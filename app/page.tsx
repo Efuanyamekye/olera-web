@@ -60,7 +60,7 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-secondary-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               Find the Right Senior Care for Your Loved One
             </h1>
@@ -125,7 +125,7 @@ export default function HomePage() {
             </form>
 
             {/* Trust indicators */}
-            <div className="mt-8 flex flex-wrap items-center gap-6 text-primary-200 text-sm">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-primary-200 text-sm">
               <div className="flex items-center gap-2">
                 <svg
                   className="w-5 h-5 text-primary-300"
