@@ -195,6 +195,15 @@ create policy "Users can update own account"
   on public.accounts for update
   using (auth.uid() = user_id);
 
+-- Helper: get active profile type without triggering RLS recursion on profiles
+create or replace function public.active_profile_type()
+returns profile_type as $$
+  select p.type from public.profiles p
+  join public.accounts a on a.active_profile_id = p.id
+  where a.user_id = auth.uid()
+  limit 1;
+$$ language sql security definer stable;
+
 -- PROFILES: public read for non-family profiles, restricted for family profiles
 create policy "Anyone can read non-family profiles"
   on public.profiles for select
@@ -205,12 +214,7 @@ create policy "Authenticated providers can read family profiles"
   using (
     type = 'family'
     and auth.uid() is not null
-    and exists (
-      select 1 from public.accounts a
-      join public.profiles p on p.id = a.active_profile_id
-      where a.user_id = auth.uid()
-      and p.type in ('organization', 'caregiver')
-    )
+    and public.active_profile_type() in ('organization', 'caregiver')
   );
 
 create policy "Users can read own family profiles"
