@@ -7,7 +7,6 @@ import type { Profile } from "@/lib/types";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
-import EmptyState from "@/components/ui/EmptyState";
 
 export default function ClaimSearchPage() {
   const [query, setQuery] = useState("");
@@ -27,15 +26,16 @@ export default function ClaimSearchPage() {
 
       try {
         const supabase = createClient();
+
+        // Build base query — only search non-family profiles
         let q = supabase
           .from("profiles")
           .select("*")
-          .in("type", ["organization", "caregiver"])
+          .neq("type", "family")
           .ilike("display_name", `%${query.trim()}%`)
           .limit(20);
 
         if (location.trim()) {
-          // Search by city or state or zip
           const loc = location.trim();
           q = q.or(
             `city.ilike.%${loc}%,state.ilike.%${loc}%,zip.eq.${loc}`
@@ -46,7 +46,7 @@ export default function ClaimSearchPage() {
 
         if (fetchError) {
           console.error("Claim search error:", fetchError.message);
-          setError("Search failed. Please try again.");
+          setError(`Search failed: ${fetchError.message}`);
           setResults([]);
         } else {
           setResults((profiles as Profile[]) || []);
@@ -76,18 +76,18 @@ export default function ClaimSearchPage() {
           Back to For Providers
         </Link>
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-          Find Your Organization
+          Get Started on Olera
         </h1>
         <p className="mt-2 text-lg text-gray-600">
-          Search our directory to see if we already have a profile for your
-          organization. Claim it to take control and keep your information
-          current.
+          First, let&apos;s check if we already have a listing for your
+          organization. If we do, you can claim it. If not, we&apos;ll help
+          you create one.
         </p>
       </div>
 
       <form onSubmit={handleSearch} className="space-y-4 mb-8">
         <Input
-          label="Organization name"
+          label="Organization or provider name"
           name="query"
           value={query}
           onChange={(e) => setQuery((e.target as HTMLInputElement).value)}
@@ -105,6 +105,18 @@ export default function ClaimSearchPage() {
         </Button>
       </form>
 
+      {/* Skip search — go straight to create */}
+      {!hasSearched && (
+        <div className="text-center pt-4 border-t border-gray-100">
+          <p className="text-gray-500 mb-3">
+            Not part of an existing organization?
+          </p>
+          <Link href="/for-providers/create">
+            <Button variant="secondary">Create a New Profile</Button>
+          </Link>
+        </div>
+      )}
+
       {error && (
         <div className="mb-6 bg-warm-50 text-warm-700 px-4 py-3 rounded-lg text-base" role="alert">
           {error}
@@ -114,19 +126,28 @@ export default function ClaimSearchPage() {
       {hasSearched && (
         <div>
           {results.length === 0 ? (
-            <EmptyState
-              title="No matching profiles found"
-              description="We don't have a listing for that organization yet. You can create a new profile instead."
-              action={
-                <Link href="/for-providers/create">
-                  <Button>Create a New Profile</Button>
-                </Link>
-              }
-            />
+            <div className="text-center py-12 bg-gray-50 rounded-xl">
+              <div className="mb-4">
+                <svg className="w-12 h-12 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                No matching listings found
+              </h3>
+              <p className="text-gray-500 mb-6 max-w-md mx-auto">
+                We don&apos;t have a listing for &quot;{query}&quot; yet. You
+                can create a new profile to get started.
+              </p>
+              <Link href="/for-providers/create">
+                <Button size="lg">Create a New Profile</Button>
+              </Link>
+            </div>
           ) : (
             <div className="space-y-4">
               <p className="text-base text-gray-500">
                 {results.length} result{results.length !== 1 ? "s" : ""} found
+                — select yours to claim it
               </p>
               {results.map((profile) => (
                 <Link

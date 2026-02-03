@@ -16,16 +16,12 @@ export default function ForProvidersPage() {
               profile, showcase your services, and receive direct inquiries —
               free for 30 days.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/for-providers/claim">
-                <Button size="lg" className="bg-white text-primary-700 hover:bg-primary-50 focus:ring-white">
-                  Claim Your Profile
-                </Button>
-              </Link>
-              <Link href="/for-providers/create">
-                <Button size="lg" variant="secondary" className="border-white text-white hover:bg-white/10">
-                  Create a New Profile
-                </Button>
+            <div className="mt-10">
+              <Link
+                href="/for-providers/claim"
+                className="inline-flex items-center justify-center font-semibold rounded-lg px-10 py-4 text-lg bg-white text-primary-700 hover:bg-primary-50 transition-colors min-h-[44px] shadow-lg"
+              >
+                Get Started Free
               </Link>
             </div>
           </div>

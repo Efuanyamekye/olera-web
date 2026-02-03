@@ -376,11 +376,11 @@ export default function HomePage() {
             Olera.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/browse" className="btn-primary">
+            <Link href="/for-providers/claim" className="btn-primary">
               Browse Care Options
             </Link>
-            <Link href="/auth/signup" className="btn-secondary">
-              Create Free Account
+            <Link href="/for-providers" className="btn-secondary">
+              For Providers
             </Link>
           </div>
         </div>
