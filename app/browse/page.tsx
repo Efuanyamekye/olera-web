@@ -160,7 +160,7 @@ function BrowseCard({ profile }: { profile: Profile }) {
   return (
     <Link
       href={`/provider/${profile.slug}`}
-      className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow block"
+      className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-200 hover:-translate-y-0.5 transition-all duration-200 block cursor-pointer"
     >
       {/* Image */}
       <div className="relative h-48 bg-gray-200">

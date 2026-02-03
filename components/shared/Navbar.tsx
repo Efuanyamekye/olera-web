@@ -36,8 +36,9 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  // Show user's actual name in the dropdown, not the org/profile name
   const displayName =
-    activeProfile?.display_name || account?.display_name || user?.email || "";
+    account?.display_name || user?.email || "";
   const initials = getInitials(displayName);
 
   const profileTypeLabel = activeProfile
@@ -60,28 +61,21 @@ export default function Navbar() {
             <span className="text-xl font-bold text-gray-900">Olera</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6">
-            {/* Care category dropdowns — for unauthenticated users and families */}
-            {(!isAuthenticated || isFamily) &&
-              NAV_CATEGORIES.map((cat) => (
-                <NavDropdown key={cat.label} category={cat} />
-              ))}
-            {isAuthenticated && hasProfile && (
-              <Link
-                href="/portal"
-                className="text-gray-600 hover:text-primary-600 font-medium transition-colors focus:outline-none focus:underline"
-              >
-                Dashboard
-              </Link>
-            )}
+          {/* Desktop Navigation — care categories always visible, centered */}
+          <div className="hidden lg:flex items-center space-x-4">
+            {NAV_CATEGORIES.map((cat) => (
+              <NavDropdown key={cat.label} category={cat} />
+            ))}
             {!isAuthenticated && (
-              <Link
-                href="/for-providers"
-                className="text-gray-600 hover:text-primary-600 font-medium transition-colors focus:outline-none focus:underline"
-              >
-                For Providers
-              </Link>
+              <>
+                <div className="w-px h-5 bg-gray-200" />
+                <Link
+                  href="/for-providers"
+                  className="text-gray-700 hover:text-primary-600 text-[15px] font-medium transition-colors focus:outline-none focus:underline whitespace-nowrap"
+                >
+                  For Providers
+                </Link>
+              </>
             )}
           </div>
 
@@ -136,6 +130,13 @@ export default function Navbar() {
                     </div>
                     {hasProfile ? (
                       <>
+                        <Link
+                          href="/portal"
+                          className="block px-4 py-3 text-base text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsUserMenuOpen(false)}
+                        >
+                          Dashboard
+                        </Link>
                         <Link
                           href="/portal/profile"
                           className="block px-4 py-3 text-base text-gray-700 hover:bg-gray-50 transition-colors"
@@ -253,15 +254,14 @@ export default function Navbar() {
         {isMobileMenuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-100">
             <div className="flex flex-col space-y-1">
-              {/* Care category accordions */}
-              {(!isAuthenticated || isFamily) &&
-                NAV_CATEGORIES.map((cat) => (
-                  <MobileNavAccordion
-                    key={cat.label}
-                    category={cat}
-                    onNavigate={() => setIsMobileMenuOpen(false)}
-                  />
-                ))}
+              {/* Care category accordions — always visible */}
+              {NAV_CATEGORIES.map((cat) => (
+                <MobileNavAccordion
+                  key={cat.label}
+                  category={cat}
+                  onNavigate={() => setIsMobileMenuOpen(false)}
+                />
+              ))}
               {!isAuthenticated && (
                 <Link
                   href="/for-providers"

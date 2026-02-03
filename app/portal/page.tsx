@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import { getTrialDaysRemaining } from "@/lib/membership";
+import { getFreeConnectionsRemaining, FREE_CONNECTION_LIMIT } from "@/lib/membership";
 import EmptyState from "@/components/ui/EmptyState";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
@@ -48,7 +48,7 @@ export default function PortalDashboard() {
     );
   }
 
-  const trialDaysRemaining = getTrialDaysRemaining(membership?.trial_ends_at);
+  const freeRemaining = getFreeConnectionsRemaining(membership);
 
   return (
     <div>
@@ -60,31 +60,32 @@ export default function PortalDashboard() {
         </p>
       </div>
 
-      {/* Trial banner for providers */}
-      {isProvider && membership?.status === "trialing" && trialDaysRemaining !== null && (
+      {/* Free connections banner for providers */}
+      {isProvider && freeRemaining !== null && freeRemaining > 0 && (
         <div className="mb-8 bg-primary-50 border border-primary-200 rounded-xl p-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h2 className="text-lg font-semibold text-primary-800">
-                  Free trial active
-                </h2>
-                <Badge variant="trial">Trial</Badge>
-              </div>
+              <h2 className="text-lg font-semibold text-primary-800 mb-1">
+                {freeRemaining} of {FREE_CONNECTION_LIMIT} free connections remaining
+              </h2>
               <p className="text-base text-primary-700">
-                {trialDaysRemaining} day{trialDaysRemaining !== 1 ? "s" : ""}{" "}
-                remaining. You have full access to respond to inquiries and
-                connect with families.
+                Upgrade to Pro for unlimited connections.
               </p>
             </div>
+            <Link
+              href="/portal/settings"
+              className="bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-5 rounded-lg transition-colors text-sm"
+            >
+              Upgrade
+            </Link>
           </div>
         </div>
       )}
 
-      {/* Expired trial banner */}
-      {isProvider && membership?.status === "free" && (
+      {/* Paywall banner — out of free connections */}
+      {isProvider && freeRemaining !== null && freeRemaining === 0 && (
         <div className="mb-8">
-          <UpgradePrompt context="respond to inquiries and connect with families" />
+          <UpgradePrompt context="continue connecting with families and providers" />
         </div>
       )}
 

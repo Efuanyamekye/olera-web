@@ -1,15 +1,18 @@
 import type { Membership, Profile } from "@/lib/types";
 
 /**
- * Check whether the given account has active engagement access.
+ * Engagement access rules.
  *
- * Rules:
  * - Families always have full access (they never pay).
- * - Saves are always free for everyone.
- * - Receiving/viewing inquiry existence is always free.
- * - Everything else (viewing full inquiry details, responding) requires
- *   an active trial or pro membership.
+ * - Saves and viewing inquiry existence are always free.
+ * - For providers, engagement actions (viewing details, responding,
+ *   initiating contact) require either:
+ *   1. An active Pro membership, OR
+ *   2. Remaining free connections (3 total before paywall)
  */
+
+export const FREE_CONNECTION_LIMIT = 3;
+
 export type EngageAction =
   | "save"
   | "receive_inquiry"
@@ -33,26 +36,35 @@ export function canEngage(
   if (action === "receive_inquiry" || action === "view_inquiry_metadata")
     return true;
 
-  // Everything else requires active trial or pro
+  // Everything else requires paid membership OR remaining free connections
   if (!membership) return false;
 
+  // Active paid membership
   if (membership.status === "active") return true;
-  if (membership.status === "trialing" && membership.trial_ends_at) {
-    return new Date(membership.trial_ends_at) > new Date();
+
+  // Past due — grace period
+  if (membership.status === "past_due") return true;
+
+  // Free tier — check connection limit
+  if (membership.status === "free" || membership.status === "trialing") {
+    return (membership.free_responses_used ?? 0) < FREE_CONNECTION_LIMIT;
   }
-  if (membership.status === "past_due") return true; // grace period
 
   return false;
 }
 
 /**
- * Returns the number of trial days remaining, or null if not on trial.
+ * Returns how many free connections remain, or null if on a paid plan.
  */
-export function getTrialDaysRemaining(
-  trialEndsAt: string | null | undefined
+export function getFreeConnectionsRemaining(
+  membership: Membership | null
 ): number | null {
-  if (!trialEndsAt) return null;
-  const diff = new Date(trialEndsAt).getTime() - Date.now();
-  if (diff <= 0) return 0;
-  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  if (!membership) return FREE_CONNECTION_LIMIT;
+
+  if (membership.status === "active" || membership.status === "past_due") {
+    return null; // unlimited on paid plan
+  }
+
+  const used = membership.free_responses_used ?? 0;
+  return Math.max(0, FREE_CONNECTION_LIMIT - used);
 }

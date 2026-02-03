@@ -12,7 +12,7 @@ import Button from "@/components/ui/Button";
 type AuthView = "sign-in" | "sign-up" | "check-email";
 
 export default function AuthModal() {
-  const { isAuthModalOpen, closeAuthModal, authModalDefaultView, account } = useAuth();
+  const { isAuthModalOpen, closeAuthModal, authModalDefaultView } = useAuth();
   const [view, setView] = useState<AuthView>("sign-up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -72,18 +72,12 @@ export default function AuthModal() {
       handleClose();
 
       // Check for deferred action with a returnUrl (e.g., claim or create flow)
-      // Don't clear — let the target page consume and clear the deferred action
       const deferred = getDeferredAction();
       if (deferred?.returnUrl) {
         router.push(deferred.returnUrl);
-      } else {
-        // If onboarding not completed, redirect
-        setTimeout(() => {
-          if (account && !account.onboarding_completed) {
-            router.push("/onboarding");
-          }
-        }, 100);
       }
+      // No setTimeout — auth listener in AuthProvider handles state.
+      // If onboarding isn't complete, the navbar shows "Complete your profile".
     } catch (err) {
       console.error("Sign in error:", err);
       setError("Something went wrong. Please try again.");

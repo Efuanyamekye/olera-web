@@ -67,7 +67,7 @@ export default function NavDropdown({ category, onNavigate }: NavDropdownProps) 
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex items-center gap-1 text-gray-600 hover:text-primary-600 font-medium transition-colors focus:outline-none focus:underline py-1"
+        className="flex items-center gap-1.5 text-gray-700 hover:text-primary-600 text-[15px] font-medium transition-colors focus:outline-none focus:underline py-1"
         aria-expanded={open}
         aria-haspopup="true"
       >
@@ -88,16 +88,16 @@ export default function NavDropdown({ category, onNavigate }: NavDropdownProps) 
             <Link
               key={item.href + item.label}
               href={item.href}
-              className="block px-4 py-3 hover:bg-gray-50 transition-colors group"
+              className="block px-5 py-3 hover:bg-gray-50 transition-colors group"
               onClick={() => {
                 setOpen(false);
                 onNavigate?.();
               }}
             >
-              <span className="block text-sm font-medium text-gray-900 group-hover:text-primary-600">
+              <span className="block text-[15px] font-medium text-gray-900 group-hover:text-primary-600">
                 {item.label}
               </span>
-              <span className="block text-xs text-gray-500 mt-0.5">
+              <span className="block text-sm text-gray-500 mt-0.5">
                 {item.description}
               </span>
             </Link>

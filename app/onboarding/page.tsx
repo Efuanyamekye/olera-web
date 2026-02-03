@@ -96,11 +96,15 @@ export default function OnboardingPage() {
 
         if (claimError) throw claimError;
 
-        // Set as active profile (or keep current if adding a second profile)
+        // Update account
         const accountUpdate: Record<string, unknown> = {
           onboarding_completed: true,
-          display_name: data.displayName || account.display_name,
         };
+        // Only set display_name on account if it's not already set
+        if (!account.display_name) {
+          accountUpdate.display_name = data.displayName;
+        }
+        // Only set active_profile_id if user doesn't already have one
         if (!isAddingProfile) {
           accountUpdate.active_profile_id = profileId;
         }
@@ -112,16 +116,16 @@ export default function OnboardingPage() {
 
         if (accountError) throw accountError;
 
-        // Create membership for providers (trial) — only if none exists
+        // Create membership for providers — only if none exists yet
         if (data.intent !== "family") {
-          await supabase.from("memberships").upsert({
-            account_id: account.id,
-            plan: "free",
-            status: "trialing",
-            trial_ends_at: new Date(
-              Date.now() + 30 * 24 * 60 * 60 * 1000
-            ).toISOString(),
-          });
+          await supabase.from("memberships").upsert(
+            {
+              account_id: account.id,
+              plan: "free",
+              status: "free",
+            },
+            { onConflict: "account_id" }
+          );
         }
       } else {
         // Creating a new profile
@@ -150,11 +154,15 @@ export default function OnboardingPage() {
 
         if (profileError) throw profileError;
 
-        // Set as active profile (or keep current if adding a second profile)
+        // Update account
         const newAccountUpdate: Record<string, unknown> = {
           onboarding_completed: true,
-          display_name: data.displayName || account.display_name,
         };
+        // Only set display_name on account if it's not already set
+        if (!account.display_name) {
+          newAccountUpdate.display_name = data.displayName;
+        }
+        // Only set active_profile_id if user doesn't already have one
         if (!isAddingProfile) {
           newAccountUpdate.active_profile_id = newProfile.id;
         }
@@ -166,16 +174,16 @@ export default function OnboardingPage() {
 
         if (accountError) throw accountError;
 
-        // Create membership for providers (trial) — only if none exists
+        // Create membership for providers — only if none exists yet
         if (data.intent !== "family") {
-          await supabase.from("memberships").upsert({
-            account_id: account.id,
-            plan: "free",
-            status: "trialing",
-            trial_ends_at: new Date(
-              Date.now() + 30 * 24 * 60 * 60 * 1000
-            ).toISOString(),
-          });
+          await supabase.from("memberships").upsert(
+            {
+              account_id: account.id,
+              plan: "free",
+              status: "free",
+            },
+            { onConflict: "account_id" }
+          );
         }
       }
 

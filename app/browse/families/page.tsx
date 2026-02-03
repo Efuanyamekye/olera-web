@@ -168,7 +168,7 @@ function FamilyCard({
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-primary-200 hover:-translate-y-0.5 transition-all duration-200">
       {hasAccess ? (
         <Link href={`/profile/${family.id}`} target="_blank" className="block hover:opacity-80 transition-opacity">
           {cardContent}

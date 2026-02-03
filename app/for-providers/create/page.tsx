@@ -180,13 +180,10 @@ export default function CreateProfilePage() {
         .single();
 
       if (!existingMembership) {
-        const trialEnd = new Date();
-        trialEnd.setDate(trialEnd.getDate() + 30);
         await supabase.from("memberships").insert({
           account_id: createAccount.id,
-          plan: "pro",
-          status: "trialing",
-          trial_ends_at: trialEnd.toISOString(),
+          plan: "free",
+          status: "free",
         });
       }
 

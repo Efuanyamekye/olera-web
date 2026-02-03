@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
   useCallback,
+  useRef,
   type ReactNode,
 } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
@@ -15,19 +16,12 @@ import { setDeferredAction } from "@/lib/deferred-action";
 export type AuthModalView = "sign-in" | "sign-up";
 
 interface AuthContextValue extends AuthState {
-  /** Open the auth modal. Optionally store a deferred action to execute after auth. */
   openAuthModal: (deferred?: Omit<DeferredAction, "createdAt">, view?: AuthModalView) => void;
-  /** Close the auth modal. */
   closeAuthModal: () => void;
-  /** Whether the auth modal is currently open. */
   isAuthModalOpen: boolean;
-  /** The initial view the modal should show when opened. */
   authModalDefaultView: AuthModalView;
-  /** Sign out the current user. */
   signOut: () => Promise<void>;
-  /** Refresh account/profile/membership data from the database. */
   refreshAccountData: () => Promise<void>;
-  /** Switch the active profile to a different one owned by this account. */
   switchProfile: (profileId: string) => Promise<void>;
 }
 
@@ -41,17 +35,32 @@ export function useAuth() {
   return ctx;
 }
 
+const EMPTY_STATE: AuthState = {
+  user: null,
+  account: null,
+  activeProfile: null,
+  profiles: [],
+  membership: null,
+  isLoading: false,
+};
+
+const FETCH_TIMEOUT_MS = 10000;
+
+/** Race a promise against a timeout. Returns null on timeout. */
+function withTimeout<T>(promise: PromiseLike<T>, ms: number): Promise<T | null> {
+  return Promise.race([
+    Promise.resolve(promise),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
+  ]);
+}
+
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [state, setState] = useState<AuthState>({
-    user: null,
-    account: null,
-    activeProfile: null,
-    profiles: [],
-    membership: null,
+    ...EMPTY_STATE,
     isLoading: true,
   });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -59,50 +68,71 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const configured = isSupabaseConfigured();
 
-  // Fetch account, all profiles, active profile, and membership for the current user
+  // Refs to avoid stale closures
+  const userIdRef = useRef<string | null>(null);
+  const accountIdRef = useRef<string | null>(null);
+  // Version counter to discard stale async responses
+  const versionRef = useRef(0);
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    userIdRef.current = state.user?.id ?? null;
+    accountIdRef.current = state.account?.id ?? null;
+  }, [state.user, state.account]);
+
+  /**
+   * Fetch account, profiles, and membership for a given user ID.
+   * Parallelizes queries where possible and has a timeout guard.
+   */
   const fetchAccountData = useCallback(
     async (userId: string) => {
-      if (!configured) return { account: null, activeProfile: null, profiles: [] as Profile[], membership: null };
+      if (!configured) return null;
 
       const supabase = createClient();
 
-      // Get account
-      const { data: account } = await supabase
-        .from("accounts")
-        .select("*")
-        .eq("user_id", userId)
-        .single<Account>();
+      // Step 1: Get account (required for everything else)
+      const accountResult = await withTimeout(
+        supabase.from("accounts").select("*").eq("user_id", userId).single<Account>(),
+        FETCH_TIMEOUT_MS
+      );
 
-      if (!account) return { account: null, activeProfile: null, profiles: [] as Profile[], membership: null };
+      const account = accountResult?.data ?? null;
+      if (!account) return null;
 
-      // Get ALL profiles owned by this account
-      const { data: allProfiles } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("account_id", account.id)
-        .order("created_at", { ascending: true });
+      // Step 2: Fetch profiles and membership in parallel
+      const [profilesResult, membershipResult] = await Promise.all([
+        withTimeout(
+          supabase
+            .from("profiles")
+            .select("*")
+            .eq("account_id", account.id)
+            .order("created_at", { ascending: true }),
+          FETCH_TIMEOUT_MS
+        ),
+        withTimeout(
+          supabase
+            .from("memberships")
+            .select("*")
+            .eq("account_id", account.id)
+            .single<Membership>(),
+          FETCH_TIMEOUT_MS
+        ),
+      ]);
 
-      const profiles = (allProfiles as Profile[]) || [];
+      const profiles = (profilesResult?.data as Profile[]) || [];
+      const membership = membershipResult?.data ?? null;
 
-      // Get active profile (if set)
       let activeProfile: Profile | null = null;
       if (account.active_profile_id) {
         activeProfile = profiles.find((p) => p.id === account.active_profile_id) || null;
       }
-
-      // Get membership (if exists)
-      const { data: membership } = await supabase
-        .from("memberships")
-        .select("*")
-        .eq("account_id", account.id)
-        .single<Membership>();
 
       return { account, activeProfile, profiles, membership };
     },
     [configured]
   );
 
-  // Initialize: check current session
+  // Initialize: check session + listen for auth changes
   useEffect(() => {
     if (!configured) {
       setState((prev) => ({ ...prev, isLoading: false }));
@@ -110,60 +140,67 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
 
     const supabase = createClient();
+    let cancelled = false;
 
     const init = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
 
+      if (cancelled) return;
+
       if (session?.user) {
-        const { account, activeProfile, profiles, membership } = await fetchAccountData(
-          session.user.id
-        );
+        const data = await fetchAccountData(session.user.id);
+        if (cancelled) return;
+
         setState({
           user: { id: session.user.id, email: session.user.email! },
-          account,
-          activeProfile,
-          profiles,
-          membership,
+          account: data?.account ?? null,
+          activeProfile: data?.activeProfile ?? null,
+          profiles: data?.profiles ?? [],
+          membership: data?.membership ?? null,
           isLoading: false,
         });
       } else {
-        setState((prev) => ({ ...prev, isLoading: false }));
+        setState({ ...EMPTY_STATE, isLoading: false });
       }
     };
 
     init();
 
-    // Listen for auth state changes (sign in, sign out, token refresh)
+    // Auth state listener — handles sign in, sign out, token refresh
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === "SIGNED_IN" && session?.user) {
-        const { account, activeProfile, profiles, membership } = await fetchAccountData(
-          session.user.id
-        );
+      if (cancelled) return;
+
+      if (event === "SIGNED_OUT") {
+        // Immediately clear state — no async work needed
+        versionRef.current++;
+        setState({ ...EMPTY_STATE });
+        return;
+      }
+
+      if ((event === "SIGNED_IN" || event === "TOKEN_REFRESHED") && session?.user) {
+        const version = ++versionRef.current;
+        const data = await fetchAccountData(session.user.id);
+
+        // Only apply if this is still the latest request
+        if (cancelled || versionRef.current !== version) return;
+
         setState({
           user: { id: session.user.id, email: session.user.email! },
-          account,
-          activeProfile,
-          profiles,
-          membership,
-          isLoading: false,
-        });
-      } else if (event === "SIGNED_OUT") {
-        setState({
-          user: null,
-          account: null,
-          activeProfile: null,
-          profiles: [],
-          membership: null,
+          account: data?.account ?? null,
+          activeProfile: data?.activeProfile ?? null,
+          profiles: data?.profiles ?? [],
+          membership: data?.membership ?? null,
           isLoading: false,
         });
       }
     });
 
     return () => {
+      cancelled = true;
       subscription.unsubscribe();
     };
   }, [configured, fetchAccountData]);
@@ -183,53 +220,79 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setIsAuthModalOpen(false);
   }, []);
 
+  /**
+   * Sign out. Let the auth listener handle state clearing.
+   * Only clear state manually if signOut fails.
+   */
   const signOut = useCallback(async () => {
-    if (configured) {
-      const supabase = createClient();
-      await supabase.auth.signOut();
+    if (!configured) return;
+    const supabase = createClient();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      // Supabase signOut failed — force-clear local state anyway
+      console.error("Sign out error:", error.message);
+      versionRef.current++;
+      setState({ ...EMPTY_STATE });
     }
-    setState({
-      user: null,
-      account: null,
-      activeProfile: null,
-      profiles: [],
-      membership: null,
-      isLoading: false,
-    });
+    // On success, the onAuthStateChange SIGNED_OUT handler clears state
   }, [configured]);
 
+  /**
+   * Refresh account data from the database.
+   * Uses userIdRef to avoid stale closure issues.
+   */
   const refreshAccountData = useCallback(async () => {
-    if (!state.user) return;
-    const { account, activeProfile, profiles, membership } = await fetchAccountData(
-      state.user.id
-    );
-    setState((prev) => ({ ...prev, account, activeProfile, profiles, membership }));
-  }, [state.user, fetchAccountData]);
+    const userId = userIdRef.current;
+    if (!userId) return;
 
+    const version = ++versionRef.current;
+    const data = await fetchAccountData(userId);
+
+    // Discard if a newer request has been issued
+    if (versionRef.current !== version) return;
+
+    if (data) {
+      setState((prev) => ({
+        ...prev,
+        account: data.account,
+        activeProfile: data.activeProfile,
+        profiles: data.profiles,
+        membership: data.membership,
+      }));
+    }
+  }, [fetchAccountData]);
+
+  /**
+   * Switch the active profile. Uses refs to avoid stale closures.
+   */
   const switchProfile = useCallback(
     async (profileId: string) => {
-      if (!state.user || !state.account || !configured) return;
+      const userId = userIdRef.current;
+      const accountId = accountIdRef.current;
+      if (!userId || !accountId || !configured) return;
 
       const supabase = createClient();
       const { error } = await supabase
         .from("accounts")
         .update({ active_profile_id: profileId })
-        .eq("id", state.account.id);
+        .eq("id", accountId);
 
       if (error) {
         console.error("Failed to switch profile:", error.message);
         return;
       }
 
-      // Update local state immediately then refresh for consistency
-      const newActive = state.profiles.find((p) => p.id === profileId) || null;
-      setState((prev) => ({
-        ...prev,
-        account: prev.account ? { ...prev.account, active_profile_id: profileId } : null,
-        activeProfile: newActive,
-      }));
+      // Optimistic local update
+      setState((prev) => {
+        const newActive = prev.profiles.find((p) => p.id === profileId) || null;
+        return {
+          ...prev,
+          account: prev.account ? { ...prev.account, active_profile_id: profileId } : null,
+          activeProfile: newActive,
+        };
+      });
     },
-    [state.user, state.account, state.profiles, configured]
+    [configured]
   );
 
   return (

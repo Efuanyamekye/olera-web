@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { canEngage, getTrialDaysRemaining } from "@/lib/membership";
+import { canEngage, getFreeConnectionsRemaining, FREE_CONNECTION_LIMIT } from "@/lib/membership";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 
@@ -19,7 +19,7 @@ export default function SettingsPage() {
     activeProfile?.type === "organization" ||
     activeProfile?.type === "caregiver";
   const hasAccess = canEngage(activeProfile?.type, membership, "respond_to_inquiry");
-  const trialDays = getTrialDaysRemaining(membership?.trial_ends_at);
+  const freeRemaining = getFreeConnectionsRemaining(membership);
 
   const handleUpgrade = async (billingCycle: "monthly" | "annual") => {
     setLoading(billingCycle);
@@ -111,10 +111,7 @@ export default function SettingsPage() {
               {membership?.status === "active" && (
                 <Badge variant="pro">Pro</Badge>
               )}
-              {membership?.status === "trialing" && (
-                <Badge variant="trial">Trial</Badge>
-              )}
-              {(membership?.status === "free" || !membership) && (
+              {(membership?.status === "free" || membership?.status === "trialing" || !membership) && (
                 <Badge variant="default">Free</Badge>
               )}
               {membership?.status === "past_due" && (
@@ -125,19 +122,27 @@ export default function SettingsPage() {
               )}
             </div>
 
-            {/* Trial info */}
-            {membership?.status === "trialing" && trialDays !== null && (
-              <p className="text-base text-gray-600 mb-4">
-                Your trial ends in {trialDays} day{trialDays !== 1 ? "s" : ""}.
-                Upgrade before it expires to keep full access.
-              </p>
+            {/* Free tier info */}
+            {freeRemaining !== null && (
+              <div className="mb-4">
+                <p className="text-base text-gray-600">
+                  You have{" "}
+                  <span className="font-semibold text-gray-900">
+                    {freeRemaining} of {FREE_CONNECTION_LIMIT}
+                  </span>{" "}
+                  free connections remaining.
+                  {freeRemaining === 0
+                    ? " Upgrade to Pro to continue connecting."
+                    : " Upgrade to Pro for unlimited connections."}
+                </p>
+              </div>
             )}
 
             {/* Active subscription info */}
             {membership?.status === "active" && (
               <div className="mb-4">
                 <p className="text-base text-gray-600">
-                  You have full access to all Pro features.
+                  You have unlimited access to all Pro features.
                 </p>
                 {membership.billing_cycle && (
                   <p className="text-sm text-gray-500 mt-1">
@@ -163,72 +168,71 @@ export default function SettingsPage() {
               </div>
             )}
 
-            {/* Upgrade options (show for trialing, free, or canceled) */}
-            {(!hasAccess || membership?.status === "trialing") &&
-              membership?.status !== "active" && (
-                <div className="space-y-4">
-                  {error && (
-                    <div
-                      className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base"
-                      role="alert"
+            {/* Upgrade options */}
+            {membership?.status !== "active" && (
+              <div className="space-y-4">
+                {error && (
+                  <div
+                    className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base"
+                    role="alert"
+                  >
+                    {error}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Monthly */}
+                  <div className="border-2 border-gray-200 rounded-xl p-5 hover:border-primary-300 transition-colors">
+                    <p className="text-lg font-semibold text-gray-900">
+                      Monthly
+                    </p>
+                    <p className="text-3xl font-bold text-gray-900 mt-1">
+                      $25
+                      <span className="text-base font-normal text-gray-500">
+                        /mo
+                      </span>
+                    </p>
+                    <Button
+                      fullWidth
+                      className="mt-4"
+                      onClick={() => handleUpgrade("monthly")}
+                      loading={loading === "monthly"}
+                      disabled={loading !== null}
                     >
-                      {error}
-                    </div>
-                  )}
+                      Subscribe Monthly
+                    </Button>
+                  </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Monthly */}
-                    <div className="border-2 border-gray-200 rounded-xl p-5 hover:border-primary-300 transition-colors">
-                      <p className="text-lg font-semibold text-gray-900">
-                        Monthly
-                      </p>
-                      <p className="text-3xl font-bold text-gray-900 mt-1">
-                        $25
-                        <span className="text-base font-normal text-gray-500">
-                          /mo
-                        </span>
-                      </p>
-                      <Button
-                        fullWidth
-                        className="mt-4"
-                        onClick={() => handleUpgrade("monthly")}
-                        loading={loading === "monthly"}
-                        disabled={loading !== null}
-                      >
-                        Subscribe Monthly
-                      </Button>
+                  {/* Annual */}
+                  <div className="border-2 border-primary-300 rounded-xl p-5 relative">
+                    <div className="absolute -top-3 right-4 bg-primary-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                      Save 17%
                     </div>
-
-                    {/* Annual */}
-                    <div className="border-2 border-primary-300 rounded-xl p-5 relative">
-                      <div className="absolute -top-3 right-4 bg-primary-600 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                        Save 17%
-                      </div>
-                      <p className="text-lg font-semibold text-gray-900">
-                        Annual
-                      </p>
-                      <p className="text-3xl font-bold text-gray-900 mt-1">
-                        $249
-                        <span className="text-base font-normal text-gray-500">
-                          /yr
-                        </span>
-                      </p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        ~$20.75/mo
-                      </p>
-                      <Button
-                        fullWidth
-                        className="mt-4"
-                        onClick={() => handleUpgrade("annual")}
-                        loading={loading === "annual"}
-                        disabled={loading !== null}
-                      >
-                        Subscribe Annually
-                      </Button>
-                    </div>
+                    <p className="text-lg font-semibold text-gray-900">
+                      Annual
+                    </p>
+                    <p className="text-3xl font-bold text-gray-900 mt-1">
+                      $249
+                      <span className="text-base font-normal text-gray-500">
+                        /yr
+                      </span>
+                    </p>
+                    <p className="text-sm text-gray-500 mt-1">
+                      ~$20.75/mo
+                    </p>
+                    <Button
+                      fullWidth
+                      className="mt-4"
+                      onClick={() => handleUpgrade("annual")}
+                      loading={loading === "annual"}
+                      disabled={loading !== null}
+                    >
+                      Subscribe Annually
+                    </Button>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
           </div>
         </section>
       )}
@@ -242,10 +246,10 @@ export default function SettingsPage() {
           <div className="bg-white rounded-xl border border-gray-200 p-6">
             <ul className="space-y-3">
               {[
-                "View full inquiry details (name, contact info)",
-                "Respond to family inquiries",
-                "Initiate outbound contact with families",
-                "Browse family profiles looking for care",
+                "Unlimited connections with families and providers",
+                "View full profile details and contact info",
+                "Respond to all inquiries and invitations",
+                "Browse and connect with family profiles",
                 "Priority listing in search results",
               ].map((feature) => (
                 <li

@@ -82,7 +82,7 @@ export default function ClaimProfilePage() {
         throw new Error(accountError.message);
       }
 
-      // Create trial membership if none exists
+      // Create free membership if none exists
       const { data: existingMembership } = await supabase
         .from("memberships")
         .select("id")
@@ -90,14 +90,10 @@ export default function ClaimProfilePage() {
         .single();
 
       if (!existingMembership) {
-        const trialEnd = new Date();
-        trialEnd.setDate(trialEnd.getDate() + 30);
-
         await supabase.from("memberships").insert({
           account_id: claimAccount.id,
-          plan: "pro",
-          status: "trialing",
-          trial_ends_at: trialEnd.toISOString(),
+          plan: "free",
+          status: "free",
         });
       }
 
@@ -245,7 +241,7 @@ export default function ClaimProfilePage() {
         <p className="text-gray-600 mb-6">
           Claim this profile to take control of your listing. You&apos;ll be
           able to update your information, respond to inquiries from families,
-          and access your 30-day free trial.
+          and start connecting right away.
         </p>
 
         {error && (
