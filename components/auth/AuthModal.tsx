@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
@@ -19,7 +19,6 @@ export default function AuthModal() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
 
   const resetForm = () => {
     setEmail("");
@@ -40,6 +39,7 @@ export default function AuthModal() {
     setError("");
     setLoading(true);
 
+    const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -79,6 +79,7 @@ export default function AuthModal() {
 
     setLoading(true);
 
+    const supabase = createClient();
     const { error: authError } = await supabase.auth.signUp({
       email,
       password,
