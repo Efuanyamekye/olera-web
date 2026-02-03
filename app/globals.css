@@ -22,6 +22,38 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+
+  /* Infinite scroll animations */
+  .animate-scroll-left {
+    animation: scroll-left 35s linear infinite;
+  }
+  .animate-scroll-right {
+    animation: scroll-right 35s linear infinite;
+  }
+
+  /* Pause animation on hover */
+  .pause-animation {
+    animation-play-state: paused;
+  }
+}
+
+/* Keyframes for scrolling tags */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 /* Custom component styles */

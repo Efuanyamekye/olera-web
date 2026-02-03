@@ -1,9 +1,80 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ProviderCard, { Provider } from "@/components/providers/ProviderCard";
+
+// Hook to detect when element is in view
+function useInView(threshold: number = 0.3) {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { isInView, ref };
+}
+
+// Hook to animate multiple counters together
+function useAnimatedCounters(
+  targets: { end: number; duration?: number }[],
+  shouldStart: boolean
+) {
+  const [counts, setCounts] = useState<number[]>(targets.map(() => 0));
+  const hasAnimatedRef = useRef(false);
+
+  useEffect(() => {
+    if (!shouldStart || hasAnimatedRef.current) return;
+
+    hasAnimatedRef.current = true;
+    let startTime: number | null = null;
+    let animationFrame: number;
+
+    const animate = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime;
+
+      const newCounts = targets.map((target) => {
+        const duration = target.duration || 2000;
+        const progress = Math.min((currentTime - startTime!) / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        return Math.floor(easeOut * target.end);
+      });
+
+      setCounts(newCounts);
+
+      // Continue if any animation isn't complete
+      const allComplete = targets.every((target, i) => {
+        const duration = target.duration || 2000;
+        const progress = (currentTime - startTime!) / duration;
+        return progress >= 1;
+      });
+
+      if (!allComplete) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [shouldStart, targets]);
+
+  return counts;
+}
 
 // Dummy provider data
 const topProviders: Provider[] = [
@@ -209,6 +280,144 @@ const careTypeOptions = [
   { value: "skilled-nursing", label: "Skilled Nursing" },
   { value: "respite-care", label: "Respite Care" },
 ];
+
+// Scrolling tags data
+const scrollingTags = {
+  row1: [
+    "Memory Care Specialists",
+    "24/7 Nursing Staff",
+    "Pet-Friendly Communities",
+    "Veteran Discounts",
+    "Dementia Support",
+    "Spanish-Speaking Staff",
+    "Physical Therapy On-Site",
+    "Chef-Prepared Meals",
+  ],
+  row2: [
+    "In-Home Care",
+    "Art & Music Therapy",
+    "Transportation Services",
+    "Medication Management",
+    "Garden & Outdoor Spaces",
+    "24/7 Family Support",
+    "Assisted Bathing",
+    "Personalized Care Plans",
+  ],
+};
+
+// Counter targets - defined outside component to avoid re-creating on every render
+const counterTargets = [
+  { end: 48000, duration: 2000 },
+  { end: 12000, duration: 2000 },
+  { end: 500, duration: 1500 },
+];
+
+// Social Proof Section Component
+function SocialProofSection() {
+  // Single ref to trigger all counters when section is in view
+  const { isInView, ref } = useInView(0.3);
+
+  // All counters animate together
+  const [providersCount, familiesCount, citiesCount] = useAnimatedCounters(
+    counterTargets,
+    isInView
+  );
+
+  return (
+    <section className="py-20 md:py-28 bg-gradient-to-b from-gray-50 via-white to-white overflow-hidden relative">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary-100/40 rounded-full blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-warm-100/40 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <p className="text-primary-600 font-semibold text-sm uppercase tracking-wider mb-3">Trusted nationwide</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            Helping families find care, every day
+          </h2>
+        </div>
+
+        {/* Stats Row */}
+        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
+          {/* Stat 1 */}
+          <div className="text-center p-8 rounded-2xl bg-white/80 backdrop-blur-sm border border-gray-100 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-300 group">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+              <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+              </svg>
+            </div>
+            <p className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight tabular-nums">
+              {providersCount.toLocaleString()}+
+            </p>
+            <p className="mt-2 text-gray-500 text-base font-medium">care providers</p>
+          </div>
+
+          {/* Stat 2 */}
+          <div className="text-center p-8 rounded-2xl bg-white/80 backdrop-blur-sm border border-gray-100 shadow-sm hover:shadow-md hover:border-warm-100 transition-all duration-300 group">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-warm-100 to-warm-50 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+              <svg className="w-6 h-6 text-warm-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </div>
+            <p className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight tabular-nums">
+              {familiesCount.toLocaleString()}+
+            </p>
+            <p className="mt-2 text-gray-500 text-base font-medium">families helped</p>
+          </div>
+
+          {/* Stat 3 */}
+          <div className="text-center p-8 rounded-2xl bg-white/80 backdrop-blur-sm border border-gray-100 shadow-sm hover:shadow-md hover:border-primary-100 transition-all duration-300 group">
+            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+              <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </div>
+            <p className="text-4xl md:text-5xl font-bold text-primary-600 tracking-tight tabular-nums">
+              {citiesCount.toLocaleString()}+
+            </p>
+            <p className="mt-2 text-gray-500 text-base font-medium">cities covered</p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Scrolling Tags - Full width, no fades */}
+      <div className="mt-12">
+        {/* Scrolling Tags - Row 1 (scrolls left) */}
+        <div className="mb-3">
+          <div className="flex animate-scroll-left">
+            {[...scrollingTags.row1, ...scrollingTags.row1].map((tag, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center bg-white border border-gray-200 px-5 py-2.5 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap mx-2 shadow-sm hover:shadow hover:border-primary-200 hover:text-primary-700 transition-all duration-200 cursor-default"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Scrolling Tags - Row 2 (scrolls right) */}
+        <div>
+          <div className="flex animate-scroll-right">
+            {[...scrollingTags.row2, ...scrollingTags.row2].map((tag, index) => (
+              <span
+                key={index}
+                className="inline-flex items-center bg-white border border-gray-200 px-5 py-2.5 rounded-full text-sm font-medium text-gray-700 whitespace-nowrap mx-2 shadow-sm hover:shadow hover:border-primary-200 hover:text-primary-700 transition-all duration-200 cursor-default"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function HomePage() {
   const [location, setLocation] = useState("");
@@ -466,6 +675,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Social Proof Stats Section */}
+      <SocialProofSection />
 
       {/* Care Types Section */}
       <section className="py-16 md:py-24">
