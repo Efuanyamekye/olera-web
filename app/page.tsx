@@ -114,8 +114,8 @@ export default function HomePage() {
               Find the Right Senior Care for Your Loved One
             </h1>
             <p className="mt-6 text-lg md:text-xl text-primary-100">
-              Compare trusted care providers in your area. From assisted living
-              to home care, we help families make confident decisions.
+              Compare trusted senior care providers near you. From assisted living
+              to home care, we help families make informed, confident decisions.
             </p>
 
             {/* Search Form */}
