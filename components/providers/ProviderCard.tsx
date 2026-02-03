@@ -186,7 +186,7 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
                   </svg>
                 </div>
                 {/* Tooltip */}
-                <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible transition-all duration-200 z-10">
+                <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover/badge:opacity-100 group-hover/badge:visible transition-all duration-200 z-30">
                   {provider.badge === "Top Rated" && "This provider is among the highest-rated in your area based on family reviews and care quality."}
                   {provider.badge === "New" && "This provider recently joined Olera and is accepting new residents."}
                   {provider.badge === "Featured" && "This provider is featured for exceptional service and care standards."}
@@ -241,9 +241,9 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
         )}
       </div>
 
-      {/* Content - Consistent padding regardless of staff avatar */}
-      <div className="p-5 flex flex-col flex-1">
-        {/* Primary Category, Provider Name & Location - Grouped as single unit */}
+      {/* Content - 256px to match image height */}
+      <div className="pt-5 px-5 pb-5 flex flex-col h-64">
+        {/* Stack 1: Category, Provider Name & Location */}
         <div>
           <p className="text-primary-600 text-sm font-semibold tracking-wide uppercase">
             {provider.primaryCategory}
@@ -274,7 +274,7 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
           </p>
         </div>
 
-        {/* Price & Rating - Grouped as single unit */}
+        {/* Stack 2: Price & Rating */}
         <div className="flex items-center justify-between mt-4">
           {/* Price with "From" prefix */}
           <p className="text-lg">
@@ -298,10 +298,10 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
           </div>
         </div>
 
-        {/* Bottom Section - Tags & Payment Info (revealed on hover) */}
-        <div className="mt-auto pt-4">
-          {/* Highlight Tags */}
-          <div className="flex flex-wrap gap-1.5 transition-transform duration-300 group-hover:-translate-y-1">
+        {/* Stack 3: Highlights + Accepted Payments (anchored to bottom) */}
+        <div className="mt-auto">
+          {/* Highlights */}
+          <div className="flex flex-wrap gap-1.5">
             {displayedHighlights.map((highlight) => (
               <span
                 key={highlight}
@@ -314,38 +314,42 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
 
           {/* Accepted Payments - Hidden by default, revealed on hover */}
           {provider.acceptedPayments && provider.acceptedPayments.length > 0 && (
-            <div className="flex items-center justify-between mt-2 max-h-0 opacity-0 transition-all duration-300 group-hover:max-h-10 group-hover:opacity-100">
-              <p className="text-sm text-gray-600">
-                <span className="font-semibold text-gray-900">Accepts:</span>{" "}
-                {provider.acceptedPayments.join(", ")}
-              </p>
+            <div className="grid grid-rows-[0fr] group-hover:grid-rows-[1fr] transition-all duration-300 ease-out">
+              <div className="overflow-hidden group-hover:overflow-visible">
+                <div className="flex items-center justify-between pt-3">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold text-gray-900">Accepts:</span>{" "}
+                    {provider.acceptedPayments.join(", ")}
+                  </p>
 
-              {/* Info Icon with Tooltip */}
-              <div className="relative group/info flex-shrink-0 ml-2">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-                  aria-label="Pricing information"
-                >
-                  <svg
-                    className="w-3 h-3 text-gray-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-                {/* Info Tooltip */}
-                <div className="absolute right-0 bottom-full mb-2 w-56 p-2.5 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-30">
-                  Prices may vary based on care needs and room type. Contact the provider for accurate pricing.
-                  <div className="absolute -bottom-1 right-2 w-2 h-2 bg-gray-900 rotate-45" />
+                  {/* Info Icon with Tooltip */}
+                  <div className="relative group/info flex-shrink-0 ml-2">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                      aria-label="Pricing information"
+                    >
+                      <svg
+                        className="w-3 h-3 text-gray-500"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                    {/* Info Tooltip */}
+                    <div className="absolute right-0 bottom-full mb-2 w-56 p-2.5 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-50">
+                      Prices may vary based on care needs and room type. Contact the provider for accurate pricing.
+                      <div className="absolute -bottom-1 right-2 w-2 h-2 bg-gray-900 rotate-45" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

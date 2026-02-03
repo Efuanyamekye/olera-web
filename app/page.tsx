@@ -276,7 +276,7 @@ export default function HomePage() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1556909172-54557c7e4fb7?w=1920&q=80')"
+            backgroundImage: "url('/hero.png')"
           }}
         />
         {/* Overlay for text readability */}
@@ -290,10 +290,10 @@ export default function HomePage() {
               <div className="inline-flex items-center gap-2.5 bg-white/15 backdrop-blur-md border border-white/20 px-5 py-2.5 rounded-full text-sm font-medium text-white mb-6 shadow-lg">
                 <span className="flex items-center justify-center w-5 h-5 bg-primary-500 rounded-full">
                   <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                   </svg>
                 </span>
-                <span>48,000+ verified providers listed</span>
+                <span>48,000+ care providers</span>
               </div>
 
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
@@ -446,7 +446,7 @@ export default function HomePage() {
             className="flex gap-5 overflow-x-scroll pb-4 scrollbar-hide"
           >
             {topProviders.map((provider) => (
-              <div key={provider.id} className="flex-shrink-0 w-[370px] h-[480px]">
+              <div key={provider.id} className="flex-shrink-0 w-[370px] h-[512px]">
                 <ProviderCard provider={provider} />
               </div>
             ))}

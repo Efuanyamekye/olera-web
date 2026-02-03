@@ -8,7 +8,7 @@
 
 _What's the main thing being worked on right now?_
 
-- Building out provider discovery features (cards, detail pages)
+- Landing page redesign (hero section, provider cards spacing)
 
 ---
 
@@ -19,6 +19,8 @@ _Active work items and their current state._
 - [x] Initial project setup
 - [x] Provider cards on homepage
 - [x] Provider detail page
+- [x] Hero section redesign
+- [x] Provider card spacing standardization
 - [ ] Browse page with filtering
 
 ---
@@ -61,6 +63,29 @@ _Useful context, patterns noticed, things to remember._
 ---
 
 ## Session Log
+
+### 2026-02-03
+
+**Hero Section Redesign:**
+- Added HousingAnywhere-inspired pill-style search bar (location + care type inputs)
+- Added social proof pill above headline ("48,000+ verified providers listed")
+- Added background image with overlay for readability
+- Changed headline to sentence case ("Find the right care for your loved one")
+
+**Provider Card Spacing Fixes:**
+- Set image section to 256px (`h-64`)
+- Set content section to 256px (`h-64`) - total card height now 512px
+- Standardized vertical stacks:
+  - Stack 1: Category (caps) → Provider Name → Location
+  - Stack 2: Pricing + Reviews
+  - Stack 3: Highlights (anchored to bottom with `mt-auto`)
+  - Stack 4 (hover): Accepted Payments (animates in using CSS grid `grid-rows-[0fr]` to `grid-rows-[1fr]`)
+- Fixed tooltip z-index issues (badge tooltip now `z-30`, payment tooltip `z-50`)
+- Fixed overflow clipping on payment tooltip with `overflow-hidden group-hover:overflow-visible`
+
+**Files Changed:**
+- `app/page.tsx` - Hero section, card wrapper height
+- `components/providers/ProviderCard.tsx` - Card structure and spacing
 
 ### 2026-02-02
 
