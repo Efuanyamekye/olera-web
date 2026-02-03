@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import ProfileSwitcher from "@/components/shared/ProfileSwitcher";
+import NavDropdown from "@/components/shared/NavDropdown";
+import { NAV_CATEGORIES } from "@/components/shared/NavMenuData";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -59,16 +61,12 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {/* Browse Care — only for unauthenticated users and families */}
-            {(!isAuthenticated || isFamily) && (
-              <Link
-                href="/browse"
-                className="text-gray-600 hover:text-primary-600 font-medium transition-colors focus:outline-none focus:underline"
-              >
-                Browse Care
-              </Link>
-            )}
+          <div className="hidden lg:flex items-center space-x-6">
+            {/* Care category dropdowns — for unauthenticated users and families */}
+            {(!isAuthenticated || isFamily) &&
+              NAV_CATEGORIES.map((cat) => (
+                <NavDropdown key={cat.label} category={cat} />
+              ))}
             {isAuthenticated && hasProfile && (
               <Link
                 href="/portal"
@@ -88,7 +86,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Auth */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             {isLoading ? (
               <div className="w-20 h-8" />
             ) : isAuthenticated ? (
@@ -216,7 +214,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="lg:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? (
@@ -253,21 +251,21 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-100">
-            <div className="flex flex-col space-y-4">
-              {(!isAuthenticated || isFamily) && (
-                <Link
-                  href="/browse"
-                  className="text-gray-600 hover:text-primary-600 font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Browse Care
-                </Link>
-              )}
+          <div className="lg:hidden py-4 border-t border-gray-100">
+            <div className="flex flex-col space-y-1">
+              {/* Care category accordions */}
+              {(!isAuthenticated || isFamily) &&
+                NAV_CATEGORIES.map((cat) => (
+                  <MobileNavAccordion
+                    key={cat.label}
+                    category={cat}
+                    onNavigate={() => setIsMobileMenuOpen(false)}
+                  />
+                ))}
               {!isAuthenticated && (
                 <Link
                   href="/for-providers"
-                  className="text-gray-600 hover:text-primary-600 font-medium"
+                  className="block py-3 text-gray-600 hover:text-primary-600 font-medium"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   For Providers
@@ -365,6 +363,52 @@ export default function Navbar() {
         )}
       </div>
     </nav>
+  );
+}
+
+function MobileNavAccordion({
+  category,
+  onNavigate,
+}: {
+  category: (typeof NAV_CATEGORIES)[number];
+  onNavigate: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex items-center justify-between w-full py-3 text-gray-600 hover:text-primary-600 font-medium"
+        aria-expanded={open}
+      >
+        {category.label}
+        <svg
+          className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="pl-4 pb-2 space-y-1">
+          {category.items.map((item) => (
+            <Link
+              key={item.href + item.label}
+              href={item.href}
+              className="block py-2 text-sm text-gray-600 hover:text-primary-600"
+              onClick={onNavigate}
+            >
+              <span className="font-medium">{item.label}</span>
+              <span className="block text-xs text-gray-400 mt-0.5">{item.description}</span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
