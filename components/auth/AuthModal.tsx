@@ -40,6 +40,11 @@ export default function AuthModal() {
     setLoading(true);
 
     try {
+      if (!isSupabaseConfigured()) {
+        setError("Authentication is not configured. Please set up Supabase environment variables.");
+        setLoading(false);
+        return;
+      }
       const supabase = createClient();
       const { error: authError } = await supabase.auth.signInWithPassword({
         email,
@@ -86,6 +91,11 @@ export default function AuthModal() {
     setLoading(true);
 
     try {
+      if (!isSupabaseConfigured()) {
+        setError("Authentication is not configured. Please set up Supabase environment variables.");
+        setLoading(false);
+        return;
+      }
       const supabase = createClient();
       const { data, error: authError } = await supabase.auth.signUp({
         email,
