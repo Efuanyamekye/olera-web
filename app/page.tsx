@@ -1,18 +1,205 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import type { Profile, OrganizationMetadata, CaregiverMetadata } from "@/lib/types";
+import ProviderCard, { Provider } from "@/components/providers/ProviderCard";
 
-// Care type options for the quick filters
-const careTypes = [
+// Hook to detect when element is in view
+function useInView(threshold: number = 0.3) {
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { isInView, ref };
+}
+
+// Hook to animate multiple counters together
+function useAnimatedCounters(
+  targets: { end: number; duration?: number }[],
+  shouldStart: boolean
+) {
+  const [counts, setCounts] = useState<number[]>(targets.map(() => 0));
+  const hasAnimatedRef = useRef(false);
+
+  useEffect(() => {
+    if (!shouldStart || hasAnimatedRef.current) return;
+
+    hasAnimatedRef.current = true;
+    let startTime: number | null = null;
+    let animationFrame: number;
+
+    const animate = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime;
+
+      const newCounts = targets.map((target) => {
+        const duration = target.duration || 2000;
+        const progress = Math.min((currentTime - startTime!) / duration, 1);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        return Math.floor(easeOut * target.end);
+      });
+
+      setCounts(newCounts);
+
+      // Continue if any animation isn't complete
+      const allComplete = targets.every((target, i) => {
+        const duration = target.duration || 2000;
+        const progress = (currentTime - startTime!) / duration;
+        return progress >= 1;
+      });
+
+      if (!allComplete) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [shouldStart, targets]);
+
+  return counts;
+}
+
+// Dummy provider data
+const topProviders: Provider[] = [
   {
-    id: "assisted-living",
-    name: "Assisted Living",
-    description: "Support with daily activities in a residential setting",
-    icon: "AL",
+    id: "1",
+    slug: "sunrise-senior-living",
+    name: "Sunrise Senior Living",
+    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+    images: [
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800",
+      "https://images.unsplash.com/photo-1559526324-593bc073d938?w=800",
+      "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800",
+    ],
+    address: "1234 Oak Street, Austin, TX 78701",
+    rating: 4.8,
+    reviewCount: 47,
+    priceRange: "$3,500/mo",
+    primaryCategory: "Assisted Living",
+    careTypes: ["Memory Care", "Respite Care"],
+    highlights: ["24/7 Nursing Staff", "Pet Friendly", "Private Rooms"],
+    acceptedPayments: ["Medicare", "Medicaid", "Private Pay"],
+    verified: true,
+    badge: "Top Rated",
+    description: "Award-winning senior living community with personalized care plans",
+    staffImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200",
+    staff: {
+      name: "Dr. Sarah Mitchell",
+      position: "Director of Care",
+      bio: "Board-certified geriatrician with 15+ years experience in senior care. Passionate about creating personalized care plans that prioritize dignity and quality of life.",
+      image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200",
+    },
+  },
+  {
+    id: "2",
+    slug: "harmony-care-home",
+    name: "Harmony Care Home",
+    image: "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800",
+    images: [
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800",
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+      "https://images.unsplash.com/photo-1559526324-593bc073d938?w=800",
+    ],
+    address: "5678 Maple Avenue, Austin, TX 78702",
+    rating: 4.6,
+    reviewCount: 21,
+    priceRange: "$4,200/mo",
+    primaryCategory: "Memory Care",
+    careTypes: ["Hospice", "Skilled Nursing"],
+    highlights: ["Dementia Specialists", "Secured Facility", "Family Support"],
+    acceptedPayments: ["Medicaid", "Long-term Insurance"],
+    verified: true,
+    description: "Specialized memory care with 24/7 nursing support",
+  },
+  {
+    id: "3",
+    slug: "golden-years-residence",
+    name: "Golden Years Residence",
+    image: "https://images.unsplash.com/photo-1559526324-593bc073d938?w=800",
+    images: [
+      "https://images.unsplash.com/photo-1559526324-593bc073d938?w=800",
+      "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800",
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+      "https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800",
+      "https://images.unsplash.com/photo-1559526324-593bc073d938?w=800",
+    ],
+    address: "910 Pine Road, Austin, TX 78703",
+    rating: 4.5,
+    reviewCount: 12,
+    priceRange: "$2,800/mo",
+    primaryCategory: "Independent Living",
+    careTypes: ["Assisted Living"],
+    highlights: ["Active Lifestyle", "On-site Fitness", "Social Events"],
+    acceptedPayments: ["Private Pay", "Veterans Benefits"],
+    verified: true,
+    badge: "New",
+    description: "Modern community designed for active, independent seniors",
+    staffImage: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200",
+    staff: {
+      name: "Michael Chen",
+      position: "Activities Director",
+      bio: "Certified recreation therapist dedicated to keeping seniors active and engaged. Organizes daily fitness classes, social events, and community outings.",
+      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200",
+    },
+  },
+  {
+    id: "4",
+    slug: "caring-hearts-home-care",
+    name: "Caring Hearts Home Care",
+    image: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800",
+    images: [
+      "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=800",
+      "https://images.unsplash.com/photo-1559526324-593bc073d938?w=800",
+    ],
+    address: "Serving Greater Austin Area",
+    rating: 4.9,
+    reviewCount: 83,
+    priceRange: "$25/hr",
+    primaryCategory: "Home Care",
+    careTypes: ["Respite Care", "Companion Care"],
+    highlights: ["Flexible Scheduling", "Background Checked", "Bilingual Staff"],
+    acceptedPayments: ["Medicare", "Private Pay"],
+    verified: true,
+    description: "Compassionate in-home care tailored to your loved one's needs",
+  },
+  {
+    id: "5",
+    slug: "oak-meadows-retirement",
+    name: "Oak Meadows Retirement",
+    image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
+    images: [
+      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800",
+      "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800",
+    ],
+    address: "2345 Elm Street, Austin, TX 78704",
+    rating: 4.7,
+    reviewCount: 38,
+    priceRange: "$3,200/mo",
+    primaryCategory: "Independent Living",
+    careTypes: ["Assisted Living"],
+    highlights: ["Golf Course Access", "Fine Dining", "Spa Services"],
+    acceptedPayments: ["Private Pay", "Long-term Insurance"],
+    verified: true,
+    badge: "Featured",
+    description: "Luxury retirement living with resort-style amenities",
   },
   {
     id: "6",
@@ -48,32 +235,32 @@ const careCategories = [
   {
     id: "home-care",
     name: "Home Care",
-    description: "Care services delivered in the comfort of home",
-    icon: "HC",
+    iconPath: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
+  },
+  {
+    id: "home-health",
+    name: "Home Health",
+    iconPath: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",
+  },
+  {
+    id: "assisted-living",
+    name: "Assisted Living",
+    iconPath: "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
   },
   {
     id: "memory-care",
     name: "Memory Care",
-    description: "Specialized care for dementia and Alzheimer's",
-    icon: "MC",
+    iconPath: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
   },
   {
     id: "independent-living",
     name: "Independent Living",
-    description: "Active adult communities with amenities",
-    icon: "IL",
+    iconPath: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z",
   },
   {
-    id: "skilled-nursing",
-    name: "Skilled Nursing",
-    description: "24/7 medical care and rehabilitation",
-    icon: "SN",
-  },
-  {
-    id: "respite-care",
-    name: "Respite Care",
-    description: "Short-term relief for family caregivers",
-    icon: "RC",
+    id: "nursing-home",
+    name: "Nursing Home",
+    iconPath: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10",
   },
 ];
 
@@ -401,7 +588,9 @@ function BrowseByCareTypeSection() {
 
 export default function HomePage() {
   const [location, setLocation] = useState("");
-  const [providers, setProviders] = useState<Profile[]>([]);
+  const [careType, setCareType] = useState("");
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
   const router = useRouter();
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -443,31 +632,11 @@ export default function HomePage() {
     }
   };
 
-  useEffect(() => {
-    if (!isSupabaseConfigured()) return;
-
-    const fetchTopProviders = async () => {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .neq("type", "family")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .limit(4);
-      if (data) setProviders(data as Profile[]);
-    };
-
-    fetchTopProviders();
-  }, []);
-
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const params = new URLSearchParams();
     if (location.trim()) {
-      router.push(`/browse?q=${encodeURIComponent(location.trim())}`);
-    } else {
-      router.push("/browse");
+      params.set("location", location.trim());
     }
     if (careType) {
       params.set("type", careType);
@@ -555,10 +724,9 @@ export default function HomePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
-                <button
-                  type="submit"
-                  className="bg-warm-700 hover:bg-warm-800 text-white font-semibold px-8 py-4 rounded-xl transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg"
-                >
+
+                {/* Care Type Dropdown - Gray pill */}
+                <div className="flex-1 flex items-center px-4 py-3.5 bg-gray-100 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
                   <svg
                     className="w-5 h-5 text-gray-500 flex-shrink-0"
                     fill="none"
@@ -611,32 +779,69 @@ export default function HomePage() {
       </section>
 
       {/* Top Providers Section */}
-      {providers.length > 0 && (
-        <section className="py-16 md:py-24 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-                Featured providers
-              </h2>
-              <Link
-                href="/browse"
-                className="text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1"
+      <section className="py-16 md:py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header with title and arrows */}
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+              Top providers near you
+            </h2>
+            <div className="flex gap-2">
+              <button
+                onClick={scrollLeft_handler}
+                className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors ${
+                  canScrollLeft
+                    ? "border-primary-600 text-primary-600 hover:bg-primary-50"
+                    : "border-gray-200 text-gray-300"
+                }`}
+                aria-label="Scroll left"
               >
-                View all
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button
+                onClick={scrollRight_handler}
+                className={`w-10 h-10 rounded-full border flex items-center justify-center transition-colors ${
+                  canScrollRight
+                    ? "border-primary-600 text-primary-600 hover:bg-primary-50"
+                    : "border-gray-200 text-gray-300"
+                }`}
+                aria-label="Scroll right"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {providers.map((profile) => (
-                <HomeProviderCard key={profile.id} profile={profile} />
-              ))}
+              </button>
             </div>
           </div>
-        </section>
-      )}
+
+          {/* Provider Cards - Horizontal Scroll */}
+          <div
+            ref={scrollContainerRef}
+            className="flex gap-5 overflow-x-scroll pb-4 scrollbar-hide"
+          >
+            {topProviders.map((provider) => (
+              <div key={provider.id} className="flex-shrink-0 w-[370px] h-[512px]">
+                <ProviderCard provider={provider} />
+              </div>
+            ))}
+          </div>
+
+          {/* View all link */}
+          <div className="mt-6 text-center">
+            <Link
+              href="/browse"
+              className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-medium"
+            >
+              View all providers
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* Social Proof Stats Section */}
       <SocialProofSection />
@@ -662,37 +867,61 @@ export default function HomePage() {
               }}
             />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {careTypes.map((type) => (
-              <Link
-                key={type.id}
-                href={`/browse?type=${type.id}`}
-                className="card p-6 hover:border-primary-200 group"
-              >
-                <div className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4">
-                  <span className="text-primary-700 font-bold text-sm">
-                    {type.icon}
-                  </span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
-                  {type.name}
-                </h3>
-                <p className="mt-2 text-gray-600">{type.description}</p>
-                <div className="mt-4 text-primary-600 font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                  <span>Browse options</span>
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
+            {/* Teal glow effect behind video area */}
+            <div className="absolute top-1/2 right-0 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl transform translate-x-1/4 -translate-y-1/2" />
+            <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-primary-400/10 rounded-full blur-2xl" />
+
+            {/* Decorative elements */}
+            <div className="absolute top-12 left-12 w-20 h-20 border border-white/10 rounded-full" />
+            <div className="absolute top-16 left-16 w-12 h-12 border border-primary-500/20 rounded-full" />
+            <div className="absolute bottom-12 left-1/4 w-2 h-2 bg-primary-400/40 rounded-full" />
+            <div className="absolute bottom-20 left-1/3 w-1.5 h-1.5 bg-white/20 rounded-full" />
+
+            <div className="relative flex items-center justify-center p-8 md:p-12 lg:p-16">
+              <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 w-full max-w-6xl">
+                {/* Left side - Text content */}
+                <div className="flex flex-col lg:w-[40%]">
+                  {/* Chapter badge */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className="inline-flex items-center gap-1.5 bg-primary-500/20 border border-primary-500/30 text-primary-400 text-xs font-semibold px-3 py-1.5 rounded-full">
+                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                      </svg>
+                      Chapter 1
+                    </span>
+                    <span className="text-gray-500 text-sm">Documentary Series</span>
+                  </div>
+
+                  <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4">
+                    Aging in America
+                  </h2>
+
+                  <p className="text-gray-400 text-base mb-8 max-w-sm leading-relaxed">
+                    Explore the realities of senior care in America and discover how families navigate finding the right care.
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center items-start gap-4">
+                    <Link
+                      href="/browse"
+                      className="group inline-flex items-center gap-2 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-semibold px-6 py-3.5 rounded-xl transition-all duration-300 shadow-lg shadow-primary-500/25 hover:shadow-xl hover:shadow-primary-500/30 hover:scale-[1.02]"
+                    >
+                      Start Your Search
+                      <svg className="w-5 h-5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                    <Link
+                      href="https://youtube.com/@olera"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm font-medium transition-colors"
+                    >
+                      Watch more chapters
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </Link>
+                  </div>
                 </div>
 
                 {/* Right side - YouTube Video */}
@@ -782,100 +1011,12 @@ export default function HomePage() {
             <Link href="/browse" className="btn-primary">
               Browse Care Options
             </Link>
-            <Link href="/for-providers" className="btn-secondary">
-              For Providers
+            <Link href="/auth/signup" className="btn-secondary">
+              Create Free Account
             </Link>
           </div>
         </div>
       </section>
     </div>
-  );
-}
-
-function HomeProviderCard({ profile }: { profile: Profile }) {
-  const meta = profile.metadata as OrganizationMetadata & CaregiverMetadata;
-  const priceRange =
-    meta?.price_range ||
-    (meta?.hourly_rate_min && meta?.hourly_rate_max
-      ? `$${meta.hourly_rate_min}-${meta.hourly_rate_max}/hr`
-      : null);
-  const locationStr = [profile.city, profile.state].filter(Boolean).join(", ");
-  const displayedCareTypes = (profile.care_types || []).slice(0, 2);
-  const remainingCount = Math.max(0, (profile.care_types || []).length - 2);
-
-  return (
-    <Link
-      href={`/provider/${profile.slug}`}
-      className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow block"
-    >
-      <div className="relative h-48 bg-gray-200">
-        {profile.image_url ? (
-          <img
-            src={profile.image_url}
-            alt={profile.display_name}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-300 flex items-center justify-center">
-            <span className="text-4xl font-bold text-primary-600/40">
-              {profile.display_name.charAt(0)}
-            </span>
-          </div>
-        )}
-
-        {profile.claim_state === "claimed" &&
-          profile.verification_state === "verified" && (
-            <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-primary-600 text-sm font-medium px-3 py-1 rounded-full flex items-center gap-1.5">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Verified
-            </div>
-          )}
-      </div>
-
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-900 text-lg leading-tight">
-          {profile.display_name}
-        </h3>
-
-        {locationStr && (
-          <p className="text-gray-500 text-base mt-1">{locationStr}</p>
-        )}
-
-        {priceRange && (
-          <div className="mt-3">
-            <p className="text-gray-500 text-sm">Estimated Pricing</p>
-            <p className="text-gray-900 font-semibold">{priceRange}</p>
-          </div>
-        )}
-
-        {displayedCareTypes.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
-            {displayedCareTypes.map((ct) => (
-              <span
-                key={ct}
-                className="bg-gray-100 text-gray-600 text-xs px-2.5 py-1 rounded-full"
-              >
-                {ct}
-              </span>
-            ))}
-            {remainingCount > 0 && (
-              <span className="bg-gray-100 text-gray-600 text-xs px-2.5 py-1 rounded-full">
-                +{remainingCount} more
-              </span>
-            )}
-          </div>
-        )}
-
-        <div className="mt-4 text-primary-600 font-medium text-base">
-          View provider
-        </div>
-      </div>
-    </Link>
   );
 }

@@ -327,47 +327,10 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
           <p className="text-gray-900 font-semibold">{provider.priceRange}</p>
         </div>
 
-                  {/* Info Icon with Tooltip */}
-                  <div className="relative group/info flex-shrink-0 ml-2">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                      }}
-                      className="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
-                      aria-label="Pricing information"
-                    >
-                      <svg
-                        className="w-3 h-3 text-gray-500"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                    </button>
-                    {/* Info Tooltip */}
-                    <div className="absolute right-0 bottom-full mb-2 w-56 p-2.5 bg-gray-900 text-white text-xs rounded-lg shadow-lg opacity-0 invisible group-hover/info:opacity-100 group-hover/info:visible transition-all duration-200 z-50">
-                      Prices may vary based on care needs and room type. Contact the provider for accurate pricing.
-                      <div className="absolute -bottom-1 right-2 w-2 h-2 bg-gray-900 rotate-45" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
         {/* CTA Button */}
-        <Link
-          href={`/provider/${provider.slug}`}
-          className="mt-4 w-full btn-primary text-base"
-        >
+        <span className="mt-4 w-full btn-primary text-base block text-center">
           View provider
-        </Link>
+        </span>
       </div>
     </Link>
   );
