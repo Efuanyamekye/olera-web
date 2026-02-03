@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { getDeferredAction, clearDeferredAction } from "@/lib/deferred-action";
 import type { ProfileType, ProfileCategory } from "@/lib/types";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
+
+const FORM_STORAGE_KEY = "olera_create_profile_form";
 
 const CARE_TYPES = [
   "Assisted Living",
@@ -47,6 +50,39 @@ function generateSlug(name: string, city: string, state: string): string {
   return `${base}-${suffix}`;
 }
 
+interface FormData {
+  kind: ProviderKind | null;
+  name: string;
+  category: ProfileCategory | "";
+  city: string;
+  state: string;
+  zip: string;
+  careTypes: string[];
+  description: string;
+  phone: string;
+}
+
+function saveFormToStorage(data: FormData) {
+  if (typeof window === "undefined") return;
+  sessionStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
+}
+
+function loadFormFromStorage(): FormData | null {
+  if (typeof window === "undefined") return null;
+  const raw = sessionStorage.getItem(FORM_STORAGE_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function clearFormStorage() {
+  if (typeof window === "undefined") return;
+  sessionStorage.removeItem(FORM_STORAGE_KEY);
+}
+
 export default function CreateProfilePage() {
   const router = useRouter();
   const { user, account, openAuthModal, refreshAccountData } = useAuth();
@@ -62,6 +98,23 @@ export default function CreateProfilePage() {
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const autoSubmitTriggered = useRef(false);
+
+  // Restore form data from sessionStorage on mount (after returning from auth)
+  useEffect(() => {
+    const saved = loadFormFromStorage();
+    if (saved) {
+      setKind(saved.kind);
+      setName(saved.name);
+      setCategory(saved.category);
+      setCity(saved.city);
+      setState(saved.state);
+      setZip(saved.zip);
+      setCareTypes(saved.careTypes);
+      setDescription(saved.description);
+      setPhone(saved.phone);
+    }
+  }, []);
 
   const toggleCareType = (ct: string) => {
     setCareTypes((prev) =>
@@ -69,18 +122,11 @@ export default function CreateProfilePage() {
     );
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!user) {
-      openAuthModal({
-        action: "claim",
-        returnUrl: "/for-providers/create",
-      });
-      return;
-    }
-
-    if (!account || !kind || !name.trim() || !city.trim() || !state.trim()) return;
+  const executeCreate = useCallback(async (
+    formData: FormData,
+    createAccount: NonNullable<typeof account>
+  ) => {
+    if (!formData.kind || !formData.name.trim() || !formData.city.trim() || !formData.state.trim()) return;
     if (!isSupabaseConfigured()) return;
 
     setSubmitting(true);
@@ -88,23 +134,23 @@ export default function CreateProfilePage() {
 
     try {
       const supabase = createClient();
-      const profileType: ProfileType = kind;
-      const slug = generateSlug(name, city, state);
+      const profileType: ProfileType = formData.kind;
+      const slug = generateSlug(formData.name, formData.city, formData.state);
 
       const { data: newProfile, error: insertError } = await supabase
         .from("profiles")
         .insert({
-          account_id: account.id,
+          account_id: createAccount.id,
           slug,
           type: profileType,
-          category: kind === "organization" ? category || null : "private_caregiver",
-          display_name: name.trim(),
-          description: description.trim() || null,
-          phone: phone.trim() || null,
-          city: city.trim(),
-          state: state.trim(),
-          zip: zip.trim() || null,
-          care_types: careTypes,
+          category: formData.kind === "organization" ? formData.category || null : "private_caregiver",
+          display_name: formData.name.trim(),
+          description: formData.description.trim() || null,
+          phone: formData.phone.trim() || null,
+          city: formData.city.trim(),
+          state: formData.state.trim(),
+          zip: formData.zip.trim() || null,
+          care_types: formData.careTypes,
           claim_state: "claimed",
           verification_state: "unverified",
           source: "user_created",
@@ -122,7 +168,7 @@ export default function CreateProfilePage() {
           active_profile_id: newProfile.id,
           onboarding_completed: true,
         })
-        .eq("id", account.id);
+        .eq("id", createAccount.id);
 
       if (accountError) throw new Error(accountError.message);
 
@@ -130,20 +176,21 @@ export default function CreateProfilePage() {
       const { data: existingMembership } = await supabase
         .from("memberships")
         .select("id")
-        .eq("account_id", account.id)
+        .eq("account_id", createAccount.id)
         .single();
 
       if (!existingMembership) {
         const trialEnd = new Date();
         trialEnd.setDate(trialEnd.getDate() + 30);
         await supabase.from("memberships").insert({
-          account_id: account.id,
+          account_id: createAccount.id,
           plan: "pro",
           status: "trialing",
           trial_ends_at: trialEnd.toISOString(),
         });
       }
 
+      clearFormStorage();
       await refreshAccountData();
       router.push("/portal");
     } catch (err: unknown) {
@@ -155,7 +202,41 @@ export default function CreateProfilePage() {
       setError(`Something went wrong: ${message}`);
       setSubmitting(false);
     }
+  }, [refreshAccountData, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const formData: FormData = { kind, name, category, city, state, zip, careTypes, description, phone };
+
+    if (!user) {
+      // Save form data so it persists across the auth redirect
+      saveFormToStorage(formData);
+      openAuthModal({
+        action: "create_profile",
+        returnUrl: "/for-providers/create",
+      });
+      return;
+    }
+
+    if (!account) return;
+    executeCreate(formData, account);
   };
+
+  // Auto-submit: if user returns from auth with saved form data,
+  // submit automatically instead of making them click again
+  useEffect(() => {
+    if (autoSubmitTriggered.current) return;
+    if (!user || !account) return;
+
+    const deferred = getDeferredAction();
+    const saved = loadFormFromStorage();
+    if (deferred?.action === "create_profile" && saved?.kind && saved?.name) {
+      autoSubmitTriggered.current = true;
+      clearDeferredAction();
+      executeCreate(saved, account);
+    }
+  }, [user, account, executeCreate]);
 
   // Step 1: Pick org vs caregiver
   if (!kind) {
