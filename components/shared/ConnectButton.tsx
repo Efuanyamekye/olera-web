@@ -4,8 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { canEngage, isProfileShareable, getProfileCompletionGaps } from "@/lib/membership";
-import type { ConnectionType, Membership } from "@/lib/types";
+import {
+  canEngage,
+  isProfileShareable,
+  getProfileCompletionGaps,
+  FREE_CONNECTION_LIMIT,
+} from "@/lib/membership";
+import type { ConnectionType } from "@/lib/types";
 import Button from "@/components/ui/Button";
 import Modal from "@/components/ui/Modal";
 
@@ -31,12 +36,22 @@ interface ConnectButtonProps {
 }
 
 /**
+ * Single modal state machine — exactly one modal can be open at a time.
+ * Eliminates the possibility of flash/overlap from independent booleans.
+ */
+type ModalState =
+  | { kind: "closed" }
+  | { kind: "confirm" }
+  | { kind: "success" }
+  | { kind: "upgrade" }
+  | { kind: "incomplete"; gaps: string[] };
+
+const CLOSED: ModalState = { kind: "closed" };
+
+/**
  * ConnectButton creates a connection (profile share) between two profiles.
  * The connection record links from_profile_id → to_profile_id. Both parties
  * can then view each other's profile — the profile IS the message.
- *
- * An optional note can be attached, but the primary interaction is the
- * profile share itself.
  */
 export default function ConnectButton({
   fromProfileId,
@@ -49,24 +64,34 @@ export default function ConnectButton({
   fullWidth = false,
   size = "sm",
 }: ConnectButtonProps) {
-  const { user, activeProfile, membership, openAuthModal, refreshAccountData } = useAuth();
+  const { user, activeProfile, membership, openAuthModal, refreshAccountData } =
+    useAuth();
   const [alreadySent, setAlreadySent] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modal, setModal] = useState<ModalState>(CLOSED);
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [showIncompleteModal, setShowIncompleteModal] = useState(false);
+
+  // Local optimistic counter — tracks connections made in THIS session
+  // so we don't depend solely on the async refreshAccountData round-trip.
+  const [localConnectionsMade, setLocalConnectionsMade] = useState(0);
 
   const profileShareable = isProfileShareable(activeProfile);
-  const completionGaps = !profileShareable ? getProfileCompletionGaps(activeProfile) : [];
 
-  const hasEngageAccess = canEngage(
+  // Compute access using both server membership AND local optimistic count
+  const serverAccess = canEngage(
     activeProfile?.type,
     membership,
     "initiate_contact"
   );
+
+  // If on free tier, also check local count hasn't exceeded limit
+  const isFree =
+    membership?.status === "free" || membership?.status === "trialing";
+  const serverUsed = membership?.free_responses_used ?? 0;
+  const hasEngageAccess = isFree
+    ? serverUsed + localConnectionsMade < FREE_CONNECTION_LIMIT && serverAccess
+    : serverAccess;
 
   // Check for existing connection
   useEffect(() => {
@@ -108,11 +133,13 @@ export default function ConnectButton({
         });
 
       if (insertError) {
-        if (insertError.code === "23505" ||
-            insertError.message.includes("duplicate") ||
-            insertError.message.includes("unique")) {
+        if (
+          insertError.code === "23505" ||
+          insertError.message.includes("duplicate") ||
+          insertError.message.includes("unique")
+        ) {
           setAlreadySent(true);
-          setModalOpen(false);
+          setModal(CLOSED);
           return;
         }
         throw new Error(insertError.message);
@@ -129,15 +156,18 @@ export default function ConnectButton({
           .update({ free_responses_used: newCount })
           .eq("account_id", membership.account_id);
 
-        // Refresh auth state so canEngage re-evaluates with updated count
-        refreshAccountData();
+        // Optimistic local increment — immediately gates next click
+        setLocalConnectionsMade((prev) => prev + 1);
+
+        // Refresh auth state so canEngage re-evaluates with updated count.
+        // Awaited so state is consistent before user can interact again.
+        await refreshAccountData();
       }
 
-      setSuccess(true);
       setAlreadySent(true);
+      setModal({ kind: "success" });
       setTimeout(() => {
-        setModalOpen(false);
-        setSuccess(false);
+        setModal(CLOSED);
         setNote("");
       }, 1500);
     } catch (err: unknown) {
@@ -149,7 +179,7 @@ export default function ConnectButton({
     } finally {
       setSubmitting(false);
     }
-  }, [fromProfileId, toProfileId, connectionType, note]);
+  }, [fromProfileId, toProfileId, connectionType, note, membership, refreshAccountData]);
 
   const handleClick = () => {
     if (!user) {
@@ -160,28 +190,37 @@ export default function ConnectButton({
 
     // Profile completeness check — must have minimum info before sharing
     if (!profileShareable) {
-      setShowIncompleteModal(true);
+      const gaps = getProfileCompletionGaps(activeProfile);
+      setModal({ kind: "incomplete", gaps });
       return;
     }
 
     // Paywall check — families always pass, providers need membership
     if (!hasEngageAccess) {
-      setShowUpgradeModal(true);
+      setModal({ kind: "upgrade" });
       return;
     }
 
     if (showConfirmation) {
-      setModalOpen(true);
+      setModal({ kind: "confirm" });
     } else {
       createConnection();
     }
   };
 
-  const actionLabel = connectionType === "invitation"
-    ? "invite"
-    : connectionType === "application"
-    ? "apply to"
-    : "connect with";
+  const closeModal = () => {
+    if (!submitting) {
+      setModal(CLOSED);
+      setError("");
+    }
+  };
+
+  const actionLabel =
+    connectionType === "invitation"
+      ? "invite"
+      : connectionType === "application"
+      ? "apply to"
+      : "connect with";
 
   return (
     <>
@@ -195,22 +234,32 @@ export default function ConnectButton({
         {alreadySent ? sentLabel : label}
       </Button>
 
+      {/* Confirmation / success modal */}
       <Modal
-        isOpen={modalOpen}
-        onClose={() => {
-          if (!submitting) {
-            setModalOpen(false);
-            setError("");
-          }
-        }}
-        title={success ? "Sent!" : `Share your profile with ${toName}`}
+        isOpen={modal.kind === "confirm" || modal.kind === "success"}
+        onClose={closeModal}
+        title={
+          modal.kind === "success"
+            ? "Sent!"
+            : `Share your profile with ${toName}`
+        }
         size="md"
       >
-        {success ? (
+        {modal.kind === "success" ? (
           <div className="text-center py-4">
             <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-8 h-8 text-primary-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
             <p className="text-lg text-gray-900">
@@ -220,13 +269,16 @@ export default function ConnectButton({
         ) : (
           <div className="space-y-4">
             <p className="text-base text-gray-600">
-              When you {actionLabel} <strong>{toName}</strong>, your profile will be
-              shared with them. They&#39;ll be able to see your profile details
-              and respond to you.
+              When you {actionLabel} <strong>{toName}</strong>, your profile
+              will be shared with them. They&#39;ll be able to see your profile
+              details and respond to you.
             </p>
 
             <div>
-              <label htmlFor="connect-note" className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                htmlFor="connect-note"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
                 Add a note (optional)
               </label>
               <textarea
@@ -240,16 +292,15 @@ export default function ConnectButton({
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base" role="alert">
+              <div
+                className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base"
+                role="alert"
+              >
                 {error}
               </div>
             )}
 
-            <Button
-              fullWidth
-              loading={submitting}
-              onClick={createConnection}
-            >
+            <Button fullWidth loading={submitting} onClick={createConnection}>
               Share Profile
             </Button>
           </div>
@@ -258,8 +309,8 @@ export default function ConnectButton({
 
       {/* Upgrade paywall modal */}
       <Modal
-        isOpen={showUpgradeModal}
-        onClose={() => setShowUpgradeModal(false)}
+        isOpen={modal.kind === "upgrade"}
+        onClose={closeModal}
         title="Upgrade to connect"
         size="sm"
       >
@@ -280,12 +331,14 @@ export default function ConnectButton({
             </svg>
           </div>
           <p className="text-base text-gray-600 mb-6">
-            Upgrade to Pro to share your profile and connect with others on Olera.
+            You&#39;ve used all {FREE_CONNECTION_LIMIT} free connections.
+            Upgrade to Pro to continue sharing your profile and connecting with
+            others on Olera.
           </p>
           <Link
             href="/portal/settings"
             className="inline-flex items-center justify-center w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors min-h-[44px]"
-            onClick={() => setShowUpgradeModal(false)}
+            onClick={closeModal}
           >
             View upgrade options
           </Link>
@@ -297,18 +350,19 @@ export default function ConnectButton({
 
       {/* Incomplete profile modal */}
       <Modal
-        isOpen={showIncompleteModal}
-        onClose={() => setShowIncompleteModal(false)}
+        isOpen={modal.kind === "incomplete"}
+        onClose={closeModal}
         title="Complete your profile first"
         size="sm"
       >
         <div className="py-2">
           <p className="text-base text-gray-600 mb-4">
-            Your profile needs a few more details before you can share it with others.
+            Your profile needs a few more details before you can share it with
+            others.
           </p>
-          {completionGaps.length > 0 && (
+          {modal.kind === "incomplete" && modal.gaps.length > 0 && (
             <ul className="text-sm text-gray-600 mb-6 space-y-1">
-              {completionGaps.map((gap) => (
+              {modal.gaps.map((gap) => (
                 <li key={gap} className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-warm-500 rounded-full shrink-0" />
                   Add {gap}
@@ -319,7 +373,7 @@ export default function ConnectButton({
           <Link
             href="/portal/profile"
             className="inline-flex items-center justify-center w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors min-h-[44px]"
-            onClick={() => setShowIncompleteModal(false)}
+            onClick={closeModal}
           >
             Edit Profile
           </Link>
