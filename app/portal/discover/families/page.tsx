@@ -31,8 +31,10 @@ export default function DiscoverFamiliesPage() {
     "view_inquiry_details"
   );
 
+  const profileId = activeProfile?.id;
+
   useEffect(() => {
-    if (!activeProfile || !isProvider || !isSupabaseConfigured()) {
+    if (!profileId || !isProvider || !isSupabaseConfigured()) {
       setLoading(false);
       return;
     }
@@ -52,7 +54,7 @@ export default function DiscoverFamiliesPage() {
     };
 
     fetchFamilies();
-  }, [activeProfile, isProvider]);
+  }, [profileId, isProvider]);
 
   if (!isProvider) {
     return (

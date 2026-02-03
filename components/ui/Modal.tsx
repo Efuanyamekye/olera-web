@@ -17,6 +17,14 @@ const sizeClasses: Record<string, string> = {
   lg: "max-w-lg",
 };
 
+/**
+ * Measure scrollbar width so we can compensate when hiding overflow.
+ * Without this, hiding the scrollbar causes a ~17px layout shift.
+ */
+function getScrollbarWidth(): number {
+  return window.innerWidth - document.documentElement.clientWidth;
+}
+
 export default function Modal({
   isOpen,
   onClose,
@@ -39,16 +47,23 @@ export default function Modal({
     }
   }, []);
 
-  // Keyboard listener + scroll lock — only re-runs when isOpen changes
+  // Keyboard listener + scroll lock — only re-runs when isOpen changes.
+  // Compensates for scrollbar width to prevent layout shift.
   useEffect(() => {
     if (!isOpen) return;
 
+    const scrollbarWidth = getScrollbarWidth();
+
     document.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
     };
   }, [isOpen, handleKeyDown]);
 
@@ -73,7 +88,7 @@ export default function Modal({
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
       role="dialog"
       aria-modal="true"
       aria-label={title}

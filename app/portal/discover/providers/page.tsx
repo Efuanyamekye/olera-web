@@ -22,8 +22,10 @@ export default function DiscoverProvidersPage() {
     "initiate_contact"
   );
 
+  const profileId = activeProfile?.id;
+
   useEffect(() => {
-    if (!activeProfile || !isCaregiver || !isSupabaseConfigured()) {
+    if (!profileId || !isCaregiver || !isSupabaseConfigured()) {
       setLoading(false);
       return;
     }
@@ -43,7 +45,7 @@ export default function DiscoverProvidersPage() {
     };
 
     fetchOrgs();
-  }, [activeProfile, isCaregiver]);
+  }, [profileId, isCaregiver]);
 
   if (!isCaregiver) {
     return (

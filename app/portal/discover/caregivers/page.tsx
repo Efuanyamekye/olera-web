@@ -22,8 +22,10 @@ export default function DiscoverCaregiversPage() {
     "view_inquiry_details"
   );
 
+  const profileId = activeProfile?.id;
+
   useEffect(() => {
-    if (!activeProfile || !isOrg || !isSupabaseConfigured()) {
+    if (!profileId || !isOrg || !isSupabaseConfigured()) {
       setLoading(false);
       return;
     }
@@ -43,7 +45,7 @@ export default function DiscoverCaregiversPage() {
     };
 
     fetchCaregivers();
-  }, [activeProfile, isOrg]);
+  }, [profileId, isOrg]);
 
   if (!isOrg) {
     return (

@@ -33,8 +33,10 @@ function BrowseCaregiversContent() {
     "view_inquiry_details"
   );
 
+  const profileId = activeProfile?.id;
+
   useEffect(() => {
-    if (!activeProfile || !isSupabaseConfigured()) {
+    if (!profileId || !isSupabaseConfigured()) {
       setLoading(false);
       return;
     }
@@ -54,7 +56,7 @@ function BrowseCaregiversContent() {
     };
 
     fetchCaregivers();
-  }, [activeProfile]);
+  }, [profileId]);
 
   if (loading) {
     return (

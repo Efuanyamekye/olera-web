@@ -69,11 +69,11 @@
    ============================================================ */
 @layer utilities {
   .animate-fade-in {
-    animation: fadeIn 150ms ease-out;
+    animation: fadeIn 150ms ease-out forwards;
   }
 
   .animate-slide-up {
-    animation: slideUp 150ms ease-out;
+    animation: slideUp 150ms ease-out forwards;
   }
 
   @keyframes fadeIn {

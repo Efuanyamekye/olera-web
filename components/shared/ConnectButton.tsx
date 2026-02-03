@@ -234,22 +234,92 @@ export default function ConnectButton({
         {alreadySent ? sentLabel : label}
       </Button>
 
-      {/* Confirmation / success modal */}
-      <Modal
-        isOpen={modal.kind === "confirm" || modal.kind === "success"}
-        onClose={closeModal}
-        title={
-          modal.kind === "success"
-            ? "Sent!"
-            : `Share your profile with ${toName}`
-        }
-        size="md"
-      >
-        {modal.kind === "success" ? (
-          <div className="text-center py-4">
-            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+      {/* Only mount the active modal — avoids N×3 Modal instances in the DOM */}
+      {(modal.kind === "confirm" || modal.kind === "success") && (
+        <Modal
+          isOpen
+          onClose={closeModal}
+          title={
+            modal.kind === "success"
+              ? "Sent!"
+              : `Share your profile with ${toName}`
+          }
+          size="md"
+        >
+          {modal.kind === "success" ? (
+            <div className="text-center py-4">
+              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg
+                  className="w-8 h-8 text-primary-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <p className="text-lg text-gray-900">
+                Your profile has been shared with {toName}.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <p className="text-base text-gray-600">
+                When you {actionLabel} <strong>{toName}</strong>, your profile
+                will be shared with them. They&#39;ll be able to see your profile
+                details and respond to you.
+              </p>
+
+              <div>
+                <label
+                  htmlFor="connect-note"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Add a note (optional)
+                </label>
+                <textarea
+                  id="connect-note"
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder="Introduce yourself or share why you're reaching out..."
+                  rows={3}
+                  className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                />
+              </div>
+
+              {error && (
+                <div
+                  className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base"
+                  role="alert"
+                >
+                  {error}
+                </div>
+              )}
+
+              <Button fullWidth loading={submitting} onClick={createConnection}>
+                Share Profile
+              </Button>
+            </div>
+          )}
+        </Modal>
+      )}
+
+      {modal.kind === "upgrade" && (
+        <Modal
+          isOpen
+          onClose={closeModal}
+          title="Upgrade to connect"
+          size="sm"
+        >
+          <div className="text-center py-2">
+            <div className="w-12 h-12 bg-warm-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <svg
-                className="w-8 h-8 text-primary-600"
+                className="w-6 h-6 text-warm-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -258,127 +328,61 @@ export default function ConnectButton({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M5 13l4 4L19 7"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 />
               </svg>
             </div>
-            <p className="text-lg text-gray-900">
-              Your profile has been shared with {toName}.
+            <p className="text-base text-gray-600 mb-6">
+              You&#39;ve used all {FREE_CONNECTION_LIMIT} free connections.
+              Upgrade to Pro to continue sharing your profile and connecting with
+              others on Olera.
             </p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            <p className="text-base text-gray-600">
-              When you {actionLabel} <strong>{toName}</strong>, your profile
-              will be shared with them. They&#39;ll be able to see your profile
-              details and respond to you.
-            </p>
-
-            <div>
-              <label
-                htmlFor="connect-note"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Add a note (optional)
-              </label>
-              <textarea
-                id="connect-note"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Introduce yourself or share why you're reaching out..."
-                rows={3}
-                className="w-full px-4 py-3 text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
-              />
-            </div>
-
-            {error && (
-              <div
-                className="bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base"
-                role="alert"
-              >
-                {error}
-              </div>
-            )}
-
-            <Button fullWidth loading={submitting} onClick={createConnection}>
-              Share Profile
-            </Button>
-          </div>
-        )}
-      </Modal>
-
-      {/* Upgrade paywall modal */}
-      <Modal
-        isOpen={modal.kind === "upgrade"}
-        onClose={closeModal}
-        title="Upgrade to connect"
-        size="sm"
-      >
-        <div className="text-center py-2">
-          <div className="w-12 h-12 bg-warm-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg
-              className="w-6 h-6 text-warm-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+            <Link
+              href="/portal/settings"
+              className="inline-flex items-center justify-center w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors min-h-[44px]"
+              onClick={closeModal}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-              />
-            </svg>
+              View upgrade options
+            </Link>
+            <p className="text-sm text-gray-500 mt-3">
+              Plans start at $25/month
+            </p>
           </div>
-          <p className="text-base text-gray-600 mb-6">
-            You&#39;ve used all {FREE_CONNECTION_LIMIT} free connections.
-            Upgrade to Pro to continue sharing your profile and connecting with
-            others on Olera.
-          </p>
-          <Link
-            href="/portal/settings"
-            className="inline-flex items-center justify-center w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors min-h-[44px]"
-            onClick={closeModal}
-          >
-            View upgrade options
-          </Link>
-          <p className="text-sm text-gray-500 mt-3">
-            Plans start at $25/month
-          </p>
-        </div>
-      </Modal>
+        </Modal>
+      )}
 
-      {/* Incomplete profile modal */}
-      <Modal
-        isOpen={modal.kind === "incomplete"}
-        onClose={closeModal}
-        title="Complete your profile first"
-        size="sm"
-      >
-        <div className="py-2">
-          <p className="text-base text-gray-600 mb-4">
-            Your profile needs a few more details before you can share it with
-            others.
-          </p>
-          {modal.kind === "incomplete" && modal.gaps.length > 0 && (
-            <ul className="text-sm text-gray-600 mb-6 space-y-1">
-              {modal.gaps.map((gap) => (
-                <li key={gap} className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-warm-500 rounded-full shrink-0" />
-                  Add {gap}
-                </li>
-              ))}
-            </ul>
-          )}
-          <Link
-            href="/portal/profile"
-            className="inline-flex items-center justify-center w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors min-h-[44px]"
-            onClick={closeModal}
-          >
-            Edit Profile
-          </Link>
-        </div>
-      </Modal>
+      {modal.kind === "incomplete" && (
+        <Modal
+          isOpen
+          onClose={closeModal}
+          title="Complete your profile first"
+          size="sm"
+        >
+          <div className="py-2">
+            <p className="text-base text-gray-600 mb-4">
+              Your profile needs a few more details before you can share it with
+              others.
+            </p>
+            {modal.gaps.length > 0 && (
+              <ul className="text-sm text-gray-600 mb-6 space-y-1">
+                {modal.gaps.map((gap) => (
+                  <li key={gap} className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-warm-500 rounded-full shrink-0" />
+                    Add {gap}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <Link
+              href="/portal/profile"
+              className="inline-flex items-center justify-center w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors min-h-[44px]"
+              onClick={closeModal}
+            >
+              Edit Profile
+            </Link>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

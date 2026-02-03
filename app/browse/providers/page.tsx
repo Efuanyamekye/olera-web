@@ -32,8 +32,10 @@ function BrowseProvidersContent() {
     "initiate_contact"
   );
 
+  const profileId = activeProfile?.id;
+
   useEffect(() => {
-    if (!activeProfile || !isSupabaseConfigured()) {
+    if (!profileId || !isSupabaseConfigured()) {
       setLoading(false);
       return;
     }
@@ -53,7 +55,7 @@ function BrowseProvidersContent() {
     };
 
     fetchOrgs();
-  }, [activeProfile]);
+  }, [profileId]);
 
   if (loading) {
     return (

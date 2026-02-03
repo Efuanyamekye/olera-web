@@ -159,8 +159,8 @@ export default function PortalSidebar({ profile }: PortalSidebarProps) {
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className="hidden md:flex md:flex-col md:w-64 bg-white border-r border-gray-200">
+      {/* Desktop sidebar — sticky so bottom section stays visible on long pages */}
+      <aside className="hidden md:flex md:flex-col md:w-64 bg-white border-r border-gray-200 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
         <div className="p-6 border-b border-gray-100">
           {profile ? (
             <div>

@@ -30,8 +30,10 @@ export default function BrowseFamiliesPage() {
     "view_inquiry_details"
   );
 
+  const userId = user?.id;
+
   useEffect(() => {
-    if (!user || !isProvider || !isSupabaseConfigured()) {
+    if (!userId || !isProvider || !isSupabaseConfigured()) {
       setLoading(false);
       return;
     }
@@ -51,7 +53,7 @@ export default function BrowseFamiliesPage() {
     };
 
     fetchFamilies();
-  }, [user, isProvider]);
+  }, [userId, isProvider]);
 
   // Non-provider guard
   if (!isProvider) {
