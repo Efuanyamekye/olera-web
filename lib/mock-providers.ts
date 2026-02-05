@@ -591,3 +591,102 @@ export function mockProviderToProfile(provider: Provider): Profile {
     updated_at: new Date().toISOString(),
   };
 }
+
+// ============================================================
+// iOS Supabase Provider to Profile Adapter
+// ============================================================
+
+import type { Provider as IOSProvider } from "@/lib/types/provider";
+import {
+  parseProviderImages,
+  formatPriceRange as formatIOSPriceRange,
+  getPrimaryImage,
+  getCategoryDisplayName,
+} from "@/lib/types/provider";
+
+/**
+ * Map iOS provider_category strings to ProfileCategory enum values
+ */
+const iosCategoryMap: Record<string, ProfileCategory> = {
+  "Home Care (Non-medical)": "home_care_agency",
+  "Home Health Care": "home_health_agency",
+  "Assisted Living": "assisted_living",
+  "Independent Living": "independent_living",
+  "Memory Care": "memory_care",
+  "Nursing Home": "nursing_home",
+  "Assisted Living | Independent Living": "assisted_living",
+  "Memory Care | Assisted Living": "memory_care",
+  "Hospice": "hospice_agency",
+};
+
+/**
+ * Convert iOS Supabase Provider to Profile format for the provider details page.
+ * This allows the rich provider page to work with real iOS data.
+ */
+export function iosProviderToProfile(provider: IOSProvider): Profile {
+  const images = parseProviderImages(provider.provider_images);
+  const primaryImage = getPrimaryImage(provider);
+  const allImages = primaryImage && !images.includes(primaryImage)
+    ? [primaryImage, ...images]
+    : images.length > 0 ? images : (primaryImage ? [primaryImage] : []);
+
+  const priceRange = formatIOSPriceRange(provider);
+  const categoryDisplay = getCategoryDisplayName(provider.provider_category);
+
+  // Build metadata with iOS-specific fields
+  const metadata: OrganizationMetadata & {
+    rating?: number;
+    review_count?: number;
+    images?: string[];
+    badge?: string;
+    accepted_payments?: string[];
+    community_score?: number;
+    value_score?: number;
+    info_score?: number;
+  } = {
+    price_range: priceRange || undefined,
+    amenities: [categoryDisplay],
+    // iOS scores
+    rating: provider.google_rating || undefined,
+    review_count: undefined,
+    images: allImages,
+    community_score: provider.community_Score || undefined,
+    value_score: provider.value_score || undefined,
+    info_score: provider.information_availability_score || undefined,
+  };
+
+  // Build care_types array from category and main_category
+  const careTypes: string[] = [provider.provider_category];
+  if (provider.main_category && provider.main_category !== provider.provider_category) {
+    careTypes.push(provider.main_category);
+  }
+
+  return {
+    id: provider.provider_id,
+    account_id: null,
+    slug: provider.provider_id, // iOS uses provider_id as the slug
+    type: "organization",
+    category: iosCategoryMap[provider.provider_category] || "assisted_living",
+    display_name: provider.provider_name,
+    description: provider.provider_description,
+    image_url: primaryImage,
+    phone: provider.phone,
+    email: provider.email,
+    website: provider.website,
+    address: provider.address,
+    city: provider.city,
+    state: provider.state,
+    zip: provider.zipcode?.toString() || null,
+    lat: provider.lat,
+    lng: provider.lon,
+    service_area: provider.city && provider.state ? `${provider.city}, ${provider.state}` : null,
+    care_types: careTypes,
+    metadata,
+    claim_state: "unclaimed", // iOS data doesn't have claim status
+    verification_state: "unverified", // iOS data doesn't have verification status
+    source: "seeded",
+    is_active: !provider.deleted,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+}

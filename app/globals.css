@@ -1,12 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================================
-   BASE LAYER — Global defaults (Untitled UI style)
-   ============================================================ */
+/* Custom base styles */
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -14,169 +10,104 @@
 
   body {
     @apply antialiased text-gray-900;
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 1rem;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Untitled UI Typography defaults */
-  h1 {
-    @apply text-display-lg font-semibold text-gray-900;
-  }
-  h2 {
-    @apply text-display-sm font-semibold text-gray-900;
-  }
-  h3 {
-    @apply text-display-xs font-semibold text-gray-900;
-  }
-  h4 {
-    @apply text-text-xl font-semibold text-gray-900;
-  }
-  h5 {
-    @apply text-text-lg font-semibold text-gray-900;
-  }
-  h6 {
-    @apply text-text-md font-semibold text-gray-900;
-  }
-
-  /* Respect reduced motion preferences */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
   }
 }
 
-/* ============================================================
-   COMPONENT LAYER — Untitled UI style patterns
-   ============================================================ */
-@layer components {
-  /* Buttons - Untitled UI style */
-  .btn-primary {
-    @apply bg-primary-600 text-white px-4 py-2.5 rounded-lg font-semibold text-text-sm
-           hover:bg-primary-700 transition-all duration-200
-           focus:outline-none focus:ring-4 focus:ring-primary-100
-           shadow-xs hover:shadow-sm
-           min-h-[44px] inline-flex items-center justify-center gap-2;
-  }
-
-  .btn-secondary {
-    @apply bg-white text-gray-700 px-4 py-2.5 rounded-lg font-semibold text-text-sm
-           border border-gray-300
-           hover:bg-gray-50 hover:text-gray-800 transition-all duration-200
-           focus:outline-none focus:ring-4 focus:ring-gray-100
-           shadow-xs hover:shadow-sm
-           min-h-[44px] inline-flex items-center justify-center gap-2;
-  }
-
-  .btn-tertiary {
-    @apply text-gray-600 px-4 py-2.5 rounded-lg font-semibold text-text-sm
-           hover:bg-gray-50 hover:text-gray-700 transition-all duration-200
-           focus:outline-none focus:ring-4 focus:ring-gray-100
-           min-h-[44px] inline-flex items-center justify-center gap-2;
-  }
-
-  /* Inputs - Untitled UI style */
-  .input-field {
-    @apply w-full px-3.5 py-2.5 rounded-lg border border-gray-300 text-text-md
-           shadow-xs
-           focus:outline-none focus:ring-4 focus:ring-primary-100 focus:border-primary-300
-           placeholder:text-gray-500
-           min-h-[44px];
-  }
-
-  /* Cards - Untitled UI style */
-  .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-200
-           hover:shadow-md hover:border-gray-300 transition-all duration-200;
-  }
-
-  /* Focus ring utility */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-4 focus:ring-primary-100 rounded-lg;
-  }
-
-  /* Badge styles - Untitled UI */
-  .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-text-xs font-medium;
-  }
-  .badge-primary {
-    @apply bg-primary-50 text-primary-700 border border-primary-200;
-  }
-  .badge-gray {
-    @apply bg-gray-100 text-gray-700 border border-gray-200;
-  }
-  .badge-success {
-    @apply bg-success-50 text-success-700 border border-success-200;
-  }
-  .badge-warning {
-    @apply bg-warning-50 text-warning-700 border border-warning-200;
-  }
-  .badge-error {
-    @apply bg-error-50 text-error-700 border border-error-200;
-  }
-}
-
-/* ============================================================
-   UTILITY LAYER — Animations
-   ============================================================ */
+/* Custom utilities */
 @layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 150ms ease-out forwards;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 150ms ease-out forwards;
-  }
-
-  .animate-slide-down {
-    animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(8px) scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  /* Hide scrollbar for horizontal scroll containers */
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Infinite scroll animations */
+  .animate-scroll-left {
+    animation: scroll-left 35s linear infinite;
+  }
+  .animate-scroll-right {
+    animation: scroll-right 35s linear infinite;
+  }
+
+  /* Pause animation on hover */
+  .pause-animation {
+    animation-play-state: paused;
+  }
+}
+
+/* Keyframes for scrolling tags */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Keyframes for mega-menu animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.15s ease-out forwards;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.2s ease-out forwards;
+}
+
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 text-white px-6 py-3 rounded-lg font-medium
+           hover:bg-primary-700 transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-primary-700 px-6 py-3 rounded-lg font-medium
+           border-2 border-primary-600
+           hover:bg-primary-50 transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg border border-gray-300
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+           placeholder:text-gray-400;
+  }
+
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100
+           hover:shadow-md transition-shadow duration-200;
   }
 }
