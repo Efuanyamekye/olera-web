@@ -14,6 +14,7 @@ _What's the main thing being worked on right now?_
   - ✅ Provider detail page shows real data + similar providers
   - ✅ Homepage fetches real providers (top + by category)
   - ✅ Browse page with search/filtering by state/category
+  - ✅ All PRs merged (#16, #17, #18)
   - Phase 2/3: Waiting for iOS app approval before schema changes
 
 ---
@@ -27,7 +28,8 @@ _Active work items and their current state._
 - [x] Provider detail page
 - [x] Hero section redesign
 - [x] Provider card spacing standardization
-- [ ] Browse page with filtering
+- [x] Browse page with filtering
+- [x] iOS Supabase integration (Phase 1)
 
 ---
 
@@ -43,9 +45,10 @@ _None currently._
 
 _What should be tackled next, in priority order._
 
-1. Browse page with provider cards and filters
-2. User authentication (login/signup)
-3. Consultation request flow
+1. User authentication (login/signup)
+2. Consultation request flow
+3. Phase 2: Environment strategy (dev/staging/prod)
+4. Phase 3: Supabase unification (after iOS approval)
 
 ---
 
@@ -55,6 +58,8 @@ _Key decisions with rationale, for future reference._
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-02-05 | No adapter layer for iOS schema | User feedback: keep both uniform, simpler code |
+| 2026-02-05 | Server-side browse page over client-side | Real Supabase data requires server components |
 | 2026-01-30 | Added Claude Code slash commands | Standardize workflow for explore → plan → build → save cycle |
 
 ---
@@ -111,6 +116,18 @@ _Useful context, patterns noticed, things to remember._
 - 39,355+ real providers accessible
 - Graceful mock fallback for development
 - No schema changes made (iOS app safe during review)
+
+*Session 4:*
+- Resolved merge conflicts in PR #16 (browse-page-refinement)
+  - Conflicts: `app/browse/page.tsx`, `app/provider/[slug]/page.tsx`
+  - Resolution: Keep iOS Supabase integration + SEO metadata from PR
+  - Created `components/browse/BrowseFilters.tsx` for server-side filtering
+- Created PR #17 with resolved conflicts (PR #16 was from fork)
+- Merged all PRs:
+  - PR #16: Browse page refinement (auto-closed)
+  - PR #17: Browse page refinement with iOS Supabase integration
+  - PR #18: Landing page search and browse layout refinements
+- All pages now deployed with real Supabase data
 
 *Session 1:*
 - Ran `/explore` workflow - identified TJ's P1 task from Notion
