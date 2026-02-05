@@ -41,7 +41,6 @@ export default function BrowsePageClient({
   const [providers, setProviders] = useState<ProviderCardData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [usingMockData, setUsingMockData] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<string>("");
 
   useEffect(() => {
     async function fetchProviders() {
@@ -59,24 +58,20 @@ export default function BrowsePageClient({
 
         if (error) {
           console.error("Browse fetch error:", error.message);
-          setDebugInfo(`Error: ${error.message}`);
           // Fall back to mock data
           setProviders(allBrowseProviders.map(mockToCardFormat));
           setUsingMockData(true);
         } else if (!data || data.length === 0) {
-          setDebugInfo(`Empty: data=${!!data}, length=${data?.length}`);
           // No results from Supabase - show mock data as fallback
           setProviders(allBrowseProviders.map(mockToCardFormat));
           setUsingMockData(true);
         } else {
-          setDebugInfo(`Success: ${data.length} providers`);
           // Success! Use real data
           setProviders((data as Provider[]).map(toCardFormat));
           setUsingMockData(false);
         }
       } catch (err) {
         console.error("Browse page error:", err);
-        setDebugInfo(`Catch: ${err instanceof Error ? err.message : String(err)}`);
         // Fall back to mock data on any error
         setProviders(allBrowseProviders.map(mockToCardFormat));
         setUsingMockData(true);
@@ -171,11 +166,6 @@ export default function BrowsePageClient({
           <>
             <p className="text-base text-gray-500 mb-6">
               {filteredProviders.length} provider{filteredProviders.length !== 1 ? "s" : ""} found
-              {debugInfo && (
-                <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded">
-                  [{usingMockData ? "MOCK" : "REAL"}] {debugInfo}
-                </span>
-              )}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredProviders.map((provider) => (
