@@ -1,38 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { useCitySearch } from "@/hooks/use-city-search";
 import { useRouter } from "next/navigation";
 import ProviderCard from "@/components/providers/ProviderCard";
 import type { Provider } from "@/components/providers/ProviderCard";
 import { allBrowseProviders, getCareTypeLabel, getCareTypeName } from "@/lib/mock-providers";
 import { useNavbar } from "@/components/shared/NavbarContext";
 
-// Location suggestions for autocomplete
-const locationSuggestions = [
-  { city: "Dallas", state: "TX", full: "Dallas, TX" },
-  { city: "Plano", state: "TX", full: "Plano, TX" },
-  { city: "Frisco", state: "TX", full: "Frisco, TX" },
-  { city: "Irving", state: "TX", full: "Irving, TX" },
-  { city: "Richardson", state: "TX", full: "Richardson, TX" },
-  { city: "Garland", state: "TX", full: "Garland, TX" },
-  { city: "McKinney", state: "TX", full: "McKinney, TX" },
-  { city: "Carrollton", state: "TX", full: "Carrollton, TX" },
-  { city: "Arlington", state: "TX", full: "Arlington, TX" },
-  { city: "Fort Worth", state: "TX", full: "Fort Worth, TX" },
-  { city: "Austin", state: "TX", full: "Austin, TX" },
-  { city: "Houston", state: "TX", full: "Houston, TX" },
-  { city: "San Antonio", state: "TX", full: "San Antonio, TX" },
-  { city: "New York", state: "NY", full: "New York, NY" },
-  { city: "Los Angeles", state: "CA", full: "Los Angeles, CA" },
-  { city: "Chicago", state: "IL", full: "Chicago, IL" },
-  { city: "Phoenix", state: "AZ", full: "Phoenix, AZ" },
-  { city: "Philadelphia", state: "PA", full: "Philadelphia, PA" },
-  { city: "Denver", state: "CO", full: "Denver, CO" },
-  { city: "Seattle", state: "WA", full: "Seattle, WA" },
-  { city: "Miami", state: "FL", full: "Miami, FL" },
-  { city: "Atlanta", state: "GA", full: "Atlanta, GA" },
-  { city: "Boston", state: "MA", full: "Boston, MA" },
-];
+// Location suggestions moved to useCitySearch hook for comprehensive US city search
 
 const careTypes = [
   { id: "all", label: "All Care Types" },
@@ -152,8 +128,8 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
     return () => disableAutoHide();
   }, [enableAutoHide, disableAutoHide]);
 
-  // Filter states - use searchQuery from URL if provided, otherwise default to Austin, TX
-  const initialLocation = searchQuery?.trim() || "Austin, TX";
+  // Filter states - use searchQuery from URL if provided, otherwise empty (auto-detect will fill)
+  const initialLocation = searchQuery?.trim() || "";
   const [searchLocation, setSearchLocation] = useState(initialLocation);
   const [locationInput, setLocationInput] = useState(initialLocation);
   const [selectedRating, setSelectedRating] = useState("any");
@@ -188,19 +164,8 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
   const locationInputRef = useRef<HTMLInputElement>(null);
   const mapListingsRef = useRef<HTMLDivElement>(null);
 
-  // Filter location suggestions based on input
-  const filteredLocations = useMemo(() => {
-    if (!locationInput.trim()) return locationSuggestions.slice(0, 8);
-    const search = locationInput.toLowerCase();
-    return locationSuggestions
-      .filter(
-        (loc) =>
-          loc.city.toLowerCase().includes(search) ||
-          loc.state.toLowerCase().includes(search) ||
-          loc.full.toLowerCase().includes(search)
-      )
-      .slice(0, 8);
-  }, [locationInput]);
+  // City search with progressive loading (18K+ US cities, ZIP codes, states)
+  const { results: cityResults, preload: preloadCities } = useCitySearch(locationInput);
 
   // US state abbreviation mapping
   const stateAbbreviations: Record<string, string> = {
@@ -439,7 +404,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   )}
-                  <span>{isGeolocating ? "Detecting..." : searchLocation}</span>
+                  <span>{isGeolocating ? "Detecting..." : (searchLocation || "Enter location")}</span>
                 </div>
                 <svg className="w-4 h-4 text-gray-400 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -447,7 +412,8 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
               </button>
 
               {showLocationDropdown && (
-                <div className="absolute left-0 top-[calc(100%+6px)] w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-[100]">
+                <div className="absolute left-0 top-[calc(100%+6px)] w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 py-3 z-[100]">
+                  {/* Search Input */}
                   <div className="px-3 pb-2">
                     <div className="relative">
                       <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -458,29 +424,53 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                         type="text"
                         value={locationInput}
                         onChange={(e) => setLocationInput(e.target.value)}
-                        placeholder="Search city or zip code..."
-                        className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                        onFocus={preloadCities}
+                        placeholder="Search city or ZIP code..."
+                        className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-100"
                       />
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => {
-                      detectLocation();
-                      setShowLocationDropdown(false);
-                    }}
-                    className="flex items-center gap-2 w-full px-3 py-2 text-sm text-primary-600 hover:bg-primary-50 transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-                    </svg>
-                    Use my current location
-                  </button>
+                  {/* Use Current Location - Prominent Button */}
+                  <div className="px-3 pb-2">
+                    <button
+                      onClick={() => {
+                        detectLocation();
+                        setShowLocationDropdown(false);
+                      }}
+                      disabled={isGeolocating}
+                      className="flex items-center justify-center gap-2 w-full py-2 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-sm text-primary-700 font-medium transition-colors disabled:opacity-60"
+                    >
+                      {isGeolocating ? (
+                        <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
+                        </svg>
+                      )}
+                      <span>{isGeolocating ? "Detecting..." : "Use my location"}</span>
+                    </button>
+                  </div>
 
-                  <div className="border-t border-gray-100 my-1" />
+                  {/* Divider */}
+                  <div className="flex items-center gap-3 px-3 py-1">
+                    <div className="flex-1 h-px bg-gray-200" />
+                    <span className="text-xs text-gray-400">or</span>
+                    <div className="flex-1 h-px bg-gray-200" />
+                  </div>
 
-                  <div className="max-h-[200px] overflow-y-auto">
-                    {filteredLocations.map((loc) => (
+                  {/* Popular Cities Label */}
+                  {!locationInput.trim() && cityResults.length > 0 && (
+                    <div className="px-3 pt-1 pb-1">
+                      <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Popular cities</span>
+                    </div>
+                  )}
+
+                  <div className="max-h-[180px] overflow-y-auto">
+                    {cityResults.map((loc) => (
                       <button
                         key={loc.full}
                         onClick={() => {
@@ -500,7 +490,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                         {loc.full}
                       </button>
                     ))}
-                    {filteredLocations.length === 0 && (
+                    {cityResults.length === 0 && (
                       <div className="px-3 py-4 text-sm text-gray-500 text-center">
                         No locations found
                       </div>
