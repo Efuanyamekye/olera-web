@@ -44,7 +44,10 @@ _Active work items and their current state._
 
 _Items waiting on decisions, external input, or dependencies._
 
-_None currently._
+- **PR #21 Integration - Awaiting user actions:**
+  1. Run SQL migration in Supabase: `supabase/migrations/001_provider_portal_tables.sql`
+  2. Add `SUPABASE_SERVICE_ROLE_KEY` to Vercel environment variables
+  3. Then: merge `feature/provider-portal` branch to main
 
 ---
 
@@ -52,10 +55,11 @@ _None currently._
 
 _What should be tackled next, in priority order._
 
-1. **PR #21 Integration** - Provider portal (auth flow, onboarding, dashboard)
-2. Family onboarding flow
-3. Payment/subscription integration
-4. Environment strategy (dev/staging/prod)
+1. **Complete PR #21 Integration** - Run migration, add env var, merge branch, test
+2. **Update claim flow** - Wire `source_provider_id` to claim existing olera-providers listings
+3. Family onboarding flow
+4. Payment/subscription integration
+5. Environment strategy (dev/staging/prod)
 
 ---
 
@@ -120,11 +124,13 @@ _Useful context, patterns noticed, things to remember._
   - Browse page → reads `olera-providers` (unchanged)
   - Portal → reads/writes `business_profiles` (user's copy)
   - See: `plans/provider-data-architecture.md`
+- **Committed**: `c3967ea` on `feature/provider-portal` branch
 - **Next steps**:
   1. Run SQL migration in Supabase (user action)
   2. Add `SUPABASE_SERVICE_ROLE_KEY` to Vercel (user action)
-  3. Complete integration testing (Phase 3)
-  4. Deploy to production
+  3. Merge `feature/provider-portal` to main
+  4. Complete integration testing (Phase 3)
+  5. Deploy to production
 
 ### 2026-02-05
 
