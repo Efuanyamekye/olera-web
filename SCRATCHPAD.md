@@ -99,6 +99,36 @@ _Useful context, patterns noticed, things to remember._
   - `components/auth/AuthFlowModal.tsx`:
     - Added `handleSendOtpForSignIn` handler using `signInWithOtp`
     - Updated `AuthStep` component with new `onSendOtpCode` prop
+  - `components/auth/AuthModal.tsx`:
+    - Added `verify-otp` view type
+    - Added OTP handlers and 8-digit code input UI
+
+- **PR #24 merged** - OTP sign-in feature live
+
+**Provider Portal Cleanup:**
+
+- **Closed PR #21** (Logan's original) with comment explaining it was integrated via PR #23
+- Logan's code was merged with schema modifications, not his original PR
+
+**Supabase Schema Documentation:**
+
+Documented actual table usage for team clarity:
+
+| Table | iOS | Web | Purpose |
+|-------|-----|-----|---------|
+| `olera-providers` | ✅ | ✅ | 39K provider directory (shared) |
+| `profiles` | ✅ | ❌ | iOS user identity |
+| `care_requests` | ✅ | ❌ | iOS connection requests |
+| `care_need_profiles` | ✅ | ❌ | iOS family care needs |
+| `matches` | ✅ | ❌ | iOS family-provider matching |
+| `conversations` / `messages` | ✅ | ❌ | iOS chat |
+| `accounts` | ❌ | ✅ | Web user identity (NEW) |
+| `business_profiles` | ❌ | ✅ | Web business listings (NEW) |
+| `connections` | ❌ | ✅ | Web inquiries/saves (NEW) |
+| `memberships` | ❌ | ✅ | Web subscriptions (NEW) |
+
+**Key clarification:** `profiles` → `business_profiles` rename was because iOS uses `profiles` for user identity, not business listings.
+    - Updated `AuthStep` component with new `onSendOtpCode` prop
     - Added OTP link in sign-in mode (disabled if email not entered)
   - `components/auth/AuthModal.tsx`:
     - Added `verify-otp` view type
