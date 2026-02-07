@@ -821,11 +821,8 @@ const stateAbbreviations: Record<string, string> = {
   "District of Columbia": "DC",
 };
 
-// Default location for fallback (simulates geolocation default)
-const DEFAULT_LOCATION = "New York, NY";
-
 export default function HomePage() {
-  const [location, setLocation] = useState(DEFAULT_LOCATION);
+  const [location, setLocation] = useState("");
   const [careType, setCareType] = useState("home-health");
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [showCareTypeDropdown, setShowCareTypeDropdown] = useState(false);
@@ -855,7 +852,6 @@ export default function HomePage() {
 
           const country = data.address?.country_code?.toUpperCase();
           if (country !== "US") {
-            setLocation(DEFAULT_LOCATION);
             setIsGeolocating(false);
             return;
           }
@@ -872,7 +868,7 @@ export default function HomePage() {
           const locationString = `${city}, ${stateAbbr}`;
           setLocation(locationString);
         } catch {
-          setLocation(DEFAULT_LOCATION);
+          // Silently fail - keep placeholder visible
         }
         setIsGeolocating(false);
       },
