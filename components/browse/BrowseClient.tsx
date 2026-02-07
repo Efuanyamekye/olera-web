@@ -160,6 +160,11 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
     }
   }, [viewMode, setForceHidden]);
 
+  // Reset scroll position when switching view modes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [viewMode]);
+
   // Refs
   const locationInputRef = useRef<HTMLInputElement>(null);
   const mapListingsRef = useRef<HTMLDivElement>(null);
@@ -182,9 +187,17 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
     "District of Columbia": "DC",
   };
 
+  // Default location for fallback (simulates geolocation default)
+  const DEFAULT_LOCATION = "New York, NY";
+
   // Geolocation function
   const detectLocation = () => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      // No geolocation available, use default
+      setSearchLocation(DEFAULT_LOCATION);
+      setLocationInput(DEFAULT_LOCATION);
+      return;
+    }
 
     setIsGeolocating(true);
     navigator.geolocation.getCurrentPosition(
@@ -197,8 +210,8 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
 
           const country = data.address?.country_code?.toUpperCase();
           if (country !== "US") {
-            setSearchLocation("Austin, TX");
-            setLocationInput("Austin, TX");
+            setSearchLocation(DEFAULT_LOCATION);
+            setLocationInput(DEFAULT_LOCATION);
             setIsGeolocating(false);
             return;
           }
@@ -216,20 +229,25 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
           setSearchLocation(locationString);
           setLocationInput(locationString);
         } catch {
-          setSearchLocation("Austin, TX");
-          setLocationInput("Austin, TX");
+          setSearchLocation(DEFAULT_LOCATION);
+          setLocationInput(DEFAULT_LOCATION);
         }
         setIsGeolocating(false);
       },
       () => {
+        // Geolocation denied or failed, use default
+        setSearchLocation(DEFAULT_LOCATION);
+        setLocationInput(DEFAULT_LOCATION);
         setIsGeolocating(false);
       }
     );
   };
 
-  // Auto-detect location on mount
+  // Auto-detect location on mount ONLY if no location was provided via URL
   useEffect(() => {
-    detectLocation();
+    if (!initialLocation) {
+      detectLocation();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -354,8 +372,8 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
 
   // Clear all filters
   const clearFilters = () => {
-    setSearchLocation("Austin, TX");
-    setLocationInput("Austin, TX");
+    setSearchLocation(DEFAULT_LOCATION);
+    setLocationInput(DEFAULT_LOCATION);
     setSelectedRating("any");
     setSelectedPayment("any");
     setSortBy("recommended");
@@ -386,27 +404,27 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                   setShowSortDropdown(false);
                   setTimeout(() => locationInputRef.current?.focus({ preventScroll: true }), 100);
                 }}
-                className={`flex items-center justify-between h-9 px-3 w-[250px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
-                  searchLocation !== "Austin, TX"
+                className={`flex items-center justify-between h-9 px-3 w-[200px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
+                  searchLocation.trim()
                     ? "bg-white text-gray-900 border-2 border-gray-900"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                   {isGeolocating ? (
-                    <svg className="w-4 h-4 text-gray-500 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-500 flex-shrink-0 animate-spin" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
                   ) : (
-                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   )}
-                  <span>{isGeolocating ? "Detecting..." : (searchLocation || "Enter location")}</span>
+                  <span className="truncate">{isGeolocating ? "Detecting..." : (searchLocation || "Enter location")}</span>
                 </div>
-                <svg className="w-4 h-4 text-gray-400 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-gray-400 ml-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
@@ -569,15 +587,15 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                   setShowPaymentDropdown(false);
                   setShowSortDropdown(false);
                 }}
-                className={`flex items-center justify-between h-9 px-3 w-[140px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+                className={`flex items-center justify-between h-9 px-3 w-[160px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   selectedRating !== "any"
                     ? "bg-white text-gray-900 border-2 border-gray-900"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
-                <span>{selectedRating === "any" ? "Rating" : `${selectedRating}+ Stars`}</span>
+                <span className="truncate">{selectedRating === "any" ? "Rating" : `${selectedRating}+ Stars`}</span>
                 <svg
-                  className={`w-4 h-4 ml-2 transition-transform ${showRatingDropdown ? "rotate-180" : ""} ${selectedRating !== "any" ? "text-gray-900" : "text-gray-400"}`}
+                  className={`w-4 h-4 ml-2 flex-shrink-0 transition-transform ${showRatingDropdown ? "rotate-180" : ""} ${selectedRating !== "any" ? "text-gray-900" : "text-gray-400"}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -624,15 +642,15 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                   setShowRatingDropdown(false);
                   setShowSortDropdown(false);
                 }}
-                className={`flex items-center justify-between h-9 px-3 w-[150px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+                className={`flex items-center justify-between h-9 px-3 w-[160px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   selectedPayment !== "any"
                     ? "bg-white text-gray-900 border-2 border-gray-900"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
-                <span>{selectedPayment === "any" ? "Payments" : selectedPayment}</span>
+                <span className="truncate">{selectedPayment === "any" ? "Payments" : selectedPayment}</span>
                 <svg
-                  className={`w-4 h-4 ml-2 transition-transform ${showPaymentDropdown ? "rotate-180" : ""} ${selectedPayment !== "any" ? "text-gray-900" : "text-gray-400"}`}
+                  className={`w-4 h-4 ml-2 flex-shrink-0 transition-transform ${showPaymentDropdown ? "rotate-180" : ""} ${selectedPayment !== "any" ? "text-gray-900" : "text-gray-400"}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -679,17 +697,17 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                   setShowRatingDropdown(false);
                   setShowPaymentDropdown(false);
                 }}
-                className={`flex items-center justify-between h-9 px-3 w-[160px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
+                className={`flex items-center justify-between h-9 px-3 w-[160px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   sortBy !== "recommended"
                     ? "bg-white text-gray-900 border-2 border-gray-900"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
-                <span>
+                <span className="truncate">
                   {sortBy === "recommended" ? "Sort" : sortOptions.find((o) => o.value === sortBy)?.label}
                 </span>
                 <svg
-                  className={`w-4 h-4 ml-2 transition-transform ${showSortDropdown ? "rotate-180" : ""} ${sortBy !== "recommended" ? "text-gray-900" : "text-gray-400"}`}
+                  className={`w-4 h-4 ml-2 flex-shrink-0 transition-transform ${showSortDropdown ? "rotate-180" : ""} ${sortBy !== "recommended" ? "text-gray-900" : "text-gray-400"}`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -725,18 +743,22 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
               )}
             </div>
 
-            {/* Clear Filters */}
-            {hasActiveFilters && (
-              <button
-                onClick={clearFilters}
-                className="flex items-center gap-1 h-9 px-3 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors whitespace-nowrap"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                Clear
-              </button>
-            )}
+            {/* Clear Filters - always rendered to prevent layout shift */}
+            <button
+              onClick={clearFilters}
+              className={`flex items-center gap-1 h-9 px-3 text-sm font-medium rounded-lg transition-colors whitespace-nowrap ${
+                hasActiveFilters
+                  ? "text-red-600 hover:text-red-700 hover:bg-red-50"
+                  : "invisible"
+              }`}
+              aria-hidden={!hasActiveFilters}
+              tabIndex={hasActiveFilters ? 0 : -1}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              Clear
+            </button>
           </div>
 
           {/* Right Side - View Toggle */}

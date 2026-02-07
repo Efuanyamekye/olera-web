@@ -35,6 +35,12 @@
   .pause-animation {
     animation-play-state: paused;
   }
+
+  /* Page mount animation to prevent layout flash */
+  .animate-page-in {
+    opacity: 0;
+    animation: fade-in 0.15s ease-out forwards;
+  }
 }
 
 /* Keyframes for scrolling tags */

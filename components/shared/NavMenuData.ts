@@ -30,7 +30,7 @@ export const CARE_CATEGORIES: CareCategory[] = [
     description: "Skilled medical care in the comfort of home",
     image: "/images/home-health.webp",
     resources: [
-      { title: "Home Health Forum", href: "/community/home-health", icon: "chat" },
+      { title: "Community Forum", href: "/community?category=home-health", icon: "chat" },
       { title: "Home Health Guide", href: "/resources/home-health", icon: "heart" },
       { title: "Paying for Home Health", href: "/resources/paying-for-home-health", icon: "dollar" },
       { title: "Home Health vs Home Care", href: "/resources/home-health-vs-home-care", icon: "compare" },
@@ -43,7 +43,7 @@ export const CARE_CATEGORIES: CareCategory[] = [
     description: "In-home assistance for daily living activities",
     image: "/images/home-care.jpg",
     resources: [
-      { title: "Home Care Forum", href: "/community/home-care", icon: "chat" },
+      { title: "Community Forum", href: "/community?category=home-care", icon: "chat" },
       { title: "Home Care Support", href: "/resources/home-care", icon: "heart" },
       { title: "Paying for Home Care", href: "/resources/paying-for-home-care", icon: "dollar" },
       { title: "Home Care vs Home Health", href: "/resources/home-care-vs-home-health", icon: "compare" },
@@ -56,7 +56,7 @@ export const CARE_CATEGORIES: CareCategory[] = [
     description: "Residential communities with personal care support",
     image: "/images/assisted-living.webp",
     resources: [
-      { title: "Assisted Living Forum", href: "/community/assisted-living", icon: "chat" },
+      { title: "Community Forum", href: "/community?category=assisted-living", icon: "chat" },
       { title: "Assisted Living Guide", href: "/resources/assisted-living", icon: "book" },
       { title: "Paying for Assisted Living", href: "/resources/paying-for-assisted-living", icon: "dollar" },
       { title: "Assisted Living vs Nursing Home", href: "/resources/assisted-living-vs-nursing-home", icon: "compare" },
@@ -69,7 +69,7 @@ export const CARE_CATEGORIES: CareCategory[] = [
     description: "Specialized care for dementia and Alzheimer's",
     image: "/images/memory-care.jpg",
     resources: [
-      { title: "Memory Care Forum", href: "/community/memory-care", icon: "chat" },
+      { title: "Community Forum", href: "/community?category=memory-care", icon: "chat" },
       { title: "Memory Care Guide", href: "/resources/memory-care", icon: "book" },
       { title: "Paying for Memory Care", href: "/resources/paying-for-memory-care", icon: "dollar" },
       { title: "Signs It's Time for Memory Care", href: "/resources/when-memory-care", icon: "info" },
@@ -82,7 +82,7 @@ export const CARE_CATEGORIES: CareCategory[] = [
     description: "24/7 skilled nursing and medical care",
     image: "/images/nursing-homes.webp",
     resources: [
-      { title: "Nursing Home Forum", href: "/community/nursing-homes", icon: "chat" },
+      { title: "Community Forum", href: "/community?category=nursing-homes", icon: "chat" },
       { title: "Nursing Home Guide", href: "/resources/nursing-homes", icon: "book" },
       { title: "Paying for Nursing Home", href: "/resources/paying-for-nursing-home", icon: "dollar" },
       { title: "Medicare & Medicaid Coverage", href: "/resources/medicare-medicaid", icon: "shield" },
@@ -95,7 +95,7 @@ export const CARE_CATEGORIES: CareCategory[] = [
     description: "Active adult communities for seniors",
     image: "/images/independent-living.jpg",
     resources: [
-      { title: "Independent Living Forum", href: "/community/independent-living", icon: "chat" },
+      { title: "Community Forum", href: "/community?category=independent-living", icon: "chat" },
       { title: "Independent Living Guide", href: "/resources/independent-living", icon: "book" },
       { title: "Cost of Independent Living", href: "/resources/independent-living-costs", icon: "dollar" },
       { title: "Is Independent Living Right?", href: "/resources/is-independent-living-right", icon: "info" },
@@ -106,5 +106,5 @@ export const CARE_CATEGORIES: CareCategory[] = [
 export const NAV_LINKS: NavLink[] = [
   { label: "Community", href: "/community" },
   { label: "Resources", href: "/resources" },
-  { label: "Benefits", href: "/benefits" },
+  { label: "Benefits Center", href: "/benefits" },
 ];

@@ -116,7 +116,7 @@ export default function OrgClaimStep({
                 No matching organizations found.
               </p>
               <p className="text-base text-gray-500">
-                We'll create a new profile for you.
+                We&apos;ll create a new profile for you.
               </p>
             </div>
           ) : (

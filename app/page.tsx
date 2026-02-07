@@ -15,6 +15,9 @@ import {
   toCardFormat,
   mockToCardFormat,
 } from "@/lib/types/provider";
+import { mockForumPosts } from "@/data/mock/forumPosts";
+import { mockForumComments } from "@/data/mock/forumComments";
+import { CARE_TYPE_CONFIG } from "@/types/forum";
 
 // Hook to detect when element is in view
 function useInView(threshold: number = 0.3) {
@@ -818,8 +821,11 @@ const stateAbbreviations: Record<string, string> = {
   "District of Columbia": "DC",
 };
 
+// Default location for fallback (simulates geolocation default)
+const DEFAULT_LOCATION = "New York, NY";
+
 export default function HomePage() {
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState(DEFAULT_LOCATION);
   const [careType, setCareType] = useState("home-health");
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
   const [showCareTypeDropdown, setShowCareTypeDropdown] = useState(false);
@@ -849,6 +855,7 @@ export default function HomePage() {
 
           const country = data.address?.country_code?.toUpperCase();
           if (country !== "US") {
+            setLocation(DEFAULT_LOCATION);
             setIsGeolocating(false);
             return;
           }
@@ -865,7 +872,7 @@ export default function HomePage() {
           const locationString = `${city}, ${stateAbbr}`;
           setLocation(locationString);
         } catch {
-          // Silently fail
+          setLocation(DEFAULT_LOCATION);
         }
         setIsGeolocating(false);
       },
@@ -1364,44 +1371,75 @@ export default function HomePage() {
 
           {/* Forum Posts Grid */}
           <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              {
-                id: 1,
-                topic: "Memory Care",
-                question: "My mom was just diagnosed with early-stage dementia. What should I look for in a memory care facility?",
-                replies: 14,
-                likes: 32,
-                timeAgo: "2h ago",
-                topReply: "Start with the staff-to-resident ratio. We found that smaller communities with a 1:5 ratio made all the difference for my dad.",
-                avatars: ["S", "A", "R"],
-                accentColor: "primary",
-                iconPath: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
-              },
-              {
-                id: 2,
-                topic: "Home Care",
-                question: "How do you handle the transition from hospital to home care? My father is being discharged next week.",
-                replies: 8,
-                likes: 19,
-                timeAgo: "5h ago",
-                topReply: "Ask the hospital for a care transition plan. We also hired a home care aide for the first 2 weeks — it was a lifesaver.",
-                avatars: ["M", "K"],
-                accentColor: "warm",
-                iconPath: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
-              },
-              {
-                id: 3,
-                topic: "Costs & Insurance",
-                question: "Does Medicare cover assisted living? We're trying to figure out how to afford care for my grandmother.",
-                replies: 21,
-                likes: 47,
-                timeAgo: "8h ago",
-                topReply: "Medicare doesn't cover assisted living directly, but Medicaid might. Check your state's waiver programs — they vary a lot.",
-                avatars: ["J", "L", "D", "P"],
-                accentColor: "blue",
-                iconPath: "M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z",
-              },
-            ].map((post) => {
+            {(() => {
+              // Get 3 most recent posts for the landing page
+              // Sorted by createdAt descending (newest first) - mirrors: SELECT * FROM posts ORDER BY created_at DESC LIMIT 3
+              const recentPosts = [...mockForumPosts]
+                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+                .slice(0, 3);
+
+              // Format time ago - will show relative timestamps like "2h ago", "3d ago"
+              const formatTimeAgo = (dateString: string) => {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffMs = now.getTime() - date.getTime();
+                const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                const diffDays = Math.floor(diffHours / 24);
+                if (diffDays > 0) return `${diffDays}d ago`;
+                if (diffHours > 0) return `${diffHours}h ago`;
+                return "Just now";
+              };
+
+              // Map care types to accent colors
+              const careTypeToColor: Record<string, string> = {
+                "memory-care": "primary",
+                "home-care": "warm",
+                "home-health": "blue",
+                "assisted-living": "primary",
+                "nursing-homes": "warm",
+                "independent-living": "blue",
+              };
+
+              // Map care types to icons
+              const careTypeToIcon: Record<string, string> = {
+                "memory-care": "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
+                "home-care": "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
+                "home-health": "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z",
+                "assisted-living": "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z",
+                "nursing-homes": "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4",
+                "independent-living": "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z",
+              };
+
+              return recentPosts.map((forumPost) => {
+                // Lookup top comment if exists (will be a LEFT JOIN in production)
+                const topComment = mockForumComments.find(c => c.postId === forumPost.id);
+                const careTypeConfig = CARE_TYPE_CONFIG[forumPost.careType];
+                const accentColor = careTypeToColor[forumPost.careType] || "primary";
+                const iconPath = careTypeToIcon[forumPost.careType] || careTypeToIcon["memory-care"];
+
+                // Build avatars from author initials
+                const avatars = [forumPost.author.displayName.charAt(0)];
+                if (topComment) {
+                  avatars.push(topComment.author.displayName.charAt(0));
+                }
+
+                const post = {
+                  id: forumPost.id,
+                  slug: forumPost.slug,
+                  topic: careTypeConfig.label,
+                  question: forumPost.title,
+                  replies: forumPost.commentCount,
+                  likes: forumPost.likeCount,
+                  timeAgo: formatTimeAgo(forumPost.createdAt),
+                  topReply: topComment?.content.split('\n')[0].slice(0, 120) + (topComment && topComment.content.length > 120 ? '...' : '') || '',
+                  topReplyAuthor: topComment?.author.displayName.charAt(0) || '',
+                  avatars,
+                  accentColor,
+                  iconPath,
+                };
+                return post;
+              });
+            })().map((post) => {
               const colorMap: Record<string, { tag: string; accent: string; glow: string; avatar: string; stripe: string; icon: string }> = {
                 primary: {
                   tag: "text-primary-600 bg-primary-100/80",
@@ -1433,7 +1471,7 @@ export default function HomePage() {
               return (
                 <Link
                   key={post.id}
-                  href="/community"
+                  href={`/community?post=${post.slug}`}
                   className={`group relative bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg ${colors.accent} ${colors.glow} transition-all duration-300`}
                 >
                   {/* Left accent stripe */}
@@ -1460,13 +1498,14 @@ export default function HomePage() {
                     </p>
 
                     {/* Top reply — speech bubble style */}
+                    {post.topReply && (
                     <div className="relative mb-4">
                       {/* Speech bubble triangle */}
                       <div className="absolute -top-1.5 left-5 w-3 h-3 bg-gray-50 rotate-45 border-l border-t border-gray-100" />
                       <div className="relative bg-gray-50 rounded-xl p-3.5 border border-gray-100">
                         <div className="flex items-center gap-2 mb-1.5">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ring-1 ${colors.avatar}`}>
-                            {post.avatars[0]}
+                            {post.topReplyAuthor}
                           </div>
                           <span className="text-[11px] text-gray-400 font-medium">Top reply</span>
                         </div>
@@ -1475,6 +1514,7 @@ export default function HomePage() {
                         </p>
                       </div>
                     </div>
+                    )}
 
                     {/* Footer — avatars, engagement, read more */}
                     <div className="flex items-center justify-between">

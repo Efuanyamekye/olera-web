@@ -9,7 +9,7 @@ import ImageCarousel from "@/components/providers/ImageCarousel";
 import ExpandableText from "@/components/providers/ExpandableText";
 import CompactProviderCard from "@/components/providers/CompactProviderCard";
 import CareServicesList from "@/components/providers/CareServicesList";
-import QASection from "@/components/providers/QASection";
+import QASectionV2 from "@/components/providers/QASectionV2";
 import SectionNav from "@/components/providers/SectionNav";
 import type { SectionItem } from "@/components/providers/SectionNav";
 import ClaimBadge from "@/components/providers/ClaimBadge";
@@ -323,7 +323,7 @@ export default async function ProviderPage({
             </div>
           </div>
           {profile.address && (
-            <p className="text-[15px] text-gray-500 mt-1">
+            <p className="text-base text-gray-500 mt-1">
               {profile.address}
             </p>
           )}
@@ -380,7 +380,7 @@ export default async function ProviderPage({
                         </svg>
                       </div>
                       <div>
-                        <p className="font-semibold text-warm-800 text-[15px]">
+                        <p className="font-semibold text-warm-800 text-base">
                           This profile hasn&apos;t been claimed yet
                         </p>
                         <p className="text-sm text-warm-600">
@@ -429,14 +429,14 @@ export default async function ProviderPage({
                     Get a custom quote
                   </button>
                 </div>
-                <div className="divide-y divide-gray-200">
+                <div className="bg-white rounded-xl border border-gray-100 shadow-xs divide-y divide-gray-100">
                   {pricingDetails.map((item) => (
                     <div
                       key={item.service}
-                      className="flex items-center justify-between py-4"
+                      className="flex items-center justify-between py-4 px-5 hover:bg-gray-50 transition-colors"
                     >
-                      <span className="text-[16px] font-medium text-gray-900">{item.service}</span>
-                      <span className="text-[16px] font-semibold text-gray-900">
+                      <span className="text-base font-medium text-gray-900">{item.service}</span>
+                      <span className="text-base font-semibold text-gray-900">
                         {item.rate} <span className="font-normal text-gray-500">/{item.rateType.replace("per ", "")}</span>
                       </span>
                     </div>
@@ -453,11 +453,11 @@ export default async function ProviderPage({
                   {acceptedPayments.map((payment) => (
                     <div key={payment} className="flex items-center gap-2.5">
                       <CheckIcon className="w-5 h-5 text-primary-600 flex-shrink-0" />
-                      <span className="text-[16px] text-gray-700">{payment}</span>
+                      <span className="text-base text-gray-700">{payment}</span>
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 text-[16px] text-gray-500">
+                <p className="mt-4 text-base text-gray-500">
                   For clarity and guidance,{" "}
                   <button className="text-primary-600 hover:text-primary-700 font-medium transition-colors">
                     Book a consultation
@@ -470,19 +470,25 @@ export default async function ProviderPage({
             {staffScreening && (
               <div id="safety" className="py-10 scroll-mt-20 border-t border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Staff Screening &amp; Safety</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {[
                     { label: "Background Checked", verified: staffScreening.background_checked },
                     { label: "Licensed", verified: staffScreening.licensed },
                     { label: "Insured", verified: staffScreening.insured },
                   ].map((item) => (
-                    <div key={item.label} className="flex items-center gap-3">
-                      <svg className={`w-5 h-5 flex-shrink-0 ${item.verified ? "text-primary-600" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
+                    <div key={item.label} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-xs">
+                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                        item.verified ? "bg-primary-50" : "bg-gray-50"
+                      }`}>
+                        <svg className={`w-5 h-5 ${item.verified ? "text-primary-600" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                      </div>
                       <div>
-                        <p className="text-[15px] font-medium text-gray-900">{item.label}</p>
-                        <p className="text-[13px] text-gray-500">{item.verified ? "Verified" : "Not verified"}</p>
+                        <p className="text-base font-medium text-gray-900">{item.label}</p>
+                        <p className={`text-sm ${item.verified ? "text-primary-600" : "text-gray-500"}`}>
+                          {item.verified ? "Verified" : "Not verified"}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -494,24 +500,24 @@ export default async function ProviderPage({
             {staff && (
               <div id="team" className="py-10 scroll-mt-20 border-t border-gray-200">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Meet Our Team</h2>
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-4 p-5 bg-white rounded-xl border border-gray-100 shadow-xs">
                   {staff.image ? (
                     <img
                       src={staff.image}
                       alt={staff.name}
-                      className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+                      className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
+                    <div className="w-16 h-16 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-primary-600">
                         {getInitials(staff.name)}
                       </span>
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-[16px] font-semibold text-gray-900">{staff.name}</h3>
-                    <p className="text-primary-600 text-[14px] font-medium mt-0.5">{staff.position}</p>
-                    <p className="text-gray-600 text-[15px] mt-2 leading-relaxed">{staff.bio}</p>
+                    <h3 className="text-base font-semibold text-gray-900">{staff.name}</h3>
+                    <p className="text-primary-600 text-sm font-medium mt-0.5">{staff.position}</p>
+                    <p className="text-gray-600 text-base mt-2 leading-relaxed">{staff.bio}</p>
                   </div>
                 </div>
               </div>
@@ -520,7 +526,7 @@ export default async function ProviderPage({
             {/* 9. Q&A */}
             {defaultQA.length > 0 && (
               <div id="qa" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <QASection
+                <QASectionV2
                   providerName={profile.display_name}
                   questions={defaultQA}
                 />
@@ -530,12 +536,12 @@ export default async function ProviderPage({
             {/* 11. Disclaimer */}
             <div className="py-10 border-t border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Disclaimer</h2>
-              <p className="text-[16px] text-gray-500 leading-relaxed">
+              <p className="text-base text-gray-500 leading-relaxed">
                 We strive to keep this page accurate and current, but some details may not be up to date. To confirm whether {profile.display_name} is the right fit for you or your loved one, please verify all information directly with the provider by submitting a connect request or contacting them.
               </p>
               <div className="flex items-center justify-between mt-6 pt-5 border-t border-gray-100">
-                <p className="text-[16px] font-semibold text-gray-900">Are you the owner of this business?</p>
-                <button className="px-5 py-2.5 text-[14px] font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0">
+                <p className="text-base font-semibold text-gray-900">Are you the owner of this business?</p>
+                <button className="px-5 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0">
                   Manage this page
                 </button>
               </div>
@@ -660,10 +666,10 @@ export default async function ProviderPage({
             {/* Olera Score */}
             {oleraScore && (
               <div className="text-center mb-16">
-                <p className="text-[12px] uppercase tracking-[0.2em] text-primary-600 font-semibold mb-6">Olera Score</p>
+                <p className="text-xs uppercase tracking-[0.2em] text-primary-600 font-semibold mb-6">Olera Score</p>
                 <div className="relative inline-flex items-center justify-center mb-4">
                   <div className="w-32 h-32 rounded-full bg-white border-2 border-primary-100 shadow-lg flex items-center justify-center">
-                    <span className="text-[42px] font-bold text-primary-700 tracking-tight">{oleraScore.toFixed(1)}</span>
+                    <span className="text-5xl font-bold text-primary-700 tracking-tight">{oleraScore.toFixed(1)}</span>
                   </div>
                 </div>
                 <div className="flex items-center justify-center gap-1 mb-8">
@@ -680,11 +686,11 @@ export default async function ProviderPage({
                     { label: "Completeness", value: Math.min(5, oleraScore - 0.5) },
                   ].map((f) => (
                     <div key={f.label} className="bg-white rounded-2xl p-5 border border-gray-100 text-center">
-                      <span className="text-[28px] font-bold text-gray-900 tracking-tight">{f.value.toFixed(1)}</span>
+                      <span className="text-3xl font-bold text-gray-900 tracking-tight">{f.value.toFixed(1)}</span>
                       <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden mt-3 mb-2">
                         <div className="h-full bg-gradient-to-r from-primary-400 to-primary-600 rounded-full" style={{ width: `${(f.value / 5) * 100}%` }} />
                       </div>
-                      <span className="text-[11px] uppercase tracking-[0.15em] text-gray-500 font-medium">{f.label}</span>
+                      <span className="text-xs uppercase tracking-[0.15em] text-gray-500 font-medium">{f.label}</span>
                     </div>
                   ))}
                 </div>
@@ -695,14 +701,14 @@ export default async function ProviderPage({
             <div>
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h2 className="text-[28px] font-bold text-gray-900 tracking-tight">
+                  <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
                     What families are saying
                   </h2>
                   {reviews.length > 0 && (
-                    <p className="text-[15px] text-gray-500 mt-1">{reviews.length} {reviews.length === 1 ? "family" : "families"} shared their experience</p>
+                    <p className="text-base text-gray-500 mt-1">{reviews.length} {reviews.length === 1 ? "family" : "families"} shared their experience</p>
                   )}
                 </div>
-                <button className="px-5 py-2.5 text-[14px] font-semibold text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors">
+                <button className="px-5 py-2.5 text-sm font-semibold text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors">
                   Write a review
                 </button>
               </div>
@@ -715,24 +721,24 @@ export default async function ProviderPage({
                         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609L9.978 5.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H0z" />
                       </svg>
                       {/* Review text first (Airbnb pattern) */}
-                      <p className="text-[15px] text-gray-600 leading-relaxed mb-5">
+                      <p className="text-base text-gray-600 leading-relaxed mb-5">
                         {review.comment.length > 200 ? review.comment.slice(0, 200).trimEnd() + "..." : review.comment}
                       </p>
                       {/* Reviewer identity at bottom */}
                       <div className="pt-4 border-t border-gray-100 flex items-center gap-3">
                         <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                          <span className="text-[12px] font-semibold text-gray-600">{review.name.split(" ").map(n => n[0]).join("")}</span>
+                          <span className="text-xs font-semibold text-gray-600">{review.name.split(" ").map(n => n[0]).join("")}</span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[14px] font-semibold text-gray-900">{review.name}</p>
+                          <p className="text-sm font-semibold text-gray-900">{review.name}</p>
                           <div className="flex items-center gap-1.5 mt-0.5">
                             <div className="flex items-center gap-0.5">
                               {[1, 2, 3, 4, 5].map((star) => (
                                 <StarIcon key={star} className={`w-3 h-3 ${star <= review.rating ? "text-yellow-400" : "text-gray-200"}`} filled={star <= review.rating} />
                               ))}
                             </div>
-                            <span className="text-[12px] text-gray-400">·</span>
-                            <span className="text-[12px] text-gray-400">{review.date}</span>
+                            <span className="text-xs text-gray-400">·</span>
+                            <span className="text-xs text-gray-400">{review.date}</span>
                           </div>
                         </div>
                       </div>
@@ -741,7 +747,7 @@ export default async function ProviderPage({
                 </div>
               ) : (
                 <div className="bg-white rounded-2xl p-10 border border-gray-100 text-center">
-                  <p className="text-[16px] text-gray-500">No reviews yet. Be the first to share your experience.</p>
+                  <p className="text-base text-gray-500">No reviews yet. Be the first to share your experience.</p>
                 </div>
               )}
             </div>
