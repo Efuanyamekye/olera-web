@@ -8,15 +8,15 @@
 
 _What's the main thing being worked on right now?_
 
-- **Provider Portal Integration**: Merge Logan's PR #21 into main
-  - Plan: `plans/provider-portal-integration.md`
-  - **iOS APPROVED** (2026-02-05) - Can proceed with schema changes
-  - ✅ Phase 1: Schema analysis complete, migration file created
-  - ✅ Phase 2: Code merge complete (build passes)
-  - ✅ Phase 3a: SQL migration run in Supabase (tables created)
-  - ⏳ Phase 3b: Add env var + merge PR ← CURRENT
-  - Phase 4: Deploy & verify
-  - **PR #23**: https://github.com/olera-care/olera-web/pull/23
+- **Provider Portal Integration**: ✅ MERGED
+  - PR #23 merged to main
+  - SQL migration run, tables created
+  - Deployed to production
+
+- **"Email me a code instead" option**: ✅ COMPLETE
+  - Added to both `AuthFlowModal.tsx` and `AuthModal.tsx`
+  - Matches iOS app UX: OTP link below password field
+  - Users can sign in via email code instead of password
 
 - **Supabase Unification**: ✅ COMPLETE
   - All pages connected to iOS Supabase
@@ -37,7 +37,8 @@ _Active work items and their current state._
 - [x] Browse page with filtering
 - [x] iOS Supabase integration (Phase 1)
 - [x] PR #20 merged (Esther's provider details + community forum)
-- [ ] PR #21 integration (Logan's provider portal) ← IN PROGRESS
+- [x] PR #21/PR #23 merged (Logan's provider portal)
+- [x] Add "Email me a code instead" to web sign-in ✅
 
 ---
 
@@ -45,10 +46,7 @@ _Active work items and their current state._
 
 _Items waiting on decisions, external input, or dependencies._
 
-- **PR #23 - Ready to merge after:**
-  1. ~~Run SQL migration in Supabase~~ ✅ Done
-  2. Add `SUPABASE_SERVICE_ROLE_KEY` to Vercel environment variables
-  3. Merge PR #23 (`feature/provider-portal` → `main`)
+_None currently._
 
 ---
 
@@ -56,11 +54,10 @@ _Items waiting on decisions, external input, or dependencies._
 
 _What should be tackled next, in priority order._
 
-1. **Complete PR #21 Integration** - Run migration, add env var, merge branch, test
-2. **Update claim flow** - Wire `source_provider_id` to claim existing olera-providers listings
-3. Family onboarding flow
-4. Payment/subscription integration
-5. Environment strategy (dev/staging/prod)
+1. **Update claim flow** - Wire `source_provider_id` to claim existing olera-providers listings
+2. Family onboarding flow
+3. Payment/subscription integration
+4. Environment strategy (dev/staging/prod)
 
 ---
 
@@ -89,6 +86,35 @@ _Useful context, patterns noticed, things to remember._
 ---
 
 ## Session Log
+
+### 2026-02-07
+
+**"Email me a code instead" - OTP Sign-in Option:**
+
+- **Added OTP sign-in option to match iOS app UX**
+  - User couldn't sign in (forgot password) - wanted OTP option like iOS app
+  - Added "Email me a code instead" link below password field in sign-in forms
+
+- **Files modified:**
+  - `components/auth/AuthFlowModal.tsx`:
+    - Added `handleSendOtpForSignIn` handler using `signInWithOtp`
+    - Updated `AuthStep` component with new `onSendOtpCode` prop
+    - Added OTP link in sign-in mode (disabled if email not entered)
+  - `components/auth/AuthModal.tsx`:
+    - Added `verify-otp` view type
+    - Added OTP state: `otpCode`, `resendCooldown`
+    - Added handlers: `handleSendOtpForSignIn`, `handleVerifyOtp`, `handleResendOtp`
+    - Added OTP verification UI with 8-digit code input
+    - Added "Email me a code instead" link in sign-in form
+
+- **UX Flow:**
+  1. User enters email on sign-in form
+  2. Clicks "Email me a code instead"
+  3. OTP code sent via `signInWithOtp`
+  4. User enters 8-digit code
+  5. Code verified, user signed in
+
+- **Build passes** ✅
 
 ### 2026-02-06
 

@@ -802,6 +802,51 @@ export default function AuthFlowModal({
     }
   };
 
+  // Send OTP code for sign-in (alternative to password)
+  const handleSendOtpForSignIn = async () => {
+    if (!data.email.trim()) {
+      setError("Please enter your email address first.");
+      return;
+    }
+
+    setError("");
+    setLoading(true);
+
+    try {
+      if (!isSupabaseConfigured()) {
+        setError("Authentication is not configured.");
+        setLoading(false);
+        return;
+      }
+
+      const supabase = createClient();
+      const { error: otpError } = await supabase.auth.signInWithOtp({
+        email: data.email,
+        options: {
+          shouldCreateUser: false, // Only existing users can use this
+        },
+      });
+
+      if (otpError) {
+        if (otpError.message.includes("not found") || otpError.message.includes("not registered")) {
+          setError("No account found with this email. Please sign up first.");
+        } else {
+          setError(otpError.message);
+        }
+        setLoading(false);
+        return;
+      }
+
+      setResendCooldown(30);
+      setLoading(false);
+      setStep("verify-code");
+    } catch (err) {
+      console.error("Send OTP error:", err);
+      setError("Failed to send code. Please try again.");
+      setLoading(false);
+    }
+  };
+
   // ──────────────────────────────────────────────────────────
   // Profile Creation (Final Step)
   // ──────────────────────────────────────────────────────────
@@ -1142,6 +1187,7 @@ export default function AuthFlowModal({
           loading={loading}
           onSignUp={handleSignUp}
           onSignIn={handleSignIn}
+          onSendOtpCode={handleSendOtpForSignIn}
           onBack={goBack}
         />
       )}
@@ -1649,6 +1695,7 @@ function AuthStep({
   loading,
   onSignUp,
   onSignIn,
+  onSendOtpCode,
   onBack,
 }: {
   mode: "sign-up" | "sign-in";
@@ -1658,6 +1705,7 @@ function AuthStep({
   loading: boolean;
   onSignUp: (e: React.FormEvent) => void;
   onSignIn: (e: React.FormEvent) => void;
+  onSendOtpCode: () => void;
   onBack: () => void;
 }) {
   return (
@@ -1692,17 +1740,29 @@ function AuthStep({
           autoComplete="email"
         />
 
-        <Input
-          label="Password"
-          type="password"
-          name="password"
-          value={data.password}
-          onChange={(e) => updateData({ password: (e.target as HTMLInputElement).value })}
-          placeholder={mode === "sign-up" ? "At least 8 characters" : "Your password"}
-          required
-          autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
-          helpText={mode === "sign-up" ? "Must be at least 8 characters" : undefined}
-        />
+        <div>
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            value={data.password}
+            onChange={(e) => updateData({ password: (e.target as HTMLInputElement).value })}
+            placeholder={mode === "sign-up" ? "At least 8 characters" : "Your password"}
+            required
+            autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
+            helpText={mode === "sign-up" ? "Must be at least 8 characters" : undefined}
+          />
+          {mode === "sign-in" && (
+            <button
+              type="button"
+              onClick={onSendOtpCode}
+              disabled={loading || !data.email.trim()}
+              className="mt-2 text-sm text-primary-600 hover:text-primary-700 font-medium focus:outline-none focus:underline disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Email me a code instead
+            </button>
+          )}
+        </div>
 
         <Button type="submit" loading={loading} fullWidth size="md">
           {mode === "sign-up" ? "Create account & finish" : "Sign in & finish"}
