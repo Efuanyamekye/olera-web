@@ -267,9 +267,10 @@ function OnboardingContent() {
 
         // Only overwrite fields that are empty/missing in the seeded profile
         // to preserve richer seeded data (e.g., care_types, description).
+        // Providers go to "pending" for admin review; families skip to "claimed"
         const update: Record<string, unknown> = {
           account_id: currentAccount.id,
-          claim_state: "claimed" as const,
+          claim_state: data.intent === "family" ? "claimed" : "pending",
         };
 
         if (!s?.display_name?.trim() && data.displayName) {
@@ -348,7 +349,7 @@ function OnboardingContent() {
             state: data.state || null,
             zip: data.zip || null,
             care_types: data.careTypes,
-            claim_state: "claimed" as const,
+            claim_state: data.intent === "family" ? ("claimed" as const) : ("pending" as const),
             verification_state: "unverified" as const,
             source: "user_created" as const,
             is_active: true,

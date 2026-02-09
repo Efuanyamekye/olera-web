@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 
 interface ClaimBadgeProps {
-  claimState: "unclaimed" | "pending" | "claimed";
+  claimState: "unclaimed" | "pending" | "claimed" | "rejected";
   providerName: string;
   claimUrl: string;
 }

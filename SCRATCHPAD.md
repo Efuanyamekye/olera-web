@@ -8,21 +8,13 @@
 
 _What's the main thing being worked on right now?_
 
-- **PR #22 Merged - Esther's Browse/Community Design**: ✅ COMPLETE
-  - Merged Esther's browse page design (carousel/grid/map views)
-  - Integrated with our Supabase data (39K+ providers)
-  - Community forum V2 added
-  - Provider detail page styling confirmed
-
-- **Provider Portal Integration**: ✅ MERGED
-  - PR #23 merged to main
-  - SQL migration run, tables created
-  - Deployed to production
-
-- **Supabase Unification**: ✅ COMPLETE
-  - All pages connected to iOS Supabase
-  - Browse page with server-side filtering
-  - PRs merged: #16, #17, #18, #20, #22
+- **Admin Dashboard MVP**: ✅ BUILT
+  - Internal admin dashboard at `/admin` with auth gating
+  - Provider approval queue (pending → admin approves → claimed)
+  - Leads viewer (all connections across platform)
+  - Team management (add/remove admins, master_admin role)
+  - Audit log for all admin actions
+  - SQL migration run, tables created (admin_users, audit_log)
 
 ---
 
@@ -40,6 +32,7 @@ _Active work items and their current state._
 - [x] PR #20 merged (Esther's provider details + community forum)
 - [x] PR #21/PR #23 merged (Logan's provider portal)
 - [x] Add "Email me a code instead" to web sign-in ✅
+- [x] Admin dashboard MVP (provider approvals, leads, team management)
 
 ---
 
@@ -55,10 +48,11 @@ _None currently._
 
 _What should be tackled next, in priority order._
 
-1. **Update claim flow** - Wire `source_provider_id` to claim existing olera-providers listings
-2. Family onboarding flow
-3. Payment/subscription integration
-4. Environment strategy (dev/staging/prod)
+1. **Email notifications** for provider approval/rejection
+2. **Community forum flagging** infrastructure for admin moderation
+3. **Update claim flow** - Wire `source_provider_id` to claim existing olera-providers listings
+4. Payment/subscription integration
+5. Environment strategy (dev/staging/prod)
 
 ---
 
@@ -73,6 +67,9 @@ _Key decisions with rationale, for future reference._
 | 2026-02-05 | No adapter layer for iOS schema | User feedback: keep both uniform, simpler code |
 | 2026-02-05 | Server-side browse page over client-side | Real Supabase data requires server components |
 | 2026-02-06 | Add `source_provider_id` to link claims | Enables claiming existing 39K olera-providers without modifying iOS schema |
+| 2026-02-09 | Admin dashboard at `/admin` (not linked from public site) | Internal-only tool; no nav link needed, access via URL |
+| 2026-02-09 | Provider claims go to `pending` first (not `claimed`) | Admin review before provider goes live; families skip to `claimed` |
+| 2026-02-09 | `ADMIN_EMAILS` env var for bootstrapping | Can always re-seed master admin if table emptied |
 | 2026-01-30 | Added Claude Code slash commands | Standardize workflow for explore → plan → build → save cycle |
 
 ---
@@ -87,6 +84,43 @@ _Useful context, patterns noticed, things to remember._
 ---
 
 ## Session Log
+
+### 2026-02-09 (Session 10)
+
+**Admin Dashboard MVP:**
+
+- **Built full admin dashboard** at `/admin` with 4 sections:
+  - **Overview**: Stat cards (pending providers, inquiries, admin count) + audit activity timeline
+  - **Providers**: Approval queue with Pending/Approved/Rejected/All tabs, approve/reject actions
+  - **Leads**: Read-only view of all connections with type filters
+  - **Team**: Admin management with add/remove (master_admin only), role badges
+- **Changed provider claim flow**: New claims go to `pending` (not `claimed`), families skip to `claimed`
+- **Added portal banners**: "Profile under review" for pending, "Not approved" for rejected
+- **Auth gating**: Middleware redirects unauthenticated, layout shows "Access denied" for non-admins
+- **Auto-seed**: `ADMIN_EMAILS` env var bootstraps first master_admin
+
+**New files (15):**
+- `supabase/migrations/002_admin_dashboard.sql` - admin_users, audit_log tables
+- `lib/admin.ts` - getServiceClient, getAdminUser, seedInitialAdmin, logAuditAction
+- `hooks/useAdminAuth.ts` - client-side admin auth hook
+- `components/admin/AdminSidebar.tsx` - sidebar + mobile bottom nav
+- `app/admin/layout.tsx`, `page.tsx`, `providers/page.tsx`, `leads/page.tsx`, `team/page.tsx`
+- `app/api/admin/auth/route.ts`, `providers/route.ts`, `providers/[id]/route.ts`, `leads/route.ts`, `team/route.ts`, `audit/route.ts`
+
+**Modified files (7):**
+- `lib/types.ts` - Added `rejected` to ClaimState, admin types
+- `lib/supabase/middleware.ts` - Added `/admin` to protected paths
+- `components/auth/AuthFlowModal.tsx` - Provider claims → `pending`
+- `app/onboarding/page.tsx` - Provider claims → `pending`, families stay `claimed`
+- `app/portal/page.tsx` - Pending/rejected banners
+- `components/ui/Badge.tsx` - Added `rejected` variant
+- `components/providers/ClaimBadge.tsx` - Added `rejected` to type union
+
+**SQL migration run** ✅ - Tables: admin_users, audit_log with RLS + indexes
+**Admin emails configured**: tfalohun@gmail.com (master_admin), tj@olera.care (master_admin)
+**Build passes** ✅
+
+---
 
 ### 2026-02-07 (Session 9)
 

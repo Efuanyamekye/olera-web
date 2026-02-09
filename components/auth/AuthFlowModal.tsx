@@ -965,7 +965,7 @@ export default function AuthFlowModal({
       const s = data.claimedProfile;
       const claimUpdate: Record<string, unknown> = {
         account_id: accountId,
-        claim_state: "claimed",
+        claim_state: "pending",
       };
 
       if (!s.display_name?.trim() && data.orgName) claimUpdate.display_name = data.orgName;
@@ -1005,7 +1005,7 @@ export default function AuthFlowModal({
         state: data.state || null,
         zip: data.zip || null,
         care_types: data.careTypes,
-        claim_state: "claimed",
+        claim_state: "pending",
         verification_state: "unverified",
         source: "user_created",
         is_active: true,

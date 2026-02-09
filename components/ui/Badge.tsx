@@ -1,4 +1,4 @@
-type BadgeVariant = "verified" | "unclaimed" | "pending" | "trial" | "pro" | "default";
+type BadgeVariant = "verified" | "unclaimed" | "pending" | "rejected" | "trial" | "pro" | "default";
 
 interface BadgeProps {
   variant?: BadgeVariant;
@@ -10,6 +10,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   verified: "bg-primary-100 text-primary-700",
   unclaimed: "bg-gray-100 text-gray-600",
   pending: "bg-warm-100 text-warm-700",
+  rejected: "bg-red-100 text-red-700",
   trial: "bg-secondary-100 text-secondary-700",
   pro: "bg-primary-600 text-white",
   default: "bg-gray-100 text-gray-600",

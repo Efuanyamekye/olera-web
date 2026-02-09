@@ -42,6 +42,44 @@ export default function PortalDashboard() {
 
   return (
     <div>
+      {/* Pending review banner */}
+      {activeProfile.claim_state === "pending" && (
+        <div className="mb-8 bg-warm-50 border border-warm-200 rounded-xl p-6">
+          <div className="flex items-start gap-3">
+            <svg className="w-6 h-6 text-warm-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <h2 className="text-lg font-semibold text-warm-800 mb-1">
+                Profile under review
+              </h2>
+              <p className="text-base text-warm-700">
+                Your profile is being reviewed by our team. You&apos;ll have full access once approved. In the meantime, you can complete your profile details.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rejected banner */}
+      {activeProfile.claim_state === "rejected" && (
+        <div className="mb-8 bg-red-50 border border-red-200 rounded-xl p-6">
+          <div className="flex items-start gap-3">
+            <svg className="w-6 h-6 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <div>
+              <h2 className="text-lg font-semibold text-red-800 mb-1">
+                Profile not approved
+              </h2>
+              <p className="text-base text-red-700">
+                Your profile was not approved. Please contact support for more information.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>

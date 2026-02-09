@@ -21,7 +21,7 @@ export type ProfileCategory =
   // Caregivers
   | "private_caregiver";
 
-export type ClaimState = "unclaimed" | "pending" | "claimed";
+export type ClaimState = "unclaimed" | "pending" | "claimed" | "rejected";
 export type VerificationState = "unverified" | "pending" | "verified";
 export type ProfileSource = "seeded" | "user_created";
 
@@ -169,4 +169,32 @@ export interface AuthState {
   profiles: Profile[];
   membership: Membership | null;
   isLoading: boolean;
+}
+
+// ============================================================
+// Admin Types
+// ============================================================
+
+export type AdminRole = "admin" | "master_admin";
+
+export interface AdminUser {
+  id: string;
+  user_id: string;
+  email: string;
+  role: AdminRole;
+  granted_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  admin_user_id: string;
+  action: string;
+  target_type: string;
+  target_id: string;
+  details: Record<string, unknown>;
+  created_at: string;
+  // Joined fields
+  admin_email?: string;
 }
