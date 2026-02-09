@@ -1,12 +1,30 @@
 "use client";
 
-import { Suspense, useState, useMemo, useEffect } from "react";
+import { Suspense, useState, useMemo, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ForumPostCardV3 from "@/components/community/ForumPostCardV3";
 import PostModal from "@/components/community/PostModal";
 import GuidelinesDrawer from "@/components/community/GuidelinesDrawer";
 import { getPostsByCategory, getPostBySlug } from "@/data/mock/forumPosts";
 import { ForumPost, CareTypeId, CARE_TYPE_CONFIG, ALL_CARE_TYPES } from "@/types/forum";
+
+// Sort options
+type SortOption = "newest" | "oldest" | "most-likes" | "most-views" | "most-comments";
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "newest", label: "Newest" },
+  { value: "oldest", label: "Oldest" },
+  { value: "most-likes", label: "Most likes" },
+  { value: "most-views", label: "Most views" },
+  { value: "most-comments", label: "Most comments" },
+];
+
+// Time-aware greeting
+function getGreeting(): string {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return "Good morning!";
+  if (hour >= 12 && hour < 17) return "Good afternoon!";
+  return "Good evening!";
+}
 
 // Category styling with colorful icons
 const CATEGORY_STYLES: Record<CareTypeId | "all", { emoji: string; bg: string; activeBg: string; hoverBg: string }> = {
@@ -38,6 +56,22 @@ function CommunityPageContent() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<CareTypeId | "all">(urlCategory);
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const sortMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close sort menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortMenuRef.current && !sortMenuRef.current.contains(event.target as Node)) {
+        setShowSortMenu(false);
+      }
+    };
+    if (showSortMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showSortMenu]);
 
   // Sync state with URL when navigating (e.g., from Find Care menu or back button)
   useEffect(() => {
@@ -47,6 +81,32 @@ function CommunityPageContent() {
   const [composerTitle, setComposerTitle] = useState("");
   const [composerText, setComposerText] = useState("");
   const [composerCategory, setComposerCategory] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const POSTS_PER_PAGE = 10;
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const [feedScrollEl, setFeedScrollEl] = useState<HTMLDivElement | null>(null);
+
+  // Handle Escape key to close composer
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && showComposer) {
+        setShowComposer(false);
+        setComposerTitle("");
+        setComposerText("");
+        setComposerCategory("");
+        setComposerErrors({ title: "", content: "", category: "" });
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [showComposer]);
+
+  // Auto-focus title input when composer opens
+  useEffect(() => {
+    if (showComposer && titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, [showComposer]);
   const [showGuidelines, setShowGuidelines] = useState(false);
 
   // Validation error state
@@ -121,8 +181,39 @@ function CommunityPageContent() {
           post.tags.some((tag) => tag.toLowerCase().includes(query))
       );
     }
-    return filtered;
-  }, [searchQuery, activeCategory]);
+
+    // Sort posts
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "newest":
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case "oldest":
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        case "most-likes":
+          return b.likeCount - a.likeCount;
+        case "most-views":
+          return b.viewCount - a.viewCount;
+        case "most-comments":
+          return b.commentCount - a.commentCount;
+        default:
+          return 0;
+      }
+    });
+
+    return sorted;
+  }, [searchQuery, activeCategory, sortBy]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  const paginatedPosts = useMemo(() => {
+    const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+    return posts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+  }, [posts, currentPage, POSTS_PER_PAGE]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, sortBy, searchQuery]);
 
   // Calculate category counts
   const categoryCounts = useMemo(() => {
@@ -177,28 +268,12 @@ function CommunityPageContent() {
       {/* Two-Column Layout */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:h-full">
         <div className="flex gap-6 lg:h-full">
-          {/* Left Sidebar - Fixed position */}
+          {/* Left Sidebar - Fixed position, extends to left edge */}
           <aside className="hidden lg:block w-[400px] flex-shrink-0">
-            <div className="fixed top-[88px] w-[400px] h-[calc(100vh-112px)] left-[max(1rem,calc((100vw-1280px)/2+2rem))] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col">
-              {/* Search */}
-              <div className="p-3 border-b border-gray-100">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search discussions..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white transition-all"
-                  />
-                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
-              </div>
-
+            <div className="fixed top-[64px] w-[380px] h-[calc(100vh-64px)] left-0 bg-white border-r border-gray-200 overflow-hidden flex flex-col">
               {/* Categories */}
-              <div className="p-3">
-                <p className="px-1 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Categories</p>
+              <div className="p-4 pt-6" style={{ paddingLeft: 'max(2rem, calc((100vw - 1280px) / 2 + 2rem))' }}>
+                <h2 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4">Categories</h2>
                 <nav className="space-y-1.5">
                   <button
                     onClick={() => handleCategoryChange("all")}
@@ -255,15 +330,14 @@ function CommunityPageContent() {
                 </nav>
               </div>
 
-              {/* Divider + Community Guidelines Link - Bottom aligned */}
+              {/* Community Guidelines Link - Bottom aligned */}
               <div className="mt-auto">
-                <div className="mx-3 border-t border-gray-100" />
+                <div className="mr-4 border-t border-gray-100" style={{ marginLeft: 'max(2rem, calc((100vw - 1280px) / 2 + 2rem))' }} />
 
-                {/* Community Guidelines Link */}
-                <div className="p-3">
+                <div className="p-4" style={{ paddingLeft: 'max(2rem, calc((100vw - 1280px) / 2 + 2rem))' }}>
                 <button
                   onClick={() => setShowGuidelines(true)}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors group"
+                  className="w-full flex items-center gap-3 py-2.5 rounded-lg text-gray-600 hover:text-gray-900 transition-colors group"
                 >
                   <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-100 transition-colors">
                     <svg className="w-5 h-5 text-gray-500 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -283,25 +357,69 @@ function CommunityPageContent() {
           </aside>
 
           {/* Main Content - Fixed position on desktop */}
-          <div className="flex-1 min-w-0 lg:ml-[424px]">
+          <div className="flex-1 min-w-0 lg:ml-[344px]">
             {/* Desktop: Fixed Right Panel */}
-            <div className="hidden lg:flex lg:flex-col fixed top-[88px] right-[max(1rem,calc((100vw-1280px)/2+2rem))] left-[calc(max(1rem,calc((100vw-1280px)/2+2rem))+424px)] h-[calc(100vh-112px)] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-              {/* Sticky Post Composer */}
-              <div className="flex-shrink-0 p-4 border-b border-gray-100 bg-white">
+            <div className="hidden lg:flex lg:flex-col fixed top-[64px] right-0 left-[380px] h-[calc(100vh-64px)] bg-gray-50/50 overflow-hidden">
+              <div className="flex-1 flex flex-col overflow-hidden pt-6 px-6 pr-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))]">
+              {/* Unified Top Section - Composer + Category/Sort (its own card) */}
+              <div className={`flex-shrink-0 p-4 bg-white rounded-xl shadow-md mb-4 transition-shadow duration-200 ${showComposer ? "shadow-lg relative z-20" : ""}`}>
                 {!showComposer ? (
-                  <div
-                    onClick={() => setShowComposer(true)}
-                    className="w-full flex items-center gap-3 cursor-pointer"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary-600 font-medium text-sm">JD</span>
+                  <div className="space-y-3">
+                    {/* Row 1: Greeting + Category/Sort */}
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <p className="text-sm text-gray-500">{getGreeting()}</p>
+                        <h2 className="text-xl font-semibold text-gray-900">What's on your mind today?</h2>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <div className="relative" ref={sortMenuRef}>
+                          <button
+                            onClick={() => setShowSortMenu(!showSortMenu)}
+                            className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                          >
+                            Sort: {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          {showSortMenu && (
+                            <div className="absolute right-0 top-full mt-1 w-36 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                              {SORT_OPTIONS.map((option) => (
+                                <button
+                                  key={option.value}
+                                  onClick={() => {
+                                    setSortBy(option.value);
+                                    setShowSortMenu(false);
+                                  }}
+                                  className={`w-full px-3 py-2 text-left text-sm transition-colors ${
+                                    sortBy === option.value
+                                      ? "bg-gray-50 text-gray-900 font-medium"
+                                      : "text-gray-600 hover:bg-gray-50"
+                                  }`}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1 text-left px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-500 text-sm font-medium hover:border-gray-400 hover:bg-gray-50 transition-colors">
-                      Start a discussion...
+                    {/* Row 2: Composer */}
+                    <div
+                      onClick={() => setShowComposer(true)}
+                      className="flex items-center gap-3 pl-3 pr-1.5 py-1.5 bg-white border border-gray-300 rounded-lg hover:border-gray-400 transition-colors cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
+                        <span className="text-primary-600 font-medium text-xs">JD</span>
+                      </div>
+                      <span className="flex-1 text-left text-gray-500 text-sm font-medium">
+                        Start a discussion...
+                      </span>
+                      <button className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                        Post
+                      </button>
                     </div>
-                    <button className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
-                      Post
-                    </button>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -312,6 +430,7 @@ function CommunityPageContent() {
                       <div className="flex-1 space-y-3">
                         <div>
                           <input
+                            ref={titleInputRef}
                             type="text"
                             value={composerTitle}
                             onChange={(e) => handleTitleChange(e.target.value)}
@@ -345,7 +464,7 @@ function CommunityPageContent() {
                         <select
                           value={composerCategory}
                           onChange={(e) => handleCategorySelect(e.target.value)}
-                          className={`text-sm bg-gray-50 border rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                          className={`text-sm bg-gray-50 border rounded-lg pl-3 pr-10 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M3%205l3%203%203-3%22%2F%3E%3C%2Fsvg%3E')] bg-[length:12px] bg-[right_0.75rem_center] bg-no-repeat ${
                             composerErrors.category ? "border-red-400" : "border-gray-200"
                           } ${composerCategory ? 'text-gray-900' : 'text-gray-500'}`}
                         >
@@ -386,24 +505,28 @@ function CommunityPageContent() {
                 )}
               </div>
 
-              {/* Posts Feed Header + Scrollable Content */}
-              <div className="flex-1 overflow-y-auto">
-                {/* Feed Header with count */}
-                <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-4 py-3 z-10">
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-sm font-semibold text-gray-900">
-                      {activeCategory === "all" ? "All Discussions" : CARE_TYPE_CONFIG[activeCategory].label}
-                    </h2>
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
-                      {posts.length}
-                    </span>
-                  </div>
-                </div>
+              {/* Posts Feed - with overlay when composing */}
+              <div className="flex-1 flex flex-col overflow-hidden relative">
+                {/* Overlay when composer is open */}
+                {showComposer && (
+                  <div
+                    className="absolute inset-0 bg-gray-100/70 backdrop-blur-[2px] z-10 cursor-pointer transition-opacity duration-200"
+                    onClick={() => {
+                      setShowComposer(false);
+                      setComposerTitle("");
+                      setComposerText("");
+                      setComposerCategory("");
+                      setComposerErrors({ title: "", content: "", category: "" });
+                    }}
+                  />
+                )}
 
-                {/* Posts List */}
-                <div className="p-4 space-y-4">
-                  {posts.length > 0 ? (
-                    posts.map((post) => (
+                {/* Posts Feed - Scrollable Content (cards on gray background) */}
+                <div ref={setFeedScrollEl} className="flex-1 overflow-y-auto">
+                {/* Posts List - cards sit directly on gray background */}
+                <div className="space-y-4 pb-6">
+                  {paginatedPosts.length > 0 ? (
+                    paginatedPosts.map((post) => (
                       <ForumPostCardV3
                         key={post.id}
                         post={post}
@@ -421,6 +544,102 @@ function CommunityPageContent() {
                       <p className="text-gray-500">
                         {searchQuery ? "Try different keywords or browse all topics." : "Be the first to start a discussion!"}
                       </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              </div>
+              </div>
+
+              {/* Pagination - Full width footer spanning edge to edge, content aligned with cards */}
+              <div className="flex-shrink-0 bg-white border-t border-gray-200 px-6 py-3 pr-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))]">
+                <div className="flex items-center justify-between">
+                  {/* Range info on left */}
+                  <span className="text-sm text-gray-500">
+                    Showing {((currentPage - 1) * POSTS_PER_PAGE) + 1}-{Math.min(currentPage * POSTS_PER_PAGE, posts.length)} of {posts.length} discussions
+                  </span>
+
+                  {/* Pagination controls on right */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center gap-1">
+                      {/* Previous button */}
+                      <button
+                        onClick={() => {
+                          setCurrentPage(currentPage - 1);
+                          feedScrollEl?.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        disabled={currentPage === 1}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
+                          currentPage === 1
+                            ? "text-gray-300 cursor-not-allowed"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        aria-label="Previous page"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+
+                      {/* Page numbers */}
+                      {(() => {
+                        const pages: (number | "ellipsis")[] = [];
+                        if (totalPages <= 7) {
+                          for (let i = 1; i <= totalPages; i++) pages.push(i);
+                        } else {
+                          pages.push(1);
+                          if (currentPage > 3) pages.push("ellipsis");
+                          const start = Math.max(2, currentPage - 1);
+                          const end = Math.min(totalPages - 1, currentPage + 1);
+                          for (let i = start; i <= end; i++) {
+                            if (!pages.includes(i)) pages.push(i);
+                          }
+                          if (currentPage < totalPages - 2) pages.push("ellipsis");
+                          if (!pages.includes(totalPages)) pages.push(totalPages);
+                        }
+                        return pages.map((page, index) =>
+                          page === "ellipsis" ? (
+                            <span key={`ellipsis-${index}`} className="w-8 h-8 flex items-center justify-center text-gray-400 text-sm">
+                              ...
+                            </span>
+                          ) : (
+                            <button
+                              key={page}
+                              onClick={() => {
+                                setCurrentPage(page);
+                                feedScrollEl?.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium transition-colors ${
+                                currentPage === page
+                                  ? "bg-gray-900 text-white"
+                                  : "text-gray-600 hover:bg-gray-100"
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          )
+                        );
+                      })()}
+
+                      {/* Next button */}
+                      <button
+                        onClick={() => {
+                          setCurrentPage(currentPage + 1);
+                          feedScrollEl?.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        disabled={currentPage === totalPages}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
+                          currentPage === totalPages
+                            ? "text-gray-300 cursor-not-allowed"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        aria-label="Next page"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -474,23 +693,66 @@ function CommunityPageContent() {
             </div>
 
             {/* Mobile: Unified Content Panel (non-fixed height) */}
-            <div className="lg:hidden bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-              {/* Post Composer */}
-              <div className="p-4 border-b border-gray-100">
+            <div className="lg:hidden space-y-4">
+              {/* Unified Top Section - Composer + Count/Sort (its own card) */}
+              <div className={`p-4 bg-white rounded-xl shadow-md transition-shadow duration-200 ${showComposer ? "shadow-lg relative z-20" : ""}`}>
                 {!showComposer ? (
-                  <div
-                    onClick={() => setShowComposer(true)}
-                    className="w-full flex items-center gap-3 cursor-pointer"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary-600 font-medium text-sm">JD</span>
+                  <div className="space-y-3">
+                    {/* Row 1: Greeting + Count/Sort */}
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="text-sm text-gray-500">{getGreeting()}</p>
+                        <h2 className="text-xl font-semibold text-gray-900">What's on your mind today?</h2>
+                      </div>
+                      <div className="flex items-center pt-1">
+                        <div className="relative">
+                          <button
+                            onClick={() => setShowSortMenu(!showSortMenu)}
+                            className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 transition-colors"
+                          >
+                            Sort: {SORT_OPTIONS.find(o => o.value === sortBy)?.label}
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          {showSortMenu && (
+                            <div className="absolute right-0 top-full mt-1 w-32 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                              {SORT_OPTIONS.map((option) => (
+                                <button
+                                  key={option.value}
+                                  onClick={() => {
+                                    setSortBy(option.value);
+                                    setShowSortMenu(false);
+                                  }}
+                                  className={`w-full px-3 py-2 text-left text-xs transition-colors ${
+                                    sortBy === option.value
+                                      ? "bg-gray-50 text-gray-900 font-medium"
+                                      : "text-gray-600 hover:bg-gray-50"
+                                  }`}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1 text-left px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-500 text-sm font-medium hover:border-gray-400 hover:bg-gray-50 transition-colors">
-                      Start a discussion...
+                    {/* Row 2: Composer */}
+                    <div
+                      onClick={() => setShowComposer(true)}
+                      className="flex items-center gap-3 pl-3 pr-1.5 py-1.5 bg-white border border-gray-300 rounded-lg hover:border-gray-400 transition-colors cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0">
+                        <span className="text-primary-600 font-medium text-xs">JD</span>
+                      </div>
+                      <span className="flex-1 text-left text-gray-500 text-sm font-medium">
+                        Start a discussion...
+                      </span>
+                      <button className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                        Post
+                      </button>
                     </div>
-                    <button className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
-                      Post
-                    </button>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -534,7 +796,7 @@ function CommunityPageContent() {
                         <select
                           value={composerCategory}
                           onChange={(e) => handleCategorySelect(e.target.value)}
-                          className={`text-sm bg-gray-50 border rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                          className={`text-sm bg-gray-50 border rounded-lg pl-3 pr-10 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M3%205l3%203%203-3%22%2F%3E%3C%2Fsvg%3E')] bg-[length:12px] bg-[right_0.75rem_center] bg-no-repeat ${
                             composerErrors.category ? "border-red-400" : "border-gray-200"
                           } ${composerCategory ? 'text-gray-900' : 'text-gray-500'}`}
                         >
@@ -575,10 +837,25 @@ function CommunityPageContent() {
                 )}
               </div>
 
-              {/* Posts Feed */}
-              <div className="p-4 space-y-4">
-                {posts.length > 0 ? (
-                  posts.map((post) => (
+              {/* Posts Feed - cards on gray background */}
+              <div className="space-y-4 relative">
+                {/* Overlay when composer is open */}
+                {showComposer && (
+                  <div
+                    className="absolute inset-0 bg-gray-100/70 backdrop-blur-[2px] z-10 cursor-pointer transition-opacity duration-200 rounded-xl"
+                    onClick={() => {
+                      setShowComposer(false);
+                      setComposerTitle("");
+                      setComposerText("");
+                      setComposerCategory("");
+                      setComposerErrors({ title: "", content: "", category: "" });
+                    }}
+                  />
+                )}
+
+                {/* Posts Feed */}
+                {paginatedPosts.length > 0 ? (
+                  paginatedPosts.map((post) => (
                     <ForumPostCardV3
                       key={post.id}
                       post={post}
@@ -586,7 +863,7 @@ function CommunityPageContent() {
                     />
                   ))
                 ) : (
-                  <div className="py-12 text-center">
+                  <div className="py-12 text-center bg-white rounded-xl border border-gray-200 shadow-sm">
                     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                       <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -598,6 +875,99 @@ function CommunityPageContent() {
                     </p>
                   </div>
                 )}
+              </div>
+
+              {/* Pagination - its own card */}
+              <div className="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3">
+                <div className="flex items-center justify-between">
+                  {/* Range info on left */}
+                  <span className="text-sm text-gray-500">
+                    Showing {((currentPage - 1) * POSTS_PER_PAGE) + 1}-{Math.min(currentPage * POSTS_PER_PAGE, posts.length)} of {posts.length} discussions
+                  </span>
+
+                  {/* Pagination controls on right */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center gap-1">
+                      {/* Previous button */}
+                      <button
+                        onClick={() => {
+                          setCurrentPage(currentPage - 1);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        disabled={currentPage === 1}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
+                          currentPage === 1
+                            ? "text-gray-300 cursor-not-allowed"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        aria-label="Previous page"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+
+                      {/* Page numbers */}
+                      {(() => {
+                        const pages: (number | "ellipsis")[] = [];
+                        if (totalPages <= 7) {
+                          for (let i = 1; i <= totalPages; i++) pages.push(i);
+                        } else {
+                          pages.push(1);
+                          if (currentPage > 3) pages.push("ellipsis");
+                          const start = Math.max(2, currentPage - 1);
+                          const end = Math.min(totalPages - 1, currentPage + 1);
+                          for (let i = start; i <= end; i++) {
+                            if (!pages.includes(i)) pages.push(i);
+                          }
+                          if (currentPage < totalPages - 2) pages.push("ellipsis");
+                          if (!pages.includes(totalPages)) pages.push(totalPages);
+                        }
+                        return pages.map((page, index) =>
+                          page === "ellipsis" ? (
+                            <span key={`ellipsis-${index}`} className="w-8 h-8 flex items-center justify-center text-gray-400 text-sm">
+                              ...
+                            </span>
+                          ) : (
+                            <button
+                              key={page}
+                              onClick={() => {
+                                setCurrentPage(page);
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              className={`w-8 h-8 flex items-center justify-center rounded-full text-sm font-medium transition-colors ${
+                                currentPage === page
+                                  ? "bg-gray-900 text-white"
+                                  : "text-gray-600 hover:bg-gray-100"
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          )
+                        );
+                      })()}
+
+                      {/* Next button */}
+                      <button
+                        onClick={() => {
+                          setCurrentPage(currentPage + 1);
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        disabled={currentPage === totalPages}
+                        className={`w-8 h-8 flex items-center justify-center rounded-full transition-colors ${
+                          currentPage === totalPages
+                            ? "text-gray-300 cursor-not-allowed"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        aria-label="Next page"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
             </div>
@@ -625,16 +995,16 @@ function CommunityPageContent() {
 function MountingSkeleton() {
   return (
     <main className="min-h-screen lg:h-screen lg:overflow-hidden bg-gray-50/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:h-full">
-        <div className="flex gap-6 lg:h-full">
-          {/* Left Sidebar skeleton */}
-          <aside className="hidden lg:block w-[400px] flex-shrink-0">
-            <div className="fixed top-[88px] w-[400px] h-[calc(100vh-112px)] left-[max(1rem,calc((100vw-1280px)/2+2rem))] bg-white rounded-xl border border-gray-200 shadow-sm" />
-          </aside>
-          {/* Main Content skeleton */}
-          <div className="flex-1 min-w-0 lg:ml-[424px]">
-            <div className="hidden lg:block fixed top-[88px] right-[max(1rem,calc((100vw-1280px)/2+2rem))] left-[calc(max(1rem,calc((100vw-1280px)/2+2rem))+424px)] h-[calc(100vh-112px)] bg-white rounded-xl border border-gray-200 shadow-sm" />
-          </div>
+      {/* Left Sidebar skeleton */}
+      <div className="hidden lg:block fixed top-[64px] w-[380px] h-[calc(100vh-64px)] left-0 bg-white border-r border-gray-200" />
+      {/* Main Content skeleton */}
+      <div className="hidden lg:block fixed top-[64px] right-0 left-[380px] h-[calc(100vh-64px)] bg-gray-50/50 p-6 pr-[max(1.5rem,calc((100vw-1280px)/2+1.5rem)]">
+        <div className="space-y-4">
+          {/* Composer skeleton */}
+          <div className="h-24 bg-white rounded-xl border border-gray-200 shadow-sm" />
+          {/* Posts skeleton */}
+          <div className="h-40 bg-white rounded-xl border border-gray-200 shadow-sm" />
+          <div className="h-40 bg-white rounded-xl border border-gray-200 shadow-sm" />
         </div>
       </div>
     </main>

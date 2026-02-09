@@ -185,25 +185,6 @@ export default function ForumPostCardV3({ post, onClick, isSelected, compact }: 
         {post.excerpt}
       </p>
 
-      {/* Tags */}
-      {post.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.slice(0, 4).map((tag) => (
-            <span
-              key={tag}
-              className="text-xs px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full"
-            >
-              {tag}
-            </span>
-          ))}
-          {post.tags.length > 4 && (
-            <span className="text-xs px-2.5 py-1 text-gray-400">
-              +{post.tags.length - 4} more
-            </span>
-          )}
-        </div>
-      )}
-
       {/* Footer: Engagement metrics */}
       <div className="flex items-center gap-5 text-sm text-gray-400 pt-3 border-t border-gray-100">
         {post.likeCount > 0 && (
