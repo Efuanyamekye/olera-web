@@ -69,15 +69,41 @@ const EMPTY_STATE: AuthState = {
   isLoading: false,
 };
 
-const FETCH_TIMEOUT_MS = 10000;
+// ─── Session cache ──────────────────────────────────────────────────────
+// Persists auth data across page refreshes so the UI never shows a blank
+// loading state. Background fetch keeps it current.
+const CACHE_KEY = "olera_auth_cache";
 
-/** Race a promise against a timeout. Returns null on timeout. */
-function withTimeout<T>(promise: PromiseLike<T>, ms: number): Promise<T | null> {
-  return Promise.race([
-    Promise.resolve(promise),
-    new Promise<null>((resolve) => setTimeout(() => resolve(null), ms)),
-  ]);
+interface CachedAuthData {
+  userId: string;
+  account: Account;
+  activeProfile: Profile | null;
+  profiles: Profile[];
+  membership: Membership | null;
 }
+
+function cacheAuthData(userId: string, data: Omit<CachedAuthData, "userId">) {
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ...data, userId }));
+  } catch { /* quota exceeded or SSR — ignore */ }
+}
+
+function getCachedAuthData(userId: string): Omit<CachedAuthData, "userId"> | null {
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as CachedAuthData;
+    // Only use cache if it matches the current user
+    if (parsed.userId !== userId) return null;
+    return parsed;
+  } catch { return null; }
+}
+
+function clearAuthCache() {
+  try { sessionStorage.removeItem(CACHE_KEY); } catch { /* ignore */ }
+}
+
+// ─── Provider ───────────────────────────────────────────────────────────
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -108,7 +134,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   /**
    * Fetch account, profiles, and membership for a given user ID.
-   * Parallelizes queries where possible and has a timeout guard.
+   * No artificial timeouts — let queries complete naturally.
+   * The browser's native HTTP timeout (~60-120s) handles dead connections.
    */
   const fetchAccountData = useCallback(
     async (userId: string) => {
@@ -117,36 +144,30 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       const supabase = createClient();
 
       // Step 1: Get account (required for everything else)
-      const accountResult = await withTimeout(
-        supabase.from("accounts").select("*").eq("user_id", userId).single<Account>(),
-        FETCH_TIMEOUT_MS
-      );
+      const { data: account, error: accountError } = await supabase
+        .from("accounts")
+        .select("*")
+        .eq("user_id", userId)
+        .single<Account>();
 
-      const account = accountResult?.data ?? null;
-      if (!account) return null;
+      if (accountError || !account) return null;
 
       // Step 2: Fetch profiles and membership in parallel
       const [profilesResult, membershipResult] = await Promise.all([
-        withTimeout(
-          supabase
-            .from("business_profiles")
-            .select("*")
-            .eq("account_id", account.id)
-            .order("created_at", { ascending: true }),
-          FETCH_TIMEOUT_MS
-        ),
-        withTimeout(
-          supabase
-            .from("memberships")
-            .select("*")
-            .eq("account_id", account.id)
-            .single<Membership>(),
-          FETCH_TIMEOUT_MS
-        ),
+        supabase
+          .from("business_profiles")
+          .select("*")
+          .eq("account_id", account.id)
+          .order("created_at", { ascending: true }),
+        supabase
+          .from("memberships")
+          .select("*")
+          .eq("account_id", account.id)
+          .single<Membership>(),
       ]);
 
-      const profiles = (profilesResult?.data as Profile[]) || [];
-      const membership = membershipResult?.data ?? null;
+      const profiles = (profilesResult.data as Profile[]) || [];
+      const membership = membershipResult.data ?? null;
 
       let activeProfile: Profile | null = null;
       if (account.active_profile_id) {
@@ -176,24 +197,31 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       if (cancelled) return;
 
       if (!session?.user) {
+        clearAuthCache();
         setState({ ...EMPTY_STATE, isLoading: false });
         return;
       }
 
-      // Set user immediately so UI knows we're authenticated.
-      // This makes isLoading: false within milliseconds (getSession reads local storage).
-      // Account data loads as a non-blocking second step.
-      setState((prev) => ({
-        ...prev,
-        user: { id: session.user.id, email: session.user.email! },
-        isLoading: false,
-      }));
+      const userId = session.user.id;
 
-      // Fetch account data — if it fails, portal shows "Loading your account" + Try again
-      const data = await fetchAccountData(session.user.id);
+      // Restore cached data immediately — no loading screens, correct
+      // initials, full portal rendered on first paint.
+      const cached = getCachedAuthData(userId);
+      setState({
+        user: { id: userId, email: session.user.email! },
+        account: cached?.account ?? null,
+        activeProfile: cached?.activeProfile ?? null,
+        profiles: cached?.profiles ?? [],
+        membership: cached?.membership ?? null,
+        isLoading: false,
+      });
+
+      // Background refresh — keeps data current without blocking UI
+      const data = await fetchAccountData(userId);
       if (cancelled) return;
 
       if (data) {
+        cacheAuthData(userId, data);
         setState((prev) => ({
           ...prev,
           account: data.account,
@@ -213,35 +241,42 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       if (cancelled) return;
 
       if (event === "SIGNED_OUT") {
-        // Immediately clear state — no async work needed
         versionRef.current++;
+        clearAuthCache();
         setState({ ...EMPTY_STATE });
         return;
       }
 
       if (event === "SIGNED_IN" && session?.user) {
-        // Set user immediately so UI reflects sign-in state.
+        const userId = session.user.id;
+
+        // Set user + any cached data immediately
+        const cached = getCachedAuthData(userId);
         setState((prev) => ({
           ...prev,
-          user: { id: session.user.id, email: session.user.email! },
+          user: { id: userId, email: session.user.email! },
+          account: cached?.account ?? prev.account,
+          activeProfile: cached?.activeProfile ?? prev.activeProfile,
+          profiles: cached?.profiles ?? prev.profiles,
+          membership: cached?.membership ?? prev.membership,
           isLoading: false,
         }));
 
-        // Fetch account data. For brand-new accounts the DB trigger may
+        // Fetch fresh data. For brand-new accounts the DB trigger may
         // not have run yet, so retry once after a short delay.
         const version = ++versionRef.current;
-        let data = await fetchAccountData(session.user.id);
+        let data = await fetchAccountData(userId);
 
         if (!data?.account) {
           await new Promise((r) => setTimeout(r, 1500));
           if (cancelled || versionRef.current !== version) return;
-          data = await fetchAccountData(session.user.id);
+          data = await fetchAccountData(userId);
         }
 
         if (cancelled || versionRef.current !== version) return;
 
-        // Only update if we got data — never overwrite good state with null.
         if (data) {
+          cacheAuthData(userId, data);
           setState((prev) => ({
             ...prev,
             account: data.account,
@@ -253,25 +288,24 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       }
 
       if (event === "TOKEN_REFRESHED" && session?.user) {
-        // Token refresh: keep existing state if refetch fails.
-        // This prevents random sign-out appearance on slow networks.
         const version = ++versionRef.current;
         const data = await fetchAccountData(session.user.id);
 
         if (cancelled || versionRef.current !== version) return;
 
-        // Only update state if fetch succeeded — never clear on failure
         if (data) {
-          setState({
+          cacheAuthData(session.user.id, data);
+          setState((prev) => ({
+            ...prev,
             user: { id: session.user.id, email: session.user.email! },
             account: data.account,
             activeProfile: data.activeProfile,
             profiles: data.profiles,
             membership: data.membership,
             isLoading: false,
-          });
+          }));
         }
-        // If data is null (timeout/error), silently keep existing state
+        // If fetch failed, silently keep existing state
       }
     });
 
@@ -287,7 +321,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       if (deferred) {
         setDeferredAction(deferred);
       }
-      // Convert to new auth flow options format
       setAuthFlowOptions({
         deferred,
         defaultToSignIn: view === "sign-in",
@@ -310,32 +343,29 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const closeAuthModal = useCallback(() => {
     setIsAuthModalOpen(false);
-    // Reset options when modal closes
     setAuthFlowOptions({});
   }, []);
 
   /**
    * Sign out. Let the auth listener handle state clearing.
    * Only clear state manually if signOut fails.
-   * Optional onComplete callback fires after state is cleared (e.g. to redirect).
    */
   const signOut = useCallback(async (onComplete?: () => void) => {
     if (!configured) return;
+    clearAuthCache();
     const supabase = createClient();
     const { error } = await supabase.auth.signOut();
     if (error) {
-      // Supabase signOut failed — force-clear local state anyway
       console.error("Sign out error:", error.message);
       versionRef.current++;
       setState({ ...EMPTY_STATE });
     }
-    // On success, the onAuthStateChange SIGNED_OUT handler clears state
     onComplete?.();
   }, [configured]);
 
   /**
    * Refresh account data from the database.
-   * Uses userIdRef to avoid stale closure issues.
+   * Updates cache on success.
    */
   const refreshAccountData = useCallback(async () => {
     const userId = userIdRef.current;
@@ -344,10 +374,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     const version = ++versionRef.current;
     const data = await fetchAccountData(userId);
 
-    // Discard if a newer request has been issued
     if (versionRef.current !== version) return;
 
     if (data) {
+      cacheAuthData(userId, data);
       setState((prev) => ({
         ...prev,
         account: data.account,
@@ -388,7 +418,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         };
       });
 
-      // Refresh full account data so membership state stays accurate
       await refreshAccountData();
     },
     [configured, refreshAccountData]

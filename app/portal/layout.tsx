@@ -7,17 +7,19 @@ import Button from "@/components/ui/Button";
 import type { ReactNode } from "react";
 
 export default function PortalLayout({ children }: { children: ReactNode }) {
-  const { user, account, activeProfile, isLoading, refreshAccountData } = useAuth();
+  const { user, account, activeProfile, isLoading } = useAuth();
 
-  if (isLoading) {
+  // Brief spinner while getSession() runs (reads local storage — very fast)
+  // or while a brand-new account's DB trigger fires (~1-2s on first sign-up)
+  if (isLoading || (user && !account)) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="text-lg text-gray-500">Loading...</div>
+        <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full" />
       </div>
     );
   }
 
-  // Not signed in at all
+  // Not signed in
   if (!user) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
@@ -33,26 +35,7 @@ export default function PortalLayout({ children }: { children: ReactNode }) {
     );
   }
 
-  // Signed in but account data couldn't be loaded (DB timeout, race condition)
-  if (!account) {
-    return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Loading your account
-          </h1>
-          <p className="text-lg text-gray-600 mb-6">
-            We&apos;re having trouble loading your account data. This usually
-            resolves on its own.
-          </p>
-          <Button size="lg" onClick={() => refreshAccountData()}>
-            Try again
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
+  // Account exists but no profile yet — direct to onboarding
   if (!activeProfile) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-16 px-4">
