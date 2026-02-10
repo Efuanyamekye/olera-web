@@ -4,7 +4,7 @@ import type { Profile, OrganizationMetadata, CaregiverMetadata } from "@/lib/typ
 import { getProviderBySlug, mockProviderToProfile, iosProviderToProfile } from "@/lib/mock-providers";
 import type { Provider as IOSProvider } from "@/lib/types/provider";
 import Badge from "@/components/ui/Badge";
-import InquiryButton from "@/components/providers/InquiryButton";
+import ConnectionCard from "@/components/providers/connection-card";
 import ImageCarousel from "@/components/providers/ImageCarousel";
 import ExpandableText from "@/components/providers/ExpandableText";
 import CompactProviderCard from "@/components/providers/CompactProviderCard";
@@ -143,12 +143,12 @@ export default async function ProviderPage({
     // iOS Supabase not configured or provider not found
   }
 
-  // 2. Try web profiles table
+  // 2. Try web business_profiles table
   if (!profile) {
     try {
       const supabase = await createClient();
       const { data } = await supabase
-        .from("profiles")
+        .from("business_profiles")
         .select("*")
         .eq("slug", slug)
         .in("type", ["organization", "caregiver"])
@@ -552,107 +552,20 @@ export default async function ProviderPage({
 
           {/* Right Column — Sticky Sidebar */}
           <div className="lg:col-span-1 self-stretch">
-            <div className="sticky top-24 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[534px]">
-              {/* Accent bar */}
-              <div className="h-1 bg-gradient-to-r from-primary-500 to-primary-600" />
-
-              <div className="p-5 space-y-4">
-                {/* Price + Olera Score */}
-                {(priceRange || oleraScore) && (
-                  <div className="flex items-center pb-4 border-b border-gray-100 -mx-5 px-5">
-                    {priceRange && (
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-500 font-medium">Starting from</p>
-                        <p className="text-xl font-bold text-gray-900 mt-1">{priceRange}</p>
-                      </div>
-                    )}
-                    {priceRange && oleraScore && (
-                      <div className="w-px h-12 bg-gray-100 flex-shrink-0" />
-                    )}
-                    {oleraScore && (
-                      <div className="flex-1 flex items-center justify-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-primary-50 border border-primary-100 flex items-center justify-center">
-                          <span className="text-xl font-bold text-primary-700">{oleraScore.toFixed(1)}</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900 leading-none">Olera Score</p>
-                          <div className="flex items-center gap-0.5 mt-[6px]">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <StarIcon
-                                key={star}
-                                className={`w-3.5 h-3.5 ${star <= Math.round(oleraScore) ? "text-yellow-400" : "text-gray-200"}`}
-                                filled={star <= Math.round(oleraScore)}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* CTA Buttons */}
-                <div className="space-y-2.5">
-                  <InquiryButton
-                    providerProfileId={profile.id}
-                    providerName={profile.display_name}
-                    providerSlug={profile.slug}
-                  />
-                  {profile.phone && (
-                    <a
-                      href={`tel:${profile.phone}`}
-                      className="w-full border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2 min-h-[44px] text-sm"
-                    >
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                      {profile.phone}
-                    </a>
-                  )}
-                  {profile.website && (
-                    <a
-                      href={profile.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2 min-h-[44px] text-sm"
-                    >
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                      </svg>
-                      Visit Website
-                    </a>
-                  )}
-                </div>
-
-                {/* Hours */}
-                {meta?.hours && (
-                  <div className="pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <p className="text-sm text-gray-600">{meta.hours}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Accepted Payments — pinned to bottom */}
-              {acceptedPayments.length > 0 && (
-                <div className="mt-auto px-5 pb-5 pt-4 border-t border-gray-100">
-                  <p className="text-xs text-gray-500 font-medium mb-2">Accepted payments</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {acceptedPayments.map((payment) => (
-                      <span
-                        key={payment}
-                        className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-50 text-gray-600 border border-gray-100"
-                      >
-                        {payment}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <div className="sticky top-24">
+              <ConnectionCard
+                providerId={profile.id}
+                providerName={profile.display_name}
+                providerSlug={profile.slug}
+                priceRange={priceRange}
+                oleraScore={oleraScore}
+                reviewCount={meta?.review_count}
+                phone={profile.phone}
+                acceptedPayments={acceptedPayments}
+                careTypes={profile.care_types}
+                isActive={profile.is_active}
+                responseTime={null}
+              />
             </div>
           </div>
         </div>

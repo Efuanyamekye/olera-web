@@ -61,38 +61,29 @@ export default function PostContent({ post, onClose }: PostContentProps) {
             <span className="font-medium text-gray-900">{post.author.displayName}</span>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span>{formatTimeAgo(post.createdAt)}</span>
-              <span className="text-gray-300">·</span>
-              <span>{post.viewCount} views</span>
             </div>
           </div>
         </div>
-        {onClose && (
-          <button
-            onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-            aria-label="Close"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          <span className={`inline-flex text-xs font-medium px-2.5 py-1 rounded-full ${careTypeConfig.bgColor} ${careTypeConfig.color}`}>
+            {careTypeConfig.label}
+          </span>
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Title */}
       <h1 className="text-2xl font-semibold text-gray-900 mb-4">{post.title}</h1>
-
-      {/* Care Type Badge + Tags */}
-      <div className="flex flex-wrap items-center gap-2 mb-6">
-        <span className={`inline-flex text-xs font-medium px-2.5 py-1 rounded-full ${careTypeConfig.bgColor} ${careTypeConfig.color}`}>
-          {careTypeConfig.label}
-        </span>
-        {post.tags.map((tag) => (
-          <span key={tag} className="text-xs px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full">
-            {tag}
-          </span>
-        ))}
-      </div>
 
       {/* Content */}
       <div className="prose prose-gray max-w-none mb-8">
@@ -121,6 +112,13 @@ export default function PostContent({ post, onClose }: PostContentProps) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
           {post.commentCount} {post.commentCount === 1 ? "comment" : "comments"}
+        </span>
+        <span className="flex items-center gap-2 text-sm text-gray-500">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+          {post.viewCount} {post.viewCount === 1 ? "view" : "views"}
         </span>
         <button className="flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors ml-auto">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

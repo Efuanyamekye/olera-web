@@ -39,17 +39,22 @@ export default function BrowseFamiliesPage() {
     }
 
     const fetchFamilies = async () => {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("type", "family")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .limit(50);
+      try {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from("business_profiles")
+          .select("id, display_name, city, state, type, care_types, metadata, image_url, slug")
+          .eq("type", "family")
+          .eq("is_active", true)
+          .order("created_at", { ascending: false })
+          .limit(50);
 
-      setFamilies((data as Profile[]) || []);
-      setLoading(false);
+        setFamilies((data as Profile[]) || []);
+      } catch (err) {
+        console.error("[olera] browse families failed:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchFamilies();

@@ -50,15 +50,18 @@ export default function ConnectionsPage() {
     }
 
     try {
+      console.time("[olera] fetchConnections");
       const supabase = createClient();
 
       // Fetch ALL connections involving this profile (inbound and outbound)
+      console.time("[olera] query: connections");
       const { data, error: fetchError } = await supabase
         .from("connections")
         .select("*")
         .or(`to_profile_id.eq.${activeProfile.id},from_profile_id.eq.${activeProfile.id}`)
         .neq("type", "save")
         .order("created_at", { ascending: false });
+      console.timeEnd("[olera] query: connections");
 
       if (fetchError) throw new Error(fetchError.message);
 
@@ -72,10 +75,12 @@ export default function ConnectionsPage() {
 
       let profiles: Profile[] = [];
       if (profileIds.size > 0) {
+        console.time("[olera] query: connection profiles");
         const { data: profileData } = await supabase
-          .from("profiles")
-          .select("*")
+          .from("business_profiles")
+          .select("id, display_name, city, state, type, email, phone, slug, image_url")
           .in("id", Array.from(profileIds));
+        console.timeEnd("[olera] query: connection profiles");
         profiles = (profileData as Profile[]) || [];
       }
 
@@ -88,6 +93,7 @@ export default function ConnectionsPage() {
 
       setConnections(enriched);
     } catch (err: unknown) {
+      console.error("[olera] fetchConnections failed:", err);
       const msg =
         err && typeof err === "object" && "message" in err
           ? (err as { message: string }).message
@@ -95,6 +101,7 @@ export default function ConnectionsPage() {
       setError(msg);
     } finally {
       setLoading(false);
+      console.timeEnd("[olera] fetchConnections");
     }
   }, [activeProfile]);
 
@@ -173,10 +180,17 @@ export default function ConnectionsPage() {
 
       {error && (
         <div
-          className="mb-6 bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base"
+          className="mb-6 bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base flex items-center justify-between"
           role="alert"
         >
-          {error}
+          <span>{error}</span>
+          <button
+            type="button"
+            onClick={() => { setError(""); setLoading(true); fetchConnections(); }}
+            className="text-sm font-medium text-red-700 hover:text-red-800 underline ml-4"
+          >
+            Retry
+          </button>
         </div>
       )}
 

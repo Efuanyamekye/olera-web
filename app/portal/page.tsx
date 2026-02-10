@@ -24,15 +24,25 @@ export default function PortalDashboard() {
     if (!activeProfile || !isSupabaseConfigured()) return;
 
     const fetchCounts = async () => {
-      const supabase = createClient();
-      const column = isProvider ? "to_profile_id" : "from_profile_id";
-      const { count } = await supabase
-        .from("connections")
-        .select("*", { count: "exact", head: true })
-        .eq(column, activeProfile.id)
-        .eq("type", "inquiry");
+      try {
+        console.time("[olera] dashboard: inquiry count");
+        const supabase = createClient();
+        const column = isProvider ? "to_profile_id" : "from_profile_id";
+        const { count, error } = await supabase
+          .from("connections")
+          .select("*", { count: "exact", head: true })
+          .eq(column, activeProfile.id)
+          .eq("type", "inquiry");
+        console.timeEnd("[olera] dashboard: inquiry count");
 
-      setInquiryCount(count ?? 0);
+        if (error) {
+          console.error("[olera] dashboard count error:", error.message);
+          return;
+        }
+        setInquiryCount(count ?? 0);
+      } catch (err) {
+        console.error("[olera] dashboard fetchCounts failed:", err);
+      }
     };
 
     fetchCounts();

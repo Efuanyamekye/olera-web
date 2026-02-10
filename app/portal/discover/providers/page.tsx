@@ -31,17 +31,23 @@ export default function DiscoverProvidersPage() {
     }
 
     const fetchOrgs = async () => {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("type", "organization")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .limit(50);
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("business_profiles")
+          .select("id, display_name, city, state, type, care_types, metadata, image_url, slug")
+          .eq("type", "organization")
+          .eq("is_active", true)
+          .order("created_at", { ascending: false })
+          .limit(50);
 
-      setOrgs((data as Profile[]) || []);
-      setLoading(false);
+        if (error) console.error("[olera] discover providers error:", error.message);
+        setOrgs((data as Profile[]) || []);
+      } catch (err) {
+        console.error("[olera] discover providers failed:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchOrgs();

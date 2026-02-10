@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import type {
@@ -173,10 +173,17 @@ export default function PortalProfilePage() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
 
+  // Image upload state
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [imageError, setImageError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Pre-fill form from active profile
   useEffect(() => {
     if (!activeProfile) return;
 
+    setImageUrl(activeProfile.image_url || null);
     setForm({
       display_name: activeProfile.display_name || "",
       description: activeProfile.description || "",
@@ -307,6 +314,117 @@ export default function PortalProfilePage() {
     return {};
   };
 
+  const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+  const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImageError("");
+
+    // Validate file type
+    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+      setImageError("Please upload a JPEG, PNG, or WebP image.");
+      return;
+    }
+
+    // Validate file size
+    if (file.size > MAX_IMAGE_SIZE) {
+      setImageError("Image must be under 5MB.");
+      return;
+    }
+
+    setImageUploading(true);
+
+    try {
+      if (!isSupabaseConfigured()) {
+        setImageError("Storage is not configured.");
+        return;
+      }
+
+      const supabase = createClient();
+      const ext = file.name.split(".").pop() || "jpg";
+      const fileName = `${activeProfile.id}-${Date.now()}.${ext}`;
+      const filePath = `profile-images/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("profile-images")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: true,
+          contentType: file.type,
+        });
+
+      if (uploadError) {
+        // Storage bucket may not exist yet — surface a clear message
+        if (
+          uploadError.message?.includes("not found") ||
+          uploadError.message?.includes("Bucket")
+        ) {
+          setImageError(
+            "Image storage is not configured yet. This feature requires a Supabase Storage bucket to be created. Please contact your developer."
+          );
+        } else {
+          setImageError(`Upload failed: ${uploadError.message}`);
+        }
+        return;
+      }
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from("profile-images")
+        .getPublicUrl(filePath);
+
+      const publicUrl = urlData.publicUrl;
+
+      // Update profile with new image URL
+      const { error: updateError } = await supabase
+        .from("business_profiles")
+        .update({ image_url: publicUrl })
+        .eq("id", activeProfile.id);
+
+      if (updateError) throw updateError;
+
+      setImageUrl(publicUrl);
+      await refreshAccountData();
+    } catch (err) {
+      console.error("Image upload error:", err);
+      setImageError("Failed to upload image. Please try again.");
+    } finally {
+      setImageUploading(false);
+      // Reset the input so the same file can be re-selected
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    if (!imageUrl || !isSupabaseConfigured()) return;
+
+    setImageUploading(true);
+    setImageError("");
+
+    try {
+      const supabase = createClient();
+
+      // Clear image_url from profile
+      const { error: updateError } = await supabase
+        .from("business_profiles")
+        .update({ image_url: null })
+        .eq("id", activeProfile.id);
+
+      if (updateError) throw updateError;
+
+      setImageUrl(null);
+      await refreshAccountData();
+    } catch (err) {
+      console.error("Remove image error:", err);
+      setImageError("Failed to remove image. Please try again.");
+    } finally {
+      setImageUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isSupabaseConfigured()) return;
@@ -358,10 +476,98 @@ export default function PortalProfilePage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Edit profile</h1>
-        <p className="text-lg text-gray-600 mt-1">{profileLabel}</p>
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Edit profile</h1>
+          <p className="text-lg text-gray-600 mt-1">{profileLabel}</p>
+        </div>
+        {activeProfile?.slug && (isOrg || isCaregiver) && (
+          <a
+            href={`/provider/${activeProfile.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors whitespace-nowrap"
+          >
+            View live profile
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
+        )}
       </div>
+
+      {/* Profile image section */}
+      {(isOrg || isCaregiver) && (
+        <section className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Profile photo
+          </h2>
+          <div className="bg-white p-6 rounded-xl border border-gray-200">
+            <div className="flex items-center gap-6">
+              {/* Image preview */}
+              <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
+                {imageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={imageUrl}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                )}
+                {imageUploading && (
+                  <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
+                    <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </div>
+
+              {/* Upload controls */}
+              <div className="flex-1">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  disabled={imageUploading}
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={imageUploading}
+                    className="px-4 py-2 text-sm font-medium text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors disabled:opacity-50"
+                  >
+                    {imageUrl ? "Change photo" : "Upload photo"}
+                  </button>
+                  {imageUrl && (
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      disabled={imageUploading}
+                      className="px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors disabled:opacity-50"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  JPEG, PNG, or WebP. Max 5MB.
+                </p>
+                {imageError && (
+                  <p className="text-xs text-red-600 mt-1">{imageError}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Basic info section */}

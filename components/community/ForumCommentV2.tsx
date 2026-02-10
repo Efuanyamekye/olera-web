@@ -145,8 +145,10 @@ export default function ForumCommentV2({ comment, isReply = false }: ForumCommen
             {/* Likes */}
             <button
               onClick={handleLike}
-              className={`flex items-center gap-1.5 transition-colors ${
-                isLiked ? "text-red-500" : "text-gray-400 hover:text-gray-600"
+              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg transition-all ${
+                isLiked
+                  ? "bg-red-50 text-red-600"
+                  : "bg-gray-50 text-gray-600 hover:bg-gray-100"
               }`}
             >
               <svg className={`w-4 h-4 ${isLiked ? "scale-110" : ""} transition-transform`} fill={isLiked ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">

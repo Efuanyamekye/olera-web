@@ -169,6 +169,8 @@ export interface AuthState {
   profiles: Profile[];
   membership: Membership | null;
   isLoading: boolean;
+  /** True when the initial data fetch failed and no cache was available */
+  fetchError: boolean;
 }
 
 // ============================================================

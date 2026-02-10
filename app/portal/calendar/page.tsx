@@ -59,6 +59,7 @@ export default function CalendarPage() {
   const { activeProfile } = useAuth();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [weekOffset, setWeekOffset] = useState(0);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -81,52 +82,65 @@ export default function CalendarPage() {
       return;
     }
 
-    const supabase = createClient();
+    try {
+      console.time("[olera] fetchAppointments");
+      const supabase = createClient();
 
-    // Fetch accepted connections — these are your "appointments"
-    const { data: connections } = await supabase
-      .from("connections")
-      .select("*")
-      .or(
-        `to_profile_id.eq.${activeProfile.id},from_profile_id.eq.${activeProfile.id}`
-      )
-      .eq("status", "accepted")
-      .neq("type", "save")
-      .order("updated_at", { ascending: false });
+      // Fetch accepted connections — these are your "appointments"
+      const { data: connections, error: connError } = await supabase
+        .from("connections")
+        .select("*")
+        .or(
+          `to_profile_id.eq.${activeProfile.id},from_profile_id.eq.${activeProfile.id}`
+        )
+        .eq("status", "accepted")
+        .neq("type", "save")
+        .order("updated_at", { ascending: false });
 
-    if (!connections || connections.length === 0) {
-      setAppointments([]);
+      if (connError) throw new Error(connError.message);
+
+      if (!connections || connections.length === 0) {
+        setAppointments([]);
+        return;
+      }
+
+      // Fetch all related profiles
+      const profileIds = new Set<string>();
+      connections.forEach((c: Connection) => {
+        profileIds.add(c.from_profile_id);
+        profileIds.add(c.to_profile_id);
+      });
+
+      const { data: profiles } = await supabase
+        .from("business_profiles")
+        .select("id, display_name, email, phone")
+        .in("id", Array.from(profileIds));
+
+      const profileMap = new Map(
+        ((profiles as Profile[]) || []).map((p) => [p.id, p])
+      );
+
+      const enriched: Appointment[] = (connections as Connection[]).map((c) => ({
+        connection: c,
+        otherProfile:
+          c.from_profile_id === activeProfile.id
+            ? profileMap.get(c.to_profile_id) || null
+            : profileMap.get(c.from_profile_id) || null,
+        isInbound: c.to_profile_id === activeProfile.id,
+      }));
+
+      setAppointments(enriched);
+    } catch (err: unknown) {
+      console.error("[olera] fetchAppointments failed:", err);
+      setError(
+        err && typeof err === "object" && "message" in err
+          ? (err as { message: string }).message
+          : "Failed to load activity"
+      );
+    } finally {
       setLoading(false);
-      return;
+      console.timeEnd("[olera] fetchAppointments");
     }
-
-    // Fetch all related profiles
-    const profileIds = new Set<string>();
-    connections.forEach((c: Connection) => {
-      profileIds.add(c.from_profile_id);
-      profileIds.add(c.to_profile_id);
-    });
-
-    const { data: profiles } = await supabase
-      .from("business_profiles")
-      .select("*")
-      .in("id", Array.from(profileIds));
-
-    const profileMap = new Map(
-      ((profiles as Profile[]) || []).map((p) => [p.id, p])
-    );
-
-    const enriched: Appointment[] = (connections as Connection[]).map((c) => ({
-      connection: c,
-      otherProfile:
-        c.from_profile_id === activeProfile.id
-          ? profileMap.get(c.to_profile_id) || null
-          : profileMap.get(c.from_profile_id) || null,
-      isInbound: c.to_profile_id === activeProfile.id,
-    }));
-
-    setAppointments(enriched);
-    setLoading(false);
   }, [activeProfile]);
 
   useEffect(() => {
@@ -159,6 +173,19 @@ export default function CalendarPage() {
           Track your accepted connections and coordinate next steps.
         </p>
       </div>
+
+      {error && (
+        <div className="mb-6 bg-red-50 text-red-700 px-4 py-3 rounded-lg text-base flex items-center justify-between" role="alert">
+          <span>{error}</span>
+          <button
+            type="button"
+            onClick={() => { setError(""); setLoading(true); fetchAppointments(); }}
+            className="text-sm font-medium text-red-700 hover:text-red-800 underline ml-4"
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {/* Week navigation + calendar strip */}
       <div className="bg-white rounded-xl border border-gray-200 mb-6">
