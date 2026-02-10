@@ -8,6 +8,7 @@ import { mapProviderCareTypes } from "./constants";
 import type {
   CardState,
   IntentStep,
+  IdentityStep,
   IntentData,
   IdentityData,
   CareRecipient,
@@ -57,6 +58,7 @@ export function useConnectionCard(props: ConnectionCardProps) {
   // ── State machine ──
   const [cardState, setCardState] = useState<CardState>("default");
   const [intentStep, setIntentStep] = useState<IntentStep>(0);
+  const [identityStep, setIdentityStep] = useState<IdentityStep>(0);
   const [intentData, setIntentData] = useState<IntentData>(INITIAL_INTENT);
   const [identityData, setIdentityData] =
     useState<IdentityData>(INITIAL_IDENTITY);
@@ -112,6 +114,7 @@ export function useConnectionCard(props: ConnectionCardProps) {
   const resetFlow = useCallback(() => {
     setCardState("default");
     setIntentStep(0);
+    setIdentityStep(0);
     setIntentData(INITIAL_INTENT);
     setIdentityData(INITIAL_IDENTITY);
     setError("");
@@ -149,6 +152,7 @@ export function useConnectionCard(props: ConnectionCardProps) {
       }
       // Otherwise proceed to identity capture
       setCardState("identity");
+      setIdentityStep(0);
     }
   }, [intentStep, intentData, availableCareTypes, resetFlow]);
 
@@ -168,9 +172,24 @@ export function useConnectionCard(props: ConnectionCardProps) {
     setCardState("intent");
   }, []);
 
-  const goBackFromIdentity = useCallback(() => {
-    setCardState("intent");
-    setIntentStep(2);
+  const goToNextIdentityStep = useCallback(() => {
+    if (identityStep === 0) {
+      setIdentityStep(1);
+    }
+  }, [identityStep]);
+
+  const goBackIdentityStep = useCallback(() => {
+    if (identityStep === 0) {
+      // Back from identity sub-step 0 → intent step 2
+      setCardState("intent");
+      setIntentStep(2);
+    } else {
+      setIdentityStep(0);
+    }
+  }, [identityStep]);
+
+  const editIdentityStep = useCallback((step: IdentityStep) => {
+    setIdentityStep(step);
   }, []);
 
   // ── Field setters ──
@@ -368,6 +387,7 @@ export function useConnectionCard(props: ConnectionCardProps) {
     // State
     cardState,
     intentStep,
+    identityStep,
     intentData,
     identityData,
     phoneRevealed,
@@ -383,7 +403,9 @@ export function useConnectionCard(props: ConnectionCardProps) {
     goToNextIntentStep,
     goBackIntentStep,
     editIntentStep,
-    goBackFromIdentity,
+    goToNextIdentityStep,
+    goBackIdentityStep,
+    editIdentityStep,
 
     // Field setters
     setRecipient,

@@ -42,7 +42,7 @@ export default function ConnectionCard(props: ConnectionCardProps) {
       <div className="h-px bg-gray-200" />
 
       {/* Middle section — state-dependent */}
-      <div className="px-5 py-4">
+      <div className="px-5 py-5">
         {hook.cardState === "default" && (
           <DefaultActions
             providerName={providerName}
@@ -74,18 +74,21 @@ export default function ConnectionCard(props: ConnectionCardProps) {
         {hook.cardState === "identity" && (
           <IdentityCapture
             providerName={providerName}
+            identityStep={hook.identityStep}
             intentData={hook.intentData}
             identityData={hook.identityData}
             submitting={hook.submitting}
             error={hook.error}
             onEditIntent={() => hook.editIntentStep(0)}
+            onEditIdentityStep={hook.editIdentityStep}
             onSetEmail={hook.setEmail}
             onSetFirstName={hook.setFirstName}
             onSetLastName={hook.setLastName}
             onSetContactPref={hook.setContactPref}
             onSetPhone={hook.setPhone}
+            onNext={hook.goToNextIdentityStep}
             onSubmit={hook.submitRequest}
-            onBack={hook.goBackFromIdentity}
+            onBack={hook.goBackIdentityStep}
           />
         )}
 

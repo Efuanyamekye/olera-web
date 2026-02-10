@@ -44,7 +44,7 @@ export default function DefaultActions({
       {/* Primary CTA */}
       <button
         onClick={onConnect}
-        className="w-full py-3.5 bg-primary-600 hover:bg-primary-500 text-white border-none rounded-[10px] text-[15px] font-semibold cursor-pointer tracking-tight transition-colors"
+        className="w-full py-3.5 bg-primary-600 hover:bg-primary-500 text-white border-none rounded-[10px] text-base font-semibold cursor-pointer tracking-tight transition-colors"
       >
         Connect with {providerName}
       </button>

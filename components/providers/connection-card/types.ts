@@ -13,6 +13,8 @@ export type CardState =
 
 export type IntentStep = 0 | 1 | 2;
 
+export type IdentityStep = 0 | 1; // 0 = email+name, 1 = contact+phone
+
 export type CareRecipient = "self" | "loved_one";
 
 export type CareTypeValue =

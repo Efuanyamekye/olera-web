@@ -41,10 +41,10 @@ export default function ConfirmationState({
         <div className="mb-2.5">
           <CheckIcon />
         </div>
-        <p className="text-[15px] font-semibold text-gray-900 mb-2">
+        <p className="text-base font-semibold text-gray-900 mb-2">
           Request sent to {providerName}
         </p>
-        <p className="text-[13px] text-gray-600 leading-relaxed">
+        <p className="text-sm text-gray-600 leading-relaxed">
           {responseTime && (
             <>
               They usually respond within {responseTime}.
@@ -69,7 +69,7 @@ export default function ConfirmationState({
       {/* Browse similar */}
       <Link
         href="/browse"
-        className="block w-full text-center text-[13px] text-primary-600 font-medium mt-3.5 underline decoration-primary-600/25 underline-offset-2 hover:decoration-primary-600/50 transition-colors"
+        className="block w-full text-center text-sm text-primary-600 font-medium mt-3.5 underline decoration-primary-600/25 underline-offset-2 hover:decoration-primary-600/50 transition-colors"
       >
         Browse similar providers nearby &rarr;
       </Link>
