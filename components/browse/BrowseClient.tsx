@@ -546,12 +546,15 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
               </button>
 
               {showLocationDropdown && (
-                <div className="absolute left-0 top-[calc(100%+6px)] w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 py-3 z-[100]">
+                <div className="absolute left-0 top-[calc(100%+8px)] w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 py-3 z-[100] max-h-[340px] overflow-y-auto">
                   {/* Search Input */}
                   <div className="px-3 pb-2">
-                    <div className="relative">
-                      <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <div className={`flex items-center px-3 py-2.5 bg-gray-50 rounded-xl border transition-colors ${
+                      locationInput.trim() ? "border-primary-400 ring-2 ring-primary-100" : "border-gray-200"
+                    }`}>
+                      <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       <input
                         ref={locationInputRef}
@@ -559,21 +562,22 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                         value={locationInput}
                         onChange={(e) => setLocationInput(e.target.value)}
                         onFocus={preloadCities}
-                        placeholder="Search city or ZIP code..."
-                        className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-100"
+                        placeholder="City or ZIP code"
+                        className="w-full ml-2.5 bg-transparent border-none text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 text-sm"
                       />
                     </div>
                   </div>
 
                   {/* Use Current Location - Prominent Button */}
-                  <div className="px-3 pb-2">
+                  <div className="px-3 pb-3">
                     <button
+                      type="button"
                       onClick={() => {
                         detectLocation();
                         setShowLocationDropdown(false);
                       }}
                       disabled={isGeolocating}
-                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-sm text-primary-700 font-medium transition-colors disabled:opacity-60"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-primary-700 font-medium transition-colors disabled:opacity-60"
                     >
                       {isGeolocating ? (
                         <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -590,7 +594,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                   </div>
 
                   {/* Divider */}
-                  <div className="flex items-center gap-3 px-3 py-1">
+                  <div className="flex items-center gap-3 px-4 py-1">
                     <div className="flex-1 h-px bg-gray-200" />
                     <span className="text-xs text-gray-400 font-medium">or search</span>
                     <div className="flex-1 h-px bg-gray-200" />
@@ -603,34 +607,33 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                     </div>
                   )}
 
-                  <div className="max-h-[280px] overflow-y-auto">
-                    {cityResults.map((loc) => (
-                      <button
-                        key={loc.full}
-                        onClick={() => {
-                          setSearchLocation(loc.full);
-                          setLocationInput(loc.full);
-                          setShowLocationDropdown(false);
-                        }}
-                        className={`flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
-                          searchLocation === loc.full
-                            ? "bg-primary-50 text-primary-700 font-medium"
-                            : "text-gray-900"
-                        }`}
-                      >
-                        <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span className="font-medium">{loc.full}</span>
-                      </button>
-                    ))}
-                    {cityResults.length === 0 && (
-                      <div className="px-4 py-4 text-sm text-gray-500 text-center">
-                        No locations found
-                      </div>
-                    )}
-                  </div>
+                  {cityResults.map((loc) => (
+                    <button
+                      key={loc.full}
+                      type="button"
+                      onClick={() => {
+                        setSearchLocation(loc.full);
+                        setLocationInput(loc.full);
+                        setShowLocationDropdown(false);
+                      }}
+                      className={`flex items-center gap-3 w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors ${
+                        searchLocation === loc.full
+                          ? "bg-primary-50 text-primary-700"
+                          : "text-gray-900"
+                      }`}
+                    >
+                      <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span className="font-medium">{loc.full}</span>
+                    </button>
+                  ))}
+                  {cityResults.length === 0 && (
+                    <div className="px-4 py-3 text-sm text-gray-500 text-center">
+                      No locations found
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -936,7 +939,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 {careTypeLabel} in {searchLocation}
               </h1>
               <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-900">
-                {filteredProviders.length} results
+                {filteredProviders.length} {filteredProviders.length === 1 ? "result" : "results"}
               </span>
             </div>
 
@@ -1009,7 +1012,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 {careTypeLabel} in {searchLocation}
               </h1>
               <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-900">
-                {filteredProviders.length} results
+                {filteredProviders.length} {filteredProviders.length === 1 ? "result" : "results"}
               </span>
             </div>
 
@@ -1050,7 +1053,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                     {careTypeLabel} in {searchLocation}
                   </h1>
                   <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-900">
-                    {filteredProviders.length} results
+                    {filteredProviders.length} {filteredProviders.length === 1 ? "result" : "results"}
                   </span>
                 </div>
 
