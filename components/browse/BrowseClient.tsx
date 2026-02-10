@@ -355,6 +355,8 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
       const target = e.target as HTMLElement;
       if (!target.closest(".dropdown-container")) {
         setShowLocationDropdown(false);
+        // Restore locationInput to current searchLocation when closing without selection
+        setLocationInput(searchLocation);
         setShowCareTypeDropdown(false);
         setShowRatingDropdown(false);
         setShowPaymentDropdown(false);
@@ -363,7 +365,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+  }, [searchLocation]);
 
   // Filter and sort providers (Supabase already filtered by care type and location)
   const filteredProviders = useMemo(() => {
@@ -504,12 +506,17 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowLocationDropdown(!showLocationDropdown);
+                  const opening = !showLocationDropdown;
+                  setShowLocationDropdown(opening);
                   setShowCareTypeDropdown(false);
                   setShowRatingDropdown(false);
                   setShowPaymentDropdown(false);
                   setShowSortDropdown(false);
-                  setTimeout(() => locationInputRef.current?.focus({ preventScroll: true }), 100);
+                  if (opening) {
+                    // Clear input so popular cities show (matching landing page dropdown)
+                    setLocationInput("");
+                    setTimeout(() => locationInputRef.current?.focus({ preventScroll: true }), 100);
+                  }
                 }}
                 className={`flex items-center justify-between h-9 px-3 w-[200px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   searchLocation.trim()
@@ -537,7 +544,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
               </button>
 
               {showLocationDropdown && (
-                <div className="absolute left-0 top-[calc(100%+8px)] w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 py-3 z-[100] max-h-[340px] overflow-y-auto">
+                <div className="absolute left-0 top-[calc(100%+8px)] w-[380px] bg-white rounded-xl shadow-xl border border-gray-200 py-3 z-[100] max-h-[340px] overflow-y-auto">
                   {/* Search Input */}
                   <div className="px-3 pb-2">
                     <div className={`flex items-center px-4 py-3 bg-gray-50 rounded-xl border transition-colors ${
