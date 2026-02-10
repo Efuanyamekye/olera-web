@@ -24,7 +24,7 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(
     const isTextarea = props.as === "textarea";
 
     const inputClasses = [
-      "w-full px-4 py-3 rounded-lg border text-lg",
+      "w-full px-4 py-3 rounded-xl border text-base",
       "placeholder:text-gray-400",
       "transition-colors duration-200",
       "focus:outline-none focus:ring-2 focus:border-transparent",

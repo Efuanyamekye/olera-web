@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
 import type { ProfileType } from "@/lib/types";
 import Button from "@/components/ui/Button";
@@ -26,7 +25,7 @@ interface RoleGateProps {
  * - Correct profile type → render children
  */
 export default function RoleGate({ requiredType, children, actionLabel }: RoleGateProps) {
-  const { user, account, activeProfile, profiles, openAuthModal, switchProfile } = useAuth();
+  const { user, account, activeProfile, profiles, openAuth, switchProfile } = useAuth();
 
   const requiredTypes = Array.isArray(requiredType) ? requiredType : [requiredType];
   const typeLabels = requiredTypes.map(formatType).join(" or ");
@@ -46,7 +45,7 @@ export default function RoleGate({ requiredType, children, actionLabel }: RoleGa
             ? `You need to sign in to ${actionLabel}.`
             : `This page requires a ${typeLabels} account.`}
         </p>
-        <Button onClick={() => openAuthModal(undefined, "sign-in")}>
+        <Button onClick={() => openAuth({ defaultMode: "sign-in" })}>
           Sign in
         </Button>
       </div>
@@ -61,9 +60,7 @@ export default function RoleGate({ requiredType, children, actionLabel }: RoleGa
         <p className="text-base text-gray-600 mb-6">
           Set up your profile to access this page.
         </p>
-        <Link href="/onboarding">
-          <Button>Get started</Button>
-        </Link>
+        <Button onClick={() => openAuth()}>Get started</Button>
       </div>
     );
   }
@@ -107,9 +104,7 @@ export default function RoleGate({ requiredType, children, actionLabel }: RoleGa
           : `This page is only available to ${typeLabels} profiles.`}
         {" "}You can create one to get started.
       </p>
-      <Link href="/onboarding">
-        <Button>Create a {typeLabels} profile</Button>
-      </Link>
+      <Button onClick={() => openAuth()}>Create a {typeLabels} profile</Button>
     </div>
   );
 }

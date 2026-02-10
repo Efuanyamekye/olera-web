@@ -48,7 +48,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={isDisabled}
         className={[
-          "inline-flex items-center justify-center font-medium rounded-lg",
+          "inline-flex items-center justify-center font-medium rounded-xl",
           "transition-colors duration-200",
           "focus:outline-none focus:ring-2 focus:ring-offset-2",
           "min-h-[44px]", // WCAG touch target

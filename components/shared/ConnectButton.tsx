@@ -64,7 +64,7 @@ export default function ConnectButton({
   fullWidth = false,
   size = "sm",
 }: ConnectButtonProps) {
-  const { user, activeProfile, membership, openAuthModal, refreshAccountData } =
+  const { user, activeProfile, membership, openAuth, refreshAccountData } =
     useAuth();
   const [alreadySent, setAlreadySent] = useState(false);
   const [modal, setModal] = useState<ModalState>(CLOSED);
@@ -183,7 +183,7 @@ export default function ConnectButton({
 
   const handleClick = () => {
     if (!user) {
-      openAuthModal(undefined, "sign-up");
+      openAuth({ defaultMode: "sign-up" });
       return;
     }
     if (alreadySent) return;

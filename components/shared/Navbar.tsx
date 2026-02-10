@@ -14,7 +14,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isFindCareOpen, setIsFindCareOpen] = useState(false);
   const [isMobileCareOpen, setIsMobileCareOpen] = useState(false);
-  const { user, account, activeProfile, profiles, isLoading, openAuthModal, signOut } =
+  const { user, account, activeProfile, profiles, isLoading, openAuth, signOut } =
     useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -233,13 +233,16 @@ export default function Navbar() {
                           )}
                         </>
                       ) : (
-                        <Link
-                          href="/onboarding"
-                          className="block px-4 py-3 text-base text-primary-600 hover:bg-primary-50 transition-colors font-medium"
-                          onClick={() => setIsUserMenuOpen(false)}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsUserMenuOpen(false);
+                            openAuth();
+                          }}
+                          className="block w-full text-left px-4 py-3 text-base text-primary-600 hover:bg-primary-50 transition-colors font-medium"
                         >
                           Complete your profile
-                        </Link>
+                        </button>
                       )}
                       {/* Profile switcher — always show to enable adding profiles */}
                       <div className="border-t border-gray-100 mt-1 pt-1">
@@ -266,7 +269,7 @@ export default function Navbar() {
               ) : (
                 <button
                   type="button"
-                  onClick={() => openAuthModal(undefined, "sign-in")}
+                  onClick={() => openAuth({ defaultMode: "sign-in" })}
                   className="text-[15px] font-medium text-gray-700 hover:text-primary-600 transition-colors focus:outline-none focus:underline"
                 >
                   Log In
@@ -420,13 +423,16 @@ export default function Navbar() {
                         )}
                       </>
                     ) : (
-                      <Link
-                        href="/onboarding"
-                        className="text-primary-600 hover:text-primary-700 font-medium"
-                        onClick={() => setIsMobileMenuOpen(false)}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          openAuth();
+                        }}
+                        className="text-left text-primary-600 hover:text-primary-700 font-medium"
                       >
                         Complete your profile
-                      </Link>
+                      </button>
                     )}
                     {/* Profile switcher */}
                     <div className="border-t border-gray-100 pt-2">
@@ -451,7 +457,7 @@ export default function Navbar() {
                     type="button"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
-                      openAuthModal(undefined, "sign-in");
+                      openAuth({ defaultMode: "sign-in" });
                     }}
                     className="text-left text-gray-600 hover:text-primary-600 font-medium"
                   >

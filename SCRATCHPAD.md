@@ -8,13 +8,12 @@
 
 _What's the main thing being worked on right now?_
 
-- **Admin Dashboard MVP**: ✅ BUILT
-  - Internal admin dashboard at `/admin` with auth gating
-  - Provider approval queue (pending → admin approves → claimed)
-  - Leads viewer (all connections across platform)
-  - Team management (add/remove admins, master_admin role)
-  - Audit log for all admin actions
-  - SQL migration run, tables created (admin_users, audit_log)
+- **Auth Overhaul**: ✅ COMPLETE (all 3 phases)
+  - Replaced ~3,000 lines of duplicate auth code with ~1,000-line unified system
+  - Google OAuth + email-first progressive disclosure
+  - Premium modal UI (Luma/Linear-inspired, Olera hummingbird logo)
+  - Post-auth onboarding inside modal (no separate /onboarding page)
+  - All legacy auth modals deleted, all call sites migrated
 
 ---
 
@@ -33,6 +32,7 @@ _Active work items and their current state._
 - [x] PR #21/PR #23 merged (Logan's provider portal)
 - [x] Add "Email me a code instead" to web sign-in ✅
 - [x] Admin dashboard MVP (provider approvals, leads, team management)
+- [x] Auth overhaul — unified modal, Google OAuth, post-auth onboarding
 
 ---
 
@@ -48,11 +48,12 @@ _None currently._
 
 _What should be tackled next, in priority order._
 
-1. **Email notifications** for provider approval/rejection
-2. **Community forum flagging** infrastructure for admin moderation
-3. **Update claim flow** - Wire `source_provider_id` to claim existing olera-providers listings
-4. Payment/subscription integration
-5. Environment strategy (dev/staging/prod)
+1. **Test Google OAuth end-to-end** (Supabase Google provider configured, needs live test)
+2. **Email notifications** for provider approval/rejection
+3. **Community forum flagging** infrastructure for admin moderation
+4. **Update claim flow** - Wire `source_provider_id` to claim existing olera-providers listings
+5. Payment/subscription integration
+6. Environment strategy (dev/staging/prod)
 
 ---
 
@@ -70,6 +71,10 @@ _Key decisions with rationale, for future reference._
 | 2026-02-09 | Admin dashboard at `/admin` (not linked from public site) | Internal-only tool; no nav link needed, access via URL |
 | 2026-02-09 | Provider claims go to `pending` first (not `claimed`) | Admin review before provider goes live; families skip to `claimed` |
 | 2026-02-09 | `ADMIN_EMAILS` env var for bootstrapping | Can always re-seed master admin if table emptied |
+| 2026-02-10 | Auth-first flow (not profile-first) | Best practice: authenticate first, then collect profile data |
+| 2026-02-10 | Google OAuth primary CTA | One-click auth is fastest path; positioned above email |
+| 2026-02-10 | Single UnifiedAuthModal replaces 2 modals | Eliminated ~2,000 LOC of duplication |
+| 2026-02-10 | Post-auth onboarding inside modal | No separate /onboarding page; smoother UX |
 | 2026-01-30 | Added Claude Code slash commands | Standardize workflow for explore → plan → build → save cycle |
 
 ---
@@ -84,6 +89,66 @@ _Useful context, patterns noticed, things to remember._
 ---
 
 ## Session Log
+
+### 2026-02-10 (Session 11)
+
+**Auth Overhaul — All 3 Phases Complete:**
+
+- **Replaced ~3,000 lines of auth code** with ~1,000-line unified system
+- **Phase 1**: New `UnifiedAuthModal` with Google OAuth + email-first flow
+  - Entry screen: Olera logo → "Log in or sign up" → Google button → email field
+  - Email-first: checks if email exists → routes to sign-up or sign-in
+  - Sign-up: name + password → OTP verification
+  - Sign-in: password or "email me a code" OTP
+  - New `/auth/callback` route for Google OAuth code exchange
+  - New `/api/auth/check-email` route for email existence check
+- **Phase 2**: Post-auth onboarding inside the modal
+  - `PostAuthOnboarding` component: intent → profile info → org search → complete
+  - `lib/profile-creation.ts`: extracted from AuthFlowModal (~150 lines)
+  - Family flow: name, city, state, care types → create profile → /browse
+  - Provider flow: org name, city, state, type, care types → /portal
+  - Claim flow: pre-fills data from claimed provider
+- **Phase 3**: Cleanup — deleted legacy code, migrated all call sites
+  - Deleted: `AuthModal.tsx` (517 LOC), `AuthFlowModal.tsx` (1887 LOC), `GlobalAuthFlowModal.tsx` (23 LOC)
+  - Deleted: `IntentStep.tsx`, `OrgClaimStep.tsx`, `ProfileInfoStep.tsx` (dead onboarding components)
+  - Migrated: Navbar, ProviderGetStartedButton, InquiryButton, ConnectButton, RoleGate, ProfileSwitcher, claim page
+  - Simplified `/onboarding/page.tsx` to redirect wrapper
+  - Removed `/onboarding` from middleware protected paths
+- **UI polish**: Premium modal design (Luma/Linear-inspired)
+  - Olera hummingbird logo at top of entry screen
+  - Google button first (one-click auth = primary action)
+  - No input labels — clean placeholders only
+  - Consistent `rounded-xl` on buttons, inputs, Google button
+  - `text-xl font-semibold` headings (lighter than before)
+  - Configured Google OAuth in Supabase Dashboard + Google Cloud Console
+
+**New files (7):**
+- `components/auth/UnifiedAuthModal.tsx` — main auth modal (~350 LOC)
+- `components/auth/PostAuthOnboarding.tsx` — post-auth onboarding (~400 LOC)
+- `components/auth/GlobalUnifiedAuthModal.tsx` — context wrapper
+- `lib/profile-creation.ts` — extracted profile creation logic
+- `app/auth/callback/route.ts` — Google OAuth callback
+- `app/api/auth/check-email/route.ts` — email existence check
+- `public/images/olera-logo.png` — Olera hummingbird logo
+
+**Deleted files (6):**
+- `components/auth/AuthModal.tsx`, `AuthFlowModal.tsx`, `GlobalAuthFlowModal.tsx`
+- `components/onboarding/IntentStep.tsx`, `OrgClaimStep.tsx`, `ProfileInfoStep.tsx`
+
+**Modified files (13):**
+- `components/auth/AuthProvider.tsx` — added `openAuth()`, deprecated old methods
+- `components/ui/Modal.tsx` — added `onBack` prop, rounded-2xl, always-show header
+- `components/ui/Button.tsx` — `rounded-xl`
+- `components/ui/Input.tsx` — `rounded-xl`, `text-base`
+- `components/shared/Navbar.tsx` — migrated to `openAuth()`
+- `components/shared/ConnectButton.tsx`, `RoleGate.tsx`, `ProfileSwitcher.tsx` — migrated
+- `components/providers/InquiryButton.tsx`, `ProviderGetStartedButton.tsx` — migrated
+- `app/for-providers/claim/[slug]/page.tsx` — migrated to `openAuth()`
+- `app/onboarding/page.tsx` — simplified to redirect wrapper
+- `app/layout.tsx` — swapped to `GlobalUnifiedAuthModal`
+- `lib/supabase/middleware.ts` — removed `/onboarding` from protected paths
+
+---
 
 ### 2026-02-09 (Session 10)
 

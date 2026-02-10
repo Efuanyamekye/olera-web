@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import type { Profile } from "@/lib/types";
@@ -37,7 +36,7 @@ interface ProfileSwitcherProps {
 }
 
 export default function ProfileSwitcher({ onSwitch, variant = "dropdown" }: ProfileSwitcherProps) {
-  const { profiles, activeProfile, switchProfile } = useAuth();
+  const { profiles, activeProfile, switchProfile, openAuth } = useAuth();
   const router = useRouter();
 
   const hasMultipleProfiles = profiles.length > 1;
@@ -93,10 +92,10 @@ export default function ProfileSwitcher({ onSwitch, variant = "dropdown" }: Prof
             </button>
           );
         })}
-        <Link
-          href="/onboarding"
-          className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors min-h-[44px]"
-          onClick={onSwitch}
+        <button
+          type="button"
+          onClick={() => { onSwitch?.(); openAuth(); }}
+          className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors min-h-[44px] w-full"
         >
           <div className="w-8 h-8 border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center shrink-0">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,7 +103,7 @@ export default function ProfileSwitcher({ onSwitch, variant = "dropdown" }: Prof
             </svg>
           </div>
           <span className="text-sm font-medium">Add profile</span>
-        </Link>
+        </button>
       </div>
     );
   }
@@ -152,10 +151,10 @@ export default function ProfileSwitcher({ onSwitch, variant = "dropdown" }: Prof
           </button>
         );
       })}
-      <Link
-        href="/onboarding"
-        className="flex items-center gap-3 px-4 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
-        onClick={onSwitch}
+      <button
+        type="button"
+        onClick={() => { onSwitch?.(); openAuth(); }}
+        className="flex items-center gap-3 px-4 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors w-full"
       >
         <div className="w-8 h-8 border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center shrink-0">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +162,7 @@ export default function ProfileSwitcher({ onSwitch, variant = "dropdown" }: Prof
           </svg>
         </div>
         <span className="text-sm font-medium">Add profile</span>
-      </Link>
+      </button>
     </div>
   );
 }

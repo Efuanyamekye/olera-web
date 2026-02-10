@@ -35,16 +35,46 @@ export interface OpenAuthFlowOptions {
   defaultToSignIn?: boolean;
 }
 
+// ────────────────────────────────────────────────────────────
+// Unified Auth API (replaces openAuthModal + openAuthFlow)
+// ────────────────────────────────────────────────────────────
+
+/** Options for the unified openAuth() method */
+export interface OpenAuthOptions {
+  /** Default auth mode */
+  defaultMode?: "sign-in" | "sign-up";
+  /** Pre-set intent (skip the intent question) */
+  intent?: AuthFlowIntent;
+  /** Pre-set provider type (skip provider type question) */
+  providerType?: AuthFlowProviderType;
+  /** Profile to claim (for claim flow) */
+  claimProfile?: Profile | null;
+  /** Deferred action after auth */
+  deferred?: Omit<DeferredAction, "createdAt">;
+  /** Start in post-auth onboarding (for returning OAuth users) */
+  startAtPostAuth?: boolean;
+}
+
+const AUTH_INTENT_KEY = "olera_auth_intent";
+
 interface AuthContextValue extends AuthState {
-  /** @deprecated Use openAuthFlow instead */
+  /** @deprecated Use openAuth instead */
   openAuthModal: (deferred?: Omit<DeferredAction, "createdAt">, view?: AuthModalView) => void;
-  /** Open the unified auth flow modal */
+  /** @deprecated Use openAuth instead */
   openAuthFlow: (options?: OpenAuthFlowOptions) => void;
+  /** Open the unified auth modal */
+  openAuth: (options?: OpenAuthOptions) => void;
   closeAuthModal: () => void;
   isAuthModalOpen: boolean;
   authModalDefaultView: AuthModalView;
-  /** Current auth flow modal options */
+  /** Current auth flow modal options (legacy) */
   authFlowOptions: OpenAuthFlowOptions;
+  /** Current unified auth options */
+  unifiedAuthOptions: OpenAuthOptions;
+  /** Whether unified auth modal is open */
+  isUnifiedAuthOpen: boolean;
+  /** Close the unified auth modal */
+  closeUnifiedAuth: () => void;
   signOut: (onComplete?: () => void) => Promise<void>;
   refreshAccountData: () => Promise<void>;
   switchProfile: (profileId: string) => Promise<void>;
@@ -91,6 +121,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalDefaultView, setAuthModalDefaultView] = useState<AuthModalView>("sign-up");
   const [authFlowOptions, setAuthFlowOptions] = useState<OpenAuthFlowOptions>({});
+  const [isUnifiedAuthOpen, setIsUnifiedAuthOpen] = useState(false);
+  const [unifiedAuthOptions, setUnifiedAuthOptions] = useState<OpenAuthOptions>({});
 
   const configured = isSupabaseConfigured();
 
@@ -253,7 +285,32 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     };
   }, [configured, fetchAccountData]);
 
-  /** @deprecated Use openAuthFlow instead */
+  // Post-OAuth: detect returning users who need onboarding
+  useEffect(() => {
+    if (state.isLoading || !state.user) return;
+    // If user is authenticated but hasn't completed onboarding, and we have
+    // a saved intent from a pre-OAuth redirect, auto-open post-auth onboarding
+    if (state.account && !state.account.onboarding_completed && !isUnifiedAuthOpen) {
+      try {
+        const saved = sessionStorage.getItem(AUTH_INTENT_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          sessionStorage.removeItem(AUTH_INTENT_KEY);
+          setUnifiedAuthOptions({
+            intent: parsed.intent,
+            providerType: parsed.providerType,
+            startAtPostAuth: true,
+          });
+          setIsUnifiedAuthOpen(true);
+        }
+      } catch {
+        // sessionStorage unavailable
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.isLoading, state.user, state.account]);
+
+  /** @deprecated Use openAuth instead */
   const openAuthModal = useCallback(
     (deferred?: Omit<DeferredAction, "createdAt">, view?: AuthModalView) => {
       if (deferred) {
@@ -284,6 +341,35 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setIsAuthModalOpen(false);
     // Reset options when modal closes
     setAuthFlowOptions({});
+  }, []);
+
+  /** Open the unified auth modal */
+  const openAuth = useCallback((options: OpenAuthOptions = {}) => {
+    if (options.deferred) {
+      setDeferredAction(options.deferred);
+    }
+    // Persist intent to sessionStorage for OAuth redirects
+    if (options.intent || options.providerType || options.claimProfile) {
+      try {
+        sessionStorage.setItem(
+          AUTH_INTENT_KEY,
+          JSON.stringify({
+            intent: options.intent ?? null,
+            providerType: options.providerType ?? null,
+            claimProfileId: options.claimProfile?.id ?? null,
+          })
+        );
+      } catch {
+        // sessionStorage unavailable
+      }
+    }
+    setUnifiedAuthOptions(options);
+    setIsUnifiedAuthOpen(true);
+  }, []);
+
+  const closeUnifiedAuth = useCallback(() => {
+    setIsUnifiedAuthOpen(false);
+    setUnifiedAuthOptions({});
   }, []);
 
   /**
@@ -372,10 +458,14 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         ...state,
         openAuthModal,
         openAuthFlow,
+        openAuth,
         closeAuthModal,
         isAuthModalOpen,
         authModalDefaultView,
         authFlowOptions,
+        unifiedAuthOptions,
+        isUnifiedAuthOpen,
+        closeUnifiedAuth,
         signOut,
         refreshAccountData,
         switchProfile,

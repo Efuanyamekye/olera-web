@@ -3,8 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import AuthProvider from "@/components/auth/AuthProvider";
-import AuthModal from "@/components/auth/AuthModal";
-import GlobalAuthFlowModal from "@/components/auth/GlobalAuthFlowModal";
+import GlobalUnifiedAuthModal from "@/components/auth/GlobalUnifiedAuthModal";
 import { NavbarProvider } from "@/components/shared/NavbarContext";
 
 export const metadata: Metadata = {
@@ -34,8 +33,7 @@ export default function RootLayout({
             <Navbar />
             <main className="flex-grow">{children}</main>
             <Footer />
-            <AuthModal />
-            <GlobalAuthFlowModal />
+            <GlobalUnifiedAuthModal />
           </NavbarProvider>
         </AuthProvider>
       </body>
