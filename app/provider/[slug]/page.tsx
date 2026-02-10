@@ -332,8 +332,8 @@ export default async function ProviderPage({
 
             {/* 1. Unclaimed Banner */}
             {profile.claim_state === "unclaimed" && (
-              <div className="pb-10">
-                <div className="bg-warm-50 border border-warm-200 rounded-xl p-4 md:p-5">
+              <div className="pb-12">
+                <div className="bg-warm-50 border border-warm-100 rounded-xl p-4 md:p-5">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-warm-100 flex items-center justify-center flex-shrink-0">
@@ -363,8 +363,8 @@ export default async function ProviderPage({
 
             {/* 2. About */}
             {profile.description && (
-              <div id="about" className="py-10 first:pt-0 scroll-mt-20">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              <div id="about" className="pb-12 first:pt-0 scroll-mt-20">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   About {profile.display_name}
                 </h2>
                 <ExpandableText text={profile.description} maxLength={150} />
@@ -373,29 +373,29 @@ export default async function ProviderPage({
 
             {/* 3. Care Services */}
             {profile.care_types && profile.care_types.length > 0 && (
-              <div id="services" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Care Services</h2>
+              <div id="services" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Care Services</h2>
                 <CareServicesList services={profile.care_types} initialCount={9} />
               </div>
             )}
 
             {/* 4. Detailed Pricing */}
             {pricingDetails.length > 0 && (
-              <div id="pricing" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <div className="flex items-start justify-between mb-5">
+              <div id="pricing" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900">Prices at {profile.display_name}</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">Prices at {profile.display_name}</h2>
                     <p className="text-sm text-gray-400 mt-1">Last updated on 01/15/2025</p>
                   </div>
                   <button className="px-5 py-2.5 text-sm font-medium text-primary-600 border border-primary-600 rounded-lg hover:bg-primary-50 transition-colors flex-shrink-0">
                     Get a custom quote
                   </button>
                 </div>
-                <div className="bg-white rounded-xl border border-gray-100 shadow-xs divide-y divide-gray-100">
+                <div className="space-y-2">
                   {pricingDetails.map((item) => (
                     <div
                       key={item.service}
-                      className="flex items-center justify-between py-4 px-5 hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-between py-3.5 px-4 bg-gray-50 rounded-lg"
                     >
                       <span className="text-base font-medium text-gray-900">{item.service}</span>
                       <span className="text-base font-semibold text-gray-900">
@@ -409,9 +409,9 @@ export default async function ProviderPage({
 
             {/* 5. Payment & Insurance */}
             {(acceptedPayments.length > 0 || meta?.accepts_medicaid || meta?.accepts_medicare) && (
-              <div id="payment" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Acceptable Payment / Insurance Options</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+              <div id="payment" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Acceptable Payment Options</h2>
+                <div className="flex flex-wrap gap-x-8 gap-y-3">
                   {acceptedPayments.map((payment) => (
                     <div key={payment} className="flex items-center gap-2.5">
                       <CheckIcon className="w-5 h-5 text-primary-600 flex-shrink-0" />
@@ -419,7 +419,7 @@ export default async function ProviderPage({
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 text-base text-gray-500">
+                <p className="mt-5 text-base text-gray-500">
                   For clarity and guidance,{" "}
                   <button className="text-primary-600 hover:text-primary-700 font-medium transition-colors">
                     Book a consultation
@@ -430,28 +430,17 @@ export default async function ProviderPage({
 
             {/* 7. Staff Screening & Safety */}
             {staffScreening && (
-              <div id="safety" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Staff Screening &amp; Safety</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div id="safety" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Staff Screening &amp; Safety</h2>
+                <div className="flex flex-wrap gap-x-8 gap-y-3">
                   {[
                     { label: "Background Checked", verified: staffScreening.background_checked },
                     { label: "Licensed", verified: staffScreening.licensed },
                     { label: "Insured", verified: staffScreening.insured },
-                  ].map((item) => (
-                    <div key={item.label} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-xs">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                        item.verified ? "bg-primary-50" : "bg-gray-50"
-                      }`}>
-                        <svg className={`w-5 h-5 ${item.verified ? "text-primary-600" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-base font-medium text-gray-900">{item.label}</p>
-                        <p className={`text-sm ${item.verified ? "text-primary-600" : "text-gray-500"}`}>
-                          {item.verified ? "Verified" : "Not verified"}
-                        </p>
-                      </div>
+                  ].filter(item => item.verified).map((item) => (
+                    <div key={item.label} className="flex items-center gap-2.5">
+                      <CheckIcon className="w-5 h-5 text-primary-600 flex-shrink-0" />
+                      <span className="text-base text-gray-700">{item.label}</span>
                     </div>
                   ))}
                 </div>
@@ -460,24 +449,24 @@ export default async function ProviderPage({
 
             {/* 8. Meet Our Team */}
             {staff && (
-              <div id="team" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Meet Our Team</h2>
-                <div className="flex items-start gap-4 p-5 bg-white rounded-xl border border-gray-100 shadow-xs">
+              <div id="team" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Meet Our Team</h2>
+                <div className="flex items-start gap-4">
                   {staff.image ? (
                     <img
                       src={staff.image}
                       alt={staff.name}
-                      className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                      className="w-16 h-16 rounded-full object-cover flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-primary-600">
                         {getInitials(staff.name)}
                       </span>
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-gray-900">{staff.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{staff.name}</h3>
                     <p className="text-primary-600 text-sm font-medium mt-0.5">{staff.position}</p>
                     <p className="text-gray-600 text-base mt-2 leading-relaxed">{staff.bio}</p>
                   </div>
@@ -487,25 +476,29 @@ export default async function ProviderPage({
 
             {/* 9. Q&A */}
             {defaultQA.length > 0 && (
-              <div id="qa" className="py-10 scroll-mt-20 border-t border-gray-200">
+              <div id="qa" className="py-12 scroll-mt-20 border-t border-gray-100">
                 <QASectionV2
                   providerName={profile.display_name}
+                  providerImage={images[0]}
                   questions={defaultQA}
                 />
               </div>
             )}
 
             {/* 11. Disclaimer */}
-            <div className="py-10 border-t border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Disclaimer</h2>
-              <p className="text-base text-gray-500 leading-relaxed">
+            <div className="py-12 border-t border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Disclaimer</h2>
+              <p className="text-sm text-gray-500 leading-relaxed">
                 We strive to keep this page accurate and current, but some details may not be up to date. To confirm whether {profile.display_name} is the right fit for you or your loved one, please verify all information directly with the provider by submitting a connect request or contacting them.
               </p>
               <div className="flex items-center justify-between mt-6 pt-5 border-t border-gray-100">
                 <p className="text-base font-semibold text-gray-900">Are you the owner of this business?</p>
-                <button className="px-5 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0">
+                <Link
+                  href={`/for-providers/claim/${profile.slug}`}
+                  className="px-5 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0"
+                >
                   Manage this page
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -541,7 +534,7 @@ export default async function ProviderPage({
             {/* Olera Score */}
             {oleraScore && (
               <div className="text-center mb-16">
-                <p className="text-xs uppercase tracking-[0.2em] text-primary-600 font-semibold mb-6">Olera Score</p>
+                <p className="text-sm uppercase tracking-[0.2em] text-primary-600 font-semibold mb-6">Olera Score</p>
                 <div className="relative inline-flex items-center justify-center mb-4">
                   <div className="w-32 h-32 rounded-full bg-white border-2 border-primary-100 shadow-lg flex items-center justify-center">
                     <span className="text-5xl font-bold text-primary-700 tracking-tight">{oleraScore.toFixed(1)}</span>
@@ -549,18 +542,18 @@ export default async function ProviderPage({
                 </div>
                 <div className="flex items-center justify-center gap-1 mb-8">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <StarIcon key={star} className={`w-5 h-5 ${star <= Math.round(oleraScore) ? "text-yellow-400" : "text-gray-200"}`} filled={star <= Math.round(oleraScore)} />
+                    <StarIcon key={star} className={`w-6 h-6 ${star <= Math.round(oleraScore) ? "text-yellow-400" : "text-gray-200"}`} filled={star <= Math.round(oleraScore)} />
                   ))}
                 </div>
                 {/* Breakdown cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-5xl mx-auto">
                   {[
                     { label: "Community", value: meta?.community_score || Math.min(5, oleraScore + 0.1) },
                     { label: "Value", value: meta?.value_score || Math.min(5, oleraScore - 0.1) },
                     { label: "Transparency", value: meta?.info_score || Math.min(5, oleraScore - 0.3) },
                     { label: "Completeness", value: Math.min(5, oleraScore - 0.5) },
                   ].map((f) => (
-                    <div key={f.label} className="bg-white rounded-2xl p-5 border border-gray-100 text-center">
+                    <div key={f.label} className="bg-white rounded-2xl p-6 border border-gray-100 text-center">
                       <span className="text-3xl font-bold text-gray-900 tracking-tight">{f.value.toFixed(1)}</span>
                       <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden mt-3 mb-2">
                         <div className="h-full bg-gradient-to-r from-primary-400 to-primary-600 rounded-full" style={{ width: `${(f.value / 5) * 100}%` }} />
