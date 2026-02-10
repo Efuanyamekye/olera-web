@@ -59,9 +59,11 @@ export default function CardTopSection({
             onClick={() => scrollToSection("pricing")}
             className="text-left cursor-pointer hover:opacity-80 transition-opacity"
           >
-            <p className="text-xs text-gray-500 font-medium mb-0.5">
-              Starting from
-            </p>
+            {!priceRange.includes(" - ") && !priceRange.startsWith("From ") && (
+              <p className="text-xs text-gray-500 font-medium mb-0.5">
+                Starting from
+              </p>
+            )}
             <p className="text-lg font-bold text-gray-900 leading-tight tracking-tight">
               {priceRange}
             </p>
@@ -84,7 +86,7 @@ export default function CardTopSection({
               </span>
               <div className="flex gap-px items-center">
                 {[0, 1, 2, 3, 4].map((i) => (
-                  <StarIcon key={i} filled={i < Math.floor(oleraScore)} />
+                  <StarIcon key={i} filled={i < Math.round(oleraScore)} />
                 ))}
               </div>
             </div>

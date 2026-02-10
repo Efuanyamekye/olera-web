@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile, OrganizationMetadata, CaregiverMetadata } from "@/lib/types";
-import { getProviderBySlug, mockProviderToProfile, iosProviderToProfile } from "@/lib/mock-providers";
+import { iosProviderToProfile } from "@/lib/mock-providers";
 import type { Provider as IOSProvider } from "@/lib/types/provider";
 import Badge from "@/components/ui/Badge";
 import ConnectionCard from "@/components/providers/connection-card";
@@ -151,14 +151,6 @@ export default async function ProviderPage({
     }
   }
 
-  // 3. Fall back to mock data
-  if (!profile) {
-    const mockProvider = getProviderBySlug(slug);
-    if (mockProvider) {
-      profile = mockProviderToProfile(mockProvider);
-    }
-  }
-
   if (!profile) {
     return (
       <div className="bg-white min-h-screen flex items-center justify-center">
@@ -206,7 +198,7 @@ export default async function ProviderPage({
     priceRange,
   });
 
-  const similarProviders = getSimilarProviders(profile.category, profile.slug, 4);
+  const similarProviders = await getSimilarProviders(profile.category, profile.slug, 4);
 
   const pricingDetails = meta?.pricing_details || [];
   const staffScreening = meta?.staff_screening;

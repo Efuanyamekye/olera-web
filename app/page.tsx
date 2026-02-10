@@ -6,14 +6,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import ProviderCard from "@/components/providers/ProviderCard";
-import { topProviders, providersByCategory } from "@/lib/mock-providers";
-import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
 import {
   type Provider as IOSProvider,
   type ProviderCardData,
   PROVIDERS_TABLE,
   toCardFormat,
-  mockToCardFormat,
 } from "@/lib/types/provider";
 import { mockForumPosts } from "@/data/mock/forumPosts";
 import { mockForumComments } from "@/data/mock/forumComments";
@@ -644,10 +642,8 @@ function BrowseByCareTypeSection() {
       setIsLoadingCategory(true);
       const providerCategory = categoryToProviderCategory[selectedCategory];
 
-      if (!isSupabaseConfigured() || !providerCategory) {
-        // Fall back to mock data
-        const mockProviders = providersByCategory[selectedCategory] || [];
-        setCategoryProviders(mockProviders.map(mockToCardFormat));
+      if (!providerCategory) {
+        setCategoryProviders([]);
         setIsLoadingCategory(false);
         return;
       }
@@ -663,18 +659,15 @@ function BrowseByCareTypeSection() {
           .order("google_rating", { ascending: false, nullsFirst: false })
           .limit(8);
 
-        if (error || !data || data.length === 0) {
-          // Fall back to mock data
-          const mockProviders = providersByCategory[selectedCategory] || [];
-          setCategoryProviders(mockProviders.map(mockToCardFormat));
+        if (error || !data) {
+          console.error("Error fetching category providers:", error?.message);
+          setCategoryProviders([]);
         } else {
           setCategoryProviders((data as IOSProvider[]).map(toCardFormat));
         }
       } catch (err) {
         console.error("Error fetching category providers:", err);
-        // Fall back to mock data
-        const mockProviders = providersByCategory[selectedCategory] || [];
-        setCategoryProviders(mockProviders.map(mockToCardFormat));
+        setCategoryProviders([]);
       } finally {
         setIsLoadingCategory(false);
       }
@@ -901,16 +894,9 @@ export default function HomePage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Fetch featured providers from iOS Supabase
+  // Fetch featured providers from Supabase
   useEffect(() => {
     async function fetchFeaturedProviders() {
-      if (!isSupabaseConfigured()) {
-        // Fall back to mock data if Supabase not configured
-        setFeaturedProviders(topProviders.map(mockToCardFormat));
-        setIsLoadingProviders(false);
-        return;
-      }
-
       try {
         const supabase = createClient();
         const { data, error } = await supabase
@@ -923,17 +909,15 @@ export default function HomePage() {
           .order("google_rating", { ascending: false })
           .limit(8);
 
-        if (error || !data || data.length === 0) {
-          // Fall back to mock data
-          setFeaturedProviders(topProviders.map(mockToCardFormat));
+        if (error || !data) {
+          console.error("Error fetching featured providers:", error?.message);
+          setFeaturedProviders([]);
         } else {
-          // Convert iOS providers to card format
           setFeaturedProviders((data as IOSProvider[]).map(toCardFormat));
         }
       } catch (err) {
         console.error("Error fetching providers:", err);
-        // Fall back to mock data
-        setFeaturedProviders(topProviders.map(mockToCardFormat));
+        setFeaturedProviders([]);
       } finally {
         setIsLoadingProviders(false);
       }

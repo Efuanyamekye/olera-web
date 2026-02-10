@@ -4,7 +4,12 @@
 
 import type { ProfileCategory } from "@/lib/types";
 import type { Provider } from "@/components/providers/ProviderCard";
-import { providersByCategory } from "@/lib/mock-providers";
+import { createClient } from "@/lib/supabase/server";
+import {
+  type Provider as IOSProvider,
+  PROVIDERS_TABLE,
+  toCardFormat,
+} from "@/lib/types/provider";
 
 // ============================================================
 // Initials
@@ -43,22 +48,6 @@ export function formatCategory(category: ProfileCategory | null): string | null 
   if (!category) return null;
   return categoryLabels[category] || null;
 }
-
-// Map ProfileCategory to the providersByCategory keys used in mock data
-const categoryToBrowseKey: Record<string, string> = {
-  home_care_agency: "home-care",
-  home_health_agency: "home-health",
-  assisted_living: "assisted-living",
-  memory_care: "memory-care",
-  independent_living: "independent-living",
-  nursing_home: "nursing-home",
-  hospice_agency: "home-health",
-  inpatient_hospice: "home-health",
-  rehab_facility: "nursing-home",
-  adult_day_care: "home-care",
-  wellness_center: "home-care",
-  private_caregiver: "home-care",
-};
 
 // ============================================================
 // Quick Facts builder
@@ -183,23 +172,51 @@ export function getDefaultQA(
 }
 
 // ============================================================
-// Similar providers
+// Similar providers (fetched from Supabase)
 // ============================================================
 
-export function getSimilarProviders(
+// Map ProfileCategory to Supabase provider_category values
+const categoryToSupabaseCategory: Record<string, string> = {
+  home_care_agency: "Home Care (Non-medical)",
+  home_health_agency: "Home Health Care",
+  assisted_living: "Assisted Living",
+  memory_care: "Memory Care",
+  independent_living: "Independent Living",
+  nursing_home: "Nursing Home",
+  hospice_agency: "Hospice",
+  inpatient_hospice: "Hospice",
+  rehab_facility: "Nursing Home",
+  adult_day_care: "Home Care (Non-medical)",
+  wellness_center: "Home Care (Non-medical)",
+  private_caregiver: "Home Care (Non-medical)",
+};
+
+export async function getSimilarProviders(
   category: ProfileCategory | null,
   excludeSlug: string,
   limit: number = 3
-): Provider[] {
+): Promise<Provider[]> {
   if (!category) return [];
 
-  const browseKey = categoryToBrowseKey[category];
-  if (!browseKey) return [];
+  const supabaseCategory = categoryToSupabaseCategory[category];
+  if (!supabaseCategory) return [];
 
-  const providers = providersByCategory[browseKey];
-  if (!providers) return [];
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from(PROVIDERS_TABLE)
+      .select("*")
+      .eq("deleted", false)
+      .ilike("provider_category", `%${supabaseCategory}%`)
+      .neq("provider_id", excludeSlug)
+      .not("provider_images", "is", null)
+      .order("google_rating", { ascending: false, nullsFirst: false })
+      .limit(limit);
 
-  return providers
-    .filter((p) => p.slug !== excludeSlug)
-    .slice(0, limit);
+    if (error || !data) return [];
+
+    return (data as IOSProvider[]).map(toCardFormat);
+  } catch {
+    return [];
+  }
 }

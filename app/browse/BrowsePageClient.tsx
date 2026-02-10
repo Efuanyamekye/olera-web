@@ -11,10 +11,8 @@ import {
   getCategoryDisplayName,
   getPrimaryImage,
   toCardFormat,
-  mockToCardFormat,
   type ProviderCardData,
 } from "@/lib/types/provider";
-import { allBrowseProviders } from "@/lib/mock-providers";
 import BrowseFilters from "@/components/browse/BrowseFilters";
 
 // Care types matching iOS Supabase provider_category values
@@ -40,7 +38,6 @@ export default function BrowsePageClient({
 }: BrowsePageClientProps) {
   const [providers, setProviders] = useState<ProviderCardData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [usingMockData, setUsingMockData] = useState(false);
 
   useEffect(() => {
     async function fetchProviders() {
@@ -96,23 +93,13 @@ export default function BrowsePageClient({
 
         if (error) {
           console.error("Browse fetch error:", error.message);
-          // Fall back to mock data
-          setProviders(allBrowseProviders.map(mockToCardFormat));
-          setUsingMockData(true);
-        } else if (!data || data.length === 0) {
-          // No results from Supabase - show mock data as fallback
-          setProviders(allBrowseProviders.map(mockToCardFormat));
-          setUsingMockData(true);
+          setProviders([]);
         } else {
-          // Success! Use real data
           setProviders((data as Provider[]).map(toCardFormat));
-          setUsingMockData(false);
         }
       } catch (err) {
         console.error("Browse page error:", err);
-        // Fall back to mock data on any error
-        setProviders(allBrowseProviders.map(mockToCardFormat));
-        setUsingMockData(true);
+        setProviders([]);
       }
 
       setIsLoading(false);
@@ -121,33 +108,8 @@ export default function BrowsePageClient({
     fetchProviders();
   }, [searchQuery, careTypeFilter, stateFilter]);
 
-  // For real data, server already filtered. For mock data, apply client-side filters.
-  const filteredProviders = usingMockData
-    ? providers.filter((p) => {
-        // Apply care type filter for mock data
-        if (careTypeFilter) {
-          const careTypeOption = CARE_TYPE_OPTIONS.find(
-            (ct) => ct.label.toLowerCase().replace(/\s+/g, "-") === careTypeFilter
-          );
-          if (careTypeOption && p.primaryCategory) {
-            const searchTerm = careTypeOption.label.toLowerCase();
-            if (!p.primaryCategory.toLowerCase().includes(searchTerm)) {
-              return false;
-            }
-          }
-        }
-        // Apply search filter for mock data
-        if (searchQuery) {
-          const search = searchQuery.toLowerCase();
-          const nameMatch = p.name.toLowerCase().includes(search);
-          const addressMatch = p.address?.toLowerCase().includes(search);
-          if (!nameMatch && !addressMatch) {
-            return false;
-          }
-        }
-        return true;
-      })
-    : providers;
+  // Server already filters by care type, location, and state
+  const filteredProviders = providers;
 
   return (
     <div className="bg-gray-50 min-h-screen">
