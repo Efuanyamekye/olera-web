@@ -124,7 +124,10 @@ export default function Navbar() {
                 <div onMouseEnter={() => setIsFindCareOpen(true)}>
                   <button
                     type="button"
-                    onClick={() => setIsFindCareOpen((prev) => !prev)}
+                    onClick={() => {
+                      setIsFindCareOpen(false);
+                      router.push("/browse");
+                    }}
                     className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[15px] font-medium transition-colors ${
                       isFindCareOpen
                         ? "bg-gray-100 text-gray-900"

@@ -522,7 +522,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 }}
                 className={`flex items-center justify-between h-9 px-3 w-[200px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   searchLocation.trim()
-                    ? "bg-white text-gray-900 border-2 border-gray-900"
+                    ? "bg-white text-gray-900 border-2 border-primary-400"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
@@ -573,7 +573,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                         setShowLocationDropdown(false);
                       }}
                       disabled={isGeolocating}
-                      className="flex items-center justify-center gap-2 w-full py-2 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-sm text-primary-700 font-medium transition-colors disabled:opacity-60"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-sm text-primary-700 font-medium transition-colors disabled:opacity-60"
                     >
                       {isGeolocating ? (
                         <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -585,25 +585,25 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                           <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
                         </svg>
                       )}
-                      <span>{isGeolocating ? "Detecting..." : "Use my location"}</span>
+                      <span>{isGeolocating ? "Detecting location..." : "Use my current location"}</span>
                     </button>
                   </div>
 
                   {/* Divider */}
                   <div className="flex items-center gap-3 px-3 py-1">
                     <div className="flex-1 h-px bg-gray-200" />
-                    <span className="text-xs text-gray-400">or</span>
+                    <span className="text-xs text-gray-400 font-medium">or search</span>
                     <div className="flex-1 h-px bg-gray-200" />
                   </div>
 
                   {/* Popular Cities Label */}
                   {!locationInput.trim() && cityResults.length > 0 && (
-                    <div className="px-3 pt-1 pb-1">
+                    <div className="px-4 pt-2 pb-1">
                       <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Popular cities</span>
                     </div>
                   )}
 
-                  <div className="max-h-[180px] overflow-y-auto">
+                  <div className="max-h-[280px] overflow-y-auto">
                     {cityResults.map((loc) => (
                       <button
                         key={loc.full}
@@ -612,20 +612,21 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                           setLocationInput(loc.full);
                           setShowLocationDropdown(false);
                         }}
-                        className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-gray-50 ${
+                        className={`flex items-center gap-3 w-full px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors ${
                           searchLocation === loc.full
-                            ? "text-primary-600 font-medium"
+                            ? "bg-primary-50 text-primary-700 font-medium"
                             : "text-gray-900"
                         }`}
                       >
-                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        {loc.full}
+                        <span className="font-medium">{loc.full}</span>
                       </button>
                     ))}
                     {cityResults.length === 0 && (
-                      <div className="px-3 py-4 text-sm text-gray-500 text-center">
+                      <div className="px-4 py-4 text-sm text-gray-500 text-center">
                         No locations found
                       </div>
                     )}
