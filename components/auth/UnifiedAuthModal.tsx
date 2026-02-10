@@ -238,7 +238,7 @@ export default function UnifiedAuthModal({
   // OTP Verification
   // ──────────────────────────────────────────────────────────
 
-  const expectedOtpLength = 6;
+  const expectedOtpLength = 8;
 
   const handleVerifyOtp = async (e?: React.FormEvent) => {
     e?.preventDefault();
