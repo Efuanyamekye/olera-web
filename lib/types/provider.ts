@@ -44,15 +44,22 @@ export function parseProviderImages(images: string | null): string[] {
   return images.split(" | ").filter(Boolean);
 }
 
+/** Categories where pricing is per-hour rather than per-month */
+const HOURLY_CATEGORIES = new Set([
+  "Home Care (Non-medical)",
+  "Home Health Care",
+]);
+
 /**
  * Format price range for display
  */
 export function formatPriceRange(provider: Provider): string | null {
+  const suffix = HOURLY_CATEGORIES.has(provider.provider_category) ? "/hr" : "/mo";
   if (provider.lower_price && provider.upper_price) {
-    return `$${provider.lower_price.toLocaleString()} - $${provider.upper_price.toLocaleString()}/mo`;
+    return `$${provider.lower_price.toLocaleString()} - $${provider.upper_price.toLocaleString()}${suffix}`;
   }
   if (provider.lower_price) {
-    return `From $${provider.lower_price.toLocaleString()}/mo`;
+    return `From $${provider.lower_price.toLocaleString()}${suffix}`;
   }
   if (provider.contact_for_price === "True") {
     return "Contact for pricing";

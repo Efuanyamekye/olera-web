@@ -8,6 +8,7 @@ import ConnectionCard from "@/components/providers/connection-card";
 import ImageCarousel from "@/components/providers/ImageCarousel";
 import ExpandableText from "@/components/providers/ExpandableText";
 import CompactProviderCard from "@/components/providers/CompactProviderCard";
+import SaveButton from "@/components/providers/SaveButton";
 import CareServicesList from "@/components/providers/CareServicesList";
 import QASectionV2 from "@/components/providers/QASectionV2";
 import SectionNav from "@/components/providers/SectionNav";
@@ -268,12 +269,16 @@ export default async function ProviderPage({
                 </svg>
                 Share
               </button>
-              <button className="flex items-center justify-center gap-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg w-24 py-2 hover:bg-gray-50 transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-                Save
-              </button>
+              <SaveButton
+                provider={{
+                  providerId: profile.id,
+                  slug: profile.slug,
+                  name: profile.display_name,
+                  location: locationStr,
+                  careTypes: profile.care_types || [],
+                  image: images[0] || null,
+                }}
+              />
             </div>
           </div>
           {profile.address && (

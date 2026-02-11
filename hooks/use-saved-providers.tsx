@@ -37,6 +37,7 @@ interface SavedProvidersContextValue {
   toggleSave: (provider: SaveProviderData) => void;
   savedCount: number;
   anonSaves: SavedProviderEntry[];
+  savedProviders: SavedProviderEntry[];
 }
 
 const SavedProvidersContext = createContext<SavedProvidersContextValue | null>(
@@ -58,8 +59,9 @@ export function SavedProvidersProvider({ children }: { children: ReactNode }) {
 
   // Anonymous saves (from sessionStorage)
   const [anonSaves, setAnonSaves] = useState<SavedProviderEntry[]>([]);
-  // Authenticated saves — set of provider IDs
+  // Authenticated saves — set of provider IDs + full entries
   const [dbSaveIds, setDbSaveIds] = useState<Set<string>>(new Set());
+  const [dbSaves, setDbSaves] = useState<SavedProviderEntry[]>([]);
 
   const migrationDone = useRef(false);
 
@@ -72,6 +74,7 @@ export function SavedProvidersProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!activeProfile || !isSupabaseConfigured()) {
       setDbSaveIds(new Set());
+      setDbSaves([]);
       return;
     }
 
@@ -79,12 +82,27 @@ export function SavedProvidersProvider({ children }: { children: ReactNode }) {
       const supabase = createClient();
       const { data } = await supabase
         .from("connections")
-        .select("to_profile_id")
+        .select("to_profile_id, message, created_at")
         .eq("from_profile_id", activeProfile.id)
-        .eq("type", "save");
+        .eq("type", "save")
+        .order("created_at", { ascending: false });
 
       if (data) {
         setDbSaveIds(new Set(data.map((r) => r.to_profile_id)));
+        setDbSaves(
+          data.map((r) => {
+            const meta = r.message ? JSON.parse(r.message) : {};
+            return {
+              providerId: r.to_profile_id,
+              slug: meta.slug || r.to_profile_id,
+              name: meta.name || "Unknown Provider",
+              location: meta.location || "",
+              careTypes: meta.careTypes || [],
+              image: meta.image || null,
+              savedAt: r.created_at,
+            };
+          })
+        );
       }
     };
 
@@ -136,12 +154,27 @@ export function SavedProvidersProvider({ children }: { children: ReactNode }) {
       // Refresh DB saves
       const { data } = await supabase
         .from("connections")
-        .select("to_profile_id")
+        .select("to_profile_id, message, created_at")
         .eq("from_profile_id", activeProfile.id)
-        .eq("type", "save");
+        .eq("type", "save")
+        .order("created_at", { ascending: false });
 
       if (data) {
         setDbSaveIds(new Set(data.map((r) => r.to_profile_id)));
+        setDbSaves(
+          data.map((r) => {
+            const meta = r.message ? JSON.parse(r.message) : {};
+            return {
+              providerId: r.to_profile_id,
+              slug: meta.slug || r.to_profile_id,
+              name: meta.name || "Unknown Provider",
+              location: meta.location || "",
+              careTypes: meta.careTypes || [],
+              image: meta.image || null,
+              savedAt: r.created_at,
+            };
+          })
+        );
       }
     };
 
@@ -163,12 +196,13 @@ export function SavedProvidersProvider({ children }: { children: ReactNode }) {
       if (currentlySaved) {
         // ── Unsave ──
         if (user && activeProfile && isSupabaseConfigured()) {
-          // DB unsave
+          // DB unsave (optimistic)
           setDbSaveIds((prev) => {
             const next = new Set(prev);
             next.delete(provider.providerId);
             return next;
           });
+          setDbSaves((prev) => prev.filter((s) => s.providerId !== provider.providerId));
           const supabase = createClient();
           await supabase
             .from("connections")
@@ -184,8 +218,20 @@ export function SavedProvidersProvider({ children }: { children: ReactNode }) {
       } else {
         // ── Save ──
         if (user && activeProfile && isSupabaseConfigured()) {
-          // DB save
+          // DB save (optimistic)
           setDbSaveIds((prev) => new Set(prev).add(provider.providerId));
+          setDbSaves((prev) => [
+            {
+              providerId: provider.providerId,
+              slug: provider.slug,
+              name: provider.name,
+              location: provider.location,
+              careTypes: provider.careTypes,
+              image: provider.image,
+              savedAt: new Date().toISOString(),
+            },
+            ...prev,
+          ]);
           const supabase = createClient();
           await supabase
             .from("connections")
@@ -239,10 +285,11 @@ export function SavedProvidersProvider({ children }: { children: ReactNode }) {
   );
 
   const savedCount = dbSaveIds.size + anonSaves.length;
+  const savedProviders = user && activeProfile ? dbSaves : anonSaves;
 
   return (
     <SavedProvidersContext.Provider
-      value={{ isSaved, toggleSave, savedCount, anonSaves }}
+      value={{ isSaved, toggleSave, savedCount, anonSaves, savedProviders }}
     >
       {children}
     </SavedProvidersContext.Provider>

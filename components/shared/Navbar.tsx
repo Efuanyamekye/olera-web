@@ -8,6 +8,7 @@ import ProfileSwitcher from "@/components/shared/ProfileSwitcher";
 import FindCareMegaMenu from "@/components/shared/FindCareMegaMenu";
 import { CARE_CATEGORIES, NAV_LINKS } from "@/components/shared/NavMenuData";
 import { useNavbar } from "@/components/shared/NavbarContext";
+import { useSavedProviders } from "@/hooks/use-saved-providers";
 
 export default function Navbar() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function Navbar() {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const { visible: navbarVisible } = useNavbar();
+  const { savedCount } = useSavedProviders();
 
   // Show auth pill as soon as we know a user session exists.
   // Full dropdown content requires account data.
@@ -171,7 +173,23 @@ export default function Navbar() {
             {/* Right — Account menu (flex-1, align right) */}
             <div className="flex-1 flex items-center justify-end">
               {/* Desktop right section */}
-              <div className="hidden lg:flex items-center">
+              <div className="hidden lg:flex items-center gap-2">
+                {/* Saved providers heart */}
+                <Link
+                  href="/saved"
+                  className="relative p-2 text-gray-400 hover:text-red-500 transition-colors"
+                  aria-label="Saved providers"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  {savedCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                      {savedCount}
+                    </span>
+                  )}
+                </Link>
+
                 {hasSession ? (
                   /* ── Signed in: avatar pill with user/account menu ── */
                   <div className="relative" ref={userMenuRef}>
@@ -467,6 +485,17 @@ export default function Navbar() {
                         {link.label}
                       </Link>
                     ))}
+
+                    <Link
+                      href="/saved"
+                      className="flex items-center gap-2 py-3 text-gray-700 hover:text-primary-600 font-medium"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                      </svg>
+                      Saved{savedCount > 0 ? ` (${savedCount})` : ""}
+                    </Link>
 
                     <hr className="border-gray-100" />
                   </>

@@ -84,17 +84,17 @@ export default function CardTopSection({
               <span className="text-xl font-bold text-gray-900">
                 {oleraScore.toFixed(1)}
               </span>
-              <div className="flex gap-px items-center">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <StarIcon key={i} filled={i < Math.round(oleraScore)} />
-                ))}
+              <div className="flex flex-col items-end">
+                <div className="flex gap-px items-center">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <StarIcon key={i} filled={i < Math.round(oleraScore)} />
+                  ))}
+                </div>
+                <p className="text-xs text-primary-600 font-medium mt-0.5 underline decoration-primary-600/25 underline-offset-2">
+                  {(reviewCount ?? 0)} review{(reviewCount ?? 0) !== 1 ? "s" : ""}
+                </p>
               </div>
             </div>
-            {reviewCount !== undefined && reviewCount > 0 && (
-              <p className="text-xs text-primary-600 font-medium mt-0.5 underline decoration-primary-600/25 underline-offset-2">
-                {reviewCount} review{reviewCount !== 1 ? "s" : ""}
-              </p>
-            )}
           </button>
         )}
       </div>
