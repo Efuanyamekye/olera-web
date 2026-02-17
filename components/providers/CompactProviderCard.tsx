@@ -10,6 +10,8 @@ export default function CompactProviderCard({ provider }: CompactProviderCardPro
   return (
     <Link
       href={`/provider/${provider.slug}`}
+      target="_blank"
+      rel="noopener noreferrer"
       className="group bg-white rounded-xl border border-gray-100 shadow-xs overflow-hidden hover:shadow-md transition-shadow duration-200"
     >
       {/* Image */}

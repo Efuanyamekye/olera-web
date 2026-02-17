@@ -12,7 +12,7 @@ import Badge from "@/components/ui/Badge";
 export default function ClaimProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
-  const { user, openAuthFlow } = useAuth();
+  const { user, openAuth } = useAuth();
 
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,7 +49,7 @@ export default function ClaimProfilePage() {
     // The modal handles both authenticated and unauthenticated users:
     // - If authenticated: skips to onboarding completion with claim profile
     // - If not authenticated: goes through onboarding then auth
-    openAuthFlow({
+    openAuth({
       intent: "provider",
       providerType: "organization",
       claimProfile: profile,

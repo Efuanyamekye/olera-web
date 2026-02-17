@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Profile, OrganizationMetadata, CaregiverMetadata } from "@/lib/types";
-import { getProviderBySlug, mockProviderToProfile, iosProviderToProfile } from "@/lib/mock-providers";
+import { iosProviderToProfile } from "@/lib/mock-providers";
 import type { Provider as IOSProvider } from "@/lib/types/provider";
 import Badge from "@/components/ui/Badge";
-import InquiryButton from "@/components/providers/InquiryButton";
+import ConnectionCard from "@/components/providers/connection-card";
 import ImageCarousel from "@/components/providers/ImageCarousel";
 import ExpandableText from "@/components/providers/ExpandableText";
 import CompactProviderCard from "@/components/providers/CompactProviderCard";
+import SaveButton from "@/components/providers/SaveButton";
 import CareServicesList from "@/components/providers/CareServicesList";
 import QASectionV2 from "@/components/providers/QASectionV2";
 import SectionNav from "@/components/providers/SectionNav";
@@ -69,14 +70,6 @@ function CheckIcon({ className }: { className?: string }) {
   );
 }
 
-function ChevronRightIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-    </svg>
-  );
-}
-
 // Quick fact icon mapping
 const factIcons: Record<QuickFact["icon"], (props: { className?: string }) => React.JSX.Element> = {
   category: ({ className }) => (
@@ -133,7 +126,7 @@ export default async function ProviderPage({
       .from("olera-providers")
       .select("*")
       .eq("provider_id", slug)
-      .eq("deleted", false)
+      .not("deleted", "is", true)
       .single<IOSProvider>();
 
     if (iosProvider) {
@@ -143,12 +136,12 @@ export default async function ProviderPage({
     // iOS Supabase not configured or provider not found
   }
 
-  // 2. Try web profiles table
+  // 2. Try web business_profiles table
   if (!profile) {
     try {
       const supabase = await createClient();
       const { data } = await supabase
-        .from("profiles")
+        .from("business_profiles")
         .select("*")
         .eq("slug", slug)
         .in("type", ["organization", "caregiver"])
@@ -156,14 +149,6 @@ export default async function ProviderPage({
       profile = data;
     } catch {
       // Supabase not configured — fall through to mock lookup
-    }
-  }
-
-  // 3. Fall back to mock data
-  if (!profile) {
-    const mockProvider = getProviderBySlug(slug);
-    if (mockProvider) {
-      profile = mockProviderToProfile(mockProvider);
     }
   }
 
@@ -214,7 +199,7 @@ export default async function ProviderPage({
     priceRange,
   });
 
-  const similarProviders = getSimilarProviders(profile.category, profile.slug, 4);
+  const similarProviders = await getSimilarProviders(profile.category, profile.slug, 4);
 
   const pricingDetails = meta?.pricing_details || [];
   const staffScreening = meta?.staff_screening;
@@ -258,38 +243,8 @@ export default async function ProviderPage({
         oleraScore={oleraScore}
       />
 
-      {/* ===== Breadcrumbs ===== */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-[44px]">
-        <ol className="flex items-center gap-1.5 text-sm text-gray-500">
-          <li>
-            <Link href="/" className="hover:text-primary-600 transition-colors">Home</Link>
-          </li>
-          <li><ChevronRightIcon className="w-3.5 h-3.5 text-gray-300" /></li>
-          <li>
-            <Link href="/browse" className="hover:text-primary-600 transition-colors">Browse</Link>
-          </li>
-          {categoryLabel && (
-            <>
-              <li><ChevronRightIcon className="w-3.5 h-3.5 text-gray-300" /></li>
-              <li>
-                <Link
-                  href={`/browse?type=${profile.category}`}
-                  className="hover:text-primary-600 transition-colors"
-                >
-                  {categoryLabel}
-                </Link>
-              </li>
-            </>
-          )}
-          <li><ChevronRightIcon className="w-3.5 h-3.5 text-gray-300" /></li>
-          <li className="text-gray-900 font-medium truncate max-w-[200px]">
-            {profile.display_name}
-          </li>
-        </ol>
-      </nav>
-
       {/* ===== Main Layout ===== */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10">
 
         {/* -- Identity: Category + Provider Name + Location + Share/Save -- */}
         <div className="mb-4">
@@ -314,12 +269,16 @@ export default async function ProviderPage({
                 </svg>
                 Share
               </button>
-              <button className="flex items-center justify-center gap-1.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg w-24 py-2 hover:bg-gray-50 transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-                Save
-              </button>
+              <SaveButton
+                provider={{
+                  providerId: profile.id,
+                  slug: profile.slug,
+                  name: profile.display_name,
+                  location: locationStr,
+                  careTypes: profile.care_types || [],
+                  image: images[0] || null,
+                }}
+              />
             </div>
           </div>
           {profile.address && (
@@ -370,8 +329,8 @@ export default async function ProviderPage({
 
             {/* 1. Unclaimed Banner */}
             {profile.claim_state === "unclaimed" && (
-              <div className="pb-10">
-                <div className="bg-warm-50 border border-warm-200 rounded-xl p-4 md:p-5">
+              <div className="pb-12">
+                <div className="bg-warm-50 border border-warm-100 rounded-xl p-4 md:p-5">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-full bg-warm-100 flex items-center justify-center flex-shrink-0">
@@ -401,8 +360,8 @@ export default async function ProviderPage({
 
             {/* 2. About */}
             {profile.description && (
-              <div id="about" className="py-10 first:pt-0 scroll-mt-20">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              <div id="about" className="pb-12 first:pt-0 scroll-mt-20">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">
                   About {profile.display_name}
                 </h2>
                 <ExpandableText text={profile.description} maxLength={150} />
@@ -411,29 +370,29 @@ export default async function ProviderPage({
 
             {/* 3. Care Services */}
             {profile.care_types && profile.care_types.length > 0 && (
-              <div id="services" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Care Services</h2>
+              <div id="services" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Care Services</h2>
                 <CareServicesList services={profile.care_types} initialCount={9} />
               </div>
             )}
 
             {/* 4. Detailed Pricing */}
             {pricingDetails.length > 0 && (
-              <div id="pricing" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <div className="flex items-start justify-between mb-5">
+              <div id="pricing" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900">Prices at {profile.display_name}</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">Prices at {profile.display_name}</h2>
                     <p className="text-sm text-gray-400 mt-1">Last updated on 01/15/2025</p>
                   </div>
                   <button className="px-5 py-2.5 text-sm font-medium text-primary-600 border border-primary-600 rounded-lg hover:bg-primary-50 transition-colors flex-shrink-0">
                     Get a custom quote
                   </button>
                 </div>
-                <div className="bg-white rounded-xl border border-gray-100 shadow-xs divide-y divide-gray-100">
+                <div className="space-y-2">
                   {pricingDetails.map((item) => (
                     <div
                       key={item.service}
-                      className="flex items-center justify-between py-4 px-5 hover:bg-gray-50 transition-colors"
+                      className="flex items-center justify-between py-3.5 px-4 bg-gray-50 rounded-lg"
                     >
                       <span className="text-base font-medium text-gray-900">{item.service}</span>
                       <span className="text-base font-semibold text-gray-900">
@@ -447,9 +406,9 @@ export default async function ProviderPage({
 
             {/* 5. Payment & Insurance */}
             {(acceptedPayments.length > 0 || meta?.accepts_medicaid || meta?.accepts_medicare) && (
-              <div id="payment" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Acceptable Payment / Insurance Options</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+              <div id="payment" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Acceptable Payment Options</h2>
+                <div className="flex flex-wrap gap-x-8 gap-y-3">
                   {acceptedPayments.map((payment) => (
                     <div key={payment} className="flex items-center gap-2.5">
                       <CheckIcon className="w-5 h-5 text-primary-600 flex-shrink-0" />
@@ -457,7 +416,7 @@ export default async function ProviderPage({
                     </div>
                   ))}
                 </div>
-                <p className="mt-4 text-base text-gray-500">
+                <p className="mt-5 text-base text-gray-500">
                   For clarity and guidance,{" "}
                   <button className="text-primary-600 hover:text-primary-700 font-medium transition-colors">
                     Book a consultation
@@ -468,28 +427,17 @@ export default async function ProviderPage({
 
             {/* 7. Staff Screening & Safety */}
             {staffScreening && (
-              <div id="safety" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Staff Screening &amp; Safety</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div id="safety" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Staff Screening &amp; Safety</h2>
+                <div className="flex flex-wrap gap-x-8 gap-y-3">
                   {[
                     { label: "Background Checked", verified: staffScreening.background_checked },
                     { label: "Licensed", verified: staffScreening.licensed },
                     { label: "Insured", verified: staffScreening.insured },
-                  ].map((item) => (
-                    <div key={item.label} className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 shadow-xs">
-                      <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                        item.verified ? "bg-primary-50" : "bg-gray-50"
-                      }`}>
-                        <svg className={`w-5 h-5 ${item.verified ? "text-primary-600" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-base font-medium text-gray-900">{item.label}</p>
-                        <p className={`text-sm ${item.verified ? "text-primary-600" : "text-gray-500"}`}>
-                          {item.verified ? "Verified" : "Not verified"}
-                        </p>
-                      </div>
+                  ].filter(item => item.verified).map((item) => (
+                    <div key={item.label} className="flex items-center gap-2.5">
+                      <CheckIcon className="w-5 h-5 text-primary-600 flex-shrink-0" />
+                      <span className="text-base text-gray-700">{item.label}</span>
                     </div>
                   ))}
                 </div>
@@ -498,24 +446,24 @@ export default async function ProviderPage({
 
             {/* 8. Meet Our Team */}
             {staff && (
-              <div id="team" className="py-10 scroll-mt-20 border-t border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Meet Our Team</h2>
-                <div className="flex items-start gap-4 p-5 bg-white rounded-xl border border-gray-100 shadow-xs">
+              <div id="team" className="py-12 scroll-mt-20 border-t border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-5">Meet Our Team</h2>
+                <div className="flex items-start gap-4">
                   {staff.image ? (
                     <img
                       src={staff.image}
                       alt={staff.name}
-                      className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+                      className="w-16 h-16 rounded-full object-cover flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-xl bg-primary-50 flex items-center justify-center flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center flex-shrink-0">
                       <span className="text-lg font-bold text-primary-600">
                         {getInitials(staff.name)}
                       </span>
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-base font-semibold text-gray-900">{staff.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{staff.name}</h3>
                     <p className="text-primary-600 text-sm font-medium mt-0.5">{staff.position}</p>
                     <p className="text-gray-600 text-base mt-2 leading-relaxed">{staff.bio}</p>
                   </div>
@@ -525,25 +473,29 @@ export default async function ProviderPage({
 
             {/* 9. Q&A */}
             {defaultQA.length > 0 && (
-              <div id="qa" className="py-10 scroll-mt-20 border-t border-gray-200">
+              <div id="qa" className="py-12 scroll-mt-20 border-t border-gray-100">
                 <QASectionV2
                   providerName={profile.display_name}
+                  providerImage={images[0]}
                   questions={defaultQA}
                 />
               </div>
             )}
 
             {/* 11. Disclaimer */}
-            <div className="py-10 border-t border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Disclaimer</h2>
-              <p className="text-base text-gray-500 leading-relaxed">
+            <div className="py-12 border-t border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Disclaimer</h2>
+              <p className="text-sm text-gray-500 leading-relaxed">
                 We strive to keep this page accurate and current, but some details may not be up to date. To confirm whether {profile.display_name} is the right fit for you or your loved one, please verify all information directly with the provider by submitting a connect request or contacting them.
               </p>
               <div className="flex items-center justify-between mt-6 pt-5 border-t border-gray-100">
                 <p className="text-base font-semibold text-gray-900">Are you the owner of this business?</p>
-                <button className="px-5 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0">
+                <Link
+                  href={`/for-providers/claim/${profile.slug}`}
+                  className="px-5 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0"
+                >
                   Manage this page
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -552,107 +504,20 @@ export default async function ProviderPage({
 
           {/* Right Column — Sticky Sidebar */}
           <div className="lg:col-span-1 self-stretch">
-            <div className="sticky top-24 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden flex flex-col h-[534px]">
-              {/* Accent bar */}
-              <div className="h-1 bg-gradient-to-r from-primary-500 to-primary-600" />
-
-              <div className="p-5 space-y-4">
-                {/* Price + Olera Score */}
-                {(priceRange || oleraScore) && (
-                  <div className="flex items-center pb-4 border-b border-gray-100 -mx-5 px-5">
-                    {priceRange && (
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-500 font-medium">Starting from</p>
-                        <p className="text-xl font-bold text-gray-900 mt-1">{priceRange}</p>
-                      </div>
-                    )}
-                    {priceRange && oleraScore && (
-                      <div className="w-px h-12 bg-gray-100 flex-shrink-0" />
-                    )}
-                    {oleraScore && (
-                      <div className="flex-1 flex items-center justify-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-primary-50 border border-primary-100 flex items-center justify-center">
-                          <span className="text-xl font-bold text-primary-700">{oleraScore.toFixed(1)}</span>
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-gray-900 leading-none">Olera Score</p>
-                          <div className="flex items-center gap-0.5 mt-[6px]">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                              <StarIcon
-                                key={star}
-                                className={`w-3.5 h-3.5 ${star <= Math.round(oleraScore) ? "text-yellow-400" : "text-gray-200"}`}
-                                filled={star <= Math.round(oleraScore)}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* CTA Buttons */}
-                <div className="space-y-2.5">
-                  <InquiryButton
-                    providerProfileId={profile.id}
-                    providerName={profile.display_name}
-                    providerSlug={profile.slug}
-                  />
-                  {profile.phone && (
-                    <a
-                      href={`tel:${profile.phone}`}
-                      className="w-full border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2 min-h-[44px] text-sm"
-                    >
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                      {profile.phone}
-                    </a>
-                  )}
-                  {profile.website && (
-                    <a
-                      href={profile.website}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium py-3 rounded-lg transition-colors flex items-center justify-center gap-2 min-h-[44px] text-sm"
-                    >
-                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                      </svg>
-                      Visit Website
-                    </a>
-                  )}
-                </div>
-
-                {/* Hours */}
-                {meta?.hours && (
-                  <div className="pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <p className="text-sm text-gray-600">{meta.hours}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Accepted Payments — pinned to bottom */}
-              {acceptedPayments.length > 0 && (
-                <div className="mt-auto px-5 pb-5 pt-4 border-t border-gray-100">
-                  <p className="text-xs text-gray-500 font-medium mb-2">Accepted payments</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {acceptedPayments.map((payment) => (
-                      <span
-                        key={payment}
-                        className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-50 text-gray-600 border border-gray-100"
-                      >
-                        {payment}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <div className="sticky top-24">
+              <ConnectionCard
+                providerId={profile.id}
+                providerName={profile.display_name}
+                providerSlug={profile.slug}
+                priceRange={priceRange}
+                oleraScore={oleraScore}
+                reviewCount={meta?.review_count}
+                phone={profile.phone}
+                acceptedPayments={acceptedPayments}
+                careTypes={profile.care_types}
+                isActive={profile.is_active}
+                responseTime={null}
+              />
             </div>
           </div>
         </div>
@@ -666,7 +531,7 @@ export default async function ProviderPage({
             {/* Olera Score */}
             {oleraScore && (
               <div className="text-center mb-16">
-                <p className="text-xs uppercase tracking-[0.2em] text-primary-600 font-semibold mb-6">Olera Score</p>
+                <p className="text-sm uppercase tracking-[0.2em] text-primary-600 font-semibold mb-6">Olera Score</p>
                 <div className="relative inline-flex items-center justify-center mb-4">
                   <div className="w-32 h-32 rounded-full bg-white border-2 border-primary-100 shadow-lg flex items-center justify-center">
                     <span className="text-5xl font-bold text-primary-700 tracking-tight">{oleraScore.toFixed(1)}</span>
@@ -674,18 +539,18 @@ export default async function ProviderPage({
                 </div>
                 <div className="flex items-center justify-center gap-1 mb-8">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <StarIcon key={star} className={`w-5 h-5 ${star <= Math.round(oleraScore) ? "text-yellow-400" : "text-gray-200"}`} filled={star <= Math.round(oleraScore)} />
+                    <StarIcon key={star} className={`w-6 h-6 ${star <= Math.round(oleraScore) ? "text-yellow-400" : "text-gray-200"}`} filled={star <= Math.round(oleraScore)} />
                   ))}
                 </div>
                 {/* Breakdown cards */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-5xl mx-auto">
                   {[
                     { label: "Community", value: meta?.community_score || Math.min(5, oleraScore + 0.1) },
                     { label: "Value", value: meta?.value_score || Math.min(5, oleraScore - 0.1) },
                     { label: "Transparency", value: meta?.info_score || Math.min(5, oleraScore - 0.3) },
                     { label: "Completeness", value: Math.min(5, oleraScore - 0.5) },
                   ].map((f) => (
-                    <div key={f.label} className="bg-white rounded-2xl p-5 border border-gray-100 text-center">
+                    <div key={f.label} className="bg-white rounded-2xl p-6 border border-gray-100 text-center">
                       <span className="text-3xl font-bold text-gray-900 tracking-tight">{f.value.toFixed(1)}</span>
                       <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden mt-3 mb-2">
                         <div className="h-full bg-gradient-to-r from-primary-400 to-primary-600 rounded-full" style={{ width: `${(f.value / 5) * 100}%` }} />

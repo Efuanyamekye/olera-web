@@ -31,9 +31,9 @@ export const CARE_CATEGORIES: CareCategory[] = [
     image: "/images/home-health.webp",
     resources: [
       { title: "Community Forum", href: "/community?category=home-health", icon: "chat" },
-      { title: "Home Health Guide", href: "/resources/home-health", icon: "heart" },
-      { title: "Paying for Home Health", href: "/resources/paying-for-home-health", icon: "dollar" },
-      { title: "Home Health vs Home Care", href: "/resources/home-health-vs-home-care", icon: "compare" },
+      { title: "Home Health Guide", href: "/resources?type=home-health", icon: "book" },
+      { title: "Paying for Home Health", href: "/benefits?type=home-health", icon: "dollar" },
+      { title: "Home Health vs Home Care", href: "/resources/home-health-vs-home-care", icon: "info" },
     ],
   },
   {
@@ -44,9 +44,9 @@ export const CARE_CATEGORIES: CareCategory[] = [
     image: "/images/home-care.jpg",
     resources: [
       { title: "Community Forum", href: "/community?category=home-care", icon: "chat" },
-      { title: "Home Care Support", href: "/resources/home-care", icon: "heart" },
-      { title: "Paying for Home Care", href: "/resources/paying-for-home-care", icon: "dollar" },
-      { title: "Home Care vs Home Health", href: "/resources/home-care-vs-home-health", icon: "compare" },
+      { title: "Home Care Guide", href: "/resources?type=home-care", icon: "book" },
+      { title: "Paying for Home Care", href: "/benefits?type=home-care", icon: "dollar" },
+      { title: "When to Consider Home Care", href: "/resources/caregiver-burnout-prevention", icon: "info" },
     ],
   },
   {
@@ -57,9 +57,9 @@ export const CARE_CATEGORIES: CareCategory[] = [
     image: "/images/assisted-living.webp",
     resources: [
       { title: "Community Forum", href: "/community?category=assisted-living", icon: "chat" },
-      { title: "Assisted Living Guide", href: "/resources/assisted-living", icon: "book" },
-      { title: "Paying for Assisted Living", href: "/resources/paying-for-assisted-living", icon: "dollar" },
-      { title: "Assisted Living vs Nursing Home", href: "/resources/assisted-living-vs-nursing-home", icon: "compare" },
+      { title: "Assisted Living Guide", href: "/resources?type=assisted-living", icon: "book" },
+      { title: "Paying for Assisted Living", href: "/benefits?type=assisted-living", icon: "dollar" },
+      { title: "Assisted Living vs Nursing Home", href: "/resources/nursing-home-vs-assisted-living", icon: "info" },
     ],
   },
   {
@@ -70,9 +70,9 @@ export const CARE_CATEGORIES: CareCategory[] = [
     image: "/images/memory-care.jpg",
     resources: [
       { title: "Community Forum", href: "/community?category=memory-care", icon: "chat" },
-      { title: "Memory Care Guide", href: "/resources/memory-care", icon: "book" },
-      { title: "Paying for Memory Care", href: "/resources/paying-for-memory-care", icon: "dollar" },
-      { title: "Signs It's Time for Memory Care", href: "/resources/when-memory-care", icon: "info" },
+      { title: "Memory Care Guide", href: "/resources?type=memory-care", icon: "book" },
+      { title: "Paying for Memory Care", href: "/benefits?type=memory-care", icon: "dollar" },
+      { title: "Signs It's Time for Memory Care", href: "/resources/when-its-time-for-memory-care", icon: "info" },
     ],
   },
   {
@@ -83,9 +83,9 @@ export const CARE_CATEGORIES: CareCategory[] = [
     image: "/images/nursing-homes.webp",
     resources: [
       { title: "Community Forum", href: "/community?category=nursing-homes", icon: "chat" },
-      { title: "Nursing Home Guide", href: "/resources/nursing-homes", icon: "book" },
-      { title: "Paying for Nursing Home", href: "/resources/paying-for-nursing-home", icon: "dollar" },
-      { title: "Medicare & Medicaid Coverage", href: "/resources/medicare-medicaid", icon: "shield" },
+      { title: "Nursing Home Guide", href: "/resources?type=nursing-homes", icon: "book" },
+      { title: "Paying for Nursing Home", href: "/benefits?type=nursing-homes", icon: "dollar" },
+      { title: "Medicare & Medicaid Coverage", href: "/resources/medicaid-nursing-home-coverage", icon: "info" },
     ],
   },
   {
@@ -96,9 +96,9 @@ export const CARE_CATEGORIES: CareCategory[] = [
     image: "/images/independent-living.jpg",
     resources: [
       { title: "Community Forum", href: "/community?category=independent-living", icon: "chat" },
-      { title: "Independent Living Guide", href: "/resources/independent-living", icon: "book" },
-      { title: "Cost of Independent Living", href: "/resources/independent-living-costs", icon: "dollar" },
-      { title: "Is Independent Living Right?", href: "/resources/is-independent-living-right", icon: "info" },
+      { title: "Independent Living Guide", href: "/resources?type=independent-living", icon: "book" },
+      { title: "Paying for Independent Living", href: "/benefits?type=independent-living", icon: "dollar" },
+      { title: "Is Independent Living Right?", href: "/resources/independent-living-guide", icon: "info" },
     ],
   },
 ];

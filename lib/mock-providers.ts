@@ -439,11 +439,56 @@ export const providersByCategory: Record<string, Provider[]> = {
 // Browse page exports
 // ============================================================
 
-/** Flat array of all providers for browse/search results */
+/**
+ * Generate deterministic mock coordinates scattered around Austin, TX.
+ * Each index produces a unique position within ~5km of downtown.
+ */
+function getMockCoordinates(index: number): { lat: number; lon: number } {
+  return {
+    lat: 30.2672 + Math.sin(index * 2.1) * 0.05 + Math.cos(index * 0.7) * 0.02,
+    lon: -97.7431 + Math.cos(index * 1.7) * 0.06 + Math.sin(index * 0.9) * 0.02,
+  };
+}
+
+/**
+ * Generate a realistic price range based on care category.
+ * Hourly categories (Home Care, Home Health) use /hr, facility types use /mo.
+ */
+function getCategoryPrice(category: string, seed: number): string {
+  const s = Math.abs(Math.sin(seed * 3.7));
+  switch (category) {
+    case "Home Care":
+      return `$${Math.round(20 + s * 15)}/hr`;
+    case "Home Health":
+      return `$${Math.round(28 + s * 22)}/hr`;
+    case "Assisted Living":
+      return `$${(Math.round((3.0 + s * 2.5) * 10) / 10).toFixed(1).replace(/\.0$/, "")}k/mo`;
+    case "Memory Care":
+      return `$${(Math.round((4.0 + s * 3.0) * 10) / 10).toFixed(1).replace(/\.0$/, "")}k/mo`;
+    case "Independent Living":
+      return `$${(Math.round((2.5 + s * 2.0) * 10) / 10).toFixed(1).replace(/\.0$/, "")}k/mo`;
+    case "Nursing Home":
+      return `$${(Math.round((5.0 + s * 4.0) * 10) / 10).toFixed(1).replace(/\.0$/, "")}k/mo`;
+    case "Hospice":
+      return `$${(Math.round((4.5 + s * 2.5) * 10) / 10).toFixed(1).replace(/\.0$/, "")}k/mo`;
+    default:
+      return `$${(Math.round((3.0 + s * 3.0) * 10) / 10).toFixed(1).replace(/\.0$/, "")}k/mo`;
+  }
+}
+
+/** Flat array of all providers for browse/search results (with mock coordinates and correct pricing) */
 export const allBrowseProviders: Provider[] = [
   ...topProviders,
   ...Object.values(providersByCategory).flat(),
-];
+].map((p, i) => {
+  const coords = getMockCoordinates(i);
+  return {
+    ...p,
+    lat: coords.lat,
+    lon: coords.lon,
+    priceRange: getCategoryPrice(p.primaryCategory, i),
+  };
+});
 
 /** Map care type slug to display label */
 const careTypeLabelMap: Record<string, string> = {

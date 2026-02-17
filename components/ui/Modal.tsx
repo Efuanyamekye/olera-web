@@ -10,6 +10,8 @@ interface ModalProps {
   children: ReactNode;
   /** Maximum width of the modal content. Default: "md" */
   size?: "sm" | "md" | "lg";
+  /** Optional back button handler. Shows a small circular back arrow in the header. */
+  onBack?: () => void;
 }
 
 const sizeClasses: Record<string, string> = {
@@ -32,6 +34,7 @@ export default function Modal({
   title,
   children,
   size = "md",
+  onBack,
 }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -115,29 +118,49 @@ export default function Modal({
       <div
         ref={contentRef}
         className={[
-          "relative bg-white rounded-xl shadow-xl w-full",
+          "relative bg-white rounded-2xl shadow-2xl w-full",
           "animate-slide-up",
           sizeClasses[size],
         ].join(" ")}
       >
-        {/* Header */}
-        {title && (
-          <div className="flex items-center justify-between px-6 pt-6 pb-2">
-            <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+        {/* Header — always show back/close buttons */}
+        <div className="flex items-center justify-between px-5 pt-5 pb-0">
+          {/* Back button (left) */}
+          {onBack ? (
             <button
-              onClick={() => onCloseRef.current()}
-              className="w-10 h-10 flex items-center justify-center rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-              aria-label="Close"
+              onClick={onBack}
+              className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+              aria-label="Go back"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-          </div>
-        )}
+          ) : (
+            <div className="w-8" />
+          )}
+
+          {/* Title (center) */}
+          {title ? (
+            <h2 className="text-xl font-semibold text-gray-900 text-center flex-1">{title}</h2>
+          ) : (
+            <div className="flex-1" />
+          )}
+
+          {/* Close button (right) */}
+          <button
+            onClick={() => onCloseRef.current()}
+            className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+            aria-label="Close"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
 
         {/* Body */}
-        <div className="px-6 pb-6 pt-2">{children}</div>
+        <div className="px-7 pb-7 pt-2">{children}</div>
       </div>
     </div>
   );

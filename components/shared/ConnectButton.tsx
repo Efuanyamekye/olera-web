@@ -44,7 +44,8 @@ type ModalState =
   | { kind: "confirm" }
   | { kind: "success" }
   | { kind: "upgrade" }
-  | { kind: "incomplete"; gaps: string[] };
+  | { kind: "incomplete"; gaps: string[] }
+  | { kind: "wrong-profile-type" };
 
 const CLOSED: ModalState = { kind: "closed" };
 
@@ -64,7 +65,7 @@ export default function ConnectButton({
   fullWidth = false,
   size = "sm",
 }: ConnectButtonProps) {
-  const { user, activeProfile, membership, openAuthModal, refreshAccountData } =
+  const { user, activeProfile, membership, openAuth, refreshAccountData } =
     useAuth();
   const [alreadySent, setAlreadySent] = useState(false);
   const [modal, setModal] = useState<ModalState>(CLOSED);
@@ -183,10 +184,20 @@ export default function ConnectButton({
 
   const handleClick = () => {
     if (!user) {
-      openAuthModal(undefined, "sign-up");
+      openAuth({ defaultMode: "sign-up" });
       return;
     }
     if (alreadySent) return;
+
+    // Provider-to-provider care inquiry guard:
+    // Orgs/caregivers can't send care consultation inquiries to other providers.
+    // They must switch to a family profile for care requests.
+    const isProviderProfile =
+      activeProfile?.type === "organization" || activeProfile?.type === "caregiver";
+    if (isProviderProfile && connectionType === "inquiry") {
+      setModal({ kind: "wrong-profile-type" });
+      return;
+    }
 
     // Profile completeness check — must have minimum info before sharing
     if (!profileShareable) {
@@ -380,6 +391,33 @@ export default function ConnectButton({
             >
               Edit Profile
             </Link>
+          </div>
+        </Modal>
+      )}
+
+      {modal.kind === "wrong-profile-type" && (
+        <Modal
+          isOpen
+          onClose={closeModal}
+          title="Switch to a family profile"
+          size="sm"
+        >
+          <div className="py-2">
+            <p className="text-base text-gray-600 mb-4">
+              Care consultation requests can only be sent from a family profile.
+              Switch to your family profile to request care from this provider.
+            </p>
+            <p className="text-sm text-gray-500 mb-6">
+              If you&apos;re looking to hire a caregiver for your organization,
+              use the hiring workflow from your dashboard instead.
+            </p>
+            <button
+              type="button"
+              onClick={closeModal}
+              className="inline-flex items-center justify-center w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors min-h-[44px]"
+            >
+              Got it
+            </button>
           </div>
         </Modal>
       )}

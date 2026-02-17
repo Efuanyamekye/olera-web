@@ -152,7 +152,7 @@ export interface FamilyMetadata {
 // ============================================================
 
 export interface DeferredAction {
-  action: "save" | "inquiry" | "apply" | "claim" | "create_profile";
+  action: "save" | "inquiry" | "apply" | "claim" | "create_profile" | "phone_reveal";
   targetProfileId?: string;
   returnUrl: string;
   createdAt: string;
@@ -169,6 +169,8 @@ export interface AuthState {
   profiles: Profile[];
   membership: Membership | null;
   isLoading: boolean;
+  /** True when the initial data fetch failed and no cache was available */
+  fetchError: boolean;
 }
 
 // ============================================================

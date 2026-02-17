@@ -28,7 +28,7 @@ export default function InquiryButton({
   providerName,
   providerSlug,
 }: InquiryButtonProps) {
-  const { user, account, activeProfile, openAuthModal, refreshAccountData } =
+  const { user, account, activeProfile, openAuth, refreshAccountData } =
     useAuth();
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState("");
@@ -217,14 +217,14 @@ export default function InquiryButton({
 
   const handleClick = () => {
     if (!user) {
-      openAuthModal(
-        {
+      openAuth({
+        deferred: {
           action: "inquiry",
           targetProfileId: providerProfileId,
           returnUrl: `/provider/${providerSlug}`,
         },
-        "sign-up"
-      );
+        defaultMode: "sign-up",
+      });
       return;
     }
 

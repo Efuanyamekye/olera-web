@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { useCitySearch } from "@/hooks/use-city-search";
 import { useRouter } from "next/navigation";
 import ProviderCard from "@/components/providers/ProviderCard";
 import type { Provider as ProviderCardType } from "@/components/providers/ProviderCard";
 import { useNavbar } from "@/components/shared/NavbarContext";
+import Pagination from "@/components/ui/Pagination";
 import { createClient } from "@/lib/supabase/client";
 import {
   type Provider as SupabaseProvider,
@@ -13,6 +15,15 @@ import {
   toCardFormat,
   type ProviderCardData,
 } from "@/lib/types/provider";
+
+const BrowseMap = dynamic(() => import("@/components/browse/BrowseMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-gray-100 rounded-2xl animate-pulse flex items-center justify-center">
+      <span className="text-sm text-gray-400">Loading map...</span>
+    </div>
+  ),
+});
 
 // Location suggestions moved to useCitySearch hook for comprehensive US city search
 
@@ -69,6 +80,8 @@ function getCareTypeLabel(id: string): string {
 
 type ViewMode = "carousel" | "grid" | "map";
 
+const PROVIDERS_PER_PAGE = 24;
+
 // Helper function to parse price for sorting
 function parsePrice(price: string): number {
   const numericValue = parseInt(price.replace(/[^0-9]/g, ""));
@@ -91,8 +104,9 @@ function CarouselSection({
 
   return (
     <div className="mb-10">
-      <div className="mb-3">
+      <div className="flex items-center gap-2 mb-3">
         <h2 className="text-base font-semibold text-gray-900">{title}</h2>
+        <span className="text-sm text-gray-400 font-medium">({providers.length})</span>
       </div>
       <div className="relative group/carousel">
         <div
@@ -159,6 +173,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
   const [sortBy, setSortBy] = useState("recommended");
   const [viewMode, setViewMode] = useState<ViewMode>("carousel");
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Dropdown states
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
@@ -177,12 +192,13 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
   // Fetch providers from Supabase
   const fetchProviders = useCallback(async () => {
     setIsLoadingProviders(true);
+
     try {
       const supabase = createClient();
       let query = supabase
         .from(PROVIDERS_TABLE)
         .select("*")
-        .eq("deleted", false);
+        .not("deleted", "is", true);
 
       // Apply care type filter
       if (careType && careType !== "all") {
@@ -270,7 +286,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
   };
 
   // Default location for fallback (simulates geolocation default)
-  const DEFAULT_LOCATION = "New York, NY";
+  const DEFAULT_LOCATION = "Houston, TX";
 
   // Geolocation function
   const detectLocation = () => {
@@ -339,6 +355,8 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
       const target = e.target as HTMLElement;
       if (!target.closest(".dropdown-container")) {
         setShowLocationDropdown(false);
+        // Restore locationInput to current searchLocation when closing without selection
+        setLocationInput(searchLocation);
         setShowCareTypeDropdown(false);
         setShowRatingDropdown(false);
         setShowPaymentDropdown(false);
@@ -347,7 +365,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+  }, [searchLocation]);
 
   // Filter and sort providers (Supabase already filtered by care type and location)
   const filteredProviders = useMemo(() => {
@@ -385,6 +403,18 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
 
     return result;
   }, [providers, selectedRating, selectedPayment, sortBy]);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredProviders.length / PROVIDERS_PER_PAGE);
+  const paginatedProviders = useMemo(() => {
+    const startIndex = (currentPage - 1) * PROVIDERS_PER_PAGE;
+    return filteredProviders.slice(startIndex, startIndex + PROVIDERS_PER_PAGE);
+  }, [filteredProviders, currentPage]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [careType, selectedRating, selectedPayment, sortBy]);
 
   // Categorized providers for carousel view - override badges to match section
   const topRatedProviders = useMemo(
@@ -476,16 +506,21 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowLocationDropdown(!showLocationDropdown);
+                  const opening = !showLocationDropdown;
+                  setShowLocationDropdown(opening);
                   setShowCareTypeDropdown(false);
                   setShowRatingDropdown(false);
                   setShowPaymentDropdown(false);
                   setShowSortDropdown(false);
-                  setTimeout(() => locationInputRef.current?.focus({ preventScroll: true }), 100);
+                  if (opening) {
+                    // Clear input so popular cities show (matching landing page dropdown)
+                    setLocationInput("");
+                    setTimeout(() => locationInputRef.current?.focus({ preventScroll: true }), 100);
+                  }
                 }}
                 className={`flex items-center justify-between h-9 px-3 w-[200px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   searchLocation.trim()
-                    ? "bg-white text-gray-900 border-2 border-gray-900"
+                    ? "bg-white text-gray-900 border-2 border-primary-400"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
@@ -509,12 +544,15 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
               </button>
 
               {showLocationDropdown && (
-                <div className="absolute left-0 top-[calc(100%+6px)] w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 py-3 z-[100]">
+                <div className="absolute left-0 top-[calc(100%+8px)] w-[300px] bg-white rounded-xl shadow-xl border border-gray-200 py-3 z-[100] max-h-[340px] overflow-y-auto">
                   {/* Search Input */}
                   <div className="px-3 pb-2">
-                    <div className="relative">
-                      <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    <div className={`flex items-center px-4 py-3 bg-gray-50 rounded-xl border transition-colors ${
+                      locationInput.trim() ? "border-primary-400 ring-2 ring-primary-100" : "border-gray-200"
+                    }`}>
+                      <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       <input
                         ref={locationInputRef}
@@ -522,21 +560,22 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                         value={locationInput}
                         onChange={(e) => setLocationInput(e.target.value)}
                         onFocus={preloadCities}
-                        placeholder="Search city or ZIP code..."
-                        className="w-full pl-9 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-primary-400 focus:ring-1 focus:ring-primary-100"
+                        placeholder="City or ZIP code"
+                        className="w-full ml-3 bg-transparent border-none text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 text-base"
                       />
                     </div>
                   </div>
 
                   {/* Use Current Location - Prominent Button */}
-                  <div className="px-3 pb-2">
+                  <div className="px-3 pb-3">
                     <button
+                      type="button"
                       onClick={() => {
                         detectLocation();
                         setShowLocationDropdown(false);
                       }}
                       disabled={isGeolocating}
-                      className="flex items-center justify-center gap-2 w-full py-2 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-sm text-primary-700 font-medium transition-colors disabled:opacity-60"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-primary-700 font-medium transition-colors disabled:opacity-60"
                     >
                       {isGeolocating ? (
                         <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -548,51 +587,51 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                           <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
                         </svg>
                       )}
-                      <span>{isGeolocating ? "Detecting..." : "Use my location"}</span>
+                      <span>{isGeolocating ? "Detecting location..." : "Use my current location"}</span>
                     </button>
                   </div>
 
                   {/* Divider */}
-                  <div className="flex items-center gap-3 px-3 py-1">
+                  <div className="flex items-center gap-3 px-4 py-1">
                     <div className="flex-1 h-px bg-gray-200" />
-                    <span className="text-xs text-gray-400">or</span>
+                    <span className="text-xs text-gray-400 font-medium">or search</span>
                     <div className="flex-1 h-px bg-gray-200" />
                   </div>
 
                   {/* Popular Cities Label */}
                   {!locationInput.trim() && cityResults.length > 0 && (
-                    <div className="px-3 pt-1 pb-1">
+                    <div className="px-4 pt-2 pb-1">
                       <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Popular cities</span>
                     </div>
                   )}
 
-                  <div className="max-h-[180px] overflow-y-auto">
-                    {cityResults.map((loc) => (
-                      <button
-                        key={loc.full}
-                        onClick={() => {
-                          setSearchLocation(loc.full);
-                          setLocationInput(loc.full);
-                          setShowLocationDropdown(false);
-                        }}
-                        className={`flex items-center gap-2 w-full px-3 py-2 text-sm hover:bg-gray-50 ${
-                          searchLocation === loc.full
-                            ? "text-primary-600 font-medium"
-                            : "text-gray-900"
-                        }`}
-                      >
-                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        </svg>
-                        {loc.full}
-                      </button>
-                    ))}
-                    {cityResults.length === 0 && (
-                      <div className="px-3 py-4 text-sm text-gray-500 text-center">
-                        No locations found
-                      </div>
-                    )}
-                  </div>
+                  {cityResults.map((loc) => (
+                    <button
+                      key={loc.full}
+                      type="button"
+                      onClick={() => {
+                        setSearchLocation(loc.full);
+                        setLocationInput(loc.full);
+                        setShowLocationDropdown(false);
+                      }}
+                      className={`flex items-center gap-3 w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors ${
+                        searchLocation === loc.full
+                          ? "bg-primary-50 text-primary-700"
+                          : "text-gray-900"
+                      }`}
+                    >
+                      <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span className="font-medium">{loc.full}</span>
+                    </button>
+                  ))}
+                  {cityResults.length === 0 && (
+                    <div className="px-4 py-3 text-sm text-gray-500 text-center">
+                      No locations found
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -610,7 +649,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 }}
                 className={`flex items-center justify-between h-9 px-3 w-[180px] rounded-lg text-sm font-medium transition-colors whitespace-nowrap ${
                   !isAllTypes
-                    ? "bg-white text-gray-900 border-2 border-gray-900"
+                    ? "bg-white text-gray-900 border-2 border-primary-400"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
@@ -668,7 +707,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 }}
                 className={`flex items-center justify-between h-9 px-3 w-[160px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   selectedRating !== "any"
-                    ? "bg-white text-gray-900 border-2 border-gray-900"
+                    ? "bg-white text-gray-900 border-2 border-primary-400"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
@@ -723,7 +762,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 }}
                 className={`flex items-center justify-between h-9 px-3 w-[160px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   selectedPayment !== "any"
-                    ? "bg-white text-gray-900 border-2 border-gray-900"
+                    ? "bg-white text-gray-900 border-2 border-primary-400"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
@@ -778,7 +817,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 }}
                 className={`flex items-center justify-between h-9 px-3 w-[160px] rounded-lg text-sm font-medium transition-colors overflow-hidden ${
                   sortBy !== "recommended"
-                    ? "bg-white text-gray-900 border-2 border-gray-900"
+                    ? "bg-white text-gray-900 border-2 border-primary-400"
                     : "bg-white border border-gray-300 text-gray-900 hover:border-gray-400"
                 }`}
               >
@@ -898,7 +937,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 {careTypeLabel} in {searchLocation}
               </h1>
               <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-900">
-                {filteredProviders.length} results
+                {filteredProviders.length} {filteredProviders.length === 1 ? "result" : "results"}
               </span>
             </div>
 
@@ -971,22 +1010,26 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 {careTypeLabel} in {searchLocation}
               </h1>
               <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-900">
-                {filteredProviders.length} results
+                {filteredProviders.length} {filteredProviders.length === 1 ? "result" : "results"}
               </span>
             </div>
 
             {filteredProviders.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {filteredProviders.map((provider, index) => (
+                  {paginatedProviders.map((provider, index) => (
                     <ProviderCard key={`${provider.id}-${index}`} provider={provider} />
                   ))}
                 </div>
-                <div className="py-8 text-center">
-                  <button className="px-8 py-3 border border-gray-300 rounded-lg font-medium text-gray-900 hover:border-gray-400 hover:bg-gray-50 transition-all">
-                    Load more providers
-                  </button>
-                </div>
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={filteredProviders.length}
+                  itemsPerPage={PROVIDERS_PER_PAGE}
+                  onPageChange={setCurrentPage}
+                  itemLabel="providers"
+                  className="mt-8"
+                />
               </>
             ) : (
               <EmptyState onClear={clearFilters} />
@@ -1008,7 +1051,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                     {careTypeLabel} in {searchLocation}
                   </h1>
                   <span className="px-3 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-900">
-                    {filteredProviders.length} results
+                    {filteredProviders.length} {filteredProviders.length === 1 ? "result" : "results"}
                   </span>
                 </div>
 
@@ -1025,11 +1068,15 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                         </div>
                       ))}
                     </div>
-                    <div className="py-6 text-center">
-                      <button className="px-8 py-3 border border-gray-300 rounded-lg font-medium text-gray-900 hover:border-gray-400 hover:bg-gray-50 transition-all bg-white">
-                        Load more providers
-                      </button>
-                    </div>
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      totalItems={filteredProviders.length}
+                      itemsPerPage={PROVIDERS_PER_PAGE}
+                      onPageChange={setCurrentPage}
+                      itemLabel="providers"
+                      className="mt-6"
+                    />
                   </>
                 ) : (
                   <EmptyState onClear={clearFilters} />
@@ -1037,80 +1084,14 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
               </div>
             </div>
 
-            {/* Right Side - Map (independent section with rounded corners + inset) */}
+            {/* Right Side - Interactive Map */}
             <div className="hidden lg:flex flex-col w-[600px] h-full pt-6 pb-[90px] pl-0" style={{ paddingRight: "max(calc((100vw - 80rem) / 2 + 2rem), 1rem)" }}>
-              <div className="relative w-full flex-1 min-h-0 rounded-2xl overflow-hidden shadow-sm border border-gray-200">
-                <img
-                  src="https://images.unsplash.com/photo-1524661135-423995f22d0b?w=1200&h=1600&fit=crop"
-                  alt="Map view"
-                  className="absolute inset-0 w-full h-full object-cover opacity-90"
+              <div className="relative w-full flex-1 min-h-0 rounded-2xl overflow-hidden shadow-sm border border-gray-200 isolate">
+                <BrowseMap
+                  providers={filteredProviders}
+                  hoveredProviderId={hoveredProviderId}
+                  onMarkerHover={setHoveredProviderId}
                 />
-
-                {/* Mock Map Markers */}
-                <div className="absolute inset-0 pointer-events-none">
-                  {filteredProviders.slice(0, 15).map((provider, index) => (
-                    <div
-                      key={`marker-${provider.id}-${index}`}
-                      className={`absolute transform -translate-x-1/2 -translate-y-1/2 pointer-events-auto cursor-pointer transition-all duration-200 ${
-                        hoveredProviderId === provider.id ? "z-20 scale-125" : "z-10"
-                      }`}
-                      style={{
-                        top: `${12 + (index % 5) * 18 + Math.sin(index) * 5}%`,
-                        left: `${8 + (index % 6) * 15 + Math.cos(index) * 5}%`,
-                      }}
-                      onMouseEnter={() => setHoveredProviderId(provider.id)}
-                      onMouseLeave={() => setHoveredProviderId(null)}
-                    >
-                      <div
-                        className={`px-3 py-1.5 rounded-full text-sm font-bold shadow-lg transition-all duration-200 ${
-                          hoveredProviderId === provider.id
-                            ? "bg-primary-600 text-white shadow-xl"
-                            : "bg-white text-gray-900 hover:shadow-xl"
-                        }`}
-                      >
-                        {provider.priceRange}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Map Controls */}
-                <div className="absolute top-4 right-4 flex flex-col gap-2">
-                  <button className="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
-                    <svg className="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                  </button>
-                  <button className="w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
-                    <svg className="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                    </svg>
-                  </button>
-                </div>
-
-                <div className="absolute bottom-6 left-4 flex items-center gap-2">
-                  <button className="h-9 px-4 bg-white rounded-lg shadow-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                    </svg>
-                    Fullscreen
-                  </button>
-                  <button className="h-9 px-4 bg-white rounded-lg shadow-lg text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors flex items-center gap-2">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-                    </svg>
-                    Satellite
-                  </button>
-                </div>
-
-                <div className="absolute top-4 left-1/2 -translate-x-1/2">
-                  <button className="h-10 px-5 bg-white rounded-full shadow-lg text-sm font-semibold text-primary-600 hover:bg-gray-50 transition-colors flex items-center gap-2 border border-gray-100">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
-                    Search this area
-                  </button>
-                </div>
               </div>
             </div>
           </div>

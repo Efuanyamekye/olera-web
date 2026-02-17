@@ -21,7 +21,7 @@ export default async function ProfilePage({
   try {
     const supabase = await createClient();
     const { data } = await supabase
-      .from("profiles")
+      .from("business_profiles")
       .select("*")
       .eq("id", id)
       .single<Profile>();

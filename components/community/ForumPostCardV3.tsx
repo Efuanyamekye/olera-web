@@ -125,23 +125,22 @@ export default function ForumPostCardV3({ post, onClick, isSelected, compact }: 
 
   // Full card content
   const cardContent = (
-    <article className={`group bg-white rounded-xl border p-6 transition-all duration-200 ${
+    <article className={`group bg-white rounded-2xl border p-5 transition-all duration-300 ${
       isSelected
-        ? "border-primary-200 shadow-md ring-1 ring-primary-100"
-        : "border-gray-200/60 shadow-sm hover:shadow-lg hover:-translate-y-0.5"
+        ? "border-primary-200 shadow-lg ring-1 ring-primary-100"
+        : "border-gray-200 shadow-sm hover:shadow-xl hover:border-gray-300 hover:-translate-y-1"
     }`}>
       {/* Header: Author + Care Type + Menu */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2.5">
           <AuthorAvatar author={post.author} />
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-gray-900 font-medium">{post.author.displayName}</span>
-            <span className="text-gray-300">·</span>
-            <span className="text-gray-500">{formatTimeAgo(post.createdAt)}</span>
+          <div>
+            <span className="text-gray-900 font-medium text-sm block leading-tight">{post.author.displayName}</span>
+            <span className="text-gray-400 text-xs">{formatTimeAgo(post.createdAt)}</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${careTypeConfig.bgColor} ${careTypeConfig.color}`}>
+          <span className={`text-xs font-medium px-2.5 py-1 rounded-lg ${careTypeConfig.bgColor} ${careTypeConfig.color}`}>
             {careTypeConfig.label}
           </span>
           {/* Menu button */}
@@ -152,7 +151,7 @@ export default function ForumPostCardV3({ post, onClick, isSelected, compact }: 
                 e.preventDefault();
                 setShowMenu(!showMenu);
               }}
-              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+              className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
@@ -176,60 +175,41 @@ export default function ForumPostCardV3({ post, onClick, isSelected, compact }: 
       </div>
 
       {/* Title */}
-      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary-600 transition-colors mb-3 line-clamp-2">
+      <h3 className="text-[17px] font-semibold text-gray-900 group-hover:text-primary-600 transition-colors mb-2 line-clamp-2 leading-snug">
         {post.title}
       </h3>
 
-      {/* Excerpt - LARGER TEXT */}
-      <p className="text-base text-gray-600 leading-relaxed line-clamp-3 mb-4">
+      {/* Excerpt */}
+      <p className="text-[15px] text-gray-500 leading-relaxed line-clamp-2 mb-4">
         {post.excerpt}
       </p>
 
-      {/* Tags */}
-      {post.tags.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.slice(0, 4).map((tag) => (
-            <span
-              key={tag}
-              className="text-xs px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full"
-            >
-              {tag}
-            </span>
-          ))}
-          {post.tags.length > 4 && (
-            <span className="text-xs px-2.5 py-1 text-gray-400">
-              +{post.tags.length - 4} more
-            </span>
-          )}
-        </div>
-      )}
-
       {/* Footer: Engagement metrics */}
-      <div className="flex items-center gap-5 text-sm text-gray-400 pt-3 border-t border-gray-100">
+      <div className="flex items-center gap-4 text-sm text-gray-400">
+        {post.commentCount > 0 ? (
+          <span className="flex items-center gap-1.5 font-medium text-gray-600">
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            {post.commentCount} {post.commentCount === 1 ? "reply" : "replies"}
+          </span>
+        ) : (
+          <span className="flex items-center gap-1.5 text-gray-400">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+            No replies
+          </span>
+        )}
         {post.likeCount > 0 && (
-          <span className="flex items-center gap-1.5 hover:text-gray-600 transition-colors">
+          <span className="flex items-center gap-1.5">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
             </svg>
             {post.likeCount}
           </span>
         )}
-        {post.commentCount > 0 ? (
-          <span className="flex items-center gap-1.5 hover:text-gray-600 transition-colors">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            {post.commentCount} {post.commentCount === 1 ? "reply" : "replies"}
-          </span>
-        ) : (
-          <span className="flex items-center gap-1.5 text-gray-300">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            No replies yet
-          </span>
-        )}
-        <span className="flex items-center gap-1.5 hover:text-gray-600 transition-colors">
+        <span className="flex items-center gap-1.5 ml-auto">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

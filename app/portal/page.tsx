@@ -24,15 +24,25 @@ export default function PortalDashboard() {
     if (!activeProfile || !isSupabaseConfigured()) return;
 
     const fetchCounts = async () => {
-      const supabase = createClient();
-      const column = isProvider ? "to_profile_id" : "from_profile_id";
-      const { count } = await supabase
-        .from("connections")
-        .select("*", { count: "exact", head: true })
-        .eq(column, activeProfile.id)
-        .eq("type", "inquiry");
+      try {
+        console.time("[olera] dashboard: inquiry count");
+        const supabase = createClient();
+        const column = isProvider ? "to_profile_id" : "from_profile_id";
+        const { count, error } = await supabase
+          .from("connections")
+          .select("*", { count: "exact", head: true })
+          .eq(column, activeProfile.id)
+          .eq("type", "inquiry");
+        console.timeEnd("[olera] dashboard: inquiry count");
 
-      setInquiryCount(count ?? 0);
+        if (error) {
+          console.error("[olera] dashboard count error:", error.message);
+          return;
+        }
+        setInquiryCount(count ?? 0);
+      } catch (err) {
+        console.error("[olera] dashboard fetchCounts failed:", err);
+      }
     };
 
     fetchCounts();
@@ -200,6 +210,7 @@ export default function PortalDashboard() {
             description="See how your profile appears to families."
             href={`/provider/${activeProfile.slug}`}
             show={isProvider}
+            target="_blank"
           />
 
           {/* Role-specific discovery actions */}
@@ -250,17 +261,20 @@ function QuickAction({
   description,
   href,
   show,
+  target,
 }: {
   title: string;
   description: string;
   href: string;
   show: boolean;
+  target?: string;
 }) {
   if (!show) return null;
 
   return (
     <Link
       href={href}
+      {...(target ? { target, rel: "noopener noreferrer" } : {})}
       className="block p-6 bg-white rounded-xl border border-gray-200 hover:border-primary-300 hover:shadow-sm transition-all group"
     >
       <h3 className="text-lg font-semibold text-gray-900 group-hover:text-primary-700 mb-1">

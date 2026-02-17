@@ -31,17 +31,23 @@ export default function DiscoverCaregiversPage() {
     }
 
     const fetchCaregivers = async () => {
-      const supabase = createClient();
-      const { data } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("type", "caregiver")
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .limit(50);
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("business_profiles")
+          .select("id, display_name, city, state, type, care_types, metadata, image_url, slug")
+          .eq("type", "caregiver")
+          .eq("is_active", true)
+          .order("created_at", { ascending: false })
+          .limit(50);
 
-      setCaregivers((data as Profile[]) || []);
-      setLoading(false);
+        if (error) console.error("[olera] discover caregivers error:", error.message);
+        setCaregivers((data as Profile[]) || []);
+      } catch (err) {
+        console.error("[olera] discover caregivers failed:", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchCaregivers();
