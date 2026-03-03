@@ -35,12 +35,14 @@ export default function MobileClaimLink({
   }, [showTooltip]);
 
   return (
-    <div className="md:hidden mt-1 relative inline-flex items-center gap-1" ref={tooltipRef}>
+    <div className="md:hidden mt-2 relative inline-flex" ref={tooltipRef}>
       <button
         type="button"
         onClick={() => setShowTooltip((prev) => !prev)}
-        className={`text-xs font-medium inline-flex items-center gap-1 transition-colors ${
-          isClaimed ? "text-primary-600" : "text-gray-400"
+        className={`text-xs font-medium inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full transition-colors ${
+          isClaimed
+            ? "bg-primary-50 text-primary-700 border border-primary-200"
+            : "bg-amber-50 text-amber-700 border border-amber-200"
         }`}
       >
         {isClaimed ? (
@@ -48,11 +50,11 @@ export default function MobileClaimLink({
             <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307z" clipRule="evenodd" />
           </svg>
         ) : (
-          <svg className="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <svg className="w-3.5 h-3.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
           </svg>
         )}
-        {isClaimed ? "Claimed listing" : "Unclaimed listing"}
+        {isClaimed ? "Claimed" : "Unclaimed"}
       </button>
 
       {showTooltip && (
