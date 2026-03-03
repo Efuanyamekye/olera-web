@@ -176,7 +176,7 @@ export default function ManageListingModal({
 
   // Dynamic modal config per view
   const title =
-    view === "choice" ? "Manage this listing" : "Request to hide or remove page";
+    view === "choice" ? "Manage listing" : "Request to hide or remove page";
 
   const modalOnBack =
     view === "removal-form"
@@ -217,74 +217,73 @@ export default function ManageListingModal({
         <div className="pt-2 pb-4">
           {/* CASE 1: Claimed + Owner → Go to Dashboard */}
           {isOwner && (
-            <>
-              <div className="w-full text-left rounded-2xl shadow-md border border-primary-100 bg-gradient-to-br from-primary-50/30 to-white p-7">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center shrink-0">
-                    <svg className="w-6 h-6 text-primary-600" viewBox="0 0 24 24" fill="currentColor">
-                      <path fillRule="evenodd" d="M12.516 2.17a.75.75 0 00-1.032 0 11.209 11.209 0 01-7.877 3.08.75.75 0 00-.722.515A12.74 12.74 0 002.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 00.374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 00-.722-.516l-.143.001c-2.996 0-5.717-1.17-7.734-3.08zm3.094 8.016a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-gray-900 tracking-tight mb-1">
-                      You manage this listing
-                    </h3>
-                    <p className="text-gray-600 text-base leading-relaxed mb-4">
-                      This listing is linked to your account. Visit your dashboard to update information, respond to families, and manage your presence.
-                    </p>
-                    <Button onClick={() => { handleClose(); router.push("/provider"); }}>
-                      Go to Dashboard
-                    </Button>
-                  </div>
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/60 p-5">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    <path fillRule="evenodd" d="M12.516 2.17a.75.75 0 00-1.032 0 11.209 11.209 0 01-7.877 3.08.75.75 0 00-.722.515A12.74 12.74 0 002.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 00.374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 00-.722-.516l-.143.001c-2.996 0-5.717-1.17-7.734-3.08zm3.094 8.016a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-semibold text-primary-900 mb-0.5">
+                    You manage this listing
+                  </h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    This listing is linked to your account. Update info, respond to families, and manage your presence.
+                  </p>
                 </div>
               </div>
-            </>
+              <button
+                type="button"
+                onClick={() => { handleClose(); router.push("/provider"); }}
+                className="w-full py-3 bg-primary-700 hover:bg-primary-800 active:bg-primary-900 text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-1.5"
+              >
+                Go to Dashboard
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           )}
 
           {/* CASE 2: Claimed + NOT Owner → Info + Dispute */}
           {isClaimed && !isOwner && (
-            <>
-              <div className="rounded-2xl shadow-md border border-amber-100 bg-amber-50/30 p-7">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center shrink-0">
-                    <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-gray-900 tracking-tight mb-1">
-                      This listing has been claimed
-                    </h3>
-                    <p className="text-gray-600 text-base leading-relaxed mb-4">
-                      Someone has already verified ownership of <strong>{providerName}</strong>. If you believe this is incorrect, you can dispute the claim.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={handleDisputeClick}
-                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
-                    >
-                      Dispute this claim
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
-                  </div>
+            <div className="rounded-2xl border border-amber-100 bg-amber-50/60 p-5">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-base font-semibold text-gray-900 mb-0.5">
+                    This listing has been claimed
+                  </h3>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Someone has already verified ownership of <strong>{providerName}</strong>. If you believe this is incorrect, you can dispute the claim.
+                  </p>
                 </div>
               </div>
-            </>
+              <button
+                type="button"
+                onClick={handleDisputeClick}
+                className="w-full py-3 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-1.5"
+              >
+                Dispute this claim
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           )}
 
           {/* CASE 3: Unclaimed → Claim card */}
           {!isClaimed && (
-            <button
-              type="button"
-              onClick={handleClaimClick}
-              className="w-full text-left rounded-2xl shadow-sm border border-gray-100 bg-gradient-to-br from-primary-50/30 to-white p-7 hover:shadow-lg hover:border-primary-200 transition-all duration-200 group"
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary-200 transition-colors">
+            <div className="rounded-2xl border border-primary-100 bg-primary-50/60 p-5">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shrink-0">
                   <svg
-                    className="w-6 h-6 text-primary-600"
+                    className="w-5 h-5 text-white"
                     viewBox="0 0 24 24"
                     fill="currentColor"
                   >
@@ -296,58 +295,35 @@ export default function ManageListingModal({
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 tracking-tight mb-1">
+                  <h3 className="text-base font-semibold text-primary-900 mb-0.5">
                     Claim this listing
                   </h3>
-                  <p className="text-gray-600 text-base leading-relaxed mb-4">
-                    Take control of your page to update information, respond to
-                    families, and manage your online presence.
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Manage your page, respond to families, and update your info
                   </p>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600 group-hover:text-primary-700 transition-colors">
-                    Get started
-                    <svg
-                      className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2.5}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </span>
                 </div>
               </div>
-            </button>
+              <button
+                type="button"
+                onClick={handleClaimClick}
+                className="w-full py-3 bg-primary-700 hover:bg-primary-800 active:bg-primary-900 text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-1.5"
+              >
+                Get started
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           )}
 
           {/* Separator + removal link — secondary action (always visible) */}
-          <div className="mt-8 pt-6 border-t border-gray-100">
-            <p className="text-sm text-gray-500 mb-1">
-              Need to request a change instead?
-            </p>
+          <div className="mt-5 pt-5 border-t border-gray-100">
             <button
               type="button"
               onClick={() => setView("removal-form")}
-              className="inline-flex items-center gap-1 text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors"
+              className="w-full text-center text-sm text-gray-400 hover:text-gray-600 transition-colors"
             >
               Request to hide or remove this page
-              <svg
-                className="w-3.5 h-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
             </button>
           </div>
         </div>
