@@ -16,6 +16,8 @@ import QASectionV2 from "@/components/providers/QASectionV2";
 import SectionNav from "@/components/providers/SectionNav";
 import type { SectionItem } from "@/components/providers/SectionNav";
 import ClaimBadge from "@/components/providers/ClaimBadge";
+import MobileGalleryActionBar from "@/components/providers/MobileGalleryActionBar";
+import MobileStickyBottomCTA from "@/components/providers/MobileStickyBottomCTA";
 import { ManagePageButton } from "@/components/providers/ManageListingModal";
 import SectionEmptyState from "@/components/providers/SectionEmptyState";
 import ReviewsSection from "@/components/providers/ReviewsSection";
@@ -512,7 +514,7 @@ export default async function ProviderPage({
   } : null;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-20 md:pb-0">
       {/* Structured data */}
       <script
         type="application/ld+json"
@@ -538,7 +540,7 @@ export default async function ProviderPage({
 
       {/* ===== Hero Zone — Vanilla Background ===== */}
       <div className="bg-vanilla-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-0 md:pt-6 pb-8">
 
           {/* Breadcrumbs */}
           <Breadcrumbs
@@ -551,14 +553,25 @@ export default async function ProviderPage({
           {/* ── Hero (full width, above the grid) ── */}
           <div className="flex flex-col md:flex-row gap-6">
             {/* Gallery */}
-            <div className="flex-shrink-0 relative w-full md:w-[448px]">
+            <div className="flex-shrink-0 relative w-full md:w-[448px] -mx-4 sm:-mx-6 md:mx-0">
               <ProviderHeroGallery
                 images={images}
                 providerName={profile.display_name}
                 category={profile.category}
               />
+              <MobileGalleryActionBar
+                provider={{
+                  providerId: profile.id,
+                  slug: profile.slug,
+                  name: profile.display_name,
+                  location: locationStr,
+                  careTypes: profile.care_types || [],
+                  image: images[0] || null,
+                  rating: rating || undefined,
+                }}
+              />
               {images.length > 0 && (
-                <div className="absolute top-4 left-4 z-20">
+                <div className="absolute top-14 md:top-4 left-4 z-20">
                   <ClaimBadge
                     claimState={profile.claim_state}
                     providerName={profile.display_name}
@@ -575,18 +588,20 @@ export default async function ProviderPage({
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight leading-tight font-display">
                   {profile.display_name}
                 </h1>
-                <SaveButton
-                  provider={{
-                    providerId: profile.id,
-                    slug: profile.slug,
-                    name: profile.display_name,
-                    location: locationStr,
-                    careTypes: profile.care_types || [],
-                    image: images[0] || null,
-                    rating: rating || undefined,
-                  }}
-                  variant="pill"
-                />
+                <div className="hidden md:block">
+                  <SaveButton
+                    provider={{
+                      providerId: profile.id,
+                      slug: profile.slug,
+                      name: profile.display_name,
+                      location: locationStr,
+                      careTypes: profile.care_types || [],
+                      image: images[0] || null,
+                      rating: rating || undefined,
+                    }}
+                    variant="pill"
+                  />
+                </div>
               </div>
 
               {/* Context line: category · location · rating (if available) */}
@@ -929,6 +944,12 @@ export default async function ProviderPage({
 
         </div>
       </div>
+
+      {/* Mobile sticky bottom CTA */}
+      <MobileStickyBottomCTA
+        providerName={profile.display_name}
+        priceRange={priceRange}
+      />
     </div>
   );
 }

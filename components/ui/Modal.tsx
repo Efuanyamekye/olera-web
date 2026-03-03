@@ -116,7 +116,7 @@ export default function Modal({
   const modalContent = (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center sm:p-4"
       role="dialog"
       aria-modal="true"
       aria-label={title}
@@ -136,13 +136,21 @@ export default function Modal({
       <div
         ref={contentRef}
         className={[
-          "relative bg-white rounded-2xl shadow-2xl w-full min-h-[50vh] max-h-[85vh] flex flex-col",
-          "animate-slide-up",
+          "relative bg-white shadow-2xl w-full flex flex-col",
+          // Mobile: bottom sheet
+          "rounded-t-2xl max-h-[92vh] animate-sheet-up",
+          // Desktop: centered modal
+          "sm:rounded-2xl sm:min-h-[50vh] sm:max-h-[85vh] sm:animate-modal-pop",
           sizeClasses[size],
         ].join(" ")}
       >
+        {/* Drag handle — mobile only */}
+        <div className="sm:hidden flex justify-center pt-2 pb-1 shrink-0">
+          <div className="w-10 h-1 rounded-full bg-gray-300" />
+        </div>
+
         {/* Header — pinned top */}
-        <div className="flex items-center gap-3 px-7 pt-6 pb-0 shrink-0">
+        <div className="flex items-center gap-3 px-5 sm:px-7 pt-4 sm:pt-6 pb-0 shrink-0">
           {/* Back button */}
           {onBack && (
             <button
@@ -158,7 +166,7 @@ export default function Modal({
 
           {/* Title (left-aligned) */}
           {title ? (
-            <h2 className="text-[28px] font-semibold text-gray-900 flex-1">{title}</h2>
+            <h2 className="text-xl sm:text-[28px] font-semibold text-gray-900 flex-1">{title}</h2>
           ) : (
             <div className="flex-1" />
           )}
@@ -176,13 +184,13 @@ export default function Modal({
         </div>
 
         {/* Scrollable body */}
-        <div className={`px-7 pt-2 flex-1 min-h-0 overflow-y-auto ${footer ? "" : "pb-7"}`}>
+        <div className={`px-5 sm:px-7 pt-2 flex-1 min-h-0 overflow-y-auto ${footer ? "" : "pb-5 sm:pb-7"}`}>
           {children}
         </div>
 
         {/* Sticky footer — pinned bottom */}
         {footer && (
-          <div className="px-7 pb-7 shrink-0">{footer}</div>
+          <div className="px-5 sm:px-7 pb-5 sm:pb-7 shrink-0">{footer}</div>
         )}
       </div>
     </div>

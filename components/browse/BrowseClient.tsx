@@ -66,7 +66,8 @@ function getCareTypeLabel(id: string): string {
   return ct?.label || "All Care Types";
 }
 
-const PROVIDERS_PER_PAGE = 24;
+const PROVIDERS_PER_PAGE_DESKTOP = 24;
+const PROVIDERS_PER_PAGE_MOBILE = 14;
 
 // Helper function to parse price for sorting
 function parsePrice(price: string): number {
@@ -101,6 +102,19 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
   const [sortBy, setSortBy] = useState("recommended");
   const [hoveredProviderId, setHoveredProviderId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [providersPerPage, setProvidersPerPage] = useState(PROVIDERS_PER_PAGE_DESKTOP);
+
+  // Responsive page size
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 639px)");
+    const update = () => {
+      setProvidersPerPage(mql.matches ? PROVIDERS_PER_PAGE_MOBILE : PROVIDERS_PER_PAGE_DESKTOP);
+      setCurrentPage(1);
+    };
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
 
   // Dropdown states
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
@@ -316,7 +330,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
   }, [providers, selectedRating, sortBy]);
 
   // Pagination with badge assignment (top 3 highest-rated in full result set)
-  const totalPages = Math.ceil(filteredProviders.length / PROVIDERS_PER_PAGE);
+  const totalPages = Math.ceil(filteredProviders.length / providersPerPage);
   const topRatedIds = useMemo(() => {
     return new Set(
       filteredProviders
@@ -326,14 +340,14 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
     );
   }, [filteredProviders]);
   const paginatedProviders = useMemo(() => {
-    const startIndex = (currentPage - 1) * PROVIDERS_PER_PAGE;
+    const startIndex = (currentPage - 1) * providersPerPage;
     return filteredProviders
-      .slice(startIndex, startIndex + PROVIDERS_PER_PAGE)
+      .slice(startIndex, startIndex + providersPerPage)
       .map((p) => ({
         ...p,
         badge: topRatedIds.has(p.id) ? "Top Rated" : undefined,
       }));
-  }, [filteredProviders, currentPage, topRatedIds]);
+  }, [filteredProviders, currentPage, topRatedIds, providersPerPage]);
 
   // Reset page when filters or location change
   useEffect(() => {
@@ -754,7 +768,7 @@ export default function BrowseClient({ careType, searchQuery }: BrowseClientProp
                 currentPage={currentPage}
                 totalPages={totalPages}
                 totalItems={filteredProviders.length}
-                itemsPerPage={PROVIDERS_PER_PAGE}
+                itemsPerPage={providersPerPage}
                 onPageChange={setCurrentPage}
                 itemLabel="providers"
                 className="mt-6"

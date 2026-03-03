@@ -126,9 +126,9 @@ export default function HeroSection() {
         <img
           src="/images/hero-home.jpg"
           alt="Family caring for loved one"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover object-[center_30%] sm:object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent sm:bg-gradient-to-r sm:from-black/60 sm:via-black/30 sm:to-transparent" />
       </div>
 
       {/* Content — left-aligned, bottom-anchored */}
@@ -192,9 +192,14 @@ export default function HeroSection() {
                             setShowLocationDropdown(false);
                           }
                         }}
-                        onFocus={() => {
+                        onFocus={(e) => {
                           setShowLocationDropdown(true);
                           preloadCities();
+                          // On mobile, scroll the form to the top of the viewport
+                          // so the dropdown isn't hidden behind the keyboard
+                          setTimeout(() => {
+                            e.target.closest("form")?.scrollIntoView({ block: "start", behavior: "smooth" });
+                          }, 300);
                         }}
                         placeholder="City or ZIP code"
                         className="w-full ml-3 bg-transparent border-none text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 text-base"

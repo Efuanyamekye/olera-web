@@ -63,7 +63,7 @@ export default function Pagination({
   };
 
   return (
-    <div className={`flex items-center justify-between ${className}`}>
+    <div className={`flex flex-col items-center gap-3 sm:flex-row sm:justify-between ${className}`}>
       {/* Item count */}
       {showItemCount && (
         <span className="text-sm text-gray-500">

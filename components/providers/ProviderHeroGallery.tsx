@@ -41,7 +41,7 @@ export default function ProviderHeroGallery({ images, providerName, category }: 
   // 0 valid images — gradient placeholder with avatar circle + hint
   if (validImages.length === 0) {
     return (
-      <div className="w-full max-w-md aspect-[3/2] rounded-2xl bg-gradient-to-br from-primary-100 via-primary-50 to-warm-50 flex flex-col items-center justify-center">
+      <div className="w-full aspect-[3/2] rounded-none md:max-w-md md:rounded-2xl bg-gradient-to-br from-primary-100 via-primary-50 to-warm-50 flex flex-col items-center justify-center">
         <div className="w-20 h-20 rounded-full bg-white/80 flex items-center justify-center mb-3 shadow-sm">
           <span className="text-3xl font-bold text-primary-400">
             {getInitials(providerName)}
@@ -61,7 +61,7 @@ export default function ProviderHeroGallery({ images, providerName, category }: 
 
   // 1+ images — fixed aspect ratio with navigation
   return (
-    <div className="relative w-full max-w-md aspect-[3/2] rounded-2xl overflow-hidden bg-gray-100">
+    <div className="relative w-full aspect-[3/2] rounded-none md:max-w-md md:rounded-2xl overflow-hidden bg-gray-100">
       <Image
         key={validImages[safeIndex]}
         src={validImages[safeIndex]}
