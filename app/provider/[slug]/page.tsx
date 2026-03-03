@@ -686,14 +686,26 @@ export default async function ProviderPage({
                 )}
               </div>
 
-              {/* Highlight badges — real data + category-inferred */}
-              <div id="highlights" className="grid grid-cols-2 gap-2.5 mt-4 scroll-mt-20">
-                {highlights.map((label) => (
-                  <div key={label} className="bg-white border border-gray-200 rounded-lg py-3 px-3 flex items-center gap-2.5">
-                    <HighlightIcon label={label} className="w-5 h-5 text-primary-500 flex-shrink-0" />
-                    <span className="text-sm text-gray-600">{label}</span>
-                  </div>
-                ))}
+              {/* Highlight badges */}
+              <div id="highlights" className="scroll-mt-20">
+                {/* Mobile: 2-col grid, Zillow-style filled cards */}
+                <div className="md:hidden grid grid-cols-2 gap-2.5 mt-4">
+                  {highlights.map((label) => (
+                    <div key={label} className="bg-gray-50 rounded-xl py-4 px-3.5 flex items-center gap-3">
+                      <HighlightIcon label={label} className="w-6 h-6 text-gray-700 flex-shrink-0" />
+                      <span className="text-[15px] font-semibold text-gray-800 leading-tight">{label}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Desktop: 2-column grid */}
+                <div className="hidden md:grid grid-cols-2 gap-2.5 mt-4">
+                  {highlights.map((label) => (
+                    <div key={label} className="bg-white border border-gray-200 rounded-lg py-3 px-3 flex items-center gap-2.5">
+                      <HighlightIcon label={label} className="w-5 h-5 text-primary-500 flex-shrink-0" />
+                      <span className="text-sm text-gray-600">{label}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Managed by — only show when staff data exists */}
