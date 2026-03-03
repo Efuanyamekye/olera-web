@@ -43,18 +43,18 @@ export default function MobileStickyBottomCTA({
         className="bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.08)]"
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
-        <div className="flex items-center gap-3 px-4 py-3">
+        <div className="flex items-center gap-4 px-4 py-3.5">
           <div className="flex-1 min-w-0">
             {priceRange ? (
-              <p className="text-sm font-semibold text-gray-900 truncate">{priceRange}</p>
+              <p className="text-base font-bold text-gray-900 truncate">{priceRange}</p>
             ) : (
-              <p className="text-sm text-gray-500 truncate">{providerName}</p>
+              <p className="text-sm font-medium text-gray-500 truncate">Contact for pricing</p>
             )}
           </div>
 
           <button
             onClick={scrollToConnectionCard}
-            className="flex-shrink-0 px-6 py-2.5 bg-primary-600 hover:bg-primary-500 text-white rounded-lg text-sm font-semibold transition-colors"
+            className="flex-shrink-0 px-7 py-3 bg-primary-600 hover:bg-primary-500 active:bg-primary-700 text-white rounded-xl text-base font-semibold transition-colors"
           >
             Connect
           </button>
