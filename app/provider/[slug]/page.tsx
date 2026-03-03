@@ -19,6 +19,7 @@ import ClaimBadge from "@/components/providers/ClaimBadge";
 import MobileGalleryActionBar from "@/components/providers/MobileGalleryActionBar";
 import MobileStickyBottomCTA from "@/components/providers/MobileStickyBottomCTA";
 import MobileClaimLink from "@/components/providers/MobileClaimLink";
+import PriceEstimate from "@/components/providers/PriceEstimate";
 import { ManagePageButton } from "@/components/providers/ManageListingModal";
 import SectionEmptyState from "@/components/providers/SectionEmptyState";
 import ReviewsSection from "@/components/providers/ReviewsSection";
@@ -630,18 +631,7 @@ export default async function ProviderPage({
 
               {/* Price estimate with tooltip, or contact-for-pricing */}
               {hasPriceRange ? (
-                <div className="relative group/price inline-flex items-center gap-1.5 mt-1">
-                  <p className="text-lg font-semibold text-gray-900">{priceRange}</p>
-                  <span className="text-xs text-gray-400 font-normal self-center">est.</span>
-                  <svg className="w-3.5 h-3.5 text-gray-300 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div className="absolute left-0 top-full mt-1 z-30 hidden group-hover/price:block">
-                    <div className="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg">
-                      Price is an estimate and may vary. Contact the provider for exact rates.
-                    </div>
-                  </div>
-                </div>
+                <PriceEstimate priceRange={priceRange!} />
               ) : (
                 <p className="text-sm text-gray-400 mt-1">Contact for pricing</p>
               )}
