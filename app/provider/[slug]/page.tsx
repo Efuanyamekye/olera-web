@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -19,6 +18,7 @@ import type { SectionItem } from "@/components/providers/SectionNav";
 import ClaimBadge from "@/components/providers/ClaimBadge";
 import MobileGalleryActionBar from "@/components/providers/MobileGalleryActionBar";
 import MobileStickyBottomCTA from "@/components/providers/MobileStickyBottomCTA";
+import MobileClaimLink from "@/components/providers/MobileClaimLink";
 import { ManagePageButton } from "@/components/providers/ManageListingModal";
 import SectionEmptyState from "@/components/providers/SectionEmptyState";
 import ReviewsSection from "@/components/providers/ReviewsSection";
@@ -651,35 +651,12 @@ export default async function ProviderPage({
                 <p className="text-sm text-gray-400 mt-0.5">{profile.address}</p>
               )}
 
-              {/* Claim status — inline link with tooltip (mobile), badge stays on image for desktop */}
-              <div className="md:hidden mt-1 relative group/claim inline-flex items-center gap-1">
-                <Link
-                  href={`/for-providers/claim/${profile.slug}`}
-                  className={`text-xs font-medium inline-flex items-center gap-1 ${
-                    profile.claim_state === "claimed"
-                      ? "text-primary-600"
-                      : "text-gray-400 hover:text-gray-500"
-                  } transition-colors`}
-                >
-                  {profile.claim_state === "claimed" ? (
-                    <svg className="w-3.5 h-3.5 text-primary-500" viewBox="0 0 24 24" fill="currentColor">
-                      <path fillRule="evenodd" d="M8.603 3.799A4.49 4.49 0 0112 2.25c1.357 0 2.573.6 3.397 1.549a4.49 4.49 0 013.498 1.307 4.491 4.491 0 011.307 3.497A4.49 4.49 0 0121.75 12a4.49 4.49 0 01-1.549 3.397 4.491 4.491 0 01-1.307 3.497 4.491 4.491 0 01-3.497 1.307A4.49 4.49 0 0112 21.75a4.49 4.49 0 01-3.397-1.549 4.49 4.49 0 01-3.498-1.306 4.491 4.491 0 01-1.307-3.498A4.49 4.49 0 012.25 12c0-1.357.6-2.573 1.549-3.397a4.49 4.49 0 011.307-3.497 4.49 4.49 0 013.497-1.307z" clipRule="evenodd" />
-                    </svg>
-                  ) : (
-                    <svg className="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
-                    </svg>
-                  )}
-                  {profile.claim_state === "claimed" ? "Claimed listing" : "Unclaimed listing"}
-                </Link>
-                <div className="absolute left-0 top-full mt-1 z-30 hidden group-hover/claim:block">
-                  <div className="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 w-56 shadow-lg">
-                    {profile.claim_state === "claimed"
-                      ? `This listing is managed by ${profile.display_name}. Information is kept up to date.`
-                      : "This listing hasn\u2019t been claimed yet. Information may be outdated."}
-                  </div>
-                </div>
-              </div>
+              {/* Claim status — tap-friendly tooltip on mobile, badge stays on image for desktop */}
+              <MobileClaimLink
+                claimState={profile.claim_state}
+                providerName={profile.display_name}
+                claimUrl={`/for-providers/claim/${profile.slug}`}
+              />
 
               {/* Highlight badges — real data + category-inferred */}
               <div id="highlights" className="grid grid-cols-2 gap-2.5 mt-4 scroll-mt-20">
