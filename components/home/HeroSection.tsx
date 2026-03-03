@@ -126,9 +126,9 @@ export default function HeroSection() {
         <img
           src="/images/hero-home.jpg"
           alt="Family caring for loved one"
-          className="absolute inset-0 w-full h-full object-cover object-[center_30%] sm:object-center"
+          className="absolute inset-0 w-full h-full object-cover object-[center_20%] sm:object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent sm:bg-gradient-to-r sm:from-black/60 sm:via-black/30 sm:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/45 via-[35%] to-transparent sm:bg-gradient-to-r sm:from-black/60 sm:via-black/30 sm:to-transparent" />
       </div>
 
       {/* Content — left-aligned, bottom-anchored */}
