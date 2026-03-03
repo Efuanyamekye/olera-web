@@ -606,47 +606,85 @@ export default async function ProviderPage({
                 </div>
               </div>
 
-              {/* Context line: category · location · rating (if available) */}
-              <div className="flex items-center flex-wrap gap-x-2 gap-y-1 mt-2 text-sm text-gray-500">
-                {categoryLabel && (
-                  <>
-                    <span className="text-gray-700 font-medium">{categoryLabel}</span>
-                    {(locationStr || hasRating) && <span className="text-gray-300">·</span>}
-                  </>
-                )}
-                {locationStr && (
-                  <>
-                    <span>{locationStr}</span>
-                    {hasRating && <span className="text-gray-300">·</span>}
-                  </>
-                )}
-                {hasRating && (
-                  <span className="flex items-center gap-1">
-                    <StarIcon className="w-4 h-4 text-primary-500" />
-                    <span className="font-semibold text-gray-900">{rating!.toFixed(1)}</span>
-                    {reviewCount != null && <span>({reviewCount})</span>}
-                  </span>
-                )}
+              {/* ── Mobile identity layout ── */}
+              <div className="md:hidden">
+                {/* Row 1: Category · Location · Address */}
+                <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-1.5 text-sm text-gray-500">
+                  {categoryLabel && (
+                    <>
+                      <span className="text-gray-700 font-medium">{categoryLabel}</span>
+                      {locationStr && <span className="text-gray-300">·</span>}
+                    </>
+                  )}
+                  {locationStr && <span>{locationStr}</span>}
+                  {profile.address && (
+                    <>
+                      <span className="text-gray-300">·</span>
+                      <span className="truncate max-w-[180px]">{profile.address}</span>
+                    </>
+                  )}
+                </div>
+
+                {/* Row 2: Price (left) — Rating (right) */}
+                <div className="flex items-center justify-between mt-3">
+                  <div>
+                    {hasPriceRange ? (
+                      <PriceEstimate priceRange={priceRange!} />
+                    ) : (
+                      <p className="text-sm text-gray-400">Contact for pricing</p>
+                    )}
+                  </div>
+                  {hasRating && (
+                    <span className="flex items-center gap-1.5">
+                      <StarIcon className="w-5 h-5 text-primary-500" />
+                      <span className="text-base font-bold text-gray-900">{rating!.toFixed(1)}</span>
+                      {reviewCount != null && <span className="text-sm text-gray-400">({reviewCount})</span>}
+                    </span>
+                  )}
+                </div>
+
+                {/* Row 3: Claim status */}
+                <MobileClaimLink
+                  claimState={profile.claim_state}
+                  providerName={profile.display_name}
+                  claimUrl={`/for-providers/claim/${profile.slug}`}
+                />
               </div>
 
-              {/* Price estimate with tooltip, or contact-for-pricing */}
-              {hasPriceRange ? (
-                <PriceEstimate priceRange={priceRange!} />
-              ) : (
-                <p className="text-sm text-gray-400 mt-1">Contact for pricing</p>
-              )}
+              {/* ── Desktop identity layout (unchanged) ── */}
+              <div className="hidden md:block">
+                <div className="flex items-center flex-wrap gap-x-2 gap-y-1 mt-2 text-sm text-gray-500">
+                  {categoryLabel && (
+                    <>
+                      <span className="text-gray-700 font-medium">{categoryLabel}</span>
+                      {(locationStr || hasRating) && <span className="text-gray-300">·</span>}
+                    </>
+                  )}
+                  {locationStr && (
+                    <>
+                      <span>{locationStr}</span>
+                      {hasRating && <span className="text-gray-300">·</span>}
+                    </>
+                  )}
+                  {hasRating && (
+                    <span className="flex items-center gap-1">
+                      <StarIcon className="w-4 h-4 text-primary-500" />
+                      <span className="font-semibold text-gray-900">{rating!.toFixed(1)}</span>
+                      {reviewCount != null && <span>({reviewCount})</span>}
+                    </span>
+                  )}
+                </div>
 
-              {/* Address */}
-              {profile.address && (
-                <p className="text-sm text-gray-400 mt-0.5">{profile.address}</p>
-              )}
+                {hasPriceRange ? (
+                  <PriceEstimate priceRange={priceRange!} />
+                ) : (
+                  <p className="text-sm text-gray-400 mt-1">Contact for pricing</p>
+                )}
 
-              {/* Claim status — tap-friendly tooltip on mobile, badge stays on image for desktop */}
-              <MobileClaimLink
-                claimState={profile.claim_state}
-                providerName={profile.display_name}
-                claimUrl={`/for-providers/claim/${profile.slug}`}
-              />
+                {profile.address && (
+                  <p className="text-sm text-gray-400 mt-0.5">{profile.address}</p>
+                )}
+              </div>
 
               {/* Highlight badges — real data + category-inferred */}
               <div id="highlights" className="grid grid-cols-2 gap-2.5 mt-4 scroll-mt-20">
