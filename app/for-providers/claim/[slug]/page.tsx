@@ -692,67 +692,91 @@ export default function ClaimPage() {
 
   // Info + Verify steps
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-      <Link
-        href={`/provider/${slug}`}
-        className="text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1 mb-8"
-      >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        Back to listing
-      </Link>
+    <>
+      {/* Page content — padded bottom for sticky button on info step */}
+      <div className={`max-w-lg mx-auto px-4 sm:px-6 py-8 ${step === "info" ? "pb-36" : "pb-12"}`}>
+        <Link
+          href={`/provider/${slug}`}
+          className="text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center gap-1 mb-6"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to listing
+        </Link>
 
-      {/* Provider card (both steps) */}
-      {provider && step === "info" && (
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-8">
-          {getPrimaryImage(provider) && (
-            <div className="h-48 bg-gray-200">
-              <img
-                src={getPrimaryImage(provider)!}
-                alt={provider.provider_name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          )}
-          <div className="p-6 md:p-8">
-            <div className="flex items-center gap-3 flex-wrap mb-2">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                {provider.provider_name}
-              </h1>
+        {/* ── Info Step ── */}
+        {step === "info" && provider && (
+          <div className="animate-step-in">
+            {/* Compact provider card */}
+            <div className="flex items-center gap-3 border border-gray-200 rounded-xl p-3 mb-8">
+              <div className="w-12 h-12 rounded-lg bg-gray-100 shrink-0 overflow-hidden">
+                {getPrimaryImage(provider) ? (
+                  <img
+                    src={getPrimaryImage(provider)!}
+                    alt={provider.provider_name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-300">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-900 truncate">{provider.provider_name}</p>
+                {(provider.address || provider.city) && (
+                  <p className="text-xs text-gray-500 truncate">
+                    {[provider.address, provider.city, provider.state].filter(Boolean).join(", ")}
+                  </p>
+                )}
+              </div>
               <Badge variant="unclaimed">Unclaimed</Badge>
             </div>
-            {(provider.city || provider.state) && (
-              <p className="text-lg text-gray-600 mb-2">
-                {[provider.address, provider.city, provider.state].filter(Boolean).join(", ")}
-                {provider.zipcode && ` ${provider.zipcode}`}
-              </p>
-            )}
-            {provider.provider_description && (
-              <p className="text-gray-600 mb-4 line-clamp-3">{provider.provider_description}</p>
-            )}
+
+            {/* Heading */}
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Verify your ownership</h1>
+            <p className="text-gray-500 mb-8 leading-relaxed">
+              Confirm you represent this organization to manage its listing and respond to families.
+            </p>
+
+            {/* Numbered steps */}
+            <div className="space-y-0">
+              {/* Step 1 */}
+              <div className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white text-sm font-bold shrink-0">
+                    1
+                  </div>
+                  <div className="w-px flex-1 bg-gray-200 my-1.5 min-h-[32px]" />
+                </div>
+                <div className="pb-6 pt-0.5">
+                  <p className="font-semibold text-gray-900 text-base">Receive a verification code</p>
+                  <p className="text-sm text-gray-500 mt-0.5">
+                    We&apos;ll email a code to the address on file
+                  </p>
+                </div>
+              </div>
+              {/* Step 2 */}
+              <div className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full border-2 border-gray-200 flex items-center justify-center text-gray-400 text-sm font-semibold shrink-0">
+                    2
+                  </div>
+                </div>
+                <div className="pt-0.5">
+                  <p className="font-semibold text-gray-900 text-base">Enter the code &amp; claim</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Start managing your listing right away</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Info step — CTA */}
-      {step === "info" && (
-        <div className="bg-primary-50/60 shadow-sm rounded-2xl p-6 md:p-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            Is this your organization?
-          </h2>
-          <p className="text-gray-600 mb-6">
-            Verify your ownership to take control of this listing. We&apos;ll send a verification code to the email we have on file for this organization.
-          </p>
-          <Button size="lg" fullWidth onClick={() => setStep("verify")}>
-            Verify to claim this listing
-          </Button>
-        </div>
-      )}
-
-      {/* Verify step */}
-      {step === "verify" && (
-        <div className="max-w-lg mx-auto">
+        {/* ── Verify Step ── */}
+        {step === "verify" && (
           <ClaimVerifyForm
             providerName={provider?.provider_name || ""}
             emailHint={verifyEmailHint}
@@ -781,8 +805,34 @@ export default function ClaimPage() {
             }}
             noAccessSuccess={noAccessSuccess}
           />
+        )}
+      </div>
+
+      {/* ── Sticky CTA (info step only) ── */}
+      {step === "info" && (
+        <div
+          className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 pt-4"
+          style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)" }}
+        >
+          <div className="max-w-lg mx-auto">
+            <button
+              onClick={() => setStep("verify")}
+              className="w-full py-4 bg-primary-700 hover:bg-primary-800 active:bg-primary-900 text-white rounded-xl text-base font-semibold transition-colors flex items-center justify-center gap-2"
+            >
+              Send verification code
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+            <p className="text-xs text-gray-400 text-center mt-2.5 flex items-center justify-center gap-1.5">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              Your information is secure and never shared
+            </p>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
