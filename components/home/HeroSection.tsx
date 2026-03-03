@@ -128,23 +128,23 @@ export default function HeroSection() {
           alt="Family caring for loved one"
           className="absolute inset-0 w-full h-full object-cover object-[center_30%] sm:object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent sm:bg-gradient-to-r sm:from-black/60 sm:via-black/30 sm:to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent sm:bg-gradient-to-r sm:from-black/60 sm:via-black/30 sm:to-transparent" />
       </div>
 
       {/* Content — left-aligned, bottom-anchored */}
-      <div className="relative z-10 flex flex-col justify-end h-full min-h-[400px] sm:min-h-[460px] lg:min-h-[520px] pb-10 sm:pb-14 lg:pb-16">
+      <div className="relative z-10 flex flex-col justify-end h-full min-h-[400px] sm:min-h-[460px] lg:min-h-[520px] pb-6 sm:pb-14 lg:pb-16">
         <div className="max-w-7xl mx-auto w-full relative px-4 sm:px-6 lg:px-8">
           <div className="max-w-xl">
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-white">
               Find the right care<br />
               <span className="text-primary-200">for your loved one</span>
             </h1>
-            <p className="mt-3 text-base sm:text-lg text-white/80 max-w-md leading-relaxed">
+            <p className="mt-1 sm:mt-3 text-base sm:text-lg text-white/80 max-w-md leading-relaxed">
               Home care, assisted living, memory care, and more.
             </p>
 
             {/* Search Bar */}
-            <div className="mt-5 w-full">
+            <div className="mt-3 sm:mt-5 w-full">
               <form onSubmit={handleSearch}>
                 <div className="bg-white/95 backdrop-blur-sm shadow-2xl p-3 flex flex-col sm:flex-row sm:items-center gap-3 rounded-2xl">
                   {/* Location Input with Dropdown */}
