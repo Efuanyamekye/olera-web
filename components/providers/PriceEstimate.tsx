@@ -26,7 +26,7 @@ export default function PriceEstimate({ priceRange }: PriceEstimateProps) {
   }, [showTooltip]);
 
   return (
-    <div className="relative inline-flex items-center gap-1.5 mt-1" ref={ref}>
+    <div className="relative inline-flex items-center gap-1.5" ref={ref}>
       <p className="text-lg font-semibold text-gray-900">{priceRange}</p>
       <span className="text-xs text-gray-400 font-normal self-center">est.</span>
       <button

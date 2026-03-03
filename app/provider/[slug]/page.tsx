@@ -954,8 +954,8 @@ export default async function ProviderPage({
             </div>
           </div>
 
-          {/* ========== Right Column — Sticky Sidebar ========== */}
-          <div className="lg:col-span-1 self-stretch">
+          {/* ========== Right Column — Sticky Sidebar (hidden on mobile) ========== */}
+          <div className="hidden md:block lg:col-span-1 self-stretch">
             <div id="connection-card" className="sticky top-24">
               <ConnectionCardWithRedirect
                 providerId={profile.id}
@@ -993,10 +993,20 @@ export default async function ProviderPage({
         </div>
       </div>
 
-      {/* Mobile sticky bottom CTA */}
+      {/* Mobile sticky bottom CTA — opens bottom sheet with ConnectionCard */}
       <MobileStickyBottomCTA
         providerName={profile.display_name}
         priceRange={priceRange}
+        providerId={profile.id}
+        providerSlug={profile.slug}
+        oleraScore={oleraScore}
+        reviewCount={meta?.review_count}
+        phone={profile.phone}
+        acceptedPayments={acceptedPayments}
+        careTypes={profile.care_types}
+        providerCategory={profile.category}
+        providerCity={profile.city}
+        providerState={profile.state}
       />
     </div>
   );

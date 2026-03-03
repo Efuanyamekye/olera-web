@@ -2,6 +2,9 @@
 
 /**
  * Button that scrolls to the ConnectionCard sidebar and briefly highlights it.
+ * On mobile (< md), opens the ConnectionCard bottom sheet instead since the
+ * sidebar is hidden.
+ *
  * Used by "Get a custom quote", "Book a consultation", and "Connect with us".
  */
 export default function ScrollToConnectionCard({
@@ -12,6 +15,13 @@ export default function ScrollToConnectionCard({
   className?: string;
 }) {
   function handleClick() {
+    // On mobile (< md breakpoint), the sidebar is hidden — open bottom sheet instead
+    if (window.innerWidth < 768) {
+      window.dispatchEvent(new CustomEvent("open-connection-sheet"));
+      return;
+    }
+
+    // Desktop: scroll to sidebar card and highlight
     const el = document.getElementById("connection-card");
     if (!el) return;
 

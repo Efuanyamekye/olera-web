@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
@@ -87,6 +87,13 @@ export default function ManageListingModal({
   // Ownership detection
   const isClaimed = claimState === "claimed";
   const isOwner = isClaimed && !!account && !!claimAccountId && account.id === claimAccountId;
+
+  // Scroll modal body to top when view changes
+  const viewContentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const scrollable = viewContentRef.current?.closest(".overflow-y-auto");
+    if (scrollable) scrollable.scrollTop = 0;
+  }, [view]);
 
   // Removal form state
   const [fullName, setFullName] = useState("");
@@ -204,6 +211,7 @@ export default function ManageListingModal({
       onBack={modalOnBack}
       footer={footer}
     >
+      <div ref={viewContentRef}>
       {/* ── Choice Screen ── */}
       {view === "choice" && (
         <div className="pt-2 pb-4">
@@ -367,7 +375,7 @@ export default function ManageListingModal({
           </div>
 
           {/* Email + Phone row */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label
                 htmlFor="removal-email"
@@ -403,7 +411,7 @@ export default function ManageListingModal({
           </div>
 
           {/* Action + Reason row */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label
                 htmlFor="removal-action"
@@ -534,6 +542,7 @@ export default function ManageListingModal({
           </Button>
         </div>
       )}
+      </div>
     </Modal>
   );
 }
