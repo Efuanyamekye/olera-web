@@ -27,20 +27,29 @@ export default function MobileGalleryActionBar({ provider }: MobileGalleryAction
     }
   };
 
+  const handleBack = () => {
+    // If there's history, go back; otherwise navigate to home
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push("/");
+    }
+  };
+
   const btnClass =
-    "w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center";
+    "w-10 h-10 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center active:bg-black/60";
 
   return (
-    <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between md:hidden">
+    <div className="absolute top-3 left-3 right-3 z-40 flex items-center justify-between pointer-events-none md:hidden">
       {/* Back */}
-      <button onClick={() => router.back()} className={btnClass} aria-label="Go back">
+      <button onClick={handleBack} className={`${btnClass} pointer-events-auto`} aria-label="Go back">
         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
       </button>
 
       {/* Save + Share */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 pointer-events-auto">
         <button
           onClick={() => toggleSave(provider)}
           className={btnClass}
