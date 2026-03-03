@@ -480,6 +480,7 @@ export function useConnectionCard(props: ConnectionCardProps) {
     selectRecipient,
     selectCareType,
     selectUrgency,
+    setIntentStep,
     revealPhone,
     toggleSave,
   };
