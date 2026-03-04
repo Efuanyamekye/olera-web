@@ -224,8 +224,21 @@ export default function Navbar() {
 
       <div className="mx-4 border-t border-gray-100" />
 
+      {/* Mode switcher — loading skeleton while profiles load */}
+      {authLoading && (
+        <>
+          <div className="px-3 pt-2 pb-1">
+            <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl animate-pulse">
+              <div className="flex-1 h-7 bg-gray-200 rounded-lg" />
+              <div className="flex-1 h-7 bg-gray-200 rounded-lg" />
+            </div>
+          </div>
+          <div className="mx-4 border-t border-gray-100" />
+        </>
+      )}
+
       {/* Mode switcher — shown when both profiles exist OR user has started provider onboarding */}
-      {(showModeSwitcher || hasAttemptedOnboarding) && (
+      {!authLoading && (showModeSwitcher || hasAttemptedOnboarding) && (
         <>
           <div className="px-3 pt-2 pb-1">
             <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl">
@@ -870,8 +883,18 @@ export default function Navbar() {
                     </div>
                   </div>
 
+                  {/* Mode switcher — loading skeleton while profiles load */}
+                  {hasSession && authLoading && (
+                    <div className="py-2 mb-2">
+                      <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl animate-pulse">
+                        <div className="flex-1 h-[44px] bg-gray-200 rounded-lg" />
+                        <div className="flex-1 h-[44px] bg-gray-200 rounded-lg" />
+                      </div>
+                    </div>
+                  )}
+
                   {/* Mode switcher — navigates AND closes menu (matches desktop behavior) */}
-                  {(showModeSwitcher || hasAttemptedOnboarding) && (
+                  {!authLoading && (showModeSwitcher || hasAttemptedOnboarding) && (
                     <div className="py-2 mb-2">
                       <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl">
                         <button
