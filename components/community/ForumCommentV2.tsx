@@ -124,13 +124,13 @@ export default function ForumCommentV2({ comment, isReply = false }: ForumCommen
 
   return (
     <div className={`py-5 ${isReply ? "pl-12" : ""}`}>
-      <div className="flex gap-3">
+      <div className="flex items-start gap-3">
         <AuthorAvatar author={comment.author} />
 
         <div className="flex-1 min-w-0">
           {/* Header */}
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-2 flex-wrap pt-0.5">
               <span className="font-medium text-gray-900 text-sm">{comment.author.displayName}</span>
               <span className="text-xs text-gray-400">{formatDate(comment.createdAt)}</span>
             </div>
@@ -172,7 +172,7 @@ export default function ForumCommentV2({ comment, isReply = false }: ForumCommen
           </div>
 
           {/* Content */}
-          <div className="text-[15px] text-gray-700 leading-relaxed whitespace-pre-wrap mb-3">
+          <div className="text-[15px] text-gray-700 leading-relaxed whitespace-pre-wrap mt-2 mb-3">
             {displayContent}
             {isLongContent && (
               <button
@@ -191,7 +191,7 @@ export default function ForumCommentV2({ comment, isReply = false }: ForumCommen
               onClick={handleLike}
               className={`flex items-center gap-1.5 px-2.5 py-1 min-h-[44px] rounded-lg transition-all ${
                 isLiked
-                  ? "bg-red-50 text-red-600"
+                  ? "bg-primary-50 text-primary-600"
                   : "bg-gray-50 text-gray-600 hover:bg-gray-100"
               }`}
             >

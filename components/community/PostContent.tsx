@@ -99,7 +99,7 @@ export default function PostContent({ post, onClose }: PostContentProps) {
           onClick={handleLike}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
             isLiked
-              ? "bg-red-50 text-red-600"
+              ? "bg-primary-50 text-primary-600"
               : "bg-gray-50 text-gray-600 hover:bg-gray-100"
           }`}
         >

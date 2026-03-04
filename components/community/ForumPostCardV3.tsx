@@ -221,7 +221,7 @@ export default function ForumPostCardV3({ post, onClick, isSelected, compact }: 
         <button
           onClick={handleLike}
           className={`flex items-center gap-1.5 min-h-[44px] px-2 -mx-2 transition-colors ${
-            isLiked ? "text-red-500" : "text-gray-400 hover:text-red-400"
+            isLiked ? "text-primary-500" : "text-gray-400 hover:text-primary-400"
           }`}
         >
           <svg className="w-4 h-4" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
