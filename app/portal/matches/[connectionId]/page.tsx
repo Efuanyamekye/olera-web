@@ -360,8 +360,8 @@ export default function MatchDetailPage() {
   if (accepted) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-        {/* Fixed header */}
-        <div className="fixed top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-3">
+        {/* Sticky header */}
+        <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-3">
           <button
             onClick={() => router.push("/portal/matches")}
             className="flex items-center gap-1.5 text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors min-h-[44px]"
@@ -384,7 +384,7 @@ export default function MatchDetailPage() {
         </div>
 
         {/* Success content */}
-        <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 pt-[72px]">
+        <div className="flex flex-col items-center justify-center px-6 py-12 min-h-[calc(100vh-120px)]">
           <div className="w-14 h-14 rounded-full bg-primary-50 flex items-center justify-center mx-auto mb-5">
             <svg
               className="w-7 h-7 text-primary-500"
@@ -466,9 +466,9 @@ export default function MatchDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-      {/* Fixed header */}
-      <div className="fixed top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-3">
+    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white pb-[88px]">
+      {/* Sticky header */}
+      <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-3">
         <button
           onClick={() => router.push("/portal/matches")}
           className="flex items-center gap-1.5 text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors min-h-[44px]"
@@ -490,8 +490,8 @@ export default function MatchDetailPage() {
         </button>
       </div>
 
-      {/* Scrollable content with padding for fixed header/footer */}
-      <div className="pt-[60px] pb-[88px]">
+      {/* Content */}
+      <div>
         {/* Provider header */}
         <div className="bg-white px-5 pt-6 pb-5">
           <div className="flex items-start gap-4">
