@@ -195,9 +195,8 @@ export default function Navbar() {
     }
   }, [isMobileMenuOpen, hasSession, isProviderPortal]);
 
-  // Provider-facing flows (claim, removal request) use their own minimal top nav.
-  // All hooks are above this point so the early-return is safe.
-  if (pathname.startsWith("/for-providers")) return null;
+  // NOTE: /for-providers used to return null here, but we want the full navbar
+  // to show on the provider landing page for navigation consistency.
 
   // Shared dropdown content (context-aware links, mode switcher, sign out)
   // User menu is always in the right column, so dropdown always aligns right
@@ -224,21 +223,8 @@ export default function Navbar() {
 
       <div className="mx-4 border-t border-gray-100" />
 
-      {/* Mode switcher — loading skeleton while profiles load */}
-      {authLoading && (
-        <>
-          <div className="px-3 pt-2 pb-1">
-            <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl animate-pulse">
-              <div className="flex-1 h-7 bg-gray-200 rounded-lg" />
-              <div className="flex-1 h-7 bg-gray-200 rounded-lg" />
-            </div>
-          </div>
-          <div className="mx-4 border-t border-gray-100" />
-        </>
-      )}
-
       {/* Mode switcher — shown when both profiles exist OR user has started provider onboarding */}
-      {!authLoading && (showModeSwitcher || hasAttemptedOnboarding) && (
+      {(showModeSwitcher || hasAttemptedOnboarding) && (
         <>
           <div className="px-3 pt-2 pb-1">
             <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl">
@@ -883,18 +869,8 @@ export default function Navbar() {
                     </div>
                   </div>
 
-                  {/* Mode switcher — loading skeleton while profiles load */}
-                  {hasSession && authLoading && (
-                    <div className="py-2 mb-2">
-                      <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl animate-pulse">
-                        <div className="flex-1 h-[44px] bg-gray-200 rounded-lg" />
-                        <div className="flex-1 h-[44px] bg-gray-200 rounded-lg" />
-                      </div>
-                    </div>
-                  )}
-
                   {/* Mode switcher — navigates AND closes menu (matches desktop behavior) */}
-                  {!authLoading && (showModeSwitcher || hasAttemptedOnboarding) && (
+                  {(showModeSwitcher || hasAttemptedOnboarding) && (
                     <div className="py-2 mb-2">
                       <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl">
                         <button
@@ -1290,6 +1266,21 @@ export default function Navbar() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                     </svg>
                     Saved
+                  </Link>
+
+                  {/* Divider before provider section */}
+                  <div className="my-3 border-t border-gray-100" />
+
+                  {/* For Providers */}
+                  <Link
+                    href="/for-providers"
+                    className={`flex items-center gap-3 py-3 font-medium ${pathname.startsWith("/for-providers") ? "text-primary-600" : "text-gray-700 hover:text-primary-600"}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <svg className={`w-5 h-5 shrink-0 ${pathname.startsWith("/for-providers") ? "text-primary-600" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                    </svg>
+                    For Providers
                   </Link>
                 </>
               )}
