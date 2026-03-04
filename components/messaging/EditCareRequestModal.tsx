@@ -82,22 +82,27 @@ export default function EditCareRequestModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* Modal */}
-      <div className="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden">
+      {/* Modal — bottom sheet on mobile, centered modal on desktop */}
+      <div className="relative w-full sm:max-w-md sm:mx-4 bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:fade-in sm:zoom-in-95 duration-200">
+        {/* Drag handle — mobile only */}
+        <div className="sm:hidden flex justify-center pt-3 pb-1 bg-gradient-to-r from-primary-600 to-primary-500">
+          <div className="w-10 h-1 rounded-full bg-white/30" />
+        </div>
+
         {/* Header */}
-        <div className="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 sm:pt-4 pt-2 shrink-0">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold text-white">Edit Care Request</h2>
             <button
               onClick={onClose}
-              className="p-1 rounded-lg hover:bg-white/15 transition-colors"
+              className="w-11 h-11 -mr-2 flex items-center justify-center rounded-lg hover:bg-white/15 transition-colors"
               aria-label="Close"
             >
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,8 +112,8 @@ export default function EditCareRequestModal({
           </div>
         </div>
 
-        {/* Body */}
-        <div className="px-6 py-5 space-y-5">
+        {/* Body — scrollable */}
+        <div className="px-6 py-5 space-y-5 overflow-y-auto flex-1 min-h-0">
           {/* Care Type */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -120,7 +125,7 @@ export default function EditCareRequestModal({
                   key={opt.value}
                   type="button"
                   onClick={() => setCareType(opt.value)}
-                  className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all ${
+                  className={`min-h-[44px] px-3 py-2.5 rounded-xl text-sm font-medium border transition-all ${
                     careType === opt.value
                       ? "bg-primary-50 border-primary-300 text-primary-700"
                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
@@ -143,7 +148,7 @@ export default function EditCareRequestModal({
                   key={opt.value}
                   type="button"
                   onClick={() => setCareRecipient(opt.value)}
-                  className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all ${
+                  className={`min-h-[44px] px-3 py-2.5 rounded-xl text-sm font-medium border transition-all ${
                     careRecipient === opt.value
                       ? "bg-primary-50 border-primary-300 text-primary-700"
                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
@@ -166,7 +171,7 @@ export default function EditCareRequestModal({
                   key={opt.value}
                   type="button"
                   onClick={() => setUrgency(opt.value)}
-                  className={`px-3 py-2.5 rounded-xl text-sm font-medium border transition-all ${
+                  className={`min-h-[44px] px-3 py-2.5 rounded-xl text-sm font-medium border transition-all ${
                     urgency === opt.value
                       ? "bg-primary-50 border-primary-300 text-primary-700"
                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
@@ -200,10 +205,10 @@ export default function EditCareRequestModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3">
+        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3 shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+            className="min-h-[44px] px-4 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
             disabled={saving}
           >
             Cancel
@@ -211,7 +216,7 @@ export default function EditCareRequestModal({
           <button
             onClick={handleSave}
             disabled={saving || !hasChanges}
-            className="px-5 py-2 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors"
+            className="min-h-[44px] px-5 bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors"
           >
             {saving ? "Saving..." : "Save Changes"}
           </button>
