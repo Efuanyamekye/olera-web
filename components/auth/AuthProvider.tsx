@@ -461,6 +461,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
         // Set user + any cached data immediately
         const cached = getCachedAuthData(userId);
+        const hasCachedData = !!cached?.account;
         setState((prev) => ({
           ...prev,
           user: { id: userId, email: session.user.email!, email_confirmed_at: session.user.email_confirmed_at ?? undefined },
@@ -468,7 +469,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
           activeProfile: cached?.activeProfile ?? prev.activeProfile,
           profiles: cached?.profiles ?? prev.profiles,
           membership: cached?.membership ?? prev.membership,
-          isLoading: false,
+          // Only mark as "done loading" if we have cached data — otherwise
+          // keep loading until the background fetch completes to avoid
+          // showing empty states that flash to populated states.
+          isLoading: !hasCachedData && !prev.account,
           fetchError: false,
         }));
 
