@@ -116,20 +116,20 @@ export default function CareProfileControlsMobile({
       {/* Fixed control bar */}
       <div className="fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-2.5">
         <div className="flex items-center justify-between">
-          {/* Left: Status badge + label */}
-          <div className="flex items-center gap-2.5">
+          {/* Left: Label + status badge */}
+          <div className="flex items-center gap-2">
+            <span className="text-[12px] font-medium text-gray-500">Your profile</span>
             {acceptingMatches ? (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-primary-50 border border-primary-100/60 text-[10px] font-semibold text-primary-600 uppercase tracking-wide">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-primary-50 border border-primary-100/60 text-[9px] font-semibold text-primary-600 uppercase tracking-wide">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse" />
                 Live
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-50 border border-amber-100/60 text-[10px] font-semibold text-amber-600 uppercase tracking-wide">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-50 border border-amber-100/60 text-[9px] font-semibold text-amber-600 uppercase tracking-wide">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                 Paused
               </span>
             )}
-            <span className="text-[13px] font-medium text-gray-600">Your profile</span>
           </div>
 
           {/* Right: Toggle + Menu */}
@@ -160,7 +160,7 @@ export default function CareProfileControlsMobile({
               <button
                 type="button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="inline-flex items-center justify-center w-9 h-9 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-warm-50/60 active:bg-warm-100/40 transition-colors"
+                className="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-warm-50/80 text-gray-500 hover:text-gray-700 hover:bg-warm-100/60 active:bg-warm-100 transition-colors"
                 aria-label="More options"
               >
                 <svg
