@@ -359,9 +359,9 @@ export default function MatchDetailPage() {
   // Accepted / Connected state
   if (accepted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex flex-col">
-        {/* Header */}
-        <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-3">
+      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
+        {/* Fixed header */}
+        <div className="fixed top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-3">
           <button
             onClick={() => router.push("/portal/matches")}
             className="flex items-center gap-1.5 text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors min-h-[44px]"
@@ -384,7 +384,7 @@ export default function MatchDetailPage() {
         </div>
 
         {/* Success content */}
-        <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+        <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 pt-[72px]">
           <div className="w-14 h-14 rounded-full bg-primary-50 flex items-center justify-center mx-auto mb-5">
             <svg
               className="w-7 h-7 text-primary-500"
@@ -466,9 +466,9 @@ export default function MatchDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex flex-col">
-      {/* Sticky header */}
-      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-3">
+    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
+      {/* Fixed header */}
+      <div className="fixed top-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-3">
         <button
           onClick={() => router.push("/portal/matches")}
           className="flex items-center gap-1.5 text-[15px] font-medium text-gray-600 hover:text-gray-900 transition-colors min-h-[44px]"
@@ -490,8 +490,8 @@ export default function MatchDetailPage() {
         </button>
       </div>
 
-      {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto pb-24">
+      {/* Scrollable content with padding for fixed header/footer */}
+      <div className="pt-[60px] pb-[88px]">
         {/* Provider header */}
         <div className="bg-white px-5 pt-6 pb-5">
           <div className="flex items-start gap-4">
@@ -747,8 +747,11 @@ export default function MatchDetailPage() {
         )}
       </div>
 
-      {/* Sticky footer */}
-      <div className="sticky bottom-0 bg-white/95 backdrop-blur-sm border-t border-warm-100/60 px-4 py-3.5 flex items-center gap-3 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+      {/* Fixed footer */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-20 bg-white/95 backdrop-blur-sm border-t border-warm-100/60 px-4 py-3.5 flex items-center gap-3 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]"
+        style={{ paddingBottom: "calc(0.875rem + env(safe-area-inset-bottom, 0px))" }}
+      >
         <button
           type="button"
           onClick={handleDecline}
