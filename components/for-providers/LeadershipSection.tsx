@@ -30,10 +30,10 @@ export default function LeadershipSection() {
           {leaders.map((leader) => (
             <div
               key={leader.name}
-              className="flex gap-0 rounded-xl border border-gray-200 bg-gray-50 overflow-hidden"
+              className="flex gap-0 rounded-xl border border-gray-200 bg-gray-50 overflow-hidden min-h-[200px]"
             >
-              {/* Headshot */}
-              <div className="shrink-0 w-44 sm:w-52 self-stretch">
+              {/* Headshot — fixed aspect ratio on mobile */}
+              <div className="shrink-0 w-40 sm:w-52 self-stretch">
                 <Image
                   src={leader.image}
                   alt={leader.name}
@@ -44,15 +44,15 @@ export default function LeadershipSection() {
               </div>
 
               {/* Info */}
-              <div className="flex flex-col justify-between min-w-0 p-5">
+              <div className="flex flex-col justify-between min-w-0 p-4 sm:p-5 flex-1">
                 <div>
                   <span className="text-text-xs font-medium text-gray-500 uppercase tracking-wide">
                     {leader.role}
                   </span>
-                  <h3 className="text-text-lg font-bold text-gray-900 mt-0.5">
+                  <h3 className="text-text-base sm:text-text-lg font-bold text-gray-900 mt-0.5">
                     {leader.name}
                   </h3>
-                  <p className="text-text-sm text-gray-600 mt-2 leading-relaxed">
+                  <p className="text-text-sm text-gray-600 mt-2 leading-relaxed line-clamp-4 sm:line-clamp-none">
                     {leader.bio}
                   </p>
                 </div>
@@ -62,7 +62,7 @@ export default function LeadershipSection() {
                   href={leader.linkedIn}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center text-primary-600 hover:text-primary-700 transition-colors"
+                  className="mt-3 inline-flex items-center text-primary-600 hover:text-primary-700 transition-colors min-h-[44px] w-11 h-11 justify-center -ml-3"
                   aria-label={`${leader.name} on LinkedIn`}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
