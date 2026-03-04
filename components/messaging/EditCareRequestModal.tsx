@@ -83,37 +83,35 @@ export default function EditCareRequestModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center">
-      {/* Backdrop */}
+      {/* Backdrop — standard gray overlay, no blur */}
       <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+        className="absolute inset-0 bg-gray-900/50"
         onClick={onClose}
       />
 
-      {/* Modal — bottom sheet on mobile, centered modal on desktop */}
+      {/* Bottom sheet on mobile, centered modal on desktop */}
       <div className="relative w-full sm:max-w-md sm:mx-4 bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col animate-in slide-in-from-bottom sm:slide-in-from-bottom-0 sm:fade-in sm:zoom-in-95 duration-200">
         {/* Drag handle — mobile only */}
-        <div className="sm:hidden flex justify-center pt-3 pb-1 bg-gradient-to-r from-primary-600 to-primary-500">
-          <div className="w-10 h-1 rounded-full bg-white/30" />
+        <div className="sm:hidden flex justify-center pt-2 pb-1 shrink-0">
+          <div className="w-10 h-1 rounded-full bg-gray-300" />
         </div>
 
-        {/* Header */}
-        <div className="bg-gradient-to-r from-primary-600 to-primary-500 px-6 py-4 sm:pt-4 pt-2 shrink-0">
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-white">Edit Care Request</h2>
-            <button
-              onClick={onClose}
-              className="w-11 h-11 -mr-2 flex items-center justify-center rounded-lg hover:bg-white/15 transition-colors"
-              aria-label="Close"
-            >
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+        {/* Header — standard white with gray close button */}
+        <div className="flex items-center gap-3 px-5 sm:px-6 pt-4 pb-0 shrink-0">
+          <h2 className="text-xl font-semibold text-gray-900 flex-1">Edit Care Request</h2>
+          <button
+            onClick={onClose}
+            className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition-colors shrink-0"
+            aria-label="Close"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
         {/* Body — scrollable */}
-        <div className="px-6 py-5 space-y-5 overflow-y-auto flex-1 min-h-0">
+        <div className="px-5 sm:px-6 py-5 space-y-5 overflow-y-auto flex-1 min-h-0">
           {/* Care Type */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -205,7 +203,7 @@ export default function EditCareRequestModal({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3 shrink-0">
+        <div className="px-5 sm:px-6 py-4 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-3 shrink-0">
           <button
             onClick={onClose}
             className="min-h-[44px] px-4 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
