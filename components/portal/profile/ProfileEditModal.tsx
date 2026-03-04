@@ -92,6 +92,11 @@ export default function ProfileEditModal({
 
   // Payment fields
   const [payments, setPayments] = useState<string[]>(meta.payment_methods || []);
+  const [savedBenefits, setSavedBenefits] = useState<string[]>(meta.saved_benefits || []);
+
+  const handleRemoveBenefit = (benefit: string) => {
+    setSavedBenefits((prev) => prev.filter((b) => b !== benefit));
+  };
 
   const handleImageUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -184,6 +189,7 @@ export default function ProfileEditModal({
         case "payment":
           metaUpdates = {
             payment_methods: payments.length > 0 ? payments : undefined,
+            saved_benefits: savedBenefits.length > 0 ? savedBenefits : undefined,
           };
           break;
       }
@@ -527,18 +533,28 @@ export default function ProfileEditModal({
               </div>
             </div>
 
-            {meta.saved_benefits && meta.saved_benefits.length > 0 && (
+            {savedBenefits.length > 0 && (
               <div className="px-4 py-3.5 rounded-xl border border-gray-200/80 bg-warm-50/30">
                 <p className="text-sm font-medium text-gray-600 mb-2">
                   Saved from Benefits Finder
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {meta.saved_benefits.map((benefit) => (
+                  {savedBenefits.map((benefit) => (
                     <span
                       key={benefit}
-                      className="px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-50 text-gray-600 border border-gray-200"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg bg-gray-50 text-gray-600 border border-gray-200"
                     >
                       {benefit}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveBenefit(benefit)}
+                        className="w-4 h-4 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors shrink-0"
+                        aria-label={`Remove ${benefit}`}
+                      >
+                        <svg className="w-2.5 h-2.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      </button>
                     </span>
                   ))}
                 </div>
