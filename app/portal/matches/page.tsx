@@ -354,21 +354,19 @@ function MatchesContent() {
   // ── ACTIVE STATE — providers interested (regardless of profile status), show grid ──
   return (
     <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-      {/* Mobile: Sticky controls bar */}
-      {hasPost && (
-        <div className="lg:hidden">
-          {activeProfile && (
-            <CareProfileControlsMobile
-              activeProfile={activeProfile}
-              userEmail={user?.email}
-              onPublish={handlePublish}
-              onDeactivate={handleDeactivate}
-              onDelete={handleDelete}
-              onEditProfile={() => setEditModalOpen(true)}
-            />
-          )}
-        </div>
-      )}
+      {/* Mobile: Sticky controls bar - show whenever there are interested providers */}
+      <div className="lg:hidden">
+        {activeProfile && (
+          <CareProfileControlsMobile
+            activeProfile={activeProfile}
+            userEmail={user?.email}
+            onPublish={handlePublish}
+            onDeactivate={handleDeactivate}
+            onDelete={handleDelete}
+            onEditProfile={() => setEditModalOpen(true)}
+          />
+        )}
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 h-full">
         {/* Header */}
