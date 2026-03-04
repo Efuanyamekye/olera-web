@@ -32,7 +32,7 @@ function AuthorAvatar({ author }: { author: ForumPost["author"] }) {
     );
   }
   if (author.avatar) {
-    return <Image src={author.avatar} alt={author.displayName} width={40} height={40} className="rounded-full object-cover flex-shrink-0 aspect-square" />;
+    return <Image src={author.avatar} alt={author.displayName} width={40} height={40} className="w-10 h-10 rounded-full object-cover flex-shrink-0" />;
   }
   const initials = author.displayName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
   return (

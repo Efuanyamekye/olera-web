@@ -48,7 +48,7 @@ function AuthorAvatar({ author, size = "md" }: { author: ForumPost["author"]; si
   }
   if (author.avatar) {
     const dim = size === "sm" ? 24 : 36;
-    return <Image src={author.avatar} alt={author.displayName} width={dim} height={dim} className={`${sizeClasses} rounded-full object-cover flex-shrink-0 aspect-square`} />;
+    return <Image src={author.avatar} alt={author.displayName} width={dim} height={dim} className={`${sizeClasses} rounded-full object-cover flex-shrink-0`} />;
   }
   const initials = author.displayName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
   return (
