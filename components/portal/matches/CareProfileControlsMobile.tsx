@@ -113,8 +113,8 @@ export default function CareProfileControlsMobile({
 
   return (
     <>
-      {/* Fixed control bar */}
-      <div className="fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-2.5">
+      {/* Sticky control bar - positioned below navbar */}
+      <div className="sticky top-0 z-20 bg-white/95 backdrop-blur-sm border-b border-warm-100/60 px-4 py-2.5">
         <div className="flex items-center justify-between">
           {/* Left: Label + status badge */}
           <div className="flex items-center gap-2">
@@ -230,9 +230,6 @@ export default function CareProfileControlsMobile({
           </div>
         </div>
       </div>
-
-      {/* Spacer to prevent content from hiding under fixed bar */}
-      <div className="h-[52px]" />
 
       {/* Delete confirmation modal */}
       {showDeleteConfirm && (
