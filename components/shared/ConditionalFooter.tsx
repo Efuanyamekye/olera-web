@@ -13,11 +13,12 @@ import SimpleFooter from "./SimpleFooter";
 export default function ConditionalFooter() {
   const pathname = usePathname();
 
-  // Inbox and onboarding — no footer
+  // Inbox, onboarding, and match detail — no footer
   if (
     pathname.startsWith("/portal/inbox") ||
     pathname.startsWith("/provider/inbox") ||
-    pathname.startsWith("/provider/onboarding")
+    pathname.startsWith("/provider/onboarding") ||
+    pathname.match(/^\/portal\/matches\/[^/]+$/)
   ) {
     return null;
   }
