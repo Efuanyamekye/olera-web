@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import InterestedCard from "@/components/portal/matches/InterestedCard";
+import InterestedCardCompact from "@/components/portal/matches/InterestedCardCompact";
 import {
   useInterestedProviders,
   type InterestedProvider,
@@ -12,6 +13,7 @@ interface InterestedTabContentProps {
   hasCarePost: boolean;
   familyLat?: number | null;
   familyLng?: number | null;
+  variant?: "desktop" | "mobile";
 }
 
 export default function InterestedTabContent({
@@ -19,6 +21,7 @@ export default function InterestedTabContent({
   hasCarePost,
   familyLat,
   familyLng,
+  variant = "desktop",
 }: InterestedTabContentProps) {
   const { pending, declined, loading, updateLocal } =
     useInterestedProviders(profileId);
@@ -203,6 +206,29 @@ export default function InterestedTabContent({
 
   // ── Loading state ──
   if (loading) {
+    if (variant === "mobile") {
+      return (
+        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="flex items-center gap-3.5 px-5 py-4 border-b border-warm-100/60 last:border-b-0 animate-pulse"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-gray-200 shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="h-4 w-36 bg-gray-200 rounded mb-2" />
+                <div className="h-3 w-28 bg-gray-100 rounded mb-1.5" />
+                <div className="h-3 w-20 bg-gray-100 rounded" />
+              </div>
+              <div className="flex flex-col items-end gap-1.5">
+                <div className="h-5 w-10 bg-gray-100 rounded-full" />
+                <div className="h-3 w-6 bg-gray-100 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
     return (
       <div className="space-y-5">
         {[0, 1, 2].map((i) => (
@@ -292,7 +318,80 @@ export default function InterestedTabContent({
     );
   }
 
-  // ── Card list ──
+  // ── Mobile card list ──
+  if (variant === "mobile") {
+    return (
+      <div>
+        {/* Pending cards */}
+        {pending.length > 0 && (
+          <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden mb-5">
+            {pending.map((item) => (
+              <InterestedCardCompact
+                key={item.id}
+                item={item}
+                familyLat={familyLat}
+                familyLng={familyLng}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* If no pending but some declined */}
+        {pending.length === 0 && declined.length > 0 && (
+          <div className="py-10 text-center mb-4">
+            <p className="text-[14px] text-gray-500 leading-relaxed">
+              No pending providers. Check declined providers below if
+              you&apos;d like to reconsider.
+            </p>
+          </div>
+        )}
+
+        {/* Declined collapsible section */}
+        {declined.length > 0 && (
+          <div>
+            <button
+              type="button"
+              onClick={() => setDeclinedExpanded(!declinedExpanded)}
+              className="flex items-center gap-2 text-[13px] font-semibold text-gray-500 hover:text-gray-700 transition-colors mb-3"
+            >
+              <svg
+                className={[
+                  "w-4 h-4 transition-transform duration-200",
+                  declinedExpanded ? "rotate-90" : "",
+                ].join(" ")}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+              Declined ({declined.length})
+            </button>
+
+            {declinedExpanded && (
+              <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden opacity-55">
+                {declined.map((item) => (
+                  <InterestedCardCompact
+                    key={item.id}
+                    item={item}
+                    familyLat={familyLat}
+                    familyLng={familyLng}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── Desktop card list ──
   return (
     <div>
       {/* Pending cards */}

@@ -9,6 +9,7 @@ import { useProfileCompleteness, type SectionStatus } from "./completeness";
 import { BenefitsFinderBanner } from "./ProfileEditContent";
 import Pill from "@/components/providers/connection-card/Pill";
 import Input from "@/components/ui/Input";
+import ProfileEditModal, { type ProfileSection } from "./ProfileEditModal";
 
 // ── Constants ──
 
@@ -60,6 +61,7 @@ interface FamilyProfileViewProps {
 export default function FamilyProfileView({ profile: profileProp }: FamilyProfileViewProps = {}) {
   const { user, activeProfile, refreshAccountData } = useAuth();
   const [editingSection, setEditingSection] = useState<number | null>(null);
+  const [mobileEditSection, setMobileEditSection] = useState<ProfileSection | null>(null);
 
   const profile = (profileProp ?? activeProfile) as BusinessProfile;
   const meta = (profile?.metadata || {}) as FamilyMetadata;
@@ -234,6 +236,20 @@ export default function FamilyProfileView({ profile: profileProp }: FamilyProfil
     }
   };
 
+  // Mobile: open bottom sheet modal
+  const handleMobileEdit = (section: ProfileSection) => {
+    setMobileEditSection(section);
+  };
+
+  const handleMobileModalClose = () => {
+    setMobileEditSection(null);
+  };
+
+  const handleMobileModalSaved = async () => {
+    setMobileEditSection(null);
+    await refreshAccountData();
+  };
+
   const handleCancel = () => {
     // Revert form state from profile and close
     if (profile) {
@@ -266,36 +282,50 @@ export default function FamilyProfileView({ profile: profileProp }: FamilyProfil
 
   return (
     <div className="max-w-2xl">
+      {/* Mobile Edit Modal */}
+      {mobileEditSection && (
+        <ProfileEditModal
+          profile={profile}
+          userEmail={userEmail}
+          section={mobileEditSection}
+          onClose={handleMobileModalClose}
+          onSaved={handleMobileModalSaved}
+        />
+      )}
+
       <div className="rounded-2xl bg-white border border-gray-200/80 shadow-sm divide-y divide-gray-100">
       {/* ── Profile Header ── */}
       <div className={`${editingSection === 0 ? "bg-gray-50/50" : ""} transition-colors`}>
-        <div className="p-6 flex items-center gap-5">
-          <div className="shrink-0">
-            <div className="w-[88px] h-[88px] rounded-full overflow-hidden bg-gray-50 ring-[3px] ring-gray-100 shadow-xs flex items-center justify-center">
+        {/* Mobile: Stacked layout */}
+        <div className="p-5 sm:hidden">
+          <div className="flex flex-col items-center text-center">
+            {/* Avatar - larger on mobile for breathing room */}
+            <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-50 ring-[3px] ring-gray-100 shadow-sm flex items-center justify-center mb-4">
               {profile.image_url ? (
-                <Image src={profile.image_url} alt={profile.display_name} width={88} height={88} className="w-full h-full object-cover" />
+                <Image src={profile.image_url} alt={profile.display_name || "Profile"} width={96} height={96} className="w-full h-full object-cover" />
               ) : (
                 <div className="flex flex-col items-center gap-0.5 text-gray-400">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
               )}
             </div>
-          </div>
 
-          <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-display font-bold text-gray-900 truncate tracking-tight">
+            {/* Name and details */}
+            <h2 className="text-xl font-display font-bold text-gray-900 tracking-tight mb-1">
               {profile.display_name || "Your Name"}
             </h2>
-            <p className="text-base text-gray-500 mt-1">
+            <p className="text-[14px] text-gray-500 mb-3">
               {location || "Location not set"}
               <span className="mx-1.5 text-gray-300">&middot;</span>
               Family care seeker
             </p>
+
+            {/* Progress bar */}
             {percentage < 100 && (
-              <div className="flex items-center gap-2.5 mt-2.5">
-                <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <div className="flex items-center gap-2.5 mb-4">
+                <div className="w-28 h-1.5 bg-gray-100 rounded-full overflow-hidden">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${percentage >= 80 ? "bg-gray-700" : "bg-warning-400"}`}
                     style={{ width: `${percentage}%` }}
@@ -306,20 +336,75 @@ export default function FamilyProfileView({ profile: profileProp }: FamilyProfil
                 </span>
               </div>
             )}
-          </div>
 
-          <button
-            type="button"
-            onClick={() => handleEditToggle(0)}
-            className="shrink-0 self-start mt-1 text-[14px] font-medium text-primary-600 hover:text-primary-700 transition-colors"
-          >
-            {editingSection === 0 ? "Cancel" : "Edit"}
-          </button>
+            {/* Edit button */}
+            <button
+              type="button"
+              onClick={() => handleMobileEdit("overview")}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-[14px] font-medium text-primary-600 hover:text-primary-700 hover:bg-primary-50/50 rounded-lg transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Edit profile
+            </button>
+          </div>
         </div>
 
-        {/* Inline edit: Basic Info */}
+        {/* Desktop: Horizontal layout */}
+        <div className="hidden sm:block p-6">
+          <div className="flex items-center gap-5">
+            <div className="shrink-0">
+              <div className="w-[88px] h-[88px] rounded-full overflow-hidden bg-gray-50 ring-[3px] ring-gray-100 shadow-xs flex items-center justify-center">
+                {profile.image_url ? (
+                  <Image src={profile.image_url} alt={profile.display_name || "Profile"} width={88} height={88} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="flex flex-col items-center gap-0.5 text-gray-400">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <h2 className="text-2xl font-display font-bold text-gray-900 truncate tracking-tight">
+                {profile.display_name || "Your Name"}
+              </h2>
+              <p className="text-base text-gray-500 mt-1">
+                {location || "Location not set"}
+                <span className="mx-1.5 text-gray-300">&middot;</span>
+                Family care seeker
+              </p>
+              {percentage < 100 && (
+                <div className="flex items-center gap-2.5 mt-2.5">
+                  <div className="w-24 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${percentage >= 80 ? "bg-gray-700" : "bg-warning-400"}`}
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                  <span className={`text-xs font-medium ${percentage >= 80 ? "text-gray-600" : "text-warning-600"}`}>
+                    {percentage}%
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => handleEditToggle(0)}
+              className="shrink-0 self-start mt-1 text-[14px] font-medium text-primary-600 hover:text-primary-700 transition-colors"
+            >
+              {editingSection === 0 ? "Cancel" : "Edit"}
+            </button>
+          </div>
+        </div>
+
+        {/* Inline edit: Basic Info (desktop only) */}
         {editingSection === 0 && (
-          <div className="px-6 pb-6 space-y-5 border-t border-gray-100 pt-5">
+          <div className="hidden sm:block px-6 pb-6 space-y-5 border-t border-gray-100 pt-5">
             {/* Photo upload */}
             <div>
               <label className="block text-sm font-medium text-gray-600 mb-2.5">Profile photo</label>
@@ -385,6 +470,7 @@ export default function FamilyProfileView({ profile: profileProp }: FamilyProfil
         status={sectionStatus[1]}
         isEditing={editingSection === 1}
         onEdit={() => handleEditToggle(1)}
+        onMobileEdit={() => handleMobileEdit("contact")}
         onCancel={handleCancel}
         onSave={() => { saveToDb(); setEditingSection(null); }}
         editContent={
@@ -415,6 +501,7 @@ export default function FamilyProfileView({ profile: profileProp }: FamilyProfil
         status={sectionStatus[2]}
         isEditing={editingSection === 2}
         onEdit={() => handleEditToggle(2)}
+        onMobileEdit={() => handleMobileEdit("care")}
         onCancel={handleCancel}
         onSave={() => { saveToDb(); setEditingSection(null); }}
         editContent={
@@ -481,6 +568,7 @@ export default function FamilyProfileView({ profile: profileProp }: FamilyProfil
         status={sectionStatus[3]}
         isEditing={editingSection === 3}
         onEdit={() => handleEditToggle(3)}
+        onMobileEdit={() => handleMobileEdit("payment")}
         onCancel={handleCancel}
         onSave={() => { saveToDb(); setEditingSection(null); }}
         editContent={
@@ -582,6 +670,7 @@ function SectionCard({
   status,
   isEditing,
   onEdit,
+  onMobileEdit,
   onCancel,
   onSave,
   editContent,
@@ -591,6 +680,7 @@ function SectionCard({
   status: SectionStatus | undefined;
   isEditing: boolean;
   onEdit: () => void;
+  onMobileEdit?: () => void;
   onCancel: () => void;
   onSave: () => void;
   editContent: React.ReactNode;
@@ -599,22 +689,36 @@ function SectionCard({
   const editLabel = isEditing ? "Cancel" : status === "empty" ? "Add \u2192" : "Edit";
 
   return (
-    <div className={`p-6 ${isEditing ? "bg-gray-50/50" : ""} transition-colors`}>
+    <div className={`p-5 sm:p-6 ${isEditing ? "bg-gray-50/50" : ""} transition-colors`}>
       {/* Header row */}
       <div className="flex items-center gap-2.5 mb-4">
         <h3 className="text-lg font-display font-bold text-gray-900">{title}</h3>
         <SectionBadge status={status} />
+
+        {/* Desktop edit button */}
         <button
           type="button"
           onClick={isEditing ? onCancel : onEdit}
-          className="ml-auto text-[14px] font-medium text-primary-600 hover:text-primary-700 transition-colors"
+          className="hidden sm:block ml-auto text-[14px] font-medium text-primary-600 hover:text-primary-700 transition-colors"
         >
           {editLabel}
         </button>
+
+        {/* Mobile edit button - opens bottom sheet */}
+        {onMobileEdit && (
+          <button
+            type="button"
+            onClick={onMobileEdit}
+            className="sm:hidden ml-auto text-[14px] font-medium text-primary-600 hover:text-primary-700 transition-colors"
+          >
+            {status === "empty" ? "Add \u2192" : "Edit"}
+          </button>
+        )}
       </div>
 
-      {isEditing ? (
-        <div>
+      {/* Desktop inline edit */}
+      {isEditing && (
+        <div className="hidden sm:block">
           {editContent}
           <div className="flex justify-end pt-4">
             <button type="button" onClick={onSave} className="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors">
@@ -622,9 +726,40 @@ function SectionCard({
             </button>
           </div>
         </div>
-      ) : (
-        <div role="button" tabIndex={0} onClick={onEdit} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onEdit(); } }} className="cursor-pointer">
-          {children}
+      )}
+
+      {/* View content */}
+      {!isEditing && (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={onMobileEdit ? undefined : onEdit}
+          onKeyDown={onMobileEdit ? undefined : (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onEdit(); } }}
+          className={onMobileEdit ? "" : "cursor-pointer sm:cursor-pointer"}
+        >
+          {/* Mobile: tap to open modal */}
+          {onMobileEdit && (
+            <div
+              className="sm:hidden cursor-pointer"
+              role="button"
+              tabIndex={0}
+              onClick={onMobileEdit}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onMobileEdit(); } }}
+            >
+              {children}
+            </div>
+          )}
+
+          {/* Desktop: tap to inline edit */}
+          <div
+            className={onMobileEdit ? "hidden sm:block cursor-pointer" : ""}
+            role="button"
+            tabIndex={0}
+            onClick={onEdit}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onEdit(); } }}
+          >
+            {children}
+          </div>
         </div>
       )}
     </div>
