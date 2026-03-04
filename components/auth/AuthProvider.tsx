@@ -501,18 +501,20 @@ export default function AuthProvider({ children }: AuthProviderProps) {
               activeProfile: data.activeProfile,
               profiles: data.profiles,
               membership: data.membership,
+              isLoading: false,
               fetchError: false,
             }));
           } else if (!cached?.account) {
-            setState((prev) => ({ ...prev, fetchError: true }));
+            setState((prev) => ({ ...prev, isLoading: false, fetchError: true }));
+          } else {
+            // Had cache, fetch returned nothing — keep cache, stop loading
+            setState((prev) => ({ ...prev, isLoading: false }));
           }
         } catch (err) {
           // Timeout or network error — don't retry, just use cache
           console.error("[olera] SIGNED_IN fetch failed:", err);
           if (cancelled || versionRef.current !== version) return;
-          if (!cached?.account) {
-            setState((prev) => ({ ...prev, fetchError: true }));
-          }
+          setState((prev) => ({ ...prev, isLoading: false, fetchError: !cached?.account }));
         }
       }
 
