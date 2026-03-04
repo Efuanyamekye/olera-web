@@ -870,18 +870,19 @@ export default function Navbar() {
                     </div>
                   </div>
 
-                  {/* Mode switcher — toggles menu view without navigating */}
+                  {/* Mode switcher — navigates AND closes menu (matches desktop behavior) */}
                   {(showModeSwitcher || hasAttemptedOnboarding) && (
                     <div className="py-2 mb-2">
                       <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl">
                         <button
                           type="button"
                           onClick={() => {
-                            setMobileMenuMode("family");
-                            setMobileAccordion("account");
+                            if (hasFamilyProfile && familyProfileId) switchProfile(familyProfileId);
+                            setIsMobileMenuOpen(false);
+                            router.push("/");
                           }}
                           className={[
-                            "flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold transition-all",
+                            "flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold transition-all min-h-[44px]",
                             mobileMenuMode === "family" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700",
                           ].join(" ")}
                         >
@@ -890,12 +891,18 @@ export default function Navbar() {
                         <button
                           type="button"
                           onClick={() => {
-                            setMobileMenuMode("provider");
-                            setMobileAccordion("hub");
+                            if (hasProviderProfile && providerProfileId) {
+                              switchProfile(providerProfileId);
+                              setIsMobileMenuOpen(false);
+                              router.push("/provider");
+                            } else if (hasAttemptedOnboarding) {
+                              setIsMobileMenuOpen(false);
+                              router.push("/provider/onboarding");
+                            }
                           }}
                           disabled={!hasProviderProfile && !hasAttemptedOnboarding}
                           className={[
-                            "flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold transition-all",
+                            "flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold transition-all min-h-[44px]",
                             mobileMenuMode === "provider" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700",
                             !hasProviderProfile && !hasAttemptedOnboarding ? "opacity-50 cursor-not-allowed" : "",
                           ].join(" ")}
