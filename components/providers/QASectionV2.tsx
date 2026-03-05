@@ -294,7 +294,7 @@ export default function QASectionV2({
                           <button
                             type="button"
                             onClick={() => setOpenMenuId(openMenuId === qa.id ? null : qa.id!)}
-                            className="w-8 h-8 -mr-2 flex items-center justify-center rounded-full text-gray-400 opacity-0 group-hover/question:opacity-100 hover:text-gray-600 hover:bg-gray-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-all"
+                            className="w-8 h-8 -mr-2 flex items-center justify-center rounded-full text-gray-400 lg:opacity-0 lg:group-hover/question:opacity-100 hover:text-gray-600 hover:bg-gray-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-all"
                             aria-label="More options"
                           >
                             <MoreIcon className="w-5 h-5" />
