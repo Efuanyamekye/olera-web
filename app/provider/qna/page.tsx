@@ -615,9 +615,11 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
 
   return (
     <div className="hidden lg:block">
-      <div className="sticky top-24 space-y-3">
-        {/* ── Visibility Score Card ── */}
+      <div className="sticky top-24">
+        {/* ── Unified Sidebar Card ── */}
         <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+
+          {/* ── Section 1: Visibility Score ── */}
           <div className="p-6">
             {/* Header with tooltip */}
             <div className="flex items-center gap-2 mb-5">
@@ -676,11 +678,9 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
               <span>Top 10%</span>
             </div>
           </div>
-        </div>
 
-        {/* ── Share Profile Card ── */}
-        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-          <div className="p-6">
+          {/* ── Section 2: Share Profile ── */}
+          <div className="px-6 py-5 border-t border-gray-100">
             <div className="flex items-start gap-4">
               <div className="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
                 <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -718,11 +718,9 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* ── Tips for Better Answers ── */}
-        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-          <div className="p-6">
+          {/* ── Section 3: Tips for Better Answers ── */}
+          <div className="px-6 py-5 border-t border-gray-100">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-1 h-4 bg-gray-300 rounded-full" />
               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
