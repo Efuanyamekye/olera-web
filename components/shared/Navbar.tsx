@@ -13,6 +13,7 @@ import { CARE_CATEGORIES, NAV_LINKS } from "@/components/shared/NavMenuData";
 import { useNavbar } from "@/components/shared/NavbarContext";
 import { useSavedProviders } from "@/hooks/use-saved-providers";
 import { useUnreadInboxCount } from "@/hooks/useUnreadInboxCount";
+import { useUnreadQnACount } from "@/hooks/useUnreadQnACount";
 import { useInterestedProviders } from "@/hooks/useInterestedProviders";
 import { MOCK_LEADS } from "@/lib/mock/provider-leads";
 
@@ -37,6 +38,8 @@ export default function Navbar() {
   const unreadInboxCount = useUnreadInboxCount(profileIds);
   const providerProfileIds = (profiles || []).filter((p) => p.type !== "family").map((p) => p.id);
   const providerInboxCount = useUnreadInboxCount(providerProfileIds);
+  const providerSlug = (profiles || []).find((p) => p.type === "organization" || p.type === "caregiver")?.slug ?? null;
+  const qnaCount = useUnreadQnACount(providerSlug);
   const familyProfileForMatches = (profiles || []).find((p) => p.type === "family");
   const { pendingCount: matchesPendingCount } = useInterestedProviders(
     familyProfileForMatches?.id
@@ -559,6 +562,7 @@ export default function Navbar() {
                       { label: "Dashboard", href: "/provider", match: "/provider", badge: 0 },
                       { label: "Inbox", href: "/provider/inbox", match: "/provider/inbox", badge: providerInboxCount },
                       { label: "Leads", href: "/provider/connections", match: "/provider/connections", badge: newLeadsCount },
+                      { label: "Q&A", href: "/provider/qna", match: "/provider/qna", badge: qnaCount },
                       { label: "Reviews", href: "/provider/reviews", match: "/provider/reviews", badge: 0 },
                       { label: "Matches", href: "/provider/matches", match: "/provider/matches", badge: 0 },
                     ] as const).map((item) => {
@@ -949,6 +953,7 @@ export default function Navbar() {
                               { label: "Dashboard", href: "/provider", match: "/provider", badge: 0, icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" },
                               { label: "Inbox", href: "/provider/inbox", match: "/provider/inbox", badge: providerInboxCount, icon: "M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" },
                               { label: "Leads", href: "/provider/connections", match: "/provider/connections", badge: newLeadsCount, icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" },
+                              { label: "Q&A", href: "/provider/qna", match: "/provider/qna", badge: qnaCount, icon: "M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" },
                               { label: "Matches", href: "/provider/matches", match: "/provider/matches", badge: 0, icon: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" },
                               { label: "Reviews", href: "/provider/reviews", match: "/provider/reviews", badge: 0, icon: "M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z" },
                             ] as const).map((item) => {

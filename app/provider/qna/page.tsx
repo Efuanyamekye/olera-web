@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useProviderProfile } from "@/hooks/useProviderProfile";
 
 // ── Types ──
 
@@ -9,68 +10,29 @@ type TabFilter = "pending" | "published";
 interface Question {
   id: string;
   question: string;
-  askerName: string;
-  askedAt: string;
-  status: "pending" | "published";
-  likes: number;
+  asker_name: string;
+  created_at: string;
+  status: "pending" | "answered";
   answer?: string;
-  answeredAt?: string;
-  providerName?: string;
+  answered_at?: string;
+  is_public?: boolean;
 }
 
-// ── Mock Data ──
+// ── Helper to mark question as read ──
 
-const MOCK_QUESTIONS: Question[] = [
-  {
-    id: "1",
-    question: "What's special about your business?",
-    askerName: "Anonymous",
-    askedAt: "2026-03-05T07:50:00Z",
-    status: "pending",
-    likes: 0,
-  },
-  {
-    id: "2",
-    question: "Do you offer overnight care services for seniors who need continuous support?",
-    askerName: "Anonymous",
-    askedAt: "2026-03-04T14:30:00Z",
-    status: "pending",
-    likes: 2,
-  },
-  {
-    id: "3",
-    question: "Does Home Instead provide 24/7 care for seniors who need continuous support?",
-    askerName: "Cameron Williamson",
-    askedAt: "2026-02-21T10:00:00Z",
-    status: "published",
-    likes: 5,
-    answer: "Yes, Home Instead offers 24/7 care services to ensure your loved one receives continuous support, day and night. Our dedicated caregivers provide assistance, companionship, and supervision tailored to individual needs. Contact us to discuss a personalized care plan.",
-    answeredAt: "2026-02-21T12:00:00Z",
-    providerName: "Home Instead Houston",
-  },
-  {
-    id: "4",
-    question: "What are your hourly rates for companionship care?",
-    askerName: "Sarah M.",
-    askedAt: "2026-02-18T09:15:00Z",
-    status: "published",
-    likes: 8,
-    answer: "Our companionship care rates are competitive and vary based on the specific services needed and scheduling requirements. We offer flexible packages to fit your budget. Please reach out through our profile for a personalized quote.",
-    answeredAt: "2026-02-18T11:30:00Z",
-    providerName: "Home Instead Houston",
-  },
-  {
-    id: "5",
-    question: "Do your caregivers have experience with dementia patients?",
-    askerName: "Anonymous",
-    askedAt: "2026-02-15T16:00:00Z",
-    status: "published",
-    likes: 12,
-    answer: "Yes, many of our caregivers have specialized training in dementia and Alzheimer's care. We match caregivers with families based on experience and compatibility. Our team receives ongoing education on best practices for memory care.",
-    answeredAt: "2026-02-15T18:00:00Z",
-    providerName: "Home Instead Houston",
-  },
-];
+function markQuestionAsRead(questionId: string): void {
+  try {
+    const stored = localStorage.getItem("olera_qna_read");
+    const readIds: string[] = stored ? JSON.parse(stored) : [];
+    if (!readIds.includes(questionId)) {
+      readIds.push(questionId);
+      localStorage.setItem("olera_qna_read", JSON.stringify(readIds));
+      window.dispatchEvent(new CustomEvent("olera:qna-read"));
+    }
+  } catch {
+    // localStorage unavailable
+  }
+}
 
 // ── Helpers ──
 
@@ -215,13 +177,13 @@ function PendingQuestionCard({
       >
         <div className="p-4">
           <div className="flex items-start gap-3">
-            <Avatar name={question.askerName} size="lg" />
+            <Avatar name={question.asker_name} size="lg" />
             <div className="flex-1 min-w-0">
               <p className="text-[15px] font-semibold text-gray-900 leading-snug line-clamp-2">
                 {question.question}
               </p>
               <p className="text-sm text-gray-500 mt-1.5">
-                {question.askerName} · {timeAgo(question.askedAt)}
+                {question.asker_name} · {timeAgo(question.created_at)}
               </p>
             </div>
           </div>
@@ -256,13 +218,13 @@ function PendingQuestionCard({
     <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:border-gray-300/80 transition-colors">
       <div className="p-6">
         <div className="flex items-start gap-4">
-          <Avatar name={question.askerName} size="lg" />
+          <Avatar name={question.asker_name} size="lg" />
           <div className="flex-1 min-w-0">
             <p className="text-lg font-semibold text-gray-900 leading-snug">
               {question.question}
             </p>
             <p className="text-sm text-gray-500 mt-1.5">
-              {question.askerName} · {timeAgo(question.askedAt)}
+              {question.asker_name} · {timeAgo(question.created_at)}
             </p>
           </div>
         </div>
@@ -315,18 +277,18 @@ function PublishedQuestionCard({
       <div className={isMobile ? "p-4" : "p-6"}>
         {/* Asker info + badge */}
         <div className="flex items-start gap-3">
-          <Avatar name={question.askerName} size={isMobile ? "md" : "lg"} />
+          <Avatar name={question.asker_name} size={isMobile ? "md" : "lg"} />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`font-semibold text-gray-900 ${isMobile ? "text-[15px]" : "text-base"}`}>
-                {question.askerName}
+                {question.asker_name}
               </span>
               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-primary-50 text-primary-700 border border-primary-100/50">
                 Published
               </span>
             </div>
             <p className="text-sm text-gray-400 mt-0.5">
-              {formatDate(question.askedAt)}
+              {formatDate(question.created_at)}
             </p>
           </div>
         </div>
@@ -340,13 +302,13 @@ function PublishedQuestionCard({
         {question.answer && (
           <div className="mt-5">
             <div className="flex items-start gap-3">
-              <Avatar name={question.providerName || "Provider"} size={isMobile ? "md" : "lg"} isProvider />
+              <Avatar name="Provider" size={isMobile ? "md" : "lg"} isProvider />
               <div className="flex-1 min-w-0">
                 <p className={`font-semibold text-gray-900 ${isMobile ? "text-[15px]" : "text-base"}`}>
-                  {question.providerName || "Your response"}
+                  Your response
                 </p>
                 <p className="text-sm text-gray-400 mt-0.5">
-                  {question.answeredAt ? formatDate(question.answeredAt) : ""}
+                  {question.answered_at ? formatDate(question.answered_at) : ""}
                 </p>
               </div>
             </div>
@@ -479,13 +441,13 @@ function BottomSheet({
         <div className="flex-1 overflow-y-auto px-4 lg:px-6 py-5">
           {/* Question display */}
           <div className="flex items-start gap-3 mb-5 pb-5 border-b border-gray-100">
-            <Avatar name={question.askerName} size="lg" />
+            <Avatar name={question.asker_name} size="lg" />
             <div className="flex-1 min-w-0">
               <p className="text-[15px] font-semibold text-gray-900 leading-snug">
                 {question.question}
               </p>
               <p className="text-sm text-gray-500 mt-1.5">
-                {question.askerName} · {timeAgo(question.askedAt)}
+                {question.asker_name} · {timeAgo(question.created_at)}
               </p>
             </div>
           </div>
@@ -813,10 +775,12 @@ function QnASkeleton() {
 // ── Main Page ──
 
 export default function ProviderQnAPage() {
+  const providerProfile = useProviderProfile();
   const [activeFilter, setActiveFilter] = useState<TabFilter>("pending");
-  const [questions, setQuestions] = useState<Question[]>(MOCK_QUESTIONS);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Sheet state
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
@@ -831,43 +795,80 @@ export default function ProviderQnAPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Simulate loading
+  // Fetch questions from API
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
+    if (!providerProfile?.slug) {
+      setIsLoading(false);
+      return;
+    }
+
+    (async () => {
+      try {
+        const res = await fetch("/api/provider/questions");
+        if (!res.ok) {
+          throw new Error("Failed to fetch questions");
+        }
+        const data = await res.json();
+        setQuestions(data.questions || []);
+
+        // Mark all pending questions as read when page loads
+        for (const q of data.questions || []) {
+          if (q.status === "pending") {
+            markQuestionAsRead(q.id);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch questions:", err);
+        setError("Unable to load questions. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [providerProfile?.slug]);
 
   const filteredQuestions = useMemo(() => {
-    return questions.filter((q) => q.status === activeFilter);
+    // Map "published" tab to "answered" status
+    const statusToMatch = activeFilter === "published" ? "answered" : "pending";
+    return questions.filter((q) => q.status === statusToMatch);
   }, [activeFilter, questions]);
 
   const counts = useMemo(() => ({
     pending: questions.filter((q) => q.status === "pending").length,
-    published: questions.filter((q) => q.status === "published").length,
+    published: questions.filter((q) => q.status === "answered").length,
   }), [questions]);
 
   // Handle reply (from card or sheet)
-  const handleReply = useCallback((question: Question, answer?: string) => {
+  const handleReply = useCallback(async (question: Question, answer?: string) => {
     if (isMobile || !answer) {
       // Mobile or no answer provided - open sheet
       setSelectedQuestion(question);
       setSheetMode("reply");
       setIsSheetOpen(true);
     } else {
-      // Desktop inline submit
-      setQuestions((prev) =>
-        prev.map((q) =>
-          q.id === question.id
-            ? {
-                ...q,
-                status: "published" as const,
-                answer,
-                answeredAt: new Date().toISOString(),
-                providerName: "Your Business"
-              }
-            : q
-        )
-      );
+      // Desktop inline submit - call API
+      try {
+        const res = await fetch("/api/provider/questions", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: question.id, answer }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to publish answer");
+        }
+
+        const data = await res.json();
+
+        // Update the question in local state
+        setQuestions((prev) =>
+          prev.map((q) =>
+            q.id === question.id ? { ...q, ...data.question } : q
+          )
+        );
+      } catch (err) {
+        console.error("Failed to publish answer:", err);
+        // Optionally show error toast
+      }
     }
   }, [isMobile]);
 
@@ -879,20 +880,30 @@ export default function ProviderQnAPage() {
   }, []);
 
   // Handle sheet submit
-  const handleSheetSubmit = useCallback((question: Question, answer: string) => {
-    setQuestions((prev) =>
-      prev.map((q) =>
-        q.id === question.id
-          ? {
-              ...q,
-              status: "published" as const,
-              answer,
-              answeredAt: new Date().toISOString(),
-              providerName: q.providerName || "Your Business"
-            }
-          : q
-      )
-    );
+  const handleSheetSubmit = useCallback(async (question: Question, answer: string) => {
+    try {
+      const res = await fetch("/api/provider/questions", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: question.id, answer }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to publish answer");
+      }
+
+      const data = await res.json();
+
+      // Update the question in local state
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === question.id ? { ...q, ...data.question } : q
+        )
+      );
+    } catch (err) {
+      console.error("Failed to publish answer:", err);
+      // Optionally show error toast
+    }
   }, []);
 
   const handleCloseSheet = useCallback(() => {
