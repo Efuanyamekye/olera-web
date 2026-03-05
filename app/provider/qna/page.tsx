@@ -665,7 +665,7 @@ function QnASidebar({ publishedCount, providerSlug }: { publishedCount: number; 
                   Share your profile with families
                 </h3>
                 <p className="text-[13px] text-gray-500 mt-1 leading-relaxed">
-                  Every question they ask becomes a live Google result for your business.
+                  Questions from families help your profile rank in search.
                 </p>
                 <button
                   type="button"
