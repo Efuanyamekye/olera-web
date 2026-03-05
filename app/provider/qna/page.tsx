@@ -580,8 +580,8 @@ function EmptyState({ filter }: { filter: TabFilter }) {
 function QnASkeleton() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-        <div className="animate-pulse">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        <div className="lg:max-w-2xl animate-pulse">
           <div className="mb-5 lg:mb-8">
             <div className="h-8 w-56 bg-warm-100 rounded-lg mb-2" />
             <div className="h-4 w-72 bg-warm-50 rounded" />
@@ -709,16 +709,18 @@ export default function ProviderQnAPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-        {/* ── Page header ── */}
-        <div className="mb-5 lg:mb-8">
-          <h1 className="text-2xl lg:text-[28px] font-display font-bold text-gray-900 tracking-tight">
-            Questions & Answers
-          </h1>
-          <p className="text-sm lg:text-[15px] text-gray-500 mt-1 lg:mt-1.5 leading-relaxed">
-            Answer questions from families and showcase your expertise.
-          </p>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+        {/* Content constrained to left on desktop, full width on mobile */}
+        <div className="lg:max-w-2xl">
+          {/* ── Page header ── */}
+          <div className="mb-5 lg:mb-8">
+            <h1 className="text-2xl lg:text-[28px] font-display font-bold text-gray-900 tracking-tight">
+              Questions & Answers
+            </h1>
+            <p className="text-sm lg:text-[15px] text-gray-500 mt-1 lg:mt-1.5 leading-relaxed">
+              Answer questions from families and showcase your expertise.
+            </p>
+          </div>
 
         {/* ── Tabs ── */}
         <div className="mb-5 lg:mb-6">
@@ -774,6 +776,7 @@ export default function ProviderQnAPage() {
             <EmptyState filter={activeFilter} />
           </div>
         )}
+        </div>
       </div>
 
       {/* ── Bottom Sheet / Side Drawer ── */}
