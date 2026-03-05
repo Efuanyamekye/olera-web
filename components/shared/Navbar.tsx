@@ -672,7 +672,7 @@ export default function Navbar() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                           </svg>
                           {activeProfile?.image_url ? (
-                            <Image src={activeProfile.image_url} alt={displayName} width={32} height={32} className="rounded-full object-cover" />
+                            <Image src={activeProfile.image_url} alt={displayName} width={32} height={32} className="w-8 h-8 rounded-full object-cover aspect-square shrink-0" />
                           ) : (
                             <div className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm font-semibold">
                               {initials}
@@ -749,7 +749,7 @@ export default function Navbar() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                           </svg>
                           {activeProfile?.image_url ? (
-                            <Image src={activeProfile.image_url} alt={displayName} width={32} height={32} className="rounded-full object-cover" />
+                            <Image src={activeProfile.image_url} alt={displayName} width={32} height={32} className="w-8 h-8 rounded-full object-cover aspect-square shrink-0" />
                           ) : (
                             <div className="w-8 h-8 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm font-semibold">
                               {initials}
