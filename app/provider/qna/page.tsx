@@ -654,9 +654,9 @@ function QnASidebar({ publishedCount, providerSlug }: { publishedCount: number; 
 
           {/* ── Section 2: Share Profile ── */}
           <div className="px-6 py-5 border-t border-gray-100">
-            <div className="flex items-start gap-4">
-              <div className="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
-                <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
+                <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
                 </svg>
               </div>
