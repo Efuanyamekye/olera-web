@@ -617,7 +617,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
     <div className="hidden lg:block">
       <div className="sticky top-24">
         {/* ── Unified Sidebar Card ── */}
-        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
 
           {/* ── Section 1: Visibility Score ── */}
           <div className="p-6">
@@ -630,10 +630,12 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                 <button
                   type="button"
                   onClick={() => setShowTooltip(!showTooltip)}
-                  className="w-[18px] h-[18px] rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors"
+                  className="w-[18px] h-[18px] rounded-full flex items-center justify-center text-gray-400 hover:text-gray-500 transition-colors"
                   aria-label="What is visibility score?"
                 >
-                  <span className="text-[11px] font-medium">?</span>
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
                 </button>
                 {/* Tooltip */}
                 {showTooltip && (
