@@ -545,7 +545,7 @@ function EmptyState({ filter }: { filter: TabFilter }) {
 
 // ── Sidebar Component (Desktop Only) ──
 
-function QnASidebar({ publishedCount }: { publishedCount: number }) {
+function QnASidebar({ publishedCount, providerSlug }: { publishedCount: number; providerSlug: string | null }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [copied, setCopied] = useState(false);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -569,9 +569,10 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
   }, [showTooltip]);
 
   const handleCopyLink = async () => {
+    if (!providerSlug) return;
     try {
-      // Mock profile URL - in production this would be the actual provider profile URL
-      await navigator.clipboard.writeText("https://olera.com/provider/home-instead-houston");
+      const profileUrl = `https://olera.care/provider/${providerSlug}`;
+      await navigator.clipboard.writeText(profileUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
@@ -997,7 +998,7 @@ export default function ProviderQnAPage() {
           </div>
 
           {/* Right column - sidebar (desktop only, aligns with first card) */}
-          <QnASidebar publishedCount={counts.published} />
+          <QnASidebar publishedCount={counts.published} providerSlug={providerProfile?.slug ?? null} />
         </div>
       </div>
 
