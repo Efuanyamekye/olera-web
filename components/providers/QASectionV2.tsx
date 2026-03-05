@@ -31,6 +31,31 @@ function MoreIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
+// Avatar gradient (deterministic by name)
+const AVATAR_GRADIENTS = [
+  "from-rose-100 to-pink-50",
+  "from-sky-100 to-blue-50",
+  "from-amber-100 to-yellow-50",
+  "from-emerald-100 to-green-50",
+  "from-violet-100 to-purple-50",
+  "from-orange-100 to-amber-50",
+  "from-teal-100 to-cyan-50",
+  "from-fuchsia-100 to-pink-50",
+];
+
+function avatarGradient(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_GRADIENTS[Math.abs(hash) % AVATAR_GRADIENTS.length];
+}
+
+function getInitials(name: string): string {
+  if (!name || name === "Anonymous") return "?";
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
 // Format relative time
 function timeAgo(dateStr: string): string {
   const now = Date.now();
@@ -280,10 +305,10 @@ export default function QASectionV2({
               >
                 {/* Question */}
                 <div className="flex items-start gap-3">
-                  {/* Asker avatar */}
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-                    <span className="text-xs font-semibold text-gray-600">
-                      {qa.asker_name ? qa.asker_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "?"}
+                  {/* Asker avatar with gradient */}
+                  <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarGradient(qa.asker_name || "Anonymous")} flex items-center justify-center shrink-0 ring-2 ring-white shadow-sm`}>
+                    <span className="text-xs font-bold text-gray-600">
+                      {getInitials(qa.asker_name || "Anonymous")}
                     </span>
                   </div>
 
@@ -472,7 +497,7 @@ export default function QASectionV2({
         <>
           {/* Overlay */}
           <div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px] transition-opacity"
             onClick={() => setShowAllModal(false)}
             aria-hidden="true"
           />
@@ -484,33 +509,33 @@ export default function QASectionV2({
             aria-labelledby="all-questions-title"
             className="fixed z-50 bg-white shadow-2xl flex flex-col
               /* Mobile: Bottom sheet */
-              inset-x-0 bottom-0 max-h-[85vh] rounded-t-3xl
-              /* Desktop: Centered modal */
-              lg:inset-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:max-h-[80vh] lg:w-full lg:max-w-2xl lg:rounded-2xl"
+              inset-x-0 bottom-0 h-[85vh] rounded-t-3xl
+              /* Desktop: Centered modal with fixed dimensions */
+              lg:inset-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:h-[640px] lg:w-[600px] lg:rounded-2xl lg:border lg:border-gray-200/60"
           >
             {/* Drag handle (mobile only) */}
             <div className="lg:hidden pt-3 pb-1 flex justify-center shrink-0">
               <div className="w-10 h-1 bg-gray-300 rounded-full" />
             </div>
 
-            {/* Header */}
-            <div className="px-5 lg:px-8 py-4 lg:py-6 border-b border-gray-100 shrink-0">
+            {/* Header - fixed */}
+            <div className="px-5 lg:px-6 py-4 lg:py-5 border-b border-gray-200/80 bg-gray-50/50 shrink-0 rounded-t-3xl lg:rounded-t-2xl">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 id="all-questions-title" className="text-xl lg:text-2xl font-display font-bold text-gray-900 tracking-tight">
+                  <h2 id="all-questions-title" className="text-lg lg:text-xl font-display font-bold text-gray-900 tracking-tight">
                     Questions & Answers
                   </h2>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-gray-500 mt-0.5">
                     {questions.length} question{questions.length !== 1 ? "s" : ""} · {answeredCount} answered
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setShowAllModal(false)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
+                  className="w-9 h-9 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-200/60 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
                   aria-label="Close"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -518,65 +543,66 @@ export default function QASectionV2({
             </div>
 
             {/* Scrollable content */}
-            <div className="flex-1 overflow-y-auto overscroll-contain px-5 lg:px-8 py-6">
-              <div className="space-y-6">
+            <div className="flex-1 overflow-y-auto overscroll-contain">
+              <div className="px-5 lg:px-6 py-5 lg:py-6">
                 {questions.map((qa, index) => {
                   const isAnswered = qa.status === "answered" || !!qa.answer;
                   const isPending = !isAnswered;
                   const isOwner = user?.id && qa.asker_user_id === user.id;
+                  const askerName = qa.asker_name || "Anonymous";
 
                   return (
                     <div
                       key={qa.id || index}
-                      className={`${index > 0 ? "pt-6 border-t border-gray-100" : ""}`}
+                      className={`${index > 0 ? "mt-6 pt-6 border-t border-gray-100" : ""}`}
                     >
-                      {/* Question card */}
-                      <div className="flex items-start gap-4">
-                        {/* Asker avatar */}
-                        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-                          <span className="text-sm font-semibold text-gray-600">
-                            {qa.asker_name ? qa.asker_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "?"}
+                      {/* Question */}
+                      <div className="flex items-start gap-3.5">
+                        {/* Asker avatar with gradient */}
+                        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${avatarGradient(askerName)} flex items-center justify-center shrink-0 ring-2 ring-white shadow-sm`}>
+                          <span className="text-sm font-bold text-gray-600">
+                            {getInitials(askerName)}
                           </span>
                         </div>
 
                         <div className="flex-1 min-w-0">
                           {/* Asker name + time */}
-                          <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-2 mb-1.5">
                             <p className="text-[15px] font-semibold text-gray-900">
-                              {qa.asker_name || "Anonymous"}
+                              {askerName}
                             </p>
                             {qa.created_at && (
-                              <span className="text-sm text-gray-400">· {timeAgo(qa.created_at)}</span>
+                              <span className="text-[13px] text-gray-400">· {timeAgo(qa.created_at)}</span>
                             )}
                           </div>
 
                           {/* Question text */}
-                          <p className="text-[15px] lg:text-base text-gray-700 leading-relaxed">
+                          <p className="text-[15px] text-gray-700 leading-relaxed">
                             {qa.question}
                           </p>
 
                           {/* Awaiting response (owner only) */}
                           {isPending && isOwner && (
-                            <div className="mt-3 flex items-center gap-2 text-sm text-gray-400">
+                            <div className="mt-3 flex items-center gap-2 text-[13px] text-gray-400">
                               <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
                               <span>Awaiting response</span>
                             </div>
                           )}
 
-                          {/* Provider response */}
+                          {/* Provider response - thread style */}
                           {isAnswered && qa.answer && (
-                            <div className="mt-5">
+                            <div className="mt-4 ml-0.5 pl-4 border-l-2 border-primary-200">
                               <div className="flex items-start gap-3">
                                 {/* Provider avatar */}
                                 {providerImage ? (
                                   <img
                                     src={providerImage}
                                     alt={providerName}
-                                    className="w-9 h-9 rounded-full object-cover shrink-0 ring-2 ring-white shadow-sm"
+                                    className="w-8 h-8 rounded-full object-cover shrink-0 ring-2 ring-white shadow-sm"
                                   />
                                 ) : (
-                                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center shrink-0 ring-2 ring-white shadow-sm">
-                                    <span className="text-sm font-bold text-primary-700">
+                                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center shrink-0 ring-2 ring-white shadow-sm">
+                                    <span className="text-xs font-bold text-primary-700">
                                       {providerName.charAt(0)}
                                     </span>
                                   </div>
@@ -584,24 +610,22 @@ export default function QASectionV2({
 
                                 <div className="flex-1 min-w-0">
                                   {/* Provider name + badge */}
-                                  <div className="flex items-center gap-2 mb-2">
-                                    <span className="text-[15px] font-semibold text-gray-900">{providerName}</span>
-                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold text-primary-700 bg-primary-50 uppercase tracking-wide">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className="text-sm font-semibold text-gray-900">{providerName}</span>
+                                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold text-primary-700 bg-primary-50 uppercase tracking-wide">
                                       Provider
                                     </span>
                                   </div>
 
-                                  {/* Answer text in styled box */}
-                                  <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl px-4 py-4 border-l-2 border-primary-400">
-                                    <p className="text-[15px] text-gray-600 leading-relaxed whitespace-pre-wrap">
-                                      {qa.answer}
-                                    </p>
-                                  </div>
+                                  {/* Answer text */}
+                                  <p className="text-[15px] text-gray-600 leading-relaxed whitespace-pre-wrap">
+                                    {qa.answer}
+                                  </p>
 
                                   {/* Answered time */}
                                   {qa.answered_at && (
                                     <p className="text-xs text-gray-400 mt-2">
-                                      Answered {timeAgo(qa.answered_at)}
+                                      {timeAgo(qa.answered_at)}
                                     </p>
                                   )}
                                 </div>
@@ -616,14 +640,14 @@ export default function QASectionV2({
               </div>
             </div>
 
-            {/* Footer with safe area padding */}
-            <div className="shrink-0 border-t border-gray-100 px-5 lg:px-8 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            {/* Mobile footer with safe area - desktop hidden */}
+            <div className="lg:hidden shrink-0 border-t border-gray-100 px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <button
                 type="button"
                 onClick={() => setShowAllModal(false)}
-                className="w-full py-3.5 rounded-xl border border-gray-200 text-[15px] font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
+                className="w-full py-3.5 rounded-xl bg-gray-900 text-[15px] font-semibold text-white hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors active:scale-[0.98]"
               >
-                Close
+                Done
               </button>
             </div>
           </div>
