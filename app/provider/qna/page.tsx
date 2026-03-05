@@ -577,6 +577,211 @@ function EmptyState({ filter }: { filter: TabFilter }) {
 
 // ── Loading Skeleton ──
 
+// ── Sidebar Component (Desktop Only) ──
+
+function QnASidebar({ publishedCount }: { publishedCount: number }) {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  // Calculate a mock visibility score based on published answers
+  const visibilityScore = Math.min(100, 35 + (publishedCount * 15));
+  const scoreLabel = visibilityScore >= 80 ? "Excellent" : visibilityScore >= 60 ? "Good" : visibilityScore >= 40 ? "Building" : "Getting started";
+  const progressPercent = visibilityScore;
+
+  // Close tooltip on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (tooltipRef.current && !tooltipRef.current.contains(e.target as Node)) {
+        setShowTooltip(false);
+      }
+    }
+    if (showTooltip) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showTooltip]);
+
+  const handleCopyLink = async () => {
+    try {
+      // Mock profile URL - in production this would be the actual provider profile URL
+      await navigator.clipboard.writeText("https://olera.com/provider/home-instead-houston");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback for older browsers
+    }
+  };
+
+  return (
+    <div className="hidden lg:block">
+      <div className="sticky top-24 space-y-4">
+        {/* ── Visibility Score Card ── */}
+        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+          <div className="p-5">
+            {/* Header with tooltip */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1 h-4 bg-primary-500 rounded-full" />
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Visibility Score
+              </span>
+              <div className="relative" ref={tooltipRef}>
+                <button
+                  type="button"
+                  onClick={() => setShowTooltip(!showTooltip)}
+                  className="w-4 h-4 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-200 hover:text-gray-500 transition-colors"
+                  aria-label="What is visibility score?"
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                </button>
+                {/* Tooltip */}
+                {showTooltip && (
+                  <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-gray-900 text-white text-sm rounded-xl shadow-xl z-20">
+                    <div className="absolute -top-1.5 left-3 w-3 h-3 bg-gray-900 rotate-45" />
+                    <p className="relative leading-relaxed">
+                      Score is based on questions received, your response rate, and answer depth. Higher scores rank you above other providers in family searches.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Score display */}
+            <div className="flex items-end justify-between mb-4">
+              <div className="flex items-baseline gap-1">
+                <span className="text-5xl font-display font-bold text-gray-900 tracking-tight">
+                  {visibilityScore}
+                </span>
+                <span className="text-lg text-gray-400 font-medium">/100</span>
+              </div>
+              <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-50 border border-primary-100/50">
+                <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+                </svg>
+                <span className="text-xs font-semibold text-primary-700">{scoreLabel}</span>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div className="mb-2">
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-primary-400 to-primary-500 rounded-full transition-all duration-500"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            </div>
+            <div className="flex justify-between text-[11px] text-gray-400 font-medium">
+              <span>Needs work</span>
+              <span>Strong</span>
+              <span>Top 10%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Share Profile Card ── */}
+        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+          <div className="p-5">
+            <div className="flex items-start gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935-2.186 2.25 2.25 0 0 0-3.935 2.186Zm0-12.814a2.25 2.25 0 1 0 3.933 2.185 2.25 2.25 0 0 0-3.933-2.185Z" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-[15px] font-semibold text-gray-900">
+                  Share your profile with families
+                </h3>
+                <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                  Every question they ask becomes a live Google result for your business.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors group"
+                >
+                  {copied ? (
+                    <>
+                      <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                      </svg>
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      Copy profile link
+                      <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                      </svg>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Tips for Better Answers ── */}
+        <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+          <div className="p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-1 h-4 bg-gray-300 rounded-full" />
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Tips for Better Answers
+              </span>
+            </div>
+
+            <div className="space-y-4">
+              {/* Tip 1 */}
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
+                  <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">Aim for 80+ words</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Longer answers rank higher in Google</p>
+                </div>
+              </div>
+
+              {/* Tip 2 */}
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
+                  <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">Be specific</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Certifications, experience, real examples</p>
+                </div>
+              </div>
+
+              {/* Tip 3 */}
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
+                  <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">Answers go live on Google</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Published responses indexed within 48 hrs</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Loading Skeleton ──
+
 function QnASkeleton() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
@@ -710,72 +915,78 @@ export default function ProviderQnAPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-        {/* Content constrained to left on desktop, full width on mobile */}
-        <div className="lg:max-w-2xl">
-          {/* ── Page header ── */}
-          <div className="mb-5 lg:mb-8">
-            <h1 className="text-2xl lg:text-[28px] font-display font-bold text-gray-900 tracking-tight">
-              Questions & Answers
-            </h1>
-            <p className="text-sm lg:text-[15px] text-gray-500 mt-1 lg:mt-1.5 leading-relaxed">
-              Answer questions from families and showcase your expertise.
-            </p>
-          </div>
-
-        {/* ── Tabs ── */}
-        <div className="mb-5 lg:mb-6">
-          <div className="inline-flex bg-vanilla-50 border border-warm-100/60 p-0.5 rounded-xl">
-            {TABS.map((tab) => (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveFilter(tab.id)}
-                className={[
-                  "px-5 lg:px-6 py-2.5 rounded-[10px] text-sm font-semibold transition-all duration-150 min-h-[44px] flex items-center justify-center gap-2",
-                  activeFilter === tab.id
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700",
-                ].join(" ")}
-              >
-                {tab.label}
-                <span className={`text-xs px-1.5 py-0.5 rounded-md ${
-                  activeFilter === tab.id
-                    ? "bg-gray-100 text-gray-600"
-                    : "bg-warm-100/60 text-gray-400"
-                }`}>
-                  {counts[tab.id]}
-                </span>
-              </button>
-            ))}
-          </div>
+        {/* ── Page header ── */}
+        <div className="mb-5 lg:mb-8">
+          <h1 className="text-2xl lg:text-[28px] font-display font-bold text-gray-900 tracking-tight">
+            Questions & Answers
+          </h1>
+          <p className="text-sm lg:text-[15px] text-gray-500 mt-1 lg:mt-1.5 leading-relaxed">
+            Answer questions from families and showcase your expertise.
+          </p>
         </div>
 
-        {/* ── Content ── */}
-        {filteredQuestions.length > 0 ? (
-          <div className="space-y-4">
-            {filteredQuestions.map((question) => (
-              question.status === "pending" ? (
-                <PendingQuestionCard
-                  key={question.id}
-                  question={question}
-                  onReply={handleReply}
-                  isMobile={isMobile}
-                />
-              ) : (
-                <PublishedQuestionCard
-                  key={question.id}
-                  question={question}
-                  onEdit={handleEdit}
-                  isMobile={isMobile}
-                />
-              )
-            ))}
+        {/* ── Two column layout on desktop ── */}
+        <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8">
+          {/* Left column - main content */}
+          <div>
+            {/* ── Tabs ── */}
+            <div className="mb-5 lg:mb-6">
+              <div className="inline-flex bg-vanilla-50 border border-warm-100/60 p-0.5 rounded-xl">
+                {TABS.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveFilter(tab.id)}
+                    className={[
+                      "px-5 lg:px-6 py-2.5 rounded-[10px] text-sm font-semibold transition-all duration-150 min-h-[44px] flex items-center justify-center gap-2",
+                      activeFilter === tab.id
+                        ? "bg-white text-gray-900 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700",
+                    ].join(" ")}
+                  >
+                    {tab.label}
+                    <span className={`text-xs px-1.5 py-0.5 rounded-md ${
+                      activeFilter === tab.id
+                        ? "bg-gray-100 text-gray-600"
+                        : "bg-warm-100/60 text-gray-400"
+                    }`}>
+                      {counts[tab.id]}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* ── Content ── */}
+            {filteredQuestions.length > 0 ? (
+              <div className="space-y-4">
+                {filteredQuestions.map((question) => (
+                  question.status === "pending" ? (
+                    <PendingQuestionCard
+                      key={question.id}
+                      question={question}
+                      onReply={handleReply}
+                      isMobile={isMobile}
+                    />
+                  ) : (
+                    <PublishedQuestionCard
+                      key={question.id}
+                      question={question}
+                      onEdit={handleEdit}
+                      isMobile={isMobile}
+                    />
+                  )
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
+                <EmptyState filter={activeFilter} />
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
-            <EmptyState filter={activeFilter} />
-          </div>
-        )}
+
+          {/* Right column - sidebar (desktop only) */}
+          <QnASidebar publishedCount={counts.published} />
         </div>
       </div>
 
