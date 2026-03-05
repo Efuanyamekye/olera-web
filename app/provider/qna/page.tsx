@@ -933,39 +933,38 @@ export default function ProviderQnAPage() {
           </p>
         </div>
 
-        {/* ── Two column layout on desktop ── */}
-        <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8">
-          {/* Left column - main content */}
-          <div>
-            {/* ── Tabs ── */}
-            <div className="mb-5 lg:mb-6">
-              <div className="inline-flex bg-vanilla-50 border border-warm-100/60 p-0.5 rounded-xl">
-                {TABS.map((tab) => (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setActiveFilter(tab.id)}
-                    className={[
-                      "px-5 lg:px-6 py-2.5 rounded-[10px] text-sm font-semibold transition-all duration-150 min-h-[44px] flex items-center justify-center gap-2",
-                      activeFilter === tab.id
-                        ? "bg-white text-gray-900 shadow-sm"
-                        : "text-gray-500 hover:text-gray-700",
-                    ].join(" ")}
-                  >
-                    {tab.label}
-                    <span className={`text-xs px-1.5 py-0.5 rounded-md ${
-                      activeFilter === tab.id
-                        ? "bg-gray-100 text-gray-600"
-                        : "bg-warm-100/60 text-gray-400"
-                    }`}>
-                      {counts[tab.id]}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* ── Tabs (outside grid, full width) ── */}
+        <div className="mb-5 lg:mb-6">
+          <div className="inline-flex bg-vanilla-50 border border-warm-100/60 p-0.5 rounded-xl">
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveFilter(tab.id)}
+                className={[
+                  "px-5 lg:px-6 py-2.5 rounded-[10px] text-sm font-semibold transition-all duration-150 min-h-[44px] flex items-center justify-center gap-2",
+                  activeFilter === tab.id
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700",
+                ].join(" ")}
+              >
+                {tab.label}
+                <span className={`text-xs px-1.5 py-0.5 rounded-md ${
+                  activeFilter === tab.id
+                    ? "bg-gray-100 text-gray-600"
+                    : "bg-warm-100/60 text-gray-400"
+                }`}>
+                  {counts[tab.id]}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
 
-            {/* ── Content ── */}
+        {/* ── Two column layout on desktop (cards + sidebar aligned) ── */}
+        <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8 lg:items-start">
+          {/* Left column - question cards */}
+          <div>
             {filteredQuestions.length > 0 ? (
               <div className="space-y-4">
                 {filteredQuestions.map((question) => (
@@ -987,13 +986,13 @@ export default function ProviderQnAPage() {
                 ))}
               </div>
             ) : (
-              <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
+              <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm lg:min-h-[420px] flex items-center justify-center">
                 <EmptyState filter={activeFilter} />
               </div>
             )}
           </div>
 
-          {/* Right column - sidebar (desktop only) */}
+          {/* Right column - sidebar (desktop only, aligns with first card) */}
           <QnASidebar publishedCount={counts.published} />
         </div>
       </div>
