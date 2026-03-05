@@ -161,7 +161,7 @@ function PendingQuestionCard({
   isMobile,
 }: {
   question: Question;
-  onReply: (question: Question, answer?: string) => void;
+  onReply: (question: Question, answer?: string) => Promise<boolean>;
   isMobile: boolean;
 }) {
   const [answer, setAnswer] = useState("");
@@ -208,10 +208,14 @@ function PendingQuestionCard({
   const handleSubmit = async () => {
     if (!answer.trim() || isSubmitting) return;
     setIsSubmitting(true);
-    await new Promise(r => setTimeout(r, 800));
-    onReply(question, answer);
-    setIsSubmitting(false);
-    setAnswer("");
+    try {
+      const success = await onReply(question, answer);
+      if (success) {
+        setAnswer("");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -843,12 +847,13 @@ export default function ProviderQnAPage() {
   }), [questions]);
 
   // Handle reply (from card or sheet)
-  const handleReply = useCallback(async (question: Question, answer?: string) => {
+  const handleReply = useCallback(async (question: Question, answer?: string): Promise<boolean> => {
     if (isMobile || !answer) {
       // Mobile or no answer provided - open sheet
       setSelectedQuestion(question);
       setSheetMode("reply");
       setIsSheetOpen(true);
+      return false; // Sheet will handle submission
     } else {
       // Desktop inline submit - call API
       try {
@@ -859,7 +864,10 @@ export default function ProviderQnAPage() {
         });
 
         if (!res.ok) {
-          throw new Error("Failed to publish answer");
+          const errorData = await res.json().catch(() => ({}));
+          console.error("Failed to publish answer:", errorData);
+          alert(errorData.error || "Failed to publish answer. Please try again.");
+          return false;
         }
 
         const data = await res.json();
@@ -870,9 +878,14 @@ export default function ProviderQnAPage() {
             q.id === question.id ? { ...q, ...data.question } : q
           )
         );
+
+        // Auto-switch to Published tab after successful answer
+        setActiveFilter("published");
+        return true;
       } catch (err) {
         console.error("Failed to publish answer:", err);
-        // Optionally show error toast
+        alert("Failed to publish answer. Please try again.");
+        return false;
       }
     }
   }, [isMobile]);
@@ -894,7 +907,10 @@ export default function ProviderQnAPage() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to publish answer");
+        const errorData = await res.json().catch(() => ({}));
+        console.error("Failed to publish answer:", errorData);
+        alert(errorData.error || "Failed to publish answer. Please try again.");
+        return;
       }
 
       const data = await res.json();
@@ -905,9 +921,12 @@ export default function ProviderQnAPage() {
           q.id === question.id ? { ...q, ...data.question } : q
         )
       );
+
+      // Auto-switch to Published tab after successful answer
+      setActiveFilter("published");
     } catch (err) {
       console.error("Failed to publish answer:", err);
-      // Optionally show error toast
+      alert("Failed to publish answer. Please try again.");
     }
   }, []);
 
