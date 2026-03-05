@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { getServiceClient } from "@/lib/admin";
 
 /**
  * GET /api/provider/questions
@@ -130,23 +131,28 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });
     }
 
+    // Use service client for database operations (bypasses RLS)
+    const db = getServiceClient();
+
     // Verify the question belongs to this provider
-    const { data: question } = await supabase
+    const { data: question, error: questionError } = await db
       .from("provider_questions")
       .select("id, provider_id, answer")
       .eq("id", id)
       .single();
 
-    if (!question) {
+    if (questionError || !question) {
+      console.error("Question lookup error:", questionError);
       return NextResponse.json({ error: "Question not found" }, { status: 404 });
     }
 
     if (question.provider_id !== profile.slug) {
+      console.error("Provider mismatch:", { questionProviderId: question.provider_id, profileSlug: profile.slug });
       return NextResponse.json({ error: "Not authorized to answer this question" }, { status: 403 });
     }
 
     // Update the question with the answer
-    const { data: updated, error: updateError } = await supabase
+    const { data: updated, error: updateError } = await db
       .from("provider_questions")
       .update({
         answer: answer.trim(),
@@ -162,7 +168,7 @@ export async function PATCH(request: NextRequest) {
 
     if (updateError) {
       console.error("Failed to answer question:", updateError);
-      return NextResponse.json({ error: "Failed to publish answer" }, { status: 500 });
+      return NextResponse.json({ error: `Failed to publish: ${updateError.message}` }, { status: 500 });
     }
 
     return NextResponse.json({ question: updated });
