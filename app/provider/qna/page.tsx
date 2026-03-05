@@ -659,13 +659,13 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                 <h3 className="text-[15px] font-semibold text-gray-900 leading-snug">
                   Share your profile with families
                 </h3>
-                <p className="text-[13px] text-gray-500 mt-1.5 leading-relaxed">
+                <p className="text-[13px] text-gray-500 mt-1 leading-relaxed">
                   Every question they ask becomes a live Google result for your business.
                 </p>
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="inline-flex items-center gap-1.5 mt-3 text-[13px] font-semibold text-primary-600 hover:text-primary-700 focus:outline-none focus:underline transition-colors group"
+                  className="inline-flex items-center gap-1.5 mt-2 text-[13px] font-semibold text-primary-600 hover:text-primary-700 focus:outline-none focus:underline transition-colors group"
                 >
                   {copied ? (
                     <>
