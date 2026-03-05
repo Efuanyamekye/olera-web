@@ -1012,13 +1012,12 @@ export default function ProviderLeadsPage() {
       {filteredLeads.length > 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
           {/* Table header - desktop only */}
-          <div className="hidden lg:grid grid-cols-[2.5fr_1.2fr_1.2fr_1fr_0.8fr_0.7fr] gap-6 px-8 py-4 border-b border-gray-100">
-            <span className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">Name</span>
-            <span className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">Location</span>
-            <span className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">Urgency</span>
-            <span className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">Status</span>
-            <span className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider">Date</span>
-            <span />
+          <div className="hidden lg:grid grid-cols-[2.5fr_1fr_1.1fr_1fr_0.8fr] gap-8 px-8 py-3.5 border-b border-gray-200/80 bg-gray-50/40">
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Name</span>
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Location</span>
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Urgency</span>
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Status</span>
+            <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Date</span>
           </div>
 
           {/* Lead rows */}
@@ -1027,8 +1026,9 @@ export default function ProviderLeadsPage() {
               key={lead.id}
               onClick={() => openDrawer(lead)}
               className={[
-                "group transition-colors duration-100 hover:bg-vanilla-50/40 cursor-pointer",
-                idx < filteredLeads.length - 1 ? "border-b border-gray-100/80" : "",
+                "group transition-colors duration-150 cursor-pointer",
+                "lg:hover:bg-vanilla-50/80",
+                idx < filteredLeads.length - 1 ? "border-b border-gray-100 lg:border-gray-200/60" : "",
               ].join(" ")}
             >
               {/* Mobile card layout - redesigned for clarity */}
@@ -1090,45 +1090,42 @@ export default function ProviderLeadsPage() {
               </div>
 
               {/* Desktop table layout */}
-              <div className="hidden lg:grid grid-cols-[2.5fr_1.2fr_1.2fr_1fr_0.8fr_0.7fr] gap-6 items-center px-8 py-4">
+              <div className="hidden lg:grid grid-cols-[2.5fr_1fr_1.1fr_1fr_0.8fr] gap-8 items-center px-8 py-5">
                 {/* Name */}
-                <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-                    <span className="text-xs font-bold text-gray-500">{lead.initials}</span>
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className={`w-11 h-11 rounded-full bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0 ring-2 ring-white shadow-sm`}>
+                    <span className="text-sm font-bold text-gray-600">{lead.initials}</span>
                   </div>
-                  <div className="min-w-0">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2.5">
-                      <p className="text-base font-semibold text-gray-900 truncate">{lead.name}</p>
+                      <p className="text-[15px] font-semibold text-gray-900 truncate">{lead.name}</p>
                       {lead.isNew && (
                         <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold tracking-wide bg-primary-50 text-primary-600 border border-primary-100/50 shrink-0">
                           New
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-500 truncate mt-0.5">{lead.subtitle}</p>
+                    <p className="text-[13px] text-gray-500 truncate mt-0.5">{lead.subtitle}</p>
                   </div>
                 </div>
 
                 {/* Location */}
-                <span className="text-[14px] font-medium text-gray-500">{lead.location}</span>
+                <span className="text-[14px] text-gray-500">{lead.location}</span>
 
                 {/* Urgency */}
-                <span className="text-[14px] font-medium text-gray-500">{URGENCY_LABELS[lead.urgency]}</span>
+                <span className="text-[14px] font-medium text-gray-700">{URGENCY_LABELS[lead.urgency]}</span>
 
                 {/* Status */}
-                <span className="text-[14px] font-medium text-gray-500">{STATUS_LABELS[lead.status]}</span>
+                <span className="text-[14px] text-gray-600">{STATUS_LABELS[lead.status]}</span>
 
                 {/* Date */}
-                <span className="text-[14px] font-medium text-gray-500">{lead.date}</span>
-
-                {/* Action */}
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); openDrawer(lead); }}
-                  className="text-sm font-semibold text-primary-600 border border-primary-200 rounded-lg px-4 py-2.5 hover:bg-primary-50 hover:border-primary-300 hover:shadow-sm transition-all duration-150 active:scale-[0.97] min-h-[44px]"
-                >
-                  View
-                </button>
+                <div className="flex items-center justify-between">
+                  <span className="text-[14px] text-gray-400">{lead.date}</span>
+                  {/* Chevron - appears on hover */}
+                  <svg className="w-5 h-5 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-150 -mr-1" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                  </svg>
+                </div>
               </div>
             </div>
           ))}
