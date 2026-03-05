@@ -217,7 +217,7 @@ export default function ReviewModal({
                   <StarIcon
                     className={`w-10 h-10 transition-colors ${
                       star <= (hoverRating || rating)
-                        ? "text-yellow-400"
+                        ? "text-primary-500"
                         : "text-gray-200"
                     }`}
                     filled={star <= (hoverRating || rating)}
@@ -270,7 +270,7 @@ export default function ReviewModal({
               {[1, 2, 3, 4, 5].map((star) => (
                 <StarIcon
                   key={star}
-                  className={`w-4 h-4 ${star <= rating ? "text-yellow-400" : "text-gray-200"}`}
+                  className={`w-4 h-4 ${star <= rating ? "text-primary-500" : "text-gray-200"}`}
                   filled={star <= rating}
                 />
               ))}

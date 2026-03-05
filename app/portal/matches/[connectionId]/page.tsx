@@ -551,7 +551,7 @@ export default function MatchDetailPage() {
               {googleRating > 0 && (
                 <div className="flex items-center gap-1.5">
                   <svg
-                    className="w-4 h-4 text-amber-400"
+                    className="w-4 h-4 text-primary-500"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >

@@ -321,7 +321,7 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
             {provider.rating > 0 && (
               <div className="flex items-center gap-1.5">
                 <svg
-                  className="w-5 h-5 text-warning-400"
+                  className="w-5 h-5 text-primary-500"
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >

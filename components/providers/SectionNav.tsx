@@ -168,7 +168,7 @@ export default function SectionNav({
                         key={star}
                         className={`w-3 h-3 ${
                           star <= Math.round(oleraScore)
-                            ? "text-yellow-400"
+                            ? "text-primary-500"
                             : "text-gray-200"
                         }`}
                         fill="currentColor"

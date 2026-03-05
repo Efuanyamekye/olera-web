@@ -326,7 +326,6 @@ export default async function ProviderPage({
       : null);
 
   const rating = meta?.rating;
-  const reviewCount = meta?.review_count;
   const images = meta?.images || (profile.image_url ? [profile.image_url] : []);
   const staff = meta?.staff;
   const acceptedPayments = meta?.accepted_payments || [];
@@ -359,6 +358,9 @@ export default async function ProviderPage({
   const pricingDetails = meta?.pricing_details || [];
   const staffScreening = meta?.staff_screening;
   const reviews = meta?.reviews || [];
+
+  // Use actual reviews array length when available, otherwise fall back to metadata count
+  const reviewCount = reviews.length > 0 ? reviews.length : (meta?.review_count ?? 0);
 
   // Olera Score: use community_score if available, otherwise rating
   const oleraScore = meta?.community_score || (rating ? Math.round(rating * 10) / 10 : null);
@@ -862,7 +864,7 @@ export default async function ProviderPage({
                       {[1, 2, 3, 4, 5].map((star) => (
                         <StarIcon
                           key={star}
-                          className={`w-5 h-5 ${star <= Math.round(oleraScore!) ? "text-yellow-400" : "text-gray-200"}`}
+                          className={`w-5 h-5 ${star <= Math.round(oleraScore!) ? "text-primary-500" : "text-gray-200"}`}
                           filled={star <= Math.round(oleraScore!)}
                         />
                       ))}
@@ -963,7 +965,7 @@ export default async function ProviderPage({
                 providerSlug={profile.slug}
                 priceRange={priceRange}
                 oleraScore={oleraScore}
-                reviewCount={meta?.review_count}
+                reviewCount={reviewCount}
                 phone={profile.phone}
                 acceptedPayments={acceptedPayments}
                 careTypes={profile.care_types}
@@ -1000,7 +1002,7 @@ export default async function ProviderPage({
         providerId={profile.id}
         providerSlug={profile.slug}
         oleraScore={oleraScore}
-        reviewCount={meta?.review_count}
+        reviewCount={reviewCount}
         phone={profile.phone}
         acceptedPayments={acceptedPayments}
         careTypes={profile.care_types}
