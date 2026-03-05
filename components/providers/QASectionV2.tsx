@@ -266,7 +266,7 @@ export default function QASectionV2({
             return (
               <div
                 key={qa.id || index}
-                className={`py-5 ${index > 0 ? "border-t border-gray-100" : ""}`}
+                className={`group/question py-5 ${index > 0 ? "border-t border-gray-100" : ""}`}
               >
                 {/* Question */}
                 <div className="flex items-start gap-3">
@@ -280,46 +280,46 @@ export default function QASectionV2({
                   <div className="flex-1 min-w-0">
                     {/* Asker name + time + more menu */}
                     <div className="flex items-center justify-between mb-1">
-                      <p className="text-sm font-semibold text-gray-900">
-                        {qa.asker_name || "Anonymous"}
-                      </p>
                       <div className="flex items-center gap-2">
+                        <p className="text-sm font-semibold text-gray-900">
+                          {qa.asker_name || "Anonymous"}
+                        </p>
                         {qa.created_at && (
-                          <p className="text-xs text-gray-400">{timeAgo(qa.created_at)}</p>
-                        )}
-                        {/* More menu - only for question owner on pending questions */}
-                        {canEdit && qa.id && (
-                          <div className="relative" ref={openMenuId === qa.id ? menuRef : null}>
-                            <button
-                              type="button"
-                              onClick={() => setOpenMenuId(openMenuId === qa.id ? null : qa.id!)}
-                              className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
-                              aria-label="More options"
-                            >
-                              <MoreIcon className="w-4 h-4" />
-                            </button>
-                            {/* Dropdown menu */}
-                            {openMenuId === qa.id && (
-                              <div className="absolute right-0 top-full mt-1 bg-white border border-gray-100 rounded-xl shadow-lg py-1 z-10 min-w-[120px] animate-slide-down">
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setEditingQuestion(qa);
-                                    setEditValue(qa.question);
-                                    setOpenMenuId(null);
-                                  }}
-                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors"
-                                >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
-                                  </svg>
-                                  Edit
-                                </button>
-                              </div>
-                            )}
-                          </div>
+                          <span className="text-xs text-gray-400">· {timeAgo(qa.created_at)}</span>
                         )}
                       </div>
+                      {/* More menu - only for question owner on pending questions */}
+                      {canEdit && qa.id && (
+                        <div className="relative" ref={openMenuId === qa.id ? menuRef : null}>
+                          <button
+                            type="button"
+                            onClick={() => setOpenMenuId(openMenuId === qa.id ? null : qa.id!)}
+                            className="w-8 h-8 -mr-2 flex items-center justify-center rounded-full text-gray-400 opacity-0 group-hover/question:opacity-100 hover:!opacity-100 hover:text-gray-600 hover:bg-gray-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-all"
+                            aria-label="More options"
+                          >
+                            <MoreIcon className="w-5 h-5" />
+                          </button>
+                          {/* Dropdown menu */}
+                          {openMenuId === qa.id && (
+                            <div className="absolute right-0 top-full mt-1 bg-white border border-gray-100 rounded-xl shadow-lg py-1 z-10 min-w-[120px] animate-slide-down">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setEditingQuestion(qa);
+                                  setEditValue(qa.question);
+                                  setOpenMenuId(null);
+                                }}
+                                className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2.5 transition-colors"
+                              >
+                                <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                                Edit question
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     {/* Question text */}
