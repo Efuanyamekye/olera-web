@@ -1034,15 +1034,9 @@ export default function ProviderLeadsPage() {
               {/* Mobile card layout - redesigned for clarity */}
               <div className="lg:hidden px-4 py-4 active:bg-vanilla-50/60">
                 <div className="flex items-start gap-3.5">
-                  {/* Avatar with urgency indicator */}
-                  <div className="relative shrink-0">
-                    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center ring-2 ring-white shadow-sm`}>
-                      <span className="text-sm font-bold text-gray-600">{lead.initials}</span>
-                    </div>
-                    {/* Urgency dot */}
-                    <div className={`absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2 border-white ${
-                      lead.urgency === "immediate" ? "bg-red-400" : lead.urgency === "within_1_month" ? "bg-amber-400" : "bg-blue-400"
-                    }`} />
+                  {/* Avatar */}
+                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center ring-2 ring-white shadow-sm shrink-0`}>
+                    <span className="text-sm font-bold text-gray-600">{lead.initials}</span>
                   </div>
 
                   {/* Content */}
