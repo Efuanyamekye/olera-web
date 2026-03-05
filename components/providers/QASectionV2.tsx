@@ -63,7 +63,6 @@ export default function QASectionV2({
 }: QASectionProps) {
   const { user } = useAuth();
   const [inputValue, setInputValue] = useState("");
-  const [showAll, setShowAll] = useState(false);
   const [questions, setQuestions] = useState<QAEntry[]>(initialQuestions);
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error" | "auth_required">("idle");
@@ -177,8 +176,19 @@ export default function QASectionV2({
     }
   };
 
-  const visibleQuestions = showAll ? questions : questions.slice(0, 3);
-  const hasMore = questions.length > 3;
+  const visibleQuestions = questions.slice(0, 2);
+  const hasMore = questions.length > 2;
+  const [showAllModal, setShowAllModal] = useState(false);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (showAllModal) {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showAllModal]);
   const hasQuestions = questions.length > 0;
   const answeredCount = questions.filter((q) => q.status === "answered" || q.answer).length;
   const pendingCount = questions.filter((q) => q.status === "pending" && !q.answer).length;
@@ -383,24 +393,15 @@ export default function QASectionV2({
             );
           })}
 
-          {/* Show more/less */}
+          {/* See all questions button */}
           {hasMore && (
-            <div className="pt-4 border-t border-gray-100">
+            <div className="pt-5 border-t border-gray-100">
               <button
                 type="button"
-                onClick={() => setShowAll(!showAll)}
-                className="text-sm font-medium text-primary-600 hover:text-primary-700 focus:outline-none focus:underline flex items-center gap-1 transition-colors"
+                onClick={() => setShowAllModal(true)}
+                className="text-sm font-semibold text-primary-600 hover:text-primary-700 focus:outline-none focus:underline transition-colors"
               >
-                {showAll ? "Show less" : `Show more`}
-                <svg
-                  className={`w-4 h-4 transition-transform ${showAll ? "rotate-180" : ""}`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
+                See all {questions.length} questions
               </button>
             </div>
           )}
@@ -460,6 +461,169 @@ export default function QASectionV2({
                 className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-b from-primary-500 to-primary-600 rounded-xl shadow-sm hover:from-primary-600 hover:to-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {editSubmitting ? "Saving..." : "Save changes"}
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* All Questions Modal (Desktop) / Bottom Sheet (Mobile) */}
+      {showAllModal && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity"
+            onClick={() => setShowAllModal(false)}
+            aria-hidden="true"
+          />
+
+          {/* Modal/Sheet Container */}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="all-questions-title"
+            className="fixed z-50 bg-white shadow-2xl flex flex-col
+              /* Mobile: Bottom sheet */
+              inset-x-0 bottom-0 max-h-[85vh] rounded-t-3xl
+              /* Desktop: Centered modal */
+              lg:inset-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:max-h-[80vh] lg:w-full lg:max-w-2xl lg:rounded-2xl"
+          >
+            {/* Drag handle (mobile only) */}
+            <div className="lg:hidden pt-3 pb-1 flex justify-center shrink-0">
+              <div className="w-10 h-1 bg-gray-300 rounded-full" />
+            </div>
+
+            {/* Header */}
+            <div className="px-5 lg:px-8 py-4 lg:py-6 border-b border-gray-100 shrink-0">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 id="all-questions-title" className="text-xl lg:text-2xl font-display font-bold text-gray-900 tracking-tight">
+                    Questions & Answers
+                  </h2>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {questions.length} question{questions.length !== 1 ? "s" : ""} · {answeredCount} answered
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowAllModal(false)}
+                  className="w-10 h-10 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
+                  aria-label="Close"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Scrollable content */}
+            <div className="flex-1 overflow-y-auto overscroll-contain px-5 lg:px-8 py-6">
+              <div className="space-y-6">
+                {questions.map((qa, index) => {
+                  const isAnswered = qa.status === "answered" || !!qa.answer;
+                  const isPending = !isAnswered;
+                  const isOwner = user?.id && qa.asker_user_id === user.id;
+
+                  return (
+                    <div
+                      key={qa.id || index}
+                      className={`${index > 0 ? "pt-6 border-t border-gray-100" : ""}`}
+                    >
+                      {/* Question card */}
+                      <div className="flex items-start gap-4">
+                        {/* Asker avatar */}
+                        <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                          <span className="text-sm font-semibold text-gray-600">
+                            {qa.asker_name ? qa.asker_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "?"}
+                          </span>
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          {/* Asker name + time */}
+                          <div className="flex items-center gap-2 mb-2">
+                            <p className="text-[15px] font-semibold text-gray-900">
+                              {qa.asker_name || "Anonymous"}
+                            </p>
+                            {qa.created_at && (
+                              <span className="text-sm text-gray-400">· {timeAgo(qa.created_at)}</span>
+                            )}
+                          </div>
+
+                          {/* Question text */}
+                          <p className="text-[15px] lg:text-base text-gray-700 leading-relaxed">
+                            {qa.question}
+                          </p>
+
+                          {/* Awaiting response (owner only) */}
+                          {isPending && isOwner && (
+                            <div className="mt-3 flex items-center gap-2 text-sm text-gray-400">
+                              <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                              <span>Awaiting response</span>
+                            </div>
+                          )}
+
+                          {/* Provider response */}
+                          {isAnswered && qa.answer && (
+                            <div className="mt-5">
+                              <div className="flex items-start gap-3">
+                                {/* Provider avatar */}
+                                {providerImage ? (
+                                  <img
+                                    src={providerImage}
+                                    alt={providerName}
+                                    className="w-9 h-9 rounded-full object-cover shrink-0 ring-2 ring-white shadow-sm"
+                                  />
+                                ) : (
+                                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center shrink-0 ring-2 ring-white shadow-sm">
+                                    <span className="text-sm font-bold text-primary-700">
+                                      {providerName.charAt(0)}
+                                    </span>
+                                  </div>
+                                )}
+
+                                <div className="flex-1 min-w-0">
+                                  {/* Provider name + badge */}
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <span className="text-[15px] font-semibold text-gray-900">{providerName}</span>
+                                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold text-primary-700 bg-primary-50 uppercase tracking-wide">
+                                      Provider
+                                    </span>
+                                  </div>
+
+                                  {/* Answer text in styled box */}
+                                  <div className="bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl px-4 py-4 border-l-2 border-primary-400">
+                                    <p className="text-[15px] text-gray-600 leading-relaxed whitespace-pre-wrap">
+                                      {qa.answer}
+                                    </p>
+                                  </div>
+
+                                  {/* Answered time */}
+                                  {qa.answered_at && (
+                                    <p className="text-xs text-gray-400 mt-2">
+                                      Answered {timeAgo(qa.answered_at)}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Footer with safe area padding */}
+            <div className="shrink-0 border-t border-gray-100 px-5 lg:px-8 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+              <button
+                type="button"
+                onClick={() => setShowAllModal(false)}
+                className="w-full py-3.5 rounded-xl border border-gray-200 text-[15px] font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
+              >
+                Close
               </button>
             </div>
           </div>
