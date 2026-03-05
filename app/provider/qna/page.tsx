@@ -934,15 +934,15 @@ export default function ProviderQnAPage() {
         </div>
 
         {/* ── Tabs (outside grid, full width) ── */}
-        <div className="mb-5 lg:mb-6">
-          <div className="inline-flex bg-vanilla-50 border border-warm-100/60 p-0.5 rounded-xl">
+        <div className="mb-4 lg:mb-5">
+          <div className="flex gap-0.5 bg-vanilla-50 border border-warm-100/60 p-0.5 rounded-xl w-max">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveFilter(tab.id)}
                 className={[
-                  "px-5 lg:px-6 py-2.5 rounded-[10px] text-sm font-semibold transition-all duration-150 min-h-[44px] flex items-center justify-center gap-2",
+                  "px-3.5 lg:px-5 py-2 lg:py-2.5 rounded-[10px] text-[13px] lg:text-sm font-semibold whitespace-nowrap transition-all duration-150 min-h-[40px] lg:min-h-[44px] flex items-center gap-2",
                   activeFilter === tab.id
                     ? "bg-white text-gray-900 shadow-sm"
                     : "text-gray-500 hover:text-gray-700",
