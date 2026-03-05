@@ -371,10 +371,10 @@ export default function QASectionV2({
                           </div>
                         </div>
                       </div>
-                    ) : isPending ? (
+                    ) : isPending && isOwner ? (
                       <div className="mt-3 flex items-center gap-2 text-[13px] text-gray-400">
                         <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                        <span>Awaiting response from {providerName}</span>
+                        <span>Awaiting response</span>
                       </div>
                     ) : null}
                   </div>
