@@ -706,7 +706,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">Aim for 80+ words</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Longer answers rank higher in Google</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Longer answers rank higher</p>
                 </div>
               </div>
 
@@ -719,7 +719,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">Be specific</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Certifications, experience, real examples</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Real details build family trust</p>
                 </div>
               </div>
 
@@ -732,7 +732,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">Answers go live on Google</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Published responses indexed within 48 hrs</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Published instantly</p>
                 </div>
               </div>
             </div>
