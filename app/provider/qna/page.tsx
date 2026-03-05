@@ -323,7 +323,7 @@ function PublishedQuestionCard({
           <button
             type="button"
             onClick={() => onEdit(question)}
-            className="w-full py-3 rounded-xl border border-gray-200 text-[15px] font-semibold text-primary-600 hover:bg-primary-50/50 hover:border-primary-200 transition-all active:scale-[0.99] min-h-[48px]"
+            className="w-full py-3 rounded-xl border border-gray-200 text-[15px] font-semibold text-primary-600 hover:bg-primary-50/50 hover:border-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-all active:scale-[0.99] min-h-[48px]"
           >
             Edit
           </button>
@@ -403,10 +403,14 @@ function BottomSheet({
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Sheet - bottom on mobile, side drawer on desktop */}
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="sheet-title"
         className={`fixed z-50 bg-white shadow-2xl flex flex-col will-change-transform transition-transform duration-300 ease-out
           /* Mobile: bottom sheet */
           inset-x-0 bottom-0 max-h-[90vh] rounded-t-3xl
@@ -425,11 +429,11 @@ function BottomSheet({
         {/* Header */}
         <div className="px-4 lg:px-6 py-3 lg:py-5 border-b border-gray-100 shrink-0">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-display font-bold text-gray-900 tracking-tight">{title}</h2>
+            <h2 id="sheet-title" className="text-lg font-display font-bold text-gray-900 tracking-tight">{title}</h2>
             <button
               type="button"
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+              className="w-8 h-8 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
               aria-label="Close"
             >
               <CloseIcon className="w-5 h-5" />
@@ -592,7 +596,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                 <button
                   type="button"
                   onClick={() => setShowTooltip(!showTooltip)}
-                  className="w-[18px] h-[18px] rounded-full flex items-center justify-center text-gray-400 hover:text-gray-500 transition-colors"
+                  className="w-[18px] h-[18px] rounded-full flex items-center justify-center text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
                   aria-label="What is visibility score?"
                 >
                   <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -661,7 +665,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="inline-flex items-center gap-1.5 mt-3 text-[13px] font-semibold text-primary-600 hover:text-primary-700 transition-colors group"
+                  className="inline-flex items-center gap-1.5 mt-3 text-[13px] font-semibold text-primary-600 hover:text-primary-700 focus:outline-none focus:underline transition-colors group"
                 >
                   {copied ? (
                     <>

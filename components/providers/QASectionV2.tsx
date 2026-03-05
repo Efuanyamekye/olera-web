@@ -125,7 +125,7 @@ export default function QASectionV2({
       {/* Header */}
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-xl lg:text-2xl font-display font-bold text-gray-900 tracking-tight">
+          <h2 className="text-2xl font-bold text-gray-900 font-display tracking-tight">
             Questions & Answers
           </h2>
           <p className="text-sm text-gray-500 mt-1">
@@ -146,8 +146,9 @@ export default function QASectionV2({
               {suggestedQuestions.map((q) => (
                 <button
                   key={q}
+                  type="button"
                   onClick={() => setInputValue(q)}
-                  className="text-[13px] text-gray-600 px-3.5 py-2 bg-white border border-gray-200 rounded-full hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                  className="text-[13px] text-gray-600 px-3.5 py-2 bg-white border border-gray-200 rounded-full hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors"
                 >
                   {q}
                 </button>
@@ -180,9 +181,10 @@ export default function QASectionV2({
             )}
           </div>
           <button
+            type="button"
             onClick={handleSubmit}
             disabled={!inputValue.trim() || submitting}
-            className="shrink-0 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-b from-primary-500 to-primary-600 rounded-full shadow-sm hover:from-primary-600 hover:to-primary-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+            className="shrink-0 px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-b from-primary-500 to-primary-600 rounded-full shadow-sm hover:from-primary-600 hover:to-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
           >
             {submitting ? "Posting..." : "Post Question"}
           </button>
@@ -204,22 +206,26 @@ export default function QASectionV2({
                 {/* Question */}
                 <div className="flex items-start gap-3">
                   {/* Asker avatar */}
-                  <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-                    <span className="text-sm font-semibold text-gray-400">
-                      {qa.asker_name ? qa.asker_name.charAt(0).toUpperCase() : "?"}
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                    <span className="text-xs font-semibold text-gray-600">
+                      {qa.asker_name ? qa.asker_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase() : "?"}
                     </span>
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    {/* Question text */}
-                    <p className="text-[15px] lg:text-base font-semibold text-gray-900 leading-snug">
-                      {qa.question}
-                    </p>
+                    {/* Asker name + time (like ReviewsSection) */}
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-sm font-semibold text-gray-900">
+                        {qa.asker_name || "Anonymous"}
+                      </p>
+                      {qa.created_at && (
+                        <p className="text-xs text-gray-400">{timeAgo(qa.created_at)}</p>
+                      )}
+                    </div>
 
-                    {/* Meta: asker + time */}
-                    <p className="text-[13px] text-gray-400 mt-1">
-                      {qa.asker_name || "Anonymous"}
-                      {qa.created_at && ` · ${timeAgo(qa.created_at)}`}
+                    {/* Question text */}
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {qa.question}
                     </p>
 
                     {/* Provider response OR awaiting response */}
@@ -251,8 +257,8 @@ export default function QASectionV2({
                             </div>
 
                             {/* Answer text */}
-                            <div className="mt-2 bg-gray-50 rounded-xl px-4 py-3 border-l-2 border-primary-200">
-                              <p className="text-[15px] text-gray-600 leading-relaxed">
+                            <div className="mt-2 bg-gray-50 rounded-xl px-4 py-3 border-l-2 border-primary-300">
+                              <p className="text-sm text-gray-600 leading-relaxed">
                                 {qa.answer}
                               </p>
                             </div>
@@ -282,10 +288,11 @@ export default function QASectionV2({
           {hasMore && (
             <div className="pt-4 border-t border-gray-100">
               <button
+                type="button"
                 onClick={() => setShowAll(!showAll)}
-                className="text-sm font-semibold text-primary-600 hover:text-primary-700 flex items-center gap-1.5 transition-colors"
+                className="text-sm font-medium text-primary-600 hover:text-primary-700 focus:outline-none focus:underline flex items-center gap-1 transition-colors"
               >
-                {showAll ? "Show fewer" : `View all ${questions.length} questions`}
+                {showAll ? "Show less" : `Show more`}
                 <svg
                   className={`w-4 h-4 transition-transform ${showAll ? "rotate-180" : ""}`}
                   fill="none"
@@ -300,15 +307,13 @@ export default function QASectionV2({
           )}
         </div>
       ) : (
-        /* Empty state */
-        <div className="bg-gray-50/80 rounded-2xl py-10 px-6 flex flex-col items-center text-center">
-          <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-            <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-11.25 5.25v-1.875a3.375 3.375 0 013.375-3.375h6.75a3.375 3.375 0 013.375 3.375v1.875m-16.5 0h16.5" />
-            </svg>
-          </div>
-          <p className="text-base font-semibold text-gray-700">No questions yet</p>
-          <p className="text-sm text-gray-500 mt-1">Be the first to ask {providerName} a question.</p>
+        /* Empty state - matches ReviewsSection pattern */
+        <div className="text-center py-12 border border-dashed border-gray-200 rounded-2xl bg-gray-50/50">
+          <svg className="w-10 h-10 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+          </svg>
+          <p className="text-gray-500 font-medium">No questions yet</p>
+          <p className="text-sm text-gray-400 mt-1">Be the first to ask {providerName} a question.</p>
         </div>
       )}
     </div>
