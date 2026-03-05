@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 interface QAEntry {
   id?: string;
   question: string;
   answer?: string | null;
   asker_name?: string;
+  asker_user_id?: string;
   status?: "pending" | "approved" | "answered";
   created_at?: string;
   answered_at?: string;
@@ -18,6 +20,15 @@ interface QASectionProps {
   providerImage?: string;
   questions?: QAEntry[];
   suggestedQuestions?: string[];
+}
+
+// More menu icon component
+function MoreIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 20 20">
+      <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0zm6 0a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg>
+  );
 }
 
 // Format relative time
@@ -50,11 +61,32 @@ export default function QASectionV2({
     "Do caregivers give meds?",
   ],
 }: QASectionProps) {
+  const { user } = useAuth();
   const [inputValue, setInputValue] = useState("");
   const [showAll, setShowAll] = useState(false);
   const [questions, setQuestions] = useState<QAEntry[]>(initialQuestions);
   const [submitting, setSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error" | "auth_required">("idle");
+
+  // Edit question state
+  const [editingQuestion, setEditingQuestion] = useState<QAEntry | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const [editSubmitting, setEditSubmitting] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenuId(null);
+      }
+    }
+    if (openMenuId) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openMenuId]);
 
   // Fetch public questions on mount
   const fetchQuestions = useCallback(async () => {
@@ -111,6 +143,37 @@ export default function QASectionV2({
       setSubmitStatus("error");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleEditSubmit = async () => {
+    if (!editingQuestion?.id || !editValue.trim() || editSubmitting) return;
+
+    setEditSubmitting(true);
+    try {
+      const res = await fetch("/api/questions", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: editingQuestion.id, question: editValue.trim() }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        alert(data.error || "Failed to update question");
+        return;
+      }
+
+      const data = await res.json();
+      // Update question in local state
+      setQuestions((prev) =>
+        prev.map((q) => (q.id === editingQuestion.id ? { ...q, ...data.question } : q))
+      );
+      setEditingQuestion(null);
+      setEditValue("");
+    } catch {
+      alert("Failed to update question");
+    } finally {
+      setEditSubmitting(false);
     }
   };
 
@@ -197,6 +260,8 @@ export default function QASectionV2({
           {visibleQuestions.map((qa, index) => {
             const isAnswered = qa.status === "answered" || !!qa.answer;
             const isPending = !isAnswered;
+            const isOwner = user?.id && qa.asker_user_id === user.id;
+            const canEdit = isOwner && isPending;
 
             return (
               <div
@@ -213,14 +278,48 @@ export default function QASectionV2({
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    {/* Asker name + time (like ReviewsSection) */}
+                    {/* Asker name + time + more menu */}
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-sm font-semibold text-gray-900">
                         {qa.asker_name || "Anonymous"}
                       </p>
-                      {qa.created_at && (
-                        <p className="text-xs text-gray-400">{timeAgo(qa.created_at)}</p>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {qa.created_at && (
+                          <p className="text-xs text-gray-400">{timeAgo(qa.created_at)}</p>
+                        )}
+                        {/* More menu - only for question owner on pending questions */}
+                        {canEdit && qa.id && (
+                          <div className="relative" ref={openMenuId === qa.id ? menuRef : null}>
+                            <button
+                              type="button"
+                              onClick={() => setOpenMenuId(openMenuId === qa.id ? null : qa.id!)}
+                              className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
+                              aria-label="More options"
+                            >
+                              <MoreIcon className="w-4 h-4" />
+                            </button>
+                            {/* Dropdown menu */}
+                            {openMenuId === qa.id && (
+                              <div className="absolute right-0 top-full mt-1 bg-white border border-gray-100 rounded-xl shadow-lg py-1 z-10 min-w-[120px] animate-slide-down">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setEditingQuestion(qa);
+                                    setEditValue(qa.question);
+                                    setOpenMenuId(null);
+                                  }}
+                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors"
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                  </svg>
+                                  Edit
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     {/* Question text */}
@@ -315,6 +414,56 @@ export default function QASectionV2({
           <p className="text-gray-500 font-medium">No questions yet</p>
           <p className="text-sm text-gray-400 mt-1">Be the first to ask {providerName} a question.</p>
         </div>
+      )}
+
+      {/* Edit Question Modal */}
+      {editingQuestion && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 z-40 bg-black/50 transition-opacity"
+            onClick={() => setEditingQuestion(null)}
+            aria-hidden="true"
+          />
+          {/* Modal */}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-question-title"
+            className="fixed inset-x-4 top-1/2 -translate-y-1/2 z-50 bg-white rounded-2xl shadow-2xl max-w-lg mx-auto p-6"
+          >
+            <h3 id="edit-question-title" className="text-lg font-display font-bold text-gray-900 mb-4">
+              Edit your question
+            </h3>
+            <textarea
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              rows={4}
+              maxLength={1000}
+              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-[15px] text-gray-900 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-300 focus:bg-white transition-all"
+            />
+            <div className="flex items-center justify-end gap-3 mt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setEditingQuestion(null);
+                  setEditValue("");
+                }}
+                className="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleEditSubmit}
+                disabled={!editValue.trim() || editValue.trim() === editingQuestion.question || editSubmitting}
+                className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-b from-primary-500 to-primary-600 rounded-xl shadow-sm hover:from-primary-600 hover:to-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {editSubmitting ? "Saving..." : "Save changes"}
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

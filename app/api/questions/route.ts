@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     // Fetch both pending and answered questions that are public
     const { data: questions, error } = await db
       .from("provider_questions")
-      .select("id, question, answer, asker_name, status, answered_at, created_at")
+      .select("id, question, answer, asker_name, asker_user_id, status, answered_at, created_at")
       .eq("provider_id", providerId)
       .eq("is_public", true)
       .in("status", ["pending", "approved", "answered"])
@@ -99,6 +99,73 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ question: newQuestion }, { status: 201 });
   } catch (err) {
     console.error("Questions POST error:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+/**
+ * PATCH /api/questions
+ *
+ * Edit a question (only by the original asker, and only if not yet answered).
+ * Body: { id, question }
+ */
+export async function PATCH(request: NextRequest) {
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Authentication required" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { id, question } = body;
+
+    if (!id || !question) {
+      return NextResponse.json({ error: "id and question are required" }, { status: 400 });
+    }
+
+    if (question.length > 1000) {
+      return NextResponse.json({ error: "Question must be under 1000 characters" }, { status: 400 });
+    }
+
+    const db = getServiceClient();
+
+    // Verify ownership and status
+    const { data: existing, error: fetchError } = await db
+      .from("provider_questions")
+      .select("id, asker_user_id, status, answer")
+      .eq("id", id)
+      .single();
+
+    if (fetchError || !existing) {
+      return NextResponse.json({ error: "Question not found" }, { status: 404 });
+    }
+
+    if (existing.asker_user_id !== user.id) {
+      return NextResponse.json({ error: "You can only edit your own questions" }, { status: 403 });
+    }
+
+    if (existing.status === "answered" || existing.answer) {
+      return NextResponse.json({ error: "Cannot edit a question that has been answered" }, { status: 400 });
+    }
+
+    // Update the question
+    const { data: updated, error: updateError } = await db
+      .from("provider_questions")
+      .update({ question: question.trim() })
+      .eq("id", id)
+      .select("id, question, asker_name, asker_user_id, status, created_at")
+      .single();
+
+    if (updateError) {
+      console.error("Failed to update question:", updateError);
+      return NextResponse.json({ error: "Failed to update question" }, { status: 500 });
+    }
+
+    return NextResponse.json({ question: updated });
+  } catch (err) {
+    console.error("Questions PATCH error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
