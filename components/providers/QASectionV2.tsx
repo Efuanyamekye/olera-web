@@ -266,7 +266,7 @@ export default function QASectionV2({
             return (
               <div
                 key={qa.id || index}
-                className={`group/question py-5 ${index > 0 ? "border-t border-gray-100" : ""}`}
+                className={`py-5 ${index > 0 ? "border-t border-gray-100" : ""}`}
               >
                 {/* Question */}
                 <div className="flex items-start gap-3">
@@ -294,7 +294,7 @@ export default function QASectionV2({
                           <button
                             type="button"
                             onClick={() => setOpenMenuId(openMenuId === qa.id ? null : qa.id!)}
-                            className="w-8 h-8 -mr-2 flex items-center justify-center rounded-full text-gray-400 opacity-0 group-hover/question:opacity-100 hover:!opacity-100 hover:text-gray-600 hover:bg-gray-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-all"
+                            className="w-8 h-8 -mr-2 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
                             aria-label="More options"
                           >
                             <MoreIcon className="w-5 h-5" />
