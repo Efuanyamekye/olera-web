@@ -5,7 +5,7 @@ import { getServiceClient } from "@/lib/admin";
 /**
  * GET /api/questions?provider_id=xxx
  *
- * Fetch public (approved/answered) questions for a provider.
+ * Fetch public questions for a provider (both pending and answered).
  * No auth required — these are public Q&A.
  */
 export async function GET(request: NextRequest) {
@@ -18,12 +18,13 @@ export async function GET(request: NextRequest) {
 
   try {
     const db = getServiceClient();
+    // Fetch both pending and answered questions that are public
     const { data: questions, error } = await db
       .from("provider_questions")
-      .select("id, question, answer, asker_name, answered_at, created_at")
+      .select("id, question, answer, asker_name, status, answered_at, created_at")
       .eq("provider_id", providerId)
       .eq("is_public", true)
-      .in("status", ["approved", "answered"])
+      .in("status", ["pending", "approved", "answered"])
       .order("created_at", { ascending: false })
       .limit(20);
 
@@ -85,7 +86,7 @@ export async function POST(request: NextRequest) {
         asker_email: user.email,
         asker_user_id: user.id,
         status: "pending",
-        is_public: false,
+        is_public: true, // Show question publicly immediately
       })
       .select("id, question, asker_name, status, created_at")
       .single();
