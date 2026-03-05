@@ -615,31 +615,28 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
 
   return (
     <div className="hidden lg:block">
-      <div className="sticky top-24 space-y-4">
+      <div className="sticky top-24 space-y-3">
         {/* ── Visibility Score Card ── */}
         <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-          <div className="p-5">
+          <div className="p-6">
             {/* Header with tooltip */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-1 h-4 bg-primary-500 rounded-full" />
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <div className="flex items-center gap-2 mb-5">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
                 Visibility Score
               </span>
               <div className="relative" ref={tooltipRef}>
                 <button
                   type="button"
                   onClick={() => setShowTooltip(!showTooltip)}
-                  className="w-4 h-4 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:bg-gray-200 hover:text-gray-500 transition-colors"
+                  className="w-[18px] h-[18px] rounded-full border border-gray-300 flex items-center justify-center text-gray-400 hover:border-gray-400 hover:text-gray-500 transition-colors"
                   aria-label="What is visibility score?"
                 >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
+                  <span className="text-[11px] font-medium">?</span>
                 </button>
                 {/* Tooltip */}
                 {showTooltip && (
-                  <div className="absolute left-0 top-full mt-2 w-64 p-3 bg-gray-900 text-white text-sm rounded-xl shadow-xl z-20">
-                    <div className="absolute -top-1.5 left-3 w-3 h-3 bg-gray-900 rotate-45" />
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 p-4 bg-gray-900 text-white text-[13px] rounded-xl shadow-xl z-20">
+                    <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45" />
                     <p className="relative leading-relaxed">
                       Score is based on questions received, your response rate, and answer depth. Higher scores rank you above other providers in family searches.
                     </p>
@@ -649,23 +646,23 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
             </div>
 
             {/* Score display */}
-            <div className="flex items-end justify-between mb-4">
-              <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-display font-bold text-gray-900 tracking-tight">
+            <div className="flex items-end justify-between mb-5">
+              <div className="flex items-baseline gap-0.5">
+                <span className="text-[44px] font-display font-bold text-gray-900 leading-none tracking-tight">
                   {visibilityScore}
                 </span>
-                <span className="text-lg text-gray-400 font-medium">/100</span>
+                <span className="text-lg text-gray-300 font-medium">/100</span>
               </div>
-              <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-50 border border-primary-100/50">
-                <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-50 border border-primary-100/60">
+                <svg className="w-3.5 h-3.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
                 </svg>
-                <span className="text-xs font-semibold text-primary-700">{scoreLabel}</span>
+                <span className="text-xs font-bold text-primary-700">{scoreLabel}</span>
               </div>
             </div>
 
             {/* Progress bar */}
-            <div className="mb-2">
+            <div className="mb-2.5">
               <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-primary-400 to-primary-500 rounded-full transition-all duration-500"
@@ -673,7 +670,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                 />
               </div>
             </div>
-            <div className="flex justify-between text-[11px] text-gray-400 font-medium">
+            <div className="flex justify-between text-xs text-gray-400">
               <span>Needs work</span>
               <span>Strong</span>
               <span>Top 10%</span>
@@ -683,28 +680,28 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
 
         {/* ── Share Profile Card ── */}
         <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-          <div className="p-5">
-            <div className="flex items-start gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
+          <div className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 rounded-xl bg-primary-50 flex items-center justify-center shrink-0">
                 <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935-2.186 2.25 2.25 0 0 0-3.935 2.186Zm0-12.814a2.25 2.25 0 1 0 3.933 2.185 2.25 2.25 0 0 0-3.933-2.185Z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
                 </svg>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="text-[15px] font-semibold text-gray-900">
+                <h3 className="text-[15px] font-semibold text-gray-900 leading-snug">
                   Share your profile with families
                 </h3>
-                <p className="text-sm text-gray-500 mt-1 leading-relaxed">
+                <p className="text-[13px] text-gray-500 mt-1.5 leading-relaxed">
                   Every question they ask becomes a live Google result for your business.
                 </p>
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="inline-flex items-center gap-1.5 mt-3 text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors group"
+                  className="inline-flex items-center gap-1.5 mt-3 text-[13px] font-semibold text-primary-600 hover:text-primary-700 transition-colors group"
                 >
                   {copied ? (
                     <>
-                      <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                       </svg>
                       Copied!
@@ -712,7 +709,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
                   ) : (
                     <>
                       Copy profile link
-                      <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                       </svg>
                     </>
@@ -725,7 +722,7 @@ function QnASidebar({ publishedCount }: { publishedCount: number }) {
 
         {/* ── Tips for Better Answers ── */}
         <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-          <div className="p-5">
+          <div className="p-6">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-1 h-4 bg-gray-300 rounded-full" />
               <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
