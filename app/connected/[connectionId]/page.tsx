@@ -92,6 +92,11 @@ function ConnectedPageContent() {
           .single();
 
         if (!connection) {
+          // If we have provider info from URL params, show success anyway (guest flow)
+          if (nameFromParams) {
+            setLoading(false);
+            return;
+          }
           setNotFound(true);
           setLoading(false);
           return;
