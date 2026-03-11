@@ -93,7 +93,7 @@ export default function EmailCapture({
       </p>
 
       {/* Email input */}
-      <div className="mb-4">
+      <div className="mb-2">
         <input
           type="email"
           value={email}

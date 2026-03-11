@@ -72,7 +72,7 @@ function MobileEmailCaptureForm({
 
   return (
     <>
-      <div className="mb-4">
+      <div className="mb-2">
         <input
           type="email"
           value={email}
