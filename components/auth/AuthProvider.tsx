@@ -559,7 +559,24 @@ export default function AuthProvider({ children }: AuthProviderProps) {
                 headers: { "Content-Type": "application/json" },
               });
               if (cancelled || versionRef.current !== version) return;
-              // Re-fetch now that account + family profile exist
+
+              // Auto-claim placeholder profiles for new users (guest connection flow)
+              try {
+                const claimToken = localStorage.getItem(CLAIM_TOKEN_KEY);
+                if (claimToken) {
+                  await fetch("/api/auth/claim-profiles", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ claimToken }),
+                  });
+                  localStorage.removeItem(CLAIM_TOKEN_KEY);
+                }
+              } catch {
+                // Non-blocking
+              }
+              if (cancelled || versionRef.current !== version) return;
+
+              // Re-fetch now that account + family profile exist (with claimed connections)
               const retryData = await fetchAccountData(userId);
               if (cancelled || versionRef.current !== version) return;
               if (retryData) {
@@ -639,6 +656,18 @@ export default function AuthProvider({ children }: AuthProviderProps) {
         }
       } catch {
         // sessionStorage unavailable
+      }
+
+      // Check for guest connection flow — if there's a claim token, skip onboarding
+      // (user came from magic link after guest connection)
+      try {
+        const hasClaimToken = !!localStorage.getItem(CLAIM_TOKEN_KEY);
+        if (hasClaimToken) {
+          // Guest connection flow — don't show onboarding, let them access inbox
+          return;
+        }
+      } catch {
+        // localStorage unavailable
       }
 
       // Only route to provider onboarding if that's their explicit intent
