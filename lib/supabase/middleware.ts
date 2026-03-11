@@ -52,9 +52,16 @@ export async function updateSession(request: NextRequest) {
   );
 
   if (isProtectedPath && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/";
-    return NextResponse.redirect(url);
+    // Allow guest access to inbox with claim token
+    const isInboxWithToken =
+      request.nextUrl.pathname === "/portal/inbox" &&
+      request.nextUrl.searchParams.has("token");
+
+    if (!isInboxWithToken) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

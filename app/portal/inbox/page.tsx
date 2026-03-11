@@ -68,8 +68,19 @@ function InboxContent() {
     if (user || activeProfile) return; // Already authenticated
     if (!isSupabaseConfigured()) return;
 
-    const claimToken = localStorage.getItem(CLAIM_TOKEN_KEY);
+    // Check URL param first, then localStorage
+    const urlToken = searchParams.get("token");
+    const claimToken = urlToken || localStorage.getItem(CLAIM_TOKEN_KEY);
     if (!claimToken) return;
+
+    // If token came from URL, also save to localStorage for future visits
+    if (urlToken) {
+      try {
+        localStorage.setItem(CLAIM_TOKEN_KEY, urlToken);
+      } catch {
+        // localStorage unavailable
+      }
+    }
 
     const fetchGuestProfile = async () => {
       try {
@@ -90,7 +101,7 @@ function InboxContent() {
     };
 
     fetchGuestProfile();
-  }, [user, activeProfile]);
+  }, [user, activeProfile, searchParams]);
 
   // Fetch connections
   const fetchConnections = useCallback(async () => {
