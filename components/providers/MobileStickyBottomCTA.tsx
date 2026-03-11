@@ -101,8 +101,8 @@ function MobileEmailCaptureForm({
           </p>
         )}
       </div>
-      <p className="text-xs text-gray-500 mb-4 leading-relaxed">
-        No password needed. We&apos;ll email you a link to access your conversation.
+      <p className="text-xs text-gray-500 mb-3">
+        We&apos;ll email you a link.
       </p>
       <button
         onClick={handleSubmit}
