@@ -17,14 +17,12 @@ import {
 
 // ── Mobile email capture form (inline to avoid circular imports) ──
 interface MobileEmailCaptureFormProps {
-  providerName: string;
   onSubmit: (email: string) => void;
   submitting?: boolean;
   error?: string;
 }
 
 function MobileEmailCaptureForm({
-  providerName,
   onSubmit,
   submitting,
   error,
@@ -118,21 +116,7 @@ function MobileEmailCaptureForm({
         {submitting && (
           <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         )}
-        {submitting ? "Connecting..." : `Connect with ${providerName}`}
-        {!submitting && (
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        )}
+        {submitting ? "Connecting..." : "Connect"}
       </button>
     </>
   );
@@ -541,7 +525,6 @@ export default function MobileStickyBottomCTA({
               )}
             </div>
             <MobileEmailCaptureForm
-              providerName={providerName}
               onSubmit={hook.submitGuestRequest}
               submitting={hook.submitting}
               error={hook.error}

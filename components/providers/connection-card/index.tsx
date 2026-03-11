@@ -72,7 +72,6 @@ export default function ConnectionCard(props: ConnectionCardProps) {
         {hook.cardState === "email_capture" && (
           <EmailCapture
             intentData={hook.intentData}
-            providerName={providerName}
             onSubmit={hook.submitGuestRequest}
             onBack={hook.editFromEmailCapture}
             submitting={hook.submitting}

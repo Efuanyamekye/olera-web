@@ -7,7 +7,6 @@ import type { IntentData } from "./types";
 
 interface EmailCaptureProps {
   intentData: IntentData;
-  providerName: string;
   onSubmit: (email: string) => void;
   onBack: () => void;
   submitting?: boolean;
@@ -16,7 +15,6 @@ interface EmailCaptureProps {
 
 export default function EmailCapture({
   intentData,
-  providerName,
   onSubmit,
   onBack,
   submitting,
@@ -146,21 +144,7 @@ export default function EmailCapture({
         {submitting && (
           <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         )}
-        {submitting ? "Connecting..." : `Connect with ${providerName}`}
-        {!submitting && (
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        )}
+        {submitting ? "Connecting..." : "Connect"}
       </button>
 
       {/* Back link */}
