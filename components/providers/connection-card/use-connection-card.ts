@@ -49,6 +49,7 @@ function buildIntentFromProfile(profile: {
 
   const urgency = timeline ? URGENCY_FROM_TIMELINE[timeline] || null : null;
 
+  // Care type is optional now (removed from new flow)
   let careType: IntentData["careType"] = null;
   for (const ct of careTypes) {
     const mapped = CARE_TYPE_FROM_DISPLAY[ct];
@@ -58,7 +59,8 @@ function buildIntentFromProfile(profile: {
     }
   }
 
-  if (careRecipient && careType && urgency) {
+  // Only require recipient + urgency for returning user state
+  if (careRecipient && urgency) {
     return { careRecipient, careType, urgency };
   }
   return null;
@@ -203,10 +205,11 @@ export function useConnectionCard(props: ConnectionCardProps) {
           const parsed = JSON.parse(intentResult.data.message);
           const restored: IntentData = {
             careRecipient: parsed.care_recipient || null,
-            careType: parsed.care_type || null,
+            careType: parsed.care_type || null, // Optional - may be null for new flow
             urgency: parsed.urgency || null,
           };
-          if (restored.careRecipient && restored.careType && restored.urgency) {
+          // Only require recipient + urgency for returning user state
+          if (restored.careRecipient && restored.urgency) {
             setPreviousIntent(restored);
             setIntentData(restored);
             setCardState("returning");

@@ -11,7 +11,6 @@ import StepIndicator from "@/components/providers/connection-card/StepIndicator"
 import {
   RECIPIENT_OPTIONS,
   URGENCY_OPTIONS,
-  CARE_TYPE_LABELS,
   RECIPIENT_LABELS,
   URGENCY_LABELS,
 } from "@/components/providers/connection-card/constants";
@@ -363,9 +362,6 @@ export default function MobileStickyBottomCTA({
   })();
 
   // ── Derived labels for returning state ──
-  const careTypeLabel = hook.intentData.careType
-    ? CARE_TYPE_LABELS[hook.intentData.careType] || hook.intentData.careType
-    : "";
   const recipientLabel = hook.intentData.careRecipient
     ? RECIPIENT_LABELS[hook.intentData.careRecipient] ||
       hook.intentData.careRecipient
@@ -586,10 +582,10 @@ export default function MobileStickyBottomCTA({
           <div className="py-2 animate-step-in">
             <div className="px-3.5 py-3.5 bg-gray-50 rounded-[10px] border border-gray-100">
               <p className="text-sm font-semibold text-gray-800">
-                {careTypeLabel}
+                {recipientLabel}
               </p>
               <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                {recipientLabel} &middot; {urgencyLabel}
+                {urgencyLabel}
               </p>
               <button
                 onClick={hook.editFromReturning}

@@ -2,7 +2,6 @@
 
 import PhoneButton from "./PhoneButton";
 import {
-  CARE_TYPE_LABELS,
   RECIPIENT_LABELS,
   URGENCY_LABELS,
 } from "./constants";
@@ -23,9 +22,6 @@ export default function ReturningUserState({
   onEdit,
   submitting,
 }: ReturningUserStateProps) {
-  const careTypeLabel = intentData.careType
-    ? CARE_TYPE_LABELS[intentData.careType] || intentData.careType
-    : "";
   const recipientLabel = intentData.careRecipient
     ? RECIPIENT_LABELS[intentData.careRecipient] || intentData.careRecipient
     : "";
@@ -36,9 +32,9 @@ export default function ReturningUserState({
   return (
     <>
       <div className="px-3.5 py-3.5 bg-gray-50 rounded-[10px] mb-3.5 border border-gray-100">
-        <p className="text-sm font-semibold text-gray-800">{careTypeLabel}</p>
+        <p className="text-sm font-semibold text-gray-800">{recipientLabel}</p>
         <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-          {recipientLabel} &middot; {urgencyLabel}
+          {urgencyLabel}
         </p>
         <button
           onClick={onEdit}
