@@ -28,9 +28,11 @@ function getLastActivityTime(conn: ConnectionWithProfile): number {
   return new Date(conn.updated_at || conn.created_at).getTime();
 }
 
+const CLAIM_TOKEN_KEY = "olera_claim_token";
+
 function InboxContent() {
   const searchParams = useSearchParams();
-  const { activeProfile, profiles } = useAuth();
+  const { activeProfile, profiles, user } = useAuth();
 
   const [connections, setConnections] = useState<ConnectionWithProfile[]>([]);
   const connectionsRef = useRef(connections);
@@ -42,6 +44,9 @@ function InboxContent() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [reportingConnectionId, setReportingConnectionId] = useState<string | null>(null);
   const [archivedCount, setArchivedCount] = useState(0);
+
+  // Guest claim token support — used when not authenticated
+  const [guestProfileId, setGuestProfileId] = useState<string | null>(null);
 
   // Track managed connections. Protection is cleared ONLY when DB data confirms the change,
   // not on a timer or in finally blocks. This eliminates all race conditions.
@@ -58,16 +63,57 @@ function InboxContent() {
     if (id) setSelectedId(id);
   }, [searchParams]);
 
+  // Fetch guest profile from claim token (for unauthenticated users)
+  useEffect(() => {
+    if (user || activeProfile) return; // Already authenticated
+    if (!isSupabaseConfigured()) return;
+
+    const claimToken = localStorage.getItem(CLAIM_TOKEN_KEY);
+    if (!claimToken) return;
+
+    const fetchGuestProfile = async () => {
+      try {
+        const res = await fetch("/api/connections/guest-profile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ claimToken }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.profileId) {
+            setGuestProfileId(data.profileId);
+          }
+        }
+      } catch (err) {
+        console.error("[inbox] Failed to fetch guest profile:", err);
+      }
+    };
+
+    fetchGuestProfile();
+  }, [user, activeProfile]);
+
   // Fetch connections
   const fetchConnections = useCallback(async () => {
-    if (!activeProfile || !profiles.length || !isSupabaseConfigured()) {
+    // For authenticated users, require activeProfile
+    // For guests, allow guestProfileId as fallback
+    const hasAuthProfile = activeProfile && profiles.length > 0;
+    const hasGuestProfile = !user && guestProfileId;
+
+    if (!hasAuthProfile && !hasGuestProfile) {
+      setLoading(false);
+      return;
+    }
+
+    if (!isSupabaseConfigured()) {
       setLoading(false);
       return;
     }
 
     try {
       const supabase = createClient();
-      const profileIds = profiles.map((p) => p.id);
+      const profileIds = hasAuthProfile
+        ? profiles.map((p) => p.id)
+        : [guestProfileId!];
 
       // Fire archived count in the background — JSONB filter queries are slower and
       // don't need to block the active conversations render.
@@ -270,7 +316,7 @@ function InboxContent() {
     } finally {
       setLoading(false);
     }
-  }, [activeProfile, profiles]);
+  }, [activeProfile, profiles, user, guestProfileId]);
 
   useEffect(() => {
     fetchConnections();

@@ -5,11 +5,12 @@
 export type CardState =
   | "loading" // Logged-in users while DB queries run
   | "default" // State 1: Anonymous / no connection
-  | "intent" // State 2: Intent capture (steps 1-3)
+  | "intent" // State 2: Intent capture (2 steps for logged-in, 3 for guest)
+  | "email_capture" // State 2b: Guest email capture (after intent)
   | "returning" // State 3: Returning user (prior connection or past)
   | "connected"; // State 4: Existing connection (pending or accepted)
 
-export type IntentStep = 0 | 1 | 2;
+export type IntentStep = 0 | 1;
 
 export type CareRecipient = "self" | "parent" | "spouse" | "other";
 

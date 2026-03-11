@@ -22,6 +22,7 @@ import type {
 } from "./types";
 
 const CONNECTION_INTENT_KEY = "olera_connection_intent";
+const CLAIM_TOKEN_KEY = "olera_claim_token";
 
 const INITIAL_INTENT: IntentData = {
   careRecipient: null,
@@ -377,22 +378,79 @@ export function useConnectionCard(props: ConnectionCardProps) {
     setError("");
   }, []);
 
-  // ── Auto-advancing field setters (for intent steps 1–2) ──
+  // ── Auto-advancing field setters (for intent steps) ──
   const selectRecipient = useCallback((val: CareRecipient) => {
     setIntentData((prev) => ({ ...prev, careRecipient: val }));
-    // Auto-advance to step 2 after a short delay for visual feedback
+    // Auto-advance to urgency step after a short delay for visual feedback
     setTimeout(() => setIntentStep(1), 150);
-  }, []);
-
-  const selectCareType = useCallback((val: CareTypeValue) => {
-    setIntentData((prev) => ({ ...prev, careType: val }));
-    // Auto-advance to step 3
-    setTimeout(() => setIntentStep(2), 150);
   }, []);
 
   const selectUrgency = useCallback((val: UrgencyValue) => {
     setIntentData((prev) => ({ ...prev, urgency: val }));
   }, []);
+
+  // ── Submit guest connection request via API ──
+  const submitGuestRequest = useCallback(async (email: string) => {
+    setError("");
+    setSubmitting(true);
+
+    try {
+      const res = await fetch("/api/connections/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          providerId,
+          providerName,
+          providerSlug,
+          intentData,
+          guest: true,
+          guestEmail: email,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to send request.");
+      }
+
+      // Store claim token in localStorage for inbox access
+      if (data.claimToken) {
+        try {
+          localStorage.setItem(CLAIM_TOKEN_KEY, data.claimToken);
+        } catch {
+          // localStorage may fail in private browsing
+        }
+      }
+
+      // Redirect to post-connection success page if callback provided
+      if (data.connectionId && onConnectionCreated) {
+        onConnectionCreated(data.connectionId);
+        return;
+      }
+
+      // No redirect callback — update local state
+      if (data.created_at) {
+        setPendingRequestDate(data.created_at);
+      }
+      if (data.connectionId) {
+        setConnectionId(data.connectionId);
+      }
+
+      setCardState("connected");
+      setPendingRequestDate((prev) => prev || new Date().toISOString());
+      setPhoneRevealed(true);
+    } catch (err: unknown) {
+      const msg =
+        err && typeof err === "object" && "message" in err
+          ? (err as { message: string }).message
+          : String(err);
+      console.error("Guest connection request error:", msg);
+      setError(msg || "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }, [providerId, providerName, providerSlug, intentData, onConnectionCreated]);
 
   // ── Connect (submit from intent or returning) ──
   const connect = useCallback(() => {
@@ -407,26 +465,10 @@ export function useConnectionCard(props: ConnectionCardProps) {
       // submitting=true on the button, then redirect instantly after API
       submitRequest();
     } else {
-      // Save intent for OAuth resilience, then trigger auth
-      try {
-        sessionStorage.setItem(
-          CONNECTION_INTENT_KEY,
-          JSON.stringify(intentData)
-        );
-      } catch {
-        // sessionStorage may fail in private browsing
-      }
-      openAuth({
-        defaultMode: "sign-up",
-        intent: "family",
-        deferred: {
-          action: "connection_request",
-          targetProfileId: providerId,
-          returnUrl: `/provider/${providerSlug}`,
-        },
-      });
+      // Guest user — go to email capture step
+      setCardState("email_capture");
     }
-  }, [user, intentData, submitRequest, openAuth, providerId, providerSlug, onConnectionCreated]);
+  }, [user, submitRequest, onConnectionCreated]);
 
   const editFromReturning = useCallback(() => {
     setIntentStep(0);
@@ -459,6 +501,15 @@ export function useConnectionCard(props: ConnectionCardProps) {
     });
   }, [savedProviders, providerId, providerSlug, providerName, providerCareTypes]);
 
+  // ── Edit from email capture ──
+  const editFromEmailCapture = useCallback(() => {
+    setIntentStep(0);
+    setCardState("intent");
+  }, []);
+
+  // Total steps: 2 for logged-in, 3 for guest (includes email capture)
+  const totalSteps = user ? 2 : 3;
+
   return {
     // State
     cardState,
@@ -472,19 +523,23 @@ export function useConnectionCard(props: ConnectionCardProps) {
     connectionId,
     availableCareTypes,
     notificationEmail,
+    totalSteps,
 
     // Navigation
     startFlow,
     resetFlow,
     editFromReturning,
+    editFromEmailCapture,
     connect,
 
     // Auto-advancing field setters
     selectRecipient,
-    selectCareType,
     selectUrgency,
     setIntentStep,
     revealPhone,
     toggleSave,
+
+    // Guest flow
+    submitGuestRequest,
   };
 }

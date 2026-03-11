@@ -3,7 +3,6 @@
 import StepIndicator from "./StepIndicator";
 import Pill from "./Pill";
 import {
-  CARE_TYPE_LABELS,
   URGENCY_OPTIONS,
   RECIPIENT_OPTIONS,
 } from "./constants";
@@ -11,38 +10,36 @@ import type {
   IntentStep,
   IntentData,
   CareRecipient,
-  CareTypeValue,
   UrgencyValue,
 } from "./types";
 
 interface IntentCaptureProps {
   intentStep: IntentStep;
   intentData: IntentData;
-  availableCareTypes: CareTypeValue[];
   onSelectRecipient: (val: CareRecipient) => void;
-  onSelectCareType: (val: CareTypeValue) => void;
   onSelectUrgency: (val: UrgencyValue) => void;
   onConnect: () => void;
   submitting?: boolean;
+  /** Total number of steps (2 for logged-in, 3 for guest) */
+  totalSteps?: number;
 }
 
 export default function IntentCapture({
   intentStep,
   intentData,
-  availableCareTypes,
   onSelectRecipient,
-  onSelectCareType,
   onSelectUrgency,
   onConnect,
   submitting,
+  totalSteps = 2,
 }: IntentCaptureProps) {
-  const { careRecipient, careType, urgency } = intentData;
+  const { careRecipient, urgency } = intentData;
 
   const canConnect = urgency !== null && !submitting;
 
   return (
     <>
-      <StepIndicator current={intentStep} total={3} />
+      <StepIndicator current={intentStep} total={totalSteps} />
 
       {/* Step 0: Who needs care? */}
       {intentStep === 0 && (
@@ -63,27 +60,8 @@ export default function IntentCapture({
         </>
       )}
 
-      {/* Step 1: What type of care? */}
+      {/* Step 1: When do you need care? */}
       {intentStep === 1 && (
-        <>
-          <p className="text-[15px] font-semibold text-gray-800 mb-3">
-            What type of care?
-          </p>
-          <div className="flex flex-col gap-1.5 mb-4">
-            {availableCareTypes.map((ct) => (
-              <Pill
-                key={ct}
-                label={CARE_TYPE_LABELS[ct] || ct}
-                selected={careType === ct}
-                onClick={() => onSelectCareType(ct)}
-              />
-            ))}
-          </div>
-        </>
-      )}
-
-      {/* Step 2: When do you need care? */}
-      {intentStep === 2 && (
         <>
           <p className="text-[15px] font-semibold text-gray-800 mb-3">
             When do you need care?

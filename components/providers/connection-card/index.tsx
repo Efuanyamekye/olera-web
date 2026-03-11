@@ -5,6 +5,7 @@ import CardTopSection from "./CardTopSection";
 import CardBottomSection from "./CardBottomSection";
 import DefaultActions from "./DefaultActions";
 import IntentCapture from "./IntentCapture";
+import EmailCapture from "./EmailCapture";
 import ConnectedState from "./ConnectedState";
 import ReturningUserState from "./ReturningUserState";
 import type { ConnectionCardProps } from "./types";
@@ -60,12 +61,22 @@ export default function ConnectionCard(props: ConnectionCardProps) {
           <IntentCapture
             intentStep={hook.intentStep}
             intentData={hook.intentData}
-            availableCareTypes={hook.availableCareTypes}
             onSelectRecipient={hook.selectRecipient}
-            onSelectCareType={hook.selectCareType}
             onSelectUrgency={hook.selectUrgency}
             onConnect={hook.connect}
             submitting={hook.submitting}
+            totalSteps={hook.totalSteps}
+          />
+        )}
+
+        {hook.cardState === "email_capture" && (
+          <EmailCapture
+            intentData={hook.intentData}
+            providerName={providerName}
+            onSubmit={hook.submitGuestRequest}
+            onBack={hook.editFromEmailCapture}
+            submitting={hook.submitting}
+            error={hook.error}
           />
         )}
 

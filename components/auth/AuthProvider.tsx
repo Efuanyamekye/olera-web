@@ -57,6 +57,7 @@ export interface OpenAuthOptions {
 }
 
 const AUTH_INTENT_KEY = "olera_auth_intent";
+const CLAIM_TOKEN_KEY = "olera_claim_token";
 
 interface AuthContextValue extends AuthState {
   /** @deprecated Use openAuth instead */
@@ -533,6 +534,23 @@ export default function AuthProvider({ children }: AuthProviderProps) {
               isLoading: false,
               fetchError: false,
             }));
+
+            // Auto-claim any placeholder profiles (fire-and-forget)
+            try {
+              const claimToken = localStorage.getItem(CLAIM_TOKEN_KEY);
+              fetch("/api/auth/claim-profiles", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ claimToken }),
+              }).then(() => {
+                // Clear the claim token after claiming
+                localStorage.removeItem(CLAIM_TOKEN_KEY);
+              }).catch(() => {
+                // Non-blocking
+              });
+            } catch {
+              // localStorage unavailable
+            }
           } else {
             // No account found — ensure one exists (creates account + family profile)
             try {
