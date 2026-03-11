@@ -89,7 +89,7 @@ export default function EmailCapture({
       </div>
 
       <p className="text-[15px] font-semibold text-gray-800 mb-3">
-        How can they reach you?
+        How can we reach you?
       </p>
 
       {/* Email input */}

@@ -225,7 +225,7 @@ export default function MobileStickyBottomCTA({
           ? "Who needs care?"
           : "When do you need care?";
       case "email_capture":
-        return "How can they reach you?";
+        return "How can we reach you?";
       case "connected":
         return undefined;
       case "returning":
