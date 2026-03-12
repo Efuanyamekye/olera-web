@@ -118,6 +118,33 @@ export function connectionSentEmail(opts: {
   `);
 }
 
+/**
+ * Combined email for guest connections — serves as both confirmation AND magic link.
+ * Single email reduces confusion and improves conversion.
+ */
+export function guestConnectionEmail(opts: {
+  familyName: string;
+  providerName: string;
+  careType: string | null;
+  magicLinkUrl: string;
+}): string {
+  const careLine = opts.careType
+    ? `<p style="font-size:14px;color:#6b7280;margin:0 0 8px;"><strong>Care type:</strong> ${opts.careType}</p>`
+    : "";
+
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">You're connected with ${opts.providerName}</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
+      Hi ${opts.familyName}, your care inquiry has been delivered. Click below to view your inbox and continue the conversation.
+    </p>
+    ${careLine}
+    <div style="margin:24px 0;">${button("View Inbox & Sign In", opts.magicLinkUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      You'll be signed in automatically when you click the button. This link expires in 1 hour.
+    </p>
+  `);
+}
+
 /** Email to family when a provider responds (accept/decline) */
 export function connectionResponseEmail(opts: {
   familyName: string;

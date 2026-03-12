@@ -3,7 +3,7 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { buildIntroMessage } from "@/lib/build-intro-message";
 import { sendEmail } from "@/lib/email";
-import { connectionRequestEmail, connectionSentEmail } from "@/lib/email-templates";
+import { connectionRequestEmail, connectionSentEmail, guestConnectionEmail } from "@/lib/email-templates";
 import { sendSlackAlert, slackNewLead, slackMissingEmail } from "@/lib/slack";
 import { sendSMS, normalizeUSPhone } from "@/lib/twilio";
 import { sendLoopsEvent } from "@/lib/loops";
@@ -331,31 +331,14 @@ async function handleGuestConnection({
     return NextResponse.json({ error: "Failed to send request." }, { status: 500 });
   }
 
-  // Send magic link via Supabase (fire-and-forget)
+  // Send SINGLE combined email: connection confirmation + magic link
+  // Uses generateLink() to create magic link without Supabase sending its own email
   try {
     const { createClient: createAdminAuthClient } = await import("@supabase/supabase-js");
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
 
-    if (url && serviceKey) {
-      const authClient = createAdminAuthClient(url, serviceKey);
-      // Use auth callback for proper PKCE code exchange, then redirect to inbox
-      const finalDestination = encodeURIComponent(`/portal/inbox?id=${newConnection.id}&token=${claimToken}`);
-      await authClient.auth.signInWithOtp({
-        email: normalizedEmail,
-        options: {
-          emailRedirectTo: `${siteUrl}/auth/callback?next=${finalDestination}`,
-        },
-      });
-    }
-  } catch (magicLinkErr) {
-    console.error("Failed to send magic link:", magicLinkErr);
-    // Non-blocking — connection was created
-  }
-
-  // Send confirmation email to guest (fire-and-forget)
-  try {
     const careTypeMap: Record<string, string> = {
       home_care: "Home Care",
       home_health: "Home Health Care",
@@ -363,19 +346,49 @@ async function handleGuestConnection({
       memory_care: "Memory Care",
     };
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
-    await sendEmail({
-      to: normalizedEmail,
-      subject: `Your inquiry to ${providerName} was sent`,
-      html: connectionSentEmail({
-        familyName: firstName || "there",
-        providerName,
-        careType: intentData?.careType ? (careTypeMap[intentData.careType] || intentData.careType) : null,
-        viewUrl: `${siteUrl}/portal/inbox?id=${newConnection.id}&token=${claimToken}`,
-      }),
-    });
+    if (url && serviceKey) {
+      const authClient = createAdminAuthClient(url, serviceKey);
+
+      // Generate magic link without sending Supabase's default email
+      const finalDestination = `/portal/inbox?id=${newConnection.id}&token=${claimToken}`;
+      const { data: linkData, error: linkError } = await authClient.auth.admin.generateLink({
+        type: "magiclink",
+        email: normalizedEmail,
+        options: {
+          redirectTo: `${siteUrl}/auth/callback?next=${encodeURIComponent(finalDestination)}`,
+        },
+      });
+
+      if (linkError) {
+        console.error("Failed to generate magic link:", linkError);
+        // Fall back to simple confirmation email without magic link
+        await sendEmail({
+          to: normalizedEmail,
+          subject: `You're connected with ${providerName} on Olera`,
+          html: connectionSentEmail({
+            familyName: firstName || "there",
+            providerName,
+            careType: intentData?.careType ? (careTypeMap[intentData.careType] || intentData.careType) : null,
+            viewUrl: `${siteUrl}${finalDestination}`,
+          }),
+        });
+      } else {
+        // Send our combined email with the magic link embedded
+        await sendEmail({
+          to: normalizedEmail,
+          subject: `You're connected with ${providerName} on Olera`,
+          html: guestConnectionEmail({
+            familyName: firstName || "there",
+            providerName,
+            careType: intentData?.careType ? (careTypeMap[intentData.careType] || intentData.careType) : null,
+            magicLinkUrl: linkData.properties.action_link,
+          }),
+        });
+      }
+    }
   } catch (emailErr) {
-    console.error("Failed to send guest confirmation email:", emailErr);
+    console.error("Failed to send guest connection email:", emailErr);
+    // Non-blocking — connection was created
   }
 
   // Provider notifications (fire-and-forget)
