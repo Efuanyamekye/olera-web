@@ -50,10 +50,12 @@ export async function POST(request: Request) {
     // Parse optional body
     let displayName = "";
     let markOnboardingComplete = false;
+    let claimToken: string | null = null;
     try {
       const body = await request.json();
       displayName = body.display_name || "";
       markOnboardingComplete = body.mark_onboarding_complete === true;
+      claimToken = body.claimToken || null;
     } catch {
       // No body or invalid JSON - that's fine
     }
@@ -135,6 +137,37 @@ export async function POST(request: Request) {
             },
           });
         } catch {
+          // Non-blocking
+        }
+      }
+
+      // Handle placeholder profile claim for EXISTING accounts (guest connection flow)
+      // Move connections from placeholder to existing family profile, then delete placeholder
+      if (claimToken) {
+        try {
+          const mainFamilyId = existingFamilyProfile?.id;
+          const { data: placeholder } = await dbClient
+            .from("business_profiles")
+            .select("id")
+            .eq("claim_token", claimToken)
+            .is("account_id", null)
+            .single();
+
+          if (placeholder && mainFamilyId && placeholder.id !== mainFamilyId) {
+            // Move connections from placeholder to main family profile
+            await dbClient
+              .from("connections")
+              .update({ from_profile_id: mainFamilyId })
+              .eq("from_profile_id", placeholder.id);
+
+            // Delete the placeholder profile
+            await dbClient
+              .from("business_profiles")
+              .delete()
+              .eq("id", placeholder.id);
+          }
+        } catch (err) {
+          console.error("[ensure-account] placeholder handling error (existing):", err);
           // Non-blocking
         }
       }
@@ -251,6 +284,36 @@ export async function POST(request: Request) {
         await dbClient.from("accounts").update({
           active_profile_id: newFamilyProfile.id,
         }).eq("id", accountId);
+      }
+
+      // Handle placeholder profile claim (guest connection flow)
+      // Move connections from placeholder to new family profile, then delete placeholder
+      if (claimToken && newFamilyProfile) {
+        try {
+          const { data: placeholder } = await dbClient
+            .from("business_profiles")
+            .select("id")
+            .eq("claim_token", claimToken)
+            .is("account_id", null)
+            .single();
+
+          if (placeholder && placeholder.id !== newFamilyProfile.id) {
+            // Move connections from placeholder to new family profile
+            await dbClient
+              .from("connections")
+              .update({ from_profile_id: newFamilyProfile.id })
+              .eq("from_profile_id", placeholder.id);
+
+            // Delete the placeholder profile
+            await dbClient
+              .from("business_profiles")
+              .delete()
+              .eq("id", placeholder.id);
+          }
+        } catch (err) {
+          console.error("[ensure-account] placeholder handling error:", err);
+          // Non-blocking
+        }
       }
     }
 

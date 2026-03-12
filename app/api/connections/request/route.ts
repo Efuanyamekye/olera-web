@@ -350,12 +350,14 @@ async function handleGuestConnection({
       const authClient = createAdminAuthClient(url, serviceKey);
 
       // Generate magic link without sending Supabase's default email
+      // Use client-side /auth/magic-link handler (not server-side /auth/callback)
+      // because generateLink() uses implicit flow which puts tokens in hash fragment
       const finalDestination = `/portal/inbox?id=${newConnection.id}&token=${claimToken}`;
       const { data: linkData, error: linkError } = await authClient.auth.admin.generateLink({
         type: "magiclink",
         email: normalizedEmail,
         options: {
-          redirectTo: `${siteUrl}/auth/callback?next=${encodeURIComponent(finalDestination)}`,
+          redirectTo: `${siteUrl}/auth/magic-link?next=${encodeURIComponent(finalDestination)}&token=${claimToken}`,
         },
       });
 
