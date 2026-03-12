@@ -34,6 +34,10 @@ function InboxContent() {
   const searchParams = useSearchParams();
   const { activeProfile, profiles, user } = useAuth();
 
+  // Extract URL params explicitly so changes trigger re-renders on client-side navigation
+  const urlConnectionId = searchParams.get("id");
+  const urlToken = searchParams.get("token");
+
   const [connections, setConnections] = useState<ConnectionWithProfile[]>([]);
   const connectionsRef = useRef(connections);
   connectionsRef.current = connections;
@@ -57,11 +61,12 @@ function InboxContent() {
   // Cache business profiles within the session to avoid re-fetching on every fetchConnections call
   const profileCacheRef = useRef(new Map<string, Profile>());
 
-  // Auto-select from URL param
+  // Auto-select from URL param and reset loading on navigation
   useEffect(() => {
-    const id = searchParams.get("id");
-    if (id) setSelectedId(id);
-  }, [searchParams]);
+    if (urlConnectionId) setSelectedId(urlConnectionId);
+    // Reset loading to trigger fresh fetch on client-side navigation
+    setLoading(true);
+  }, [urlConnectionId, urlToken]);
 
   // Fetch guest profile from claim token (for unauthenticated users)
   useEffect(() => {
@@ -69,7 +74,6 @@ function InboxContent() {
     if (!isSupabaseConfigured()) return;
 
     // Check URL param first, then localStorage
-    const urlToken = searchParams.get("token");
     const claimToken = urlToken || localStorage.getItem(CLAIM_TOKEN_KEY);
     if (!claimToken) return;
 
@@ -101,7 +105,7 @@ function InboxContent() {
     };
 
     fetchGuestProfile();
-  }, [user, activeProfile, searchParams]);
+  }, [user, activeProfile, urlToken]);
 
   // Fetch connections
   const fetchConnections = useCallback(async () => {
@@ -111,7 +115,6 @@ function InboxContent() {
 
     // Guest flow: use API endpoint since RLS blocks direct queries
     if (!user && !hasAuthProfile) {
-      const urlToken = searchParams.get("token");
       const claimToken = urlToken || localStorage.getItem(CLAIM_TOKEN_KEY);
       if (!claimToken) {
         setLoading(false);
@@ -371,7 +374,7 @@ function InboxContent() {
     } finally {
       setLoading(false);
     }
-  }, [activeProfile, profiles, user, guestProfileId, searchParams]);
+  }, [activeProfile, profiles, user, guestProfileId, urlToken, urlConnectionId]);
 
   useEffect(() => {
     fetchConnections();
@@ -669,7 +672,7 @@ function InboxContent() {
         detailOpen={detailOpen}
         onToggleDetail={() => setDetailOpen((p) => !p)}
         className={`w-full lg:flex-1 ${selectedId ? "flex" : "hidden lg:flex"}`}
-        claimToken={!user && !activeProfile ? (searchParams.get("token") || localStorage.getItem(CLAIM_TOKEN_KEY)) : null}
+        claimToken={!user && !activeProfile ? (urlToken || localStorage.getItem(CLAIM_TOKEN_KEY)) : null}
         guestProfileId={guestProfileId}
       />
 
