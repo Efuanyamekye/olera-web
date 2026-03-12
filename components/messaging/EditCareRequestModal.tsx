@@ -20,6 +20,7 @@ interface EditCareRequestModalProps {
   connectionId: string;
   onClose: () => void;
   onSaved: (message: string, metadata: Record<string, unknown>) => void;
+  claimToken?: string | null;
 }
 
 const CARE_TYPE_OPTIONS = Object.entries(CARE_TYPE_LABELS).map(
@@ -31,6 +32,7 @@ export default function EditCareRequestModal({
   connectionId,
   onClose,
   onSaved,
+  claimToken,
 }: EditCareRequestModalProps) {
   const [careType, setCareType] = useState(careRequest.careType || "");
   const [careRecipient, setCareRecipient] = useState(careRequest.careRecipient || "");
@@ -64,6 +66,7 @@ export default function EditCareRequestModal({
           careRecipient: careRecipient || null,
           urgency: urgency || null,
           additionalNotes: notes || null,
+          ...(claimToken ? { claimToken } : {}),
         }),
       });
 

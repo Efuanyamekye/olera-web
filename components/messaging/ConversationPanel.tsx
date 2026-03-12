@@ -132,7 +132,7 @@ const HomeIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
 
 // ── Care Request Card ──
 
-function CareRequestCard({ careRequest, time, dateStr, isInbound, otherName, otherInitial, imageUrl, editable, connectionId, autoIntro, onUpdated }: {
+function CareRequestCard({ careRequest, time, dateStr, isInbound, otherName, otherInitial, imageUrl, editable, connectionId, autoIntro, onUpdated, claimToken }: {
   careRequest: CareRequestData;
   time: string;
   dateStr: string;
@@ -144,6 +144,7 @@ function CareRequestCard({ careRequest, time, dateStr, isInbound, otherName, oth
   connectionId: string;
   autoIntro?: string | null;
   onUpdated?: (message: string, metadata: Record<string, unknown>) => void;
+  claimToken?: string | null;
 }) {
   const [editOpen, setEditOpen] = useState(false);
   const senderName = careRequest.seekerName;
@@ -265,6 +266,7 @@ function CareRequestCard({ careRequest, time, dateStr, isInbound, otherName, oth
             setEditOpen(false);
             onUpdated?.(message, metadata);
           }}
+          claimToken={claimToken}
         />
       )}
     </div>
@@ -496,6 +498,7 @@ export default function ConversationPanel({
                   onUpdated={(message, metadata) => {
                     onCareRequestUpdated?.(connection.id, message, metadata);
                   }}
+                  claimToken={claimToken}
                 />
               ) : initialNotes ? (
                 /* Fallback to simple bubble when no structured data */

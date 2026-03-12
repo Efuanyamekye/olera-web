@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
 import { buildIntroMessage } from "@/lib/build-intro-message";
 
 interface ThreadMessage {
@@ -14,26 +15,24 @@ interface ThreadMessage {
  *
  * Updates the care request fields in connections.message and regenerates auto_intro.
  * Only the sender (from_profile_id) can update. Connection must be pending or accepted.
+ *
+ * Supports both authenticated users and guests with claim tokens.
  */
 export async function PATCH(request: Request) {
   try {
     const supabase = await createServerClient();
     const {
       data: { user },
-      error: authError,
     } = await supabase.auth.getUser();
 
-    if (authError || !user) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    }
-
     const body = await request.json();
-    const { connectionId, careType, careRecipient, urgency, additionalNotes } = body as {
+    const { connectionId, careType, careRecipient, urgency, additionalNotes, claimToken } = body as {
       connectionId?: string;
       careType?: string;
       careRecipient?: string;
       urgency?: string;
       additionalNotes?: string;
+      claimToken?: string;
     };
 
     if (!connectionId) {
@@ -43,22 +42,52 @@ export async function PATCH(request: Request) {
       );
     }
 
-    // Get user's active profile
-    const { data: account } = await supabase
-      .from("accounts")
-      .select("active_profile_id")
-      .eq("user_id", user.id)
-      .single();
+    // Need admin client for RLS bypass (guest flow)
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (!account?.active_profile_id) {
+    if (!url || !serviceKey) {
       return NextResponse.json(
-        { error: "No active profile" },
-        { status: 400 }
+        { error: "Server configuration error" },
+        { status: 500 }
       );
     }
 
-    // Fetch the connection
-    const { data: connection, error: fetchError } = await supabase
+    const admin = createClient(url, serviceKey);
+
+    // Determine profile ID — from authenticated user or claim token
+    let profileId: string | null = null;
+
+    if (user) {
+      // Authenticated user: get active profile
+      const { data: account } = await admin
+        .from("accounts")
+        .select("active_profile_id")
+        .eq("user_id", user.id)
+        .single();
+
+      profileId = account?.active_profile_id || null;
+    } else if (claimToken) {
+      // Guest: validate claim token
+      const { data: guestProfile } = await admin
+        .from("business_profiles")
+        .select("id")
+        .eq("claim_token", claimToken)
+        .is("account_id", null)
+        .single();
+
+      profileId = guestProfile?.id || null;
+    }
+
+    if (!profileId) {
+      return NextResponse.json(
+        { error: "Not authenticated" },
+        { status: 401 }
+      );
+    }
+
+    // Fetch the connection (using admin client for RLS bypass)
+    const { data: connection, error: fetchError } = await admin
       .from("connections")
       .select("id, from_profile_id, to_profile_id, status, message, metadata")
       .eq("id", connectionId)
@@ -72,7 +101,6 @@ export async function PATCH(request: Request) {
     }
 
     // Only the sender can edit the care request
-    const profileId = account.active_profile_id;
     if (connection.from_profile_id !== profileId) {
       return NextResponse.json({ error: "Not authorized" }, { status: 403 });
     }
@@ -133,8 +161,8 @@ export async function PATCH(request: Request) {
 
     const updatedMessageStr = JSON.stringify(existingMessage);
 
-    // Persist
-    const { error: updateError } = await supabase
+    // Persist (use admin client for RLS bypass in guest flow)
+    const { error: updateError } = await admin
       .from("connections")
       .update({
         message: updatedMessageStr,
