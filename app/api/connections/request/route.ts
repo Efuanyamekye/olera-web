@@ -363,6 +363,7 @@ async function handleGuestConnection({
       memory_care: "Memory Care",
     };
 
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
     await sendEmail({
       to: normalizedEmail,
       subject: `Your inquiry to ${providerName} was sent`,
@@ -370,7 +371,7 @@ async function handleGuestConnection({
         familyName: firstName || "there",
         providerName,
         careType: intentData?.careType ? (careTypeMap[intentData.careType] || intentData.careType) : null,
-        viewUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"}/portal/inbox?id=${newConnection.id}`,
+        viewUrl: `${siteUrl}/portal/inbox?id=${newConnection.id}&token=${claimToken}`,
       }),
     });
   } catch (emailErr) {
@@ -938,7 +939,7 @@ export async function POST(request: Request) {
             familyName: firstName || "there",
             providerName,
             careType: intentData?.careType ? (careTypeMap0[intentData.careType] || intentData.careType) : null,
-            viewUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"}/provider/connections`,
+            viewUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"}/portal/inbox?id=${newConnection.id}`,
           }),
         });
       }
