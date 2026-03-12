@@ -127,11 +127,23 @@ function InboxContent() {
         if (res.ok) {
           const data = await res.json();
           if (data.connections?.length) {
-            // Transform API response to match expected Connection shape
-            const conns = data.connections.map((c: Record<string, unknown>) => ({
-              ...c,
-              to_profile_id: (c.to_profile as Record<string, unknown>)?.id,
-            })) as Connection[];
+            // Transform API response to match ConnectionWithProfile shape
+            const conns: ConnectionWithProfile[] = data.connections.map((c: Record<string, unknown>) => {
+              const toProfile = c.to_profile as Record<string, unknown> | null;
+              return {
+                id: c.id as string,
+                type: c.type as string,
+                status: c.status as ConnectionStatus,
+                from_profile_id: data.profileId,
+                to_profile_id: toProfile?.id as string,
+                message: c.message as string | null,
+                metadata: c.metadata as Record<string, unknown>,
+                created_at: c.created_at as string,
+                updated_at: c.updated_at as string,
+                fromProfile: null, // Guest profile not needed for display
+                toProfile: toProfile as Profile | null,
+              };
+            });
             setConnections(conns);
             setGuestProfileId(data.profileId);
           }
