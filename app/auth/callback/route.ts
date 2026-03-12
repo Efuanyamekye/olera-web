@@ -96,6 +96,52 @@ export async function GET(request: NextRequest) {
           });
         }
 
+        // Claim placeholder profile if token present (guest connection flow)
+        try {
+          const nextUrl = new URL(next, origin);
+          const claimToken = nextUrl.searchParams.get("token");
+          if (claimToken && newAccount) {
+            // Find placeholder profile by token
+            const { data: placeholder } = await admin
+              .from("business_profiles")
+              .select("id")
+              .eq("claim_token", claimToken)
+              .is("account_id", null)
+              .single();
+
+            if (placeholder) {
+              // Claim the placeholder
+              await admin
+                .from("business_profiles")
+                .update({
+                  account_id: newAccount.id,
+                  claimed_at: new Date().toISOString(),
+                })
+                .eq("id", placeholder.id);
+
+              // Move connections to main family profile
+              const { data: mainFamily } = await admin
+                .from("business_profiles")
+                .select("id")
+                .eq("account_id", newAccount.id)
+                .eq("type", "family")
+                .is("claimed_at", null)
+                .order("created_at", { ascending: true })
+                .limit(1)
+                .single();
+
+              if (mainFamily && mainFamily.id !== placeholder.id) {
+                await admin
+                  .from("connections")
+                  .update({ from_profile_id: mainFamily.id })
+                  .eq("from_profile_id", placeholder.id);
+              }
+            }
+          }
+        } catch {
+          // Non-blocking — profile will be claimed by AuthProvider fallback
+        }
+
         // Loops: new account created
         try {
           const fullName = data.user.user_metadata?.full_name || data.user.user_metadata?.name || "";
@@ -140,6 +186,41 @@ export async function GET(request: NextRequest) {
             source: "user_created",
             metadata: {},
           });
+        }
+
+        // Claim placeholder profile if token present (guest connection flow)
+        try {
+          const nextUrl = new URL(next, origin);
+          const claimToken = nextUrl.searchParams.get("token");
+          if (claimToken) {
+            const { data: placeholder } = await admin
+              .from("business_profiles")
+              .select("id")
+              .eq("claim_token", claimToken)
+              .is("account_id", null)
+              .single();
+
+            if (placeholder) {
+              await admin
+                .from("business_profiles")
+                .update({
+                  account_id: existing.id,
+                  claimed_at: new Date().toISOString(),
+                })
+                .eq("id", placeholder.id);
+
+              // Move connections to main family profile
+              const mainFamilyId = existingFamily?.id;
+              if (mainFamilyId && mainFamilyId !== placeholder.id) {
+                await admin
+                  .from("connections")
+                  .update({ from_profile_id: mainFamilyId })
+                  .eq("from_profile_id", placeholder.id);
+              }
+            }
+          }
+        } catch {
+          // Non-blocking
         }
       }
     }

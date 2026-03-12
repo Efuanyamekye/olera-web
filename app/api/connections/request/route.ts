@@ -339,11 +339,12 @@ async function handleGuestConnection({
 
     if (url && serviceKey) {
       const authClient = createAdminAuthClient(url, serviceKey);
+      // Use auth callback for proper PKCE code exchange, then redirect to inbox
+      const finalDestination = encodeURIComponent(`/portal/inbox?id=${newConnection.id}&token=${claimToken}`);
       await authClient.auth.signInWithOtp({
         email: normalizedEmail,
         options: {
-          // Include claim token so it can be stored in localStorage on arrival
-          emailRedirectTo: `${siteUrl}/portal/inbox?id=${newConnection.id}&token=${claimToken}`,
+          emailRedirectTo: `${siteUrl}/auth/callback?next=${finalDestination}`,
         },
       });
     }
