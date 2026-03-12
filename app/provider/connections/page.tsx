@@ -1028,23 +1028,62 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
   }
 
   // For provider-initiated requests, also check family profile metadata for care info
+  // IMPORTANT: Prefer fresh profile data over stale message JSON for up-to-date info
   const familyMeta = (familyProfile?.metadata || {}) as Record<string, unknown>;
   const isProviderInitiated = conn.type === "request" && meta?.provider_initiated;
 
-  const firstName = (careDetails.seeker_first_name as string) || familyProfile?.display_name?.split(" ")[0] || "Unknown";
-  const lastName = (careDetails.seeker_last_name as string) || familyProfile?.display_name?.split(" ").slice(1).join(" ") || "";
-  const fullName = `${firstName} ${lastName}`.trim();
+  // Name: prefer fresh profile display_name, fall back to message JSON for backward compat
+  const profileDisplayName = familyProfile?.display_name || "";
+  const messageFirstName = careDetails.seeker_first_name as string;
+  const messageLastName = careDetails.seeker_last_name as string;
 
-  // Determine urgency from care details or family profile metadata
+  let fullName: string;
+  if (profileDisplayName && profileDisplayName !== messageFirstName?.split("@")[0]) {
+    // Profile has a real name (not just email prefix)
+    fullName = profileDisplayName;
+  } else if (messageFirstName) {
+    // Fall back to message JSON
+    fullName = `${messageFirstName} ${messageLastName || ""}`.trim();
+  } else {
+    fullName = profileDisplayName || "Unknown";
+  }
+
+  // Determine urgency: prefer fresh profile metadata, fall back to connection message
   const urgencyMap: Record<string, Urgency> = {
     asap: "immediate",
     within_month: "within_1_month",
+    within_1_month: "within_1_month",
+    few_months: "exploring", // Map "within 3 months" to exploring (less urgent)
+    within_3_months: "exploring",
     researching: "exploring",
     exploring: "exploring",
     immediate: "immediate",
   };
-  const rawUrgency = (careDetails.urgency as string) || (familyMeta.timeline as string);
+  // Prefer fresh profile metadata over stale message JSON
+  const rawUrgency = (familyMeta.timeline as string) || (careDetails.urgency as string);
   const urgency = urgencyMap[rawUrgency] || "exploring";
+
+  // Pull care needs from fresh profile (with message fallback)
+  const profileCareTypes = familyProfile?.care_types || [];
+  const profileCareNeeds = (familyMeta.care_needs as string[]) || [];
+  const messageCareType = careDetails.care_type as string;
+
+  // Additional profile metadata fields (fresh data)
+  const livingSituation = familyMeta.living_situation as string | undefined;
+  const schedulePreference = familyMeta.schedule_preference as string | undefined;
+  const careLocation = familyMeta.care_location as string | undefined;
+  const languagePreference = familyMeta.language_preference as string | undefined;
+
+  // Map contact preference to ContactMethod type
+  const contactPrefMap: Record<string, ContactMethod> = {
+    call: "phone",
+    phone: "phone",
+    text: "phone", // Text usually means phone
+    email: "email",
+    either: "either",
+  };
+  const rawContactPref = familyMeta.contact_preference as string | undefined;
+  const contactPreference = rawContactPref ? contactPrefMap[rawContactPref] : undefined;
 
   // Determine status
   const hasProviderReply = thread.some((msg) => msg.from_profile_id === providerProfileId);
@@ -1074,14 +1113,19 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
     }
   }
 
-  // Care recipient info
+  // Care recipient: prefer fresh profile metadata, fall back to message JSON
   const careRecipientMap: Record<string, string> = {
     parent: "Parent",
+    "My parent": "Parent",
     spouse: "Spouse",
+    "My spouse": "Spouse",
     self: "Self",
+    "Myself": "Self",
     other: "Family member",
+    "Someone else": "Family member",
   };
-  const careRecipient = careRecipientMap[careDetails.care_recipient as string] || "Family member";
+  const rawCareRecipient = (familyMeta.relationship_to_recipient as string) || (careDetails.care_recipient as string);
+  const careRecipient = careRecipientMap[rawCareRecipient] || "Family member";
 
   // Check if this is a "new" lead (not viewed yet) - scoped by provider profile
   let isNew = false;
@@ -1111,6 +1155,14 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
     email: familyProfile?.email || undefined,
     phone: familyProfile?.phone || undefined,
     careRecipient,
+    // Fresh profile data for enriched lead details
+    careType: profileCareTypes.length > 0 ? profileCareTypes : (messageCareType ? [messageCareType] : undefined),
+    careNeeds: profileCareNeeds.length > 0 ? profileCareNeeds : undefined,
+    livingSituation,
+    schedulePreference,
+    careLocation,
+    languagePreference,
+    contactPreference,
     additionalNotes: (careDetails.additional_notes as string) || (meta?.auto_intro as string) || undefined,
     activity,
   };
@@ -1150,7 +1202,7 @@ export default function ProviderLeadsPage() {
           // Query 1: Family-initiated inquiries (existing behavior)
           supabase
             .from("connections")
-            .select("*, fromProfile:from_profile_id(id, display_name, email, phone, city, state, type)")
+            .select("*, fromProfile:from_profile_id(id, display_name, email, phone, city, state, type, care_types, metadata)")
             .eq("to_profile_id", profileId)
             .eq("type", "inquiry")
             .in("status", ["pending", "accepted"])
@@ -1159,7 +1211,7 @@ export default function ProviderLeadsPage() {
           // Query 2: Accepted provider-initiated requests (NEW - these should also be leads)
           supabase
             .from("connections")
-            .select("*, toProfile:to_profile_id(id, display_name, email, phone, city, state, type, metadata)")
+            .select("*, toProfile:to_profile_id(id, display_name, email, phone, city, state, type, care_types, metadata)")
             .eq("from_profile_id", profileId)
             .eq("type", "request")
             .eq("status", "accepted")

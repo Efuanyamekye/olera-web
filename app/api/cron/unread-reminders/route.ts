@@ -7,6 +7,7 @@ interface ThreadMessage {
   from_profile_id: string;
   text: string;
   created_at: string;
+  is_auto_reply?: boolean;
 }
 
 /**
@@ -52,7 +53,11 @@ export async function GET(request: NextRequest) {
       const thread = (meta.thread as ThreadMessage[]) || [];
       if (thread.length === 0) continue;
 
-      const lastMsg = thread[thread.length - 1];
+      // Filter out auto-reply messages (seeded at connection creation)
+      const humanMessages = thread.filter((msg) => !msg.is_auto_reply);
+      if (humanMessages.length === 0) continue;
+
+      const lastMsg = humanMessages[humanMessages.length - 1];
       const lastMsgTime = new Date(lastMsg.created_at).getTime();
 
       // Skip if last message is less than 24h old
@@ -68,11 +73,11 @@ export async function GET(request: NextRequest) {
           ? conn.to_profile_id
           : conn.from_profile_id;
 
-      // Get recipient email + names
+      // Get recipient email + names + type for routing
       const [{ data: recipient }, { data: sender }] = await Promise.all([
         db
           .from("business_profiles")
-          .select("display_name, email")
+          .select("display_name, email, type")
           .eq("id", recipientProfileId)
           .single(),
         db
@@ -89,6 +94,11 @@ export async function GET(request: NextRequest) {
 
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
 
+      // Route families to portal inbox, providers to provider connections
+      const viewUrl = recipient.type === "family"
+        ? `${siteUrl}/portal/inbox`
+        : `${siteUrl}/provider/connections`;
+
       await sendEmail({
         to: recipient.email,
         subject: `Reminder: You have an unread message from ${sender?.display_name || "someone"} on Olera`,
@@ -96,7 +106,7 @@ export async function GET(request: NextRequest) {
           recipientName: recipient.display_name || "there",
           senderName: sender?.display_name || "Someone",
           messagePreview: preview,
-          viewUrl: `${siteUrl}/provider/connections`,
+          viewUrl,
         }),
       });
 

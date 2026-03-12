@@ -121,10 +121,18 @@ export default function PostAuthOnboarding({
   const [providerType, setProviderType] = useState<"organization" | "caregiver" | null>(
     initialProviderType as "organization" | "caregiver" | null
   );
-  // Prefill name from claim profile, or from account (collected during auth)
-  const [displayName, setDisplayName] = useState(
-    claimProfile?.display_name || account?.display_name || ""
-  );
+  // Prefill name from claim profile, account, or email prefix
+  const getInitialDisplayName = () => {
+    if (claimProfile?.display_name) return claimProfile.display_name;
+    if (account?.display_name) return account.display_name;
+    // Derive from email as last resort
+    const emailPrefix = user?.email?.split("@")[0] || "";
+    // Capitalize first letter and replace dots/underscores with spaces
+    return emailPrefix
+      .replace(/[._]/g, " ")
+      .replace(/\b\w/g, (c) => c.toUpperCase());
+  };
+  const [displayName, setDisplayName] = useState(getInitialDisplayName);
   const [city, setCity] = useState(claimProfile?.city || "");
   const [state, setState] = useState(claimProfile?.state || "");
   const [careTypes, setCareTypes] = useState<string[]>(claimProfile?.care_types || []);
@@ -146,12 +154,22 @@ export default function PostAuthOnboarding({
     }
   }, [claimProfile]);
 
-  // Prefill name from account when it loads (if not already set)
+  // Prefill name when account/user loads (if not already set by user)
   useEffect(() => {
-    if (account?.display_name && !displayName && !claimProfile?.display_name) {
+    if (displayName) return; // User has already entered something
+    if (claimProfile?.display_name) return; // Already prefilled from claim
+
+    if (account?.display_name) {
       setDisplayName(account.display_name);
+    } else if (user?.email) {
+      // Derive from email as fallback
+      const emailPrefix = user.email.split("@")[0] || "";
+      const derived = emailPrefix
+        .replace(/[._]/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+      setDisplayName(derived);
     }
-  }, [account?.display_name, displayName, claimProfile?.display_name]);
+  }, [account?.display_name, user?.email, displayName, claimProfile?.display_name]);
 
   // ──────────────────────────────────────────────────────────
   // Progress computation
@@ -224,8 +242,8 @@ export default function PostAuthOnboarding({
 
   const isProfileInfoValid = (): boolean => {
     if (intent === "family") {
-      // No requirements for family - any info helps recommendations but nothing is blocking
-      return true;
+      // Require name for families - helps providers and personalization
+      return displayName.trim().length > 0;
     }
     // Provider
     return displayName.trim().length > 0 && careTypes.length > 0;
@@ -546,8 +564,17 @@ export default function PostAuthOnboarding({
             </div>
           )}
 
-          {/* Name field - only for providers (families already provided name during auth) */}
-          {intent === "provider" && (
+          {/* Name field - shown for both families and providers */}
+          {intent === "family" ? (
+            <Input
+              label="Your name"
+              type="text"
+              value={displayName}
+              onChange={(e) => setDisplayName((e.target as HTMLInputElement).value)}
+              placeholder="First and last name"
+              required
+            />
+          ) : intent === "provider" ? (
             <Input
               label={providerType === "organization" ? "Organization name" : "Your name"}
               type="text"
@@ -556,7 +583,7 @@ export default function PostAuthOnboarding({
               placeholder={providerType === "organization" ? "e.g., Sunrise Senior Living" : "First and last name"}
               required
             />
-          )}
+          ) : null}
 
           <div className="grid grid-cols-2 gap-3">
             <Input

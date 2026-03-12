@@ -5,10 +5,13 @@ import { createClient } from "@supabase/supabase-js";
 /**
  * POST /api/auth/claim-profiles
  *
- * Claims placeholder profiles for a newly authenticated user.
+ * Handles placeholder profiles for a newly authenticated user.
  * This is called automatically after sign-in to:
- * 1. Claim any placeholder profile matching the claim token from localStorage
- * 2. Claim any placeholder profiles matching the user's email
+ * 1. Find placeholder profiles matching the claim token or user's email
+ * 2. Move their connections to the user's main family profile
+ * 3. Delete the placeholders (NOT claim them as additional family profiles)
+ *
+ * Business rule: Each account should have exactly ONE family profile.
  */
 export async function POST(request: Request) {
   try {
@@ -45,13 +48,13 @@ export async function POST(request: Request) {
       .single();
 
     if (!account) {
-      return NextResponse.json({ claimed: 0 }); // Account not ready yet
+      return NextResponse.json({ processed: 0 }); // Account not ready yet
     }
 
-    let claimedCount = 0;
-    const claimedProfileIds: string[] = [];
+    // Find placeholder profiles to process
+    const placeholderIds: string[] = [];
 
-    // 1. Claim by token (if provided)
+    // 1. Find by token (if provided)
     if (claimToken) {
       const { data: tokenProfile } = await db
         .from("business_profiles")
@@ -61,22 +64,11 @@ export async function POST(request: Request) {
         .single();
 
       if (tokenProfile) {
-        const { error: claimError } = await db
-          .from("business_profiles")
-          .update({
-            account_id: account.id,
-            claimed_at: new Date().toISOString(),
-          })
-          .eq("id", tokenProfile.id);
-
-        if (!claimError) {
-          claimedCount++;
-          claimedProfileIds.push(tokenProfile.id);
-        }
+        placeholderIds.push(tokenProfile.id);
       }
     }
 
-    // 2. Claim by email match
+    // 2. Find by email match
     if (user.email) {
       const { data: emailProfiles } = await db
         .from("business_profiles")
@@ -87,58 +79,73 @@ export async function POST(request: Request) {
 
       if (emailProfiles?.length) {
         for (const profile of emailProfiles) {
-          // Skip if already claimed above
-          if (claimedProfileIds.includes(profile.id)) continue;
-
-          const { error: claimError } = await db
-            .from("business_profiles")
-            .update({
-              account_id: account.id,
-              claimed_at: new Date().toISOString(),
-            })
-            .eq("id", profile.id);
-
-          if (!claimError) {
-            claimedCount++;
-            claimedProfileIds.push(profile.id);
+          if (!placeholderIds.includes(profile.id)) {
+            placeholderIds.push(profile.id);
           }
         }
       }
     }
 
-    // 3. If we claimed any profiles, merge their connections to the user's main family profile
-    if (claimedProfileIds.length > 0) {
-      // Find the user's main family profile (the one that was created when they signed up)
-      const { data: mainFamily } = await db
+    // If no placeholders found, nothing to do
+    if (placeholderIds.length === 0) {
+      return NextResponse.json({ processed: 0 });
+    }
+
+    // Find the user's main family profile
+    const { data: mainFamily } = await db
+      .from("business_profiles")
+      .select("id")
+      .eq("account_id", account.id)
+      .eq("type", "family")
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .single();
+
+    if (!mainFamily) {
+      // Edge case: no family profile yet. The first placeholder becomes the main one.
+      const firstPlaceholder = placeholderIds[0];
+      await db
         .from("business_profiles")
-        .select("id")
-        .eq("account_id", account.id)
-        .eq("type", "family")
-        .is("claimed_at", null) // Not a claimed placeholder
-        .order("created_at", { ascending: true })
-        .limit(1)
-        .single();
+        .update({
+          account_id: account.id,
+          claimed_at: new Date().toISOString(),
+        })
+        .eq("id", firstPlaceholder);
 
-      // If there's a main family profile, reassign connections from claimed placeholders
-      if (mainFamily) {
-        for (const claimedId of claimedProfileIds) {
-          if (claimedId === mainFamily.id) continue;
+      // Move connections from other placeholders to this one, then delete them
+      for (let i = 1; i < placeholderIds.length; i++) {
+        const otherId = placeholderIds[i];
+        await db
+          .from("connections")
+          .update({ from_profile_id: firstPlaceholder })
+          .eq("from_profile_id", otherId);
 
-          // Move outbound connections
-          await db
-            .from("connections")
-            .update({ from_profile_id: mainFamily.id })
-            .eq("from_profile_id", claimedId);
-
-          // Note: inbound connections stay pointed at the original profile
-          // since providers already have a reference to it
-        }
+        await db.from("business_profiles").delete().eq("id", otherId);
       }
+
+      return NextResponse.json({
+        processed: placeholderIds.length,
+        mainProfileId: firstPlaceholder,
+      });
+    }
+
+    // Move connections from all placeholders to main family profile, then delete placeholders
+    for (const placeholderId of placeholderIds) {
+      if (placeholderId === mainFamily.id) continue;
+
+      // Move outbound connections
+      await db
+        .from("connections")
+        .update({ from_profile_id: mainFamily.id })
+        .eq("from_profile_id", placeholderId);
+
+      // Delete the placeholder (don't claim it as a second family profile)
+      await db.from("business_profiles").delete().eq("id", placeholderId);
     }
 
     return NextResponse.json({
-      claimed: claimedCount,
-      profileIds: claimedProfileIds,
+      processed: placeholderIds.length,
+      mainProfileId: mainFamily.id,
     });
   } catch (err) {
     console.error("Claim profiles error:", err);

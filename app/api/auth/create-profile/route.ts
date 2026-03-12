@@ -90,9 +90,17 @@ export async function POST(request: Request) {
     } = body;
 
     // Validate required fields
-    if (!intent || !displayName?.trim()) {
+    if (!intent) {
       return NextResponse.json(
-        { error: "Intent and display name are required." },
+        { error: "Intent is required." },
+        { status: 400 }
+      );
+    }
+
+    // For providers, display name is required
+    if (intent === "provider" && !displayName?.trim()) {
+      return NextResponse.json(
+        { error: "Display name is required for providers." },
         { status: 400 }
       );
     }
@@ -117,6 +125,12 @@ export async function POST(request: Request) {
 
     const accountId = account.id;
     let profileId: string;
+
+    // For families, derive display name if not provided
+    const finalDisplayName = displayName?.trim()
+      || account.display_name
+      || user.email?.split("@")[0]
+      || "My Family";
 
     if (intent === "provider") {
       const profileType = providerType === "caregiver" ? "caregiver" : "organization";
@@ -260,7 +274,7 @@ export async function POST(request: Request) {
         const { error: updateErr } = await db
           .from("business_profiles")
           .update({
-            display_name: displayName,
+            display_name: finalDisplayName,
             city: city || null,
             state: state || null,
             zip: zip || null,
@@ -283,7 +297,7 @@ export async function POST(request: Request) {
         profileId = existingFamilyProfile.id;
       } else {
         // No existing family profile — create one
-        const slug = generateSlug(displayName, city || "", state || "");
+        const slug = generateSlug(finalDisplayName, city || "", state || "");
 
         const { data: newProfile, error: insertErr } = await db
           .from("business_profiles")
@@ -291,7 +305,7 @@ export async function POST(request: Request) {
             account_id: accountId,
             slug,
             type: "family",
-            display_name: displayName,
+            display_name: finalDisplayName,
             city: city || null,
             state: state || null,
             zip: zip || null,

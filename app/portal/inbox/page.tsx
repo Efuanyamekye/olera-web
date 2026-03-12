@@ -669,6 +669,8 @@ function InboxContent() {
         detailOpen={detailOpen}
         onToggleDetail={() => setDetailOpen((p) => !p)}
         className={`w-full lg:flex-1 ${selectedId ? "flex" : "hidden lg:flex"}`}
+        claimToken={!user && !activeProfile ? (searchParams.get("token") || localStorage.getItem(CLAIM_TOKEN_KEY)) : null}
+        guestProfileId={guestProfileId}
       />
 
       {/* Right panel — provider details (animated width) */}

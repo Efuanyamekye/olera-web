@@ -16,23 +16,18 @@ interface ThreadMessage {
  *
  * Appends a message to the connection's metadata.thread array.
  * Only participants can send messages. Connection must be pending or accepted.
+ *
+ * Supports two auth modes:
+ * 1. Authenticated users: uses Supabase session + active_profile_id
+ * 2. Guest users: uses claimToken to validate unclaimed profile ownership
  */
 export async function POST(request: Request) {
   try {
-    const supabase = await createServerClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
-
-    if (authError || !user) {
-      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-    }
-
     const body = await request.json();
-    const { connectionId, text } = body as {
+    const { connectionId, text, claimToken } = body as {
       connectionId?: string;
       text?: string;
+      claimToken?: string;
     };
 
     if (!connectionId || !text?.trim()) {
@@ -42,22 +37,55 @@ export async function POST(request: Request) {
       );
     }
 
-    // Get user's active profile
-    const { data: account } = await supabase
-      .from("accounts")
-      .select("active_profile_id")
-      .eq("user_id", user.id)
-      .single();
+    const admin = getServiceClient();
+    let profileId: string;
+    let userEmail: string | null = null;
 
-    if (!account?.active_profile_id) {
-      return NextResponse.json(
-        { error: "No active profile" },
-        { status: 400 }
-      );
+    // Try authenticated flow first
+    const supabase = await createServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (user) {
+      // Authenticated user flow
+      const { data: account } = await supabase
+        .from("accounts")
+        .select("active_profile_id")
+        .eq("user_id", user.id)
+        .single();
+
+      if (!account?.active_profile_id) {
+        return NextResponse.json(
+          { error: "No active profile" },
+          { status: 400 }
+        );
+      }
+      profileId = account.active_profile_id;
+      userEmail = user.email || null;
+    } else if (claimToken) {
+      // Guest flow — validate claim token
+      const { data: guestProfile } = await admin
+        .from("business_profiles")
+        .select("id, email")
+        .eq("claim_token", claimToken)
+        .is("account_id", null)
+        .single();
+
+      if (!guestProfile) {
+        return NextResponse.json(
+          { error: "Invalid or expired token" },
+          { status: 401 }
+        );
+      }
+      profileId = guestProfile.id;
+      userEmail = guestProfile.email || null;
+    } else {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    // Fetch the connection
-    const { data: connection, error: fetchError } = await supabase
+    // Fetch the connection (use admin to bypass RLS for guests)
+    const { data: connection, error: fetchError } = await admin
       .from("connections")
       .select("id, from_profile_id, to_profile_id, status, metadata")
       .eq("id", connectionId)
@@ -71,7 +99,6 @@ export async function POST(request: Request) {
     }
 
     // Must be a participant
-    const profileId = account.active_profile_id;
     if (
       connection.from_profile_id !== profileId &&
       connection.to_profile_id !== profileId
@@ -100,7 +127,8 @@ export async function POST(request: Request) {
 
     const updatedThread = [...existingThread, newMessage];
 
-    const { error: updateError } = await supabase
+    // Use admin client to bypass RLS (needed for guest flow)
+    const { error: updateError } = await admin
       .from("connections")
       .update({
         metadata: { ...existingMeta, thread: updatedThread },
@@ -132,14 +160,14 @@ export async function POST(request: Request) {
       if (!recentRecipientMsg) {
         const [{ data: senderProfile }, { data: recipientProfile }] =
           await Promise.all([
-            supabase
+            admin
               .from("business_profiles")
               .select("display_name")
               .eq("id", profileId)
               .single(),
-            supabase
+            admin
               .from("business_profiles")
-              .select("display_name, email, account_id")
+              .select("display_name, email, account_id, type")
               .eq("id", recipientProfileId)
               .single(),
           ]);
@@ -147,7 +175,6 @@ export async function POST(request: Request) {
         // Resolve recipient email: business_profiles.email → accounts → auth.users
         let recipientEmail = recipientProfile?.email;
         if (!recipientEmail && recipientProfile?.account_id) {
-          const admin = getServiceClient();
           const { data: acct } = await admin
             .from("accounts")
             .select("user_id")
@@ -165,6 +192,12 @@ export async function POST(request: Request) {
               ? text.trim().slice(0, 200) + "..."
               : text.trim();
 
+          // Route families to portal inbox, providers to provider connections
+          const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+          const viewUrl = recipientProfile?.type === "family"
+            ? `${siteUrl}/portal/inbox`
+            : `${siteUrl}/provider/connections`;
+
           await sendEmail({
             to: recipientEmail,
             subject: `New message from ${senderProfile?.display_name || "someone"} on Olera`,
@@ -172,7 +205,7 @@ export async function POST(request: Request) {
               recipientName: recipientProfile?.display_name || "there",
               senderName: senderProfile?.display_name || "Someone",
               messagePreview: preview,
-              viewUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"}/provider/connections`,
+              viewUrl,
             }),
           });
         }
@@ -183,14 +216,16 @@ export async function POST(request: Request) {
 
     // Loops: new message event (fire-and-forget)
     try {
-      await sendLoopsEvent({
-        email: user.email || "",
-        eventName: "new_message",
-        audience: "seeker",
-        eventProperties: {
-          messagePreview: text.trim().slice(0, 100),
-        },
-      });
+      if (userEmail) {
+        await sendLoopsEvent({
+          email: userEmail,
+          eventName: "new_message",
+          audience: "seeker",
+          eventProperties: {
+            messagePreview: text.trim().slice(0, 100),
+          },
+        });
+      }
     } catch {
       // Non-blocking
     }
