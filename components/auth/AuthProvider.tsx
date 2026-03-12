@@ -537,17 +537,22 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
             // Auto-claim any placeholder profiles (fire-and-forget)
             try {
-              const claimToken = localStorage.getItem(CLAIM_TOKEN_KEY);
-              fetch("/api/auth/claim-profiles", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ claimToken }),
-              }).then(() => {
-                // Clear the claim token after claiming
-                localStorage.removeItem(CLAIM_TOKEN_KEY);
-              }).catch(() => {
-                // Non-blocking
-              });
+              // Check URL params first (magic link flow), then localStorage
+              const urlParams = new URLSearchParams(window.location.search);
+              const urlToken = urlParams.get("token");
+              const claimToken = urlToken || localStorage.getItem(CLAIM_TOKEN_KEY);
+              if (claimToken) {
+                fetch("/api/auth/claim-profiles", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ claimToken }),
+                }).then(() => {
+                  // Clear the claim token after claiming
+                  localStorage.removeItem(CLAIM_TOKEN_KEY);
+                }).catch(() => {
+                  // Non-blocking
+                });
+              }
             } catch {
               // localStorage unavailable
             }
@@ -562,7 +567,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
               // Auto-claim placeholder profiles for new users (guest connection flow)
               try {
-                const claimToken = localStorage.getItem(CLAIM_TOKEN_KEY);
+                // Check URL params first (magic link flow), then localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlToken = urlParams.get("token");
+                const claimToken = urlToken || localStorage.getItem(CLAIM_TOKEN_KEY);
                 if (claimToken) {
                   await fetch("/api/auth/claim-profiles", {
                     method: "POST",

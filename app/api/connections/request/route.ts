@@ -342,7 +342,8 @@ async function handleGuestConnection({
       await authClient.auth.signInWithOtp({
         email: normalizedEmail,
         options: {
-          emailRedirectTo: `${siteUrl}/portal/inbox?id=${newConnection.id}`,
+          // Include claim token so it can be stored in localStorage on arrival
+          emailRedirectTo: `${siteUrl}/portal/inbox?id=${newConnection.id}&token=${claimToken}`,
         },
       });
     }
