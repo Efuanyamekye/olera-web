@@ -106,11 +106,45 @@ function InboxContent() {
   // Fetch connections
   const fetchConnections = useCallback(async () => {
     // For authenticated users, require activeProfile
-    // For guests, allow guestProfileId as fallback
+    // For guests, use API endpoint (bypasses RLS)
     const hasAuthProfile = activeProfile && profiles.length > 0;
-    const hasGuestProfile = !user && guestProfileId;
 
-    if (!hasAuthProfile && !hasGuestProfile) {
+    // Guest flow: use API endpoint since RLS blocks direct queries
+    if (!user && !hasAuthProfile) {
+      const urlToken = searchParams.get("token");
+      const claimToken = urlToken || localStorage.getItem(CLAIM_TOKEN_KEY);
+      if (!claimToken) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/connections/guest-inbox", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ claimToken }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.connections?.length) {
+            // Transform API response to match expected Connection shape
+            const conns = data.connections.map((c: Record<string, unknown>) => ({
+              ...c,
+              to_profile_id: (c.to_profile as Record<string, unknown>)?.id,
+            })) as Connection[];
+            setConnections(conns);
+            setGuestProfileId(data.profileId);
+          }
+        }
+      } catch (err) {
+        console.error("[inbox] Failed to fetch guest connections:", err);
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
+    if (!hasAuthProfile) {
       setLoading(false);
       return;
     }
@@ -122,9 +156,7 @@ function InboxContent() {
 
     try {
       const supabase = createClient();
-      const profileIds = hasAuthProfile
-        ? profiles.map((p) => p.id)
-        : [guestProfileId!];
+      const profileIds = profiles.map((p) => p.id);
 
       // Fire archived count in the background — JSONB filter queries are slower and
       // don't need to block the active conversations render.
@@ -327,7 +359,7 @@ function InboxContent() {
     } finally {
       setLoading(false);
     }
-  }, [activeProfile, profiles, user, guestProfileId]);
+  }, [activeProfile, profiles, user, guestProfileId, searchParams]);
 
   useEffect(() => {
     fetchConnections();
