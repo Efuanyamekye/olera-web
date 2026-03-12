@@ -11,6 +11,7 @@ import {
   URGENCY_FROM_TIMELINE,
   CARE_TYPE_FROM_DISPLAY,
 } from "./constants";
+import { storeGuestRedirect } from "@/components/auth/MagicLinkHandler";
 import type {
   CardState,
   IntentStep,
@@ -424,6 +425,13 @@ export function useConnectionCard(props: ConnectionCardProps) {
         } catch {
           // localStorage may fail in private browsing
         }
+      }
+
+      // Store redirect destination for magic link handler
+      // When user clicks magic link, they'll be redirected here after auth
+      if (data.connectionId && data.claimToken) {
+        const redirectUrl = `/portal/inbox?id=${data.connectionId}&token=${data.claimToken}`;
+        storeGuestRedirect(redirectUrl, data.claimToken);
       }
 
       // Redirect to post-connection success page if callback provided

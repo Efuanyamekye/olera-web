@@ -6,6 +6,7 @@ import Navbar from "@/components/shared/Navbar";
 import ConditionalFooter from "@/components/shared/ConditionalFooter";
 import AuthProvider from "@/components/auth/AuthProvider";
 import GlobalUnifiedAuthModal from "@/components/auth/GlobalUnifiedAuthModal";
+import MagicLinkHandler from "@/components/auth/MagicLinkHandler";
 import { SavedProvidersProvider } from "@/hooks/use-saved-providers";
 import { NavbarProvider } from "@/components/shared/NavbarContext";
 
@@ -146,6 +147,7 @@ export default function RootLayout({
       <body className="bg-white min-h-screen flex flex-col font-sans">
         <Script src="https://cdn.lordicon.com/lordicon.js" strategy="afterInteractive" />
         <AuthProvider>
+          <MagicLinkHandler />
           <SavedProvidersProvider>
           <NavbarProvider>
             <Navbar />
