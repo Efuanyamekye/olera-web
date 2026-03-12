@@ -93,7 +93,7 @@ export async function POST(request: Request) {
 
       if (!existingFamilyProfile) {
         const name = (existingAccount as Account).display_name || user.email?.split("@")[0] || "My Family";
-        const { error: profileError } = await dbClient.from("business_profiles").insert({
+        const { data: newFamilyProfile, error: profileError } = await dbClient.from("business_profiles").insert({
           account_id: acctId,
           slug: `family-${acctId.slice(0, 8)}`,
           type: "family",
@@ -104,9 +104,16 @@ export async function POST(request: Request) {
           source: "user_created",
           is_active: true,
           metadata: {},
-        });
+        }).select("id").single();
         if (profileError) {
           console.error("Error creating family profile (existing account):", profileError.message, profileError.code);
+        }
+
+        // Set active profile so user can send messages
+        if (newFamilyProfile && !(existingAccount as Account).active_profile_id) {
+          await dbClient.from("accounts").update({
+            active_profile_id: newFamilyProfile.id,
+          }).eq("id", acctId);
         }
 
         // Send welcome email for fresh signups where DB trigger created the account
@@ -223,7 +230,7 @@ export async function POST(request: Request) {
 
     if (!existingFamily) {
       const familyDisplayName = displayName || user.email?.split("@")[0] || "My Family";
-      const { error: profileError } = await dbClient.from("business_profiles").insert({
+      const { data: newFamilyProfile, error: profileError } = await dbClient.from("business_profiles").insert({
         account_id: accountId,
         slug: `family-${accountId.slice(0, 8)}`,
         type: "family",
@@ -234,9 +241,16 @@ export async function POST(request: Request) {
         source: "user_created",
         is_active: true,
         metadata: {},
-      });
+      }).select("id").single();
       if (profileError) {
         console.error("Error creating family profile (new account):", profileError.message, profileError.code);
+      }
+
+      // Set active profile so user can send messages
+      if (newFamilyProfile) {
+        await dbClient.from("accounts").update({
+          active_profile_id: newFamilyProfile.id,
+        }).eq("id", accountId);
       }
     }
 

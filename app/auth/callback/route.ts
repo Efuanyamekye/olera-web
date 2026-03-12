@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
 
         // Create family profile (every user gets one)
         if (newAccount) {
-          await admin.from("business_profiles").insert({
+          const { data: newFamily } = await admin.from("business_profiles").insert({
             account_id: newAccount.id,
             slug: `family-${newAccount.id.slice(0, 8)}`,
             type: "family",
@@ -93,7 +93,14 @@ export async function GET(request: NextRequest) {
             verification_state: "unverified",
             source: "user_created",
             metadata: {},
-          });
+          }).select("id").single();
+
+          // Set active profile so user can send messages
+          if (newFamily) {
+            await admin.from("accounts").update({
+              active_profile_id: newFamily.id,
+            }).eq("id", newAccount.id);
+          }
         }
 
         // Claim placeholder profile if token present (guest connection flow)
