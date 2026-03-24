@@ -533,7 +533,7 @@ export default function Navbar() {
           role="menuitem"
           onClick={() => {
             setIsUserMenuOpen(false);
-            openAuth({ intent: "provider", providerType: "organization" });
+            router.push("/provider/onboarding");
           }}
           className="w-full text-left flex items-center gap-3 px-3.5 py-2.5 text-[15px] text-gray-600 hover:bg-gray-50 rounded-xl transition-colors"
         >
@@ -547,7 +547,7 @@ export default function Navbar() {
           role="menuitem"
           onClick={() => {
             setIsUserMenuOpen(false);
-            openAuth({ intent: "provider", providerType: "caregiver" });
+            router.push("/provider/onboarding");
           }}
           className="w-full text-left flex items-center gap-3 px-3.5 py-2.5 text-[15px] text-gray-600 hover:bg-gray-50 rounded-xl transition-colors"
         >
@@ -1419,7 +1419,7 @@ export default function Navbar() {
                   type="button"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    openAuth({ intent: "provider", providerType: "organization" });
+                    router.push("/provider/onboarding");
                   }}
                   className="w-full py-2.5 text-sm text-gray-500 hover:text-primary-600 transition-colors min-h-[44px]"
                 >

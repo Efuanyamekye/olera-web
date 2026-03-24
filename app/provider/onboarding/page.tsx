@@ -127,7 +127,7 @@ function ProviderOnboardingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isAdding = searchParams.get("adding") === "true";
-  const { user, account, profiles, isLoading, refreshAccountData, switchProfile } = useAuth();
+  const { user, account, profiles, isLoading, refreshAccountData, switchProfile, openAuth } = useAuth();
   const [step, setStep] = useState<Step>(1);
   const [providerType, setProviderType] = useState<ProviderType | null>(null);
   const [data, setData] = useState<WizardData>(EMPTY);
@@ -202,27 +202,24 @@ function ProviderOnboardingContent() {
   const [noAccessSubmitting, setNoAccessSubmitting] = useState(false);
   const [noAccessSuccess, setNoAccessSuccess] = useState(false);
 
-  // Auth guard + resume detection
+  // Resume detection (auth check moved to handleSubmit)
   useEffect(() => {
     if (isLoading) return;
 
-    if (!user) {
-      router.replace("/");
-      return;
-    }
-
-    // If they already have a provider profile, redirect to hub
+    // If logged in and they already have a provider profile, redirect to hub
     // (unless they're explicitly adding another profile, or claiming via ?claim=)
-    const hasProviderProfile = (profiles || []).some(
-      (p) => p.type === "organization" || p.type === "caregiver"
-    );
-    if (hasProviderProfile && !isAdding) {
-      router.replace("/provider");
-      return;
+    if (user) {
+      const hasProviderProfile = (profiles || []).some(
+        (p) => p.type === "organization" || p.type === "caregiver"
+      );
+      if (hasProviderProfile && !isAdding) {
+        router.replace("/provider");
+        return;
+      }
     }
 
     // When adding a new profile, clear stale wizard data so we start fresh
-    if (isAdding) {
+    if (user && isAdding) {
       try {
         localStorage.removeItem(TYPE_KEY);
         localStorage.removeItem(DATA_KEY);
@@ -278,7 +275,7 @@ function ProviderOnboardingContent() {
   const prefillApplied = useRef(false);
   useEffect(() => {
     if (prefillApplied.current) return;
-    if (isLoading || !user) return; // Wait for auth to settle
+    if (isLoading) return; // Wait for auth to settle (but don't require user)
 
     try {
       const raw = sessionStorage.getItem("olera_provider_search_prefill");
@@ -658,6 +655,20 @@ function ProviderOnboardingContent() {
 
   const handleSubmit = async () => {
     if (!data.displayName.trim()) return;
+
+    // Auth check: if not logged in, prompt to create account first
+    if (!user) {
+      openAuth({
+        headline: "Almost done! Create an account to publish your listing",
+        intent: "provider",
+        deferred: {
+          action: "claim",
+          returnUrl: window.location.pathname + window.location.search,
+        },
+      });
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError("");
 
@@ -736,7 +747,7 @@ function ProviderOnboardingContent() {
   };
 
   const displayName =
-    account?.display_name || user?.email?.split("@")[0] || "back";
+    account?.display_name || user?.email?.split("@")[0] || "there";
 
   // WizardNav step mapping — org flow: 6 steps
   const isOrg = providerType === "organization";
@@ -754,13 +765,15 @@ function ProviderOnboardingContent() {
     );
   }
 
-  // Prevent flash: if user already has a provider profile and isn't adding another,
+  // Prevent flash: if logged-in user already has a provider profile and isn't adding another,
   // render nothing while the useEffect redirect fires.
-  const hasProviderProfile = (profiles || []).some(
-    (p) => p.type === "organization" || p.type === "caregiver"
-  );
-  if (hasProviderProfile && !isAdding) {
-    return null;
+  if (user) {
+    const hasProviderProfile = (profiles || []).some(
+      (p) => p.type === "organization" || p.type === "caregiver"
+    );
+    if (hasProviderProfile && !isAdding) {
+      return null;
+    }
   }
 
   const showResultsBg = step === "search" && hasSearched;
