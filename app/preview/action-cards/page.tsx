@@ -177,122 +177,80 @@ export default function ActionCardPreviewPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-display font-bold text-gray-900 mb-2">
-            ActionCard States Preview
-          </h1>
-          <p className="text-gray-500 max-w-xl mx-auto">
-            Interactive preview of all provider onboarding ActionCard states.
-            Use the controls below to switch between states and auth modes.
-          </p>
+      <div className="max-w-3xl mx-auto">
+        {/* Header - Clean and simple */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <div className="flex items-center gap-3 mb-1">
+              <h1 className="text-2xl font-display font-bold text-gray-900">
+                Provider Onboarding Cards
+              </h1>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-primary-100 text-primary-700 uppercase tracking-wide">
+                Preview
+              </span>
+            </div>
+            <p className="text-sm text-gray-500">
+              These are the cards providers see when claiming their listing or responding to notifications.
+            </p>
+          </div>
         </div>
 
-        {/* Controls */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* State selector */}
-            <div className="lg:col-span-2">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Card State ({selectedIndex + 1} of {ALL_STATES.length})
-              </label>
-              <select
-                value={selectedIndex}
-                onChange={(e) => setSelectedIndex(Number(e.target.value))}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-[15px] focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent"
+        {/* All States - Pill navigation */}
+        <div className="mb-6">
+          <div className="flex flex-wrap gap-2">
+            {ALL_STATES.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedIndex(i)}
+                className={`px-3.5 py-2 rounded-full text-sm font-medium transition-all ${
+                  selectedIndex === i
+                    ? "bg-primary-600 text-white shadow-sm"
+                    : "bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                }`}
               >
-                {ALL_STATES.map((s, i) => (
-                  <option key={i} value={i}>
-                    {s.label}
-                  </option>
-                ))}
-              </select>
-              {currentStateConfig && (
-                <p className="mt-2 text-sm text-gray-500">{currentStateConfig.description}</p>
-              )}
-            </div>
-
-            {/* Auth toggle */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                User Auth State
-              </label>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setIsSignedIn(false)}
-                  className={`flex-1 px-3 py-3 rounded-xl text-sm font-medium transition-all ${
-                    !isSignedIn
-                      ? "bg-primary-600 text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  Signed Out
-                </button>
-                <button
-                  onClick={() => setIsSignedIn(true)}
-                  className={`flex-1 px-3 py-3 rounded-xl text-sm font-medium transition-all ${
-                    isSignedIn
-                      ? "bg-primary-600 text-white"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                  }`}
-                >
-                  Signed In
-                </button>
-              </div>
-              <p className="mt-2 text-xs text-gray-400">
-                Affects notification card CTAs
-              </p>
-            </div>
-          </div>
-
-          {/* Navigation arrows */}
-          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-            <button
-              onClick={() => setSelectedIndex((i) => Math.max(0, i - 1))}
-              disabled={selectedIndex === 0}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Previous
-            </button>
-            <span className="text-sm text-gray-400">
-              {selectedIndex + 1} / {ALL_STATES.length}
-            </span>
-            <button
-              onClick={() => setSelectedIndex((i) => Math.min(ALL_STATES.length - 1, i + 1))}
-              disabled={selectedIndex === ALL_STATES.length - 1}
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            >
-              Next
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+                {s.label}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Current State Badge */}
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
-            state=&quot;{currentStateConfig?.state}&quot;
-          </span>
-          {currentStateConfig?.needsNotification && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-50 text-primary-700">
-              + notificationData
-            </span>
-          )}
-          {currentStateConfig?.useNoEmailProvider && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-amber-50 text-amber-700">
-              no email on file
-            </span>
-          )}
+        {/* Current state info bar */}
+        <div className="flex items-center justify-between bg-white rounded-xl border border-gray-200 px-4 py-3 mb-6">
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-gray-900 truncate">{currentStateConfig?.label}</p>
+            <p className="text-xs text-gray-500 truncate">{currentStateConfig?.description}</p>
+          </div>
+
+          {/* Auth toggle - compact */}
+          <div className="flex items-center gap-2 ml-4 shrink-0">
+            <span className="text-xs text-gray-400 hidden sm:inline">User:</span>
+            <div className="flex bg-gray-100 rounded-lg p-0.5">
+              <button
+                onClick={() => setIsSignedIn(false)}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                  !isSignedIn
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                Signed Out
+              </button>
+              <button
+                onClick={() => setIsSignedIn(true)}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                  isSignedIn
+                    ? "bg-white text-gray-900 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                Signed In
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Card Preview */}
-        <div className="max-w-xl mx-auto">
+        <div className="max-w-xl mx-auto mb-8">
           <ActionCard
             key={`${selectedIndex}-${isSignedIn}`}
             provider={currentProvider}
@@ -305,35 +263,31 @@ export default function ActionCardPreviewPage() {
           />
         </div>
 
-        {/* Quick Jump */}
-        <div className="mt-10 pt-8 border-t border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Jump</h2>
-          <div className="flex flex-wrap gap-2">
-            {ALL_STATES.map((s, i) => (
-              <button
-                key={i}
-                onClick={() => setSelectedIndex(i)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
-                  selectedIndex === i
-                    ? "bg-primary-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Info Footer */}
-        <div className="mt-8 p-4 bg-gray-50 rounded-xl text-sm text-gray-500">
-          <p className="font-medium text-gray-700 mb-1">Testing Notes:</p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>Toggle &quot;Signed In&quot; to see different CTAs on notification cards</li>
-            <li>Notification cards (lead/question/review) show context from emails</li>
-            <li>The &quot;No Email&quot; variant shows what happens when provider has no email on file</li>
-            <li>Buttons trigger alerts instead of actual actions in this preview</li>
-          </ul>
+        {/* Navigation */}
+        <div className="flex items-center justify-center gap-4">
+          <button
+            onClick={() => setSelectedIndex((i) => Math.max(0, i - 1))}
+            disabled={selectedIndex === 0}
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Previous
+          </button>
+          <span className="text-sm text-gray-400 tabular-nums">
+            {selectedIndex + 1} of {ALL_STATES.length}
+          </span>
+          <button
+            onClick={() => setSelectedIndex((i) => Math.min(ALL_STATES.length - 1, i + 1))}
+            disabled={selectedIndex === ALL_STATES.length - 1}
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+          >
+            Next
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
