@@ -561,7 +561,9 @@ export default function UnifiedAuthModal({
             onClose();
             // Pass current page as ?next= so they return here after welcome
             const currentPath = window.location.pathname + window.location.search;
-            router.push(`/welcome?next=${encodeURIComponent(currentPath)}`);
+            // Route providers to provider welcome page, families to family welcome page
+            const welcomePath = hasProviderProfile ? "/provider/welcome" : "/welcome";
+            router.push(`${welcomePath}?next=${encodeURIComponent(currentPath)}`);
             return;
           }
         }
