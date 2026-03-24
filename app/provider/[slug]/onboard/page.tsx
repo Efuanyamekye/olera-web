@@ -7,8 +7,7 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 import type { Provider } from "@/lib/types/provider";
 import SmartDashboardShell from "@/components/provider-onboarding/SmartDashboardShell";
-import type { ActionCardState } from "@/components/provider-onboarding/ActionCard";
-import type { NotificationData, NotificationType } from "@/components/provider-onboarding/NotificationBanner";
+import type { ActionCardState, NotificationData, NotificationType } from "@/components/provider-onboarding/ActionCard";
 import {
   getOrCreateClaimSession,
   markSessionVerified,
@@ -197,12 +196,25 @@ export default function ProviderOnboardPage() {
       }
 
       // Start with dashboard (wizard will show first, then verification)
-      // If state param provided (e.g., from dispute link), use it
-      const validStates: ActionCardState[] = ["verify-form", "already-claimed", "no-access"];
-      if (stateParam && validStates.includes(stateParam)) {
-        setActionCardState(stateParam);
+      // Set initial state based on context:
+      // 1. Notification from email (lead/question/review) → show notification card
+      // 2. State param provided (e.g., from dispute link) → use that state
+      // 3. Default → verify-form
+      if (actionParam) {
+        // Map action param to notification state
+        const notificationStateMap: Record<string, ActionCardState> = {
+          lead: "notification-lead",
+          question: "notification-question",
+          review: "notification-review",
+        };
+        setActionCardState(notificationStateMap[actionParam] || "verify-form");
       } else {
-        setActionCardState("verify-form");
+        const validStates: ActionCardState[] = ["verify-form", "already-claimed", "no-access"];
+        if (stateParam && validStates.includes(stateParam)) {
+          setActionCardState(stateParam);
+        } else {
+          setActionCardState("verify-form");
+        }
       }
       setStep("dashboard");
     })();
@@ -390,6 +402,7 @@ export default function ProviderOnboardPage() {
       onVerificationComplete={handleVerificationComplete}
       initialActionState={actionCardState}
       notificationData={notificationData}
+      isSignedIn={!!user}
     />
   );
 }
