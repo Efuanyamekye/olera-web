@@ -360,6 +360,7 @@ function LeadCard({ data, routeTo }: LeadCardProps) {
   let careRecipient: string | null = null;
   let urgency: string | null = null;
   let seekerPhone: string | null = null;
+  let seekerEmail: string | null = null;
 
   try {
     const msgData = typeof data.message === "string" ? JSON.parse(data.message) : data.message;
@@ -367,6 +368,7 @@ function LeadCard({ data, routeTo }: LeadCardProps) {
     careRecipient = msgData?.care_recipient || null;
     urgency = msgData?.urgency || null;
     seekerPhone = msgData?.seeker_phone || null;
+    seekerEmail = msgData?.seeker_email || null;
   } catch {
     careType = data.metadata?.care_type || null;
   }
@@ -375,11 +377,19 @@ function LeadCard({ data, routeTo }: LeadCardProps) {
   const message = data.metadata?.auto_intro || data.metadata?.message;
   const timeAgo = formatTimeAgo(data.created_at);
 
-  // Format urgency for display
+  // Check if we have any care details to show
+  const hasCareDetails = careType || urgency || careRecipient;
+  const hasContactInfo = seekerPhone || seekerEmail;
+
+  // Format urgency for display (both old and new formats)
   const urgencyLabels: Record<string, string> = {
-    immediate: "Immediate need",
+    immediate: "Immediate",
     within_1_month: "Within 1 month",
-    exploring: "Exploring options",
+    exploring: "Exploring",
+    asap: "ASAP",
+    within_month: "Within 1 month",
+    few_months: "In a few months",
+    researching: "Researching",
   };
 
   // Format care recipient for display
@@ -425,39 +435,47 @@ function LeadCard({ data, routeTo }: LeadCardProps) {
 
           <div className="my-4 border-t border-gray-100" />
 
-          {/* Care details summary */}
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            {careType && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-primary-50 text-text-sm font-medium text-primary-700">
-                {CARE_TYPE_LABELS[careType] || careType}
-              </span>
-            )}
-            {urgency && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-50 text-text-sm font-medium text-amber-700">
-                {urgencyLabels[urgency] || urgency}
-              </span>
-            )}
-            {careRecipient && (
-              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-gray-100 text-text-sm font-medium text-gray-600">
-                {recipientLabels[careRecipient] || careRecipient}
-              </span>
-            )}
-          </div>
+          {/* Care details summary - only show if we have data */}
+          {hasCareDetails && (
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              {careType && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-primary-50 text-text-sm font-medium text-primary-700">
+                  {CARE_TYPE_LABELS[careType] || careType}
+                </span>
+              )}
+              {urgency && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-50 text-text-sm font-medium text-amber-700">
+                  {urgencyLabels[urgency] || urgency}
+                </span>
+              )}
+              {careRecipient && (
+                <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-gray-100 text-text-sm font-medium text-gray-600">
+                  {recipientLabels[careRecipient] || careRecipient}
+                </span>
+              )}
+            </div>
+          )}
 
-          {/* Family's message */}
-          {message && (
+          {/* Family's message or fallback */}
+          {message ? (
             <p className="text-text-md text-gray-600 line-clamp-2 leading-relaxed">
               &ldquo;{message}&rdquo;
+            </p>
+          ) : (
+            <p className="text-text-md text-gray-500 leading-relaxed">
+              {getFirstName(name)} is interested in learning more about your services.
             </p>
           )}
 
           {/* Meta info */}
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-text-sm text-gray-500">
             <span>{timeAgo}</span>
-            {seekerPhone && (
+            {hasContactInfo && (
               <>
                 <span className="text-gray-300">·</span>
-                <span>Phone provided</span>
+                <span className="text-primary-600 font-medium">
+                  {seekerPhone ? "Phone" : "Email"} provided
+                </span>
               </>
             )}
           </div>
