@@ -668,8 +668,8 @@ async function handleGuestConnection({
 
       // Generate magic link for provider one-click sign-in
       const siteUrl = getSiteUrl();
-      const redirectPath = `/provider/welcome?action=lead&id=${newConnection.id}`;
-      // Fallback: direct to welcome page (handles both claimed and unclaimed providers)
+      const redirectPath = `/provider/${providerSlug || toProfileId}/onboard?action=lead&actionId=${newConnection.id}`;
+      // Fallback: direct to onboard page (handles both claimed and unclaimed providers)
       let viewUrl = `${siteUrl}${redirectPath}`;
 
       try {
@@ -1318,8 +1318,8 @@ export async function POST(request: Request) {
 
         // Generate magic link for provider one-click sign-in
         const siteUrl = getSiteUrl();
-        const redirectPath = `/provider/welcome?action=lead&id=${newConnection.id}`;
-        // Fallback: direct to welcome page (handles both claimed and unclaimed providers)
+        const redirectPath = `/provider/${providerSlug || toProfileId}/onboard?action=lead&actionId=${newConnection.id}`;
+        // Fallback: direct to onboard page (handles both claimed and unclaimed providers)
         let viewUrl = `${siteUrl}${redirectPath}`;
 
         try {

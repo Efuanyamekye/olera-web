@@ -8,6 +8,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import type { Provider } from "@/lib/types/provider";
 import SmartDashboardShell from "@/components/provider-onboarding/SmartDashboardShell";
 import type { ActionCardState } from "@/components/provider-onboarding/ActionCard";
+import type { NotificationData, NotificationType } from "@/components/provider-onboarding/NotificationBanner";
 import {
   getOrCreateClaimSession,
   markSessionVerified,
@@ -27,6 +28,9 @@ export default function ProviderOnboardPage() {
   const searchParams = useSearchParams();
   const providerIdParam = searchParams.get("provider_id");
   const stateParam = searchParams.get("state") as ActionCardState | null;
+  // Action params for email notifications (lead/review/question)
+  const actionParam = searchParams.get("action") as NotificationType | null;
+  const actionIdParam = searchParams.get("actionId");
   const router = useRouter();
   const { user, account, openAuth, refreshAccountData, switchProfile } = useAuth();
 
@@ -36,6 +40,7 @@ export default function ProviderOnboardPage() {
   const [errorMsg, setErrorMsg] = useState("");
   const [session, setSession] = useState<ClaimSessionData | null>(null);
   const [actionCardState, setActionCardState] = useState<ActionCardState>("verify-form");
+  const [notificationData, setNotificationData] = useState<NotificationData | null>(null);
   const initRef = useRef(false);
   const finalizeRef = useRef(false);
 
@@ -92,6 +97,65 @@ export default function ProviderOnboardPage() {
 
       setProvider(foundProvider);
 
+      // Fetch notification data if action params provided (lead/review/question from email)
+      if (actionParam && actionIdParam) {
+        try {
+          if (actionParam === "lead") {
+            // Fetch connection (lead) data
+            const { data: conn } = await supabase
+              .from("connections")
+              .select("id, created_at, message, metadata, from_profile:business_profiles!connections_from_profile_id_fkey(display_name, city, state, image_url)")
+              .eq("id", actionIdParam)
+              .single();
+            if (conn) {
+              setNotificationData({
+                type: "lead",
+                id: conn.id,
+                created_at: conn.created_at,
+                message: conn.message,
+                metadata: conn.metadata as NotificationData["metadata"],
+                from_profile: conn.from_profile as NotificationData["from_profile"],
+              });
+            }
+          } else if (actionParam === "question") {
+            // Fetch question data
+            const { data: question } = await supabase
+              .from("questions")
+              .select("id, question, asker_name, created_at")
+              .eq("id", actionIdParam)
+              .single();
+            if (question) {
+              setNotificationData({
+                type: "question",
+                id: question.id,
+                created_at: question.created_at,
+                question: question.question,
+                asker_name: question.asker_name,
+              });
+            }
+          } else if (actionParam === "review") {
+            // Fetch review data
+            const { data: review } = await supabase
+              .from("reviews")
+              .select("id, rating, comment, reviewer_name, created_at")
+              .eq("id", actionIdParam)
+              .single();
+            if (review) {
+              setNotificationData({
+                type: "review",
+                id: review.id,
+                created_at: review.created_at,
+                rating: review.rating,
+                comment: review.comment,
+                reviewer_name: review.reviewer_name,
+              });
+            }
+          }
+        } catch (err) {
+          console.error("[ProviderOnboard] Failed to fetch notification data:", err);
+        }
+      }
+
       // Initialize or recover session
       const claimSessionData = getOrCreateClaimSession(
         foundProvider.provider_id,
@@ -143,7 +207,7 @@ export default function ProviderOnboardPage() {
       setStep("dashboard");
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, providerIdParam, stateParam]);
+  }, [slug, providerIdParam, stateParam, actionParam, actionIdParam]);
 
   // Auto-finalize after OAuth return
   useEffect(() => {
@@ -325,6 +389,7 @@ export default function ProviderOnboardPage() {
       claimSession={claimSession}
       onVerificationComplete={handleVerificationComplete}
       initialActionState={actionCardState}
+      notificationData={notificationData}
     />
   );
 }

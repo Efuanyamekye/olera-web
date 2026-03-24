@@ -167,7 +167,7 @@ export async function POST(request: Request) {
               .single(),
             admin
               .from("business_profiles")
-              .select("display_name, email, account_id, type")
+              .select("display_name, email, account_id, type, slug, source_provider_id")
               .eq("id", recipientProfileId)
               .single(),
           ]);
@@ -200,8 +200,9 @@ export async function POST(request: Request) {
             viewUrl = `${siteUrl}/portal/inbox`;
           } else {
             // Generate magic link for provider one-click sign-in
-            const redirectPath = `/provider/welcome?action=message&id=${connectionId}`;
-            // Fallback: direct to welcome page (handles both claimed and unclaimed providers)
+            const providerSlug = recipientProfile?.slug || recipientProfile?.source_provider_id || recipientProfileId;
+            const redirectPath = `/provider/${providerSlug}/onboard?action=lead&actionId=${connectionId}`;
+            // Fallback: direct to onboard page (handles both claimed and unclaimed providers)
             viewUrl = `${siteUrl}${redirectPath}`;
 
             try {

@@ -532,9 +532,10 @@ export default function UnifiedAuthModal({
     }
 
     // Check if user already has a provider profile (from cache)
-    const hasProviderProfile = (profiles || []).some(
+    const providerProfile = (profiles || []).find(
       (p) => p.type === "organization" || p.type === "caregiver"
     );
+    const hasProviderProfile = !!providerProfile;
 
     // Provider intent — route to provider onboarding (not /welcome)
     if (options.intent === "provider") {
@@ -559,11 +560,17 @@ export default function UnifiedAuthModal({
           const { account: freshAccount } = await res.json();
           if (freshAccount?.onboarding_completed === false) {
             onClose();
-            // Pass current page as ?next= so they return here after welcome
+            // Pass current page as ?next= so they return here after onboarding
             const currentPath = window.location.pathname + window.location.search;
-            // Route providers to provider welcome page, families to family welcome page
-            const welcomePath = hasProviderProfile ? "/provider/welcome" : "/welcome";
-            router.push(`${welcomePath}?next=${encodeURIComponent(currentPath)}`);
+
+            if (providerProfile) {
+              // Route providers to their onboard page
+              const slug = providerProfile.slug || providerProfile.source_provider_id || providerProfile.id;
+              router.push(`/provider/${slug}/onboard?next=${encodeURIComponent(currentPath)}`);
+            } else {
+              // Route families to family welcome page
+              router.push(`/welcome?next=${encodeURIComponent(currentPath)}`);
+            }
             return;
           }
         }

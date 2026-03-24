@@ -25,6 +25,7 @@ import ProfileCompletenessSidebar from "@/components/provider-dashboard/ProfileC
 // Onboarding components
 import OnboardingWizard from "./OnboardingWizard";
 import ActionCard, { type ActionCardState } from "./ActionCard";
+import NotificationBanner, { type NotificationData } from "./NotificationBanner";
 
 // ============================================================
 // Onboarding Header (replaces main navbar during claim flow)
@@ -213,6 +214,8 @@ interface SmartDashboardShellProps {
   initialActionState?: ActionCardState;
   /** If provided, user came from email campaign link and is pre-verified */
   preVerifiedEmail?: string;
+  /** Notification data (lead/review/question) that brought the user here */
+  notificationData?: NotificationData | null;
 }
 
 // ============================================================
@@ -225,6 +228,7 @@ export default function SmartDashboardShell({
   onVerificationComplete,
   initialActionState = "verify-form",
   preVerifiedEmail,
+  notificationData,
 }: SmartDashboardShellProps) {
   const { setForceHidden } = useNavbar();
 
@@ -300,7 +304,15 @@ export default function SmartDashboardShell({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Main Content - Cards */}
           <div className={`lg:col-span-2 space-y-6 ${isWizardActive ? "opacity-40 blur-[2px]" : ""}`}>
-            {/* Action Card - TOP OF LEFT COLUMN */}
+            {/* Notification Banner - shows why they're here (lead/review/question) */}
+            {notificationData && (
+              <NotificationBanner
+                data={notificationData}
+                providerName={provider.provider_name}
+              />
+            )}
+
+            {/* Action Card - verification/claim flow */}
             <ActionCard
               provider={provider}
               claimSession={claimSession}

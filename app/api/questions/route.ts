@@ -206,8 +206,9 @@ export async function POST(request: NextRequest) {
 
       if (pEmail) {
         // Generate magic link for provider one-click sign-in
-        const redirectPath = `/provider/welcome?action=question&id=${newQuestion.id}`;
-        // Fallback: direct to welcome page (handles both claimed and unclaimed providers)
+        const providerSlug = providerForEmail?.slug || provider_id;
+        const redirectPath = `/provider/${providerSlug}/onboard?action=question&actionId=${newQuestion.id}`;
+        // Fallback: direct to onboard page (handles both claimed and unclaimed providers)
         let providerUrl = `${siteUrl}${redirectPath}`;
 
         try {

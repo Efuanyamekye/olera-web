@@ -190,8 +190,9 @@ export async function POST(request: NextRequest) {
         if (providerEmail) {
           // Generate magic link for provider one-click sign-in
           const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
-          const redirectPath = `/provider/welcome?action=review&id=${newReview.id}`;
-          // Fallback: direct to welcome page (handles both claimed and unclaimed providers)
+          const providerSlug = provider.slug || provider.source_provider_id || provider.id;
+          const redirectPath = `/provider/${providerSlug}/onboard?action=review&actionId=${newReview.id}`;
+          // Fallback: direct to onboard page (handles both claimed and unclaimed providers)
           let viewUrl = `${siteUrl}${redirectPath}`;
 
           try {

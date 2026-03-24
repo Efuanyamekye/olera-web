@@ -6,21 +6,26 @@ import { getSiteUrl } from "@/lib/site-url";
 /**
  * POST /api/provider/send-magic-link
  *
- * Sends a magic link email to a provider for the provider welcome page.
+ * Sends a magic link email to a provider for the provider onboard page.
  * Used when a provider's original magic link has expired (State 2).
  *
  * Request body:
  * - email: Provider's email address
+ * - providerSlug: Provider's slug for routing
  * - action: The action type (lead, question, review, message, match)
  * - actionId: The ID of the action item
  */
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, action, actionId } = body;
+    const { email, providerSlug, action, actionId } = body;
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
+    }
+
+    if (!providerSlug) {
+      return NextResponse.json({ error: "Provider slug is required" }, { status: 400 });
     }
 
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -35,9 +40,9 @@ export async function POST(request: Request) {
     const siteUrl = getSiteUrl();
 
     // Build the redirect URL with action params
-    let redirectPath = "/provider/welcome";
+    let redirectPath = `/provider/${providerSlug}/onboard`;
     if (action && actionId) {
-      redirectPath = `/provider/welcome?action=${action}&id=${actionId}`;
+      redirectPath = `/provider/${providerSlug}/onboard?action=${action}&actionId=${actionId}`;
     }
 
     // Generate magic link

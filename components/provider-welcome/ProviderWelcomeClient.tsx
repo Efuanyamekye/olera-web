@@ -1088,6 +1088,7 @@ export default function ProviderWelcomeClient({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: providerForAuth.email,
+          providerSlug: providerForAuth.profile?.slug || providerForAuth.sourceProviderId || providerForAuth.profile?.id,
           action,
           actionId,
         }),
