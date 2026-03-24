@@ -205,6 +205,40 @@ export async function POST(request: NextRequest) {
       }
 
       if (pEmail) {
+        // Generate magic link for provider one-click sign-in
+        const redirectPath = `/provider/welcome?action=question&id=${newQuestion.id}`;
+        // Fallback: direct to welcome page (handles both claimed and unclaimed providers)
+        let providerUrl = `${siteUrl}${redirectPath}`;
+
+        try {
+          const { data: providerLinkData, error: providerLinkError } = await db.auth.admin.generateLink({
+            type: "magiclink",
+            email: pEmail,
+            options: {
+              redirectTo: `${siteUrl}/auth/magic-link?next=${encodeURIComponent(redirectPath)}`,
+            },
+          });
+          if (providerLinkError) {
+            console.error("Magic link generation error for question:", {
+              error: providerLinkError,
+              email: pEmail,
+              redirectPath
+            });
+          }
+          if (!providerLinkError && providerLinkData?.properties?.action_link) {
+            providerUrl = providerLinkData.properties.action_link;
+            console.log("Magic link generated successfully for question notification");
+          } else {
+            console.log("Using fallback URL for question notification (no magic link)", {
+              hasError: !!providerLinkError,
+              hasActionLink: !!providerLinkData?.properties?.action_link
+            });
+          }
+        } catch (linkErr) {
+          console.error("Failed to generate provider magic link for question:", linkErr);
+          // Continue with fallback URL (welcome page)
+        }
+
         await sendEmail({
           to: pEmail,
           subject: `A family has a question about ${providerDisplayName}`,
@@ -212,7 +246,7 @@ export async function POST(request: NextRequest) {
             providerName: providerDisplayName,
             askerName,
             question: question.trim(),
-            providerUrl: providerPortalUrl,
+            providerUrl,
             providerSlug: provider_id,
           }),
         });

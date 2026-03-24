@@ -800,24 +800,6 @@ export default function WelcomeClient({ destination, initialProviders = [], init
     router.push(destination);
   }, [router, destination]);
 
-  // Navigate to inbox with a specific provider, marking onboarding complete first
-  const handleStartConversation = useCallback(async (providerId: string) => {
-    setNavigating(true);
-    try {
-      // Mark onboarding as complete so middleware doesn't redirect back
-      await fetch("/api/auth/ensure-account", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ markOnboardingComplete: true }),
-      });
-      // Refresh account data to update local state
-      await refreshAccountData();
-    } catch {
-      // Continue anyway - worst case they see welcome page again
-    }
-    router.push(`/portal/inbox?provider=${providerId}`);
-  }, [router, refreshAccountData]);
-
   const handleViewMatches = useCallback(() => {
     setNavigating(true);
     router.push("/portal/matches");
@@ -1046,12 +1028,11 @@ export default function WelcomeClient({ destination, initialProviders = [], init
                       {/* Message Button — full width on mobile, right-aligned on desktop */}
                       <div className="mt-4 sm:mt-5 flex sm:justify-end">
                         <button
-                          type="button"
-                          onClick={() => handleStartConversation(provider.id)}
-                          disabled={navigating}
-                          className="flex items-center justify-center w-full sm:w-auto px-6 py-3 text-text-md font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-50"
+                          onClick={() => completeOnboarding(false, false, `/portal/inbox?provider=${provider.id}`)}
+                          disabled={saving}
+                          className="flex items-center justify-center w-full sm:w-auto px-6 py-3 text-text-md font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 active:bg-gray-200 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          {navigating ? "Loading..." : "Start conversation"}
+                          {saving ? "Loading..." : "Start conversation"}
                         </button>
                       </div>
                     </div>
@@ -1098,15 +1079,14 @@ export default function WelcomeClient({ destination, initialProviders = [], init
                     </p>
                     <div className="mt-3 flex items-center gap-3">
                       <button
-                        type="button"
-                        onClick={() => handleStartConversation(connection.to_profile!.id)}
-                        disabled={navigating}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 text-text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50"
+                        onClick={() => completeOnboarding(false, false, `/portal/inbox?provider=${connection.to_profile!.id}`)}
+                        disabled={saving}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 text-text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                         </svg>
-                        {navigating ? "Loading..." : "Message"}
+                        {saving ? "Loading..." : "Message"}
                       </button>
                       {!profileComplete && (
                         <button

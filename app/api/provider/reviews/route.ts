@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     const { data: profile } = await supabase
       .from("business_profiles")
-      .select("id, slug")
+      .select("id, slug, source_provider_id")
       .eq("account_id", account.id)
       .in("type", ["organization", "caregiver"])
       .single();
@@ -49,11 +49,17 @@ export async function GET(request: NextRequest) {
     // Use service client for database operations
     const db = getServiceClient();
 
-    // Build query
+    // Build list of possible provider_id values (reviews may be stored with slug, UUID, or source_provider_id)
+    const providerIdVariants = [profile.slug, profile.id];
+    if (profile.source_provider_id) {
+      providerIdVariants.push(profile.source_provider_id);
+    }
+
+    // Build query - match any of the possible provider_id formats
     let query = db
       .from("reviews")
       .select("id, provider_id, account_id, reviewer_name, rating, title, comment, relationship, status, created_at, updated_at, provider_reply, replied_at, replied_by")
-      .eq("provider_id", profile.slug)
+      .in("provider_id", providerIdVariants)
       .eq("status", "published")
       .order("created_at", { ascending: false });
 
@@ -145,7 +151,7 @@ export async function PATCH(request: NextRequest) {
 
     const { data: profile } = await supabase
       .from("business_profiles")
-      .select("id, slug")
+      .select("id, slug, source_provider_id")
       .eq("account_id", account.id)
       .in("type", ["organization", "caregiver"])
       .single();
@@ -169,8 +175,14 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Review not found" }, { status: 404 });
     }
 
-    if (review.provider_id !== profile.slug) {
-      console.error("Provider mismatch:", { reviewProviderId: review.provider_id, profileSlug: profile.slug });
+    // Check if review's provider_id matches any of our possible identifiers (slug, UUID, or source_provider_id)
+    const providerIdVariants = [profile.slug, profile.id];
+    if (profile.source_provider_id) {
+      providerIdVariants.push(profile.source_provider_id);
+    }
+
+    if (!providerIdVariants.includes(review.provider_id)) {
+      console.error("Provider mismatch:", { reviewProviderId: review.provider_id, providerIdVariants });
       return NextResponse.json({ error: "Not authorized to reply to this review" }, { status: 403 });
     }
 

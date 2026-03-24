@@ -11,14 +11,12 @@ import type { ActionCardState } from "@/components/provider-onboarding/ActionCar
 import {
   getOrCreateClaimSession,
   markSessionVerified,
-  markSessionTokenValidated,
   clearClaimSession,
   type ClaimSessionData,
 } from "@/lib/claim-session";
 
 type OnboardStep =
   | "loading"
-  | "validating-token"
   | "dashboard" // Shows SmartDashboardShell with appropriate ActionCard state
   | "finalizing"
   | "success"
@@ -28,7 +26,6 @@ export default function ProviderOnboardPage() {
   const { slug } = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
   const providerIdParam = searchParams.get("provider_id");
-  const tokenParam = searchParams.get("token");
   const stateParam = searchParams.get("state") as ActionCardState | null;
   const router = useRouter();
   const { user, account, openAuth, refreshAccountData, switchProfile } = useAuth();
@@ -38,22 +35,12 @@ export default function ProviderOnboardPage() {
   const [provider, setProvider] = useState<Provider | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [session, setSession] = useState<ClaimSessionData | null>(null);
-  const [tokenEmailHint, setTokenEmailHint] = useState<string | null>(null);
   const [actionCardState, setActionCardState] = useState<ActionCardState>("verify-form");
-  const [tokenError, setTokenError] = useState<string | null>(null);
   const initRef = useRef(false);
   const finalizeRef = useRef(false);
-  const tokenValidatedRef = useRef(false);
 
   // Get claimSession ID for API calls
   const claimSession = session?.sessionId || "";
-
-  // Auto-dismiss token error after 4 seconds
-  useEffect(() => {
-    if (!tokenError) return;
-    const timer = setTimeout(() => setTokenError(null), 4000);
-    return () => clearTimeout(timer);
-  }, [tokenError]);
 
   // Fetch provider on mount
   useEffect(() => {
@@ -132,14 +119,6 @@ export default function ProviderOnboardPage() {
         return;
       }
 
-      // Check for email campaign token
-      if (tokenParam && !tokenValidatedRef.current) {
-        tokenValidatedRef.current = true;
-        setStep("validating-token");
-        await validateToken(foundProvider, claimSessionData);
-        return;
-      }
-
       // Check if returning from OAuth with verified session
       if (claimSessionData.verified && user) {
         setStep("finalizing");
@@ -165,54 +144,6 @@ export default function ProviderOnboardPage() {
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, providerIdParam, stateParam]);
-
-  // Validate email campaign token
-  const validateToken = async (foundProvider: Provider, claimSessionData: ClaimSessionData) => {
-    try {
-      const res = await fetch("/api/claim/validate-token", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          token: tokenParam,
-          claimSession: claimSessionData.sessionId,
-        }),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok || !result.valid) {
-        // Token invalid or expired - fall back to normal flow
-        if (result.alreadyClaimed) {
-          setActionCardState("already-claimed");
-        } else {
-          console.warn("Token validation failed:", result.error);
-          setTokenError("This verification link has expired. Please verify your email below.");
-          setActionCardState("verify-form");
-        }
-        setStep("dashboard");
-        return;
-      }
-
-      // Token valid - mark session as pre-verified
-      setTokenEmailHint(result.emailHint);
-      markSessionTokenValidated(result.emailHint);
-      setSession(prev => prev ? { ...prev, verified: true, tokenValidated: true, emailHint: result.emailHint } : null);
-
-      // If user is logged in, go straight to finalize
-      if (user) {
-        setStep("finalizing");
-      } else {
-        // Show pre-verified state in dashboard, then prompt to sign in
-        setActionCardState("pre-verified");
-        setStep("dashboard");
-      }
-    } catch (err) {
-      console.error("Token validation error:", err);
-      setTokenError("Couldn't validate link. Please verify your email below.");
-      setActionCardState("verify-form");
-      setStep("dashboard");
-    }
-  };
 
   // Auto-finalize after OAuth return
   useEffect(() => {
@@ -294,14 +225,12 @@ export default function ProviderOnboardPage() {
   }, [user, openAuth, provider?.provider_id]);
 
   // Loading state
-  if (step === "loading" || step === "validating-token") {
+  if (step === "loading") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-vanilla-50 via-white to-white">
         <div className="text-center px-4">
           <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto" />
-          <p className="mt-4 text-gray-500">
-            {step === "validating-token" ? "Validating your link..." : "Loading..."}
-          </p>
+          <p className="mt-4 text-gray-500">Loading...</p>
         </div>
       </div>
     );
@@ -391,19 +320,11 @@ export default function ProviderOnboardPage() {
   if (!provider || !session) return null;
 
   return (
-    <>
-      {tokenError && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg bg-rose-50/95 border border-rose-100/60 shadow-sm">
-          <p className="text-[13px] text-rose-600 font-medium">{tokenError}</p>
-        </div>
-      )}
-      <SmartDashboardShell
-        provider={provider}
-        claimSession={claimSession}
-        onVerificationComplete={handleVerificationComplete}
-        initialActionState={actionCardState}
-        preVerifiedEmail={tokenEmailHint || undefined}
-      />
-    </>
+    <SmartDashboardShell
+      provider={provider}
+      claimSession={claimSession}
+      onVerificationComplete={handleVerificationComplete}
+      initialActionState={actionCardState}
+    />
   );
 }

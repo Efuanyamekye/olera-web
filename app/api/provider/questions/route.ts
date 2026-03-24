@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     const { data: profile } = await supabase
       .from("business_profiles")
-      .select("id, slug")
+      .select("id, slug, source_provider_id")
       .eq("account_id", account.id)
       .in("type", ["organization", "caregiver"])
       .single();
@@ -46,11 +46,20 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get("status") || "all";
 
-    // Build query
-    let query = supabase
+    // Build list of possible provider_id values (questions may be stored with slug, source_provider_id, or UUID)
+    const providerIdVariants = [profile.slug, profile.id];
+    if (profile.source_provider_id) {
+      providerIdVariants.push(profile.source_provider_id);
+    }
+
+    // Use service client to bypass RLS for question lookups
+    const db = getServiceClient();
+
+    // Build query - match any of the possible provider_id formats
+    let query = db
       .from("provider_questions")
       .select("id, question, answer, asker_name, asker_email, status, is_public, answered_at, created_at, updated_at")
-      .eq("provider_id", profile.slug)
+      .in("provider_id", providerIdVariants)
       .order("created_at", { ascending: false });
 
     // Apply status filter
@@ -122,7 +131,7 @@ export async function PATCH(request: NextRequest) {
 
     const { data: profile } = await supabase
       .from("business_profiles")
-      .select("id, slug")
+      .select("id, slug, source_provider_id")
       .eq("account_id", account.id)
       .in("type", ["organization", "caregiver"])
       .single();
@@ -146,8 +155,14 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Question not found" }, { status: 404 });
     }
 
-    if (question.provider_id !== profile.slug) {
-      console.error("Provider mismatch:", { questionProviderId: question.provider_id, profileSlug: profile.slug });
+    // Check if question's provider_id matches any of our possible identifiers (slug, UUID, or source_provider_id)
+    const providerIdVariants = [profile.slug, profile.id];
+    if (profile.source_provider_id) {
+      providerIdVariants.push(profile.source_provider_id);
+    }
+
+    if (!providerIdVariants.includes(question.provider_id)) {
+      console.error("Provider mismatch:", { questionProviderId: question.provider_id, providerIdVariants });
       return NextResponse.json({ error: "Not authorized to answer this question" }, { status: 403 });
     }
 

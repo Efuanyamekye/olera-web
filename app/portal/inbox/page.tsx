@@ -219,7 +219,9 @@ function InboxContent() {
 
     try {
       const supabase = createClient();
-      const profileIds = profiles.map((p) => p.id);
+      // Use only the active profile ID for data isolation
+      // Each profile (organization/caregiver) should have its own isolated inbox
+      const activeProfileId = activeProfile.id;
 
       // Fire archived count in the background — JSONB filter queries are slower and
       // don't need to block the active conversations render.
@@ -230,13 +232,13 @@ function InboxContent() {
             supabase
               .from("connections")
               .select("id, metadata")
-              .in("from_profile_id", profileIds)
+              .eq("from_profile_id", activeProfileId)
               .in("type", ["inquiry", "request"])
               .filter("metadata->>archived", "eq", "true"),
             supabase
               .from("connections")
               .select("id, metadata")
-              .in("to_profile_id", profileIds)
+              .eq("to_profile_id", activeProfileId)
               .in("type", ["inquiry", "request"])
               .filter("metadata->>archived", "eq", "true"),
           ]);
@@ -258,14 +260,14 @@ function InboxContent() {
         supabase
           .from("connections")
           .select("id, type, status, from_profile_id, to_profile_id, message, metadata, created_at, updated_at")
-          .in("from_profile_id", profileIds)
+          .eq("from_profile_id", activeProfileId)
           .eq("type", "inquiry")
           .in("status", ["pending", "accepted"])
           .order("updated_at", { ascending: false }),
         supabase
           .from("connections")
           .select("id, type, status, from_profile_id, to_profile_id, message, metadata, created_at, updated_at")
-          .in("to_profile_id", profileIds)
+          .eq("to_profile_id", activeProfileId)
           .eq("type", "inquiry")
           .in("status", ["pending", "accepted"])
           .order("updated_at", { ascending: false }),
@@ -273,14 +275,14 @@ function InboxContent() {
         supabase
           .from("connections")
           .select("id, type, status, from_profile_id, to_profile_id, message, metadata, created_at, updated_at")
-          .in("from_profile_id", profileIds)
+          .eq("from_profile_id", activeProfileId)
           .eq("type", "request")
           .eq("status", "accepted")
           .order("updated_at", { ascending: false }),
         supabase
           .from("connections")
           .select("id, type, status, from_profile_id, to_profile_id, message, metadata, created_at, updated_at")
-          .in("to_profile_id", profileIds)
+          .eq("to_profile_id", activeProfileId)
           .eq("type", "request")
           .eq("status", "accepted")
           .order("updated_at", { ascending: false }),
@@ -437,13 +439,19 @@ function InboxContent() {
 
   // Lazy-load archived connections when the user opens the archive section
   const archivedLoadedRef = useRef(false);
+  // Reset archived cache when active profile changes (profile switching)
+  useEffect(() => {
+    archivedLoadedRef.current = false;
+  }, [activeProfile?.id]);
+
   const fetchArchived = useCallback(async () => {
-    if (archivedLoadedRef.current || !activeProfile || !profiles.length || !isSupabaseConfigured()) return;
+    if (archivedLoadedRef.current || !activeProfile || !isSupabaseConfigured()) return;
     archivedLoadedRef.current = true;
 
     try {
       const supabase = createClient();
-      const pIds = profiles.map((p) => p.id);
+      // Use only the active profile ID for data isolation (same as fetchConnections)
+      const activeProfileId = activeProfile.id;
 
       // Archive state is in metadata.archived = true (not status column)
       // Include both inquiry and request types
@@ -451,14 +459,14 @@ function InboxContent() {
         supabase
           .from("connections")
           .select("id, type, status, from_profile_id, to_profile_id, message, metadata, created_at, updated_at")
-          .in("from_profile_id", pIds)
+          .eq("from_profile_id", activeProfileId)
           .in("type", ["inquiry", "request"])
           .filter("metadata->>archived", "eq", "true")
           .order("updated_at", { ascending: false }),
         supabase
           .from("connections")
           .select("id, type, status, from_profile_id, to_profile_id, message, metadata, created_at, updated_at")
-          .in("to_profile_id", pIds)
+          .eq("to_profile_id", activeProfileId)
           .in("type", ["inquiry", "request"])
           .filter("metadata->>archived", "eq", "true")
           .order("updated_at", { ascending: false }),
@@ -507,7 +515,7 @@ function InboxContent() {
       console.error("[inbox] fetch archived error:", err);
       archivedLoadedRef.current = false; // Allow retry
     }
-  }, [activeProfile, profiles]);
+  }, [activeProfile]);
 
   // Handle message sent — update thread in local state
   const handleMessageSent = useCallback((connectionId: string, thread: ThreadMessage[]) => {

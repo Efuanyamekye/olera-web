@@ -666,6 +666,28 @@ async function handleGuestConnection({
         memory_care: "Memory Care",
       };
 
+      // Generate magic link for provider one-click sign-in
+      const siteUrl = getSiteUrl();
+      const redirectPath = `/provider/welcome?action=lead&id=${newConnection.id}`;
+      // Fallback: direct to welcome page (handles both claimed and unclaimed providers)
+      let viewUrl = `${siteUrl}${redirectPath}`;
+
+      try {
+        const { data: providerLinkData, error: providerLinkError } = await authClient.auth.admin.generateLink({
+          type: "magiclink",
+          email: providerEmail,
+          options: {
+            redirectTo: `${siteUrl}/auth/magic-link?next=${encodeURIComponent(redirectPath)}`,
+          },
+        });
+        if (!providerLinkError && providerLinkData?.properties?.action_link) {
+          viewUrl = providerLinkData.properties.action_link;
+        }
+      } catch (linkErr) {
+        console.error("Failed to generate provider magic link:", linkErr);
+        // Continue with fallback URL (welcome page)
+      }
+
       await sendEmail({
         to: providerEmail,
         subject: `A family is looking for care from ${providerDisplayName || providerName}`,
@@ -674,7 +696,7 @@ async function handleGuestConnection({
           familyName: firstName || "A family",
           careType: intentData?.careType ? (careTypeMap[intentData.careType] || intentData.careType) : null,
           message: intentData?.additionalNotes || null,
-          viewUrl: `${getSiteUrl()}/provider/connections`,
+          viewUrl,
           providerSlug: providerSlug || undefined,
         }),
       });
@@ -1286,13 +1308,35 @@ export async function POST(request: Request) {
 
     // 9b. Email notification to provider (fire-and-forget)
     try {
-      if (providerEmail) {
+      if (providerEmail && admin) {
         const careTypeMap: Record<string, string> = {
           home_care: "Home Care",
           home_health: "Home Health Care",
           assisted_living: "Assisted Living",
           memory_care: "Memory Care",
         };
+
+        // Generate magic link for provider one-click sign-in
+        const siteUrl = getSiteUrl();
+        const redirectPath = `/provider/welcome?action=lead&id=${newConnection.id}`;
+        // Fallback: direct to welcome page (handles both claimed and unclaimed providers)
+        let viewUrl = `${siteUrl}${redirectPath}`;
+
+        try {
+          const { data: providerLinkData, error: providerLinkError } = await admin.auth.admin.generateLink({
+            type: "magiclink",
+            email: providerEmail,
+            options: {
+              redirectTo: `${siteUrl}/auth/magic-link?next=${encodeURIComponent(redirectPath)}`,
+            },
+          });
+          if (!providerLinkError && providerLinkData?.properties?.action_link) {
+            viewUrl = providerLinkData.properties.action_link;
+          }
+        } catch (linkErr) {
+          console.error("Failed to generate provider magic link:", linkErr);
+          // Continue with fallback URL (welcome page)
+        }
 
         await sendEmail({
           to: providerEmail,
@@ -1302,7 +1346,7 @@ export async function POST(request: Request) {
             familyName: account.display_name || "A family",
             careType: intentData?.careType ? (careTypeMap[intentData.careType] || intentData.careType) : null,
             message: intentData?.additionalNotes || null,
-            viewUrl: `${getSiteUrl()}/provider/connections`,
+            viewUrl,
             providerSlug: providerSlug || undefined,
           }),
         });

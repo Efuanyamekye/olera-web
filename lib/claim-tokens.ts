@@ -88,13 +88,27 @@ export function validateClaimToken(
 
 /**
  * Generate a claim URL for email campaigns
+ * Routes to the Welcome page which handles the full claim flow
  */
 export function generateClaimUrl(
   providerId: string,
   providerSlug: string,
   email: string,
-  baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || "https://olera.care"
+  baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || "https://olera.care",
+  options?: {
+    headline?: string;
+    message?: string;
+  }
 ): string {
   const token = generateClaimToken(providerId, email);
-  return `${baseUrl}/provider/${providerSlug}/onboard?token=${token}`;
+  const url = new URL(`${baseUrl}/provider/welcome`);
+  url.searchParams.set("action", "campaign");
+  url.searchParams.set("token", token);
+  if (options?.headline) {
+    url.searchParams.set("headline", options.headline);
+  }
+  if (options?.message) {
+    url.searchParams.set("message", options.message);
+  }
+  return url.toString();
 }
