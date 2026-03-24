@@ -706,74 +706,65 @@ export default function ActionCard({
 
     return (
       <div className={cardClass} style={{ animation: "card-enter 0.25s ease-out both" }}>
-        <div className="text-center mb-6">
-          {/* Icon */}
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center mx-auto mb-4 shadow-sm shadow-primary-500/10 border border-primary-100/60">
-            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </div>
-
-          {/* Title */}
-          <h3 className="text-xl font-display font-bold text-gray-900 mb-1.5 inline-flex items-center gap-1.5">
+        {/* Header row */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-display font-bold text-gray-900 inline-flex items-center gap-1.5">
             New lead
             <InfoTooltip content={TOOLTIP_CONTENT["notification-lead"].text} showTos={TOOLTIP_CONTENT["notification-lead"].showTos} />
           </h3>
-          <p className="text-[15px] text-gray-500 mb-4">{timeAgo}</p>
+          <span className="text-sm text-gray-400">{timeAgo}</span>
+        </div>
 
-          {/* Person info */}
-          <div className="flex items-center justify-center gap-3 mb-4">
+        {/* Consolidated content card */}
+        <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-5">
+          {/* Person row */}
+          <div className="flex items-center gap-3 mb-3">
             {personImage ? (
-              <Image src={personImage} alt={personName} width={48} height={48} className="w-12 h-12 rounded-full object-cover" />
+              <Image src={personImage} alt={personName} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
             ) : (
-              <div className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: avatarGradient(personName) }}>
+              <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(personName) }}>
                 {getInitials(personName)}
               </div>
             )}
-            <div className="text-left">
-              <p className="text-base font-semibold text-gray-900">{personName}</p>
-              {location && <p className="text-sm text-gray-500">{location}</p>}
+            <div className="min-w-0 flex-1">
+              <p className="text-[15px] font-semibold text-gray-900 truncate">{personName}</p>
+              {location && <p className="text-sm text-gray-500 truncate">{location}</p>}
             </div>
-          </div>
-
-          {/* Care type badge */}
-          {careType && (
-            <div className="flex justify-center mb-3">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-50 text-primary-700">
+            {/* Care type badge */}
+            {careType && (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700 shrink-0">
                 {CARE_TYPE_LABELS[careType] || careType}
               </span>
-            </div>
-          )}
+            )}
+          </div>
 
-          {/* Message preview */}
+          {/* Message */}
           {message && (
-            <p className="text-[15px] text-gray-600 leading-relaxed mb-4 max-w-sm mx-auto">
-              &ldquo;{message.length > 120 ? message.slice(0, 120) + "..." : message}&rdquo;
+            <p className="text-[14px] text-gray-600 leading-relaxed line-clamp-3">
+              &ldquo;{message.length > 150 ? message.slice(0, 150) + "..." : message}&rdquo;
             </p>
           )}
-
-          <div className="border-t border-gray-100 my-5" />
-
-          {/* CTA based on auth state */}
-          {isSignedIn ? (
-            <Link
-              href={`/provider/inbox?id=${notificationData.id}`}
-              className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] text-center shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
-            >
-              View and respond
-            </Link>
-          ) : (
-            <>
-              <p className="text-[15px] text-gray-500 mb-4">Verify your email to respond to this lead</p>
-              <button
-                onClick={() => setState("verify-form")}
-                className="w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
-              >
-                Verify email to respond
-              </button>
-            </>
-          )}
         </div>
+
+        {/* CTA based on auth state */}
+        {isSignedIn ? (
+          <Link
+            href={`/provider/inbox?id=${notificationData.id}`}
+            className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] text-center shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+          >
+            View and respond
+          </Link>
+        ) : (
+          <>
+            <p className="text-[14px] text-gray-500 mb-3 text-center">Verify your email to respond to this lead</p>
+            <button
+              onClick={() => setState("verify-form")}
+              className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+            >
+              Verify email to respond
+            </button>
+          </>
+        )}
       </div>
     );
   }
@@ -785,58 +776,50 @@ export default function ActionCard({
 
     return (
       <div className={cardClass} style={{ animation: "card-enter 0.25s ease-out both" }}>
-        <div className="text-center mb-6">
-          {/* Icon */}
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center mx-auto mb-4 shadow-sm shadow-primary-500/10 border border-primary-100/60">
-            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-
-          {/* Title */}
-          <h3 className="text-xl font-display font-bold text-gray-900 mb-1.5 inline-flex items-center gap-1.5">
+        {/* Header row */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-display font-bold text-gray-900 inline-flex items-center gap-1.5">
             New question
             <InfoTooltip content={TOOLTIP_CONTENT["notification-question"].text} showTos={TOOLTIP_CONTENT["notification-question"].showTos} />
           </h3>
-          <p className="text-[15px] text-gray-500 mb-4">{timeAgo}</p>
+          <span className="text-sm text-gray-400">{timeAgo}</span>
+        </div>
 
-          {/* Person info */}
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: avatarGradient(personName) }}>
+        {/* Consolidated content card */}
+        <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-5">
+          {/* Person row */}
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(personName) }}>
               {getInitials(personName)}
             </div>
-            <p className="text-base font-semibold text-gray-900">{personName}</p>
+            <p className="text-[15px] font-semibold text-gray-900">{personName}</p>
           </div>
 
-          {/* Question preview */}
-          <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-4 max-w-sm mx-auto">
-            <p className="text-[15px] text-gray-700 leading-relaxed">
-              &ldquo;{question.length > 150 ? question.slice(0, 150) + "..." : question}&rdquo;
-            </p>
-          </div>
-
-          <div className="border-t border-gray-100 my-5" />
-
-          {/* CTA based on auth state */}
-          {isSignedIn ? (
-            <Link
-              href={`/provider/qna?id=${notificationData.id}`}
-              className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] text-center shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
-            >
-              Answer question
-            </Link>
-          ) : (
-            <>
-              <p className="text-[15px] text-gray-500 mb-4">Verify your email to answer this question</p>
-              <button
-                onClick={() => setState("verify-form")}
-                className="w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
-              >
-                Verify email to respond
-              </button>
-            </>
-          )}
+          {/* Question */}
+          <p className="text-[14px] text-gray-600 leading-relaxed line-clamp-3">
+            &ldquo;{question.length > 150 ? question.slice(0, 150) + "..." : question}&rdquo;
+          </p>
         </div>
+
+        {/* CTA based on auth state */}
+        {isSignedIn ? (
+          <Link
+            href={`/provider/qna?id=${notificationData.id}`}
+            className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] text-center shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+          >
+            Answer question
+          </Link>
+        ) : (
+          <>
+            <p className="text-[14px] text-gray-500 mb-3 text-center">Verify your email to answer this question</p>
+            <button
+              onClick={() => setState("verify-form")}
+              className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+            >
+              Verify email to respond
+            </button>
+          </>
+        )}
       </div>
     );
   }
@@ -849,74 +832,67 @@ export default function ActionCard({
 
     return (
       <div className={cardClass} style={{ animation: "card-enter 0.25s ease-out both" }}>
-        <div className="text-center mb-6">
-          {/* Icon */}
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center mx-auto mb-4 shadow-sm shadow-primary-500/10 border border-primary-100/60">
-            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-            </svg>
-          </div>
-
-          {/* Title */}
-          <h3 className="text-xl font-display font-bold text-gray-900 mb-1.5 inline-flex items-center gap-1.5">
+        {/* Header row */}
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-display font-bold text-gray-900 inline-flex items-center gap-1.5">
             New review
             <InfoTooltip content={TOOLTIP_CONTENT["notification-review"].text} showTos={TOOLTIP_CONTENT["notification-review"].showTos} />
           </h3>
-          <p className="text-[15px] text-gray-500 mb-4">{timeAgo}</p>
+          <span className="text-sm text-gray-400">{timeAgo}</span>
+        </div>
 
-          {/* Person info */}
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold text-white" style={{ background: avatarGradient(personName) }}>
+        {/* Consolidated content card */}
+        <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-5">
+          {/* Person row with stars */}
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(personName) }}>
               {getInitials(personName)}
             </div>
-            <p className="text-base font-semibold text-gray-900">{personName}</p>
-          </div>
-
-          {/* Rating stars */}
-          <div className="flex items-center justify-center gap-0.5 mb-4">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <svg
-                key={star}
-                className={`w-5 h-5 ${star <= rating ? "text-primary-500" : "text-gray-200"}`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-            ))}
-          </div>
-
-          {/* Comment preview */}
-          {comment && (
-            <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-4 max-w-sm mx-auto">
-              <p className="text-[15px] text-gray-700 leading-relaxed italic">
-                &ldquo;{comment.length > 150 ? comment.slice(0, 150) + "..." : comment}&rdquo;
-              </p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[15px] font-semibold text-gray-900">{personName}</p>
+              {/* Rating stars inline */}
+              <div className="flex items-center gap-0.5 mt-0.5">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <svg
+                    key={star}
+                    className={`w-4 h-4 ${star <= rating ? "text-primary-500" : "text-gray-300"}`}
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
             </div>
-          )}
+          </div>
 
-          <div className="border-t border-gray-100 my-5" />
-
-          {/* CTA based on auth state */}
-          {isSignedIn ? (
-            <Link
-              href={`/provider/reviews?id=${notificationData.id}`}
-              className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] text-center shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
-            >
-              See review
-            </Link>
-          ) : (
-            <>
-              <p className="text-[15px] text-gray-500 mb-4">Verify your email to manage your reviews</p>
-              <button
-                onClick={() => setState("verify-form")}
-                className="w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
-              >
-                Verify email to respond
-              </button>
-            </>
+          {/* Comment */}
+          {comment && (
+            <p className="text-[14px] text-gray-600 leading-relaxed line-clamp-3 italic">
+              &ldquo;{comment.length > 150 ? comment.slice(0, 150) + "..." : comment}&rdquo;
+            </p>
           )}
         </div>
+
+        {/* CTA based on auth state */}
+        {isSignedIn ? (
+          <Link
+            href={`/provider/reviews?id=${notificationData.id}`}
+            className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] text-center shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+          >
+            See review
+          </Link>
+        ) : (
+          <>
+            <p className="text-[14px] text-gray-500 mb-3 text-center">Verify your email to manage your reviews</p>
+            <button
+              onClick={() => setState("verify-form")}
+              className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+            >
+              Verify email to respond
+            </button>
+          </>
+        )}
       </div>
     );
   }
@@ -945,7 +921,7 @@ export default function ActionCard({
 
         <button
           onClick={onVerificationComplete}
-          className="w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
+          className="block w-full sm:max-w-[280px] sm:mx-auto py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2"
         >
           Continue to sign in
         </button>
