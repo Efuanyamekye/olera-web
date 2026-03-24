@@ -477,7 +477,7 @@ function MobileCompletenessSheet({
 
       {/* Sheet */}
       <div
-        className="fixed inset-x-0 bottom-0 z-50 lg:hidden bg-white rounded-t-3xl shadow-xl max-h-[85vh] overflow-y-auto"
+        className="fixed inset-x-0 bottom-0 z-50 lg:hidden bg-white rounded-t-3xl shadow-xl max-h-[85dvh] overflow-y-auto pb-[env(safe-area-inset-bottom)]"
         style={{ animation: "slide-up 0.3s ease-out both" }}
       >
         {/* Handle */}

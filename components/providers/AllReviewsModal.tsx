@@ -237,8 +237,8 @@ export default function AllReviewsModal({
         ref={contentRef}
         className={[
           "relative bg-white shadow-2xl w-full flex flex-col",
-          "rounded-t-2xl max-h-[92vh] animate-sheet-up",
-          "sm:rounded-2xl sm:max-h-[85vh] sm:animate-modal-pop",
+          "rounded-t-2xl max-h-[92dvh] animate-sheet-up",
+          "sm:rounded-2xl sm:max-h-[85dvh] sm:animate-modal-pop",
           "max-w-2xl",
         ].join(" ")}
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}

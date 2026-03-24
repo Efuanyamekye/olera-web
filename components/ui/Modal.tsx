@@ -169,10 +169,10 @@ export default function Modal({
         ref={contentRef}
         className={[
           "relative bg-white shadow-2xl w-full flex flex-col",
-          // Mobile: bottom sheet
-          "rounded-t-2xl max-h-[92vh] animate-sheet-up",
+          // Mobile: bottom sheet - use dvh for proper mobile Safari support
+          "rounded-t-2xl max-h-[92dvh] animate-sheet-up",
           // Desktop: centered modal
-          "sm:rounded-2xl sm:min-h-[50vh] sm:max-h-[85vh] sm:animate-modal-pop",
+          "sm:rounded-2xl sm:min-h-[50vh] sm:max-h-[85dvh] sm:animate-modal-pop",
           sizeClasses[size],
         ].join(" ")}
         // Extend the white sheet into the iPhone safe-area zone so the
