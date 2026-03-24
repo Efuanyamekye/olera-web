@@ -27,9 +27,11 @@ export default function ProviderOnboardPage() {
   const searchParams = useSearchParams();
   const providerIdParam = searchParams.get("provider_id");
   const stateParam = searchParams.get("state") as ActionCardState | null;
-  // Action params for email notifications (lead/review/question)
-  const actionParam = searchParams.get("action") as NotificationType | null;
+  // Action params for email notifications (lead/review/question) or campaign
+  const actionParam = searchParams.get("action") as NotificationType | "campaign" | null;
   const actionIdParam = searchParams.get("actionId");
+  // Token param for marketing campaign emails (pre-verified flow)
+  const tokenParam = searchParams.get("token");
   const router = useRouter();
   const { user, account, openAuth, refreshAccountData, switchProfile } = useAuth();
 
@@ -40,6 +42,7 @@ export default function ProviderOnboardPage() {
   const [session, setSession] = useState<ClaimSessionData | null>(null);
   const [actionCardState, setActionCardState] = useState<ActionCardState>("verify-form");
   const [notificationData, setNotificationData] = useState<NotificationData | null>(null);
+  const [preVerifiedEmail, setPreVerifiedEmail] = useState<string | null>(null);
   const initRef = useRef(false);
   const finalizeRef = useRef(false);
 
@@ -163,6 +166,40 @@ export default function ProviderOnboardPage() {
       );
       setSession(claimSessionData);
 
+      // Handle campaign token (marketing email pre-verification)
+      if (actionParam === "campaign" && tokenParam) {
+        try {
+          const tokenRes = await fetch("/api/claim/validate-token", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              token: tokenParam,
+              claimSession: claimSessionData.sessionId,
+            }),
+          });
+          const tokenResult = await tokenRes.json();
+
+          if (tokenResult.valid) {
+            // Token is valid - user is pre-verified
+            setPreVerifiedEmail(tokenResult.emailHint);
+            setActionCardState("pre-verified");
+            setStep("dashboard");
+            return;
+          } else if (tokenResult.alreadyClaimed) {
+            // Listing already claimed
+            setActionCardState("already-claimed");
+            setStep("dashboard");
+            return;
+          } else {
+            // Token invalid/expired - fall through to normal flow
+            console.warn("[ProviderOnboard] Campaign token invalid:", tokenResult.error);
+          }
+        } catch (err) {
+          console.error("[ProviderOnboard] Failed to validate campaign token:", err);
+          // Fall through to normal flow
+        }
+      }
+
       // Check if already claimed via business_profiles
       const { data: bp } = await supabase
         .from("business_profiles")
@@ -219,7 +256,7 @@ export default function ProviderOnboardPage() {
       setStep("dashboard");
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, providerIdParam, stateParam, actionParam, actionIdParam]);
+  }, [slug, providerIdParam, stateParam, actionParam, actionIdParam, tokenParam]);
 
   // Auto-finalize after OAuth return
   useEffect(() => {
@@ -403,6 +440,7 @@ export default function ProviderOnboardPage() {
       initialActionState={actionCardState}
       notificationData={notificationData}
       isSignedIn={!!user}
+      preVerifiedEmail={preVerifiedEmail || undefined}
     />
   );
 }

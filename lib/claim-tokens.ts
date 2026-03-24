@@ -88,7 +88,7 @@ export function validateClaimToken(
 
 /**
  * Generate a claim URL for email campaigns
- * Routes to the Welcome page which handles the full claim flow
+ * Routes to the provider onboard page which handles the full claim flow
  */
 export function generateClaimUrl(
   providerId: string,
@@ -101,7 +101,7 @@ export function generateClaimUrl(
   }
 ): string {
   const token = generateClaimToken(providerId, email);
-  const url = new URL(`${baseUrl}/provider/welcome`);
+  const url = new URL(`${baseUrl}/provider/${providerSlug}/onboard`);
   url.searchParams.set("action", "campaign");
   url.searchParams.set("token", token);
   if (options?.headline) {
