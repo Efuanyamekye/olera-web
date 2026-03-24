@@ -706,18 +706,22 @@ export default function ActionCard({
 
     return (
       <div className={cardClass} style={{ animation: "card-enter 0.25s ease-out both" }}>
-        {/* Header row */}
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-display font-bold text-gray-900 inline-flex items-center gap-1.5">
+        {/* Header - centered with icon */}
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center mx-auto mb-4 shadow-sm shadow-primary-500/10 border border-primary-100/60">
+            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-display font-bold text-gray-900 mb-1.5 inline-flex items-center gap-1.5">
             New lead
             <InfoTooltip content={TOOLTIP_CONTENT["notification-lead"].text} showTos={TOOLTIP_CONTENT["notification-lead"].showTos} />
           </h3>
-          <span className="text-sm text-gray-400">{timeAgo}</span>
         </div>
 
         {/* Consolidated content card */}
         <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-5">
-          {/* Person row */}
+          {/* Person row with timestamp */}
           <div className="flex items-center gap-3 mb-3">
             {personImage ? (
               <Image src={personImage} alt={personName} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
@@ -728,7 +732,7 @@ export default function ActionCard({
             )}
             <div className="min-w-0 flex-1">
               <p className="text-[15px] font-semibold text-gray-900 truncate">{personName}</p>
-              {location && <p className="text-sm text-gray-500 truncate">{location}</p>}
+              <p className="text-xs text-gray-400">{timeAgo}{location && ` · ${location}`}</p>
             </div>
             {/* Care type badge */}
             {careType && (
@@ -776,23 +780,30 @@ export default function ActionCard({
 
     return (
       <div className={cardClass} style={{ animation: "card-enter 0.25s ease-out both" }}>
-        {/* Header row */}
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-display font-bold text-gray-900 inline-flex items-center gap-1.5">
+        {/* Header - centered with icon */}
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center mx-auto mb-4 shadow-sm shadow-primary-500/10 border border-primary-100/60">
+            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-display font-bold text-gray-900 mb-1.5 inline-flex items-center gap-1.5">
             New question
             <InfoTooltip content={TOOLTIP_CONTENT["notification-question"].text} showTos={TOOLTIP_CONTENT["notification-question"].showTos} />
           </h3>
-          <span className="text-sm text-gray-400">{timeAgo}</span>
         </div>
 
         {/* Consolidated content card */}
         <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-5">
-          {/* Person row */}
+          {/* Person row with timestamp */}
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(personName) }}>
               {getInitials(personName)}
             </div>
-            <p className="text-[15px] font-semibold text-gray-900">{personName}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[15px] font-semibold text-gray-900">{personName}</p>
+              <p className="text-xs text-gray-400">{timeAgo}</p>
+            </div>
           </div>
 
           {/* Question */}
@@ -832,36 +843,44 @@ export default function ActionCard({
 
     return (
       <div className={cardClass} style={{ animation: "card-enter 0.25s ease-out both" }}>
-        {/* Header row */}
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-display font-bold text-gray-900 inline-flex items-center gap-1.5">
+        {/* Header - centered with icon */}
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center mx-auto mb-4 shadow-sm shadow-primary-500/10 border border-primary-100/60">
+            <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-display font-bold text-gray-900 mb-1.5 inline-flex items-center gap-1.5">
             New review
             <InfoTooltip content={TOOLTIP_CONTENT["notification-review"].text} showTos={TOOLTIP_CONTENT["notification-review"].showTos} />
           </h3>
-          <span className="text-sm text-gray-400">{timeAgo}</span>
         </div>
 
         {/* Consolidated content card */}
         <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-5">
-          {/* Person row with stars */}
+          {/* Person row with stars and timestamp */}
           <div className="flex items-center gap-3 mb-3">
             <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(personName) }}>
               {getInitials(personName)}
             </div>
             <div className="min-w-0 flex-1">
               <p className="text-[15px] font-semibold text-gray-900">{personName}</p>
-              {/* Rating stars inline */}
-              <div className="flex items-center gap-0.5 mt-0.5">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <svg
-                    key={star}
-                    className={`w-4 h-4 ${star <= rating ? "text-primary-500" : "text-gray-300"}`}
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
+              <div className="flex items-center gap-2 mt-0.5">
+                {/* Rating stars inline */}
+                <div className="flex items-center gap-0.5">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <svg
+                      key={star}
+                      className={`w-3.5 h-3.5 ${star <= rating ? "text-primary-500" : "text-gray-300"}`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <span className="text-xs text-gray-400">·</span>
+                <span className="text-xs text-gray-400">{timeAgo}</span>
               </div>
             </div>
           </div>
