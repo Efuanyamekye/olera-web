@@ -91,6 +91,58 @@ export default function ProviderOnboardPage() {
         if (data) foundProvider = data;
       }
 
+      // Strategy 4: Look up in business_profiles by slug (for native/claimed providers)
+      // These providers may not exist in olera-providers
+      if (!foundProvider) {
+        const { data: bp } = await supabase
+          .from("business_profiles")
+          .select("id, slug, display_name, claim_state, account_id, source_provider_id, email, phone, address, city, state, zip, description, image_url, care_types, metadata, type, category")
+          .eq("slug", slug)
+          .eq("type", "organization")
+          .maybeSingle();
+
+        if (bp) {
+          // For claimed providers, check if user owns it and redirect appropriately
+          if (bp.claim_state === "claimed" && account && bp.account_id === account.id) {
+            // User owns this listing - redirect to appropriate section
+            if (actionParam === "lead" && actionIdParam) {
+              router.replace(`/provider/inbox?id=${actionIdParam}`);
+            } else if (actionParam === "question" && actionIdParam) {
+              router.replace(`/provider/qna?id=${actionIdParam}`);
+            } else if (actionParam === "review" && actionIdParam) {
+              router.replace(`/provider/reviews?id=${actionIdParam}`);
+            } else {
+              router.replace("/provider");
+            }
+            return;
+          }
+
+          // For other cases (not owned or unclaimed), create a Provider-like object
+          // to continue with the onboard flow
+          foundProvider = {
+            provider_id: bp.source_provider_id || bp.id,
+            provider_name: bp.display_name || "Provider",
+            slug: bp.slug,
+            email: bp.email,
+            phone: bp.phone,
+            address: bp.address,
+            city: bp.city,
+            state: bp.state,
+            zipcode: bp.zip ? parseInt(bp.zip, 10) : null,
+            provider_description: bp.description,
+            provider_images: bp.image_url ? JSON.stringify([bp.image_url]) : null,
+            provider_category: bp.category || "",
+            main_category: bp.care_types?.[0] || null,
+            lat: null,
+            lon: null,
+            website: null,
+            lower_price: null,
+            upper_price: null,
+            deleted: false,
+          } as Provider;
+        }
+      }
+
       if (!foundProvider) {
         setErrorMsg("Provider not found.");
         setStep("error");
