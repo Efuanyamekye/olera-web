@@ -461,17 +461,18 @@ export default async function ProviderWelcomePage({ searchParams }: ProviderWelc
             .select("id", { count: "exact", head: true })
             .in("provider_id", providerIdVariants)
             .is("answer", null),
-          // Total reviews
-          supabase
+          // Total reviews - check multiple provider_id formats (slug, id, source_provider_id)
+          db
             .from("reviews")
             .select("id", { count: "exact", head: true })
-            .eq("provider_id", profile.id),
-          // Unread messages (connections with unread messages)
+            .in("provider_id", providerIdVariants),
+          // Unread messages: count connections with explicit unread_count > 0
+          // OR pending connections (new leads the provider hasn't seen yet)
           supabase
             .from("connections")
             .select("id", { count: "exact", head: true })
-            .or(`to_profile_id.eq.${profile.id},from_profile_id.eq.${profile.id}`)
-            .gt("metadata->unread_count", 0),
+            .eq("to_profile_id", profile.id)
+            .or("metadata->unread_count.gt.0,status.eq.pending"),
         ]);
 
         providerStats = {
@@ -491,6 +492,7 @@ export default async function ProviderWelcomePage({ searchParams }: ProviderWelc
                 .select(`
                   id,
                   created_at,
+                  message,
                   metadata,
                   from_profile:from_profile_id (
                     id,
@@ -593,6 +595,7 @@ export default async function ProviderWelcomePage({ searchParams }: ProviderWelc
               .select(`
                 id,
                 created_at,
+                message,
                 metadata,
                 from_profile:from_profile_id (
                   id,

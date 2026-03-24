@@ -48,10 +48,13 @@ interface FromProfile {
 interface ConnectionData {
   id: string;
   created_at: string;
+  message?: string | null; // JSON string with care details
   metadata?: {
     care_type?: string;
     message?: string;
-    thread?: Array<{ text: string; created_at: string }>;
+    auto_intro?: string; // Family's actual intro message
+    thread?: Array<{ text: string; created_at: string; is_auto_reply?: boolean }>;
+    unread_count?: number;
   } | null;
   from_profile?: FromProfile | null;
   to_profile?: FromProfile | null;
@@ -351,9 +354,41 @@ function LeadCard({ data, routeTo }: LeadCardProps) {
   const profile = data.from_profile;
   const name = profile?.display_name || "A family";
   const location = [profile?.city, profile?.state].filter(Boolean).join(", ");
-  const careType = data.metadata?.care_type;
-  const message = data.metadata?.message || data.metadata?.thread?.[0]?.text;
+
+  // Parse the connection message JSON to get care details
+  let careType: string | null = null;
+  let careRecipient: string | null = null;
+  let urgency: string | null = null;
+  let seekerPhone: string | null = null;
+
+  try {
+    const msgData = typeof data.message === "string" ? JSON.parse(data.message) : data.message;
+    careType = msgData?.care_type || data.metadata?.care_type || null;
+    careRecipient = msgData?.care_recipient || null;
+    urgency = msgData?.urgency || null;
+    seekerPhone = msgData?.seeker_phone || null;
+  } catch {
+    careType = data.metadata?.care_type || null;
+  }
+
+  // Use auto_intro (family's actual message) instead of auto-reply from thread
+  const message = data.metadata?.auto_intro || data.metadata?.message;
   const timeAgo = formatTimeAgo(data.created_at);
+
+  // Format urgency for display
+  const urgencyLabels: Record<string, string> = {
+    immediate: "Immediate need",
+    within_1_month: "Within 1 month",
+    exploring: "Exploring options",
+  };
+
+  // Format care recipient for display
+  const recipientLabels: Record<string, string> = {
+    parent: "For a parent",
+    spouse: "For a spouse",
+    self: "For themselves",
+    other: "For a family member",
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.08),0_4px_12px_rgba(0,0,0,0.05)] overflow-hidden">
@@ -388,21 +423,44 @@ function LeadCard({ data, routeTo }: LeadCardProps) {
             <p className="mt-1 text-text-md text-gray-500">{location}</p>
           )}
 
-          {(message || careType) && (
-            <>
-              <div className="my-4 border-t border-gray-100" />
-              {message && (
-                <p className="text-text-md text-gray-600 line-clamp-2 leading-relaxed">
-                  &ldquo;{message}&rdquo;
-                </p>
-              )}
-              <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-text-sm text-gray-500">
-                {careType && <span>{CARE_TYPE_LABELS[careType] || careType}</span>}
-                {careType && <span className="text-gray-300">·</span>}
-                <span>{timeAgo}</span>
-              </div>
-            </>
+          <div className="my-4 border-t border-gray-100" />
+
+          {/* Care details summary */}
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            {careType && (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-primary-50 text-text-sm font-medium text-primary-700">
+                {CARE_TYPE_LABELS[careType] || careType}
+              </span>
+            )}
+            {urgency && (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-50 text-text-sm font-medium text-amber-700">
+                {urgencyLabels[urgency] || urgency}
+              </span>
+            )}
+            {careRecipient && (
+              <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-gray-100 text-text-sm font-medium text-gray-600">
+                {recipientLabels[careRecipient] || careRecipient}
+              </span>
+            )}
+          </div>
+
+          {/* Family's message */}
+          {message && (
+            <p className="text-text-md text-gray-600 line-clamp-2 leading-relaxed">
+              &ldquo;{message}&rdquo;
+            </p>
           )}
+
+          {/* Meta info */}
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-text-sm text-gray-500">
+            <span>{timeAgo}</span>
+            {seekerPhone && (
+              <>
+                <span className="text-gray-300">·</span>
+                <span>Phone provided</span>
+              </>
+            )}
+          </div>
 
           {/* Spacer */}
           <div className="flex-1 min-h-4" />
