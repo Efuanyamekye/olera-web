@@ -208,9 +208,18 @@ export default function ProviderOnboardPage() {
         .maybeSingle();
 
       if (bp?.claim_state === "claimed") {
-        // If the signed-in user owns this listing, send them to their dashboard
+        // If the signed-in user owns this listing, redirect to the appropriate section
         if (account && bp.account_id && account.id === bp.account_id) {
-          router.replace("/provider");
+          // Route to specific section based on notification type
+          if (actionParam === "lead" && actionIdParam) {
+            router.replace(`/provider/inbox?id=${actionIdParam}`);
+          } else if (actionParam === "question" && actionIdParam) {
+            router.replace(`/provider/qna?id=${actionIdParam}`);
+          } else if (actionParam === "review" && actionIdParam) {
+            router.replace(`/provider/reviews?id=${actionIdParam}`);
+          } else {
+            router.replace("/provider");
+          }
           return;
         }
         // Otherwise show dashboard with dispute form in ActionCard
