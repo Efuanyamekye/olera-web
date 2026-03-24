@@ -12,10 +12,12 @@ import Link from "next/link";
 export type NotificationType = "lead" | "question" | "review";
 
 interface FromProfile {
-  display_name: string;
-  city?: string | null;
-  state?: string | null;
-  image_url?: string | null;
+  display_name?: string | null;  // May be null or email prefix
+  email?: string | null;         // Always captured for guests
+  phone?: string | null;         // Optional
+  city?: string | null;          // Usually null for seekers
+  state?: string | null;         // Usually null for seekers
+  image_url?: string | null;     // Usually null for family profiles
 }
 
 export interface NotificationData {
@@ -23,19 +25,20 @@ export interface NotificationData {
   id: string;
   created_at: string;
   // Lead-specific
-  message?: string | null;
+  message?: string | null;       // Custom message from additionalNotes
   metadata?: {
-    care_type?: string;
-    auto_intro?: string;
+    care_type?: string | null;   // May be null if not selected
+    auto_intro?: string | null;  // Generated intro message
   } | null;
   from_profile?: FromProfile | null;
   // Question-specific
-  question?: string;
-  asker_name?: string | null;
+  question?: string | null;
+  asker_name?: string | null;    // May be null for anonymous
   // Review-specific
   rating?: number;
-  comment?: string;
-  reviewer_name?: string;
+  comment?: string | null;
+  review_title?: string | null;  // Reviews may have optional title
+  reviewer_name?: string | null; // May be null
 }
 
 export type ActionCardState =
@@ -132,6 +135,58 @@ const CARE_TYPE_LABELS: Record<string, string> = {
 };
 
 // Helper functions for notification display
+
+/**
+ * Check if a name looks like a real name vs an email prefix
+ * Real names typically have spaces, start with capital, no numbers
+ */
+function looksLikeRealName(name: string | null | undefined): boolean {
+  if (!name) return false;
+  const trimmed = name.trim();
+  // Has a space (first + last name)
+  if (trimmed.includes(" ")) return true;
+  // Contains numbers (likely email prefix like "john123")
+  if (/\d/.test(trimmed)) return false;
+  // All lowercase and short (likely email prefix)
+  if (trimmed === trimmed.toLowerCase() && trimmed.length < 6) return false;
+  // Starts with capital and reasonable length
+  if (/^[A-Z][a-z]+$/.test(trimmed) && trimmed.length >= 3) return true;
+  return false;
+}
+
+/**
+ * Get a display-friendly name for a lead
+ * Handles: full names, email prefixes, or completely missing names
+ */
+function getLeadDisplayName(profile: FromProfile | null | undefined): { name: string; isAnonymous: boolean } {
+  const displayName = profile?.display_name?.trim();
+  const email = profile?.email?.trim();
+
+  // Has a real-looking name
+  if (displayName && looksLikeRealName(displayName)) {
+    return { name: displayName, isAnonymous: false };
+  }
+
+  // Has display_name but it looks like email prefix - still use it but note it's partial
+  if (displayName && displayName.length >= 2) {
+    // Capitalize first letter for display
+    const formatted = displayName.charAt(0).toUpperCase() + displayName.slice(1).toLowerCase();
+    return { name: formatted, isAnonymous: false };
+  }
+
+  // Fall back to email prefix if we have email
+  if (email) {
+    const prefix = email.split("@")[0];
+    if (prefix && prefix.length >= 2) {
+      const formatted = prefix.charAt(0).toUpperCase() + prefix.slice(1).toLowerCase();
+      return { name: formatted, isAnonymous: false };
+    }
+  }
+
+  // Completely anonymous
+  return { name: "A family", isAnonymous: true };
+}
+
 function getInitials(name: string): string {
   return name
     .split(/\s+/)
@@ -697,11 +752,24 @@ export default function ActionCard({
   // ════════════════════════════════════════════════════════════
 
   if (state === "notification-lead" && notificationData) {
-    const personName = notificationData.from_profile?.display_name || "A family";
+    // Extract and validate lead data with proper fallbacks
+    const { name: personName, isAnonymous } = getLeadDisplayName(notificationData.from_profile);
     const personImage = notificationData.from_profile?.image_url || null;
-    const location = [notificationData.from_profile?.city, notificationData.from_profile?.state].filter(Boolean).join(", ");
-    const careType = notificationData.metadata?.care_type;
-    const message = notificationData.metadata?.auto_intro;
+
+    // Location: Only show if seeker actually provided it (rare for family profiles)
+    const location = [
+      notificationData.from_profile?.city,
+      notificationData.from_profile?.state
+    ].filter(Boolean).join(", ");
+
+    // Care type: Only show badge if actually selected
+    const careType = notificationData.metadata?.care_type || null;
+
+    // Message: Prefer custom message, fall back to auto_intro, then generic
+    const customMessage = notificationData.message;
+    const autoIntro = notificationData.metadata?.auto_intro;
+    const displayMessage = customMessage || autoIntro || null;
+
     const timeAgo = formatTimeAgo(notificationData.created_at);
 
     return (
@@ -727,14 +795,23 @@ export default function ActionCard({
               <Image src={personImage} alt={personName} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
             ) : (
               <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(personName) }}>
-                {getInitials(personName)}
+                {isAnonymous ? (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                ) : (
+                  getInitials(personName)
+                )}
               </div>
             )}
             <div className="min-w-0 flex-1">
               <p className="text-[15px] font-semibold text-gray-900 truncate">{personName}</p>
-              <p className="text-xs text-gray-400">{timeAgo}{location && ` · ${location}`}</p>
+              <p className="text-xs text-gray-400">
+                {timeAgo}
+                {location && ` · ${location}`}
+              </p>
             </div>
-            {/* Care type badge */}
+            {/* Care type badge - only show if selected */}
             {careType && (
               <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary-100 text-primary-700 shrink-0">
                 {CARE_TYPE_LABELS[careType] || careType}
@@ -742,10 +819,14 @@ export default function ActionCard({
             )}
           </div>
 
-          {/* Message */}
-          {message && (
+          {/* Message - show if available, otherwise show helpful context */}
+          {displayMessage ? (
             <p className="text-[14px] text-gray-600 leading-relaxed line-clamp-3">
-              &ldquo;{message.length > 150 ? message.slice(0, 150) + "..." : message}&rdquo;
+              &ldquo;{displayMessage.length > 150 ? displayMessage.slice(0, 150) + "..." : displayMessage}&rdquo;
+            </p>
+          ) : (
+            <p className="text-[14px] text-gray-500 leading-relaxed italic">
+              {personName} is interested in learning more about your services.
             </p>
           )}
         </div>
@@ -774,8 +855,14 @@ export default function ActionCard({
   }
 
   if (state === "notification-question" && notificationData) {
-    const personName = notificationData.asker_name || "Someone";
-    const question = notificationData.question || "";
+    // Handle asker name - may be null for anonymous askers or guests
+    const askerName = notificationData.asker_name?.trim();
+    const isAnonymousAsker = !askerName || !looksLikeRealName(askerName);
+    const displayAskerName = askerName && askerName.length >= 2
+      ? (looksLikeRealName(askerName) ? askerName : askerName.charAt(0).toUpperCase() + askerName.slice(1).toLowerCase())
+      : "Someone";
+
+    const question = notificationData.question?.trim() || "";
     const timeAgo = formatTimeAgo(notificationData.created_at);
 
     return (
@@ -797,19 +884,31 @@ export default function ActionCard({
         <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-5">
           {/* Person row with timestamp */}
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(personName) }}>
-              {getInitials(personName)}
+            <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(displayAskerName) }}>
+              {isAnonymousAsker && displayAskerName === "Someone" ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              ) : (
+                getInitials(displayAskerName)
+              )}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-semibold text-gray-900">{personName}</p>
+              <p className="text-[15px] font-semibold text-gray-900">{displayAskerName}</p>
               <p className="text-xs text-gray-400">{timeAgo}</p>
             </div>
           </div>
 
-          {/* Question */}
-          <p className="text-[14px] text-gray-600 leading-relaxed line-clamp-3">
-            &ldquo;{question.length > 150 ? question.slice(0, 150) + "..." : question}&rdquo;
-          </p>
+          {/* Question - show if available, otherwise show helpful context */}
+          {question ? (
+            <p className="text-[14px] text-gray-600 leading-relaxed line-clamp-3">
+              &ldquo;{question.length > 150 ? question.slice(0, 150) + "..." : question}&rdquo;
+            </p>
+          ) : (
+            <p className="text-[14px] text-gray-500 leading-relaxed italic">
+              {displayAskerName} asked a question about your services.
+            </p>
+          )}
         </div>
 
         {/* CTA based on auth state */}
@@ -836,9 +935,16 @@ export default function ActionCard({
   }
 
   if (state === "notification-review" && notificationData) {
-    const personName = notificationData.reviewer_name || "Someone";
-    const rating = notificationData.rating || 5;
-    const comment = notificationData.comment || "";
+    // Handle reviewer name - may be null for anonymous reviewers
+    const reviewerName = notificationData.reviewer_name?.trim();
+    const isAnonymousReviewer = !reviewerName || !looksLikeRealName(reviewerName);
+    const displayReviewerName = reviewerName && reviewerName.length >= 2
+      ? (looksLikeRealName(reviewerName) ? reviewerName : reviewerName.charAt(0).toUpperCase() + reviewerName.slice(1).toLowerCase())
+      : "A reviewer";
+
+    const rating = notificationData.rating ?? 5; // Default to 5 if somehow missing
+    const comment = notificationData.comment?.trim() || "";
+    const reviewTitle = notificationData.review_title?.trim();
     const timeAgo = formatTimeAgo(notificationData.created_at);
 
     return (
@@ -860,11 +966,17 @@ export default function ActionCard({
         <div className="bg-primary-50/50 border border-primary-100 rounded-xl p-4 mb-5">
           {/* Person row with stars and timestamp */}
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(personName) }}>
-              {getInitials(personName)}
+            <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0" style={{ background: avatarGradient(displayReviewerName) }}>
+              {isAnonymousReviewer && displayReviewerName === "A reviewer" ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              ) : (
+                getInitials(displayReviewerName)
+              )}
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[15px] font-semibold text-gray-900">{personName}</p>
+              <p className="text-[15px] font-semibold text-gray-900">{displayReviewerName}</p>
               <div className="flex items-center gap-2 mt-0.5">
                 {/* Rating stars inline */}
                 <div className="flex items-center gap-0.5">
@@ -885,10 +997,19 @@ export default function ActionCard({
             </div>
           </div>
 
-          {/* Comment */}
-          {comment && (
+          {/* Review title if provided */}
+          {reviewTitle && (
+            <p className="text-[14px] font-semibold text-gray-800 mb-1">{reviewTitle}</p>
+          )}
+
+          {/* Comment - show if available, otherwise show helpful context */}
+          {comment ? (
             <p className="text-[14px] text-gray-600 leading-relaxed line-clamp-3 italic">
               &ldquo;{comment.length > 150 ? comment.slice(0, 150) + "..." : comment}&rdquo;
+            </p>
+          ) : (
+            <p className="text-[14px] text-gray-500 leading-relaxed italic">
+              {displayReviewerName} left a {rating}-star review.
             </p>
           )}
         </div>
