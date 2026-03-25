@@ -23,25 +23,31 @@ export async function GET(
     // Try to find the provider by slug in business_profiles (only provider types)
     let profile = null;
 
+    console.log("Looking up provider with slug:", slug);
+
     // First try: strict type filter (organization or caregiver)
-    const { data: strictProfile } = await db
+    const { data: strictProfile, error: strictError } = await db
       .from("business_profiles")
       .select("id, display_name, slug, image_url, tagline, city, state, metadata, type")
       .eq("slug", slug)
       .in("type", ["organization", "caregiver"])
       .maybeSingle();
 
+    console.log("Strict query result:", { strictProfile, strictError });
+
     profile = strictProfile;
 
     // Second try: if not found, search without type filter but exclude family/student
     // This handles older profiles that may have null or different types
     if (!profile) {
-      const { data: lenientProfile } = await db
+      const { data: lenientProfile, error: lenientError } = await db
         .from("business_profiles")
         .select("id, display_name, slug, image_url, tagline, city, state, metadata, type")
         .eq("slug", slug)
         .not("type", "in", "(family,student)")
         .maybeSingle();
+
+      console.log("Lenient query result:", { lenientProfile, lenientError });
 
       profile = lenientProfile;
     }
