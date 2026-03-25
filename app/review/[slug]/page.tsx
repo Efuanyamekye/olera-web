@@ -225,11 +225,46 @@ function ReviewPageContent() {
   const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
   const [reviewerName, setReviewerName] = useState(prefillName);
+  const [postAnonymously, setPostAnonymously] = useState(!prefillName);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Google share state
   const [copiedForGoogle, setCopiedForGoogle] = useState(false);
+
+  // Dynamic content based on rating (family's perspective)
+  const getStepTwoHeader = () => {
+    if (rating >= 5) return "Share what made it great";
+    if (rating >= 4) return "Tell us more about your experience";
+    if (rating >= 3) return "Share your honest thoughts";
+    if (rating >= 2) return "Help others know what to expect";
+    return "Share your concerns";
+  };
+
+  const getStepTwoSubtext = () => {
+    if (rating >= 4) return "Your story helps other families find quality care";
+    if (rating >= 3) return "Your feedback helps families make informed decisions";
+    return "Your experience matters — help others avoid similar issues";
+  };
+
+  // Pre-fill comment when moving to step 2
+  const getDefaultComment = () => {
+    if (!provider) return "";
+    const name = provider.display_name;
+    if (rating >= 5) return `I had an excellent experience with ${name}. The care and attention provided was exceptional. `;
+    if (rating >= 4) return `Overall, I had a positive experience with ${name}. `;
+    if (rating >= 3) return `My experience with ${name} was mixed. `;
+    if (rating >= 2) return `I was disappointed with my experience at ${name}. `;
+    return `I had significant concerns about my experience with ${name}. `;
+  };
+
+  // Handle moving to step 2 with pre-filled comment
+  const handleContinueToDetails = () => {
+    if (!comment) {
+      setComment(getDefaultComment());
+    }
+    setStep("details");
+  };
 
   // Fetch provider info
   useEffect(() => {
@@ -271,7 +306,7 @@ function ReviewPageContent() {
           relationship,
           title: title.trim() || null,
           comment: comment.trim(),
-          reviewer_name: reviewerName.trim() || "Anonymous",
+          reviewer_name: postAnonymously ? "Anonymous" : (reviewerName.trim() || "Anonymous"),
           ref_source: refSource,
         }),
       });
@@ -570,7 +605,7 @@ function ReviewPageContent() {
               {/* Next Button */}
               <button
                 type="button"
-                onClick={() => setStep("details")}
+                onClick={handleContinueToDetails}
                 disabled={rating === 0 || !relationship}
                 className="w-full py-3.5 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 active:scale-[0.99] text-white font-semibold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed min-h-[52px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 shadow-sm hover:shadow"
               >
@@ -582,6 +617,16 @@ function ReviewPageContent() {
           {/* Step 2: Details */}
           {step === "details" && (
             <div className="p-6">
+              {/* Dynamic header based on rating */}
+              <div className="text-center mb-6">
+                <h2 className="text-lg font-semibold text-gray-900 mb-1">
+                  {getStepTwoHeader()}
+                </h2>
+                <p className="text-sm text-gray-500">
+                  {getStepTwoSubtext()}
+                </p>
+              </div>
+
               {/* Summary bar */}
               <button
                 type="button"
@@ -609,25 +654,39 @@ function ReviewPageContent() {
               {/* Your Name */}
               <div className="mb-5">
                 <label htmlFor="reviewer-name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Your name <span className="text-gray-400">(optional)</span>
+                  Your name
                 </label>
                 <input
                   id="reviewer-name"
                   type="text"
                   value={reviewerName}
-                  onChange={(e) => setReviewerName(e.target.value)}
+                  onChange={(e) => {
+                    setReviewerName(e.target.value);
+                    if (e.target.value) setPostAnonymously(false);
+                  }}
+                  disabled={postAnonymously}
                   placeholder="How should we display your name?"
-                  className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[48px]"
+                  className={`w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[48px] ${postAnonymously ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}`}
                 />
-                <p className="mt-1.5 text-xs text-gray-400">
-                  Leave blank to post anonymously
-                </p>
+                {/* Post anonymously checkbox */}
+                <label className="flex items-center gap-2 mt-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={postAnonymously}
+                    onChange={(e) => {
+                      setPostAnonymously(e.target.checked);
+                      if (e.target.checked) setReviewerName("");
+                    }}
+                    className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                  />
+                  <span className="text-sm text-gray-600">Post anonymously</span>
+                </label>
               </div>
 
               {/* Title */}
               <div className="mb-5">
                 <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
-                  Title <span className="text-gray-400">(optional)</span>
+                  Title
                 </label>
                 <input
                   id="title"
