@@ -749,7 +749,7 @@ function RequestNowContent({ state, onStateChange }: RequestNowContentProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm lg:max-w-2xl">
+    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
       <div className="p-5 lg:p-6">
         {/* Recipients Section */}
         <div className="mb-6">
@@ -1118,7 +1118,7 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm lg:max-w-xl">
+    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
       <div className="p-5 lg:p-6">
         {/* Header */}
         <div className="flex items-start gap-3 mb-6">
