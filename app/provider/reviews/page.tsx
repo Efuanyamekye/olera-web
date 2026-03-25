@@ -1187,34 +1187,15 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
 
 const YOUTUBE_VIDEO_ID = "cb3TMkMNe3I";
 
-function EducationSidebar({ activeTab }: { activeTab: TabFilter }) {
+function EducationSidebar() {
   const [videoPlaying, setVideoPlaying] = useState(false);
 
-  // Tips based on active tab - updated for current features
-  const tipsMap: Record<TabFilter, { icon: string; text: string }[]> = {
-    request_now: [
-      { icon: "⏱", text: "Request within 48 hours of service" },
-      { icon: "✍️", text: "Personalize with their name" },
-      { icon: "🔄", text: "Follow up once if no response" },
-    ],
-    request_onsite: [
-      { icon: "🏠", text: "Best during or right after visits" },
-      { icon: "📱", text: "Share the link via text or verbally" },
-      { icon: "⏳", text: "Let clients review at their own pace" },
-    ],
-    all: [
-      { icon: "💬", text: "Respond to reviews promptly" },
-      { icon: "🙏", text: "Thank reviewers for feedback" },
-      { icon: "⭐", text: "Address concerns professionally" },
-    ],
-    replied: [
-      { icon: "✅", text: "Keep responses helpful and warm" },
-      { icon: "📝", text: "Update replies if needed" },
-      { icon: "🔄", text: "Follow up on resolved issues" },
-    ],
-  };
-
-  const tips = tipsMap[activeTab];
+  // Universal tips that apply to all tabs - focused on motivating action
+  const tips = [
+    "Families check reviews before calling",
+    "Your best clients are waiting to be asked",
+    "Send one request now, see results this week",
+  ];
 
   return (
     <div className="hidden lg:block">
@@ -1264,19 +1245,13 @@ function EducationSidebar({ activeTab }: { activeTab: TabFilter }) {
 
           {/* Tips Section */}
           <div className="px-5 py-4">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-6 h-6 rounded-md bg-amber-50 flex items-center justify-center">
-                <svg className="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Quick Tips</span>
-            </div>
             <div className="space-y-3">
               {tips.map((tip, idx) => (
-                <div key={idx} className="flex items-start gap-2.5">
-                  <span className="text-sm flex-shrink-0 w-5 text-center leading-5">{tip.icon}</span>
-                  <p className="text-[13px] text-gray-600 leading-5">{tip.text}</p>
+                <div key={idx} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary-100 text-primary-700 text-xs font-semibold flex items-center justify-center">
+                    {idx + 1}
+                  </span>
+                  <p className="text-[13px] text-gray-600 leading-5">{tip}</p>
                 </div>
               ))}
             </div>
@@ -1289,20 +1264,15 @@ function EducationSidebar({ activeTab }: { activeTab: TabFilter }) {
 
 // ── Mobile Tips Accordion (for Request tabs) ──
 
-function MobileTipsAccordion({ activeTab }: { activeTab: TabFilter }) {
+function MobileTipsAccordion() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const tips = activeTab === "request_now"
-    ? [
-        { icon: "⏱", text: "Request within 48 hours of service" },
-        { icon: "✍️", text: "Personalize with their name" },
-        { icon: "🔄", text: "Follow up once if no response" },
-      ]
-    : [
-        { icon: "🏠", text: "Best during or right after visits" },
-        { icon: "📱", text: "Share the link via text or verbally" },
-        { icon: "⏳", text: "Let clients review at their own pace" },
-      ];
+  // Universal tips - same as desktop sidebar
+  const tips = [
+    "Families check reviews before calling",
+    "Your best clients are waiting to be asked",
+    "Send one request now, see results this week",
+  ];
 
   return (
     <div className="lg:hidden mt-4 bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
@@ -1332,9 +1302,11 @@ function MobileTipsAccordion({ activeTab }: { activeTab: TabFilter }) {
       {isOpen && (
         <div className="px-4 pb-4 space-y-3 border-t border-gray-100 pt-3">
           {tips.map((tip, idx) => (
-            <div key={idx} className="flex items-center gap-3">
-              <span className="text-base flex-shrink-0 w-5 text-center">{tip.icon}</span>
-              <p className="text-[13px] text-gray-600">{tip.text}</p>
+            <div key={idx} className="flex items-start gap-3">
+              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary-100 text-primary-700 text-xs font-semibold flex items-center justify-center">
+                {idx + 1}
+              </span>
+              <p className="text-[13px] text-gray-600 leading-5">{tip}</p>
             </div>
           ))}
         </div>
@@ -1917,7 +1889,7 @@ export default function ProviderReviewsPage() {
                   onStateChange={setRequestNowState}
                   providerSlug={activeFilter === "request_onsite" ? providerProfile?.slug : undefined}
                 />
-                <MobileTipsAccordion activeTab={activeFilter} />
+                <MobileTipsAccordion />
               </>
             ) : filteredReviews.length > 0 ? (
               <div className="space-y-4">
@@ -1953,7 +1925,7 @@ export default function ProviderReviewsPage() {
               animationDelay: "200ms",
             }}
           >
-            <EducationSidebar activeTab={activeFilter} />
+            <EducationSidebar />
           </div>
         </div>
       </div>
