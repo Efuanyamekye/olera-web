@@ -158,16 +158,40 @@ export default function ProviderOnboardPage() {
             // Fetch connection (lead) data
             const { data: conn } = await supabase
               .from("connections")
-              .select("id, created_at, message, metadata, from_profile:business_profiles!connections_from_profile_id_fkey(display_name, city, state, image_url)")
+              .select("id, created_at, message, metadata, from_profile:business_profiles!connections_from_profile_id_fkey(display_name, email, city, state, image_url)")
               .eq("id", actionIdParam)
               .single();
             if (conn) {
+              // Parse the message field - it's stored as JSON string with seeker info
+              let parsedMessage: Record<string, unknown> = {};
+              try {
+                if (conn.message && typeof conn.message === "string") {
+                  parsedMessage = JSON.parse(conn.message);
+                }
+              } catch {
+                // If parsing fails, message might be plain text (legacy)
+                parsedMessage = { message: conn.message };
+              }
+
+              // Extract the actual custom message (additionalNotes) from parsed data
+              const customMessage = (parsedMessage.message as string) || (parsedMessage.additional_notes as string) || null;
+
+              // Extract care_type from parsed message or metadata
+              const careType = (parsedMessage.care_type as string) || null;
+
+              // Get auto_intro from metadata (generated intro message)
+              const connMetadata = conn.metadata as Record<string, unknown> | null;
+              const autoIntro = (connMetadata?.auto_intro as string) || null;
+
               setNotificationData({
                 type: "lead",
                 id: conn.id,
                 created_at: conn.created_at,
-                message: conn.message,
-                metadata: conn.metadata as NotificationData["metadata"],
+                message: customMessage,
+                metadata: {
+                  care_type: careType || undefined,
+                  auto_intro: autoIntro || undefined,
+                },
                 from_profile: conn.from_profile as NotificationData["from_profile"],
               });
             }
