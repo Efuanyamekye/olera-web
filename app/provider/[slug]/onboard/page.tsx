@@ -27,7 +27,7 @@ export default function ProviderOnboardPage() {
   const searchParams = useSearchParams();
   const providerIdParam = searchParams.get("provider_id");
   const stateParam = searchParams.get("state") as ActionCardState | null;
-  // Action params for email notifications (lead/review/question) or campaign
+  // Action params for email notifications (lead/message/review/question) or campaign
   const actionParam = searchParams.get("action") as NotificationType | "campaign" | null;
   const actionIdParam = searchParams.get("actionId");
   // Token param for marketing campaign emails (pre-verified flow)
@@ -107,6 +107,8 @@ export default function ProviderOnboardPage() {
           if (bp.claim_state === "claimed" && account && bp.account_id === account.id) {
             // User owns this listing - redirect to appropriate section
             if (actionParam === "lead" && actionIdParam) {
+              router.replace(`/provider/connections?id=${actionIdParam}`);
+            } else if (actionParam === "message" && actionIdParam) {
               router.replace(`/provider/inbox?id=${actionIdParam}`);
             } else if (actionParam === "question" && actionIdParam) {
               router.replace(`/provider/qna?id=${actionIdParam}`);
@@ -289,6 +291,8 @@ export default function ProviderOnboardPage() {
         if (account && bp.account_id && account.id === bp.account_id) {
           // Route to specific section based on notification type
           if (actionParam === "lead" && actionIdParam) {
+            router.replace(`/provider/connections?id=${actionIdParam}`);
+          } else if (actionParam === "message" && actionIdParam) {
             router.replace(`/provider/inbox?id=${actionIdParam}`);
           } else if (actionParam === "question" && actionIdParam) {
             router.replace(`/provider/qna?id=${actionIdParam}`);
@@ -327,6 +331,7 @@ export default function ProviderOnboardPage() {
         // Map action param to notification state
         const notificationStateMap: Record<string, ActionCardState> = {
           lead: "notification-lead",
+          message: "notification-lead", // Messages show similar card to leads
           question: "notification-question",
           review: "notification-review",
         };

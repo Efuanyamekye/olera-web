@@ -9,7 +9,7 @@ import Link from "next/link";
 // Types
 // ============================================================
 
-export type NotificationType = "lead" | "question" | "review";
+export type NotificationType = "lead" | "message" | "question" | "review";
 
 interface FromProfile {
   display_name: string;

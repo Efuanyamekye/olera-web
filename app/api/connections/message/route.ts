@@ -201,7 +201,7 @@ export async function POST(request: Request) {
           } else {
             // Generate magic link for provider one-click sign-in
             const providerSlug = recipientProfile?.slug || recipientProfile?.source_provider_id || recipientProfileId;
-            const redirectPath = `/provider/${providerSlug}/onboard?action=lead&actionId=${connectionId}`;
+            const redirectPath = `/provider/${providerSlug}/onboard?action=message&actionId=${connectionId}`;
             // Fallback: direct to onboard page (handles both claimed and unclaimed providers)
             viewUrl = `${siteUrl}${redirectPath}`;
 
