@@ -21,13 +21,13 @@ export async function GET(
     const db = getServiceClient();
 
     // Try to find the provider by slug in business_profiles
-    const { data: profile, error } = await db
+    const { data: profile } = await db
       .from("business_profiles")
-      .select("id, display_name, slug, image_url, tagline, city, state, metadata")
+      .select("id, display_name, slug, image_url, tagline, city, state, metadata, type")
       .eq("slug", slug)
-      .single();
+      .maybeSingle();
 
-    if (error || !profile) {
+    if (!profile) {
       // Try legacy olera-providers table as fallback
       const { data: legacyProvider } = await db
         .from("olera-providers")
