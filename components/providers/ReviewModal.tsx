@@ -92,6 +92,8 @@ export default function ReviewModal({
   const [hoverRating, setHoverRating] = useState(0);
   const [relationship, setRelationship] = useState("");
   const [comment, setComment] = useState("");
+  const [reviewerName, setReviewerName] = useState("");
+  const [postAnonymously, setPostAnonymously] = useState(false);
 
   // Submission
   const [submitting, setSubmitting] = useState(false);
@@ -108,6 +110,8 @@ export default function ReviewModal({
     setHoverRating(0);
     setRelationship("");
     setComment("");
+    setReviewerName("");
+    setPostAnonymously(false);
     setError("");
     setSubmitting(false);
     setCopiedForGoogle(false);
@@ -180,6 +184,7 @@ export default function ReviewModal({
           rating,
           comment: comment.trim(),
           relationship: relationship || undefined,
+          reviewer_name: postAnonymously ? "Anonymous" : (reviewerName.trim() || undefined),
         },
       });
       openAuth({
@@ -199,6 +204,7 @@ export default function ReviewModal({
           rating,
           comment: comment.trim(),
           relationship,
+          reviewer_name: postAnonymously ? "Anonymous" : (reviewerName.trim() || undefined),
         }),
       });
 
@@ -272,15 +278,59 @@ export default function ReviewModal({
       footer={modalFooter}
       size="md"
     >
+      {/* ── Step Indicator ── */}
+      {step !== "success" && (
+        <div className="flex items-center justify-center gap-2 pt-2 pb-6">
+          {["rating", "details"].map((s, idx) => {
+            const stepIndex = ["rating", "details"].indexOf(step);
+            const isCompleted = idx < stepIndex;
+            const isCurrent = s === step;
+            return (
+              <div key={s} className="flex items-center">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
+                    isCompleted || isCurrent
+                      ? "bg-primary-600 text-white"
+                      : "bg-gray-100 text-gray-400"
+                  }`}
+                >
+                  {isCompleted ? (
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    idx + 1
+                  )}
+                </div>
+                {idx < 1 && (
+                  <div
+                    className={`w-12 h-0.5 mx-2 transition-colors ${
+                      isCompleted ? "bg-primary-600" : "bg-gray-200"
+                    }`}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {/* ── Step 1: Rating ── */}
       {step === "rating" && (
-        <div className="py-6 animate-step-in">
-          {/* Star rating */}
-          <div className="text-center mb-8">
-            <p className="text-lg text-gray-600 mb-5">
-              How would you rate your experience with <strong className="text-gray-800">{providerName}</strong>?
+        <div className="animate-step-in">
+          {/* Header */}
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-1">
+              How was your experience?
+            </h3>
+            <p className="text-base text-gray-500">
+              Rate your experience with {providerName}
             </p>
-            <div className="flex justify-center gap-1">
+          </div>
+
+          {/* Star rating */}
+          <div className="flex flex-col items-center mb-8">
+            <div className="flex justify-center gap-0.5">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
@@ -288,7 +338,7 @@ export default function ReviewModal({
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
                   onClick={() => setRating(star)}
-                  className="p-2 transition-transform hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg min-w-[52px] min-h-[52px] flex items-center justify-center"
+                  className="p-2 transition-transform hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg min-w-[48px] min-h-[48px] flex items-center justify-center"
                   aria-label={`Rate ${star} stars`}
                 >
                   <StarIcon
@@ -302,56 +352,103 @@ export default function ReviewModal({
                 </button>
               ))}
             </div>
-            {rating > 0 && (
-              <p className="text-base font-medium text-gray-600 mt-3 animate-step-in">
-                {RATING_LABELS[rating]}
+            {(hoverRating || rating) > 0 && (
+              <p className="mt-3 text-base font-medium text-primary-600 animate-step-in">
+                {RATING_LABELS[hoverRating || rating]}
               </p>
             )}
           </div>
 
           {/* Relationship */}
           <Select
-            label="How do you know this provider?"
+            label="Your relationship"
             required
             options={RELATIONSHIP_OPTIONS}
             value={relationship}
             onChange={setRelationship}
             placeholder="Select your relationship"
-            size="lg"
           />
         </div>
       )}
 
       {/* ── Step 2: Details ── */}
       {step === "details" && (
-        <div className="py-4 animate-step-in">
+        <div className="animate-step-in">
           {/* Dynamic header based on rating */}
-          <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">
-            {getStepTwoHeader(rating)}
-          </h3>
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-semibold text-gray-900 mb-1">
+              {getStepTwoHeader(rating)}
+            </h3>
+            <p className="text-base text-gray-500">
+              Your story helps other families find quality care
+            </p>
+          </div>
 
           {/* Summary bar — shows rating + relationship from step 1 */}
           <button
             type="button"
             onClick={() => setStep("rating")}
-            className="w-full flex items-center gap-3 bg-gray-50 rounded-xl p-3.5 mb-6 text-left hover:bg-gray-100 active:scale-[0.99] transition-all group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 min-h-[52px]"
+            className="w-full flex items-center justify-between p-3.5 mb-6 bg-vanilla-50 border border-warm-100 rounded-xl hover:bg-vanilla-100 active:scale-[0.99] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 min-h-[56px]"
           >
-            <div className="flex gap-0.5">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <StarIcon
-                  key={star}
-                  className={`w-5 h-5 ${star <= rating ? "text-primary-500" : "text-gray-200"}`}
-                  filled={star <= rating}
-                />
-              ))}
+            <div className="flex items-center gap-3">
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <StarIcon
+                    key={star}
+                    className={`w-5 h-5 ${star <= rating ? "text-primary-500" : "text-gray-200"}`}
+                    filled={star <= rating}
+                  />
+                ))}
+              </div>
+              <span className="text-base text-gray-600">{relationship}</span>
             </div>
-            <span className="text-base text-gray-600">
-              {RATING_LABELS[rating]} · {relationship}
-            </span>
-            <svg className="w-4 h-4 text-gray-300 group-hover:text-gray-400 ml-auto shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
+            <span className="text-sm text-primary-600 font-medium">Edit</span>
           </button>
+
+          {/* Reviewer name */}
+          <div className="mb-5">
+            <label htmlFor="reviewer-name" className="block text-base font-medium text-gray-700 mb-2">
+              Your name
+            </label>
+            <input
+              id="reviewer-name"
+              type="text"
+              value={reviewerName}
+              onChange={(e) => {
+                setReviewerName(e.target.value);
+                if (e.target.value) setPostAnonymously(false);
+              }}
+              disabled={postAnonymously}
+              placeholder="How should we display your name?"
+              className={`w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[52px] ${postAnonymously ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}`}
+            />
+            {/* Post anonymously checkbox */}
+            <label className="flex items-center gap-2.5 mt-3 cursor-pointer group">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={postAnonymously}
+                  onChange={(e) => {
+                    setPostAnonymously(e.target.checked);
+                    if (e.target.checked) setReviewerName("");
+                  }}
+                  className="sr-only peer"
+                />
+                <div className={`w-5 h-5 rounded border-2 transition-all flex items-center justify-center ${
+                  postAnonymously
+                    ? "bg-primary-600 border-primary-600"
+                    : "border-gray-300 bg-white group-hover:border-gray-400"
+                }`}>
+                  {postAnonymously && (
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  )}
+                </div>
+              </div>
+              <span className="text-base text-gray-600">Post anonymously</span>
+            </label>
+          </div>
 
           {/* Comment */}
           <div>
@@ -364,7 +461,7 @@ export default function ReviewModal({
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share details about your experience with this provider..."
               rows={5}
-              className="w-full px-4 py-4 border border-gray-200 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none leading-relaxed transition-shadow"
+              className="w-full px-4 py-4 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 resize-none leading-relaxed transition-all"
             />
           </div>
         </div>
@@ -372,18 +469,18 @@ export default function ReviewModal({
 
       {/* ── Step 3: Success ── */}
       {step === "success" && (
-        <div className="py-8 animate-wizard-in">
+        <div className="py-6 animate-step-in">
           <div className="text-center mb-6">
-            <div className="w-18 h-18 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-5 shadow-sm" style={{ width: 72, height: 72 }}>
-              <svg className="w-9 h-9 text-green-600 animate-success-pop" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-green-50 flex items-center justify-center ring-4 ring-green-50/50 shadow-sm">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-display font-bold text-gray-900 tracking-tight mb-3">
-              Thank you for your review!
+            <h2 className="text-2xl font-display font-bold text-gray-900 mb-2">
+              Thank you!
             </h2>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-sm mx-auto">
-              Your review of <strong className="text-gray-800">{providerName}</strong> has been published.
+            <p className="text-base text-gray-500 leading-relaxed">
+              Your review for <span className="font-medium text-gray-700">{providerName}</span> has been submitted successfully.
             </p>
           </div>
 
