@@ -1216,13 +1216,6 @@ function EducationSidebar({ activeTab }: { activeTab: TabFilter }) {
 
   const tips = tipsMap[activeTab];
 
-  // Video title based on tab
-  const videoTitle = activeTab === "request_now"
-    ? "How to request reviews"
-    : activeTab === "request_onsite"
-    ? "Collecting reviews on-site"
-    : "Managing your reviews";
-
   return (
     <div className="hidden lg:block">
       <div className="sticky top-24">
@@ -1265,7 +1258,7 @@ function EducationSidebar({ activeTab }: { activeTab: TabFilter }) {
 
           {/* Video Title */}
           <div className="px-5 pt-4 pb-3 border-b border-gray-100">
-            <p className="text-sm font-semibold text-gray-900">{videoTitle}</p>
+            <p className="text-sm font-semibold text-gray-900">How to collect reviews</p>
             <p className="text-xs text-gray-400 mt-0.5">2:30 min</p>
           </div>
 
