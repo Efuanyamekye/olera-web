@@ -564,11 +564,13 @@ interface RequestNowState {
 interface RequestNowContentProps {
   state: RequestNowState;
   onStateChange: (state: RequestNowState) => void;
+  /** If provided, shows the review link section (for "Request on-site" tab) */
+  providerSlug?: string | null;
 }
 
 const DEFAULT_MESSAGE = "Hi, we'd love to hear about your experience with us. Would you take a moment to leave a review? It helps other families find quality care.";
 
-function RequestNowContent({ state, onStateChange }: RequestNowContentProps) {
+function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowContentProps) {
   const { clients, message, deliveryMethod } = state;
 
   // Local form state (not persisted across tab switches)
@@ -579,7 +581,32 @@ function RequestNowContent({ state, onStateChange }: RequestNowContentProps) {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
   const nameInputRef = useRef<HTMLInputElement>(null);
+
+  // Review link for on-site sharing
+  const siteOrigin = typeof window !== "undefined" ? window.location.origin : "https://olera.care";
+  const reviewUrl = providerSlug
+    ? `${siteOrigin}/review/${providerSlug}?ref=qr`
+    : null;
+
+  const handleCopyLink = async () => {
+    if (!reviewUrl) return;
+    try {
+      await navigator.clipboard.writeText(reviewUrl);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = reviewUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    }
+  };
 
   // Helper to update parent state
   const setClients = (updater: ReviewRequestClient[] | ((prev: ReviewRequestClient[]) => ReviewRequestClient[])) => {
@@ -749,8 +776,71 @@ function RequestNowContent({ state, onStateChange }: RequestNowContentProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
+    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
       <div className="p-5 lg:p-6">
+        {/* Review Link Section (only for on-site tab) */}
+        {reviewUrl && (
+          <div className="mb-6 pb-6 border-b border-gray-100">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100/50 flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
+                </svg>
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="text-[15px] font-semibold text-gray-900">Your review link</h3>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  Share this link to collect reviews
+                </p>
+              </div>
+            </div>
+            {/* Link container with button inside */}
+            <div className="flex items-center gap-3 px-4 py-2 bg-vanilla-50 border border-warm-100 rounded-xl min-h-[56px]">
+              <p className="flex-1 min-w-0 text-[15px] font-mono text-gray-700 truncate">
+                {reviewUrl}
+              </p>
+              <button
+                type="button"
+                onClick={handleCopyLink}
+                className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-semibold text-[15px] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 flex-shrink-0 ${
+                  linkCopied
+                    ? "bg-primary-100 text-primary-700"
+                    : "bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white shadow-sm"
+                }`}
+              >
+                {linkCopied ? (
+                  <>
+                    <CheckIcon className="w-4 h-4" />
+                    <span>Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+                    </svg>
+                    <span>Copy link</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Illustration */}
+            <div className="mt-6 flex justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/onsite-review.png"
+                alt="Caregiver helping elderly person with review"
+                className="max-w-full h-auto max-h-[280px] object-contain"
+              />
+            </div>
+
+            {/* Note */}
+            <p className="mt-4 text-sm text-gray-500">
+              <span className="font-semibold text-gray-700">Note:</span> Works best during care visits
+            </p>
+          </div>
+        )}
+
         {/* Recipients Section */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-3">
@@ -1048,7 +1138,7 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
+    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
       <div className="p-5 lg:p-6">
         {/* Header */}
         <div className="flex items-start gap-3 mb-6">
@@ -1057,7 +1147,7 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
             </svg>
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h3 className="text-[15px] font-semibold text-gray-900">Your review link</h3>
             <p className="text-sm text-gray-500 mt-0.5">
               Share this link to collect reviews
@@ -1065,36 +1155,36 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
           </div>
         </div>
 
-        {/* Link display */}
+        {/* Link display - with proper overflow handling */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <div className="flex-1 min-w-0 px-4 py-3.5 bg-vanilla-50 border border-warm-100 rounded-xl min-h-[48px] flex items-center overflow-hidden">
-              <p className="text-[15px] font-mono text-gray-700 truncate">
-                {reviewUrl}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={handleCopy}
-              className={`inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-[15px] transition-all min-h-[48px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 shrink-0 ${
-                copied
-                  ? "bg-primary-50 text-primary-700 border border-primary-200"
-                  : "bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white shadow-sm"
-              }`}
-            >
-              {copied ? (
-                <>
-                  <CheckIcon className="w-4 h-4" />
-                  <span>Copied!</span>
-                </>
-              ) : (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
-                  </svg>
-                  <span>Copy link</span>
-                </>
-              )}
-            </button>
+          <div className="flex-1 min-w-0 px-4 py-3.5 bg-vanilla-50 border border-warm-100 rounded-xl min-h-[48px] flex items-center overflow-hidden">
+            <p className="text-[15px] font-mono text-gray-700 truncate">
+              {reviewUrl}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleCopy}
+            className={`inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-[15px] transition-all min-h-[48px] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 flex-shrink-0 ${
+              copied
+                ? "bg-primary-50 text-primary-700 border border-primary-200"
+                : "bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white shadow-sm"
+            }`}
+          >
+            {copied ? (
+              <>
+                <CheckIcon className="w-4 h-4" />
+                <span>Copied!</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+                </svg>
+                <span>Copy link</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>
@@ -1848,15 +1938,14 @@ export default function ProviderReviewsPage() {
         {/* ── Two column layout on desktop (cards + sidebar aligned) ── */}
         <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8 lg:items-start">
           {/* Left column - review cards or request forms */}
-          <div>
-            {activeFilter === "request_now" ? (
+          <div className="min-w-0">
+            {(activeFilter === "request_now" || activeFilter === "request_onsite") ? (
               <>
-                <RequestNowContent state={requestNowState} onStateChange={setRequestNowState} />
-                <MobileTipsAccordion activeTab={activeFilter} />
-              </>
-            ) : activeFilter === "request_onsite" ? (
-              <>
-                <RequestOnsiteContent providerSlug={providerProfile?.slug ?? null} />
+                <RequestNowContent
+                  state={requestNowState}
+                  onStateChange={setRequestNowState}
+                  providerSlug={activeFilter === "request_onsite" ? providerProfile?.slug : undefined}
+                />
                 <MobileTipsAccordion activeTab={activeFilter} />
               </>
             ) : filteredReviews.length > 0 ? (
@@ -1887,6 +1976,7 @@ export default function ProviderReviewsPage() {
 
           {/* Right column - education sidebar (desktop only) */}
           <div
+            className="hidden lg:block"
             style={{
               animation: "card-enter 0.25s ease-out both",
               animationDelay: "200ms",

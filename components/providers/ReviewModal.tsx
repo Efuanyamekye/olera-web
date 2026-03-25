@@ -26,6 +26,24 @@ function StarIcon({ className, filled = true }: { className?: string; filled?: b
 
 const RATING_LABELS = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
 
+// Dynamic headers based on rating (from family's perspective)
+function getStepTwoHeader(rating: number): string {
+  if (rating >= 5) return "Share what made it great";
+  if (rating >= 4) return "Tell us more about your experience";
+  if (rating >= 3) return "Share your honest thoughts";
+  if (rating >= 2) return "Help others know what to expect";
+  return "Share your concerns";
+}
+
+// Pre-filled comment starter based on rating
+function getDefaultComment(providerName: string, rating: number): string {
+  if (rating >= 5) return `I had an excellent experience with ${providerName}. The care and attention provided was exceptional. `;
+  if (rating >= 4) return `Overall, I had a positive experience with ${providerName}. `;
+  if (rating >= 3) return `My experience with ${providerName} was mixed. `;
+  if (rating >= 2) return `I was disappointed with my experience at ${providerName}. `;
+  return `I had significant concerns about my experience with ${providerName}. `;
+}
+
 const RELATIONSHIP_OPTIONS = [
   "Family Member of Resident",
   "Daughter of Resident",
@@ -215,11 +233,19 @@ export default function ReviewModal({
   const modalTitle = step === "success" ? undefined : "Write a review";
   const modalOnBack = step === "details" ? () => { setStep("rating"); setError(""); } : undefined;
 
+  const handleNextToDetails = () => {
+    // Pre-fill comment if empty when moving to step 2
+    if (!comment.trim()) {
+      setComment(getDefaultComment(providerName, rating));
+    }
+    setStep("details");
+  };
+
   const modalFooter = step === "rating" ? (
     <Button
       fullWidth
       disabled={!rating || !relationship}
-      onClick={() => setStep("details")}
+      onClick={handleNextToDetails}
     >
       Next
     </Button>
@@ -257,8 +283,8 @@ export default function ReviewModal({
         <div className="py-6 animate-step-in">
           {/* Star rating */}
           <div className="text-center mb-8">
-            <p className="text-base text-gray-500 mb-5">
-              How would you rate your experience with <strong className="text-gray-700">{providerName}</strong>?
+            <p className="text-lg text-gray-600 mb-5">
+              How would you rate your experience with <strong className="text-gray-800">{providerName}</strong>?
             </p>
             <div className="flex justify-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
@@ -268,11 +294,11 @@ export default function ReviewModal({
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
                   onClick={() => setRating(star)}
-                  className="p-2 transition-transform hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg min-w-[48px] min-h-[48px] flex items-center justify-center"
+                  className="p-2 transition-transform hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg min-w-[52px] min-h-[52px] flex items-center justify-center"
                   aria-label={`Rate ${star} stars`}
                 >
                   <StarIcon
-                    className={`w-9 h-9 transition-colors duration-150 ${
+                    className={`w-10 h-10 transition-colors duration-150 ${
                       star <= (hoverRating || rating)
                         ? "text-primary-500"
                         : "text-gray-200"
@@ -283,7 +309,7 @@ export default function ReviewModal({
               ))}
             </div>
             {rating > 0 && (
-              <p className="text-sm font-medium text-gray-600 mt-3 animate-step-in">
+              <p className="text-base font-medium text-gray-600 mt-3 animate-step-in">
                 {RATING_LABELS[rating]}
               </p>
             )}
@@ -297,6 +323,7 @@ export default function ReviewModal({
             value={relationship}
             onChange={setRelationship}
             placeholder="Select your relationship"
+            size="lg"
           />
         </div>
       )}
@@ -304,6 +331,11 @@ export default function ReviewModal({
       {/* ── Step 2: Details ── */}
       {step === "details" && (
         <div className="py-4 animate-step-in">
+          {/* Dynamic header based on rating */}
+          <h3 className="text-xl font-semibold text-gray-900 mb-4 text-center">
+            {getStepTwoHeader(rating)}
+          </h3>
+
           {/* Summary bar — shows rating + relationship from step 1 */}
           <button
             type="button"
@@ -314,22 +346,22 @@ export default function ReviewModal({
               {[1, 2, 3, 4, 5].map((star) => (
                 <StarIcon
                   key={star}
-                  className={`w-4 h-4 ${star <= rating ? "text-primary-500" : "text-gray-200"}`}
+                  className={`w-5 h-5 ${star <= rating ? "text-primary-500" : "text-gray-200"}`}
                   filled={star <= rating}
                 />
               ))}
             </div>
-            <span className="text-sm text-gray-500">
+            <span className="text-base text-gray-600">
               {RATING_LABELS[rating]} · {relationship}
             </span>
-            <svg className="w-3.5 h-3.5 text-gray-300 group-hover:text-gray-400 ml-auto shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-gray-300 group-hover:text-gray-400 ml-auto shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
             </svg>
           </button>
 
           {/* Title (optional) */}
           <div className="mb-5">
-            <label htmlFor="review-title" className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label htmlFor="review-title" className="block text-base font-medium text-gray-700 mb-2">
               Title <span className="text-gray-400 font-normal">(optional)</span>
             </label>
             <input
@@ -338,13 +370,13 @@ export default function ReviewModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Summarize your experience"
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent min-h-[48px] transition-shadow"
+              className="w-full px-4 py-4 border border-gray-200 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent min-h-[52px] transition-shadow"
             />
           </div>
 
           {/* Comment */}
           <div>
-            <label htmlFor="review-comment" className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label htmlFor="review-comment" className="block text-base font-medium text-gray-700 mb-2">
               Your review <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -353,7 +385,7 @@ export default function ReviewModal({
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share details about your experience with this provider..."
               rows={5}
-              className="w-full px-4 py-3.5 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none leading-relaxed transition-shadow"
+              className="w-full px-4 py-4 border border-gray-200 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none leading-relaxed transition-shadow"
             />
           </div>
         </div>
@@ -363,16 +395,16 @@ export default function ReviewModal({
       {step === "success" && (
         <div className="py-8 animate-wizard-in">
           <div className="text-center mb-6">
-            <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-5 shadow-sm">
-              <svg className="w-8 h-8 text-green-600 animate-success-pop" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-18 h-18 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-5 shadow-sm" style={{ width: 72, height: 72 }}>
+              <svg className="w-9 h-9 text-green-600 animate-success-pop" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h2 className="text-2xl font-display font-bold text-gray-900 tracking-tight mb-2">
+            <h2 className="text-2xl font-display font-bold text-gray-900 tracking-tight mb-3">
               Thank you for your review!
             </h2>
-            <p className="text-base text-gray-500 leading-relaxed max-w-xs mx-auto">
-              Your review of <strong className="text-gray-700">{providerName}</strong> has been published.
+            <p className="text-lg text-gray-600 leading-relaxed max-w-sm mx-auto">
+              Your review of <strong className="text-gray-800">{providerName}</strong> has been published.
             </p>
           </div>
 
@@ -381,7 +413,7 @@ export default function ReviewModal({
             <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 animate-step-in">
               <div className="flex items-start gap-3 mb-4">
                 {/* Google "G" logo */}
-                <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center flex-shrink-0">
+                <div className="w-11 h-11 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center flex-shrink-0">
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -390,10 +422,10 @@ export default function ReviewModal({
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-base font-semibold text-gray-900">
                     Help them get discovered
                   </p>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-sm text-gray-500 mt-0.5">
                     Share on Google so more families can find quality care
                   </p>
                 </div>
@@ -402,7 +434,7 @@ export default function ReviewModal({
                 type="button"
                 onClick={handleShareOnGoogle}
                 disabled={copiedForGoogle}
-                className={`w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all min-h-[48px] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+                className={`w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-base transition-all min-h-[52px] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   copiedForGoogle
                     ? "bg-primary-50 text-primary-700 border border-primary-200 focus-visible:ring-primary-500"
                     : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300 active:scale-[0.99] focus-visible:ring-gray-300 shadow-sm"
@@ -410,21 +442,21 @@ export default function ReviewModal({
               >
                 {copiedForGoogle ? (
                   <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                     <span>Review copied — opening Google...</span>
                   </>
                 ) : (
                   <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                     </svg>
                     <span>Share on Google</span>
                   </>
                 )}
               </button>
-              <p className="text-[11px] text-gray-400 text-center mt-2.5">
+              <p className="text-xs text-gray-400 text-center mt-2.5">
                 We&apos;ll copy your review so you can paste it on Google
               </p>
             </div>
