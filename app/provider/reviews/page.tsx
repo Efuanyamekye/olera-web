@@ -841,145 +841,136 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
           </div>
         )}
 
-        {/* Recipients Section */}
-        <div className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[15px] font-semibold text-gray-900">Recipients</h3>
-            {clients.length > 0 && (
-              <span className="text-sm text-gray-400">{clients.length} added</span>
-            )}
+        {/* Main Card - All in one cohesive section */}
+        <div className="bg-vanilla-50/50 border border-warm-100/60 rounded-2xl p-5 lg:p-6">
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center flex-shrink-0">
+              <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-[15px] font-semibold text-gray-900">Request reviews from your clients</h3>
+              <p className="text-sm text-gray-500">Add recipients, customize your message, and send</p>
+            </div>
           </div>
 
-          {/* Client chips */}
+          {/* Recipients chips - shown at top when there are clients */}
           {clients.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {clients.map((client) => (
-                <div
-                  key={client.id}
-                  className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-[15px] group transition-all ${
-                    editingClientId === client.id
-                      ? "bg-primary-50 border-2 border-primary-500 ring-2 ring-primary-500/20"
-                      : "bg-vanilla-50 border border-warm-100 hover:border-gray-300 hover:bg-vanilla-100"
-                  }`}
-                  style={{ animation: "card-enter 0.2s ease-out both" }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => handleEditClient(client)}
-                    className="inline-flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 rounded-lg -ml-0.5 -my-0.5 py-0.5 pl-0.5 pr-1"
-                    aria-label={`Edit ${client.name}`}
+            <div className="mb-5">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium text-gray-600">Recipients</span>
+                <span className="text-xs text-primary-600 font-semibold bg-primary-50 px-2 py-0.5 rounded-full">
+                  {clients.length} added
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {clients.map((client) => (
+                  <div
+                    key={client.id}
+                    className={`inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm group transition-all ${
+                      editingClientId === client.id
+                        ? "bg-primary-100 border-2 border-primary-500"
+                        : "bg-white border border-gray-200 hover:border-gray-300"
+                    }`}
+                    style={{ animation: "card-enter 0.2s ease-out both" }}
                   >
-                    {getClientContactIcon(client)}
-                    <span className="font-medium text-gray-700">{client.name}</span>
-                    {editingClientId !== client.id && (
-                      <svg className="w-3 h-3 text-gray-300 group-hover:text-gray-400 transition-colors" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
-                      </svg>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveClient(client.id)}
-                    className="text-gray-300 hover:text-red-500 group-hover:text-gray-400 transition-colors p-0.5 -mr-1 rounded hover:bg-red-50"
-                    aria-label={`Remove ${client.name}`}
-                  >
-                    <CloseIcon className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
+                    <button
+                      type="button"
+                      onClick={() => handleEditClient(client)}
+                      className="inline-flex items-center gap-1.5 focus:outline-none"
+                      aria-label={`Edit ${client.name}`}
+                    >
+                      {getClientContactIcon(client)}
+                      <span className="font-medium text-gray-700">{client.name}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveClient(client.id)}
+                      className="text-gray-300 hover:text-red-500 transition-colors p-0.5 rounded hover:bg-red-50"
+                      aria-label={`Remove ${client.name}`}
+                    >
+                      <CloseIcon className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
-          {/* Add client form */}
-          <div className="bg-vanilla-50/50 border border-warm-100/60 rounded-xl p-4">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-              <div>
-                <label htmlFor="client-name" className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Name <span className="text-red-500">*</span>
-                </label>
-                <input
-                  ref={nameInputRef}
-                  id="client-name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Client name"
-                  className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[48px]"
-                />
-              </div>
-              <div>
-                <label htmlFor="client-email" className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Email
-                </label>
-                <input
-                  id="client-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="email@example.com"
-                  className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[48px]"
-                />
-              </div>
-              <div>
-                <label htmlFor="client-phone" className="block text-sm font-medium text-gray-700 mb-1.5">
-                  Phone
-                </label>
-                <input
-                  id="client-phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="(555) 123-4567"
-                  className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[48px]"
-                />
-              </div>
+          {/* Add recipient form */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4 mb-5">
+            <div className="flex items-center gap-2 mb-3">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+              </svg>
+              <span className="text-sm font-medium text-gray-700">
+                {isEditing ? "Edit recipient" : "Add a recipient"}
+              </span>
             </div>
-            <p className="mt-2 text-xs text-gray-400">
-              Enter email or phone (or both) to send the review request.
-            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <input
+                ref={nameInputRef}
+                id="client-name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Name *"
+                className="w-full px-3.5 py-3 rounded-lg border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+              />
+              <input
+                id="client-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Email"
+                className="w-full px-3.5 py-3 rounded-lg border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+              />
+              <input
+                id="client-phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Phone"
+                className="w-full px-3.5 py-3 rounded-lg border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+              />
+            </div>
             {formError && (
               <p className="mt-2 text-xs text-red-600">{formError}</p>
             )}
-            <div className="mt-3 flex justify-end gap-2">
-              {isEditing && (
+            <div className="mt-3 flex items-center justify-between">
+              <span className="text-xs text-gray-400">Email or phone required</span>
+              <div className="flex gap-2">
+                {isEditing && (
+                  <button
+                    type="button"
+                    onClick={handleCancelEdit}
+                    className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-all"
+                  >
+                    Cancel
+                  </button>
+                )}
                 <button
                   type="button"
-                  onClick={handleCancelEdit}
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 text-[15px] font-semibold text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:ring-offset-2 min-h-[48px]"
+                  onClick={handleAddClient}
+                  disabled={!canAddClient}
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 text-sm font-semibold text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded-lg transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  Cancel
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  {isEditing ? "Update" : "Add"}
                 </button>
-              )}
-              <button
-                type="button"
-                onClick={handleAddClient}
-                disabled={!canAddClient}
-                className="inline-flex items-center gap-1.5 px-4 py-2.5 text-[15px] font-semibold text-primary-600 hover:text-primary-700 hover:bg-primary-50 rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 min-h-[48px]"
-              >
-                {isEditing ? (
-                  <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                    </svg>
-                    Update
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    Add to list
-                  </>
-                )}
-              </button>
+              </div>
             </div>
           </div>
 
-          {/* Message - inside Recipients card */}
-          <div className="mt-5">
+          {/* Message */}
+          <div className="mb-5">
             <label htmlFor="review-message" className="block text-sm font-medium text-gray-700 mb-2">
               Message
             </label>
@@ -990,119 +981,115 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
               rows={3}
               maxLength={500}
               placeholder="Write a personalized message..."
-              className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all resize-none leading-relaxed"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all resize-none leading-relaxed"
             />
             <div className="mt-1.5 flex items-center justify-between">
-              <span className="text-xs text-gray-400">
-                Personalize to increase responses
-              </span>
+              <span className="text-xs text-gray-400">Personalize to increase responses</span>
               <span className={`text-xs ${message.length > 450 ? "text-amber-500" : "text-gray-400"}`}>
                 {message.length}/500
               </span>
             </div>
           </div>
-        </div>
 
-        {/* Delivery Method */}
-        <div className="mb-6">
-          <label className="block text-[15px] font-semibold text-gray-900 mb-3">
-            Send via
-          </label>
-          <div className="flex flex-wrap gap-2 sm:gap-3">
-            <label
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-all min-h-[44px] focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 ${
-                deliveryMethod === "email"
-                  ? "border-primary-500 bg-primary-50 text-primary-700 ring-1 ring-primary-500/20"
-                  : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50/50"
-              } ${!hasAnyEmail && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
-            >
-              <input
-                type="radio"
-                name="delivery-method"
-                value="email"
-                checked={deliveryMethod === "email"}
-                onChange={() => setDeliveryMethod("email")}
-                disabled={!hasAnyEmail && clients.length > 0}
-                className="sr-only"
-              />
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-              </svg>
-              <span className="text-[15px] font-medium">Email</span>
-            </label>
-            <label
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-all min-h-[44px] focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 ${
-                deliveryMethod === "sms"
-                  ? "border-primary-500 bg-primary-50 text-primary-700 ring-1 ring-primary-500/20"
-                  : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50/50"
-              } ${!hasAnyPhone && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
-            >
-              <input
-                type="radio"
-                name="delivery-method"
-                value="sms"
-                checked={deliveryMethod === "sms"}
-                onChange={() => setDeliveryMethod("sms")}
-                disabled={!hasAnyPhone && clients.length > 0}
-                className="sr-only"
-              />
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-              </svg>
-              <span className="text-[15px] font-medium">SMS</span>
-            </label>
-            <label
-              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer transition-all min-h-[44px] focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 ${
-                deliveryMethod === "both"
-                  ? "border-primary-500 bg-primary-50 text-primary-700 ring-1 ring-primary-500/20"
-                  : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50/50"
-              } ${(!hasAnyEmail || !hasAnyPhone) && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
-            >
-              <input
-                type="radio"
-                name="delivery-method"
-                value="both"
-                checked={deliveryMethod === "both"}
-                onChange={() => setDeliveryMethod("both")}
-                disabled={(!hasAnyEmail || !hasAnyPhone) && clients.length > 0}
-                className="sr-only"
-              />
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
-              </svg>
-              <span className="text-[15px] font-medium">Both</span>
-            </label>
+          {/* Delivery Method */}
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Send via</label>
+            <div className="flex flex-wrap gap-2">
+              <label
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border cursor-pointer transition-all ${
+                  deliveryMethod === "email"
+                    ? "border-primary-500 bg-primary-50 text-primary-700"
+                    : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                } ${!hasAnyEmail && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
+              >
+                <input
+                  type="radio"
+                  name="delivery-method"
+                  value="email"
+                  checked={deliveryMethod === "email"}
+                  onChange={() => setDeliveryMethod("email")}
+                  disabled={!hasAnyEmail && clients.length > 0}
+                  className="sr-only"
+                />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                </svg>
+                <span className="text-sm font-medium">Email</span>
+              </label>
+              <label
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border cursor-pointer transition-all ${
+                  deliveryMethod === "sms"
+                    ? "border-primary-500 bg-primary-50 text-primary-700"
+                    : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                } ${!hasAnyPhone && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
+              >
+                <input
+                  type="radio"
+                  name="delivery-method"
+                  value="sms"
+                  checked={deliveryMethod === "sms"}
+                  onChange={() => setDeliveryMethod("sms")}
+                  disabled={!hasAnyPhone && clients.length > 0}
+                  className="sr-only"
+                />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                </svg>
+                <span className="text-sm font-medium">SMS</span>
+              </label>
+              <label
+                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border cursor-pointer transition-all ${
+                  deliveryMethod === "both"
+                    ? "border-primary-500 bg-primary-50 text-primary-700"
+                    : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                } ${(!hasAnyEmail || !hasAnyPhone) && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
+              >
+                <input
+                  type="radio"
+                  name="delivery-method"
+                  value="both"
+                  checked={deliveryMethod === "both"}
+                  onChange={() => setDeliveryMethod("both")}
+                  disabled={(!hasAnyEmail || !hasAnyPhone) && clients.length > 0}
+                  className="sr-only"
+                />
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+                </svg>
+                <span className="text-sm font-medium">Both</span>
+              </label>
+            </div>
           </div>
-        </div>
 
-        {/* Send Button */}
-        <button
-          type="button"
-          onClick={handleSend}
-          disabled={!canSend || sending}
-          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 active:scale-[0.99] text-white font-semibold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed min-h-[52px] shadow-sm hover:shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
-        >
-          {sending ? (
-            <>
-              <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-              </svg>
-              <span>Sending...</span>
-            </>
-          ) : (
-            <>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-              </svg>
-              <span>
-                {clients.length > 0
-                  ? `Send to ${clients.length} client${clients.length > 1 ? "s" : ""}`
-                  : "Add clients to send"}
-              </span>
-            </>
-          )}
-        </button>
+          {/* Send Button - Full width, prominent */}
+          <button
+            type="button"
+            onClick={handleSend}
+            disabled={!canSend || sending}
+            className="w-full inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-sm hover:shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
+          >
+            {sending ? (
+              <>
+                <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                <span>Sending...</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                </svg>
+                <span>
+                  {clients.length > 0
+                    ? `Send to ${clients.length} client${clients.length > 1 ? "s" : ""}`
+                    : "Add clients to send"}
+                </span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
