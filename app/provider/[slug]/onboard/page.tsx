@@ -322,6 +322,25 @@ export default function ProviderOnboardPage() {
         return;
       }
 
+      // Pre-verify if user is authenticated via magic link with provider's email
+      // If they clicked the magic link in the email, they've proven email ownership
+      if (user && actionParam && actionIdParam) {
+        const userEmail = user.email?.toLowerCase();
+        const providerEmail = foundProvider.email?.toLowerCase();
+
+        // If user's email matches provider's email, they came from the magic link
+        // and are already verified (no need for OTP)
+        if (userEmail && providerEmail && userEmail === providerEmail) {
+          console.log("[ProviderOnboard] User authenticated via magic link, pre-verifying");
+          // Mark session as verified
+          await markSessionVerified(claimSessionData.sessionId);
+          setPreVerifiedEmail(user.email || "");
+          setActionCardState("pre-verified");
+          setStep("dashboard");
+          return;
+        }
+      }
+
       // Start with dashboard (wizard will show first, then verification)
       // Set initial state based on context:
       // 1. Notification from email (lead/question/review) → show notification card
