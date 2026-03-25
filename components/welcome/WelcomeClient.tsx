@@ -808,7 +808,7 @@ export default function WelcomeClient({ destination, initialProviders = [], init
       await fetch("/api/auth/ensure-account", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ markOnboardingComplete: true }),
+        body: JSON.stringify({ mark_onboarding_complete: true }),
       });
       // Refresh account data to update local state
       await refreshAccountData();
