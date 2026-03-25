@@ -729,7 +729,7 @@ function RequestNowContent({ state, onStateChange }: RequestNowContentProps) {
   // Success state
   if (sent) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
+      <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm lg:max-w-2xl">
         <div
           className="p-8 lg:p-12 flex flex-col items-center text-center"
           style={{ animation: "card-enter 0.3s ease-out both" }}
@@ -749,7 +749,7 @@ function RequestNowContent({ state, onStateChange }: RequestNowContentProps) {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
+    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm lg:max-w-2xl">
       <div className="p-5 lg:p-6">
         {/* Recipients Section */}
         <div className="mb-6">
@@ -1118,7 +1118,7 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
+    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm lg:max-w-2xl">
       <div className="p-5 lg:p-6">
         {/* Header */}
         <div className="flex items-start gap-3 mb-6">
@@ -1127,7 +1127,7 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
             </svg>
           </div>
-          <div>
+          <div className="min-w-0">
             <h3 className="text-[15px] font-semibold text-gray-900">Your review link</h3>
             <p className="text-sm text-gray-500 mt-0.5">
               Share this link or QR code to collect reviews
@@ -1138,7 +1138,7 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
         {/* Link display */}
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <div className="flex-1 px-4 py-3.5 bg-vanilla-50 border border-warm-100 rounded-xl min-h-[48px] flex items-center">
+            <div className="flex-1 min-w-0 px-4 py-3.5 bg-vanilla-50 border border-warm-100 rounded-xl min-h-[48px] flex items-center overflow-hidden">
               <p className="text-[15px] font-mono text-gray-700 truncate">
                 {reviewUrl}
               </p>
