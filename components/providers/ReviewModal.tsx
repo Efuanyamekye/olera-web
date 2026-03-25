@@ -280,7 +280,7 @@ export default function ReviewModal({
     >
       {/* ── Step Indicator ── */}
       {step !== "success" && (
-        <div className="flex items-center justify-center gap-2 pt-4 pb-8">
+        <div className="flex items-center justify-center gap-2 mb-6">
           {["rating", "details"].map((s, idx) => {
             const stepIndex = ["rating", "details"].indexOf(step);
             const isCompleted = idx < stepIndex;
@@ -317,20 +317,20 @@ export default function ReviewModal({
 
       {/* ── Step 1: Rating ── */}
       {step === "rating" && (
-        <div className="animate-step-in pb-2">
+        <div className="px-2">
           {/* Header */}
           <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold text-gray-900 mb-1">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
               How was your experience?
-            </h3>
+            </h2>
             <p className="text-base text-gray-500">
-              Rate your experience with {providerName}
+              Select a rating below
             </p>
           </div>
 
           {/* Star rating */}
           <div className="flex flex-col items-center mb-8">
-            <div className="flex justify-center gap-0.5">
+            <div className="flex justify-center gap-1">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
@@ -338,11 +338,11 @@ export default function ReviewModal({
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
                   onClick={() => setRating(star)}
-                  className="p-2 transition-transform hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg min-w-[48px] min-h-[48px] flex items-center justify-center"
+                  className="p-2 transition-transform hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded-lg"
                   aria-label={`Rate ${star} stars`}
                 >
                   <StarIcon
-                    className={`w-10 h-10 transition-colors duration-150 ${
+                    className={`w-11 h-11 transition-colors duration-150 ${
                       star <= (hoverRating || rating)
                         ? "text-primary-500"
                         : "text-gray-200"
@@ -353,14 +353,14 @@ export default function ReviewModal({
               ))}
             </div>
             {(hoverRating || rating) > 0 && (
-              <p className="mt-3 text-base font-medium text-primary-600 animate-step-in">
+              <p className="mt-3 text-base font-medium text-primary-600">
                 {RATING_LABELS[hoverRating || rating]}
               </p>
             )}
           </div>
 
           {/* Relationship */}
-          <div className="mb-4">
+          <div className="mb-6">
             <Select
               label="Your relationship"
               required
@@ -376,12 +376,12 @@ export default function ReviewModal({
 
       {/* ── Step 2: Details ── */}
       {step === "details" && (
-        <div className="animate-step-in pb-2">
+        <div className="px-2">
           {/* Dynamic header based on rating */}
-          <div className="text-center mb-8">
-            <h3 className="text-xl font-semibold text-gray-900 mb-1">
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-1">
               {getStepTwoHeader(rating)}
-            </h3>
+            </h2>
             <p className="text-base text-gray-500">
               Your story helps other families find quality care
             </p>
