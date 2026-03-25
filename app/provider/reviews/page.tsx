@@ -1342,9 +1342,9 @@ function EducationSidebar({ activeTab }: { activeTab: TabFilter }) {
         {tipsOpen && (
           <div className="px-5 pb-5 pt-1 space-y-4 border-t border-gray-100">
             {tips.map((tip, idx) => (
-              <div key={idx} className="flex items-start gap-3">
-                <span className="text-base flex-shrink-0 mt-0.5">{tip.icon}</span>
-                <p className="text-[13px] text-gray-600 leading-relaxed">{tip.text}</p>
+              <div key={idx} className="flex items-center gap-3">
+                <span className="text-base flex-shrink-0 w-5 text-center">{tip.icon}</span>
+                <p className="text-[13px] text-gray-600">{tip.text}</p>
               </div>
             ))}
           </div>
@@ -1400,9 +1400,9 @@ function MobileTipsAccordion({ activeTab }: { activeTab: TabFilter }) {
       {isOpen && (
         <div className="px-4 pb-4 space-y-3 border-t border-gray-100 pt-3">
           {tips.map((tip, idx) => (
-            <div key={idx} className="flex items-start gap-3">
-              <span className="text-base flex-shrink-0 mt-0.5">{tip.icon}</span>
-              <p className="text-[13px] text-gray-600 leading-relaxed">{tip.text}</p>
+            <div key={idx} className="flex items-center gap-3">
+              <span className="text-base flex-shrink-0 w-5 text-center">{tip.icon}</span>
+              <p className="text-[13px] text-gray-600">{tip.text}</p>
             </div>
           ))}
         </div>
