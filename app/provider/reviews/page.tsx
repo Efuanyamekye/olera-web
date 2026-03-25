@@ -1987,7 +1987,7 @@ function ReviewsSkeleton() {
 
 export default function ProviderReviewsPage() {
   const providerProfile = useProviderProfile();
-  const [activeFilter, setActiveFilter] = useState<TabFilter>("all");
+  const [activeFilter, setActiveFilter] = useState<TabFilter>("request_now");
   const [reviews, setReviews] = useState<Review[]>([]);
   const [stats, setStats] = useState<ReviewStats>({
     totalReviews: 0,
