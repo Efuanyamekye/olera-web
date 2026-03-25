@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Select from "@/components/ui/Select";
 
 // ── Types ──
 
@@ -122,6 +123,84 @@ function StepIndicator({ currentStep }: { currentStep: Step }) {
         </div>
       ))}
     </div>
+  );
+}
+
+// ── Minimal Header Component ──
+
+function MinimalHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
+      <div className="flex items-center justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <Link href="/" className="flex items-center space-x-2">
+          <Image src="/images/olera-logo.png" alt="Olera" width={32} height={32} className="object-contain" />
+          <span className="text-xl font-bold text-gray-900">Olera</span>
+        </Link>
+
+        {/* Hamburger menu button */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            aria-label="Menu"
+          >
+            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+
+          {/* Dropdown menu */}
+          {menuOpen && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
+              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-gray-200 shadow-xl z-50 overflow-hidden">
+                <nav className="py-2">
+                  <Link
+                    href="/browse"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Find Care
+                  </Link>
+                  <Link
+                    href="/caregiver-support"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Caregiver Support
+                  </Link>
+                  <Link
+                    href="/benefits-center"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Benefits Center
+                  </Link>
+                  <Link
+                    href="/medjobs"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    MedJobs
+                  </Link>
+                  <div className="border-t border-gray-100 my-1" />
+                  <Link
+                    href="/for-providers"
+                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    For Providers
+                  </Link>
+                </nav>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
   );
 }
 
@@ -256,8 +335,11 @@ function ReviewPageContent() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex flex-col">
+        <MinimalHeader />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+        </div>
       </div>
     );
   }
@@ -265,8 +347,10 @@ function ReviewPageContent() {
   // Error state
   if (error || !provider) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex items-center justify-center p-4">
-        <div className="text-center max-w-md">
+      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex flex-col">
+        <MinimalHeader />
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="text-center max-w-md">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
             <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
@@ -284,6 +368,7 @@ function ReviewPageContent() {
           >
             Go to homepage
           </Link>
+          </div>
         </div>
       </div>
     );
@@ -292,8 +377,10 @@ function ReviewPageContent() {
   // Success state
   if (step === "success") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex items-center justify-center p-4">
-        <div className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex flex-col">
+        <MinimalHeader />
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="w-full max-w-md">
           {/* Main success card */}
           <div
             className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-8 text-center"
@@ -379,6 +466,7 @@ function ReviewPageContent() {
               View provider profile
             </Link>
           </div>
+          </div>
         </div>
         <style jsx global>{`
           @keyframes card-enter {
@@ -391,14 +479,16 @@ function ReviewPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
+    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex flex-col">
+      <MinimalHeader />
       <style jsx global>{`
         @keyframes card-enter {
           from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
-      <div className="max-w-lg mx-auto px-4 py-8 sm:py-12">
+      <div className="flex-1">
+        <div className="max-w-lg mx-auto px-4 py-8 sm:py-12">
         {/* Provider Header */}
         <div className="text-center mb-8" style={{ animation: "card-enter 0.25s ease-out both" }}>
           <div className="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden bg-gray-100 ring-4 ring-white shadow-sm">
@@ -467,28 +557,14 @@ function ReviewPageContent() {
 
               {/* Relationship */}
               <div className="mb-6">
-                <label htmlFor="relationship" className="block text-sm font-medium text-gray-700 mb-2">
-                  Your relationship <span className="text-red-500">*</span>
-                </label>
-                <select
-                  id="relationship"
+                <Select
+                  label="Your relationship"
+                  required
+                  options={RELATIONSHIPS}
                   value={relationship}
-                  onChange={(e) => setRelationship(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all appearance-none cursor-pointer min-h-[48px]"
-                  style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "right 12px center",
-                    backgroundSize: "20px",
-                  }}
-                >
-                  <option value="">Select your relationship</option>
-                  {RELATIONSHIPS.map((rel) => (
-                    <option key={rel} value={rel}>
-                      {rel}
-                    </option>
-                  ))}
-                </select>
+                  onChange={setRelationship}
+                  placeholder="Select your relationship"
+                />
               </div>
 
               {/* Next Button */}
@@ -612,6 +688,7 @@ function ReviewPageContent() {
         <p className="text-center text-xs text-gray-400 mt-8">
           Powered by <Link href="/" className="text-primary-600 hover:text-primary-700 hover:underline transition-colors">Olera</Link>
         </p>
+        </div>
       </div>
     </div>
   );

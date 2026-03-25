@@ -10,7 +10,7 @@ import { NavbarProvider } from "@/components/shared/NavbarContext";
  * Client-side layout shell that conditionally renders navbar/footer
  * based on the current route. Standalone pages like /welcome opt out.
  */
-const STANDALONE_ROUTES: string[] = [];
+const STANDALONE_ROUTES: string[] = ["/review"];
 
 export default function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
