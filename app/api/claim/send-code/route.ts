@@ -182,7 +182,7 @@ export async function POST(request: Request) {
     const { success: emailSent, error: emailErrMsg } = await sendEmail({
       to: provider.email!,
       subject: "Your Olera verification code",
-      html: verificationCodeEmail(provider.provider_name, code),
+      html: verificationCodeEmail(provider.provider_name || "Provider", code),
       emailType: "verification_code",
       recipientType: "provider",
       providerId,
