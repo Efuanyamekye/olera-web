@@ -107,7 +107,7 @@ export default function ProviderOnboardPage() {
           if (bp.claim_state === "claimed" && account && bp.account_id === account.id) {
             // User owns this listing - redirect to appropriate section
             if (actionParam === "lead" && actionIdParam) {
-              router.replace(`/provider/connections?id=${actionIdParam}`);
+              router.replace(`/provider/inbox?id=${actionIdParam}`);
             } else if (actionParam === "message" && actionIdParam) {
               router.replace(`/provider/inbox?id=${actionIdParam}`);
             } else if (actionParam === "question" && actionIdParam) {
@@ -291,7 +291,7 @@ export default function ProviderOnboardPage() {
         if (account && bp.account_id && account.id === bp.account_id) {
           // Route to specific section based on notification type
           if (actionParam === "lead" && actionIdParam) {
-            router.replace(`/provider/connections?id=${actionIdParam}`);
+            router.replace(`/provider/inbox?id=${actionIdParam}`);
           } else if (actionParam === "message" && actionIdParam) {
             router.replace(`/provider/inbox?id=${actionIdParam}`);
           } else if (actionParam === "question" && actionIdParam) {
@@ -493,6 +493,32 @@ export default function ProviderOnboardPage() {
     );
   }
 
+  // Determine success redirect URL based on action type
+  const getSuccessRedirectUrl = () => {
+    if (actionParam === "lead" && actionIdParam) {
+      return `/provider/inbox?id=${actionIdParam}`;
+    } else if (actionParam === "message" && actionIdParam) {
+      return `/provider/inbox?id=${actionIdParam}`;
+    } else if (actionParam === "question" && actionIdParam) {
+      return `/provider/qna?id=${actionIdParam}`;
+    } else if (actionParam === "review" && actionIdParam) {
+      return `/provider/reviews?id=${actionIdParam}`;
+    }
+    return "/provider";
+  };
+
+  // Get button text based on action type
+  const getSuccessButtonText = () => {
+    if (actionParam === "lead" || actionParam === "message") {
+      return "View Message";
+    } else if (actionParam === "question") {
+      return "View Question";
+    } else if (actionParam === "review") {
+      return "View Review";
+    }
+    return "Go to Dashboard";
+  };
+
   // Success state
   if (step === "success") {
     return (
@@ -517,10 +543,10 @@ export default function ProviderOnboardPage() {
             <strong className="text-gray-700">{provider?.provider_name}</strong> is now linked to your account.
           </p>
           <button
-            onClick={() => router.push("/provider")}
+            onClick={() => router.push(getSuccessRedirectUrl())}
             className="px-8 py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all shadow-sm min-h-[48px]"
           >
-            Go to Dashboard
+            {getSuccessButtonText()}
           </button>
         </div>
       </div>
