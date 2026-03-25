@@ -841,9 +841,9 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
           </div>
         )}
 
-        {/* Main Card - All in one cohesive section (only for Request Now tab) */}
+        {/* Request Now form (only shown when not on-site tab) */}
         {!reviewUrl && (
-        <div className="bg-vanilla-50/50 border border-warm-100/60 rounded-2xl p-5 lg:p-6">
+        <>
           {/* Header */}
           <div className="flex items-center gap-3 mb-5">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center flex-shrink-0">
@@ -901,7 +901,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
           )}
 
           {/* Add recipient form */}
-          <div className="bg-white rounded-xl border border-gray-200 p-4 mb-5">
+          <div className="mb-5">
             <div className="flex items-center gap-2 mb-3">
               <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
@@ -919,7 +919,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                 onChange={(e) => setName(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Name *"
-                className="w-full px-3.5 py-3 rounded-lg border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+                className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
               />
               <input
                 id="client-email"
@@ -928,7 +928,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Email"
-                className="w-full px-3.5 py-3 rounded-lg border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+                className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
               />
               <input
                 id="client-phone"
@@ -937,7 +937,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                 onChange={(e) => setPhone(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Phone"
-                className="w-full px-3.5 py-3 rounded-lg border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+                className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-white text-[15px] text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
               />
             </div>
             {formError && (
@@ -1090,7 +1090,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
               </>
             )}
           </button>
-        </div>
+        </>
         )}
       </div>
     </div>
