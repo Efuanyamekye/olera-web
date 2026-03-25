@@ -36,11 +36,22 @@ export async function POST(request: NextRequest) {
 
     const db = getServiceClient();
 
-    // Get user's profile IDs
+    // Get user's account first (accounts.user_id → auth.users.id)
+    const { data: account } = await db
+      .from("accounts")
+      .select("id")
+      .eq("user_id", user.id)
+      .single();
+
+    if (!account) {
+      return NextResponse.json({ error: "Account not found" }, { status: 404 });
+    }
+
+    // Get user's profile IDs (business_profiles.account_id → accounts.id)
     const { data: profiles } = await db
       .from("business_profiles")
       .select("id")
-      .eq("user_id", user.id);
+      .eq("account_id", account.id);
 
     const profileIds = (profiles || []).map((p) => p.id);
 
