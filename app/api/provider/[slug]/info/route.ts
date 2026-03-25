@@ -20,11 +20,12 @@ export async function GET(
 
     const db = getServiceClient();
 
-    // Try to find the provider by slug in business_profiles
+    // Try to find the provider by slug in business_profiles (only provider types)
     const { data: profile } = await db
       .from("business_profiles")
       .select("id, display_name, slug, image_url, tagline, city, state, metadata, type")
       .eq("slug", slug)
+      .in("type", ["organization", "caregiver"])
       .maybeSingle();
 
     if (!profile) {
@@ -33,7 +34,7 @@ export async function GET(
         .from("olera-providers")
         .select("provider_id, name, city, state, place_id")
         .eq("provider_id", slug)
-        .single();
+        .maybeSingle();
 
       if (legacyProvider) {
         return NextResponse.json({
