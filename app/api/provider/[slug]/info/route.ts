@@ -21,15 +21,33 @@ export async function GET(
     const db = getServiceClient();
 
     // Try to find the provider by slug in business_profiles (only provider types)
-    const { data: profile } = await db
+    let profile = null;
+
+    // First try: strict type filter (organization or caregiver)
+    const { data: strictProfile } = await db
       .from("business_profiles")
       .select("id, display_name, slug, image_url, tagline, city, state, metadata, type")
       .eq("slug", slug)
       .in("type", ["organization", "caregiver"])
       .maybeSingle();
 
+    profile = strictProfile;
+
+    // Second try: if not found, search without type filter but exclude family/student
+    // This handles older profiles that may have null or different types
     if (!profile) {
-      // Try legacy olera-providers table as fallback
+      const { data: lenientProfile } = await db
+        .from("business_profiles")
+        .select("id, display_name, slug, image_url, tagline, city, state, metadata, type")
+        .eq("slug", slug)
+        .not("type", "in", "(family,student)")
+        .maybeSingle();
+
+      profile = lenientProfile;
+    }
+
+    if (!profile) {
+      // Third try: legacy olera-providers table as fallback
       const { data: legacyProvider } = await db
         .from("olera-providers")
         .select("provider_id, name, city, state, place_id")
