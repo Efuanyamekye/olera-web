@@ -619,7 +619,7 @@ function ReviewPageContent() {
 
         {/* Form Card */}
         <div
-          className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden"
+          className="bg-white rounded-2xl border border-gray-200/80 shadow-sm"
           style={{ animation: "card-enter 0.3s ease-out both", animationDelay: "100ms" }}
         >
           {/* Step 1: Rating */}
