@@ -877,14 +877,17 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                     }`}
                     style={{ animation: "card-enter 0.2s ease-out both" }}
                   >
+                    {getClientContactIcon(client)}
+                    <span className="font-medium text-gray-700">{client.name}</span>
                     <button
                       type="button"
                       onClick={() => handleEditClient(client)}
-                      className="inline-flex items-center gap-1.5 focus:outline-none"
+                      className="text-gray-300 hover:text-primary-500 transition-colors p-0.5 rounded hover:bg-primary-50"
                       aria-label={`Edit ${client.name}`}
                     >
-                      {getClientContactIcon(client)}
-                      <span className="font-medium text-gray-700">{client.name}</span>
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125" />
+                      </svg>
                     </button>
                     <button
                       type="button"
