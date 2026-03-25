@@ -53,13 +53,54 @@ export async function POST(request: Request) {
     }
 
     // Look up provider contact info
-    const { data: provider, error: providerErr } = await db
+    // Strategy 1: Check olera-providers by provider_id
+    let provider: { email: string | null; phone: string | null; provider_name: string | null } | null = null;
+
+    const { data: oleraProvider } = await db
       .from("olera-providers")
       .select("email, phone, provider_name")
       .eq("provider_id", providerId)
       .single();
 
-    if (providerErr || !provider) {
+    if (oleraProvider) {
+      provider = oleraProvider;
+    }
+
+    // Strategy 2: Check business_profiles by id (for native/claimed providers)
+    if (!provider) {
+      const { data: bp } = await db
+        .from("business_profiles")
+        .select("email, phone, display_name")
+        .eq("id", providerId)
+        .single();
+
+      if (bp) {
+        provider = {
+          email: bp.email,
+          phone: bp.phone,
+          provider_name: bp.display_name,
+        };
+      }
+    }
+
+    // Strategy 3: Check business_profiles by source_provider_id (linked providers)
+    if (!provider) {
+      const { data: bp } = await db
+        .from("business_profiles")
+        .select("email, phone, display_name")
+        .eq("source_provider_id", providerId)
+        .single();
+
+      if (bp) {
+        provider = {
+          email: bp.email,
+          phone: bp.phone,
+          provider_name: bp.display_name,
+        };
+      }
+    }
+
+    if (!provider) {
       return NextResponse.json({ error: "Provider not found." }, { status: 404 });
     }
 
