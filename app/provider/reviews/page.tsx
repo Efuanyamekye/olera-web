@@ -1650,7 +1650,7 @@ function ReviewsSkeleton() {
 
 export default function ProviderReviewsPage() {
   const providerProfile = useProviderProfile();
-  const [activeFilter, setActiveFilter] = useState<TabFilter>("request_now");
+  const [activeFilter, setActiveFilter] = useState<TabFilter>("request_onsite");
   const [reviews, setReviews] = useState<Review[]>([]);
   const [stats, setStats] = useState<ReviewStats>({
     totalReviews: 0,
@@ -1799,8 +1799,8 @@ export default function ProviderReviewsPage() {
   }
 
   const TABS: { id: TabFilter; label: string }[] = [
-    { id: "request_now", label: "Request Now" },
-    { id: "request_onsite", label: "Request On-site" },
+    { id: "request_onsite", label: "On Site" },
+    { id: "request_now", label: "Send Invites" },
     { id: "all", label: "All Reviews" },
     { id: "replied", label: "Replied" },
   ];
