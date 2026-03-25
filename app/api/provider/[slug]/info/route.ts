@@ -25,6 +25,22 @@ export async function GET(
 
     console.log("Looking up provider with slug:", slug);
 
+    // Debug: try to find ANY profile with this slug (no type filter)
+    const { data: anyProfile, error: anyError } = await db
+      .from("business_profiles")
+      .select("id, slug, type, is_active")
+      .eq("slug", slug)
+      .maybeSingle();
+
+    console.log("DEBUG - Any profile with slug:", { anyProfile, anyError });
+
+    // Debug: count total profiles
+    const { count, error: countError } = await db
+      .from("business_profiles")
+      .select("*", { count: "exact", head: true });
+
+    console.log("DEBUG - Total profiles in table:", { count, countError });
+
     // First try: strict type filter (organization or caregiver)
     const { data: strictProfile, error: strictError } = await db
       .from("business_profiles")
