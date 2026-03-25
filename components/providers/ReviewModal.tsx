@@ -276,11 +276,11 @@ export default function ReviewModal({
       title={modalTitle}
       onBack={modalOnBack}
       footer={modalFooter}
-      size="md"
+      size="lg"
     >
       {/* ── Step Indicator ── */}
       {step !== "success" && (
-        <div className="flex items-center justify-center gap-2 pt-2 pb-6">
+        <div className="flex items-center justify-center gap-2 pt-4 pb-8">
           {["rating", "details"].map((s, idx) => {
             const stepIndex = ["rating", "details"].indexOf(step);
             const isCompleted = idx < stepIndex;
@@ -317,9 +317,9 @@ export default function ReviewModal({
 
       {/* ── Step 1: Rating ── */}
       {step === "rating" && (
-        <div className="animate-step-in">
+        <div className="animate-step-in pb-2">
           {/* Header */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-8">
             <h3 className="text-xl font-semibold text-gray-900 mb-1">
               How was your experience?
             </h3>
@@ -360,22 +360,25 @@ export default function ReviewModal({
           </div>
 
           {/* Relationship */}
-          <Select
-            label="Your relationship"
-            required
-            options={RELATIONSHIP_OPTIONS}
-            value={relationship}
-            onChange={setRelationship}
-            placeholder="Select your relationship"
-          />
+          <div className="mb-4">
+            <Select
+              label="Your relationship"
+              required
+              options={RELATIONSHIP_OPTIONS}
+              value={relationship}
+              onChange={setRelationship}
+              placeholder="Select your relationship"
+              dropdownDirection="down"
+            />
+          </div>
         </div>
       )}
 
       {/* ── Step 2: Details ── */}
       {step === "details" && (
-        <div className="animate-step-in">
+        <div className="animate-step-in pb-2">
           {/* Dynamic header based on rating */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-8">
             <h3 className="text-xl font-semibold text-gray-900 mb-1">
               {getStepTwoHeader(rating)}
             </h3>
@@ -451,7 +454,7 @@ export default function ReviewModal({
           </div>
 
           {/* Comment */}
-          <div>
+          <div className="mb-4">
             <label htmlFor="review-comment" className="block text-base font-medium text-gray-700 mb-2">
               Your review <span className="text-red-500">*</span>
             </label>
@@ -460,7 +463,7 @@ export default function ReviewModal({
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share details about your experience with this provider..."
-              rows={5}
+              rows={4}
               className="w-full px-4 py-4 border border-gray-200 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 resize-none leading-relaxed transition-all"
             />
           </div>
