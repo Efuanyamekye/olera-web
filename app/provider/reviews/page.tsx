@@ -973,7 +973,8 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
             </div>
           </div>
 
-          {/* Message */}
+          {/* Message - only show when recipients added */}
+          {clients.length > 0 && (
           <div className="mb-5">
             <label htmlFor="review-message" className="block text-sm font-medium text-gray-700 mb-2">
               Message
@@ -994,8 +995,10 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
               </span>
             </div>
           </div>
+          )}
 
-          {/* Delivery Method */}
+          {/* Delivery Method - only show when recipients added */}
+          {clients.length > 0 && (
           <div className="mb-5">
             <label className="block text-sm font-medium text-gray-700 mb-2">Send via</label>
             <div className="flex flex-wrap gap-2">
@@ -1004,7 +1007,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                   deliveryMethod === "email"
                     ? "border-primary-500 bg-primary-50 text-primary-700"
                     : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
-                } ${!hasAnyEmail && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
+                } ${!hasAnyEmail ? "opacity-40 cursor-not-allowed" : ""}`}
               >
                 <input
                   type="radio"
@@ -1012,7 +1015,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                   value="email"
                   checked={deliveryMethod === "email"}
                   onChange={() => setDeliveryMethod("email")}
-                  disabled={!hasAnyEmail && clients.length > 0}
+                  disabled={!hasAnyEmail}
                   className="sr-only"
                 />
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -1025,7 +1028,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                   deliveryMethod === "sms"
                     ? "border-primary-500 bg-primary-50 text-primary-700"
                     : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
-                } ${!hasAnyPhone && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
+                } ${!hasAnyPhone ? "opacity-40 cursor-not-allowed" : ""}`}
               >
                 <input
                   type="radio"
@@ -1033,7 +1036,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                   value="sms"
                   checked={deliveryMethod === "sms"}
                   onChange={() => setDeliveryMethod("sms")}
-                  disabled={!hasAnyPhone && clients.length > 0}
+                  disabled={!hasAnyPhone}
                   className="sr-only"
                 />
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -1046,7 +1049,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                   deliveryMethod === "both"
                     ? "border-primary-500 bg-primary-50 text-primary-700"
                     : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
-                } ${(!hasAnyEmail || !hasAnyPhone) && clients.length > 0 ? "opacity-40 cursor-not-allowed" : ""}`}
+                } ${(!hasAnyEmail || !hasAnyPhone) ? "opacity-40 cursor-not-allowed" : ""}`}
               >
                 <input
                   type="radio"
@@ -1054,7 +1057,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                   value="both"
                   checked={deliveryMethod === "both"}
                   onChange={() => setDeliveryMethod("both")}
-                  disabled={(!hasAnyEmail || !hasAnyPhone) && clients.length > 0}
+                  disabled={!hasAnyEmail || !hasAnyPhone}
                   className="sr-only"
                 />
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -1064,6 +1067,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
               </label>
             </div>
           </div>
+          )}
 
           {/* Send Button - Full width, prominent */}
           <button
