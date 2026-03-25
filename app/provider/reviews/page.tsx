@@ -1185,7 +1185,7 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
 
 // ── Education Sidebar (for all tabs) ──
 
-const YOUTUBE_VIDEO_ID = "kbKOG8vmJl0";
+const YOUTUBE_VIDEO_ID = "cb3TMkMNe3I";
 
 function EducationSidebar({ activeTab }: { activeTab: TabFilter }) {
   const [videoPlaying, setVideoPlaying] = useState(false);
