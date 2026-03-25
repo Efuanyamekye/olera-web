@@ -32,7 +32,7 @@ function MagicLinkHandler() {
         // Check for hash fragment with tokens
         const hash = window.location.hash;
         if (!hash || !hash.includes("access_token")) {
-          // No tokens in hash - might be a direct visit or error
+          // No tokens in hash - might be expired link or direct visit
           // Check if already authenticated
           const supabase = createClient();
           const { data: { session } } = await supabase.auth.getSession();
@@ -43,7 +43,15 @@ function MagicLinkHandler() {
             return;
           }
 
-          // No session and no tokens - redirect to home
+          // No session and no tokens - link is expired or invalid
+          // Still redirect to intended destination so user sees context
+          // They'll just need to sign in manually via the onboard page
+          if (next && next !== "/") {
+            router.replace(next);
+            return;
+          }
+
+          // No destination - redirect to home
           setError("Invalid or expired link. Please request a new one.");
           setStatus("error");
           setTimeout(() => router.replace("/"), 3000);
