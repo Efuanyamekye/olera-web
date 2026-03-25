@@ -790,7 +790,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
               <div className="min-w-0 flex-1">
                 <h3 className="text-[15px] font-semibold text-gray-900">Share with visitors</h3>
                 <p className="text-sm text-gray-500 mt-0.5">
-                  Display this link or QR code when families visit
+                  Text to families or share with your staff
                 </p>
               </div>
             </div>
@@ -1142,7 +1142,7 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
           <div className="min-w-0 flex-1">
             <h3 className="text-[15px] font-semibold text-gray-900">Share with visitors</h3>
             <p className="text-sm text-gray-500 mt-0.5">
-              Display this link or QR code when families visit
+              Text to families or share with your staff
             </p>
           </div>
         </div>
