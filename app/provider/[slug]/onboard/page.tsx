@@ -201,7 +201,7 @@ export default function ProviderOnboardPage() {
           } else if (actionParam === "question") {
             // Fetch question data
             const { data: question } = await supabase
-              .from("questions")
+              .from("provider_questions")
               .select("id, question, asker_name, created_at")
               .eq("id", actionIdParam)
               .single();
