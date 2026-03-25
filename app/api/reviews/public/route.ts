@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
 import { sendEmail } from "@/lib/email";
 import { newReviewEmail } from "@/lib/email-templates";
@@ -49,6 +51,40 @@ export async function POST(request: NextRequest) {
 
     const db = getServiceClient();
 
+    // Check if user is logged in and prevent self-reviews
+    try {
+      const supabase = await createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        // Get user's account and check if they own this provider
+        const { data: account } = await db
+          .from("accounts")
+          .select("id")
+          .eq("user_id", user.id)
+          .single();
+
+        if (account) {
+          // Check if this account owns the provider being reviewed
+          const { data: ownedProfile } = await db
+            .from("business_profiles")
+            .select("id")
+            .eq("account_id", account.id)
+            .or(`id.eq.${provider_id},slug.eq.${provider_id}`)
+            .maybeSingle();
+
+          if (ownedProfile) {
+            return NextResponse.json(
+              { error: "You cannot review your own business" },
+              { status: 403 }
+            );
+          }
+        }
+      }
+    } catch {
+      // If auth check fails, allow the review (public submissions allowed)
+    }
+
     // Look up the provider (could be slug or id)
     let providerId = provider_id;
     let providerSlug = provider_id;
@@ -87,7 +123,7 @@ export async function POST(request: NextRequest) {
       ? `${parts[0]} ${parts[parts.length - 1][0]}.`
       : parts[0];
 
-    // Insert the review
+    // Insert the review (note: ref_source is tracked but reviews table doesn't have metadata column)
     const { data: newReview, error } = await db
       .from("reviews")
       .insert({
@@ -99,7 +135,6 @@ export async function POST(request: NextRequest) {
         comment: comment.trim(),
         relationship,
         status: "published",
-        metadata: ref_source ? { ref_source } : null,
       })
       .select()
       .single();
