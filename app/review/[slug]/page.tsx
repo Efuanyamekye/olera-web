@@ -543,11 +543,11 @@ function ReviewPageContent() {
               </div>
             )}
           </div>
-          <h1 className="text-lg font-display font-bold text-gray-900">
+          <h1 className="text-xl font-display font-bold text-gray-900">
             Review {provider.display_name}
           </h1>
           {provider.city && provider.state && (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-base text-gray-500 mt-1">
               {provider.city}, {provider.state}
             </p>
           )}
@@ -567,10 +567,10 @@ function ReviewPageContent() {
           {step === "rating" && (
             <div className="p-6">
               <div className="text-center mb-8">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">
+                <h2 className="text-xl font-semibold text-gray-900 mb-2">
                   How was your experience?
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-base text-gray-500">
                   Select a rating below
                 </p>
               </div>
@@ -584,7 +584,7 @@ function ReviewPageContent() {
                   onHover={setHoverRating}
                 />
                 {(hoverRating || rating) > 0 && (
-                  <p className="mt-3 text-sm font-medium text-primary-600">
+                  <p className="mt-3 text-base font-medium text-primary-600">
                     {RATING_LABELS[hoverRating || rating]}
                   </p>
                 )}
@@ -619,10 +619,10 @@ function ReviewPageContent() {
             <div className="p-6">
               {/* Dynamic header based on rating */}
               <div className="text-center mb-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-1">
+                <h2 className="text-xl font-semibold text-gray-900 mb-1">
                   {getStepTwoHeader()}
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-base text-gray-500">
                   {getStepTwoSubtext()}
                 </p>
               </div>
@@ -638,7 +638,7 @@ function ReviewPageContent() {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <svg
                         key={star}
-                        className={`w-4 h-4 ${star <= rating ? "text-primary-500" : "text-gray-200"}`}
+                        className={`w-5 h-5 ${star <= rating ? "text-primary-500" : "text-gray-200"}`}
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -646,14 +646,14 @@ function ReviewPageContent() {
                       </svg>
                     ))}
                   </div>
-                  <span className="text-sm text-gray-600">{relationship}</span>
+                  <span className="text-base text-gray-600">{relationship}</span>
                 </div>
-                <span className="text-xs text-primary-600 font-medium">Edit</span>
+                <span className="text-sm text-primary-600 font-medium">Edit</span>
               </button>
 
               {/* Your Name */}
               <div className="mb-5">
-                <label htmlFor="reviewer-name" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="reviewer-name" className="block text-base font-medium text-gray-700 mb-2">
                   Your name
                 </label>
                 <input
@@ -666,10 +666,10 @@ function ReviewPageContent() {
                   }}
                   disabled={postAnonymously}
                   placeholder="How should we display your name?"
-                  className={`w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[48px] ${postAnonymously ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}`}
+                  className={`w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[52px] ${postAnonymously ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}`}
                 />
                 {/* Post anonymously checkbox */}
-                <label className="flex items-center gap-2 mt-3 cursor-pointer">
+                <label className="flex items-center gap-2.5 mt-3 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={postAnonymously}
@@ -677,15 +677,15 @@ function ReviewPageContent() {
                       setPostAnonymously(e.target.checked);
                       if (e.target.checked) setReviewerName("");
                     }}
-                    className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+                    className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
                   />
-                  <span className="text-sm text-gray-600">Post anonymously</span>
+                  <span className="text-base text-gray-600">Post anonymously</span>
                 </label>
               </div>
 
               {/* Title */}
               <div className="mb-5">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="title" className="block text-base font-medium text-gray-700 mb-2">
                   Title
                 </label>
                 <input
@@ -694,13 +694,13 @@ function ReviewPageContent() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Summarize your experience"
-                  className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[48px]"
+                  className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[52px]"
                 />
               </div>
 
               {/* Comment */}
               <div className="mb-6">
-                <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="comment" className="block text-base font-medium text-gray-700 mb-2">
                   Your review <span className="text-red-500">*</span>
                 </label>
                 <textarea
@@ -709,14 +709,14 @@ function ReviewPageContent() {
                   onChange={(e) => setComment(e.target.value)}
                   rows={5}
                   placeholder="Share details about your experience with this provider..."
-                  className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all resize-none leading-relaxed"
+                  className="w-full px-4 py-4 rounded-xl border border-gray-200 bg-white text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all resize-none leading-relaxed"
                 />
               </div>
 
               {/* Error message */}
               {submitError && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-xl">
-                  <p className="text-sm text-red-600">{submitError}</p>
+                <div className="mb-4 p-4 bg-red-50 border border-red-100 rounded-xl">
+                  <p className="text-base text-red-600">{submitError}</p>
                 </div>
               )}
 
