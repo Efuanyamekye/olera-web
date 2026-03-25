@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useRef } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Select from "@/components/ui/Select";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 // ── Types ──
 
@@ -129,7 +130,36 @@ function StepIndicator({ currentStep }: { currentStep: Step }) {
 // ── Minimal Header Component ──
 
 function MinimalHeader() {
+  const { user, openAuth, signOut } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Close menu on outside click
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuOpen]);
+
+  const handleSignIn = () => {
+    setMenuOpen(false);
+    openAuth({ defaultMode: "sign-in" });
+  };
+
+  const handleSignUp = () => {
+    setMenuOpen(false);
+    openAuth({ defaultMode: "sign-up" });
+  };
+
+  const handleSignOut = async () => {
+    setMenuOpen(false);
+    await signOut();
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-sm">
@@ -139,64 +169,97 @@ function MinimalHeader() {
           <span className="text-xl font-bold text-gray-900">Olera</span>
         </Link>
 
-        {/* Hamburger menu button */}
-        <div className="relative">
+        {/* Pill-shaped menu button (matches main Navbar) */}
+        <div className="relative" ref={menuRef}>
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-1.5 pl-3 pr-2 py-1.5 border border-gray-200 rounded-full hover:shadow-md transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 min-h-[44px]"
             aria-label="Menu"
+            aria-expanded={menuOpen}
+            aria-haspopup="true"
           >
-            <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
+            <div className="w-8 h-8 bg-gray-100 text-gray-500 rounded-full flex items-center justify-center">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+              </svg>
+            </div>
           </button>
 
           {/* Dropdown menu */}
           {menuOpen && (
-            <>
-              <div className="fixed inset-0 z-40" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-gray-200 shadow-xl z-50 overflow-hidden">
-                <nav className="py-2">
-                  <Link
-                    href="/browse"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Find Care
-                  </Link>
-                  <Link
-                    href="/caregiver-support"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Caregiver Support
-                  </Link>
-                  <Link
-                    href="/benefits-center"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    Benefits Center
-                  </Link>
-                  <Link
-                    href="/medjobs"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    MedJobs
-                  </Link>
-                  <div className="border-t border-gray-100 my-1" />
-                  <Link
-                    href="/for-providers"
-                    className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    For Providers
-                  </Link>
-                </nav>
-              </div>
-            </>
+            <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white border border-gray-200 shadow-xl z-50 overflow-hidden">
+              <nav className="py-2">
+                <Link
+                  href="/browse"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Find Care
+                </Link>
+                <Link
+                  href="/caregiver-support"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Caregiver Support
+                </Link>
+                <Link
+                  href="/benefits-center"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Benefits Center
+                </Link>
+                <div className="border-t border-gray-100 my-1" />
+                <Link
+                  href="/for-providers"
+                  className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  For Providers
+                </Link>
+                <div className="border-t border-gray-100 my-1" />
+                {user ? (
+                  <>
+                    <Link
+                      href="/portal"
+                      className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      My Account
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      Sign out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handleSignIn}
+                      className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      Sign in
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSignUp}
+                      className="w-full text-left px-4 py-3 text-sm font-medium text-primary-600 hover:bg-primary-50 transition-colors"
+                    >
+                      Sign up
+                    </button>
+                  </>
+                )}
+              </nav>
+            </div>
           )}
         </div>
       </div>
