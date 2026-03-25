@@ -23,47 +23,25 @@ export async function GET(
     // Try to find the provider by slug in business_profiles (only provider types)
     let profile = null;
 
-    console.log("Looking up provider with slug:", slug);
-
-    // Debug: try to find ANY profile with this slug (no type filter)
-    const { data: anyProfile, error: anyError } = await db
-      .from("business_profiles")
-      .select("id, slug, type, is_active")
-      .eq("slug", slug)
-      .maybeSingle();
-
-    console.log("DEBUG - Any profile with slug:", { anyProfile, anyError });
-
-    // Debug: count total profiles
-    const { count, error: countError } = await db
-      .from("business_profiles")
-      .select("*", { count: "exact", head: true });
-
-    console.log("DEBUG - Total profiles in table:", { count, countError });
-
     // First try: strict type filter (organization or caregiver)
-    const { data: strictProfile, error: strictError } = await db
+    const { data: strictProfile } = await db
       .from("business_profiles")
-      .select("id, display_name, slug, image_url, tagline, city, state, metadata, type")
+      .select("id, display_name, slug, image_url, city, state, metadata, type")
       .eq("slug", slug)
       .in("type", ["organization", "caregiver"])
       .maybeSingle();
-
-    console.log("Strict query result:", { strictProfile, strictError });
 
     profile = strictProfile;
 
     // Second try: if not found, search without type filter but exclude family/student
     // This handles older profiles that may have null or different types
     if (!profile) {
-      const { data: lenientProfile, error: lenientError } = await db
+      const { data: lenientProfile } = await db
         .from("business_profiles")
-        .select("id, display_name, slug, image_url, tagline, city, state, metadata, type")
+        .select("id, display_name, slug, image_url, city, state, metadata, type")
         .eq("slug", slug)
         .not("type", "in", "(family,student)")
         .maybeSingle();
-
-      console.log("Lenient query result:", { lenientProfile, lenientError });
 
       profile = lenientProfile;
     }
@@ -103,7 +81,7 @@ export async function GET(
         display_name: profile.display_name,
         slug: profile.slug,
         image_url: profile.image_url,
-        tagline: profile.tagline,
+        tagline: null,
         city: profile.city,
         state: profile.state,
         google_place_id: googlePlaceId,
