@@ -889,7 +889,7 @@ function RequestNowContent({ state, onStateChange }: RequestNowContentProps) {
           </div>
 
           {/* Message - inside Recipients card */}
-          <div className="mt-5 pt-5 border-t border-gray-100">
+          <div className="mt-5">
             <label htmlFor="review-message" className="block text-sm font-medium text-gray-700 mb-2">
               Message
             </label>
