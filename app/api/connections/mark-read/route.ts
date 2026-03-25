@@ -8,7 +8,7 @@ import { getServiceClient } from "@/lib/admin";
  * Mark a connection as read by the current user's profile.
  * Stores read timestamp in metadata.read_by[profileId].
  *
- * Body: { connectionId: string }
+ * Body: { connectionId: string, profileId?: string }
  */
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { connectionId } = body;
+    const { connectionId, profileId: requestedProfileId } = body;
 
     if (!connectionId) {
       return NextResponse.json(
@@ -75,10 +75,29 @@ export async function POST(request: NextRequest) {
     }
 
     // Determine which profile to mark as having read
-    // Use the profile that is a participant in this connection
-    const readerProfileId = profileIds.includes(connection.from_profile_id)
-      ? connection.from_profile_id
-      : connection.to_profile_id;
+    // Use the provided profileId if valid, otherwise fall back to detection
+    let readerProfileId: string;
+
+    if (requestedProfileId && profileIds.includes(requestedProfileId)) {
+      // Use the explicitly provided profile ID (verified to belong to user)
+      const isValidParticipant =
+        requestedProfileId === connection.from_profile_id ||
+        requestedProfileId === connection.to_profile_id;
+
+      if (isValidParticipant) {
+        readerProfileId = requestedProfileId;
+      } else {
+        return NextResponse.json(
+          { error: "Provided profileId is not a participant in this connection" },
+          { status: 403 }
+        );
+      }
+    } else {
+      // Fallback: detect which of the user's profiles is a participant
+      readerProfileId = profileIds.includes(connection.from_profile_id)
+        ? connection.from_profile_id
+        : connection.to_profile_id;
+    }
 
     // Update metadata.read_by
     const existingMeta =

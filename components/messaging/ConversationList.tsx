@@ -205,7 +205,7 @@ function markAsRead(connectionId: string, profileId: string) {
   fetch("/api/connections/mark-read", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ connectionId }),
+    body: JSON.stringify({ connectionId, profileId }),
   }).catch((err) => {
     console.error("[markAsRead] Failed to persist to database:", err);
   });
