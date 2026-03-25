@@ -788,9 +788,9 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
                 </svg>
               </div>
               <div className="min-w-0 flex-1">
-                <h3 className="text-[15px] font-semibold text-gray-900">Your review link</h3>
+                <h3 className="text-[15px] font-semibold text-gray-900">Share with visitors</h3>
                 <p className="text-sm text-gray-500 mt-0.5">
-                  Share this link to collect reviews
+                  Display this link or QR code when families visit
                 </p>
               </div>
             </div>
@@ -852,7 +852,7 @@ function RequestNowContent({ state, onStateChange, providerSlug }: RequestNowCon
               </svg>
             </div>
             <div>
-              <h3 className="text-[15px] font-semibold text-gray-900">Request reviews from your clients</h3>
+              <h3 className="text-[15px] font-semibold text-gray-900">Invite families to review</h3>
               <p className="text-sm text-gray-500">Add recipients, customize your message, and send</p>
             </div>
           </div>
@@ -1140,9 +1140,9 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
             </svg>
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="text-[15px] font-semibold text-gray-900">Your review link</h3>
+            <h3 className="text-[15px] font-semibold text-gray-900">Share with visitors</h3>
             <p className="text-sm text-gray-500 mt-0.5">
-              Share this link to collect reviews
+              Display this link or QR code when families visit
             </p>
           </div>
         </div>
@@ -1799,7 +1799,7 @@ export default function ProviderReviewsPage() {
   }
 
   const TABS: { id: TabFilter; label: string }[] = [
-    { id: "request_onsite", label: "On Site" },
+    { id: "request_onsite", label: "In Person" },
     { id: "request_now", label: "Send Invites" },
     { id: "all", label: "All Reviews" },
     { id: "replied", label: "Replied" },
