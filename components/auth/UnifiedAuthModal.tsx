@@ -130,11 +130,18 @@ export default function UnifiedAuthModal({
     } catch { /* localStorage not available */ }
 
     const supabase = createClient();
-    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(window.location.pathname)}`;
+
+    // Build callback URL with action hint if there's a deferred action
+    // This lets the server-side callback know to skip the welcome redirect
+    const deferred = options.deferred || getDeferredAction();
+    let callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(window.location.pathname)}`;
+    if (deferred?.action) {
+      callbackUrl += `&action=${encodeURIComponent(deferred.action)}`;
+    }
 
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo },
+      options: { redirectTo: callbackUrl },
     });
 
     if (oauthError) {

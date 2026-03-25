@@ -190,6 +190,23 @@ export async function GET(request: NextRequest) {
         }
 
         // New user (onboarding_completed=false) → redirect to /welcome
+        // EXCEPTION: If user is completing a task (review, Q&A, message via deferred action),
+        // skip welcome and let them complete their task first.
+        // Check both the callback URL params and the destination URL.
+        const actionParam = searchParams.get("action"); // From OAuth redirect (e.g., "review", "question")
+        const hasTaskAction = actionParam && ["review", "question", "inquiry", "save", "connection_request", "phone_reveal"].includes(actionParam);
+        const isTaskUrl = next.includes("/reviews") ||
+          next.includes("/qna") ||
+          next.includes("/inbox") ||
+          next.includes("/leads") ||
+          next.includes("/provider/") || // User was on a provider page (likely doing an action)
+          next.includes("id=");
+
+        if (hasTaskAction || isTaskUrl) {
+          // Let user complete their task, skip welcome redirect
+          return response;
+        }
+
         // Pass original destination as ?next= so they return there after welcome
         const welcomeUrl = `/welcome?next=${encodeURIComponent(next)}`;
         return NextResponse.redirect(`${origin}${welcomeUrl}`, {

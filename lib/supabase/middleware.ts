@@ -81,6 +81,21 @@ export async function updateSession(request: NextRequest) {
           .single();
 
         if (account && account.onboarding_completed === false) {
+          // Check if user is completing a task (review, Q&A, message, lead) via URL hints
+          // If so, skip the welcome redirect and let them complete their task
+          const hasActionParam = request.nextUrl.searchParams.has("action") ||
+            request.nextUrl.searchParams.has("id");
+          const pathname = request.nextUrl.pathname;
+          const isTaskPage = pathname.includes("/inbox") ||
+            pathname.includes("/reviews") ||
+            pathname.includes("/qna") ||
+            pathname.includes("/leads");
+
+          // If user is going to a task page with an ID (completing a deferred action), allow through
+          if (hasActionParam || isTaskPage) {
+            return supabaseResponse;
+          }
+
           // Check if user has a provider profile to route them correctly
           const { data: providerProfile } = await supabase
             .from("business_profiles")

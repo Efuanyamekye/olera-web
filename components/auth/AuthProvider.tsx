@@ -351,6 +351,13 @@ export default function AuthProvider({ children }: AuthProviderProps) {
                 // Use defaults
               }
 
+              // Check deferred action for returnUrl (e.g., reviews, Q&A)
+              // This takes priority over URL params/localStorage defaults
+              const deferred = getDeferredAction();
+              if (deferred?.returnUrl) {
+                redirectTo = deferred.returnUrl;
+              }
+
               // Clear hash from URL before redirect
               window.history.replaceState(null, "", window.location.pathname + window.location.search);
 
