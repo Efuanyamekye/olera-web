@@ -15,13 +15,17 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
  */
 export function useUnreadReviewsCount(providerId: string | null): number {
   const [count, setCount] = useState(0);
-  const fetchedRef = useRef(false);
+  const fetchingRef = useRef(false);
 
   const recount = useCallback(() => {
-    if (!providerId || !isSupabaseConfigured()) {
+    if (!providerId || fetchingRef.current) return;
+
+    if (!isSupabaseConfigured()) {
       setCount(0);
       return;
     }
+
+    fetchingRef.current = true;
 
     const readKey = `olera_reviews_read_${providerId}`;
 
@@ -38,31 +42,35 @@ export function useUnreadReviewsCount(providerId: string | null): number {
     }
 
     (async () => {
-      const supabase = createClient();
+      try {
+        const supabase = createClient();
 
-      const { data: reviews } = await supabase
-        .from("reviews")
-        .select("id")
-        .eq("provider_id", providerId)
-        .eq("status", "published");
+        const { data: reviews } = await supabase
+          .from("reviews")
+          .select("id")
+          .eq("provider_id", providerId)
+          .eq("status", "published");
 
-      if (!reviews || reviews.length === 0) {
+        if (!reviews || reviews.length === 0) {
+          setCount(0);
+          return;
+        }
+
+        const unreadCount = reviews.filter((r) => !readIds.has(r.id)).length;
+        setCount(unreadCount);
+      } catch (err) {
+        console.error("[useUnreadReviewsCount] Error:", err);
         setCount(0);
-        return;
+      } finally {
+        fetchingRef.current = false;
       }
-
-      const unreadCount = reviews.filter((r) => !readIds.has(r.id)).length;
-      setCount(unreadCount);
     })();
   }, [providerId]);
 
-  // Initial count
+  // Initial count - always recount when providerId changes
   useEffect(() => {
-    if (!fetchedRef.current && providerId) {
-      recount();
-      fetchedRef.current = true;
-    }
-  }, [recount, providerId]);
+    recount();
+  }, [recount]);
 
   // Re-count when a review is marked as read
   useEffect(() => {
