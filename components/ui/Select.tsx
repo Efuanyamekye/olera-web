@@ -35,6 +35,8 @@ interface SelectProps {
   className?: string;
   /** Size variant */
   size?: "sm" | "md" | "lg";
+  /** Force dropdown direction (auto by default) */
+  dropdownDirection?: "auto" | "down" | "up";
 }
 
 // ============================================================
@@ -63,6 +65,7 @@ export default function Select({
   errorMessage,
   className = "",
   size = "md",
+  dropdownDirection = "auto",
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
@@ -98,12 +101,19 @@ export default function Select({
 
   useEffect(() => {
     if (isOpen && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const dropdownHeight = Math.min(normalizedOptions.length * 48 + 16, 320);
-      setOpenUpward(spaceBelow < dropdownHeight && rect.top > dropdownHeight);
+      if (dropdownDirection === "down") {
+        setOpenUpward(false);
+      } else if (dropdownDirection === "up") {
+        setOpenUpward(true);
+      } else {
+        // Auto: calculate based on available space
+        const rect = triggerRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const dropdownHeight = Math.min(normalizedOptions.length * 48 + 16, 320);
+        setOpenUpward(spaceBelow < dropdownHeight && rect.top > dropdownHeight);
+      }
     }
-  }, [isOpen, normalizedOptions.length]);
+  }, [isOpen, normalizedOptions.length, dropdownDirection]);
 
   // ────────────────────────────────────────────────────────────
   // Click outside

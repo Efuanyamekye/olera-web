@@ -599,6 +599,7 @@ function ReviewPageContent() {
                   value={relationship}
                   onChange={setRelationship}
                   placeholder="Select your relationship"
+                  dropdownDirection="down"
                 />
               </div>
 
