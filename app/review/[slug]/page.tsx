@@ -222,10 +222,9 @@ function ReviewPageContent() {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [relationship, setRelationship] = useState("");
-  const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
   const [reviewerName, setReviewerName] = useState(prefillName);
-  const [postAnonymously, setPostAnonymously] = useState(!prefillName);
+  const [postAnonymously, setPostAnonymously] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
@@ -304,7 +303,6 @@ function ReviewPageContent() {
           provider_id: provider.id,
           rating,
           relationship,
-          title: title.trim() || null,
           comment: comment.trim(),
           reviewer_name: postAnonymously ? "Anonymous" : (reviewerName.trim() || "Anonymous"),
           ref_source: refSource,
@@ -329,9 +327,7 @@ function ReviewPageContent() {
     if (!provider?.google_place_id) return;
 
     // Build the review text to copy
-    const reviewText = title.trim()
-      ? `${title.trim()}\n\n${comment.trim()}`
-      : comment.trim();
+    const reviewText = comment.trim();
 
     try {
       await navigator.clipboard.writeText(reviewText);
@@ -669,34 +665,32 @@ function ReviewPageContent() {
                   placeholder="How should we display your name?"
                   className={`w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[52px] ${postAnonymously ? "opacity-50 cursor-not-allowed bg-gray-50" : ""}`}
                 />
-                {/* Post anonymously checkbox */}
-                <label className="flex items-center gap-2.5 mt-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={postAnonymously}
-                    onChange={(e) => {
-                      setPostAnonymously(e.target.checked);
-                      if (e.target.checked) setReviewerName("");
-                    }}
-                    className="w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
-                  />
+                {/* Post anonymously checkbox - styled green */}
+                <label className="flex items-center gap-2.5 mt-3 cursor-pointer group">
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      checked={postAnonymously}
+                      onChange={(e) => {
+                        setPostAnonymously(e.target.checked);
+                        if (e.target.checked) setReviewerName("");
+                      }}
+                      className="sr-only peer"
+                    />
+                    <div className={`w-5 h-5 rounded border-2 transition-all flex items-center justify-center ${
+                      postAnonymously
+                        ? "bg-primary-600 border-primary-600"
+                        : "border-gray-300 bg-white group-hover:border-gray-400"
+                    }`}>
+                      {postAnonymously && (
+                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
                   <span className="text-base text-gray-600">Post anonymously</span>
                 </label>
-              </div>
-
-              {/* Title */}
-              <div className="mb-5">
-                <label htmlFor="title" className="block text-base font-medium text-gray-700 mb-2">
-                  Title
-                </label>
-                <input
-                  id="title"
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Summarize your experience"
-                  className="w-full px-4 py-3.5 rounded-xl border border-gray-200 bg-white text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all min-h-[52px]"
-                />
               </div>
 
               {/* Comment */}

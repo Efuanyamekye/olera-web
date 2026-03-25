@@ -91,7 +91,6 @@ export default function ReviewModal({
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [relationship, setRelationship] = useState("");
-  const [title, setTitle] = useState("");
   const [comment, setComment] = useState("");
 
   // Submission
@@ -108,7 +107,6 @@ export default function ReviewModal({
     setRating(0);
     setHoverRating(0);
     setRelationship("");
-    setTitle("");
     setComment("");
     setError("");
     setSubmitting(false);
@@ -120,9 +118,7 @@ export default function ReviewModal({
     if (!googlePlaceId) return;
 
     // Build the review text to copy
-    const reviewText = title.trim()
-      ? `${title.trim()}\n\n${comment.trim()}`
-      : comment.trim();
+    const reviewText = comment.trim();
 
     try {
       await navigator.clipboard.writeText(reviewText);
@@ -156,7 +152,7 @@ export default function ReviewModal({
         );
       }, 600);
     }
-  }, [googlePlaceId, title, comment]);
+  }, [googlePlaceId, comment]);
 
   function handleClose() {
     onClose();
@@ -183,7 +179,6 @@ export default function ReviewModal({
         reviewData: {
           rating,
           comment: comment.trim(),
-          title: title.trim() || undefined,
           relationship: relationship || undefined,
         },
       });
@@ -202,7 +197,6 @@ export default function ReviewModal({
         body: JSON.stringify({
           provider_id: providerId,
           rating,
-          title: title.trim() || undefined,
           comment: comment.trim(),
           relationship,
         }),
@@ -358,21 +352,6 @@ export default function ReviewModal({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
             </svg>
           </button>
-
-          {/* Title (optional) */}
-          <div className="mb-5">
-            <label htmlFor="review-title" className="block text-base font-medium text-gray-700 mb-2">
-              Title <span className="text-gray-400 font-normal">(optional)</span>
-            </label>
-            <input
-              id="review-title"
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Summarize your experience"
-              className="w-full px-4 py-4 border border-gray-200 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent min-h-[52px] transition-shadow"
-            />
-          </div>
 
           {/* Comment */}
           <div>
