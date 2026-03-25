@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -127,7 +127,7 @@ function StepIndicator({ currentStep }: { currentStep: Step }) {
 
 // ── Main Page Component ──
 
-export default function ReviewPage() {
+function ReviewPageContent() {
   const params = useParams();
   const searchParams = useSearchParams();
   const slug = params.slug as string;
@@ -614,5 +614,21 @@ export default function ReviewPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+// ── Default Export with Suspense ──
+
+export default function ReviewPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <ReviewPageContent />
+    </Suspense>
   );
 }
