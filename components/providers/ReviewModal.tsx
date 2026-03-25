@@ -359,8 +359,8 @@ export default function ReviewModal({
             )}
           </div>
 
-          {/* Relationship */}
-          <div className="mb-6">
+          {/* Relationship - extra bottom padding for dropdown space */}
+          <div className="pb-48">
             <Select
               label="Your relationship"
               required
