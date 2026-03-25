@@ -1022,15 +1022,12 @@ function RequestNowContent({ state, onStateChange }: RequestNowContentProps) {
 
 function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null }) {
   const [copied, setCopied] = useState(false);
-  const [qrLoaded, setQrLoaded] = useState(false);
 
   // Use current site origin for dynamic deployment support (preview URLs, staging, production)
   const siteOrigin = typeof window !== "undefined" ? window.location.origin : "https://olera.care";
   const reviewUrl = providerSlug
     ? `${siteOrigin}/review/${providerSlug}?ref=qr`
     : `${siteOrigin}/review/your-profile`;
-
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(reviewUrl)}&bgcolor=ffffff&color=1a1a1a&format=svg`;
 
   const handleCopy = async () => {
     try {
@@ -1050,73 +1047,6 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
     }
   };
 
-  const handleDownloadQR = () => {
-    const link = document.createElement("a");
-    link.href = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(reviewUrl)}&bgcolor=ffffff&color=1a1a1a&format=png`;
-    link.download = `review-qr-${providerSlug || "olera"}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handlePrint = () => {
-    const printWindow = window.open("", "_blank");
-    if (printWindow) {
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Review QR Code</title>
-            <style>
-              body {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-                margin: 0;
-                font-family: system-ui, -apple-system, sans-serif;
-              }
-              .container {
-                text-align: center;
-                padding: 40px;
-              }
-              h1 {
-                font-size: 24px;
-                color: #1a1a1a;
-                margin-bottom: 8px;
-              }
-              p {
-                font-size: 14px;
-                color: #666;
-                margin-bottom: 32px;
-              }
-              img {
-                width: 200px;
-                height: 200px;
-              }
-              .url {
-                margin-top: 24px;
-                font-size: 12px;
-                color: #999;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <h1>Leave us a review</h1>
-              <p>Scan this QR code with your phone</p>
-              <img src="${qrCodeUrl}" alt="QR Code" />
-              <p class="url">${reviewUrl}</p>
-            </div>
-          </body>
-        </html>
-      `);
-      printWindow.document.close();
-      printWindow.print();
-    }
-  };
-
   return (
     <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm">
       <div className="p-5 lg:p-6">
@@ -1130,14 +1060,13 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
           <div className="min-w-0">
             <h3 className="text-[15px] font-semibold text-gray-900">Your review link</h3>
             <p className="text-sm text-gray-500 mt-0.5">
-              Share this link or QR code to collect reviews
+              Share this link to collect reviews
             </p>
           </div>
         </div>
 
         {/* Link display */}
-        <div className="mb-6">
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <div className="flex-1 min-w-0 px-4 py-3.5 bg-vanilla-50 border border-warm-100 rounded-xl min-h-[48px] flex items-center overflow-hidden">
               <p className="text-[15px] font-mono text-gray-700 truncate">
                 {reviewUrl}
@@ -1166,64 +1095,6 @@ function RequestOnsiteContent({ providerSlug }: { providerSlug: string | null })
                 </>
               )}
             </button>
-          </div>
-        </div>
-
-        {/* Divider with text */}
-        <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-100" />
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-white px-4 text-xs font-medium text-gray-400 uppercase tracking-wider">
-              or scan
-            </span>
-          </div>
-        </div>
-
-        {/* QR Code */}
-        <div className="flex flex-col items-center">
-          <div className="relative w-[180px] h-[180px] lg:w-[200px] lg:h-[200px] bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-center">
-            {!qrLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-vanilla-50 rounded-2xl">
-                <svg className="w-8 h-8 text-gray-300 animate-pulse" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
-                </svg>
-              </div>
-            )}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={qrCodeUrl}
-              alt="QR Code for review link"
-              className={`w-full h-full transition-opacity duration-300 ${qrLoaded ? "opacity-100" : "opacity-0"}`}
-              onLoad={() => setQrLoaded(true)}
-            />
-          </div>
-
-          {/* QR Actions */}
-          <div className="flex items-center justify-center gap-3 mt-6">
-            <button
-              type="button"
-              onClick={handleDownloadQR}
-              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-medium text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 active:bg-gray-150 border border-gray-200 rounded-xl transition-all min-h-[48px] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:ring-offset-2"
-            >
-              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-              </svg>
-              <span>Download</span>
-            </button>
-            <button
-              type="button"
-              onClick={handlePrint}
-              className="inline-flex items-center gap-2 px-5 py-3 text-[15px] font-medium text-gray-700 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 active:bg-gray-150 border border-gray-200 rounded-xl transition-all min-h-[48px] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300 focus-visible:ring-offset-2"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0 1 10.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0 .229 2.523a1.125 1.125 0 0 1-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0 0 21 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 0 0-1.913-.247M6.34 18H5.25A2.25 2.25 0 0 1 3 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 0 1 1.913-.247m10.5 0a48.536 48.536 0 0 0-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5Zm-3 0h.008v.008H15V10.5Z" />
-              </svg>
-              <span>Print</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>
