@@ -87,19 +87,20 @@ async function handleFeedView(db: any, opts: {
   const { emailType, sinceISO, search, limit, offset, countOnly } = opts;
   // Provider feed — existing behavior
 
-  // If searching, find matching provider IDs first
+  // If searching, find matching provider IDs first (check both tables)
   let searchProviderIds: string[] | null = null;
   if (search) {
-    const { data: matches } = await db
-      .from("olera-providers")
-      .select("provider_id")
-      .ilike("provider_name", `%${search}%`)
-      .limit(200);
+    const [{ data: iosMatches }, { data: bpMatches }] = await Promise.all([
+      db.from("olera-providers").select("provider_id").ilike("provider_name", `%${search}%`).limit(200),
+      db.from("business_profiles").select("slug").in("type", ["organization", "caregiver"]).ilike("display_name", `%${search}%`).limit(200),
+    ]);
 
-    searchProviderIds = (matches ?? []).map(
-      (p: { provider_id: string }) => p.provider_id
-    );
-    if (searchProviderIds!.length === 0) {
+    const ids = new Set<string>();
+    for (const p of iosMatches ?? []) ids.add(p.provider_id);
+    for (const p of bpMatches ?? []) ids.add(p.slug);
+    searchProviderIds = Array.from(ids);
+
+    if (searchProviderIds.length === 0) {
       return NextResponse.json({ events: [], total: 0 });
     }
   }
@@ -112,7 +113,14 @@ async function handleFeedView(db: any, opts: {
     .order("created_at", { ascending: false });
 
   if (emailType) {
-    query = query.eq("email_type", emailType);
+    if (emailType === "question_received") {
+      // "Questions" filter: match email clicks on question emails + direct question events
+      query = query.or(
+        "email_type.eq.question_received,event_type.eq.question_received,event_type.eq.question_responded"
+      );
+    } else {
+      query = query.eq("email_type", emailType);
+    }
   }
   if (searchProviderIds) {
     query = query.in("provider_id", searchProviderIds);
@@ -214,12 +222,18 @@ async function handleProvidersView(db: any, opts: {
   // Fallback: fetch all activity and aggregate in JS (fine for current scale)
   let query = db
     .from("provider_activity")
-    .select("provider_id, event_type, email_type, created_at")
+    .select("provider_id, event_type, email_type, created_at, metadata")
     .gte("created_at", sinceISO)
     .order("created_at", { ascending: false });
 
   if (emailType) {
-    query = query.eq("email_type", emailType);
+    if (emailType === "question_received") {
+      query = query.or(
+        "email_type.eq.question_received,event_type.eq.question_received,event_type.eq.question_responded"
+      );
+    } else {
+      query = query.eq("email_type", emailType);
+    }
   }
 
   // Cap at 5000 events for aggregation (covers most scenarios)
@@ -262,9 +276,11 @@ async function handleProvidersView(db: any, opts: {
 
     providerStats[pid].total_clicks++;
 
-    if (event.email_type) {
-      providerStats[pid].email_types[event.email_type] =
-        (providerStats[pid].email_types[event.email_type] || 0) + 1;
+    // Use email_type for email clicks, event_type for direct question events
+    const typeKey = event.email_type || event.event_type;
+    if (typeKey) {
+      providerStats[pid].email_types[typeKey] =
+        (providerStats[pid].email_types[typeKey] || 0) + 1;
     }
 
     if (new Date(event.created_at) > sevenDaysAgo) {

@@ -148,7 +148,7 @@ export async function PATCH(request: NextRequest) {
     // Verify the question belongs to this provider
     const { data: question, error: questionError } = await db
       .from("provider_questions")
-      .select("id, provider_id, answer")
+      .select("id, provider_id, question, answer, asker_name")
       .eq("id", id)
       .single();
 
@@ -187,6 +187,21 @@ export async function PATCH(request: NextRequest) {
       console.error("Failed to answer question:", updateError);
       return NextResponse.json({ error: `Failed to publish: ${updateError.message}` }, { status: 500 });
     }
+
+    // Log provider-side activity (fire-and-forget)
+    db.from("provider_activity").insert({
+      provider_id: question.provider_id,
+      profile_id: profile.id,
+      event_type: "question_responded",
+      metadata: {
+        question_id: id,
+        question_preview: question.question?.substring(0, 100),
+        answer_preview: answer.trim().substring(0, 100),
+        asker_name: question.asker_name,
+      },
+    }).then(({ error: actErr }: { error: { message: string } | null }) => {
+      if (actErr) console.error("[provider_activity] question_responded insert failed:", actErr);
+    });
 
     return NextResponse.json({ question: updated });
   } catch (err) {

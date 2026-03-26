@@ -5,6 +5,7 @@ const PROVIDER_EVENT_TYPES = [
   "email_click",
   "page_view",
   "lead_opened",
+  "question_received",
   "question_responded",
   "review_viewed",
 ] as const;

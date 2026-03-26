@@ -99,8 +99,10 @@ function providerEmailTypeLabel(type: string | null): string {
   const map: Record<string, string> = {
     connection_request: "Lead",
     question_received: "Question",
+    question_responded: "Answered",
     new_review: "Review",
     add_email_notification: "Lead",
+    email_click: "Email",
   };
   return map[type] || type;
 }
@@ -110,8 +112,10 @@ function providerEmailTypeBadgeColor(type: string | null): string {
   const map: Record<string, string> = {
     connection_request: "bg-blue-50 text-blue-700",
     question_received: "bg-amber-50 text-amber-700",
+    question_responded: "bg-emerald-50 text-emerald-700",
     new_review: "bg-violet-50 text-violet-700",
     add_email_notification: "bg-blue-50 text-blue-700",
+    email_click: "bg-gray-100 text-gray-600",
   };
   return map[type] || "bg-gray-100 text-gray-600";
 }
@@ -332,9 +336,23 @@ function ProviderFeedView({ events, loading, total, page, setPage, pageSize, sel
                   {event.provider.city && ` \u00b7 ${event.provider.city}, ${event.provider.state}`}
                 </span>
               )}
+              {String((event.metadata as Record<string, string>)?.question_preview || "") !== "" && (
+                <p className="text-xs text-gray-500 mt-0.5 truncate">
+                  {event.event_type === "question_responded" ? (
+                    <>&ldquo;{String((event.metadata as Record<string, string>).answer_preview || (event.metadata as Record<string, string>).question_preview)}&rdquo;</>
+                  ) : (
+                    <>
+                      {(event.metadata as Record<string, unknown>).is_guest === true && (
+                        <span className="text-orange-500 font-medium">Guest </span>
+                      )}
+                      &ldquo;{String((event.metadata as Record<string, string>).question_preview)}&rdquo;
+                    </>
+                  )}
+                </p>
+              )}
             </div>
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${providerEmailTypeBadgeColor(event.email_type)}`}>
-              {providerEmailTypeLabel(event.email_type)}
+            <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${providerEmailTypeBadgeColor(event.email_type || event.event_type)}`}>
+              {providerEmailTypeLabel(event.email_type || event.event_type)}
             </span>
             <TrashButton onClick={() => onDeleteOne(event.id, event.provider?.name || event.provider_id)} />
             <span className="text-xs text-gray-400 shrink-0 w-20 text-right">{relativeTime(event.created_at)}</span>
@@ -458,6 +476,11 @@ function FamilyFeedView({ events, loading, total, page, setPage, pageSize, selec
                   {event.family.city && ` \u00b7 ${event.family.city}, ${event.family.state}`}
                   {event.family.timeline && ` \u00b7 ${TIMELINE_LABELS[event.family.timeline] || event.family.timeline}`}
                 </span>
+              )}
+              {event.event_type === "question_asked" && String((event.metadata as Record<string, string>)?.question_preview || "") !== "" && (
+                <p className="text-xs text-gray-500 mt-0.5 truncate">
+                  &ldquo;{String((event.metadata as Record<string, string>).question_preview)}&rdquo;
+                </p>
               )}
             </div>
             <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${familyEventTypeBadgeColor(event.event_type)}`}>

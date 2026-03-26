@@ -174,6 +174,23 @@ export async function PATCH(request: NextRequest) {
       }
     }
 
+    // Log provider-side activity when admin answers (fire-and-forget)
+    if (answer && data?.provider_id) {
+      db.from("provider_activity").insert({
+        provider_id: data.provider_id,
+        event_type: "question_responded",
+        metadata: {
+          question_id: id,
+          question_preview: data.question?.substring(0, 100),
+          answer_preview: answer.trim().substring(0, 100),
+          asker_name: data.asker_name,
+          answered_by_admin: true,
+        },
+      }).then(({ error: actErr }: { error: { message: string } | null }) => {
+        if (actErr) console.error("[provider_activity] question_responded insert failed:", actErr);
+      });
+    }
+
     return NextResponse.json({ question: data });
   } catch (err) {
     console.error("Admin questions PATCH error:", err);

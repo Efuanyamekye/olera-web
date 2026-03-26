@@ -155,6 +155,20 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Log provider-side activity (fire-and-forget, ALL questions including guests)
+    db.from("provider_activity").insert({
+      provider_id,
+      event_type: "question_received",
+      metadata: {
+        question_id: newQuestion.id,
+        question_preview: question.trim().substring(0, 100),
+        asker_name: askerName,
+        is_guest: !user,
+      },
+    }).then(({ error: actErr }: { error: { message: string } | null }) => {
+      if (actErr) console.error("[provider_activity] question_received insert failed:", actErr);
+    });
+
     // Slack notifications — must await in serverless to prevent early termination
     try {
       const { data: provider } = await db
