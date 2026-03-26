@@ -196,6 +196,63 @@ function SegmentedControl<T extends string>({
   );
 }
 
+function ConfirmDialog({ open, message, onConfirm, onCancel, deleting }: {
+  open: boolean; message: string; onConfirm: () => void; onCancel: () => void; deleting: boolean;
+}) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+      <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full mx-4">
+        <p className="text-sm text-gray-700 leading-relaxed">{message}</p>
+        <div className="flex justify-end gap-2 mt-5">
+          <button onClick={onCancel} disabled={deleting}
+            className="text-xs font-medium text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-md disabled:opacity-50">
+            Cancel
+          </button>
+          <button onClick={onConfirm} disabled={deleting}
+            className="text-xs font-medium text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-md disabled:opacity-50">
+            {deleting ? "Deleting..." : "Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DeleteBar({ count, onDelete, deleting }: {
+  count: number; onDelete: () => void; deleting: boolean;
+}) {
+  if (count === 0) return null;
+  return (
+    <div className="sticky bottom-4 z-40 flex items-center justify-between bg-gray-900 text-white rounded-lg px-4 py-2.5 shadow-lg mx-auto max-w-md">
+      <span className="text-xs font-medium">{count} selected</span>
+      <button onClick={onDelete} disabled={deleting}
+        className="text-xs font-medium text-red-300 hover:text-red-200 disabled:opacity-50">
+        {deleting ? "Deleting..." : "Delete selected"}
+      </button>
+    </div>
+  );
+}
+
+function TrashButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button onClick={(e) => { e.stopPropagation(); onClick(); }}
+      className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-red-500 shrink-0 p-0.5"
+      title="Delete">
+      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      </svg>
+    </button>
+  );
+}
+
+function RowCheckbox({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)}
+      className="w-3.5 h-3.5 rounded border-gray-300 text-gray-900 focus:ring-gray-300 shrink-0 cursor-pointer" />
+  );
+}
+
 function Skeleton({ rows = 5 }: { rows?: number }) {
   return (
     <div className="space-y-0">
@@ -243,9 +300,10 @@ function Pagination({ page, setPage, total, pageSize }: {
 // Provider Feed View
 // ---------------------------------------------------------------------------
 
-function ProviderFeedView({ events, loading, total, page, setPage, pageSize }: {
+function ProviderFeedView({ events, loading, total, page, setPage, pageSize, selected, onToggle, onDeleteOne }: {
   events: ActivityEvent[]; loading: boolean; total: number;
   page: number; setPage: (p: number) => void; pageSize: number;
+  selected: Set<string>; onToggle: (id: string) => void; onDeleteOne: (id: string, label: string) => void;
 }) {
   if (loading) return <Skeleton rows={8} />;
   if (events.length === 0) {
@@ -262,6 +320,7 @@ function ProviderFeedView({ events, loading, total, page, setPage, pageSize }: {
       <div className="space-y-0">
         {events.map((event) => (
           <div key={event.id} className="flex items-center gap-3 py-3.5 border-b border-gray-100/80 group">
+            <RowCheckbox checked={selected.has(event.id)} onChange={() => onToggle(event.id)} />
             <div className="min-w-0 flex-1">
               <a href={`/provider/${event.provider?.slug || event.provider_id}`} target="_blank" rel="noopener noreferrer"
                 className="text-sm font-medium text-gray-900 hover:text-teal-700 transition-colors truncate block">
@@ -277,6 +336,7 @@ function ProviderFeedView({ events, loading, total, page, setPage, pageSize }: {
             <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${providerEmailTypeBadgeColor(event.email_type)}`}>
               {providerEmailTypeLabel(event.email_type)}
             </span>
+            <TrashButton onClick={() => onDeleteOne(event.id, event.provider?.name || event.provider_id)} />
             <span className="text-xs text-gray-400 shrink-0 w-20 text-right">{relativeTime(event.created_at)}</span>
           </div>
         ))}
@@ -290,9 +350,10 @@ function ProviderFeedView({ events, loading, total, page, setPage, pageSize }: {
 // Providers People View
 // ---------------------------------------------------------------------------
 
-function ProvidersPeopleView({ providers, loading, total, page, setPage, pageSize }: {
+function ProvidersPeopleView({ providers, loading, total, page, setPage, pageSize, selected, onToggle, onDeletePerson }: {
   providers: ProviderAgg[]; loading: boolean; total: number;
   page: number; setPage: (p: number) => void; pageSize: number;
+  selected: Set<string>; onToggle: (id: string) => void; onDeletePerson: (personId: string, label: string, eventCount: number) => void;
 }) {
   if (loading) return <Skeleton rows={8} />;
   if (providers.length === 0) {
@@ -305,6 +366,7 @@ function ProvidersPeopleView({ providers, loading, total, page, setPage, pageSiz
   return (
     <div>
       <div className="flex items-center gap-3 py-2.5 border-b border-gray-200 text-xs text-gray-400 font-medium">
+        <div className="w-3.5 shrink-0" />
         <div className="flex-1 min-w-0">Provider</div>
         <div className="w-16 text-center">Clicks</div>
         <div className="w-24 text-center">Status</div>
@@ -314,7 +376,8 @@ function ProvidersPeopleView({ providers, loading, total, page, setPage, pageSiz
         {providers.map((p) => {
           const engagement = engagementLabel(p.recent_clicks_7d);
           return (
-            <div key={p.provider_id} className="flex items-center gap-3 py-3.5 border-b border-gray-100/80">
+            <div key={p.provider_id} className="flex items-center gap-3 py-3.5 border-b border-gray-100/80 group">
+              <RowCheckbox checked={selected.has(p.provider_id)} onChange={() => onToggle(p.provider_id)} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <a href={`/provider/${p.provider?.slug || p.provider_id}`} target="_blank" rel="noopener noreferrer"
@@ -348,6 +411,7 @@ function ProvidersPeopleView({ providers, loading, total, page, setPage, pageSiz
               <div className="w-24 text-center">
                 <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${engagement.className}`}>{engagement.text}</span>
               </div>
+              <TrashButton onClick={() => onDeletePerson(p.provider_id, p.provider?.name || p.provider_id, p.total_clicks)} />
               <div className="w-20 text-right"><span className="text-xs text-gray-400">{relativeTime(p.last_active)}</span></div>
             </div>
           );
@@ -362,9 +426,10 @@ function ProvidersPeopleView({ providers, loading, total, page, setPage, pageSiz
 // Family Feed View
 // ---------------------------------------------------------------------------
 
-function FamilyFeedView({ events, loading, total, page, setPage, pageSize }: {
+function FamilyFeedView({ events, loading, total, page, setPage, pageSize, selected, onToggle, onDeleteOne }: {
   events: FamilyEvent[]; loading: boolean; total: number;
   page: number; setPage: (p: number) => void; pageSize: number;
+  selected: Set<string>; onToggle: (id: string) => void; onDeleteOne: (id: string, label: string) => void;
 }) {
   if (loading) return <Skeleton rows={8} />;
   if (events.length === 0) {
@@ -381,6 +446,7 @@ function FamilyFeedView({ events, loading, total, page, setPage, pageSize }: {
       <div className="space-y-0">
         {events.map((event) => (
           <div key={event.id} className="flex items-center gap-3 py-3.5 border-b border-gray-100/80 group">
+            <RowCheckbox checked={selected.has(event.id)} onChange={() => onToggle(event.id)} />
             <div className="min-w-0 flex-1">
               <Link href={`/admin/care-seekers/${event.profile_id}`}
                 className="text-sm font-medium text-gray-900 hover:text-teal-700 transition-colors truncate block">
@@ -397,6 +463,7 @@ function FamilyFeedView({ events, loading, total, page, setPage, pageSize }: {
             <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${familyEventTypeBadgeColor(event.event_type)}`}>
               {familyEventTypeLabel(event.event_type)}
             </span>
+            <TrashButton onClick={() => onDeleteOne(event.id, event.family?.name || "Unknown")} />
             <span className="text-xs text-gray-400 shrink-0 w-20 text-right">{relativeTime(event.created_at)}</span>
           </div>
         ))}
@@ -410,9 +477,10 @@ function FamilyFeedView({ events, loading, total, page, setPage, pageSize }: {
 // Families People View
 // ---------------------------------------------------------------------------
 
-function FamiliesPeopleView({ families, loading, total, page, setPage, pageSize }: {
+function FamiliesPeopleView({ families, loading, total, page, setPage, pageSize, selected, onToggle, onDeletePerson }: {
   families: FamilyAgg[]; loading: boolean; total: number;
   page: number; setPage: (p: number) => void; pageSize: number;
+  selected: Set<string>; onToggle: (id: string) => void; onDeletePerson: (personId: string, label: string, eventCount: number) => void;
 }) {
   if (loading) return <Skeleton rows={8} />;
   if (families.length === 0) {
@@ -427,6 +495,7 @@ function FamiliesPeopleView({ families, loading, total, page, setPage, pageSize 
   return (
     <div>
       <div className="flex items-center gap-3 py-2.5 border-b border-gray-200 text-xs text-gray-400 font-medium">
+        <div className="w-3.5 shrink-0" />
         <div className="flex-1 min-w-0">Family</div>
         <div className="w-16 text-center">Events</div>
         <div className="w-20 text-center">Connects</div>
@@ -437,7 +506,8 @@ function FamiliesPeopleView({ families, loading, total, page, setPage, pageSize 
         {families.map((f) => {
           const engagement = engagementLabel(f.recent_events_7d);
           return (
-            <div key={f.profile_id} className="flex items-center gap-3 py-3.5 border-b border-gray-100/80">
+            <div key={f.profile_id} className="flex items-center gap-3 py-3.5 border-b border-gray-100/80 group">
+              <RowCheckbox checked={selected.has(f.profile_id)} onChange={() => onToggle(f.profile_id)} />
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <Link href={`/admin/care-seekers/${f.profile_id}`}
@@ -478,6 +548,7 @@ function FamiliesPeopleView({ families, loading, total, page, setPage, pageSize 
               <div className="w-24 text-center">
                 <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${engagement.className}`}>{engagement.text}</span>
               </div>
+              <TrashButton onClick={() => onDeletePerson(f.profile_id, f.family?.name || "Unknown", f.total_events)} />
               <div className="w-20 text-right"><span className="text-xs text-gray-400">{relativeTime(f.last_active)}</span></div>
             </div>
           );
@@ -537,15 +608,26 @@ export default function ActivityCenterPage() {
   const [totalCount, setTotalCount] = useState<number | null>(null);
   const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Reset page and event filter when actor or subView changes
+  // Delete state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean; message: string; onConfirm: () => void;
+  }>({ open: false, message: "", onConfirm: () => {} });
+
+  // Reset page, event filter, and selection when actor or subView changes
   useEffect(() => {
     setPage(0);
     setEventFilter("");
+    setSelectedIds(new Set());
+    setDeleteError(null);
   }, [actor, subView]);
 
-  // Reset page when filters change
+  // Reset page and selection when filters change
   useEffect(() => {
     setPage(0);
+    setSelectedIds(new Set());
   }, [timeWindow, eventFilter, search]);
 
   const fetchData = useCallback(async () => {
@@ -613,6 +695,105 @@ export default function ActivityCenterPage() {
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => setSearch(val), 300);
   };
+
+  const toggleSelection = useCallback((id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }, []);
+
+  const refreshTotalCount = useCallback(() => {
+    Promise.all([
+      fetch("/api/admin/activity?actor=providers&view=feed&days=9999&count_only=true").then(r => r.json()).catch(() => ({ count: 0 })),
+      fetch("/api/admin/activity?actor=families&view=feed&days=9999&count_only=true").then(r => r.json()).catch(() => ({ count: 0 })),
+    ]).then(([prov, fam]) => {
+      setTotalCount((prov.count || 0) + (fam.count || 0));
+    });
+  }, []);
+
+  const executeDelete = useCallback(async (actorType: "providers" | "families", mode: "events" | "person", ids?: string[], personId?: string) => {
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      const res = await fetch("/api/admin/activity", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ actor: actorType, mode, ids, person_id: personId }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Delete failed");
+      }
+      setSelectedIds(new Set());
+      setConfirmDialog({ open: false, message: "", onConfirm: () => {} });
+      fetchData();
+      refreshTotalCount();
+    } catch (err) {
+      setDeleteError(err instanceof Error ? err.message : "Delete failed");
+    } finally {
+      setDeleting(false);
+    }
+  }, [fetchData, refreshTotalCount]);
+
+  const handleDeleteOneEvent = useCallback((id: string, label: string) => {
+    setConfirmDialog({
+      open: true,
+      message: `Delete this activity event for "${label}"?`,
+      onConfirm: () => executeDelete(actor, "events", [id]),
+    });
+  }, [actor, executeDelete]);
+
+  const handleDeletePerson = useCallback((personId: string, label: string, eventCount: number) => {
+    setConfirmDialog({
+      open: true,
+      message: `Delete all ${eventCount} event${eventCount === 1 ? "" : "s"} for "${label}"? This cannot be undone.`,
+      onConfirm: () => executeDelete(actor, "person", undefined, personId),
+    });
+  }, [actor, executeDelete]);
+
+  const handleBulkDelete = useCallback(() => {
+    const count = selectedIds.size;
+    if (count === 0) return;
+
+    if (subView === "feed") {
+      setConfirmDialog({
+        open: true,
+        message: `Delete ${count} selected event${count === 1 ? "" : "s"}?`,
+        onConfirm: () => executeDelete(actor, "events", Array.from(selectedIds)),
+      });
+    } else {
+      // People view — delete all events for each selected person
+      const personIds = Array.from(selectedIds);
+      setConfirmDialog({
+        open: true,
+        message: `Delete ALL activity for ${count} selected ${actor === "families" ? "famil" : "provider"}${count === 1 ? (actor === "families" ? "y" : "") : (actor === "families" ? "ies" : "s")}? This removes every event for each.`,
+        onConfirm: async () => {
+          setDeleting(true);
+          setDeleteError(null);
+          try {
+            for (const pid of personIds) {
+              const res = await fetch("/api/admin/activity", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ actor, mode: "person", person_id: pid }),
+              });
+              if (!res.ok) throw new Error("Delete failed");
+            }
+            setSelectedIds(new Set());
+            setConfirmDialog({ open: false, message: "", onConfirm: () => {} });
+            fetchData();
+            refreshTotalCount();
+          } catch (err) {
+            setDeleteError(err instanceof Error ? err.message : "Delete failed");
+          } finally {
+            setDeleting(false);
+          }
+        },
+      });
+    }
+  }, [selectedIds, subView, actor, executeDelete, fetchData, refreshTotalCount]);
 
   const filterOptions = actor === "families" ? FAMILY_EVENT_FILTER_OPTIONS : PROVIDER_EVENT_FILTER_OPTIONS;
 
@@ -685,17 +866,27 @@ export default function ActivityCenterPage() {
         </div>
       </div>
 
+      {/* Error banner */}
+      {deleteError && (
+        <div className="flex items-center justify-between bg-red-50 border border-red-200 rounded-lg px-4 py-2.5">
+          <span className="text-xs text-red-700">{deleteError}</span>
+          <button onClick={() => setDeleteError(null)} className="text-xs text-red-500 hover:text-red-700">Dismiss</button>
+        </div>
+      )}
+
       {/* Content */}
       {actor === "families" ? (
         subView === "feed" ? (
           <FamilyFeedView
             events={familyFeedEvents} loading={loading} total={familyFeedTotal}
             page={page} setPage={setPage} pageSize={PAGE_SIZE}
+            selected={selectedIds} onToggle={toggleSelection} onDeleteOne={handleDeleteOneEvent}
           />
         ) : (
           <FamiliesPeopleView
             families={familyRows} loading={loading} total={familiesTotal}
             page={page} setPage={setPage} pageSize={PAGE_SIZE}
+            selected={selectedIds} onToggle={toggleSelection} onDeletePerson={handleDeletePerson}
           />
         )
       ) : (
@@ -703,14 +894,28 @@ export default function ActivityCenterPage() {
           <ProviderFeedView
             events={providerFeedEvents} loading={loading} total={providerFeedTotal}
             page={page} setPage={setPage} pageSize={PAGE_SIZE}
+            selected={selectedIds} onToggle={toggleSelection} onDeleteOne={handleDeleteOneEvent}
           />
         ) : (
           <ProvidersPeopleView
             providers={providerRows} loading={loading} total={providersTotal}
             page={page} setPage={setPage} pageSize={PAGE_SIZE}
+            selected={selectedIds} onToggle={toggleSelection} onDeletePerson={handleDeletePerson}
           />
         )
       )}
+
+      {/* Bulk delete bar */}
+      <DeleteBar count={selectedIds.size} onDelete={handleBulkDelete} deleting={deleting} />
+
+      {/* Confirm dialog */}
+      <ConfirmDialog
+        open={confirmDialog.open}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={() => setConfirmDialog({ open: false, message: "", onConfirm: () => {} })}
+        deleting={deleting}
+      />
     </div>
   );
 }

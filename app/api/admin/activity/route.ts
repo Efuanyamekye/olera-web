@@ -387,6 +387,73 @@ async function handleProvidersView(db: any, opts: {
 }
 
 // ---------------------------------------------------------------------------
+// DELETE /api/admin/activity
+// ---------------------------------------------------------------------------
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const user = await getAuthUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    const adminUser = await getAdminUser(user.id);
+    if (!adminUser) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const { actor, mode, ids, person_id } = body as {
+      actor: "providers" | "families";
+      mode: "events" | "person";
+      ids?: string[];
+      person_id?: string;
+    };
+
+    const table = actor === "families" ? "seeker_activity" : "provider_activity";
+    const db = getServiceClient();
+
+    if (mode === "events") {
+      if (!ids || ids.length === 0) {
+        return NextResponse.json({ error: "No event IDs provided" }, { status: 400 });
+      }
+      const { error, count } = await db
+        .from(table)
+        .delete({ count: "exact" })
+        .in("id", ids);
+
+      if (error) {
+        console.error("Activity delete error:", error);
+        return NextResponse.json({ error: "Failed to delete events" }, { status: 500 });
+      }
+      return NextResponse.json({ deleted: count || 0 });
+    }
+
+    if (mode === "person") {
+      if (!person_id) {
+        return NextResponse.json({ error: "No person_id provided" }, { status: 400 });
+      }
+      const idColumn = actor === "families" ? "profile_id" : "provider_id";
+      const { error, count } = await db
+        .from(table)
+        .delete({ count: "exact" })
+        .eq(idColumn, person_id);
+
+      if (error) {
+        console.error("Activity person delete error:", error);
+        return NextResponse.json({ error: "Failed to delete events" }, { status: 500 });
+      }
+      return NextResponse.json({ deleted: count || 0 });
+    }
+
+    return NextResponse.json({ error: "Invalid mode — use 'events' or 'person'" }, { status: 400 });
+  } catch (err) {
+    console.error("Admin activity delete error:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Family handlers — seeker_activity table
 // ---------------------------------------------------------------------------
 
