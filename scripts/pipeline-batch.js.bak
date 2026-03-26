@@ -50,7 +50,7 @@ function parseArgs() {
     batch: null,        // path to expansion dir or .md file
     phase: 'all',       // clean | load | enrich | finalize | all
     expansionDir: path.resolve(process.env.HOME, 'Desktop/TJ-hq/Olera/Provider Database/Expansion'),
-    dedupCsv: null, // deprecated: now queries Supabase live instead of stale CSV
+    dedupCsv: path.resolve(process.env.HOME, 'Desktop/TJ-hq/Olera/Provider Database/olera-providers_rows.csv'),
     resume: false,
     dryRun: false,
     concurrency: 5,
@@ -482,30 +482,21 @@ async function phaseClean(cities, opts) {
   console.log(`${'='.repeat(70)}`);
   console.log(`  Cities: ${cities.length}`);
 
-  // Step 1: Load dedup sets ONCE — live from Supabase (not stale CSV)
-  console.log(`\n  Loading dedup data from Supabase (live)...`);
-  const dedupNameSet = new Set();    // name|state for name-based dedup
-  const dedupPlaceSet = new Set();   // place_id for exact-match dedup
-  let offset = 0;
-  const PAGE = 1000;
-  while (true) {
-    const { data, error } = await supabase
-      .from('olera-providers')
-      .select('provider_name, state, place_id')
-      .range(offset, offset + PAGE - 1);
-    if (error || !data || data.length === 0) break;
-    for (const row of data) {
+  // Step 1: Load dedup set ONCE
+  console.log(`\n  Loading dedup CSV...`);
+  const dedupSet = new Set();
+  if (fs.existsSync(opts.dedupCsv)) {
+    const raw = fs.readFileSync(opts.dedupCsv);
+    const rows = csvParse.parse(raw, { columns: true, relax_column_count: true });
+    for (const row of rows) {
       if (row.provider_name && row.state) {
-        dedupNameSet.add(row.provider_name.trim().toLowerCase() + '|' + row.state.trim().toUpperCase());
-      }
-      if (row.place_id) {
-        dedupPlaceSet.add(row.place_id);
+        dedupSet.add(row.provider_name.trim().toLowerCase() + '|' + row.state.trim().toUpperCase());
       }
     }
-    offset += data.length;
-    if (data.length < PAGE) break;
+    console.log(`  Dedup set loaded: ${dedupSet.size} existing providers`);
+  } else {
+    console.log(`  WARN: Dedup CSV not found at ${opts.dedupCsv} — skipping dedup`);
   }
-  console.log(`  Dedup sets loaded: ${dedupNameSet.size} names, ${dedupPlaceSet.size} place_ids (live from Supabase)`);
 
   // Step 2: Process each city
   for (let i = 0; i < cities.length; i++) {
@@ -624,14 +615,11 @@ Return JSON: {"results": [{"num": 1, "is_senior_care": true, "reason": "brief re
       if (p.provider_name !== orig) namesCleaned++;
     }
 
-    // 2e: Dedup — place_id (exact) + name|state (fuzzy) against DB + within-batch
+    // 2e: Dedup against existing DB
     const beforeDedup = providers.length;
     providers = providers.filter(p => {
-      // Place ID dedup: same place_id = same business, 100% precision
-      if (p.place_id && dedupPlaceSet.has(p.place_id)) return false;
-      // Name|state dedup: catches remaining overlaps
       const key = p.provider_name.trim().toLowerCase() + '|' + (p.state || c.state).trim().toUpperCase();
-      return !dedupNameSet.has(key);
+      return !dedupSet.has(key);
     });
     const dupes = beforeDedup - providers.length;
 
@@ -661,8 +649,7 @@ Return JSON: {"results": [{"num": 1, "is_senior_care": true, "reason": "brief re
 
     // Add dedup entries for this city (so next city dedupes against it too)
     for (const p of providers) {
-      dedupNameSet.add(p.provider_name.trim().toLowerCase() + '|' + (p.state || c.state).trim().toUpperCase());
-      if (p.place_id) dedupPlaceSet.add(p.place_id);
+      dedupSet.add(p.provider_name.trim().toLowerCase() + '|' + (p.state || c.state).trim().toUpperCase());
     }
   }
 
@@ -757,7 +744,7 @@ async function phaseLoad(cities, opts) {
 
     console.log(`    Uploaded: ${uploaded}${slugCollisions > 0 ? ` (${slugCollisions} slug collisions resolved)` : ''}`);
 
-    // Smart Geocode — only re-geocode providers with missing/suspicious coordinates
+    // Geocode
     const { data: toGeocode } = await supabase
       .from('olera-providers')
       .select('provider_id, provider_name, address, city, state, lat, lon')
@@ -766,34 +753,16 @@ async function phaseLoad(cities, opts) {
 
     let corrections = 0;
     let outOfArea = 0;
-    let skippedGeocode = 0;
     const stateName = STATE_NAMES[c.state] || c.state;
     const bounds = STATE_BOUNDS[c.state];
 
-    // Get city center (1 API call per city, not per provider)
+    // Get city center for area check (approximate from first provider or geocode)
     let cityLat = null, cityLon = null;
     const centerResult = await googleGeocode(`${c.city}, ${stateName}`);
     if (centerResult) { cityLat = centerResult.lat; cityLon = centerResult.lon; }
 
     for (let g = 0; g < (toGeocode || []).length; g++) {
       const p = toGeocode[g];
-
-      // Smart skip: if discovery coordinates are within state bounds AND near city center, trust them
-      const hasCoords = p.lat && p.lon && p.lat !== 0 && p.lon !== 0;
-      let coordsLookGood = false;
-      if (hasCoords && bounds) {
-        const inState = p.lat >= bounds[0] && p.lat <= bounds[1] && p.lon >= bounds[2] && p.lon <= bounds[3];
-        const nearCity = cityLat && cityLon &&
-          Math.abs(p.lat - cityLat) <= 0.5 && Math.abs(p.lon - cityLon) <= 0.5;
-        coordsLookGood = inState && nearCity;
-      }
-
-      if (coordsLookGood) {
-        skippedGeocode++;
-        continue; // Discovery coordinates are trustworthy — skip the API call
-      }
-
-      // Coordinates missing, zero, out of state, or far from city — re-geocode
       const fullAddr = [p.address, p.city, stateName].filter(Boolean).join(', ');
       const result = await googleGeocode(fullAddr);
       if (!result) continue;
@@ -801,13 +770,14 @@ async function phaseLoad(cities, opts) {
       const diff = Math.abs((p.lat || 0) - result.lat) + Math.abs((p.lon || 0) - result.lon);
       if (diff > 0.01) corrections++;
 
-      // Validate geocoded result
+      // State bounding box check
       let isOutOfArea = false;
       if (bounds) {
         if (result.lat < bounds[0] || result.lat > bounds[1] || result.lon < bounds[2] || result.lon > bounds[3]) {
           isOutOfArea = true;
         }
       }
+      // City proximity check (~0.5° ≈ 30 miles)
       if (!isOutOfArea && cityLat && cityLon) {
         if (Math.abs(result.lat - cityLat) > 0.5 || Math.abs(result.lon - cityLon) > 0.5) {
           isOutOfArea = true;
@@ -834,8 +804,7 @@ async function phaseLoad(cities, opts) {
       .like('provider_id', `${idPrefix}%`)
       .eq('deleted', false);
 
-    const geocoded = (toGeocode || []).length - skippedGeocode;
-    console.log(`    Geocode: ${skippedGeocode} skipped (coords OK), ${geocoded} checked, ${corrections} corrected, ${outOfArea} out-of-area → ${activeCount} active`);
+    console.log(`    Geocoded: ${corrections} corrections, ${outOfArea} out-of-area removed → ${activeCount} active`);
   }
 
   console.log(`\n  Load phase complete. Cost so far: ${cost.summary()}`);
@@ -905,15 +874,17 @@ async function phaseEnrich(cities, opts) {
   }
   console.log(`    Descriptions: ${descCount} written | Reviews hydrated: ${hydrateCount}`);
 
-  // --- Parallel streams A + B (trust signals || combined reviews+photos) ---
+  // --- Parallel streams A/B/C ---
   const streamA = enrichTrustSignals(allProviders);
-  const streamB = enrichReviewsAndImages(allProviders);
+  const streamB = enrichReviewSnippets(allProviders);
+  const streamC = enrichImages(allProviders);
 
-  console.log('\n  Streams A/B running in parallel...');
-  const [trustResult, placesResult] = await Promise.all([streamA, streamB]);
+  console.log('\n  Streams A/B/C running in parallel...');
+  const [trustResult, snippetResult, imageResult] = await Promise.all([streamA, streamB, streamC]);
 
   console.log(`    Stream A (Trust signals): ${trustResult.confirmed} confirmed, ${trustResult.deleted} deleted`);
-  console.log(`    Stream B (Reviews+Images): ${placesResult.snippetsFetched} snippets, ${placesResult.imagesFetched} images, ${placesResult.noData} no data (${placesResult.apiCalls} API calls — was ${placesResult.savedCalls} separate calls before merge)`);
+  console.log(`    Stream B (Review snippets): ${snippetResult.fetched} fetched, ${snippetResult.empty} empty`);
+  console.log(`    Stream C (Images): ${imageResult.fetched} fetched, ${imageResult.noPhotos} no photos`);
 
   // --- Post-streams: Re-hydrate to merge snippets into existing JSONB ---
   console.log('\n  Re-hydrating reviews (merging snippets into JSONB)...');
@@ -1019,49 +990,20 @@ Return ONLY this JSON:
   return { confirmed, deleted, failed };
 }
 
-async function enrichReviewsAndImages(allProviders) {
-  // Combined stream: one Google Places call fetches reviews+photos together
-  // Before: 2 separate calls per provider (reviews + photos) = 2N API calls
-  // After:  1 combined call + 1 photo URI resolution = at most 2 calls, often 1
-  const needReviews = new Set(
-    allProviders.filter(p =>
-      p.place_id && p.google_rating &&
-      (!p.google_reviews_data?.reviews || p.google_reviews_data.reviews.length === 0)
-    ).map(p => p.provider_id)
+async function enrichReviewSnippets(allProviders) {
+  const withPlaceId = allProviders.filter(p =>
+    p.place_id && p.google_rating &&
+    (!p.google_reviews_data?.reviews || p.google_reviews_data.reviews.length === 0)
   );
-  const needImages = new Set(
-    allProviders.filter(p => p.place_id && !p.provider_images).map(p => p.provider_id)
-  );
+  if (!GOOGLE_API_KEY || withPlaceId.length === 0) return { fetched: 0, empty: 0 };
 
-  // Union: providers that need either reviews or images (or both)
-  const needEither = allProviders.filter(p =>
-    p.place_id && (needReviews.has(p.provider_id) || needImages.has(p.provider_id))
-  );
+  let fetched = 0, empty = 0;
 
-  if (!GOOGLE_API_KEY || needEither.length === 0) {
-    return { snippetsFetched: 0, imagesFetched: 0, noData: 0, apiCalls: 0, savedCalls: 0 };
-  }
-
-  let snippetsFetched = 0, imagesFetched = 0, noData = 0, apiCalls = 0;
-  const wouldHaveBeen = needReviews.size + needImages.size; // old separate call count
-
-  for (let i = 0; i < needEither.length; i++) {
-    const p = needEither[i];
-    const wantReviews = needReviews.has(p.provider_id);
-    const wantImages = needImages.has(p.provider_id);
-
-    // Build fields list — one call for both
-    const fields = [];
-    if (wantReviews) fields.push('reviews');
-    if (wantImages) fields.push('photos');
-
+  for (let i = 0; i < withPlaceId.length; i++) {
+    const p = withPlaceId[i];
     try {
-      const data = await googlePlacesField(p.place_id, fields.join(','));
-      apiCalls++;
-      const updates = {};
-
-      // Reviews
-      if (wantReviews && data?.reviews?.length > 0) {
+      const data = await googlePlacesField(p.place_id, 'reviews');
+      if (data?.reviews?.length > 0) {
         const reviews = data.reviews.slice(0, 5).map(r => ({
           text: r.text?.text || '',
           rating: r.rating,
@@ -1072,34 +1014,51 @@ async function enrichReviewsAndImages(allProviders) {
         const existing = p.google_reviews_data || {};
         existing.reviews = reviews;
         existing.last_synced = new Date().toISOString();
-        updates.google_reviews_data = existing;
-        snippetsFetched++;
-      }
-
-      // Images
-      if (wantImages && data?.photos?.length > 0) {
-        const photoName = data.photos[0].name;
-        const uri = await googlePhotoUri(photoName);
-        apiCalls++; // photo URI resolution is a separate call (unavoidable)
-        if (uri) {
-          updates.provider_images = uri;
-          imagesFetched++;
-        }
-      }
-
-      if (Object.keys(updates).length > 0) {
-        await supabase.from('olera-providers').update(updates).eq('provider_id', p.provider_id);
+        await supabase.from('olera-providers').update({ google_reviews_data: existing }).eq('provider_id', p.provider_id);
+        fetched++;
       } else {
-        noData++;
+        empty++;
       }
     } catch (e) {
-      noData++;
+      empty++;
     }
 
-    if ((i + 1) % 50 === 0) process.stdout.write(`    Places: ${i + 1}/${needEither.length}\r`);
+    if ((i + 1) % 50 === 0) process.stdout.write(`    Snippets: ${i + 1}/${withPlaceId.length}\r`);
   }
 
-  return { snippetsFetched, imagesFetched, noData, apiCalls, savedCalls: wouldHaveBeen };
+  return { fetched, empty };
+}
+
+async function enrichImages(allProviders) {
+  const needImages = allProviders.filter(p => p.place_id && !p.provider_images);
+  if (!GOOGLE_API_KEY || needImages.length === 0) return { fetched: 0, noPhotos: 0 };
+
+  let fetched = 0, noPhotos = 0;
+
+  for (let i = 0; i < needImages.length; i++) {
+    const p = needImages[i];
+    try {
+      const data = await googlePlacesField(p.place_id, 'photos');
+      if (data?.photos?.length > 0) {
+        const photoName = data.photos[0].name;
+        const uri = await googlePhotoUri(photoName);
+        if (uri) {
+          await supabase.from('olera-providers').update({ provider_images: uri }).eq('provider_id', p.provider_id);
+          fetched++;
+        } else {
+          noPhotos++;
+        }
+      } else {
+        noPhotos++;
+      }
+    } catch (e) {
+      noPhotos++;
+    }
+
+    if ((i + 1) % 50 === 0) process.stdout.write(`    Images: ${i + 1}/${needImages.length}\r`);
+  }
+
+  return { fetched, noPhotos };
 }
 
 async function phaseFinalize(cities, opts) {
