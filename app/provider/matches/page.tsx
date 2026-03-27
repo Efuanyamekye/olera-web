@@ -1117,7 +1117,7 @@ function MatchesSidebar({
               {[
                 { num: 1, bold: "Send a note", rest: "explaining why you\u2019re a good fit" },
                 { num: 2, bold: "Family reviews", rest: "your profile and message" },
-                { num: 3, bold: "If they accept,", rest: "a conversation opens in your inbox" },
+                { num: 3, bold: "If they reply,", rest: "you\u2019re connected" },
               ].map((step) => (
                 <div key={step.num} className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-warm-100/70 flex items-center justify-center shrink-0 mt-0.5">
@@ -1128,6 +1128,9 @@ function MatchesSidebar({
                   </p>
                 </div>
               ))}
+              <p className="text-[12px] text-gray-400 leading-relaxed pt-2 border-t border-warm-100/60">
+                Families choose the first provider who responds.
+              </p>
             </div>
           </div>
         </div>
