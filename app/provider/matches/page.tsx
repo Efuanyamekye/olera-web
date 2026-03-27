@@ -129,26 +129,49 @@ const floatKeyframes = `
 `;
 
 // ---------------------------------------------------------------------------
-// Discovery Banner
+// Discovery Banner (with location selector)
 // ---------------------------------------------------------------------------
 
 function DiscoveryBanner({
   familyCount,
-  hotLeadsCount,
-  newTodayCount,
-  responseRate,
+  currentLocation,
   providerLocation,
-  hasContacted,
+  onLocationChange,
 }: {
   familyCount: number;
-  hotLeadsCount: number;
-  newTodayCount: number;
-  responseRate: number;
-  providerLocation: string | null;
-  hasContacted: boolean;
+  currentLocation: string | null; // current filter selection
+  providerLocation: string | null; // provider's default location
+  onLocationChange: (location: string | null) => void;
 }) {
+  const [locationOpen, setLocationOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!locationOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setLocationOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [locationOpen]);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!locationOpen) return;
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLocationOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [locationOpen]);
+
+  const displayLocation = currentLocation || providerLocation || "All locations";
+
   return (
-    <div className="relative mb-6 lg:mb-8 rounded-2xl overflow-hidden border border-warm-200/60">
+    <div className="relative rounded-2xl overflow-hidden border border-warm-200/60">
       {/* Background with warm gradient */}
       <div
         className="absolute inset-0"
@@ -167,74 +190,93 @@ function DiscoveryBanner({
       />
 
       {/* Content */}
-      <div className="relative px-5 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
-          {/* Left: Main content */}
-          <div className="flex-1 min-w-0">
-            {/* Location label */}
-            {providerLocation && (
-              <div className="inline-flex items-center gap-1.5 mb-2.5 px-2.5 py-1 bg-primary-50/80 rounded-full border border-primary-100/60">
-                <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                </svg>
-                <span className="text-[11px] font-semibold text-primary-700 uppercase tracking-wide">
-                  {providerLocation}
-                </span>
-              </div>
-            )}
+      <div className="relative px-5 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
+        {/* Location selector */}
+        <div className="relative inline-block mb-3" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setLocationOpen(!locationOpen)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-50/80 hover:bg-primary-100/80 rounded-full border border-primary-100/60 transition-colors group"
+          >
+            <svg className="w-3.5 h-3.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+            </svg>
+            <span className="text-[12px] font-semibold text-primary-700 uppercase tracking-wide">
+              {displayLocation}
+            </span>
+            <svg
+              className={`w-3.5 h-3.5 text-primary-500 transition-transform duration-200 ${locationOpen ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            </svg>
+          </button>
 
-            {/* Main headline */}
-            <h1 className="font-display text-[22px] sm:text-2xl lg:text-3xl leading-snug tracking-tight text-gray-900">
-              <span className="text-primary-600 font-bold">{familyCount}</span>
-              <span className="text-gray-800"> {familyCount === 1 ? 'family is' : 'families are'} looking for care near you</span>
-            </h1>
+          {/* Location dropdown */}
+          {locationOpen && (
+            <div className="absolute top-[calc(100%+6px)] left-0 w-56 bg-white rounded-xl shadow-lg border border-gray-200/80 py-1.5 z-50 animate-fade-in">
+              <button
+                type="button"
+                onClick={() => {
+                  onLocationChange(null);
+                  setLocationOpen(false);
+                }}
+                className={`flex items-center gap-2.5 w-full px-3.5 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors ${
+                  currentLocation === null ? "bg-primary-50 text-primary-700" : "text-gray-700"
+                }`}
+              >
+                {currentLocation === null && (
+                  <svg className="w-4 h-4 text-primary-600 shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                  </svg>
+                )}
+                {currentLocation !== null && <span className="w-4" />}
+                <span>All locations</span>
+              </button>
 
-            {/* Supporting text */}
-            <p className="mt-2 lg:mt-3 text-sm text-gray-500 leading-relaxed max-w-lg">
-              Reach out within 24 hours — families are{' '}
-              <span className="font-medium text-gray-600">3× more likely</span>{' '}
-              to respond to early contact.
-            </p>
-          </div>
-
-          {/* Right: Stats - horizontal scroll on mobile */}
-          <div className="flex gap-2.5 sm:gap-3 overflow-x-auto pb-1 -mx-1 px-1 lg:mx-0 lg:px-0 lg:overflow-visible lg:shrink-0">
-            {/* Hot Leads */}
-            <div className="flex-shrink-0 min-w-[95px] sm:min-w-[105px] lg:min-w-[115px] bg-white/80 backdrop-blur-sm rounded-xl p-3.5 lg:p-4 border border-gray-100 shadow-xs">
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Hot Leads</span>
-              </div>
-              <p className="text-xl sm:text-2xl font-display font-bold text-gray-900 tracking-tight">
-                {hotLeadsCount}
-              </p>
+              {providerLocation && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onLocationChange(providerLocation);
+                    setLocationOpen(false);
+                  }}
+                  className={`flex items-center gap-2.5 w-full px-3.5 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors ${
+                    currentLocation === providerLocation ? "bg-primary-50 text-primary-700" : "text-gray-700"
+                  }`}
+                >
+                  {currentLocation === providerLocation && (
+                    <svg className="w-4 h-4 text-primary-600 shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  )}
+                  {currentLocation !== providerLocation && <span className="w-4" />}
+                  <span>{providerLocation}</span>
+                </button>
+              )}
             </div>
+          )}
+        </div>
 
-            {/* New Today */}
-            <div className="flex-shrink-0 min-w-[95px] sm:min-w-[105px] lg:min-w-[115px] bg-white/80 backdrop-blur-sm rounded-xl p-3.5 lg:p-4 border border-gray-100 shadow-xs">
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
-                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">New Today</span>
-              </div>
-              <p className="text-xl sm:text-2xl font-display font-bold text-gray-900 tracking-tight">
-                {newTodayCount}
-              </p>
-            </div>
+        {/* Main headline */}
+        <h1 className="font-display text-[22px] sm:text-2xl lg:text-[28px] leading-snug tracking-tight text-gray-900">
+          <span className="text-primary-600 font-bold">{familyCount}</span>
+          <span className="text-gray-800"> {familyCount === 1 ? 'family is' : 'families are'} looking</span>
+          <br className="sm:hidden" />
+          <span className="text-gray-800"> for care near you</span>
+        </h1>
 
-            {/* Response Rate - only show if they've contacted someone */}
-            {hasContacted && (
-              <div className="flex-shrink-0 min-w-[95px] sm:min-w-[105px] lg:min-w-[115px] bg-white/80 backdrop-blur-sm rounded-xl p-3.5 lg:p-4 border border-gray-100 shadow-xs">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success-400" />
-                  <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Your Rate</span>
-                </div>
-                <p className="text-xl sm:text-2xl font-display font-bold text-gray-900 tracking-tight">
-                  {responseRate}%
-                </p>
-              </div>
-            )}
-          </div>
+        {/* Divider + Supporting text */}
+        <div className="mt-4 pt-4 border-t border-warm-200/60">
+          <p className="text-sm text-gray-500 leading-relaxed">
+            Reach out within 24 hours — families are{' '}
+            <span className="font-semibold text-gray-700">3× more likely</span>{' '}
+            to respond to early contact. The first provider to connect has the highest chance of being chosen.
+          </p>
         </div>
       </div>
     </div>
@@ -1148,14 +1190,7 @@ export default function ProviderMatchesPage() {
     [families, contactedIds],
   );
 
-  // Compute banner stats (must be before early returns to satisfy React hooks rules)
-  const hotLeadsCount = useMemo(() => {
-    return families.filter((f) => {
-      const meta = f.metadata as FamilyMetadata;
-      return meta?.timeline === "immediate" && !contactedIds.has(f.id);
-    }).length;
-  }, [families, contactedIds]);
-
+  // Compute new matches today for sidebar (must be before early returns for hooks rules)
   const newTodayCount = useMemo(() => {
     const today = new Date().toDateString();
     return families.filter((f) => {
@@ -1164,12 +1199,6 @@ export default function ProviderMatchesPage() {
       return publishedAt && new Date(publishedAt).toDateString() === today;
     }).length;
   }, [families]);
-
-  const responseRate = useMemo(() => {
-    return contactedIds.size > 0
-      ? Math.round((respondedIds.size / contactedIds.size) * 100)
-      : 0;
-  }, [contactedIds, respondedIds]);
 
   const providerLocation = providerProfile
     ? [providerProfile.city, providerProfile.state].filter(Boolean).join(", ") || null
@@ -1222,7 +1251,6 @@ export default function ProviderMatchesPage() {
         filters={filters}
         onChange={setFilters}
         resultCount={filteredFamilies.length}
-        providerLocation={providerLocation}
       />
 
       {/* ── Main layout (Upwork-style) ── */}
@@ -1232,11 +1260,9 @@ export default function ProviderMatchesPage() {
           {/* Discovery Banner */}
           <DiscoveryBanner
             familyCount={filteredFamilies.length}
-            hotLeadsCount={hotLeadsCount}
-            newTodayCount={newTodayCount}
-            responseRate={responseRate}
+            currentLocation={filters.location}
             providerLocation={providerLocation}
-            hasContacted={contactedIds.size > 0}
+            onLocationChange={(location) => setFilters({ ...filters, location })}
           />
 
           {/* Filter bar */}
@@ -1245,7 +1271,6 @@ export default function ProviderMatchesPage() {
             onChange={setFilters}
             sortBy={sortBy}
             onSortChange={setSortBy}
-            providerLocation={providerLocation}
             onOpenSheet={(type) => setFilterSheetType(type)}
           />
 
