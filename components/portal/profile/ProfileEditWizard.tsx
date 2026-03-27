@@ -66,10 +66,28 @@ const CONTACT_METHODS = [
 ] as const;
 
 const TIMELINES = [
-  { value: "immediate", label: "As soon as possible" },
+  { value: "immediate", label: "Immediately" },
   { value: "within_1_month", label: "Within a month" },
   { value: "within_3_months", label: "In a few months" },
-  { value: "exploring", label: "Just researching" },
+  { value: "exploring", label: "Just exploring" },
+] as const;
+
+const CARE_NEEDS = [
+  "Personal care",
+  "Household tasks",
+  "Health management",
+  "Companionship",
+  "Memory care",
+  "Mobility help",
+] as const;
+
+const SCHEDULE_OPTIONS = [
+  { value: "mornings", label: "Mornings" },
+  { value: "afternoons", label: "Afternoons" },
+  { value: "evenings", label: "Evenings" },
+  { value: "overnight", label: "Overnight" },
+  { value: "full_time", label: "Full-time" },
+  { value: "flexible", label: "Flexible" },
 ] as const;
 
 const PAYMENT_OPTIONS = [
@@ -85,18 +103,62 @@ const PAYMENT_OPTIONS = [
 // Helper Components
 // ============================================================
 
+/** Unified selection chip - used throughout for consistency */
+function SelectionChip({
+  selected,
+  onClick,
+  children,
+  icon,
+  size = "md",
+}: {
+  selected: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  icon?: React.ReactNode;
+  size?: "sm" | "md";
+}) {
+  const sizeClasses = size === "sm"
+    ? "px-3 py-2 text-[13px]"
+    : "px-4 py-2.5 text-sm";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`
+        ${sizeClasses} rounded-xl font-medium transition-all duration-200
+        flex items-center gap-2
+        ${selected
+          ? "bg-primary-600 text-white shadow-sm"
+          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+        }
+      `}
+    >
+      {icon && <span className={selected ? "text-white/90" : "text-gray-500"}>{icon}</span>}
+      {children}
+    </button>
+  );
+}
+
+/** Section label for form groups */
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <label className="block text-[15px] font-semibold text-gray-900 mb-3">
+      {children}
+    </label>
+  );
+}
+
 function ProgressDots({ current, total }: { current: number; total: number }) {
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-1.5">
       {Array.from({ length: total }, (_, i) => (
         <div
           key={i}
-          className={`w-2 h-2 rounded-full transition-all duration-300 ${
-            i < current
-              ? "bg-primary-600"
-              : i === current
-              ? "bg-primary-600 scale-125"
-              : "bg-gray-200"
+          className={`h-1.5 rounded-full transition-all duration-300 ${
+            i <= current
+              ? "bg-primary-600 w-6"
+              : "bg-gray-200 w-1.5"
           }`}
         />
       ))}
@@ -114,13 +176,13 @@ function StepNav({
   onSelect: (step: Step) => void;
 }) {
   return (
-    <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-xl">
+    <div className="flex items-center gap-0.5 p-1 bg-gray-100 rounded-full">
       {steps.map(({ num, label }) => (
         <button
           key={num}
           type="button"
           onClick={() => onSelect(num)}
-          className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all ${
+          className={`px-3.5 py-1.5 text-[13px] font-medium rounded-full transition-all ${
             current === num
               ? "bg-white text-gray-900 shadow-sm"
               : "text-gray-500 hover:text-gray-700"
@@ -133,31 +195,29 @@ function StepNav({
   );
 }
 
-function WhoIcon({ type }: { type: string }) {
-  const iconClass = "w-5 h-5";
-
+function WhoIcon({ type, className = "w-5 h-5" }: { type: string; className?: string }) {
   switch (type) {
     case "user":
       return (
-        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
       );
     case "parent":
       return (
-        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       );
     case "heart":
       return (
-        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
       );
     case "people":
       return (
-        <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       );
@@ -211,8 +271,12 @@ export default function ProfileEditWizard({
 
   // Step 3: Care Preferences
   const [whoNeedsCare, setWhoNeedsCare] = useState(meta.relationship_to_recipient || "");
+  const [age, setAge] = useState<string>(meta.age ? String(meta.age) : "");
   const [careTypes, setCareTypes] = useState<string[]>(profile.care_types || []);
+  const [careNeeds, setCareNeeds] = useState<string[]>(meta.care_needs || []);
   const [timeline, setTimeline] = useState(meta.timeline || "");
+  const [schedulePreference, setSchedulePreference] = useState(meta.schedule_preference || "");
+  const [description, setDescription] = useState(meta.about_situation || profile.description || "");
 
   // Step 4: Payment
   const [payments, setPayments] = useState<string[]>(meta.payment_methods || []);
@@ -272,6 +336,13 @@ export default function ProfileEditWizard({
     );
   };
 
+  // Toggle care need selection
+  const toggleCareNeed = (need: string) => {
+    setCareNeeds((prev) =>
+      prev.includes(need) ? prev.filter((n) => n !== need) : [...prev, need]
+    );
+  };
+
   // Toggle payment option
   const togglePayment = (option: string) => {
     setPayments((prev) =>
@@ -298,7 +369,11 @@ export default function ProfileEditWizard({
         ...existingMeta,
         contact_preference: contactPref || undefined,
         relationship_to_recipient: whoNeedsCare || undefined,
+        age: age ? parseInt(age, 10) : undefined,
+        care_needs: careNeeds.length > 0 ? careNeeds : undefined,
         timeline: timeline || undefined,
+        schedule_preference: schedulePreference || undefined,
+        about_situation: description || undefined,
         payment_methods: payments.length > 0 ? payments : undefined,
       };
 
@@ -311,6 +386,7 @@ export default function ProfileEditWizard({
           email: email || null,
           phone: phone || null,
           care_types: careTypes,
+          description: description || null,
           metadata: updatedMeta,
         })
         .eq("id", profile.id);
@@ -331,8 +407,12 @@ export default function ProfileEditWizard({
               email && "email",
               phone && "phone",
               careTypes.length > 0 && "care_types",
+              careNeeds.length > 0 && "care_needs",
               whoNeedsCare && "relationship",
+              age && "age",
               timeline && "timeline",
+              schedulePreference && "schedule_preference",
+              description && "description",
               payments.length > 0 && "payment_methods",
               contactPref && "contact_preference",
             ].filter(Boolean),
@@ -356,10 +436,15 @@ export default function ProfileEditWizard({
     phone,
     contactPref,
     whoNeedsCare,
+    age,
     careTypes,
+    careNeeds,
     timeline,
+    schedulePreference,
+    description,
     payments,
     refreshAccountData,
+    step,
   ]);
 
   // Track if initial load is done (to prevent saving on mount)
@@ -386,8 +471,12 @@ export default function ProfileEditWizard({
     phone,
     contactPref,
     whoNeedsCare,
+    age,
     careTypes,
+    careNeeds,
     timeline,
+    schedulePreference,
+    description,
     payments,
     saveChanges,
   ]);
@@ -403,21 +492,18 @@ export default function ProfileEditWizard({
   const isStep3Valid = careTypes.length > 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
         onClick={handleClose}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-2xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+      <div className="relative w-full max-w-[600px] bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[85vh] flex flex-col">
+        {/* Header - minimal, Apple-style */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100/80">
           <div className="flex items-center gap-4">
-            <h2 className="text-lg font-display font-bold text-gray-900">
-              Edit Profile
-            </h2>
             <StepNav
               steps={[
                 { num: 1, label: "Info" },
@@ -432,132 +518,103 @@ export default function ProfileEditWizard({
           <button
             type="button"
             onClick={handleClose}
-            className="p-2 text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+            className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          <div className="min-h-[400px]">
-            {/* Form Content */}
-            <div className="p-6 lg:p-8">
-              {/* Step title */}
-              <div className="mb-6">
-                <p className="text-sm font-medium text-primary-600 mb-1">
-                  Step {step} of 4
-                </p>
-                <h3 className="text-xl lg:text-2xl font-display font-bold text-gray-900">
-                  {STEP_TITLES[step]}
-                </h3>
-                <p className="text-gray-500 mt-1">
-                  {STEP_SUBTITLES[step]}
-                </p>
-              </div>
+          <div className="px-6 py-6 lg:px-8 lg:py-8">
+            {/* Step title - cleaner hierarchy */}
+            <div className="mb-8">
+              <h3 className="text-2xl font-display font-bold text-gray-900 tracking-tight">
+                {STEP_TITLES[step]}
+              </h3>
+              <p className="text-[15px] text-gray-500 mt-1">
+                {STEP_SUBTITLES[step]}
+              </p>
+            </div>
 
               {/* Step 1: Basic Information */}
               {step === 1 && (
-                <div className="space-y-5">
-                  {/* Photo upload */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Profile photo
-                    </label>
-                    <div className="flex items-center gap-4">
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                        disabled={imageUploading}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={imageUploading}
-                        className="w-20 h-20 rounded-full overflow-hidden bg-gray-50 ring-[3px] ring-gray-100 hover:ring-primary-200 shadow-sm hover:shadow transition-all cursor-pointer flex items-center justify-center group relative shrink-0"
-                      >
-                        {localImageUrl ? (
-                          <>
-                            <Image
-                              src={localImageUrl}
-                              alt={displayName || "Profile"}
-                              width={80}
-                              height={80}
-                              className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all rounded-full flex items-center justify-center">
-                              <svg
-                                className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={1.5}
-                                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                                />
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={1.5}
-                                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
-                              </svg>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex flex-col items-center gap-0.5 text-gray-400 group-hover:text-primary-600 transition-colors">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4v16m8-8H4" />
+                <div className="space-y-8">
+                  {/* Photo upload - centered, prominent */}
+                  <div className="flex flex-col items-center">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      disabled={imageUploading}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={imageUploading}
+                      className="w-24 h-24 rounded-full overflow-hidden bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer flex items-center justify-center group relative"
+                    >
+                      {localImageUrl ? (
+                        <>
+                          <Image
+                            src={localImageUrl}
+                            alt={displayName || "Profile"}
+                            width={96}
+                            height={96}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all rounded-full flex items-center justify-center">
+                            <svg
+                              className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                           </div>
-                        )}
-                        {imageUploading && (
-                          <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-full">
-                            <div className="w-5 h-5 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
-                          </div>
-                        )}
-                      </button>
-                      <div className="text-sm">
-                        <p className="font-medium text-gray-700">
-                          {localImageUrl ? "Change photo" : "Add a photo"}
-                        </p>
-                        <p className="text-gray-400 text-xs mt-0.5">
-                          JPG, PNG or WebP. Max 5MB.
-                        </p>
-                      </div>
-                    </div>
+                        </>
+                      ) : (
+                        <svg className="w-8 h-8 text-gray-400 group-hover:text-gray-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                        </svg>
+                      )}
+                      {imageUploading && (
+                        <div className="absolute inset-0 bg-white/90 flex items-center justify-center rounded-full">
+                          <div className="w-6 h-6 border-2 border-primary-600 border-t-transparent rounded-full animate-spin" />
+                        </div>
+                      )}
+                    </button>
+                    <p className="text-sm text-gray-500 mt-3">
+                      {localImageUrl ? "Tap to change" : "Add a photo"}
+                    </p>
                     {imageError && (
-                      <p className="text-sm text-red-600 mt-2">{imageError}</p>
+                      <p className="text-sm text-red-600 mt-1">{imageError}</p>
                     )}
                   </div>
 
                   {/* Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Your name
-                    </label>
+                    <SectionLabel>Your name</SectionLabel>
                     <input
                       type="text"
                       value={displayName}
                       onChange={(e) => setDisplayName(e.target.value)}
                       placeholder="Enter your full name"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-300 focus:ring-2 focus:ring-primary-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                      className="w-full px-4 py-3.5 rounded-xl bg-gray-100 border-0 focus:bg-white focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     />
                   </div>
 
                   {/* Location */}
                   <div ref={cityDropdownRef} className="relative">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Location
-                    </label>
+                    <SectionLabel>Location</SectionLabel>
                     <input
                       ref={cityInputRef}
                       type="text"
@@ -568,16 +625,16 @@ export default function ProfileEditWizard({
                       }}
                       onFocus={() => setShowCityDropdown(true)}
                       placeholder="Search for your city..."
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-300 focus:ring-2 focus:ring-primary-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                      className="w-full px-4 py-3.5 rounded-xl bg-gray-100 border-0 focus:bg-white focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     />
                     {showCityDropdown && cityResults.length > 0 && (
-                      <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                      <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl max-h-48 overflow-y-auto">
                         {cityResults.map((result) => (
                           <button
                             key={`${result.city}-${result.state}`}
                             type="button"
                             onClick={() => handleCitySelect(result.city, result.state)}
-                            className="w-full px-4 py-2.5 text-left hover:bg-gray-50 transition-colors first:rounded-t-xl last:rounded-b-xl"
+                            className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors first:rounded-t-xl last:rounded-b-xl"
                           >
                             <span className="font-medium text-gray-900">{result.city}</span>
                             <span className="text-gray-500">, {result.state}</span>
@@ -591,54 +648,43 @@ export default function ProfileEditWizard({
 
               {/* Step 2: Contact Details */}
               {step === 2 && (
-                <div className="space-y-5">
+                <div className="space-y-8">
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email address
-                    </label>
+                    <SectionLabel>Email address</SectionLabel>
                     <input
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="your@email.com"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-300 focus:ring-2 focus:ring-primary-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                      className="w-full px-4 py-3.5 rounded-xl bg-gray-100 border-0 focus:bg-white focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     />
                   </div>
 
                   {/* Phone */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone number
-                    </label>
+                    <SectionLabel>Phone number</SectionLabel>
                     <input
                       type="tel"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="(555) 123-4567"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary-300 focus:ring-2 focus:ring-primary-100 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                      className="w-full px-4 py-3.5 rounded-xl bg-gray-100 border-0 focus:bg-white focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     />
                   </div>
 
                   {/* Preferred contact method */}
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-3">
-                      Preferred contact method
-                    </h4>
+                    <SectionLabel>Preferred contact method</SectionLabel>
                     <div className="flex flex-wrap gap-2">
                       {CONTACT_METHODS.map(({ id, label }) => (
-                        <button
+                        <SelectionChip
                           key={id}
-                          type="button"
+                          selected={contactPref === id}
                           onClick={() => setContactPref(id)}
-                          className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all ${
-                            contactPref === id
-                              ? "border-primary-500 bg-primary-50 text-primary-700"
-                              : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                          }`}
                         >
                           {label}
-                        </button>
+                        </SelectionChip>
                       ))}
                     </div>
                   </div>
@@ -647,175 +693,225 @@ export default function ProfileEditWizard({
 
               {/* Step 3: Care Preferences */}
               {step === 3 && (
-                <div className="space-y-6">
+                <div className="space-y-8">
                   {/* Who needs care */}
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-3">
-                      Who needs care?
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2">
+                    <SectionLabel>Who needs care?</SectionLabel>
+                    <div className="flex flex-wrap gap-2">
                       {WHO_OPTIONS.map(({ id, label, icon }) => (
-                        <button
+                        <SelectionChip
                           key={id}
-                          type="button"
+                          selected={whoNeedsCare === id}
                           onClick={() => setWhoNeedsCare(id)}
-                          className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
-                            whoNeedsCare === id
-                              ? "border-primary-500 bg-primary-50 text-primary-700"
-                              : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                          }`}
+                          icon={<WhoIcon type={icon} className="w-4 h-4" />}
                         >
-                          <div className={`${whoNeedsCare === id ? "text-primary-600" : "text-gray-400"}`}>
-                            <WhoIcon type={icon} />
-                          </div>
-                          <span className="text-sm font-medium">{label}</span>
-                        </button>
+                          {label}
+                        </SelectionChip>
                       ))}
                     </div>
                   </div>
 
+                  {/* Age - inline with label */}
+                  <div>
+                    <SectionLabel>Age of person needing care</SectionLabel>
+                    <input
+                      type="number"
+                      min="0"
+                      max="120"
+                      value={age}
+                      onChange={(e) => setAge(e.target.value)}
+                      placeholder="Enter age"
+                      className="w-full max-w-[200px] px-4 py-3.5 rounded-xl bg-gray-100 border-0 focus:bg-white focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 placeholder:text-gray-400"
+                    />
+                  </div>
+
                   {/* Care types */}
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-3">
-                      What type of care are you looking for?
-                    </h4>
+                    <SectionLabel>Type of care setting</SectionLabel>
                     <div className="flex flex-wrap gap-2">
                       {CARE_TYPES.map((type) => (
-                        <button
+                        <SelectionChip
                           key={type}
-                          type="button"
+                          selected={careTypes.includes(type)}
                           onClick={() => toggleCareType(type)}
-                          className={`px-3.5 py-2 rounded-lg text-sm font-medium border transition-all ${
-                            careTypes.includes(type)
-                              ? "border-primary-500 bg-primary-50 text-primary-700"
-                              : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                          }`}
+                          size="sm"
                         >
                           {type}
-                        </button>
+                        </SelectionChip>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Care needs */}
+                  <div>
+                    <SectionLabel>What kind of help is needed?</SectionLabel>
+                    <div className="flex flex-wrap gap-2">
+                      {CARE_NEEDS.map((need) => (
+                        <SelectionChip
+                          key={need}
+                          selected={careNeeds.includes(need)}
+                          onClick={() => toggleCareNeed(need)}
+                          size="sm"
+                        >
+                          {need}
+                        </SelectionChip>
                       ))}
                     </div>
                   </div>
 
                   {/* Timeline */}
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-3">
-                      When do you need care?
-                    </h4>
-                    <div className="grid grid-cols-2 gap-2">
+                    <SectionLabel>When do you need care?</SectionLabel>
+                    <div className="flex flex-wrap gap-2">
                       {TIMELINES.map(({ value, label }) => (
-                        <button
+                        <SelectionChip
                           key={value}
-                          type="button"
+                          selected={timeline === value}
                           onClick={() => setTimeline(value)}
-                          className={`p-3 rounded-xl text-sm font-medium border-2 transition-all text-left ${
-                            timeline === value
-                              ? "border-primary-500 bg-primary-50 text-primary-700"
-                              : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                          }`}
+                          size="sm"
                         >
                           {label}
-                        </button>
+                        </SelectionChip>
                       ))}
                     </div>
+                  </div>
+
+                  {/* Schedule preference */}
+                  <div>
+                    <SectionLabel>Preferred schedule</SectionLabel>
+                    <div className="flex flex-wrap gap-2">
+                      {SCHEDULE_OPTIONS.map(({ value, label }) => (
+                        <SelectionChip
+                          key={value}
+                          selected={schedulePreference === value}
+                          onClick={() => setSchedulePreference(value)}
+                          size="sm"
+                        >
+                          {label}
+                        </SelectionChip>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Description / About situation */}
+                  <div>
+                    <SectionLabel>Tell us about your situation</SectionLabel>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder="Share any details that would help providers understand your needs..."
+                      rows={4}
+                      className="w-full px-4 py-3.5 rounded-xl bg-gray-100 border-0 focus:bg-white focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 placeholder:text-gray-400 resize-none"
+                    />
                   </div>
                 </div>
               )}
 
               {/* Step 4: Payment & Benefits */}
               {step === 4 && (
-                <div className="space-y-5">
+                <div className="space-y-8">
                   <div>
-                    <h4 className="text-base font-semibold text-gray-900 mb-2">
-                      How do you plan to pay for care?
-                    </h4>
-                    <p className="text-sm text-gray-500 mb-4">
-                      Select all that apply. This helps providers understand your options.
+                    <SectionLabel>How do you plan to pay for care?</SectionLabel>
+                    <p className="text-sm text-gray-500 -mt-1 mb-4">
+                      Select all that apply
                     </p>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {PAYMENT_OPTIONS.map((option) => (
-                        <button
+                        <SelectionChip
                           key={option}
-                          type="button"
+                          selected={payments.includes(option)}
                           onClick={() => togglePayment(option)}
-                          className={`p-3 rounded-xl text-sm font-medium border-2 transition-all text-left ${
-                            payments.includes(option)
-                              ? "border-primary-500 bg-primary-50 text-primary-700"
-                              : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                          }`}
                         >
-                          <div className="flex items-center gap-2">
-                            <div
-                              className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${
-                                payments.includes(option)
-                                  ? "border-primary-500 bg-primary-500"
-                                  : "border-gray-300"
-                              }`}
-                            >
-                              {payments.includes(option) && (
-                                <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                </svg>
-                              )}
-                            </div>
-                            {option}
-                          </div>
-                        </button>
+                          {option}
+                        </SelectionChip>
                       ))}
                     </div>
                   </div>
 
-                  {/* Benefits finder CTA */}
-                  <div className="p-4 rounded-xl bg-gradient-to-br from-warm-50 to-vanilla-100 border border-warm-200/60">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-full bg-warm-100 flex items-center justify-center shrink-0">
-                        <svg className="w-5 h-5 text-warm-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  {/* Benefits finder CTA - subtle, not distracting */}
+                  <div className="p-5 rounded-2xl bg-gray-50">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center shrink-0">
+                        <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
                         </svg>
                       </div>
                       <div>
                         <h4 className="font-semibold text-gray-900">Not sure what you qualify for?</h4>
-                        <p className="text-sm text-gray-600 mt-0.5">
-                          Use our Benefits Finder to discover programs that can help cover care costs.
+                        <p className="text-sm text-gray-500 mt-1">
+                          Our Benefits Finder can help you discover programs that may cover care costs.
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
               )}
-            </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-gray-50/50">
-          <div className="flex items-center gap-2 text-sm text-gray-500 min-w-[120px]">
-            {hasChanges && (
-              saving ? (
-                <>
-                  <div className="w-3.5 h-3.5 border-2 border-primary-400 border-t-transparent rounded-full animate-spin" />
-                  <span>Saving...</span>
-                </>
-              ) : (
-                <>
-                  <svg className="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Changes saved</span>
-                </>
-              )
+        {/* Footer - minimal Apple-style */}
+        <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
+          {/* Left: Back button */}
+          <div className="w-20">
+            {step > 1 && (
+              <button
+                type="button"
+                onClick={() => setStep((step - 1) as Step)}
+                className="flex items-center gap-1 text-[15px] font-medium text-gray-500 hover:text-gray-900 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back
+              </button>
             )}
           </div>
 
-          <ProgressDots current={step - 1} total={4} />
+          {/* Center: Progress + save status */}
+          <div className="flex flex-col items-center gap-2">
+            <ProgressDots current={step - 1} total={4} />
+            {hasChanges && (
+              <div className="flex items-center gap-1.5 text-xs text-gray-400 h-4">
+                {saving ? (
+                  <>
+                    <div className="w-3 h-3 border-[1.5px] border-gray-300 border-t-transparent rounded-full animate-spin" />
+                    <span>Saving</span>
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3 h-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>Saved</span>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
-          <button
-            type="button"
-            onClick={handleClose}
-            className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-xl transition-colors"
-          >
-            Done
-          </button>
+          {/* Right: Next or Done button */}
+          <div className="w-20 flex justify-end">
+            {step < 4 ? (
+              <button
+                type="button"
+                onClick={() => setStep((step + 1) as Step)}
+                className="flex items-center gap-1 text-[15px] font-semibold text-primary-600 hover:text-primary-700 transition-colors"
+              >
+                Next
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleClose}
+                className="px-5 py-2 bg-primary-600 hover:bg-primary-700 text-white text-[15px] font-semibold rounded-full transition-colors"
+              >
+                Done
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

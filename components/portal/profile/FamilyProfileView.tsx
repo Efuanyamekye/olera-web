@@ -23,6 +23,15 @@ const CONTACT_PREF_LABELS: Record<string, string> = {
   email: "Email",
 };
 
+const SCHEDULE_LABELS: Record<string, string> = {
+  mornings: "Mornings",
+  afternoons: "Afternoons",
+  evenings: "Evenings",
+  overnight: "Overnight",
+  full_time: "Full-time / Live-in",
+  flexible: "Flexible",
+};
+
 // Map section index to wizard step
 type WizardStep = 1 | 2 | 3 | 4;
 
@@ -63,8 +72,12 @@ export default function FamilyProfileView({ profile: profileProp }: FamilyProfil
   // ── Derived display values ──
   const location = [profile.city, profile.state].filter(Boolean).join(", ");
   const careTypesDisplay = profile.care_types?.length ? profile.care_types.join(", ") : null;
+  const careNeedsDisplay = meta.care_needs?.length ? meta.care_needs.join(", ") : null;
   const timelineDisplay = meta.timeline ? TIMELINE_LABELS[meta.timeline] || meta.timeline : null;
+  const scheduleDisplay = meta.schedule_preference ? SCHEDULE_LABELS[meta.schedule_preference] || meta.schedule_preference : null;
   const contactPrefDisplay = meta.contact_preference ? CONTACT_PREF_LABELS[meta.contact_preference] || meta.contact_preference : null;
+  const descriptionDisplay = meta.about_situation || profile.description || null;
+  const ageDisplay = meta.age ? `${meta.age} years old` : null;
 
   return (
     <div className="max-w-2xl">
@@ -229,8 +242,18 @@ export default function FamilyProfileView({ profile: profileProp }: FamilyProfil
         >
           <div className="divide-y divide-gray-50">
             <ViewRow label="Who needs care" value={meta.relationship_to_recipient || null} />
+            <ViewRow label="Age" value={ageDisplay} />
             <ViewRow label="Type of care" value={careTypesDisplay} />
+            <ViewRow label="Help needed" value={careNeedsDisplay} />
             <ViewRow label="Timeline" value={timelineDisplay} />
+            <ViewRow label="Schedule" value={scheduleDisplay} />
+            {descriptionDisplay && (
+              <div className="py-3">
+                <p className="text-[13px] font-medium text-gray-500">About the situation</p>
+                <p className="text-[15px] text-gray-900 mt-0.5 whitespace-pre-wrap">{descriptionDisplay}</p>
+              </div>
+            )}
+            {!descriptionDisplay && <ViewRow label="About the situation" value={null} />}
           </div>
         </SectionCard>
 
