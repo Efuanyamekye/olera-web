@@ -398,11 +398,12 @@ export default function FamilyMatchCard({
           </span>
           <button
             type="button"
-            className="relative flex items-center justify-center w-[15px] h-[15px] rounded-full border text-[9px] font-medium leading-none"
+            className="relative flex items-center justify-center w-[15px] h-[15px] rounded-full border text-[9px] font-medium leading-none transition-colors hover:bg-gray-50"
             style={{ borderColor: completenessColors.border, color: completenessColors.text }}
             onMouseEnter={handleTooltipMouseEnter}
             onMouseLeave={handleTooltipMouseLeave}
             onClick={(e) => e.stopPropagation()}
+            aria-label="View shared details"
           >
             i
           </button>
@@ -414,10 +415,10 @@ export default function FamilyMatchCard({
               style={{ minWidth: "200px" }}
             >
               <div
-                className="relative bg-[#141918] text-white rounded-[7px] px-[11px] py-2"
+                className="relative bg-[#141918] text-white rounded-[7px] px-[11px] py-2 shadow-lg"
                 style={{ fontSize: "11px", lineHeight: "1.7" }}
               >
-                <p className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">
+                <p className="text-[9px] font-semibold text-white/50 uppercase tracking-wider mb-1.5">
                   Shared details
                 </p>
                 {hasTooltipContent ? (
