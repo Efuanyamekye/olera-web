@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import type { Profile, FamilyMetadata } from "@/lib/types";
 
 interface ReachOutDrawerProps {
@@ -17,6 +18,8 @@ interface ReachOutDrawerProps {
   sendError?: string | null;
 }
 
+// ── Helpers ──
+
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/);
   if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
@@ -24,13 +27,12 @@ function getInitials(name: string): string {
 }
 
 function avatarGradient(name: string): string {
-  // Warm/purple tones to avoid green overload on the page
   const gradients = [
-    "linear-gradient(135deg, #8b7355, #a08060)", // warm brown
-    "linear-gradient(135deg, #7c6a9a, #9683b5)", // soft purple
-    "linear-gradient(135deg, #6b7c8a, #8a9ba8)", // slate blue
-    "linear-gradient(135deg, #9a7c6a, #b59683)", // terracotta
-    "linear-gradient(135deg, #7a6b8a, #968bb5)", // lavender
+    "linear-gradient(135deg, #7fbfb5, #5a9e94)", // teal/mint
+    "linear-gradient(135deg, #9683b5, #7c6a9a)", // purple/violet
+    "linear-gradient(135deg, #7a8fa8, #5d7490)", // slate/blue
+    "linear-gradient(135deg, #b59683, #9a7c6a)", // terracotta
+    "linear-gradient(135deg, #a89683, #8a7a68)", // warm brown
   ];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -39,32 +41,88 @@ function avatarGradient(name: string): string {
   return gradients[Math.abs(hash) % gradients.length];
 }
 
+// Timeline badge configuration
 const TIMELINE_CONFIG: Record<string, { label: string; color: string; bg: string; border: string; dot: string }> = {
+  as_soon_as_possible: { label: "Immediate", color: "text-red-600", bg: "bg-red-50", border: "border-red-200", dot: "bg-red-500" },
+  within_a_month: { label: "Within a month", color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200", dot: "bg-amber-500" },
+  in_a_few_months: { label: "In a few months", color: "text-teal-600", bg: "bg-teal-50", border: "border-teal-200", dot: "bg-teal-500" },
+  just_researching: { label: "Just researching", color: "text-gray-600", bg: "bg-gray-100", border: "border-gray-300", dot: "bg-gray-500" },
+  // Legacy values
   immediate: { label: "Immediate", color: "text-red-600", bg: "bg-red-50", border: "border-red-200", dot: "bg-red-500" },
-  within_1_month: { label: "Within 1 month", color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200", dot: "bg-amber-500" },
-  within_3_months: { label: "Within 3 months", color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-200", dot: "bg-blue-500" },
-  exploring: { label: "Exploring", color: "text-gray-500", bg: "bg-gray-50", border: "border-gray-200", dot: "bg-gray-400" },
+  within_1_month: { label: "Within a month", color: "text-amber-600", bg: "bg-amber-50", border: "border-amber-200", dot: "bg-amber-500" },
+  within_3_months: { label: "In a few months", color: "text-teal-600", bg: "bg-teal-50", border: "border-teal-200", dot: "bg-teal-500" },
+  exploring: { label: "Just researching", color: "text-gray-600", bg: "bg-gray-100", border: "border-gray-300", dot: "bg-gray-500" },
 };
 
-function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 3959; // miles
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLng = ((lng2 - lng1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+// Tone chip options
+type ToneType = "introduce" | "ask_needs" | "invite_visit";
+
+const TONE_CHIPS_FULL: { id: ToneType; label: string }[] = [
+  { id: "introduce", label: "Introduce ourselves" },
+  { id: "ask_needs", label: "Ask about their needs" },
+  { id: "invite_visit", label: "Invite to visit" },
+];
+
+const TONE_CHIPS_MINIMAL: { id: ToneType; label: string }[] = [
+  { id: "introduce", label: "Warm intro" },
+  { id: "ask_needs", label: "Ask about their needs" },
+];
+
+// Calculate profile completeness
+function calculateCompleteness(family: Profile, meta: FamilyMetadata | null): number {
+  if (meta?.profile_completeness !== undefined) {
+    return meta.profile_completeness;
+  }
+
+  let score = 0;
+  if (family.display_name?.trim()) score += 15;
+  if (family.city?.trim()) score += 10;
+  if (meta?.care_needs && meta.care_needs.length > 0) score += 20;
+  if (meta?.timeline) score += 15;
+  if (meta?.payment_methods && meta.payment_methods.length > 0) score += 15;
+  if (meta?.who_needs_care || meta?.relationship_to_recipient) score += 10;
+  if (meta?.about_situation?.trim()) score += 15;
+
+  return Math.min(100, score);
 }
 
-function estimateDriveTime(miles: number): string {
-  const minutes = Math.round(miles / 0.5);
-  if (minutes < 1) return "1 min";
-  if (minutes < 60) return `${minutes} min`;
-  const hours = Math.floor(minutes / 60);
-  const rem = minutes % 60;
-  return rem > 0 ? `${hours}h ${rem}m` : `${hours}h`;
+// Generate default message based on profile state
+function getDefaultMessage(
+  firstName: string,
+  careTypes: string[],
+  profileState: "full" | "partial" | "minimal",
+  providerName: string
+): string {
+  if (profileState === "full" && careTypes.length > 0) {
+    const careList = careTypes.slice(0, 2).join(" and ");
+    return `Hi ${firstName},
+
+I came across your care profile and noticed you're looking for ${careList}. Our team specializes in exactly this and I'd love to help.
+
+Would you be available for a quick call to discuss your needs?
+
+Best regards,
+${providerName}`;
+  }
+
+  if (profileState === "partial") {
+    return `Hi ${firstName},
+
+I came across your profile and would love to learn more about what you're looking for. We're here to help and happy to answer any questions — no pressure at all.
+
+Feel free to reach out whenever you're ready.
+
+Best regards,
+${providerName}`;
+  }
+
+  // Minimal
+  return `Hi ${firstName},
+
+We're here to help whenever you're ready. No pressure at all — feel free to reach out with any questions and we'll be happy to guide you.
+
+Best regards,
+${providerName}`;
 }
 
 export default function ReachOutDrawer({
@@ -74,28 +132,106 @@ export default function ReachOutDrawer({
   onSend,
   defaultMessage = "",
   providerProfile,
-  providerCareTypes = [],
-  providerPaymentMethods = [],
   sending = false,
   sendError,
 }: ReachOutDrawerProps) {
-  const [message, setMessage] = useState(defaultMessage);
+  const [message, setMessage] = useState("");
   const [saveAsDefault, setSaveAsDefault] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [activeTone, setActiveTone] = useState<ToneType>("introduce");
+  const [isGenerating, setIsGenerating] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Reset state when drawer opens/closes or family changes
+  // Extract family data
+  const meta = family ? (family.metadata as FamilyMetadata) : null;
+  const displayName = family?.display_name || "Family";
+  const firstName = displayName.split(" ")[0];
+  const initials = getInitials(displayName);
+  const location = family ? [family.city, family.state].filter(Boolean).join(", ") : "";
+  const careNeeds = meta?.care_needs || family?.care_types || [];
+  const timeline = meta?.timeline ? TIMELINE_CONFIG[meta.timeline] : null;
+  const familyQuote = meta?.about_situation;
+
+  // Calculate profile state
+  const completeness = family ? calculateCompleteness(family, meta) : 0;
+  const profileState: "full" | "partial" | "minimal" =
+    completeness >= 70 ? "full" :
+    completeness >= 30 ? "partial" : "minimal";
+
+  // Provider data
+  const providerName = providerProfile?.display_name || "Your Business";
+  const providerInitials = providerProfile ? getInitials(providerName) : "?";
+  const providerLocation = providerProfile
+    ? [providerProfile.city, providerProfile.state].filter(Boolean).join(", ")
+    : "";
+
+  // Tone chips based on profile state
+  const toneChips = profileState === "minimal" ? TONE_CHIPS_MINIMAL : TONE_CHIPS_FULL;
+
+  // Generate AI message
+  const generateMessage = useCallback(async (tone: ToneType) => {
+    if (!family || !providerProfile) return;
+
+    setIsGenerating(true);
+
+    try {
+      const response = await fetch("/api/matches/generate-message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          familyFirstName: firstName,
+          careTypes: careNeeds,
+          timeline: meta?.timeline,
+          whoNeedsCare: meta?.who_needs_care,
+          tone,
+          providerName,
+          providerLocation,
+          profileState,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.message) {
+          setMessage(data.message);
+        }
+      } else {
+        // Fallback to default template if API fails
+        setMessage(getDefaultMessage(firstName, careNeeds, profileState, providerName));
+      }
+    } catch {
+      // Fallback to default template
+      setMessage(getDefaultMessage(firstName, careNeeds, profileState, providerName));
+    } finally {
+      setIsGenerating(false);
+    }
+  }, [family, providerProfile, firstName, careNeeds, meta?.timeline, meta?.who_needs_care, providerName, providerLocation, profileState]);
+
+  // Initialize message when drawer opens
   useEffect(() => {
     if (isOpen && family) {
-      const firstName = family.display_name?.split(" ")[0] || "there";
-      const template = defaultMessage || `Hi ${firstName}!\n\nI came across your care profile and I'd love to help. Our team specializes in providing compassionate, personalized care.\n\nI'd be happy to discuss your needs and answer any questions. Would you be available for a quick call?\n\nBest regards`;
-      setMessage(template);
       setSaveAsDefault(false);
-      setSuccess(false);
-      // Focus textarea after drawer animation
-      setTimeout(() => textareaRef.current?.focus(), 300);
+      setActiveTone("introduce");
+
+      // If there's a saved default message, use it
+      if (defaultMessage) {
+        setMessage(defaultMessage);
+        setIsGenerating(false);
+      } else {
+        // Generate AI message
+        setMessage(""); // Show skeleton while loading
+        generateMessage("introduce");
+      }
+
+      // Focus textarea after animation
+      setTimeout(() => textareaRef.current?.focus(), 350);
     }
-  }, [isOpen, family, defaultMessage]);
+  }, [isOpen, family, defaultMessage, generateMessage]);
+
+  // Handle tone chip click
+  const handleToneClick = (tone: ToneType) => {
+    setActiveTone(tone);
+    generateMessage(tone);
+  };
 
   // Close on Escape
   useEffect(() => {
@@ -122,71 +258,10 @@ export default function ReachOutDrawer({
 
   const handleSend = async () => {
     if (!family || !message.trim() || sending) return;
-    try {
-      await onSend(family.id, message.trim(), saveAsDefault);
-      setSuccess(true);
-    } catch {
-      // Error handled by parent
-    }
+    await onSend(family.id, message.trim(), saveAsDefault);
   };
 
   if (!family) return null;
-
-  const meta = family.metadata as FamilyMetadata;
-  const displayName = family.display_name || "Family";
-  const firstName = displayName.split(" ")[0];
-  const initials = getInitials(displayName);
-  const location = [family.city, family.state].filter(Boolean).join(", ");
-  const careNeeds = meta?.care_needs || family.care_types || [];
-  const paymentMethods = meta?.payment_methods || [];
-  const timeline = meta?.timeline ? TIMELINE_CONFIG[meta.timeline] : null;
-  const aboutSituation = meta?.about_situation || family.description;
-
-  // Calculate match reasons for the drawer
-  const matchReasons: { icon: string; text: string }[] = [];
-
-  // Service match
-  const matchingServices = careNeeds.filter((need) =>
-    providerCareTypes.some((service) => service.toLowerCase() === need.toLowerCase())
-  );
-  if (matchingServices.length > 0) {
-    matchReasons.push({
-      icon: "services",
-      text: matchingServices.length === 1
-        ? `Looking for ${matchingServices[0]}`
-        : `Looking for ${matchingServices.length} services you offer`,
-    });
-  }
-
-  // Distance
-  const providerLat = providerProfile?.lat;
-  const providerLng = providerProfile?.lng;
-  if (providerLat && providerLng && family.lat && family.lng) {
-    const distance = haversineDistance(providerLat, providerLng, family.lat, family.lng);
-    const driveTime = estimateDriveTime(distance);
-    matchReasons.push({
-      icon: "location",
-      text: `${driveTime} drive from you`,
-    });
-  }
-
-  // Payment match
-  const matchingPayments = paymentMethods.filter((method) =>
-    providerPaymentMethods.some((pm) => pm.toLowerCase() === method.toLowerCase())
-  );
-  if (matchingPayments.length > 0) {
-    matchReasons.push({
-      icon: "payment",
-      text: `Pays with ${matchingPayments[0]} — you accept`,
-    });
-  }
-
-  // Provider preview
-  const providerName = providerProfile?.display_name || "Your profile";
-  const providerInitials = providerProfile ? getInitials(providerName) : "?";
-  const providerLocation = providerProfile
-    ? [providerProfile.city, providerProfile.state].filter(Boolean).join(", ")
-    : "";
 
   return (
     <>
@@ -196,237 +271,249 @@ export default function ReachOutDrawer({
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
+        aria-hidden="true"
       />
 
-      {/* Drawer - bottom sheet on mobile, side drawer on desktop */}
+      {/* Drawer */}
       <div
         className={`fixed z-50 bg-white shadow-2xl flex flex-col will-change-transform transition-transform duration-300 ease-out
           inset-x-0 bottom-0 max-h-[92dvh] rounded-t-3xl pb-[env(safe-area-inset-bottom)]
-          lg:inset-y-0 lg:top-16 lg:right-0 lg:left-auto lg:bottom-auto lg:w-[540px] lg:max-w-[calc(100vw-24px)] lg:h-[calc(100dvh-64px)] lg:max-h-none lg:rounded-none lg:rounded-l-2xl lg:pb-0
+          lg:inset-y-0 lg:top-16 lg:right-0 lg:left-auto lg:bottom-auto lg:w-[440px] lg:max-w-[calc(100vw-24px)] lg:h-[calc(100dvh-64px)] lg:max-h-none lg:rounded-none lg:rounded-l-2xl lg:pb-0
           ${isOpen ? "translate-y-0 lg:translate-x-0" : "translate-y-full lg:translate-y-0 lg:translate-x-full"}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="drawer-title"
       >
         {/* Mobile drag handle */}
         <div className="lg:hidden pt-3 pb-2 flex justify-center shrink-0">
           <div className="w-10 h-1 bg-gray-300 rounded-full" />
         </div>
 
-        {/* Success State */}
-        {success ? (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-            <div className="w-16 h-16 rounded-full bg-primary-50 flex items-center justify-center mb-5">
-              <svg className="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-display font-bold text-gray-900 mb-2">
-              Message sent!
-            </h3>
-            <p className="text-sm text-gray-500 leading-relaxed max-w-[280px] mb-6">
-              {firstName} will see your profile and message. You&apos;ll be notified when they respond.
-            </p>
-            <button
-              onClick={onClose}
-              className="px-6 py-3 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors"
-            >
-              Done
-            </button>
-          </div>
-        ) : (
-          <>
-            {/* Header */}
-            <div className="shrink-0 border-b border-gray-100 px-5 lg:px-6 py-4 lg:py-5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-sm font-bold text-white shadow-sm"
-                    style={{ background: avatarGradient(displayName) }}
-                  >
-                    {initials}
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-semibold text-gray-900">
-                      Reach out to {firstName}
-                    </h2>
-                    {location && (
-                      <p className="text-sm text-gray-500">{location}</p>
-                    )}
-                  </div>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
-                >
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                  </svg>
-                </button>
+        {/* Header */}
+        <div className="shrink-0 px-5 lg:px-6 pt-4 lg:pt-5 pb-4 border-b border-gray-100">
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 lg:top-5 lg:right-5 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
+            aria-label="Close drawer"
+          >
+            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Avatar + Title */}
+          <div className="flex items-start gap-3 pr-10">
+            {family.image_url ? (
+              <Image
+                src={family.image_url}
+                alt={displayName}
+                width={44}
+                height={44}
+                className="w-11 h-11 rounded-[11px] object-cover shrink-0"
+              />
+            ) : (
+              <div
+                className="w-11 h-11 rounded-[11px] flex items-center justify-center text-sm font-semibold text-white shrink-0"
+                style={{ background: avatarGradient(displayName) }}
+              >
+                {initials}
               </div>
-            </div>
-
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto">
-              {/* Family Summary */}
-              <div className="px-5 lg:px-6 py-4 bg-warm-50/50 border-b border-warm-100/60">
-                {/* Timeline + Care Needs badges */}
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {timeline && (
-                    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border ${timeline.border} ${timeline.color} ${timeline.bg}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${timeline.dot} animate-pulse`} />
-                      {timeline.label}
-                    </span>
-                  )}
-                  {careNeeds.slice(0, 3).map((need) => (
-                    <span
-                      key={need}
-                      className="text-xs font-medium px-2.5 py-1 rounded-full bg-white border border-gray-200 text-gray-600"
-                    >
-                      {need}
-                    </span>
-                  ))}
-                  {careNeeds.length > 3 && (
-                    <span className="text-xs text-gray-400 self-center">
-                      +{careNeeds.length - 3} more
-                    </span>
-                  )}
-                </div>
-
-                {/* Match details */}
-                {matchReasons.length > 0 && (
-                  <div className="space-y-1.5 mb-3">
-                    {matchReasons.slice(0, 3).map((reason, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded-full bg-primary-100 flex items-center justify-center shrink-0">
-                          {reason.icon === "services" && (
-                            <svg className="w-2.5 h-2.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                            </svg>
-                          )}
-                          {reason.icon === "location" && (
-                            <svg className="w-2.5 h-2.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-                          )}
-                          {reason.icon === "payment" && (
-                            <svg className="w-2.5 h-2.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3" />
-                            </svg>
-                          )}
-                        </div>
-                        <p className="text-xs text-gray-600">{reason.text}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {aboutSituation && (
-                  <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
-                    &ldquo;{aboutSituation}&rdquo;
-                  </p>
-                )}
-              </div>
-
-              {/* Message Composer */}
-              <div className="px-5 lg:px-6 py-5">
-                <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Your message
-                </label>
-                <textarea
-                  ref={textareaRef}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  rows={8}
-                  className="w-full px-4 py-3.5 text-[15px] bg-gray-50 border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent focus:bg-white transition-colors placeholder:text-gray-400"
-                  placeholder={`Hi ${firstName}! I'd love to help with your care needs...`}
-                />
-
-                {/* Save as default checkbox */}
-                <label className="flex items-center gap-2.5 mt-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={saveAsDefault}
-                    onChange={(e) => setSaveAsDefault(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                  />
-                  <span className="text-sm text-gray-600">Save as my default message</span>
-                </label>
-              </div>
-
-              {/* What they'll see */}
-              <div className="px-5 lg:px-6 py-4 border-t border-gray-100">
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
-                  {firstName} will see
-                </p>
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
-                  {providerProfile?.image_url ? (
-                    <Image
-                      src={providerProfile.image_url}
-                      alt={providerName}
-                      width={40}
-                      height={40}
-                      className="w-10 h-10 rounded-lg object-cover"
-                    />
-                  ) : (
-                    <div
-                      className="w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold text-white"
-                      style={{ background: avatarGradient(providerName) }}
-                    >
-                      {providerInitials}
-                    </div>
-                  )}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{providerName}</p>
-                    {providerLocation && (
-                      <p className="text-xs text-gray-500 truncate">{providerLocation}</p>
-                    )}
-                  </div>
-                  <span className="text-xs text-primary-600 font-medium shrink-0">Your profile</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="shrink-0 border-t border-gray-100 px-5 lg:px-6 py-4 bg-white">
-              {sendError && (
-                <div className="mb-3 px-3 py-2 bg-rose-50 border border-rose-100 rounded-lg">
-                  <p className="text-sm text-rose-600">{sendError}</p>
-                </div>
+            )}
+            <div className="min-w-0">
+              <h2 id="drawer-title" className="text-[15px] font-medium text-gray-900">
+                Reach out to {firstName}
+              </h2>
+              {location && (
+                <p className="text-xs text-gray-500 mt-0.5">{location}</p>
               )}
-              <div className="flex gap-3">
-                <button
-                  onClick={onClose}
-                  className="flex-1 px-4 py-3 text-sm font-medium text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+            </div>
+          </div>
+
+          {/* Timeline badge + Care type tags */}
+          {(timeline || (profileState !== "minimal" && careNeeds.length > 0)) && (
+            <div className="flex flex-wrap gap-1.5 mt-3">
+              {timeline && (
+                <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full border ${timeline.border} ${timeline.color} ${timeline.bg}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${timeline.dot}`} />
+                  {timeline.label}
+                </span>
+              )}
+              {profileState !== "minimal" && careNeeds.slice(0, 3).map((need) => (
+                <span
+                  key={need}
+                  className="text-xs font-medium px-2.5 py-1 rounded-full bg-gray-100 border border-gray-200/60 text-gray-600"
                 >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSend}
-                  disabled={!message.trim() || sending}
-                  className="flex-1 px-4 py-3 bg-gradient-to-b from-primary-500 to-primary-600 text-white text-sm font-semibold rounded-xl hover:from-primary-600 hover:to-primary-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-sm"
-                >
-                  {sending ? (
-                    <>
-                      <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                      </svg>
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-                      </svg>
-                      Send message
-                    </>
-                  )}
-                </button>
-              </div>
-              <p className="text-xs text-center text-gray-400 mt-3">
-                {firstName} can view your profile once you reach out
+                  {need}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto">
+          {/* Family Quote Block (Full/Partial with note) OR Guidance Note (Minimal) */}
+          {profileState === "minimal" ? (
+            <div className="mx-5 lg:mx-6 mt-5 px-4 py-3 bg-amber-50/60 border-l-2 border-amber-300 rounded-r-lg">
+              <p className="text-sm text-amber-800/90 leading-relaxed">
+                This family is just getting started. A warm, no-pressure introduction works best here.
               </p>
             </div>
-          </>
-        )}
+          ) : familyQuote ? (
+            <div className="mx-5 lg:mx-6 mt-5 px-4 py-3 bg-gray-50 border-l-2 border-gray-300 rounded-r-lg">
+              <p className="text-sm text-gray-600 italic leading-relaxed">
+                &ldquo;{familyQuote}&rdquo;
+              </p>
+            </div>
+          ) : null}
+
+          {/* Tone Chips */}
+          <div className="px-5 lg:px-6 mt-5">
+            <p className="text-xs font-medium text-gray-500 mb-2.5">Start with a tone:</p>
+            <div className="flex flex-wrap gap-2">
+              {toneChips.map((chip) => (
+                <button
+                  key={chip.id}
+                  type="button"
+                  onClick={() => handleToneClick(chip.id)}
+                  disabled={isGenerating}
+                  className={`px-3.5 py-2 text-sm font-medium rounded-full border transition-all ${
+                    activeTone === chip.id
+                      ? "bg-teal-50 border-[#2a7a6e] text-[#2a7a6e]"
+                      : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                  } disabled:opacity-50`}
+                >
+                  {chip.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Message Textarea */}
+          <div className="px-5 lg:px-6 mt-5">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Your message
+            </label>
+            <div className="relative">
+              <textarea
+                ref={textareaRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                disabled={isGenerating}
+                className={`w-full px-4 py-3.5 text-[15px] bg-white border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#2a7a6e] focus:border-transparent transition-all placeholder:text-gray-400 ${
+                  isGenerating ? "opacity-50 animate-pulse" : ""
+                }`}
+                style={{ minHeight: "140px" }}
+                placeholder={`Hi ${firstName}! I'd love to help with your care needs...`}
+              />
+              {isGenerating && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 rounded-lg shadow-sm">
+                    <svg className="w-4 h-4 animate-spin text-[#2a7a6e]" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    <span className="text-xs text-gray-500">Generating...</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Save as default checkbox */}
+            <label className="flex items-center gap-2.5 mt-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={saveAsDefault}
+                onChange={(e) => setSaveAsDefault(e.target.checked)}
+                className="w-4 h-4 rounded border-gray-300 text-[#2a7a6e] focus:ring-[#2a7a6e]"
+              />
+              <span className="text-[12.5px] text-gray-500">Save as my default message</span>
+            </label>
+          </div>
+
+          {/* Divider */}
+          <div className="mx-5 lg:mx-6 my-5 border-t border-gray-100" />
+
+          {/* "[Name] will see" Section */}
+          <div className="px-5 lg:px-6 pb-5">
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">
+              {firstName} will see
+            </p>
+            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              {providerProfile?.image_url ? (
+                <Image
+                  src={providerProfile.image_url}
+                  alt={providerName}
+                  width={40}
+                  height={40}
+                  className="w-10 h-10 rounded-lg object-cover"
+                />
+              ) : (
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold text-white"
+                  style={{ background: avatarGradient(providerName) }}
+                >
+                  {providerInitials}
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">{providerName}</p>
+                {providerLocation && (
+                  <p className="text-xs text-gray-500 truncate">{providerLocation}</p>
+                )}
+              </div>
+              <Link
+                href="/provider/profile"
+                className="text-xs font-medium text-[#2a7a6e] hover:text-[#1f5c54] transition-colors shrink-0"
+              >
+                Your profile
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer (sticky) */}
+        <div className="shrink-0 border-t border-gray-100 px-5 lg:px-6 py-4 bg-white">
+          {sendError && (
+            <div className="mb-3 px-3 py-2 bg-rose-50 border border-rose-100 rounded-lg">
+              <p className="text-sm text-rose-600">{sendError}</p>
+            </div>
+          )}
+          <div className="flex gap-3">
+            <button
+              onClick={onClose}
+              className="flex-1 px-4 py-3 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSend}
+              disabled={!message.trim() || sending || isGenerating}
+              className="flex-[2] px-4 py-3 bg-[#2a7a6e] text-white text-sm font-semibold rounded-xl hover:bg-[#1f5c54] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {sending ? (
+                <>
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                  </svg>
+                  Send message
+                </>
+              )}
+            </button>
+          </div>
+          <p className="text-xs text-center text-gray-400 mt-3">
+            {firstName} can view your profile once you reach out
+          </p>
+        </div>
       </div>
     </>
   );
