@@ -1561,12 +1561,14 @@ export default function ProviderMatchesPage() {
         {/* ── LEFT COLUMN: Banner + Filters + Content ── */}
         <div className="flex-1 min-w-0 space-y-5">
           {/* Discovery Banner */}
-          <DiscoveryBanner
-            familyCount={filteredFamilies.length}
-            currentLocation={filters.location}
-            providerLocation={providerLocation}
-            onLocationChange={(location) => setFilters({ ...filters, location })}
-          />
+          <div className="mb-6">
+            <DiscoveryBanner
+              familyCount={filteredFamilies.length}
+              currentLocation={filters.location}
+              providerLocation={providerLocation}
+              onLocationChange={(location) => setFilters({ ...filters, location })}
+            />
+          </div>
 
           {/* Tabs row */}
           <MatchesTabs
