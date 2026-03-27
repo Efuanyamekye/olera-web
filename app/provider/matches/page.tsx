@@ -2,13 +2,15 @@
 
 import { useEffect, useState, useMemo, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProviderProfile } from "@/hooks/useProviderProfile";
+import { useProviderDashboardData } from "@/hooks/useProviderDashboardData";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { canEngage, getFreeConnectionsRemaining, FREE_CONNECTION_LIMIT, isProfileShareable } from "@/lib/membership";
 import type { Profile, FamilyMetadata } from "@/lib/types";
 import { avatarGradient } from "@/components/portal/ConnectionDetailContent";
-import { type ExtendedMetadata } from "@/lib/profile-completeness";
+import { calculateProfileCompleteness, type ExtendedMetadata } from "@/lib/profile-completeness";
 import MatchesFilterBar, {
   type MatchesFilters,
   type SortOption,
@@ -233,6 +235,88 @@ function DiscoveryBanner({
               </div>
             )}
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Profile Snapshot Card (Upwork-style sidebar header)
+// ---------------------------------------------------------------------------
+
+function ProfileSnapshotCard({
+  profile,
+  completeness,
+}: {
+  profile: Profile;
+  completeness: number;
+}) {
+  const displayName = profile.display_name || "Your Business";
+  const category = profile.category || profile.care_types?.[0] || "Care Provider";
+  const initials = displayName
+    .split(/\s+/)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-5">
+      <div className="flex items-start gap-4">
+        {/* Profile image or initials */}
+        {profile.image_url ? (
+          <Image
+            src={profile.image_url}
+            alt={displayName}
+            width={56}
+            height={56}
+            className="w-14 h-14 rounded-xl object-cover border border-gray-100"
+          />
+        ) : (
+          <div
+            className="w-14 h-14 rounded-xl flex items-center justify-center text-base font-bold text-white shrink-0"
+            style={{ background: avatarGradient(displayName) }}
+          >
+            {initials}
+          </div>
+        )}
+
+        {/* Name and category */}
+        <div className="flex-1 min-w-0">
+          <h3 className="text-[15px] font-semibold text-gray-900 truncate leading-tight">
+            {displayName}
+          </h3>
+          <p className="text-sm text-gray-500 truncate mt-0.5">
+            {category}
+          </p>
+
+          {/* Complete profile link - only show if < 100% */}
+          {completeness < 100 && (
+            <Link
+              href="/provider"
+              className="inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700 mt-2 transition-colors"
+            >
+              Complete your profile
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+              </svg>
+            </Link>
+          )}
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-4">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-xs text-gray-400">Profile completeness</span>
+          <span className="text-xs font-semibold text-gray-600">{completeness}%</span>
+        </div>
+        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-primary-500 rounded-full transition-all duration-500"
+            style={{ width: `${completeness}%` }}
+          />
         </div>
       </div>
     </div>
@@ -695,6 +779,7 @@ function MatchesSidebar({
 export default function ProviderMatchesPage() {
   const providerProfile = useProviderProfile();
   const { membership, refreshAccountData } = useAuth();
+  const { metadata: dashboardMetadata } = useProviderDashboardData(providerProfile);
   const [families, setFamilies] = useState<Profile[]>([]);
   const [contactedIds, setContactedIds] = useState<Set<string>>(new Set());
   const [respondedIds, setRespondedIds] = useState<Set<string>>(new Set());
@@ -736,6 +821,13 @@ export default function ProviderMatchesPage() {
   }, [providerProfile]);
 
   const profileId = providerProfile?.id;
+
+  // Profile completeness for sidebar snapshot
+  const profileCompleteness = useMemo(() => {
+    if (!providerProfile) return 0;
+    const meta = (dashboardMetadata || providerProfile.metadata || {}) as ExtendedMetadata;
+    return calculateProfileCompleteness(providerProfile, meta).overall;
+  }, [providerProfile, dashboardMetadata]);
 
   // ── Drawer handlers ──
 
@@ -1115,29 +1207,6 @@ export default function ProviderMatchesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
       <style dangerouslySetInnerHTML={{ __html: floatKeyframes }} />
 
-      {/* ── Discovery Banner ── */}
-      <DiscoveryBanner
-        familyCount={filteredFamilies.length}
-        hotLeadsCount={hotLeadsCount}
-        newTodayCount={newTodayCount}
-        responseRate={responseRate}
-        providerLocation={providerLocation}
-        hasContacted={contactedIds.size > 0}
-      />
-
-      {/* ── Filter bar ── */}
-      <div className="mb-4 lg:mb-5">
-        <MatchesFilterBar
-          filters={filters}
-          onChange={setFilters}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-          resultCount={filteredFamilies.length}
-          providerLocation={providerLocation}
-          onOpenSheet={(type) => setFilterSheetType(type)}
-        />
-      </div>
-
       {/* ── Mobile filter sheet ── */}
       <MatchesFilterSheet
         isOpen={filterSheetType !== null}
@@ -1149,132 +1218,154 @@ export default function ProviderMatchesPage() {
         providerLocation={providerLocation}
       />
 
-      {/* ── Content grid ── */}
-      {families.length === 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          <MatchesEmptyState />
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* Main content — 2/3 */}
-          <div className="lg:col-span-2 space-y-5">
-            {filteredFamilies.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm text-center py-16 px-8">
-                <div className="w-12 h-12 rounded-2xl bg-warm-50 border border-warm-100/60 flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-6 h-6 text-warm-300" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-                  </svg>
-                </div>
-                <p className="text-[15px] font-display font-semibold text-gray-900 mb-1">
-                  No matches for these filters
-                </p>
-                <p className="text-sm text-gray-500">
-                  Try adjusting your filters to see more families.
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {paginatedFamilies.map((family) => (
-                  <FamilyMatchCard
-                    key={family.id}
-                    family={family}
-                    hasFullAccess={hasFullAccess}
-                    providerCareTypes={providerCareTypes}
-                    providerPaymentMethods={providerPaymentMethods}
-                    providerLat={providerProfile?.lat}
-                    providerLng={providerProfile?.lng}
-                    contacted={contactedIds.has(family.id)}
-                    reachOutCount={reachOutCounts.get(family.id) || 0}
-                    onReachOut={handleReachOut}
-                  />
-                ))}
-              </div>
-            )}
+      {/* ── Main grid (Upwork-style layout) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
+        {/* ── LEFT COLUMN: Banner + Filters + Content (2/3) ── */}
+        <div className="lg:col-span-2 space-y-5">
+          {/* Discovery Banner */}
+          <DiscoveryBanner
+            familyCount={filteredFamilies.length}
+            hotLeadsCount={hotLeadsCount}
+            newTodayCount={newTodayCount}
+            responseRate={responseRate}
+            providerLocation={providerLocation}
+            hasContacted={contactedIds.size > 0}
+          />
 
-            {/* Already contacted - collapsible accordion */}
-            {contactedFamilies.length > 0 && (
-              <div className="pt-8">
-                <button
-                  type="button"
-                  onClick={() => setContactedExpanded(!contactedExpanded)}
-                  className="w-full flex items-center justify-between py-3.5 px-4 bg-gray-50/80 hover:bg-gray-100/80 rounded-xl border border-gray-200/60 transition-all duration-200 group"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center shadow-sm">
-                      <CheckCircleIcon className="w-4 h-4 text-gray-400" />
-                    </div>
-                    <span className="text-sm font-semibold text-gray-700">
-                      Already contacted
-                    </span>
-                    <span className="text-xs font-semibold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200/80 shadow-sm">
-                      {contactedFamilies.length}
-                    </span>
-                  </div>
-                  <svg
-                    className={`w-5 h-5 text-gray-400 group-hover:text-gray-500 transition-all duration-300 ease-out ${contactedExpanded ? "rotate-180" : ""}`}
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                  </svg>
-                </button>
+          {/* Filter bar */}
+          <MatchesFilterBar
+            filters={filters}
+            onChange={setFilters}
+            sortBy={sortBy}
+            onSortChange={setSortBy}
+            resultCount={filteredFamilies.length}
+            providerLocation={providerLocation}
+            onOpenSheet={(type) => setFilterSheetType(type)}
+          />
 
-                {/* Expandable content */}
-                <div
-                  className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)]"
-                  style={{ gridTemplateRows: contactedExpanded ? "1fr" : "0fr" }}
-                >
-                  <div className="overflow-hidden">
-                    <div className="pt-3 space-y-2">
-                      {contactedFamilies.map((family) => (
-                        <ContactedRow
-                          key={family.id}
-                          family={family}
-                          isAccepted={respondedIds.has(family.id)}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
+          {/* Family cards or empty state */}
+          {families.length === 0 ? (
+            <MatchesEmptyState />
+          ) : filteredFamilies.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm text-center py-16 px-8">
+              <div className="w-12 h-12 rounded-2xl bg-warm-50 border border-warm-100/60 flex items-center justify-center mx-auto mb-4">
+                <svg className="w-6 h-6 text-warm-300" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                </svg>
               </div>
-            )}
-
-            {/* Pagination */}
-            {filteredFamilies.length > PAGE_SIZE && (
-              <div className="pt-6">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  totalItems={filteredFamilies.length}
-                  itemsPerPage={PAGE_SIZE}
-                  onPageChange={setCurrentPage}
-                  itemLabel="families"
-                  showItemCount={true}
+              <p className="text-[15px] font-display font-semibold text-gray-900 mb-1">
+                No matches for these filters
+              </p>
+              <p className="text-sm text-gray-500">
+                Try adjusting your filters to see more families.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {paginatedFamilies.map((family) => (
+                <FamilyMatchCard
+                  key={family.id}
+                  family={family}
+                  hasFullAccess={hasFullAccess}
+                  providerCareTypes={providerCareTypes}
+                  providerPaymentMethods={providerPaymentMethods}
+                  providerLat={providerProfile?.lat}
+                  providerLng={providerProfile?.lng}
+                  contacted={contactedIds.has(family.id)}
+                  reachOutCount={reachOutCounts.get(family.id) || 0}
+                  onReachOut={handleReachOut}
                 />
-              </div>
-            )}
-          </div>
+              ))}
+            </div>
+          )}
 
-          {/* Sidebar — hidden on mobile */}
-          <div className="hidden lg:block lg:col-span-1 self-start">
+          {/* Already contacted - collapsible accordion */}
+          {contactedFamilies.length > 0 && (
+            <div className="pt-4">
+              <button
+                type="button"
+                onClick={() => setContactedExpanded(!contactedExpanded)}
+                className="w-full flex items-center justify-between py-3.5 px-4 bg-gray-50/80 hover:bg-gray-100/80 rounded-xl border border-gray-200/60 transition-all duration-200 group"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center shadow-sm">
+                    <CheckCircleIcon className="w-4 h-4 text-gray-400" />
+                  </div>
+                  <span className="text-sm font-semibold text-gray-700">
+                    Already contacted
+                  </span>
+                  <span className="text-xs font-semibold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200/80 shadow-sm">
+                    {contactedFamilies.length}
+                  </span>
+                </div>
+                <svg
+                  className={`w-5 h-5 text-gray-400 group-hover:text-gray-500 transition-all duration-300 ease-out ${contactedExpanded ? "rotate-180" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+
+              {/* Expandable content */}
+              <div
+                className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)]"
+                style={{ gridTemplateRows: contactedExpanded ? "1fr" : "0fr" }}
+              >
+                <div className="overflow-hidden">
+                  <div className="pt-3 space-y-2">
+                    {contactedFamilies.map((family) => (
+                      <ContactedRow
+                        key={family.id}
+                        family={family}
+                        isAccepted={respondedIds.has(family.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {filteredFamilies.length > PAGE_SIZE && (
+            <div className="pt-4">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                totalItems={filteredFamilies.length}
+                itemsPerPage={PAGE_SIZE}
+                onPageChange={setCurrentPage}
+                itemLabel="families"
+                showItemCount={true}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* ── RIGHT COLUMN: Profile Snapshot + Sidebar (1/3, hidden on mobile) ── */}
+        <div className="hidden lg:block lg:col-span-1">
+          <div className="sticky top-24 space-y-4">
+            {/* Profile Snapshot Card */}
+            <ProfileSnapshotCard
+              profile={providerProfile}
+              completeness={profileCompleteness}
+            />
+
+            {/* Membership / Access Card + How it works */}
             <MatchesSidebar
               remaining={freeRemaining}
               totalFamilies={families.length}
               isFreeTier={isFreeTier}
               contactedCount={contactedIds.size}
               respondedCount={respondedIds.size}
-              newMatchesToday={families.filter((f) => {
-                const created = f.created_at ? new Date(f.created_at) : null;
-                if (!created) return false;
-                const today = new Date();
-                return created.toDateString() === today.toDateString();
-              }).length}
+              newMatchesToday={newTodayCount}
             />
           </div>
         </div>
-      )}
+      </div>
 
       {/* ── Reach Out Drawer ── */}
       <ReachOutDrawer
