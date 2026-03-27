@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -262,62 +262,58 @@ function ProfileSnapshotCard({
     .toUpperCase();
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-5">
-      <div className="flex items-start gap-4">
+    <div className="bg-white rounded-2xl border border-gray-100 p-5">
+      <div className="flex items-start gap-3.5">
         {/* Profile image or initials */}
         {profile.image_url ? (
           <Image
             src={profile.image_url}
             alt={displayName}
-            width={56}
-            height={56}
-            className="w-14 h-14 rounded-xl object-cover border border-gray-100"
+            width={52}
+            height={52}
+            className="w-13 h-13 rounded-xl object-cover shrink-0"
+            style={{ width: 52, height: 52 }}
           />
         ) : (
           <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center text-base font-bold text-white shrink-0"
-            style={{ background: avatarGradient(displayName) }}
+            className="w-13 h-13 rounded-xl flex items-center justify-center text-sm font-bold text-white shrink-0"
+            style={{ background: avatarGradient(displayName), width: 52, height: 52 }}
           >
             {initials}
           </div>
         )}
 
         {/* Name and category */}
-        <div className="flex-1 min-w-0">
-          <h3 className="text-[15px] font-semibold text-gray-900 truncate leading-tight">
+        <div className="flex-1 min-w-0 pt-0.5">
+          <Link
+            href={profile.slug ? `/provider/${profile.slug}` : "/provider"}
+            className="block text-[15px] font-semibold text-gray-900 hover:underline truncate leading-tight"
+          >
             {displayName}
-          </h3>
+          </Link>
           <p className="text-sm text-gray-500 truncate mt-0.5">
             {category}
           </p>
-
-          {/* Complete profile link - only show if < 100% */}
-          {completeness < 100 && (
-            <Link
-              href="/provider"
-              className="inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700 mt-2 transition-colors"
-            >
-              Complete your profile
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-              </svg>
-            </Link>
-          )}
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="mt-4">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-gray-400">Profile completeness</span>
-          <span className="text-xs font-semibold text-gray-600">{completeness}%</span>
-        </div>
-        <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+      {/* Complete your profile link */}
+      <Link
+        href="/provider"
+        className="inline-block text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline mt-4 transition-colors"
+      >
+        Complete your profile
+      </Link>
+
+      {/* Progress bar - simple, Upwork style */}
+      <div className="flex items-center gap-3 mt-2">
+        <div className="flex-1 h-1 bg-gray-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-primary-500 rounded-full transition-all duration-500"
+            className="h-full bg-gray-900 rounded-full transition-all duration-500"
             style={{ width: `${completeness}%` }}
           />
         </div>
+        <span className="text-sm font-medium text-gray-700 tabular-nums">{completeness}%</span>
       </div>
     </div>
   );
@@ -533,10 +529,10 @@ function MatchesSidebar({
   const responseRate = contactedCount > 0 ? Math.round((respondedCount / contactedCount) * 100) : 0;
 
   return (
-    <div className="sticky top-24 space-y-3">
+    <div className="space-y-3">
       {/* ── Main sidebar card ── */}
-      <div className="rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
-        <div className="bg-white p-6">
+      <div className="rounded-2xl border border-gray-100 overflow-hidden">
+        <div className="bg-white p-5">
 
           {/* ── FREE TIER: reach-outs ring + families count ── */}
           {isFreeTier && remaining !== null && (
@@ -730,7 +726,7 @@ function MatchesSidebar({
       </div>
 
       {/* ── How It Works accordion ── */}
-      <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         <button
           type="button"
           onClick={() => setHowItWorksOpen(!howItWorksOpen)}
@@ -804,6 +800,9 @@ export default function ProviderMatchesPage() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Track if initial fetch has completed (ref to avoid re-renders)
+  const hasFetchedOnceRef = useRef(false);
   const [totalCount, setTotalCount] = useState(0);
 
   const hasFullAccess = canEngage(
@@ -945,13 +944,18 @@ export default function ProviderMatchesPage() {
   );
 
   const fetchFamilies = useCallback(
-    async () => {
+    async (isBackgroundRefresh = false) => {
       if (!profileId || !isSupabaseConfigured()) {
         setLoading(false);
         return;
       }
 
-      setLoading(true);
+      // Only show loading skeleton on initial load, not during background refreshes
+      // Also skip loading state if we've already fetched once (covers effect re-runs)
+      const shouldShowLoading = !isBackgroundRefresh && !hasFetchedOnceRef.current;
+      if (shouldShowLoading) {
+        setLoading(true);
+      }
       setFetchError(null);
 
       try {
@@ -1019,19 +1023,22 @@ export default function ProviderMatchesPage() {
         );
       } finally {
         setLoading(false);
+        hasFetchedOnceRef.current = true;
       }
     },
     [profileId],
   );
 
+  // Fetch families on mount or when profileId changes
   useEffect(() => {
     fetchFamilies();
   }, [fetchFamilies]);
 
   // Poll for updates every 45 seconds (family profile changes, new listings)
+  // Pass isBackgroundRefresh=true to avoid showing loading skeleton during refresh
   useEffect(() => {
     const interval = setInterval(() => {
-      fetchFamilies();
+      fetchFamilies(true);
     }, 45000);
 
     return () => clearInterval(interval);
@@ -1346,7 +1353,7 @@ export default function ProviderMatchesPage() {
         </div>
 
         {/* ── RIGHT COLUMN: Profile Snapshot + Sidebar (fixed width, hidden on mobile) ── */}
-        <div className="hidden lg:block w-[340px] shrink-0">
+        <div className="hidden lg:block w-[300px] shrink-0">
           <div className="sticky top-24 space-y-4">
             {/* Profile Snapshot Card */}
             <ProfileSnapshotCard
