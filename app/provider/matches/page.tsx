@@ -127,6 +127,119 @@ const floatKeyframes = `
 `;
 
 // ---------------------------------------------------------------------------
+// Discovery Banner
+// ---------------------------------------------------------------------------
+
+function DiscoveryBanner({
+  familyCount,
+  hotLeadsCount,
+  newTodayCount,
+  responseRate,
+  providerLocation,
+  hasContacted,
+}: {
+  familyCount: number;
+  hotLeadsCount: number;
+  newTodayCount: number;
+  responseRate: number;
+  providerLocation: string | null;
+  hasContacted: boolean;
+}) {
+  return (
+    <div className="relative mb-6 lg:mb-8 rounded-2xl overflow-hidden border border-warm-200/60">
+      {/* Background with warm gradient */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `linear-gradient(145deg, #fdfbf8 0%, #f9f6f2 40%, #f5f0ea 100%)`,
+        }}
+      />
+
+      {/* Subtle dot pattern for texture */}
+      <div
+        className="absolute inset-0 opacity-[0.025]"
+        style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #417272 0.5px, transparent 0)`,
+          backgroundSize: '20px 20px',
+        }}
+      />
+
+      {/* Content */}
+      <div className="relative px-5 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
+          {/* Left: Main content */}
+          <div className="flex-1 min-w-0">
+            {/* Location label */}
+            {providerLocation && (
+              <div className="inline-flex items-center gap-1.5 mb-2.5 px-2.5 py-1 bg-primary-50/80 rounded-full border border-primary-100/60">
+                <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                </svg>
+                <span className="text-[11px] font-semibold text-primary-700 uppercase tracking-wide">
+                  {providerLocation}
+                </span>
+              </div>
+            )}
+
+            {/* Main headline */}
+            <h1 className="font-display text-[22px] sm:text-2xl lg:text-3xl leading-snug tracking-tight text-gray-900">
+              <span className="text-primary-600 font-bold">{familyCount}</span>
+              <span className="text-gray-800"> {familyCount === 1 ? 'family is' : 'families are'} looking for care near you</span>
+            </h1>
+
+            {/* Supporting text */}
+            <p className="mt-2 lg:mt-3 text-sm text-gray-500 leading-relaxed max-w-lg">
+              Reach out within 24 hours — families are{' '}
+              <span className="font-medium text-gray-600">3× more likely</span>{' '}
+              to respond to early contact.
+            </p>
+          </div>
+
+          {/* Right: Stats - horizontal scroll on mobile */}
+          <div className="flex gap-2.5 sm:gap-3 overflow-x-auto pb-1 -mx-1 px-1 lg:mx-0 lg:px-0 lg:overflow-visible lg:shrink-0">
+            {/* Hot Leads */}
+            <div className="flex-shrink-0 min-w-[95px] sm:min-w-[105px] lg:min-w-[115px] bg-white/80 backdrop-blur-sm rounded-xl p-3.5 lg:p-4 border border-gray-100 shadow-xs">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Hot Leads</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-display font-bold text-gray-900 tracking-tight">
+                {hotLeadsCount}
+              </p>
+            </div>
+
+            {/* New Today */}
+            <div className="flex-shrink-0 min-w-[95px] sm:min-w-[105px] lg:min-w-[115px] bg-white/80 backdrop-blur-sm rounded-xl p-3.5 lg:p-4 border border-gray-100 shadow-xs">
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">New Today</span>
+              </div>
+              <p className="text-xl sm:text-2xl font-display font-bold text-gray-900 tracking-tight">
+                {newTodayCount}
+              </p>
+            </div>
+
+            {/* Response Rate - only show if they've contacted someone */}
+            {hasContacted && (
+              <div className="flex-shrink-0 min-w-[95px] sm:min-w-[105px] lg:min-w-[115px] bg-white/80 backdrop-blur-sm rounded-xl p-3.5 lg:p-4 border border-gray-100 shadow-xs">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-success-400" />
+                  <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide">Your Rate</span>
+                </div>
+                <p className="text-xl sm:text-2xl font-display font-bold text-gray-900 tracking-tight">
+                  {responseRate}%
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Icons
 // ---------------------------------------------------------------------------
 
@@ -970,19 +1083,47 @@ export default function ProviderMatchesPage() {
     );
   }
 
+  // Compute banner stats
+  const hotLeadsCount = useMemo(() => {
+    return families.filter((f) => {
+      const meta = f.metadata as FamilyMetadata;
+      return meta?.timeline === "immediate" && !contactedIds.has(f.id);
+    }).length;
+  }, [families, contactedIds]);
+
+  const newTodayCount = useMemo(() => {
+    const today = new Date().toDateString();
+    return families.filter((f) => {
+      const meta = f.metadata as FamilyMetadata;
+      const publishedAt = meta?.care_post?.published_at || f.created_at;
+      return publishedAt && new Date(publishedAt).toDateString() === today;
+    }).length;
+  }, [families]);
+
+  const responseRate = useMemo(() => {
+    return contactedIds.size > 0
+      ? Math.round((respondedIds.size / contactedIds.size) * 100)
+      : 0;
+  }, [contactedIds, respondedIds]);
+
+  const providerLocation = providerProfile
+    ? [providerProfile.city, providerProfile.state].filter(Boolean).join(", ") || null
+    : null;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
       <style dangerouslySetInnerHTML={{ __html: floatKeyframes }} />
-      {/* ── Page header ── */}
-      <div className="mb-5 lg:mb-8">
-        <h1 className="text-2xl lg:text-[28px] font-display font-bold text-gray-900 tracking-tight">
-          Matches
-        </h1>
-        <p className="text-sm lg:text-[15px] text-gray-500 mt-1 lg:mt-1.5 leading-relaxed">
-          Matched to your services and location. Reach out to start a conversation.
-        </p>
-      </div>
+
+      {/* ── Discovery Banner ── */}
+      <DiscoveryBanner
+        familyCount={filteredFamilies.length}
+        hotLeadsCount={hotLeadsCount}
+        newTodayCount={newTodayCount}
+        responseRate={responseRate}
+        providerLocation={providerLocation}
+        hasContacted={contactedIds.size > 0}
+      />
 
       {/* ── Filter bar ── */}
       <div className="mb-4 lg:mb-5">
@@ -992,11 +1133,7 @@ export default function ProviderMatchesPage() {
           sortBy={sortBy}
           onSortChange={setSortBy}
           resultCount={filteredFamilies.length}
-          providerLocation={
-            providerProfile
-              ? [providerProfile.city, providerProfile.state].filter(Boolean).join(", ") || null
-              : null
-          }
+          providerLocation={providerLocation}
           onOpenSheet={(type) => setFilterSheetType(type)}
         />
       </div>
@@ -1009,11 +1146,7 @@ export default function ProviderMatchesPage() {
         filters={filters}
         onChange={setFilters}
         resultCount={filteredFamilies.length}
-        providerLocation={
-          providerProfile
-            ? [providerProfile.city, providerProfile.state].filter(Boolean).join(", ") || null
-            : null
-        }
+        providerLocation={providerLocation}
       />
 
       {/* ── Content grid ── */}
