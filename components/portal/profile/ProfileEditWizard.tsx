@@ -389,6 +389,12 @@ export default function ProfileEditWizard({
         metadata: updatedMeta,
       };
 
+      console.log("[ProfileEditWizard] Saving with payload:", {
+        profileId: profile.id,
+        description: updatePayload.description,
+        aboutSituation: updatedMeta.about_situation,
+      });
+
       const { error } = await supabase
         .from("business_profiles")
         .update(updatePayload)
@@ -399,10 +405,23 @@ export default function ProfileEditWizard({
         return;
       }
 
-      console.log("[ProfileEditWizard] Saved successfully:", {
-        description: description || "(empty)",
-        aboutSituation: updatedMeta.about_situation || "(empty)",
-      });
+      // Verify the save worked by fetching the data back
+      const { data: verification, error: verifyError } = await supabase
+        .from("business_profiles")
+        .select("description, metadata")
+        .eq("id", profile.id)
+        .single();
+
+      if (verifyError) {
+        console.error("[ProfileEditWizard] Verification fetch failed:", verifyError);
+      } else {
+        const verifyMeta = verification?.metadata as Record<string, unknown>;
+        console.log("[ProfileEditWizard] Verified saved data:", {
+          description: verification?.description || "(empty)",
+          aboutSituation: verifyMeta?.about_situation || "(empty)",
+          savedCorrectly: verification?.description === (description || null),
+        });
+      }
 
       // Log profile enrichment event (fire-and-forget, debounced by saveChanges already)
       fetch("/api/activity/track", {
@@ -494,11 +513,13 @@ export default function ProfileEditWizard({
     saveChanges,
   ]);
 
-  // Handle close - just close, changes are already saved
-  const handleClose = useCallback(() => {
+  // Handle close - save any pending changes, then close
+  const handleClose = useCallback(async () => {
+    // Save immediately to capture any pending changes (debounce might not have fired yet)
+    await saveChanges();
     onSaved(); // Refresh parent data
     onClose();
-  }, [onSaved, onClose]);
+  }, [saveChanges, onSaved, onClose]);
 
   // Step validation (optional - for visual feedback)
   const isStep1Valid = displayName.trim().length > 0;
