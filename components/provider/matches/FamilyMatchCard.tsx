@@ -127,22 +127,6 @@ function formatWhoNeedsCare(value: string | undefined): string | null {
   return mapping[value] || null;
 }
 
-// Human readable timeline for tooltip
-function formatTimelineLabel(value: string | undefined): string | null {
-  if (!value) return null;
-  const mapping: Record<string, string> = {
-    as_soon_as_possible: "Immediate",
-    within_a_month: "Within a month",
-    in_a_few_months: "In a few months",
-    just_researching: "Just researching",
-    immediate: "Immediate",
-    within_1_month: "Within a month",
-    within_3_months: "In a few months",
-    exploring: "Just researching",
-  };
-  return mapping[value] || null;
-}
-
 // Completeness color config
 function getCompletenessColors(percent: number): { dot: string; text: string; border: string } {
   if (percent >= 70) return { dot: "#2a7a6e", text: "#2a7a6e", border: "#2a7a6e" };
@@ -182,10 +166,6 @@ export default function FamilyMatchCard({
 
   // Completeness chip colors
   const completenessColors = getCompletenessColors(completeness);
-
-  // Tooltip content
-  const timelineLabel = formatTimelineLabel(meta?.timeline);
-  const hasTooltipContent = careNeeds.length > 0 || timelineLabel || paymentMethods.length > 0;
 
   // Tooltip hover handlers
   const handleTooltipMouseEnter = () => {
@@ -408,34 +388,80 @@ export default function FamilyMatchCard({
             i
           </button>
 
-          {/* Tooltip */}
+          {/* Tooltip - Dynamic content based on profile state */}
           {showTooltip && (
             <div
               className="absolute bottom-full left-0 mb-2 z-50"
-              style={{ minWidth: "200px" }}
+              style={{ minWidth: "220px", maxWidth: "260px" }}
             >
               <div
-                className="relative bg-[#141918] text-white rounded-[7px] px-[11px] py-2 shadow-lg"
-                style={{ fontSize: "11px", lineHeight: "1.7" }}
+                className="relative bg-[#141918] text-white rounded-[7px] px-3 py-2.5 shadow-lg"
+                style={{ fontSize: "11px", lineHeight: "1.6" }}
               >
-                <p className="text-[9px] font-semibold text-white/50 uppercase tracking-wider mb-1.5">
-                  Shared details
-                </p>
-                {hasTooltipContent ? (
+                {/* FULL PROFILE */}
+                {cardState === "full" && (
                   <>
-                    {careNeeds.length > 0 && (
-                      <p>Care: {careNeeds.join(", ")}</p>
-                    )}
-                    {timelineLabel && (
-                      <p>Timeline: {timelineLabel}</p>
-                    )}
-                    {paymentMethods.length > 0 && (
-                      <p>Pays with: {paymentMethods.join(", ")}</p>
-                    )}
+                    <p className="text-[9px] font-semibold text-white/50 uppercase tracking-wider mb-1">
+                      Match quality
+                    </p>
+                    <p className="text-white/90 mb-2.5">
+                      {matchingServices.length > 0 ? (
+                        <>Strong match — needs {matchingServices.length} {matchingServices.length === 1 ? "service" : "services"} you offer.</>
+                      ) : (
+                        <>Strong match — detailed profile shared.</>
+                      )}
+                    </p>
+                    <div className="border-t border-white/10 pt-2.5">
+                      <p className="text-[9px] font-semibold text-white/50 uppercase tracking-wider mb-1">
+                        Tip
+                      </p>
+                      <p className="text-white/70">
+                        Reference their care needs in your message — they&apos;ve shared enough for a personalized intro.
+                      </p>
+                    </div>
                   </>
-                ) : (
-                  <p>This family is just getting started</p>
                 )}
+
+                {/* PARTIAL PROFILE */}
+                {cardState === "partial" && (
+                  <>
+                    <p className="text-[9px] font-semibold text-white/50 uppercase tracking-wider mb-1">
+                      Match quality
+                    </p>
+                    <p className="text-white/90 mb-2.5">
+                      Potential match — still filling in their profile.
+                    </p>
+                    <div className="border-t border-white/10 pt-2.5">
+                      <p className="text-[9px] font-semibold text-white/50 uppercase tracking-wider mb-1">
+                        Tip
+                      </p>
+                      <p className="text-white/70">
+                        Ask what matters most to them. Families at this stage are open to conversation.
+                      </p>
+                    </div>
+                  </>
+                )}
+
+                {/* MINIMAL PROFILE */}
+                {cardState === "minimal" && (
+                  <>
+                    <p className="text-[9px] font-semibold text-white/50 uppercase tracking-wider mb-1">
+                      Match quality
+                    </p>
+                    <p className="text-white/90 mb-2.5">
+                      New lead — just getting started.
+                    </p>
+                    <div className="border-t border-white/10 pt-2.5">
+                      <p className="text-[9px] font-semibold text-white/50 uppercase tracking-wider mb-1">
+                        Tip
+                      </p>
+                      <p className="text-white/70">
+                        Keep it warm and pressure-free. Early outreach builds trust before they&apos;ve talked to anyone else.
+                      </p>
+                    </div>
+                  </>
+                )}
+
                 {/* Arrow pointing down-left */}
                 <div
                   className="absolute -bottom-1.5 left-3 w-0 h-0"
