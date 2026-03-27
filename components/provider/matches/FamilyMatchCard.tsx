@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import type { Profile, FamilyMetadata } from "@/lib/types";
 
@@ -127,6 +127,29 @@ function formatWhoNeedsCare(value: string | undefined): string | null {
   return mapping[value] || null;
 }
 
+// Human readable timeline for tooltip
+function formatTimelineLabel(value: string | undefined): string | null {
+  if (!value) return null;
+  const mapping: Record<string, string> = {
+    as_soon_as_possible: "Immediate",
+    within_a_month: "Within a month",
+    in_a_few_months: "In a few months",
+    just_researching: "Just researching",
+    immediate: "Immediate",
+    within_1_month: "Within a month",
+    within_3_months: "In a few months",
+    exploring: "Just researching",
+  };
+  return mapping[value] || null;
+}
+
+// Completeness color config
+function getCompletenessColors(percent: number): { dot: string; text: string; border: string } {
+  if (percent >= 70) return { dot: "#2a7a6e", text: "#2a7a6e", border: "#2a7a6e" };
+  if (percent >= 30) return { dot: "#b86e1a", text: "#b86e1a", border: "#b86e1a" };
+  return { dot: "#a8b8b4", text: "#a8b8b4", border: "#a8b8b4" };
+}
+
 export default function FamilyMatchCard({
   family,
   hasFullAccess,
@@ -137,6 +160,9 @@ export default function FamilyMatchCard({
   onReachOut,
   animationDelay = 0,
 }: FamilyMatchCardProps) {
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   const meta = (family.metadata || {}) as FamilyMetadata;
   const displayName = family.display_name || "Family";
   const initials = getInitials(displayName);
@@ -146,6 +172,7 @@ export default function FamilyMatchCard({
   const paymentMethods = meta?.payment_methods || [];
   const publishedAt = meta?.care_post?.published_at || family.created_at;
   const lastActiveAt = meta?.last_active_at;
+  const familyDescription = meta?.about_situation?.trim();
 
   // Calculate profile completeness and determine card state
   const completeness = calculateCompleteness(family, meta);
@@ -153,14 +180,28 @@ export default function FamilyMatchCard({
     completeness >= 70 ? "full" :
     completeness >= 30 ? "partial" : "minimal";
 
-  // Bar color based on completeness
-  const barColor =
-    completeness >= 70 ? "bg-[#2a7a6e]" :
-    completeness >= 30 ? "bg-[#b86e1a]" : "bg-gray-400";
+  // Completeness chip colors
+  const completenessColors = getCompletenessColors(completeness);
 
-  const percentColor =
-    completeness >= 70 ? "text-[#2a7a6e]" :
-    completeness >= 30 ? "text-[#b86e1a]" : "text-gray-500";
+  // Tooltip content
+  const timelineLabel = formatTimelineLabel(meta?.timeline);
+  const hasTooltipContent = careNeeds.length > 0 || timelineLabel || paymentMethods.length > 0;
+
+  // Tooltip hover handlers
+  const handleTooltipMouseEnter = () => {
+    tooltipTimeoutRef.current = setTimeout(() => setShowTooltip(true), 300);
+  };
+  const handleTooltipMouseLeave = () => {
+    if (tooltipTimeoutRef.current) clearTimeout(tooltipTimeoutRef.current);
+    setShowTooltip(false);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tooltipTimeoutRef.current) clearTimeout(tooltipTimeoutRef.current);
+    };
+  }, []);
 
   // Activity status
   const activity = activityAgo(lastActiveAt);
@@ -241,19 +282,23 @@ export default function FamilyMatchCard({
           )}
         </div>
 
-        {/* COMPLETENESS BAR */}
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-xs text-gray-500 shrink-0">Profile</span>
-          <div className="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${barColor}`}
-              style={{ width: `${completeness}%` }}
-            />
-          </div>
-          <span className={`text-xs font-medium tabular-nums ${percentColor}`}>
-            {completeness}%
-          </span>
-        </div>
+        {/* FAMILY DESCRIPTION QUOTE */}
+        {familyDescription && (
+          <>
+            <p
+              className="text-[13px] text-gray-500 italic leading-[1.6] mb-4"
+              style={{
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+              }}
+            >
+              &ldquo;{familyDescription}&rdquo;
+            </p>
+            <div className="border-t border-gray-100 mb-4" />
+          </>
+        )}
 
         {/* FULL STATE: Match highlight block */}
         {cardState === "full" && matchingServices.length > 0 && (
@@ -339,28 +384,69 @@ export default function FamilyMatchCard({
 
       {/* BOTTOM ROW */}
       <div className="px-5 py-3.5 border-t border-gray-100 flex items-center justify-between">
-        {/* Activity indicator */}
-        <div className="flex items-center gap-1.5">
+        {/* Completeness chip with tooltip */}
+        <div className="relative flex items-center gap-1.5">
           <span
-            className={`w-2 h-2 rounded-full ${
-              activity.color === "green"
-                ? "bg-[#38b068] animate-pulse"
-                : activity.color === "amber"
-                ? "bg-amber-500"
-                : "bg-gray-400"
-            }`}
+            className="w-1.5 h-1.5 rounded-full"
+            style={{ backgroundColor: completenessColors.dot }}
           />
           <span
-            className={`text-sm font-medium ${
-              activity.color === "green"
-                ? "text-[#38b068]"
-                : activity.color === "amber"
-                ? "text-amber-600"
-                : "text-gray-500"
-            }`}
+            className="text-sm font-medium"
+            style={{ color: completenessColors.text }}
           >
-            {activity.label}
+            {completeness}% complete
           </span>
+          <button
+            type="button"
+            className="relative flex items-center justify-center w-[15px] h-[15px] rounded-full border text-[9px] font-medium leading-none"
+            style={{ borderColor: completenessColors.border, color: completenessColors.text }}
+            onMouseEnter={handleTooltipMouseEnter}
+            onMouseLeave={handleTooltipMouseLeave}
+            onClick={(e) => e.stopPropagation()}
+          >
+            i
+          </button>
+
+          {/* Tooltip */}
+          {showTooltip && (
+            <div
+              className="absolute bottom-full left-0 mb-2 z-50"
+              style={{ minWidth: "200px" }}
+            >
+              <div
+                className="relative bg-[#141918] text-white rounded-[7px] px-[11px] py-2"
+                style={{ fontSize: "11px", lineHeight: "1.7" }}
+              >
+                <p className="text-[9px] font-bold text-gray-400 uppercase tracking-wider mb-1">
+                  Shared details
+                </p>
+                {hasTooltipContent ? (
+                  <>
+                    {careNeeds.length > 0 && (
+                      <p>Care: {careNeeds.join(", ")}</p>
+                    )}
+                    {timelineLabel && (
+                      <p>Timeline: {timelineLabel}</p>
+                    )}
+                    {paymentMethods.length > 0 && (
+                      <p>Pays with: {paymentMethods.join(", ")}</p>
+                    )}
+                  </>
+                ) : (
+                  <p>This family is just getting started</p>
+                )}
+                {/* Arrow pointing down-left */}
+                <div
+                  className="absolute -bottom-1.5 left-3 w-0 h-0"
+                  style={{
+                    borderLeft: "6px solid transparent",
+                    borderRight: "6px solid transparent",
+                    borderTop: "6px solid #141918",
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Competition indicator */}
