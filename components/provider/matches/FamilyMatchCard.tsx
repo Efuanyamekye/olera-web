@@ -9,8 +9,6 @@ interface FamilyMatchCardProps {
   hasFullAccess: boolean;
   providerCareTypes: string[];
   providerPaymentMethods: string[];
-  providerLat?: number | null;
-  providerLng?: number | null;
   contacted?: boolean;
   reachOutCount?: number;
   onReachOut: (family: Profile) => void;
@@ -51,10 +49,11 @@ function timeAgo(dateStr: string): string {
   if (diffMins < 5) return "Just now";
   if (diffMins < 60) return `${diffMins}m ago`;
   if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays === 1) return "Yesterday";
-  if (diffDays < 7) return `${diffDays}d ago`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)} week${Math.floor(diffDays / 7) > 1 ? "s" : ""} ago`;
-  return `${Math.floor(diffDays / 30)}mo ago`;
+  if (diffDays === 1) return "1 day ago";
+  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+  if (diffDays < 14) return "1 week ago";
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+  return `${Math.floor(diffDays / 30)} month${Math.floor(diffDays / 30) > 1 ? "s" : ""} ago`;
 }
 
 function activityAgo(dateStr: string | null | undefined): { label: string; color: "green" | "amber" | "gray" } {
@@ -141,7 +140,7 @@ export default function FamilyMatchCard({
   const meta = (family.metadata || {}) as FamilyMetadata;
   const displayName = family.display_name || "Family";
   const initials = getInitials(displayName);
-  const location = family.city || "";
+  const location = [family.city, family.state].filter(Boolean).join(", ");
   const timeline = meta?.timeline ? TIMELINE_CONFIG[meta.timeline] : null;
   const careNeeds = meta?.care_needs || family.care_types || [];
   const paymentMethods = meta?.payment_methods || [];
@@ -186,10 +185,10 @@ export default function FamilyMatchCard({
 
   return (
     <div
-      className={`group bg-white rounded-[14px] border border-[#e4edea] overflow-hidden transition-all duration-200 ${
+      className={`group bg-white rounded-[14px] border overflow-hidden ${
         contacted
-          ? "opacity-60 cursor-default"
-          : "hover:shadow-lg hover:border-[#7fbfb5] cursor-pointer"
+          ? "border-[#e4edea] opacity-60 cursor-default"
+          : "border-[#e4edea] hover:border-[#a8d4cf] cursor-pointer card-hover-shadow"
       }`}
       style={{
         animation: `fadeSlideUp 0.4s ease-out ${animationDelay}ms both`,
@@ -376,7 +375,7 @@ export default function FamilyMatchCard({
         )}
       </div>
 
-      {/* Animation keyframes */}
+      {/* Animation keyframes and hover styles */}
       <style jsx>{`
         @keyframes fadeSlideUp {
           from {
@@ -387,6 +386,12 @@ export default function FamilyMatchCard({
             opacity: 1;
             transform: translateY(0);
           }
+        }
+        .card-hover-shadow {
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover-shadow:hover {
+          box-shadow: 0 4px 12px rgba(42, 122, 110, 0.08);
         }
       `}</style>
     </div>
