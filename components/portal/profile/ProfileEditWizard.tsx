@@ -540,8 +540,8 @@ export default function ProfileEditWizard({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="px-6 py-6 lg:px-8 lg:py-8">
+        <div className="flex-1 overflow-y-auto overflow-x-visible">
+          <div className="px-6 py-6 lg:px-8 lg:py-8 pb-24">
             {/* Step title - cleaner hierarchy */}
             <div className="mb-8">
               <h3 className="text-2xl font-display font-bold text-gray-900 tracking-tight">
@@ -641,7 +641,7 @@ export default function ProfileEditWizard({
                       className="w-full px-4 py-3.5 rounded-xl bg-gray-100 border-0 focus:bg-white focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-gray-900 placeholder:text-gray-400"
                     />
                     {showCityDropdown && cityResults.length > 0 && (
-                      <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl max-h-48 overflow-y-auto">
+                      <div className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-48 overflow-y-auto">
                         {cityResults.map((result) => (
                           <button
                             key={`${result.city}-${result.state}`}
