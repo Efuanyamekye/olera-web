@@ -11,15 +11,14 @@ import { canEngage, getFreeConnectionsRemaining, FREE_CONNECTION_LIMIT, isProfil
 import type { Profile, FamilyMetadata } from "@/lib/types";
 import { avatarGradient } from "@/components/portal/ConnectionDetailContent";
 import { calculateProfileCompleteness, type ExtendedMetadata } from "@/lib/profile-completeness";
-import MatchesFilterBar, {
+import {
   type MatchesFilters,
-  type SortOption,
   DEFAULT_FILTERS,
-  SERVICE_OPTIONS,
-  PAYMENT_OPTIONS,
 } from "@/components/provider/matches/MatchesFilterBar";
-import MatchesFilterSheet, { type FilterSheetType } from "@/components/provider/matches/MatchesFilterSheet";
 import FamilyMatchCard from "@/components/provider/matches/FamilyMatchCard";
+
+// Tab types for the matches view
+type MatchesTab = "best_match" | "most_recent" | "most_urgent" | "reached_out";
 import ReachOutDrawer from "@/components/provider/matches/ReachOutDrawer";
 import Pagination from "@/components/ui/Pagination";
 
@@ -278,6 +277,77 @@ function DiscoveryBanner({
             to respond to early contact. The first provider to connect has the highest chance of being chosen.
           </p>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Matches Tabs (replaces filter bar)
+// ---------------------------------------------------------------------------
+
+const TABS: { id: MatchesTab; label: string }[] = [
+  { id: "best_match", label: "Best Matches" },
+  { id: "most_recent", label: "Most Recent" },
+  { id: "most_urgent", label: "Urgent First" },
+  { id: "reached_out", label: "Reached Out" },
+];
+
+function MatchesTabs({
+  activeTab,
+  onTabChange,
+  matchCount,
+  reachedOutCount,
+  locationLabel,
+}: {
+  activeTab: MatchesTab;
+  onTabChange: (tab: MatchesTab) => void;
+  matchCount: number;
+  reachedOutCount: number;
+  locationLabel: string | null;
+}) {
+  return (
+    <div className="border-b border-gray-200">
+      <div className="flex items-center justify-between">
+        {/* Tabs */}
+        <div className="flex items-center gap-6 lg:gap-8">
+          {TABS.map((tab) => {
+            const isActive = activeTab === tab.id;
+            const showBadge = tab.id === "reached_out" && reachedOutCount > 0;
+
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => onTabChange(tab.id)}
+                className={`relative pb-3 text-[15px] transition-colors ${
+                  isActive
+                    ? "font-semibold text-gray-900"
+                    : "font-normal text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  {tab.label}
+                  {showBadge && (
+                    <span className="inline-flex items-center justify-center w-5 h-5 text-[11px] font-bold text-white bg-primary-600 rounded-full">
+                      {reachedOutCount}
+                    </span>
+                  )}
+                </span>
+                {/* Active underline */}
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gray-900" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Match count on the right */}
+        <p className="hidden sm:block text-sm text-gray-400">
+          {matchCount} {matchCount === 1 ? "match" : "matches"}
+          {locationLabel && <span> in {locationLabel}</span>}
+        </p>
       </div>
     </div>
   );
@@ -825,10 +895,7 @@ export default function ProviderMatchesPage() {
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [filters, setFilters] = useState<MatchesFilters>(DEFAULT_FILTERS);
-  const [sortBy, setSortBy] = useState<SortOption>("best_match");
-
-  // Mobile filter sheet state
-  const [filterSheetType, setFilterSheetType] = useState<FilterSheetType | null>(null);
+  const [activeTab, setActiveTab] = useState<MatchesTab>("best_match");
 
   // Reach-out drawer state
   const [drawerFamily, setDrawerFamily] = useState<Profile | null>(null);
@@ -836,9 +903,6 @@ export default function ProviderMatchesPage() {
   const [saveAsDefault, setSaveAsDefault] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
-
-  // Contacted section accordion (collapsed by default)
-  const [contactedExpanded, setContactedExpanded] = useState(false);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -1086,12 +1150,12 @@ export default function ProviderMatchesPage() {
     return () => clearInterval(interval);
   }, [fetchFamilies]);
 
-  // Reset to page 1 when filters change
+  // Reset to page 1 when filters or tab changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters, sortBy]);
+  }, [filters, activeTab]);
 
-  // Filter + sort
+  // Filter + sort families (excludes contacted - those show in "Reached Out" tab)
   const filteredFamilies = useMemo(() => {
     let result = families.filter((f) => !contactedIds.has(f.id));
 
@@ -1103,65 +1167,24 @@ export default function ProviderMatchesPage() {
       });
     }
 
-    // Services filter (OR logic - any match)
-    if (filters.services.length > 0) {
-      result = result.filter((f) => {
-        const meta = f.metadata as FamilyMetadata;
-        const needs = meta?.care_needs || f.care_types || [];
-        // Normalize: check if any filter service matches any family need
-        return filters.services.some((filterService) => {
-          const filterLabel = SERVICE_OPTIONS.find((s) => s.id === filterService)?.label.toLowerCase();
-          return needs.some((need) => {
-            const needLower = need.toLowerCase();
-            return needLower.includes(filterLabel || filterService) ||
-                   (filterLabel && filterLabel.includes(needLower));
-          });
-        });
-      });
-    }
-
-    // Payment filter (OR logic - any match)
-    if (filters.payment.length > 0) {
-      result = result.filter((f) => {
-        const meta = f.metadata as FamilyMetadata;
-        const methods = meta?.payment_methods || [];
-        return filters.payment.some((filterPayment) => {
-          const filterLabel = PAYMENT_OPTIONS.find((p) => p.id === filterPayment)?.label.toLowerCase();
-          return methods.some((method) => {
-            const methodLower = method.toLowerCase();
-            return methodLower.includes(filterLabel || filterPayment) ||
-                   (filterLabel && filterLabel.includes(methodLower));
-          });
-        });
-      });
-    }
-
-    // Timeline filter
-    if (filters.timeline !== "all") {
-      result = result.filter((f) => {
-        const meta = f.metadata as FamilyMetadata;
-        return meta?.timeline === filters.timeline;
-      });
-    }
-
-    // Sort
+    // Sort based on active tab
     const sorted = [...result].sort((a, b) => {
       const metaA = a.metadata as FamilyMetadata;
       const metaB = b.metadata as FamilyMetadata;
 
-      if (sortBy === "most_recent") {
+      if (activeTab === "most_recent") {
         const dateA = metaA?.care_post?.published_at || a.created_at;
         const dateB = metaB?.care_post?.published_at || b.created_at;
         return new Date(dateB).getTime() - new Date(dateA).getTime();
       }
 
-      if (sortBy === "most_urgent") {
+      if (activeTab === "most_urgent") {
         const urgA = URGENCY_ORDER[metaA?.timeline || "exploring"] ?? 3;
         const urgB = URGENCY_ORDER[metaB?.timeline || "exploring"] ?? 3;
         return urgA - urgB;
       }
 
-      // best_match: most service overlap first, then urgent, then recent
+      // best_match (default): most service overlap first, then urgent, then recent
       const needsA = metaA?.care_needs || a.care_types || [];
       const needsB = metaB?.care_needs || b.care_types || [];
       const matchA = computeMatchingServices(needsA, providerCareTypes);
@@ -1176,7 +1199,7 @@ export default function ProviderMatchesPage() {
     });
 
     return sorted;
-  }, [families, contactedIds, filters, sortBy, providerCareTypes]);
+  }, [families, contactedIds, filters, activeTab, providerCareTypes]);
 
   // Paginate filtered families
   const totalPages = Math.ceil(filteredFamilies.length / PAGE_SIZE);
@@ -1243,17 +1266,7 @@ export default function ProviderMatchesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
       <style dangerouslySetInnerHTML={{ __html: floatKeyframes }} />
 
-      {/* ── Mobile filter sheet ── */}
-      <MatchesFilterSheet
-        isOpen={filterSheetType !== null}
-        onClose={() => setFilterSheetType(null)}
-        type={filterSheetType || "timeline"}
-        filters={filters}
-        onChange={setFilters}
-        resultCount={filteredFamilies.length}
-      />
-
-      {/* ── Main layout (Upwork-style) ── */}
+      {/* ── Main layout ── */}
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
         {/* ── LEFT COLUMN: Banner + Filters + Content ── */}
         <div className="flex-1 min-w-0 space-y-5">
@@ -1265,99 +1278,77 @@ export default function ProviderMatchesPage() {
             onLocationChange={(location) => setFilters({ ...filters, location })}
           />
 
-          {/* Filter bar */}
-          <MatchesFilterBar
-            filters={filters}
-            onChange={setFilters}
-            sortBy={sortBy}
-            onSortChange={setSortBy}
-            onOpenSheet={(type) => setFilterSheetType(type)}
+          {/* Tabs row */}
+          <MatchesTabs
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            matchCount={activeTab === "reached_out" ? contactedFamilies.length : filteredFamilies.length}
+            reachedOutCount={contactedFamilies.length}
+            locationLabel={filters.location || providerLocation}
           />
 
-          {/* Family cards or empty state */}
-          {families.length === 0 ? (
-            <MatchesEmptyState />
-          ) : filteredFamilies.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm text-center py-16 px-8">
-              <div className="w-12 h-12 rounded-2xl bg-warm-50 border border-warm-100/60 flex items-center justify-center mx-auto mb-4">
-                <svg className="w-6 h-6 text-warm-300" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-                </svg>
+          {/* Content based on active tab */}
+          {activeTab === "reached_out" ? (
+            // Reached Out tab - show contacted families
+            contactedFamilies.length === 0 ? (
+              <div className="text-center py-16 px-8">
+                <div className="w-12 h-12 rounded-2xl bg-warm-50 border border-warm-100/60 flex items-center justify-center mx-auto mb-4">
+                  <CheckCircleIcon className="w-6 h-6 text-warm-300" />
+                </div>
+                <p className="text-[15px] font-display font-semibold text-gray-900 mb-1">
+                  No families reached out yet
+                </p>
+                <p className="text-sm text-gray-500">
+                  When you reach out to families, they&apos;ll appear here.
+                </p>
               </div>
-              <p className="text-[15px] font-display font-semibold text-gray-900 mb-1">
-                No matches for these filters
-              </p>
-              <p className="text-sm text-gray-500">
-                Try adjusting your filters to see more families.
-              </p>
-            </div>
+            ) : (
+              <div className="space-y-3 pt-2">
+                {contactedFamilies.map((family) => (
+                  <ContactedRow
+                    key={family.id}
+                    family={family}
+                    isAccepted={respondedIds.has(family.id)}
+                  />
+                ))}
+              </div>
+            )
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-              {paginatedFamilies.map((family) => (
-                <FamilyMatchCard
-                  key={family.id}
-                  family={family}
-                  hasFullAccess={hasFullAccess}
-                  providerCareTypes={providerCareTypes}
-                  providerPaymentMethods={providerPaymentMethods}
-                  providerLat={providerProfile?.lat}
-                  providerLng={providerProfile?.lng}
-                  contacted={contactedIds.has(family.id)}
-                  reachOutCount={reachOutCounts.get(family.id) || 0}
-                  onReachOut={handleReachOut}
-                />
-              ))}
-            </div>
-          )}
-
-          {/* Already contacted - collapsible accordion */}
-          {contactedFamilies.length > 0 && (
-            <div className="pt-4">
-              <button
-                type="button"
-                onClick={() => setContactedExpanded(!contactedExpanded)}
-                className="w-full flex items-center justify-between py-3.5 px-4 bg-gray-50/80 hover:bg-gray-100/80 rounded-xl border border-gray-200/60 transition-all duration-200 group"
-              >
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-white border border-gray-200/80 flex items-center justify-center shadow-sm">
-                    <CheckCircleIcon className="w-4 h-4 text-gray-400" />
+            // Other tabs - show filtered/sorted families
+            <>
+              {families.length === 0 ? (
+                <MatchesEmptyState />
+              ) : filteredFamilies.length === 0 ? (
+                <div className="text-center py-16 px-8">
+                  <div className="w-12 h-12 rounded-2xl bg-warm-50 border border-warm-100/60 flex items-center justify-center mx-auto mb-4">
+                    <PeopleIcon className="w-6 h-6 text-warm-300" />
                   </div>
-                  <span className="text-sm font-semibold text-gray-700">
-                    Already contacted
-                  </span>
-                  <span className="text-xs font-semibold text-gray-500 bg-white px-2 py-0.5 rounded-full border border-gray-200/80 shadow-sm">
-                    {contactedFamilies.length}
-                  </span>
+                  <p className="text-[15px] font-display font-semibold text-gray-900 mb-1">
+                    No matches in this location
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Try selecting a different location.
+                  </p>
                 </div>
-                <svg
-                  className={`w-5 h-5 text-gray-400 group-hover:text-gray-500 transition-all duration-300 ease-out ${contactedExpanded ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                </svg>
-              </button>
-
-              {/* Expandable content */}
-              <div
-                className="grid transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)]"
-                style={{ gridTemplateRows: contactedExpanded ? "1fr" : "0fr" }}
-              >
-                <div className="overflow-hidden">
-                  <div className="pt-3 space-y-2">
-                    {contactedFamilies.map((family) => (
-                      <ContactedRow
-                        key={family.id}
-                        family={family}
-                        isAccepted={respondedIds.has(family.id)}
-                      />
-                    ))}
-                  </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+                  {paginatedFamilies.map((family) => (
+                    <FamilyMatchCard
+                      key={family.id}
+                      family={family}
+                      hasFullAccess={hasFullAccess}
+                      providerCareTypes={providerCareTypes}
+                      providerPaymentMethods={providerPaymentMethods}
+                      providerLat={providerProfile?.lat}
+                      providerLng={providerProfile?.lng}
+                      contacted={contactedIds.has(family.id)}
+                      reachOutCount={reachOutCounts.get(family.id) || 0}
+                      onReachOut={handleReachOut}
+                    />
+                  ))}
                 </div>
-              </div>
-            </div>
+              )}
+            </>
           )}
 
           {/* Pagination */}
