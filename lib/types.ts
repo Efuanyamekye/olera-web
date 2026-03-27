@@ -308,6 +308,9 @@ export interface FamilyMetadata {
   // Enrichment fields
   country?: string;
   contact_preference?: "call" | "text" | "email";
+  // Contact details (unlocked when connected)
+  contact_email?: string;
+  contact_phone?: string;
   payment_methods?: string[];
   saved_benefits?: string[];
   living_situation?: string;

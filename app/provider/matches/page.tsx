@@ -550,15 +550,32 @@ function MatchesEmptyState() {
 }
 
 // ---------------------------------------------------------------------------
-// Contacted Row (condensed view for already contacted families)
+// ReachedOutCard — Full card for Reached Out tab
+// Two visual states: Pending Reply (amber) and Connected (teal)
 // ---------------------------------------------------------------------------
 
-function ContactedRow({
+function ReachedOutCard({
   family,
-  isAccepted,
+  connectionInfo,
+  isConnected,
+  reminderSent,
+  onSendReminder,
+  sendingReminder,
 }: {
   family: Profile;
-  isAccepted: boolean;
+  connectionInfo: {
+    id: string;
+    message: string | null;
+    created_at: string;
+    status: "pending" | "accepted";
+    reply_message?: string | null;
+    replied_at?: string | null;
+    reminder_sent?: boolean;
+  };
+  isConnected: boolean;
+  reminderSent: boolean;
+  onSendReminder: (connectionId: string) => void;
+  sendingReminder: boolean;
 }) {
   const displayName = family.display_name || "Family";
   const initials = getInitials(displayName);
@@ -566,51 +583,219 @@ function ContactedRow({
   const meta = family.metadata as FamilyMetadata;
   const timeline = meta?.timeline ? TIMELINE_CONFIG[meta.timeline] : null;
 
+  // Calculate hours since reach-out
+  const reachedOutAt = new Date(connectionInfo.created_at);
+  const hoursSinceReachOut = Math.floor((Date.now() - reachedOutAt.getTime()) / (1000 * 60 * 60));
+  const canSendReminder = hoursSinceReachOut >= 48 && !reminderSent && !isConnected;
+  const hoursUntilReminder = Math.max(0, 48 - hoursSinceReachOut);
+
+  // Format date for display
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  };
+
+  // Border and accent colors
+  const borderColor = isConnected ? "#2a7a6e" : "#b86e1a";
+  const pillBg = isConnected ? "bg-teal-50" : "bg-amber-50";
+  const pillText = isConnected ? "text-teal-700" : "text-amber-700";
+  const pillBorder = isConnected ? "border-teal-200" : "border-amber-200";
+
   return (
-    <div className="flex items-center gap-3 py-3 px-4 bg-white rounded-xl border border-gray-200/60 shadow-sm hover:shadow transition-shadow duration-200">
-      {/* Avatar */}
-      <div
-        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold text-white shadow-sm"
-        style={{ background: avatarGradient(displayName) }}
-      >
-        {initials}
-      </div>
+    <div
+      className="bg-white rounded-xl border border-gray-200/60 shadow-sm overflow-hidden"
+      style={{ borderLeftWidth: "3px", borderLeftColor: borderColor }}
+    >
+      <div className="p-5">
+        {/* Header row: Avatar + Name/Location + Status pill */}
+        <div className="flex items-start gap-3 mb-4">
+          {/* Avatar */}
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 text-sm font-bold text-white shadow-sm"
+            style={{ background: avatarGradient(displayName) }}
+          >
+            {initials}
+          </div>
 
-      {/* Name + location */}
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
-        {locationStr && (
-          <p className="text-xs text-gray-500 truncate">{locationStr}</p>
+          {/* Name + location + timeline */}
+          <div className="flex-1 min-w-0">
+            <p className="text-[15px] font-semibold text-gray-900 truncate">{displayName}</p>
+            {locationStr && (
+              <p className="text-sm text-gray-500 truncate">{locationStr}</p>
+            )}
+            {/* Timeline badge */}
+            {timeline && (
+              <span className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border mt-1.5 ${timeline.border} ${timeline.text} ${timeline.bg}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${timeline.dot}`} />
+                {timeline.label}
+              </span>
+            )}
+          </div>
+
+          {/* Status pill */}
+          <div className={`flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-full shrink-0 border ${pillBg} ${pillText} ${pillBorder}`}>
+            {isConnected ? (
+              <>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span>Connected</span>
+              </>
+            ) : (
+              <>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+                <span>Pending reply</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* YOUR MESSAGE block (always shown) */}
+        <div className="mb-4">
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Your message</p>
+          <div className="bg-warm-50/50 rounded-lg px-3.5 py-3 border border-warm-100/60">
+            <p className="text-sm text-gray-600 italic leading-relaxed">
+              {connectionInfo.message || "No message sent."}
+            </p>
+          </div>
+        </div>
+
+        {/* CONNECTED STATE: Their reply + Contact details */}
+        {isConnected && (
+          <>
+            {/* THEIR REPLY block */}
+            {connectionInfo.reply_message && (
+              <div className="mb-4">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Their reply</p>
+                <div className="bg-teal-50/50 rounded-lg px-3.5 py-3 border border-teal-100/60">
+                  <p className="text-sm text-gray-700 italic leading-relaxed">
+                    {connectionInfo.reply_message}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* CONTACT DETAILS UNLOCKED */}
+            <div className="bg-gray-50/80 rounded-lg p-4 border border-gray-100">
+              <div className="flex items-center gap-2 mb-3">
+                <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                </svg>
+                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Contact details unlocked</p>
+              </div>
+
+              <div className="space-y-2.5">
+                {/* Email */}
+                {meta?.contact_email && (
+                  <div className="flex items-center gap-2.5">
+                    <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                    </svg>
+                    <a href={`mailto:${meta.contact_email}`} className="text-sm text-primary-600 hover:underline">
+                      {meta.contact_email}
+                    </a>
+                  </div>
+                )}
+
+                {/* Phone */}
+                {meta?.contact_phone && (
+                  <div className="flex items-center gap-2.5">
+                    <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                    </svg>
+                    <a href={`tel:${meta.contact_phone}`} className="text-sm text-primary-600 hover:underline">
+                      {meta.contact_phone}
+                    </a>
+                  </div>
+                )}
+
+                {/* Preferred contact method */}
+                {meta?.contact_preference && (
+                  <div className="flex items-center gap-2.5">
+                    <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                    </svg>
+                    <span className="text-sm text-gray-600">
+                      Prefers <span className="font-medium capitalize">{meta.contact_preference}</span>
+                    </span>
+                  </div>
+                )}
+
+                {/* Connected timestamp */}
+                {connectionInfo.replied_at && (
+                  <div className="flex items-center gap-2.5 pt-1.5 border-t border-gray-200/60">
+                    <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                    <span className="text-sm text-gray-500">
+                      Connected {formatDate(connectionInfo.replied_at)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* View in Leads link */}
+            <div className="mt-4 flex justify-end">
+              <Link
+                href="/provider/leads"
+                className="inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors group"
+              >
+                View in Leads
+                <svg className="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>
+              </Link>
+            </div>
+          </>
         )}
-      </div>
 
-      {/* Timeline badge (smaller, hidden on mobile) */}
-      {timeline && (
-        <span className={`hidden lg:inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full border ${timeline.border} ${timeline.text} ${timeline.bg}`}>
-          <span className={`w-1.5 h-1.5 rounded-full ${timeline.dot}`} />
-          {timeline.label}
-        </span>
-      )}
+        {/* PENDING STATE: Follow-up reminder logic */}
+        {!isConnected && (
+          <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+            <p className="text-xs text-gray-400">
+              Reached out {timeAgo(connectionInfo.created_at)}
+            </p>
 
-      {/* Status */}
-      <div className={`flex items-center gap-1.5 text-[11px] lg:text-xs font-semibold px-2 lg:px-3 py-1.5 rounded-full shrink-0 ${
-        isAccepted
-          ? "bg-green-50 text-green-700 border border-green-200/80"
-          : "bg-amber-50 text-amber-600 border border-amber-200/80"
-      }`}>
-        {isAccepted ? (
-          <>
-            <CheckCircleIcon className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Connected</span>
-            <span className="sm:hidden">Done</span>
-          </>
-        ) : (
-          <>
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            <span>Pending</span>
-          </>
+            {/* Follow-up status/button */}
+            {reminderSent || connectionInfo.reminder_sent ? (
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-500">
+                <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                Reminder sent
+              </span>
+            ) : canSendReminder ? (
+              <button
+                type="button"
+                onClick={() => onSendReminder(connectionInfo.id)}
+                disabled={sendingReminder}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-full transition-colors disabled:opacity-50"
+              >
+                {sendingReminder ? (
+                  <>
+                    <svg className="w-3.5 h-3.5 animate-spin" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    Send a reminder
+                  </>
+                )}
+              </button>
+            ) : (
+              <span className="text-xs text-gray-400">
+                Follow-up available in {hoursUntilReminder}h
+              </span>
+            )}
+          </div>
         )}
       </div>
     </div>
@@ -892,6 +1077,18 @@ export default function ProviderMatchesPage() {
   const [contactedIds, setContactedIds] = useState<Set<string>>(new Set());
   const [respondedIds, setRespondedIds] = useState<Set<string>>(new Set());
   const [reachOutCounts, setReachOutCounts] = useState<Map<string, number>>(new Map());
+  // Full connection data for Reached Out tab cards
+  const [connectionData, setConnectionData] = useState<Map<string, {
+    id: string;
+    message: string | null;
+    created_at: string;
+    status: "pending" | "accepted";
+    reply_message?: string | null;
+    replied_at?: string | null;
+    reminder_sent?: boolean;
+  }>>(new Map());
+  // Track which connections have had reminders sent (local state, persisted via DB)
+  const [reminderSentIds, setReminderSentIds] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [filters, setFilters] = useState<MatchesFilters>(DEFAULT_FILTERS);
@@ -903,6 +1100,9 @@ export default function ProviderMatchesPage() {
   const [saveAsDefault, setSaveAsDefault] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+
+  // Reminder sending state
+  const [sendingReminderId, setSendingReminderId] = useState<string | null>(null);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -964,6 +1164,44 @@ export default function ProviderMatchesPage() {
       setSendError(null);
     }
   }, [sending]);
+
+  // Handle sending a follow-up reminder (48-hour rule, max 1 per family)
+  const handleSendReminder = useCallback(
+    async (connectionId: string) => {
+      if (!profileId || !isSupabaseConfigured() || sendingReminderId) return;
+
+      setSendingReminderId(connectionId);
+
+      try {
+        const supabase = createClient();
+
+        // Update the connection metadata to mark reminder as sent
+        const { error } = await supabase
+          .from("connections")
+          .update({
+            metadata: {
+              provider_initiated: true,
+              reminder_sent: true,
+              reminder_sent_at: new Date().toISOString(),
+            },
+          })
+          .eq("id", connectionId);
+
+        if (error) throw error;
+
+        // Update local state
+        setReminderSentIds((prev) => new Set([...prev, connectionId]));
+
+        // Optionally trigger a notification to the family (fire-and-forget)
+        // This could be expanded with an API route similar to notify-reach-out
+      } catch (err) {
+        console.error("[olera] Failed to send reminder:", err);
+      } finally {
+        setSendingReminderId(null);
+      }
+    },
+    [profileId, sendingReminderId],
+  );
 
   const handleSendFromDrawer = useCallback(
     async (toProfileId: string, message: string, shouldSaveAsDefault: boolean) => {
@@ -1068,7 +1306,7 @@ export default function ProviderMatchesPage() {
         const supabase = createClient();
 
         // Fetch all families + provider's own connections (+ responded)
-        const [familiesRes, connectionsRes, respondedRes] = await Promise.all([
+        const [familiesRes, connectionsRes, respondedRes, fullConnectionsRes] = await Promise.all([
           supabase
             .from("business_profiles")
             .select("id, display_name, city, state, lat, lng, type, care_types, metadata, image_url, slug, created_at", { count: "exact" })
@@ -1088,6 +1326,14 @@ export default function ProviderMatchesPage() {
             .eq("from_profile_id", profileId)
             .eq("type", "request")
             .eq("status", "accepted"),
+          // Full connection data for Reached Out tab (includes message, timestamps, metadata)
+          supabase
+            .from("connections")
+            .select("id, to_profile_id, message, created_at, status, metadata")
+            .eq("from_profile_id", profileId)
+            .eq("type", "request")
+            .in("status", ["pending", "accepted"])
+            .order("created_at", { ascending: false }),
         ]);
 
         if (familiesRes.error) {
@@ -1103,6 +1349,50 @@ export default function ProviderMatchesPage() {
         setRespondedIds(
           new Set(respondedRes.data?.map((c: { to_profile_id: string }) => c.to_profile_id) || [])
         );
+
+        // Process full connection data for Reached Out tab
+        const connDataMap = new Map<string, {
+          id: string;
+          message: string | null;
+          created_at: string;
+          status: "pending" | "accepted";
+          reply_message?: string | null;
+          replied_at?: string | null;
+          reminder_sent?: boolean;
+        }>();
+        const reminderIds = new Set<string>();
+
+        (fullConnectionsRes.data || []).forEach((conn: {
+          id: string;
+          to_profile_id: string;
+          message: string | null;
+          created_at: string;
+          status: string;
+          metadata: Record<string, unknown> | null;
+        }) => {
+          const meta = conn.metadata as {
+            reply_message?: string;
+            replied_at?: string;
+            reminder_sent?: boolean;
+          } | null;
+
+          connDataMap.set(conn.to_profile_id, {
+            id: conn.id,
+            message: conn.message,
+            created_at: conn.created_at,
+            status: conn.status as "pending" | "accepted",
+            reply_message: meta?.reply_message || null,
+            replied_at: meta?.replied_at || null,
+            reminder_sent: meta?.reminder_sent || false,
+          });
+
+          if (meta?.reminder_sent) {
+            reminderIds.add(conn.id);
+          }
+        });
+
+        setConnectionData(connDataMap);
+        setReminderSentIds(reminderIds);
 
         // Reach-out counts per family
         const familyIds = fetchedFamilies.map((f) => f.id);
@@ -1289,28 +1579,39 @@ export default function ProviderMatchesPage() {
 
           {/* Content based on active tab */}
           {activeTab === "reached_out" ? (
-            // Reached Out tab - show contacted families
+            // Reached Out tab - show contacted families with full card view
             contactedFamilies.length === 0 ? (
               <div className="text-center py-16 px-8">
-                <div className="w-12 h-12 rounded-2xl bg-warm-50 border border-warm-100/60 flex items-center justify-center mx-auto mb-4">
-                  <CheckCircleIcon className="w-6 h-6 text-warm-300" />
+                <div className="w-14 h-14 rounded-2xl bg-warm-50 border border-warm-100/60 flex items-center justify-center mx-auto mb-5">
+                  <svg className="w-7 h-7 text-warm-300" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                  </svg>
                 </div>
-                <p className="text-[15px] font-display font-semibold text-gray-900 mb-1">
-                  No families reached out yet
-                </p>
-                <p className="text-sm text-gray-500">
-                  When you reach out to families, they&apos;ll appear here.
+                <h3 className="text-[17px] font-display font-bold text-gray-900 mb-1.5">
+                  No reach-outs yet
+                </h3>
+                <p className="text-sm text-gray-500 max-w-xs mx-auto leading-relaxed">
+                  When you reach out to families, they&apos;ll appear here. You can track responses and send follow-up reminders.
                 </p>
               </div>
             ) : (
-              <div className="space-y-3 pt-2">
-                {contactedFamilies.map((family) => (
-                  <ContactedRow
-                    key={family.id}
-                    family={family}
-                    isAccepted={respondedIds.has(family.id)}
-                  />
-                ))}
+              <div className="space-y-4 pt-2">
+                {contactedFamilies.map((family) => {
+                  const connInfo = connectionData.get(family.id);
+                  if (!connInfo) return null;
+
+                  return (
+                    <ReachedOutCard
+                      key={family.id}
+                      family={family}
+                      connectionInfo={connInfo}
+                      isConnected={respondedIds.has(family.id)}
+                      reminderSent={reminderSentIds.has(connInfo.id)}
+                      onSendReminder={handleSendReminder}
+                      sendingReminder={sendingReminderId === connInfo.id}
+                    />
+                  );
+                })}
               </div>
             )
           ) : (
