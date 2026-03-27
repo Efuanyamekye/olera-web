@@ -365,31 +365,44 @@ export default function ProfileEditWizard({
 
       const existingMeta = (current?.metadata || {}) as Record<string, unknown>;
 
-      const updatedMeta = {
-        ...existingMeta,
-        contact_preference: contactPref || undefined,
-        relationship_to_recipient: whoNeedsCare || undefined,
-        age: age ? parseInt(age, 10) : undefined,
-        care_needs: careNeeds.length > 0 ? careNeeds : undefined,
-        timeline: timeline || undefined,
-        schedule_preference: schedulePreference || undefined,
-        about_situation: description || undefined,
-        payment_methods: payments.length > 0 ? payments : undefined,
+      // Build updated metadata - only include fields that have values
+      const updatedMeta: Record<string, unknown> = { ...existingMeta };
+
+      // Set or clear each field explicitly
+      if (contactPref) updatedMeta.contact_preference = contactPref;
+      if (whoNeedsCare) updatedMeta.relationship_to_recipient = whoNeedsCare;
+      if (age) updatedMeta.age = parseInt(age, 10);
+      if (careNeeds.length > 0) updatedMeta.care_needs = careNeeds;
+      if (timeline) updatedMeta.timeline = timeline;
+      if (schedulePreference) updatedMeta.schedule_preference = schedulePreference;
+      if (description) updatedMeta.about_situation = description;
+      if (payments.length > 0) updatedMeta.payment_methods = payments;
+
+      const updatePayload = {
+        display_name: displayName || null,
+        city: city || null,
+        state: state || null,
+        email: email || null,
+        phone: phone || null,
+        care_types: careTypes,
+        description: description || null,
+        metadata: updatedMeta,
       };
 
-      await supabase
+      const { error } = await supabase
         .from("business_profiles")
-        .update({
-          display_name: displayName || null,
-          city: city || null,
-          state: state || null,
-          email: email || null,
-          phone: phone || null,
-          care_types: careTypes,
-          description: description || null,
-          metadata: updatedMeta,
-        })
+        .update(updatePayload)
         .eq("id", profile.id);
+
+      if (error) {
+        console.error("[ProfileEditWizard] Save failed:", error);
+        return;
+      }
+
+      console.log("[ProfileEditWizard] Saved successfully:", {
+        description: description || "(empty)",
+        aboutSituation: updatedMeta.about_situation || "(empty)",
+      });
 
       // Log profile enrichment event (fire-and-forget, debounced by saveChanges already)
       fetch("/api/activity/track", {
