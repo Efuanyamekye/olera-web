@@ -806,125 +806,193 @@ function ReachedOutCard({
 // Matches Sidebar (sticky — mirrors dashboard completeness sidebar)
 // ---------------------------------------------------------------------------
 
+// Avatar colors by position
+const AVATAR_COLORS = [
+  { bg: "#d4ede7", text: "#1a6055" }, // green
+  { bg: "#fce5d8", text: "#a04020" }, // orange
+  { bg: "#e0ddf4", text: "#4838a0" }, // purple
+  { bg: "#fcdede", text: "#982828" }, // red
+];
+
+function getInitialsForSidebar(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
 function MatchesSidebar({
-  remaining,
-  totalFamilies,
-  isFreeTier,
-  contactedCount,
-  respondedCount,
-  newMatchesToday,
+  families,
+  contactedIds,
+  providerLocation,
 }: {
-  remaining: number | null;
-  totalFamilies: number;
-  isFreeTier: boolean;
-  contactedCount: number;
-  respondedCount: number;
-  newMatchesToday: number;
+  families: Profile[];
+  contactedIds: Set<string>;
+  providerLocation: string | null;
 }) {
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
-  const isPro = !isFreeTier;
-  const responseRate = contactedCount > 0 ? Math.round((respondedCount / contactedCount) * 100) : 0;
+
+  // Calculate counts
+  const totalFamilies = families.length;
+  const contactedCount = contactedIds.size;
+  const remainingFamilies = totalFamilies - contactedCount;
+
+  // Determine state
+  const isZeroOutreach = contactedCount === 0;
+  const isActive = contactedCount > 0;
+
+  // Get families for avatar display (up to 4 + overflow)
+  const displayFamilies = families.slice(0, 4);
+  const overflowCount = Math.max(0, totalFamilies - 4);
 
   return (
     <div className="space-y-3">
       {/* ── Main sidebar card ── */}
-      <div className="rounded-2xl border border-gray-100 overflow-hidden">
-        <div className="bg-white p-5">
-
-          {/* ── FREE TIER: reach-outs ring + families count ── */}
-          {isFreeTier && remaining !== null && (
+      <div className="rounded-2xl border border-gray-100 overflow-hidden bg-white">
+        <div className="p-5">
+          {/* ── STATE 1: ZERO OUTREACH ── */}
+          {isZeroOutreach && totalFamilies > 0 && (
             <>
-              {/* Circular progress + count */}
-              <div className="flex flex-col items-center text-center mb-5">
-                <div className="relative w-20 h-20 mb-3">
-                  <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
-                    <circle cx="40" cy="40" r="34" fill="none" stroke="#f0eeeb" strokeWidth="5" />
-                    <circle
-                      cx="40" cy="40" r="34" fill="none"
-                      stroke="#374151" strokeWidth="5" strokeLinecap="round"
-                      strokeDasharray={`${(remaining / FREE_CONNECTION_LIMIT) * 213.6} 213.6`}
-                    />
-                  </svg>
-                  <span className="absolute inset-0 flex items-center justify-center text-[28px] font-display font-bold text-gray-900">
-                    {remaining}
-                  </span>
-                </div>
-                <p className="text-[15px] text-gray-500">
-                  <span className="font-bold text-gray-900">{remaining} of {FREE_CONNECTION_LIMIT}</span> reach-outs remaining
-                </p>
+              {/* Full Access header */}
+              <div className="flex items-center gap-1.5 mb-5">
+                <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span className="text-[10.5px] font-bold text-primary-600 uppercase tracking-wide">
+                  Full Access {providerLocation && `· ${providerLocation}`}
+                </span>
               </div>
 
-              {/* Families stat */}
-              <div className="flex items-center justify-center gap-2.5 bg-warm-50/50 rounded-xl px-4 py-3">
-                <PeopleIcon className="w-5 h-5 text-gray-400 shrink-0" />
-                <p className="text-[13px] text-gray-500">
-                  <span className="font-bold text-gray-900">{totalFamilies}</span> families waiting
-                </p>
+              {/* Avatar stack - all bright */}
+              <div className="flex items-center mb-4">
+                {displayFamilies.map((family, index) => (
+                  <div
+                    key={family.id}
+                    className="relative w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-[2.5px] border-white"
+                    style={{
+                      backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length].bg,
+                      color: AVATAR_COLORS[index % AVATAR_COLORS.length].text,
+                      marginRight: index < displayFamilies.length - 1 || overflowCount > 0 ? "-10px" : "0",
+                      zIndex: displayFamilies.length - index,
+                    }}
+                  >
+                    {getInitialsForSidebar(family.display_name || "?")}
+                  </div>
+                ))}
+                {overflowCount > 0 && (
+                  <div
+                    className="relative w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold border-[2.5px] border-white bg-gray-100 text-gray-500"
+                    style={{ zIndex: 0 }}
+                  >
+                    +{overflowCount}
+                  </div>
+                )}
               </div>
-            </>
-          )}
 
-          {/* ── PRO + FAMILIES WAITING ── */}
-          {isPro && totalFamilies > 0 && (
-            <>
-              {/* Full Access badge */}
-              <div className="flex justify-center mb-5">
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary-50/60 border border-primary-100/60">
-                  <svg className="w-3.5 h-3.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                  <span className="text-xs font-bold text-primary-700 tracking-wide">Full Access</span>
-                </div>
-              </div>
-
-              {/* Big family count */}
-              <div className="text-center mb-2">
-                <p className="text-[52px] font-display font-bold text-gray-900 leading-none tracking-tight">
-                  {totalFamilies}
-                </p>
-              </div>
-              <p className="text-[17px] text-gray-700 text-center font-medium leading-snug">
-                {totalFamilies === 1 ? "family" : "families"} waiting for you
+              {/* Family count */}
+              <p className="text-[22px] font-display font-bold text-gray-900 leading-tight">
+                {totalFamilies} {totalFamilies === 1 ? "family" : "families"}
               </p>
-              <p className="text-[13px] text-gray-400 text-center mt-1.5 leading-relaxed">
-                Families choose the first provider who responds.
+              <p className="text-[14px] text-gray-500 mt-0.5">
+                haven&apos;t heard from you yet.
               </p>
 
-              {/* Stats row */}
-              <div className="mt-6 pt-5 border-t border-gray-100">
-                <div className="grid grid-cols-3 gap-1">
-                  <div className="text-center">
-                    <p className="text-xl font-display font-bold text-gray-900 tracking-tight">{contactedCount}</p>
-                    <p className="text-[11px] text-gray-400 font-medium mt-0.5">Reached out</p>
-                  </div>
-                  <div className="text-center border-x border-gray-100">
-                    <p className="text-xl font-display font-bold text-gray-900 tracking-tight">{respondedCount}</p>
-                    <p className="text-[11px] text-gray-400 font-medium mt-0.5">Responded</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-xl font-display font-bold text-gray-900 tracking-tight">{responseRate}%</p>
-                    <p className="text-[11px] text-gray-400 font-medium mt-0.5">Rate</p>
+              {/* Tip section */}
+              <div className="mt-5 pt-4 border-t border-gray-100">
+                <div className="flex items-start gap-2">
+                  <span className="text-base">💡</span>
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-1">Tip</p>
+                    <p className="text-[13px] text-gray-600 leading-relaxed">
+                      First to reach out is 3× more likely to be chosen.
+                    </p>
                   </div>
                 </div>
               </div>
             </>
           )}
 
-          {/* ── PRO + ALL CAUGHT UP ── */}
-          {isPro && totalFamilies === 0 && (
+          {/* ── STATE 2: ACTIVE (reached out to some) ── */}
+          {isActive && totalFamilies > 0 && (
             <>
-              {/* Full Access badge */}
-              <div className="flex justify-center mb-5">
-                <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary-50/60 border border-primary-100/60">
-                  <svg className="w-3.5 h-3.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                  <span className="text-xs font-bold text-primary-700 tracking-wide">Full Access</span>
-                </div>
+              {/* Full Access header */}
+              <div className="flex items-center gap-1.5 mb-5">
+                <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span className="text-[10.5px] font-bold text-primary-600 uppercase tracking-wide">
+                  Full Access {providerLocation && `· ${providerLocation}`}
+                </span>
+              </div>
+
+              {/* Avatar stack - contacted are dimmed with checkmark */}
+              <div className="flex items-center mb-4">
+                {displayFamilies.map((family, index) => {
+                  const isContacted = contactedIds.has(family.id);
+                  return (
+                    <div
+                      key={family.id}
+                      className="relative"
+                      style={{
+                        marginRight: index < displayFamilies.length - 1 || overflowCount > 0 ? "-10px" : "0",
+                        zIndex: displayFamilies.length - index,
+                      }}
+                    >
+                      <div
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-[2.5px] border-white transition-opacity"
+                        style={{
+                          backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length].bg,
+                          color: AVATAR_COLORS[index % AVATAR_COLORS.length].text,
+                          opacity: isContacted ? 0.3 : 1,
+                        }}
+                      >
+                        {getInitialsForSidebar(family.display_name || "?")}
+                      </div>
+                      {/* Checkmark badge for contacted */}
+                      {isContacted && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-primary-500 flex items-center justify-center">
+                          <svg className="w-2 h-2 text-white" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+                {overflowCount > 0 && (
+                  <div
+                    className="relative w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold border-[2.5px] border-white bg-gray-100 text-gray-500"
+                    style={{ zIndex: 0 }}
+                  >
+                    +{overflowCount}
+                  </div>
+                )}
+              </div>
+
+              {/* Remaining family count */}
+              <p className="text-[22px] font-display font-bold text-gray-900 leading-tight">
+                {remainingFamilies} {remainingFamilies === 1 ? "family" : "families"}
+              </p>
+              <p className="text-[14px] text-gray-500 mt-0.5">
+                haven&apos;t heard from you yet.
+              </p>
+            </>
+          )}
+
+          {/* ── ALL CAUGHT UP (no families) ── */}
+          {totalFamilies === 0 && (
+            <>
+              {/* Full Access header */}
+              <div className="flex items-center gap-1.5 mb-5">
+                <svg className="w-3 h-3 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+                <span className="text-[10.5px] font-bold text-primary-600 uppercase tracking-wide">
+                  Full Access {providerLocation && `· ${providerLocation}`}
+                </span>
               </div>
 
               {/* Checkmark circle */}
-              <div className="flex justify-center mb-5">
+              <div className="flex justify-center mb-4">
                 <div className="w-14 h-14 rounded-full bg-primary-50/60 flex items-center justify-center">
                   <svg className="w-7 h-7 text-primary-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
@@ -935,92 +1003,95 @@ function MatchesSidebar({
               <h3 className="text-lg font-display font-bold text-gray-900 text-center">
                 You&apos;re all caught up
               </h3>
-              <p className="text-[13px] text-gray-400 text-center mt-2 leading-relaxed max-w-[220px] mx-auto">
+              <p className="text-[13px] text-gray-400 text-center mt-2 leading-relaxed">
                 No new families waiting. We&apos;ll notify you when someone&apos;s looking for care in your area.
               </p>
             </>
           )}
         </div>
-
-        {/* ── Contextual footer strip ── */}
-
-        {/* Pro + families: urgency nudge */}
-        {isPro && totalFamilies > 0 && newMatchesToday > 0 && (
-          <div className="px-5 py-3.5 bg-amber-50/60 border-t border-amber-100/40 flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center shrink-0 mt-0.5">
-              <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
-              </svg>
-            </div>
-            <p className="text-[13px] text-gray-600 leading-relaxed">
-              <span className="font-semibold text-gray-800">{newMatchesToday} new {newMatchesToday === 1 ? "match" : "matches"} today</span> — respond within 24hrs for the best chance.
-            </p>
-          </div>
-        )}
-
-        {/* Pro + all caught up: profile tip */}
-        {isPro && totalFamilies === 0 && (
-          <div className="px-5 py-3.5 bg-warm-50/50 border-t border-warm-100/60">
-            <p className="text-[13px] text-gray-500 text-center leading-relaxed">
-              Tip: <Link href="/provider/profile" className="font-semibold text-primary-600 hover:text-primary-700 transition-colors">Complete your profile</Link> to match with more families.
-            </p>
-          </div>
-        )}
-
-        {/* Free tier: dark Pro upsell */}
-        {isFreeTier && (
-          <div
-            className="relative"
-            style={{ background: "linear-gradient(135deg, #1a1d23 0%, #252830 50%, #1e2127 100%)" }}
-          >
-            <div
-              className="absolute top-0 right-0 w-48 h-48 opacity-[0.06] pointer-events-none"
-              style={{ background: "radial-gradient(circle at 80% 20%, #199087, transparent 70%)" }}
-            />
-
-            <div className="relative p-6">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 mb-4">
-                <svg className="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-                </svg>
-                <span className="text-[11px] font-bold text-amber-400 tracking-wide uppercase">Pro</span>
-              </div>
-
-              <h3 className="text-[17px] font-display font-bold text-white leading-tight mb-1.5 tracking-tight">
-                Connect with every family
-              </h3>
-              <p className="text-[13px] text-gray-400 leading-relaxed mb-5">
-                Unlimited reach-outs, priority visibility, and more leads.
-              </p>
-
-              <div className="flex items-center justify-between mb-5">
-                <div className="text-center">
-                  <p className="text-sm font-display font-bold text-white tracking-tight leading-none uppercase">Unlimited</p>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1.5">Reach-outs</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-lg font-display font-bold text-white tracking-tight leading-none">3&times;</p>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1.5">Visibility</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-lg font-display font-bold text-white tracking-tight leading-none">2&times;</p>
-                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider mt-1.5">More leads</p>
-                </div>
-              </div>
-
-              <Link
-                href="/provider/pro"
-                className="flex items-center justify-center gap-2 w-full py-3.5 rounded-xl bg-primary-500 text-white text-[14px] font-bold hover:bg-primary-400 transition-colors shadow-lg shadow-primary-500/20"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-                </svg>
-                Get unlimited · $25/mo
-              </Link>
-            </div>
-          </div>
-        )}
       </div>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+         STATE 3: FREE PLAN (commented out — enable when subscriptions launch)
+         ══════════════════════════════════════════════════════════════════════
+
+      {isFreeTier && (
+        <div className="rounded-2xl border border-gray-100 overflow-hidden bg-white">
+          <div className="p-5">
+            {/* Free Plan header *}
+            <div className="flex items-center gap-1.5 mb-5">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span className="text-[10.5px] font-bold text-amber-600 uppercase tracking-wide">
+                Free Plan {providerLocation && `· ${providerLocation}`}
+              </span>
+            </div>
+
+            {/* Avatar stack - 3 bright, 1 blurred, dashed overflow *}
+            <div className="flex items-center mb-4">
+              {displayFamilies.slice(0, 3).map((family, index) => (
+                <div
+                  key={family.id}
+                  className="relative w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-[2.5px] border-white"
+                  style={{
+                    backgroundColor: AVATAR_COLORS[index % AVATAR_COLORS.length].bg,
+                    color: AVATAR_COLORS[index % AVATAR_COLORS.length].text,
+                    marginRight: "-10px",
+                    zIndex: 4 - index,
+                  }}
+                >
+                  {getInitialsForSidebar(family.display_name || "?")}
+                </div>
+              ))}
+              {/* Blurred avatar *}
+              {displayFamilies[3] && (
+                <div
+                  className="relative w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-[2.5px] border-white"
+                  style={{
+                    backgroundColor: AVATAR_COLORS[3].bg,
+                    color: AVATAR_COLORS[3].text,
+                    marginRight: "-10px",
+                    zIndex: 1,
+                    opacity: 0.25,
+                    filter: "blur(2px)",
+                  }}
+                >
+                  {getInitialsForSidebar(displayFamilies[3].display_name || "?")}
+                </div>
+              )}
+              {/* Dashed overflow *}
+              {overflowCount > 0 && (
+                <div
+                  className="relative w-10 h-10 rounded-full flex items-center justify-center text-xs font-semibold bg-gray-50 text-gray-400"
+                  style={{
+                    zIndex: 0,
+                    border: "2px dashed #d1d5db",
+                  }}
+                >
+                  +{overflowCount}
+                </div>
+              )}
+            </div>
+
+            {/* Family count *}
+            <p className="text-[22px] font-display font-bold text-gray-900 leading-tight">
+              {totalFamilies} families
+            </p>
+            <p className="text-[14px] text-gray-500 mt-0.5 leading-relaxed">
+              in your area. You can reach <span className="font-semibold">{FREE_CONNECTION_LIMIT} per month</span> on the free plan.
+            </p>
+
+            {/* Upgrade CTA *}
+            <Link
+              href="/provider/pro"
+              className="flex items-center justify-center w-full mt-5 py-3 rounded-xl bg-primary-500 text-white text-[14px] font-semibold hover:bg-primary-600 transition-colors"
+            >
+              Unlock all {totalFamilies} families
+            </Link>
+          </div>
+        </div>
+      )}
+
+      ══════════════════════════════════════════════════════════════════════ */}
 
       {/* ── How It Works accordion ── */}
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
@@ -1680,12 +1751,9 @@ export default function ProviderMatchesPage() {
 
             {/* Membership / Access Card + How it works */}
             <MatchesSidebar
-              remaining={freeRemaining}
-              totalFamilies={families.length}
-              isFreeTier={isFreeTier}
-              contactedCount={contactedIds.size}
-              respondedCount={respondedIds.size}
-              newMatchesToday={newTodayCount}
+              families={families}
+              contactedIds={contactedIds}
+              providerLocation={providerLocation}
             />
           </div>
         </div>
