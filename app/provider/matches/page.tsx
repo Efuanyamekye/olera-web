@@ -1245,7 +1245,6 @@ export default function ProviderMatchesPage() {
             onChange={setFilters}
             sortBy={sortBy}
             onSortChange={setSortBy}
-            resultCount={filteredFamilies.length}
             providerLocation={providerLocation}
             onOpenSheet={(type) => setFilterSheetType(type)}
           />

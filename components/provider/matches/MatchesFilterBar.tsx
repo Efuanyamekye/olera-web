@@ -202,7 +202,6 @@ interface MatchesFilterBarProps {
   onChange: (filters: MatchesFilters) => void;
   sortBy: SortOption;
   onSortChange: (sort: SortOption) => void;
-  resultCount: number;
   providerLocation: string | null; // e.g., "Houston, TX"
   onOpenSheet?: (type: "location" | "services" | "payment" | "timeline") => void;
 }
@@ -212,7 +211,6 @@ export default function MatchesFilterBar({
   onChange,
   sortBy,
   onSortChange,
-  resultCount,
   providerLocation,
   onOpenSheet,
 }: MatchesFilterBarProps) {
@@ -728,52 +726,18 @@ export default function MatchesFilterBar({
           </div>
         </div>
 
-        {/* Clear all (desktop) */}
+        {/* Clear all */}
         {hasActiveFilters && (
           <button
             type="button"
             onClick={clearAllFilters}
-            className="hidden lg:flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors shrink-0"
+            className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors shrink-0"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
-            Clear all
-          </button>
-        )}
-      </div>
-
-      {/* Result count row */}
-      <div className="flex items-center justify-between">
-        <p className="text-sm lg:text-[15px] text-gray-500">
-          {resultCount === 0 ? (
-            <>
-              <span className="font-semibold text-gray-800">No matches</span>
-              {filters.location ? (
-                <span> in <span className="text-gray-700">{filters.location}</span></span>
-              ) : (
-                <span> found</span>
-              )}
-            </>
-          ) : (
-            <>
-              <span className="font-semibold text-gray-800">{resultCount}</span>
-              {" "}{resultCount === 1 ? "match" : "matches"}
-              {filters.location && (
-                <span> in <span className="text-gray-700">{filters.location}</span></span>
-              )}
-            </>
-          )}
-        </p>
-
-        {/* Clear all (mobile) */}
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={clearAllFilters}
-            className="lg:hidden text-sm font-medium text-primary-600 hover:text-primary-700 active:text-primary-800"
-          >
-            Clear all
+            <span className="hidden lg:inline">Clear all</span>
+            <span className="lg:hidden">Clear</span>
           </button>
         )}
       </div>
