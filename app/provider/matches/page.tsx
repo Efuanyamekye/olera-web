@@ -329,7 +329,7 @@ function MatchesTabs({
                 <span className="flex items-center gap-2">
                   {tab.label}
                   {showBadge && (
-                    <span className="inline-flex items-center justify-center w-5 h-5 text-[11px] font-bold text-white bg-primary-600 rounded-full">
+                    <span className="inline-flex items-center justify-center w-5 h-5 text-[11px] font-bold text-white bg-gray-700 rounded-full">
                       {reachedOutCount}
                     </span>
                   )}
