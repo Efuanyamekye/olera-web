@@ -86,16 +86,20 @@ function calculateCompleteness(family: Profile, meta: FamilyMetadata | null): nu
   return Math.min(100, score);
 }
 
-// Generate default message based on profile state
+// Generate default message based on profile state and tone
 function getDefaultMessage(
   firstName: string,
   careTypes: string[],
   profileState: "full" | "partial" | "minimal",
-  providerName: string
+  providerName: string,
+  tone: ToneType = "introduce"
 ): string {
-  if (profileState === "full" && careTypes.length > 0) {
-    const careList = careTypes.slice(0, 2).join(" and ");
-    return `Hi ${firstName},
+  const careList = careTypes.length > 0 ? careTypes.slice(0, 2).join(" and ") : "";
+
+  // INTRODUCE tone
+  if (tone === "introduce") {
+    if (profileState === "full" && careList) {
+      return `Hi ${firstName},
 
 I came across your care profile and noticed you're looking for ${careList}. Our team specializes in exactly this and I'd love to help.
 
@@ -103,23 +107,88 @@ Would you be available for a quick call to discuss your needs?
 
 Best regards,
 ${providerName}`;
-  }
+    }
+    if (profileState === "partial") {
+      return `Hi ${firstName},
 
-  if (profileState === "partial") {
+I came across your profile and wanted to introduce myself. We're a local care provider and I'd love to learn more about what you're looking for.
+
+Feel free to reach out whenever you're ready — no pressure at all.
+
+Best regards,
+${providerName}`;
+    }
+    // Minimal
     return `Hi ${firstName},
 
-I came across your profile and would love to learn more about what you're looking for. We're here to help and happy to answer any questions — no pressure at all.
+I wanted to reach out and introduce myself. We're here to help whenever you're ready — no pressure at all.
 
-Feel free to reach out whenever you're ready.
+Feel free to reach out with any questions.
 
 Best regards,
 ${providerName}`;
   }
 
+  // ASK NEEDS tone
+  if (tone === "ask_needs") {
+    if (profileState === "full" && careList) {
+      return `Hi ${firstName},
+
+I saw you're exploring ${careList} options. I'd love to understand more about your situation — every family's needs are unique.
+
+What matters most to you in a care provider? I'm happy to answer any questions you might have.
+
+Best regards,
+${providerName}`;
+    }
+    if (profileState === "partial") {
+      return `Hi ${firstName},
+
+I'd love to learn more about what you're looking for. Every family's situation is different, and understanding your specific needs helps us figure out if we're the right fit.
+
+What's most important to you right now?
+
+Best regards,
+${providerName}`;
+    }
+    // Minimal
+    return `Hi ${firstName},
+
+I'd love to learn more about your situation when you're ready to share. Every family's needs are different, and I'm here to listen.
+
+What questions can I help answer?
+
+Best regards,
+${providerName}`;
+  }
+
+  // INVITE VISIT tone
+  if (profileState === "full" && careList) {
+    return `Hi ${firstName},
+
+I'd love to invite you to visit us and see our ${careList} services firsthand. There's no substitute for experiencing the environment in person.
+
+Would you be interested in scheduling a tour? We can work around your schedule.
+
+Best regards,
+${providerName}`;
+  }
+  if (profileState === "partial") {
+    return `Hi ${firstName},
+
+If you're exploring care options, I'd love to invite you to visit us. Seeing the space and meeting our team in person can really help with such an important decision.
+
+No pressure — just let me know if you'd like to schedule a tour.
+
+Best regards,
+${providerName}`;
+  }
   // Minimal
   return `Hi ${firstName},
 
-We're here to help whenever you're ready. No pressure at all — feel free to reach out with any questions and we'll be happy to guide you.
+When you're ready, I'd love to invite you to visit us. Sometimes seeing a place in person makes all the difference.
+
+No pressure at all — just reach out if you'd like to schedule a tour.
 
 Best regards,
 ${providerName}`;
@@ -196,11 +265,11 @@ export default function ReachOutDrawer({
         }
       } else {
         // Fallback to default template if API fails
-        setMessage(getDefaultMessage(firstName, careNeeds, profileState, providerName));
+        setMessage(getDefaultMessage(firstName, careNeeds, profileState, providerName, tone));
       }
     } catch {
       // Fallback to default template
-      setMessage(getDefaultMessage(firstName, careNeeds, profileState, providerName));
+      setMessage(getDefaultMessage(firstName, careNeeds, profileState, providerName, tone));
     } finally {
       setIsGenerating(false);
     }
