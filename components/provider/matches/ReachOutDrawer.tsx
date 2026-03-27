@@ -285,16 +285,16 @@ export default function ReachOutDrawer({
         aria-labelledby="drawer-title"
       >
         {/* Mobile drag handle */}
-        <div className="lg:hidden pt-3 pb-2 flex justify-center shrink-0">
+        <div className="lg:hidden pt-3 pb-1 flex justify-center shrink-0">
           <div className="w-10 h-1 bg-gray-300 rounded-full" />
         </div>
 
         {/* Header */}
-        <div className="shrink-0 px-5 lg:px-6 pt-4 lg:pt-5 pb-4 border-b border-gray-100">
-          {/* Close button */}
+        <div className="shrink-0 px-5 lg:px-6 pt-2 lg:pt-5 pb-4 border-b border-gray-100 relative">
+          {/* Close button - positioned relative to header */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 lg:top-5 lg:right-5 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
+            className="absolute top-2 right-4 lg:top-5 lg:right-5 w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors z-10"
             aria-label="Close drawer"
           >
             <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -303,7 +303,7 @@ export default function ReachOutDrawer({
           </button>
 
           {/* Avatar + Title */}
-          <div className="flex items-start gap-3 pr-10">
+          <div className="flex items-start gap-3 pr-10 pt-1 lg:pt-0">
             {family.image_url ? (
               <Image
                 src={family.image_url}
@@ -369,16 +369,16 @@ export default function ReachOutDrawer({
           ) : null}
 
           {/* Tone Chips */}
-          <div className="px-5 lg:px-6 mt-5">
-            <p className="text-xs font-medium text-gray-500 mb-2.5">Start with a tone:</p>
-            <div className="flex flex-wrap gap-2">
+          <div className="mt-5">
+            <p className="text-xs font-medium text-gray-500 mb-2.5 px-5 lg:px-6">Start with a tone:</p>
+            <div className="flex gap-2 overflow-x-auto px-5 lg:px-6 pb-1 scrollbar-hide">
               {toneChips.map((chip) => (
                 <button
                   key={chip.id}
                   type="button"
                   onClick={() => handleToneClick(chip.id)}
                   disabled={isGenerating}
-                  className={`px-3.5 py-2 text-sm font-medium rounded-full border transition-all ${
+                  className={`px-3.5 py-2 text-sm font-medium rounded-full border transition-all whitespace-nowrap shrink-0 ${
                     activeTone === chip.id
                       ? "bg-teal-50 border-[#2a7a6e] text-[#2a7a6e]"
                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
@@ -401,10 +401,10 @@ export default function ReachOutDrawer({
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 disabled={isGenerating}
-                className={`w-full px-4 py-3.5 text-[15px] bg-white border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#2a7a6e] focus:border-transparent transition-all placeholder:text-gray-400 ${
+                rows={6}
+                className={`w-full px-4 py-3.5 text-[15px] leading-relaxed bg-white border border-gray-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#2a7a6e]/40 focus:border-[#2a7a6e] transition-all placeholder:text-gray-400 ${
                   isGenerating ? "opacity-50 animate-pulse" : ""
                 }`}
-                style={{ minHeight: "140px" }}
                 placeholder={`Hi ${firstName}! I'd love to help with your care needs...`}
               />
               {isGenerating && (
@@ -421,14 +421,14 @@ export default function ReachOutDrawer({
             </div>
 
             {/* Save as default checkbox */}
-            <label className="flex items-center gap-2.5 mt-3 cursor-pointer">
+            <label className="inline-flex items-center gap-2.5 mt-4 cursor-pointer select-none">
               <input
                 type="checkbox"
                 checked={saveAsDefault}
                 onChange={(e) => setSaveAsDefault(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-[#2a7a6e] focus:ring-[#2a7a6e]"
+                className="w-4 h-4 rounded border-gray-300 text-[#2a7a6e] focus:ring-[#2a7a6e]/30 focus:ring-offset-0"
               />
-              <span className="text-[12.5px] text-gray-500">Save as my default message</span>
+              <span className="text-[13px] text-gray-500">Save as my default message</span>
             </label>
           </div>
 
@@ -474,7 +474,7 @@ export default function ReachOutDrawer({
         </div>
 
         {/* Footer (sticky) */}
-        <div className="shrink-0 border-t border-gray-100 px-5 lg:px-6 py-4 bg-white">
+        <div className="shrink-0 border-t border-gray-100 px-5 lg:px-6 pt-4 pb-4 lg:pb-4 bg-white">
           {sendError && (
             <div className="mb-3 px-3 py-2 bg-rose-50 border border-rose-100 rounded-lg">
               <p className="text-sm text-rose-600">{sendError}</p>
@@ -483,14 +483,14 @@ export default function ReachOutDrawer({
           <div className="flex gap-3">
             <button
               onClick={onClose}
-              className="flex-1 px-4 py-3 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-3.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-colors"
             >
               Cancel
             </button>
             <button
               onClick={handleSend}
               disabled={!message.trim() || sending || isGenerating}
-              className="flex-[2] px-4 py-3 bg-[#2a7a6e] text-white text-sm font-semibold rounded-xl hover:bg-[#1f5c54] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="flex-[2] px-4 py-3.5 bg-[#2a7a6e] text-white text-sm font-semibold rounded-xl hover:bg-[#236860] active:bg-[#1f5c54] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {sending ? (
                 <>
@@ -510,7 +510,7 @@ export default function ReachOutDrawer({
               )}
             </button>
           </div>
-          <p className="text-xs text-center text-gray-400 mt-3">
+          <p className="text-[11px] text-center text-gray-400 mt-3">
             {firstName} can view your profile once you reach out
           </p>
         </div>
