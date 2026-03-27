@@ -1632,19 +1632,18 @@ export default function ProviderMatchesPage() {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
-                  {paginatedFamilies.map((family) => (
+                <div className="flex flex-col gap-2.5 pt-2">
+                  {paginatedFamilies.map((family, index) => (
                     <FamilyMatchCard
                       key={family.id}
                       family={family}
                       hasFullAccess={hasFullAccess}
                       providerCareTypes={providerCareTypes}
                       providerPaymentMethods={providerPaymentMethods}
-                      providerLat={providerProfile?.lat}
-                      providerLng={providerProfile?.lng}
                       contacted={contactedIds.has(family.id)}
                       reachOutCount={reachOutCounts.get(family.id) || 0}
                       onReachOut={handleReachOut}
+                      animationDelay={index * 40}
                     />
                   ))}
                 </div>

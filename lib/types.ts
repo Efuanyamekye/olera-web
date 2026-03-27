@@ -301,10 +301,16 @@ export interface CaregiverMetadata {
 export interface FamilyMetadata {
   age?: number;
   care_needs?: string[];
-  timeline?: "immediate" | "within_1_month" | "within_3_months" | "exploring";
+  timeline?: "immediate" | "within_1_month" | "within_3_months" | "exploring" |
+    "as_soon_as_possible" | "within_a_month" | "in_a_few_months" | "just_researching";
   budget_min?: number;
   budget_max?: number;
   relationship_to_recipient?: string;
+  who_needs_care?: "myself" | "my_parent" | "my_spouse" | "someone_else";
+  // Profile completeness (0-100)
+  profile_completeness?: number;
+  // Activity tracking
+  last_active_at?: string;
   // Enrichment fields
   country?: string;
   contact_preference?: "call" | "text" | "email";
