@@ -1049,6 +1049,33 @@ export default function ProviderMatchesPage() {
     [families, contactedIds],
   );
 
+  // Compute banner stats (must be before early returns to satisfy React hooks rules)
+  const hotLeadsCount = useMemo(() => {
+    return families.filter((f) => {
+      const meta = f.metadata as FamilyMetadata;
+      return meta?.timeline === "immediate" && !contactedIds.has(f.id);
+    }).length;
+  }, [families, contactedIds]);
+
+  const newTodayCount = useMemo(() => {
+    const today = new Date().toDateString();
+    return families.filter((f) => {
+      const meta = f.metadata as FamilyMetadata;
+      const publishedAt = meta?.care_post?.published_at || f.created_at;
+      return publishedAt && new Date(publishedAt).toDateString() === today;
+    }).length;
+  }, [families]);
+
+  const responseRate = useMemo(() => {
+    return contactedIds.size > 0
+      ? Math.round((respondedIds.size / contactedIds.size) * 100)
+      : 0;
+  }, [contactedIds, respondedIds]);
+
+  const providerLocation = providerProfile
+    ? [providerProfile.city, providerProfile.state].filter(Boolean).join(", ") || null
+    : null;
+
   if (!providerProfile || loading) {
     return <MatchesSkeleton />;
   }
@@ -1082,33 +1109,6 @@ export default function ProviderMatchesPage() {
       </div>
     );
   }
-
-  // Compute banner stats
-  const hotLeadsCount = useMemo(() => {
-    return families.filter((f) => {
-      const meta = f.metadata as FamilyMetadata;
-      return meta?.timeline === "immediate" && !contactedIds.has(f.id);
-    }).length;
-  }, [families, contactedIds]);
-
-  const newTodayCount = useMemo(() => {
-    const today = new Date().toDateString();
-    return families.filter((f) => {
-      const meta = f.metadata as FamilyMetadata;
-      const publishedAt = meta?.care_post?.published_at || f.created_at;
-      return publishedAt && new Date(publishedAt).toDateString() === today;
-    }).length;
-  }, [families]);
-
-  const responseRate = useMemo(() => {
-    return contactedIds.size > 0
-      ? Math.round((respondedIds.size / contactedIds.size) * 100)
-      : 0;
-  }, [contactedIds, respondedIds]);
-
-  const providerLocation = providerProfile
-    ? [providerProfile.city, providerProfile.state].filter(Boolean).join(", ") || null
-    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
