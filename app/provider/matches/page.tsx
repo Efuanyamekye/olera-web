@@ -1218,10 +1218,10 @@ export default function ProviderMatchesPage() {
         providerLocation={providerLocation}
       />
 
-      {/* ── Main grid (Upwork-style layout) ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
-        {/* ── LEFT COLUMN: Banner + Filters + Content (2/3) ── */}
-        <div className="lg:col-span-2 space-y-5">
+      {/* ── Main layout (Upwork-style) ── */}
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+        {/* ── LEFT COLUMN: Banner + Filters + Content ── */}
+        <div className="flex-1 min-w-0 space-y-5">
           {/* Discovery Banner */}
           <DiscoveryBanner
             familyCount={filteredFamilies.length}
@@ -1345,8 +1345,8 @@ export default function ProviderMatchesPage() {
           )}
         </div>
 
-        {/* ── RIGHT COLUMN: Profile Snapshot + Sidebar (1/3, hidden on mobile) ── */}
-        <div className="hidden lg:block lg:col-span-1">
+        {/* ── RIGHT COLUMN: Profile Snapshot + Sidebar (fixed width, hidden on mobile) ── */}
+        <div className="hidden lg:block w-[340px] shrink-0">
           <div className="sticky top-24 space-y-4">
             {/* Profile Snapshot Card */}
             <ProfileSnapshotCard
