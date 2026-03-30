@@ -16,6 +16,7 @@ import {
   DEFAULT_FILTERS,
 } from "@/components/provider/matches/MatchesFilterBar";
 import FamilyMatchCard from "@/components/provider/matches/FamilyMatchCard";
+import { useCitySearch } from "@/hooks/use-city-search";
 
 // Tab types for the matches view
 type MatchesTab = "best_match" | "most_recent" | "most_urgent" | "reached_out";
@@ -128,6 +129,24 @@ const floatKeyframes = `
 `;
 
 // ---------------------------------------------------------------------------
+// State abbreviations for geolocation
+// ---------------------------------------------------------------------------
+
+const STATE_ABBREVIATIONS: Record<string, string> = {
+  Alabama: "AL", Alaska: "AK", Arizona: "AZ", Arkansas: "AR", California: "CA",
+  Colorado: "CO", Connecticut: "CT", Delaware: "DE", Florida: "FL", Georgia: "GA",
+  Hawaii: "HI", Idaho: "ID", Illinois: "IL", Indiana: "IN", Iowa: "IA",
+  Kansas: "KS", Kentucky: "KY", Louisiana: "LA", Maine: "ME", Maryland: "MD",
+  Massachusetts: "MA", Michigan: "MI", Minnesota: "MN", Mississippi: "MS", Missouri: "MO",
+  Montana: "MT", Nebraska: "NE", Nevada: "NV", "New Hampshire": "NH", "New Jersey": "NJ",
+  "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", Ohio: "OH",
+  Oklahoma: "OK", Oregon: "OR", Pennsylvania: "PA", "Rhode Island": "RI", "South Carolina": "SC",
+  "South Dakota": "SD", Tennessee: "TN", Texas: "TX", Utah: "UT", Vermont: "VT",
+  Virginia: "VA", Washington: "WA", "West Virginia": "WV", Wisconsin: "WI", Wyoming: "WY",
+  "District of Columbia": "DC",
+};
+
+// ---------------------------------------------------------------------------
 // Discovery Banner (with location selector)
 // ---------------------------------------------------------------------------
 
@@ -143,7 +162,15 @@ function DiscoveryBanner({
   onLocationChange: (location: string | null) => void;
 }) {
   const [locationOpen, setLocationOpen] = useState(false);
+  const [locationInput, setLocationInput] = useState("");
+  const [isGeolocating, setIsGeolocating] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Use city search hook for autocomplete
+  const { results: cityResults, preload: preloadCities } = useCitySearch(locationInput, {
+    limit: 6,
+  });
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -161,11 +188,73 @@ function DiscoveryBanner({
   useEffect(() => {
     if (!locationOpen) return;
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLocationOpen(false);
+      if (e.key === "Escape") {
+        setLocationOpen(false);
+        inputRef.current?.blur();
+      }
     };
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
   }, [locationOpen]);
+
+  // Detect current location via browser geolocation
+  const detectLocation = useCallback(() => {
+    if (!navigator.geolocation) return;
+
+    setIsGeolocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.coords.latitude}&lon=${position.coords.longitude}&countrycodes=us`
+          );
+          const data = await response.json();
+
+          const country = data.address?.country_code?.toUpperCase();
+          if (country !== "US") {
+            setIsGeolocating(false);
+            return;
+          }
+
+          const city =
+            data.address?.city ||
+            data.address?.town ||
+            data.address?.village ||
+            data.address?.county ||
+            "Unknown";
+          const stateName = data.address?.state || "";
+          const stateAbbr =
+            STATE_ABBREVIATIONS[stateName] || stateName.substring(0, 2).toUpperCase();
+          const locationString = `${city}, ${stateAbbr}`;
+
+          onLocationChange(locationString);
+          setLocationInput("");
+          setLocationOpen(false);
+        } catch {
+          // Silently fail
+        }
+        setIsGeolocating(false);
+      },
+      () => {
+        setIsGeolocating(false);
+      }
+    );
+  }, [onLocationChange]);
+
+  // Handle selecting a location from the dropdown
+  const handleSelectLocation = useCallback((location: string | null) => {
+    onLocationChange(location);
+    setLocationInput("");
+    setLocationOpen(false);
+  }, [onLocationChange]);
+
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && cityResults.length > 0 && locationInput.trim()) {
+      e.preventDefault();
+      handleSelectLocation(cityResults[0].full);
+    }
+  }, [cityResults, locationInput, handleSelectLocation]);
 
   const displayLocation = currentLocation || providerLocation || "All locations";
 
@@ -194,7 +283,12 @@ function DiscoveryBanner({
         <div className="relative inline-block mb-3" ref={dropdownRef}>
           <button
             type="button"
-            onClick={() => setLocationOpen(!locationOpen)}
+            onClick={() => {
+              setLocationOpen(!locationOpen);
+              if (!locationOpen) {
+                setTimeout(() => inputRef.current?.focus(), 50);
+              }
+            }}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary-50/80 hover:bg-primary-100/80 rounded-full border border-primary-100/60 transition-colors group"
           >
             <svg className="w-3.5 h-3.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -215,48 +309,172 @@ function DiscoveryBanner({
             </svg>
           </button>
 
-          {/* Location dropdown */}
+          {/* Location dropdown with search */}
           {locationOpen && (
-            <div className="absolute top-[calc(100%+6px)] left-0 w-56 bg-white rounded-xl shadow-lg border border-gray-200/80 py-1.5 z-50 animate-fade-in">
-              <button
-                type="button"
-                onClick={() => {
-                  onLocationChange(null);
-                  setLocationOpen(false);
-                }}
-                className={`flex items-center gap-2.5 w-full px-3.5 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors ${
-                  currentLocation === null ? "bg-primary-50 text-primary-700" : "text-gray-700"
-                }`}
-              >
-                {currentLocation === null && (
-                  <svg className="w-4 h-4 text-primary-600 shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            <div className="absolute top-[calc(100%+6px)] left-0 w-72 bg-white rounded-xl shadow-lg border border-gray-200/80 overflow-hidden z-50 animate-fade-in">
+              {/* Search input */}
+              <div className="p-2 border-b border-gray-100">
+                <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 rounded-lg border border-gray-200 focus-within:border-primary-300 focus-within:ring-2 focus-within:ring-primary-100 transition-all">
+                  <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                   </svg>
-                )}
-                {currentLocation !== null && <span className="w-4" />}
-                <span>All locations</span>
-              </button>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={locationInput}
+                    onChange={(e) => setLocationInput(e.target.value)}
+                    onFocus={preloadCities}
+                    onKeyDown={handleKeyDown}
+                    placeholder="City or ZIP code"
+                    className="flex-1 bg-transparent border-none text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0"
+                  />
+                  {locationInput && (
+                    <button
+                      type="button"
+                      onClick={() => setLocationInput("")}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
 
-              {providerLocation && (
+              {/* Dropdown options */}
+              <div className="max-h-[280px] overflow-y-auto py-1">
+                {/* Use current location */}
                 <button
                   type="button"
-                  onClick={() => {
-                    onLocationChange(providerLocation);
-                    setLocationOpen(false);
-                  }}
+                  onClick={detectLocation}
+                  disabled={isGeolocating}
+                  className="flex items-center gap-2.5 w-full px-3.5 py-2.5 text-left text-sm text-primary-600 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                >
+                  {isGeolocating ? (
+                    <svg className="w-4 h-4 animate-spin shrink-0" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3A8.994 8.994 0 0013 3.06V1h-2v2.06A8.994 8.994 0 003.06 11H1v2h2.06A8.994 8.994 0 0011 20.94V23h2v-2.06A8.994 8.994 0 0020.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z" />
+                    </svg>
+                  )}
+                  <span className="font-medium">{isGeolocating ? "Detecting..." : "Use my current location"}</span>
+                </button>
+
+                {/* Divider */}
+                <div className="mx-3.5 my-1 h-px bg-gray-100" />
+
+                {/* All locations option */}
+                <button
+                  type="button"
+                  onClick={() => handleSelectLocation(null)}
                   className={`flex items-center gap-2.5 w-full px-3.5 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors ${
-                    currentLocation === providerLocation ? "bg-primary-50 text-primary-700" : "text-gray-700"
+                    currentLocation === null ? "bg-primary-50 text-primary-700" : "text-gray-700"
                   }`}
                 >
-                  {currentLocation === providerLocation && (
+                  {currentLocation === null ? (
                     <svg className="w-4 h-4 text-primary-600 shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
+                  ) : (
+                    <span className="w-4" />
                   )}
-                  {currentLocation !== providerLocation && <span className="w-4" />}
-                  <span>{providerLocation}</span>
+                  <span>All locations</span>
                 </button>
-              )}
+
+                {/* Provider's location if different from current */}
+                {providerLocation && (
+                  <button
+                    type="button"
+                    onClick={() => handleSelectLocation(providerLocation)}
+                    className={`flex items-center gap-2.5 w-full px-3.5 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors ${
+                      currentLocation === providerLocation ? "bg-primary-50 text-primary-700" : "text-gray-700"
+                    }`}
+                  >
+                    {currentLocation === providerLocation ? (
+                      <svg className="w-4 h-4 text-primary-600 shrink-0" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                    ) : (
+                      <svg className="w-4 h-4 text-gray-300 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                      </svg>
+                    )}
+                    <span>{providerLocation}</span>
+                    <span className="ml-auto text-xs text-gray-400">Your area</span>
+                  </button>
+                )}
+
+                {/* City search results */}
+                {locationInput.trim() && cityResults.length > 0 && (
+                  <>
+                    <div className="mx-3.5 my-1 h-px bg-gray-100" />
+                    {cityResults.map((city, index) => (
+                      <button
+                        key={city.full}
+                        type="button"
+                        onClick={() => handleSelectLocation(city.full)}
+                        className={`flex items-center gap-2.5 w-full px-3.5 py-2.5 text-left text-sm transition-colors ${
+                          currentLocation === city.full
+                            ? "bg-primary-50 text-primary-700"
+                            : index === 0
+                              ? "bg-gray-50 text-gray-900"
+                              : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <svg className="w-4 h-4 text-gray-300 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                        <span>{city.full}</span>
+                        {index === 0 && (
+                          <span className="ml-auto text-xs text-gray-400">Enter</span>
+                        )}
+                      </button>
+                    ))}
+                  </>
+                )}
+
+                {/* Popular cities when no search input */}
+                {!locationInput.trim() && cityResults.length > 0 && (
+                  <>
+                    <div className="mx-3.5 my-1 h-px bg-gray-100" />
+                    <div className="px-3.5 pt-1.5 pb-1">
+                      <span className="text-[10px] font-medium text-gray-400 uppercase tracking-wider">Popular cities</span>
+                    </div>
+                    {cityResults.slice(0, 5).map((city) => (
+                      <button
+                        key={city.full}
+                        type="button"
+                        onClick={() => handleSelectLocation(city.full)}
+                        className={`flex items-center gap-2.5 w-full px-3.5 py-2 text-left text-sm transition-colors ${
+                          currentLocation === city.full
+                            ? "bg-primary-50 text-primary-700"
+                            : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        <svg className="w-4 h-4 text-gray-300 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                        </svg>
+                        <span>{city.full}</span>
+                      </button>
+                    ))}
+                  </>
+                )}
+
+                {/* No results message */}
+                {locationInput.trim() && cityResults.length === 0 && (
+                  <div className="px-3.5 py-4 text-center">
+                    <p className="text-sm text-gray-500">No locations found</p>
+                    <p className="text-xs text-gray-400 mt-1">Try a city name or ZIP code</p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

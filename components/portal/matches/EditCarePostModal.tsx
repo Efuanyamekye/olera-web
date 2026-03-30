@@ -288,11 +288,6 @@ export default function EditCarePostModal({
                 {error}
               </p>
             )}
-        {error && (
-          <p className="text-sm text-red-600" role="alert">
-            {error}
-          </p>
-        )}
 
             {/* ── Step 1: Care details ── */}
             {step === 1 && (
