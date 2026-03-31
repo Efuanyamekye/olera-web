@@ -300,36 +300,8 @@ export async function POST(request: Request) {
         }
       }
 
-      // Auto-create a baseline family profile so the Family Portal is always accessible.
-      // Every user gets a family profile regardless of which portal they signed up through.
-      const { data: existingFamilyProfile } = await db
-        .from("business_profiles")
-        .select("id")
-        .eq("account_id", accountId)
-        .eq("type", "family")
-        .limit(1)
-        .maybeSingle();
-
-      if (!existingFamilyProfile) {
-        const familySlug = await generateUniqueSlug(db, sanitizedDisplayName, city || "", state || "");
-        await db.from("business_profiles").insert({
-          account_id: accountId,
-          slug: familySlug,
-          type: "family",
-          display_name: sanitizedDisplayName,
-          city: city || null,
-          state: state || null,
-          care_types: [],
-          claim_state: "claimed",
-          verification_state: "unverified",
-          source: "user_created",
-          is_active: true,
-          metadata: {
-            visible_to_families: false,
-            visible_to_providers: false,
-          },
-        });
-      }
+      // NOTE: We no longer auto-create family profiles for providers.
+      // Each account type is now separate - providers only get their provider profile.
     } else {
       // Family profile — check if a baseline one already exists (created by ensure-account)
       const { data: existingFamilyProfile } = await db

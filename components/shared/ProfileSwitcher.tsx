@@ -6,13 +6,15 @@ import type { Profile } from "@/lib/types";
 
 const TYPE_LABELS: Record<string, string> = {
   organization: "Organization",
-  caregiver: "Private Caregiver",
+  caregiver: "Caregiver",
+  student: "Caregiver", // Students are unified as Caregivers
   family: "Family",
 };
 
 const TYPE_COLORS: Record<string, string> = {
   organization: "bg-primary-100 text-primary-700",
   caregiver: "bg-secondary-100 text-secondary-700",
+  student: "bg-secondary-100 text-secondary-700", // Students are unified as Caregivers
   family: "bg-warm-100 text-warm-700",
 };
 
@@ -104,18 +106,6 @@ export default function ProfileSwitcher({
             </button>
           );
         })}
-        <button
-          type="button"
-          onClick={() => { onSwitch?.(); router.push("/provider/onboarding?adding=true"); }}
-          className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors min-h-[44px] w-full"
-        >
-          <div className="w-8 h-8 border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center shrink-0">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-          </div>
-          <span className="text-sm font-medium">Add profile</span>
-        </button>
       </div>
     );
   }
@@ -163,18 +153,6 @@ export default function ProfileSwitcher({
           </button>
         );
       })}
-      <button
-        type="button"
-        onClick={() => { onSwitch?.(); router.push("/provider/onboarding?adding=true"); }}
-        className="flex items-center gap-3 px-4 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors w-full"
-      >
-        <div className="w-8 h-8 border-2 border-dashed border-gray-300 rounded-full flex items-center justify-center shrink-0">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-        </div>
-        <span className="text-sm font-medium">Add profile</span>
-      </button>
     </div>
   );
 }

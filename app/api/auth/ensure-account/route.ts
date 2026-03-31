@@ -90,17 +90,22 @@ export async function POST(request: Request) {
       .single();
 
     if (existingAccount) {
-      // Account exists — also ensure a baseline family profile exists
+      // Account exists — check if user has ANY profiles
       const acctId = (existingAccount as Account).id;
-      const { data: existingFamilyProfile } = await dbClient
+      const { data: existingProfiles } = await dbClient
         .from("business_profiles")
-        .select("id")
+        .select("id, type")
         .eq("account_id", acctId)
-        .eq("type", "family")
-        .limit(1)
-        .maybeSingle();
+        .limit(1);
 
-      if (!existingFamilyProfile) {
+      const existingFamilyProfile = existingProfiles?.find(p => p.type === "family");
+      const hasAnyProfile = existingProfiles && existingProfiles.length > 0;
+
+      // Only create a family profile if:
+      // 1. User has no profiles at all, AND
+      // 2. This is a guest connection flow (claimToken present) — needs family profile to receive connections
+      // Otherwise, defer profile creation to create-profile where we know the user's intent
+      if (!hasAnyProfile && claimToken) {
         // Check if this is a MedJobs student — they get their own welcome flow,
         // so skip the generic family welcome email and Loops seeker drip
         const { data: studentProfile } = await dbClient
@@ -349,18 +354,20 @@ export async function POST(request: Request) {
       }
     }
 
-    // Also ensure a baseline family profile exists so the Family Portal
-    // is always accessible. Every authenticated user gets a family profile.
+    // Only create a family profile if:
+    // 1. User has no profiles at all, AND
+    // 2. This is a guest connection flow (claimToken present) — needs family profile to receive connections
+    // Otherwise, defer profile creation to create-profile where we know the user's intent
     const accountId = (newAccount as Account).id;
-    const { data: existingFamily } = await dbClient
+    const { data: existingProfiles } = await dbClient
       .from("business_profiles")
       .select("id")
       .eq("account_id", accountId)
-      .eq("type", "family")
-      .limit(1)
-      .maybeSingle();
+      .limit(1);
 
-    if (!existingFamily) {
+    const hasAnyProfile = existingProfiles && existingProfiles.length > 0;
+
+    if (!hasAnyProfile && claimToken) {
       const familySlug = await generateUniqueSlugFromName(dbClient, sanitizedName);
       const { data: newFamilyProfile, error: profileError } = await dbClient.from("business_profiles").insert({
         account_id: accountId,
@@ -387,7 +394,7 @@ export async function POST(request: Request) {
 
       // Handle placeholder profile claim (guest connection flow)
       // Move connections from placeholder to new family profile, then delete placeholder
-      if (claimToken && newFamilyProfile) {
+      if (newFamilyProfile) {
         try {
           const { data: placeholder } = await dbClient
             .from("business_profiles")

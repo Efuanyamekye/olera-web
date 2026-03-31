@@ -63,24 +63,12 @@ export default function Navbar() {
   const newLeadsCount = useUnreadLeadsCount(activeProviderId);
   // Reviews count
   const reviewsCount = useUnreadReviewsCount(activeProviderId);
-  // Check localStorage synchronously on client (SSR-safe with typeof check)
-  // Only show "Provider Hub" if user has progressed past step 1 (actually started filling out profile)
-  // This prevents showing it to users who just peeked at provider onboarding
-  const [hasAttemptedOnboarding, setHasAttemptedOnboarding] = useState(() => {
-    if (typeof window !== "undefined") {
-      // olera_provider_wizard_data is only set when user starts filling out the profile form (step 2+)
-      return !!localStorage.getItem("olera_provider_wizard_data");
-    }
-    return false;
-  });
   const [isAdmin, setIsAdmin] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // Track client-side mount for createPortal (SSR-safe)
   useEffect(() => {
     setMounted(true);
-    // Re-check in case SSR hydration missed it
-    setHasAttemptedOnboarding(!!localStorage.getItem("olera_onboarding_provider_type"));
   }, []);
 
   // Lightweight admin check
@@ -250,8 +238,8 @@ export default function Navbar() {
 
       <div className="mx-4 border-t border-gray-100" />
 
-      {/* Mode switcher — shown when both profiles exist OR user has started provider onboarding */}
-      {(showModeSwitcher || hasAttemptedOnboarding) && (
+      {/* Mode switcher — only shown when user has BOTH family and provider profiles */}
+      {showModeSwitcher && (
         <>
           <div className="px-3 pt-2 pb-1">
             <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl">
@@ -278,9 +266,6 @@ export default function Navbar() {
                     switchProfile(providerProfileId);
                     setIsUserMenuOpen(false);
                     router.push("/provider");
-                  } else if (hasAttemptedOnboarding) {
-                    setIsUserMenuOpen(false);
-                    router.push("/provider/onboarding");
                   }
                 }}
                 className={[
@@ -347,6 +332,62 @@ export default function Navbar() {
                   <polyline points="9 12 11 14 15 10" />
                 </svg>
                 Identity Verification
+              </Link>
+              <Link
+                href="/portal/settings"
+                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                onClick={() => setIsUserMenuOpen(false)}
+              >
+                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                  <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                Account Settings
+              </Link>
+            </>
+          ) : hasStudentProfile ? (
+            <>
+              {/* Caregiver (Student) links */}
+              <Link
+                href="/portal/medjobs"
+                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                onClick={() => setIsUserMenuOpen(false)}
+              >
+                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
+                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Application
+              </Link>
+              <Link
+                href="/portal/medjobs/jobs"
+                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                onClick={() => setIsUserMenuOpen(false)}
+              >
+                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
+                  <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0H8m8 0h2a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h2" />
+                </svg>
+                Open Jobs
+              </Link>
+              <Link
+                href="/portal/medjobs/interviews"
+                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                onClick={() => setIsUserMenuOpen(false)}
+              >
+                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
+                  <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                Interviews
+              </Link>
+              <Link
+                href="/portal/settings"
+                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
+                onClick={() => setIsUserMenuOpen(false)}
+              >
+                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                  <path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                Account Settings
               </Link>
             </>
           ) : hasStudentProfile ? (
@@ -943,22 +984,16 @@ export default function Navbar() {
                     </div>
                   </div>
 
-                  {/* Mode switcher — if user has BOTH profiles, just switch menu; otherwise navigate */}
-                  {(showModeSwitcher || hasAttemptedOnboarding) && (
+                  {/* Mode switcher — only shown when user has BOTH family and provider profiles */}
+                  {showModeSwitcher && (
                     <div className="py-2 mb-2">
                       <div className="flex gap-0.5 bg-gray-100 p-0.5 rounded-xl">
                         <button
                           type="button"
                           onClick={() => {
-                            if (showModeSwitcher && familyProfileId) {
-                              // Has both profiles — just switch menu view
+                            if (familyProfileId) {
                               switchProfile(familyProfileId);
                               setMobileMenuMode("family");
-                            } else {
-                              // Only one profile — navigate to landing
-                              if (hasFamilyProfile && familyProfileId) switchProfile(familyProfileId);
-                              setIsMobileMenuOpen(false);
-                              router.push("/");
                             }
                           }}
                           className={[
@@ -971,26 +1006,14 @@ export default function Navbar() {
                         <button
                           type="button"
                           onClick={() => {
-                            if (showModeSwitcher && providerProfileId) {
-                              // Has both profiles — just switch menu view
+                            if (providerProfileId) {
                               switchProfile(providerProfileId);
                               setMobileMenuMode("provider");
-                            } else if (hasProviderProfile && providerProfileId) {
-                              // Only provider profile — navigate to provider home
-                              switchProfile(providerProfileId);
-                              setIsMobileMenuOpen(false);
-                              router.push("/provider");
-                            } else if (hasAttemptedOnboarding) {
-                              // Onboarding in progress — navigate to onboarding
-                              setIsMobileMenuOpen(false);
-                              router.push("/provider/onboarding");
                             }
                           }}
-                          disabled={!hasProviderProfile && !hasAttemptedOnboarding}
                           className={[
                             "flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold transition-all min-h-[44px]",
                             mobileMenuMode === "provider" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700",
-                            !hasProviderProfile && !hasAttemptedOnboarding ? "opacity-50 cursor-not-allowed" : "",
                           ].join(" ")}
                         >
                           Provider Hub
@@ -1238,34 +1261,31 @@ export default function Navbar() {
                         )}
                       </div>
 
-                      {/* Switch to Provider - show when user has provider access */}
-                      <div className="my-3 border-t border-gray-100" />
-                      {(hasProviderProfile || hasAttemptedOnboarding) && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (showModeSwitcher && providerProfileId) {
-                              // Has both profiles — just switch menu view
-                              switchProfile(providerProfileId);
-                              setMobileMenuMode("provider");
-                            } else if (hasProviderProfile && providerProfileId) {
-                              // Only provider profile — navigate to provider home
-                              switchProfile(providerProfileId);
-                              setIsMobileMenuOpen(false);
-                              router.push("/provider");
-                            } else if (hasAttemptedOnboarding) {
-                              // Onboarding in progress — navigate to onboarding
-                              setIsMobileMenuOpen(false);
-                              router.push("/provider/onboarding");
-                            }
-                          }}
-                          className="flex items-center gap-3 px-3 py-3 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-xl transition-colors text-left w-full"
-                        >
-                          <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
-                          </svg>
-                          <span className="text-[15px]">Switch to Provider Hub</span>
-                        </button>
+                      {/* Switch to Provider - only show when user has a provider profile */}
+                      {hasProviderProfile && (
+                        <>
+                          <div className="my-3 border-t border-gray-100" />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (providerProfileId) {
+                                switchProfile(providerProfileId);
+                                if (showModeSwitcher) {
+                                  setMobileMenuMode("provider");
+                                } else {
+                                  setIsMobileMenuOpen(false);
+                                  router.push("/provider");
+                                }
+                              }
+                            }}
+                            className="flex items-center gap-3 px-3 py-3 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-xl transition-colors text-left w-full"
+                          >
+                            <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                            </svg>
+                            <span className="text-[15px]">Switch to Provider Hub</span>
+                          </button>
+                        </>
                       )}
 
                       {isAdmin && (
