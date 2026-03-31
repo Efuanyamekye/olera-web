@@ -337,7 +337,7 @@ export default function Navbar() {
                 Identity Verification
               </Link>
               <Link
-                href="/portal/settings"
+                href="/account/settings"
                 className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setIsUserMenuOpen(false)}
               >
@@ -382,7 +382,7 @@ export default function Navbar() {
                 Interviews
               </Link>
               <Link
-                href="/portal/settings"
+                href="/account/settings"
                 className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setIsUserMenuOpen(false)}
               >
@@ -458,7 +458,7 @@ export default function Navbar() {
                 Profile
               </Link>
               <Link
-                href="/portal/settings"
+                href="/account/settings"
                 className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setIsUserMenuOpen(false)}
               >
