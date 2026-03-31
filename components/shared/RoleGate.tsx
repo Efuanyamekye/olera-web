@@ -92,19 +92,26 @@ export default function RoleGate({ requiredType, children, actionLabel }: RoleGa
     );
   }
 
-  // User doesn't own a matching profile at all — offer to create one
+  // User doesn't own a matching profile — show access denied
+  // With strict account separation, users cannot create additional profile types
   return (
     <div className="max-w-lg mx-auto text-center py-16 px-4">
+      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      </div>
       <h2 className="text-xl font-bold text-gray-900 mb-2">
-        {typeLabels} profile required
+        {typeLabels} account required
       </h2>
       <p className="text-base text-gray-600 mb-6">
         {actionLabel
-          ? `You need a ${typeLabels} profile to ${actionLabel}.`
-          : `This page is only available to ${typeLabels} profiles.`}
-        {" "}You can create one to get started.
+          ? `You need a ${typeLabels} account to ${actionLabel}.`
+          : `This page is only available to ${typeLabels} accounts.`}
       </p>
-      <Button onClick={() => openAuth()}>Create a {typeLabels} profile</Button>
+      <Button variant="secondary" onClick={() => window.history.back()}>
+        Go back
+      </Button>
     </div>
   );
 }

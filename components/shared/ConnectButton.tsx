@@ -399,13 +399,13 @@ export default function ConnectButton({
         <Modal
           isOpen
           onClose={closeModal}
-          title="Switch to a family profile"
+          title="Family account required"
           size="sm"
         >
           <div className="py-2">
             <p className="text-base text-gray-600 mb-4">
-              Care consultation requests can only be sent from a family profile.
-              Switch to your family profile to request care from this provider.
+              Care consultation requests can only be sent from a family account.
+              Provider and caregiver accounts cannot request care from other providers.
             </p>
             <p className="text-sm text-gray-500 mb-6">
               If you&apos;re looking to hire a caregiver for your organization,

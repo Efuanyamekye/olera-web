@@ -768,12 +768,12 @@ export default function Navbar() {
                    * flipping between signed-out/signed-in hamburger during auth churn.
                    * On public provider pages (onboard, detail), respect hasSession. */
                   <>
-                    {/* Switch to family — only when signed in */}
-                    {(hasSession || isProviderHub) && (
+                    {/* Switch to family — only when signed in AND has family profile */}
+                    {(hasSession || isProviderHub) && hasFamilyProfile && (
                       <button
                         type="button"
                         onClick={() => {
-                          if (hasFamilyProfile && familyProfileId) switchProfile(familyProfileId);
+                          if (familyProfileId) switchProfile(familyProfileId);
                           router.push("/");
                         }}
                         className="px-4 py-2 text-[15px] font-medium text-gray-700 hover:bg-gray-50 rounded-full transition-colors"
