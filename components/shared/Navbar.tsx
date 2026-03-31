@@ -197,10 +197,12 @@ export default function Navbar() {
   }, [pathname]);
 
   // Reset mobile menu state when menu opens
+  // Provider-only accounts (no family profile) should always see provider mode
+  const isProviderOnlyAccount = hasProviderProfile && !hasFamilyProfile && !hasStudentProfile;
   useEffect(() => {
     if (isMobileMenuOpen && hasSession) {
-      // Set mode based on current URL context
-      const mode = isProviderPortal ? "provider" : "family";
+      // Set mode based on profile type first, then URL context
+      const mode = (isProviderPortal || isProviderOnlyAccount) ? "provider" : "family";
       setMobileMenuMode(mode);
       // Set default accordion based on mode
       setMobileAccordion(mode === "provider" ? "hub" : "account");
@@ -208,7 +210,7 @@ export default function Navbar() {
       setMobileAccordion(null);
       setIsMobileCareOpen(false);
     }
-  }, [isMobileMenuOpen, hasSession, isProviderPortal]);
+  }, [isMobileMenuOpen, hasSession, isProviderPortal, isProviderOnlyAccount]);
 
   // NOTE: /for-providers used to return null here, but we want the full navbar
   // to show on the provider landing page for navigation consistency.
@@ -283,9 +285,10 @@ export default function Navbar() {
         </>
       )}
 
-      {/* Hub-specific links */}
+      {/* Hub-specific links — based on profile type, not URL */}
       <div className="px-2 py-1.5">
-          {isProviderPortal ? (
+          {/* Provider-only accounts (no family profile) always see provider dropdown */}
+          {(isProviderPortal || (hasProviderProfile && !hasFamilyProfile && !hasStudentProfile)) ? (
             <>
               {/* Provider Hub engagement links — Inbox, Q&A, Leads */}
               {([
