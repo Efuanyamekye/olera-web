@@ -189,12 +189,12 @@ export default function ConnectButton({
     }
     if (alreadySent) return;
 
-    // Provider-to-provider care inquiry guard:
-    // Orgs/caregivers can't send care consultation inquiries to other providers.
-    // They must switch to a family profile for care requests.
-    const isProviderProfile =
-      activeProfile?.type === "organization" || activeProfile?.type === "caregiver";
-    if (isProviderProfile && connectionType === "inquiry") {
+    // Provider/caregiver care inquiry guard:
+    // Orgs, caregivers, and students can't send care consultation inquiries.
+    // Only family accounts can request care from providers.
+    const isNonFamilyProfile =
+      activeProfile?.type === "organization" || activeProfile?.type === "caregiver" || activeProfile?.type === "student";
+    if (isNonFamilyProfile && connectionType === "inquiry") {
       setModal({ kind: "wrong-profile-type" });
       return;
     }
