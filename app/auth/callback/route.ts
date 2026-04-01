@@ -320,8 +320,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // If user has an incomplete student profile and no explicit destination,
-    // redirect to the student dashboard instead of home
+    // If user has a provider or student profile and no explicit destination,
+    // redirect to their dashboard instead of home
     if (next === "/" || next === "") {
       try {
         const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -335,15 +335,33 @@ export async function GET(request: NextRequest) {
             .maybeSingle();
 
           if (acct) {
+            // Check for provider profile first
+            const { data: orgProfile } = await db
+              .from("business_profiles")
+              .select("id, is_active")
+              .eq("account_id", acct.id)
+              .eq("type", "organization")
+              .eq("is_active", true)
+              .limit(1)
+              .maybeSingle();
+
+            if (orgProfile) {
+              return NextResponse.redirect(`${origin}/provider`, {
+                headers: response.headers,
+              });
+            }
+
+            // Check for student/caregiver profile
             const { data: studentProfile } = await db
               .from("business_profiles")
               .select("id, is_active")
               .eq("account_id", acct.id)
-              .eq("type", "student")
+              .in("type", ["student", "caregiver"])
+              .eq("is_active", true)
               .limit(1)
               .maybeSingle();
 
-            if (studentProfile && !studentProfile.is_active) {
+            if (studentProfile) {
               return NextResponse.redirect(`${origin}/portal/medjobs`, {
                 headers: response.headers,
               });
