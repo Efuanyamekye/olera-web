@@ -668,10 +668,11 @@ export default function Navbar() {
             </div>
 
             {/* ── CENTER — Primary navigation (page-centered, hidden on mobile + inbox) ── */}
-            {!isMinimalNav && (
+            {/* Caregivers use dropdown only - no center nav */}
+            {!isMinimalNav && activeProfile?.type !== "student" && (
               <div className="hidden lg:flex items-center gap-1">
-                {isProviderPortal ? (
-                  /* Provider Hub nav links */
+                {activeProfile?.type === "organization" || isProviderPortal ? (
+                  /* Provider Hub nav links - shown for org accounts or when in provider portal */
                   <>
                     {/* Home */}
                     <Link
