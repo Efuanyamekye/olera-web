@@ -481,18 +481,8 @@ export default function Navbar() {
                 </svg>
                 Account Settings
               </Link>
-              {hasFamilyProfile && (
-                <Link
-                  href="/medjobs/apply"
-                  className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                  onClick={() => setIsUserMenuOpen(false)}
-                >
-                  <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
-                    <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                  </svg>
-                  Become a Caregiver
-                </Link>
-              )}
+              {/* "Become a Caregiver" removed - with strict account separation,
+                  family users would need a new account to become a caregiver */}
             </>
           )}
         </div>
@@ -750,9 +740,9 @@ export default function Navbar() {
                       </button>
                     </div>
 
-                    {/* Simple nav links - filter out MedJobs for caregivers (they're already one) */}
+                    {/* Simple nav links - filter out MedJobs for caregivers and families */}
                     {NAV_LINKS
-                      .filter((link) => !(link.href === "/medjobs" && activeProfile?.type === "student"))
+                      .filter((link) => !(link.href === "/medjobs" && (activeProfile?.type === "student" || activeProfile?.type === "family")))
                       .map((link) => {
                         const isActive = pathname.startsWith(link.href);
                         return (
