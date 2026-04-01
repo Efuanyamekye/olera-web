@@ -117,9 +117,9 @@ export default function MobileGalleryActionBar({ provider }: MobileGalleryAction
         {showTooltip && (
           <div
             ref={tooltipRef}
-            className="absolute top-14 right-0 z-50 w-64 bg-white rounded-xl shadow-lg border border-gray-200 p-3 animate-in fade-in slide-in-from-top-1 duration-150"
+            className="absolute top-14 right-0 z-50 w-64 bg-gray-900 text-white rounded-xl shadow-lg p-3 animate-in fade-in slide-in-from-top-1 duration-150"
           >
-            <p className="text-sm text-gray-600 mb-2">
+            <p className="text-sm mb-2">
               Save providers with a family account.
             </p>
             <button
@@ -127,7 +127,7 @@ export default function MobileGalleryActionBar({ provider }: MobileGalleryAction
                 setShowTooltip(false);
                 openAuth({ defaultMode: "sign-up", intent: "family" });
               }}
-              className="text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline"
+              className="text-sm font-medium text-primary-300 hover:text-primary-200 hover:underline"
             >
               Create one →
             </button>
