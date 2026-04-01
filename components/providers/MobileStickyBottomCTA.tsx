@@ -415,13 +415,39 @@ export default function MobileStickyBottomCTA({
       <Modal
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}
-        title={sheetTitle}
-        onBack={sheetOnBack}
-        footer={sheetFooter}
+        title={hook.isNonFamilyProfile ? "Family account required" : sheetTitle}
+        onBack={hook.isNonFamilyProfile ? undefined : sheetOnBack}
+        footer={hook.isNonFamilyProfile ? undefined : sheetFooter}
         size="lg"
       >
+        {/* ── Non-family profile block ── */}
+        {hook.isNonFamilyProfile && (
+          <div className="py-4 text-center animate-step-in">
+            <div className="w-14 h-14 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-7 h-7 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </div>
+            <p className="text-sm text-gray-600 mb-4 px-2">
+              Care consultation requests can only be sent from a family account. Create one to connect with {providerName}.
+            </p>
+            <button
+              onClick={() => {
+                setSheetOpen(false);
+                hook.openAuth({ defaultMode: "sign-up", intent: "family" });
+              }}
+              className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-colors"
+            >
+              Create Family Account
+            </button>
+            <p className="text-xs text-gray-400 mt-3">
+              Use a different email than your current account.
+            </p>
+          </div>
+        )}
+
         {/* ── Loading ── */}
-        {hook.cardState === "loading" && (
+        {!hook.isNonFamilyProfile && hook.cardState === "loading" && (
           <div className="py-4 animate-step-in">
             <div className="animate-pulse space-y-3">
               <div className="h-11 bg-gray-100 rounded-[10px]" />
@@ -431,7 +457,7 @@ export default function MobileStickyBottomCTA({
         )}
 
         {/* ── Default: payments ── */}
-        {hook.cardState === "default" && (
+        {!hook.isNonFamilyProfile && hook.cardState === "default" && (
           <div className="animate-step-in">
             {acceptedPayments.length > 0 && (
               <div className="pt-2">
@@ -454,7 +480,7 @@ export default function MobileStickyBottomCTA({
         )}
 
         {/* ── Intent step 0: Who needs care? ── */}
-        {hook.cardState === "intent" && hook.intentStep === 0 && (
+        {!hook.isNonFamilyProfile && hook.cardState === "intent" && hook.intentStep === 0 && (
           <div className="py-2 animate-step-in">
             <StepIndicator current={0} total={hook.totalSteps} />
             <div className="flex flex-col gap-1.5">
@@ -471,7 +497,7 @@ export default function MobileStickyBottomCTA({
         )}
 
         {/* ── Intent step 1: When do you need care? ── */}
-        {hook.cardState === "intent" && hook.intentStep === 1 && (
+        {!hook.isNonFamilyProfile && hook.cardState === "intent" && hook.intentStep === 1 && (
           <div className="py-2 animate-step-in">
             <StepIndicator current={1} total={hook.totalSteps} />
             <div className="grid grid-cols-2 gap-1.5">
@@ -488,7 +514,7 @@ export default function MobileStickyBottomCTA({
         )}
 
         {/* ── Email capture (guest flow) ── */}
-        {hook.cardState === "email_capture" && (
+        {!hook.isNonFamilyProfile && hook.cardState === "email_capture" && (
           <div className="py-2 animate-step-in">
             <StepIndicator current={2} total={3} />
             {/* Summary chips */}
@@ -513,7 +539,7 @@ export default function MobileStickyBottomCTA({
         )}
 
         {/* ── Enrichment: post-submission questions ── */}
-        {hook.cardState === "enrichment" && (
+        {!hook.isNonFamilyProfile && hook.cardState === "enrichment" && (
           <div className="py-4 animate-step-in">
             <EnrichmentState
               providerName={providerName}
@@ -527,7 +553,7 @@ export default function MobileStickyBottomCTA({
         )}
 
         {/* ── Connected: success banner ── */}
-        {hook.cardState === "connected" && (
+        {!hook.isNonFamilyProfile && hook.cardState === "connected" && (
           <div className="py-4 animate-step-in">
             <div className="flex items-center gap-3 px-4 py-4 bg-emerald-50 rounded-[10px] border border-emerald-100">
               <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
@@ -555,7 +581,7 @@ export default function MobileStickyBottomCTA({
         )}
 
         {/* ── Returning: intent summary ── */}
-        {hook.cardState === "returning" && (
+        {!hook.isNonFamilyProfile && hook.cardState === "returning" && (
           <div className="py-2 animate-step-in">
             <div className="px-3.5 py-3.5 bg-gray-50 rounded-[10px] border border-gray-100">
               <p className="text-sm font-semibold text-gray-800">

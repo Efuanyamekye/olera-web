@@ -81,6 +81,11 @@ export function useConnectionCard(props: ConnectionCardProps) {
   const { user, account, activeProfile, profiles, isLoading: authLoading, openAuth, refreshAccountData } =
     useAuth();
   const savedProviders = useSavedProviders();
+
+  // ── Non-family profile guard ──
+  // Provider, caregiver, and student accounts cannot send care inquiries
+  const isNonFamilyProfile = activeProfile &&
+    (activeProfile.type === "organization" || activeProfile.type === "caregiver" || activeProfile.type === "student");
   const phoneRevealTriggered = useRef(false);
   const connectionAuthTriggered = useRef(false);
 
@@ -734,5 +739,9 @@ export function useConnectionCard(props: ConnectionCardProps) {
     hasProfileCareDetails,
     initialRecipient,
     initialUrgency,
+
+    // Non-family profile guard
+    isNonFamilyProfile,
+    openAuth,
   };
 }
