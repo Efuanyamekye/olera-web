@@ -4,6 +4,7 @@ import TopProvidersSection from "@/components/home/TopProvidersSection";
 import ExploreCareSection from "@/components/home/ExploreCareSection";
 import CommunitySection from "@/components/home/CommunitySection";
 import CTASection from "@/components/home/CTASection";
+import HomeRedirect from "@/components/home/HomeRedirect";
 import { US_STATES } from "@/lib/power-pages";
 
 export default async function HomePage() {
@@ -15,6 +16,8 @@ export default async function HomePage() {
 
   return (
     <div className="bg-gray-50">
+      {/* Redirect providers/caregivers to their dashboards */}
+      <HomeRedirect />
       <HeroSection />
       <TopProvidersSection geoState={geoState} geoCity={geoCity} />
       <ExploreCareSection />

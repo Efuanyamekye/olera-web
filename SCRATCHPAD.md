@@ -7,6 +7,17 @@
 
 ## Current Focus
 
+- **Strict User Account Type Separation** (branch: `feature/user-accounts-separation-logic`) — READY FOR MERGE (PR #463)
+  - **22 commits**, clean fast-forward from staging, no conflicts
+  - **Phase 1**: Fix broken provider experience (stop auto-creating family profiles, fix menus/dropdowns, account settings by type)
+  - **Phase 2**: Block family-only actions (save buttons, connection card, server-side guards, guest provider email detection)
+  - **Auth flow fix**: Sign out existing session when provider creates family account with different email
+  - **Context-aware navigation**: Logo redirects to "home base" by account type (family→/, provider→/for-providers, caregiver→/medjobs). Hide MedJobs/For Providers from family accounts in nav.
+  - **Cleanup**: Removed obsolete "Remove this profile" (154 lines), updated save tooltips to dark style
+  - **Principle**: One email = one account type. No mixing. Defense in depth (UI → API → email check)
+  - **PR URL**: https://github.com/olera-care/olera-web/pull/463
+  - **Testing**: Provider logged in → sees blocking UI on save/connect. Guest with provider email → "Provider email detected" UI. Family users unaffected.
+
 - **Staging → Main Promotion** — IN PROGRESS
   - Audited full staging diff: 253 commits, 225 files changed, ~31K lines across ~90 PRs
   - Key areas: one-click onboarding, provider dashboard, MedJobs, reviews, activity center, email revamp, highlights waterfall, city expansion, admin improvements

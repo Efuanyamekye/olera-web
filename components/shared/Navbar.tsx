@@ -200,16 +200,16 @@ export default function Navbar() {
   // Provider-only accounts (no family profile) should always see provider mode
   const isProviderOnlyAccount = hasProviderProfile && !hasFamilyProfile && !hasStudentProfile;
 
-  // Logo href based on account type — each user type has their "home base"
+  // Logo href based on account type — each user type goes to their dashboard
   // Family or not logged in → main site
-  // Provider (organization) → For Providers landing
-  // Caregiver (caregiver/student) → MedJobs
+  // Provider (organization) → Provider dashboard
+  // Caregiver (student) → MedJobs portal
   const logoHref = !activeProfile
     ? "/"
     : activeProfile.type === "organization"
-    ? "/for-providers"
+    ? "/provider"
     : activeProfile.type === "caregiver" || activeProfile.type === "student"
-    ? "/medjobs"
+    ? "/portal/medjobs"
     : "/";
 
   useEffect(() => {
@@ -671,8 +671,8 @@ export default function Navbar() {
             {/* Caregivers use dropdown only - no center nav */}
             {!isMinimalNav && activeProfile?.type !== "student" && (
               <div className="hidden lg:flex items-center gap-1">
-                {activeProfile?.type === "organization" || isProviderPortal ? (
-                  /* Provider Hub nav links - shown for org accounts or when in provider portal */
+                {isProviderPortal ? (
+                  /* Provider Hub nav links - only shown on /provider/* URLs */
                   <>
                     {/* Home */}
                     <Link
@@ -750,22 +750,24 @@ export default function Navbar() {
                       </button>
                     </div>
 
-                    {/* Simple nav links */}
-                    {NAV_LINKS.map((link) => {
-                      const isActive = pathname.startsWith(link.href);
-                      return (
-                      <Link
-                        key={link.label}
-                        href={link.href}
-                        className={`px-4 py-2 text-[15px] font-medium rounded-full transition-colors ${
-                          isActive
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700 hover:bg-gray-50"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    );
+                    {/* Simple nav links - filter out MedJobs for caregivers (they're already one) */}
+                    {NAV_LINKS
+                      .filter((link) => !(link.href === "/medjobs" && activeProfile?.type === "student"))
+                      .map((link) => {
+                        const isActive = pathname.startsWith(link.href);
+                        return (
+                        <Link
+                          key={link.label}
+                          href={link.href}
+                          className={`px-4 py-2 text-[15px] font-medium rounded-full transition-colors ${
+                            isActive
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700 hover:bg-gray-50"
+                          }`}
+                        >
+                          {link.label}
+                        </Link>
+                      );
                     })}
                   </>
                 )}
@@ -846,8 +848,8 @@ export default function Navbar() {
                 ) : (
                   /* Family mode: For Providers + heart + user menu */
                   <>
-                    {/* For Providers link — hidden on minimal nav pages and for family accounts */}
-                    {!isMinimalNav && activeProfile?.type !== "family" && (
+                    {/* For Providers link — hidden for family and provider accounts (they don't need it) */}
+                    {!isMinimalNav && activeProfile?.type !== "family" && activeProfile?.type !== "organization" && (
                       <button
                         onClick={handleForProviders}
                         className="px-4 py-2 text-[15px] font-medium text-gray-700 hover:bg-gray-50 rounded-full transition-colors"
