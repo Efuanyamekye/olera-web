@@ -606,7 +606,8 @@ export default function UnifiedAuthModal({
             return;
           }
 
-          // Check for incomplete student profile → redirect to student dashboard
+          // Redirect providers and students to their respective dashboards
+          // This ensures they go to their dashboard regardless of which page they logged in from
           if (freshAccount?.id) {
             try {
               const { createBrowserClient } = await import("@supabase/ssr");
@@ -614,17 +615,36 @@ export default function UnifiedAuthModal({
                 process.env.NEXT_PUBLIC_SUPABASE_URL!,
                 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
               );
+
+              // Check for organization (provider) profile
+              const { data: orgProfile } = await sb
+                .from("business_profiles")
+                .select("id, is_active")
+                .eq("account_id", freshAccount.id)
+                .eq("type", "organization")
+                .eq("is_active", true)
+                .limit(1)
+                .maybeSingle();
+
+              if (orgProfile) {
+                router.push("/provider");
+                onClose();
+                return;
+              }
+
+              // Check for student or legacy caregiver profile (both are MedJobs users)
               const { data: studentProfile } = await sb
                 .from("business_profiles")
                 .select("id, is_active")
                 .eq("account_id", freshAccount.id)
-                .eq("type", "student")
+                .in("type", ["student", "caregiver"])
+                .eq("is_active", true)
                 .limit(1)
                 .maybeSingle();
 
-              if (studentProfile && !studentProfile.is_active) {
-                onClose();
+              if (studentProfile) {
                 router.push("/portal/medjobs");
+                onClose();
                 return;
               }
             } catch {

@@ -17,7 +17,8 @@ export default function CaregiverRedirect() {
     if (isLoading) return;
 
     // Caregiver → redirect to dashboard (they don't need marketing page)
-    if (activeProfile?.type === "student") {
+    // Includes both "student" (new) and "caregiver" (legacy) types
+    if (activeProfile?.type === "student" || activeProfile?.type === "caregiver") {
       router.replace("/portal/medjobs");
       return;
     }

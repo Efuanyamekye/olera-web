@@ -95,7 +95,8 @@ export default function Navbar() {
     pathname.startsWith("/provider/medjobs") ||
     // Claim/onboard flow shows provider portal nav
     (pathname.startsWith("/provider/") && pathname.endsWith("/onboard"));
-  const isMinimalNav = pathname.startsWith("/portal/inbox") || pathname.startsWith("/welcome") || pathname.startsWith("/provider/welcome");
+  const isInboxPage = pathname.startsWith("/portal/inbox");
+  const isMinimalNav = pathname.startsWith("/welcome") || pathname.startsWith("/provider/welcome");
   // Auth-gated provider hub routes — the layout gate guarantees the user is signed in,
   // so we can safely render signed-in UI without waiting for hasSession
   const isProviderHub = pathname === "/provider" ||
@@ -147,7 +148,7 @@ export default function Navbar() {
   // "For Providers" click handler
   const handleForProviders = useCallback(() => {
     const hasProviderProfile = profiles.some(
-      (p) => p.type === "organization" || p.type === "caregiver"
+      (p) => p.type === "organization"
     );
     if (hasProviderProfile) {
       router.push("/provider");
@@ -203,12 +204,12 @@ export default function Navbar() {
   // Logo href based on account type — each user type goes to their dashboard
   // Family or not logged in → main site
   // Provider (organization) → Provider dashboard
-  // Caregiver (student) → MedJobs portal
+  // MedJobs caregiver (student or legacy caregiver) → MedJobs portal
   const logoHref = !activeProfile
     ? "/"
     : activeProfile.type === "organization"
     ? "/provider"
-    : activeProfile.type === "caregiver" || activeProfile.type === "student"
+    : activeProfile.type === "student" || activeProfile.type === "caregiver"
     ? "/portal/medjobs"
     : "/";
 
@@ -638,7 +639,7 @@ export default function Navbar() {
           transition: "transform 200ms cubic-bezier(0.33, 1, 0.68, 1)"
         }}
       >
-        <div className={isMinimalNav ? "px-[44px]" : "max-w-7xl mx-auto px-5 sm:px-6 lg:px-8"}>
+        <div className={(isInboxPage || isMinimalNav) ? "px-[44px]" : "max-w-7xl mx-auto px-5 sm:px-6 lg:px-8"}>
           {/*
            * 3-column layout: Left | Center Nav | Right
            *
@@ -660,8 +661,8 @@ export default function Navbar() {
             {/* ── CENTER — Primary navigation (page-centered, hidden on mobile + inbox) ── */}
             {!isMinimalNav && (
               <div className="hidden lg:flex items-center gap-1">
-                {activeProfile?.type === "student" ? (
-                  /* Caregiver (MedJobs) nav links */
+                {(activeProfile?.type === "student" || activeProfile?.type === "caregiver") ? (
+                  /* Caregiver (MedJobs) nav links - includes legacy "caregiver" type */
                   <>
                     <Link
                       href="/portal/medjobs"
@@ -694,8 +695,8 @@ export default function Navbar() {
                       Interviews
                     </Link>
                   </>
-                ) : isProviderPortal ? (
-                  /* Provider Hub nav links - only shown on /provider/* URLs */
+                ) : (isProviderPortal || activeProfile?.type === "organization") ? (
+                  /* Provider Hub nav links - shown on /provider/* URLs or for organization users (e.g., in inbox) */
                   <>
                     {/* Home */}
                     <Link
@@ -738,44 +739,53 @@ export default function Navbar() {
                 ) : (
                   /* Family / public nav links */
                   <>
-                    {/* Find Care trigger */}
-                    <div onMouseEnter={() => setIsFindCareOpen(true)}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setIsFindCareOpen(false);
-                          router.push("/browse");
-                        }}
-                        className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[15px] font-medium transition-colors ${
-                          isFindCareOpen
-                            ? "bg-gray-100 text-gray-900"
-                            : "text-gray-700 hover:bg-gray-50"
-                        }`}
-                        aria-expanded={isFindCareOpen}
-                        aria-haspopup="true"
+                    {/* Find Care - simple link in inbox, mega menu elsewhere */}
+                    {isInboxPage ? (
+                      <Link
+                        href="/browse"
+                        className="px-4 py-2 rounded-full text-[15px] font-medium transition-colors text-gray-700 hover:bg-gray-50"
                       >
                         Find Care
-                        <svg
-                          className={`w-3.5 h-3.5 text-gray-500 transition-transform duration-200 ${
-                            isFindCareOpen ? "rotate-180" : ""
+                      </Link>
+                    ) : (
+                      <div onMouseEnter={() => setIsFindCareOpen(true)}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsFindCareOpen(false);
+                            router.push("/browse");
+                          }}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[15px] font-medium transition-colors ${
+                            isFindCareOpen
+                              ? "bg-gray-100 text-gray-900"
+                              : "text-gray-700 hover:bg-gray-50"
                           }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
+                          aria-expanded={isFindCareOpen}
+                          aria-haspopup="true"
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                    </div>
+                          Find Care
+                          <svg
+                            className={`w-3.5 h-3.5 text-gray-500 transition-transform duration-200 ${
+                              isFindCareOpen ? "rotate-180" : ""
+                            }`}
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
 
                     {/* Simple nav links - filter out MedJobs for caregivers and families */}
                     {NAV_LINKS
-                      .filter((link) => !(link.href === "/medjobs" && (activeProfile?.type === "student" || activeProfile?.type === "family")))
+                      .filter((link) => !(link.href === "/medjobs" && (activeProfile?.type === "student" || activeProfile?.type === "caregiver" || activeProfile?.type === "family")))
                       .map((link) => {
                         const isActive = pathname.startsWith(link.href);
                         return (

@@ -21,8 +21,8 @@ export default function HomeRedirect() {
       return;
     }
 
-    // Caregiver → redirect to MedJobs portal
-    if (activeProfile?.type === "student") {
+    // MedJobs caregiver (student or legacy caregiver type) → redirect to MedJobs portal
+    if (activeProfile?.type === "student" || activeProfile?.type === "caregiver") {
       router.replace("/portal/medjobs");
       return;
     }
