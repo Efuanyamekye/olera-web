@@ -23,17 +23,33 @@ function renderAnswer(text: string) {
   });
 }
 
-export function FaqAccordion({ faqs, columns = 2 }: { faqs: FaqItem[]; columns?: 1 | 2 }) {
+export function FaqAccordion({ faqs, columns = 2, multiOpen }: { faqs: FaqItem[]; columns?: 1 | 2; multiOpen?: boolean }) {
+  // Default: multiOpen is true for 2-column layout to avoid blank space issues
+  const isMultiOpen = multiOpen ?? columns === 2;
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [openSet, setOpenSet] = useState<Set<number>>(new Set());
+
+  function toggle(i: number) {
+    if (isMultiOpen) {
+      setOpenSet((prev) => {
+        const next = new Set(prev);
+        if (next.has(i)) next.delete(i);
+        else next.add(i);
+        return next;
+      });
+    } else {
+      setOpenIndex(openIndex === i ? null : i);
+    }
+  }
 
   return (
-    <div className={`grid gap-2 ${columns === 2 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"}`}>
+    <div className={columns === 2 ? "md:columns-2 gap-2 space-y-2" : "grid gap-2 grid-cols-1"}>
       {faqs.map((faq, i) => {
-        const isOpen = openIndex === i;
+        const isOpen = isMultiOpen ? openSet.has(i) : openIndex === i;
         return (
-          <div key={i} className="bg-primary-50 rounded-xl border border-primary-100 shadow-[0_2px_8px_rgba(77,155,150,0.1),0_1px_3px_rgba(77,155,150,0.08)] overflow-hidden">
+          <div key={i} className="bg-primary-50 rounded-xl border border-primary-100 shadow-[0_2px_8px_rgba(77,155,150,0.1),0_1px_3px_rgba(77,155,150,0.08)] overflow-hidden break-inside-avoid">
             <button
-              onClick={() => setOpenIndex(isOpen ? null : i)}
+              onClick={() => toggle(i)}
               className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-primary-100/40 transition-colors"
             >
               <span className="font-semibold text-gray-900 pr-4">{faq.question}</span>

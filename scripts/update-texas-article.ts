@@ -33,6 +33,17 @@ if (!SUPABASE_URL || !SERVICE_KEY) {
 const db = createClient(SUPABASE_URL, SERVICE_KEY);
 
 const ARTICLE_HTML = `
+<div class="not-prose my-8 rounded-2xl bg-primary-25 border border-primary-100 p-6 sm:p-8">
+  <h2 class="text-xl font-bold text-gray-900" style="margin-top:0;margin-bottom:12px;">Quick Summary</h2>
+  <ul style="list-style:none;padding:0;margin:0;font-size:15px;line-height:1.5;color:#374151;">
+    <li style="padding:3px 0;"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#d1fae5;color:#059669;font-size:12px;flex-shrink:0;margin-right:6px;">&#10003;</span> Family members and close friends can get paid to care for a loved one through STAR+PLUS</li>
+    <li style="padding:3px 0;"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#d1fae5;color:#059669;font-size:12px;flex-shrink:0;margin-right:6px;">&#10003;</span> Pay ranges from <b>$10 to $17 per hour</b>, up to 56 hours per week</li>
+    <li style="padding:3px 0;"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#d1fae5;color:#059669;font-size:12px;flex-shrink:0;margin-right:6px;">&#10003;</span> You must be 18 or older and pass a background check</li>
+    <li style="padding:3px 0;"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#d1fae5;color:#059669;font-size:12px;flex-shrink:0;margin-right:6px;">&#10003;</span> Spouses and legal guardians generally do not qualify</li>
+    <li style="padding:3px 0;"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#d1fae5;color:#059669;font-size:12px;flex-shrink:0;margin-right:6px;">&#10003;</span> First paycheck typically takes <b>30 to 90 days</b></li>
+  </ul>
+</div>
+
 <p class="text-lg leading-relaxed">Caring for someone you love is one of the hardest and most important things you can do. You deserve support, not just emotionally, but practically and financially too.</p>
 
 <p>Applying for caregiver benefits in Texas is more complicated than it should be. The systems are confusing, the paperwork is overwhelming, and most families never find out about the help that is available to them. That is exactly why we built Olera to make this easier.</p>

@@ -373,6 +373,9 @@ export default async function TexasBenefitPage({ params }: Props) {
                       </svg>
                       {program.serviceAreasHeading}
                     </h2>
+                    {program.serviceAreasSummary && (
+                      <p className="text-sm text-gray-600 mb-5 -mt-2">{program.serviceAreasSummary}</p>
+                    )}
                     <div className="grid gap-2.5 grid-cols-1 sm:grid-cols-2">
                       {program.serviceAreas.map((area) => (
                         <div key={area.name} className="bg-gray-50 border border-gray-100 rounded-lg px-4 py-3">

@@ -158,7 +158,7 @@ export default async function StatePage({ params }: Props) {
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-5">
                 Frequently Asked Questions
               </h2>
-              <FaqAccordion faqs={faqs} />
+              <FaqAccordion faqs={faqs.slice(0, 3)} columns={1} />
             </div>
           </section>
         </>

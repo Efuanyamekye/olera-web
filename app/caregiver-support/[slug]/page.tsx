@@ -11,10 +11,11 @@ import {
   DesktopTableOfContents,
   MobileTableOfContents,
 } from "@/components/article/TableOfContents";
+import SpendDownWidget from "@/components/article/SpendDownWidget";
 import ArticleFAQ from "@/components/article/ArticleFAQ";
 import SeniorCareFAQ from "@/components/article/SeniorCareFAQ";
 import StarPlusFAQ from "@/components/article/StarPlusFAQ";
-import StarPlusServiceMap from "@/components/article/StarPlusServiceMap";
+import MedicaidEligibilityFAQ from "@/components/article/MedicaidEligibilityFAQ";
 import EligibilityChecker from "@/components/article/EligibilityChecker";
 
 // ISR: revalidate every 60 seconds
@@ -50,7 +51,7 @@ export async function generateMetadata({
   const ogTitle = article.og_title || title;
   const ogDescription = article.og_description || description;
   const ogImage = article.og_image_url || article.cover_image_url;
-  const canonical = `https://olera.care/caregiver-support/${slug}`;
+  const canonical = article.canonical_url || `https://olera.care/caregiver-support/${slug}`;
 
   return {
     title: `${title} | Olera Caregiver Support`,
@@ -308,8 +309,8 @@ export default async function ResourceArticlePage({
           {(() => {
             const MARKERS: Record<string, React.ReactNode> = {
               "<!-- eligibility-checker -->": <EligibilityChecker />,
-              "<!-- service-map -->": <StarPlusServiceMap />,
-              "<!-- faq-accordion -->": slug === "how-to-pay-for-senior-care-in-texas" ? <SeniorCareFAQ /> : slug === "star-plus-waiver-texas-complete-guide" ? <StarPlusFAQ /> : <ArticleFAQ />,
+              "<!-- spend-down-calculator -->": <SpendDownWidget initialStateCode="TX" />,
+              "<!-- faq-accordion -->": slug === "how-to-pay-for-senior-care-in-texas" ? <SeniorCareFAQ /> : slug === "star-plus-waiver-texas-complete-guide" ? <StarPlusFAQ /> : slug === "texas-medicaid-eligibility-seniors-2026" ? <MedicaidEligibilityFAQ /> : <ArticleFAQ />,
             };
             let segments: React.ReactNode[] = [processedHtml];
             for (const [marker, component] of Object.entries(MARKERS)) {

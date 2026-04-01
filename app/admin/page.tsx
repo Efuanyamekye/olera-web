@@ -38,8 +38,10 @@ export default function AdminOverviewPage() {
   const [questionsNeedEmail, setQuestionsNeedEmail] = useState<number | null>(null);
   const [totalReviews, setTotalReviews] = useState<number | null>(null);
   const [totalProviders, setTotalProviders] = useState<number | null>(null);
+  const [publicProfiles, setPublicProfiles] = useState<number | null>(null);
   const [auditLog, setAuditLog] = useState<AuditEntry[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showAllStats, setShowAllStats] = useState(false);
 
   useEffect(() => {
     // Fire all fetches independently — each card updates on its own
@@ -67,6 +69,10 @@ export default function AdminOverviewPage() {
       .then(setTotalProviders)
       .catch(() => { setTotalProviders(0); setError("Some data failed to load."); });
 
+    fetchCount("/api/admin/demand", "total_public")
+      .then(setPublicProfiles)
+      .catch(() => { setPublicProfiles(0); setError("Some data failed to load."); });
+
     // Audit log
     fetch("/api/admin/audit?limit=10")
       .then((r) => r.ok ? r.json() : { entries: [] })
@@ -74,14 +80,51 @@ export default function AdminOverviewPage() {
       .catch(() => setAuditLog([]));
   }, []);
 
-  const cards: StatCard[] = [
+  const primaryCards: StatCard[] = [
     { label: "Pending Providers", value: pendingProviders, subtitle: "Awaiting review", href: "/admin/providers" },
     { label: "Total Inquiries", value: totalInquiries, subtitle: "All connections", href: "/admin/leads" },
     { label: "Needs Email", value: needsEmail, subtitle: "Leads awaiting email", href: "/admin/leads?tab=needs_email", isWarning: true },
     { label: "Q&A Needs Email", value: questionsNeedEmail, subtitle: "Questions blocked", href: "/admin/questions", isWarning: true },
-    { label: "Reviews", value: totalReviews, subtitle: "Total reviews", href: "/admin/reviews" },
+    { label: "Public Profiles", value: publicProfiles, subtitle: "Care seekers live", href: "/admin/demand" },
     { label: "Provider Directory", value: totalProviders, subtitle: "Total providers", href: "/admin/directory" },
   ];
+
+  const secondaryCards: StatCard[] = [
+    { label: "Reviews", value: totalReviews, subtitle: "Total reviews", href: "/admin/reviews" },
+  ];
+
+  function renderCard(card: StatCard) {
+    const showWarning = card.isWarning && card.value !== null && card.value > 0;
+    return (
+      <Link key={card.href} href={card.href} className="block">
+        <div
+          className={[
+            "p-5 rounded-xl border transition-colors",
+            showWarning
+              ? "bg-amber-50 border-amber-200 hover:border-amber-300"
+              : "bg-white border-gray-200 hover:border-gray-300",
+          ].join(" ")}
+        >
+          <p className="text-[13px] text-gray-500 mb-1">{card.label}</p>
+          {card.value === null ? (
+            <div className="h-9 flex items-center">
+              <div className="w-12 h-6 bg-gray-100 rounded animate-pulse" />
+            </div>
+          ) : (
+            <p
+              className={[
+                "text-2xl font-semibold mb-1",
+                showWarning ? "text-amber-600" : "text-gray-900",
+              ].join(" ")}
+            >
+              {card.value.toLocaleString()}
+            </p>
+          )}
+          <p className="text-[13px] text-gray-400">{card.subtitle}</p>
+        </div>
+      </Link>
+    );
+  }
 
   return (
     <div>
@@ -96,40 +139,21 @@ export default function AdminOverviewPage() {
       )}
 
       {/* Stats grid — each card loads independently */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
-        {cards.map((card) => {
-          const showWarning = card.isWarning && card.value !== null && card.value > 0;
-          return (
-            <Link key={card.href} href={card.href} className="block">
-              <div
-                className={[
-                  "p-5 rounded-xl border transition-colors",
-                  showWarning
-                    ? "bg-amber-50 border-amber-200 hover:border-amber-300"
-                    : "bg-white border-gray-200 hover:border-gray-300",
-                ].join(" ")}
-              >
-                <p className="text-[13px] text-gray-500 mb-1">{card.label}</p>
-                {card.value === null ? (
-                  <div className="h-9 flex items-center">
-                    <div className="w-12 h-6 bg-gray-100 rounded animate-pulse" />
-                  </div>
-                ) : (
-                  <p
-                    className={[
-                      "text-2xl font-semibold mb-1",
-                      showWarning ? "text-amber-600" : "text-gray-900",
-                    ].join(" ")}
-                  >
-                    {card.value.toLocaleString()}
-                  </p>
-                )}
-                <p className="text-[13px] text-gray-400">{card.subtitle}</p>
-              </div>
-            </Link>
-          );
-        })}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-4">
+        {primaryCards.map((card) => renderCard(card))}
+        {showAllStats && secondaryCards.map((card) => renderCard(card))}
       </div>
+
+      {secondaryCards.length > 0 && (
+        <div className="mb-8">
+          <button
+            onClick={() => setShowAllStats((v) => !v)}
+            className="text-sm text-gray-500 hover:text-gray-700 font-medium transition-colors"
+          >
+            {showAllStats ? "Show less" : `See all stats (${secondaryCards.length} more) →`}
+          </button>
+        </div>
+      )}
 
       {/* Recent Activity */}
       <div>

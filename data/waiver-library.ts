@@ -9223,6 +9223,7 @@ const texasPrograms: WaiverProgram[] = [
       { name: "El Paso", description: "El Paso County" },
     ],
     serviceAreasHeading: "Medicare Savings Locations in Texas",
+    serviceAreasSummary: "Texas Medicare Savings Programs are available statewide. Find the office closest to you.",
     faqs: [
       {
         question: "What are the income limits for Texas Medicare Savings Programs in 2026?",

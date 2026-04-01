@@ -94,6 +94,24 @@ The core error: **treating the plan as authoritative when the code told a differ
 
 ---
 
+### 2026-04-01: Slack private channel lookup — 4 rounds of unnecessary back-and-forth
+
+**Symptom**: When asked to message `#ai-product-development`, Claude spent 4 search attempts with `slack_search_channels` (trying "ai-development", "ai development", "development", "ai") before TJ had to explain it's a private channel, then point out we'd messaged it the day before.
+
+**Root Cause**: `slack_search_channels` doesn't return private channels. Instead of switching tools after the first miss, Claude kept retrying with different search terms — the definition of insanity. The fix was trivial: `slack_read_channel` accepts channel names (not just IDs) and works for any channel the bot is a member of, including private ones. One call would have resolved it.
+
+**Fix**: Used `slack_read_channel("ai-product-development")` which returned the channel ID and messages. Message sent successfully.
+
+**Time to Resolution**: ~3 minutes of wasted back-and-forth that TJ had to guide.
+
+**Prevention**:
+- Saved memory: when `slack_search_channels` returns no results on the first try, immediately fall back to `slack_read_channel` with the channel name. If that also fails, *then* ask the user for the channel ID.
+- Never retry `slack_search_channels` with query variations — if the first search misses, the channel is either private or doesn't exist. Retrying with different terms won't surface a private channel.
+
+**Lesson**: When a tool fails, switch tools — don't retry the same tool with slightly different inputs. The user should never have to debug your tool usage for you.
+
+---
+
 ### 2026-03-27: Notification card never rendered — 3 compounding root causes over 12+ rounds
 
 **Symptom**: Provider clicks notification email link. Expected: notification card hero ("A family is interested in your services") + dashboard. Actual: "Email verified / Claim this listing" every single time, across 12+ fix attempts over ~4 hours.

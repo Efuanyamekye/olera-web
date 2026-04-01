@@ -20,6 +20,9 @@ export async function GET(request: NextRequest) {
     const perPage = Math.min(100, Math.max(1, parseInt(searchParams.get("per_page") || "50", 10)));
     const guestOnly = searchParams.get("guest_only") === "true";
     const claimedOnly = searchParams.get("claimed_only") === "true";
+    const publicOnly = searchParams.get("public_only") === "true";
+    const cityFilter = searchParams.get("city")?.trim() || "";
+    const stateFilter = searchParams.get("state")?.trim() || "";
 
     const db = getServiceClient();
 
@@ -37,6 +40,22 @@ export async function GET(request: NextRequest) {
       query = query.is("account_id", null);
     } else if (claimedOnly) {
       query = query.not("account_id", "is", null);
+    }
+
+    if (publicOnly) {
+      query = query
+        .eq("is_active", true)
+        .contains("metadata", { care_post: { status: "active" } });
+    }
+
+    if (cityFilter === "__null__") {
+      query = query.is("city", null);
+    } else if (cityFilter) {
+      query = query.eq("city", cityFilter);
+    }
+
+    if (stateFilter) {
+      query = query.eq("state", stateFilter);
     }
 
     const from = (page - 1) * perPage;

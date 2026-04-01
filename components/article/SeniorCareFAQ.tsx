@@ -11,32 +11,32 @@ const FAQS: FAQItem[] = [
   {
     question: "What happens to my house if I go on Medicaid in Texas?",
     answer:
-      "Your home is generally <strong>exempt</strong> from Medicaid's asset count as long as you (or your spouse) intend to return to it or continue living there. However, after you pass away, Texas may seek repayment from your estate through <strong>Medicaid Estate Recovery</strong>. Proper planning, such as placing the home in a trust, can help protect it.",
+      "Your house is protected while you are alive. Medicaid will not force you to sell it. However, after you pass away, Texas can make a claim against your estate to recover what Medicaid paid for your care. This is called estate recovery. There are legal ways to protect your home from this process, and an elder law attorney can help you plan ahead.",
   },
   {
     question: "Can I pay for nursing home care with just Social Security in Texas?",
     answer:
-      "In most cases, <strong>no</strong>. The average nursing home in Texas costs around $8,500 per month, while the average Social Security benefit is roughly $1,900. Most families use a combination of Medicaid, personal savings, and sometimes Veterans benefits to cover the gap.",
+      "Social Security alone typically does not cover nursing home costs in Texas. The average nursing home runs <strong>$8,500 a month</strong>, while the average Social Security benefit is around <strong>$1,900</strong>. Most families use Social Security as a contribution toward care costs and rely on Medicaid to cover the rest once they qualify.",
   },
   {
     question: "How much does Medicaid pay for assisted living in Texas?",
     answer:
-      "Texas Medicaid does not directly pay for room and board in assisted living facilities. However, the <strong>STAR+PLUS HCBS waiver</strong> can cover personal care services, nursing, and other supports delivered in an assisted living setting. The resident is responsible for room and board costs.",
+      "Texas Medicaid does not cover traditional assisted living facilities. It covers nursing home care and home and community based services through programs like <strong>STAR+PLUS</strong>. If your loved one needs assisted living, there are limited waiver programs that may help, but availability depends on where you live and waitlist times can be long.",
   },
   {
     question: "Is there a senior assistance program that covers $3,000 a month in Texas?",
     answer:
-      "Yes. The <strong>STAR+PLUS waiver</strong> can provide services valued at several thousand dollars per month, including personal attendant care, home modifications, and adult day care. The exact value depends on the care plan set by your service coordinator.",
+      "Yes. <strong>STAR+PLUS</strong> is Texas Medicaid's managed care program for seniors and people with disabilities. Depending on your level of need, it can cover home care, personal assistance, adult day care, and other services that can easily exceed $3,000 in monthly value. Eligibility is based on income, assets, and medical need.",
   },
   {
     question: "Can a family member get paid to care for me in Texas?",
     answer:
-      "Yes. Through <strong>Consumer Directed Services (CDS)</strong> under STAR+PLUS, you can hire a family member (except a spouse in most cases) as your paid caregiver. They must pass a background check and be managed through an FMSA.",
+      "Yes, in some cases. Through the <strong>Consumer Directed Services</strong> option under STAR+PLUS, you can choose a family member as your paid caregiver. There are some restrictions: a spouse cannot be paid, and the family member must meet basic requirements. It is one of the most underused benefits available to Texas families.",
   },
   {
     question: "How long is the waitlist for STAR+PLUS in Texas?",
     answer:
-      "The STAR+PLUS interest list wait time varies by region but typically ranges from <strong>6 to 18 months</strong>. You can get on the list by calling <strong>211</strong> or applying through <a href='https://www.yourtexasbenefits.com' target='_blank' rel='noopener noreferrer' class='text-primary-600 underline'>YourTexasBenefits.com</a>. Getting on the list early is critical.",
+      "STAR+PLUS itself does not have a waitlist for nursing home coverage. However, the home and community based services portion can have waiting periods depending on your area and the specific services needed. This is why applying as early as possible matters, even if your loved one does not need care right away.",
   },
 ];
 

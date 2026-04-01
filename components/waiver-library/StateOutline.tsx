@@ -61,7 +61,7 @@ export function StateOutline({ stateId }: StateOutlineProps) {
   if (!pathData) return null;
 
   return (
-    <div className="absolute left-[42%] sm:left-[38%] top-1/2 -translate-y-1/2 h-[90%] aspect-square pointer-events-none">
+    <div className="absolute left-[55%] sm:left-[50%] top-1/2 -translate-y-1/2 h-[90%] aspect-square pointer-events-none">
       <svg
         viewBox={pathData.viewBox}
         className="w-full h-full"
