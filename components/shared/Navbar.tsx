@@ -1414,13 +1414,10 @@ export default function Navbar() {
                     </Link>
                   )}
 
-                  {/* Provider/Caregiver section — hidden for family accounts */}
-                  {activeProfile?.type !== "family" && (
+                  {/* MedJobs — hidden for families and caregivers (they're already one) */}
+                  {activeProfile?.type !== "family" && activeProfile?.type !== "student" && (
                     <>
-                      {/* Divider before provider section */}
                       <div className="my-3 border-t border-gray-100" />
-
-                      {/* MedJobs */}
                       <Link
                         href="/medjobs"
                         className={`flex items-center gap-3 py-3 font-medium ${pathname.startsWith("/medjobs") ? "text-primary-600" : "text-gray-700 hover:text-primary-600"}`}
@@ -1431,8 +1428,13 @@ export default function Navbar() {
                         </svg>
                         MedJobs
                       </Link>
+                    </>
+                  )}
 
-                      {/* For Providers */}
+                  {/* For Providers — hidden for families and providers (they're already one) */}
+                  {activeProfile?.type !== "family" && activeProfile?.type !== "organization" && (
+                    <>
+                      <div className="my-3 border-t border-gray-100" />
                       <Link
                         href="/for-providers"
                         className={`flex items-center gap-3 py-3 font-medium ${pathname.startsWith("/for-providers") ? "text-primary-600" : "text-gray-700 hover:text-primary-600"}`}
