@@ -955,7 +955,29 @@ export async function POST(request: Request) {
       );
     }
 
-    // 2. Ensure user has a family profile
+    // 2. STRICT ACCOUNT SEPARATION: Check if user has any non-family profiles
+    // Provider, caregiver, and student accounts cannot send care inquiries
+    const { data: allProfiles } = await db
+      .from("business_profiles")
+      .select("id, type")
+      .eq("account_id", account.id)
+      .eq("is_active", true);
+
+    const hasNonFamilyProfile = allProfiles?.some(
+      (p: { type: string }) => p.type === "organization" || p.type === "caregiver" || p.type === "student"
+    );
+    const hasFamilyProfile = allProfiles?.some((p: { type: string }) => p.type === "family");
+
+    // Block if user has a non-family profile but no family profile
+    // This enforces strict account separation
+    if (hasNonFamilyProfile && !hasFamilyProfile) {
+      return NextResponse.json(
+        { error: "Care inquiries can only be sent from a family account. Please create a separate family account to connect with providers." },
+        { status: 403 }
+      );
+    }
+
+    // 3. Ensure user has a family profile
     let fromProfileId: string;
 
     const { data: existingFamily } = await db
