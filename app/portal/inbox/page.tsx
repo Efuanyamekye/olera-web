@@ -533,6 +533,22 @@ function InboxContent() {
     fetchConnections();
   }, [fetchConnections]);
 
+  // Poll for updates every 15 seconds (catches accepted connections, new messages)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchConnections();
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [fetchConnections]);
+
+  // Track if a manual refresh is in progress
+  const [refreshing, setRefreshing] = useState(false);
+  const handleManualRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchConnections();
+    setRefreshing(false);
+  }, [fetchConnections]);
+
   // Auto-switch to Requests tab when URL points to a pending provider-initiated request
   // This handles old email links redirected via next.config.ts (/portal/matches/:id → /portal/inbox?id=:id)
   useEffect(() => {
@@ -876,6 +892,8 @@ function InboxContent() {
         familyProfileId={familyProfileId || undefined}
         familyTab={familyTab}
         onFamilyTabChange={setFamilyTab}
+        onRefresh={handleManualRefresh}
+        refreshing={refreshing}
       />
 
       {/* Middle panel — request detail OR conversation */}

@@ -81,10 +81,10 @@ export async function POST(request: Request) {
 
     const profileIds = (profiles || []).map((p: { id: string }) => p.id);
 
-    // Fetch the connection
+    // Fetch the connection (include type to handle inquiry vs request flows)
     const { data: connection, error: fetchError } = await admin
       .from("connections")
-      .select("id, from_profile_id, to_profile_id, status, metadata")
+      .select("id, type, from_profile_id, to_profile_id, status, metadata")
       .eq("id", connectionId)
       .single();
 
@@ -125,79 +125,97 @@ export async function POST(request: Request) {
           return NextResponse.json({ error: `Failed to ${action}` }, { status: 500 });
         }
 
-        // Send email to the other party (fire-and-forget)
+        // Send email to the initiator (the one who started the connection)
+        // - type: "inquiry" → family initiated, provider is accepting/declining
+        // - type: "request" → provider initiated, family is accepting/declining
         try {
-          // The family is the one who sent the request (from_profile_id)
-          // The provider is to_profile_id (the one accepting/declining)
-          const [{ data: familyBp }, { data: providerBp }] = await Promise.all([
+          const isProviderRequest = connection.type === "request";
+
+          // Determine who initiated and who is responding based on connection type
+          const initiatorProfileId = connection.from_profile_id;
+          const responderProfileId = connection.to_profile_id;
+
+          const [{ data: initiatorBp }, { data: responderBp }] = await Promise.all([
             admin
               .from("business_profiles")
-              .select("email, display_name, account_id")
-              .eq("id", connection.from_profile_id)
+              .select("email, display_name, account_id, type")
+              .eq("id", initiatorProfileId)
               .single(),
             admin
               .from("business_profiles")
-              .select("display_name")
-              .eq("id", connection.to_profile_id)
+              .select("display_name, type")
+              .eq("id", responderProfileId)
               .single(),
           ]);
 
-          // Look up family auth email via accounts table
-          let familyEmail = familyBp?.email;
-          if (!familyEmail && familyBp?.account_id) {
+          // Look up initiator's auth email via accounts table
+          let initiatorEmail = initiatorBp?.email;
+          if (!initiatorEmail && initiatorBp?.account_id) {
             const { data: acct } = await admin
               .from("accounts")
               .select("user_id")
-              .eq("id", familyBp.account_id)
+              .eq("id", initiatorBp.account_id)
               .single();
             if (acct?.user_id) {
               const { data: { user: authUser } } = await admin.auth.admin.getUserById(acct.user_id);
-              familyEmail = authUser?.email;
+              initiatorEmail = authUser?.email;
             }
           }
 
-          if (familyEmail) {
+          if (initiatorEmail) {
+            // Customize email based on connection type
+            const responderName = responderBp?.display_name || (isProviderRequest ? "The family" : "A provider");
+            const initiatorName = initiatorBp?.display_name || "there";
+
+            const subject = action === "accept"
+              ? `${responderName} accepted your ${isProviderRequest ? "connection request" : "inquiry"} on Olera`
+              : `Update on your ${isProviderRequest ? "connection request" : "care inquiry"} on Olera`;
+
+            // Direct to the appropriate inbox view
+            const viewUrl = isProviderRequest
+              ? `${process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"}/portal/inbox?role=provider`
+              : `${process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"}/portal/inbox`;
+
             await sendEmail({
-              to: familyEmail,
-              subject: action === "accept"
-                ? `${providerBp?.display_name || "A provider"} accepted your inquiry on Olera`
-                : `Update on your care inquiry on Olera`,
+              to: initiatorEmail,
+              subject,
               html: connectionResponseEmail({
-                familyName: familyBp?.display_name || "there",
-                providerName: providerBp?.display_name || "The provider",
+                familyName: isProviderRequest ? responderName : initiatorName,
+                providerName: isProviderRequest ? initiatorName : responderName,
                 accepted: action === "accept",
-                viewUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"}/provider/connections`,
+                viewUrl,
               }),
               emailType: 'connection_response',
-              recipientType: 'family',
+              recipientType: isProviderRequest ? 'provider' : 'family',
             });
           }
         } catch (emailErr) {
           console.error(`[manage] ${action} email failed:`, emailErr);
         }
 
-        // Loops event (fire-and-forget)
+        // Loops event (fire-and-forget) — notify the initiator that their connection was accepted
         if (action === "accept") {
           try {
-            const { data: seekerBp } = await admin
+            const isProviderRequest = connection.type === "request";
+            const { data: initiatorBp } = await admin
               .from("business_profiles")
               .select("account_id")
               .eq("id", connection.from_profile_id)
               .single();
 
-            if (seekerBp?.account_id) {
+            if (initiatorBp?.account_id) {
               const { data: acct } = await admin
                 .from("accounts")
                 .select("user_id")
-                .eq("id", seekerBp.account_id)
+                .eq("id", initiatorBp.account_id)
                 .single();
               if (acct?.user_id) {
-                const { data: { user: seekerAuth } } = await admin.auth.admin.getUserById(acct.user_id);
-                if (seekerAuth?.email) {
+                const { data: { user: initiatorAuth } } = await admin.auth.admin.getUserById(acct.user_id);
+                if (initiatorAuth?.email) {
                   await sendLoopsEvent({
-                    email: seekerAuth.email,
+                    email: initiatorAuth.email,
                     eventName: "connection_accepted",
-                    audience: "seeker",
+                    audience: isProviderRequest ? "provider" : "seeker",
                   });
                 }
               }

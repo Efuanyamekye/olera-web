@@ -46,6 +46,10 @@ interface ConversationListProps {
   familyTab?: FamilyTab;
   /** Callback when family tab changes */
   onFamilyTabChange?: (tab: FamilyTab) => void;
+  /** Callback for manual refresh */
+  onRefresh?: () => void;
+  /** Whether a refresh is currently in progress */
+  refreshing?: boolean;
 }
 
 /** Deterministic gradient for fallback avatars */
@@ -320,6 +324,8 @@ export default function ConversationList({
   familyProfileId,
   familyTab: familyTabProp,
   onFamilyTabChange,
+  onRefresh,
+  refreshing = false,
 }: ConversationListProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -707,15 +713,36 @@ export default function ConversationList({
             }`}
           >
             <h2 className="text-2xl font-display font-bold text-gray-900">Inbox</h2>
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="w-11 h-11 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-colors"
-              aria-label="Search messages"
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Refresh button */}
+              {onRefresh && (
+                <button
+                  onClick={onRefresh}
+                  disabled={refreshing}
+                  className="w-11 h-11 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  aria-label="Refresh inbox"
+                >
+                  <svg
+                    className={`w-5 h-5 text-gray-600 ${refreshing ? "animate-spin" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+              )}
+              {/* Search button */}
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="w-11 h-11 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 transition-colors"
+                aria-label="Search messages"
+              >
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Search mode */}
