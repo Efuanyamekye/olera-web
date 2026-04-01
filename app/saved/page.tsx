@@ -34,10 +34,89 @@ function toProvider(entry: {
 }
 
 export default function SavedProvidersPage() {
-  const { user, openAuth } = useAuth();
+  const { user, activeProfile, profiles, openAuth } = useAuth();
   const { savedProviders } = useSavedProviders();
   const [shareLabel, setShareLabel] = useState<"share" | "copied">("share");
   const [showToast, setShowToast] = useState(false);
+
+  // Check if user is logged in but doesn't have a family profile
+  const hasFamilyProfile = profiles.some((p) => p.type === "family");
+  const isNonFamilyUser = user && !hasFamilyProfile;
+
+  // Dynamic label for the account type hint
+  const accountTypeLabel = activeProfile?.type === "organization"
+    ? "provider"
+    : (activeProfile?.type === "caregiver" || activeProfile?.type === "student")
+    ? "caregiver"
+    : "current";
+
+  // Show conversion page for non-family logged-in users
+  if (isNonFamilyUser) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-8 sm:py-10">
+          {/* Header */}
+          <div className="mb-6">
+            <h1 className="font-display text-display-sm sm:text-display-md font-semibold text-gray-900 tracking-tight">
+              Saved
+            </h1>
+            <p className="text-sm text-gray-500 mt-1">
+              Save providers you&apos;re interested in
+            </p>
+          </div>
+
+          {/* Conversion card */}
+          <div className="relative w-full max-w-lg">
+            <div className="relative bg-white/80 backdrop-blur-sm border border-gray-200/80 rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.05),0_8px_24px_rgba(0,0,0,0.04)] overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600" />
+
+              <div className="px-8 py-10 sm:px-10 sm:py-12 text-center">
+                <div className="relative inline-flex mb-6">
+                  <div className="absolute inset-0 bg-primary-400/20 rounded-2xl blur-xl scale-150" />
+                  <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg shadow-primary-500/25">
+                    <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                  </div>
+                </div>
+
+                <h2 className="text-xl font-display font-bold text-gray-900 mb-2">
+                  Save providers with a family account
+                </h2>
+
+                <p className="text-[15px] text-gray-500 leading-relaxed mb-6 max-w-sm mx-auto">
+                  Looking for care for yourself or a loved one? Create a family account to save and compare providers.
+                </p>
+
+                <button
+                  onClick={() => openAuth({ defaultMode: "sign-up", intent: "family" })}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white text-sm font-semibold rounded-xl transition-all shadow-md shadow-primary-600/25 hover:shadow-lg hover:shadow-primary-600/30 active:scale-[0.98]"
+                >
+                  Create Family Account
+                </button>
+
+                <p className="text-sm text-gray-500 mt-4">
+                  Already have a family account?{" "}
+                  <button
+                    onClick={() => openAuth({ defaultMode: "sign-in", intent: "family" })}
+                    className="text-primary-600 font-medium hover:underline"
+                  >
+                    Sign in
+                  </button>
+                </p>
+
+                <div className="mt-8 pt-6 border-t border-gray-100">
+                  <p className="text-xs text-gray-400">
+                    Use a different email than your {accountTypeLabel} account. Family accounts are separate for privacy.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   async function handleShare() {
     const url = typeof window !== "undefined" ? window.location.href : "";

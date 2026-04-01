@@ -79,7 +79,10 @@ export default function ReviewsSection({
   placeId,
   hideBorder = false,
 }: ReviewsSectionProps) {
-  const { user, account } = useAuth();
+  const { user, account, activeProfile } = useAuth();
+
+  // Only family profiles can write reviews (providers/caregivers cannot)
+  const canWriteReview = !activeProfile || activeProfile.type === "family";
 
   // Data
   const [realReviews, setRealReviews] = useState<Review[]>([]);
@@ -470,13 +473,15 @@ export default function ReviewsSection({
               <div />
             )}
 
-            {/* Add review button */}
-            <button
-              onClick={() => setReviewModalOpen(true)}
-              className="px-4 py-2 text-sm font-medium text-primary-600 border border-primary-600 rounded-xl hover:bg-primary-50 transition-colors"
-            >
-              Add review
-            </button>
+            {/* Add review button (hidden for non-family profiles) */}
+            {canWriteReview && (
+              <button
+                onClick={() => setReviewModalOpen(true)}
+                className="px-4 py-2 text-sm font-medium text-primary-600 border border-primary-600 rounded-xl hover:bg-primary-50 transition-colors"
+              >
+                Add review
+              </button>
+            )}
           </div>
         </>
       ) : (
@@ -485,14 +490,18 @@ export default function ReviewsSection({
           <StarIcon className="w-10 h-10 text-gray-300 mx-auto mb-3" filled={false} />
           <p className="text-gray-500 font-medium">No reviews yet.</p>
           <p className="text-sm text-gray-400 mt-1 mb-4">
-            Be the first to share your experience with this provider.
+            {canWriteReview
+              ? "Be the first to share your experience with this provider."
+              : "No family reviews have been shared yet."}
           </p>
-          <button
-            onClick={() => setReviewModalOpen(true)}
-            className="px-4 py-2 text-sm font-medium text-primary-600 border border-primary-600 rounded-xl hover:bg-primary-50 transition-colors"
-          >
-            Write a review
-          </button>
+          {canWriteReview && (
+            <button
+              onClick={() => setReviewModalOpen(true)}
+              className="px-4 py-2 text-sm font-medium text-primary-600 border border-primary-600 rounded-xl hover:bg-primary-50 transition-colors"
+            >
+              Write a review
+            </button>
+          )}
         </div>
       )}
 

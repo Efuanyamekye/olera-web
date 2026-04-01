@@ -191,7 +191,16 @@ export default function UnifiedAuthModal({
 
       if (authError) {
         if (authError.message.includes("already registered")) {
-          setError("This email is already registered. Try signing in instead.");
+          // Provide a clearer message when user is trying to create a family account
+          // but their email is already used for a provider/caregiver account
+          if (options.intent === "family") {
+            setError(
+              "This email is already registered with another account. " +
+              "Please use a different email for your family account, or sign in to your existing account."
+            );
+          } else {
+            setError("This email is already registered. Try signing in instead.");
+          }
         } else {
           setError(authError.message);
         }
