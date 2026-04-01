@@ -204,13 +204,12 @@ export default function Navbar() {
   // Family or not logged in → main site
   // Provider (organization) → Provider dashboard
   // MedJobs caregiver (student or legacy caregiver) → MedJobs portal
-  const logoHref = !activeProfile
-    ? "/"
-    : activeProfile.type === "organization"
-    ? "/provider"
-    : activeProfile.type === "student" || activeProfile.type === "caregiver"
-    ? "/portal/medjobs"
-    : "/";
+  // Logo destination based on profile type (use has* checks for faster detection after login)
+  const logoHref = hasProviderProfile && !hasFamilyProfile && !hasStudentProfile
+    ? "/provider"  // Provider-only account
+    : hasStudentProfile
+    ? "/portal/medjobs"  // Caregiver account
+    : "/";  // Family or logged out
 
   useEffect(() => {
     if (isMobileMenuOpen && hasSession) {
