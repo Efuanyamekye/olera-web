@@ -555,9 +555,7 @@ export default function UnifiedAuthModal({
     }
 
     // Check if user already has a provider profile (from cache)
-    const providerProfile = (profiles || []).find(
-      (p) => p.type === "organization" || p.type === "caregiver"
-    );
+    const providerProfile = (profiles || []).find((p) => p.type === "organization");
     const hasProviderProfile = !!providerProfile;
 
     // Provider intent — route to provider onboarding (not /welcome)

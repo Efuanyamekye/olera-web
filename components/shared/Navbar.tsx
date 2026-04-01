@@ -39,20 +39,16 @@ export default function Navbar() {
   const unreadInboxCount = useUnreadInboxCount(activeProfile ? [activeProfile.id] : []);
   // For provider inbox badge: only count unread for the ACTIVE provider profile, not all providers
   // This ensures proper data isolation when users have multiple provider profiles
-  const activeProviderProfileId = activeProfile && (activeProfile.type === "organization" || activeProfile.type === "caregiver")
-    ? activeProfile.id
-    : null;
+  const activeProviderProfileId = activeProfile?.type === "organization" ? activeProfile.id : null;
   const providerInboxCount = useUnreadInboxCount(activeProviderProfileId ? [activeProviderProfileId] : []);
   // Provider profile ID for badge counts
-  const activeProviderId =
-    activeProfile && (activeProfile.type === "organization" || activeProfile.type === "caregiver")
-      ? activeProfile.id
-      : (profiles || []).find((p) => p.type === "organization" || p.type === "caregiver")?.id ?? null;
+  const activeProviderId = activeProfile?.type === "organization"
+    ? activeProfile.id
+    : (profiles || []).find((p) => p.type === "organization")?.id ?? null;
   // Use activeProfile slug if it's a provider, otherwise fall back to first provider
-  const activeProviderSlug =
-    activeProfile && (activeProfile.type === "organization" || activeProfile.type === "caregiver")
-      ? activeProfile.slug
-      : (profiles || []).find((p) => p.type === "organization" || p.type === "caregiver")?.slug ?? null;
+  const activeProviderSlug = activeProfile?.type === "organization"
+    ? activeProfile.slug
+    : (profiles || []).find((p) => p.type === "organization")?.slug ?? null;
   const qnaCount = useUnreadQnACount(activeProviderSlug, activeProviderId);
   const familyProfileForMatches = (profiles || []).find((p) => p.type === "family");
   const { pendingCount: matchesPendingCount } = useInterestedProviders(
@@ -113,16 +109,12 @@ export default function Navbar() {
   const hasSession = !!user;
   // Mode switcher — shown when user has both a family and a provider profile
   const hasFamilyProfile = (profiles || []).some((p) => p.type === "family");
-  const hasProviderProfile = (profiles || []).some(
-    (p) => p.type === "organization" || p.type === "caregiver"
-  );
+  const hasProviderProfile = (profiles || []).some((p) => p.type === "organization");
   const showModeSwitcher = hasSession && hasFamilyProfile && hasProviderProfile;
 
   // Profile IDs for hub switching — used by the mode switcher to also switch activeProfile
   const familyProfileId = (profiles || []).find((p) => p.type === "family")?.id;
-  const providerProfileId = (profiles || []).find(
-    (p) => p.type === "organization" || p.type === "caregiver"
-  )?.id;
+  const providerProfileId = (profiles || []).find((p) => p.type === "organization")?.id;
 
   // Show user's actual name in the dropdown, not the org/profile name
   const displayName = account?.display_name || user?.email || "";
@@ -205,11 +197,13 @@ export default function Navbar() {
   // Provider (organization) → Provider dashboard
   // MedJobs caregiver (student or legacy caregiver) → MedJobs portal
   // Logo destination based on profile type (use has* checks for faster detection after login)
-  const logoHref = hasProviderProfile && !hasFamilyProfile && !hasStudentProfile
-    ? "/provider"  // Provider-only account
+  // Priority: Provider > Student > Family/logged-out
+  // If user has multiple profile types, provider takes precedence (they can use mode switcher)
+  const logoHref = hasProviderProfile
+    ? "/provider"
     : hasStudentProfile
-    ? "/portal/medjobs"  // Caregiver account
-    : "/";  // Family or logged out
+    ? "/portal/medjobs"
+    : "/";
 
   useEffect(() => {
     if (isMobileMenuOpen && hasSession) {
