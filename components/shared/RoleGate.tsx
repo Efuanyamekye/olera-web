@@ -121,7 +121,8 @@ function formatType(type: ProfileType): string {
     case "organization":
       return "organization";
     case "caregiver":
-      return "private caregiver";
+    case "student":
+      return "caregiver";
     case "family":
       return "family";
     default:

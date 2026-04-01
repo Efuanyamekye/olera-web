@@ -18,7 +18,7 @@ import GooglePlaceSearch from "@/components/providers/GooglePlaceSearch";
 import type { Provider } from "@/lib/types/provider";
 
 type ProviderType = "organization" | "caregiver";
-type Step = "resume" | 1 | "caregiver-coming-soon" | "search" | "verify" | 2 | 3 | 4 | 5;
+type Step = "resume" | 1 | "search" | "verify" | 2 | 3 | 4 | 5;
 
 const TYPE_KEY = "olera_onboarding_provider_type";
 const DATA_KEY = "olera_provider_wizard_data";
@@ -135,10 +135,6 @@ function ProviderOnboardingContent() {
   const [submitError, setSubmitError] = useState("");
   // Track if we're still checking for landing page prefill (to avoid flashing step 1)
   const [checkingPrefill, setCheckingPrefill] = useState(true);
-  // Caregiver coming-soon notify state
-  const [caregiverEmail, setCaregiverEmail] = useState(user?.email || "");
-  const [caregiverNotified, setCaregiverNotified] = useState(false);
-  const [caregiverNotifying, setCaregiverNotifying] = useState(false);
   // Search state
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Provider[]>([]);
@@ -246,7 +242,18 @@ function ProviderOnboardingContent() {
     // Check for a previously started session (only if no prefill)
     try {
       const savedType = localStorage.getItem(TYPE_KEY) as ProviderType | null;
-      if (savedType === "organization" || savedType === "caregiver") {
+
+      // Legacy caregiver sessions (from "coming soon" era) → redirect to MedJobs
+      if (savedType === "caregiver") {
+        localStorage.removeItem(TYPE_KEY);
+        localStorage.removeItem(DATA_KEY);
+        localStorage.removeItem(STEP_KEY);
+        localStorage.removeItem(SEARCH_KEY);
+        router.push("/medjobs/apply");
+        return;
+      }
+
+      if (savedType === "organization") {
         setProviderType(savedType);
         const savedData = localStorage.getItem(DATA_KEY);
         if (savedData) {
@@ -453,8 +460,8 @@ function ProviderOnboardingContent() {
         }
       }
     } else {
-      // Caregiver flow is disabled — send to Coming Soon
-      setStep("caregiver-coming-soon");
+      // Caregiver flow redirects to MedJobs
+      router.push("/medjobs/apply");
     }
   };
 
@@ -754,7 +761,7 @@ function ProviderOnboardingContent() {
   const wizardTotal = 6;
   const wizardCurrentMap: Record<string, number> = { "1": 1, search: 2, verify: 2, "2": 3, "3": 4, "4": 5, "5": 6 };
   const wizardCurrentStep = wizardCurrentMap[String(step)] ?? 1;
-  const showWizardNav = step !== "resume" && step !== "caregiver-coming-soon" && step !== "search";
+  const showWizardNav = step !== "resume" && step !== "search";
 
   // Show loading while auth is loading or while checking for landing page prefill
   if (isLoading || checkingPrefill) {
@@ -901,10 +908,10 @@ function ProviderOnboardingContent() {
                 </p>
               </button>
 
-              {/* Private Caregiver */}
+              {/* Private Caregiver — redirects to MedJobs */}
               <button
                 type="button"
-                onClick={() => setStep("caregiver-coming-soon")}
+                onClick={() => router.push("/medjobs/apply")}
                 className="group flex flex-col items-center text-center p-4 lg:p-10 rounded-2xl border-2 border-gray-200 hover:border-primary-400 hover:shadow-md transition-all duration-200 cursor-pointer bg-white"
               >
                 <div className="w-14 h-14 lg:w-20 lg:h-20 rounded-xl lg:rounded-2xl bg-primary-50 group-hover:bg-primary-100 flex items-center justify-center mb-3 lg:mb-6 transition-colors duration-200">
@@ -918,98 +925,6 @@ function ProviderOnboardingContent() {
                 </p>
               </button>
             </div>
-          </div>
-        )}
-
-        {/* ── Caregiver Coming Soon ── */}
-        {step === "caregiver-coming-soon" && (
-          <div className="flex flex-col items-center justify-center text-center min-h-[60vh] w-full max-w-md mx-auto px-4">
-            {/* Icon */}
-            <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-primary-50 flex items-center justify-center mb-5 lg:mb-6">
-              <svg className="w-8 h-8 lg:w-9 lg:h-9 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </div>
-
-            {/* Badge */}
-            <span className="inline-flex items-center px-3.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-primary-600 border border-primary-200 mb-4 lg:mb-5">
-              Coming Soon
-            </span>
-
-            {/* Heading */}
-            <h1 className="text-2xl lg:text-3xl font-display font-bold text-gray-900 tracking-tight mb-2 lg:mb-3">
-              Private Caregiver
-            </h1>
-
-            <p className="text-sm lg:text-base text-gray-500 max-w-sm leading-relaxed mb-6 lg:mb-8">
-              Individual caregiver onboarding is coming soon. Get notified when it launches.
-            </p>
-
-            {/* Notify form */}
-            {!caregiverNotified ? (
-              <form
-                onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (!caregiverEmail.trim()) return;
-                  setCaregiverNotifying(true);
-                  try {
-                    if (isSupabaseConfigured()) {
-                      const supabase = createClient();
-                      const { error } = await supabase.from("feature_waitlist").upsert(
-                        { feature: "caregiver_onboarding", email: caregiverEmail.trim(), profile_id: null },
-                        { onConflict: "feature,email" },
-                      );
-                      if (error) throw error;
-                    }
-                    setCaregiverNotified(true);
-                  } catch {
-                    alert("Something went wrong. Please try again.");
-                  } finally {
-                    setCaregiverNotifying(false);
-                  }
-                }}
-                className="w-full max-w-sm mb-3"
-              >
-                <div className="flex items-center border border-gray-200 rounded-xl bg-white overflow-hidden">
-                  <input
-                    type="email"
-                    value={caregiverEmail}
-                    onChange={(e) => setCaregiverEmail(e.target.value)}
-                    placeholder="Your email"
-                    required
-                    className="flex-1 px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none"
-                  />
-                  <button
-                    type="submit"
-                    disabled={caregiverNotifying}
-                    className="px-5 py-2.5 mr-1.5 bg-primary-500 hover:bg-primary-600 disabled:opacity-50 text-white text-sm font-semibold rounded-lg transition-colors shrink-0"
-                  >
-                    {caregiverNotifying ? "..." : "Notify me"}
-                  </button>
-                </div>
-                <p className="text-xs text-gray-400 mt-2.5">
-                  We&apos;ll send one email when caregiver onboarding launches. No spam.
-                </p>
-              </form>
-            ) : (
-              <div className="mb-8">
-                <p className="text-sm text-primary-600 font-medium">
-                  You&apos;re on the list. We&apos;ll let you know!
-                </p>
-              </div>
-            )}
-
-            {/* Back button */}
-            <button
-              type="button"
-              onClick={() => setStep(1)}
-              className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors mt-4"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-              </svg>
-              Back
-            </button>
           </div>
         )}
 
