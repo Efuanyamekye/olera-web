@@ -17,7 +17,6 @@ export default function ConditionalFooter() {
   if (
     pathname.startsWith("/admin") ||
     pathname.startsWith("/portal/inbox") ||
-    pathname.startsWith("/portal/medjobs") ||
     pathname.startsWith("/provider/inbox") ||
     pathname.startsWith("/provider/onboarding") ||
     pathname.startsWith("/for-providers/claim") ||
