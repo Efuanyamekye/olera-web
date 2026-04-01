@@ -117,6 +117,7 @@ export default function Navbar() {
   const hasProviderProfile = (profiles || []).some(
     (p) => p.type === "organization" || p.type === "caregiver"
   );
+  const orgProfileCount = (profiles || []).filter((p) => p.type === "organization").length;
   const showModeSwitcher = hasSession && hasFamilyProfile && hasProviderProfile;
 
   // Profile IDs for hub switching — used by the mode switcher to also switch activeProfile
@@ -131,9 +132,9 @@ export default function Navbar() {
 
   // Show the contextual profile type based on which portal the user is in,
   // not the database-stored activeProfile (which may be stale).
-  const hasStudentProfile = (profiles || []).some((p) => p.type === "student");
+  const hasStudentProfile = (profiles || []).some((p) => p.type === "student" || p.type === "caregiver");
   const contextProfileType = isProviderPortal
-    ? (profiles || []).find((p) => p.type === "organization" || p.type === "caregiver")?.type
+    ? (profiles || []).find((p) => p.type === "organization")?.type
     : hasStudentProfile
     ? "caregiver"
     : hasFamilyProfile ? "family" : activeProfile?.type;
@@ -488,15 +489,15 @@ export default function Navbar() {
           )}
         </div>
 
-      {/* Profile switcher - only show on provider side where switching between org profiles is useful */}
-      {isProviderPortal && (
+      {/* Profile switcher - only show when user has multiple org profiles (need to switch between them) */}
+      {orgProfileCount > 1 && (
         <>
           <div className="mx-4 border-t border-gray-100" />
           <div className="px-2 py-1">
             <ProfileSwitcher
               onSwitch={() => setIsUserMenuOpen(false)}
               variant="dropdown"
-              allowedTypes={["organization", "caregiver"]}
+              allowedTypes={["organization"]}
               navigateTo="/provider"
             />
           </div>
@@ -661,8 +662,8 @@ export default function Navbar() {
             {/* ── CENTER — Primary navigation (page-centered, hidden on mobile + inbox) ── */}
             {!isMinimalNav && (
               <div className="hidden lg:flex items-center gap-1">
-                {(activeProfile?.type === "student" || activeProfile?.type === "caregiver") ? (
-                  /* Caregiver (MedJobs) nav links - includes legacy "caregiver" type */
+                {hasStudentProfile ? (
+                  /* Caregiver (MedJobs) nav links - use hasStudentProfile for faster detection after login */
                   <>
                     <Link
                       href="/portal/medjobs"
@@ -783,9 +784,9 @@ export default function Navbar() {
                       </div>
                     )}
 
-                    {/* Simple nav links - filter out MedJobs for caregivers and families */}
+                    {/* Simple nav links - filter out MedJobs for families (students handled above) */}
                     {NAV_LINKS
-                      .filter((link) => !(link.href === "/medjobs" && (activeProfile?.type === "student" || activeProfile?.type === "caregiver" || activeProfile?.type === "family")))
+                      .filter((link) => !(link.href === "/medjobs" && hasFamilyProfile))
                       .map((link) => {
                         const isActive = pathname.startsWith(link.href);
                         return (
