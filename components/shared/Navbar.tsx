@@ -658,10 +658,43 @@ export default function Navbar() {
             </div>
 
             {/* ── CENTER — Primary navigation (page-centered, hidden on mobile + inbox) ── */}
-            {/* Caregivers use dropdown only - no center nav */}
-            {!isMinimalNav && activeProfile?.type !== "student" && (
+            {!isMinimalNav && (
               <div className="hidden lg:flex items-center gap-1">
-                {isProviderPortal ? (
+                {activeProfile?.type === "student" ? (
+                  /* Caregiver (MedJobs) nav links */
+                  <>
+                    <Link
+                      href="/portal/medjobs"
+                      className={`relative px-4 py-2 text-[15px] font-medium transition-colors ${
+                        pathname === "/portal/medjobs"
+                          ? "text-primary-600"
+                          : "text-gray-700 hover:text-gray-900"
+                      }`}
+                    >
+                      Application
+                    </Link>
+                    <Link
+                      href="/portal/medjobs/jobs"
+                      className={`relative px-4 py-2 text-[15px] font-medium transition-colors ${
+                        pathname.startsWith("/portal/medjobs/jobs")
+                          ? "text-primary-600"
+                          : "text-gray-700 hover:text-gray-900"
+                      }`}
+                    >
+                      Open Jobs
+                    </Link>
+                    <Link
+                      href="/portal/medjobs/interviews"
+                      className={`relative px-4 py-2 text-[15px] font-medium transition-colors ${
+                        pathname.startsWith("/portal/medjobs/interviews")
+                          ? "text-primary-600"
+                          : "text-gray-700 hover:text-gray-900"
+                      }`}
+                    >
+                      Interviews
+                    </Link>
+                  </>
+                ) : isProviderPortal ? (
                   /* Provider Hub nav links - only shown on /provider/* URLs */
                   <>
                     {/* Home */}
