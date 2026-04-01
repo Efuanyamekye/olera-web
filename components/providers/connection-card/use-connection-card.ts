@@ -742,6 +742,11 @@ export function useConnectionCard(props: ConnectionCardProps) {
 
     // Non-family profile guard
     isNonFamilyProfile,
+    accountTypeLabel: activeProfile?.type === "organization"
+      ? "provider"
+      : (activeProfile?.type === "caregiver" || activeProfile?.type === "student")
+      ? "caregiver"
+      : "current",
     openAuth,
   };
 }

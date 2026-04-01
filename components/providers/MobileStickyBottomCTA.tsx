@@ -441,7 +441,7 @@ export default function MobileStickyBottomCTA({
               Create Family Account
             </button>
             <p className="text-xs text-gray-400 mt-3">
-              Use a different email than your current account.
+              Use a different email than your {hook.accountTypeLabel} account.
             </p>
           </div>
         )}
