@@ -177,6 +177,13 @@ export default function UnifiedAuthModal({
         return;
       }
 
+      // If user is already logged in with a DIFFERENT email, sign out first.
+      // This handles the case where a provider creates a separate family account.
+      if (user && user.email?.toLowerCase() !== email.toLowerCase()) {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+      }
+
       // Use implicit-flow client for signUp to avoid PKCE code_challenge.
       // The SSR browser client forces PKCE, but verifyOtp() can't send
       // the code_verifier back, causing 403 on verification.
@@ -561,6 +568,15 @@ export default function UnifiedAuthModal({
       } else {
         router.push("/provider/onboarding");
       }
+      return;
+    }
+
+    // Family intent — route to family welcome page (skip stale profile checks)
+    // This handles the case where a provider creates a separate family account.
+    if (options.intent === "family") {
+      onClose();
+      const currentPath = window.location.pathname + window.location.search;
+      router.push(`/welcome?next=${encodeURIComponent(currentPath)}`);
       return;
     }
 
