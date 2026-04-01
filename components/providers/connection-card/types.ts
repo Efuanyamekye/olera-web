@@ -9,7 +9,8 @@ export type CardState =
   | "email_capture" // State 2b: Guest email capture (after intent)
   | "returning" // State 3: Returning user (prior connection or past)
   | "enrichment" // Post-submit: optional who/when enrichment
-  | "connected"; // State 4: Existing connection (pending or accepted)
+  | "connected" // State 4: Existing connection (pending or accepted)
+  | "provider_email_block"; // Guest email belongs to provider account
 
 export type IntentStep = 0 | 1;
 

@@ -91,6 +91,39 @@ export default function ConnectionCard(props: ConnectionCardProps) {
             connectionId={hook.connectionId}
           />
         )}
+
+        {hook.cardState === "provider_email_block" && (
+          <div className="text-center">
+            <div className="w-14 h-14 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-7 h-7 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+              Provider email detected
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              The email <span className="font-medium text-gray-800">{hook.blockedEmail}</span> is linked to a provider account. To send care inquiries, please use a different email.
+            </p>
+            <div className="space-y-2">
+              <button
+                onClick={hook.resetFromProviderEmailBlock}
+                className="w-full py-3 px-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-colors"
+              >
+                Use Different Email
+              </button>
+              <button
+                onClick={() => hook.openAuth({ defaultMode: "sign-in" })}
+                className="w-full py-3 px-4 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl border border-gray-300 transition-colors"
+              >
+                Sign In Instead
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 mt-3">
+              Family accounts require a separate email from provider accounts.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Bottom section — persistent */}

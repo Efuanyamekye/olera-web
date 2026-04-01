@@ -95,6 +95,29 @@ async function handleGuestConnection({
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // PROVIDER EMAIL CHECK
+  // Block if this email belongs to a provider/caregiver account.
+  // Family accounts are allowed to proceed (they'll just get logged in).
+  // ═══════════════════════════════════════════════════════════════════════════
+  const { data: existingProviderProfile } = await db
+    .from("business_profiles")
+    .select("id, type")
+    .eq("email", normalizedEmail)
+    .in("type", ["organization", "caregiver", "student"])
+    .limit(1)
+    .maybeSingle();
+
+  if (existingProviderProfile) {
+    return NextResponse.json(
+      {
+        error: "This email is linked to a provider account. To send care inquiries, please use a different email or sign in to create a separate family account.",
+        code: "PROVIDER_EMAIL",
+      },
+      { status: 409 }
+    );
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // INSTANT ACCOUNT CREATION
   // Create real Supabase user + account + profile (not placeholder)
   // User gets instant session via tokenHash returned to client
@@ -227,6 +250,35 @@ async function handleGuestConnection({
             }
           } catch (verifyErr) {
             console.error("[guest-connection] Server-side verify error for auth-only user:", verifyErr);
+          }
+        }
+
+        // Check if this auth user has a provider profile on their account
+        // If so, block them instead of creating a family profile
+        if (userId) {
+          const { data: existingAccount } = await db
+            .from("accounts")
+            .select("id")
+            .eq("user_id", userId)
+            .single();
+
+          if (existingAccount) {
+            const { data: providerProfiles } = await db
+              .from("business_profiles")
+              .select("id, type")
+              .eq("account_id", existingAccount.id)
+              .in("type", ["organization", "caregiver", "student"])
+              .limit(1);
+
+            if (providerProfiles && providerProfiles.length > 0) {
+              return NextResponse.json(
+                {
+                  error: "This email is linked to a provider account. To send care inquiries, please use a different email or sign in to create a separate family account.",
+                  code: "PROVIDER_EMAIL",
+                },
+                { status: 409 }
+              );
+            }
           }
         }
 
@@ -644,43 +696,46 @@ async function handleGuestConnection({
     if (actErr) console.error("[seeker_activity] connection_sent insert failed:", actErr);
   });
 
-  // Send "Verify your email" email (user already has instant session via tokenHash)
-  try {
-    const verifyEmailLogId = await reserveEmailLogId({
-      to: normalizedEmail,
-      subject: `Verify your email — Olera`,
-      emailType: "verify_email",
-      recipientType: "family",
-    });
-
-    const verifyDest = appendTrackingParams("/portal/inbox", verifyEmailLogId);
-
-    // Generate a verification link for the email
-    const { data: verifyLinkData, error: verifyLinkError } = await authClient.auth.admin.generateLink({
-      type: "magiclink",
-      email: normalizedEmail,
-      options: {
-        redirectTo: `${siteUrl}/auth/magic-link?next=${encodeURIComponent(verifyDest)}&verify=true`,
-      },
-    });
-
-    if (!verifyLinkError && verifyLinkData?.properties?.action_link) {
-      await sendEmail({
+  // Send "Verify your email" email ONLY for new users
+  // Returning family users who submit while not logged in shouldn't get welcome emails
+  if (isNewUser) {
+    try {
+      const verifyEmailLogId = await reserveEmailLogId({
         to: normalizedEmail,
         subject: `Verify your email — Olera`,
-        html: verifyEmailEmail({
-          familyName: firstName || "there",
-          providerName,
-          verifyUrl: verifyLinkData.properties.action_link,
-        }),
-        emailType: 'verify_email',
-        recipientType: 'family',
-        emailLogId: verifyEmailLogId ?? undefined,
+        emailType: "verify_email",
+        recipientType: "family",
       });
+
+      const verifyDest = appendTrackingParams("/portal/inbox", verifyEmailLogId);
+
+      // Generate a verification link for the email
+      const { data: verifyLinkData, error: verifyLinkError } = await authClient.auth.admin.generateLink({
+        type: "magiclink",
+        email: normalizedEmail,
+        options: {
+          redirectTo: `${siteUrl}/auth/magic-link?next=${encodeURIComponent(verifyDest)}&verify=true`,
+        },
+      });
+
+      if (!verifyLinkError && verifyLinkData?.properties?.action_link) {
+        await sendEmail({
+          to: normalizedEmail,
+          subject: `Verify your email — Olera`,
+          html: verifyEmailEmail({
+            familyName: firstName || "there",
+            providerName,
+            verifyUrl: verifyLinkData.properties.action_link,
+          }),
+          emailType: 'verify_email',
+          recipientType: 'family',
+          emailLogId: verifyEmailLogId ?? undefined,
+        });
+      }
+    } catch (emailErr) {
+      console.error("Failed to send verify email:", emailErr);
+      // Non-blocking — user has instant session, verification is optional
     }
-  } catch (emailErr) {
-    console.error("Failed to send verify email:", emailErr);
-    // Non-blocking — user has instant session, verification is optional
   }
 
   // Provider notifications (fire-and-forget)
