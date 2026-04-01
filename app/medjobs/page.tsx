@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import CaregiverRedirect from "@/components/medjobs/CaregiverRedirect";
 
 export const metadata: Metadata = {
   title: "MedJobs — Student Caregiver Talent Marketplace | Olera",
@@ -86,6 +87,8 @@ const STUDENT_FEATURES = [
 export default function MedJobsPage() {
   return (
     <main className="bg-white">
+      {/* Redirect logged-in caregivers to their dashboard */}
+      <CaregiverRedirect />
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-gray-50 to-white" />

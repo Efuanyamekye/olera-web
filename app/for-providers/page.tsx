@@ -7,6 +7,7 @@ import BenefitsSection from "@/components/for-providers/BenefitsSection";
 import LeadershipSection from "@/components/for-providers/LeadershipSection";
 import FAQSection from "@/components/for-providers/FAQSection";
 import BottomCTASection from "@/components/for-providers/BottomCTASection";
+import ProviderRedirect from "@/components/for-providers/ProviderRedirect";
 
 export const metadata: Metadata = {
   title: "For Providers | Reach More Families on Olera",
@@ -34,6 +35,8 @@ export const metadata: Metadata = {
 export default function ForProvidersPage() {
   return (
     <main>
+      {/* Redirect logged-in providers to their dashboard */}
+      <ProviderRedirect />
       <HeroSection />
       <EasyToConnectSection />
       <StatsSection />
