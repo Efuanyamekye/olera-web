@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useSavedProviders } from "@/hooks/use-saved-providers";
 import type { CardImageType } from "@/lib/types/provider";
 import PricingEducationBadge from "@/components/providers/PricingEducationBadge";
@@ -84,9 +85,40 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
   const [imgFailed, setImgFailed] = useState(false);
   const [showPricingInfo, setShowPricingInfo] = useState(false);
   const [showStaffInfo, setShowStaffInfo] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const { activeProfile, openAuth } = useAuth();
   const { isSaved: checkSaved, toggleSave } = useSavedProviders();
   const isSaved = checkSaved(provider.id);
   const displayedHighlights = provider.highlights?.slice(0, 3) || [];
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const heartButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Check if user is a non-family profile
+  const isNonFamilyProfile = activeProfile && activeProfile.type !== "family";
+
+  // Dynamic label for account type hint
+  const accountTypeLabel = activeProfile?.type === "organization"
+    ? "provider"
+    : (activeProfile?.type === "caregiver" || activeProfile?.type === "student")
+    ? "caregiver"
+    : "current";
+
+  // Close tooltip on click outside
+  useEffect(() => {
+    if (!showTooltip) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(e.target as Node) &&
+        heartButtonRef.current &&
+        !heartButtonRef.current.contains(e.target as Node)
+      ) {
+        setShowTooltip(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showTooltip]);
 
   // Use images array if available, otherwise fall back to single image
   const images = provider.images && provider.images.length > 0
@@ -225,9 +257,14 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
 
           {/* Heart/Save Button - Larger touch target with save state */}
           <button
+            ref={heartButtonRef}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+              if (isNonFamilyProfile) {
+                setShowTooltip(true);
+                return;
+              }
               toggleSave({
                 providerId: provider.id,
                 slug: provider.slug,
@@ -255,6 +292,36 @@ export default function ProviderCard({ provider }: ProviderCardProps) {
               />
             </svg>
           </button>
+
+          {/* Tooltip for non-family users */}
+          {showTooltip && (
+            <div
+              ref={tooltipRef}
+              className="absolute top-12 right-0 z-30 w-64 bg-white rounded-xl shadow-lg border border-gray-200 p-3 animate-in fade-in slide-in-from-top-1 duration-150"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <p className="text-sm text-gray-600 mb-2">
+                Save providers with a family account.
+              </p>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowTooltip(false);
+                  openAuth({ defaultMode: "sign-up", intent: "family" });
+                }}
+                className="text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline"
+              >
+                Create one →
+              </button>
+              <p className="text-xs text-gray-400 mt-2">
+                Use a different email than your {accountTypeLabel} account.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Staff Avatar - Overlapping the image/content boundary, aligned with heart icon */}

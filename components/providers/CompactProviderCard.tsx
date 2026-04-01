@@ -1,8 +1,10 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import type { Provider } from "./ProviderCard";
 import { FallbackImage } from "./FallbackImage";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useSavedProviders } from "@/hooks/use-saved-providers";
 import PricingEducationBadge from "@/components/providers/PricingEducationBadge";
 import RegionalEstimateLabel from "@/components/providers/RegionalEstimateLabel";
@@ -23,9 +25,40 @@ interface CompactProviderCardProps {
 }
 
 export default function CompactProviderCard({ provider }: CompactProviderCardProps) {
+  const { activeProfile, openAuth } = useAuth();
   const { isSaved: checkSaved, toggleSave } = useSavedProviders();
   const isSaved = checkSaved(provider.id);
   const displayedHighlights = provider.highlights?.slice(0, 3) || [];
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const heartButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Check if user is a non-family profile
+  const isNonFamilyProfile = activeProfile && activeProfile.type !== "family";
+
+  // Dynamic label for account type hint
+  const accountTypeLabel = activeProfile?.type === "organization"
+    ? "provider"
+    : (activeProfile?.type === "caregiver" || activeProfile?.type === "student")
+    ? "caregiver"
+    : "current";
+
+  // Close tooltip on click outside
+  useEffect(() => {
+    if (!showTooltip) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(e.target as Node) &&
+        heartButtonRef.current &&
+        !heartButtonRef.current.contains(e.target as Node)
+      ) {
+        setShowTooltip(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showTooltip]);
 
   return (
     <Link
@@ -60,9 +93,14 @@ export default function CompactProviderCard({ provider }: CompactProviderCardPro
 
         {/* Heart/Save Button */}
         <button
+          ref={heartButtonRef}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            if (isNonFamilyProfile) {
+              setShowTooltip(true);
+              return;
+            }
             toggleSave({
               providerId: provider.id,
               slug: provider.slug,
@@ -90,6 +128,36 @@ export default function CompactProviderCard({ provider }: CompactProviderCardPro
             />
           </svg>
         </button>
+
+        {/* Tooltip for non-family users */}
+        {showTooltip && (
+          <div
+            ref={tooltipRef}
+            className="absolute top-12 right-2 left-2 sm:left-auto z-20 sm:w-56 bg-white rounded-xl shadow-lg border border-gray-200 p-3 animate-in fade-in slide-in-from-top-1 duration-150"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <p className="text-sm text-gray-600 mb-2">
+              Save providers with a family account.
+            </p>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowTooltip(false);
+                openAuth({ defaultMode: "sign-up", intent: "family" });
+              }}
+              className="text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline"
+            >
+              Create one →
+            </button>
+            <p className="text-xs text-gray-400 mt-2">
+              Use a different email than your {accountTypeLabel} account.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Content */}

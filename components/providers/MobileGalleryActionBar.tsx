@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useSavedProviders, type SaveProviderData } from "@/hooks/use-saved-providers";
 
 interface MobileGalleryActionBarProps {
@@ -9,8 +11,39 @@ interface MobileGalleryActionBarProps {
 
 export default function MobileGalleryActionBar({ provider }: MobileGalleryActionBarProps) {
   const router = useRouter();
+  const { activeProfile, openAuth } = useAuth();
   const { isSaved, toggleSave } = useSavedProviders();
   const saved = isSaved(provider.providerId);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const heartButtonRef = useRef<HTMLButtonElement>(null);
+
+  // Check if user is a non-family profile
+  const isNonFamilyProfile = activeProfile && activeProfile.type !== "family";
+
+  // Dynamic label for account type hint
+  const accountTypeLabel = activeProfile?.type === "organization"
+    ? "provider"
+    : (activeProfile?.type === "caregiver" || activeProfile?.type === "student")
+    ? "caregiver"
+    : "current";
+
+  // Close tooltip on click outside
+  useEffect(() => {
+    if (!showTooltip) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(e.target as Node) &&
+        heartButtonRef.current &&
+        !heartButtonRef.current.contains(e.target as Node)
+      ) {
+        setShowTooltip(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showTooltip]);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -52,9 +85,16 @@ export default function MobileGalleryActionBar({ provider }: MobileGalleryAction
       </button>
 
       {/* Save + Share */}
-      <div className="flex items-center gap-3 pointer-events-auto">
+      <div className="flex items-center gap-3 pointer-events-auto relative">
         <button
-          onClick={() => toggleSave(provider)}
+          ref={heartButtonRef}
+          onClick={() => {
+            if (isNonFamilyProfile) {
+              setShowTooltip(true);
+              return;
+            }
+            toggleSave(provider);
+          }}
           className={btnClass}
           aria-label={saved ? "Unsave" : "Save"}
         >
@@ -72,6 +112,30 @@ export default function MobileGalleryActionBar({ provider }: MobileGalleryAction
             />
           </svg>
         </button>
+
+        {/* Tooltip for non-family users */}
+        {showTooltip && (
+          <div
+            ref={tooltipRef}
+            className="absolute top-14 right-0 z-50 w-64 bg-white rounded-xl shadow-lg border border-gray-200 p-3 animate-in fade-in slide-in-from-top-1 duration-150"
+          >
+            <p className="text-sm text-gray-600 mb-2">
+              Save providers with a family account.
+            </p>
+            <button
+              onClick={() => {
+                setShowTooltip(false);
+                openAuth({ defaultMode: "sign-up", intent: "family" });
+              }}
+              className="text-sm font-medium text-primary-600 hover:text-primary-700 hover:underline"
+            >
+              Create one →
+            </button>
+            <p className="text-xs text-gray-400 mt-2">
+              Use a different email than your {accountTypeLabel} account.
+            </p>
+          </div>
+        )}
 
         <button onClick={handleShare} className={btnClass} aria-label="Share">
           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
