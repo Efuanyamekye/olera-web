@@ -7,7 +7,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { useClickOutside } from "@/hooks/use-click-outside";
 import { useAuth } from "@/components/auth/AuthProvider";
-import ProfileSwitcher from "@/components/shared/ProfileSwitcher";
 import FindCareMegaMenu from "@/components/shared/FindCareMegaMenu";
 import { CARE_CATEGORIES, NAV_LINKS } from "@/components/shared/NavMenuData";
 import { useNavbar } from "@/components/shared/NavbarContext";
@@ -117,7 +116,6 @@ export default function Navbar() {
   const hasProviderProfile = (profiles || []).some(
     (p) => p.type === "organization" || p.type === "caregiver"
   );
-  const orgProfileCount = (profiles || []).filter((p) => p.type === "organization").length;
   const showModeSwitcher = hasSession && hasFamilyProfile && hasProviderProfile;
 
   // Profile IDs for hub switching — used by the mode switcher to also switch activeProfile
@@ -488,21 +486,6 @@ export default function Navbar() {
             </>
           )}
         </div>
-
-      {/* Profile switcher - only show when user has multiple org profiles (need to switch between them) */}
-      {orgProfileCount > 1 && (
-        <>
-          <div className="mx-4 border-t border-gray-100" />
-          <div className="px-2 py-1">
-            <ProfileSwitcher
-              onSwitch={() => setIsUserMenuOpen(false)}
-              variant="dropdown"
-              allowedTypes={["organization"]}
-              navigateTo="/provider"
-            />
-          </div>
-        </>
-      )}
 
       {isAdmin && (
         <>
@@ -1167,17 +1150,6 @@ export default function Navbar() {
                             })}
                           </div>
                         )}
-                      </div>
-
-                      {/* Provider profile switcher */}
-                      <div className="my-3 border-t border-gray-100" />
-                      <div className="px-3">
-                        <ProfileSwitcher
-                          onSwitch={() => setIsMobileMenuOpen(false)}
-                          variant="dropdown"
-                          allowedTypes={["organization", "caregiver"]}
-                          navigateTo="/provider"
-                        />
                       </div>
 
                       {/* Switch to Family */}
