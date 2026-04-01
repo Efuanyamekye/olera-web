@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
         claim_state: "unclaimed",
         verification_state: "unverified",
         source: "user_created",
-        is_active: false,
+        is_active: true,
       })
       .select("id")
       .single();

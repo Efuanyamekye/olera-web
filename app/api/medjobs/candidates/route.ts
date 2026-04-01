@@ -71,7 +71,8 @@ export async function GET(req: NextRequest) {
         { count: "estimated" }
       )
       .eq("type", "student")
-      .eq("is_active", true);
+      .eq("is_active", true)
+      .contains("metadata", { application_completed: true });
 
     // Filters
     if (state) {
