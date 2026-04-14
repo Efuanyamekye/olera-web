@@ -155,10 +155,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });
     }
 
-    // Update the metadata with the new Google Place ID
+    // Check if a Place ID already exists (locked - cannot change)
     const existingMetadata = (profile.metadata || {}) as Record<string, unknown>;
     const existingGoogleMetadata = (existingMetadata.google_metadata || {}) as Record<string, unknown>;
 
+    if (existingGoogleMetadata.place_id) {
+      return NextResponse.json(
+        {
+          error: "Google Business Profile is already connected. Contact support to change it.",
+          already_connected: true,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Update the metadata with the new Google Place ID
     const updatedMetadata = {
       ...existingMetadata,
       google_metadata: {
