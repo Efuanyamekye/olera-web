@@ -126,6 +126,14 @@ export default function AccountSettingsPage() {
   const isProvider = isOrganization || (profileType === "caregiver");
   const hasActiveSubscription = !!(meta.medjobs_subscription_active as boolean);
 
+  // Google Business Profile (providers only)
+  const googleMetadata = (meta.google_metadata || {}) as { place_id?: string };
+  const hasGooglePlaceId = !!googleMetadata.place_id;
+  const [googlePlaceIdInput, setGooglePlaceIdInput] = useState("");
+  const [googleSaving, setGoogleSaving] = useState(false);
+  const [googleError, setGoogleError] = useState("");
+  const [showGoogleConfirm, setShowGoogleConfirm] = useState(false);
+
 
   // ── Notification toggle (optimistic — flips instantly, persists in background) ──
   const handleNotifToggle = useCallback(
@@ -305,6 +313,32 @@ export default function AccountSettingsPage() {
       console.error("Billing portal error:", err);
     } finally {
       setSubscriptionLoading(false);
+    }
+  };
+
+  // ── Google Business Profile connection ──
+  const handleGoogleConnect = async () => {
+    if (!googlePlaceIdInput.trim()) return;
+    setGoogleSaving(true);
+    setGoogleError("");
+
+    try {
+      const res = await fetch("/api/provider/google-business", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ place_id_or_url: googlePlaceIdInput.trim() }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to connect");
+
+      await refreshAccountData();
+      setShowGoogleConfirm(false);
+      setGooglePlaceIdInput("");
+    } catch (err) {
+      setGoogleError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setGoogleSaving(false);
     }
   };
 
@@ -503,6 +537,134 @@ export default function AccountSettingsPage() {
                             {subscriptionLoading ? "Loading..." : "Upgrade"}
                           </button>
                         </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* ── Google Business Profile (Providers only, when not connected) ── */}
+                {isProvider && (
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-1">
+                      <p className="text-[15px] font-semibold text-gray-900">
+                        Google Business Profile
+                      </p>
+                      {hasGooglePlaceId && (
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">
+                          Connected
+                        </span>
+                      )}
+                    </div>
+
+                    {hasGooglePlaceId ? (
+                      /* ── Connected state ── */
+                      <div>
+                        <p className="text-sm text-gray-500 mb-3">
+                          Review requests direct families to leave reviews on Google.
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm text-gray-600">
+                            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
+                              {googleMetadata.place_id}
+                            </span>
+                          </p>
+                          <a
+                            href="mailto:support@olera.care?subject=Change%20Google%20Business%20Profile"
+                            className="text-[14px] font-medium text-primary-600 hover:text-primary-700 transition-colors"
+                          >
+                            Contact support to change
+                          </a>
+                        </div>
+                      </div>
+                    ) : (
+                      /* ── Not connected state ── */
+                      <div>
+                        <p className="text-sm text-gray-500 mb-3">
+                          Connect your Google Business Profile to have review requests direct families to leave reviews on Google instead of Olera.
+                        </p>
+
+                        {showGoogleConfirm ? (
+                          /* ── Confirmation step ── */
+                          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+                            <div className="flex items-start gap-3 mb-3">
+                              <svg className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                              </svg>
+                              <div>
+                                <p className="text-sm font-semibold text-amber-900">
+                                  This cannot be changed later
+                                </p>
+                                <p className="text-sm text-amber-700 mt-1">
+                                  Once connected, you&apos;ll need to contact support to change your Google Business Profile.
+                                </p>
+                              </div>
+                            </div>
+
+                            {googleError && (
+                              <div className="mb-3 p-2 bg-red-50 border border-red-100 rounded-lg text-sm text-red-700">
+                                {googleError}
+                              </div>
+                            )}
+
+                            <div className="flex items-center gap-3">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setShowGoogleConfirm(false);
+                                  setGoogleError("");
+                                }}
+                                disabled={googleSaving}
+                                className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-50"
+                              >
+                                Cancel
+                              </button>
+                              <button
+                                type="button"
+                                onClick={handleGoogleConnect}
+                                disabled={googleSaving || !googlePlaceIdInput.trim()}
+                                className="px-4 py-2 bg-gray-900 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors"
+                              >
+                                {googleSaving ? "Connecting..." : "Yes, connect permanently"}
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          /* ── Input step ── */
+                          <div>
+                            <label htmlFor="googlePlaceId" className="block text-sm font-medium text-gray-700 mb-1.5">
+                              Google Place ID
+                            </label>
+                            <div className="flex gap-3">
+                              <input
+                                id="googlePlaceId"
+                                type="text"
+                                value={googlePlaceIdInput}
+                                onChange={(e) => setGooglePlaceIdInput(e.target.value)}
+                                placeholder="ChIJ..."
+                                className="flex-1 text-base border border-gray-200 rounded-lg px-3 py-2 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent placeholder:text-gray-300"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowGoogleConfirm(true)}
+                                disabled={!googlePlaceIdInput.trim()}
+                                className="px-4 py-2 bg-gray-900 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg text-sm font-medium text-white transition-colors shrink-0"
+                              >
+                                Connect
+                              </button>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-2">
+                              Your Place ID starts with &quot;ChIJ&quot;.{" "}
+                              <a
+                                href="https://developers.google.com/maps/documentation/places/web-service/place-id#find-id"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary-600 hover:text-primary-700 underline"
+                              >
+                                How to find your Place ID
+                              </a>
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
