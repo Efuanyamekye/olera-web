@@ -47,6 +47,7 @@ export default function OrganizationSearch({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const resultRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   // Search function
   const searchOrganizations = useCallback(async (query: string) => {
@@ -66,7 +67,7 @@ export default function OrganizationSearch({
         .select("id, display_name, slug, city, state, email, claim_state, source_provider_id, image_url")
         .in("type", ["organization", "caregiver"])
         .or(`display_name.ilike.${searchPattern},city.ilike.${searchPattern}`)
-        .limit(25);
+        .limit(50);
 
       // Search olera-providers (by name OR city)
       const { data: opResults } = await supabase
@@ -74,7 +75,7 @@ export default function OrganizationSearch({
         .select("provider_id, provider_name, slug, city, state, email, hero_image_url, provider_images")
         .not("deleted", "is", true)
         .or(`provider_name.ilike.${searchPattern},city.ilike.${searchPattern}`)
-        .limit(25);
+        .limit(50);
 
       // Get claim states for olera-providers by checking if they have linked business_profiles
       const opProviderIds = opResults?.map((op) => op.provider_id) || [];
@@ -191,6 +192,13 @@ export default function OrganizationSearch({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Scroll selected item into view during keyboard navigation
+  useEffect(() => {
+    if (selectedIndex >= 0 && selectedIndex < results.length) {
+      resultRefs.current[selectedIndex]?.scrollIntoView({ block: "nearest" });
+    }
+  }, [selectedIndex, results.length]);
+
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!isOpen) {
@@ -295,55 +303,66 @@ export default function OrganizationSearch({
       </div>
 
       {showDropdown && (
-        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-80 overflow-y-auto">
-          {results.length > 0 ? (
-            <>
-              {results.map((org, index) => (
-                <button
-                  key={org.id}
-                  type="button"
-                  onClick={() => handleSelect(org)}
-                  className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between gap-3 ${
-                    index === selectedIndex ? "bg-gray-50" : ""
-                  } ${index === 0 ? "rounded-t-xl" : ""}`}
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="text-base font-medium text-gray-900 truncate">
-                      {org.name}
-                    </p>
-                    {(org.city || org.state) && (
-                      <p className="text-sm text-gray-500 truncate">
-                        {[org.city, org.state].filter(Boolean).join(", ")}
-                      </p>
-                    )}
-                  </div>
-                  {org.claimState === "claimed" && (
-                    <span className="shrink-0 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
-                      Claimed
-                    </span>
-                  )}
-                </button>
-              ))}
-            </>
-          ) : (
-            !loading && (
-              <div className="px-4 py-3 text-sm text-gray-500">
-                No organizations found matching &quot;{value}&quot;
-              </div>
-            )
-          )}
+        <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+          {/* Header */}
+          <div className="px-3 py-2 text-xs font-medium text-gray-500 bg-gray-50 border-b border-gray-100">
+            Select your organization
+          </div>
 
-          {/* Always show "Create new" option */}
+          {/* Scrollable results container */}
+          <div className="max-h-64 overflow-y-auto">
+            {results.length > 0 ? (
+              <>
+                {results.map((org, index) => (
+                  <button
+                    key={org.id}
+                    ref={(el) => { resultRefs.current[index] = el; }}
+                    type="button"
+                    onClick={() => handleSelect(org)}
+                    className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center justify-between gap-3 ${
+                      index === selectedIndex ? "bg-gray-100" : ""
+                    }`}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="text-base font-medium text-gray-900 truncate">
+                        {org.name}
+                      </p>
+                      {(org.city || org.state) && (
+                        <p className="text-sm text-gray-500 truncate">
+                          {[org.city, org.state].filter(Boolean).join(", ")}
+                        </p>
+                      )}
+                    </div>
+                    {org.claimState === "claimed" && (
+                      <span className="shrink-0 text-xs font-medium text-amber-600 bg-amber-50 px-2 py-1 rounded-full">
+                        Claimed
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </>
+            ) : (
+              !loading && (
+                <div className="px-4 py-3 text-sm text-gray-500">
+                  No organizations found matching &quot;{value}&quot;
+                </div>
+              )
+            )}
+          </div>
+
+          {/* Fixed footer - always visible */}
           <button
             type="button"
             onClick={handleCreateNew}
-            className={`w-full px-4 py-3 text-left hover:bg-primary-50 transition-colors border-t border-gray-100 rounded-b-xl ${
-              selectedIndex === results.length ? "bg-primary-50" : ""
+            className={`w-full px-4 py-3 text-left transition-colors border-t border-primary-100 ${
+              selectedIndex === results.length
+                ? "bg-primary-100"
+                : "bg-primary-50 hover:bg-primary-100"
             }`}
           >
-            <div className="flex items-center gap-2 text-primary-600">
+            <div className="flex items-center gap-2">
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4 text-primary-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -355,7 +374,7 @@ export default function OrganizationSearch({
                   d="M12 4v16m8-8H4"
                 />
               </svg>
-              <span className="font-medium">
+              <span className="text-sm font-medium text-primary-700">
                 Create &quot;{value}&quot; as new organization
               </span>
             </div>
