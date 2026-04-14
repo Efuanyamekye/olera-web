@@ -200,15 +200,24 @@ function SendRequestForm({
   onUpgradeRequired: () => void;
   hasGooglePlaceId: boolean;
 }) {
+  // Delivery method toggle
+  const [deliveryMethod, setDeliveryMethod] = useState<"email" | "link">("email");
+
+  // Email form state
   const [clientName, setClientName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState(DEFAULT_MESSAGE);
+
+  // Link form state
+  const [linkClientName, setLinkClientName] = useState("");
+
+  // Shared state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [successName, setSuccessName] = useState("");
+  const [successMethod, setSuccessMethod] = useState<"email" | "shared" | "copied">("email");
+  const [successLink, setSuccessLink] = useState<string | null>(null); // For fallback manual copy
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [linkCopied, setLinkCopied] = useState(false);
-
   const isAtLimit = remainingRequests <= 0;
 
   // Auto-dismiss success after 4 seconds
@@ -219,6 +228,7 @@ function SendRequestForm({
     }
   }, [showSuccess]);
 
+  // Email submit handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clientName.trim() || !email.trim() || !message.trim() || isSubmitting || isAtLimit) return;
@@ -255,6 +265,8 @@ function SendRequestForm({
       }
 
       setSuccessName(clientName);
+      setSuccessMethod("email");
+      setSuccessLink(null);
       setShowSuccess(true);
       setClientName("");
       setEmail("");
@@ -267,29 +279,124 @@ function SendRequestForm({
     }
   };
 
-  const handleCopyLink = async () => {
-    if (!providerSlug) return;
-    const link = `${window.location.origin}/review/${providerSlug}`;
+  // Link share handler - logs request and triggers share/copy
+  const handleShareLink = async () => {
+    if (!providerSlug || isSubmitting || isAtLimit) return;
+
+    const name = linkClientName.trim() || "Client";
+    const reviewLink = `${window.location.origin}/review/${providerSlug}${linkClientName.trim() ? `?name=${encodeURIComponent(linkClientName.trim())}` : ""}`;
+
+    setIsSubmitting(true);
+    setShowSuccess(false);
+    setErrorMessage(null);
+
     try {
-      await navigator.clipboard.writeText(link);
-      setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), 2000);
-    } catch {
-      const textArea = document.createElement("textarea");
-      textArea.value = link;
-      textArea.style.position = "fixed";
-      textArea.style.opacity = "0";
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textArea);
-      setLinkCopied(true);
-      setTimeout(() => setLinkCopied(false), 2000);
+      // Log the request to count toward limit
+      const res = await fetch("/api/review-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          clients: [{ name, email: null }],
+          message: null,
+          delivery_method: "link",
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        // Handle 402 - upgrade required
+        if (res.status === 402 && data.upgrade_required) {
+          onUpgradeRequired();
+          return;
+        }
+        throw new Error(data.error || "Failed to create request");
+      }
+
+      // Store link for success state (in case copy fails, user can manually copy)
+      setSuccessLink(reviewLink);
+
+      // Try native share API first (mobile)
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: "Leave us a review",
+            text: "We'd love to hear about your experience!",
+            url: reviewLink,
+          });
+          setSuccessName(name);
+          setSuccessMethod("shared");
+          setShowSuccess(true);
+          setLinkClientName("");
+          onSuccess?.();
+          return;
+        } catch (shareErr) {
+          // User cancelled or share failed - fall back to copy
+          if ((shareErr as Error).name === "AbortError") {
+            // User cancelled - show success with link so they can share manually
+            setSuccessName(name);
+            setSuccessMethod("copied"); // Show as "copied" with manual link
+            setShowSuccess(true);
+            setLinkClientName("");
+            onSuccess?.();
+            return;
+          }
+          // Other errors: fall through to clipboard copy
+        }
+      }
+
+      // Fallback: copy to clipboard
+      let copySucceeded = false;
+      try {
+        await navigator.clipboard.writeText(reviewLink);
+        copySucceeded = true;
+      } catch {
+        try {
+          const textArea = document.createElement("textarea");
+          textArea.value = reviewLink;
+          textArea.style.position = "fixed";
+          textArea.style.opacity = "0";
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textArea);
+          copySucceeded = true;
+        } catch {
+          // Both copy methods failed - we'll show the link for manual copy
+        }
+      }
+
+      setSuccessName(name);
+      setSuccessMethod(copySucceeded ? "copied" : "shared"); // "shared" shows manual link option
+      setShowSuccess(true);
+      setLinkClientName("");
+      onSuccess?.();
+    } catch (err) {
+      setErrorMessage(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+
   // Success celebration state
   if (showSuccess) {
+    const handleCopySuccessLink = async () => {
+      if (!successLink) return;
+      try {
+        await navigator.clipboard.writeText(successLink);
+      } catch {
+        const textArea = document.createElement("textarea");
+        textArea.value = successLink;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+      }
+    };
+
     return (
       <div className="text-center py-10 animate-fade-in">
         <div className="relative w-16 h-16 mx-auto mb-4 animate-success-bounce">
@@ -299,13 +406,44 @@ function SendRequestForm({
           <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-400 rounded-full" />
           <div className="absolute -bottom-0.5 -left-1 w-2 h-2 bg-primary-400 rounded-full" />
         </div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">Request sent!</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          {successMethod === "email" && "Request sent!"}
+          {successMethod === "shared" && "Link ready!"}
+          {successMethod === "copied" && "Link copied!"}
+        </h3>
         <p className="text-sm text-gray-500 mb-5">
-          {successName} will receive your review request shortly.
+          {successMethod === "email" && `${successName} will receive your review request shortly.`}
+          {successMethod === "shared" && `Share the link with ${successName} via WhatsApp, text, or in person.`}
+          {successMethod === "copied" && `Share it with ${successName} via WhatsApp, text, or in person.`}
         </p>
+
+        {/* Show link for manual copy (for shared/copied methods) */}
+        {successMethod !== "email" && successLink && (
+          <div className="mb-5">
+            <div className="flex items-center gap-2 max-w-sm mx-auto">
+              <input
+                type="text"
+                readOnly
+                value={successLink}
+                className="flex-1 px-3 py-2 text-xs text-gray-600 bg-gray-50 border border-gray-200 rounded-lg truncate"
+              />
+              <button
+                type="button"
+                onClick={handleCopySuccessLink}
+                className="px-3 py-2 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors shrink-0"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+        )}
+
         <button
           type="button"
-          onClick={() => setShowSuccess(false)}
+          onClick={() => {
+            setShowSuccess(false);
+            setSuccessLink(null);
+          }}
           className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
         >
           Send another request
@@ -315,7 +453,46 @@ function SendRequestForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <div className="space-y-5">
+      {/* Premium Segmented Toggle */}
+      <div className="relative p-1 bg-gray-100/80 rounded-xl">
+        {/* Sliding indicator */}
+        <div
+          className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-white rounded-lg shadow-sm transition-all duration-300 ease-out ${
+            deliveryMethod === "link" ? "left-[calc(50%+2px)]" : "left-1"
+          }`}
+        />
+        {/* Toggle buttons */}
+        <div className="relative flex" role="group" aria-label="Delivery method">
+          <button
+            type="button"
+            onClick={() => setDeliveryMethod("email")}
+            aria-pressed={deliveryMethod === "email"}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-medium rounded-lg transition-colors duration-200 ${
+              deliveryMethod === "email"
+                ? "text-gray-900"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            <MailIcon className="w-4 h-4" />
+            Via Email
+          </button>
+          <button
+            type="button"
+            onClick={() => setDeliveryMethod("link")}
+            aria-pressed={deliveryMethod === "link"}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-medium rounded-lg transition-colors duration-200 ${
+              deliveryMethod === "link"
+                ? "text-gray-900"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            <LinkIcon className="w-4 h-4" />
+            Via Link
+          </button>
+        </div>
+      </div>
+
       {/* Error message */}
       {errorMessage && (
         <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-100 rounded-xl text-red-700 text-sm" role="alert">
@@ -326,78 +503,135 @@ function SendRequestForm({
         </div>
       )}
 
-      {/* Client Name + Email */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="clientName" className="block text-sm font-medium text-gray-700 mb-1.5">
-            Client name
-          </label>
-          <input
-            type="text"
-            id="clientName"
-            value={clientName}
-            onChange={(e) => setClientName(e.target.value)}
-            placeholder="Jane Smith"
-            disabled={isAtLimit}
-            className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
-            required
-            autoComplete="off"
-          />
-        </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
-            Email address
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="jane@example.com"
-            disabled={isAtLimit}
-            className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
-            required
-            autoComplete="off"
-          />
-        </div>
-      </div>
+      {/* Email Form */}
+      {deliveryMethod === "email" && (
+        <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in">
+          {/* Client Name + Email */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="clientName" className="block text-sm font-medium text-gray-700 mb-1.5">
+                Client name
+              </label>
+              <input
+                type="text"
+                id="clientName"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                placeholder="Jane Smith"
+                disabled={isAtLimit}
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
+                required
+                autoComplete="off"
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
+                Email address
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="jane@example.com"
+                disabled={isAtLimit}
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
+                required
+                autoComplete="off"
+              />
+            </div>
+          </div>
 
-      {/* Message */}
-      <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">
-          Your message
-        </label>
-        <textarea
-          id="message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          rows={4}
-          placeholder="Write a personal message..."
-          disabled={isAtLimit}
-          className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 transition-all duration-200 resize-y min-h-[120px] leading-relaxed disabled:bg-gray-50 disabled:cursor-not-allowed"
-          required
-        />
-      </div>
+          {/* Message */}
+          <div>
+            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1.5">
+              Your message
+            </label>
+            <textarea
+              id="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={4}
+              placeholder="Write a personal message..."
+              disabled={isAtLimit}
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 transition-all duration-200 resize-y min-h-[120px] leading-relaxed disabled:bg-gray-50 disabled:cursor-not-allowed"
+              required
+            />
+          </div>
 
-      {/* Submit button */}
+          {/* Submit button */}
+          <button
+            type="submit"
+            disabled={!clientName.trim() || !email.trim() || !message.trim() || isSubmitting || isAtLimit}
+            className="w-full py-3.5 rounded-2xl bg-gray-900 text-white text-[15px] font-medium hover:bg-gray-800 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 shadow-[0_4px_12px_rgb(0,0,0,0.15)] hover:shadow-[0_6px_16px_rgb(0,0,0,0.2)] disabled:shadow-none"
+          >
+            {isSubmitting ? (
+              <span className="inline-flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Sending...
+              </span>
+            ) : (
+              <span className="inline-flex items-center justify-center gap-2">
+                <MailIcon className="w-5 h-5" />
+                Send review request
+              </span>
+            )}
+          </button>
+        </form>
+      )}
+
+      {/* Link Form */}
+      {deliveryMethod === "link" && (
+        <div className="space-y-5 animate-fade-in">
+          {/* Client Name (optional) */}
+          <div>
+            <label htmlFor="linkClientName" className="block text-sm font-medium text-gray-700 mb-1.5">
+              Client name <span className="text-gray-400 font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              id="linkClientName"
+              value={linkClientName}
+              onChange={(e) => setLinkClientName(e.target.value)}
+              placeholder="Jane Smith"
+              disabled={isAtLimit}
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 bg-white text-gray-900 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 transition-all duration-200 disabled:bg-gray-50 disabled:cursor-not-allowed"
+              autoComplete="off"
+            />
+            <p className="text-xs text-gray-400 mt-1.5">
+              Personalizes the review page with their name
+            </p>
+          </div>
+
+          {/* Share button */}
+          <button
+            type="button"
+            onClick={handleShareLink}
+            disabled={isSubmitting || isAtLimit}
+            className="w-full py-3.5 rounded-2xl bg-gray-900 text-white text-[15px] font-medium hover:bg-gray-800 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 shadow-[0_4px_12px_rgb(0,0,0,0.15)] hover:shadow-[0_6px_16px_rgb(0,0,0,0.2)] disabled:shadow-none"
+          >
+            {isSubmitting ? (
+              <span className="inline-flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Creating link...
+              </span>
+            ) : (
+              <span className="inline-flex items-center justify-center gap-2">
+                <LinkIcon className="w-5 h-5" />
+                Share link
+              </span>
+            )}
+          </button>
+
+          {/* Helper text */}
+          <p className="text-center text-xs text-gray-400">
+            Share via WhatsApp, text message, or in person
+          </p>
+        </div>
+      )}
+
+      {/* Footer section - shared between both forms */}
       <div className="space-y-3">
-        <button
-          type="submit"
-          disabled={!clientName.trim() || !email.trim() || !message.trim() || isSubmitting || isAtLimit}
-          className="w-full py-3.5 rounded-2xl bg-gray-900 text-white text-[15px] font-medium hover:bg-gray-800 disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed transition-all duration-200 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 shadow-[0_4px_12px_rgb(0,0,0,0.15)] hover:shadow-[0_6px_16px_rgb(0,0,0,0.2)] disabled:shadow-none"
-        >
-          {isSubmitting ? (
-            <span className="inline-flex items-center justify-center gap-2">
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Sending...
-            </span>
-          ) : (
-            <span className="inline-flex items-center justify-center gap-2">
-              <MailIcon className="w-5 h-5" />
-              Send review request
-            </span>
-          )}
-        </button>
 
         {/* Google reassurance badge OR connect prompt with tooltip */}
         {hasGooglePlaceId ? (
@@ -459,24 +693,7 @@ function SendRequestForm({
         )}
       </div>
 
-      {/* Direct link option */}
-      {providerSlug && (
-        <div className="flex items-center justify-center pt-1">
-          <button
-            type="button"
-            onClick={handleCopyLink}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-all duration-200"
-          >
-            <LinkIcon className="w-4 h-4" />
-            {linkCopied ? (
-              <span className="text-emerald-600 font-medium">Link copied!</span>
-            ) : (
-              <span>Copy direct review link</span>
-            )}
-          </button>
-        </div>
-      )}
-    </form>
+    </div>
   );
 }
 
@@ -640,8 +857,18 @@ function SentRequestsList({
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 mt-0.5 truncate">
-                  {request.recipient}
+                <p className="text-xs text-gray-500 mt-0.5 truncate flex items-center gap-1.5">
+                  {request.deliveryMethod === "link" ? (
+                    <>
+                      <LinkIcon className="w-3 h-3 shrink-0" />
+                      <span>Link shared</span>
+                    </>
+                  ) : (
+                    <>
+                      <MailIcon className="w-3 h-3 shrink-0" />
+                      <span>{request.recipient}</span>
+                    </>
+                  )}
                 </p>
                 <p className="text-xs text-gray-400 mt-1">
                   {formatDate(request.sentAt)}

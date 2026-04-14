@@ -161,12 +161,12 @@ export async function GET() {
 /**
  * POST /api/review-requests
  *
- * Send review request emails to clients. Requires authentication.
+ * Send review request emails to clients, or log link shares. Requires authentication.
  *
  * Body: {
  *   clients: Array<{ name: string, email?: string, phone?: string }>
- *   message: string
- *   delivery_method: "email" | "sms" | "both"
+ *   message: string | null
+ *   delivery_method: "email" | "sms" | "link" | "both"
  * }
  */
 export async function POST(request: NextRequest) {
@@ -182,18 +182,20 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { clients, message, delivery_method } = body as {
+    const { clients, message, delivery_method: rawDeliveryMethod } = body as {
       clients: ReviewRequestClient[];
-      message: string;
-      delivery_method: "email" | "sms" | "both";
+      message: string | null;
+      delivery_method: string;
     };
+    const delivery_method = rawDeliveryMethod as "email" | "sms" | "link" | "both";
 
     // Validate inputs
     if (!clients || !Array.isArray(clients) || clients.length === 0) {
       return NextResponse.json({ error: "At least one client is required" }, { status: 400 });
     }
 
-    if (!message?.trim()) {
+    // Message only required for email/sms, not for link sharing
+    if (delivery_method !== "link" && !message?.trim()) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
@@ -243,8 +245,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if this batch would exceed the limit (prevent batch bypass)
-    const clientsWithEmail = clients.filter((c) => c.email);
-    if (!isPaid && reviewCreditsUsed + clientsWithEmail.length > FREE_REVIEW_CREDITS) {
+    // For link shares, all clients count toward limit. For email, only those with email.
+    const billableClients = delivery_method === "link" ? clients : clients.filter((c) => c.email);
+    if (!isPaid && reviewCreditsUsed + billableClients.length > FREE_REVIEW_CREDITS) {
       const creditsRemaining = FREE_REVIEW_CREDITS - reviewCreditsUsed;
       return NextResponse.json(
         {
@@ -267,7 +270,34 @@ export async function POST(request: NextRequest) {
 
     // Process each client
     for (const client of clients) {
-      // Skip clients without email if sending email
+      // Handle "link" delivery method - just log to email_log, no actual send
+      if (delivery_method === "link") {
+        try {
+          // Log the link share to email_log for tracking
+          await db.from("email_log").insert({
+            provider_id: profile.id,
+            email_type: "review_request",
+            recipient: client.name || "Link shared", // Use name since no email
+            status: "sent", // Mark as sent since link was generated
+            metadata: {
+              client_name: client.name || "Client",
+              delivery_method: "link",
+            },
+          });
+
+          results.push({ name: client.name || "Client", status: "sent" });
+        } catch (logErr) {
+          console.error("Failed to log link share:", logErr);
+          results.push({
+            name: client.name || "Client",
+            status: "failed",
+            error: "Failed to create request",
+          });
+        }
+        continue; // Skip email sending for link delivery
+      }
+
+      // Handle email delivery
       if (delivery_method !== "sms" && client.email) {
         const reviewUrl = `${siteUrl}/review/${profile.slug}?ref=email&name=${encodeURIComponent(client.name)}`;
 
@@ -278,7 +308,7 @@ export async function POST(request: NextRequest) {
             html: reviewRequestEmail({
               clientName: client.name,
               providerName: profile.display_name || "Your care provider",
-              customMessage: message.trim(),
+              customMessage: message!.trim(),
               reviewUrl,
             }),
             emailType: "review_request",
@@ -311,6 +341,7 @@ export async function POST(request: NextRequest) {
           });
         }
       } else if (!client.email) {
+        // delivery_method is not "link" here (handled above with continue)
         results.push({
           name: client.name,
           status: "skipped",
