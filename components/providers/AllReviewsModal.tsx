@@ -466,10 +466,19 @@ interface GoogleReviewSnippet {
   time: number;
 }
 
+export interface OleraGuestReview {
+  id: string;
+  reviewer_name: string;
+  rating: number;
+  review_text: string;
+  created_at: string;
+}
+
 export function normalizeReviews(
   realReviews: Review[],
   mockReviews: MockReview[],
   googleReviews?: GoogleReviewSnippet[],
+  oleraGuestReviews?: OleraGuestReview[],
 ): { reviews: DisplayReview[]; averageRating: number } {
   const normalizedReal: DisplayReview[] = realReviews.map((r) => ({
     id: r.id,
@@ -498,6 +507,18 @@ export function normalizeReviews(
     profilePhotoUrl: r.profile_photo_url,
   }));
 
+  // Guest Olera reviews (from review request flow)
+  const normalizedOleraGuest: DisplayReview[] = (oleraGuestReviews ?? []).map((r) => ({
+    id: r.id,
+    name: r.reviewer_name,
+    rating: r.rating,
+    date: new Date(r.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+    comment: r.review_text,
+    title: null,
+    isMock: false,
+    source: "olera" as const,
+  }));
+
   const normalizedMock: DisplayReview[] = mockReviews.map((r, i) => ({
     id: `mock-${i}`,
     name: r.name,
@@ -509,12 +530,13 @@ export function normalizeReviews(
     isMock: true,
   }));
 
-  // Merge real Olera reviews + Google reviews, then fall back to mock
-  const oleraAndGoogle = [...normalizedReal, ...normalizedGoogle];
-  const reviews = oleraAndGoogle.length > 0 ? oleraAndGoogle : normalizedMock;
+  // Merge: Google reviews first, then Olera reviews (authenticated + guest), then fall back to mock
+  const allOlera = [...normalizedReal, ...normalizedOleraGuest];
+  const googleAndOlera = [...normalizedGoogle, ...allOlera];
+  const reviews = googleAndOlera.length > 0 ? googleAndOlera : normalizedMock;
 
   // Calculate average from Olera reviews only (Google has its own rating)
-  const oleraForAvg = normalizedReal.length > 0 ? normalizedReal : normalizedMock;
+  const oleraForAvg = allOlera.length > 0 ? allOlera : normalizedMock;
   const averageRating =
     oleraForAvg.length > 0 ? oleraForAvg.reduce((sum, r) => sum + r.rating, 0) / oleraForAvg.length : 0;
 

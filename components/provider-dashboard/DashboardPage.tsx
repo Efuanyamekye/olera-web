@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useProviderProfile } from "@/hooks/useProviderProfile";
 import { useProviderDashboardData } from "@/hooks/useProviderDashboardData";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -31,6 +32,7 @@ import EditAboutModal from "./edit-modals/EditAboutModal";
 import EditPricingModal from "./edit-modals/EditPricingModal";
 import EditPaymentModal from "./edit-modals/EditPaymentModal";
 import EditOwnerModal from "./edit-modals/EditOwnerModal";
+import ConnectGoogleBusinessModal from "./ConnectGoogleBusinessModal";
 
 export default function DashboardPage() {
   const profile = useProviderProfile();
@@ -125,10 +127,31 @@ function DashboardContent({
   refreshAccountData: () => Promise<void>;
 }) {
   const guided = useGuidedOnboarding(completeness);
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [showCompletenessSheet, setShowCompletenessSheet] = useState(false);
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [verificationExistingData, setVerificationExistingData] = useState<ExistingVerificationData | undefined>();
   const [isVerificationUpdate, setIsVerificationUpdate] = useState(false);
+  const [showGoogleBusinessModal, setShowGoogleBusinessModal] = useState(false);
+
+  // Handle ?connect=google query parameter
+  useEffect(() => {
+    if (searchParams.get("connect") === "google") {
+      setShowGoogleBusinessModal(true);
+    }
+  }, [searchParams]);
+
+  // Close Google Business modal and remove query param
+  const handleCloseGoogleBusinessModal = useCallback(() => {
+    setShowGoogleBusinessModal(false);
+    // Remove the query parameter from URL
+    router.replace("/provider", { scroll: false });
+  }, [router]);
+
+  const handleGoogleBusinessSuccess = useCallback(async () => {
+    await refreshAccountData();
+  }, [refreshAccountData]);
 
   // Open verification modal (can be called with existing data for updates)
   const handleOpenVerificationModal = useCallback((existingData?: ExistingVerificationData) => {
@@ -399,6 +422,14 @@ function DashboardContent({
         existingData={verificationExistingData}
         isUpdate={isVerificationUpdate}
       />
+
+      {/* Google Business Connection Modal */}
+      {showGoogleBusinessModal && (
+        <ConnectGoogleBusinessModal
+          onClose={handleCloseGoogleBusinessModal}
+          onSuccess={handleGoogleBusinessSuccess}
+        />
+      )}
     </div>
     </div>
   );

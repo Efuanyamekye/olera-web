@@ -21,6 +21,15 @@ interface EmailLogRow {
   } | null;
 }
 
+interface OleraReviewRow {
+  id: string;
+  reviewer_name: string;
+  rating: number;
+  review_text: string;
+  created_at: string;
+  flagged: boolean;
+}
+
 // Free credit limit for review requests (lifetime, not monthly)
 const FREE_REVIEW_CREDITS = 3;
 
@@ -71,29 +80,71 @@ export async function GET() {
     const isPaid = !!(metadata.medjobs_subscription_active as boolean);
     const reviewCreditsUsed = (metadata.reviews_credits_used as number) || 0;
 
-    // Fetch review request emails for this provider
-    const { data: emails, error: emailsError } = await db
-      .from("email_log")
-      .select("id, recipient, created_at, status, metadata")
-      .eq("provider_id", profile.id)
-      .eq("email_type", "review_request")
-      .order("created_at", { ascending: false })
-      .limit(100);
+    // Get the provider's slug for matching Olera reviews
+    const { data: profileWithSlug } = await db
+      .from("business_profiles")
+      .select("slug")
+      .eq("id", profile.id)
+      .single();
 
-    if (emailsError) {
-      console.error("Failed to fetch review request emails:", emailsError);
+    const providerSlug = profileWithSlug?.slug;
+
+    // Fetch review request emails and Olera reviews in parallel
+    const [emailsResult, oleraReviewsResult] = await Promise.all([
+      db
+        .from("email_log")
+        .select("id, recipient, created_at, status, metadata")
+        .eq("provider_id", profile.id)
+        .eq("email_type", "review_request")
+        .order("created_at", { ascending: false })
+        .limit(100),
+      providerSlug
+        ? db
+            .from("olera_reviews")
+            .select("id, reviewer_name, rating, review_text, created_at, flagged")
+            .eq("provider_slug", providerSlug)
+            .order("created_at", { ascending: false })
+        : Promise.resolve({ data: [], error: null }),
+    ]);
+
+    if (emailsResult.error) {
+      console.error("Failed to fetch review request emails:", emailsResult.error);
       return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
     }
 
-    // Transform the data for the frontend
-    const requests = ((emails as EmailLogRow[]) || []).map((email) => ({
-      id: email.id,
-      clientName: email.metadata?.client_name || email.recipient.split("@")[0],
-      recipient: email.recipient,
-      deliveryMethod: email.metadata?.delivery_method || "email",
-      sentAt: email.created_at,
-      status: email.status,
-    }));
+    const emails = emailsResult.data as EmailLogRow[] | null;
+    const oleraReviews = (oleraReviewsResult.data as OleraReviewRow[] | null) || [];
+
+    // Create a map of reviewer names to their reviews (case-insensitive)
+    const reviewsByName = new Map<string, OleraReviewRow>();
+    for (const review of oleraReviews) {
+      const normalizedName = review.reviewer_name.toLowerCase().trim();
+      // Only keep the first (most recent) review per name
+      if (!reviewsByName.has(normalizedName)) {
+        reviewsByName.set(normalizedName, review);
+      }
+    }
+
+    // Transform the data for the frontend, matching reviews to requests
+    const requests = ((emails as EmailLogRow[]) || []).map((email) => {
+      const clientName = email.metadata?.client_name || email.recipient.split("@")[0];
+      const normalizedClientName = clientName.toLowerCase().trim();
+      const matchingReview = reviewsByName.get(normalizedClientName);
+
+      return {
+        id: email.id,
+        clientName,
+        recipient: email.recipient,
+        deliveryMethod: email.metadata?.delivery_method || "email",
+        sentAt: email.created_at,
+        status: email.status,
+        // Olera review data (if they left a review)
+        oleraReviewId: matchingReview?.id || null,
+        hasReview: !!matchingReview && !matchingReview.flagged,
+        reviewRating: matchingReview?.rating || null,
+        reviewFlagged: matchingReview?.flagged || false,
+      };
+    });
 
     return NextResponse.json({
       requests,

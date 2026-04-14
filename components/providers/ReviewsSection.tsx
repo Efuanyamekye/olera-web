@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { getDeferredAction, clearDeferredAction } from "@/lib/deferred-action";
 import type { Review, GoogleReviewsData } from "@/lib/types";
-import AllReviewsModal, { normalizeReviews } from "@/components/providers/AllReviewsModal";
+import AllReviewsModal, { normalizeReviews, type OleraGuestReview } from "@/components/providers/AllReviewsModal";
 
 // ── Icons ──
 
@@ -86,6 +86,7 @@ export default function ReviewsSection({
 
   // Data
   const [realReviews, setRealReviews] = useState<Review[]>([]);
+  const [oleraGuestReviews, setOleraGuestReviews] = useState<OleraGuestReview[]>([]);
   const [loading, setLoading] = useState(true);
 
   // UI state
@@ -111,17 +112,27 @@ export default function ReviewsSection({
 
   const fetchReviews = useCallback(async () => {
     try {
-      const res = await fetch(`/api/reviews?provider_id=${encodeURIComponent(providerId)}`);
-      if (res.ok) {
-        const data = await res.json();
+      // Fetch both authenticated Olera reviews and guest Olera reviews in parallel
+      const [authRes, guestRes] = await Promise.all([
+        fetch(`/api/reviews?provider_id=${encodeURIComponent(providerId)}`),
+        fetch(`/api/provider/${encodeURIComponent(providerSlug)}/olera-reviews`),
+      ]);
+
+      if (authRes.ok) {
+        const data = await authRes.json();
         setRealReviews(data.reviews ?? []);
+      }
+
+      if (guestRes.ok) {
+        const data = await guestRes.json();
+        setOleraGuestReviews(data.reviews ?? []);
       }
     } catch {
       // Silently fail — mock reviews will show
     } finally {
       setLoading(false);
     }
-  }, [providerId]);
+  }, [providerId, providerSlug]);
 
   useEffect(() => {
     fetchReviews();
@@ -155,7 +166,7 @@ export default function ReviewsSection({
 
   // ── Normalize reviews ──
 
-  const { reviews: allReviews, averageRating } = normalizeReviews(realReviews, mockReviews, googleReviewsData?.reviews);
+  const { reviews: allReviews, averageRating } = normalizeReviews(realReviews, mockReviews, googleReviewsData?.reviews, oleraGuestReviews);
   const googleMapsUrl = placeId
     ? `https://search.google.com/local/reviews?placeid=${placeId}`
     : null;
