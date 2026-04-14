@@ -1,24 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
+import { validateGooglePlaceId } from "@/lib/google-places";
 
 /**
  * Extract Google Place ID from various URL formats:
  * - https://www.google.com/maps/place/?q=place_id:ChIJ...
  * - https://maps.google.com/?cid=1234567890
  * - https://g.page/r/CxxxxxxxxEAE (short URL - needs resolution)
- * - Direct Place ID: ChIJ...
+ * - Direct Place ID: ChIJ..., GhIJ..., etc.
  */
 function extractPlaceId(input: string): string | null {
   const trimmed = input.trim();
 
-  // Direct Place ID (starts with ChIJ or similar pattern)
-  if (/^ChIJ[a-zA-Z0-9_-]+$/.test(trimmed)) {
+  // Direct Place ID - alphanumeric string, typically 20+ characters
+  // Google Place IDs can start with various prefixes (ChIJ, GhIJ, etc.)
+  // They contain letters, numbers, underscores, and hyphens
+  if (/^[A-Za-z0-9_-]{20,}$/.test(trimmed)) {
     return trimmed;
   }
 
   // URL with place_id parameter
-  const placeIdMatch = trimmed.match(/place_id[=:]([a-zA-Z0-9_-]+)/i);
+  const placeIdMatch = trimmed.match(/place_id[=:]([A-Za-z0-9_-]{20,})/i);
   if (placeIdMatch) {
     return placeIdMatch[1];
   }
@@ -125,7 +128,18 @@ export async function POST(request: NextRequest) {
     if (!placeId) {
       return NextResponse.json(
         {
-          error: "Could not extract Place ID. Please provide a direct Place ID (starts with 'ChIJ') or a Google Maps URL containing 'place_id='",
+          error: "Could not extract Place ID. Please provide a valid Place ID (20+ characters) or a Google Maps URL containing 'place_id='",
+        },
+        { status: 400 }
+      );
+    }
+
+    // Validate the Place ID with Google Places API
+    const validation = await validateGooglePlaceId(placeId);
+    if (!validation.valid) {
+      return NextResponse.json(
+        {
+          error: validation.error || "Invalid Place ID - could not verify with Google",
         },
         { status: 400 }
       );

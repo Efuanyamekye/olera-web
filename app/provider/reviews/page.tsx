@@ -411,7 +411,7 @@ function SendRequestForm({
             Goes directly to your Google Business Profile
           </p>
         ) : (
-          <div className="flex items-center justify-center gap-1.5 text-xs text-gray-400 group relative">
+          <div className="flex items-center justify-center gap-1.5 text-xs text-gray-400">
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24">
               <path fill="#9CA3AF" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#9CA3AF" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -424,15 +424,18 @@ function SendRequestForm({
             >
               Connect Google
             </Link>
-            <svg className="w-3.5 h-3.5 text-gray-300 cursor-help" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
-            </svg>
-            {/* Tooltip */}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-10">
-              <p className="leading-relaxed">
-                Without Google connected, reviews are collected on Olera. Connect your Google Business Profile to get reviews directly on Google.
-              </p>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
+            {/* Info icon with tooltip */}
+            <div className="relative group">
+              <svg className="w-3.5 h-3.5 text-gray-300 cursor-help" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+              </svg>
+              {/* Tooltip */}
+              <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-gray-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-10">
+                <p className="leading-relaxed">
+                  Without Google connected, reviews are collected on Olera. Connect your Google Business Profile to get reviews directly on Google.
+                </p>
+                <div className="absolute top-full right-3 border-4 border-transparent border-t-gray-900" />
+              </div>
             </div>
           </div>
         )}

@@ -158,6 +158,53 @@ export async function fetchGooglePlacePhoto(
 }
 
 /**
+ * Validate that a Place ID exists in Google Places.
+ *
+ * Makes a minimal API request (displayName field only) to verify the Place ID.
+ * Returns { valid: true, name: string } if valid, { valid: false } otherwise.
+ */
+export async function validateGooglePlaceId(
+  placeId: string,
+): Promise<{ valid: true; name: string } | { valid: false; error?: string }> {
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+  if (!apiKey) {
+    // If no API key, skip validation and assume valid
+    console.warn("[google-places] GOOGLE_PLACES_API_KEY not set, skipping validation");
+    return { valid: true, name: "Unknown" };
+  }
+
+  if (!placeId) {
+    return { valid: false, error: "Place ID is required" };
+  }
+
+  try {
+    // Minimal request - just get displayName to verify the Place ID exists
+    const url = `${PLACES_API_BASE}/${placeId}?fields=displayName&key=${apiKey}`;
+    const res = await fetch(url, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) {
+      if (res.status === 404 || res.status === 400) {
+        return { valid: false, error: "Invalid Place ID - not found in Google" };
+      }
+      const errorBody = await res.text().catch(() => "");
+      console.error(`[google-places] Validation error for ${placeId}: ${res.status} ${errorBody}`);
+      return { valid: false, error: "Could not validate Place ID" };
+    }
+
+    const data = await res.json();
+    const displayName = data.displayName?.text || "Business";
+
+    return { valid: true, name: displayName };
+  } catch (err) {
+    console.error(`[google-places] Validation failed for ${placeId}:`, err);
+    return { valid: false, error: "Could not validate Place ID" };
+  }
+}
+
+/**
  * Batch fetch Google reviews with rate limiting.
  *
  * Processes providers in chunks to avoid hitting API rate limits.
