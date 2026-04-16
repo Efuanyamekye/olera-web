@@ -397,7 +397,7 @@ export default async function ProviderStudentProfilePage({ params }: PageProps) 
 
                 {/* Schedule Grid */}
                 {meta.course_schedule_grid && (
-                  <details className="mt-6 pt-6 border-t border-gray-100 group">
+                  <details open className="mt-6 pt-6 border-t border-gray-100 group">
                     <summary className="flex items-center justify-between cursor-pointer list-none hover:bg-gray-50 -mx-2 px-2 py-2 rounded-lg transition-colors">
                       <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
                         View Class Schedule {meta.course_schedule_semester && `(${meta.course_schedule_semester})`}
