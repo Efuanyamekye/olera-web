@@ -464,26 +464,31 @@ export default function MedJobsApplyPage() {
           </span>
         </button>
         {open && (
-          <div className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto animate-in">
-            <div className="p-2 border-b border-gray-100">
+          <div className="absolute z-20 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 flex flex-col animate-in">
+            {/* Search input - sticky top */}
+            <div className="p-2 border-b border-gray-100 shrink-0">
               <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search..." autoFocus className="w-full px-3 py-2 text-sm outline-none bg-gray-50 rounded" />
             </div>
-            {filtered.length > 0 ? filtered.map((u) => (
-              <button key={u.id} type="button"
-                onClick={() => { setUniversity(u.name); setUniversityId(u.id); setOpen(false); }}
-                className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-gray-50 ${
-                  university === u.name ? "border-l-2 border-gray-900 font-medium text-gray-900 bg-gray-50" : "text-gray-700"
-                }`}>
-                {u.name} <span className="text-gray-400">({u.city})</span>
-              </button>
-            )) : (
-              <p className="px-4 py-3 text-sm text-gray-400">
-                {state ? `No universities found in ${state}` : "No universities found"}
-              </p>
-            )}
+            {/* University list - scrollable */}
+            <div className="overflow-y-auto flex-1">
+              {filtered.length > 0 ? filtered.map((u) => (
+                <button key={u.id} type="button"
+                  onClick={() => { setUniversity(u.name); setUniversityId(u.id); setOpen(false); }}
+                  className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-gray-50 ${
+                    university === u.name ? "border-l-2 border-gray-900 font-medium text-gray-900 bg-gray-50" : "text-gray-700"
+                  }`}>
+                  {u.name} <span className="text-gray-400">({u.city})</span>
+                </button>
+              )) : (
+                <p className="px-4 py-3 text-sm text-gray-400">
+                  {state ? `No universities found in ${state}` : "No universities found"}
+                </p>
+              )}
+            </div>
+            {/* My school isn't listed - sticky bottom */}
             <button type="button" onClick={() => { setUniversityOther(true); setOpen(false); }}
-              className="w-full text-left px-4 py-3 text-sm text-gray-500 font-medium hover:bg-gray-50 border-t border-gray-100">
+              className="w-full text-left px-4 py-3 text-sm text-gray-500 font-medium hover:bg-gray-50 border-t border-gray-100 shrink-0">
               My school isn&apos;t listed
             </button>
           </div>
