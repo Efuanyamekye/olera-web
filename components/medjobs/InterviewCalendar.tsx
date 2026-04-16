@@ -458,6 +458,41 @@ function InterviewDetailModal({
   const otherName = other?.display_name || "Unknown";
   const otherImage = other?.image_url;
 
+  // Student metadata for context line and contact info (provider view only)
+  const studentMeta = (interview.student?.metadata || {}) as Record<string, unknown>;
+  const studentEmail = interview.student?.email;
+  const studentPhone = studentMeta.phone as string | undefined;
+  const university = studentMeta.university as string | undefined;
+  const track = studentMeta.intended_professional_school as string | undefined;
+  const certifications = (studentMeta.certifications || []) as string[];
+  const linkedinUrl = studentMeta.linkedin_url as string | undefined;
+  const resumeUrl = studentMeta.resume_url as string | undefined;
+  const videoUrl = studentMeta.video_intro_url as string | undefined;
+
+  // Build context line for provider view
+  const contextParts: string[] = [];
+  if (university) contextParts.push(university);
+  if (track) {
+    const trackLabels: Record<string, string> = {
+      medical: "Pre-Med",
+      nursing: "Nursing",
+      pa: "Pre-PA",
+      pt: "Pre-PT",
+      ot: "Pre-OT",
+      dental: "Pre-Dental",
+      pharmacy: "Pre-Pharm",
+      public_health: "Public Health",
+      other: "Healthcare",
+    };
+    contextParts.push(trackLabels[track] || track);
+  }
+  if (certifications.length > 0) contextParts.push(certifications[0]);
+  const contextLine = contextParts.join(" · ");
+
+  // Check if we should show connect section (confirmed interview, provider view)
+  const showConnectSection = perspective === "provider" && interview.status === "confirmed";
+  const hasContactInfo = studentEmail || studentPhone || resumeUrl || videoUrl || linkedinUrl;
+
   // Link to the other person's profile
   const profileHref = perspective === "provider" && interview.student?.slug
     ? `/provider/medjobs/candidates/${interview.student.slug}`
@@ -565,7 +600,11 @@ function InterviewDetailModal({
             ) : (
               <p className="text-lg font-semibold text-gray-900">{otherName}</p>
             )}
-            <span className={`inline-flex items-center gap-1.5 mt-1 px-2.5 py-1 rounded-full text-xs font-medium ${styles.bg} ${styles.text}`}>
+            {/* Context line - university, track, certification */}
+            {perspective === "provider" && contextLine && (
+              <p className="text-sm text-gray-500 mt-0.5 truncate">{contextLine}</p>
+            )}
+            <span className={`inline-flex items-center gap-1.5 mt-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${styles.bg} ${styles.text}`}>
               <span className={`w-2 h-2 rounded-full ${styles.dot}`} />
               {STATUS_LABELS[interview.status] || interview.status}
             </span>
@@ -631,6 +670,78 @@ function InterviewDetailModal({
             </div>
           )}
         </div>
+
+        {/* Connect section - for providers with confirmed interviews */}
+        {showConnectSection && hasContactInfo && (
+          <div className="pt-2">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-3">Connect</p>
+            <div className="flex flex-wrap gap-2">
+              {/* Primary actions - Email & Phone */}
+              {studentEmail && (
+                <a
+                  href={`mailto:${studentEmail}`}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm font-medium text-gray-700 transition-all duration-200"
+                >
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                  Email
+                </a>
+              )}
+              {studentPhone && (
+                <a
+                  href={`tel:${studentPhone}`}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 rounded-xl text-sm font-medium text-gray-700 transition-all duration-200"
+                >
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                  </svg>
+                  Call
+                </a>
+              )}
+              {/* Secondary actions - icon only pills */}
+              {resumeUrl && (
+                <a
+                  href={resumeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200"
+                  title="View Resume"
+                >
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                </a>
+              )}
+              {videoUrl && (
+                <a
+                  href={videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-xl transition-all duration-200"
+                  title="Watch Video Intro"
+                >
+                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                  </svg>
+                </a>
+              )}
+              {linkedinUrl && (
+                <a
+                  href={linkedinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-[#0A66C2]/10 rounded-xl transition-all duration-200 group"
+                  title="View LinkedIn"
+                >
+                  <svg className="w-4 h-4 text-gray-500 group-hover:text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </a>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Provider contact info for rescheduling */}
         {perspective === "student" && interview.status === "proposed" && interview.proposed_by === interview.provider_profile_id && (providerEmail || providerPhone) && (
