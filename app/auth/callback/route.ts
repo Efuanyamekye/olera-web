@@ -352,12 +352,13 @@ export async function GET(request: NextRequest) {
             }
 
             // Check for student/caregiver profile
+            // Note: Don't filter by is_active - redirect to dashboard regardless
+            // of verification status. Dashboard shows their completion status.
             const { data: studentProfile } = await db
               .from("business_profiles")
               .select("id, is_active")
               .eq("account_id", acct.id)
               .in("type", ["student", "caregiver"])
-              .eq("is_active", true)
               .limit(1)
               .maybeSingle();
 

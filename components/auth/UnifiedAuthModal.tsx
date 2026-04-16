@@ -790,12 +790,13 @@ export default function UnifiedAuthModal({
               }
 
               // Check for student or legacy caregiver profile (both are MedJobs users)
+              // Note: Don't filter by is_active - caregivers should access their dashboard
+              // regardless of verification status. The dashboard shows their status.
               const { data: studentProfile } = await sb
                 .from("business_profiles")
                 .select("id, is_active")
                 .eq("account_id", freshAccount.id)
                 .in("type", ["student", "caregiver"])
-                .eq("is_active", true)
                 .limit(1)
                 .maybeSingle();
 
