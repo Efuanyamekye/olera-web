@@ -433,14 +433,10 @@ export default function MedJobsApplyPage() {
       return () => document.removeEventListener("mousedown", handler);
     }, []);
 
-    // Filter universities by selected state, then by search term
-    const stateFiltered = state
-      ? universityOptions.filter((u) => u.state === state)
-      : universityOptions;
-
+    // Filter universities by search term only (no state filtering)
     const filtered = search.trim()
-      ? stateFiltered.filter((u) => u.name.toLowerCase().includes(search.toLowerCase()))
-      : stateFiltered;
+      ? universityOptions.filter((u) => u.name.toLowerCase().includes(search.toLowerCase()))
+      : universityOptions;
 
     if (universityOther) {
       return (
@@ -476,15 +472,22 @@ export default function MedJobsApplyPage() {
             <div className="overflow-y-auto flex-1">
               {filtered.length > 0 ? filtered.map((u) => (
                 <button key={u.id} type="button"
-                  onClick={() => { setUniversity(u.name); setUniversityId(u.id); setOpen(false); }}
+                  onClick={() => {
+                    setUniversity(u.name);
+                    setUniversityId(u.id);
+                    // Auto-fill city/state from university data
+                    setCity(u.city);
+                    setState(u.state);
+                    setOpen(false);
+                  }}
                   className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-gray-50 ${
                     university === u.name ? "border-l-2 border-gray-900 font-medium text-gray-900 bg-gray-50" : "text-gray-700"
                   }`}>
-                  {u.name} <span className="text-gray-400">({u.city})</span>
+                  {u.name} <span className="text-gray-400">({u.city}, {u.state})</span>
                 </button>
               )) : (
                 <p className="px-4 py-3 text-sm text-gray-400">
-                  {state ? `No universities found in ${state}` : "No universities found"}
+                  No universities found
                 </p>
               )}
             </div>
@@ -540,7 +543,14 @@ export default function MedJobsApplyPage() {
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-2">School Location</label>
+                <label className="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-2">University *</label>
+                <UniDropdown />
+              </div>
+
+              <div className="border-t border-gray-100 pt-7">
+                <label className="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-2">
+                  School Location {city && state && <span className="text-gray-300 font-normal normal-case">(auto-filled)</span>}
+                </label>
                 <div ref={cityRef} className="relative">
                   <div className="w-full flex items-center gap-3 border-0 border-b-2 border-gray-200 focus-within:border-gray-900 py-2 transition-colors">
                     <svg className="w-4 h-4 text-gray-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -556,7 +566,7 @@ export default function MedJobsApplyPage() {
                         setCityDropdownOpen(true);
                       }}
                       onFocus={() => { preloadCities(); setCityDropdownOpen(true); }}
-                      placeholder="City where your school is located"
+                      placeholder="Search city to override"
                       className="w-full text-lg text-gray-900 placeholder:text-gray-300 bg-transparent outline-none"
                     />
                     {city && (
@@ -582,11 +592,6 @@ export default function MedJobsApplyPage() {
                     </div>
                   )}
                 </div>
-              </div>
-
-              <div className="border-t border-gray-100 pt-7">
-                <label className="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-2">University</label>
-                <UniDropdown />
               </div>
 
               <div className="grid grid-cols-2 gap-6">
