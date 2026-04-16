@@ -122,6 +122,7 @@ function ProviderCaregiversContent() {
           actionLoading={actionLoading}
           accessTier={accessInfo.tier}
           initialSelectedId={newInterviewId ?? undefined}
+          onUpgradeClick={() => setShowUpgradeModal(true)}
         />
       </div>
 
