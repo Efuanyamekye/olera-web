@@ -151,7 +151,7 @@ export default function MedJobsApplyPage() {
   const [university, setUniversity] = useState("");
   const [universityId, setUniversityId] = useState("");
   const [universitySearch, setUniversitySearch] = useState("");
-  const [universityOptions, setUniversityOptions] = useState<{ id: string; name: string }[]>([]);
+  const [universityOptions, setUniversityOptions] = useState<{ id: string; name: string; city: string; state: string }[]>([]);
   const [universityOther, setUniversityOther] = useState(false);
   const [major, setMajor] = useState("");
   const [majorOther, setMajorOther] = useState("");
@@ -176,13 +176,13 @@ export default function MedJobsApplyPage() {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch universities
+  // Fetch universities (includes city/state for filtering)
   useEffect(() => {
     const supabase = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
-    supabase.from("medjobs_universities").select("id, name").eq("is_active", true).order("name")
+    supabase.from("medjobs_universities").select("id, name, city, state").eq("is_active", true).order("name")
       .then(({ data }) => { if (data) setUniversityOptions(data); });
   }, []);
 
@@ -431,9 +431,14 @@ export default function MedJobsApplyPage() {
       return () => document.removeEventListener("mousedown", handler);
     }, []);
 
-    const filtered = search.trim()
-      ? universityOptions.filter((u) => u.name.toLowerCase().includes(search.toLowerCase()))
+    // Filter universities by selected state, then by search term
+    const stateFiltered = state
+      ? universityOptions.filter((u) => u.state === state)
       : universityOptions;
+
+    const filtered = search.trim()
+      ? stateFiltered.filter((u) => u.name.toLowerCase().includes(search.toLowerCase()))
+      : stateFiltered;
 
     if (universityOther) {
       return (
@@ -464,15 +469,19 @@ export default function MedJobsApplyPage() {
               <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search..." autoFocus className="w-full px-3 py-2 text-sm outline-none bg-gray-50 rounded" />
             </div>
-            {(search.trim() ? filtered : universityOptions).map((u) => (
+            {filtered.length > 0 ? filtered.map((u) => (
               <button key={u.id} type="button"
                 onClick={() => { setUniversity(u.name); setUniversityId(u.id); setOpen(false); }}
                 className={`w-full text-left px-4 py-3 text-sm transition-colors hover:bg-gray-50 ${
                   university === u.name ? "border-l-2 border-gray-900 font-medium text-gray-900 bg-gray-50" : "text-gray-700"
                 }`}>
-                {u.name}
+                {u.name} <span className="text-gray-400">({u.city})</span>
               </button>
-            ))}
+            )) : (
+              <p className="px-4 py-3 text-sm text-gray-400">
+                {state ? `No universities found in ${state}` : "No universities found"}
+              </p>
+            )}
             <button type="button" onClick={() => { setUniversityOther(true); setOpen(false); }}
               className="w-full text-left px-4 py-3 text-sm text-gray-500 font-medium hover:bg-gray-50 border-t border-gray-100">
               My school isn&apos;t listed
@@ -524,7 +533,7 @@ export default function MedJobsApplyPage() {
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-2">City &amp; State</label>
+                <label className="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-2">School Location</label>
                 <div ref={cityRef} className="relative">
                   <div className="w-full flex items-center gap-3 border-0 border-b-2 border-gray-200 focus-within:border-gray-900 py-2 transition-colors">
                     <svg className="w-4 h-4 text-gray-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -540,7 +549,7 @@ export default function MedJobsApplyPage() {
                         setCityDropdownOpen(true);
                       }}
                       onFocus={() => { preloadCities(); setCityDropdownOpen(true); }}
-                      placeholder="Search your city"
+                      placeholder="City where your school is located"
                       className="w-full text-lg text-gray-900 placeholder:text-gray-300 bg-transparent outline-none"
                     />
                     {city && (
