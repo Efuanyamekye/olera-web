@@ -172,6 +172,8 @@ export default function MedJobsApplyPage() {
   // Confirm — individual attestation checkboxes
   const [attestations, setAttestations] = useState<boolean[]>([false, false, false, false, false, false]);
   const allAcknowledged = attestations.every(Boolean);
+  // Step 1 requires: hours per week, duration commitment, and all attestations
+  const canSubmitStep1 = allAcknowledged && !!hoursPerWeekRange && !!durationCommitment;
   const [honeypot, setHoneypot] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -679,7 +681,7 @@ export default function MedJobsApplyPage() {
 
             {step === 1 ? (
               <button type="button" onClick={handleSubmit}
-                disabled={loading || !allAcknowledged}
+                disabled={loading || !canSubmitStep1}
                 className="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed rounded-lg text-sm font-semibold text-white transition-colors">
                 {loading ? "Submitting..." : "Submit application"}
               </button>
