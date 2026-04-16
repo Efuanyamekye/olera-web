@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Modal from "@/components/ui/Modal";
 import { saveStudentProfile } from "./save-profile";
 import type { BaseEditModalProps } from "./types";
@@ -24,6 +24,15 @@ export default function EditVerificationModal({
   onGuidedBack,
 }: BaseEditModalProps) {
   const meta = profile.metadata;
+
+  // Track mounted state to prevent state updates after unmount
+  const isMountedRef = useRef(true);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // Wizard step
   const [currentStep, setCurrentStep] = useState<Step>(1);
@@ -57,12 +66,15 @@ export default function EditVerificationModal({
   const licenseInputRef = useRef<HTMLInputElement>(null);
   const insuranceInputRef = useRef<HTMLInputElement>(null);
 
-  // Track if any verification item is complete
-  const hasVideo = videoSubmitted || !!videoUrl.trim();
+  // Track if any verification item is complete (only count as complete if actually saved)
+  const hasVideo = videoSubmitted;
   const hasLicense = licenseUploaded && !!licenseExpiration;
   const hasInsurance = insuranceUploaded && !!insuranceExpiration;
 
-  // Progress count
+  // For UI display - show as "in progress" if URL entered but not saved
+  const hasVideoInProgress = !!videoUrl.trim();
+
+  // Progress count (only count truly saved items)
   const completedCount = [hasVideo, hasLicense, hasInsurance].filter(Boolean).length;
 
   // Check if there's a new video URL to submit
@@ -75,18 +87,20 @@ export default function EditVerificationModal({
     3: "Car Insurance",
   };
 
-  // Navigate with animation
+  // Navigate with animation (using mounted check to prevent memory leak)
   const navigateToStep = useCallback((step: Step) => {
     if (step === currentStep || isTransitioning) return;
     setSlideDirection(step > currentStep ? "right" : "left");
     setIsTransitioning(true);
     setTimeout(() => {
-      setCurrentStep(step);
-      setIsTransitioning(false);
+      if (isMountedRef.current) {
+        setCurrentStep(step);
+        setIsTransitioning(false);
+      }
     }, 150);
   }, [currentStep, isTransitioning]);
 
-  async function submitVideo() {
+  const submitVideo = useCallback(async () => {
     if (!videoUrl.trim()) return true;
     if (videoSubmitted && videoUrl === meta.video_intro_url) return true;
 
@@ -102,19 +116,34 @@ export default function EditVerificationModal({
 
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "Failed to submit video");
+        if (isMountedRef.current) {
+          setError(data.error || "Failed to submit video");
+        }
         return false;
       }
 
-      setVideoSubmitted(true);
+      if (isMountedRef.current) {
+        setVideoSubmitted(true);
+      }
       return true;
     } catch {
-      setError("Network error");
+      if (isMountedRef.current) {
+        setError("Network error");
+      }
       return false;
     } finally {
-      setVideoSubmitting(false);
+      if (isMountedRef.current) {
+        setVideoSubmitting(false);
+      }
     }
-  }
+  }, [videoUrl, videoSubmitted, meta.video_intro_url, profile.slug]);
+
+  // Save video on blur (matches immediate-save behavior of documents)
+  const handleVideoBlur = useCallback(async () => {
+    if (hasNewVideo) {
+      await submitVideo();
+    }
+  }, [hasNewVideo, submitVideo]);
 
   const handleDocumentUpload = useCallback(async (type: "drivers_license" | "car_insurance", file: File) => {
     const isLicense = type === "drivers_license";
@@ -213,12 +242,11 @@ export default function EditVerificationModal({
     setError(null);
 
     try {
-      // Submit video if there's a new one
+      // Submit video if there's a new one (shouldn't happen since we save on blur, but just in case)
       if (hasNewVideo) {
         const videoSuccess = await submitVideo();
         if (!videoSuccess) {
-          setSaving(false);
-          return;
+          return; // Error already set by submitVideo, finally will reset saving
         }
       }
 
@@ -238,7 +266,22 @@ export default function EditVerificationModal({
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
-      setSaving(false);
+      if (isMountedRef.current) {
+        setSaving(false);
+      }
+    }
+  }
+
+  // Handle back button - in guided mode on step 1, go back in guided flow
+  function handleBack() {
+    if (currentStep === 1) {
+      if (guidedMode && onGuidedBack) {
+        onGuidedBack();
+      } else {
+        onClose();
+      }
+    } else {
+      navigateToStep((currentStep - 1) as Step);
     }
   }
 
@@ -250,10 +293,10 @@ export default function EditVerificationModal({
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
-  // Check if current step is complete
+  // Check if current step is complete (for button state)
   const isCurrentStepComplete = () => {
     switch (currentStep) {
-      case 1: return hasVideo;
+      case 1: return hasVideo || hasVideoInProgress;
       case 2: return hasLicense;
       case 3: return hasInsurance;
     }
@@ -262,7 +305,7 @@ export default function EditVerificationModal({
   // Get button text
   const getButtonText = () => {
     if (currentStep === 3) {
-      return saving ? "Saving..." : "Done";
+      return saving ? "Saving..." : guidedMode ? "Save & Next" : "Done";
     }
     if (isCurrentStepComplete()) {
       return "Continue";
@@ -270,32 +313,51 @@ export default function EditVerificationModal({
     return "Skip for now";
   };
 
+  // Get back button text
+  const getBackButtonText = () => {
+    if (currentStep === 1) {
+      if (guidedMode && onGuidedBack) {
+        return "Back";
+      }
+      return "Cancel";
+    }
+    return "Back";
+  };
+
   // Progress dot component
   const ProgressDot = ({ step, isComplete, isCurrent }: { step: Step; isComplete: boolean; isCurrent: boolean }) => (
     <button
       type="button"
       onClick={() => navigateToStep(step)}
-      className="flex flex-col items-center group"
+      className="flex flex-col items-center group relative z-10"
       disabled={isTransitioning}
     >
       <div className={`
-        w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300
+        w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 bg-white
         ${isCurrent
-          ? "bg-[#199087] ring-4 ring-[#199087]/20 scale-110"
-          : isComplete
-            ? "bg-[#199087] group-hover:scale-105"
-            : "bg-gray-200 group-hover:bg-gray-300"
+          ? "ring-4 ring-[#199087]/20 scale-110"
+          : ""
         }
       `}>
-        {isComplete && !isCurrent ? (
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-          </svg>
-        ) : (
-          <span className={`text-sm font-semibold ${isCurrent || isComplete ? "text-white" : "text-gray-500"}`}>
-            {step}
-          </span>
-        )}
+        <div className={`
+          w-full h-full rounded-full flex items-center justify-center transition-all duration-300
+          ${isCurrent
+            ? "bg-[#199087]"
+            : isComplete
+              ? "bg-[#199087] group-hover:scale-105"
+              : "bg-gray-200 group-hover:bg-gray-300"
+          }
+        `}>
+          {isComplete && !isCurrent ? (
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            </svg>
+          ) : (
+            <span className={`text-sm font-semibold ${isCurrent || isComplete ? "text-white" : "text-gray-500"}`}>
+              {step}
+            </span>
+          )}
+        </div>
       </div>
       <span className={`mt-2 text-xs font-medium transition-colors ${
         isCurrent ? "text-[#199087]" : "text-gray-400"
@@ -340,7 +402,7 @@ export default function EditVerificationModal({
                     </svg>
                   </div>
                   <div className="flex-1 min-w-0 text-left">
-                    <p className="text-sm font-medium text-[#199087]">Video added</p>
+                    <p className="text-sm font-medium text-[#199087]">Video saved</p>
                     <p className="text-xs text-[#199087]/70 truncate">{videoUrl || meta.video_intro_url}</p>
                   </div>
                   <button
@@ -354,16 +416,24 @@ export default function EditVerificationModal({
               </div>
             ) : (
               <div className="max-w-sm mx-auto">
-                <input
-                  type="url"
-                  value={videoUrl}
-                  onChange={(e) => setVideoUrl(e.target.value)}
-                  placeholder="https://youtube.com/watch?v=..."
-                  className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-center focus:border-[#199087] focus:ring-2 focus:ring-[#199087]/20 focus:bg-white outline-none transition-all placeholder:text-gray-400"
-                  autoFocus
-                />
+                <div className="relative">
+                  <input
+                    type="url"
+                    value={videoUrl}
+                    onChange={(e) => setVideoUrl(e.target.value)}
+                    onBlur={handleVideoBlur}
+                    placeholder="https://youtube.com/watch?v=..."
+                    className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl text-sm text-center focus:border-[#199087] focus:ring-2 focus:ring-[#199087]/20 focus:bg-white outline-none transition-all placeholder:text-gray-400"
+                    autoFocus
+                  />
+                  {videoSubmitting && (
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2">
+                      <div className="w-5 h-5 border-2 border-gray-200 border-t-[#199087] rounded-full animate-spin" />
+                    </div>
+                  )}
+                </div>
                 <p className="text-xs text-gray-400 mt-3">
-                  YouTube, Loom, or Vimeo links work great
+                  {videoSubmitting ? "Saving..." : "YouTube, Loom, or Vimeo links work great"}
                 </p>
               </div>
             )}
@@ -592,16 +662,23 @@ export default function EditVerificationModal({
     >
       <div className="px-2 pb-2">
         {/* Progress Indicator */}
-        <div className="relative flex justify-center items-start gap-8 mb-8 pt-4">
-          {/* Connecting lines - positioned between dots */}
-          <div className="absolute top-[24px] left-1/2 -translate-x-1/2 flex items-center" style={{ width: "160px" }}>
-            <div className={`flex-1 h-[2px] transition-colors duration-300 ${hasVideo ? "bg-[#199087]" : "bg-gray-200"}`} />
-            <div className={`flex-1 h-[2px] transition-colors duration-300 ${hasLicense ? "bg-[#199087]" : "bg-gray-200"}`} />
+        <div className="relative flex justify-center items-start pt-4 mb-8">
+          {/* Connecting lines - use flex with proper spacing */}
+          <div className="absolute top-[24px] inset-x-0 flex justify-center pointer-events-none">
+            <div className="flex items-center" style={{ width: "calc(2 * 2rem + 2 * 40px)" }}>
+              <div className="w-5" /> {/* Half dot width spacer */}
+              <div className={`flex-1 h-[2px] transition-colors duration-300 ${hasVideo ? "bg-[#199087]" : "bg-gray-200"}`} />
+              <div className="w-10" /> {/* Full dot width spacer */}
+              <div className={`flex-1 h-[2px] transition-colors duration-300 ${hasLicense ? "bg-[#199087]" : "bg-gray-200"}`} />
+              <div className="w-5" /> {/* Half dot width spacer */}
+            </div>
           </div>
 
-          <ProgressDot step={1} isComplete={hasVideo} isCurrent={currentStep === 1} />
-          <ProgressDot step={2} isComplete={hasLicense} isCurrent={currentStep === 2} />
-          <ProgressDot step={3} isComplete={hasInsurance} isCurrent={currentStep === 3} />
+          <div className="flex justify-center items-start gap-8">
+            <ProgressDot step={1} isComplete={hasVideo} isCurrent={currentStep === 1} />
+            <ProgressDot step={2} isComplete={hasLicense} isCurrent={currentStep === 2} />
+            <ProgressDot step={3} isComplete={hasInsurance} isCurrent={currentStep === 3} />
+          </div>
         </div>
 
         {/* Step Content */}
@@ -617,39 +694,59 @@ export default function EditVerificationModal({
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
-          <button
-            type="button"
-            onClick={() => currentStep === 1 ? onClose() : navigateToStep((currentStep - 1) as Step)}
-            disabled={isTransitioning || saving}
-            className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors disabled:opacity-50"
-          >
-            {currentStep === 1 ? "Cancel" : "Back"}
-          </button>
+        <div className="mt-8 pt-6 border-t border-gray-100">
+          {/* Guided mode progress bar */}
+          {guidedMode && guidedStep && guidedTotal && (
+            <div className="flex gap-0.5 px-1 mb-4">
+              {Array.from({ length: guidedTotal }, (_, i) => (
+                <div
+                  key={i}
+                  className={`flex-1 h-[3px] rounded-full transition-colors duration-300 ${
+                    i + 1 <= guidedStep ? "bg-[#199087]" : "bg-gray-100"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
 
-          <div className="flex items-center gap-2 text-xs text-gray-400">
-            <span>{completedCount}/3 complete</span>
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={handleBack}
+              disabled={isTransitioning || saving}
+              className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors disabled:opacity-50"
+            >
+              {getBackButtonText()}
+            </button>
+
+            <div className="flex items-center gap-2 text-xs text-gray-400">
+              {guidedMode && guidedStep && guidedTotal ? (
+                <span>Step {guidedStep} of {guidedTotal}</span>
+              ) : (
+                <span>{completedCount}/3 complete</span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleContinue}
+              disabled={isUploading || saving || isTransitioning}
+              className={`px-6 py-2.5 text-sm font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                isCurrentStepComplete()
+                  ? "bg-[#199087] text-white hover:bg-[#157a72] shadow-sm hover:shadow"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {isUploading ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Processing...
+                </span>
+              ) : (
+                getButtonText()
+              )}
+            </button>
           </div>
-
-          <button
-            type="button"
-            onClick={handleContinue}
-            disabled={isUploading || saving || isTransitioning}
-            className={`px-6 py-2.5 text-sm font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
-              isCurrentStepComplete()
-                ? "bg-[#199087] text-white hover:bg-[#157a72] shadow-sm hover:shadow"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            {isUploading ? (
-              <span className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Processing...
-              </span>
-            ) : (
-              getButtonText()
-            )}
-          </button>
         </div>
       </div>
     </Modal>
