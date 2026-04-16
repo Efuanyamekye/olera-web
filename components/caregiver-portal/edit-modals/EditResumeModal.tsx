@@ -30,6 +30,7 @@ export default function EditResumeModal({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [resumeJustSaved, setResumeJustSaved] = useState(false);
 
   // Track if resume was already uploaded before opening modal
   const hadResumeOnOpen = !!meta.resume_url;
@@ -46,11 +47,24 @@ export default function EditResumeModal({
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
-  // Validate LinkedIn URL
+  // Normalize LinkedIn URL - add https:// if missing
+  const normalizeLinkedInUrl = (url: string): string => {
+    const trimmed = url.trim();
+    if (!trimmed) return "";
+
+    // If no protocol, prepend https://
+    if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://")) {
+      return `https://${trimmed}`;
+    }
+    return trimmed;
+  };
+
+  // Validate LinkedIn URL (after normalization)
   const isValidLinkedIn = (url: string) => {
     if (!url.trim()) return true; // Empty is valid (optional field)
+    const normalized = normalizeLinkedInUrl(url);
     const pattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/i;
-    return pattern.test(url.trim());
+    return pattern.test(normalized);
   };
 
   async function handleSave() {
@@ -70,11 +84,14 @@ export default function EditResumeModal({
     setError(null);
 
     try {
+      // Normalize LinkedIn URL before saving
+      const normalizedLinkedIn = linkedinUrl.trim() ? normalizeLinkedInUrl(linkedinUrl) : null;
+
       // Save both fields together to prevent race conditions
       await saveStudentProfile({
         profileId: profile.id,
         metadataFields: {
-          linkedin_url: linkedinUrl.trim() || null,
+          linkedin_url: normalizedLinkedIn,
           resume_url: resumeUrl || null,
         },
       });
@@ -132,6 +149,10 @@ export default function EditResumeModal({
             resume_url: data.url,
           },
         });
+
+        // Show "Saved!" confirmation briefly
+        setResumeJustSaved(true);
+        setTimeout(() => setResumeJustSaved(false), 3000);
       }
     } catch {
       setError("Network error. Please try again.");
@@ -204,9 +225,16 @@ export default function EditResumeModal({
                   </svg>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#199087]">
-                    {resumeFile ? resumeFile.name : "Resume uploaded"}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-medium text-[#199087]">
+                      {resumeFile ? resumeFile.name : "Resume uploaded"}
+                    </p>
+                    {resumeJustSaved && (
+                      <span className="px-2 py-0.5 bg-[#199087] text-white text-[10px] font-medium rounded-full animate-pulse">
+                        Saved!
+                      </span>
+                    )}
+                  </div>
                   {resumeFile && (
                     <p className="text-xs text-[#199087]/70">{formatFileSize(resumeFile.size)}</p>
                   )}
