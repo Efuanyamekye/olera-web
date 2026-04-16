@@ -638,27 +638,29 @@ export default function MedJobsApplyPage() {
                   These standards are why providers trust MedJobs students. If these feel right to you, you&apos;re exactly who we&apos;re looking for.
               </p>
 
-              {[
-                "I\u2019ll be on time, professional, and communicate schedule changes 24+ hours in advance",
-                "I understand caregiving duties include personal care, meals, mobility, and companionship",
-                "I have reliable transportation and accept responsibility for my transport costs",
-                "I consent to a background check and drug test upon hire",
-                "I\u2019ll respond to interview requests within 48 hours",
-                "All information in this application is accurate and Olera is not the employer of record",
-              ].map((item, i) => (
-                <button key={i} type="button"
-                  onClick={() => setAttestations((prev) => { const next = [...prev]; next[i] = !next[i]; return next; })}
-                  className={`w-full flex items-start gap-3 px-4 py-3.5 rounded-lg text-left transition-all ${
-                    attestations[i] ? "border-2 border-gray-900 bg-gray-50" : "border border-gray-200 hover:border-gray-300"
-                  }`}>
-                  <span className={`inline-flex items-center justify-center w-5 h-5 rounded border-2 shrink-0 mt-0.5 transition-colors ${
-                    attestations[i] ? "bg-gray-900 border-gray-900 text-white" : "border-gray-300"
-                  }`}>
-                    {attestations[i] && <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
-                  </span>
-                  <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
-                </button>
-              ))}
+              <div className="space-y-3">
+                {[
+                  "I\u2019ll be on time, professional, and communicate schedule changes 24+ hours in advance",
+                  "I understand caregiving duties include personal care, meals, mobility, and companionship",
+                  "I have reliable transportation and accept responsibility for my transport costs",
+                  "I consent to a background check and drug test upon hire",
+                  "I\u2019ll respond to interview requests within 48 hours",
+                  "All information in this application is accurate and Olera is not the employer of record",
+                ].map((item, i) => (
+                  <button key={i} type="button"
+                    onClick={() => setAttestations((prev) => { const next = [...prev]; next[i] = !next[i]; return next; })}
+                    className={`w-full flex items-start gap-3 px-4 py-3.5 rounded-lg text-left transition-all ${
+                      attestations[i] ? "border-2 border-gray-900 bg-gray-50" : "border border-gray-200 hover:border-gray-300"
+                    }`}>
+                    <span className={`inline-flex items-center justify-center w-5 h-5 rounded border-2 shrink-0 mt-0.5 transition-colors ${
+                      attestations[i] ? "bg-gray-900 border-gray-900 text-white" : "border-gray-300"
+                    }`}>
+                      {attestations[i] && <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                    </span>
+                    <span className="text-sm text-gray-700 leading-relaxed">{item}</span>
+                  </button>
+                ))}
+              </div>
 
               <ReactiveHint show={allAcknowledged}>
                 You&apos;re ready. Students who meet these standards are highly sought after by providers and gain clinical experience that strengthens professional school applications.
