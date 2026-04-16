@@ -547,7 +547,7 @@ export default function MedJobsApplyPage() {
                 <UniDropdown />
               </div>
 
-              <div className="border-t border-gray-100 pt-7">
+              <div>
                 <label className="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-2">
                   School Location {city && state && <span className="text-gray-300 font-normal normal-case">(auto-filled)</span>}
                 </label>
