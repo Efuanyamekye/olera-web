@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Modal from "@/components/ui/Modal";
@@ -42,8 +43,6 @@ interface InterviewCalendarProps {
   accessTier?: AccessTier;
   /** If set, auto-open the detail modal for this interview id once it arrives */
   initialSelectedId?: string;
-  /** Callback when user clicks upgrade in the banner */
-  onUpgradeClick?: () => void;
 }
 
 /* ── Helpers ── */
@@ -118,12 +117,33 @@ export default function InterviewCalendar({
   actionLoading,
   accessTier,
   initialSelectedId,
-  onUpgradeClick,
 }: InterviewCalendarProps) {
+  const pathname = usePathname();
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
   const [selected, setSelected] = useState<InterviewWithProfiles | null>(null);
+  const [upgradeLoading, setUpgradeLoading] = useState(false);
+
+  // Direct checkout - goes straight to Stripe
+  const handleUpgrade = async () => {
+    setUpgradeLoading(true);
+    try {
+      const res = await fetch("/api/medjobs/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ returnUrl: pathname }),
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      }
+    } catch {
+      // Silently fail - user can retry
+    } finally {
+      setUpgradeLoading(false);
+    }
+  };
 
   // Auto-open the detail modal when arriving from the magic-link claim
   // redirect. Fires once: after the interview actually appears in the list
@@ -209,15 +229,21 @@ export default function InterviewCalendar({
               </p>
             </div>
           </div>
-          {onUpgradeClick && (
-            <button
-              type="button"
-              onClick={onUpgradeClick}
-              className="shrink-0 px-5 py-2.5 bg-[#199087] hover:bg-[#157a72] text-white text-sm font-semibold rounded-xl transition-colors"
-            >
-              Upgrade
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={handleUpgrade}
+            disabled={upgradeLoading}
+            className="shrink-0 px-5 py-2.5 bg-[#199087] hover:bg-[#157a72] disabled:opacity-60 text-white text-sm font-semibold rounded-xl transition-colors flex items-center gap-2"
+          >
+            {upgradeLoading ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Loading...</span>
+              </>
+            ) : (
+              "Upgrade"
+            )}
+          </button>
         </div>
       )}
 
