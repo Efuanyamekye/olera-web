@@ -29,6 +29,10 @@ interface ScheduleInterviewModalProps {
   onAuthRequired?: (data: ScheduleFormData) => void;
   /** Pre-fill form with saved data (e.g., after returning from auth) */
   initialValues?: ScheduleFormData;
+  /** Provider verification status */
+  isVerified?: boolean;
+  /** Called when unverified provider tries to submit */
+  onVerifyClick?: () => void;
 }
 
 const FORMAT_OPTIONS: { value: "video" | "phone" | "in_person"; label: string }[] = [
@@ -215,6 +219,8 @@ export default function ScheduleInterviewModal({
   requiresAuth = false,
   onAuthRequired,
   initialValues,
+  isVerified,
+  onVerifyClick,
 }: ScheduleInterviewModalProps) {
   const [type, setType] = useState<"video" | "in_person" | "phone">(initialValues?.type ?? "video");
   const [date, setDate] = useState(initialValues?.date ?? "");
@@ -248,6 +254,12 @@ export default function ScheduleInterviewModal({
         altTime: altTime || undefined,
         notes: notes.trim() || undefined,
       });
+      return;
+    }
+
+    // Check verification before scheduling (provider scheduling interviews)
+    if (isVerified === false && onVerifyClick) {
+      onVerifyClick();
       return;
     }
 

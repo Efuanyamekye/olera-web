@@ -4,7 +4,9 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import ReviewUpgradeModal from "@/components/provider/ReviewUpgradeModal";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
 import { useProviderProfile } from "@/hooks/useProviderProfile";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
 import { markReviewAsRead } from "@/hooks/useUnreadReviewsCount";
 import type { OrganizationMetadata } from "@/lib/types";
 
@@ -513,6 +515,8 @@ function SendRequestForm({
   creditsUsed,
   onUpgradeRequired,
   hasGooglePlaceId,
+  isVerified,
+  onVerifyClick,
 }: {
   onSuccess?: () => void;
   providerSlug?: string;
@@ -520,6 +524,8 @@ function SendRequestForm({
   creditsUsed: number;
   onUpgradeRequired: () => void;
   hasGooglePlaceId: boolean;
+  isVerified?: boolean;
+  onVerifyClick?: () => void;
 }) {
   // Delivery method toggle
   const [deliveryMethod, setDeliveryMethod] = useState<"email" | "link">("email");
@@ -554,6 +560,12 @@ function SendRequestForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!clientName.trim() || !email.trim() || !message.trim() || isSubmitting || isAtLimit) return;
+
+    // Check verification before sending email requests
+    if (isVerified === false && onVerifyClick) {
+      onVerifyClick();
+      return;
+    }
 
     setIsSubmitting(true);
     setShowSuccess(false);
@@ -1318,6 +1330,27 @@ export default function ProviderReviewsPage() {
   const metadata = profile?.metadata as OrganizationMetadata | undefined;
   const hasGooglePlaceId = !!(metadata?.google_metadata?.place_id);
 
+  // Verification state
+  const verificationState = profile?.verification_state as string | null;
+  const isVerified =
+    verificationState === "verified" ||
+    verificationState === "not_required";
+
+  // Verification modal
+  const {
+    isOpen: isVerificationModalOpen,
+    open: openVerificationModal,
+    close: closeVerificationModal,
+    handleSubmit: handleVerificationSubmit,
+    handleDismiss: handleVerificationDismiss,
+  } = useVerificationModal({
+    profileId: profile?.id || "",
+    onVerified: () => {
+      closeVerificationModal();
+      router.refresh();
+    },
+  });
+
   // Fetch highlighted review if ?id= param is present
   const reviewIdParam = searchParams.get("id");
   const profileId = profile?.id;
@@ -1540,6 +1573,8 @@ export default function ProviderReviewsPage() {
                     creditsUsed={creditsUsed}
                     onUpgradeRequired={() => setShowUpgradeModal(true)}
                     hasGooglePlaceId={hasGooglePlaceId}
+                    isVerified={isVerified}
+                    onVerifyClick={openVerificationModal}
                   />
                 </div>
               )}
@@ -1582,6 +1617,15 @@ export default function ProviderReviewsPage() {
           onClose={() => setShowUpgradeModal(false)}
         />
       )}
+
+      {/* Verification Modal */}
+      <VerificationMethodModal
+        isOpen={isVerificationModalOpen}
+        onClose={closeVerificationModal}
+        onSubmit={handleVerificationSubmit}
+        onDismiss={handleVerificationDismiss}
+        businessName={profile?.display_name || "your business"}
+      />
     </>
   );
 }

@@ -20,6 +20,10 @@ interface ProviderContactSectionProps {
   accessTier?: AccessTier;
   /** Provider's credits used count for upgrade modal */
   creditsUsed?: number;
+  /** Provider verification status */
+  isVerified?: boolean;
+  /** Called when unverified provider tries to schedule */
+  onVerifyClick?: () => void;
 }
 
 export default function ProviderContactSection({
@@ -32,6 +36,8 @@ export default function ProviderContactSection({
   initialScheduled = false,
   accessTier,
   creditsUsed = 0,
+  isVerified,
+  onVerifyClick,
 }: ProviderContactSectionProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -129,6 +135,8 @@ export default function ProviderContactSection({
             otherName={studentName}
             onClose={() => setShowModal(false)}
             onScheduled={() => { setShowModal(false); setScheduled(true); }}
+            isVerified={isVerified}
+            onVerifyClick={onVerifyClick}
           />
         )}
         {showUpgradeModal && (
@@ -216,6 +224,8 @@ export default function ProviderContactSection({
           otherName={studentName}
           onClose={() => setShowModal(false)}
           onScheduled={() => { setShowModal(false); setScheduled(true); }}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       )}
       {showUpgradeModal && (

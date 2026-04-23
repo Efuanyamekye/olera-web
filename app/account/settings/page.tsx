@@ -6,6 +6,8 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import Modal from "@/components/ui/Modal";
 import GooglePlaceSearch from "@/components/providers/GooglePlaceSearch";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
 
 type SettingsTab = "account" | "notifications";
 
@@ -77,6 +79,29 @@ export default function AccountSettingsPage() {
   const isFamily = profileType === "family";
   const isOrganization = profileType === "organization";
   const isCaregiver = profileType === "caregiver" || profileType === "student";
+  const isProvider = isOrganization || isCaregiver;
+
+  // Verification state (for providers only)
+  const verificationState = activeProfile?.verification_state as string | null;
+  const isVerified =
+    verificationState === "verified" ||
+    verificationState === "not_required" ||
+    !isProvider; // Non-providers don't need verification
+
+  // Verification modal
+  const {
+    isOpen: isVerificationModalOpen,
+    open: openVerificationModal,
+    close: closeVerificationModal,
+    handleSubmit: handleVerificationSubmit,
+    handleDismiss: handleVerificationDismiss,
+  } = useVerificationModal({
+    profileId: activeProfile?.id || "",
+    onVerified: () => {
+      closeVerificationModal();
+      router.refresh();
+    },
+  });
 
   // Tab state
   const [activeTab, setActiveTab] = useState<SettingsTab>("account");
@@ -124,7 +149,6 @@ export default function AccountSettingsPage() {
 
   // Subscription management (providers only)
   const [subscriptionLoading, setSubscriptionLoading] = useState(false);
-  const isProvider = isOrganization || (profileType === "caregiver");
   const hasActiveSubscription = !!(meta.medjobs_subscription_active as boolean);
 
   // Google Business Profile (providers only)
@@ -216,6 +240,13 @@ export default function AccountSettingsPage() {
 
   const saveField = async () => {
     if (!isSupabaseConfigured()) return;
+
+    // Check verification before saving email or phone (providers only)
+    if ((editingField === "email" || editingField === "phone") && !isVerified) {
+      openVerificationModal();
+      return;
+    }
+
     setFieldSaving(true);
     setFieldError("");
     setFieldSuccess("");
@@ -261,6 +292,13 @@ export default function AccountSettingsPage() {
 
   // ── Delete account ──
   const handleDelete = async () => {
+    // Check verification before deleting (providers only)
+    if (!isVerified) {
+      setShowDeleteModal(false);
+      openVerificationModal();
+      return;
+    }
+
     setDeleting(true);
     setDeleteError("");
 
@@ -738,6 +776,17 @@ export default function AccountSettingsPage() {
               </div>
             )}
           </div>
+
+          {/* Verification Modal (for providers) */}
+          {isProvider && (
+            <VerificationMethodModal
+              isOpen={isVerificationModalOpen}
+              onClose={closeVerificationModal}
+              onSubmit={handleVerificationSubmit}
+              onDismiss={handleVerificationDismiss}
+              businessName={activeProfile?.display_name || "Your Business"}
+            />
+          )}
 
           {/* Delete Confirmation Modal */}
           <Modal

@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import InterviewCalendar from "@/components/medjobs/InterviewCalendar";
 import UpgradeModal from "@/components/medjobs/UpgradeModal";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
 import { getAccessTier } from "@/lib/medjobs-access";
 import type { Interview } from "@/lib/types";
 
@@ -39,6 +41,27 @@ function ProviderCaregiversContent() {
   // Compute access tier from the provider's metadata
   const providerMeta = (activeProfile?.metadata ?? {}) as Record<string, unknown>;
   const accessInfo = getAccessTier(!!activeProfile, providerMeta);
+
+  // Verification state
+  const verificationState = activeProfile?.verification_state as string | null;
+  const isVerified =
+    verificationState === "verified" ||
+    verificationState === "not_required";
+
+  // Verification modal
+  const {
+    isOpen: isVerificationModalOpen,
+    open: openVerificationModal,
+    close: closeVerificationModal,
+    handleSubmit: handleVerificationSubmit,
+    handleDismiss: handleVerificationDismiss,
+  } = useVerificationModal({
+    profileId: activeProfile?.id || "",
+    onVerified: () => {
+      closeVerificationModal();
+      router.refresh();
+    },
+  });
 
   const fetchInterviews = useCallback(async (): Promise<InterviewWithProfiles[]> => {
     try {
@@ -122,6 +145,8 @@ function ProviderCaregiversContent() {
           actionLoading={actionLoading}
           accessTier={accessInfo.tier}
           initialSelectedId={newInterviewId ?? undefined}
+          isVerified={isVerified}
+          onVerifyClick={openVerificationModal}
         />
       </div>
 
@@ -131,6 +156,14 @@ function ProviderCaregiversContent() {
           onClose={() => setShowUpgradeModal(false)}
         />
       )}
+
+      <VerificationMethodModal
+        isOpen={isVerificationModalOpen}
+        onClose={closeVerificationModal}
+        onSubmit={handleVerificationSubmit}
+        onDismiss={handleVerificationDismiss}
+        businessName={activeProfile?.display_name || "Your Business"}
+      />
     </main>
   );
 }

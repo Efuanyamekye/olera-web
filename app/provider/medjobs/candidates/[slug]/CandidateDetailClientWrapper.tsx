@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import ProviderContactSection from "./ProviderContactSection";
-import VerificationFormModal from "@/components/provider/VerificationFormModal";
-import type { VerificationSubmission } from "@/components/provider/VerificationFormModal";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
 import type { AccessTier } from "@/lib/medjobs-access";
 
 interface CandidateDetailClientWrapperProps {
@@ -28,9 +29,30 @@ export default function CandidateDetailClientWrapper({
   accessTier,
   creditsUsed,
 }: CandidateDetailClientWrapperProps) {
+  const router = useRouter();
   const { activeProfile, user } = useAuth();
-  const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [hasExistingInterview, setHasExistingInterview] = useState(false);
+
+  // Verification state
+  const verificationState = activeProfile?.verification_state as string | null;
+  const isVerified =
+    verificationState === "verified" ||
+    verificationState === "not_required";
+
+  // Verification modal
+  const {
+    isOpen: isVerificationModalOpen,
+    open: openVerificationModal,
+    close: closeVerificationModal,
+    handleSubmit: handleVerificationSubmit,
+    handleDismiss: handleVerificationDismiss,
+  } = useVerificationModal({
+    profileId: activeProfile?.id || "",
+    onVerified: () => {
+      closeVerificationModal();
+      router.refresh();
+    },
+  });
 
   // Fetch existing interviews to check if provider already contacted this student
   useEffect(() => {
@@ -59,27 +81,6 @@ export default function CandidateDetailClientWrapper({
     checkExistingInterview();
   }, [user, studentId]);
 
-  const handleVerificationSubmit = useCallback(async (data: VerificationSubmission) => {
-    if (!activeProfile?.id) return;
-
-    const response = await fetch("/api/provider/verification", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        profileId: activeProfile.id,
-        submission: data,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || "Failed to submit verification");
-    }
-
-    setShowVerificationModal(false);
-    window.location.reload();
-  }, [activeProfile?.id]);
-
   return (
     <>
       <ProviderContactSection
@@ -92,14 +93,15 @@ export default function CandidateDetailClientWrapper({
         initialScheduled={hasExistingInterview}
         accessTier={accessTier}
         creditsUsed={creditsUsed}
+        isVerified={isVerified}
+        onVerifyClick={openVerificationModal}
       />
-      <VerificationFormModal
-        isOpen={showVerificationModal}
-        onClose={() => setShowVerificationModal(false)}
+      <VerificationMethodModal
+        isOpen={isVerificationModalOpen}
+        onClose={closeVerificationModal}
         onSubmit={handleVerificationSubmit}
+        onDismiss={handleVerificationDismiss}
         businessName={activeProfile?.display_name || "Your Business"}
-        allowDismiss={true}
-        onDismiss={() => setShowVerificationModal(false)}
       />
     </>
   );

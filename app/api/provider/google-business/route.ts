@@ -193,9 +193,14 @@ export async function POST(request: NextRequest) {
       },
     };
 
+    // Update metadata AND auto-verify the provider
+    // Connecting Google Business Profile proves business ownership
     const { error: updateError } = await db
       .from("business_profiles")
-      .update({ metadata: updatedMetadata })
+      .update({
+        metadata: updatedMetadata,
+        verification_state: "verified",
+      })
       .eq("id", profile.id);
 
     if (updateError) {
@@ -206,6 +211,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       place_id: placeId,
+      verified: true,
     });
   } catch (err) {
     console.error("Google Business POST error:", err);

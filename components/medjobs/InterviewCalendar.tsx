@@ -43,6 +43,10 @@ interface InterviewCalendarProps {
   accessTier?: AccessTier;
   /** If set, auto-open the detail modal for this interview id once it arrives */
   initialSelectedId?: string;
+  /** Provider verification status */
+  isVerified?: boolean;
+  /** Called when unverified provider tries to confirm interview */
+  onVerifyClick?: () => void;
 }
 
 /* ── Helpers ── */
@@ -117,6 +121,8 @@ export default function InterviewCalendar({
   actionLoading,
   accessTier,
   initialSelectedId,
+  isVerified,
+  onVerifyClick,
 }: InterviewCalendarProps) {
   const pathname = usePathname();
   const now = new Date();
@@ -429,6 +435,8 @@ export default function InterviewCalendar({
           onClose={() => setSelected(null)}
           onUpdateStatus={onUpdateStatus}
           actionLoading={actionLoading}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       )}
     </div>
@@ -443,12 +451,16 @@ function InterviewDetailModal({
   onClose,
   onUpdateStatus,
   actionLoading,
+  isVerified,
+  onVerifyClick,
 }: {
   interview: InterviewWithProfiles;
   perspective: Perspective;
   onClose: () => void;
   onUpdateStatus: (id: string, status: string) => Promise<void>;
   actionLoading: string | null;
+  isVerified?: boolean;
+  onVerifyClick?: () => void;
 }) {
   const time = new Date(interview.confirmed_time || interview.proposed_time);
   const isLoading = actionLoading === interview.id;
@@ -544,6 +556,11 @@ function InterviewDetailModal({
   const providerPhone = interview.provider?.phone;
 
   const handleAction = async (status: string) => {
+    // Check verification before confirming inbound interviews (provider receiving request)
+    if (status === "confirmed" && perspective === "provider" && isVerified === false && onVerifyClick) {
+      onVerifyClick();
+      return;
+    }
     await onUpdateStatus(interview.id, status);
     onClose();
   };
