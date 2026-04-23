@@ -177,7 +177,7 @@ export default function Modal({
       <div
         ref={contentRef}
         className={[
-          "relative bg-white shadow-2xl w-full flex flex-col",
+          "relative bg-white shadow-2xl w-full flex flex-col overflow-hidden",
           isFullscreen
             ? [
                 // Fullscreen: near full viewport with small margins
