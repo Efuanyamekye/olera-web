@@ -2,9 +2,20 @@ const WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
 
 interface SlackBlock {
   type: string;
+  block_id?: string;
   text?: { type: string; text: string; emoji?: boolean };
   fields?: { type: string; text: string }[];
-  elements?: { type: string; text: string }[];
+  elements?: SlackElement[];
+  accessory?: SlackElement;
+}
+
+interface SlackElement {
+  type: string;
+  text?: string | { type: string; text: string; emoji?: boolean };
+  action_id?: string;
+  value?: string;
+  style?: "primary" | "danger";
+  url?: string;
 }
 
 /**
@@ -551,6 +562,7 @@ export function slackBenefitsStarted(opts: {
 export function slackVerificationReview(opts: {
   providerName: string;
   providerSlug: string;
+  profileId: string;
   claimerName: string;
   claimerEmail: string;
   claimerRole: string;
@@ -579,6 +591,9 @@ export function slackVerificationReview(opts: {
   if (opts.manualReviewRequested) {
     links.push("_No verification URLs provided_");
   }
+
+  // Action value encodes: profileId|claimerEmail|providerName
+  const actionValue = `${opts.profileId}|${opts.claimerEmail}|${opts.providerName}`;
 
   return {
     text: `Verification review needed: ${opts.providerName} claimed by ${opts.claimerName}`,
@@ -610,11 +625,37 @@ export function slackVerificationReview(opts: {
           ]
         : []),
       {
+        type: "actions",
+        block_id: `verification_${opts.profileId}`,
+        elements: [
+          {
+            type: "button",
+            text: { type: "plain_text", text: "✓ Approve", emoji: true },
+            style: "primary",
+            action_id: "verification_approve",
+            value: actionValue,
+          },
+          {
+            type: "button",
+            text: { type: "plain_text", text: "✗ Reject", emoji: true },
+            style: "danger",
+            action_id: "verification_reject",
+            value: actionValue,
+          },
+          {
+            type: "button",
+            text: { type: "plain_text", text: "View Profile", emoji: true },
+            action_id: "verification_view",
+            url: `${siteUrl}/provider/${opts.providerSlug}`,
+          },
+        ],
+      },
+      {
         type: "context",
         elements: [
           {
             type: "mrkdwn",
-            text: `<${siteUrl}/provider/${opts.providerSlug}|View listing> • <${adminUrl}|Review in Admin>`,
+            text: `<${adminUrl}|Open Admin Panel>`,
           },
         ],
       },

@@ -241,6 +241,7 @@ async function runAutoVerification(opts: {
       const alert = slackVerificationReview({
         providerName: opts.businessName,
         providerSlug: opts.profileSlug,
+        profileId: opts.profileId,
         claimerName: opts.claimerName,
         claimerEmail: opts.claimerEmail,
         claimerRole: opts.claimerRole,
@@ -282,6 +283,7 @@ async function runAutoVerification(opts: {
       const alert = slackVerificationReview({
         providerName: opts.businessName,
         providerSlug: opts.profileSlug,
+        profileId: opts.profileId,
         claimerName: opts.claimerName,
         claimerEmail: opts.claimerEmail,
         claimerRole: opts.claimerRole,
