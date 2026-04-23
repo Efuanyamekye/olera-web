@@ -7,8 +7,6 @@ import type { CandidateData } from "@/components/medjobs/CandidateRow";
 import CandidateFilters from "@/components/medjobs/CandidateFilters";
 import type { CandidateFilterValues } from "@/components/medjobs/CandidateFilters";
 import Pagination from "@/components/ui/Pagination";
-import VerificationFormModal from "@/components/provider/VerificationFormModal";
-import type { VerificationSubmission } from "@/components/provider/VerificationFormModal";
 
 const PAGE_SIZE = 12;
 
@@ -17,10 +15,6 @@ type FilterTab = "all" | "contacted";
 export default function ProviderCandidateBrowsePage() {
   const { activeProfile, user } = useAuth();
 
-  // Verification check
-  const isVerified = activeProfile?.verification_state === "verified";
-  const verificationState = activeProfile?.verification_state;
-  const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [candidates, setCandidates] = useState<CandidateData[]>([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
@@ -121,28 +115,6 @@ export default function ProviderCandidateBrowsePage() {
   };
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
-
-  // Verification handler
-  const handleVerificationSubmit = useCallback(async (data: VerificationSubmission) => {
-    if (!activeProfile?.id) return;
-
-    const response = await fetch("/api/provider/verification", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        profileId: activeProfile.id,
-        submission: data,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || "Failed to submit verification");
-    }
-
-    setShowVerificationModal(false);
-    window.location.reload();
-  }, [activeProfile?.id]);
 
   return (
     <main className="min-h-screen bg-[#FAFAF8]">
@@ -308,15 +280,6 @@ export default function ProviderCandidateBrowsePage() {
           );
         })()}
       </div>
-      {/* ── Verification Modal ── */}
-      <VerificationFormModal
-        isOpen={showVerificationModal}
-        onClose={() => setShowVerificationModal(false)}
-        onSubmit={handleVerificationSubmit}
-        businessName={activeProfile?.display_name || "Your Business"}
-        allowDismiss={true}
-        onDismiss={() => setShowVerificationModal(false)}
-      />
     </main>
   );
 }

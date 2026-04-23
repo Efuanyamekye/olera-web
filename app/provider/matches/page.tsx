@@ -22,8 +22,8 @@ import { useCitySearch } from "@/hooks/use-city-search";
 type MatchesTab = "best_match" | "most_recent" | "most_urgent" | "reached_out";
 import ReachOutDrawer from "@/components/provider/matches/ReachOutDrawer";
 import Pagination from "@/components/ui/Pagination";
-import VerificationFormModal from "@/components/provider/VerificationFormModal";
-import type { VerificationSubmission } from "@/components/provider/VerificationFormModal";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
 
 
 // ── Timeline config ──
@@ -1595,13 +1595,48 @@ export default function ProviderMatchesPage() {
   const hasFetchedOnceRef = useRef(false);
   const [totalCount, setTotalCount] = useState(0);
 
-  // Verification modal state
-  const [showVerificationModal, setShowVerificationModal] = useState(false);
+  // Track which family's drawer should reopen after verification
+  const [pendingDrawerFamily, setPendingDrawerFamily] = useState<Profile | null>(null);
 
   // Verification-based access control: only verified providers see full details
   // Note: "not_required" is for high-trust providers who auto-verified at claim time
   const isVerified = providerProfile?.verification_state === "verified" || providerProfile?.verification_state === "not_required";
   const hasFullAccess = isVerified;
+
+  // Verification modal hook
+  const {
+    isOpen: isVerificationModalOpen,
+    open: openVerificationModalRaw,
+    close: closeVerificationModal,
+    handleSubmit: handleVerificationSubmit,
+    handleDismiss: handleVerificationDismiss,
+  } = useVerificationModal({
+    profileId: providerProfile?.id || "",
+    onVerified: () => {
+      // Reopen drawer with saved family after verification
+      if (pendingDrawerFamily) {
+        setDrawerFamily(pendingDrawerFamily);
+        setPendingDrawerFamily(null);
+      }
+      // Refresh data to reflect verification state
+      window.location.reload();
+    },
+    onDismissed: () => {
+      setPendingDrawerFamily(null);
+    },
+  });
+
+  // Handle verification click from drawer - close drawer first to avoid stacking
+  const handleVerifyFromDrawer = useCallback(() => {
+    if (drawerFamily) {
+      setPendingDrawerFamily(drawerFamily);
+      setDrawerFamily(null); // Close drawer first
+    }
+    // Small delay to prevent visual stacking
+    setTimeout(() => {
+      openVerificationModalRaw();
+    }, 100);
+  }, [drawerFamily, openVerificationModalRaw]);
 
   const freeRemaining = getFreeConnectionsRemaining(membership);
   const isFreeTier = freeRemaining !== null;
@@ -1619,30 +1654,6 @@ export default function ProviderMatchesPage() {
     const meta = (dashboardMetadata || providerProfile.metadata || {}) as ExtendedMetadata;
     return calculateProfileCompleteness(providerProfile, meta).overall;
   }, [providerProfile, dashboardMetadata]);
-
-  // ── Verification handler ──
-
-  const handleVerificationSubmit = useCallback(async (data: VerificationSubmission) => {
-    if (!providerProfile?.id) return;
-
-    const response = await fetch("/api/provider/verification", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        profileId: providerProfile.id,
-        submission: data,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || "Failed to submit verification");
-    }
-
-    // Close modal and refresh the page to update verification state
-    setShowVerificationModal(false);
-    window.location.reload();
-  }, [providerProfile?.id]);
 
   // ── Drawer handlers ──
 
@@ -2277,17 +2288,16 @@ export default function ProviderMatchesPage() {
         sending={sending}
         sendError={sendError}
         isVerified={isVerified}
-        onVerifyClick={() => setShowVerificationModal(true)}
+        onVerifyClick={handleVerifyFromDrawer}
       />
 
       {/* ── Verification Modal ── */}
-      <VerificationFormModal
-        isOpen={showVerificationModal}
-        onClose={() => setShowVerificationModal(false)}
+      <VerificationMethodModal
+        isOpen={isVerificationModalOpen}
+        onClose={closeVerificationModal}
         onSubmit={handleVerificationSubmit}
+        onDismiss={handleVerificationDismiss}
         businessName={providerProfile?.display_name || "Your Business"}
-        allowDismiss={true}
-        onDismiss={() => setShowVerificationModal(false)}
       />
     </div>
     </div>
