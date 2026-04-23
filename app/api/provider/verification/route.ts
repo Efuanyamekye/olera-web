@@ -3,6 +3,11 @@ import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { autoVerifyProvider } from "@/lib/verification-auto";
 import { sendSlackAlert, slackVerificationReview } from "@/lib/slack";
+import { sendEmail } from "@/lib/email";
+import {
+  verificationApprovedEmail,
+  verificationPendingReviewEmail,
+} from "@/lib/email-templates";
 
 function getAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -209,7 +214,26 @@ async function runAutoVerification(opts: {
 
       console.log(`[verification] Auto-approved: ${opts.businessName}`);
 
-      // TODO: Send approval email (Step 8)
+      // Send approval email
+      if (opts.claimerEmail) {
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+        const dashboardUrl = `${siteUrl}/provider`;
+
+        await sendEmail({
+          to: opts.claimerEmail,
+          subject: "You're verified ✓",
+          html: verificationApprovedEmail({
+            providerName: opts.businessName,
+            recipientName: opts.claimerName,
+            dashboardUrl,
+            autoApproved: true,
+          }),
+          emailType: "verification_approved",
+          recipientType: "provider",
+          providerId: opts.profileSlug,
+          metadata: { auto_approved: true },
+        });
+      }
 
       return { autoApproved: true, reason: result.reason };
     } else {
@@ -230,7 +254,24 @@ async function runAutoVerification(opts: {
 
       console.log(`[verification] Routed to manual review: ${opts.businessName}`);
 
-      // TODO: Send "we're taking a closer look" email (Step 8)
+      // Send "we're reviewing" email
+      if (opts.claimerEmail) {
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+        const dashboardUrl = `${siteUrl}/provider`;
+
+        await sendEmail({
+          to: opts.claimerEmail,
+          subject: "We're reviewing your verification",
+          html: verificationPendingReviewEmail({
+            providerName: opts.businessName,
+            recipientName: opts.claimerName,
+            dashboardUrl,
+          }),
+          emailType: "verification_pending_review",
+          recipientType: "provider",
+          providerId: opts.profileSlug,
+        });
+      }
 
       return { autoApproved: false, reason: result.reason };
     }

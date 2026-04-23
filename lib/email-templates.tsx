@@ -1034,3 +1034,87 @@ export function providerWeeklyDigestEmail(opts: DigestOpts): string {
     </div>
   `);
 }
+
+// ── Provider Verification Emails ──────────────────────────────────
+
+/** Email sent when provider verification is approved (auto or manual) */
+export function verificationApprovedEmail(opts: {
+  providerName: string;
+  recipientName: string;
+  dashboardUrl: string;
+  autoApproved?: boolean;
+}): string {
+  return layout(`
+    <div style="text-align:center;margin:0 0 24px;">
+      <div style="width:56px;height:56px;background:#ecfdf5;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">
+        <span style="font-size:28px;">✓</span>
+      </div>
+    </div>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;text-align:center;">You're verified</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;text-align:center;">
+      ${opts.recipientName}, your connection to <strong>${opts.providerName}</strong> has been verified. You now have full access to your dashboard.
+    </p>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">With verification complete, you can:</p>
+    <ul style="font-size:14px;color:#6b7280;margin:0 0 24px;padding-left:20px;line-height:1.8;">
+      <li>Respond to family inquiries</li>
+      <li>View your profile analytics</li>
+      <li>Update your listing information</li>
+      <li>Manage your team members</li>
+    </ul>
+    <div style="text-align:center;">${button("Go to Dashboard", opts.dashboardUrl)}</div>
+  `);
+}
+
+/** Email sent when verification is submitted and routed to manual review */
+export function verificationPendingReviewEmail(opts: {
+  providerName: string;
+  recipientName: string;
+  dashboardUrl: string;
+}): string {
+  return layout(`
+    <div style="text-align:center;margin:0 0 24px;">
+      <div style="width:56px;height:56px;background:#fef3c7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">
+        <span style="font-size:28px;">👀</span>
+      </div>
+    </div>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;text-align:center;">We're reviewing your verification</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;text-align:center;">
+      ${opts.recipientName}, thanks for submitting your verification for <strong>${opts.providerName}</strong>.
+    </p>
+    <div style="background:#fef3c7;border-radius:8px;padding:16px;margin:0 0 24px;">
+      <p style="font-size:14px;color:#92400e;margin:0;line-height:1.5;">
+        <strong>What happens next:</strong> Our team will review your submission and get back to you within 3 hours during business hours (Mon–Fri, 9am–6pm ET).
+      </p>
+    </div>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      In the meantime, you can still access your dashboard — some features may be limited until verification is complete.
+    </p>
+    <div style="text-align:center;">${button("View Dashboard", opts.dashboardUrl)}</div>
+  `);
+}
+
+/** Email sent when verification is rejected with reason */
+export function verificationRejectedEmail(opts: {
+  providerName: string;
+  recipientName: string;
+  reason: string;
+  resubmitUrl: string;
+}): string {
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Verification needs more info</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      ${opts.recipientName}, we couldn't verify your connection to <strong>${opts.providerName}</strong> with the information provided.
+    </p>
+    <div style="background:#fef2f2;border-left:3px solid #ef4444;padding:12px 16px;margin:0 0 24px;border-radius:0 8px 8px 0;">
+      <p style="font-size:14px;color:#991b1b;margin:0 0 4px;font-weight:600;">Reason:</p>
+      <p style="font-size:14px;color:#7f1d1d;margin:0;line-height:1.5;">${opts.reason}</p>
+    </div>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Please resubmit with updated information. Make sure your LinkedIn profile or business website clearly shows your connection to the organization.
+    </p>
+    <div>${button("Resubmit Verification", opts.resubmitUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Questions? Reply to this email or contact <a href="mailto:support@olera.care" style="color:${BRAND_COLOR};">support@olera.care</a>
+    </p>
+  `);
+}
