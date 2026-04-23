@@ -2,26 +2,35 @@
 
 import { useState, useRef, useEffect } from "react";
 
+type VerificationState = "not_required" | "unverified" | "pending" | "verified" | "rejected";
+
 interface ProfileMetadata {
   badge_approved?: boolean;
-  badge_approved_at?: string;
 }
 
 interface VerificationStatusBadgeProps {
   /** Profile metadata containing badge_approved status */
   metadata?: ProfileMetadata | null;
+  /** The verification_state from the profile */
+  verificationState?: VerificationState | null;
+  /** Callback when user clicks to open verification form (for unverified/rejected states) */
+  onVerifyClick?: () => void;
 }
 
 /**
- * Badge component that shows "Verified" status for providers
- * who have been approved by admin after submitting verification form.
+ * Badge component that shows verification status for providers.
  *
- * Only renders if badge_approved is true.
- * No longer shows "Limited Access" or "Pending" states since
- * everyone has full access via email verification.
+ * States:
+ * - 'not_required': High trust, no badge shown (ProfileOverviewCard shows "Claimed")
+ * - 'unverified': Needs verification, shows amber "Pending verification"
+ * - 'pending': Submitted, awaiting review, shows amber "Pending verification"
+ * - 'verified' or badge_approved: Shows green "Verified"
+ * - 'rejected': Rejected, shows amber "Pending verification" with resubmit prompt
  */
 export default function VerificationStatusBadge({
   metadata,
+  verificationState,
+  onVerifyClick,
 }: VerificationStatusBadgeProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [showSheet, setShowSheet] = useState(false);
@@ -59,8 +68,16 @@ export default function VerificationStatusBadge({
     }
   }, [showTooltip, isMobile]);
 
-  // Only render if badge is approved
-  if (!metadata?.badge_approved) {
+  // Determine the effective state
+  // Priority: badge_approved (legacy) > verificationState
+  const isVerified = metadata?.badge_approved === true || verificationState === "verified";
+  const isPending = verificationState === "pending";
+  const isUnverified = verificationState === "unverified";
+  const isRejected = verificationState === "rejected";
+  const needsVerification = isUnverified || isPending || isRejected;
+
+  // Don't render for 'not_required' state or if no state info
+  if (verificationState === "not_required" || (!isVerified && !needsVerification)) {
     return null;
   }
 
@@ -77,25 +94,133 @@ export default function VerificationStatusBadge({
     setShowSheet(false);
   };
 
-  const TooltipContent = ({ inSheet = false }: { inSheet?: boolean }) => (
-    <div className={inSheet ? "" : "relative"}>
-      <div className={`flex items-center gap-2 ${inSheet ? "mb-2" : "mb-1"}`}>
-        <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-          <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+  // Get badge styling and content based on state
+  const getBadgeConfig = () => {
+    if (isVerified) {
+      return {
+        bgClass: "bg-green-50 text-green-700 border-green-200",
+        icon: (
+          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
               d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
               clipRule="evenodd"
             />
           </svg>
+        ),
+        label: "Verified",
+      };
+    }
+    // All other states show amber "Pending verification"
+    return {
+      bgClass: "bg-amber-50 text-amber-700 border-amber-200",
+      icon: (
+        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      ),
+      label: "Pending verification",
+    };
+  };
+
+  const badgeConfig = getBadgeConfig();
+
+  // Get tooltip content based on state
+  const getTooltipConfig = () => {
+    if (isVerified) {
+      return {
+        iconBg: "bg-green-100",
+        iconColor: "text-green-600",
+        title: "Verified Business",
+        description:
+          "This profile has been verified. Families can trust that this is a legitimate business.",
+        showCta: false,
+      };
+    }
+    if (isPending) {
+      return {
+        iconBg: "bg-amber-100",
+        iconColor: "text-amber-600",
+        title: "Verification in Review",
+        description:
+          "We're reviewing your submission. You'll hear from us within 3 hours during business hours.",
+        showCta: false,
+      };
+    }
+    if (isRejected) {
+      return {
+        iconBg: "bg-amber-100",
+        iconColor: "text-amber-600",
+        title: "Verification Needs Update",
+        description:
+          "Your previous submission needs more information. Please resubmit with updated details.",
+        showCta: true,
+        ctaLabel: "Resubmit verification",
+      };
+    }
+    // isUnverified
+    return {
+      iconBg: "bg-amber-100",
+      iconColor: "text-amber-600",
+      title: "Verification Required",
+      description:
+        "Complete verification to unlock all features and show families you're a trusted provider.",
+      showCta: true,
+      ctaLabel: "Complete verification",
+    };
+  };
+
+  const tooltipConfig = getTooltipConfig();
+
+  const TooltipContent = ({ inSheet = false }: { inSheet?: boolean }) => (
+    <div className={inSheet ? "" : "relative"}>
+      <div className={`flex items-center gap-2 ${inSheet ? "mb-2" : "mb-1"}`}>
+        <div className={`w-8 h-8 rounded-full ${tooltipConfig.iconBg} flex items-center justify-center`}>
+          {isVerified ? (
+            <svg className={`w-4 h-4 ${tooltipConfig.iconColor}`} fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clipRule="evenodd"
+              />
+            </svg>
+          ) : (
+            <svg className={`w-4 h-4 ${tooltipConfig.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          )}
         </div>
         <h4 className={`font-semibold text-gray-900 ${inSheet ? "text-base" : "text-sm"}`}>
-          Verified Business
+          {tooltipConfig.title}
         </h4>
       </div>
       <p className={`text-gray-500 leading-relaxed ${inSheet ? "text-sm" : "text-xs"}`}>
-        This profile has been verified. Families can trust that this is a legitimate business.
+        {tooltipConfig.description}
       </p>
+      {tooltipConfig.showCta && onVerifyClick && (
+        <button
+          type="button"
+          onClick={() => {
+            handleClose();
+            onVerifyClick();
+          }}
+          className={`mt-3 w-full px-3 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors ${
+            inSheet ? "" : "text-xs"
+          }`}
+        >
+          {tooltipConfig.ctaLabel}
+        </button>
+      )}
     </div>
   );
 
@@ -106,16 +231,10 @@ export default function VerificationStatusBadge({
           ref={badgeRef}
           type="button"
           onClick={handleBadgeClick}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full border transition-all hover:opacity-80 bg-green-50 text-green-700 border-green-200"
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full border transition-all hover:opacity-80 ${badgeConfig.bgClass}`}
         >
-          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-              clipRule="evenodd"
-            />
-          </svg>
-          Verified
+          {badgeConfig.icon}
+          {badgeConfig.label}
         </button>
 
         {/* Desktop Tooltip */}
@@ -152,7 +271,7 @@ export default function VerificationStatusBadge({
               <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mb-3" />
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-display font-bold text-gray-900">
-                  Verified Business
+                  {tooltipConfig.title}
                 </h3>
                 <button
                   type="button"
