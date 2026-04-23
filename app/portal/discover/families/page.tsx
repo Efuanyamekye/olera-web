@@ -1,11 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { canEngage } from "@/lib/membership";
 import type { Profile, FamilyMetadata } from "@/lib/types";
+import { useProviderVerification } from "@/lib/hooks/useProviderVerification";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
 import UpgradePrompt from "@/components/providers/UpgradePrompt";
 import ConnectButton from "@/components/shared/ConnectButton";
 import EmptyState from "@/components/ui/EmptyState";
@@ -18,13 +21,34 @@ const TIMELINE_LABELS: Record<string, string> = {
 };
 
 export default function DiscoverFamiliesPage() {
-  const { activeProfile, membership } = useAuth();
+  const { activeProfile, membership, refreshAccountData } = useAuth();
   const [families, setFamilies] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
 
   const isProvider =
     activeProfile?.type === "organization" ||
     activeProfile?.type === "caregiver";
+
+  // Verification state
+  const { isVerified, profileId: providerProfileId } = useProviderVerification();
+  const {
+    isOpen: isVerificationModalOpen,
+    open: openVerificationModalRaw,
+    close: closeVerificationModal,
+    handleSubmit: handleVerificationSubmit,
+    handleDismiss: handleVerificationDismiss,
+  } = useVerificationModal({
+    profileId: providerProfileId || "",
+    onVerified: async () => {
+      await refreshAccountData();
+    },
+  });
+
+  // Guard: only allow opening modal if profile is loaded
+  const openVerificationModal = useCallback(() => {
+    if (!providerProfileId) return;
+    openVerificationModalRaw();
+  }, [providerProfileId, openVerificationModalRaw]);
 
   // Full access requires membership access (everyone is verified via email)
   const hasFullAccess = canEngage(
@@ -122,11 +146,21 @@ export default function DiscoverFamiliesPage() {
                 family={family}
                 hasFullAccess={hasFullAccess}
                 fromProfileId={activeProfile?.id}
+                isVerified={isVerified}
+                onVerifyClick={openVerificationModal}
               />
             ))}
           </div>
         </>
       )}
+      {/* Verification Modal */}
+      <VerificationMethodModal
+        isOpen={isVerificationModalOpen}
+        onClose={closeVerificationModal}
+        onSubmit={handleVerificationSubmit}
+        onDismiss={handleVerificationDismiss}
+        businessName={activeProfile?.display_name || "your business"}
+      />
     </div>
     </div>
   );
@@ -136,10 +170,14 @@ function FamilyCard({
   family,
   hasFullAccess,
   fromProfileId,
+  isVerified,
+  onVerifyClick,
 }: {
   family: Profile;
   hasFullAccess: boolean;
   fromProfileId?: string;
+  isVerified: boolean;
+  onVerifyClick: () => void;
 }) {
   const meta = family.metadata as FamilyMetadata;
   const locationStr = [family.city, family.state].filter(Boolean).join(", ");
@@ -197,7 +235,16 @@ function FamilyCard({
         {/* Contact button area */}
         {fromProfileId && (
           <div className="px-6 pb-6 -mt-2">
-            {hasFullAccess ? (
+            {!isVerified ? (
+              // Not verified - show verify button
+              <button
+                type="button"
+                onClick={onVerifyClick}
+                className="w-full py-2.5 text-sm font-medium text-center text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors"
+              >
+                Verify to connect
+              </button>
+            ) : hasFullAccess ? (
               <ConnectButton
                 fromProfileId={fromProfileId}
                 toProfileId={family.id}
@@ -208,7 +255,7 @@ function FamilyCard({
                 fullWidth
               />
             ) : (
-              // No membership - link to upgrade page
+              // Verified but no membership - link to upgrade page
               <Link
                 href="/provider/pro"
                 className="block w-full py-2.5 text-sm font-medium text-center text-primary-600 bg-primary-50 hover:bg-primary-100 rounded-lg transition-colors"
