@@ -26,14 +26,14 @@ If conversation context is lost, reference these files:
 | 2 | Trust scoring → verification_state | ✅ Done | e7d59ca4 |
 | 3 | Update VerificationFormModal (LinkedIn/website fields) | ✅ Done | 680156da |
 | 4 | Dashboard badge updates | ✅ Done | 7d757bfa |
-| 5 | LLM auto-verification | ⬜ Not started | |
+| 5 | LLM auto-verification | ✅ Done | f368a283 |
 | 6 | Verification prompt modal (post-answer) | ⬜ Not started | |
 | 7 | ActionCard post-answer CTA | ⬜ Not started | |
 | 8 | Email notifications | ⬜ Not started | |
 | 9 | Slack integration | ⬜ Not started | |
 | 10 | Reminder cron jobs | ⬜ Not started | |
 
-**Last updated:** Steps 1-4 committed. Next: Step 5 (LLM auto-verification).
+**Last updated:** Steps 1-5 committed. Next: Step 6 (verification prompt modal post-answer).
 
 ---
 
