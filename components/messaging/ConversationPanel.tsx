@@ -809,46 +809,34 @@ export default function ConversationPanel({
                 </div>
               )}
 
-              {/* Verification banner - elegant, above the input */}
+              {/* Verification hint - minimal, Apple-like */}
               {isProviderView && !isVerified && (
                 <div className={`mx-4 sm:ml-6 ${detailOpen ? "sm:mr-6" : "sm:mr-[44px]"} mt-4`}>
-                  <div className="bg-gradient-to-r from-primary-50 to-teal-50/50 border border-primary-100/60 rounded-xl px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      {/* Shield icon */}
-                      <div className="w-9 h-9 rounded-full bg-white/80 border border-primary-100 flex items-center justify-center shrink-0 shadow-sm">
-                        <svg
-                          className="w-4.5 h-4.5 text-primary-600"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={1.5}
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
-                          />
-                        </svg>
-                      </div>
-                      {/* Text */}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[13px] font-medium text-gray-800">
-                          Complete verification to message families
-                        </p>
-                        <p className="text-[12px] text-gray-500 mt-0.5">
-                          Verified providers get faster responses
-                        </p>
-                      </div>
-                      {/* CTA */}
-                      <button
-                        type="button"
-                        onClick={onVerifyClick}
-                        className="shrink-0 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-[13px] font-semibold rounded-lg transition-colors shadow-sm"
-                      >
-                        Verify now
-                      </button>
-                    </div>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={onVerifyClick}
+                    className="w-full flex items-center gap-2.5 px-4 py-2.5 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors group"
+                  >
+                    <svg
+                      className="w-4 h-4 text-gray-400 group-hover:text-gray-500 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
+                      />
+                    </svg>
+                    <span className="flex-1 text-[13px] text-gray-500 group-hover:text-gray-600 text-left">
+                      Verify to message families directly
+                    </span>
+                    <span className="text-[13px] font-medium text-primary-600 group-hover:text-primary-700">
+                      Verify →
+                    </span>
+                  </button>
                 </div>
               )}
 
