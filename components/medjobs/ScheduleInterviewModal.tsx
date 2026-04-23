@@ -31,8 +31,8 @@ interface ScheduleInterviewModalProps {
   initialValues?: ScheduleFormData;
   /** Provider verification status */
   isVerified?: boolean;
-  /** Called when unverified provider tries to submit */
-  onVerifyClick?: () => void;
+  /** Called when unverified provider tries to submit - receives form data to preserve */
+  onVerifyClick?: (formData?: ScheduleFormData) => void;
 }
 
 const FORMAT_OPTIONS: { value: "video" | "phone" | "in_person"; label: string }[] = [
@@ -258,8 +258,17 @@ export default function ScheduleInterviewModal({
     }
 
     // Check verification before scheduling (provider scheduling interviews)
-    if (isVerified === false && onVerifyClick) {
-      onVerifyClick();
+    // Use !isVerified to catch both false and undefined
+    if (!isVerified && onVerifyClick) {
+      // Pass form data so parent can restore state after verification
+      onVerifyClick({
+        type,
+        date,
+        time,
+        altDate: altDate || undefined,
+        altTime: altTime || undefined,
+        notes: notes.trim() || undefined,
+      });
       return;
     }
 
