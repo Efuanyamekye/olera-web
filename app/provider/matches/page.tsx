@@ -1599,7 +1599,8 @@ export default function ProviderMatchesPage() {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
 
   // Verification-based access control: only verified providers see full details
-  const isVerified = providerProfile?.verification_state === "verified";
+  // Note: "not_required" is for high-trust providers who auto-verified at claim time
+  const isVerified = providerProfile?.verification_state === "verified" || providerProfile?.verification_state === "not_required";
   const hasFullAccess = isVerified;
 
   const freeRemaining = getFreeConnectionsRemaining(membership);
@@ -2275,6 +2276,8 @@ export default function ProviderMatchesPage() {
         providerPaymentMethods={providerPaymentMethods}
         sending={sending}
         sendError={sendError}
+        isVerified={isVerified}
+        onVerifyClick={() => setShowVerificationModal(true)}
       />
 
       {/* ── Verification Modal ── */}

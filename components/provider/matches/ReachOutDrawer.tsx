@@ -16,6 +16,10 @@ interface ReachOutDrawerProps {
   providerPaymentMethods?: string[];
   sending?: boolean;
   sendError?: string | null;
+  /** Whether the provider is verified (can send messages) */
+  isVerified?: boolean;
+  /** Callback when unverified provider clicks send - opens verification modal */
+  onVerifyClick?: () => void;
 }
 
 // ── Helpers ──
@@ -203,6 +207,8 @@ export default function ReachOutDrawer({
   providerProfile,
   sending = false,
   sendError,
+  isVerified = true,
+  onVerifyClick,
 }: ReachOutDrawerProps) {
   const [message, setMessage] = useState("");
   const [saveAsDefault, setSaveAsDefault] = useState(false);
@@ -557,28 +563,40 @@ export default function ReachOutDrawer({
             >
               Cancel
             </button>
-            <button
-              onClick={handleSend}
-              disabled={!message.trim() || sending || isGenerating}
-              className="flex-[2] px-4 py-3.5 bg-[#2a7a6e] text-white text-sm font-semibold rounded-xl hover:bg-[#236860] active:bg-[#1f5c54] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {sending ? (
-                <>
-                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Sending...
-                </>
-              ) : (
-                <>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
-                  </svg>
-                  Send message
-                </>
-              )}
-            </button>
+            {!isVerified ? (
+              <button
+                onClick={onVerifyClick}
+                className="flex-[2] px-4 py-3.5 bg-[#2a7a6e] text-white text-sm font-semibold rounded-xl hover:bg-[#236860] active:bg-[#1f5c54] transition-all flex items-center justify-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                </svg>
+                Verify to message
+              </button>
+            ) : (
+              <button
+                onClick={handleSend}
+                disabled={!message.trim() || sending || isGenerating}
+                className="flex-[2] px-4 py-3.5 bg-[#2a7a6e] text-white text-sm font-semibold rounded-xl hover:bg-[#236860] active:bg-[#1f5c54] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {sending ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                    </svg>
+                    Send message
+                  </>
+                )}
+              </button>
+            )}
           </div>
           <p className="text-[11px] text-center text-gray-400 mt-3">
             {firstName} will see your profile
