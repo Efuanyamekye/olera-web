@@ -22,8 +22,8 @@ If conversation context is lost, reference these files:
 
 | Step | Description | Status | Commit |
 |------|-------------|--------|--------|
-| 1 | Data model migration | ✅ Done | Pending |
-| 2 | Trust scoring → verification_state | ✅ Done | Pending |
+| 1 | Data model migration | ✅ Done | e7d59ca4 |
+| 2 | Trust scoring → verification_state | ✅ Done | e7d59ca4 |
 | 3 | Update VerificationFormModal (LinkedIn/website fields) | ⬜ Not started | |
 | 4 | Dashboard badge updates | ⬜ Not started | |
 | 5 | LLM auto-verification | ⬜ Not started | |
@@ -33,7 +33,7 @@ If conversation context is lost, reference these files:
 | 9 | Slack integration | ⬜ Not started | |
 | 10 | Reminder cron jobs | ⬜ Not started | |
 
-**Last updated:** Steps 1-2 complete, ready for verification and commit.
+**Last updated:** Steps 1-2 committed (e7d59ca4). Next: Step 3.
 
 ---
 
