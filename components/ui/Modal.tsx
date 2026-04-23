@@ -8,6 +8,8 @@ interface ModalProps {
   onClose: () => void;
   /** Title can be a string or React node for custom headers (e.g., step indicators) */
   title?: ReactNode;
+  /** Subtitle shown below title in the fixed header area (doesn't scroll) */
+  subtitle?: ReactNode;
   children: ReactNode;
   /** Maximum width of the modal content. Default: "md" */
   size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "fullscreen";
@@ -41,6 +43,7 @@ export default function Modal({
   isOpen,
   onClose,
   title,
+  subtitle,
   children,
   size = "md",
   onBack,
@@ -251,6 +254,17 @@ export default function Modal({
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
+          </div>
+        )}
+
+        {/* Subtitle — fixed below header, doesn't scroll */}
+        {subtitle && !hideHeader && (
+          <div className="px-5 sm:px-7 pt-3 pb-1 shrink-0">
+            {typeof subtitle === "string" ? (
+              <p className="text-gray-600 text-[15px] leading-relaxed">{subtitle}</p>
+            ) : (
+              subtitle
+            )}
           </div>
         )}
 

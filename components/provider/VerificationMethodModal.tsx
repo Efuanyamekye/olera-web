@@ -297,11 +297,27 @@ export default function VerificationMethodModal({
     }
   };
 
+  // Get modal subtitle based on screen (shown in fixed header area)
+  const getSubtitle = () => {
+    switch (screen) {
+      case "pick-method":
+        return (
+          <p className="text-gray-600 text-[15px] leading-relaxed">
+            Pick one way to confirm you represent{" "}
+            <span className="font-medium text-gray-900">{businessName}</span>.
+            This usually takes under a minute.
+          </p>
+        );
+      default:
+        return null;
+    }
+  };
+
   // Render content based on screen
   const renderContent = () => {
     switch (screen) {
       case "pick-method":
-        return <PickMethodScreen businessName={businessName} onSelect={handleMethodSelect} />;
+        return <PickMethodScreen onSelect={handleMethodSelect} />;
       case "email":
         return (
           <EmailScreen
@@ -378,6 +394,7 @@ export default function VerificationMethodModal({
       isOpen={isOpen}
       onClose={onClose}
       title={getTitle()}
+      subtitle={getSubtitle()}
       size="2xl"
       onBack={screen !== "pick-method" && screen !== "success" ? handleBack : undefined}
       footer={renderFooter()}
@@ -412,20 +429,12 @@ export default function VerificationMethodModal({
 // ============================================================
 
 function PickMethodScreen({
-  businessName,
   onSelect,
 }: {
-  businessName: string;
   onSelect: (method: VerificationMethod) => void;
 }) {
   return (
-    <div className="py-2">
-      <p className="text-gray-600 text-[15px] leading-relaxed mb-6">
-        Pick one way to confirm you represent{" "}
-        <span className="font-medium text-gray-900">{businessName}</span>.
-        This usually takes under a minute.
-      </p>
-
+    <div className="pt-2">
       <div className="space-y-3">
         {METHODS.map((method, index) => (
           <button
