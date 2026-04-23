@@ -324,12 +324,12 @@ export default function VerificationMethodModal({
     }
   };
 
-  // Subtitle only for method picker
+  // Subtitle only for method picker - clearly communicates "pick one"
   const getSubtitle = () => {
     if (screen === "pick-method") {
       return (
         <p className="text-gray-500 text-[15px]">
-          Confirm you represent <span className="font-medium text-gray-700">{businessName}</span>
+          Choose one method to confirm you represent <span className="font-medium text-gray-700">{businessName}</span>
         </p>
       );
     }
@@ -484,7 +484,7 @@ function PickMethodScreen({
   const hasTriedMethods = triedMethods.size > 0;
 
   return (
-    <div className="py-1">
+    <div className="pt-3 pb-1">
       {/* Message if returning after failed attempt */}
       {hasTriedMethods && (
         <div className="mb-4 px-4 py-3 bg-amber-50/80 border border-amber-100 rounded-xl">
@@ -1218,7 +1218,7 @@ function FormWrapper({
         e.preventDefault();
         if (isValid && !submitting) onSubmit();
       }}
-      className="py-2 space-y-5"
+      className="pt-4 pb-2 space-y-5"
     >
       {children}
     </form>
