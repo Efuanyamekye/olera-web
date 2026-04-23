@@ -484,7 +484,22 @@ function PickMethodScreen({
   const hasTriedMethods = triedMethods.size > 0;
 
   return (
-    <div className="pt-3 pb-1">
+    <div className="pt-2 pb-1">
+      {/* Benefit banner - shows value of verifying */}
+      {!hasTriedMethods && (
+        <div className="mb-5 flex items-center gap-3 px-4 py-3.5 bg-gradient-to-r from-primary-50 to-emerald-50/50 border border-primary-100/60 rounded-xl">
+          <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center shrink-0">
+            <svg className="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 1 1 9 0v3.75M3.75 21.75h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H3.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[14px] font-semibold text-gray-900">Unlock your full dashboard</p>
+            <p className="text-[13px] text-gray-500">Access leads, messages, and profile editing</p>
+          </div>
+        </div>
+      )}
+
       {/* Message if returning after failed attempt */}
       {hasTriedMethods && (
         <div className="mb-4 px-4 py-3 bg-amber-50/80 border border-amber-100 rounded-xl">
@@ -494,9 +509,21 @@ function PickMethodScreen({
         </div>
       )}
 
+      {/* Pick one instruction */}
+      {!hasTriedMethods && (
+        <p className="text-[13px] text-gray-400 mb-3 flex items-center gap-1.5">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+          </svg>
+          Pick any one — most verify in under 30 seconds
+        </p>
+      )}
+
       <div className="space-y-2.5">
         {METHODS.map((method, index) => {
           const wasTried = triedMethods.has(method.id);
+
+          const isRecommended = method.recommended && !hasTriedMethods && !wasTried;
 
           return (
             <button
@@ -507,7 +534,9 @@ function PickMethodScreen({
                 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2
                 ${wasTried
                   ? "border-gray-100 bg-gray-50/50"
-                  : "border-gray-200 bg-white hover:border-primary-200 hover:bg-primary-50/30 active:scale-[0.99]"
+                  : isRecommended
+                    ? "border-primary-200 bg-primary-50/40 hover:border-primary-300 hover:bg-primary-50/60 active:scale-[0.99] shadow-sm"
+                    : "border-gray-200 bg-white hover:border-primary-200 hover:bg-primary-50/30 active:scale-[0.99]"
                 }
               `}
               style={{ animation: `methodSlide 0.2s ease-out ${index * 40}ms both` }}
@@ -518,7 +547,9 @@ function PickMethodScreen({
                   w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors
                   ${wasTried
                     ? "bg-gray-100 text-gray-400"
-                    : "bg-gray-100 text-gray-500 group-hover:bg-primary-100 group-hover:text-primary-600"
+                    : isRecommended
+                      ? "bg-primary-100 text-primary-600"
+                      : "bg-gray-100 text-gray-500 group-hover:bg-primary-100 group-hover:text-primary-600"
                   }
                 `}>
                   {method.icon}
