@@ -35,7 +35,7 @@ interface VerificationMethodModalProps {
 // Screen States
 // ============================================================
 
-type Screen = "pick-method" | "email" | "linkedin" | "website" | "document" | "success" | "pending-review";
+type Screen = "pick-method" | "email" | "linkedin" | "website" | "document" | "success" | "pending-review" | "need-help";
 
 // ============================================================
 // Method Cards Data
@@ -151,6 +151,9 @@ export default function VerificationMethodModal({
   const [error, setError] = useState<string | null>(null);
   const [isProcessingFile, setIsProcessingFile] = useState(false);
 
+  // Track which verification methods have been tried (for "try another" flow)
+  const [triedMethods, setTriedMethods] = useState<Set<VerificationMethod>>(new Set());
+
   // Form values for each method
   const [emailValue, setEmailValue] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
@@ -167,6 +170,7 @@ export default function VerificationMethodModal({
       setScreen("pick-method");
       setSubmitting(false);
       setError(null);
+      setTriedMethods(new Set());
       setIsProcessingFile(false);
       setEmailValue(userEmail || "");
       setLinkedinUrl("");
@@ -219,16 +223,35 @@ export default function VerificationMethodModal({
       if (result?.verified) {
         setScreen("success");
       } else if (result?.pendingReview) {
-        setScreen("pending-review");
+        // Instead of showing pending-review immediately, track this method as tried
+        // and prompt user to try another method
+        setTriedMethods(prev => new Set(prev).add(method));
+
+        // If they've tried all 4 methods, show the pending-review screen
+        const newTriedCount = triedMethods.size + 1;
+        if (newTriedCount >= 4) {
+          setScreen("pending-review");
+        } else {
+          // Show error with suggestion to try another method
+          setError("We couldn't verify you automatically with this method. Try another option below.");
+        }
       } else {
         // Fallback to success for backwards compatibility
         setScreen("success");
       }
     } catch (err) {
+      // Mark this method as tried even on error
+      setTriedMethods(prev => new Set(prev).add(method));
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Navigate to need-help screen
+  const handleNeedHelp = () => {
+    setScreen("need-help");
+    setError(null);
   };
 
   const handleDocumentSubmit = useCallback(async () => {
@@ -302,6 +325,7 @@ export default function VerificationMethodModal({
         return "Upload document";
       case "success":
       case "pending-review":
+      case "need-help":
         return null; // These screens have custom layout
     }
   };
@@ -326,7 +350,13 @@ export default function VerificationMethodModal({
   const renderContent = () => {
     switch (screen) {
       case "pick-method":
-        return <PickMethodScreen onSelect={handleMethodSelect} />;
+        return (
+          <PickMethodScreen
+            onSelect={handleMethodSelect}
+            triedMethods={triedMethods}
+            onNeedHelp={handleNeedHelp}
+          />
+        );
       case "email":
         return (
           <EmailScreen
@@ -336,6 +366,8 @@ export default function VerificationMethodModal({
             submitting={submitting}
             error={error}
             businessName={businessName}
+            onTryAnother={handleBack}
+            showTryAnother={triedMethods.has("email")}
           />
         );
       case "linkedin":
@@ -347,6 +379,8 @@ export default function VerificationMethodModal({
             submitting={submitting}
             error={error}
             businessName={businessName}
+            onTryAnother={handleBack}
+            showTryAnother={triedMethods.has("linkedin")}
           />
         );
       case "website":
@@ -358,6 +392,8 @@ export default function VerificationMethodModal({
             submitting={submitting}
             error={error}
             businessName={businessName}
+            onTryAnother={handleBack}
+            showTryAnother={triedMethods.has("website")}
           />
         );
       case "document":
@@ -370,18 +406,22 @@ export default function VerificationMethodModal({
             submitting={submitting || isProcessingFile}
             error={error}
             businessName={businessName}
+            onTryAnother={handleBack}
+            showTryAnother={triedMethods.has("document")}
           />
         );
       case "success":
         return <SuccessScreen businessName={businessName} onClose={onClose} />;
       case "pending-review":
         return <PendingReviewScreen businessName={businessName} onClose={onClose} />;
+      case "need-help":
+        return <NeedHelpScreen businessName={businessName} onClose={onClose} />;
     }
   };
 
   // Render footer based on screen
   const renderFooter = () => {
-    if (screen === "success" || screen === "pending-review") return null;
+    if (screen === "success" || screen === "pending-review" || screen === "need-help") return null;
 
     if (screen === "pick-method" && allowDismiss) {
       return (
@@ -407,7 +447,7 @@ export default function VerificationMethodModal({
       title={getTitle()}
       subtitle={getSubtitle()}
       size="2xl"
-      onBack={screen !== "pick-method" && screen !== "success" && screen !== "pending-review" ? handleBack : undefined}
+      onBack={screen !== "pick-method" && screen !== "success" && screen !== "pending-review" && screen !== "need-help" ? handleBack : undefined}
       footer={renderFooter()}
     >
       <div
@@ -441,53 +481,110 @@ export default function VerificationMethodModal({
 
 function PickMethodScreen({
   onSelect,
+  triedMethods,
+  onNeedHelp,
 }: {
   onSelect: (method: VerificationMethod) => void;
+  triedMethods: Set<VerificationMethod>;
+  onNeedHelp: () => void;
 }) {
+  const hasTriedMethods = triedMethods.size > 0;
+
   return (
     <div className="pt-2">
+      {/* Show message if user has tried methods and is back to pick another */}
+      {hasTriedMethods && (
+        <div className="mb-4 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl">
+          <p className="text-sm text-amber-800">
+            <span className="font-medium">No luck with that one.</span>{" "}
+            Try another verification method below.
+          </p>
+        </div>
+      )}
+
       <div className="space-y-3">
-        {METHODS.map((method, index) => (
-          <button
-            key={method.id}
-            onClick={() => onSelect(method.id)}
-            className="group w-full text-left p-4 sm:p-5 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md hover:border-primary-300 hover:bg-gradient-to-r hover:from-primary-50/40 hover:to-white active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2"
-            style={{
-              animation: `fade-slide-up 0.25s ease-out ${index * 50}ms both`,
-            }}
-          >
-            <div className="flex items-center gap-4">
-              {/* Icon container */}
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 group-hover:from-primary-100 group-hover:to-primary-50 flex items-center justify-center text-gray-500 group-hover:text-primary-600 transition-all duration-200 shrink-0 shadow-sm">
-                {method.icon}
-              </div>
+        {METHODS.map((method, index) => {
+          const wasTried = triedMethods.has(method.id);
 
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className="font-semibold text-gray-900 text-[15px] group-hover:text-primary-900 transition-colors">
-                    {method.title}
-                  </span>
-                  {method.recommended && (
-                    <span className="px-2 py-0.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-[11px] font-semibold rounded-full shadow-sm">
-                      Recommended
-                    </span>
-                  )}
+          return (
+            <button
+              key={method.id}
+              onClick={() => onSelect(method.id)}
+              className={[
+                "group w-full text-left p-4 sm:p-5 rounded-2xl border shadow-sm active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2",
+                wasTried
+                  ? "border-gray-200 bg-gray-50/50"
+                  : "border-gray-200 bg-white hover:shadow-md hover:border-primary-300 hover:bg-gradient-to-r hover:from-primary-50/40 hover:to-white",
+              ].join(" ")}
+              style={{
+                animation: `fade-slide-up 0.25s ease-out ${index * 50}ms both`,
+              }}
+            >
+              <div className="flex items-center gap-4">
+                {/* Icon container */}
+                <div className={[
+                  "w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 shrink-0 shadow-sm",
+                  wasTried
+                    ? "bg-gray-100 text-gray-400"
+                    : "bg-gradient-to-br from-gray-50 to-gray-100 group-hover:from-primary-100 group-hover:to-primary-50 text-gray-500 group-hover:text-primary-600",
+                ].join(" ")}>
+                  {method.icon}
                 </div>
-                <p className="text-gray-500 text-sm group-hover:text-gray-600 transition-colors">{method.description}</p>
-                <p className="text-gray-400 text-xs mt-1">{method.hint}</p>
-              </div>
 
-              {/* Arrow */}
-              <div className="text-gray-300 group-hover:text-primary-500 group-hover:translate-x-0.5 transition-all duration-200 shrink-0">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                </svg>
+                {/* Content */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className={[
+                      "font-semibold text-[15px] transition-colors",
+                      wasTried ? "text-gray-500" : "text-gray-900 group-hover:text-primary-900",
+                    ].join(" ")}>
+                      {method.title}
+                    </span>
+                    {wasTried ? (
+                      <span className="px-2 py-0.5 bg-gray-200 text-gray-500 text-[11px] font-medium rounded-full">
+                        Tried
+                      </span>
+                    ) : method.recommended && !hasTriedMethods ? (
+                      <span className="px-2 py-0.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white text-[11px] font-semibold rounded-full shadow-sm">
+                        Recommended
+                      </span>
+                    ) : null}
+                  </div>
+                  <p className={[
+                    "text-sm transition-colors",
+                    wasTried ? "text-gray-400" : "text-gray-500 group-hover:text-gray-600",
+                  ].join(" ")}>{method.description}</p>
+                  <p className="text-gray-400 text-xs mt-1">{method.hint}</p>
+                </div>
+
+                {/* Arrow */}
+                <div className={[
+                  "transition-all duration-200 shrink-0",
+                  wasTried ? "text-gray-300" : "text-gray-300 group-hover:text-primary-500 group-hover:translate-x-0.5",
+                ].join(" ")}>
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                  </svg>
+                </div>
               </div>
-            </div>
-          </button>
-        ))}
+            </button>
+          );
+        })}
       </div>
+
+      {/* Need help link - show after trying at least one method */}
+      {hasTriedMethods && (
+        <div className="mt-6 pt-4 border-t border-gray-100 text-center">
+          <button
+            type="button"
+            onClick={onNeedHelp}
+            className="text-sm text-gray-500 hover:text-primary-600 transition-colors"
+          >
+            Having trouble?{" "}
+            <span className="font-medium underline underline-offset-2">Get help from our team</span>
+          </button>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes fade-slide-up {
@@ -512,6 +609,8 @@ function EmailScreen({
   submitting,
   error,
   businessName,
+  onTryAnother,
+  showTryAnother,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -519,6 +618,8 @@ function EmailScreen({
   submitting: boolean;
   error: string | null;
   businessName: string;
+  onTryAnother: () => void;
+  showTryAnother: boolean;
 }) {
   const isValid = isValidEmail(value);
 
@@ -556,7 +657,7 @@ function EmailScreen({
           </p>
         </div>
 
-        {error && <ErrorMessage message={error} />}
+        {error && <ErrorMessageWithRetry message={error} onTryAnother={onTryAnother} showTryAnother={showTryAnother} />}
 
         <SubmitButton
           label="Continue"
@@ -576,6 +677,8 @@ function LinkedInScreen({
   submitting,
   error,
   businessName,
+  onTryAnother,
+  showTryAnother,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -583,6 +686,8 @@ function LinkedInScreen({
   submitting: boolean;
   error: string | null;
   businessName: string;
+  onTryAnother: () => void;
+  showTryAnother: boolean;
 }) {
   const isValid = isValidLinkedInUrl(value);
 
@@ -618,7 +723,7 @@ function LinkedInScreen({
           </p>
         </div>
 
-        {error && <ErrorMessage message={error} />}
+        {error && <ErrorMessageWithRetry message={error} onTryAnother={onTryAnother} showTryAnother={showTryAnother} />}
 
         <SubmitButton
           label="Verify with LinkedIn"
@@ -638,6 +743,8 @@ function WebsiteScreen({
   submitting,
   error,
   businessName,
+  onTryAnother,
+  showTryAnother,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -645,6 +752,8 @@ function WebsiteScreen({
   submitting: boolean;
   error: string | null;
   businessName: string;
+  onTryAnother: () => void;
+  showTryAnother: boolean;
 }) {
   const isValid = isValidWebsiteUrl(value);
 
@@ -680,7 +789,7 @@ function WebsiteScreen({
           </p>
         </div>
 
-        {error && <ErrorMessage message={error} />}
+        {error && <ErrorMessageWithRetry message={error} onTryAnother={onTryAnother} showTryAnother={showTryAnother} />}
 
         <SubmitButton
           label="Verify with website"
@@ -701,6 +810,8 @@ function DocumentScreen({
   submitting,
   error,
   businessName,
+  onTryAnother,
+  showTryAnother,
 }: {
   file: File | null;
   preview: string | null;
@@ -709,6 +820,8 @@ function DocumentScreen({
   submitting: boolean;
   error: string | null;
   businessName: string;
+  onTryAnother: () => void;
+  showTryAnother: boolean;
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -839,7 +952,7 @@ function DocumentScreen({
           </p>
         </div>
 
-        {error && <ErrorMessage message={error} />}
+        {error && <ErrorMessageWithRetry message={error} onTryAnother={onTryAnother} showTryAnother={showTryAnother} />}
 
         <SubmitButton
           label="Verify document"
@@ -1025,6 +1138,117 @@ function PendingReviewScreen({
   );
 }
 
+function NeedHelpScreen({
+  businessName,
+  onClose,
+}: {
+  businessName: string;
+  onClose: () => void;
+}) {
+  return (
+    <div className="py-8 text-center">
+      {/* Support icon */}
+      <div
+        className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center shadow-lg shadow-primary-100/50"
+        style={{ animation: "success-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both" }}
+      >
+        <svg
+          className="w-10 h-10 text-primary-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+        </svg>
+      </div>
+
+      {/* Message */}
+      <h3
+        className="text-2xl font-bold text-gray-900 mb-3"
+        style={{ animation: "fade-up 0.3s ease-out 0.2s both" }}
+      >
+        We&apos;re here to help
+      </h3>
+      <p
+        className="text-gray-600 text-[15px] leading-relaxed mb-6 max-w-sm mx-auto"
+        style={{ animation: "fade-up 0.3s ease-out 0.3s both" }}
+      >
+        Having trouble verifying{" "}
+        <span className="font-medium text-gray-900">{businessName}</span>?
+        Our team can help you get verified manually.
+      </p>
+
+      {/* Contact options */}
+      <div
+        className="space-y-3 mb-8 max-w-xs mx-auto"
+        style={{ animation: "fade-up 0.3s ease-out 0.4s both" }}
+      >
+        <a
+          href="mailto:support@olera.care?subject=Verification%20Help"
+          className="flex items-center justify-center gap-3 w-full py-3.5 px-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl transition-all shadow-sm hover:shadow-md"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+          Email support@olera.care
+        </a>
+        <a
+          href="tel:+19792439801"
+          className="flex items-center justify-center gap-3 w-full py-3.5 px-4 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl border border-gray-200 transition-all"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+          </svg>
+          Call +1 (979) 243-9801
+        </a>
+      </div>
+
+      <p
+        className="text-gray-400 text-sm mb-6"
+        style={{ animation: "fade-up 0.3s ease-out 0.45s both" }}
+      >
+        We typically respond within a few hours during business hours.
+      </p>
+
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        className="text-gray-500 hover:text-gray-700 font-medium transition-colors text-sm"
+        style={{ animation: "fade-up 0.3s ease-out 0.5s both" }}
+      >
+        Close
+      </button>
+
+      <style jsx>{`
+        @keyframes success-pop {
+          0% {
+            opacity: 0;
+            transform: scale(0.5);
+          }
+          70% {
+            transform: scale(1.1);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+        @keyframes fade-up {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 // ============================================================
 // Shared Components
 // ============================================================
@@ -1038,6 +1262,38 @@ function ErrorMessage({ message }: { message: string }) {
         </svg>
       </div>
       <p className="text-sm text-red-700 leading-relaxed" role="alert">{message}</p>
+    </div>
+  );
+}
+
+function ErrorMessageWithRetry({
+  message,
+  onTryAnother,
+  showTryAnother,
+}: {
+  message: string;
+  onTryAnother: () => void;
+  showTryAnother: boolean;
+}) {
+  return (
+    <div className="px-4 py-4 bg-amber-50 border border-amber-100 rounded-xl space-y-3">
+      <div className="flex items-start gap-3">
+        <div className="w-5 h-5 rounded-full bg-amber-100 flex items-center justify-center shrink-0 mt-0.5">
+          <svg className="w-3 h-3 text-amber-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+          </svg>
+        </div>
+        <p className="text-sm text-amber-800 leading-relaxed" role="alert">{message}</p>
+      </div>
+      {showTryAnother && (
+        <button
+          type="button"
+          onClick={onTryAnother}
+          className="w-full py-2.5 text-sm font-medium text-amber-700 hover:text-amber-800 bg-amber-100 hover:bg-amber-200 rounded-lg transition-colors"
+        >
+          Try a different method
+        </button>
+      )}
     </div>
   );
 }
