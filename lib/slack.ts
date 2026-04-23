@@ -592,8 +592,12 @@ export function slackVerificationReview(opts: {
     links.push("_No verification URLs provided_");
   }
 
-  // Action value encodes: profileId|claimerEmail|providerName
-  const actionValue = `${opts.profileId}|${opts.claimerEmail}|${opts.providerName}`;
+  // Action value encodes verification data as JSON (pipe delimiter breaks on names with |)
+  const actionValue = JSON.stringify({
+    profileId: opts.profileId,
+    email: opts.claimerEmail,
+    name: opts.providerName,
+  });
 
   return {
     text: `Verification review needed: ${opts.providerName} claimed by ${opts.claimerName}`,

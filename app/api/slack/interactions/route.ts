@@ -42,10 +42,14 @@ function verifySlackSignature(
     .update(sigBasestring, "utf8")
     .digest("hex")}`;
 
-  return timingSafeEqual(
-    Buffer.from(mySignature, "utf8"),
-    Buffer.from(signature, "utf8")
-  );
+  // timingSafeEqual throws if buffers have different lengths
+  const myBuffer = Buffer.from(mySignature, "utf8");
+  const theirBuffer = Buffer.from(signature, "utf8");
+  if (myBuffer.length !== theirBuffer.length) {
+    return false;
+  }
+
+  return timingSafeEqual(myBuffer, theirBuffer);
 }
 
 /**
@@ -88,6 +92,9 @@ export async function POST(request: NextRequest) {
 
     // Handle verification actions
     if (actionId === "verification_approve" || actionId === "verification_reject") {
+      if (!actionValue) {
+        return updateSlackMessage(payload, "❌ Missing action data");
+      }
       return await handleVerificationAction(
         actionId === "verification_approve" ? "approve" : "reject",
         actionValue,
@@ -113,10 +120,21 @@ async function handleVerificationAction(
     return updateSlackMessage(payload, "❌ Server configuration error");
   }
 
-  // Parse action value: profileId|claimerEmail|providerName
-  const [profileId, claimerEmail, providerName] = value.split("|");
-  if (!profileId || !claimerEmail) {
+  // Parse action value as JSON
+  let profileId: string;
+  let claimerEmail: string;
+  let providerName: string;
+  try {
+    const parsed = JSON.parse(value) as { profileId?: string; email?: string; name?: string };
+    profileId = parsed.profileId || "";
+    claimerEmail = parsed.email || "";
+    providerName = parsed.name || "";
+  } catch {
     return updateSlackMessage(payload, "❌ Invalid action data");
+  }
+
+  if (!profileId || !claimerEmail) {
+    return updateSlackMessage(payload, "❌ Missing profile or email");
   }
 
   // Get the Slack user who clicked
