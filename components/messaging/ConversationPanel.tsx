@@ -808,6 +808,50 @@ export default function ConversationPanel({
                   <p className="text-[13px] text-rose-600 font-medium text-center">{sendError}</p>
                 </div>
               )}
+
+              {/* Verification banner - elegant, above the input */}
+              {isProviderView && !isVerified && (
+                <div className={`mx-4 sm:ml-6 ${detailOpen ? "sm:mr-6" : "sm:mr-[44px]"} mt-4`}>
+                  <div className="bg-gradient-to-r from-primary-50 to-teal-50/50 border border-primary-100/60 rounded-xl px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      {/* Shield icon */}
+                      <div className="w-9 h-9 rounded-full bg-white/80 border border-primary-100 flex items-center justify-center shrink-0 shadow-sm">
+                        <svg
+                          className="w-4.5 h-4.5 text-primary-600"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={1.5}
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
+                          />
+                        </svg>
+                      </div>
+                      {/* Text */}
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[13px] font-medium text-gray-800">
+                          Complete verification to message families
+                        </p>
+                        <p className="text-[12px] text-gray-500 mt-0.5">
+                          Verified providers get faster responses
+                        </p>
+                      </div>
+                      {/* CTA */}
+                      <button
+                        type="button"
+                        onClick={onVerifyClick}
+                        className="shrink-0 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-[13px] font-semibold rounded-lg transition-colors shadow-sm"
+                      >
+                        Verify now
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Input area */}
               <div className={`px-4 sm:pl-6 ${detailOpen ? "sm:pr-6" : "sm:pr-[44px]"} py-4`}>
                 <div className="border border-gray-300 rounded-2xl focus-within:border-gray-400 focus-within:shadow-sm transition-all overflow-hidden">
@@ -833,38 +877,8 @@ export default function ConversationPanel({
                     placeholder={messagePlaceholder}
                     disabled={sending}
                     rows={1}
-                    className="w-full px-4 pt-3.5 pb-1 text-base text-gray-900 placeholder:text-gray-400 outline-none resize-none disabled:opacity-50 leading-relaxed bg-transparent"
+                    className="w-full px-4 pt-3.5 pb-3 text-base text-gray-900 placeholder:text-gray-400 outline-none resize-none disabled:opacity-50 leading-relaxed bg-transparent"
                   />
-                  {/* Subtle inline verification hint - integrated, friendly, not alarming */}
-                  {isProviderView && !isVerified && (
-                    <div className="px-4 pb-2 pt-1 border-t border-gray-100">
-                      <div className="flex items-center gap-2">
-                        <svg
-                          className="w-3.5 h-3.5 text-gray-400 shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={1.5}
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"
-                          />
-                        </svg>
-                        <p className="flex-1 text-[12px] text-gray-400">
-                          Verified providers get responses faster
-                        </p>
-                        <button
-                          type="button"
-                          onClick={onVerifyClick}
-                          className="text-[12px] font-medium text-primary-600 hover:text-primary-700 transition-colors"
-                        >
-                          Verify now →
-                        </button>
-                      </div>
-                    </div>
-                  )}
                   <div className="flex items-center justify-end px-3 pb-3">
                     <button
                       type="button"
