@@ -5,6 +5,7 @@ import { useClickOutside } from "@/hooks/use-click-outside";
 import Image from "next/image";
 import Link from "next/link";
 import type { Connection, Profile } from "@/lib/types";
+import { formatRedactedName } from "@/lib/utils/pii-redaction";
 
 export interface ConnectionWithProfile extends Connection {
   fromProfile: Profile | null;
@@ -50,6 +51,8 @@ interface ConversationListProps {
   onRefresh?: () => void;
   /** Whether a refresh is currently in progress */
   refreshing?: boolean;
+  /** Whether the provider is verified (controls PII redaction) */
+  isVerified?: boolean;
 }
 
 /** Deterministic gradient for fallback avatars */
@@ -326,6 +329,7 @@ export default function ConversationList({
   onFamilyTabChange,
   onRefresh,
   refreshing = false,
+  isVerified = true,
 }: ConversationListProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -463,7 +467,9 @@ export default function ConversationList({
   const renderConversationItem = (conn: ConnectionWithProfile, isPast = false) => {
     const isInbound = conn.to_profile_id === activeProfileId;
     const otherProfile = isInbound ? conn.fromProfile : conn.toProfile;
-    const name = otherProfile?.display_name || "Unknown";
+    const rawName = otherProfile?.display_name || "Unknown";
+    // Redact name for unverified providers viewing family contacts
+    const name = (variant === "provider" && !isVerified) ? formatRedactedName(rawName) : rawName;
     const initials = name.split(/\s+/).map((w) => w[0]).join("").toUpperCase().slice(0, 2);
     const lastMsg = getLastMessage(conn);
     const careType = getCareType(conn);

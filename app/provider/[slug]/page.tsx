@@ -402,6 +402,7 @@ export default async function ProviderPage({
             .select("id, question, answer, asker_name, created_at")
             .eq("provider_id", profile.slug)
             .eq("is_public", true)
+            .eq("answer_status", "published")  // Only show published answers (not pending verification)
             .in("status", ["approved", "answered"])
             .not("answer", "is", null)
             .order("created_at", { ascending: false })

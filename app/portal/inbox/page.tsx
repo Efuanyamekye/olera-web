@@ -11,6 +11,9 @@ import ConversationPanel from "@/components/messaging/ConversationPanel";
 import RequestDetailPanel from "@/components/messaging/RequestDetailPanel";
 import ProviderDetailPanel from "@/components/messaging/ProviderDetailPanel";
 import ReportConnectionModal from "@/components/messaging/ReportConnectionModal";
+import { useProviderVerification } from "@/lib/hooks/useProviderVerification";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
 
 type RoleFilter = "all" | "family" | "provider";
 
@@ -36,7 +39,7 @@ const CLAIM_TOKEN_KEY = "olera_claim_token";
 function InboxContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { activeProfile, profiles, user } = useAuth();
+  const { activeProfile, profiles, user, refreshAccountData } = useAuth();
 
   // Extract URL params explicitly so changes trigger re-renders on client-side navigation
   const urlConnectionId = searchParams.get("id");
@@ -122,6 +125,26 @@ function InboxContent() {
 
   // Only show role filters for users with both family AND provider profiles
   const showRoleFilters = hasProviderProfile && hasFamilyProfile;
+
+  // Provider verification for PII redaction gating
+  const verification = useProviderVerification();
+
+  // Verification modal (only relevant for providers)
+  const verificationModal = useVerificationModal({
+    profileId: verification.profileId || "",
+    onVerified: async () => {
+      // Refresh profile data to update isVerified state
+      await refreshAccountData();
+      // Refresh connections to update UI with full PII
+      fetchConnections();
+    },
+  });
+
+  // Guard: only allow opening modal if profileId is loaded
+  const openVerificationModal = useCallback(() => {
+    if (!verification.profileId) return;
+    verificationModal.open();
+  }, [verification.profileId, verificationModal]);
 
   // Role filter state — default from URL param, or will be set by effect below
   const [roleFilter, setRoleFilter] = useState<RoleFilter>(() => {
@@ -894,6 +917,7 @@ function InboxContent() {
         onFamilyTabChange={setFamilyTab}
         onRefresh={handleManualRefresh}
         refreshing={refreshing}
+        isVerified={verification.isVerified}
       />
 
       {/* Middle panel — request detail OR conversation */}
@@ -916,6 +940,9 @@ function InboxContent() {
           className={`w-full lg:flex-1 ${selectedId ? "flex" : "hidden lg:flex"}`}
           claimToken={!user && !activeProfile ? (urlToken || localStorage.getItem(CLAIM_TOKEN_KEY)) : null}
           guestProfileId={guestProfileId}
+          isVerified={verification.isVerified}
+          onVerifyClick={openVerificationModal}
+          variant={roleFilter === "provider" ? "provider" : "family"}
         />
       )}
 
@@ -930,6 +957,9 @@ function InboxContent() {
             profile={otherProfile}
             onClose={() => setDetailOpen(false)}
             className="flex w-[360px] h-full"
+            variant={roleFilter === "provider" ? "provider" : "family"}
+            isVerified={verification.isVerified}
+            onVerifyClick={openVerificationModal}
           />
         </div>
       )}
@@ -941,6 +971,18 @@ function InboxContent() {
         connectionId={reportingConnectionId}
         onClose={() => setReportingConnectionId(null)}
         onSubmit={handleReportSubmit}
+      />
+    )}
+
+    {/* Verification modal */}
+    {verificationModal.isOpen && (
+      <VerificationMethodModal
+        isOpen={verificationModal.isOpen}
+        onClose={verificationModal.close}
+        onSubmit={verificationModal.handleSubmit}
+        onDismiss={verificationModal.handleDismiss}
+        businessName={verification.providerName || "your business"}
+        allowDismiss
       />
     )}
     </div>

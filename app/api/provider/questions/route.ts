@@ -68,10 +68,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Build query - match any of the possible provider_id formats
-    // Include metadata for read tracking
+    // Include metadata for read tracking, answer_status for verification gating
     let query = db
       .from("provider_questions")
-      .select("id, question, answer, asker_name, asker_email, status, is_public, answered_at, created_at, updated_at, metadata")
+      .select("id, question, answer, asker_name, asker_email, status, is_public, answer_status, answered_at, created_at, updated_at, metadata")
       .in("provider_id", providerIdVariants)
       .order("created_at", { ascending: false });
 
@@ -145,7 +145,7 @@ export async function PATCH(request: NextRequest) {
 
     const { data: profile } = await supabase
       .from("business_profiles")
-      .select("id, slug, display_name, source_provider_id")
+      .select("id, slug, display_name, source_provider_id, verification_state")
       .eq("account_id", account.id)
       .in("type", ["organization", "caregiver"])
       .single();
@@ -188,6 +188,13 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Not authorized to answer this question" }, { status: 403 });
     }
 
+    // Check provider's verification state
+    // Verified or not_required = instant publish
+    // Otherwise = pending (saved but not visible until verified)
+    const verificationState = profile.verification_state as string | null;
+    const isVerified = verificationState === "verified" || verificationState === "not_required";
+    const answerStatus = isVerified ? "published" : "pending";
+
     // Update the question with the answer
     const { data: updated, error: updateError } = await db
       .from("provider_questions")
@@ -196,11 +203,12 @@ export async function PATCH(request: NextRequest) {
         answered_at: new Date().toISOString(),
         answered_by: profile.id,
         status: "answered",
-        is_public: true,
+        is_public: isVerified, // Only visible if verified
+        answer_status: answerStatus,
         updated_at: new Date().toISOString(),
       })
       .eq("id", id)
-      .select("id, question, answer, asker_name, status, is_public, answered_at, created_at")
+      .select("id, question, answer, asker_name, status, is_public, answer_status, answered_at, created_at")
       .single();
 
     if (updateError) {
@@ -223,10 +231,11 @@ export async function PATCH(request: NextRequest) {
       if (actErr) console.error("[provider_activity] question_responded insert failed:", actErr);
     });
 
-    // Only notify on first answer — not when provider edits an existing response
+    // Only notify on first answer that's published — not for pending or edits
     const isFirstAnswer = !question.answer;
+    const shouldNotify = isFirstAnswer && isVerified;
 
-    if (isFirstAnswer) {
+    if (shouldNotify) {
       const providerName = profile.display_name || "A provider";
 
       // Slack notification (fire-and-forget)
@@ -261,7 +270,12 @@ export async function PATCH(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ question: updated });
+    return NextResponse.json({
+      question: updated,
+      // Include flags for UI to show appropriate messaging
+      isVerified,
+      answerStatus,
+    });
   } catch (err) {
     console.error("Provider questions PATCH error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

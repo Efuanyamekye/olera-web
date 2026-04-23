@@ -1,11 +1,17 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useProviderProfile } from "@/hooks/useProviderProfile";
+import { useProviderVerification } from "@/lib/hooks/useProviderVerification";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
+import VerifyToUnlockPrompt from "@/components/provider/VerifyToUnlockPrompt";
 
 // ── Types ──
 
 type TabFilter = "pending" | "published";
+type AnswerStatus = "pending" | "published";
 
 interface Question {
   id: string;
@@ -16,6 +22,7 @@ interface Question {
   answer?: string;
   answered_at?: string;
   is_public?: boolean;
+  answer_status?: AnswerStatus;
   metadata?: Record<string, unknown>;
   isNew?: boolean;
 }
@@ -335,13 +342,21 @@ function PublishedQuestionCard({
   question,
   onEdit,
   isMobile,
+  onVerifyClick,
 }: {
   question: Question;
   onEdit: (question: Question) => void;
   isMobile: boolean;
+  onVerifyClick?: () => void;
 }) {
+  const isPendingVerification = question.answer_status === "pending";
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden hover:border-gray-300/80 transition-colors">
+    <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-colors ${
+      isPendingVerification
+        ? "border-amber-200 hover:border-amber-300"
+        : "border-gray-200/80 hover:border-gray-300/80"
+    }`}>
       <div className={isMobile ? "p-4" : "p-6"}>
         {/* Asker info + badge */}
         <div className="flex items-start gap-3">
@@ -351,9 +366,18 @@ function PublishedQuestionCard({
               <span className={`font-semibold text-gray-900 ${isMobile ? "text-[15px]" : "text-base"}`}>
                 {question.asker_name}
               </span>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-primary-50 text-primary-700 border border-primary-100/50">
-                Published
-              </span>
+              {isPendingVerification ? (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200/50">
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                  Pending verification
+                </span>
+              ) : (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-primary-50 text-primary-700 border border-primary-100/50">
+                  Published
+                </span>
+              )}
             </div>
             <p className="text-sm text-gray-400 mt-0.5">
               {formatDate(question.created_at)}
@@ -386,15 +410,32 @@ function PublishedQuestionCard({
           </div>
         )}
 
-        {/* Edit button */}
-        <div className="mt-5 lg:flex lg:justify-end">
-          <button
-            type="button"
-            onClick={() => onEdit(question)}
-            className="w-full lg:w-auto px-6 py-3 lg:py-2.5 rounded-xl border border-gray-200 text-[15px] lg:text-[14px] font-semibold text-primary-600 hover:bg-primary-50/50 hover:border-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-all active:scale-[0.99] min-h-[48px] lg:min-h-0"
-          >
-            Edit
-          </button>
+        {/* Edit button or Verify prompt */}
+        <div className="mt-5">
+          {isPendingVerification && onVerifyClick ? (
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+              <p className="text-[13px] text-amber-700">
+                Your answer is saved but not visible yet. Verify to publish.
+              </p>
+              <button
+                type="button"
+                onClick={onVerifyClick}
+                className="w-full lg:w-auto px-6 py-3 lg:py-2.5 rounded-xl bg-primary-600 text-[15px] lg:text-[14px] font-semibold text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-300 transition-all active:scale-[0.99] min-h-[48px] lg:min-h-0"
+              >
+                Verify to publish
+              </button>
+            </div>
+          ) : (
+            <div className="lg:flex lg:justify-end">
+              <button
+                type="button"
+                onClick={() => onEdit(question)}
+                className="w-full lg:w-auto px-6 py-3 lg:py-2.5 rounded-xl border border-gray-200 text-[15px] lg:text-[14px] font-semibold text-primary-600 hover:bg-primary-50/50 hover:border-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-all active:scale-[0.99] min-h-[48px] lg:min-h-0"
+              >
+                Edit
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -859,6 +900,7 @@ function QnASkeleton() {
 // ── Main Page ──
 
 export default function ProviderQnAPage() {
+  const { refreshAccountData } = useAuth();
   const providerProfile = useProviderProfile();
   const [activeFilter, setActiveFilter] = useState<TabFilter>("pending");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -872,6 +914,30 @@ export default function ProviderQnAPage() {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [sheetMode, setSheetMode] = useState<"reply" | "edit">("reply");
 
+  // Verification state
+  const { isVerified } = useProviderVerification();
+  const [pendingAnswerSubmitted, setPendingAnswerSubmitted] = useState(false);
+  const {
+    isOpen: isVerificationModalOpen,
+    open: openVerificationModalRaw,
+    close: closeVerificationModal,
+    handleSubmit: handleVerificationSubmit,
+    handleDismiss: handleVerificationDismiss,
+  } = useVerificationModal({
+    profileId: profileId || "",
+    onVerified: async () => {
+      // Refresh profile state to update isVerified, then refetch questions
+      await refreshAccountData();
+      fetchQuestions();
+    },
+  });
+
+  // Guard: only allow opening modal if profileId is loaded
+  const openVerificationModal = useCallback(() => {
+    if (!profileId) return;
+    openVerificationModalRaw();
+  }, [profileId, openVerificationModalRaw]);
+
   // Detect mobile
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -881,68 +947,70 @@ export default function ProviderQnAPage() {
   }, []);
 
   // Fetch questions from API
-  useEffect(() => {
+  const fetchQuestions = useCallback(async () => {
     if (!providerProfile?.slug) {
       setIsLoading(false);
       return;
     }
 
-    (async () => {
-      try {
-        const res = await fetch("/api/provider/questions");
-        if (!res.ok) {
-          throw new Error("Failed to fetch questions");
-        }
-        const data = await res.json();
-        const fetchedProfileId = data.profileId as string | undefined;
-        if (fetchedProfileId) {
-          setProfileId(fetchedProfileId);
-          // Migrate localStorage data from slug-based to profileId-based key
-          migrateQnaReadData(providerProfile.slug, fetchedProfileId);
-        }
-
-        // Determine isNew for each question based on database read_by with localStorage fallback
-        const questionsWithReadState = (data.questions || []).map((q: Question) => {
-          // Only pending questions can be "new"
-          if (q.status !== "pending") {
-            return { ...q, isNew: false };
-          }
-
-          // Check database read_by first
-          const meta = q.metadata || {};
-          const readBy = (meta.read_by as Record<string, string>) || {};
-          const isReadInDb = fetchedProfileId ? !!readBy[fetchedProfileId] : false;
-
-          if (isReadInDb) {
-            return { ...q, isNew: false };
-          }
-
-          // Fallback to localStorage
-          try {
-            const readKey = fetchedProfileId ? `olera_qna_read_${fetchedProfileId}` : `olera_qna_read_${providerProfile.slug}`;
-            const stored = localStorage.getItem(readKey);
-            const readIds: string[] = stored ? JSON.parse(stored) : [];
-            return { ...q, isNew: !readIds.includes(q.id) };
-          } catch {
-            return { ...q, isNew: true };
-          }
-        });
-
-        setQuestions(questionsWithReadState);
-
-        // Count unread questions and sync navbar badge
-        const unreadCount = questionsWithReadState.filter((q: Question) => q.isNew).length;
-        window.dispatchEvent(new CustomEvent("olera:qna-sync", {
-          detail: { count: unreadCount, providerSlug: providerProfile?.slug }
-        }));
-      } catch (err) {
-        console.error("Failed to fetch questions:", err);
-        setError("Unable to load questions. Please try again.");
-      } finally {
-        setIsLoading(false);
+    try {
+      const res = await fetch("/api/provider/questions");
+      if (!res.ok) {
+        throw new Error("Failed to fetch questions");
       }
-    })();
+      const data = await res.json();
+      const fetchedProfileId = data.profileId as string | undefined;
+      if (fetchedProfileId) {
+        setProfileId(fetchedProfileId);
+        // Migrate localStorage data from slug-based to profileId-based key
+        migrateQnaReadData(providerProfile.slug, fetchedProfileId);
+      }
+
+      // Determine isNew for each question based on database read_by with localStorage fallback
+      const questionsWithReadState = (data.questions || []).map((q: Question) => {
+        // Only pending questions can be "new"
+        if (q.status !== "pending") {
+          return { ...q, isNew: false };
+        }
+
+        // Check database read_by first
+        const meta = q.metadata || {};
+        const readBy = (meta.read_by as Record<string, string>) || {};
+        const isReadInDb = fetchedProfileId ? !!readBy[fetchedProfileId] : false;
+
+        if (isReadInDb) {
+          return { ...q, isNew: false };
+        }
+
+        // Fallback to localStorage
+        try {
+          const readKey = fetchedProfileId ? `olera_qna_read_${fetchedProfileId}` : `olera_qna_read_${providerProfile.slug}`;
+          const stored = localStorage.getItem(readKey);
+          const readIds: string[] = stored ? JSON.parse(stored) : [];
+          return { ...q, isNew: !readIds.includes(q.id) };
+        } catch {
+          return { ...q, isNew: true };
+        }
+      });
+
+      setQuestions(questionsWithReadState);
+
+      // Count unread questions and sync navbar badge
+      const unreadCount = questionsWithReadState.filter((q: Question) => q.isNew).length;
+      window.dispatchEvent(new CustomEvent("olera:qna-sync", {
+        detail: { count: unreadCount, providerSlug: providerProfile?.slug }
+      }));
+    } catch (err) {
+      console.error("Failed to fetch questions:", err);
+      setError("Unable to load questions. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }, [providerProfile?.slug]);
+
+  useEffect(() => {
+    fetchQuestions();
+  }, [fetchQuestions]);
 
   const filteredQuestions = useMemo(() => {
     // Map "published" tab to "answered" status
@@ -1007,6 +1075,11 @@ export default function ProviderQnAPage() {
           )
         );
 
+        // Check if answer was saved as pending (unverified provider)
+        if (data.answerStatus === "pending") {
+          setPendingAnswerSubmitted(true);
+        }
+
         // Auto-switch to Published tab after successful answer
         setActiveFilter("published");
         return true;
@@ -1049,6 +1122,11 @@ export default function ProviderQnAPage() {
           q.id === question.id ? { ...q, ...data.question } : q
         )
       );
+
+      // Check if answer was saved as pending (unverified provider)
+      if (data.answerStatus === "pending") {
+        setPendingAnswerSubmitted(true);
+      }
 
       // Auto-switch to Published tab after successful answer
       setActiveFilter("published");
@@ -1135,6 +1213,7 @@ export default function ProviderQnAPage() {
                       question={question}
                       onEdit={handleEdit}
                       isMobile={isMobile}
+                      onVerifyClick={!isVerified ? openVerificationModal : undefined}
                     />
                   )
                 ))}
@@ -1158,6 +1237,52 @@ export default function ProviderQnAPage() {
         onClose={handleCloseSheet}
         onSubmit={handleSheetSubmit}
         mode={sheetMode}
+      />
+
+      {/* ── Pending Answer Prompt ── */}
+      {pendingAnswerSubmitted && !isVerified && (
+        <div className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-gray-200 shadow-lg pb-[env(safe-area-inset-bottom)]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[15px] font-semibold text-gray-900">Answer saved, pending verification</p>
+                  <p className="text-[13px] text-gray-500">Verify your business to publish your answers.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPendingAnswerSubmitted(false)}
+                  className="px-3 py-2 text-[14px] font-medium text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  Later
+                </button>
+                <button
+                  type="button"
+                  onClick={openVerificationModal}
+                  className="px-4 py-2 rounded-xl bg-primary-600 text-[14px] font-semibold text-white hover:bg-primary-700 transition-colors"
+                >
+                  Verify now
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Verification Modal ── */}
+      <VerificationMethodModal
+        isOpen={isVerificationModalOpen}
+        onClose={closeVerificationModal}
+        onSubmit={handleVerificationSubmit}
+        onDismiss={handleVerificationDismiss}
+        businessName={providerProfile?.display_name || "your business"}
       />
     </div>
   );

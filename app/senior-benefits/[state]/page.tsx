@@ -109,6 +109,7 @@ export default async function StatePage({ params }: Props) {
         .select("question, answer, answered_at, answered_by, provider_id")
         .eq("status", "answered")
         .eq("is_public", true)
+        .eq("answer_status", "published")  // Only show published answers
         .not("answer", "is", null)
         .order("answered_at", { ascending: false })
         .limit(6);

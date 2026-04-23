@@ -5,11 +5,19 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Profile, FamilyMetadata } from "@/lib/types";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
+import { formatRedactedName } from "@/lib/utils/pii-redaction";
+import VerifyToUnlockPrompt from "@/components/provider/VerifyToUnlockPrompt";
 
 interface ProviderDetailPanelProps {
   profile: Profile;
   onClose: () => void;
   className?: string;
+  /** Viewing context: "provider" when provider views family, "family" when family views provider */
+  variant?: "provider" | "family";
+  /** Whether the viewing provider is verified (only relevant when variant="provider") */
+  isVerified?: boolean;
+  /** Callback to open verification modal (only relevant when variant="provider") */
+  onVerifyClick?: () => void;
 }
 
 // ── Label mappings ──
@@ -186,7 +194,12 @@ export default function ProviderDetailPanel({
   profile,
   onClose,
   className = "",
+  variant = "family",
+  isVerified = true,
+  onVerifyClick,
 }: ProviderDetailPanelProps) {
+  // PII redaction: when provider views family profile and is not verified
+  const shouldRedactPII = variant === "provider" && !isVerified;
   const [images, setImages] = useState<string[]>([]);
   const [currentImage, setCurrentImage] = useState(0);
 
@@ -300,9 +313,9 @@ export default function ProviderDetailPanel({
             )}
           </div>
 
-          {/* Name */}
+          {/* Name - redacted for unverified providers viewing family */}
           <h2 className="text-[17px] font-semibold text-gray-900">
-            {profile.display_name}
+            {shouldRedactPII ? formatRedactedName(profile.display_name || "") : profile.display_name}
           </h2>
 
           {/* Subtitle - category for providers */}
@@ -426,28 +439,36 @@ export default function ProviderDetailPanel({
                     <DetailRow label="Prefers" value={contactPref} />
                   )}
 
-                  {/* Contact info */}
+                  {/* Contact info - hidden for unverified providers */}
                   {(profile.phone || profile.email) && (
                     <div>
                       <p className="text-[11px] text-gray-400 font-medium uppercase tracking-wide mb-1.5">Contact</p>
-                      <div className="space-y-1">
-                        {profile.phone && (
-                          <p className="text-[14px] text-gray-700 flex items-center gap-2">
-                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-                            </svg>
-                            {profile.phone}
-                          </p>
-                        )}
-                        {profile.email && (
-                          <p className="text-[14px] text-gray-700 flex items-center gap-2">
-                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                            </svg>
-                            {profile.email}
-                          </p>
-                        )}
-                      </div>
+                      {shouldRedactPII ? (
+                        <VerifyToUnlockPrompt
+                          action="see contact info"
+                          onVerifyClick={onVerifyClick || (() => {})}
+                          variant="block"
+                        />
+                      ) : (
+                        <div className="space-y-1">
+                          {profile.phone && (
+                            <p className="text-[14px] text-gray-700 flex items-center gap-2">
+                              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                              </svg>
+                              {profile.phone}
+                            </p>
+                          )}
+                          {profile.email && (
+                            <p className="text-[14px] text-gray-700 flex items-center gap-2">
+                              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                              </svg>
+                              {profile.email}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                   )}
                 </>
