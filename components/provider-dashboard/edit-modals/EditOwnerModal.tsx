@@ -30,6 +30,8 @@ export default function EditOwnerModal({
   guidedStep,
   guidedTotal,
   onGuidedBack,
+  isVerified,
+  onVerifyClick,
 }: BaseEditModalProps) {
   const staff = metadata.staff as StaffInfo | undefined;
 
@@ -139,6 +141,8 @@ export default function EditOwnerModal({
           guidedStep={guidedStep}
           guidedTotal={guidedTotal}
           onGuidedBack={onGuidedBack}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       }
     >

@@ -21,6 +21,9 @@ export interface BaseEditModalProps {
   guidedStep?: number;
   guidedTotal?: number;
   onGuidedBack?: () => void;
+  /** Verification gating - if false, show "Verify to save" button */
+  isVerified?: boolean;
+  onVerifyClick?: () => void;
 }
 
 /** Section order used for guided onboarding flow */

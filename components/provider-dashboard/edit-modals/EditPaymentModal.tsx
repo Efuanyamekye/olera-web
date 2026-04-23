@@ -52,6 +52,8 @@ export default function EditPaymentModal({
   guidedStep,
   guidedTotal,
   onGuidedBack,
+  isVerified,
+  onVerifyClick,
 }: BaseEditModalProps) {
   // Merge legacy booleans into the array for backwards compatibility
   const initial = [...(Array.isArray(metadata.accepted_payments) ? metadata.accepted_payments : [])];
@@ -116,6 +118,8 @@ export default function EditPaymentModal({
           guidedStep={guidedStep}
           guidedTotal={guidedTotal}
           onGuidedBack={onGuidedBack}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       }
     >

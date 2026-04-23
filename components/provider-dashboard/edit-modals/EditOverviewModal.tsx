@@ -33,6 +33,8 @@ export default function EditOverviewModal({
   guidedStep,
   guidedTotal,
   onGuidedBack,
+  isVerified,
+  onVerifyClick,
 }: BaseEditModalProps) {
   const [displayName, setDisplayName] = useState(profile.display_name || "");
   const [category, setCategory] = useState<string>(profile.category || "");
@@ -108,6 +110,8 @@ export default function EditOverviewModal({
           guidedStep={guidedStep}
           guidedTotal={guidedTotal}
           onGuidedBack={onGuidedBack}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       }
     >

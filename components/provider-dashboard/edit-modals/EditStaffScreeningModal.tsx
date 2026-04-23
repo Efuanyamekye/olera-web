@@ -27,6 +27,8 @@ export default function EditStaffScreeningModal({
   guidedStep,
   guidedTotal,
   onGuidedBack,
+  isVerified,
+  onVerifyClick,
 }: BaseEditModalProps) {
   const initial = Array.isArray(metadata.staff_screening) ? metadata.staff_screening : [];
   const [selected, setSelected] = useState<string[]>([...initial]);
@@ -91,6 +93,8 @@ export default function EditStaffScreeningModal({
           guidedStep={guidedStep}
           guidedTotal={guidedTotal}
           onGuidedBack={onGuidedBack}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       }
     >

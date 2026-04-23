@@ -229,6 +229,14 @@ function DashboardContent({
     }
   }, [editingSection, guided, setEditingSection]);
 
+  // Check verification status for edit gating
+  const verificationState = profile.verification_state as string | null;
+  const profileMeta = profile.metadata as { badge_approved?: boolean } | null;
+  const isVerified =
+    profileMeta?.badge_approved === true ||
+    verificationState === "verified" ||
+    verificationState === "not_required";
+
   // Shared modal props
   const modalProps = {
     profile,
@@ -241,6 +249,9 @@ function DashboardContent({
     onGuidedBack: editingSection && guided.getPrevSection(editingSection)
       ? handleGuidedBack
       : undefined,
+    // Verification gating for profile edits
+    isVerified,
+    onVerifyClick: handleOpenVerificationModal,
   };
 
   return (

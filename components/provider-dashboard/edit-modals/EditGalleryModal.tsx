@@ -25,6 +25,8 @@ export default function EditGalleryModal({
   guidedStep,
   guidedTotal,
   onGuidedBack,
+  isVerified,
+  onVerifyClick,
 }: BaseEditModalProps) {
   const [images, setImages] = useState<string[]>(Array.isArray(metadata.images) ? metadata.images : []);
   const [profilePhoto, setProfilePhoto] = useState<string>(profile.image_url || "");
@@ -177,6 +179,8 @@ export default function EditGalleryModal({
           guidedStep={guidedStep}
           guidedTotal={guidedTotal}
           onGuidedBack={onGuidedBack}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       }
     >

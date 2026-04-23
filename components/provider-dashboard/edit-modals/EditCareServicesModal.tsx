@@ -38,6 +38,8 @@ export default function EditCareServicesModal({
   guidedStep,
   guidedTotal,
   onGuidedBack,
+  isVerified,
+  onVerifyClick,
 }: BaseEditModalProps) {
   const initialCareTypes = Array.isArray(profile.care_types) ? profile.care_types : [];
   const [selected, setSelected] = useState<string[]>([...initialCareTypes]);
@@ -102,6 +104,8 @@ export default function EditCareServicesModal({
           guidedStep={guidedStep}
           guidedTotal={guidedTotal}
           onGuidedBack={onGuidedBack}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       }
     >

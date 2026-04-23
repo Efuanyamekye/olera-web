@@ -97,6 +97,8 @@ export default function EditPricingModal({
   guidedStep,
   guidedTotal,
   onGuidedBack,
+  isVerified,
+  onVerifyClick,
 }: BaseEditModalProps) {
   // Initialize from metadata
   const [contactForPricing, setContactForPricing] = useState(
@@ -253,6 +255,8 @@ export default function EditPricingModal({
           guidedStep={guidedStep}
           guidedTotal={guidedTotal}
           onGuidedBack={onGuidedBack}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       }
     >

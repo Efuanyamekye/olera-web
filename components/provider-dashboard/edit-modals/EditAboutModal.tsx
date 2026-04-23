@@ -16,6 +16,8 @@ export default function EditAboutModal({
   guidedStep,
   guidedTotal,
   onGuidedBack,
+  isVerified,
+  onVerifyClick,
 }: BaseEditModalProps) {
   const [description, setDescription] = useState(profile.description || "");
   const [yearFounded, setYearFounded] = useState(
@@ -83,6 +85,8 @@ export default function EditAboutModal({
           guidedStep={guidedStep}
           guidedTotal={guidedTotal}
           onGuidedBack={onGuidedBack}
+          isVerified={isVerified}
+          onVerifyClick={onVerifyClick}
         />
       }
     >
