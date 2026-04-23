@@ -172,6 +172,9 @@ function DashboardContent({
   const guided = useGuidedOnboarding(completeness);
   const [showCompletenessSheet, setShowCompletenessSheet] = useState(false);
 
+  // Track which section was being edited when verification was triggered
+  const [pendingEditSection, setPendingEditSection] = useState<SectionId | null>(null);
+
   // Verification modal state (using the new hook)
   const {
     isOpen: isVerificationModalOpen,
@@ -184,14 +187,29 @@ function DashboardContent({
     onVerified: async () => {
       // Refresh profile data to get updated verification state
       await refreshAccountData();
+      // Re-open the edit modal that was pending verification
+      if (pendingEditSection) {
+        setEditingSection(pendingEditSection);
+        setPendingEditSection(null);
+      }
+    },
+    onDismissed: () => {
+      // Clear pending section if user dismisses verification
+      setPendingEditSection(null);
     },
   });
 
   // Guard: only allow opening modal if profile is loaded
+  // Also close the edit modal first to avoid modal stacking
   const handleOpenVerificationModal = useCallback(() => {
     if (!profile.id) return;
+    // Store the current editing section so we can re-open it after verification
+    if (editingSection) {
+      setPendingEditSection(editingSection);
+      setEditingSection(null); // Close edit modal first
+    }
     openVerificationModalRaw();
-  }, [profile.id, openVerificationModalRaw]);
+  }, [profile.id, openVerificationModalRaw, editingSection, setEditingSection]);
 
   const handleEdit = useCallback(
     (sectionId: SectionId) => setEditingSection(sectionId),
