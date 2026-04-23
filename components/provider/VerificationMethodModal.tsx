@@ -21,7 +21,7 @@ export interface VerificationResult {
 interface VerificationMethodModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (result: VerificationResult) => Promise<void>;
+  onSubmit: (result: VerificationResult) => Promise<{ verified: boolean; pendingReview: boolean } | void>;
   onDismiss?: () => void;
   businessName: string;
   businessWebsite?: string | null;

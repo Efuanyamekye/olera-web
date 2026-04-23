@@ -148,7 +148,7 @@ export default function VerificationStatusBadge({
         iconColor: "text-amber-600",
         title: "Verification in Review",
         description:
-          "We're reviewing your submission. You'll hear from us within 3 hours during business hours.",
+          "We're reviewing your submission. You'll hear from us within 1–2 business days.",
         showCta: false,
       };
     }
