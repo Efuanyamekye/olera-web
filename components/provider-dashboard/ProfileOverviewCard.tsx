@@ -58,14 +58,19 @@ export default function ProfileOverviewCard({
 
   // Badge logic:
   // - "Verified" = verification_state === 'verified' OR badge_approved === true
-  // - "Claimed" = verification_state === 'not_required' (high trust, no verification needed)
+  // - "Claimed" = verification_state === 'not_required' OR null (legacy/high trust)
   // - "Pending verification" = verification_state is unverified/pending/rejected
   const meta = profile.metadata as { badge_approved?: boolean } | null;
   const verificationState = (profile.verification_state as VerificationState) || null;
   const isVerified = meta?.badge_approved === true || verificationState === "verified";
-  // Show "Claimed" badge only for high-trust providers who don't need verification
-  const showClaimedBadge = profile.claim_state === "claimed" && verificationState === "not_required" && !isVerified;
-  // Show verification status badge for other states (unverified, pending, rejected, or verified)
+  // Show "Claimed" badge for:
+  // - High-trust providers (not_required)
+  // - Legacy providers who claimed before verification gating (null state)
+  const showClaimedBadge =
+    profile.claim_state === "claimed" &&
+    (verificationState === "not_required" || verificationState === null) &&
+    !isVerified;
+  // Show verification status badge for gated states (unverified, pending, rejected, or verified)
   const showVerificationBadge = verificationState && verificationState !== "not_required";
 
   return (

@@ -85,15 +85,23 @@ export default function VerificationFormModal({
   useEffect(() => {
     if (isOpen) {
       // Pre-fill with existing data if available (for updates)
-      setName(existingData?.name || "");
-      setEmail(existingData?.email || userEmail || "");
-      setRole(existingData?.role || "");
-      setPhone(existingData?.phone || "");
+      // Support both camelCase (frontend) and snake_case (database) field names
+      const data = existingData as (ExistingVerificationData & {
+        linkedin_url?: string | null;
+        business_website_url?: string | null;
+        manual_review_requested?: boolean;
+      }) | undefined;
+
+      setName(data?.name || "");
+      setEmail(data?.email || userEmail || "");
+      setRole(data?.role || "");
+      setPhone(data?.phone || "");
       // Support both new 'notes' and legacy 'affiliation' field
-      setNotes(existingData?.notes || existingData?.affiliation || "");
-      setLinkedinUrl(existingData?.linkedinUrl || "");
-      setBusinessWebsiteUrl(existingData?.businessWebsiteUrl || "");
-      setManualReviewRequested(existingData?.manualReviewRequested || false);
+      setNotes(data?.notes || data?.affiliation || "");
+      // Support both camelCase and snake_case for URL fields
+      setLinkedinUrl(data?.linkedinUrl || data?.linkedin_url || "");
+      setBusinessWebsiteUrl(data?.businessWebsiteUrl || data?.business_website_url || "");
+      setManualReviewRequested(data?.manualReviewRequested || data?.manual_review_requested || false);
       setError(null);
       setSubmitting(false);
     }
