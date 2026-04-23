@@ -244,6 +244,9 @@ export async function POST(request: NextRequest) {
       const claimerEmail = currentMetadata.claimer_email as string;
       const claimerRole = (currentMetadata.verification_submission as Record<string, unknown>)?.role as string || "unknown";
 
+      // Check if this is the first failed attempt (not already pending)
+      const isFirstFailure = profile.verification_state !== "pending";
+
       // Update profile to pending state with verification attempt details
       const updatedMetadata = {
         ...currentMetadata,
@@ -268,7 +271,8 @@ export async function POST(request: NextRequest) {
         console.error("[verify] Failed to update profile to pending:", updateError);
       }
 
-      if (claimerEmail && claimerName) {
+      // Only send Slack alert on the first failure to avoid duplicate alerts
+      if (isFirstFailure && claimerEmail && claimerName) {
         const alert = slackVerificationReview({
           providerName: profile.display_name || "Unknown",
           providerSlug: profile.slug || profileId,

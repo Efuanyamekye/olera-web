@@ -225,11 +225,14 @@ export default function VerificationMethodModal({
       } else if (result?.pendingReview) {
         // Instead of showing pending-review immediately, track this method as tried
         // and prompt user to try another method
+        const alreadyTried = triedMethods.has(method);
         setTriedMethods(prev => new Set(prev).add(method));
 
+        // Count distinct methods tried (only increment if this is a new method)
+        const distinctMethodsTried = alreadyTried ? triedMethods.size : triedMethods.size + 1;
+
         // If they've tried all 4 methods, show the pending-review screen
-        const newTriedCount = triedMethods.size + 1;
-        if (newTriedCount >= 4) {
+        if (distinctMethodsTried >= 4) {
           setScreen("pending-review");
         } else {
           // Show error with suggestion to try another method
