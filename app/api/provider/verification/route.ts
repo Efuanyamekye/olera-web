@@ -88,9 +88,10 @@ export async function POST(request: NextRequest) {
     };
 
     // Determine the new verification_state based on current state
-    // If currently 'unverified' (gated provider), move to 'pending' (awaiting review)
+    // If currently 'unverified' or 'rejected', move to 'pending' (awaiting review)
     // If already 'verified', 'not_required', or 'pending', keep current state (badge update only)
-    const shouldUpdateVerificationState = profile.verification_state === "unverified";
+    const shouldUpdateVerificationState =
+      profile.verification_state === "unverified" || profile.verification_state === "rejected";
     const newVerificationState = shouldUpdateVerificationState ? "pending" : profile.verification_state;
 
     // Update profile with verification data
