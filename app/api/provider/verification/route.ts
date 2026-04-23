@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     // Get profile and verify ownership
     const { data: profile, error: fetchError } = await admin
       .from("business_profiles")
-      .select("metadata, account_id")
+      .select("metadata, account_id, verification_state")
       .eq("id", profileId)
       .single();
 
@@ -70,6 +70,9 @@ export async function POST(request: NextRequest) {
       phone: submission.phone || null,
       notes: submission.notes || null,
       document_url: submission.documentUrl || null,
+      linkedin_url: submission.linkedinUrl || null,
+      business_website_url: submission.businessWebsiteUrl || null,
+      manual_review_requested: submission.manualReviewRequested || false,
       submitted_at: new Date().toISOString(),
     };
 
@@ -84,12 +87,18 @@ export async function POST(request: NextRequest) {
       badge_rejected_at: null,
     };
 
-    // Update profile with verification data (badge request)
-    // Note: verification_state stays "verified" - this is just a badge request
+    // Determine the new verification_state based on current state
+    // If currently 'unverified' (gated provider), move to 'pending' (awaiting review)
+    // If already 'verified', 'not_required', or 'pending', keep current state (badge update only)
+    const shouldUpdateVerificationState = profile.verification_state === "unverified";
+    const newVerificationState = shouldUpdateVerificationState ? "pending" : profile.verification_state;
+
+    // Update profile with verification data
     const { error: updateError } = await admin
       .from("business_profiles")
       .update({
         metadata: updatedMetadata,
+        verification_state: newVerificationState,
         updated_at: new Date().toISOString(),
       })
       .eq("id", profileId);

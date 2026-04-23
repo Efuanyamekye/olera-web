@@ -11,6 +11,12 @@ export interface VerificationSubmission {
   phone: string;
   notes: string;
   documentUrl: string | null;
+  /** LinkedIn profile URL - required if no businessWebsiteUrl */
+  linkedinUrl: string;
+  /** Business website showing the person's name - required if no linkedinUrl */
+  businessWebsiteUrl: string;
+  /** If true, user couldn't provide LinkedIn or website, needs manual review */
+  manualReviewRequested: boolean;
 }
 
 export interface ExistingVerificationData {
@@ -22,6 +28,9 @@ export interface ExistingVerificationData {
   // Legacy field for backwards compatibility
   affiliation?: string | null;
   submitted_at?: string;
+  linkedinUrl?: string | null;
+  businessWebsiteUrl?: string | null;
+  manualReviewRequested?: boolean;
 }
 
 interface VerificationFormModalProps {
@@ -66,6 +75,9 @@ export default function VerificationFormModal({
   const [role, setRole] = useState("");
   const [phone, setPhone] = useState("");
   const [notes, setNotes] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [businessWebsiteUrl, setBusinessWebsiteUrl] = useState("");
+  const [manualReviewRequested, setManualReviewRequested] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,12 +91,17 @@ export default function VerificationFormModal({
       setPhone(existingData?.phone || "");
       // Support both new 'notes' and legacy 'affiliation' field
       setNotes(existingData?.notes || existingData?.affiliation || "");
+      setLinkedinUrl(existingData?.linkedinUrl || "");
+      setBusinessWebsiteUrl(existingData?.businessWebsiteUrl || "");
+      setManualReviewRequested(existingData?.manualReviewRequested || false);
       setError(null);
       setSubmitting(false);
     }
   }, [isOpen, existingData, userEmail]);
 
-  const isValid = name.trim().length > 0 && role.length > 0;
+  // Validation: name and role required, plus at least one of: LinkedIn, website, or manual review
+  const hasVerificationSource = linkedinUrl.trim().length > 0 || businessWebsiteUrl.trim().length > 0 || manualReviewRequested;
+  const isValid = name.trim().length > 0 && role.length > 0 && hasVerificationSource;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,6 +118,9 @@ export default function VerificationFormModal({
         phone: phone.trim(),
         notes: notes.trim(),
         documentUrl: null, // Document upload to be added later
+        linkedinUrl: linkedinUrl.trim(),
+        businessWebsiteUrl: businessWebsiteUrl.trim(),
+        manualReviewRequested,
       });
       // Note: Parent handles navigation after successful submit, no need to call onClose()
     } catch (err) {
@@ -231,6 +251,95 @@ export default function VerificationFormModal({
               placeholder="(555) 123-4567"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white transition-all min-h-[48px]"
             />
+          </div>
+        </div>
+
+        {/* Verification Source Section */}
+        <div className="space-y-4 pt-2">
+          <div className="space-y-1">
+            <p className="text-[13px] font-semibold text-gray-700">
+              Verify your connection <span className="text-red-500">*</span>
+            </p>
+            <p className="text-[13px] text-gray-500">
+              Provide at least one of the following to help us verify you work at this business.
+            </p>
+          </div>
+
+          {/* LinkedIn URL */}
+          <div className="space-y-1.5">
+            <label htmlFor="ver-linkedin" className="block text-[13px] font-semibold text-gray-700">
+              LinkedIn profile URL
+            </label>
+            <input
+              id="ver-linkedin"
+              type="url"
+              value={linkedinUrl}
+              onChange={(e) => {
+                setLinkedinUrl(e.target.value);
+                if (e.target.value.trim()) setManualReviewRequested(false);
+              }}
+              placeholder="https://linkedin.com/in/yourprofile"
+              disabled={manualReviewRequested}
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white transition-all min-h-[48px] disabled:bg-gray-100 disabled:text-gray-400"
+            />
+            <p className="text-xs text-gray-400">
+              Your LinkedIn should show you work at {businessName}
+            </p>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 border-t border-gray-200" />
+            <span className="text-xs text-gray-400 font-medium">OR</span>
+            <div className="flex-1 border-t border-gray-200" />
+          </div>
+
+          {/* Business Website URL */}
+          <div className="space-y-1.5">
+            <label htmlFor="ver-website" className="block text-[13px] font-semibold text-gray-700">
+              Business website showing your name
+            </label>
+            <input
+              id="ver-website"
+              type="url"
+              value={businessWebsiteUrl}
+              onChange={(e) => {
+                setBusinessWebsiteUrl(e.target.value);
+                if (e.target.value.trim()) setManualReviewRequested(false);
+              }}
+              placeholder="https://yourbusiness.com/about-us"
+              disabled={manualReviewRequested}
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white transition-all min-h-[48px] disabled:bg-gray-100 disabled:text-gray-400"
+            />
+            <p className="text-xs text-gray-400">
+              A page on your business website that lists you as staff
+            </p>
+          </div>
+
+          {/* Can't provide either? */}
+          <div className="pt-1">
+            <label className="flex items-start gap-3 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={manualReviewRequested}
+                onChange={(e) => {
+                  setManualReviewRequested(e.target.checked);
+                  if (e.target.checked) {
+                    setLinkedinUrl("");
+                    setBusinessWebsiteUrl("");
+                  }
+                }}
+                className="mt-0.5 w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 cursor-pointer"
+              />
+              <div>
+                <span className="text-[13px] font-medium text-gray-700 group-hover:text-gray-900">
+                  I can&apos;t provide either of these
+                </span>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  We&apos;ll review your submission manually. This may take longer (up to 3 hours during business hours).
+                </p>
+              </div>
+            </label>
           </div>
         </div>
 
