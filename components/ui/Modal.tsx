@@ -51,7 +51,6 @@ export default function Modal({
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
 
   // Stable ref for onClose — prevents useEffect from re-running
   // when onClose identity changes between renders.
@@ -61,14 +60,6 @@ export default function Modal({
   // Track client-side mount for createPortal (SSR-safe)
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  // Track desktop breakpoint for border-radius (Tailwind classes weren't working reliably)
-  useEffect(() => {
-    const checkDesktop = () => setIsDesktop(window.innerWidth >= 640);
-    checkDesktop();
-    window.addEventListener("resize", checkDesktop);
-    return () => window.removeEventListener("resize", checkDesktop);
   }, []);
 
   // Blur active element before closing to prevent scroll-to-footer.
@@ -193,17 +184,14 @@ export default function Modal({
               ].join(" ")
             : [
                 // Mobile: bottom sheet (top corners rounded only)
-                "max-h-[92dvh] animate-sheet-up",
-                // Desktop: centered modal
-                "sm:min-h-[50vh] sm:max-h-[85dvh] sm:animate-modal-pop",
+                "max-h-[92dvh] animate-sheet-up rounded-t-2xl",
+                // Desktop: centered modal with all corners rounded
+                "sm:min-h-[50vh] sm:max-h-[85dvh] sm:animate-modal-pop sm:rounded-2xl",
               ].join(" "),
           sizeClasses[size],
         ].join(" ")}
-        // Border-radius via inline style (Tailwind classes weren't working reliably)
-        // Mobile: top corners only (bottom sheet). Desktop: all corners.
         style={{
           paddingBottom: "env(safe-area-inset-bottom, 0px)",
-          borderRadius: isDesktop ? "1rem" : "1rem 1rem 0 0",
         }}
       >
         {/* Drag handle — mobile only, not for fullscreen */}
