@@ -111,9 +111,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to save verification" }, { status: 500 });
     }
 
-    // Run auto-verification (fire-and-forget, don't block the response)
-    // This runs after storing the submission so the user gets a quick response
-    runAutoVerification({
+    // Run auto-verification synchronously
+    // This ensures the LLM check and Slack notification complete before the response
+    // The user waits ~10-15 seconds, but verification is reliable
+    const autoVerifyResult = await runAutoVerification({
       profileId,
       businessName: profile.display_name || "Unknown Business",
       profileSlug: profile.slug || profileId,
@@ -123,21 +124,30 @@ export async function POST(request: NextRequest) {
       linkedinUrl: submission.linkedinUrl,
       businessWebsiteUrl: submission.businessWebsiteUrl,
       manualReviewRequested: submission.manualReviewRequested,
-    }).catch((err) => {
-      console.error("[verification] Auto-verification failed:", err);
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({
+      success: true,
+      autoVerified: autoVerifyResult.autoApproved,
+      verificationState: autoVerifyResult.autoApproved ? "verified" : "pending",
+    });
   } catch (error) {
     console.error("Verification submission error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
+interface AutoVerificationResult {
+  autoApproved: boolean;
+  reason: string;
+}
+
 /**
- * Run auto-verification in the background.
+ * Run auto-verification synchronously.
  * If high confidence, auto-approves the verification.
  * Otherwise, posts to Slack for manual review.
+ *
+ * @returns Object indicating whether auto-approval happened
  */
 async function runAutoVerification(opts: {
   profileId: string;
@@ -149,9 +159,11 @@ async function runAutoVerification(opts: {
   linkedinUrl?: string | null;
   businessWebsiteUrl?: string | null;
   manualReviewRequested?: boolean;
-}) {
+}): Promise<AutoVerificationResult> {
   const admin = getAdminClient();
-  if (!admin) return;
+  if (!admin) {
+    return { autoApproved: false, reason: "Server configuration error" };
+  }
 
   try {
     // Run LLM verification
@@ -198,6 +210,8 @@ async function runAutoVerification(opts: {
       console.log(`[verification] Auto-approved: ${opts.businessName}`);
 
       // TODO: Send approval email (Step 8)
+
+      return { autoApproved: true, reason: result.reason };
     } else {
       // Post to Slack for manual review
       const alert = slackVerificationReview({
@@ -217,6 +231,8 @@ async function runAutoVerification(opts: {
       console.log(`[verification] Routed to manual review: ${opts.businessName}`);
 
       // TODO: Send "we're taking a closer look" email (Step 8)
+
+      return { autoApproved: false, reason: result.reason };
     }
   } catch (err) {
     console.error("[verification] Auto-verification error:", err);
@@ -237,6 +253,8 @@ async function runAutoVerification(opts: {
     } catch {
       // If Slack also fails, just log it
     }
+
+    return { autoApproved: false, reason: "Auto-verification failed" };
   }
 }
 
