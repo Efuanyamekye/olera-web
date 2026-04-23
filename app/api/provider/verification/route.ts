@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createClient as createServerClient } from "@/lib/supabase/server";
+import { autoVerifyProvider } from "@/lib/verification-auto";
+import { sendSlackAlert, slackVerificationReview } from "@/lib/slack";
 
 function getAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -49,7 +51,7 @@ export async function POST(request: NextRequest) {
     // Get profile and verify ownership
     const { data: profile, error: fetchError } = await admin
       .from("business_profiles")
-      .select("metadata, account_id, verification_state")
+      .select("metadata, account_id, verification_state, display_name, slug")
       .eq("id", profileId)
       .single();
 
@@ -109,10 +111,132 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Failed to save verification" }, { status: 500 });
     }
 
+    // Run auto-verification (fire-and-forget, don't block the response)
+    // This runs after storing the submission so the user gets a quick response
+    runAutoVerification({
+      profileId,
+      businessName: profile.display_name || "Unknown Business",
+      profileSlug: profile.slug || profileId,
+      claimerName: submission.name,
+      claimerEmail: submission.email || user.email || "",
+      claimerRole: submission.role,
+      linkedinUrl: submission.linkedinUrl,
+      businessWebsiteUrl: submission.businessWebsiteUrl,
+      manualReviewRequested: submission.manualReviewRequested,
+    }).catch((err) => {
+      console.error("[verification] Auto-verification failed:", err);
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Verification submission error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+/**
+ * Run auto-verification in the background.
+ * If high confidence, auto-approves the verification.
+ * Otherwise, posts to Slack for manual review.
+ */
+async function runAutoVerification(opts: {
+  profileId: string;
+  businessName: string;
+  profileSlug: string;
+  claimerName: string;
+  claimerEmail: string;
+  claimerRole: string;
+  linkedinUrl?: string | null;
+  businessWebsiteUrl?: string | null;
+  manualReviewRequested?: boolean;
+}) {
+  const admin = getAdminClient();
+  if (!admin) return;
+
+  try {
+    // Run LLM verification
+    const result = await autoVerifyProvider({
+      claimedName: opts.claimerName,
+      claimedRole: opts.claimerRole,
+      businessName: opts.businessName,
+      linkedinUrl: opts.linkedinUrl,
+      businessWebsiteUrl: opts.businessWebsiteUrl,
+      manualReviewRequested: opts.manualReviewRequested,
+    });
+
+    console.log(
+      `[verification] Auto-verify result for ${opts.businessName}:`,
+      result.confidence,
+      result.reason
+    );
+
+    if (result.confidence === "high") {
+      // Auto-approve: update verification_state to 'verified' and set badge_approved
+      const { data: currentProfile } = await admin
+        .from("business_profiles")
+        .select("metadata")
+        .eq("id", opts.profileId)
+        .single();
+
+      const updatedMetadata = {
+        ...((currentProfile?.metadata as Record<string, unknown>) || {}),
+        badge_approved: true,
+        badge_approved_at: new Date().toISOString(),
+        auto_verified: true,
+        auto_verify_reason: result.reason,
+      };
+
+      await admin
+        .from("business_profiles")
+        .update({
+          verification_state: "verified",
+          metadata: updatedMetadata,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", opts.profileId);
+
+      console.log(`[verification] Auto-approved: ${opts.businessName}`);
+
+      // TODO: Send approval email (Step 8)
+    } else {
+      // Post to Slack for manual review
+      const alert = slackVerificationReview({
+        providerName: opts.businessName,
+        providerSlug: opts.profileSlug,
+        claimerName: opts.claimerName,
+        claimerEmail: opts.claimerEmail,
+        claimerRole: opts.claimerRole,
+        linkedinUrl: opts.linkedinUrl,
+        businessWebsiteUrl: opts.businessWebsiteUrl,
+        manualReviewRequested: opts.manualReviewRequested,
+        autoVerifyReason: result.reason,
+      });
+
+      await sendSlackAlert(alert.text, alert.blocks);
+
+      console.log(`[verification] Routed to manual review: ${opts.businessName}`);
+
+      // TODO: Send "we're taking a closer look" email (Step 8)
+    }
+  } catch (err) {
+    console.error("[verification] Auto-verification error:", err);
+    // On error, still post to Slack so it doesn't get lost
+    try {
+      const alert = slackVerificationReview({
+        providerName: opts.businessName,
+        providerSlug: opts.profileSlug,
+        claimerName: opts.claimerName,
+        claimerEmail: opts.claimerEmail,
+        claimerRole: opts.claimerRole,
+        linkedinUrl: opts.linkedinUrl,
+        businessWebsiteUrl: opts.businessWebsiteUrl,
+        manualReviewRequested: opts.manualReviewRequested,
+        autoVerifyReason: "Auto-verification failed — needs manual review",
+      });
+      await sendSlackAlert(alert.text, alert.blocks);
+    } catch {
+      // If Slack also fails, just log it
+    }
   }
 }
 

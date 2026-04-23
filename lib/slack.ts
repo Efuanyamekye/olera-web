@@ -548,6 +548,80 @@ export function slackBenefitsStarted(opts: {
   };
 }
 
+export function slackVerificationReview(opts: {
+  providerName: string;
+  providerSlug: string;
+  claimerName: string;
+  claimerEmail: string;
+  claimerRole: string;
+  linkedinUrl?: string | null;
+  businessWebsiteUrl?: string | null;
+  manualReviewRequested?: boolean;
+  autoVerifyReason?: string;
+}): { text: string; blocks: SlackBlock[] } {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+  const adminUrl = `${siteUrl}/admin/verification`;
+
+  const fields: { type: string; text: string }[] = [
+    { type: "mrkdwn", text: `*Provider:*\n${opts.providerName}` },
+    { type: "mrkdwn", text: `*Claimer:*\n${opts.claimerName}` },
+    { type: "mrkdwn", text: `*Email:*\n${opts.claimerEmail}` },
+    { type: "mrkdwn", text: `*Role:*\n${opts.claimerRole}` },
+  ];
+
+  const links: string[] = [];
+  if (opts.linkedinUrl) {
+    links.push(`<${opts.linkedinUrl}|LinkedIn>`);
+  }
+  if (opts.businessWebsiteUrl) {
+    links.push(`<${opts.businessWebsiteUrl}|Website>`);
+  }
+  if (opts.manualReviewRequested) {
+    links.push("_No verification URLs provided_");
+  }
+
+  return {
+    text: `Verification review needed: ${opts.providerName} claimed by ${opts.claimerName}`,
+    blocks: [
+      {
+        type: "header",
+        text: { type: "plain_text", text: "🔍 Verification Review Needed", emoji: true },
+      },
+      {
+        type: "section",
+        fields,
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `*Verification links:*\n${links.length > 0 ? links.join(" • ") : "None provided"}`,
+        },
+      },
+      ...(opts.autoVerifyReason
+        ? [
+            {
+              type: "section" as const,
+              text: {
+                type: "mrkdwn" as const,
+                text: `*Auto-verify result:*\n_${opts.autoVerifyReason}_`,
+              },
+            },
+          ]
+        : []),
+      {
+        type: "context",
+        elements: [
+          {
+            type: "mrkdwn",
+            text: `<${siteUrl}/provider/${opts.providerSlug}|View listing> • <${adminUrl}|Review in Admin>`,
+          },
+        ],
+      },
+    ],
+  };
+}
+
 export function slackBenefitsCompleted(opts: {
   familyName: string;
   email: string;
