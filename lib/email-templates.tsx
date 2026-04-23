@@ -1097,6 +1097,55 @@ export function verificationPendingReviewEmail(opts: {
   `);
 }
 
+/** Email sent 7 days after claim if provider hasn't verified */
+export function verificationReminder7DayEmail(opts: {
+  providerName: string;
+  recipientName: string;
+  verifyUrl: string;
+}): string {
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Families are looking for ${opts.providerName}</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Hi ${opts.recipientName}, you claimed ${opts.providerName} on Olera a week ago but haven't completed verification yet.
+    </p>
+    <div style="background:#fef3c7;border-radius:8px;padding:16px;margin:0 0 24px;">
+      <p style="font-size:14px;color:#92400e;margin:0;line-height:1.5;">
+        <strong>Why verify?</strong> Verified providers can respond to family inquiries, update their listing, and access full analytics.
+      </p>
+    </div>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Verification takes less than 2 minutes — just provide your LinkedIn profile or business website.
+    </p>
+    <div style="text-align:center;">${button("Complete Verification", opts.verifyUrl)}</div>
+  `);
+}
+
+/** Email sent 21 days after claim if provider still hasn't verified (final warning) */
+export function verificationReminder21DayEmail(opts: {
+  providerName: string;
+  recipientName: string;
+  verifyUrl: string;
+}): string {
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Final reminder: Verify ${opts.providerName}</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Hi ${opts.recipientName}, this is a final reminder to complete verification for ${opts.providerName}.
+    </p>
+    <div style="background:#fef2f2;border-left:3px solid #ef4444;padding:12px 16px;margin:0 0 24px;border-radius:0 8px 8px 0;">
+      <p style="font-size:14px;color:#991b1b;margin:0;line-height:1.5;">
+        <strong>Action required:</strong> Unverified claims may be released after 30 days so others can claim the listing.
+      </p>
+    </div>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Complete verification now to keep your claim and unlock full access to your provider dashboard.
+    </p>
+    <div style="text-align:center;">${button("Verify Now", opts.verifyUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;text-align:center;">
+      Questions? Reply to this email or contact <a href="mailto:support@olera.care" style="color:${BRAND_COLOR};">support@olera.care</a>
+    </p>
+  `);
+}
+
 /** Email sent when verification is rejected with reason */
 export function verificationRejectedEmail(opts: {
   providerName: string;
