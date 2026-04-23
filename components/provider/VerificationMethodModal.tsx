@@ -35,7 +35,7 @@ interface VerificationMethodModalProps {
 // Screen States
 // ============================================================
 
-type Screen = "pick-method" | "email" | "linkedin" | "website" | "document" | "success";
+type Screen = "pick-method" | "email" | "linkedin" | "website" | "document" | "success" | "pending-review";
 
 // ============================================================
 // Method Cards Data
@@ -214,8 +214,16 @@ export default function VerificationMethodModal({
     setError(null);
 
     try {
-      await onSubmit({ method, value, documentData, documentType });
-      setScreen("success");
+      const result = await onSubmit({ method, value, documentData, documentType });
+      // Show appropriate screen based on verification result
+      if (result?.verified) {
+        setScreen("success");
+      } else if (result?.pendingReview) {
+        setScreen("pending-review");
+      } else {
+        // Fallback to success for backwards compatibility
+        setScreen("success");
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -293,7 +301,8 @@ export default function VerificationMethodModal({
       case "document":
         return "Upload document";
       case "success":
-        return null; // Success screen has custom layout
+      case "pending-review":
+        return null; // These screens have custom layout
     }
   };
 
@@ -365,12 +374,14 @@ export default function VerificationMethodModal({
         );
       case "success":
         return <SuccessScreen businessName={businessName} onClose={onClose} />;
+      case "pending-review":
+        return <PendingReviewScreen businessName={businessName} onClose={onClose} />;
     }
   };
 
   // Render footer based on screen
   const renderFooter = () => {
-    if (screen === "success") return null;
+    if (screen === "success" || screen === "pending-review") return null;
 
     if (screen === "pick-method" && allowDismiss) {
       return (
@@ -396,7 +407,7 @@ export default function VerificationMethodModal({
       title={getTitle()}
       subtitle={getSubtitle()}
       size="2xl"
-      onBack={screen !== "pick-method" && screen !== "success" ? handleBack : undefined}
+      onBack={screen !== "pick-method" && screen !== "success" && screen !== "pending-review" ? handleBack : undefined}
       footer={renderFooter()}
     >
       <div
@@ -913,6 +924,90 @@ function SuccessScreen({
           to {
             stroke-dasharray: 100;
             stroke-dashoffset: 0;
+          }
+        }
+        @keyframes fade-up {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function PendingReviewScreen({
+  businessName,
+  onClose,
+}: {
+  businessName: string;
+  onClose: () => void;
+}) {
+  return (
+    <div className="py-10 text-center">
+      {/* Clock/Review icon with animation */}
+      <div
+        className="w-24 h-24 mx-auto mb-8 rounded-full bg-gradient-to-br from-amber-100 to-yellow-50 flex items-center justify-center shadow-lg shadow-amber-100/50"
+        style={{ animation: "success-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both" }}
+      >
+        <svg
+          className="w-12 h-12 text-amber-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+      </div>
+
+      {/* Message */}
+      <h3
+        className="text-2xl font-bold text-gray-900 mb-3"
+        style={{ animation: "fade-up 0.3s ease-out 0.3s both" }}
+      >
+        Under review
+      </h3>
+      <p
+        className="text-gray-600 text-[15px] leading-relaxed mb-4 max-w-sm mx-auto"
+        style={{ animation: "fade-up 0.3s ease-out 0.4s both" }}
+      >
+        Thanks for submitting your verification for{" "}
+        <span className="font-medium text-gray-900">{businessName}</span>.
+      </p>
+      <p
+        className="text-gray-500 text-sm leading-relaxed mb-10 max-w-sm mx-auto"
+        style={{ animation: "fade-up 0.3s ease-out 0.45s both" }}
+      >
+        Our team will review your submission and get back to you within 1–2 business days. We&apos;ll email you once you&apos;re verified.
+      </p>
+
+      {/* CTA */}
+      <button
+        onClick={onClose}
+        className="px-10 py-4 bg-gray-900 hover:bg-gray-800 text-white font-semibold rounded-xl transition-all shadow-lg shadow-gray-900/20 hover:shadow-xl hover:shadow-gray-900/25 hover:-translate-y-0.5"
+        style={{ animation: "fade-up 0.3s ease-out 0.5s both" }}
+      >
+        Got it
+      </button>
+
+      <style jsx>{`
+        @keyframes success-pop {
+          0% {
+            opacity: 0;
+            transform: scale(0.5);
+          }
+          70% {
+            transform: scale(1.1);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
           }
         }
         @keyframes fade-up {

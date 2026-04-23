@@ -239,10 +239,34 @@ export async function POST(request: NextRequest) {
 
       console.log(`[verify] Auto-verified ${profile.display_name} via ${method}: ${result.reason}`);
     } else {
-      // Not auto-verified — send to Slack for manual review
+      // Not auto-verified — set to pending and send to Slack for manual review
       const currentMetadata = (profile.metadata as Record<string, unknown>) || {};
       const claimerEmail = currentMetadata.claimer_email as string;
       const claimerRole = (currentMetadata.verification_submission as Record<string, unknown>)?.role as string || "unknown";
+
+      // Update profile to pending state with verification attempt details
+      const updatedMetadata = {
+        ...currentMetadata,
+        verification_attempt: {
+          method,
+          value: method === "document" ? "[document]" : value,
+          submitted_at: new Date().toISOString(),
+          reason: result.reason,
+        },
+      };
+
+      const { error: updateError } = await admin
+        .from("business_profiles")
+        .update({
+          verification_state: "pending",
+          metadata: updatedMetadata,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id", profileId);
+
+      if (updateError) {
+        console.error("[verify] Failed to update profile to pending:", updateError);
+      }
 
       if (claimerEmail && claimerName) {
         const alert = slackVerificationReview({
@@ -263,7 +287,11 @@ export async function POST(request: NextRequest) {
       console.log(`[verify] Manual review needed for ${profile.display_name} via ${method}: ${result.reason}`);
     }
 
-    return NextResponse.json(result);
+    // Add pendingReview flag to response for non-verified submissions
+    return NextResponse.json({
+      ...result,
+      pendingReview: !result.verified,
+    });
   } catch (error) {
     console.error("[verify] Error:", error);
     return NextResponse.json(

@@ -7,6 +7,7 @@ interface UseVerificationModalOptions {
   profileId: string;
   claimerName?: string;
   onVerified?: () => void;
+  onPendingReview?: () => void;
   onDismissed?: () => void;
 }
 
@@ -14,9 +15,10 @@ interface UseVerificationModalReturn {
   isOpen: boolean;
   open: () => void;
   close: () => void;
-  handleSubmit: (result: VerificationResult) => Promise<void>;
+  handleSubmit: (result: VerificationResult) => Promise<{ verified: boolean; pendingReview: boolean }>;
   handleDismiss: () => void;
   isVerified: boolean;
+  isPendingReview: boolean;
 }
 
 /**
@@ -43,16 +45,18 @@ export function useVerificationModal({
   profileId,
   claimerName,
   onVerified,
+  onPendingReview,
   onDismissed,
 }: UseVerificationModalOptions): UseVerificationModalReturn {
   const [isOpen, setIsOpen] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [isPendingReview, setIsPendingReview] = useState(false);
 
   const open = useCallback(() => setIsOpen(true), []);
   const close = useCallback(() => setIsOpen(false), []);
 
   const handleSubmit = useCallback(
-    async (result: VerificationResult) => {
+    async (result: VerificationResult): Promise<{ verified: boolean; pendingReview: boolean }> => {
       const response = await fetch("/api/provider/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -73,19 +77,23 @@ export function useVerificationModal({
       }
 
       if (data.verified) {
+        // Instant verification succeeded
         setIsVerified(true);
+        setIsPendingReview(false);
         onVerified?.();
-      } else if (data.suggestion) {
-        // Not auto-verified but sent to manual review
-        // Still show success screen since they completed the flow
-        setIsVerified(true);
-        onVerified?.();
+        return { verified: true, pendingReview: false };
+      } else if (data.pendingReview) {
+        // Sent to manual review - user completed their part but not yet verified
+        setIsVerified(false);
+        setIsPendingReview(true);
+        onPendingReview?.();
+        return { verified: false, pendingReview: true };
       } else {
         // Verification failed with a reason
         throw new Error(data.reason || "Could not verify. Please try a different method.");
       }
     },
-    [profileId, claimerName, onVerified]
+    [profileId, claimerName, onVerified, onPendingReview]
   );
 
   const handleDismiss = useCallback(() => {
@@ -100,5 +108,6 @@ export function useVerificationModal({
     handleSubmit,
     handleDismiss,
     isVerified,
+    isPendingReview,
   };
 }
