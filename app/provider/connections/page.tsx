@@ -1255,6 +1255,8 @@ export default function ProviderLeadsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  // Track which lead's drawer should reopen after verification
+  const [pendingLeadId, setPendingLeadId] = useState<string | null>(null);
   const fetchedRef = useRef(false);
   const [whatsappBannerDismissed, setWhatsappBannerDismissed] = useState(false);
   const [whatsappOptingIn, setWhatsappOptingIn] = useState(false);
@@ -1273,14 +1275,30 @@ export default function ProviderLeadsPage() {
       // Refresh profile state to update isVerified, then refetch leads
       await refreshAccountData();
       fetchLeads();
+      // Reopen drawer with saved lead after verification
+      if (pendingLeadId) {
+        setSelectedLeadId(pendingLeadId);
+        setIsDrawerOpen(true);
+        setPendingLeadId(null);
+      }
+    },
+    onDismissed: () => {
+      setPendingLeadId(null);
     },
   });
 
-  // Guard: only allow opening modal if profile is loaded
-  const openVerificationModal = useCallback(() => {
+  // Handle verification click from drawer - close drawer first to avoid stacking
+  const handleVerifyFromDrawer = useCallback(() => {
     if (!providerProfile?.id) return;
-    openVerificationModalRaw();
-  }, [providerProfile?.id, openVerificationModalRaw]);
+    if (selectedLeadId) {
+      setPendingLeadId(selectedLeadId);
+      setIsDrawerOpen(false); // Close drawer first
+    }
+    // Small delay to prevent visual stacking
+    setTimeout(() => {
+      openVerificationModalRaw();
+    }, 100);
+  }, [providerProfile?.id, selectedLeadId, openVerificationModalRaw]);
 
   // If auth is done loading and there's no provider profile, stop showing skeletons.
   // This prevents eternal loading when the signed-in user doesn't own a provider listing.
@@ -1825,7 +1843,7 @@ export default function ProviderLeadsPage() {
           }).catch(() => {});
         }}
         isVerified={isVerified}
-        onVerifyClick={openVerificationModal}
+        onVerifyClick={handleVerifyFromDrawer}
       />
 
       {/* ── Verification Modal ── */}
