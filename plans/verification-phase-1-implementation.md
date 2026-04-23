@@ -24,7 +24,7 @@ If conversation context is lost, reference these files:
 |------|-------------|--------|--------|
 | 1 | Data model migration | ✅ Done | e7d59ca4 |
 | 2 | Trust scoring → verification_state | ✅ Done | e7d59ca4 |
-| 3 | Update VerificationFormModal (LinkedIn/website fields) | ⬜ Not started | |
+| 3 | Update VerificationFormModal (LinkedIn/website fields) | ✅ Done | 680156da |
 | 4 | Dashboard badge updates | ⬜ Not started | |
 | 5 | LLM auto-verification | ⬜ Not started | |
 | 6 | Verification prompt modal (post-answer) | ⬜ Not started | |
@@ -33,7 +33,7 @@ If conversation context is lost, reference these files:
 | 9 | Slack integration | ⬜ Not started | |
 | 10 | Reminder cron jobs | ⬜ Not started | |
 
-**Last updated:** Steps 1-2 committed (e7d59ca4). Next: Step 3.
+**Last updated:** Steps 1-3 committed. Next: Step 4.
 
 ---
 
