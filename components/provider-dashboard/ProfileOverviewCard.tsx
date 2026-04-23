@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Profile, ProfileCategory } from "@/lib/types";
 import Badge from "@/components/ui/Badge";
 import DashboardSectionCard from "./DashboardSectionCard";
+import VerificationStatusBadge from "./VerificationStatusBadge";
 
 // Inline pure helpers to avoid importing provider-utils (which has server deps)
 function getInitials(name: string): string {
@@ -34,16 +35,21 @@ function formatCategory(category: ProfileCategory | null): string | null {
   return categoryLabels[category] || null;
 }
 
+type VerificationState = "not_required" | "unverified" | "pending" | "verified" | "rejected";
+
 interface ProfileOverviewCardProps {
   profile: Profile;
   completionPercent: number;
   onEdit?: () => void;
+  /** Callback when user clicks to open verification form */
+  onVerifyClick?: () => void;
 }
 
 export default function ProfileOverviewCard({
   profile,
   completionPercent,
   onEdit,
+  onVerifyClick,
 }: ProfileOverviewCardProps) {
   const location = [profile.address, profile.city, profile.state]
     .filter(Boolean)
@@ -51,11 +57,16 @@ export default function ProfileOverviewCard({
   const initials = getInitials(profile.display_name);
 
   // Badge logic:
-  // - "Verified" = admin approved their verification submission (badge_approved === true)
-  // - "Claimed" = claimed via email but not yet verified
+  // - "Verified" = verification_state === 'verified' OR badge_approved === true
+  // - "Claimed" = verification_state === 'not_required' (high trust, no verification needed)
+  // - "Pending verification" = verification_state is unverified/pending/rejected
   const meta = profile.metadata as { badge_approved?: boolean } | null;
-  const isVerified = meta?.badge_approved === true;
-  const isClaimed = profile.claim_state === "claimed" && !isVerified;
+  const verificationState = (profile.verification_state as VerificationState) || null;
+  const isVerified = meta?.badge_approved === true || verificationState === "verified";
+  // Show "Claimed" badge only for high-trust providers who don't need verification
+  const showClaimedBadge = profile.claim_state === "claimed" && verificationState === "not_required" && !isVerified;
+  // Show verification status badge for other states (unverified, pending, rejected, or verified)
+  const showVerificationBadge = verificationState && verificationState !== "not_required";
 
   return (
     <DashboardSectionCard
@@ -117,8 +128,14 @@ export default function ProfileOverviewCard({
                 <h2 className="text-xl font-bold text-gray-900 font-display">
                   {profile.display_name}
                 </h2>
-                {isVerified && <Badge variant="verified">Verified</Badge>}
-                {isClaimed && <Badge variant="claimed">Claimed</Badge>}
+                {showVerificationBadge && (
+                  <VerificationStatusBadge
+                    metadata={meta}
+                    verificationState={verificationState}
+                    onVerifyClick={onVerifyClick}
+                  />
+                )}
+                {showClaimedBadge && <Badge variant="claimed">Claimed</Badge>}
               </div>
               {location && (
                 <p className="text-[15px] text-gray-500 mt-1">{location}</p>
@@ -156,8 +173,14 @@ export default function ProfileOverviewCard({
                 <h2 className="text-xl font-bold text-gray-900 font-display truncate">
                   {profile.display_name}
                 </h2>
-                {isVerified && <Badge variant="verified">Verified</Badge>}
-                {isClaimed && <Badge variant="claimed">Claimed</Badge>}
+                {showVerificationBadge && (
+                  <VerificationStatusBadge
+                    metadata={meta}
+                    verificationState={verificationState}
+                    onVerifyClick={onVerifyClick}
+                  />
+                )}
+                {showClaimedBadge && <Badge variant="claimed">Claimed</Badge>}
               </div>
               {location && (
                 <p className="text-[15px] text-gray-500 mt-0.5">{location}</p>
