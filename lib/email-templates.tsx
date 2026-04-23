@@ -1045,11 +1045,13 @@ export function verificationApprovedEmail(opts: {
   autoApproved?: boolean;
 }): string {
   return layout(`
-    <div style="text-align:center;margin:0 0 24px;">
-      <div style="width:56px;height:56px;background:#ecfdf5;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">
-        <span style="font-size:28px;">✓</span>
-      </div>
-    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <tr><td align="center">
+        <table cellpadding="0" cellspacing="0" style="width:56px;height:56px;background:#ecfdf5;border-radius:50%;">
+          <tr><td align="center" valign="middle" style="font-size:28px;line-height:56px;">✓</td></tr>
+        </table>
+      </td></tr>
+    </table>
     <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;text-align:center;">You're verified</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;text-align:center;">
       ${opts.recipientName}, your connection to <strong>${opts.providerName}</strong> has been verified. You now have full access to your dashboard.
@@ -1072,11 +1074,13 @@ export function verificationPendingReviewEmail(opts: {
   dashboardUrl: string;
 }): string {
   return layout(`
-    <div style="text-align:center;margin:0 0 24px;">
-      <div style="width:56px;height:56px;background:#fef3c7;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;">
-        <span style="font-size:28px;">👀</span>
-      </div>
-    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <tr><td align="center">
+        <table cellpadding="0" cellspacing="0" style="width:56px;height:56px;background:#fef3c7;border-radius:50%;">
+          <tr><td align="center" valign="middle" style="font-size:28px;line-height:56px;">👀</td></tr>
+        </table>
+      </td></tr>
+    </table>
     <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;text-align:center;">We're reviewing your verification</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;text-align:center;">
       ${opts.recipientName}, thanks for submitting your verification for <strong>${opts.providerName}</strong>.
