@@ -2298,6 +2298,7 @@ export default function ProviderMatchesPage() {
         onSubmit={handleVerificationSubmit}
         onDismiss={handleVerificationDismiss}
         businessName={providerProfile?.display_name || "Your Business"}
+        profileId={providerProfile?.id}
       />
     </div>
     </div>

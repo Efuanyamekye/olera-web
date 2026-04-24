@@ -24,6 +24,13 @@ interface VerifyRequest {
   documentType?: string;
   /** Claimer's name (for verification context) */
   claimerName?: string;
+  /** For LinkedIn verification with screenshots */
+  linkedinScreenshots?: {
+    headerData: string;
+    headerType: string;
+    experienceData: string;
+    experienceType: string;
+  };
 }
 
 interface VerifyResponse {
@@ -64,7 +71,7 @@ function getAnthropic(): Anthropic {
 export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as VerifyRequest;
-    const { profileId, method, value, documentData, documentType, claimerName } = body;
+    const { profileId, method, value, documentData, documentType, claimerName, linkedinScreenshots } = body;
 
     if (!profileId || !method || !value) {
       return NextResponse.json(
@@ -152,7 +159,7 @@ export async function POST(request: NextRequest) {
         result = await verifyByEmail(value, profile.display_name, extractDomainFromWebsite(profile.website));
         break;
       case "linkedin":
-        result = await verifyByLinkedIn(value, profile.display_name, claimerName);
+        result = await verifyByLinkedIn(value, profile.display_name, claimerName, linkedinScreenshots);
         break;
       case "website":
         result = await verifyByWebsite(value, profile.display_name, claimerName);
@@ -347,7 +354,13 @@ async function verifyByEmail(
 async function verifyByLinkedIn(
   linkedinUrl: string,
   businessName: string,
-  claimerName?: string
+  claimerName?: string,
+  screenshots?: {
+    headerData: string;
+    headerType: string;
+    experienceData: string;
+    experienceType: string;
+  }
 ): Promise<VerifyResponse> {
   // Validate URL format
   if (!linkedinUrl.includes("linkedin.com/")) {
@@ -359,7 +372,12 @@ async function verifyByLinkedIn(
     };
   }
 
-  // Use Claude to verify LinkedIn profile
+  // If screenshots are provided, use Claude Vision for stronger verification
+  if (screenshots?.headerData && screenshots?.experienceData) {
+    return verifyLinkedInWithScreenshots(linkedinUrl, businessName, claimerName, screenshots);
+  }
+
+  // Fallback to URL-only verification (weaker)
   try {
     const client = getAnthropic();
     const response = await Promise.race([
@@ -430,6 +448,133 @@ Guidelines:
       verified: false,
       reason: "LinkedIn verification unavailable",
       suggestion: "We'll review your LinkedIn profile manually.",
+    };
+  }
+}
+
+/**
+ * Verify LinkedIn using profile screenshots (Claude Vision)
+ */
+async function verifyLinkedInWithScreenshots(
+  linkedinUrl: string,
+  businessName: string,
+  claimerName: string | undefined,
+  screenshots: {
+    headerData: string;
+    headerType: string;
+    experienceData: string;
+    experienceType: string;
+  }
+): Promise<VerifyResponse> {
+  try {
+    const client = getAnthropic();
+
+    // Analyze both screenshots with Claude Vision
+    const response = await Promise.race([
+      client.messages.create({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 500,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: `You are verifying that someone works at a specific business using their LinkedIn profile screenshots.
+
+Business being verified: ${businessName}
+${claimerName ? `Person claiming to work there: ${claimerName}` : ""}
+LinkedIn URL they provided: ${linkedinUrl}
+
+I'm providing two screenshots:
+1. Profile header - showing name and photo
+2. Experience section - showing work history
+
+Verify:
+1. Does the name in the profile header match "${claimerName || "the claimer"}"?
+2. Does the Experience section show current employment at "${businessName}" or a clearly related entity?
+3. Do the screenshots look like genuine LinkedIn screenshots (not edited)?
+
+Return ONLY a JSON object (no prose, no markdown):
+{"verified":true|false,"nameMatch":true|false,"employmentMatch":true|false,"confidence":"high"|"medium"|"low","reason":"<brief explanation>"}
+
+Be reasonably lenient — we want to verify legitimate business representatives. If the profile shows current employment at the business, verify it.`,
+              },
+              {
+                type: "image",
+                source: {
+                  type: "base64",
+                  media_type: screenshots.headerType as "image/jpeg" | "image/png" | "image/webp" | "image/gif",
+                  data: screenshots.headerData,
+                },
+              },
+              {
+                type: "image",
+                source: {
+                  type: "base64",
+                  media_type: screenshots.experienceType as "image/jpeg" | "image/png" | "image/webp" | "image/gif",
+                  data: screenshots.experienceData,
+                },
+              },
+            ],
+          },
+        ],
+      }),
+      new Promise<Anthropic.Messages.Message>((_, reject) =>
+        setTimeout(() => reject(new Error("timeout")), 25000)
+      ),
+    ]);
+
+    const textBlock = response.content.find((b) => b.type === "text");
+    const raw = textBlock?.type === "text" ? textBlock.text : "";
+
+    try {
+      const parsed = JSON.parse(raw.replace(/```json?|```/gi, "").trim()) as {
+        verified?: boolean;
+        nameMatch?: boolean;
+        employmentMatch?: boolean;
+        confidence?: string;
+        reason?: string;
+      };
+
+      // Require both name match and employment match for instant verification
+      if (parsed.verified && parsed.nameMatch && parsed.employmentMatch && parsed.confidence !== "low") {
+        return {
+          success: true,
+          verified: true,
+          reason: `LinkedIn verified: ${parsed.reason || "Profile confirms employment at business"}`,
+        };
+      }
+
+      // Build helpful feedback
+      let suggestion = "Make sure your screenshots clearly show your name and current employment.";
+      if (!parsed.nameMatch) {
+        suggestion = "The name on your LinkedIn doesn't seem to match. Please check your screenshots.";
+      } else if (!parsed.employmentMatch) {
+        suggestion = `We couldn't find ${businessName} in your Experience section. Make sure it shows as your current employer.`;
+      }
+
+      return {
+        success: true,
+        verified: false,
+        reason: parsed.reason || "Could not verify LinkedIn connection from screenshots",
+        suggestion,
+      };
+    } catch {
+      return {
+        success: true,
+        verified: false,
+        reason: "LinkedIn verification inconclusive",
+        suggestion: "Please try another verification method.",
+      };
+    }
+  } catch (err) {
+    console.error("[verify] LinkedIn screenshot verification error:", err);
+    return {
+      success: true,
+      verified: false,
+      reason: "LinkedIn verification unavailable",
+      suggestion: "Please try another verification method.",
     };
   }
 }

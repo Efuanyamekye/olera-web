@@ -982,6 +982,7 @@ function InboxContent() {
         onSubmit={verificationModal.handleSubmit}
         onDismiss={verificationModal.handleDismiss}
         businessName={verification.providerName || "your business"}
+        profileId={verification.profileId || undefined}
         allowDismiss
       />
     )}

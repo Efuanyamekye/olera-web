@@ -1235,6 +1235,7 @@ export default function ProviderQnAPage() {
         onSubmit={handleVerificationSubmit}
         onDismiss={handleVerificationDismiss}
         businessName={providerProfile?.display_name || "your business"}
+        profileId={profileId || undefined}
       />
     </div>
   );

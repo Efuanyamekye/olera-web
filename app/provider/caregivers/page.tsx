@@ -163,6 +163,7 @@ function ProviderCaregiversContent() {
         onSubmit={handleVerificationSubmit}
         onDismiss={handleVerificationDismiss}
         businessName={activeProfile?.display_name || "Your Business"}
+        profileId={activeProfile?.id}
       />
     </main>
   );

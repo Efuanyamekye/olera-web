@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Modal from "@/components/ui/Modal";
+import OtpInput from "@/components/auth/OtpInput";
 
 // ============================================================
 // Types
@@ -18,6 +19,13 @@ export interface VerificationResult {
   documentData?: string;
   /** Document MIME type */
   documentType?: string;
+  /** For LinkedIn screenshots verification */
+  linkedinScreenshots?: {
+    headerData: string;
+    headerType: string;
+    experienceData: string;
+    experienceType: string;
+  };
 }
 
 interface VerificationMethodModalProps {
@@ -27,6 +35,8 @@ interface VerificationMethodModalProps {
   onDismiss?: () => void;
   businessName: string;
   businessWebsite?: string | null;
+  /** Profile ID for OTP API calls */
+  profileId?: string;
   /** User's email from auth (for email verification) */
   userEmail?: string;
   /** User's display name from profile */
@@ -39,7 +49,7 @@ interface VerificationMethodModalProps {
 // Screen States
 // ============================================================
 
-type Screen = "pick-method" | "email" | "linkedin" | "website" | "document" | "success" | "pending-review" | "need-help";
+type Screen = "pick-method" | "email" | "email-otp" | "linkedin" | "linkedin-screenshots" | "website" | "document" | "success" | "pending-review" | "need-help";
 
 // ============================================================
 // Method Cards Data
@@ -173,6 +183,7 @@ export default function VerificationMethodModal({
   onDismiss,
   businessName,
   businessWebsite,
+  profileId,
   userEmail,
   userName,
   allowDismiss = true,
@@ -195,8 +206,21 @@ export default function VerificationMethodModal({
   const [documentFile, setDocumentFile] = useState<File | null>(null);
   const [documentPreview, setDocumentPreview] = useState<string | null>(null);
 
+  // Email OTP state
+  const [otpCode, setOtpCode] = useState("");
+  const [otpExpiresAt, setOtpExpiresAt] = useState<string | null>(null);
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  // LinkedIn screenshots state
+  const [linkedinHeaderFile, setLinkedinHeaderFile] = useState<File | null>(null);
+  const [linkedinHeaderPreview, setLinkedinHeaderPreview] = useState<string | null>(null);
+  const [linkedinExperienceFile, setLinkedinExperienceFile] = useState<File | null>(null);
+  const [linkedinExperiencePreview, setLinkedinExperiencePreview] = useState<string | null>(null);
+
   // Track previous preview for cleanup
   const prevPreviewRef = useRef<string | null>(null);
+  const prevLinkedinHeaderRef = useRef<string | null>(null);
+  const prevLinkedinExperienceRef = useRef<string | null>(null);
 
   // Reset state when modal opens
   useEffect(() => {
@@ -212,8 +236,25 @@ export default function VerificationMethodModal({
       setWebsiteUrl(businessWebsite || "");
       setDocumentFile(null);
       setDocumentPreview(null);
+      // Reset OTP state
+      setOtpCode("");
+      setOtpExpiresAt(null);
+      setResendCooldown(0);
+      // Reset LinkedIn screenshots
+      setLinkedinHeaderFile(null);
+      setLinkedinHeaderPreview(null);
+      setLinkedinExperienceFile(null);
+      setLinkedinExperiencePreview(null);
     }
   }, [isOpen, userEmail, userName, businessWebsite]);
+
+  // Resend cooldown timer
+  useEffect(() => {
+    if (resendCooldown > 0) {
+      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [resendCooldown]);
 
   // Clean up preview URLs
   useEffect(() => {
@@ -227,6 +268,32 @@ export default function VerificationMethodModal({
       }
     };
   }, [documentPreview]);
+
+  // Clean up LinkedIn header preview
+  useEffect(() => {
+    if (prevLinkedinHeaderRef.current && prevLinkedinHeaderRef.current !== linkedinHeaderPreview) {
+      URL.revokeObjectURL(prevLinkedinHeaderRef.current);
+    }
+    prevLinkedinHeaderRef.current = linkedinHeaderPreview;
+    return () => {
+      if (prevLinkedinHeaderRef.current) {
+        URL.revokeObjectURL(prevLinkedinHeaderRef.current);
+      }
+    };
+  }, [linkedinHeaderPreview]);
+
+  // Clean up LinkedIn experience preview
+  useEffect(() => {
+    if (prevLinkedinExperienceRef.current && prevLinkedinExperienceRef.current !== linkedinExperiencePreview) {
+      URL.revokeObjectURL(prevLinkedinExperienceRef.current);
+    }
+    prevLinkedinExperienceRef.current = linkedinExperiencePreview;
+    return () => {
+      if (prevLinkedinExperienceRef.current) {
+        URL.revokeObjectURL(prevLinkedinExperienceRef.current);
+      }
+    };
+  }, [linkedinExperiencePreview]);
 
   const handleMethodSelect = (method: VerificationMethod) => {
     setScreen(method);
@@ -243,12 +310,12 @@ export default function VerificationMethodModal({
     onClose();
   };
 
-  const handleSubmit = async (method: VerificationMethod, value: string, documentData?: string, documentType?: string) => {
+  const handleSubmit = async (method: VerificationMethod, value: string, documentData?: string, documentType?: string, linkedinScreenshots?: VerificationResult["linkedinScreenshots"]) => {
     setSubmitting(true);
     setError(null);
 
     try {
-      const result = await onSubmit({ method, value, fullName: fullName.trim(), documentData, documentType });
+      const result = await onSubmit({ method, value, fullName: fullName.trim(), documentData, documentType, linkedinScreenshots });
       if (result?.verified) {
         setScreen("success");
       } else if (result?.pendingReview) {
@@ -271,6 +338,168 @@ export default function VerificationMethodModal({
       setSubmitting(false);
     }
   };
+
+  // ── Email OTP Handlers ──
+
+  const handleSendOtp = async () => {
+    if (!profileId) {
+      setError("Profile not found. Please refresh the page.");
+      return;
+    }
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/provider/verify/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profileId,
+          email: emailValue.trim(),
+          fullName: fullName.trim(),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to send verification code");
+      }
+
+      setOtpExpiresAt(data.expiresAt);
+      setResendCooldown(60);
+      setOtpCode("");
+      setScreen("email-otp");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send code");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!profileId || otpCode.length !== 8) return;
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/provider/verify/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profileId,
+          code: otpCode,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Verification failed");
+      }
+
+      if (data.verified) {
+        setScreen("success");
+      } else if (data.pendingReview) {
+        // Count distinct methods tried (same logic as handleSubmit)
+        const alreadyTried = triedMethods.has("email");
+        setTriedMethods(prev => new Set(prev).add("email"));
+        const distinctMethodsTried = alreadyTried ? triedMethods.size : triedMethods.size + 1;
+
+        if (distinctMethodsTried >= 4) {
+          setScreen("pending-review");
+        } else {
+          setError(data.suggestion || "We couldn't verify automatically. Try another method.");
+        }
+      } else {
+        // Invalid code
+        setError(data.error || "Invalid code. Please try again.");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Verification failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleResendOtp = async () => {
+    if (resendCooldown > 0) return;
+    await handleSendOtp();
+  };
+
+  // ── LinkedIn Screenshots Handlers ──
+
+  const handleLinkedinContinue = () => {
+    setScreen("linkedin-screenshots");
+    setError(null);
+  };
+
+  const handleLinkedinScreenshotSelect = (type: "header" | "experience") => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (!validTypes.includes(file.type)) {
+      setError("Please upload a JPG or PNG image.");
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setError("Image must be under 10MB.");
+      return;
+    }
+
+    setError(null);
+    const url = URL.createObjectURL(file);
+
+    if (type === "header") {
+      setLinkedinHeaderFile(file);
+      setLinkedinHeaderPreview(url);
+    } else {
+      setLinkedinExperienceFile(file);
+      setLinkedinExperiencePreview(url);
+    }
+  };
+
+  const handleLinkedinScreenshotsSubmit = useCallback(async () => {
+    if (!linkedinHeaderFile || !linkedinExperienceFile || isProcessingFile) return;
+
+    setIsProcessingFile(true);
+    setError(null);
+
+    try {
+      // Read both files as base64
+      const readFile = (file: File): Promise<string> =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const result = reader.result as string;
+            const base64Data = result.split(",")[1];
+            resolve(base64Data);
+          };
+          reader.onerror = () => reject(new Error("Failed to read file"));
+          reader.readAsDataURL(file);
+        });
+
+      const [headerData, experienceData] = await Promise.all([
+        readFile(linkedinHeaderFile),
+        readFile(linkedinExperienceFile),
+      ]);
+
+      setIsProcessingFile(false);
+      await handleSubmit("linkedin", linkedinUrl.trim(), undefined, undefined, {
+        headerData,
+        headerType: linkedinHeaderFile.type,
+        experienceData,
+        experienceType: linkedinExperienceFile.type,
+      });
+    } catch (err) {
+      setIsProcessingFile(false);
+      setError(err instanceof Error ? err.message : "Failed to process screenshots");
+    }
+  }, [linkedinHeaderFile, linkedinExperienceFile, linkedinUrl, isProcessingFile]);
 
   const handleNeedHelp = () => {
     setScreen("need-help");
@@ -336,8 +565,12 @@ export default function VerificationMethodModal({
         return null; // Custom header rendered in content
       case "email":
         return "Business email";
+      case "email-otp":
+        return "Enter verification code";
       case "linkedin":
         return "LinkedIn profile";
+      case "linkedin-screenshots":
+        return "Upload profile screenshots";
       case "website":
         return "Business website";
       case "document":
@@ -373,12 +606,26 @@ export default function VerificationMethodModal({
             onFullNameChange={setFullName}
             email={emailValue}
             onEmailChange={setEmailValue}
-            onSubmit={() => handleSubmit("email", emailValue.trim())}
+            onSubmit={handleSendOtp}
             submitting={submitting}
             error={error}
             onTryAnother={handleBack}
             showTryAnother={triedMethods.has("email")}
             signupEmail={userEmail}
+          />
+        );
+      case "email-otp":
+        return (
+          <EmailOtpScreen
+            email={emailValue}
+            code={otpCode}
+            onCodeChange={setOtpCode}
+            onSubmit={handleVerifyOtp}
+            onResend={handleResendOtp}
+            resendCooldown={resendCooldown}
+            submitting={submitting}
+            error={error}
+            onBack={() => setScreen("email")}
           />
         );
       case "linkedin":
@@ -388,12 +635,28 @@ export default function VerificationMethodModal({
             onFullNameChange={setFullName}
             url={linkedinUrl}
             onUrlChange={setLinkedinUrl}
-            onSubmit={() => handleSubmit("linkedin", linkedinUrl.trim())}
+            onSubmit={handleLinkedinContinue}
             submitting={submitting}
             error={error}
             businessName={businessName}
             onTryAnother={handleBack}
             showTryAnother={triedMethods.has("linkedin")}
+          />
+        );
+      case "linkedin-screenshots":
+        return (
+          <LinkedInScreenshotsScreen
+            businessName={businessName}
+            headerFile={linkedinHeaderFile}
+            headerPreview={linkedinHeaderPreview}
+            experienceFile={linkedinExperienceFile}
+            experiencePreview={linkedinExperiencePreview}
+            onHeaderSelect={handleLinkedinScreenshotSelect("header")}
+            onExperienceSelect={handleLinkedinScreenshotSelect("experience")}
+            onSubmit={handleLinkedinScreenshotsSubmit}
+            submitting={submitting || isProcessingFile}
+            error={error}
+            onBack={() => setScreen("linkedin")}
           />
         );
       case "website":
@@ -455,6 +718,20 @@ export default function VerificationMethodModal({
     return null;
   };
 
+  // Handle back button based on screen
+  const getBackHandler = () => {
+    if (screen === "pick-method" || screen === "success" || screen === "pending-review" || screen === "need-help") {
+      return undefined;
+    }
+    if (screen === "email-otp") {
+      return () => setScreen("email");
+    }
+    if (screen === "linkedin-screenshots") {
+      return () => setScreen("linkedin");
+    }
+    return handleBack;
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -462,7 +739,7 @@ export default function VerificationMethodModal({
       title={getTitle()}
       subtitle={getSubtitle()}
       size="2xl"
-      onBack={screen !== "pick-method" && screen !== "success" && screen !== "pending-review" && screen !== "need-help" ? handleBack : undefined}
+      onBack={getBackHandler()}
       footer={renderFooter()}
     >
       <div
@@ -722,7 +999,7 @@ function EmailScreen({
 
       {error && <ErrorBanner message={error} onTryAnother={onTryAnother} showTryAnother={showTryAnother} />}
 
-      <SubmitButton submitting={submitting} disabled={!isValid} />
+      <SubmitButton submitting={submitting} disabled={!isValid} label="Send verification code" submittingLabel="Sending..." />
 
       <style jsx>{`
         .form-input {
@@ -746,6 +1023,160 @@ function EmailScreen({
         }
       `}</style>
     </FormWrapper>
+  );
+}
+
+function EmailOtpScreen({
+  email,
+  code,
+  onCodeChange,
+  onSubmit,
+  onResend,
+  resendCooldown,
+  submitting,
+  error,
+  onBack,
+}: {
+  email: string;
+  code: string;
+  onCodeChange: (v: string) => void;
+  onSubmit: () => void;
+  onResend: () => void;
+  resendCooldown: number;
+  submitting: boolean;
+  error: string | null;
+  onBack: () => void;
+}) {
+  const isValid = code.length === 8;
+
+  // Track the last code we auto-submitted to prevent infinite retries
+  const lastSubmittedCodeRef = useRef<string | null>(null);
+
+  // Auto-submit when code is complete (but only once per unique code)
+  useEffect(() => {
+    if (code.length === 8 && !submitting && code !== lastSubmittedCodeRef.current) {
+      lastSubmittedCodeRef.current = code;
+      onSubmit();
+    }
+  }, [code, submitting, onSubmit]);
+
+  // Reset the submitted code ref when user changes the code (so they can retry)
+  useEffect(() => {
+    if (code.length < 8) {
+      lastSubmittedCodeRef.current = null;
+    }
+  }, [code]);
+
+  return (
+    <div className="py-6">
+      {/* Icon */}
+      <div className="text-center mb-6">
+        <div
+          className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center"
+          style={{ animation: "otpPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both" }}
+        >
+          <svg className="w-8 h-8 text-primary-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+          </svg>
+        </div>
+        <h3
+          className="text-lg font-bold text-gray-900 mb-1"
+          style={{ animation: "fadeUp 0.3s ease-out 0.1s both" }}
+        >
+          Check your inbox
+        </h3>
+        <p
+          className="text-sm text-gray-500"
+          style={{ animation: "fadeUp 0.3s ease-out 0.15s both" }}
+        >
+          We sent an 8-digit code to <span className="font-medium text-gray-700">{email}</span>
+        </p>
+      </div>
+
+      {/* OTP Input */}
+      <div
+        className="mb-6"
+        style={{ animation: "fadeUp 0.3s ease-out 0.2s both" }}
+      >
+        <OtpInput
+          length={8}
+          value={code}
+          onChange={onCodeChange}
+          disabled={submitting}
+          autoFocus
+          error={!!error}
+        />
+      </div>
+
+      {/* Error */}
+      {error && (
+        <div className="mb-4 px-4 py-3 bg-red-50 border border-red-100 rounded-xl">
+          <p className="text-sm text-red-600 font-medium">{error}</p>
+        </div>
+      )}
+
+      {/* Verify button */}
+      <button
+        type="button"
+        onClick={onSubmit}
+        disabled={!isValid || submitting}
+        className="w-full py-4 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
+      >
+        {submitting ? (
+          <>
+            <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Verifying...
+          </>
+        ) : (
+          "Verify code"
+        )}
+      </button>
+
+      {/* Resend */}
+      <div className="mt-4 text-center">
+        {resendCooldown > 0 ? (
+          <p className="text-sm text-gray-400">
+            Resend code in {resendCooldown}s
+          </p>
+        ) : (
+          <button
+            type="button"
+            onClick={onResend}
+            disabled={submitting}
+            className="text-sm text-primary-600 hover:text-primary-700 font-medium transition-colors"
+          >
+            Didn&apos;t receive it? Resend code
+          </button>
+        )}
+      </div>
+
+      {/* Use different email */}
+      <div className="mt-3 text-center">
+        <button
+          type="button"
+          onClick={onBack}
+          disabled={submitting}
+          className="text-sm text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          Use a different email
+        </button>
+      </div>
+
+      <style jsx>{`
+        @keyframes otpPop {
+          0% { opacity: 0; transform: scale(0.5); }
+          70% { transform: scale(1.05); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
   );
 }
 
@@ -800,7 +1231,7 @@ function LinkedInScreen({
 
       {error && <ErrorBanner message={error} onTryAnother={onTryAnother} showTryAnother={showTryAnother} />}
 
-      <SubmitButton submitting={submitting} disabled={!isValid} />
+      <SubmitButton submitting={submitting} disabled={!isValid} label="Continue" />
 
       <style jsx>{`
         .form-input {
@@ -824,6 +1255,207 @@ function LinkedInScreen({
         }
       `}</style>
     </FormWrapper>
+  );
+}
+
+function LinkedInScreenshotsScreen({
+  businessName,
+  headerFile,
+  headerPreview,
+  experienceFile,
+  experiencePreview,
+  onHeaderSelect,
+  onExperienceSelect,
+  onSubmit,
+  submitting,
+  error,
+  onBack,
+}: {
+  businessName: string;
+  headerFile: File | null;
+  headerPreview: string | null;
+  experienceFile: File | null;
+  experiencePreview: string | null;
+  onHeaderSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onExperienceSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSubmit: () => void;
+  submitting: boolean;
+  error: string | null;
+  onBack: () => void;
+}) {
+  const isValid = !!headerFile && !!experienceFile;
+
+  return (
+    <div className="py-4">
+      {/* Instructions */}
+      <p className="text-sm text-gray-500 mb-6">
+        Upload two screenshots from your LinkedIn profile to verify your connection to <span className="font-medium text-gray-700">{businessName}</span>.
+      </p>
+
+      {/* Screenshot 1: Profile Header */}
+      <div className="mb-5">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-6 h-6 rounded-full bg-primary-100 text-primary-700 text-xs font-bold flex items-center justify-center">1</span>
+          <span className="text-sm font-medium text-gray-700">Profile header</span>
+        </div>
+        <p className="text-xs text-gray-400 mb-2 ml-8">Screenshot showing your name and photo</p>
+        <ScreenshotUpload
+          id="linkedin-header"
+          file={headerFile}
+          preview={headerPreview}
+          onSelect={onHeaderSelect}
+          placeholder="Profile header screenshot"
+        />
+      </div>
+
+      {/* Screenshot 2: Experience Section */}
+      <div className="mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-6 h-6 rounded-full bg-primary-100 text-primary-700 text-xs font-bold flex items-center justify-center">2</span>
+          <span className="text-sm font-medium text-gray-700">Experience section</span>
+        </div>
+        <p className="text-xs text-gray-400 mb-2 ml-8">Screenshot showing your role at {businessName}</p>
+        <ScreenshotUpload
+          id="linkedin-experience"
+          file={experienceFile}
+          preview={experiencePreview}
+          onSelect={onExperienceSelect}
+          placeholder="Experience section screenshot"
+        />
+      </div>
+
+      {/* Error */}
+      {error && (
+        <div className="mb-4 px-4 py-3 bg-amber-50 border border-amber-100 rounded-xl">
+          <p className="text-sm text-amber-700 font-medium">{error}</p>
+          <button
+            type="button"
+            onClick={onBack}
+            className="mt-2 text-sm font-medium text-amber-600 hover:text-amber-700 underline underline-offset-2"
+          >
+            Try a different method
+          </button>
+        </div>
+      )}
+
+      {/* Submit */}
+      <button
+        type="button"
+        onClick={onSubmit}
+        disabled={!isValid || submitting}
+        className="w-full py-4 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2"
+      >
+        {submitting ? (
+          <>
+            <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Verifying...
+          </>
+        ) : (
+          "Submit for verification"
+        )}
+      </button>
+    </div>
+  );
+}
+
+/** Reusable screenshot upload component */
+function ScreenshotUpload({
+  id,
+  file,
+  preview,
+  onSelect,
+  placeholder,
+}: {
+  id: string;
+  file: File | null;
+  preview: string | null;
+  onSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder: string;
+}) {
+  const [isDragging, setIsDragging] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleDragOver = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDrop = useCallback((e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile && inputRef.current) {
+      const dt = new DataTransfer();
+      dt.items.add(droppedFile);
+      inputRef.current.files = dt.files;
+      const event = new Event("change", { bubbles: true });
+      inputRef.current.dispatchEvent(event);
+    }
+  }, []);
+
+  return (
+    <label
+      htmlFor={id}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className={`
+        relative flex items-center justify-center w-full h-32 rounded-xl border-2 border-dashed cursor-pointer transition-all overflow-hidden
+        ${isDragging
+          ? "border-primary-400 bg-primary-50"
+          : file
+            ? "border-primary-200 bg-primary-50/30"
+            : "border-gray-200 bg-gray-50/50 hover:border-gray-300 hover:bg-gray-50"
+        }
+      `}
+    >
+      {preview ? (
+        <div className="relative w-full h-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={preview}
+            alt="Screenshot preview"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity bg-black/40">
+            <span className="text-white text-sm font-medium">Change</span>
+          </div>
+          <div className="absolute bottom-2 right-2 px-2 py-1 bg-primary-600 text-white text-xs font-medium rounded">
+            ✓ Uploaded
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+            <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+            </svg>
+          </div>
+          <span className="text-sm text-gray-500">{placeholder}</span>
+          <span className="text-xs text-gray-400">Click or drag to upload</span>
+        </div>
+      )}
+      <input
+        ref={inputRef}
+        id={id}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        onChange={onSelect}
+        className="sr-only"
+      />
+    </label>
   );
 }
 
@@ -1349,9 +1981,13 @@ function ErrorBanner({
 function SubmitButton({
   submitting,
   disabled,
+  label = "Continue",
+  submittingLabel = "Verifying...",
 }: {
   submitting: boolean;
   disabled: boolean;
+  label?: string;
+  submittingLabel?: string;
 }) {
   return (
     <button
@@ -1365,10 +2001,10 @@ function SubmitButton({
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
           </svg>
-          Verifying...
+          {submittingLabel}
         </>
       ) : (
-        "Continue"
+        label
       )}
     </button>
   );

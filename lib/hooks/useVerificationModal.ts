@@ -66,6 +66,7 @@ export function useVerificationModal({
           value: result.value,
           documentData: result.documentData,
           documentType: result.documentType,
+          linkedinScreenshots: result.linkedinScreenshots,
           // Use fullName from form (preferred) or fallback to pre-configured claimerName
           claimerName: result.fullName || claimerName,
         }),

@@ -471,6 +471,7 @@ function DashboardContent({
         onSubmit={handleVerificationSubmit}
         onDismiss={handleVerificationDismiss}
         businessName={profile.display_name}
+        profileId={profile.id}
       />
 
     </div>

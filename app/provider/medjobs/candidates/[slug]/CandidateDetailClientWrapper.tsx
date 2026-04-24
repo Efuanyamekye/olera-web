@@ -102,6 +102,7 @@ export default function CandidateDetailClientWrapper({
         onSubmit={handleVerificationSubmit}
         onDismiss={handleVerificationDismiss}
         businessName={activeProfile?.display_name || "Your Business"}
+        profileId={activeProfile?.id}
       />
     </>
   );

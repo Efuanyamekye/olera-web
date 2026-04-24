@@ -1637,6 +1637,7 @@ export default function ProviderReviewsPage() {
         onSubmit={handleVerificationSubmit}
         onDismiss={handleVerificationDismiss}
         businessName={profile?.display_name || "your business"}
+        profileId={profile?.id}
       />
     </>
   );

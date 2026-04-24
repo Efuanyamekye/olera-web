@@ -97,6 +97,27 @@ export function verificationCodeEmail(
   `);
 }
 
+/** Verification OTP email for email verification method */
+export function verificationOtpEmail(opts: {
+  recipientName: string;
+  code: string;
+  businessName: string;
+  expiresInMinutes: number;
+}): string {
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Verify your email</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Hi ${opts.recipientName}, use this code to verify your connection to <strong>${opts.businessName}</strong> on Olera:
+    </p>
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:24px;text-align:center;margin:0 0 24px;">
+      <span style="font-size:32px;font-weight:700;letter-spacing:6px;color:#111827;">${opts.code}</span>
+    </div>
+    <p style="font-size:13px;color:#9ca3af;margin:0;">
+      This code expires in ${opts.expiresInMinutes} minutes. If you didn't request this, you can safely ignore this email.
+    </p>
+  `);
+}
+
 /** Email to provider when a family sends a connection request */
 export function connectionRequestEmail(opts: {
   providerName: string;
