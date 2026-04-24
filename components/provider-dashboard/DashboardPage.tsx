@@ -166,6 +166,7 @@ function DashboardContent({
   editingSection: SectionId | null;
   setEditingSection: (s: SectionId | null) => void;
   refreshAccountData: () => Promise<void>;
+  userEmail?: string;
   v2Data: import("@/hooks/useProviderDashboardV2Data").ProviderDashboardV2Data | null;
   v2Loading: boolean;
 }) {
