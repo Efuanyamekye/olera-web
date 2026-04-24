@@ -34,13 +34,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await supabase
+    const { data: profiles } = await supabase
       .from("business_profiles")
       .select("id, slug, source_provider_id")
       .eq("account_id", account.id)
       .in("type", ["organization", "caregiver"])
-      .single();
+      .limit(1);
 
+    const profile = profiles?.[0];
     if (!profile?.slug) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });
     }
@@ -143,13 +144,14 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "No account found" }, { status: 400 });
     }
 
-    const { data: profile } = await supabase
+    const { data: profiles } = await supabase
       .from("business_profiles")
       .select("id, slug, display_name, source_provider_id, verification_state")
       .eq("account_id", account.id)
       .in("type", ["organization", "caregiver"])
-      .single();
+      .limit(1);
 
+    const profile = profiles?.[0];
     if (!profile?.slug) {
       return NextResponse.json({ error: "No provider profile found" }, { status: 400 });
     }
