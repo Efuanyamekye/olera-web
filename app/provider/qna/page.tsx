@@ -916,7 +916,6 @@ export default function ProviderQnAPage() {
 
   // Verification state
   const { isVerified } = useProviderVerification();
-  const [pendingAnswerSubmitted, setPendingAnswerSubmitted] = useState(false);
   const {
     isOpen: isVerificationModalOpen,
     open: openVerificationModalRaw,
@@ -1075,11 +1074,6 @@ export default function ProviderQnAPage() {
           )
         );
 
-        // Check if answer was saved as pending (unverified provider)
-        if (data.answerStatus === "pending") {
-          setPendingAnswerSubmitted(true);
-        }
-
         // Auto-switch to Published tab after successful answer
         setActiveFilter("published");
         return true;
@@ -1122,11 +1116,6 @@ export default function ProviderQnAPage() {
           q.id === question.id ? { ...q, ...data.question } : q
         )
       );
-
-      // Check if answer was saved as pending (unverified provider)
-      if (data.answerStatus === "pending") {
-        setPendingAnswerSubmitted(true);
-      }
 
       // Auto-switch to Published tab after successful answer
       setActiveFilter("published");
@@ -1238,43 +1227,6 @@ export default function ProviderQnAPage() {
         onSubmit={handleSheetSubmit}
         mode={sheetMode}
       />
-
-      {/* ── Pending Answer Prompt ── */}
-      {pendingAnswerSubmitted && !isVerified && (
-        <div className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-gray-200 shadow-lg pb-[env(safe-area-inset-bottom)]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
-                  <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-[15px] font-semibold text-gray-900">Answer saved, pending verification</p>
-                  <p className="text-[13px] text-gray-500">Verify your business to publish your answers.</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setPendingAnswerSubmitted(false)}
-                  className="px-3 py-2 text-[14px] font-medium text-gray-500 hover:text-gray-700 transition-colors"
-                >
-                  Later
-                </button>
-                <button
-                  type="button"
-                  onClick={openVerificationModal}
-                  className="px-4 py-2 rounded-xl bg-primary-600 text-[14px] font-semibold text-white hover:bg-primary-700 transition-colors"
-                >
-                  Verify now
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ── Verification Modal ── */}
       <VerificationMethodModal
