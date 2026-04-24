@@ -310,11 +310,11 @@ export default function VerificationMethodModal({
       case "pick-method":
         return null; // Custom header rendered in content
       case "email":
-        return "Verify with email";
+        return "Business email";
       case "linkedin":
-        return "Verify with LinkedIn";
+        return "LinkedIn profile";
       case "website":
-        return "Verify with website";
+        return "Business website";
       case "document":
         return "Upload document";
       case "success":
@@ -435,7 +435,7 @@ export default function VerificationMethodModal({
       onClose={onClose}
       title={getTitle()}
       subtitle={getSubtitle()}
-      size="lg"
+      size="2xl"
       onBack={screen !== "pick-method" && screen !== "success" && screen !== "pending-review" && screen !== "need-help" ? handleBack : undefined}
       footer={renderFooter()}
     >
@@ -481,14 +481,14 @@ function PickMethodScreen({
 
   return (
     <div className="pb-1">
-      {/* Centered header with shield icon */}
+      {/* Centered header with verified badge icon */}
       <div className="text-center pt-2 pb-6">
         <div
           className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center"
-          style={{ animation: "shieldPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both" }}
+          style={{ animation: "badgePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both" }}
         >
           <svg className="w-7 h-7 text-primary-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
           </svg>
         </div>
         <h2
@@ -498,10 +498,10 @@ function PickMethodScreen({
           Verify your business
         </h2>
         <p
-          className="text-[15px] text-gray-500 max-w-xs mx-auto leading-relaxed"
+          className="text-[15px] text-gray-500 max-w-sm mx-auto"
           style={{ animation: "fadeUp 0.3s ease-out 0.2s both" }}
         >
-          We couldn&apos;t confirm your connection to <span className="font-medium text-gray-700">{businessName}</span> from your email. Pick one way to verify.
+          Your sign-up email doesn&apos;t match <span className="font-medium text-gray-700">{businessName}</span>.
         </p>
       </div>
 
@@ -514,31 +514,36 @@ function PickMethodScreen({
         </div>
       )}
 
-      <div className="space-y-2.5">
+      <div className="space-y-3">
         {METHODS.map((method, index) => {
           const wasTried = triedMethods.has(method.id);
+          const isRecommended = method.recommended && !hasTriedMethods && !wasTried;
 
           return (
             <button
               key={method.id}
               onClick={() => onSelect(method.id)}
               className={`
-                group w-full text-left p-4 rounded-2xl border transition-all duration-150
+                group w-full text-left p-5 rounded-2xl border transition-all duration-150
                 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2
                 ${wasTried
                   ? "border-gray-100 bg-gray-50/50"
-                  : "border-gray-200 bg-white hover:border-primary-200 hover:shadow-sm active:scale-[0.995]"
+                  : isRecommended
+                    ? "border-primary-200 bg-primary-50/30 hover:border-primary-300 hover:bg-primary-50/50 hover:shadow-sm active:scale-[0.995]"
+                    : "border-gray-200 bg-white hover:border-primary-200 hover:shadow-sm active:scale-[0.995]"
                 }
               `}
               style={{ animation: `methodSlide 0.25s ease-out ${0.25 + index * 0.05}s both` }}
             >
               <div className="flex items-center gap-4">
-                {/* Icon - starts with subtle teal tint */}
+                {/* Icon */}
                 <div className={`
-                  w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors
+                  w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors
                   ${wasTried
                     ? "bg-gray-100 text-gray-400"
-                    : "bg-primary-50/70 text-primary-600 group-hover:bg-primary-100"
+                    : isRecommended
+                      ? "bg-primary-100 text-primary-600 group-hover:bg-primary-200/70"
+                      : "bg-primary-50/70 text-primary-600 group-hover:bg-primary-100"
                   }
                 `}>
                   {method.icon}
@@ -554,7 +559,7 @@ function PickMethodScreen({
                       <span className="px-1.5 py-0.5 bg-gray-200 text-gray-500 text-[10px] font-semibold rounded uppercase tracking-wide">
                         Tried
                       </span>
-                    ) : method.recommended && !hasTriedMethods ? (
+                    ) : isRecommended ? (
                       <span className="px-2 py-0.5 bg-primary-500 text-white text-[10px] font-semibold rounded-full">
                         Fastest
                       </span>
@@ -595,7 +600,7 @@ function PickMethodScreen({
       )}
 
       <style jsx>{`
-        @keyframes shieldPop {
+        @keyframes badgePop {
           0% { opacity: 0; transform: scale(0.5); }
           70% { transform: scale(1.05); }
           100% { opacity: 1; transform: scale(1); }
