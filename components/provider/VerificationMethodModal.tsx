@@ -308,13 +308,13 @@ export default function VerificationMethodModal({
   const getTitle = () => {
     switch (screen) {
       case "pick-method":
-        return "Verify your business";
+        return null; // Custom header rendered in content
       case "email":
-        return "Business email";
+        return "Verify with email";
       case "linkedin":
-        return "LinkedIn profile";
+        return "Verify with LinkedIn";
       case "website":
-        return "Business website";
+        return "Verify with website";
       case "document":
         return "Upload document";
       case "success":
@@ -324,15 +324,8 @@ export default function VerificationMethodModal({
     }
   };
 
-  // Subtitle only for method picker
+  // Subtitle only for method screens (not picker - that has custom header)
   const getSubtitle = () => {
-    if (screen === "pick-method") {
-      return (
-        <p className="text-gray-500 text-[15px]">
-          Pick one to confirm you represent <span className="font-medium text-gray-700">{businessName}</span>
-        </p>
-      );
-    }
     return null;
   };
 
@@ -345,6 +338,7 @@ export default function VerificationMethodModal({
             onSelect={handleMethodSelect}
             triedMethods={triedMethods}
             onNeedHelp={handleNeedHelp}
+            businessName={businessName}
           />
         );
       case "email":
@@ -441,7 +435,7 @@ export default function VerificationMethodModal({
       onClose={onClose}
       title={getTitle()}
       subtitle={getSubtitle()}
-      size="md"
+      size="lg"
       onBack={screen !== "pick-method" && screen !== "success" && screen !== "pending-review" && screen !== "need-help" ? handleBack : undefined}
       footer={renderFooter()}
     >
@@ -476,25 +470,51 @@ function PickMethodScreen({
   onSelect,
   triedMethods,
   onNeedHelp,
+  businessName,
 }: {
   onSelect: (method: VerificationMethod) => void;
   triedMethods: Set<VerificationMethod>;
   onNeedHelp: () => void;
+  businessName: string;
 }) {
   const hasTriedMethods = triedMethods.size > 0;
 
   return (
-    <div className="pt-4 pb-1">
+    <div className="pb-1">
+      {/* Centered header with shield icon */}
+      <div className="text-center pt-2 pb-6">
+        <div
+          className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center"
+          style={{ animation: "shieldPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.1s both" }}
+        >
+          <svg className="w-7 h-7 text-primary-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+          </svg>
+        </div>
+        <h2
+          className="text-xl font-bold text-gray-900 mb-2"
+          style={{ animation: "fadeUp 0.3s ease-out 0.15s both" }}
+        >
+          Verify your business
+        </h2>
+        <p
+          className="text-[15px] text-gray-500 max-w-xs mx-auto leading-relaxed"
+          style={{ animation: "fadeUp 0.3s ease-out 0.2s both" }}
+        >
+          We couldn&apos;t confirm your connection to <span className="font-medium text-gray-700">{businessName}</span> from your email. Pick one way to verify.
+        </p>
+      </div>
+
       {/* Message if returning after failed attempt */}
       {hasTriedMethods && (
-        <div className="mb-5 px-4 py-3 bg-amber-50/80 border border-amber-100 rounded-xl">
+        <div className="mb-4 px-4 py-3 bg-amber-50/80 border border-amber-100 rounded-xl">
           <p className="text-sm text-amber-700 font-medium">
             Try another method below
           </p>
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {METHODS.map((method, index) => {
           const wasTried = triedMethods.has(method.id);
 
@@ -507,18 +527,18 @@ function PickMethodScreen({
                 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2
                 ${wasTried
                   ? "border-gray-100 bg-gray-50/50"
-                  : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm active:scale-[0.995]"
+                  : "border-gray-200 bg-white hover:border-primary-200 hover:shadow-sm active:scale-[0.995]"
                 }
               `}
-              style={{ animation: `methodSlide 0.25s ease-out ${index * 50}ms both` }}
+              style={{ animation: `methodSlide 0.25s ease-out ${0.25 + index * 0.05}s both` }}
             >
               <div className="flex items-center gap-4">
-                {/* Icon */}
+                {/* Icon - starts with subtle teal tint */}
                 <div className={`
-                  w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-colors
+                  w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors
                   ${wasTried
                     ? "bg-gray-100 text-gray-400"
-                    : "bg-gray-50 text-gray-600 group-hover:bg-primary-50 group-hover:text-primary-600"
+                    : "bg-primary-50/70 text-primary-600 group-hover:bg-primary-100"
                   }
                 `}>
                   {method.icon}
@@ -547,7 +567,7 @@ function PickMethodScreen({
 
                 {/* Arrow */}
                 <svg
-                  className={`w-5 h-5 shrink-0 transition-all ${wasTried ? "text-gray-300" : "text-gray-300 group-hover:text-primary-400 group-hover:translate-x-0.5"}`}
+                  className={`w-5 h-5 shrink-0 transition-all ${wasTried ? "text-gray-300" : "text-gray-300 group-hover:text-primary-500 group-hover:translate-x-0.5"}`}
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={2}
@@ -575,6 +595,15 @@ function PickMethodScreen({
       )}
 
       <style jsx>{`
+        @keyframes shieldPop {
+          0% { opacity: 0; transform: scale(0.5); }
+          70% { transform: scale(1.05); }
+          100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         @keyframes methodSlide {
           from {
             opacity: 0;
