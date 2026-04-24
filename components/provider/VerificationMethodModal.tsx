@@ -114,6 +114,31 @@ function isValidEmail(email: string): boolean {
   return true;
 }
 
+const GENERIC_EMAIL_DOMAINS = [
+  "gmail.com", "googlemail.com",
+  "yahoo.com", "yahoo.co.uk", "yahoo.ca", "yahoo.com.au",
+  "hotmail.com", "outlook.com", "live.com", "msn.com",
+  "icloud.com", "me.com", "mac.com",
+  "aol.com",
+  "protonmail.com", "proton.me",
+  "mail.com", "email.com",
+  "ymail.com", "rocketmail.com",
+  "zoho.com", "gmx.com", "gmx.net",
+];
+
+function isGenericEmail(email: string): boolean {
+  const trimmed = email.trim().toLowerCase();
+  const atIndex = trimmed.indexOf("@");
+  if (atIndex < 1) return false;
+  const domain = trimmed.slice(atIndex + 1);
+  return GENERIC_EMAIL_DOMAINS.includes(domain);
+}
+
+function isSameAsSignupEmail(email: string, signupEmail: string | undefined): boolean {
+  if (!signupEmail) return false;
+  return email.trim().toLowerCase() === signupEmail.trim().toLowerCase();
+}
+
 function isValidLinkedInUrl(url: string): boolean {
   const trimmed = url.trim().toLowerCase();
   if (!trimmed.includes("linkedin.com")) return false;
@@ -182,7 +207,7 @@ export default function VerificationMethodModal({
       setTriedMethods(new Set());
       setIsProcessingFile(false);
       setFullName(userName || "");
-      setEmailValue(userEmail || "");
+      setEmailValue(""); // Don't pre-fill — user should enter their company email
       setLinkedinUrl("");
       setWebsiteUrl(businessWebsite || "");
       setDocumentFile(null);
@@ -353,6 +378,7 @@ export default function VerificationMethodModal({
             error={error}
             onTryAnother={handleBack}
             showTryAnother={triedMethods.has("email")}
+            signupEmail={userEmail}
           />
         );
       case "linkedin":
@@ -638,6 +664,7 @@ function EmailScreen({
   error,
   onTryAnother,
   showTryAnother,
+  signupEmail,
 }: {
   fullName: string;
   onFullNameChange: (v: string) => void;
@@ -648,8 +675,11 @@ function EmailScreen({
   error: string | null;
   onTryAnother: () => void;
   showTryAnother: boolean;
+  signupEmail?: string;
 }) {
-  const isValid = isValidName(fullName) && isValidEmail(email);
+  const isSameAsSignup = isSameAsSignupEmail(email, signupEmail);
+  const isGeneric = !isSameAsSignup && isValidEmail(email) && isGenericEmail(email);
+  const isValid = isValidName(fullName) && isValidEmail(email) && !isSameAsSignup;
 
   return (
     <FormWrapper onSubmit={onSubmit} isValid={isValid} submitting={submitting}>
@@ -665,15 +695,29 @@ function EmailScreen({
         />
       </FormField>
 
-      <FormField label="Work email" hint="Use your company domain for instant verification">
+      <FormField label="Work email">
         <input
           type="email"
           value={email}
           onChange={(e) => onEmailChange(e.target.value)}
           placeholder="jane@company.com"
           autoComplete="email"
-          className="form-input"
+          className={`form-input ${isSameAsSignup ? "border-red-300 bg-red-50/50" : ""}`}
         />
+        {/* Validation messages */}
+        {isSameAsSignup ? (
+          <p className="mt-2 text-sm text-red-600">
+            This is your account email. Please use a different company email.
+          </p>
+        ) : isGeneric ? (
+          <p className="mt-2 text-sm text-amber-600">
+            Using a company email (e.g. you@company.com) will verify you faster.
+          </p>
+        ) : (
+          <p className="mt-2 text-xs text-gray-400">
+            Use your company domain for instant verification
+          </p>
+        )}
       </FormField>
 
       {error && <ErrorBanner message={error} onTryAnother={onTryAnother} showTryAnother={showTryAnother} />}
