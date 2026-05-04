@@ -315,6 +315,10 @@ export default function StaffingOutreachPage() {
                         {row.provider_name}
                       </p>
                       <p className="truncate text-xs text-gray-500">
+                        {/* Show university in Action Needed tab (cross-university view) */}
+                        {stage === "action_needed" && row.university_name && (
+                          <span className="font-medium text-gray-600">{row.university_name} · </span>
+                        )}
                         {[row.provider_city, row.provider_state]
                           .filter(Boolean)
                           .join(", ") || "—"}

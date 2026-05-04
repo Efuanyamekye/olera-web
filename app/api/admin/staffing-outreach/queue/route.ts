@@ -83,12 +83,19 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: batchesErr.message }, { status: 500 });
   }
 
-  if (!batchId) {
-    return NextResponse.json({ batches, rows: [], total: 0, tabCounts: {} });
-  }
+  // Get all active batch IDs for cross-university queries
+  const activeBatchIds = (batches ?? []).map((b) => b.id);
+  const batchMap = new Map((batches ?? []).map((b) => [b.id, b.university_name]));
 
-  // ── Tab counts for the chosen batch ─────────────────────────────────────
-  const stageCounts = await computeStageCounts(db, batchId);
+  // ── Tab counts ──────────────────────────────────────────────────────────
+  // Action Needed count is ALWAYS across all universities
+  // Other tab counts are per-selected-batch (or 0 if no batch selected)
+  const stageCounts = await computeStageCounts(db, batchId, activeBatchIds);
+
+  // For non-action_needed tabs, require a batch to be selected
+  if (!batchId && stage !== "action_needed") {
+    return NextResponse.json({ batches, rows: [], total: 0, tabCounts: stageCounts });
+  }
 
   // ── If searching, find matching provider IDs first (DB-level search) ───
   let searchProviderIds: string[] | null = null;
@@ -113,8 +120,17 @@ export async function GET(req: NextRequest) {
   // ── Filtered + paginated rows ──────────────────────────────────────────
   let query = db
     .from("staffing_outreach")
-    .select("*", { count: "exact" })
-    .eq("batch_id", batchId);
+    .select("*", { count: "exact" });
+
+  // Action Needed: query across ALL active batches (cross-university to-do list)
+  // Other tabs: filter by selected batch
+  if (stage === "action_needed") {
+    if (activeBatchIds.length > 0) {
+      query = query.in("batch_id", activeBatchIds);
+    }
+  } else {
+    query = query.eq("batch_id", batchId);
+  }
 
   // Apply search filter at DB level (before pagination)
   if (searchProviderIds) {
@@ -182,6 +198,8 @@ export async function GET(req: NextRequest) {
       provider_state: p?.state ?? null,
       provider_website: p?.website ?? null,
       provider_slug: p?.slug ?? null,
+      // Include university name for Action Needed tab (cross-university view)
+      university_name: batchMap.get(r.batch_id) ?? undefined,
     } as QueueRow;
   });
 
@@ -195,7 +213,8 @@ export async function GET(req: NextRequest) {
 
 async function computeStageCounts(
   db: ReturnType<typeof getServiceClient>,
-  batchId: string,
+  batchId: string | null,
+  activeBatchIds: string[],
 ): Promise<Record<string, number>> {
   const stageCounts: Record<string, number> = {
     action_needed: 0,
@@ -204,13 +223,6 @@ async function computeStageCounts(
     enrolled: 0,
     closed: 0,
   };
-
-  const { data, error } = await db
-    .from("staffing_outreach")
-    .select("status, next_action_due_at")
-    .eq("batch_id", batchId);
-
-  if (error || !data) return stageCounts;
 
   const nowIso = new Date().toISOString();
   const NURTURING_STATUSES = new Set([
@@ -222,31 +234,43 @@ async function computeStageCounts(
     "activated",
   ]);
 
-  for (const row of data) {
-    const status = row.status as string;
-    const isDue = row.next_action_due_at && row.next_action_due_at <= nowIso;
+  // Action Needed count: ALWAYS across all active batches (cross-university)
+  if (activeBatchIds.length > 0) {
+    const { data: allData } = await db
+      .from("staffing_outreach")
+      .select("status, next_action_due_at")
+      .in("batch_id", activeBatchIds);
 
-    // Action Needed: nurturing statuses where due <= now
-    // Key rule: does NOT include queued providers
-    if (NURTURING_STATUSES.has(status) && isDue) {
-      stageCounts.action_needed++;
+    for (const row of allData ?? []) {
+      const status = row.status as string;
+      const isDue = row.next_action_due_at && row.next_action_due_at <= nowIso;
+      if (NURTURING_STATUSES.has(status) && isDue) {
+        stageCounts.action_needed++;
+      }
     }
+  }
 
-    // Initial Contact: queued only
-    if (status === "queued") {
-      stageCounts.initial_contact++;
-    }
-    // Nurturing: all nurturing statuses (no time filter)
-    else if (NURTURING_STATUSES.has(status)) {
-      stageCounts.nurturing++;
-    }
-    // Enrolled
-    else if (status === "enrolled") {
-      stageCounts.enrolled++;
-    }
-    // Closed: do_not_contact, wrong_number
-    else if (status === "do_not_contact" || status === "wrong_number") {
-      stageCounts.closed++;
+  // Other tab counts: per selected batch (if one is selected)
+  if (batchId) {
+    const { data, error } = await db
+      .from("staffing_outreach")
+      .select("status")
+      .eq("batch_id", batchId);
+
+    if (!error && data) {
+      for (const row of data) {
+        const status = row.status as string;
+
+        if (status === "queued") {
+          stageCounts.initial_contact++;
+        } else if (NURTURING_STATUSES.has(status)) {
+          stageCounts.nurturing++;
+        } else if (status === "enrolled") {
+          stageCounts.enrolled++;
+        } else if (status === "do_not_contact" || status === "wrong_number") {
+          stageCounts.closed++;
+        }
+      }
     }
   }
 
