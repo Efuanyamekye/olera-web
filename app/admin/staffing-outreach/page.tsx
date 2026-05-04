@@ -3,10 +3,7 @@
 /**
  * Admin Staffing Outreach — main page.
  *
- * Mirrors the layout grammar of /admin/questions: stat strip, search,
- * tabs, list with click-to-open drawer. The drawer (Drawer.tsx) handles
- * the per-row workflow: research, call, history.
- *
+ * Simplified MVP layout: 5 tabs, unified search/filter row.
  * Data comes from /api/admin/staffing-outreach/queue (batches + rows)
  * and /api/admin/staffing-outreach/[id] (drawer detail).
  */
@@ -19,16 +16,13 @@ import type {
   StaffingBatch,
 } from "@/lib/staffing-outreach/types";
 
+// Simplified 5-tab structure
 const TABS: Array<{ key: string; label: string }> = [
   { key: "today", label: "Today" },
-  { key: "queued", label: "Queued" },
-  { key: "pre_call", label: "Pre-call" },
-  { key: "calling", label: "Calling" },
-  { key: "post_consent", label: "Post-consent" },
-  { key: "activated", label: "Activated" },
+  { key: "to_call", label: "To Call" },
+  { key: "in_progress", label: "In Progress" },
   { key: "enrolled", label: "Enrolled" },
   { key: "stopped", label: "Stopped" },
-  { key: "all", label: "All" },
 ];
 
 export default function StaffingOutreachPage() {
@@ -86,34 +80,116 @@ export default function StaffingOutreachPage() {
 
   const handleRowAction = useCallback(
     async (refreshedCtx: DrawerContext | null) => {
-      // Refetch the queue to update statuses + tab counts
-      await refetch();
-      // Auto-advance: open the next row in the current tab
+      // Calculate next item BEFORE refetch (rows will be stale after refetch)
+      let nextId: string | null = null;
       if (refreshedCtx) {
         const idx = rows.findIndex((r) => r.id === refreshedCtx.outreach.id);
         const next = rows[idx + 1] ?? rows.find((r) => r.id !== refreshedCtx.outreach.id);
-        setOpenOutreachId(next?.id ?? null);
+        nextId = next?.id ?? null;
+      }
+
+      // Refetch the queue to update statuses + tab counts
+      await refetch();
+
+      // Auto-advance to the next row (calculated before refetch)
+      if (refreshedCtx) {
+        setOpenOutreachId(nextId);
       }
     },
     [refetch, rows],
   );
 
+  // Handle tab change - clear rows immediately to prevent stale flash
+  const handleTabChange = useCallback((newTab: string) => {
+    if (newTab === tab) return;
+    setRows([]);
+    setLoading(true);
+    setTab(newTab);
+  }, [tab]);
+
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900">Staffing Outreach</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Enroll home care agencies into the Student Caregiver Pilot, one
-          partner university at a time.
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Staffing Outreach</h1>
+        <p className="text-lg text-gray-600 mt-1">
+          Enroll home care agencies into the Student Caregiver Pilot.
         </p>
       </div>
 
-      {/* University dropdown + stat strip */}
-      <div className="mb-5 flex items-center gap-4">
+      {/* Tabs - pill buttons like verification page */}
+      <div className="flex gap-2 mb-4">
+        {TABS.map((t) => {
+          const count = tabCounts[t.key];
+          const active = t.key === tab;
+          const isActionable = t.key === "today" || t.key === "to_call";
+          const showBadge = isActionable && typeof count === "number" && count > 0;
+
+          return (
+            <button
+              key={t.key}
+              type="button"
+              onClick={() => handleTabChange(t.key)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                active
+                  ? "bg-primary-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {t.label}
+              {showBadge ? (
+                <span className={`px-1.5 py-0.5 text-xs font-semibold rounded-full ${
+                  active
+                    ? "bg-white/20 text-white"
+                    : "bg-amber-100 text-amber-700"
+                }`}>
+                  {count}
+                </span>
+              ) : typeof count === "number" ? (
+                <span className={`text-xs ${
+                  active ? "text-white/70" : "text-gray-400"
+                }`}>
+                  ({count})
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Search + University dropdown + inline stats */}
+      <div className="flex flex-wrap items-center gap-3 mb-6">
+        {/* Search - w-64 with icon */}
+        <div className="relative w-full sm:w-64">
+          <svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search providers..."
+            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-100 focus:border-primary-400"
+          />
+        </div>
+
+        {/* University dropdown */}
         <select
           value={batchId ?? ""}
-          onChange={(e) => setBatchId(e.target.value || null)}
-          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 shadow-sm focus:border-gray-400 focus:outline-none"
+          onChange={(e) => {
+            setRows([]);
+            setLoading(true);
+            setBatchId(e.target.value || null);
+          }}
+          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100"
         >
           {batches.length === 0 && <option value="">No active batches</option>}
           {batches.map((b) => (
@@ -122,62 +198,24 @@ export default function StaffingOutreachPage() {
             </option>
           ))}
         </select>
+
+        {/* Inline stats */}
         {currentBatch && (
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 ml-auto">
             <span className="font-medium text-gray-700">
-              {currentBatch.catchment_cities.length} cities
+              {currentBatch.total_providers}
             </span>
-            {" · "}
-            <span>{currentBatch.total_providers} providers</span>
-            {" · "}
-            <span className="text-emerald-700">
-              {tabCounts.today ?? 0} due today
+            {" total · "}
+            <span className="font-medium text-gray-700">
+              {tabCounts.to_call ?? 0}
             </span>
-            {" · "}
-            <span>{currentBatch.total_enrolled} enrolled</span>
+            {" to call · "}
+            <span className="font-medium text-emerald-700">
+              {tabCounts.enrolled ?? 0}
+            </span>
+            {" enrolled"}
           </p>
         )}
-      </div>
-
-      {/* Search */}
-      <div className="mb-4">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search by provider name..."
-          className="w-full rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm shadow-sm focus:border-gray-400 focus:outline-none"
-        />
-      </div>
-
-      {/* Tabs */}
-      <div className="mb-4 flex gap-1 overflow-x-auto border-b border-gray-100">
-        {TABS.map((t) => {
-          const count = tabCounts[t.key];
-          const active = t.key === tab;
-          return (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`whitespace-nowrap border-b-2 px-3 py-2 text-sm font-medium transition-colors ${
-                active
-                  ? "border-gray-900 text-gray-900"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              {t.label}
-              {typeof count === "number" && (
-                <span
-                  className={`ml-1.5 text-xs ${
-                    active ? "text-gray-500" : "text-gray-400"
-                  }`}
-                >
-                  {count}
-                </span>
-              )}
-            </button>
-          );
-        })}
       </div>
 
       {/* List */}

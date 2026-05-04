@@ -6,7 +6,7 @@
  *
  * Query params:
  *   batch       batch id (required for the row list; if omitted only batches return)
- *   tab         today|queued|pre_call|calling|post_consent|activated|enrolled|stopped|all
+ *   tab         today|to_call|in_progress|enrolled|stopped
  *   search      substring match on provider_name (optional)
  *   page        0-indexed page, default 0
  *   pageSize    default 50
@@ -20,14 +20,20 @@ const PAGE_SIZE_DEFAULT = 50;
 
 const TAB_FILTERS: Record<string, string[] | null> = {
   today: null, // handled separately (date filter)
-  queued: ["queued"],
-  pre_call: ["pre_call_outreach"],
-  calling: ["calling", "connected_no_consent"],
-  post_consent: ["consented", "nurturing"],
-  activated: ["activated"],
+  to_call: ["queued", "pre_call_outreach"],
+  in_progress: ["calling", "connected_no_consent", "consented", "nurturing", "activated"],
   enrolled: ["enrolled"],
   stopped: ["do_not_contact", "wrong_number"],
-  all: null,
+};
+
+// Backwards compatibility: map old granular tab names to new simplified tabs
+const TAB_ALIASES: Record<string, string> = {
+  queued: "to_call",
+  pre_call: "to_call",
+  calling: "in_progress",
+  post_consent: "in_progress",
+  activated: "in_progress",
+  all: "to_call", // default to actionable items
 };
 
 export async function GET(req: NextRequest) {
@@ -39,7 +45,9 @@ export async function GET(req: NextRequest) {
   const db = getServiceClient();
   const url = new URL(req.url);
   const batchId = url.searchParams.get("batch");
-  const tab = url.searchParams.get("tab") ?? "today";
+  const rawTab = url.searchParams.get("tab") ?? "today";
+  // Normalize tab name (backwards compatibility for old URLs)
+  const tab = TAB_ALIASES[rawTab] ?? rawTab;
   const search = (url.searchParams.get("search") ?? "").trim();
   const page = Math.max(0, parseInt(url.searchParams.get("page") ?? "0", 10));
   const pageSize = Math.min(
@@ -65,11 +73,36 @@ export async function GET(req: NextRequest) {
   // ── Tab counts for the chosen batch ────────────────────────────────────
   const tabCounts = await computeTabCounts(db, batchId);
 
+  // ── If searching, find matching provider IDs first (DB-level search) ───
+  let searchProviderIds: string[] | null = null;
+  if (search) {
+    const { data: matchingProviders, error: searchErr } = await db
+      .from("olera-providers")
+      .select("provider_id")
+      .ilike("provider_name", `%${search}%`);
+
+    if (searchErr) {
+      return NextResponse.json({ error: searchErr.message }, { status: 500 });
+    }
+
+    searchProviderIds = (matchingProviders ?? []).map((p) => p.provider_id);
+
+    // If search matches nothing, return empty results immediately
+    if (searchProviderIds.length === 0) {
+      return NextResponse.json({ batches, rows: [], total: 0, tabCounts });
+    }
+  }
+
   // ── Filtered + paginated rows ──────────────────────────────────────────
   let query = db
     .from("staffing_outreach")
     .select("*", { count: "exact" })
     .eq("batch_id", batchId);
+
+  // Apply search filter at DB level (before pagination)
+  if (searchProviderIds) {
+    query = query.in("provider_id", searchProviderIds);
+  }
 
   if (tab === "today") {
     query = query
@@ -122,7 +155,7 @@ export async function GET(req: NextRequest) {
     providers.map((p) => [p.provider_id, p]),
   );
 
-  let queueRows: QueueRow[] = rows.map((r) => {
+  const queueRows: QueueRow[] = rows.map((r) => {
     const p = providerMap.get(r.provider_id);
     return {
       ...r,
@@ -134,14 +167,6 @@ export async function GET(req: NextRequest) {
       provider_slug: p?.slug ?? null,
     } as QueueRow;
   });
-
-  // Apply search post-hydration (provider_name lives on olera-providers)
-  if (search) {
-    const needle = search.toLowerCase();
-    queueRows = queueRows.filter((r) =>
-      r.provider_name.toLowerCase().includes(needle),
-    );
-  }
 
   return NextResponse.json({
     batches,
@@ -157,14 +182,10 @@ async function computeTabCounts(
 ): Promise<Record<string, number>> {
   const counts: Record<string, number> = {
     today: 0,
-    queued: 0,
-    pre_call: 0,
-    calling: 0,
-    post_consent: 0,
-    activated: 0,
+    to_call: 0,
+    in_progress: 0,
     enrolled: 0,
     stopped: 0,
-    all: 0,
   };
 
   const { data, error } = await db
@@ -178,9 +199,9 @@ async function computeTabCounts(
   const STOPPED_STATUSES = new Set(["do_not_contact", "enrolled", "wrong_number"]);
 
   for (const row of data) {
-    counts.all++;
     const status = row.status as string;
 
+    // Today: any status with next_action_due_at <= now (except enrolled/stopped)
     if (
       row.next_action_due_at &&
       row.next_action_due_at <= nowIso &&
@@ -189,16 +210,28 @@ async function computeTabCounts(
       counts.today++;
     }
 
-    if (status === "queued") counts.queued++;
-    else if (status === "pre_call_outreach") counts.pre_call++;
-    else if (status === "calling" || status === "connected_no_consent")
-      counts.calling++;
-    else if (status === "consented" || status === "nurturing")
-      counts.post_consent++;
-    else if (status === "activated") counts.activated++;
-    else if (status === "enrolled") counts.enrolled++;
-    else if (status === "do_not_contact" || status === "wrong_number")
+    // To Call: queued, pre_call_outreach
+    if (status === "queued" || status === "pre_call_outreach") {
+      counts.to_call++;
+    }
+    // In Progress: calling, connected_no_consent, consented, nurturing, activated
+    else if (
+      status === "calling" ||
+      status === "connected_no_consent" ||
+      status === "consented" ||
+      status === "nurturing" ||
+      status === "activated"
+    ) {
+      counts.in_progress++;
+    }
+    // Enrolled
+    else if (status === "enrolled") {
+      counts.enrolled++;
+    }
+    // Stopped: do_not_contact, wrong_number
+    else if (status === "do_not_contact" || status === "wrong_number") {
       counts.stopped++;
+    }
   }
 
   return counts;
