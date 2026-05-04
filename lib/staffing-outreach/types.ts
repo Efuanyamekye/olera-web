@@ -12,7 +12,6 @@ export type StaffingStatus =
   | "calling"
   | "connected_no_consent"
   | "consented"
-  | "nurturing"
   | "activated"
   | "enrolled"
   | "do_not_contact"

@@ -626,8 +626,8 @@ async function handleReopen(outreach: StaffingOutreachRow, userId: string) {
 }
 
 /**
- * Resend the enrollment email to an activated provider.
- * Used when they clicked the magic link but didn't complete T&C acceptance.
+ * Resend the enrollment email to a consented or activated provider.
+ * Used when they haven't completed T&C acceptance yet.
  */
 async function handleResendEnrollmentEmail(
   outreach: StaffingOutreachRow,
@@ -636,9 +636,9 @@ async function handleResendEnrollmentEmail(
 ) {
   const db = getServiceClient();
 
-  // Only allow for activated status
-  if (outreach.status !== "activated") {
-    throw new Error("Can only resend enrollment email to activated providers");
+  // Only allow for consented or activated status (waiting for enrollment)
+  if (outreach.status !== "consented" && outreach.status !== "activated") {
+    throw new Error("Can only resend enrollment email to consented or activated providers");
   }
 
   // Get the contact to send to

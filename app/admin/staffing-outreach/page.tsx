@@ -389,13 +389,14 @@ export default function StaffingOutreachPage() {
 }
 
 function StatusBadge({ status }: { status: string }) {
+  // Consolidated statuses: calling + connected_no_consent display as "Email Sent"
+  // do_not_contact displays as "Closed"
   const styles: Record<string, string> = {
     queued: "bg-gray-100 text-gray-700",
     pre_call_outreach: "bg-blue-50 text-blue-700",
     calling: "bg-blue-50 text-blue-700",
-    connected_no_consent: "bg-amber-50 text-amber-700",
+    connected_no_consent: "bg-blue-50 text-blue-700",
     consented: "bg-emerald-50 text-emerald-700",
-    nurturing: "bg-emerald-50 text-emerald-700",
     activated: "bg-purple-50 text-purple-700",
     enrolled: "bg-purple-100 text-purple-800",
     do_not_contact: "bg-gray-100 text-gray-500",
@@ -404,13 +405,12 @@ function StatusBadge({ status }: { status: string }) {
   const labels: Record<string, string> = {
     queued: "Pending",
     pre_call_outreach: "Email Sent",
-    calling: "Calling",
-    connected_no_consent: "No consent",
+    calling: "Email Sent",
+    connected_no_consent: "Email Sent",
     consented: "Consented",
-    nurturing: "Nurturing",
     activated: "Activated",
     enrolled: "Enrolled",
-    do_not_contact: "DNC",
+    do_not_contact: "Closed",
     wrong_number: "Wrong #",
   };
   return (

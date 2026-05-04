@@ -77,13 +77,12 @@ function ExternalLinkIcon({ className }: { className?: string }) {
 const STATUS_CONFIG: Record<StaffingStatus, { label: string; color: string; bg: string }> = {
   queued: { label: "Pending", color: "text-gray-700", bg: "bg-gray-100" },
   pre_call_outreach: { label: "Email Sent", color: "text-blue-700", bg: "bg-blue-100" },
-  calling: { label: "Calling", color: "text-amber-700", bg: "bg-amber-100" },
-  connected_no_consent: { label: "Connected", color: "text-purple-700", bg: "bg-purple-100" },
+  calling: { label: "Email Sent", color: "text-blue-700", bg: "bg-blue-100" },
+  connected_no_consent: { label: "Email Sent", color: "text-blue-700", bg: "bg-blue-100" },
   consented: { label: "Consented", color: "text-emerald-700", bg: "bg-emerald-100" },
-  nurturing: { label: "Nurturing", color: "text-indigo-700", bg: "bg-indigo-100" },
   activated: { label: "Activated", color: "text-cyan-700", bg: "bg-cyan-100" },
   enrolled: { label: "Enrolled", color: "text-green-700", bg: "bg-green-100" },
-  do_not_contact: { label: "DNC", color: "text-red-700", bg: "bg-red-100" },
+  do_not_contact: { label: "Closed", color: "text-red-700", bg: "bg-red-100" },
   wrong_number: { label: "Wrong #", color: "text-orange-700", bg: "bg-orange-100" },
 };
 
@@ -363,6 +362,7 @@ export function Drawer({ outreachId, onClose, onAction }: DrawerProps) {
               <NewSection ctx={ctx} onAction={handleAction} onAdvance={handleAdvance} setError={setError} />
               <NurturingSection ctx={ctx} onAction={handleAction} onAdvance={handleAdvance} setError={setError} />
               <CallSection ctx={ctx} onAdvance={handleAdvance} setError={setError} />
+              <ConsentedSection ctx={ctx} onRefresh={handleRefresh} setError={setError} />
               <EnrolledSection ctx={ctx} />
               <ActivatedSection ctx={ctx} onRefresh={handleRefresh} setError={setError} />
               <ClosedSection ctx={ctx} onRefresh={handleRefresh} setError={setError} />
@@ -779,7 +779,8 @@ function NewSection({
  *
  * NOT shown for:
  * - queued (should use NewSection)
- * - consented/activated (they've engaged, follow-up doesn't make sense)
+ * - consented (use ConsentedSection - has resend enrollment button)
+ * - activated (use ActivatedSection - has resend enrollment button)
  * - enrolled/closed (terminal states)
  */
 function NurturingSection({
@@ -1036,7 +1037,6 @@ function CallSection({
     "calling",
     "connected_no_consent",
     "consented",
-    "nurturing",
   ]);
   if (!callableStatuses.has(ctx.outreach.status)) return null;
 
@@ -1301,6 +1301,118 @@ function EnrolledSection({ ctx }: { ctx: DrawerContext }) {
             </li>
           </ul>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * ConsentedSection - shown for consented providers (agreed on call, enrollment email sent)
+ * Waiting for them to click the magic link
+ */
+function ConsentedSection({
+  ctx,
+  onRefresh,
+  setError,
+}: {
+  ctx: DrawerContext;
+  onRefresh: (action: string, payload?: Record<string, unknown>) => Promise<void>;
+  setError: (err: string | null) => void;
+}) {
+  const [resending, setResending] = useState(false);
+
+  if (ctx.outreach.status !== "consented") return null;
+
+  const consentTouchpoint = ctx.touchpoints.find((t) => t.type === "call_connected_consent");
+  const consentDate = consentTouchpoint?.created_at;
+  const verifiedContact = ctx.contacts.find((c) => c.is_primary) || ctx.contacts[0];
+
+  const resendEnrollmentEmail = async () => {
+    if (!verifiedContact) {
+      setError("No contact to send to");
+      return;
+    }
+    setResending(true);
+    try {
+      await onRefresh("resend_enrollment_email", {
+        contactId: verifiedContact.id,
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to resend email");
+    } finally {
+      setResending(false);
+    }
+  };
+
+  return (
+    <section>
+      <div className="rounded-xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-6">
+        {/* Progress icon */}
+        <div className="mb-4 flex justify-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+            <svg className="h-8 w-8 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+            </svg>
+          </div>
+        </div>
+
+        <h3 className="mb-2 text-center text-lg font-semibold text-emerald-800">
+          Enrollment Email Sent
+        </h3>
+        <p className="mb-4 text-center text-sm text-emerald-700">
+          This provider agreed on a call. Waiting for them to click the enrollment link.
+        </p>
+
+        {/* Consent details */}
+        <div className="space-y-3 rounded-lg bg-white/60 p-4">
+          {consentDate && (
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-600">Consented on</span>
+              <span className="font-medium text-gray-900">
+                {new Date(consentDate).toLocaleDateString("en-US", {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+            </div>
+          )}
+
+          {verifiedContact && (
+            <>
+              <div className="border-t border-emerald-100" />
+              <div className="text-sm">
+                <p className="mb-1 font-medium text-gray-900">{verifiedContact.name}</p>
+                {verifiedContact.role && (
+                  <p className="text-gray-600">{verifiedContact.role}</p>
+                )}
+                <p className="text-gray-600">{verifiedContact.email}</p>
+                {verifiedContact.phone && (
+                  <p className="text-gray-600">{verifiedContact.phone}</p>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Resend option */}
+        {verifiedContact && (
+          <button
+            onClick={resendEnrollmentEmail}
+            disabled={resending}
+            className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-emerald-300 bg-white py-3 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:opacity-50"
+          >
+            {resending ? (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-400/30 border-t-emerald-600" />
+            ) : (
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+              </svg>
+            )}
+            {resending ? "Sending..." : "Resend Enrollment Email"}
+          </button>
+        )}
       </div>
     </section>
   );
