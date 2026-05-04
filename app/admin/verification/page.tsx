@@ -843,9 +843,9 @@ export default function AdminVerificationPage() {
                             {formatDaysAgo(provider.updated_at)}
                           </p>
                         )}
-                        {filter === "pending" && submission?.submitted_at && (
+                        {filter === "pending" && (
                           <p className="text-xs text-gray-400">
-                            {formatDaysAgo(submission.submitted_at)}
+                            {formatDaysAgo(submission?.submitted_at || provider.updated_at)}
                           </p>
                         )}
                         {filter === "approved" && (
