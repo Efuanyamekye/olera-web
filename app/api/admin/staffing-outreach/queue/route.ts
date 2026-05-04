@@ -93,7 +93,11 @@ export async function GET(req: NextRequest) {
   const stageCounts = await computeStageCounts(db, batchId, activeBatchIds);
 
   // For non-action_needed tabs, require a batch to be selected
+  // For action_needed, we need at least one active batch to query
   if (!batchId && stage !== "action_needed") {
+    return NextResponse.json({ batches, rows: [], total: 0, tabCounts: stageCounts });
+  }
+  if (stage === "action_needed" && activeBatchIds.length === 0) {
     return NextResponse.json({ batches, rows: [], total: 0, tabCounts: stageCounts });
   }
 
@@ -125,11 +129,11 @@ export async function GET(req: NextRequest) {
   // Action Needed: query across ALL active batches (cross-university to-do list)
   // Other tabs: filter by selected batch
   if (stage === "action_needed") {
-    if (activeBatchIds.length > 0) {
-      query = query.in("batch_id", activeBatchIds);
-    }
+    // activeBatchIds is guaranteed non-empty here (early return above)
+    query = query.in("batch_id", activeBatchIds);
   } else {
-    query = query.eq("batch_id", batchId);
+    // batchId is guaranteed non-null here (early return above)
+    query = query.eq("batch_id", batchId!);
   }
 
   // Apply search filter at DB level (before pagination)
