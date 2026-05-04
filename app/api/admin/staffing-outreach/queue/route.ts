@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
     .from("staffing_batches")
     .select("*")
     .neq("status", "completed")
-    .order("created_at", { ascending: false });
+    .order("university_name", { ascending: true });
 
   if (batchesErr) {
     return NextResponse.json({ error: batchesErr.message }, { status: 500 });

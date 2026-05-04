@@ -30,6 +30,8 @@ const STAGE_TABS: Array<{ key: string; label: string }> = [
 type Stage = "new" | "nurturing" | "enrolled" | "closed";
 type Urgency = "due_today" | "all";
 
+const PAGE_SIZE = 50;
+
 export default function StaffingOutreachPage() {
   const [batches, setBatches] = useState<StaffingBatch[]>([]);
   const [batchId, setBatchId] = useState<string | null>(null);
@@ -40,13 +42,18 @@ export default function StaffingOutreachPage() {
   const [rows, setRows] = useState<QueueRow[]>([]);
   const [tabCounts, setTabCounts] = useState<Record<string, number>>({});
   const [totalDue, setTotalDue] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openOutreachId, setOpenOutreachId] = useState<string | null>(null);
 
   // Debounce search input
   useEffect(() => {
-    const t = setTimeout(() => setDebouncedSearch(search), 300);
+    const t = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(0); // Reset to first page on search
+    }, 300);
     return () => clearTimeout(t);
   }, [search]);
 
@@ -59,6 +66,8 @@ export default function StaffingOutreachPage() {
       if (batchId) params.set("batch", batchId);
       params.set("stage", stage);
       params.set("urgency", urgency);
+      params.set("page", String(page));
+      params.set("pageSize", String(PAGE_SIZE));
       if (debouncedSearch) params.set("search", debouncedSearch);
       const res = await fetch(`/api/admin/staffing-outreach/queue?${params}`);
       if (!res.ok) throw new Error((await res.json()).error || "Failed to load");
@@ -67,6 +76,7 @@ export default function StaffingOutreachPage() {
       setRows(data.rows ?? []);
       setTabCounts(data.tabCounts ?? {});
       setTotalDue(data.totalDue ?? 0);
+      setTotal(data.total ?? 0);
       // Auto-select first batch if none chosen
       if (!batchId && data.batches?.[0]) {
         setBatchId(data.batches[0].id);
@@ -76,7 +86,7 @@ export default function StaffingOutreachPage() {
     } finally {
       setLoading(false);
     }
-  }, [batchId, stage, urgency, debouncedSearch]);
+  }, [batchId, stage, urgency, debouncedSearch, page]);
 
   useEffect(() => {
     refetch();
@@ -113,6 +123,7 @@ export default function StaffingOutreachPage() {
     if (newStage === stage) return;
     setRows([]);
     setLoading(true);
+    setPage(0);
     setStage(newStage);
   }, [stage]);
 
@@ -121,6 +132,7 @@ export default function StaffingOutreachPage() {
     if (newUrgency === urgency) return;
     setRows([]);
     setLoading(true);
+    setPage(0);
     setUrgency(newUrgency);
   }, [urgency]);
 
@@ -189,23 +201,38 @@ export default function StaffingOutreachPage() {
           />
         </div>
 
-        {/* University dropdown */}
-        <select
-          value={batchId ?? ""}
-          onChange={(e) => {
-            setRows([]);
-            setLoading(true);
-            setBatchId(e.target.value || null);
-          }}
-          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-900 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100"
-        >
-          {batches.length === 0 && <option value="">No active batches</option>}
-          {batches.map((b) => (
-            <option key={b.id} value={b.id}>
-              {b.university_name}
-            </option>
-          ))}
-        </select>
+        {/* University dropdown - custom styled */}
+        <div className="relative">
+          <select
+            value={batchId ?? ""}
+            onChange={(e) => {
+              setRows([]);
+              setLoading(true);
+              setPage(0);
+              setBatchId(e.target.value || null);
+            }}
+            className="appearance-none rounded-lg border border-gray-200 bg-white pl-3 pr-9 py-2 text-sm font-medium text-gray-900 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100 cursor-pointer"
+          >
+            {batches.length === 0 && <option value="">No active batches</option>}
+            {batches.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.university_name}
+              </option>
+            ))}
+          </select>
+          <svg
+            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
 
         {/* Inline stats */}
         {currentBatch && (
@@ -262,48 +289,76 @@ export default function StaffingOutreachPage() {
             : "No providers in this stage."}
         </p>
       ) : (
-        <ul className="divide-y divide-gray-100 rounded-lg border border-gray-100 bg-white">
-          {rows.map((row) => {
-            const dueInfo = row.next_action_due_at ? getDueInfo(row.next_action_due_at) : null;
-            const isClaimed = row.claimed_by && row.claimed_until && new Date(row.claimed_until) > new Date();
+        <div className="rounded-lg border border-gray-100 bg-white overflow-hidden">
+          <ul className="divide-y divide-gray-100">
+            {rows.map((row) => {
+              const dueInfo = row.next_action_due_at ? getDueInfo(row.next_action_due_at) : null;
+              const isClaimed = row.claimed_by && row.claimed_until && new Date(row.claimed_until) > new Date();
 
-            return (
-              <li key={row.id}>
+              return (
+                <li key={row.id}>
+                  <button
+                    onClick={() => setOpenOutreachId(row.id)}
+                    className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-gray-50"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-gray-900">
+                        {row.provider_name}
+                      </p>
+                      <p className="truncate text-xs text-gray-500">
+                        {[row.provider_city, row.provider_state]
+                          .filter(Boolean)
+                          .join(", ") || "—"}
+                        {row.provider_phone && ` · ${row.provider_phone}`}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <StatusBadge status={row.status} />
+                      {dueInfo && (
+                        <span className={`hidden text-xs sm:inline ${
+                          dueInfo.isOverdue ? "text-amber-600 font-medium" : "text-gray-400"
+                        }`}>
+                          {dueInfo.label}
+                        </span>
+                      )}
+                      {isClaimed && (
+                        <span className="hidden text-xs text-blue-600 sm:inline">
+                          claimed
+                        </span>
+                      )}
+                    </div>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+          {/* Pagination */}
+          {total > PAGE_SIZE && (
+            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100">
+              <span className="text-xs text-gray-500">
+                {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, total)} of {total}
+              </span>
+              <div className="flex gap-2">
                 <button
-                  onClick={() => setOpenOutreachId(row.id)}
-                  className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-gray-50"
+                  type="button"
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                  disabled={page === 0}
+                  className="px-3 py-1.5 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-gray-900">
-                      {row.provider_name}
-                    </p>
-                    <p className="truncate text-xs text-gray-500">
-                      {[row.provider_city, row.provider_state]
-                        .filter(Boolean)
-                        .join(", ") || "—"}
-                      {row.provider_phone && ` · ${row.provider_phone}`}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <StatusBadge status={row.status} />
-                    {dueInfo && (
-                      <span className={`hidden text-xs sm:inline ${
-                        dueInfo.isOverdue ? "text-amber-600 font-medium" : "text-gray-400"
-                      }`}>
-                        {dueInfo.label}
-                      </span>
-                    )}
-                    {isClaimed && (
-                      <span className="hidden text-xs text-blue-600 sm:inline">
-                        claimed
-                      </span>
-                    )}
-                  </div>
+                  Previous
                 </button>
-              </li>
-            );
-          })}
-        </ul>
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => p + 1)}
+                  disabled={(page + 1) * PAGE_SIZE >= total}
+                  className="px-3 py-1.5 text-sm font-medium rounded-md border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Drawer */}
