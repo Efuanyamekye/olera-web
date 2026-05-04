@@ -401,17 +401,17 @@ function ProviderSummary({ ctx }: { ctx: DrawerContext }) {
       {/* Contact actions - all on one line */}
       <div className="flex flex-wrap items-center gap-2">
         {ctx.provider.phone && (
-          <div className="inline-flex items-center rounded-lg bg-emerald-600 shadow-sm">
+          <div className="inline-flex items-center rounded-lg bg-gray-900 shadow-sm">
             <a
               href={`tel:${ctx.provider.phone}`}
-              className="inline-flex items-center gap-2 rounded-l-lg px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+              className="inline-flex items-center gap-2 rounded-l-lg px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
             >
               <PhoneIcon className="h-4 w-4" />
               {ctx.provider.phone}
             </a>
             <button
               onClick={copyPhone}
-              className="inline-flex items-center rounded-r-lg border-l border-emerald-500 px-2 py-2 text-white transition-colors hover:bg-emerald-700"
+              className="inline-flex items-center rounded-r-lg border-l border-gray-700 px-2 py-2 text-white transition-colors hover:bg-gray-800"
               title="Copy phone number"
             >
               {phoneCopied ? (
@@ -737,7 +737,7 @@ function NewSection({
         <button
           onClick={markInitialSent}
           disabled={saving || !recipientEmail.trim()}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving ? (
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -962,7 +962,7 @@ function NurturingSection({
             <button
               onClick={markFollowUpSent}
               disabled={saving || !recipientEmail.trim()}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 py-3 text-sm font-medium text-gray-600 transition-colors hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 py-3 text-sm font-medium text-gray-600 transition-colors hover:border-primary-500 hover:bg-primary-50 hover:text-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400/30 border-t-gray-600" />
@@ -1750,7 +1750,7 @@ function DispositionButton({
   const base = "flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50";
   const styles =
     variant === "primary"
-      ? "bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm"
+      ? "bg-primary-600 text-white hover:bg-primary-700 shadow-sm"
       : variant === "danger"
       ? "border-2 border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
       : "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50";
