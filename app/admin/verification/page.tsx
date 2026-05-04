@@ -566,7 +566,7 @@ export default function AdminVerificationPage() {
             <button
               key={f.value}
               type="button"
-              onClick={() => { setPage(0); setProviders([]); setLoading(true); setFilter(f.value); }}
+              onClick={() => { if (filter === f.value) return; setPage(0); setProviders([]); setLoading(true); setFilter(f.value); }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                 filter === f.value
                   ? "bg-primary-600 text-white"
@@ -633,13 +633,13 @@ export default function AdminVerificationPage() {
         {/* State filter */}
         <StateSelectFilter
           value={stateFilter}
-          onChange={(v) => { setPage(0); setStateFilter(v); }}
+          onChange={(v) => { setPage(0); setProviders([]); setLoading(true); setStateFilter(v); }}
         />
 
         {/* Trust filter */}
         <TrustSelectFilter
           value={trustFilter}
-          onChange={(v) => { setPage(0); setTrustFilter(v); }}
+          onChange={(v) => { setPage(0); setProviders([]); setLoading(true); setTrustFilter(v); }}
         />
 
         {/* Clear filters - only when active */}
@@ -647,6 +647,8 @@ export default function AdminVerificationPage() {
           <button
             onClick={() => {
               setPage(0);
+              setProviders([]);
+              setLoading(true);
               setStateFilter("");
               setTrustFilter("");
             }}
