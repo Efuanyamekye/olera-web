@@ -104,17 +104,47 @@ function escapeHtml(s: string): string {
 export function preCallEmail(opts: {
   providerName: string;
   adminFirstName: string;
+  universityName: string;
+  demoVideoUrl?: string;
 }): { subject: string; html: string } {
-  const subject = "Pre-nursing/pre-med PRN program — quick question";
+  // Keep subject under ~60 chars for email client previews
+  const subject = "Student caregiver program — quick question";
   const body = `
     <p>Hi,</p>
-    <p>I work with Dr. Logan DuBose at Olera. He's running a free pilot connecting pre-nursing and pre-medical students to PRN shifts at home care agencies, and would like to share the details with whoever handles hiring at ${escapeHtml(opts.providerName)}.</p>
+    <p>I work with Dr. Logan DuBose at Olera. He's running a free pilot connecting pre-nursing and pre-medical students from ${escapeHtml(opts.universityName)} to PRN shifts at home care agencies, and would like to share the details with whoever handles hiring at ${escapeHtml(opts.providerName)}.</p>
+    ${opts.demoVideoUrl ? videoEmbed(opts.demoVideoUrl, "Watch the 90-second program overview") : ""}
     <p>Could you point me to the right person or email? I'll follow up by phone shortly.</p>
+    <p style="margin:20px 0;">
+      <a href="${BASE_URL}" style="color:${BRAND_COLOR};font-weight:600;">Learn more at olera.care →</a>
+    </p>
     <p style="margin:20px 0 0;">Thanks,<br/>${escapeHtml(opts.adminFirstName)}, Olera</p>
   `;
   return {
     subject,
-    html: layout(body, "Permission ask — pre-nursing/pre-med PRN program"),
+    html: layout(body, `${opts.universityName} student caregiver pilot — permission ask`),
+  };
+}
+
+/**
+ * Follow-up reminder email — sent after 5 business days if the provider
+ * hasn't responded to the initial pre-call email. Brief and direct.
+ */
+export function followUpReminderEmail(opts: {
+  providerName: string;
+  adminFirstName: string;
+  universityName: string;
+}): { subject: string; html: string } {
+  // Keep subject under ~60 chars for email client previews
+  const subject = "Following up — student caregiver program";
+  const body = `
+    <p>Hi,</p>
+    <p>Just following up on my email from last week about Dr. Logan DuBose's student caregiver program at ${escapeHtml(opts.universityName)}.</p>
+    <p>We're connecting pre-nursing and pre-med students with home care agencies like ${escapeHtml(opts.providerName)} for PRN shifts. The pilot is free — happy to share more details if you can point me to the right person.</p>
+    <p style="margin:20px 0 0;">Thanks,<br/>${escapeHtml(opts.adminFirstName)}, Olera</p>
+  `;
+  return {
+    subject,
+    html: layout(body, `Following up — ${opts.universityName} student caregiver pilot`),
   };
 }
 

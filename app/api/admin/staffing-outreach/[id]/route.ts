@@ -2,12 +2,13 @@
  * GET    /api/admin/staffing-outreach/[id]   — drawer detail
  * POST   /api/admin/staffing-outreach/[id]   — actions, dispatched on body.action
  *
- * Actions supported in PR 2:
+ * Actions supported:
  *   claim                  hold the row for 60 min
  *   release                drop the claim
  *   update_research        set research_data fields, optional notes
  *   mark_pre_call_complete advance status queued→pre_call_outreach
  *   send_pre_call          fire pre-call email + log touchpoint
+ *   send_follow_up         fire follow-up reminder email (after 5 business days)
  *   log_contact_form       log a contact_form_submitted touchpoint
  *   disposition            log a call disposition + state transition
  *   add_contact_and_send   capture verified contact + fire Step 1 email
@@ -22,6 +23,7 @@ import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { sendEmail } from "@/lib/email";
 import {
   preCallEmail,
+  followUpReminderEmail,
   postConsentStep1Email,
   SENDER_OLERA_TEAM,
   SENDER_LOGAN,
@@ -98,6 +100,9 @@ export async function POST(
         break;
       case "send_pre_call":
         await handleSendPreCall(outreach, body, user.id, admin);
+        break;
+      case "send_follow_up":
+        await handleSendFollowUp(outreach, body, user.id, admin);
         break;
       case "log_contact_form":
         await handleLogContactForm(outreach, body, user.id);
@@ -231,12 +236,18 @@ async function handleSendPreCall(
   const recipient = (body.recipientEmail ?? outreach.research_data.general_email ?? "").trim();
   if (!recipient) throw new Error("No recipient email — set research_data.general_email first");
 
-  const { data: provider } = await db
-    .from("olera-providers")
-    .select("provider_name, provider_id")
-    .eq("provider_id", outreach.provider_id)
-    .single();
+  const [{ data: provider }, { data: batch }] = await Promise.all([
+    db.from("olera-providers")
+      .select("provider_name, provider_id")
+      .eq("provider_id", outreach.provider_id)
+      .single(),
+    db.from("staffing_batches")
+      .select("university_name")
+      .eq("id", outreach.batch_id)
+      .single(),
+  ]);
   if (!provider) throw new Error("Provider not found");
+  if (!batch) throw new Error("Batch not found");
 
   const adminFirstName =
     body.adminFirstName?.trim() ||
@@ -246,6 +257,8 @@ async function handleSendPreCall(
   const { subject, html } = preCallEmail({
     providerName: provider.provider_name,
     adminFirstName,
+    universityName: batch.university_name,
+    demoVideoUrl: DEMO_VIDEO_URL,
   });
 
   const send = await sendEmail({
@@ -260,6 +273,59 @@ async function handleSendPreCall(
   });
 
   await insertTouchpoint(outreach.id, "pre_call_email_sent", userId, null, {
+    recipient,
+    email_log_id: send.emailLogId,
+    success: send.success,
+    error: send.error,
+  });
+}
+
+async function handleSendFollowUp(
+  outreach: StaffingOutreachRow,
+  body: { recipientEmail?: string; adminFirstName?: string },
+  userId: string,
+  admin: { email: string },
+) {
+  const db = getServiceClient();
+  const recipient = (body.recipientEmail ?? outreach.research_data.general_email ?? "").trim();
+  if (!recipient) throw new Error("No recipient email — set research_data.general_email first");
+
+  const [{ data: provider }, { data: batch }] = await Promise.all([
+    db.from("olera-providers")
+      .select("provider_name, provider_id")
+      .eq("provider_id", outreach.provider_id)
+      .single(),
+    db.from("staffing_batches")
+      .select("university_name")
+      .eq("id", outreach.batch_id)
+      .single(),
+  ]);
+  if (!provider) throw new Error("Provider not found");
+  if (!batch) throw new Error("Batch not found");
+
+  const adminFirstName =
+    body.adminFirstName?.trim() ||
+    admin.email?.split("@")[0] ||
+    "Olera";
+
+  const { subject, html } = followUpReminderEmail({
+    providerName: provider.provider_name,
+    adminFirstName,
+    universityName: batch.university_name,
+  });
+
+  const send = await sendEmail({
+    to: recipient,
+    from: SENDER_OLERA_TEAM,
+    subject,
+    html,
+    emailType: "staffing_follow_up",
+    recipientType: "provider",
+    providerId: provider.provider_id,
+    metadata: { outreach_id: outreach.id, batch_id: outreach.batch_id },
+  });
+
+  await insertTouchpoint(outreach.id, "follow_up_email_sent", userId, null, {
     recipient,
     email_log_id: send.emailLogId,
     success: send.success,
@@ -464,14 +530,14 @@ function computeCallTransition(
     };
   }
 
-  // No answer / voicemail
+  // No answer / voicemail — follow up after 5 business days (~7 calendar days)
   if (newAttempts >= MAX_CALL_ATTEMPTS) {
     return { status: "do_not_contact", nextDueAt: null };
   }
 
   return {
     status: outreach.status === "queued" ? "pre_call_outreach" : outreach.status,
-    nextDueAt: new Date(Date.now() + 1 * 86400_000).toISOString(),
+    nextDueAt: new Date(Date.now() + 7 * 86400_000).toISOString(),
   };
 }
 

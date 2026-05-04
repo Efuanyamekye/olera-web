@@ -216,6 +216,9 @@ function ResearchSection({
   const [sentPreCall, setSentPreCall] = useState(
     ctx.touchpoints.some((t) => t.type === "pre_call_email_sent"),
   );
+  const [sentFollowUp, setSentFollowUp] = useState(
+    ctx.touchpoints.some((t) => t.type === "follow_up_email_sent"),
+  );
   const [submittedForm, setSubmittedForm] = useState(
     ctx.touchpoints.some((t) => t.type === "contact_form_submitted"),
   );
@@ -253,6 +256,22 @@ function ResearchSection({
       });
       await onAction("send_pre_call", { recipientEmail: generalEmail.trim() });
       setSentPreCall(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Send failed");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const sendFollowUp = async () => {
+    if (!generalEmail.trim()) {
+      setError("Enter a general email first.");
+      return;
+    }
+    setSaving(true);
+    try {
+      await onAction("send_follow_up", { recipientEmail: generalEmail.trim() });
+      setSentFollowUp(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Send failed");
     } finally {
@@ -311,6 +330,14 @@ function ResearchSection({
           >
             {sentPreCall ? "✓ Pre-call email sent" : "Send pre-call email"}
           </ActionButton>
+          {sentPreCall && (
+            <ActionButton
+              onClick={sendFollowUp}
+              disabled={saving || sentFollowUp || !generalEmail.trim()}
+            >
+              {sentFollowUp ? "✓ Follow-up sent" : "Send follow-up"}
+            </ActionButton>
+          )}
           {contactFormUrl.trim() && (
             <a
               href={contactFormUrl.trim()}
@@ -363,6 +390,7 @@ function CallSection({
   setError: (err: string | null) => void;
 }) {
   const [showConnected, setShowConnected] = useState(false);
+  const [showScript, setShowScript] = useState(true);
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
@@ -412,6 +440,26 @@ function CallSection({
         2. Call
       </h3>
       <div className="space-y-3 rounded-lg border border-gray-100 bg-white p-4">
+        {/* Call Script */}
+        <div className="rounded-md bg-blue-50 p-3">
+          <button
+            onClick={() => setShowScript((s) => !s)}
+            className="flex w-full items-center justify-between text-left"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+              Call Script
+            </span>
+            <span className="text-xs text-blue-600">{showScript ? "Hide" : "Show"}</span>
+          </button>
+          {showScript && (
+            <p className="mt-2 text-sm leading-relaxed text-blue-900">
+              &ldquo;Hi, I&apos;m calling on behalf of Dr. Logan DuBose. He oversees a program
+              for pre-nursing students at <strong>{ctx.batch.university_name}</strong> that
+              connects students with open caregiving roles at local agencies.&rdquo;
+            </p>
+          )}
+        </div>
+
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           <DispositionButton onClick={() => disposition("call_no_answer")} disabled={saving}>
             No Answer
@@ -608,6 +656,7 @@ function humanType(t: string): string {
   const map: Record<string, string> = {
     research_completed: "Research updated",
     pre_call_email_sent: "Pre-call email sent",
+    follow_up_email_sent: "Follow-up email sent",
     contact_form_submitted: "Contact form submitted",
     fax_sent: "Fax sent",
     mail_sent: "Mail sent",

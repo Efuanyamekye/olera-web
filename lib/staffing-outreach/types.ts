@@ -22,6 +22,7 @@ export type TouchpointType =
   // pre-call channels
   | "research_completed"
   | "pre_call_email_sent"
+  | "follow_up_email_sent"
   | "contact_form_submitted"
   | "fax_sent"
   | "mail_sent"
