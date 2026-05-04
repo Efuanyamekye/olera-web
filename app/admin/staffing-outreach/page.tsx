@@ -304,8 +304,10 @@ export default function StaffingOutreachPage() {
               const dueInfo = row.next_action_due_at ? getDueInfo(row.next_action_due_at) : null;
               const isClaimed = row.claimed_by && row.claimed_until && new Date(row.claimed_until) > new Date();
 
+              const urgencyBorder = dueInfo ? getUrgencyBorderClass(dueInfo.urgency) : "";
+
               return (
-                <li key={row.id}>
+                <li key={row.id} className={urgencyBorder}>
                   <button
                     onClick={() => setOpenOutreachId(row.id)}
                     className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-gray-50"
@@ -325,11 +327,11 @@ export default function StaffingOutreachPage() {
                         {row.provider_phone && ` · ${row.provider_phone}`}
                       </p>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       <StatusBadge status={row.status} />
-                      {dueInfo && (
-                        <span className={`hidden text-xs sm:inline ${
-                          dueInfo.isOverdue ? "text-amber-600 font-medium" : "text-gray-400"
+                      {dueInfo && dueInfo.isOverdue && (
+                        <span className={`hidden sm:inline rounded-full px-2 py-0.5 text-xs font-medium ${
+                          getOverduePillClass(dueInfo.urgency)
                         }`}>
                           {dueInfo.label}
                         </span>
@@ -422,25 +424,71 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function getDueInfo(iso: string): { label: string; isOverdue: boolean } {
+type UrgencyLevel = "none" | "low" | "medium" | "high";
+
+interface DueInfo {
+  label: string;
+  isOverdue: boolean;
+  urgency: UrgencyLevel;
+}
+
+function getDueInfo(iso: string): DueInfo {
   const due = new Date(iso);
   const now = new Date();
   const diffMin = Math.round((due.getTime() - now.getTime()) / 60_000);
+  const diffDays = Math.round(-diffMin / (60 * 24));
 
+  if (diffMin < -60 * 24 * 6) {
+    // 6+ days overdue = high urgency
+    return { label: `${diffDays}d`, isOverdue: true, urgency: "high" };
+  }
+  if (diffMin < -60 * 24 * 3) {
+    // 3-5 days overdue = medium urgency
+    return { label: `${diffDays}d`, isOverdue: true, urgency: "medium" };
+  }
   if (diffMin < -60 * 24) {
-    return { label: `${Math.round(-diffMin / (60 * 24))}d overdue`, isOverdue: true };
+    // 1-2 days overdue = low urgency
+    return { label: `${diffDays}d`, isOverdue: true, urgency: "low" };
   }
   if (diffMin < -60) {
-    return { label: `${Math.round(-diffMin / 60)}h overdue`, isOverdue: true };
+    return { label: `${Math.round(-diffMin / 60)}h`, isOverdue: true, urgency: "low" };
   }
   if (diffMin < 0) {
-    return { label: "due now", isOverdue: true };
+    return { label: "now", isOverdue: true, urgency: "low" };
   }
   if (diffMin < 60) {
-    return { label: `in ${diffMin}m`, isOverdue: false };
+    return { label: `in ${diffMin}m`, isOverdue: false, urgency: "none" };
   }
   if (diffMin < 60 * 24) {
-    return { label: `in ${Math.round(diffMin / 60)}h`, isOverdue: false };
+    return { label: `in ${Math.round(diffMin / 60)}h`, isOverdue: false, urgency: "none" };
   }
-  return { label: `in ${Math.round(diffMin / (60 * 24))}d`, isOverdue: false };
+  return { label: `in ${Math.round(diffMin / (60 * 24))}d`, isOverdue: false, urgency: "none" };
+}
+
+/** Left border color based on urgency */
+function getUrgencyBorderClass(urgency: UrgencyLevel): string {
+  switch (urgency) {
+    case "high":
+      return "border-l-4 border-l-red-500";
+    case "medium":
+      return "border-l-4 border-l-orange-400";
+    case "low":
+      return "border-l-4 border-l-amber-400";
+    default:
+      return "";
+  }
+}
+
+/** Pill styling for overdue indicator */
+function getOverduePillClass(urgency: UrgencyLevel): string {
+  switch (urgency) {
+    case "high":
+      return "bg-red-100 text-red-700";
+    case "medium":
+      return "bg-orange-100 text-orange-700";
+    case "low":
+      return "bg-amber-100 text-amber-700";
+    default:
+      return "bg-gray-100 text-gray-500";
+  }
 }
