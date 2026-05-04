@@ -21,7 +21,7 @@ import type {
 
 // Stage tabs (funnel stages)
 const STAGE_TABS: Array<{ key: string; label: string }> = [
-  { key: "new", label: "New" },
+  { key: "new", label: "To Call" },
   { key: "contacted", label: "Contacted" },
   { key: "enrolled", label: "Enrolled" },
   { key: "closed", label: "Closed" },
@@ -146,7 +146,7 @@ export default function StaffingOutreachPage() {
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            Due Today
+            Action Needed
             {totalDue > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-700">
                 {totalDue}
@@ -258,7 +258,7 @@ export default function StaffingOutreachPage() {
           {batches.length === 0
             ? "No active batches yet. Run the seed script: npx tsx scripts/seed-staffing-outreach.ts --university <slug> --apply"
             : urgency === "due_today"
-            ? "No providers due for action in this stage."
+            ? "No providers need action in this stage."
             : "No providers in this stage."}
         </p>
       ) : (
