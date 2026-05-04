@@ -6,7 +6,8 @@
  *
  * Query params:
  *   batch       batch id (required for the row list; if omitted only batches return)
- *   tab         today|to_call|in_progress|enrolled|stopped
+ *   stage       new|contacted|enrolled|closed (funnel stage)
+ *   urgency     due_today|all (time-based filter)
  *   search      substring match on provider_name (optional)
  *   page        0-indexed page, default 0
  *   pageSize    default 50
@@ -18,22 +19,26 @@ import type { QueueRow } from "@/lib/staffing-outreach/types";
 
 const PAGE_SIZE_DEFAULT = 50;
 
-const TAB_FILTERS: Record<string, string[] | null> = {
-  today: null, // handled separately (date filter)
-  to_call: ["queued", "pre_call_outreach"],
-  in_progress: ["calling", "connected_no_consent", "consented", "nurturing", "activated"],
+// New stage-based filtering (funnel stages)
+const STAGE_STATUSES: Record<string, string[]> = {
+  new: ["queued", "pre_call_outreach"],
+  contacted: ["calling", "connected_no_consent", "consented", "nurturing", "activated"],
   enrolled: ["enrolled"],
-  stopped: ["do_not_contact", "wrong_number"],
+  closed: ["do_not_contact", "wrong_number"],
 };
 
-// Backwards compatibility: map old granular tab names to new simplified tabs
-const TAB_ALIASES: Record<string, string> = {
-  queued: "to_call",
-  pre_call: "to_call",
-  calling: "in_progress",
-  post_consent: "in_progress",
-  activated: "in_progress",
-  all: "to_call", // default to actionable items
+// Backwards compatibility: map old tab names to new stages
+const STAGE_ALIASES: Record<string, string> = {
+  to_call: "new",
+  in_progress: "contacted",
+  stopped: "closed",
+  queued: "new",
+  pre_call: "new",
+  calling: "contacted",
+  post_consent: "contacted",
+  activated: "contacted",
+  all: "new",
+  today: "new", // old "today" tab maps to "new" stage with due_today urgency
 };
 
 export async function GET(req: NextRequest) {
@@ -45,9 +50,14 @@ export async function GET(req: NextRequest) {
   const db = getServiceClient();
   const url = new URL(req.url);
   const batchId = url.searchParams.get("batch");
-  const rawTab = url.searchParams.get("tab") ?? "today";
-  // Normalize tab name (backwards compatibility for old URLs)
-  const tab = TAB_ALIASES[rawTab] ?? rawTab;
+
+  // New two-level navigation: stage (funnel) + urgency (time filter)
+  const rawStage = url.searchParams.get("stage") ?? url.searchParams.get("tab") ?? "new";
+  const resolvedStage = STAGE_ALIASES[rawStage] ?? rawStage;
+  // Validate stage - fallback to "new" if invalid
+  const stage = STAGE_STATUSES[resolvedStage] ? resolvedStage : "new";
+  const urgency = url.searchParams.get("urgency") ?? "due_today";
+
   const search = (url.searchParams.get("search") ?? "").trim();
   const page = Math.max(0, parseInt(url.searchParams.get("page") ?? "0", 10));
   const pageSize = Math.min(
@@ -67,11 +77,12 @@ export async function GET(req: NextRequest) {
   }
 
   if (!batchId) {
-    return NextResponse.json({ batches, rows: [], total: 0, tabCounts: {} });
+    return NextResponse.json({ batches, rows: [], total: 0, tabCounts: {}, totalDue: 0 });
   }
 
-  // ── Tab counts for the chosen batch ────────────────────────────────────
-  const tabCounts = await computeTabCounts(db, batchId);
+  // ── Tab counts for the chosen batch (stage counts + total due) ─────────
+  // Pass urgency so counts reflect the current filter
+  const { stageCounts, totalDue } = await computeStageCounts(db, batchId, urgency);
 
   // ── If searching, find matching provider IDs first (DB-level search) ───
   let searchProviderIds: string[] | null = null;
@@ -89,7 +100,7 @@ export async function GET(req: NextRequest) {
 
     // If search matches nothing, return empty results immediately
     if (searchProviderIds.length === 0) {
-      return NextResponse.json({ batches, rows: [], total: 0, tabCounts });
+      return NextResponse.json({ batches, rows: [], total: 0, tabCounts: stageCounts, totalDue });
     }
   }
 
@@ -104,15 +115,15 @@ export async function GET(req: NextRequest) {
     query = query.in("provider_id", searchProviderIds);
   }
 
-  if (tab === "today") {
-    query = query
-      .lte("next_action_due_at", new Date().toISOString())
-      .not("status", "in", "(do_not_contact,enrolled,wrong_number)");
-  } else {
-    const statuses = TAB_FILTERS[tab];
-    if (statuses) {
-      query = query.in("status", statuses);
-    }
+  // Apply stage filter (funnel stage)
+  const statuses = STAGE_STATUSES[stage];
+  if (statuses) {
+    query = query.in("status", statuses);
+  }
+
+  // Apply urgency filter (time-based)
+  if (urgency === "due_today") {
+    query = query.lte("next_action_due_at", new Date().toISOString());
   }
 
   query = query
@@ -126,7 +137,7 @@ export async function GET(req: NextRequest) {
 
   const rows = outreachRows ?? [];
   if (rows.length === 0) {
-    return NextResponse.json({ batches, rows: [], total: count ?? 0, tabCounts });
+    return NextResponse.json({ batches, rows: [], total: count ?? 0, tabCounts: stageCounts, totalDue });
   }
 
   // ── Hydrate with provider display info ─────────────────────────────────
@@ -172,49 +183,54 @@ export async function GET(req: NextRequest) {
     batches,
     rows: queueRows,
     total: count ?? queueRows.length,
-    tabCounts,
+    tabCounts: stageCounts,
+    totalDue,
   });
 }
 
-async function computeTabCounts(
+async function computeStageCounts(
   db: ReturnType<typeof getServiceClient>,
   batchId: string,
-): Promise<Record<string, number>> {
-  const counts: Record<string, number> = {
-    today: 0,
-    to_call: 0,
-    in_progress: 0,
+  urgency: string,
+): Promise<{ stageCounts: Record<string, number>; totalDue: number }> {
+  const stageCounts: Record<string, number> = {
+    new: 0,
+    contacted: 0,
     enrolled: 0,
-    stopped: 0,
+    closed: 0,
   };
+  let totalDue = 0;
 
   const { data, error } = await db
     .from("staffing_outreach")
     .select("status, next_action_due_at")
     .eq("batch_id", batchId);
 
-  if (error || !data) return counts;
+  if (error || !data) return { stageCounts, totalDue };
 
   const nowIso = new Date().toISOString();
-  const STOPPED_STATUSES = new Set(["do_not_contact", "enrolled", "wrong_number"]);
+  const TERMINAL_STATUSES = new Set(["do_not_contact", "enrolled", "wrong_number"]);
 
   for (const row of data) {
     const status = row.status as string;
+    const isDue = row.next_action_due_at && row.next_action_due_at <= nowIso;
 
-    // Today: any status with next_action_due_at <= now (except enrolled/stopped)
-    if (
-      row.next_action_due_at &&
-      row.next_action_due_at <= nowIso &&
-      !STOPPED_STATUSES.has(status)
-    ) {
-      counts.today++;
+    // Count items due today (across all non-terminal stages) - always computed for the badge
+    if (isDue && !TERMINAL_STATUSES.has(status)) {
+      totalDue++;
     }
 
-    // To Call: queued, pre_call_outreach
+    // When urgency is "due_today", only count items that are due in stage counts
+    // This makes tab counts reflect the urgency filter
+    if (urgency === "due_today" && !isDue) {
+      continue; // Skip non-due items in stage counts
+    }
+
+    // New: queued, pre_call_outreach
     if (status === "queued" || status === "pre_call_outreach") {
-      counts.to_call++;
+      stageCounts.new++;
     }
-    // In Progress: calling, connected_no_consent, consented, nurturing, activated
+    // Contacted: calling, connected_no_consent, consented, nurturing, activated
     else if (
       status === "calling" ||
       status === "connected_no_consent" ||
@@ -222,17 +238,17 @@ async function computeTabCounts(
       status === "nurturing" ||
       status === "activated"
     ) {
-      counts.in_progress++;
+      stageCounts.contacted++;
     }
     // Enrolled
     else if (status === "enrolled") {
-      counts.enrolled++;
+      stageCounts.enrolled++;
     }
-    // Stopped: do_not_contact, wrong_number
+    // Closed: do_not_contact, wrong_number
     else if (status === "do_not_contact" || status === "wrong_number") {
-      counts.stopped++;
+      stageCounts.closed++;
     }
   }
 
-  return counts;
+  return { stageCounts, totalDue };
 }

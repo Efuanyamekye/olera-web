@@ -3,7 +3,10 @@
 /**
  * Admin Staffing Outreach — main page.
  *
- * Simplified MVP layout: 5 tabs, unified search/filter row.
+ * Two-level navigation:
+ *   1. Urgency toggle (Due Today / All) — time-based filter
+ *   2. Stage tabs (New / Contacted / Enrolled / Closed) — funnel stages
+ *
  * Data comes from /api/admin/staffing-outreach/queue (batches + rows)
  * and /api/admin/staffing-outreach/[id] (drawer detail).
  */
@@ -16,23 +19,27 @@ import type {
   StaffingBatch,
 } from "@/lib/staffing-outreach/types";
 
-// Simplified 5-tab structure
-const TABS: Array<{ key: string; label: string }> = [
-  { key: "today", label: "Today" },
-  { key: "to_call", label: "To Call" },
-  { key: "in_progress", label: "In Progress" },
+// Stage tabs (funnel stages)
+const STAGE_TABS: Array<{ key: string; label: string }> = [
+  { key: "new", label: "New" },
+  { key: "contacted", label: "Contacted" },
   { key: "enrolled", label: "Enrolled" },
-  { key: "stopped", label: "Stopped" },
+  { key: "closed", label: "Closed" },
 ];
+
+type Stage = "new" | "contacted" | "enrolled" | "closed";
+type Urgency = "due_today" | "all";
 
 export default function StaffingOutreachPage() {
   const [batches, setBatches] = useState<StaffingBatch[]>([]);
   const [batchId, setBatchId] = useState<string | null>(null);
-  const [tab, setTab] = useState("today");
+  const [stage, setStage] = useState<Stage>("new");
+  const [urgency, setUrgency] = useState<Urgency>("due_today");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [rows, setRows] = useState<QueueRow[]>([]);
   const [tabCounts, setTabCounts] = useState<Record<string, number>>({});
+  const [totalDue, setTotalDue] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openOutreachId, setOpenOutreachId] = useState<string | null>(null);
@@ -50,7 +57,8 @@ export default function StaffingOutreachPage() {
     try {
       const params = new URLSearchParams();
       if (batchId) params.set("batch", batchId);
-      if (tab) params.set("tab", tab);
+      params.set("stage", stage);
+      params.set("urgency", urgency);
       if (debouncedSearch) params.set("search", debouncedSearch);
       const res = await fetch(`/api/admin/staffing-outreach/queue?${params}`);
       if (!res.ok) throw new Error((await res.json()).error || "Failed to load");
@@ -58,6 +66,7 @@ export default function StaffingOutreachPage() {
       setBatches(data.batches ?? []);
       setRows(data.rows ?? []);
       setTabCounts(data.tabCounts ?? {});
+      setTotalDue(data.totalDue ?? 0);
       // Auto-select first batch if none chosen
       if (!batchId && data.batches?.[0]) {
         setBatchId(data.batches[0].id);
@@ -67,7 +76,7 @@ export default function StaffingOutreachPage() {
     } finally {
       setLoading(false);
     }
-  }, [batchId, tab, debouncedSearch]);
+  }, [batchId, stage, urgency, debouncedSearch]);
 
   useEffect(() => {
     refetch();
@@ -99,65 +108,64 @@ export default function StaffingOutreachPage() {
     [refetch, rows],
   );
 
-  // Handle tab change - clear rows immediately to prevent stale flash
-  const handleTabChange = useCallback((newTab: string) => {
-    if (newTab === tab) return;
+  // Handle stage change - clear rows immediately to prevent stale flash
+  const handleStageChange = useCallback((newStage: Stage) => {
+    if (newStage === stage) return;
     setRows([]);
     setLoading(true);
-    setTab(newTab);
-  }, [tab]);
+    setStage(newStage);
+  }, [stage]);
+
+  // Handle urgency change - clear rows immediately to prevent stale flash
+  const handleUrgencyChange = useCallback((newUrgency: Urgency) => {
+    if (newUrgency === urgency) return;
+    setRows([]);
+    setLoading(true);
+    setUrgency(newUrgency);
+  }, [urgency]);
 
   return (
     <div>
-      <div className="mb-8">
+      <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-900">Staffing Outreach</h1>
         <p className="text-lg text-gray-600 mt-1">
           Enroll home care agencies into the Student Caregiver Pilot.
         </p>
       </div>
 
-      {/* Tabs - pill buttons like verification page */}
-      <div className="flex gap-2 mb-4">
-        {TABS.map((t) => {
-          const count = tabCounts[t.key];
-          const active = t.key === tab;
-          const isActionable = t.key === "today" || t.key === "to_call";
-          const showBadge = isActionable && typeof count === "number" && count > 0;
+      {/* Row 1: Urgency toggle | Search | University dropdown | Stats */}
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        {/* Urgency Toggle (segmented control) */}
+        <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5">
+          <button
+            type="button"
+            onClick={() => handleUrgencyChange("due_today")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              urgency === "due_today"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Due Today
+            {totalDue > 0 && (
+              <span className="px-1.5 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-700">
+                {totalDue}
+              </span>
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={() => handleUrgencyChange("all")}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+              urgency === "all"
+                ? "bg-white text-gray-900 shadow-sm"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            All
+          </button>
+        </div>
 
-          return (
-            <button
-              key={t.key}
-              type="button"
-              onClick={() => handleTabChange(t.key)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                active
-                  ? "bg-primary-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {t.label}
-              {showBadge ? (
-                <span className={`px-1.5 py-0.5 text-xs font-semibold rounded-full ${
-                  active
-                    ? "bg-white/20 text-white"
-                    : "bg-amber-100 text-amber-700"
-                }`}>
-                  {count}
-                </span>
-              ) : typeof count === "number" ? (
-                <span className={`text-xs ${
-                  active ? "text-white/70" : "text-gray-400"
-                }`}>
-                  ({count})
-                </span>
-              ) : null}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Search + University dropdown + inline stats */}
-      <div className="flex flex-wrap items-center gap-3 mb-6">
         {/* Search - w-64 with icon */}
         <div className="relative w-full sm:w-64">
           <svg
@@ -205,17 +213,39 @@ export default function StaffingOutreachPage() {
             <span className="font-medium text-gray-700">
               {currentBatch.total_providers}
             </span>
-            {" total · "}
-            <span className="font-medium text-gray-700">
-              {tabCounts.to_call ?? 0}
-            </span>
-            {" to call · "}
-            <span className="font-medium text-emerald-700">
-              {tabCounts.enrolled ?? 0}
-            </span>
-            {" enrolled"}
+            {" total"}
           </p>
         )}
+      </div>
+
+      {/* Row 2: Stage tabs (funnel stages) */}
+      <div className="flex gap-2 mb-6">
+        {STAGE_TABS.map((t) => {
+          const count = tabCounts[t.key];
+          const active = t.key === stage;
+
+          return (
+            <button
+              key={t.key}
+              type="button"
+              onClick={() => handleStageChange(t.key as Stage)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                active
+                  ? "bg-primary-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {t.label}
+              {typeof count === "number" && (
+                <span className={`text-xs ${
+                  active ? "text-white/70" : "text-gray-400"
+                }`}>
+                  ({count})
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* List */}
@@ -227,43 +257,52 @@ export default function StaffingOutreachPage() {
         <p className="py-12 text-center text-sm text-gray-400">
           {batches.length === 0
             ? "No active batches yet. Run the seed script: npx tsx scripts/seed-staffing-outreach.ts --university <slug> --apply"
-            : "Nothing in this tab."}
+            : urgency === "due_today"
+            ? "No providers due for action in this stage."
+            : "No providers in this stage."}
         </p>
       ) : (
         <ul className="divide-y divide-gray-100 rounded-lg border border-gray-100 bg-white">
-          {rows.map((row) => (
-            <li key={row.id}>
-              <button
-                onClick={() => setOpenOutreachId(row.id)}
-                className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-gray-50"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-gray-900">
-                    {row.provider_name}
-                  </p>
-                  <p className="truncate text-xs text-gray-500">
-                    {[row.provider_city, row.provider_state]
-                      .filter(Boolean)
-                      .join(", ") || "—"}
-                    {row.provider_phone && ` · ${row.provider_phone}`}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <StatusBadge status={row.status} />
-                  {row.next_action_due_at && (
-                    <span className="hidden text-xs text-gray-400 sm:inline">
-                      {formatDueDate(row.next_action_due_at)}
-                    </span>
-                  )}
-                  {row.claimed_by && row.claimed_until && new Date(row.claimed_until) > new Date() && (
-                    <span className="hidden text-xs text-amber-600 sm:inline">
-                      claimed
-                    </span>
-                  )}
-                </div>
-              </button>
-            </li>
-          ))}
+          {rows.map((row) => {
+            const dueInfo = row.next_action_due_at ? getDueInfo(row.next_action_due_at) : null;
+            const isClaimed = row.claimed_by && row.claimed_until && new Date(row.claimed_until) > new Date();
+
+            return (
+              <li key={row.id}>
+                <button
+                  onClick={() => setOpenOutreachId(row.id)}
+                  className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-gray-50"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-gray-900">
+                      {row.provider_name}
+                    </p>
+                    <p className="truncate text-xs text-gray-500">
+                      {[row.provider_city, row.provider_state]
+                        .filter(Boolean)
+                        .join(", ") || "—"}
+                      {row.provider_phone && ` · ${row.provider_phone}`}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <StatusBadge status={row.status} />
+                    {dueInfo && (
+                      <span className={`hidden text-xs sm:inline ${
+                        dueInfo.isOverdue ? "text-amber-600 font-medium" : "text-gray-400"
+                      }`}>
+                        {dueInfo.label}
+                      </span>
+                    )}
+                    {isClaimed && (
+                      <span className="hidden text-xs text-blue-600 sm:inline">
+                        claimed
+                      </span>
+                    )}
+                  </div>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
 
@@ -315,14 +354,25 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function formatDueDate(iso: string): string {
+function getDueInfo(iso: string): { label: string; isOverdue: boolean } {
   const due = new Date(iso);
   const now = new Date();
   const diffMin = Math.round((due.getTime() - now.getTime()) / 60_000);
-  if (diffMin < -60 * 24)
-    return `${Math.round(-diffMin / (60 * 24))}d overdue`;
-  if (diffMin < 0) return "due now";
-  if (diffMin < 60) return `in ${diffMin}m`;
-  if (diffMin < 60 * 24) return `in ${Math.round(diffMin / 60)}h`;
-  return `in ${Math.round(diffMin / (60 * 24))}d`;
+
+  if (diffMin < -60 * 24) {
+    return { label: `${Math.round(-diffMin / (60 * 24))}d overdue`, isOverdue: true };
+  }
+  if (diffMin < -60) {
+    return { label: `${Math.round(-diffMin / 60)}h overdue`, isOverdue: true };
+  }
+  if (diffMin < 0) {
+    return { label: "due now", isOverdue: true };
+  }
+  if (diffMin < 60) {
+    return { label: `in ${diffMin}m`, isOverdue: false };
+  }
+  if (diffMin < 60 * 24) {
+    return { label: `in ${Math.round(diffMin / 60)}h`, isOverdue: false };
+  }
+  return { label: `in ${Math.round(diffMin / (60 * 24))}d`, isOverdue: false };
 }
