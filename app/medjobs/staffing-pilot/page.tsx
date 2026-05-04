@@ -152,7 +152,7 @@ function StaffingPilotContent() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <Image src="/olera-logo.svg" alt="Olera" width={120} height={40} />
+            <Image src="/images/olera-logo.png" alt="Olera" width={120} height={40} />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Student Caregiver Pilot</h1>
           <p className="text-lg text-gray-600">
