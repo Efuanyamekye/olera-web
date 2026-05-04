@@ -304,10 +304,8 @@ export default function StaffingOutreachPage() {
               const dueInfo = row.next_action_due_at ? getDueInfo(row.next_action_due_at) : null;
               const isClaimed = row.claimed_by && row.claimed_until && new Date(row.claimed_until) > new Date();
 
-              const urgencyBorder = dueInfo ? getUrgencyBorderClass(dueInfo.urgency) : "";
-
               return (
-                <li key={row.id} className={urgencyBorder}>
+                <li key={row.id}>
                   <button
                     onClick={() => setOpenOutreachId(row.id)}
                     className="flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-gray-50"
@@ -385,11 +383,8 @@ export default function StaffingOutreachPage() {
                         </span>
                       )}
                       {isClaimed && (
-                        <span
-                          className="hidden sm:flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-medium text-blue-700"
-                          title={`Claimed by ${row.claimed_by_initials || "admin"}`}
-                        >
-                          {row.claimed_by_initials || "?"}
+                        <span className="hidden sm:inline rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                          Claimed
                         </span>
                       )}
                     </div>
@@ -454,7 +449,7 @@ function StatusBadge({ status }: { status: string }) {
   };
   const labels: Record<string, string> = {
     queued: "Queued",
-    pre_call_outreach: "Pre-call",
+    pre_call_outreach: "Email Sent",
     calling: "Calling",
     connected_no_consent: "No consent",
     consented: "Consented",
@@ -491,21 +486,21 @@ function getDueInfo(iso: string): DueInfo {
 
   if (diffMin < -60 * 24 * 6) {
     // 6+ days overdue = high urgency
-    return { label: `${diffDays}d`, isOverdue: true, urgency: "high" };
+    return { label: `${diffDays}d overdue`, isOverdue: true, urgency: "high" };
   }
   if (diffMin < -60 * 24 * 3) {
     // 3-5 days overdue = medium urgency
-    return { label: `${diffDays}d`, isOverdue: true, urgency: "medium" };
+    return { label: `${diffDays}d overdue`, isOverdue: true, urgency: "medium" };
   }
   if (diffMin < -60 * 24) {
     // 1-2 days overdue = low urgency
-    return { label: `${diffDays}d`, isOverdue: true, urgency: "low" };
+    return { label: `${diffDays}d overdue`, isOverdue: true, urgency: "low" };
   }
   if (diffMin < -60) {
-    return { label: `${Math.round(-diffMin / 60)}h`, isOverdue: true, urgency: "low" };
+    return { label: `${Math.round(-diffMin / 60)}h overdue`, isOverdue: true, urgency: "low" };
   }
   if (diffMin < 0) {
-    return { label: "now", isOverdue: true, urgency: "low" };
+    return { label: "due now", isOverdue: true, urgency: "low" };
   }
   if (diffMin < 60) {
     return { label: `in ${diffMin}m`, isOverdue: false, urgency: "none" };
