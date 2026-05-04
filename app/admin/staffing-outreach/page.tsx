@@ -329,9 +329,11 @@ export default function StaffingOutreachPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <StatusBadge status={row.status} />
-                      {dueInfo && dueInfo.isOverdue && (
+                      {dueInfo && (
                         <span className={`hidden sm:inline rounded-full px-2 py-0.5 text-xs font-medium ${
-                          getOverduePillClass(dueInfo.urgency)
+                          dueInfo.isOverdue
+                            ? getOverduePillClass(dueInfo.urgency)
+                            : "bg-gray-100 text-gray-500"
                         }`}>
                           {dueInfo.label}
                         </span>
