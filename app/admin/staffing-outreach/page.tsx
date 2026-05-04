@@ -511,20 +511,6 @@ function getDueInfo(iso: string): DueInfo {
   return { label: `in ${Math.round(diffMin / (60 * 24))}d`, isOverdue: false, urgency: "none" };
 }
 
-/** Left border color based on urgency */
-function getUrgencyBorderClass(urgency: UrgencyLevel): string {
-  switch (urgency) {
-    case "high":
-      return "border-l-4 border-l-red-500";
-    case "medium":
-      return "border-l-4 border-l-orange-400";
-    case "low":
-      return "border-l-4 border-l-amber-400";
-    default:
-      return "";
-  }
-}
-
 /** Pill styling for overdue indicator */
 function getOverduePillClass(urgency: UrgencyLevel): string {
   switch (urgency) {
