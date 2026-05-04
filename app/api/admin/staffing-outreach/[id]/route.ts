@@ -351,6 +351,10 @@ async function handleLogContactForm(
  * Log email sent touchpoint without actually sending an email.
  * Used for the "Open in Gmail" flow where the user sends via Gmail
  * and then marks it as sent in our system.
+ *
+ * When initial email is sent:
+ * - Status changes from queued → pre_call_outreach (moves to Nurturing tab)
+ * - Schedules follow-up in 5 days
  */
 async function handleLogEmailSent(
   outreach: StaffingOutreachRow,
@@ -368,9 +372,20 @@ async function handleLogEmailSent(
     sent_via: "gmail",
   });
 
-  // Schedule follow-up for initial email (3 business days ≈ 5 calendar days)
   if (body.emailType === "initial") {
+    // Move from New → Nurturing tab and schedule follow-up (3 business days ≈ 5 calendar days)
     const nextDue = new Date(Date.now() + 5 * 86400_000).toISOString();
+    await db
+      .from("staffing_outreach")
+      .update({
+        status: "pre_call_outreach",
+        next_action_due_at: nextDue,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", outreach.id);
+  } else {
+    // Follow-up sent - schedule next action in 3 days
+    const nextDue = new Date(Date.now() + 3 * 86400_000).toISOString();
     await db
       .from("staffing_outreach")
       .update({

@@ -21,13 +21,13 @@ import type {
 
 // Stage tabs (funnel stages)
 const STAGE_TABS: Array<{ key: string; label: string }> = [
-  { key: "new", label: "To Call" },
-  { key: "contacted", label: "Contacted" },
+  { key: "new", label: "New" },
+  { key: "nurturing", label: "Nurturing" },
   { key: "enrolled", label: "Enrolled" },
   { key: "closed", label: "Closed" },
 ];
 
-type Stage = "new" | "contacted" | "enrolled" | "closed";
+type Stage = "new" | "nurturing" | "enrolled" | "closed";
 type Urgency = "due_today" | "all";
 
 export default function StaffingOutreachPage() {

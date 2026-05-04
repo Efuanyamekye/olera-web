@@ -19,10 +19,14 @@ import type { QueueRow } from "@/lib/staffing-outreach/types";
 
 const PAGE_SIZE_DEFAULT = 50;
 
-// New stage-based filtering (funnel stages)
+// Stage-based filtering (funnel stages)
+// - new: No contact made yet
+// - nurturing: Contact made, working toward enrollment
+// - enrolled: Success
+// - closed: Terminal states
 const STAGE_STATUSES: Record<string, string[]> = {
-  new: ["queued", "pre_call_outreach"],
-  contacted: ["calling", "connected_no_consent", "consented", "nurturing", "activated"],
+  new: ["queued"],
+  nurturing: ["pre_call_outreach", "calling", "connected_no_consent", "consented", "nurturing", "activated"],
   enrolled: ["enrolled"],
   closed: ["do_not_contact", "wrong_number"],
 };
@@ -30,15 +34,16 @@ const STAGE_STATUSES: Record<string, string[]> = {
 // Backwards compatibility: map old tab names to new stages
 const STAGE_ALIASES: Record<string, string> = {
   to_call: "new",
-  in_progress: "contacted",
+  contacted: "nurturing",
+  in_progress: "nurturing",
   stopped: "closed",
   queued: "new",
-  pre_call: "new",
-  calling: "contacted",
-  post_consent: "contacted",
-  activated: "contacted",
+  pre_call: "nurturing",
+  calling: "nurturing",
+  post_consent: "nurturing",
+  activated: "nurturing",
   all: "new",
-  today: "new", // old "today" tab maps to "new" stage with due_today urgency
+  today: "new",
 };
 
 export async function GET(req: NextRequest) {
@@ -195,7 +200,7 @@ async function computeStageCounts(
 ): Promise<{ stageCounts: Record<string, number>; totalDue: number }> {
   const stageCounts: Record<string, number> = {
     new: 0,
-    contacted: 0,
+    nurturing: 0,
     enrolled: 0,
     closed: 0,
   };
@@ -226,19 +231,20 @@ async function computeStageCounts(
       continue; // Skip non-due items in stage counts
     }
 
-    // New: queued, pre_call_outreach
-    if (status === "queued" || status === "pre_call_outreach") {
+    // New: queued only (no contact made yet)
+    if (status === "queued") {
       stageCounts.new++;
     }
-    // Contacted: calling, connected_no_consent, consented, nurturing, activated
+    // Nurturing: pre_call_outreach, calling, connected_no_consent, consented, nurturing, activated
     else if (
+      status === "pre_call_outreach" ||
       status === "calling" ||
       status === "connected_no_consent" ||
       status === "consented" ||
       status === "nurturing" ||
       status === "activated"
     ) {
-      stageCounts.contacted++;
+      stageCounts.nurturing++;
     }
     // Enrolled
     else if (status === "enrolled") {
