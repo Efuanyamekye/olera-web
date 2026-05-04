@@ -398,35 +398,29 @@ function ProviderSummary({ ctx }: { ctx: DrawerContext }) {
 
   return (
     <section className="rounded-xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white p-4 shadow-sm">
-      {/* Contact actions */}
+      {/* Contact actions - all on one line */}
       <div className="flex flex-wrap items-center gap-2">
         {ctx.provider.phone && (
-          <>
+          <div className="inline-flex items-center rounded-lg bg-emerald-600 shadow-sm">
             <a
               href={`tel:${ctx.provider.phone}`}
-              className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-emerald-700"
+              className="inline-flex items-center gap-2 rounded-l-lg px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
             >
               <PhoneIcon className="h-4 w-4" />
-              Call {ctx.provider.phone}
+              {ctx.provider.phone}
             </a>
             <button
               onClick={copyPhone}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+              className="inline-flex items-center rounded-r-lg border-l border-emerald-500 px-2 py-2 text-white transition-colors hover:bg-emerald-700"
               title="Copy phone number"
             >
               {phoneCopied ? (
-                <>
-                  <CheckIcon className="h-4 w-4 text-emerald-600" />
-                  <span className="text-emerald-600">Copied</span>
-                </>
+                <CheckIcon className="h-4 w-4" />
               ) : (
-                <>
-                  <CopyIcon className="h-4 w-4" />
-                  Copy
-                </>
+                <CopyIcon className="h-4 w-4" />
               )}
             </button>
-          </>
+          </div>
         )}
         {ctx.provider.website && (
           <a
@@ -444,7 +438,7 @@ function ProviderSummary({ ctx }: { ctx: DrawerContext }) {
             href={`https://olera.care/providers/${ctx.provider.slug}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
           >
             <ExternalLinkIcon className="h-4 w-4" />
             Olera Profile
@@ -453,22 +447,15 @@ function ProviderSummary({ ctx }: { ctx: DrawerContext }) {
       </div>
 
       {/* Metadata row */}
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
-        <span className="text-gray-500">
-          <span className="font-medium text-gray-700">{ctx.batch.university_name}</span>
-        </span>
-        <span className="text-gray-400">·</span>
-        <span className="text-gray-500">
-          Attempts: <span className="font-medium text-gray-700">{ctx.outreach.attempts_count}</span>
-        </span>
+      <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-500">
+        <span className="font-medium text-gray-700">{ctx.batch.university_name}</span>
+        <span className="text-gray-300">·</span>
+        <span>Attempts: {ctx.outreach.attempts_count}</span>
         {ctx.outreach.last_engagement_at && (
           <>
-            <span className="text-gray-400">·</span>
-            <span className="text-gray-500">
-              Last activity:{" "}
-              <span className="font-medium text-gray-700">
-                {new Date(ctx.outreach.last_engagement_at).toLocaleDateString()}
-              </span>
+            <span className="text-gray-300">·</span>
+            <span>
+              Last activity: {new Date(ctx.outreach.last_engagement_at).toLocaleDateString()}
             </span>
           </>
         )}
