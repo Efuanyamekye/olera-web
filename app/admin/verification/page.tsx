@@ -566,7 +566,7 @@ export default function AdminVerificationPage() {
             <button
               key={f.value}
               type="button"
-              onClick={() => { setPage(0); setFilter(f.value); }}
+              onClick={() => { setPage(0); setProviders([]); setLoading(true); setFilter(f.value); }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                 filter === f.value
                   ? "bg-primary-600 text-white"
