@@ -1,15 +1,18 @@
 "use client";
 
 /**
- * Staffing Outreach drawer.
+ * Staffing Outreach V2 drawer.
  *
- * Sections (matching the workflow):
- *   1. ProviderSummary  — header with status badge, contact info, engagement signals
- *   2. NewSection       — initial email form (queued status)
- *   3. NurturingSection — follow-up email form (pre-consent nurturing statuses)
- *   4. CallSection      — disposition buttons; "Connected" expands into capture form
- *   5. Terminal States  — EnrolledSection, ActivatedSection, ClosedSection
- *   6. HistorySection   — chronological touchpoint timeline with icons
+ * Sections (matching the V2 workflow):
+ *   1. ProviderSummary    — header with status badge, contact info, engagement signals
+ *   2. ToQueueSection     — email preview + "Start Sequence" button (queued status)
+ *   3. SequencingSection  — sequence timeline, engagement indicators (sequencing status)
+ *   4. NeedsCallSection   — call disposition, consent capture (needs_call status)
+ *   5. ConsentedSection   — waiting for enrollment (consented status)
+ *   6. EnrolledSection    — success state (enrolled status)
+ *   7. ActivatedSection   — waiting for T&C (activated status)
+ *   8. ClosedSection      — closed/bounced states
+ *   9. HistorySection     — chronological touchpoint timeline
  *
  * After any action, the parent page refetches the queue and auto-advances
  * to the next provider in the same tab.
@@ -17,11 +20,12 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Select from "@/components/ui/Select";
-import type {
-  DrawerContext,
-  StaffingTouchpoint,
-  TouchpointType,
-  StaffingStatus,
+import {
+  getServiceArea,
+  type DrawerContext,
+  type StaffingTouchpoint,
+  type TouchpointType,
+  type StaffingStatus,
 } from "@/lib/staffing-outreach/types";
 
 interface DrawerProps {
@@ -75,15 +79,22 @@ function ExternalLinkIcon({ className }: { className?: string }) {
 // ── Status Badge ──────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<StaffingStatus, { label: string; color: string; bg: string }> = {
-  queued: { label: "Pending", color: "text-gray-700", bg: "bg-gray-100" },
-  pre_call_outreach: { label: "Email Sent", color: "text-blue-700", bg: "bg-blue-100" },
-  calling: { label: "Email Sent", color: "text-blue-700", bg: "bg-blue-100" },
-  connected_no_consent: { label: "Email Sent", color: "text-blue-700", bg: "bg-blue-100" },
+  // V2 statuses
+  queued: { label: "To Queue", color: "text-gray-700", bg: "bg-gray-100" },
+  sequencing: { label: "Sequencing", color: "text-blue-700", bg: "bg-blue-100" },
+  needs_call: { label: "Needs Call", color: "text-amber-700", bg: "bg-amber-100" },
   consented: { label: "Consented", color: "text-emerald-700", bg: "bg-emerald-100" },
   activated: { label: "Activated", color: "text-cyan-700", bg: "bg-cyan-100" },
   enrolled: { label: "Enrolled", color: "text-green-700", bg: "bg-green-100" },
-  do_not_contact: { label: "Closed", color: "text-red-700", bg: "bg-red-100" },
-  wrong_number: { label: "Wrong #", color: "text-orange-700", bg: "bg-orange-100" },
+  bounced: { label: "Bounced", color: "text-red-700", bg: "bg-red-100" },
+  closed: { label: "Closed", color: "text-gray-700", bg: "bg-gray-100" },
+  // Legacy statuses
+  pre_call_outreach: { label: "Sequencing", color: "text-blue-700", bg: "bg-blue-100" },
+  calling: { label: "Needs Call", color: "text-amber-700", bg: "bg-amber-100" },
+  connected_no_consent: { label: "Needs Call", color: "text-amber-700", bg: "bg-amber-100" },
+  nurturing: { label: "Sequencing", color: "text-blue-700", bg: "bg-blue-100" },
+  do_not_contact: { label: "Closed", color: "text-gray-700", bg: "bg-gray-100" },
+  wrong_number: { label: "Closed", color: "text-orange-700", bg: "bg-orange-100" },
 };
 
 function StatusBadge({ status }: { status: StaffingStatus }) {
@@ -359,9 +370,15 @@ export function Drawer({ outreachId, onClose, onAction }: DrawerProps) {
           ) : ctx ? (
             <div className="space-y-6">
               <ProviderSummary ctx={ctx} />
+              {/* V2 Sections */}
+              <ToQueueSection ctx={ctx} onAction={handleAction} onAdvance={handleAdvance} setError={setError} />
+              <SequencingSection ctx={ctx} onAdvance={handleAdvance} setError={setError} />
+              <NeedsCallSection ctx={ctx} onAdvance={handleAdvance} setError={setError} />
+              {/* Legacy Sections - still needed for transition */}
               <NewSection ctx={ctx} onAction={handleAction} onAdvance={handleAdvance} setError={setError} />
               <NurturingSection ctx={ctx} onAction={handleAction} onAdvance={handleAdvance} setError={setError} />
               <CallSection ctx={ctx} onAdvance={handleAdvance} setError={setError} />
+              {/* Terminal state sections */}
               <ConsentedSection ctx={ctx} onRefresh={handleRefresh} setError={setError} />
               <EnrolledSection ctx={ctx} />
               <ActivatedSection ctx={ctx} onRefresh={handleRefresh} setError={setError} />
@@ -484,42 +501,6 @@ function ProviderSummary({ ctx }: { ctx: DrawerContext }) {
 // ── Section 1: Research & pre-call ───────────────────────────────────────
 
 /**
- * Map university slugs to their service areas.
- * Must stay in sync with lib/staffing-outreach/partner-universities.ts
- */
-const SERVICE_AREA_BY_SLUG: Record<string, string> = {
-  "ut-austin": "Austin area",
-  "texas-am": "Bryan-College Station area",
-  "u-houston": "Houston area",
-  "u-florida": "Gainesville area",
-  "florida-state": "Tallahassee area",
-  "u-georgia": "Athens area",
-  "emory": "Atlanta area",
-  "unc-chapel-hill": "Chapel Hill area",
-  "duke": "Durham area",
-  "uva": "Charlottesville area",
-  "virginia-tech": "Blacksburg area",
-  "vanderbilt": "Nashville area",
-  "u-tennessee-knoxville": "Knoxville area",
-  "u-kentucky": "Lexington area",
-  "ohio-state": "Columbus area",
-  "u-michigan": "Ann Arbor area",
-  "michigan-state": "East Lansing area",
-  "penn-state": "State College area",
-  "uw-madison": "Madison area",
-  "u-minnesota": "Minneapolis area",
-  "uiuc": "Champaign area",
-  "indiana-bloomington": "Bloomington area",
-  "cu-boulder": "Boulder area",
-  "arizona-state": "Phoenix area",
-  "u-utah": "Salt Lake City area",
-};
-
-function getServiceArea(universitySlug: string): string {
-  return SERVICE_AREA_BY_SLUG[universitySlug] || "the area";
-}
-
-/**
  * Generate initial outreach email plain text.
  */
 function generateInitialEmailText(universityName: string, serviceArea: string) {
@@ -581,8 +562,562 @@ function buildGmailComposeUrl(opts: { to: string; subject: string; body: string 
   return `https://mail.google.com/mail/?${params.toString()}`;
 }
 
+// ── V2 Sections ────────────────────────────────────────────────────────────
+
 /**
- * NewSection - shown for providers in "New" tab (status: queued)
+ * ToQueueSection - V2: shown for providers in "To Queue" tab (status: queued)
+ * Shows email preview and "Start Email Sequence" button to trigger Resend automation
+ */
+function ToQueueSection({
+  ctx,
+  onAction,
+  onAdvance,
+  setError,
+}: {
+  ctx: DrawerContext;
+  onAction: (action: string, payload?: Record<string, unknown>) => Promise<DrawerContext>;
+  onAdvance: (action: string, payload?: Record<string, unknown>) => Promise<void>;
+  setError: (err: string | null) => void;
+}) {
+  const [recipientEmail, setRecipientEmail] = useState(
+    ctx.provider.email || ctx.outreach.research_data.general_email || "",
+  );
+  const [saving, setSaving] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+
+  // Generate email preview content
+  const universityName = ctx.batch.university_name;
+  const serviceArea = getServiceArea(ctx.batch.university_slug);
+  const email1 = generateInitialEmailText(universityName, serviceArea);
+  const email2 = generateFollowUpEmailText(universityName);
+
+  // Only show for queued status (To Queue tab)
+  if (ctx.outreach.status !== "queued") {
+    return null;
+  }
+
+  const saveResearch = async () => {
+    try {
+      await onAction("update_research", {
+        research: { general_email: recipientEmail.trim() },
+      });
+    } catch {
+      // Silently fail on blur save
+    }
+  };
+
+  const handleStartSequence = async () => {
+    if (!recipientEmail.trim()) {
+      setError("Enter a recipient email first.");
+      return;
+    }
+    setSaving(true);
+    try {
+      await onAdvance("start_sequence", { recipientEmail: recipientEmail.trim() });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to start sequence");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleSkipToCall = async () => {
+    setSaving(true);
+    try {
+      await onAdvance("move_to_needs_call");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to skip to call");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <section>
+      <SectionHeader title="Start Email Sequence" />
+      <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
+        {/* Info banner */}
+        <div className="rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-800">
+          <p className="font-medium">Automated 2-email sequence</p>
+          <p className="mt-1 text-blue-700">
+            Email 1 sends immediately, Email 2 sends after 3 days if no response.
+          </p>
+        </div>
+
+        {/* Recipient email field */}
+        <Field
+          label="Recipient Email"
+          placeholder="info@agency.com"
+          value={recipientEmail}
+          onChange={setRecipientEmail}
+          onBlur={saveResearch}
+          type="email"
+        />
+
+        {/* Email Preview Accordion */}
+        <div className="rounded-lg border border-gray-200">
+          <button
+            onClick={() => setShowPreview((s) => !s)}
+            className="flex w-full items-center justify-between px-4 py-3 text-left"
+          >
+            <span className="text-sm font-medium text-gray-700">Preview Emails</span>
+            <svg
+              className={`h-5 w-5 text-gray-400 transition-transform ${showPreview ? "rotate-180" : ""}`}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {showPreview && (
+            <div className="border-t border-gray-200 px-4 py-3 space-y-4">
+              {/* Email 1 */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-blue-600 mb-1">
+                  Email 1 — Immediate
+                </p>
+                <p className="text-sm font-medium text-gray-800 mb-1">
+                  Subject: {email1.subject}
+                </p>
+                <pre className="text-xs text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-2 max-h-32 overflow-y-auto">
+                  {email1.body.slice(0, 300)}...
+                </pre>
+              </div>
+              {/* Email 2 */}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-amber-600 mb-1">
+                  Email 2 — After 3 Days
+                </p>
+                <p className="text-sm font-medium text-gray-800 mb-1">
+                  Subject: {email2.subject}
+                </p>
+                <pre className="text-xs text-gray-600 whitespace-pre-wrap bg-gray-50 rounded p-2 max-h-24 overflow-y-auto">
+                  {email2.body}
+                </pre>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Start Sequence Button */}
+        <button
+          onClick={handleStartSequence}
+          disabled={saving || !recipientEmail.trim()}
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 py-3 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {saving ? (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+          ) : (
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          )}
+          {saving ? "Starting..." : "Start Email Sequence"}
+        </button>
+
+        {/* Skip to call option */}
+        <div className="border-t border-gray-100 pt-3">
+          <button
+            onClick={handleSkipToCall}
+            disabled={saving}
+            className="flex items-center gap-1.5 text-xs text-gray-400 underline transition-colors hover:text-gray-600 disabled:opacity-50"
+          >
+            No email? Skip directly to calling
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * SequencingSection - V2: shown for providers in "Sequencing" tab
+ * Shows sequence timeline and engagement indicators
+ */
+function SequencingSection({
+  ctx,
+  onAdvance,
+  setError,
+}: {
+  ctx: DrawerContext;
+  onAdvance: (action: string, payload?: Record<string, unknown>) => Promise<void>;
+  setError: (err: string | null) => void;
+}) {
+  const [moving, setMoving] = useState(false);
+
+  // Only show for sequencing status
+  if (ctx.outreach.status !== "sequencing") {
+    return null;
+  }
+
+  // Calculate sequence progress
+  const sequenceStarted = ctx.outreach.sequence_started_at;
+  const email1Sent = ctx.outreach.email1_sent_at;
+  const email2Sent = ctx.outreach.email2_sent_at;
+
+  // Check for engagement from touchpoints
+  const hasOpened = ctx.touchpoints.some((t) => t.type === "email_opened");
+  const hasClicked = ctx.touchpoints.some((t) => t.type === "email_clicked");
+  const hasReplied = ctx.touchpoints.some((t) => t.type === "reply_received");
+
+  // Calculate days since sequence started
+  const daysSinceStart = sequenceStarted
+    ? Math.floor((Date.now() - new Date(sequenceStarted).getTime()) / 86400_000)
+    : 0;
+
+  const handleMoveToNeedsCall = async () => {
+    setMoving(true);
+    try {
+      await onAdvance("move_to_needs_call");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to move");
+    } finally {
+      setMoving(false);
+    }
+  };
+
+  const handleMarkClosed = async () => {
+    const confirmed = window.confirm(
+      "Mark this provider as closed? This will stop the email sequence."
+    );
+    if (!confirmed) return;
+
+    setMoving(true);
+    try {
+      await onAdvance("mark_closed", { reason: "Not interested during sequence" });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to close");
+    } finally {
+      setMoving(false);
+    }
+  };
+
+  return (
+    <section>
+      <SectionHeader title="Email Sequence Progress" />
+      <div className="space-y-4 rounded-xl border border-gray-200 bg-white p-4">
+        {/* Sequence Timeline */}
+        <div className="space-y-3">
+          {/* Email 1 */}
+          <div className="flex items-center gap-3">
+            <div className={`flex h-8 w-8 items-center justify-center rounded-full ${
+              email1Sent ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"
+            }`}>
+              {email1Sent ? "✓" : "1"}
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-800">Email 1 — Initial outreach</p>
+              <p className="text-xs text-gray-500">
+                {email1Sent
+                  ? `Sent ${new Date(email1Sent).toLocaleDateString()}`
+                  : "Pending"}
+              </p>
+            </div>
+            {hasOpened && (
+              <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">
+                Opened
+              </span>
+            )}
+          </div>
+
+          {/* Wait indicator */}
+          <div className="ml-4 flex items-center gap-2 text-xs text-gray-400">
+            <div className="h-6 w-px bg-gray-200" />
+            <span>Wait 3 days</span>
+          </div>
+
+          {/* Email 2 */}
+          <div className="flex items-center gap-3">
+            <div className={`flex h-8 w-8 items-center justify-center rounded-full ${
+              email2Sent ? "bg-green-100 text-green-600" : "bg-gray-100 text-gray-400"
+            }`}>
+              {email2Sent ? "✓" : "2"}
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-800">Email 2 — Follow-up</p>
+              <p className="text-xs text-gray-500">
+                {email2Sent
+                  ? `Sent ${new Date(email2Sent).toLocaleDateString()}`
+                  : daysSinceStart >= 3
+                  ? "Scheduled today"
+                  : `Scheduled in ${3 - daysSinceStart} days`}
+              </p>
+            </div>
+            {hasClicked && (
+              <span className="rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700">
+                Clicked
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Engagement Summary */}
+        {(hasOpened || hasClicked || hasReplied) && (
+          <div className="rounded-lg bg-emerald-50 px-3 py-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700 mb-1">
+              Engagement Detected
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {hasOpened && (
+                <span className="inline-flex items-center gap-1 text-sm text-emerald-800">
+                  👁 Opened
+                </span>
+              )}
+              {hasClicked && (
+                <span className="inline-flex items-center gap-1 text-sm text-emerald-800">
+                  🔗 Clicked
+                </span>
+              )}
+              {hasReplied && (
+                <span className="inline-flex items-center gap-1 text-sm text-emerald-800">
+                  💬 Replied
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+          <button
+            onClick={handleMoveToNeedsCall}
+            disabled={moving}
+            className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:opacity-50"
+          >
+            {moving ? (
+              <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-gray-400/30 border-t-gray-600" />
+            ) : (
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+            )}
+            Skip to Calling
+          </button>
+          <button
+            onClick={handleMarkClosed}
+            disabled={moving}
+            className="flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 disabled:opacity-50"
+          >
+            Mark as Closed
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * NeedsCallSection - V2: shown for providers in "Needs Call" tab
+ * Simplified call disposition and consent capture
+ */
+function NeedsCallSection({
+  ctx,
+  onAdvance,
+  setError,
+}: {
+  ctx: DrawerContext;
+  onAdvance: (action: string, payload?: Record<string, unknown>) => Promise<void>;
+  setError: (err: string | null) => void;
+}) {
+  const [showConnected, setShowConnected] = useState(false);
+  const [showScript, setShowScript] = useState(true);
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [notes, setNotes] = useState("");
+  const [activeAction, setActiveAction] = useState<TouchpointType | "connected" | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{ type: TouchpointType; title: string; message: string } | null>(null);
+
+  const isBusy = activeAction !== null;
+
+  // Only show for needs_call status
+  if (ctx.outreach.status !== "needs_call") {
+    return null;
+  }
+
+  const disposition = async (type: TouchpointType) => {
+    setActiveAction(type);
+    try {
+      await onAdvance("disposition", { type });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Disposition failed");
+    } finally {
+      setActiveAction(null);
+    }
+  };
+
+  const handleDispositionWithConfirm = (type: TouchpointType) => {
+    // Destructive actions require confirmation
+    if (type === "manual_dnc") {
+      setConfirmDialog({
+        type,
+        title: "Mark as Do Not Contact?",
+        message: "This will close the provider and prevent any future outreach. This action can be undone later if needed.",
+      });
+    } else {
+      disposition(type);
+    }
+  };
+
+  const submitConnected = async () => {
+    if (!name.trim() || !email.trim()) {
+      setError("Name and email are required.");
+      return;
+    }
+    setActiveAction("connected");
+    try {
+      await onAdvance("add_contact_and_send", { name, role, email, phone, notes });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Send failed");
+    } finally {
+      setActiveAction(null);
+    }
+  };
+
+  // Check for prior engagement to highlight in the UI
+  const hasOpened = ctx.touchpoints.some((t) => t.type === "email_opened");
+  const hasClicked = ctx.touchpoints.some((t) => t.type === "email_clicked");
+
+  return (
+    <section>
+      <SectionHeader title="Call Provider" />
+      <div className="space-y-3 rounded-xl border border-gray-200 bg-white p-4">
+        {/* Engagement hint */}
+        {(hasOpened || hasClicked) && (
+          <div className="rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-800">
+            <span className="font-medium">Previous engagement:</span>
+            {hasOpened && " Opened emails"}
+            {hasOpened && hasClicked && ","}
+            {hasClicked && " Clicked links"}
+          </div>
+        )}
+
+        {/* Call Script */}
+        <div className="rounded-lg bg-blue-50 p-3">
+          <button
+            onClick={() => setShowScript((s) => !s)}
+            className="flex w-full items-center justify-between text-left"
+          >
+            <span className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+              Call Script
+            </span>
+            <span className="text-xs text-blue-600">{showScript ? "Hide" : "Show"}</span>
+          </button>
+          {showScript && (
+            <p className="mt-2 text-sm leading-relaxed text-blue-900">
+              &ldquo;Hi, I&apos;m calling on behalf of Dr. Logan DuBose. He oversees a program
+              for pre-nursing students at <strong>{ctx.batch.university_name}</strong> that
+              connects students with open caregiving roles at local agencies.&rdquo;
+            </p>
+          )}
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <DispositionButton onClick={() => disposition("call_no_answer")} disabled={isBusy}>
+            {activeAction === "call_no_answer" ? <Spinner size="sm" /> : null}
+            No Answer
+          </DispositionButton>
+          <DispositionButton onClick={() => disposition("call_voicemail")} disabled={isBusy}>
+            {activeAction === "call_voicemail" ? <Spinner size="sm" /> : null}
+            Voicemail
+          </DispositionButton>
+          <DispositionButton
+            onClick={() => setShowConnected((s) => !s)}
+            disabled={isBusy}
+            variant="primary"
+          >
+            {showConnected ? "Hide form" : "Connected"}
+          </DispositionButton>
+          <DispositionButton onClick={() => disposition("call_not_interested")} disabled={isBusy}>
+            {activeAction === "call_not_interested" ? <Spinner size="sm" /> : null}
+            Not Interested
+          </DispositionButton>
+          <DispositionButton
+            onClick={() => handleDispositionWithConfirm("manual_dnc")}
+            disabled={isBusy}
+            variant="danger"
+          >
+            {activeAction === "manual_dnc" ? <Spinner size="sm" /> : null}
+            Close / DNC
+          </DispositionButton>
+        </div>
+
+        {/* Confirmation Dialog */}
+        <ConfirmDialog
+          open={confirmDialog !== null}
+          title={confirmDialog?.title ?? ""}
+          message={confirmDialog?.message ?? ""}
+          confirmLabel="Confirm"
+          confirmVariant="danger"
+          onConfirm={() => {
+            if (confirmDialog) disposition(confirmDialog.type);
+            setConfirmDialog(null);
+          }}
+          onCancel={() => setConfirmDialog(null)}
+        />
+
+        {showConnected && (
+          <div className="space-y-3 rounded-lg bg-emerald-50/60 p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
+              Capture Contact &amp; Send Enrollment Email
+            </p>
+            <Field label="Name *" value={name} onChange={setName} placeholder="Jane Doe" />
+            <Select
+              label="Role"
+              value={role}
+              onChange={setRole}
+              placeholder="Select role..."
+              size="sm"
+              options={[
+                { value: "Owner", label: "Owner" },
+                { value: "Administrator", label: "Administrator" },
+                { value: "HR Manager", label: "HR Manager" },
+                { value: "Hiring Manager", label: "Hiring Manager" },
+                { value: "Recruiter", label: "Recruiter" },
+                { value: "Office Manager", label: "Office Manager" },
+                { value: "Director of Nursing", label: "Director of Nursing" },
+                { value: "Care Coordinator", label: "Care Coordinator" },
+                { value: "Other", label: "Other" },
+              ]}
+            />
+            <div className="grid grid-cols-2 gap-3">
+              <Field
+                label="Email *"
+                value={email}
+                onChange={setEmail}
+                placeholder="jane@agency.com"
+                type="email"
+              />
+              <Field label="Phone" value={phone} onChange={setPhone} placeholder="(555) 123-4567" />
+            </div>
+            <TextareaField
+              label="Notes"
+              value={notes}
+              onChange={setNotes}
+              placeholder="e.g., Spoke with Jane, she confirmed interest"
+              rows={3}
+            />
+            <button
+              onClick={submitConnected}
+              disabled={isBusy || !name.trim() || !email.trim()}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-gray-900 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {activeAction === "connected" && <Spinner />}
+              Save Contact &amp; Send Enrollment Email
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ── Legacy Sections (for backwards compatibility) ──────────────────────────
+
+/**
+ * NewSection - LEGACY: shown for providers in old "Initial Contact" workflow
  * Actions: Research, send initial email → moves to Nurturing
  */
 function NewSection({
@@ -1525,7 +2060,7 @@ function ActivatedSection({
 }
 
 /**
- * ClosedSection - shown for do_not_contact and wrong_number statuses
+ * ClosedSection - shown for closed, bounced, do_not_contact and wrong_number statuses
  * Shows reason for closure and option to reopen
  */
 function ClosedSection({
@@ -1540,11 +2075,18 @@ function ClosedSection({
   const [reopening, setReopening] = useState(false);
 
   const status = ctx.outreach.status;
-  if (status !== "do_not_contact" && status !== "wrong_number") return null;
+  // V2: Also handle 'closed' and 'bounced' statuses
+  const closedStatuses = ["do_not_contact", "wrong_number", "closed", "bounced"];
+  if (!closedStatuses.includes(status)) return null;
 
-  const isDNC = status === "do_not_contact";
+  // Determine closure type for styling
+  const isBounced = status === "bounced";
+  const isDNC = status === "do_not_contact" || status === "closed";
+  const isWrongNumber = status === "wrong_number";
+
+  // Find relevant touchpoint for closure details
   const closureTouchpoint = ctx.touchpoints.find(
-    (t) => t.type === (isDNC ? "manual_dnc" : "call_wrong_number")
+    (t) => t.type === "manual_dnc" || t.type === "call_wrong_number" || t.type === "email_bounced"
   );
   const autoClosureTouchpoint = ctx.touchpoints.find((t) => t.type === "system_auto_dnc");
   const relevantTouchpoint = closureTouchpoint || autoClosureTouchpoint;
@@ -1563,37 +2105,59 @@ function ClosedSection({
     }
   };
 
+  // Determine title and message based on status
+  const getTitle = () => {
+    if (isBounced) return "Email Bounced";
+    if (isWrongNumber) return "Wrong Number";
+    return "Closed";
+  };
+
+  const getMessage = () => {
+    if (isBounced) return "The email address bounced. This provider cannot receive emails.";
+    if (isWrongNumber) return "The phone number on file appears to be incorrect.";
+    if (isAutoClosed) return "This provider was automatically closed after maximum outreach attempts.";
+    return "This provider has been marked as closed.";
+  };
+
+  // Determine styling based on status
+  const borderColor = isBounced
+    ? "border-red-200"
+    : isWrongNumber
+    ? "border-orange-200"
+    : "border-gray-200";
+  const bgGradient = isBounced
+    ? "bg-gradient-to-br from-red-50 to-rose-50"
+    : isWrongNumber
+    ? "bg-gradient-to-br from-orange-50 to-amber-50"
+    : "bg-gradient-to-br from-gray-50 to-slate-50";
+  const iconBg = isBounced ? "bg-red-100" : isWrongNumber ? "bg-orange-100" : "bg-gray-100";
+  const iconColor = isBounced ? "text-red-600" : isWrongNumber ? "text-orange-600" : "text-gray-600";
+  const textColor = isBounced ? "text-red-800" : isWrongNumber ? "text-orange-800" : "text-gray-800";
+  const textColorLight = isBounced ? "text-red-700" : isWrongNumber ? "text-orange-700" : "text-gray-700";
+
   return (
     <section>
-      <div className={`rounded-xl border-2 p-6 ${
-        isDNC
-          ? "border-red-200 bg-gradient-to-br from-red-50 to-rose-50"
-          : "border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50"
-      }`}>
+      <div className={`rounded-xl border-2 p-6 ${borderColor} ${bgGradient}`}>
         {/* Warning icon */}
         <div className="mb-4 flex justify-center">
-          <div className={`flex h-16 w-16 items-center justify-center rounded-full ${
-            isDNC ? "bg-red-100" : "bg-orange-100"
-          }`}>
-            <svg className={`h-8 w-8 ${isDNC ? "text-red-600" : "text-orange-600"}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-              {isDNC ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-              ) : (
+          <div className={`flex h-16 w-16 items-center justify-center rounded-full ${iconBg}`}>
+            <svg className={`h-8 w-8 ${iconColor}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              {isBounced ? (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              ) : isWrongNumber ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
               )}
             </svg>
           </div>
         </div>
 
-        <h3 className={`mb-2 text-center text-lg font-semibold ${isDNC ? "text-red-800" : "text-orange-800"}`}>
-          {isDNC ? "Do Not Contact" : "Wrong Number"}
+        <h3 className={`mb-2 text-center text-lg font-semibold ${textColor}`}>
+          {getTitle()}
         </h3>
-        <p className={`mb-4 text-center text-sm ${isDNC ? "text-red-700" : "text-orange-700"}`}>
-          {isDNC
-            ? isAutoClosed
-              ? "This provider was automatically closed after maximum outreach attempts."
-              : "This provider has been marked as do not contact."
-            : "The phone number on file appears to be incorrect."}
+        <p className={`mb-4 text-center text-sm ${textColorLight}`}>
+          {getMessage()}
         </p>
 
         {/* Closure details */}
@@ -1660,7 +2224,12 @@ function ClosedSection({
 
 // Touchpoint type to icon mapping
 const TOUCHPOINT_ICONS: Record<string, { icon: string; color: string }> = {
-  // Emails
+  // V2: Automated sequence events
+  sequence_started: { icon: "🚀", color: "text-blue-600 bg-blue-50" },
+  sequence_email1_sent: { icon: "📧", color: "text-blue-600 bg-blue-50" },
+  sequence_email2_sent: { icon: "📧", color: "text-amber-600 bg-amber-50" },
+  sequence_completed: { icon: "✅", color: "text-green-600 bg-green-50" },
+  // Legacy emails
   pre_call_email_sent: { icon: "📧", color: "text-blue-600 bg-blue-50" },
   follow_up_email_sent: { icon: "📧", color: "text-blue-600 bg-blue-50" },
   email_pre_consent_a_sent: { icon: "📧", color: "text-blue-600 bg-blue-50" },
@@ -1675,7 +2244,7 @@ const TOUCHPOINT_ICONS: Record<string, { icon: string; color: string }> = {
   // Email events
   email_opened: { icon: "👁", color: "text-sky-600 bg-sky-50" },
   email_clicked: { icon: "🔗", color: "text-purple-600 bg-purple-50" },
-  email_bounced: { icon: "⚠️", color: "text-amber-600 bg-amber-50" },
+  email_bounced: { icon: "⚠️", color: "text-red-600 bg-red-50" },
   reply_received: { icon: "💬", color: "text-green-600 bg-green-50" },
   // Calls
   call_no_answer: { icon: "📞", color: "text-gray-600 bg-gray-100" },
@@ -1882,6 +2451,12 @@ function Spinner({ size = "default" }: { size?: "sm" | "default" }) {
 
 function humanType(t: string): string {
   const map: Record<string, string> = {
+    // V2 sequence events
+    sequence_started: "Email sequence started",
+    sequence_email1_sent: "Email 1 sent (initial)",
+    sequence_email2_sent: "Email 2 sent (follow-up)",
+    sequence_completed: "Email sequence completed",
+    // Legacy events
     research_completed: "Research updated",
     pre_call_email_sent: "Pre-call email sent",
     follow_up_email_sent: "Follow-up email sent",
@@ -1894,7 +2469,7 @@ function humanType(t: string): string {
     call_connected_no_consent: "Call: connected, no consent",
     call_connected_consent: "Call: connected, consent given",
     call_not_interested: "Not interested",
-    manual_dnc: "Marked: do not contact",
+    manual_dnc: "Marked: closed",
     email_pre_consent_a_sent: "Email: pre-consent A",
     email_pre_consent_b_sent: "Email: pre-consent B",
     email_post_consent_step1_sent: "Email: Step 1 (enrollment)",

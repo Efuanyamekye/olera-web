@@ -18,35 +18,44 @@ import type { QueueRow, EngagementSignals } from "@/lib/staffing-outreach/types"
 
 const PAGE_SIZE_DEFAULT = 50;
 
-// 5-tab stage-based filtering
-// - action_needed: Cross-stage to-do list (nurturing statuses where due <= now)
-// - initial_contact: Not yet contacted (queued)
-// - nurturing: In progress (all nurturing statuses, no time filter)
-// - enrolled: Success
-// - closed: Dead ends
+// V2: 5-tab stage-based filtering
+// - to_queue: Providers waiting to start sequence (queued status)
+// - sequencing: Emails in progress (Email 1 sent, waiting for Email 2 or response)
+// - needs_call: Sequence complete, no enrollment (needs manual call)
+// - enrolled: Success (activated, enrolled)
+// - closed: Dead ends (closed, bounced, do_not_contact, wrong_number)
 const STAGE_STATUSES: Record<string, string[]> = {
-  action_needed: ["pre_call_outreach", "calling", "connected_no_consent", "consented", "nurturing", "activated"],
+  to_queue: ["queued"],
+  sequencing: ["sequencing"],
+  needs_call: ["needs_call", "consented"],
+  enrolled: ["activated", "enrolled"],
+  closed: ["closed", "bounced", "do_not_contact", "wrong_number"],
+  // Legacy mappings for backwards compatibility
+  action_needed: ["needs_call", "consented", "sequencing"],
   initial_contact: ["queued"],
-  nurturing: ["pre_call_outreach", "calling", "connected_no_consent", "consented", "nurturing", "activated"],
-  enrolled: ["enrolled"],
-  closed: ["do_not_contact", "wrong_number"],
+  nurturing: ["sequencing", "needs_call", "consented"],
 };
 
 // Backwards compatibility: map old tab names to new stages
 const STAGE_ALIASES: Record<string, string> = {
-  new: "initial_contact",
-  to_call: "initial_contact",
-  contacted: "nurturing",
-  in_progress: "nurturing",
+  // V2 tab aliases
+  initial_contact: "to_queue",
+  new: "to_queue",
+  queued: "to_queue",
+  // Legacy mappings
+  to_call: "to_queue",
+  contacted: "sequencing",
+  in_progress: "sequencing",
   stopped: "closed",
-  queued: "initial_contact",
-  pre_call: "nurturing",
-  calling: "nurturing",
-  post_consent: "nurturing",
-  activated: "nurturing",
-  all: "initial_contact",
-  today: "action_needed",
-  due_today: "action_needed",
+  pre_call: "sequencing",
+  calling: "needs_call",
+  post_consent: "needs_call",
+  activated: "enrolled",
+  all: "to_queue",
+  today: "needs_call",
+  due_today: "needs_call",
+  action_needed: "needs_call",
+  nurturing: "sequencing",
 };
 
 export async function GET(req: NextRequest) {
@@ -59,11 +68,11 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const batchId = url.searchParams.get("batch");
 
-  // 5-tab navigation (no urgency toggle)
-  const rawStage = url.searchParams.get("stage") ?? url.searchParams.get("tab") ?? "action_needed";
+  // V2: 5-tab navigation
+  const rawStage = url.searchParams.get("stage") ?? url.searchParams.get("tab") ?? "to_queue";
   const resolvedStage = STAGE_ALIASES[rawStage] ?? rawStage;
-  // Validate stage - fallback to "action_needed" if invalid
-  const stage = STAGE_STATUSES[resolvedStage] ? resolvedStage : "action_needed";
+  // Validate stage - fallback to "to_queue" if invalid
+  const stage = STAGE_STATUSES[resolvedStage] ? resolvedStage : "to_queue";
 
   const search = (url.searchParams.get("search") ?? "").trim();
   const page = Math.max(0, parseInt(url.searchParams.get("page") ?? "0", 10));
@@ -92,12 +101,10 @@ export async function GET(req: NextRequest) {
   // Other tab counts are per-selected-batch (or 0 if no batch selected)
   const stageCounts = await computeStageCounts(db, batchId, activeBatchIds);
 
-  // For non-action_needed tabs, require a batch to be selected
-  // For action_needed, we need at least one active batch to query
-  if (!batchId && stage !== "action_needed") {
-    return NextResponse.json({ batches, rows: [], total: 0, tabCounts: stageCounts });
-  }
-  if (stage === "action_needed" && activeBatchIds.length === 0) {
+  // V2: Support "All Universities" filter (no batch selected)
+  // When no batch is selected, query across all active batches
+  // This is needed for the "Queue All" batch operation
+  if (activeBatchIds.length === 0) {
     return NextResponse.json({ batches, rows: [], total: 0, tabCounts: stageCounts });
   }
 
@@ -126,14 +133,13 @@ export async function GET(req: NextRequest) {
     .from("staffing_outreach")
     .select("*", { count: "exact" });
 
-  // Action Needed: query across ALL active batches (cross-university to-do list)
-  // Other tabs: filter by selected batch
-  if (stage === "action_needed") {
-    // activeBatchIds is guaranteed non-empty here (early return above)
-    query = query.in("batch_id", activeBatchIds);
+  // V2: Support "All Universities" filter
+  // If batchId is null, query across all active batches
+  // Otherwise filter by selected batch
+  if (batchId) {
+    query = query.eq("batch_id", batchId);
   } else {
-    // batchId is guaranteed non-null here (early return above)
-    query = query.eq("batch_id", batchId!);
+    query = query.in("batch_id", activeBatchIds);
   }
 
   // Apply search filter at DB level (before pagination)
@@ -147,8 +153,9 @@ export async function GET(req: NextRequest) {
     query = query.in("status", statuses);
   }
 
-  // Action Needed tab: only show items that are due (next_action_due_at <= now)
-  if (stage === "action_needed") {
+  // Needs Call tab: only show items that are due (next_action_due_at <= now)
+  // This replaces the old "Action Needed" cross-university to-do list
+  if (stage === "needs_call") {
     query = query.lte("next_action_due_at", new Date().toISOString());
   }
 
@@ -277,61 +284,56 @@ async function computeStageCounts(
   batchId: string | null,
   activeBatchIds: string[],
 ): Promise<Record<string, number>> {
+  // V2 tab counts
   const stageCounts: Record<string, number> = {
-    action_needed: 0,
-    initial_contact: 0,
-    nurturing: 0,
+    to_queue: 0,
+    sequencing: 0,
+    needs_call: 0,
     enrolled: 0,
     closed: 0,
   };
 
-  const nowIso = new Date().toISOString();
-  const NURTURING_STATUSES = new Set([
-    "pre_call_outreach",
-    "calling",
-    "connected_no_consent",
-    "consented",
-    "nurturing",
-    "activated",
-  ]);
-
-  // Action Needed count: ALWAYS across all active batches (cross-university)
-  if (activeBatchIds.length > 0) {
-    const { data: allData } = await db
-      .from("staffing_outreach")
-      .select("status, next_action_due_at")
-      .in("batch_id", activeBatchIds);
-
-    for (const row of allData ?? []) {
-      const status = row.status as string;
-      const isDue = row.next_action_due_at && row.next_action_due_at <= nowIso;
-      if (NURTURING_STATUSES.has(status) && isDue) {
-        stageCounts.action_needed++;
-      }
-    }
+  if (activeBatchIds.length === 0) {
+    return stageCounts;
   }
 
-  // Other tab counts: per selected batch (if one is selected)
-  if (batchId) {
-    const { data, error } = await db
-      .from("staffing_outreach")
-      .select("status")
-      .eq("batch_id", batchId);
+  // Query based on filter: specific batch or all batches
+  const queryBatchIds = batchId ? [batchId] : activeBatchIds;
 
-    if (!error && data) {
-      for (const row of data) {
-        const status = row.status as string;
+  const { data, error } = await db
+    .from("staffing_outreach")
+    .select("status")
+    .in("batch_id", queryBatchIds);
 
-        if (status === "queued") {
-          stageCounts.initial_contact++;
-        } else if (NURTURING_STATUSES.has(status)) {
-          stageCounts.nurturing++;
-        } else if (status === "enrolled") {
-          stageCounts.enrolled++;
-        } else if (status === "do_not_contact" || status === "wrong_number") {
-          stageCounts.closed++;
-        }
-      }
+  if (error || !data) {
+    return stageCounts;
+  }
+
+  for (const row of data) {
+    const status = row.status as string;
+
+    // V2 status mapping
+    if (status === "queued") {
+      stageCounts.to_queue++;
+    } else if (status === "sequencing") {
+      stageCounts.sequencing++;
+    } else if (status === "needs_call" || status === "consented") {
+      stageCounts.needs_call++;
+    } else if (status === "activated" || status === "enrolled") {
+      stageCounts.enrolled++;
+    } else if (
+      status === "closed" ||
+      status === "bounced" ||
+      status === "do_not_contact" ||
+      status === "wrong_number"
+    ) {
+      stageCounts.closed++;
+    }
+    // Legacy statuses map to V2 equivalents
+    else if (status === "pre_call_outreach" || status === "nurturing") {
+      stageCounts.sequencing++;
+    } else if (status === "calling" || status === "connected_no_consent") {
+      stageCounts.needs_call++;
     }
   }
 

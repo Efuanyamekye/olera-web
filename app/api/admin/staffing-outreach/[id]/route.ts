@@ -6,16 +6,21 @@
  *   claim                    hold the row for 60 min
  *   release                  drop the claim
  *   update_research          set research_data fields, optional notes
- *   mark_pre_call_complete   advance status queued→pre_call_outreach
- *   send_pre_call            fire pre-call email + log touchpoint
- *   send_follow_up           fire follow-up reminder email (after 5 business days)
+ *   mark_pre_call_complete   advance status queued→pre_call_outreach (legacy)
+ *   send_pre_call            fire pre-call email + log touchpoint (legacy)
+ *   send_follow_up           fire follow-up reminder email (legacy)
  *   log_email_sent           log email touchpoint only (Gmail flow, no email send)
  *   log_contact_form         log a contact_form_submitted touchpoint
  *   disposition              log a call disposition + state transition
  *   add_contact_and_send     capture verified contact + fire Step 1 email
- *   revert_to_queued         move back to queued status (initial contact tab)
- *   reopen                   reopen a closed provider (DNC/wrong_number → calling)
+ *   revert_to_queued         move back to queued status (to_queue tab)
+ *   reopen                   reopen a closed provider → needs_call
  *   resend_enrollment_email  resend Step 1 email to an activated provider
+ *
+ * V2 Actions:
+ *   start_sequence           trigger Resend automation for email sequence
+ *   move_to_needs_call       skip sequence, start calling immediately
+ *   mark_closed              mark as closed (replaces DNC workflow)
  *
  * Mutations always insert a touchpoint and update outreach.updated_at.
  * Response shape mirrors the GET payload (refreshed DrawerContext) so
@@ -33,12 +38,18 @@ import {
   SENDER_LOGAN,
 } from "@/lib/staffing-outreach/email-templates";
 import { buildStaffingPilotActivationUrl } from "@/lib/staffing-outreach/tokens";
-import type {
-  DrawerContext,
-  ResearchData,
-  StaffingOutreachRow,
-  StaffingStatus,
-  TouchpointType,
+import {
+  startEmailSequence,
+  stopEmailSequence,
+  getSequenceEmailPreviews,
+} from "@/lib/staffing-outreach/resend-automation";
+import {
+  getServiceArea,
+  type DrawerContext,
+  type ResearchData,
+  type StaffingOutreachRow,
+  type StaffingStatus,
+  type TouchpointType,
 } from "@/lib/staffing-outreach/types";
 
 const CLAIM_TTL_MIN = 60;
@@ -128,6 +139,16 @@ export async function POST(
         break;
       case "resend_enrollment_email":
         await handleResendEnrollmentEmail(outreach, body, user.id);
+        break;
+      // V2 Actions
+      case "start_sequence":
+        await handleStartSequence(outreach, body, user.id);
+        break;
+      case "move_to_needs_call":
+        await handleMoveToNeedsCall(outreach, user.id);
+        break;
+      case "mark_closed":
+        await handleMarkClosed(outreach, body, user.id);
         break;
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
@@ -596,29 +617,31 @@ async function handleRevertToQueued(outreach: StaffingOutreachRow, userId: strin
 }
 
 /**
- * Reopen a closed provider (do_not_contact or wrong_number) back to nurturing.
+ * Reopen a closed provider back to needs_call.
+ * V2: handles closed, bounced, do_not_contact, wrong_number
  */
 async function handleReopen(outreach: StaffingOutreachRow, userId: string) {
   const db = getServiceClient();
 
-  // Only allow reopening closed statuses
-  if (outreach.status !== "do_not_contact" && outreach.status !== "wrong_number") {
-    throw new Error("Can only reopen providers that are closed (DNC or wrong number)");
+  // Only allow reopening closed statuses (V2 + legacy)
+  const closedStatuses = ["closed", "bounced", "do_not_contact", "wrong_number"];
+  if (!closedStatuses.includes(outreach.status)) {
+    throw new Error("Can only reopen providers that are closed");
   }
 
   // Log touchpoint for audit trail
   await insertTouchpoint(outreach.id, "status_reverted", userId, "Provider reopened for outreach", {
     from_status: outreach.status,
-    to_status: "calling",
+    to_status: "needs_call",
     reason: "Manually reopened by admin",
   });
 
-  // Move back to calling status (nurturing tab)
+  // Move back to needs_call status (V2 workflow)
   const nextDue = new Date(Date.now() + 1 * 86400_000).toISOString(); // Due tomorrow
   await db
     .from("staffing_outreach")
     .update({
-      status: "calling",
+      status: "needs_call",
       next_action_due_at: nextDue,
       updated_at: new Date().toISOString(),
     })
@@ -731,6 +754,157 @@ async function handleResendEnrollmentEmail(
     success: send.success,
     error: send.error,
     is_resend: true,
+  });
+}
+
+// ── V2 Action Handlers ────────────────────────────────────────────────────
+
+
+/**
+ * Start the automated email sequence for a provider.
+ * Triggers Resend automation and moves to 'sequencing' status.
+ */
+async function handleStartSequence(
+  outreach: StaffingOutreachRow,
+  body: { recipientEmail?: string },
+  userId: string,
+) {
+  const db = getServiceClient();
+
+  // Get recipient email
+  const recipientEmail = (
+    body.recipientEmail?.trim() ||
+    outreach.research_data.general_email ||
+    ""
+  ).trim();
+
+  if (!recipientEmail) {
+    throw new Error("No recipient email — set research_data.general_email first");
+  }
+
+  // Get provider and batch info
+  const [{ data: provider }, { data: batch }] = await Promise.all([
+    db.from("olera-providers")
+      .select("provider_name, provider_id")
+      .eq("provider_id", outreach.provider_id)
+      .single(),
+    db.from("staffing_batches")
+      .select("university_name, university_slug")
+      .eq("id", outreach.batch_id)
+      .single(),
+  ]);
+
+  if (!provider) throw new Error("Provider not found");
+  if (!batch) throw new Error("Batch not found");
+
+  const serviceArea = getServiceArea(batch.university_slug);
+
+  // Start the Resend automation
+  const result = await startEmailSequence({
+    email: recipientEmail,
+    outreachId: outreach.id,
+    providerId: outreach.provider_id,
+    providerName: provider.provider_name,
+    universityName: batch.university_name,
+    serviceArea,
+    batchId: outreach.batch_id,
+  });
+
+  if (!result.success) {
+    throw new Error(result.error || "Failed to start email sequence");
+  }
+
+  // Update outreach status to sequencing
+  const now = new Date().toISOString();
+  await db
+    .from("staffing_outreach")
+    .update({
+      status: "sequencing",
+      sequence_started_at: now,
+      email1_sent_at: now, // Email 1 sends immediately
+      resend_automation_id: result.contactId,
+      sequence_email: recipientEmail, // Store email for proper sequence stopping
+      // Schedule auto-transition to needs_call after Email 2 + 3 days (6 days total)
+      next_action_due_at: new Date(Date.now() + 6 * 86400_000).toISOString(),
+      updated_at: now,
+    })
+    .eq("id", outreach.id);
+
+  // Log touchpoint
+  await insertTouchpoint(outreach.id, "sequence_started", userId, null, {
+    recipient_email: recipientEmail,
+    resend_contact_id: result.contactId,
+    university: batch.university_name,
+    service_area: serviceArea,
+  });
+}
+
+/**
+ * Skip the email sequence and move directly to needs_call.
+ * Use when provider has no email or prefers phone contact.
+ */
+async function handleMoveToNeedsCall(
+  outreach: StaffingOutreachRow,
+  userId: string,
+) {
+  const db = getServiceClient();
+
+  // Stop any active sequence (use sequence_email if available, fallback to research_data)
+  const sequenceEmail = outreach.sequence_email || outreach.research_data.general_email;
+  if (outreach.resend_automation_id && sequenceEmail) {
+    await stopEmailSequence(sequenceEmail);
+  }
+
+  // Update status to needs_call
+  await db
+    .from("staffing_outreach")
+    .update({
+      status: "needs_call",
+      next_action_due_at: new Date().toISOString(), // Due now
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", outreach.id);
+
+  // Log touchpoint
+  await insertTouchpoint(outreach.id, "status_reverted", userId, "Skipped to calling", {
+    from_status: outreach.status,
+    to_status: "needs_call",
+    reason: "Admin skipped email sequence",
+  });
+}
+
+/**
+ * Mark provider as closed.
+ * Replaces the DNC workflow with a simpler status.
+ */
+async function handleMarkClosed(
+  outreach: StaffingOutreachRow,
+  body: { reason?: string },
+  userId: string,
+) {
+  const db = getServiceClient();
+
+  // Stop any active sequence (use sequence_email if available, fallback to research_data)
+  const sequenceEmail = outreach.sequence_email || outreach.research_data.general_email;
+  if (outreach.resend_automation_id && sequenceEmail) {
+    await stopEmailSequence(sequenceEmail);
+  }
+
+  // Update status to closed
+  await db
+    .from("staffing_outreach")
+    .update({
+      status: "closed",
+      next_action_due_at: null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", outreach.id);
+
+  // Log touchpoint
+  await insertTouchpoint(outreach.id, "manual_dnc", userId, body.reason ?? null, {
+    from_status: outreach.status,
+    to_status: "closed",
+    reason: body.reason ?? "Manually closed by admin",
   });
 }
 
