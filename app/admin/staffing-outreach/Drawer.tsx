@@ -804,23 +804,42 @@ function CallSection({
         {showConnected && (
           <div className="space-y-3 rounded-md bg-emerald-50/60 p-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">
-              Capture verified contact &amp; send Step 1
+              Capture Contact &amp; Send Enrollment Email
             </p>
             <Field label="Name *" value={name} onChange={setName} placeholder="Jane Doe" />
-            <Field label="Role" value={role} onChange={setRole} placeholder="HR Manager" />
-            <Field
-              label="Email *"
-              value={email}
-              onChange={setEmail}
-              placeholder="jane@agency.com"
-              type="email"
+            <SelectField
+              label="Role"
+              value={role}
+              onChange={setRole}
+              options={[
+                { value: "", label: "Select role..." },
+                { value: "Owner", label: "Owner" },
+                { value: "Administrator", label: "Administrator" },
+                { value: "HR Manager", label: "HR Manager" },
+                { value: "Hiring Manager", label: "Hiring Manager" },
+                { value: "Recruiter", label: "Recruiter" },
+                { value: "Office Manager", label: "Office Manager" },
+                { value: "Director of Nursing", label: "Director of Nursing" },
+                { value: "Care Coordinator", label: "Care Coordinator" },
+                { value: "Other", label: "Other" },
+              ]}
             />
-            <Field label="Phone" value={phone} onChange={setPhone} placeholder="(555) 123-4567" />
-            <Field
-              label="Notes (consent confirmation)"
+            <div className="grid grid-cols-2 gap-3">
+              <Field
+                label="Email *"
+                value={email}
+                onChange={setEmail}
+                placeholder="jane@agency.com"
+                type="email"
+              />
+              <Field label="Phone" value={phone} onChange={setPhone} placeholder="(555) 123-4567" />
+            </div>
+            <TextareaField
+              label="Notes"
               value={notes}
               onChange={setNotes}
-              placeholder='"Said yes on the call to receiving info"'
+              placeholder="e.g., Spoke with Jane, she confirmed interest and wants to receive student candidates"
+              rows={3}
             />
             <ActionButton
               onClick={submitConnected}
@@ -828,8 +847,11 @@ function CallSection({
               variant="primary"
               full
             >
-              Add &amp; Send (fires Logan&apos;s Step 1 email)
+              Save Contact &amp; Send Enrollment Email
             </ActionButton>
+            <p className="text-xs text-center text-emerald-600">
+              This sends Logan&apos;s Step 1 email with the T&amp;C acceptance link
+            </p>
           </div>
         )}
       </div>
@@ -902,6 +924,62 @@ function Field({
         onBlur={onBlur}
         placeholder={placeholder}
         className="w-full rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-gray-400 focus:outline-none"
+      />
+    </label>
+  );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: Array<{ value: string; label: string }>;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1 block text-xs font-medium text-gray-600">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-gray-400 focus:outline-none"
+      >
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function TextareaField({
+  label,
+  value,
+  onChange,
+  placeholder,
+  rows = 3,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  rows?: number;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1 block text-xs font-medium text-gray-600">{label}</span>
+      <textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        rows={rows}
+        className="w-full rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-gray-400 focus:outline-none resize-none"
       />
     </label>
   );
