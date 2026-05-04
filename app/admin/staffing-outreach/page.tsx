@@ -327,6 +327,11 @@ export default function StaffingOutreachPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <StatusBadge status={row.status} />
+                      {isClaimed && (
+                        <span className="hidden sm:inline rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                          Claimed
+                        </span>
+                      )}
                       {dueInfo && (
                         <span className={`hidden sm:inline rounded-full px-2 py-0.5 text-xs font-medium ${
                           dueInfo.isOverdue
@@ -334,11 +339,6 @@ export default function StaffingOutreachPage() {
                             : "bg-gray-100 text-gray-500"
                         }`}>
                           {dueInfo.label}
-                        </span>
-                      )}
-                      {isClaimed && (
-                        <span className="hidden sm:inline rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
-                          Claimed
                         </span>
                       )}
                     </div>
