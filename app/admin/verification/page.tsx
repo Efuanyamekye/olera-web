@@ -843,6 +843,21 @@ export default function AdminVerificationPage() {
                             {formatDaysAgo(provider.updated_at)}
                           </p>
                         )}
+                        {filter === "pending" && submission?.submitted_at && (
+                          <p className="text-xs text-gray-400">
+                            {formatDaysAgo(submission.submitted_at)}
+                          </p>
+                        )}
+                        {filter === "approved" && (
+                          <p className="text-xs text-gray-400">
+                            {formatDaysAgo(provider.updated_at)}
+                          </p>
+                        )}
+                        {filter === "rejected" && (
+                          <p className="text-xs text-gray-400">
+                            {formatDaysAgo(provider.updated_at)}
+                          </p>
+                        )}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <div className="flex gap-2 justify-end">
