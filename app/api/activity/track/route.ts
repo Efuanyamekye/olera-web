@@ -31,6 +31,9 @@ const FAMILY_EVENT_TYPES = [
   "save_nudge_signup_clicked",
   "save_nudge_dismissed",
   "save_nudge_converted",
+  "outreach_module_impression",
+  "outreach_card_clicked",
+  "outreach_request_submitted",
 ] as const;
 
 // Anonymous events are care-seeker-driven but lack a known profile_id.
@@ -176,12 +179,16 @@ export async function POST(request: NextRequest) {
 
     // --- Family events → seeker_activity ---
     if (actor_type === "family") {
-      // Save nudge events fire for GUESTS who don't have a profile yet
+      // Save nudge + outreach module events fire for GUESTS who don't have
+      // a profile yet (most provider-page visitors are unauthenticated).
       const profileOptionalEvents = [
         "save_nudge_shown",
         "save_nudge_signup_clicked",
         "save_nudge_dismissed",
         "save_nudge_converted",
+        "outreach_module_impression",
+        "outreach_card_clicked",
+        "outreach_request_submitted",
       ];
       const requiresProfile = !profileOptionalEvents.includes(event_type);
 

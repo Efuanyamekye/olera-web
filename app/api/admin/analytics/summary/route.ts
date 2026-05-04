@@ -122,6 +122,7 @@ type BenefitsFunnelByVariant = {
   availability: BenefitsVariantRow;
   loss: BenefitsVariantRow;
   empathic: BenefitsVariantRow;
+  outreach: BenefitsVariantRow;    // 4th arm: AI outreach module (H1 demand test)
   control: BenefitsVariantRow;     // legacy V2
   money_loss: BenefitsVariantRow;  // legacy V2
   unassigned: BenefitsVariantRow;
@@ -199,6 +200,7 @@ const EMPTY_BENEFITS_FUNNEL_BY_VARIANT = (): BenefitsFunnelByVariant => ({
   availability: EMPTY_BENEFITS_FUNNEL(),
   loss: EMPTY_BENEFITS_FUNNEL(),
   empathic: EMPTY_BENEFITS_FUNNEL(),
+  outreach: EMPTY_BENEFITS_FUNNEL(),    // 4th arm
   control: EMPTY_BENEFITS_FUNNEL(),     // legacy V2
   money_loss: EMPTY_BENEFITS_FUNNEL(),  // legacy V2
   unassigned: EMPTY_BENEFITS_FUNNEL(),
@@ -293,7 +295,19 @@ async function fetchWindow(
   if (from) benefitsQ = benefitsQ.gte("created_at", from);
   if (to) benefitsQ = benefitsQ.lt("created_at", to);
 
-  const [providerRes, seekerRes, distinctRes, openersRes, funnelRes, issuesEventsRes, benefitsRes] = await Promise.all([
+  // Agent outreach 4th-arm funnel. Different table (seeker_activity) and
+  // different shape — no middle steps, just impression → submission. Bucketed
+  // into the `outreach` variant row by definition (the events are unique to
+  // that arm, no metadata.variant needed).
+  let outreachQ = db
+    .from("seeker_activity")
+    .select("event_type, metadata")
+    .in("event_type", ["outreach_module_impression", "outreach_request_submitted"])
+    .limit(50000);
+  if (from) outreachQ = outreachQ.gte("created_at", from);
+  if (to) outreachQ = outreachQ.lt("created_at", to);
+
+  const [providerRes, seekerRes, distinctRes, openersRes, funnelRes, issuesEventsRes, benefitsRes, outreachRes] = await Promise.all([
     providerQ,
     seekerQ,
     distinctQ,
@@ -301,6 +315,7 @@ async function fetchWindow(
     funnelQ,
     issuesEventsQ,
     benefitsQ,
+    outreachQ,
   ]);
 
   if (providerRes.error) return { error: "provider window query failed" };
@@ -308,6 +323,7 @@ async function fetchWindow(
   if (distinctRes.error) return { error: "distinct window query failed" };
   if (openersRes.error) return { error: "Q&A email openers query failed" };
   if (funnelRes.error) return { error: "Q&A funnel query failed" };
+  if (outreachRes.error) return { error: "outreach funnel query failed" };
   if (issuesEventsRes.error) return { error: "Q&A issues query failed" };
   if (benefitsRes.error) return { error: "benefits funnel query failed" };
 
@@ -488,6 +504,7 @@ async function fetchWindow(
     | "availability"
     | "loss"
     | "empathic"
+    | "outreach"     // 4th arm
     | "control"      // legacy V2
     | "money_loss"   // legacy V2
     | "unassigned";
@@ -503,6 +520,7 @@ async function fetchWindow(
     availability: emptyStages(),
     loss: emptyStages(),
     empathic: emptyStages(),
+    outreach: emptyStages(),
     control: emptyStages(),
     money_loss: emptyStages(),
     unassigned: emptyStages(),
@@ -548,6 +566,23 @@ async function fetchWindow(
     benefitsStageSets[stage].add(sid);
     benefitsByVariantSets[bucket][stage].add(sid);
   }
+  // Bucket outreach impressions/submissions by distinct session_id into the
+  // "outreach" arm. These events are unique to that arm (no metadata.variant
+  // needed — the event_type is the variant).
+  for (const r of (outreachRes.data ?? []) as Array<{
+    event_type: string;
+    metadata: Record<string, unknown> | null;
+  }>) {
+    const sid = r.metadata?.session_id;
+    if (typeof sid !== "string" || !sid) continue;
+    const stage: keyof BenefitsFunnel | undefined =
+      r.event_type === "outreach_module_impression" ? "started"
+      : r.event_type === "outreach_request_submitted" ? "saved"
+      : undefined;
+    if (!stage) continue;
+    benefitsByVariantSets.outreach[stage].add(sid);
+  }
+
   const benefitsFunnel: BenefitsFunnel = {
     started: benefitsStageSets.started.size,
     care_need_completed: benefitsStageSets.care_need_completed.size,
@@ -566,6 +601,7 @@ async function fetchWindow(
     availability: sizesFor("availability"),
     loss: sizesFor("loss"),
     empathic: sizesFor("empathic"),
+    outreach: sizesFor("outreach"),
     control: sizesFor("control"),
     money_loss: sizesFor("money_loss"),
     unassigned: sizesFor("unassigned"),

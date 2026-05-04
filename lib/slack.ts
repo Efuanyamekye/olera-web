@@ -936,6 +936,109 @@ export function slackBenefitsCompleted(opts: {
   };
 }
 
+/**
+ * Agent outreach request submitted — primary fulfillment surface for the
+ * H1 Wizard-of-Oz outreach module. TJ acts directly from this alert in
+ * Claude Code; the alert must be self-contained.
+ *
+ * Includes:
+ *  - Asker email (the To: address)
+ *  - Full question text (NO truncation — TJ needs full context to draft)
+ *  - Source provider page link
+ *  - 3 target providers with name, city, link to Olera detail page
+ *  - City + category metadata
+ *
+ * PHI note: question text + email together is fine in this team-restricted
+ * channel. Never put either in `text` (notification preview) — that field
+ * surfaces in push notifications and server logs (see
+ * feedback_phi_in_subject_lines.md).
+ */
+/** Display label for the relationship enum. Optional — many submitters skip. */
+function formatRelationshipForSlack(rel: string | null): string | null {
+  switch (rel) {
+    case "my-parent": return "for their parent";
+    case "my-spouse": return "for their spouse";
+    case "myself": return "for themselves";
+    case "other-family": return "for a family member";
+    default: return null;
+  }
+}
+
+export function slackOutreachRequestSubmitted(opts: {
+  requestId: string;
+  askerEmail: string;
+  sourceProviderName: string;
+  sourceProviderSlug: string;
+  city: string;
+  state: string;
+  category: string;
+  relationship: string | null;
+  questionText: string | null;
+  targetProviders: Array<{ name: string; slug: string; address: string }>;
+}): { text: string; blocks: SlackBlock[] } {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+  const targetCount = opts.targetProviders.length;
+
+  const targetList = opts.targetProviders
+    .map((p) => `• <${siteUrl}/provider/${p.slug}|${p.name}> — ${p.address}`)
+    .join("\n");
+
+  const relLabel = formatRelationshipForSlack(opts.relationship);
+
+  // First section's fields. Two columns; we pad with the relationship row only
+  // when the family told us — keeps the alert dense when they didn't.
+  const summaryFields = [
+    { type: "mrkdwn", text: `*Reply to:*\n${opts.askerEmail}` },
+    { type: "mrkdwn", text: `*Source page:*\n<${siteUrl}/provider/${opts.sourceProviderSlug}|${opts.sourceProviderName}>` },
+    { type: "mrkdwn", text: `*Where:*\n${opts.city}, ${opts.state}` },
+    { type: "mrkdwn", text: `*Category:*\n${opts.category}` },
+  ];
+  if (relLabel) {
+    summaryFields.push({ type: "mrkdwn", text: `*Care is:*\n${relLabel}` });
+  }
+
+  const blocks: SlackBlock[] = [
+    {
+      type: "header",
+      text: { type: "plain_text", text: "🤝 Outreach Request — needs fulfillment", emoji: true },
+    },
+    {
+      type: "section",
+      fields: summaryFields,
+    },
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `*Contact these ${targetCount}:*\n${targetList}`,
+      },
+    },
+  ];
+
+  if (opts.questionText) {
+    blocks.push({
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `*Asker's question:*\n${opts.questionText}`,
+      },
+    });
+  }
+
+  blocks.push({
+    type: "context",
+    elements: [
+      { type: "mrkdwn", text: `Request \`${opts.requestId}\` · reply in thread when handled` },
+    ],
+  });
+
+  return {
+    // No PHI in `text` — this is the notification preview shown in pushes/sidebar.
+    text: `Outreach request: ${targetCount} ${opts.category} provider${targetCount === 1 ? "" : "s"} in ${opts.city}, ${opts.state}`,
+    blocks,
+  };
+}
+
 export function slackSaveNudgeConverted(opts: {
   familyName: string;
   email: string;

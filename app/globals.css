@@ -221,6 +221,17 @@
   animation: wizard-fade-in 0.3s ease-out;
 }
 
+/* Outreach dot pulse — Anthropic/Claude/Grok-style "AI at work" indicator.
+   3x3 grid of dots, each fading in/out on a staggered 1.5s cycle so the
+   group reads as ambient processing, not a deterministic loader. */
+@keyframes outreach-dot-pulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+.animate-outreach-dot {
+  animation: outreach-dot-pulse 1.5s ease-in-out infinite;
+}
+
 /* Success checkmark — bouncy scale-in */
 @keyframes success-pop {
   0% {
@@ -638,5 +649,11 @@ body.benefits-spotlight-active [data-spotlight-parent] > [id]:not(#benefits) {
   .benefits-echo-line {
     opacity: 1;
     transform: none;
+  }
+  /* Stop the AgentOutreachModule's infinite dot pulse — show dots at full
+     opacity instead of looping the fade. */
+  .animate-outreach-dot {
+    animation: none !important;
+    opacity: 1;
   }
 }

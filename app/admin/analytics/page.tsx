@@ -83,6 +83,10 @@ interface BenefitsFunnelByVariant {
   availability: BenefitsFunnel;
   loss: BenefitsFunnel;
   empathic: BenefitsFunnel;
+  // 4th arm — H1 demand-test surface, replaces SBF for 25% of provider-page
+  // visitors. Only `started` (impressions) and `saved` (submissions) populate;
+  // middle steps are N/A and render as "—" in the table.
+  outreach: BenefitsFunnel;
   // Legacy V2 arms — historical, retained for the rollup window when V2 data
   // exists. Frozen after cutover.
   control: BenefitsFunnel;
@@ -730,6 +734,7 @@ function BenefitsVariantSplit({ byVariant }: { byVariant: BenefitsFunnelByVarian
     byVariant.availability.started +
     byVariant.loss.started +
     byVariant.empathic.started +
+    byVariant.outreach.started +
     byVariant.control.started +
     byVariant.money_loss.started;
   const waitingForFirstStart = totalAssigned === 0;
@@ -737,12 +742,13 @@ function BenefitsVariantSplit({ byVariant }: { byVariant: BenefitsFunnelByVarian
   const rate = (num: number, den: number) =>
     den > 0 ? `${Math.round((num / den) * 100)}%` : "—";
 
-  // Active V3 arms shipped in the cutover. Empty rows are still shown so the
-  // layout stays stable as data trickles in.
-  const activeArms: Array<{ key: keyof BenefitsFunnelByVariant; label: string; description: string }> = [
+  // Active arms. Empty rows are still shown so the layout stays stable as
+  // data trickles in.
+  const activeArms: Array<{ key: keyof BenefitsFunnelByVariant; label: string; description: string; isOutreach?: boolean }> = [
     { key: "availability", label: "availability", description: "There's help paying for care in {state}." },
     { key: "loss", label: "loss", description: "Most {state} families miss out on help paying for care." },
     { key: "empathic", label: "empathic", description: "Care is expensive." },
+    { key: "outreach", label: "outreach", description: "Have an AI agent contact the top providers for you.", isOutreach: true },
   ];
   // Legacy V2 arms only render when they have data in the window — once the
   // historical window rolls past V2, these rows disappear automatically.
@@ -755,10 +761,10 @@ function BenefitsVariantSplit({ byVariant }: { byVariant: BenefitsFunnelByVarian
   return (
     <div className="mt-6 pt-5 border-t border-gray-100">
       <div className="text-[10px] font-medium uppercase tracking-wider text-gray-400 mb-1">
-        A/B Test — entry-point copy (3-arm)
+        A/B Test — entry-point copy (4-arm)
       </div>
       <p className="text-[11px] text-gray-400 mb-3">
-        Deterministic 1/3 split by session id (djb2 hash mod 3). Conversion % = contact submitted / started. Variant copy strings + commentary live in the{" "}
+        Deterministic 1/4 split by session id (djb2 hash mod 4) — 3 benefits-copy arms + 1 outreach arm. Conversion % = contact/email submitted / started. Variant copy strings + commentary live in the{" "}
         <a
           href="https://app.notion.com/p/ec27110d1c6a4cc1a76bdf991344f63d"
           target="_blank"
@@ -786,7 +792,7 @@ function BenefitsVariantSplit({ byVariant }: { byVariant: BenefitsFunnelByVarian
             </tr>
           </thead>
           <tbody>
-            {activeArms.map(({ key, label, description }) => {
+            {activeArms.map(({ key, label, description, isOutreach }) => {
               const r = byVariant[key];
               return (
                 <tr key={key} className="border-b border-gray-50">
@@ -795,7 +801,10 @@ function BenefitsVariantSplit({ byVariant }: { byVariant: BenefitsFunnelByVarian
                     <div className="text-[11px] font-normal text-gray-400 truncate max-w-[280px]">{description}</div>
                   </td>
                   <td className="px-3 py-2 text-right tabular-nums text-gray-900">{r.started}</td>
-                  <td className="px-3 py-2 text-right tabular-nums text-gray-700">{r.care_need_completed}</td>
+                  {/* Outreach arm has no middle "care need" step — show — instead of 0. */}
+                  <td className="px-3 py-2 text-right tabular-nums text-gray-700">
+                    {isOutreach ? <span className="text-gray-300">—</span> : r.care_need_completed}
+                  </td>
                   <td className="px-3 py-2 text-right tabular-nums text-gray-700">{r.saved}</td>
                   <td className="px-3 py-2 text-right tabular-nums font-medium text-gray-900">{rate(r.saved, r.started)}</td>
                 </tr>

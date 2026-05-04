@@ -420,7 +420,7 @@ export const CARE_TYPE_SLUG_TO_PROFILE_CATEGORY: Record<string, ProfileCategory>
 /**
  * Map ProfileCategory → Supabase provider_category display for highlights lookup.
  */
-const PROFILE_CAT_TO_SUPABASE_CAT: Record<string, string> = {
+export const PROFILE_CAT_TO_SUPABASE_CAT: Record<string, string> = {
   home_care_agency: "Home Care (Non-medical)",
   home_health_agency: "Home Health Care",
   hospice_agency: "Hospice",

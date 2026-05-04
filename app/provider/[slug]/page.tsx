@@ -31,6 +31,9 @@ import AiTrustSignalsSection from "@/components/providers/AiTrustSignalsSection"
 import ScrollToConnectionCard from "@/components/providers/ScrollToConnectionCard";
 import BenefitsDiscoveryModule from "@/components/providers/BenefitsDiscoveryModule";
 import type { BenefitsProgram } from "@/components/providers/BenefitsDiscoveryModule";
+import { BenefitsArmGate, AgentOutreachSlot } from "@/components/providers/IntakeVariantSlots";
+import { getTopProvidersByCityAndCategory } from "@/lib/agent-outreach-providers";
+import { PROFILE_CAT_TO_SUPABASE_CAT } from "@/lib/types/provider";
 import { getTopProgramsForState, getAllProgramIds, getEnrichedProgram } from "@/lib/program-data";
 import {
   getInitials,
@@ -372,8 +375,15 @@ export default async function ProviderPage({
   const locationStr = [profile.city, profile.state].filter(Boolean).join(", ");
   const pricingConfig = profile.category ? getPricingConfig(profile.category) : null;
 
-  // --- Parallel data fetching (claim state, similar providers, Q&A, reviews) ---
-  const [claimResult, similarProviders, qaResult] = await Promise.all([
+  // Outreach arm needs top 3 same-city same-category providers (server-fetched
+  // for SSR + audit trail). Only fetch when we have enough context; gate
+  // component handles empty arrays gracefully. Cached 10min by (city, state,
+  // category) so adjacent provider pages share lookups.
+  const outreachCategoryString = profile.category ? PROFILE_CAT_TO_SUPABASE_CAT[profile.category] : null;
+  const canFetchOutreachCandidates = !!(profile.city && profile.state && outreachCategoryString);
+
+  // --- Parallel data fetching (claim state, similar providers, Q&A, reviews, outreach candidates) ---
+  const [claimResult, similarProviders, qaResult, outreachCandidates] = await Promise.all([
     // 1. Actual claim state (iOS data always says "unclaimed")
     profile.source_provider_id
       ? (async () => {
@@ -423,6 +433,18 @@ export default async function ProviderPage({
         return { questions: [], reviewCount: 0 };
       }
     })(),
+
+    // 4. Outreach arm candidates (top 3 same-city, same-category providers).
+    // Returns [] when context is missing or no candidates exist; gate handles.
+    canFetchOutreachCandidates
+      ? getTopProvidersByCityAndCategory({
+          city: profile.city!,
+          state: profile.state!,
+          category: outreachCategoryString!,
+          excludeProviderId: profile.source_provider_id || profile.id,
+          limit: 3,
+        }).catch(() => [])
+      : Promise.resolve([]),
   ]);
 
   let actualClaimState = profile.claim_state;
@@ -995,29 +1017,50 @@ export default async function ProviderPage({
                   suggestedQuestions={getSuggestedQuestions(profile.category)}
                   hasBenefitsSection={hasBenefitsData && !!benefitsData}
                 />
+
+                {/* Outreach arm of the 4-way intake A/B. Slot itself renders
+                    null for the 75% in benefits arms, so no wrapping div here
+                    — it would leave a phantom mt-6 gap. The module owns its
+                    own top margin. See IntakeVariantSlots.tsx. */}
+                {canFetchOutreachCandidates && outreachCandidates.length > 0 && (
+                  <AgentOutreachSlot
+                    sourceProviderId={profile.slug}
+                    sourceProviderName={profile.display_name}
+                    city={profile.city!}
+                    state={profile.state!}
+                    category={outreachCategoryString!}
+                    topProviders={outreachCandidates}
+                  />
+                )}
               </div>
 
               {/* ── Benefits Discovery ── */}
+              {/* Wrapped in BenefitsArmGate so the section disappears for the
+                  25% of visitors in the outreach arm of the 4-way intake A/B.
+                  The 75% in the 3 benefits arms see the existing module
+                  unchanged (with its internal mod-3 copy A/B). */}
               {hasBenefitsData && benefitsData && (
-                <div id="benefits" className="py-8 scroll-mt-20 border-t border-gray-200">
-                  <BenefitsDiscoveryModule
-                    providerState={profile.state!}
-                    stateId={benefitsData.stateId}
-                    stateName={benefitsData.stateName}
-                    providerName={profile.display_name}
-                    providerSlug={profile.slug}
-                    providerCareTypes={profile.care_types}
-                    providerCategory={profile.category}
-                    topPrograms={benefitsData.programs.map((p) => ({
-                      id: p.id,
-                      name: p.name,
-                      shortName: p.shortName,
-                      tagline: p.tagline,
-                      savingsRange: p.savingsRange,
-                    }))}
-                    allPrograms={benefitsAllPrograms}
-                  />
-                </div>
+                <BenefitsArmGate>
+                  <div id="benefits" className="py-8 scroll-mt-20 border-t border-gray-200">
+                    <BenefitsDiscoveryModule
+                      providerState={profile.state!}
+                      stateId={benefitsData.stateId}
+                      stateName={benefitsData.stateName}
+                      providerName={profile.display_name}
+                      providerSlug={profile.slug}
+                      providerCareTypes={profile.care_types}
+                      providerCategory={profile.category}
+                      topPrograms={benefitsData.programs.map((p) => ({
+                        id: p.id,
+                        name: p.name,
+                        shortName: p.shortName,
+                        tagline: p.tagline,
+                        savingsRange: p.savingsRange,
+                      }))}
+                      allPrograms={benefitsAllPrograms}
+                    />
+                  </div>
+                </BenefitsArmGate>
               )}
 
               {/* ── Care Services ── */}
