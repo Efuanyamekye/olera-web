@@ -14,7 +14,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
-import type { QueueRow } from "@/lib/staffing-outreach/types";
+import type { QueueRow, EngagementSignals } from "@/lib/staffing-outreach/types";
 
 const PAGE_SIZE_DEFAULT = 50;
 
@@ -208,6 +208,43 @@ export async function GET(req: NextRequest) {
     }
   }
 
+  // ── Look up engagement signals from touchpoints ───────────────────────────
+  const outreachIds = rows.map((r) => r.id);
+  const engagementMap = new Map<string, EngagementSignals>();
+
+  if (outreachIds.length > 0) {
+    // Query touchpoints for engagement types
+    const { data: touchpoints } = await db
+      .from("staffing_touchpoints")
+      .select("outreach_id, type")
+      .in("outreach_id", outreachIds)
+      .in("type", ["email_opened", "email_clicked", "reply_received"]);
+
+    // Also check for contacts (consent given)
+    const { data: contacts } = await db
+      .from("staffing_contacts")
+      .select("outreach_id")
+      .in("outreach_id", outreachIds);
+
+    const contactOutreachIds = new Set((contacts ?? []).map((c) => c.outreach_id));
+
+    // Aggregate signals per outreach
+    for (const tp of touchpoints ?? []) {
+      const existing = engagementMap.get(tp.outreach_id) ?? {};
+      if (tp.type === "email_opened") existing.emailOpened = true;
+      if (tp.type === "email_clicked") existing.emailClicked = true;
+      if (tp.type === "reply_received") existing.replied = true;
+      engagementMap.set(tp.outreach_id, existing);
+    }
+
+    // Add hasContact flag
+    for (const outreachId of contactOutreachIds) {
+      const existing = engagementMap.get(outreachId) ?? {};
+      existing.hasContact = true;
+      engagementMap.set(outreachId, existing);
+    }
+  }
+
   const queueRows: QueueRow[] = rows.map((r) => {
     const p = providerMap.get(r.provider_id);
     return {
@@ -222,6 +259,8 @@ export async function GET(req: NextRequest) {
       university_name: batchMap.get(r.batch_id) ?? undefined,
       // Include claimer initials for avatar display
       claimed_by_initials: r.claimed_by ? claimerInitialsMap.get(r.claimed_by) : undefined,
+      // Include engagement signals
+      engagement: engagementMap.get(r.id),
     } as QueueRow;
   });
 

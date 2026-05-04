@@ -117,6 +117,18 @@ export interface StaffingContact {
   created_at: string;
 }
 
+/** Engagement signals derived from touchpoints */
+export interface EngagementSignals {
+  /** Provider opened an email */
+  emailOpened?: boolean;
+  /** Provider clicked a link in an email */
+  emailClicked?: boolean;
+  /** Provider replied to an email */
+  replied?: boolean;
+  /** We have a verified contact for this provider */
+  hasContact?: boolean;
+}
+
 /** A queue row is the outreach record joined with the provider's display info. */
 export interface QueueRow extends StaffingOutreachRow {
   provider_name: string;
@@ -129,6 +141,8 @@ export interface QueueRow extends StaffingOutreachRow {
   university_name?: string;
   /** Initials of the admin who claimed this row (e.g., "TJ") */
   claimed_by_initials?: string;
+  /** Engagement signals (email opened, clicked, replied) */
+  engagement?: EngagementSignals;
 }
 
 /** What the drawer needs to render every section. */
