@@ -15,6 +15,7 @@
  */
 
 import { useCallback, useEffect, useState } from "react";
+import Select from "@/components/ui/Select";
 import type {
   DrawerContext,
   StaffingTouchpoint,
@@ -807,12 +808,13 @@ function CallSection({
               Capture Contact &amp; Send Enrollment Email
             </p>
             <Field label="Name *" value={name} onChange={setName} placeholder="Jane Doe" />
-            <SelectField
+            <Select
               label="Role"
               value={role}
               onChange={setRole}
+              placeholder="Select role..."
+              size="sm"
               options={[
-                { value: "", label: "Select role..." },
                 { value: "Owner", label: "Owner" },
                 { value: "Administrator", label: "Administrator" },
                 { value: "HR Manager", label: "HR Manager" },
@@ -929,34 +931,6 @@ function Field({
   );
 }
 
-function SelectField({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  options: Array<{ value: string; label: string }>;
-}) {
-  return (
-    <label className="block">
-      <span className="mb-1 block text-xs font-medium text-gray-600">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-gray-400 focus:outline-none"
-      >
-        {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  );
-}
 
 function TextareaField({
   label,
