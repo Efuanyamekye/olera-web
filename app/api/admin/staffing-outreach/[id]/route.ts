@@ -3,16 +3,19 @@
  * POST   /api/admin/staffing-outreach/[id]   — actions, dispatched on body.action
  *
  * Actions supported:
- *   claim                  hold the row for 60 min
- *   release                drop the claim
- *   update_research        set research_data fields, optional notes
- *   mark_pre_call_complete advance status queued→pre_call_outreach
- *   send_pre_call          fire pre-call email + log touchpoint
- *   send_follow_up         fire follow-up reminder email (after 5 business days)
- *   log_email_sent         log email touchpoint only (Gmail flow, no email send)
- *   log_contact_form       log a contact_form_submitted touchpoint
- *   disposition            log a call disposition + state transition
- *   add_contact_and_send   capture verified contact + fire Step 1 email
+ *   claim                    hold the row for 60 min
+ *   release                  drop the claim
+ *   update_research          set research_data fields, optional notes
+ *   mark_pre_call_complete   advance status queued→pre_call_outreach
+ *   send_pre_call            fire pre-call email + log touchpoint
+ *   send_follow_up           fire follow-up reminder email (after 5 business days)
+ *   log_email_sent           log email touchpoint only (Gmail flow, no email send)
+ *   log_contact_form         log a contact_form_submitted touchpoint
+ *   disposition              log a call disposition + state transition
+ *   add_contact_and_send     capture verified contact + fire Step 1 email
+ *   revert_to_queued         move back to queued status (initial contact tab)
+ *   reopen                   reopen a closed provider (DNC/wrong_number → calling)
+ *   resend_enrollment_email  resend Step 1 email to an activated provider
  *
  * Mutations always insert a touchpoint and update outreach.updated_at.
  * Response shape mirrors the GET payload (refreshed DrawerContext) so
@@ -119,6 +122,12 @@ export async function POST(
         break;
       case "revert_to_queued":
         await handleRevertToQueued(outreach, user.id);
+        break;
+      case "reopen":
+        await handleReopen(outreach, user.id);
+        break;
+      case "resend_enrollment_email":
+        await handleResendEnrollmentEmail(outreach, body, user.id);
         break;
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
@@ -584,6 +593,145 @@ async function handleRevertToQueued(outreach: StaffingOutreachRow, userId: strin
       updated_at: new Date().toISOString(),
     })
     .eq("id", outreach.id);
+}
+
+/**
+ * Reopen a closed provider (do_not_contact or wrong_number) back to nurturing.
+ */
+async function handleReopen(outreach: StaffingOutreachRow, userId: string) {
+  const db = getServiceClient();
+
+  // Only allow reopening closed statuses
+  if (outreach.status !== "do_not_contact" && outreach.status !== "wrong_number") {
+    throw new Error("Can only reopen providers that are closed (DNC or wrong number)");
+  }
+
+  // Log touchpoint for audit trail
+  await insertTouchpoint(outreach.id, "status_reverted", userId, "Provider reopened for outreach", {
+    from_status: outreach.status,
+    to_status: "calling",
+    reason: "Manually reopened by admin",
+  });
+
+  // Move back to calling status (nurturing tab)
+  const nextDue = new Date(Date.now() + 1 * 86400_000).toISOString(); // Due tomorrow
+  await db
+    .from("staffing_outreach")
+    .update({
+      status: "calling",
+      next_action_due_at: nextDue,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", outreach.id);
+}
+
+/**
+ * Resend the enrollment email to an activated provider.
+ * Used when they clicked the magic link but didn't complete T&C acceptance.
+ */
+async function handleResendEnrollmentEmail(
+  outreach: StaffingOutreachRow,
+  body: { contactId?: string },
+  userId: string,
+) {
+  const db = getServiceClient();
+
+  // Only allow for activated status
+  if (outreach.status !== "activated") {
+    throw new Error("Can only resend enrollment email to activated providers");
+  }
+
+  // Get the contact to send to
+  const contactId = body.contactId;
+  if (!contactId) throw new Error("contactId is required");
+
+  const { data: contact } = await db
+    .from("staffing_contacts")
+    .select("*")
+    .eq("id", contactId)
+    .eq("outreach_id", outreach.id)
+    .single();
+  if (!contact) throw new Error("Contact not found");
+
+  // Get provider and batch info
+  const [{ data: provider }, { data: batch }] = await Promise.all([
+    db.from("olera-providers")
+      .select("provider_name, provider_id, city, state")
+      .eq("provider_id", outreach.provider_id)
+      .single(),
+    db.from("staffing_batches")
+      .select("university_name")
+      .eq("id", outreach.batch_id)
+      .single(),
+  ]);
+  if (!provider) throw new Error("Provider not found");
+  if (!batch) throw new Error("Batch not found");
+
+  // Build activation magic link
+  const activationUrl = buildStaffingPilotActivationUrl(
+    { oid: outreach.id, cid: contact.id, pid: outreach.provider_id },
+    BASE_URL,
+  );
+
+  const { subject, html } = postConsentStep1Email({
+    contactFirstName: contact.name.split(/\s+/)[0],
+    providerName: provider.provider_name,
+    universityName: batch.university_name,
+    activationUrl,
+    demoVideoUrl: DEMO_VIDEO_URL,
+  });
+
+  // Attach the pilot agreement PDF if uploaded
+  let attachments:
+    | Array<{ filename: string; content: string; encoding?: string; type?: string }>
+    | undefined;
+  if (PILOT_AGREEMENT_URL) {
+    try {
+      const res = await fetch(PILOT_AGREEMENT_URL);
+      if (res.ok) {
+        const base64 = Buffer.from(await res.arrayBuffer()).toString("base64");
+        attachments = [
+          {
+            filename: "olera-student-caregiver-pilot-agreement.pdf",
+            content: base64,
+            encoding: "base64",
+            type: "application/pdf",
+          },
+        ];
+      }
+    } catch {
+      // Fail open — send without PDF
+    }
+  }
+
+  const send = await sendEmail({
+    to: contact.email,
+    from: SENDER_LOGAN,
+    subject,
+    html,
+    emailType: "staffing_post_consent_step1",
+    recipientType: "provider",
+    providerId: provider.provider_id,
+    metadata: {
+      outreach_id: outreach.id,
+      batch_id: outreach.batch_id,
+      contact_id: contact.id,
+      university: batch.university_name,
+      is_resend: true,
+    },
+    attachments,
+  });
+
+  await insertTouchpoint(outreach.id, "email_post_consent_step1_sent", userId, "Resent enrollment email", {
+    recipient: contact.email,
+    contact_id: contact.id,
+    email_log_id: send.emailLogId,
+    activation_url: activationUrl,
+    pdf_attached: Boolean(attachments),
+    success: send.success,
+    error: send.error,
+    is_resend: true,
+  });
 }
 
 // ── State machine ───────────────────────────────────────────────────────
