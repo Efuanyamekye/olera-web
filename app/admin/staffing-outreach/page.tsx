@@ -232,24 +232,69 @@ export default function StaffingOutreachPage() {
       ) : error ? (
         <p className="py-8 text-center text-sm text-red-600">{error}</p>
       ) : rows.length === 0 ? (
-        <div className="py-12 text-center">
+        <div className="rounded-lg border border-gray-200 bg-white py-16 text-center">
           {batches.length === 0 ? (
-            <p className="text-sm text-gray-400">
-              No active batches yet. Run the seed script: npx tsx scripts/seed-staffing-outreach.ts --university {"<slug>"} --apply
-            </p>
+            <>
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100">
+                <svg className="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-gray-900">No active batches</p>
+              <p className="mt-1 text-sm text-gray-500">
+                Run the seed script: npx tsx scripts/seed-staffing-outreach.ts --university {"<slug>"} --apply
+              </p>
+            </>
           ) : stage === "action_needed" ? (
             <>
-              <p className="text-lg font-medium text-gray-700">All caught up!</p>
-              <p className="text-sm text-gray-400 mt-1">No providers need follow-up right now.</p>
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100">
+                <svg className="h-7 w-7 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-gray-900">All caught up!</p>
+              <p className="mt-1 text-sm text-gray-500">No providers need follow-up right now.</p>
             </>
           ) : stage === "initial_contact" ? (
-            <p className="text-sm text-gray-400">No providers waiting for initial contact.</p>
+            <>
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
+                <svg className="h-7 w-7 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-gray-900">No providers waiting</p>
+              <p className="mt-1 text-sm text-gray-500">No providers waiting for initial contact.</p>
+            </>
           ) : stage === "nurturing" ? (
-            <p className="text-sm text-gray-400">No providers in nurturing stage.</p>
+            <>
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100">
+                <svg className="h-7 w-7 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-gray-900">No providers in progress</p>
+              <p className="mt-1 text-sm text-gray-500">No providers in the nurturing stage yet.</p>
+            </>
           ) : stage === "enrolled" ? (
-            <p className="text-sm text-gray-400">No enrolled providers yet.</p>
+            <>
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-purple-100">
+                <svg className="h-7 w-7 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-gray-900">No enrolled providers</p>
+              <p className="mt-1 text-sm text-gray-500">No providers have enrolled in the pilot yet.</p>
+            </>
           ) : (
-            <p className="text-sm text-gray-400">No closed providers.</p>
+            <>
+              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100">
+                <svg className="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>
+              </div>
+              <p className="text-lg font-semibold text-gray-900">No closed providers</p>
+              <p className="mt-1 text-sm text-gray-500">No providers marked as closed or do-not-contact.</p>
+            </>
           )}
         </div>
       ) : (
