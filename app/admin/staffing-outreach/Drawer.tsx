@@ -309,7 +309,7 @@ export function Drawer({ outreachId, onClose, onAction }: DrawerProps) {
         aria-label="Close drawer"
       />
       {/* Panel */}
-      <aside className="fixed inset-y-0 right-0 z-50 flex w-full max-w-xl flex-col bg-white shadow-2xl">
+      <aside className="fixed inset-y-0 right-0 z-50 flex w-full max-w-2xl flex-col bg-white shadow-2xl">
         <header className="flex items-start justify-between gap-4 border-b border-gray-100 px-6 py-4">
           {ctx ? (
             <div className="min-w-0 flex-1">
