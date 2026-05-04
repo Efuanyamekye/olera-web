@@ -326,52 +326,6 @@ export default function StaffingOutreachPage() {
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      {/* Engagement signals */}
-                      {row.engagement && (
-                        <div className="hidden sm:flex items-center gap-1">
-                          {row.engagement.replied && (
-                            <span
-                              className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600"
-                              title="Replied to email"
-                            >
-                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-                              </svg>
-                            </span>
-                          )}
-                          {row.engagement.emailClicked && !row.engagement.replied && (
-                            <span
-                              className="flex h-5 w-5 items-center justify-center rounded-full bg-purple-100 text-purple-600"
-                              title="Clicked email link"
-                            >
-                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.172 13.828a4 4 0 015.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                              </svg>
-                            </span>
-                          )}
-                          {row.engagement.emailOpened && !row.engagement.emailClicked && !row.engagement.replied && (
-                            <span
-                              className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-100 text-blue-600"
-                              title="Opened email"
-                            >
-                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
-                              </svg>
-                            </span>
-                          )}
-                          {row.engagement.hasContact && (
-                            <span
-                              className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 text-amber-600"
-                              title="Has verified contact"
-                            >
-                              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                              </svg>
-                            </span>
-                          )}
-                        </div>
-                      )}
                       <StatusBadge status={row.status} />
                       {dueInfo && (
                         <span className={`hidden sm:inline rounded-full px-2 py-0.5 text-xs font-medium ${
