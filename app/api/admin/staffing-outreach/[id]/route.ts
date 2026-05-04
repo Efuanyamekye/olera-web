@@ -117,6 +117,9 @@ export async function POST(
       case "add_contact_and_send":
         await handleAddContactAndSend(outreach, body, user.id);
         break;
+      case "revert_to_queued":
+        await handleRevertToQueued(outreach, user.id);
+        break;
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }
@@ -553,6 +556,31 @@ async function handleAddContactAndSend(
       status: "consented",
       next_action_due_at: next,
       attempts_count: outreach.attempts_count + 1,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", outreach.id);
+}
+
+/**
+ * Revert a provider back to queued status (Initial Contact tab).
+ * Used when initial email was sent by mistake.
+ */
+async function handleRevertToQueued(outreach: StaffingOutreachRow, userId: string) {
+  const db = getServiceClient();
+
+  // Log touchpoint for audit trail
+  await insertTouchpoint(outreach.id, "status_reverted", userId, "User marked as sent by mistake", {
+    from_status: outreach.status,
+    to_status: "queued",
+    reason: "Sent by mistake - moved back to Initial Contact",
+  });
+
+  // Revert status to queued (Initial Contact tab)
+  await db
+    .from("staffing_outreach")
+    .update({
+      status: "queued",
+      next_action_due_at: new Date().toISOString(), // Due now so it's ready for action
       updated_at: new Date().toISOString(),
     })
     .eq("id", outreach.id);

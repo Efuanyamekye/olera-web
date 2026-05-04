@@ -3,9 +3,12 @@
 /**
  * Admin Staffing Outreach — main page.
  *
- * Two-level navigation:
- *   1. Urgency toggle (Due Today / All) — time-based filter
- *   2. Stage tabs (New / Contacted / Enrolled / Closed) — funnel stages
+ * Five-tab navigation (no urgency toggle):
+ *   1. Action Needed   — Cross-stage to-do list (nurturing statuses with due <= now)
+ *   2. Initial Contact — Not yet contacted (queued)
+ *   3. Nurturing       — In progress (pre_call_outreach, calling, etc.)
+ *   4. Enrolled        — Success
+ *   5. Closed          — Dead ends
  *
  * Data comes from /api/admin/staffing-outreach/queue (batches + rows)
  * and /api/admin/staffing-outreach/[id] (drawer detail).
@@ -20,29 +23,27 @@ import type {
   StaffingBatch,
 } from "@/lib/staffing-outreach/types";
 
-// Stage tabs (funnel stages)
+// 5 tabs with clear purposes
 const STAGE_TABS: Array<{ key: string; label: string }> = [
-  { key: "new", label: "New" },
+  { key: "action_needed", label: "Action Needed" },
+  { key: "initial_contact", label: "Initial Contact" },
   { key: "nurturing", label: "Nurturing" },
   { key: "enrolled", label: "Enrolled" },
   { key: "closed", label: "Closed" },
 ];
 
-type Stage = "new" | "nurturing" | "enrolled" | "closed";
-type Urgency = "due_today" | "all";
+type Stage = "action_needed" | "initial_contact" | "nurturing" | "enrolled" | "closed";
 
 const PAGE_SIZE = 50;
 
 export default function StaffingOutreachPage() {
   const [batches, setBatches] = useState<StaffingBatch[]>([]);
   const [batchId, setBatchId] = useState<string | null>(null);
-  const [stage, setStage] = useState<Stage>("new");
-  const [urgency, setUrgency] = useState<Urgency>("due_today");
+  const [stage, setStage] = useState<Stage>("action_needed");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [rows, setRows] = useState<QueueRow[]>([]);
   const [tabCounts, setTabCounts] = useState<Record<string, number>>({});
-  const [totalDue, setTotalDue] = useState(0);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -66,7 +67,6 @@ export default function StaffingOutreachPage() {
       const params = new URLSearchParams();
       if (batchId) params.set("batch", batchId);
       params.set("stage", stage);
-      params.set("urgency", urgency);
       params.set("page", String(page));
       params.set("pageSize", String(PAGE_SIZE));
       if (debouncedSearch) params.set("search", debouncedSearch);
@@ -76,7 +76,6 @@ export default function StaffingOutreachPage() {
       setBatches(data.batches ?? []);
       setRows(data.rows ?? []);
       setTabCounts(data.tabCounts ?? {});
-      setTotalDue(data.totalDue ?? 0);
       setTotal(data.total ?? 0);
       // Auto-select first batch if none chosen
       if (!batchId && data.batches?.[0]) {
@@ -87,7 +86,7 @@ export default function StaffingOutreachPage() {
     } finally {
       setLoading(false);
     }
-  }, [batchId, stage, urgency, debouncedSearch, page]);
+  }, [batchId, stage, debouncedSearch, page]);
 
   useEffect(() => {
     refetch();
@@ -134,15 +133,6 @@ export default function StaffingOutreachPage() {
     setStage(newStage);
   }, [stage]);
 
-  // Handle urgency change - clear rows immediately to prevent stale flash
-  const handleUrgencyChange = useCallback((newUrgency: Urgency) => {
-    if (newUrgency === urgency) return;
-    setRows([]);
-    setLoading(true);
-    setPage(0);
-    setUrgency(newUrgency);
-  }, [urgency]);
-
   return (
     <div>
       <div className="mb-6">
@@ -152,39 +142,8 @@ export default function StaffingOutreachPage() {
         </p>
       </div>
 
-      {/* Row 1: Urgency toggle | Search | University dropdown | Stats */}
+      {/* Row 1: Search | University dropdown | Stats */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
-        {/* Urgency Toggle (segmented control) */}
-        <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-0.5">
-          <button
-            type="button"
-            onClick={() => handleUrgencyChange("due_today")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              urgency === "due_today"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            Action Needed
-            {totalDue > 0 && (
-              <span className="px-1.5 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-700">
-                {totalDue}
-              </span>
-            )}
-          </button>
-          <button
-            type="button"
-            onClick={() => handleUrgencyChange("all")}
-            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              urgency === "all"
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-          >
-            All
-          </button>
-        </div>
-
         {/* Search - w-64 with icon */}
         <div className="relative w-full sm:w-64">
           <svg
@@ -273,13 +232,26 @@ export default function StaffingOutreachPage() {
       ) : error ? (
         <p className="py-8 text-center text-sm text-red-600">{error}</p>
       ) : rows.length === 0 ? (
-        <p className="py-12 text-center text-sm text-gray-400">
-          {batches.length === 0
-            ? "No active batches yet. Run the seed script: npx tsx scripts/seed-staffing-outreach.ts --university <slug> --apply"
-            : urgency === "due_today"
-            ? "No providers need action in this stage."
-            : "No providers in this stage."}
-        </p>
+        <div className="py-12 text-center">
+          {batches.length === 0 ? (
+            <p className="text-sm text-gray-400">
+              No active batches yet. Run the seed script: npx tsx scripts/seed-staffing-outreach.ts --university {"<slug>"} --apply
+            </p>
+          ) : stage === "action_needed" ? (
+            <>
+              <p className="text-lg font-medium text-gray-700">All caught up!</p>
+              <p className="text-sm text-gray-400 mt-1">No providers need follow-up right now.</p>
+            </>
+          ) : stage === "initial_contact" ? (
+            <p className="text-sm text-gray-400">No providers waiting for initial contact.</p>
+          ) : stage === "nurturing" ? (
+            <p className="text-sm text-gray-400">No providers in nurturing stage.</p>
+          ) : stage === "enrolled" ? (
+            <p className="text-sm text-gray-400">No enrolled providers yet.</p>
+          ) : (
+            <p className="text-sm text-gray-400">No closed providers.</p>
+          )}
+        </div>
       ) : (
         <div className="rounded-lg border border-gray-100 bg-white overflow-hidden">
           <ul className="divide-y divide-gray-100">

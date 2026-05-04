@@ -6,8 +6,7 @@
  *
  * Query params:
  *   batch       batch id (required for the row list; if omitted only batches return)
- *   stage       new|contacted|enrolled|closed (funnel stage)
- *   urgency     due_today|all (time-based filter)
+ *   stage       action_needed|initial_contact|nurturing|enrolled|closed
  *   search      substring match on provider_name (optional)
  *   page        0-indexed page, default 0
  *   pageSize    default 50
@@ -19,13 +18,15 @@ import type { QueueRow } from "@/lib/staffing-outreach/types";
 
 const PAGE_SIZE_DEFAULT = 50;
 
-// Stage-based filtering (funnel stages)
-// - new: No contact made yet
-// - nurturing: Contact made, working toward enrollment
+// 5-tab stage-based filtering
+// - action_needed: Cross-stage to-do list (nurturing statuses where due <= now)
+// - initial_contact: Not yet contacted (queued)
+// - nurturing: In progress (all nurturing statuses, no time filter)
 // - enrolled: Success
-// - closed: Terminal states
+// - closed: Dead ends
 const STAGE_STATUSES: Record<string, string[]> = {
-  new: ["queued"],
+  action_needed: ["pre_call_outreach", "calling", "connected_no_consent", "consented", "nurturing", "activated"],
+  initial_contact: ["queued"],
   nurturing: ["pre_call_outreach", "calling", "connected_no_consent", "consented", "nurturing", "activated"],
   enrolled: ["enrolled"],
   closed: ["do_not_contact", "wrong_number"],
@@ -33,17 +34,19 @@ const STAGE_STATUSES: Record<string, string[]> = {
 
 // Backwards compatibility: map old tab names to new stages
 const STAGE_ALIASES: Record<string, string> = {
-  to_call: "new",
+  new: "initial_contact",
+  to_call: "initial_contact",
   contacted: "nurturing",
   in_progress: "nurturing",
   stopped: "closed",
-  queued: "new",
+  queued: "initial_contact",
   pre_call: "nurturing",
   calling: "nurturing",
   post_consent: "nurturing",
   activated: "nurturing",
-  all: "new",
-  today: "new",
+  all: "initial_contact",
+  today: "action_needed",
+  due_today: "action_needed",
 };
 
 export async function GET(req: NextRequest) {
@@ -56,12 +59,11 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const batchId = url.searchParams.get("batch");
 
-  // New two-level navigation: stage (funnel) + urgency (time filter)
-  const rawStage = url.searchParams.get("stage") ?? url.searchParams.get("tab") ?? "new";
+  // 5-tab navigation (no urgency toggle)
+  const rawStage = url.searchParams.get("stage") ?? url.searchParams.get("tab") ?? "action_needed";
   const resolvedStage = STAGE_ALIASES[rawStage] ?? rawStage;
-  // Validate stage - fallback to "new" if invalid
-  const stage = STAGE_STATUSES[resolvedStage] ? resolvedStage : "new";
-  const urgency = url.searchParams.get("urgency") ?? "due_today";
+  // Validate stage - fallback to "action_needed" if invalid
+  const stage = STAGE_STATUSES[resolvedStage] ? resolvedStage : "action_needed";
 
   const search = (url.searchParams.get("search") ?? "").trim();
   const page = Math.max(0, parseInt(url.searchParams.get("page") ?? "0", 10));
@@ -82,12 +84,11 @@ export async function GET(req: NextRequest) {
   }
 
   if (!batchId) {
-    return NextResponse.json({ batches, rows: [], total: 0, tabCounts: {}, totalDue: 0 });
+    return NextResponse.json({ batches, rows: [], total: 0, tabCounts: {} });
   }
 
-  // ── Tab counts for the chosen batch (stage counts + total due) ─────────
-  // Pass urgency so counts reflect the current filter
-  const { stageCounts, totalDue } = await computeStageCounts(db, batchId, urgency);
+  // ── Tab counts for the chosen batch ─────────────────────────────────────
+  const stageCounts = await computeStageCounts(db, batchId);
 
   // ── If searching, find matching provider IDs first (DB-level search) ───
   let searchProviderIds: string[] | null = null;
@@ -105,7 +106,7 @@ export async function GET(req: NextRequest) {
 
     // If search matches nothing, return empty results immediately
     if (searchProviderIds.length === 0) {
-      return NextResponse.json({ batches, rows: [], total: 0, tabCounts: stageCounts, totalDue });
+      return NextResponse.json({ batches, rows: [], total: 0, tabCounts: stageCounts });
     }
   }
 
@@ -126,8 +127,8 @@ export async function GET(req: NextRequest) {
     query = query.in("status", statuses);
   }
 
-  // Apply urgency filter (time-based)
-  if (urgency === "due_today") {
+  // Action Needed tab: only show items that are due (next_action_due_at <= now)
+  if (stage === "action_needed") {
     query = query.lte("next_action_due_at", new Date().toISOString());
   }
 
@@ -142,7 +143,7 @@ export async function GET(req: NextRequest) {
 
   const rows = outreachRows ?? [];
   if (rows.length === 0) {
-    return NextResponse.json({ batches, rows: [], total: count ?? 0, tabCounts: stageCounts, totalDue });
+    return NextResponse.json({ batches, rows: [], total: count ?? 0, tabCounts: stageCounts });
   }
 
   // ── Hydrate with provider display info ─────────────────────────────────
@@ -189,61 +190,54 @@ export async function GET(req: NextRequest) {
     rows: queueRows,
     total: count ?? queueRows.length,
     tabCounts: stageCounts,
-    totalDue,
   });
 }
 
 async function computeStageCounts(
   db: ReturnType<typeof getServiceClient>,
   batchId: string,
-  urgency: string,
-): Promise<{ stageCounts: Record<string, number>; totalDue: number }> {
+): Promise<Record<string, number>> {
   const stageCounts: Record<string, number> = {
-    new: 0,
+    action_needed: 0,
+    initial_contact: 0,
     nurturing: 0,
     enrolled: 0,
     closed: 0,
   };
-  let totalDue = 0;
 
   const { data, error } = await db
     .from("staffing_outreach")
     .select("status, next_action_due_at")
     .eq("batch_id", batchId);
 
-  if (error || !data) return { stageCounts, totalDue };
+  if (error || !data) return stageCounts;
 
   const nowIso = new Date().toISOString();
-  const TERMINAL_STATUSES = new Set(["do_not_contact", "enrolled", "wrong_number"]);
+  const NURTURING_STATUSES = new Set([
+    "pre_call_outreach",
+    "calling",
+    "connected_no_consent",
+    "consented",
+    "nurturing",
+    "activated",
+  ]);
 
   for (const row of data) {
     const status = row.status as string;
     const isDue = row.next_action_due_at && row.next_action_due_at <= nowIso;
 
-    // Count items due today (across all non-terminal stages) - always computed for the badge
-    if (isDue && !TERMINAL_STATUSES.has(status)) {
-      totalDue++;
+    // Action Needed: nurturing statuses where due <= now
+    // Key rule: does NOT include queued providers
+    if (NURTURING_STATUSES.has(status) && isDue) {
+      stageCounts.action_needed++;
     }
 
-    // When urgency is "due_today", only count items that are due in stage counts
-    // This makes tab counts reflect the urgency filter
-    if (urgency === "due_today" && !isDue) {
-      continue; // Skip non-due items in stage counts
-    }
-
-    // New: queued only (no contact made yet)
+    // Initial Contact: queued only
     if (status === "queued") {
-      stageCounts.new++;
+      stageCounts.initial_contact++;
     }
-    // Nurturing: pre_call_outreach, calling, connected_no_consent, consented, nurturing, activated
-    else if (
-      status === "pre_call_outreach" ||
-      status === "calling" ||
-      status === "connected_no_consent" ||
-      status === "consented" ||
-      status === "nurturing" ||
-      status === "activated"
-    ) {
+    // Nurturing: all nurturing statuses (no time filter)
+    else if (NURTURING_STATUSES.has(status)) {
       stageCounts.nurturing++;
     }
     // Enrolled
@@ -256,5 +250,5 @@ async function computeStageCounts(
     }
   }
 
-  return { stageCounts, totalDue };
+  return stageCounts;
 }

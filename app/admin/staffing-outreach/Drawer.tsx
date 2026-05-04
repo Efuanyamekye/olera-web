@@ -146,7 +146,7 @@ export function Drawer({ outreachId, onClose, onAction }: DrawerProps) {
             <div className="space-y-6">
               <ProviderSummary ctx={ctx} />
               <NewSection ctx={ctx} onAction={handleAction} onAdvance={handleAdvance} setError={setError} />
-              <NurturingSection ctx={ctx} onAction={handleAction} setError={setError} />
+              <NurturingSection ctx={ctx} onAction={handleAction} onAdvance={handleAdvance} setError={setError} />
               <CallSection ctx={ctx} onAdvance={handleAdvance} setError={setError} />
               <HistorySection touchpoints={ctx.touchpoints} />
             </div>
@@ -485,10 +485,12 @@ function NewSection({
 function NurturingSection({
   ctx,
   onAction,
+  onAdvance,
   setError,
 }: {
   ctx: DrawerContext;
   onAction: (action: string, payload?: Record<string, unknown>) => Promise<DrawerContext>;
+  onAdvance: (action: string, payload?: Record<string, unknown>) => Promise<void>;
   setError: (err: string | null) => void;
 }) {
   const [recipientEmail, setRecipientEmail] = useState(
@@ -496,6 +498,7 @@ function NurturingSection({
   );
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [reverting, setReverting] = useState(false);
 
   // Track touchpoints + local state for immediate feedback
   const initialEmailTouchpoint = ctx.touchpoints.find((t) => t.type === "pre_call_email_sent");
@@ -520,6 +523,17 @@ function NurturingSection({
   if (!showForStatuses.has(ctx.outreach.status)) {
     return null;
   }
+
+  const handleMoveBackToInitialContact = async () => {
+    setReverting(true);
+    try {
+      await onAdvance("revert_to_queued");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Failed to move back");
+    } finally {
+      setReverting(false);
+    }
+  };
 
   const saveResearch = async () => {
     try {
@@ -656,6 +670,19 @@ function NurturingSection({
                 </span>
               )}
             </span>
+          </div>
+        )}
+
+        {/* Move back link - only for pre_call_outreach status (just sent initial email) */}
+        {ctx.outreach.status === "pre_call_outreach" && (
+          <div className="border-t border-gray-100 pt-3">
+            <button
+              onClick={handleMoveBackToInitialContact}
+              disabled={reverting}
+              className="text-xs text-gray-400 hover:text-gray-600 underline disabled:opacity-50"
+            >
+              {reverting ? "Moving back..." : "Sent by mistake? Move back to Initial Contact"}
+            </button>
           </div>
         )}
       </div>
@@ -968,6 +995,7 @@ function humanType(t: string): string {
     system_activated: "Activated (magic link clicked)",
     system_enrolled: "Enrolled (T&C accepted)",
     system_auto_dnc: "Auto-DNC after max attempts",
+    status_reverted: "Status reverted",
   };
   return map[t] ?? t;
 }

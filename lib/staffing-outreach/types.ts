@@ -52,7 +52,8 @@ export type TouchpointType =
   | "reply_received"
   | "system_activated"
   | "system_enrolled"
-  | "system_auto_dnc";
+  | "system_auto_dnc"
+  | "status_reverted";
 
 export interface ResearchData {
   general_email?: string;
