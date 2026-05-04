@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import type { ProfileCategory } from "@/lib/types";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
@@ -9,6 +9,8 @@ import { saveProfile } from "./save-profile";
 import { trackProfileEdit } from "@/lib/analytics/track-profile-edit";
 import ModalFooter from "./ModalFooter";
 import type { BaseEditModalProps } from "./types";
+import { useCitySearch } from "@/hooks/use-city-search";
+import { useClickOutside } from "@/hooks/use-click-outside";
 
 const CATEGORY_OPTIONS: { value: ProfileCategory; label: string }[] = [
   { value: "home_care_agency", label: "Home Care Agency" },
@@ -48,6 +50,21 @@ export default function EditOverviewModal({
   const [website, setWebsite] = useState(profile.website || "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // City picker state
+  const [cityInput, setCityInput] = useState(profile.city || "");
+  const [showCityDropdown, setShowCityDropdown] = useState(false);
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
+  const { results: cityResults, preload: preloadCities } = useCitySearch(cityInput);
+
+  useClickOutside(cityDropdownRef, () => setShowCityDropdown(false));
+
+  const handleCitySelect = (result: { city: string; state: string; full: string }) => {
+    setCity(result.city);
+    setState(result.state);
+    setCityInput(result.city);
+    setShowCityDropdown(false);
+  };
 
   const hasChanges =
     displayName !== (profile.display_name || "") ||
@@ -141,18 +158,65 @@ export default function EditOverviewModal({
         />
 
         <div className="grid grid-cols-3 gap-4">
-          <Input
-            label="City"
-            value={city}
-            onChange={(e) => setCity((e.target as HTMLInputElement).value)}
-            placeholder="City"
-          />
+          {/* City picker with autocomplete */}
+          <div className="relative" ref={cityDropdownRef}>
+            <label htmlFor="city" className="block text-base font-semibold text-gray-900 mb-2">
+              City
+            </label>
+            <div className="relative">
+              <input
+                id="city"
+                type="text"
+                value={cityInput}
+                onChange={(e) => {
+                  setCityInput(e.target.value);
+                  setCity(e.target.value);
+                  setShowCityDropdown(true);
+                }}
+                onFocus={() => {
+                  preloadCities();
+                  setShowCityDropdown(true);
+                }}
+                placeholder="Start typing a city..."
+                className="w-full px-4 py-3 rounded-xl border border-gray-300 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200 min-h-[44px]"
+              />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* City dropdown */}
+            {showCityDropdown && cityResults.length > 0 && (
+              <div className="absolute z-50 w-full mt-1 bg-white rounded-xl border border-gray-200 shadow-lg max-h-48 overflow-y-auto">
+                {cityResults.map((result, index) => (
+                  <button
+                    key={`${result.city}-${result.state}-${index}`}
+                    type="button"
+                    onClick={() => handleCitySelect(result)}
+                    className="w-full px-4 py-3 text-left text-base text-gray-900 hover:bg-gray-50 transition-colors first:rounded-t-xl last:rounded-b-xl flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span>{result.full}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* State - editable, but auto-populated from city selection */}
           <Input
             label="State"
             value={state}
             onChange={(e) => setState((e.target as HTMLInputElement).value)}
             placeholder="State"
           />
+
           <Input
             label="ZIP Code"
             value={zip}
