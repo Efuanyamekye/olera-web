@@ -127,6 +127,8 @@ export interface QueueRow extends StaffingOutreachRow {
   provider_slug: string | null;
   /** University name - included for Action Needed tab (cross-university view) */
   university_name?: string;
+  /** Initials of the admin who claimed this row (e.g., "TJ") */
+  claimed_by_initials?: string;
 }
 
 /** What the drawer needs to render every section. */

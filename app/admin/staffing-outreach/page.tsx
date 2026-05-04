@@ -339,8 +339,11 @@ export default function StaffingOutreachPage() {
                         </span>
                       )}
                       {isClaimed && (
-                        <span className="hidden text-xs text-blue-600 sm:inline">
-                          claimed
+                        <span
+                          className="hidden sm:flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-xs font-medium text-blue-700"
+                          title={`Claimed by ${row.claimed_by_initials || "admin"}`}
+                        >
+                          {row.claimed_by_initials || "?"}
                         </span>
                       )}
                     </div>

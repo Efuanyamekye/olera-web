@@ -192,6 +192,22 @@ export async function GET(req: NextRequest) {
     providers.map((p) => [p.provider_id, p]),
   );
 
+  // ── Look up claimer initials ──────────────────────────────────────────────
+  const claimerIds = [...new Set(rows.map((r) => r.claimed_by).filter(Boolean))] as string[];
+  const claimerInitialsMap = new Map<string, string>();
+
+  if (claimerIds.length > 0) {
+    const { data: admins } = await db
+      .from("admin_users")
+      .select("user_id, email")
+      .in("user_id", claimerIds);
+
+    for (const admin of admins ?? []) {
+      const initials = getInitialsFromEmail(admin.email);
+      claimerInitialsMap.set(admin.user_id, initials);
+    }
+  }
+
   const queueRows: QueueRow[] = rows.map((r) => {
     const p = providerMap.get(r.provider_id);
     return {
@@ -204,6 +220,8 @@ export async function GET(req: NextRequest) {
       provider_slug: p?.slug ?? null,
       // Include university name for Action Needed tab (cross-university view)
       university_name: batchMap.get(r.batch_id) ?? undefined,
+      // Include claimer initials for avatar display
+      claimed_by_initials: r.claimed_by ? claimerInitialsMap.get(r.claimed_by) : undefined,
     } as QueueRow;
   });
 
@@ -279,4 +297,26 @@ async function computeStageCounts(
   }
 
   return stageCounts;
+}
+
+/**
+ * Extract initials from an email address.
+ * "tj@olera.care" → "TJ"
+ * "john.doe@example.com" → "JD"
+ * "admin@company.com" → "A"
+ */
+function getInitialsFromEmail(email: string): string {
+  const local = email.split("@")[0];
+
+  // Handle dot-separated names (john.doe → JD)
+  if (local.includes(".")) {
+    const parts = local.split(".");
+    return parts
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase() ?? "")
+      .join("");
+  }
+
+  // Single name: take first 1-2 chars
+  return local.slice(0, 2).toUpperCase();
 }
