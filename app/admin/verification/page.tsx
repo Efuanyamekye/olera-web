@@ -860,7 +860,7 @@ export default function AdminVerificationPage() {
                         )}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <div className="flex gap-2 justify-end">
+                        <div className="flex flex-nowrap gap-2 justify-end">
                           {filter === "unverified_claims" && (
                             <>
                               <button
@@ -923,14 +923,14 @@ export default function AdminVerificationPage() {
                             <>
                               <button
                                 onClick={() => openProviderModal(provider)}
-                                className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
+                                className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors whitespace-nowrap"
                               >
                                 Details
                               </button>
                               <button
                                 onClick={() => handleAction(provider.id, "approve")}
                                 disabled={actionLoading === provider.id}
-                                className="px-3 py-1.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                                className="px-3 py-1.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors whitespace-nowrap"
                               >
                                 {actionLoading === provider.id ? "..." : "Approve Badge"}
                               </button>
