@@ -75,7 +75,7 @@ function ExternalLinkIcon({ className }: { className?: string }) {
 // ── Status Badge ──────────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<StaffingStatus, { label: string; color: string; bg: string }> = {
-  queued: { label: "New", color: "text-gray-700", bg: "bg-gray-100" },
+  queued: { label: "Pending", color: "text-gray-700", bg: "bg-gray-100" },
   pre_call_outreach: { label: "Email Sent", color: "text-blue-700", bg: "bg-blue-100" },
   calling: { label: "Calling", color: "text-amber-700", bg: "bg-amber-100" },
   connected_no_consent: { label: "Connected", color: "text-purple-700", bg: "bg-purple-100" },

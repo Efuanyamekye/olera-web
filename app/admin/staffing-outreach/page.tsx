@@ -402,7 +402,7 @@ function StatusBadge({ status }: { status: string }) {
     wrong_number: "bg-gray-100 text-gray-500",
   };
   const labels: Record<string, string> = {
-    queued: "New",
+    queued: "Pending",
     pre_call_outreach: "Email Sent",
     calling: "Calling",
     connected_no_consent: "No consent",
