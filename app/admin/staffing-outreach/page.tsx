@@ -13,6 +13,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Drawer } from "./Drawer";
+import Select from "@/components/ui/Select";
 import type {
   DrawerContext,
   QueueRow,
@@ -95,6 +96,12 @@ export default function StaffingOutreachPage() {
   const currentBatch = useMemo(
     () => batches.find((b) => b.id === batchId) ?? null,
     [batches, batchId],
+  );
+
+  // Convert batches to Select options
+  const batchOptions = useMemo(
+    () => batches.map((b) => ({ value: b.id, label: b.university_name })),
+    [batches],
   );
 
   const handleRowAction = useCallback(
@@ -201,37 +208,22 @@ export default function StaffingOutreachPage() {
           />
         </div>
 
-        {/* University dropdown - custom styled */}
-        <div className="relative">
-          <select
+        {/* University dropdown */}
+        <div className="w-72">
+          <Select
+            options={batchOptions}
             value={batchId ?? ""}
-            onChange={(e) => {
+            onChange={(value) => {
               setRows([]);
               setLoading(true);
               setPage(0);
-              setBatchId(e.target.value || null);
+              setBatchId(value || null);
             }}
-            className="appearance-none rounded-lg border border-gray-200 bg-white pl-3 pr-9 py-2 text-sm font-medium text-gray-900 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100 cursor-pointer"
-          >
-            {batches.length === 0 && <option value="">No active batches</option>}
-            {batches.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.university_name}
-              </option>
-            ))}
-          </select>
-          <svg
-            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-              clipRule="evenodd"
-            />
-          </svg>
+            placeholder="Select university..."
+            size="sm"
+            searchable
+            searchPlaceholder="Search universities..."
+          />
         </div>
 
         {/* Inline stats */}
