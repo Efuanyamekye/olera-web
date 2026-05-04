@@ -25,7 +25,7 @@ export default function Badge({
   return (
     <span
       className={[
-        "inline-flex items-center gap-1.5 px-3 py-1 rounded-full",
+        "inline-flex items-center gap-1.5 px-3 py-1 rounded-full whitespace-nowrap",
         "text-base font-medium",
         variantClasses[variant],
         className,
