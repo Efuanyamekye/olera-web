@@ -566,7 +566,7 @@ export default function AdminVerificationPage() {
             <button
               key={f.value}
               type="button"
-              onClick={() => { if (filter === f.value) return; setPage(0); setProviders([]); setLoading(true); setFilter(f.value); }}
+              onClick={() => { setPage(0); setFilter(f.value); }}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                 filter === f.value
                   ? "bg-primary-600 text-white"
@@ -633,13 +633,13 @@ export default function AdminVerificationPage() {
         {/* State filter */}
         <StateSelectFilter
           value={stateFilter}
-          onChange={(v) => { setPage(0); setProviders([]); setLoading(true); setStateFilter(v); }}
+          onChange={(v) => { setPage(0); setStateFilter(v); }}
         />
 
         {/* Trust filter */}
         <TrustSelectFilter
           value={trustFilter}
-          onChange={(v) => { setPage(0); setProviders([]); setLoading(true); setTrustFilter(v); }}
+          onChange={(v) => { setPage(0); setTrustFilter(v); }}
         />
 
         {/* Clear filters - only when active */}
@@ -647,8 +647,6 @@ export default function AdminVerificationPage() {
           <button
             onClick={() => {
               setPage(0);
-              setProviders([]);
-              setLoading(true);
               setStateFilter("");
               setTrustFilter("");
             }}
@@ -845,9 +843,9 @@ export default function AdminVerificationPage() {
                             {formatDaysAgo(provider.updated_at)}
                           </p>
                         )}
-                        {filter === "pending" && (
+                        {filter === "pending" && submission?.submitted_at && (
                           <p className="text-xs text-gray-400">
-                            {formatDaysAgo(submission?.submitted_at || provider.updated_at)}
+                            {formatDaysAgo(submission.submitted_at)}
                           </p>
                         )}
                         {filter === "approved" && (
@@ -862,7 +860,7 @@ export default function AdminVerificationPage() {
                         )}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <div className="flex flex-nowrap gap-2 justify-end">
+                        <div className="flex gap-2 justify-end">
                           {filter === "unverified_claims" && (
                             <>
                               <button
@@ -925,14 +923,14 @@ export default function AdminVerificationPage() {
                             <>
                               <button
                                 onClick={() => openProviderModal(provider)}
-                                className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors whitespace-nowrap"
+                                className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
                               >
                                 Details
                               </button>
                               <button
                                 onClick={() => handleAction(provider.id, "approve")}
                                 disabled={actionLoading === provider.id}
-                                className="px-3 py-1.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors whitespace-nowrap"
+                                className="px-3 py-1.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
                               >
                                 {actionLoading === provider.id ? "..." : "Approve Badge"}
                               </button>
