@@ -9,6 +9,7 @@
  *   mark_pre_call_complete advance status queued→pre_call_outreach
  *   send_pre_call          fire pre-call email + log touchpoint
  *   send_follow_up         fire follow-up reminder email (after 5 business days)
+ *   log_email_sent         log email touchpoint only (Gmail flow, no email send)
  *   log_contact_form       log a contact_form_submitted touchpoint
  *   disposition            log a call disposition + state transition
  *   add_contact_and_send   capture verified contact + fire Step 1 email
@@ -103,6 +104,9 @@ export async function POST(
         break;
       case "send_follow_up":
         await handleSendFollowUp(outreach, body, user.id, admin);
+        break;
+      case "log_email_sent":
+        await handleLogEmailSent(outreach, body, user.id);
         break;
       case "log_contact_form":
         await handleLogContactForm(outreach, body, user.id);
@@ -341,6 +345,40 @@ async function handleLogContactForm(
   await insertTouchpoint(outreach.id, "contact_form_submitted", userId, body.notes ?? null, {
     url: body.url ?? outreach.research_data.contact_form_url ?? null,
   });
+}
+
+/**
+ * Log email sent touchpoint without actually sending an email.
+ * Used for the "Open in Gmail" flow where the user sends via Gmail
+ * and then marks it as sent in our system.
+ */
+async function handleLogEmailSent(
+  outreach: StaffingOutreachRow,
+  body: { emailType: "initial" | "follow_up"; recipientEmail?: string },
+  userId: string,
+) {
+  const db = getServiceClient();
+  const recipient = body.recipientEmail?.trim() || outreach.research_data.general_email || "";
+
+  const touchpointType: TouchpointType =
+    body.emailType === "follow_up" ? "follow_up_email_sent" : "pre_call_email_sent";
+
+  await insertTouchpoint(outreach.id, touchpointType, userId, null, {
+    recipient,
+    sent_via: "gmail",
+  });
+
+  // Schedule follow-up for initial email (3 business days ≈ 5 calendar days)
+  if (body.emailType === "initial") {
+    const nextDue = new Date(Date.now() + 5 * 86400_000).toISOString();
+    await db
+      .from("staffing_outreach")
+      .update({
+        next_action_due_at: nextDue,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", outreach.id);
+  }
 }
 
 async function handleDisposition(

@@ -175,3 +175,62 @@ export function postConsentStep1Email(opts: {
     html: layout(body, "Free three-month pilot — student caregivers for your agency"),
   };
 }
+
+// ── Plain-text templates for Gmail compose ───────────────────────────────
+// These generate plain-text emails for the "Open in Gmail" flow.
+// The user pastes these into Gmail, which handles formatting and signature.
+
+/**
+ * Initial outreach email — sent before any call attempt.
+ * Full Logan-voice pitch with program details.
+ */
+export function initialOutreachPlainText(opts: {
+  universityName: string;
+  serviceArea: string;
+}): { subject: string; body: string } {
+  return {
+    subject: `${opts.universityName} Student Caregiver Program`,
+    body: `Hello
+
+I am hoping to reach the person who handles hiring to share more information on a pilot ${opts.universityName} Student Caregiver Program.
+
+My name is Dr. Logan DuBose. I am a physician-researcher working with the National Institute of Aging, a small business owner, and affiliate faculty at ${opts.universityName}. I am currently working on a pilot program to match pre-nursing and pre-medical students with care agency jobs so they can help improve community care worker turnover and shortages, while gaining critical experience for their future careers as doctors and nurses.
+
+Would you be interested in hearing more about this program? In pilot testing in the ${opts.serviceArea}, I have seen potential for it to be an evergreen pipeline delivering vetted pre-health ${opts.universityName} students seeking employment in caregiver roles.
+
+Some materials to consider:
+• Pilot website here (demo profiles): https://olera.care/medjobs/providers
+• Demo video I made here: https://www.youtube.com/watch?v=ParY1tGaiew (~7 minutes long)
+• Recent system improvements since the last pilot include a more robust candidate vetting and scheduling system, and the price point potentially being lowered to $50/month (however, for earlier adopters, I am not charging anything for a period of time, and instead would appreciate feedback and reviews of the system)
+• Goal to send 5 new candidates a week with 1-3 solid hires per month in perpetuity
+
+Please let me know if you have any questions, would like to meet, or if there is any interest in restarting the program. If I can get your team's buy-in, then I will begin recruitment for you at ${opts.universityName} pre-nursing and pre-medical organizations this month (and could be sending vetted candidates for summer caregiving roles ASAP)!
+
+Take care!
+
+Best,
+Logan`,
+  };
+}
+
+/**
+ * Follow-up email — sent 3+ days after initial email if no response.
+ * Brief nudge to resurface the original outreach.
+ */
+export function followUpPlainText(opts: {
+  universityName: string;
+}): { subject: string; body: string } {
+  return {
+    subject: `Quick follow-up – ${opts.universityName} Student Program`,
+    body: `Hi,
+
+Just wanted to follow up in case this got buried.
+
+We're starting to connect agencies with pre-nursing students from ${opts.universityName} who are actively looking for caregiving roles.
+
+Would it make sense to share a quick overview or schedule a brief call?
+
+Best,
+Logan`,
+  };
+}

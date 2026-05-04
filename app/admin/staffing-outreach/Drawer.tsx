@@ -196,6 +196,104 @@ function ProviderSummary({ ctx }: { ctx: DrawerContext }) {
 
 // ── Section 1: Research & pre-call ───────────────────────────────────────
 
+/**
+ * Map university slugs to their service areas.
+ * Must stay in sync with lib/staffing-outreach/partner-universities.ts
+ */
+const SERVICE_AREA_BY_SLUG: Record<string, string> = {
+  "ut-austin": "Austin area",
+  "texas-am": "Bryan-College Station area",
+  "u-houston": "Houston area",
+  "u-florida": "Gainesville area",
+  "florida-state": "Tallahassee area",
+  "u-georgia": "Athens area",
+  "emory": "Atlanta area",
+  "unc-chapel-hill": "Chapel Hill area",
+  "duke": "Durham area",
+  "uva": "Charlottesville area",
+  "virginia-tech": "Blacksburg area",
+  "vanderbilt": "Nashville area",
+  "u-tennessee-knoxville": "Knoxville area",
+  "u-kentucky": "Lexington area",
+  "ohio-state": "Columbus area",
+  "u-michigan": "Ann Arbor area",
+  "michigan-state": "East Lansing area",
+  "penn-state": "State College area",
+  "uw-madison": "Madison area",
+  "u-minnesota": "Minneapolis area",
+  "uiuc": "Champaign area",
+  "indiana-bloomington": "Bloomington area",
+  "cu-boulder": "Boulder area",
+  "arizona-state": "Phoenix area",
+  "u-utah": "Salt Lake City area",
+};
+
+function getServiceArea(universitySlug: string): string {
+  return SERVICE_AREA_BY_SLUG[universitySlug] || "the area";
+}
+
+/**
+ * Generate initial outreach email plain text.
+ */
+function generateInitialEmailText(universityName: string, serviceArea: string) {
+  return {
+    subject: `${universityName} Student Caregiver Program`,
+    body: `Hello
+
+I am hoping to reach the person who handles hiring to share more information on a pilot ${universityName} Student Caregiver Program.
+
+My name is Dr. Logan DuBose. I am a physician-researcher working with the National Institute of Aging, a small business owner, and affiliate faculty at ${universityName}. I am currently working on a pilot program to match pre-nursing and pre-medical students with care agency jobs so they can help improve community care worker turnover and shortages, while gaining critical experience for their future careers as doctors and nurses.
+
+Would you be interested in hearing more about this program? In pilot testing in the ${serviceArea}, I have seen potential for it to be an evergreen pipeline delivering vetted pre-health ${universityName} students seeking employment in caregiver roles.
+
+Some materials to consider:
+• Pilot website here (demo profiles): https://olera.care/medjobs/providers
+• Demo video I made here: https://www.youtube.com/watch?v=ParY1tGaiew (~7 minutes long)
+• Recent system improvements since the last pilot include a more robust candidate vetting and scheduling system, and the price point potentially being lowered to $50/month (however, for earlier adopters, I am not charging anything for a period of time, and instead would appreciate feedback and reviews of the system)
+• Goal to send 5 new candidates a week with 1-3 solid hires per month in perpetuity
+
+Please let me know if you have any questions, would like to meet, or if there is any interest in restarting the program. If I can get your team's buy-in, then I will begin recruitment for you at ${universityName} pre-nursing and pre-medical organizations this month (and could be sending vetted candidates for summer caregiving roles ASAP)!
+
+Take care!
+
+Best,
+Logan`,
+  };
+}
+
+/**
+ * Generate follow-up email plain text.
+ */
+function generateFollowUpEmailText(universityName: string) {
+  return {
+    subject: `Quick follow-up – ${universityName} Student Program`,
+    body: `Hi,
+
+Just wanted to follow up in case this got buried.
+
+We're starting to connect agencies with pre-nursing students from ${universityName} who are actively looking for caregiving roles.
+
+Would it make sense to share a quick overview or schedule a brief call?
+
+Best,
+Logan`,
+  };
+}
+
+/**
+ * Build Gmail compose URL with pre-filled fields.
+ */
+function buildGmailComposeUrl(opts: { to: string; subject: string; body: string }): string {
+  const params = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to: opts.to,
+    su: opts.subject,
+    body: opts.body,
+  });
+  return `https://mail.google.com/mail/?${params.toString()}`;
+}
+
 function ResearchSection({
   ctx,
   onAction,
@@ -207,14 +305,22 @@ function ResearchSection({
   onAdvance: (action: string, payload?: Record<string, unknown>) => Promise<void>;
   setError: (err: string | null) => void;
 }) {
-  const [generalEmail, setGeneralEmail] = useState(ctx.outreach.research_data.general_email ?? "");
-  const [fax, setFax] = useState(ctx.outreach.research_data.fax ?? "");
+  // Pre-fill email from provider record, fall back to research_data
+  const [recipientEmail, setRecipientEmail] = useState(
+    ctx.provider.email || ctx.outreach.research_data.general_email || "",
+  );
   const [contactFormUrl, setContactFormUrl] = useState(
     ctx.outreach.research_data.contact_form_url ?? "",
   );
   const [saving, setSaving] = useState(false);
-  const [sentPreCall, setSentPreCall] = useState(
-    ctx.touchpoints.some((t) => t.type === "pre_call_email_sent"),
+  const [copiedInitial, setCopiedInitial] = useState(false);
+  const [copiedFollowUp, setCopiedFollowUp] = useState(false);
+
+  // Track sent status from touchpoints + local state for immediate feedback
+  const initialEmailTouchpoint = ctx.touchpoints.find((t) => t.type === "pre_call_email_sent");
+  const [sentInitial, setSentInitial] = useState(Boolean(initialEmailTouchpoint));
+  const [initialSentAt, setInitialSentAt] = useState<string | null>(
+    initialEmailTouchpoint?.created_at ?? null,
   );
   const [sentFollowUp, setSentFollowUp] = useState(
     ctx.touchpoints.some((t) => t.type === "follow_up_email_sent"),
@@ -222,6 +328,16 @@ function ResearchSection({
   const [submittedForm, setSubmittedForm] = useState(
     ctx.touchpoints.some((t) => t.type === "contact_form_submitted"),
   );
+
+  // Generate email content using slug for accurate service area
+  const universityName = ctx.batch.university_name;
+  const serviceArea = getServiceArea(ctx.batch.university_slug);
+  const initialEmail = generateInitialEmailText(universityName, serviceArea);
+  const followUpEmail = generateFollowUpEmailText(universityName);
+
+  // Editable email body state
+  const [initialBody, setInitialBody] = useState(initialEmail.body);
+  const [followUpBody, setFollowUpBody] = useState(followUpEmail.body);
 
   // Hide once status has moved past pre-call
   if (
@@ -235,7 +351,7 @@ function ResearchSection({
     setSaving(true);
     try {
       await onAction("update_research", {
-        research: { general_email: generalEmail, fax, contact_form_url: contactFormUrl },
+        research: { general_email: recipientEmail, contact_form_url: contactFormUrl },
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed");
@@ -244,36 +360,78 @@ function ResearchSection({
     }
   };
 
-  const sendPreCall = async () => {
-    if (!generalEmail.trim()) {
-      setError("Enter a general email first.");
+  const openGmail = (subject: string, body: string) => {
+    if (!recipientEmail.trim()) {
+      setError("Enter a recipient email first.");
+      return;
+    }
+    const url = buildGmailComposeUrl({
+      to: recipientEmail.trim(),
+      subject,
+      body,
+    });
+    window.open(url, "_blank");
+  };
+
+  const copyToClipboard = async (
+    subject: string,
+    body: string,
+    type: "initial" | "followUp",
+  ) => {
+    const fullText = `Subject: ${subject}\n\n${body}`;
+    try {
+      await navigator.clipboard.writeText(fullText);
+      if (type === "initial") {
+        setCopiedInitial(true);
+        setTimeout(() => setCopiedInitial(false), 2000);
+      } else {
+        setCopiedFollowUp(true);
+        setTimeout(() => setCopiedFollowUp(false), 2000);
+      }
+    } catch {
+      setError("Failed to copy to clipboard");
+    }
+  };
+
+  const markInitialSent = async () => {
+    if (!recipientEmail.trim()) {
+      setError("Enter a recipient email first.");
       return;
     }
     setSaving(true);
     try {
+      // Save email to research_data first
       await onAction("update_research", {
-        research: { general_email: generalEmail, fax, contact_form_url: contactFormUrl },
+        research: { general_email: recipientEmail.trim(), contact_form_url: contactFormUrl },
       });
-      await onAction("send_pre_call", { recipientEmail: generalEmail.trim() });
-      setSentPreCall(true);
+      // Log the touchpoint
+      await onAction("log_email_sent", {
+        emailType: "initial",
+        recipientEmail: recipientEmail.trim(),
+      });
+      setSentInitial(true);
+      setInitialSentAt(new Date().toISOString());
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Send failed");
+      setError(e instanceof Error ? e.message : "Failed to log email");
     } finally {
       setSaving(false);
     }
   };
 
-  const sendFollowUp = async () => {
-    if (!generalEmail.trim()) {
-      setError("Enter a general email first.");
+  const markFollowUpSent = async () => {
+    if (!recipientEmail.trim()) {
+      setError("Enter a recipient email first.");
       return;
     }
     setSaving(true);
     try {
-      await onAction("send_follow_up", { recipientEmail: generalEmail.trim() });
+      await onAction("log_email_sent", {
+        emailType: "follow_up",
+        recipientEmail: recipientEmail.trim(),
+      });
       setSentFollowUp(true);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Send failed");
+      setError(e instanceof Error ? e.message : "Failed to log email");
     } finally {
       setSaving(false);
     }
@@ -300,77 +458,168 @@ function ResearchSection({
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
         1. Research &amp; pre-call
       </h3>
-      <div className="space-y-3 rounded-lg border border-gray-100 bg-white p-4">
+      <div className="space-y-4 rounded-lg border border-gray-100 bg-white p-4">
+        {/* Recipient email field */}
         <Field
-          label="General email"
+          label="To"
           placeholder="info@agency.com"
-          value={generalEmail}
-          onChange={setGeneralEmail}
+          value={recipientEmail}
+          onChange={setRecipientEmail}
           onBlur={saveResearch}
-        />
-        <Field
-          label="Fax"
-          placeholder="(555) 123-4567"
-          value={fax}
-          onChange={setFax}
-          onBlur={saveResearch}
-        />
-        <Field
-          label="Contact form URL"
-          placeholder="https://agency.com/contact"
-          value={contactFormUrl}
-          onChange={setContactFormUrl}
-          onBlur={saveResearch}
+          type="email"
         />
 
-        <div className="flex flex-wrap gap-2 pt-2">
-          <ActionButton
-            onClick={sendPreCall}
-            disabled={saving || sentPreCall || !generalEmail.trim()}
-          >
-            {sentPreCall ? "✓ Pre-call email sent" : "Send pre-call email"}
-          </ActionButton>
-          {sentPreCall && (
+        {/* Initial email section */}
+        {!sentInitial ? (
+          <div className="space-y-3">
+            <div className="border-t border-gray-100 pt-3">
+              <p className="mb-1 text-xs font-medium text-gray-600">Subject</p>
+              <p className="text-sm text-gray-800">{initialEmail.subject}</p>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-600">Email Body</label>
+              <textarea
+                value={initialBody}
+                onChange={(e) => setInitialBody(e.target.value)}
+                className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm leading-relaxed focus:border-gray-400 focus:outline-none"
+                rows={12}
+              />
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => openGmail(initialEmail.subject, initialBody)}
+                disabled={!recipientEmail.trim()}
+                className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <span>📧</span> Open in Gmail
+              </button>
+              <button
+                onClick={() => copyToClipboard(initialEmail.subject, initialBody, "initial")}
+                className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                <span>📋</span> {copiedInitial ? "Copied!" : "Copy to Clipboard"}
+              </button>
+            </div>
+
+            <button
+              onClick={markInitialSent}
+              disabled={saving || !recipientEmail.trim()}
+              className="w-full rounded-md border-2 border-dashed border-gray-300 py-2.5 text-sm font-medium text-gray-600 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              ✓ Mark Initial Email as Sent
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Initial email sent confirmation */}
+            <div className="flex items-center gap-2 rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+              <span>✓</span>
+              <span>
+                Initial email sent
+                {initialSentAt && (
+                  <span className="text-emerald-600">
+                    {" "}
+                    ({new Date(initialSentAt).toLocaleDateString()})
+                  </span>
+                )}
+              </span>
+            </div>
+
+            {/* Follow-up email section (unlocked after initial) */}
+            {!sentFollowUp && (
+              <div className="space-y-3 border-t border-gray-100 pt-3">
+                <div>
+                  <p className="mb-1 text-xs font-medium text-gray-600">Subject</p>
+                  <p className="text-sm text-gray-800">{followUpEmail.subject}</p>
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">Follow-up Body</label>
+                  <textarea
+                    value={followUpBody}
+                    onChange={(e) => setFollowUpBody(e.target.value)}
+                    className="w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm leading-relaxed focus:border-gray-400 focus:outline-none"
+                    rows={8}
+                  />
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => openGmail(followUpEmail.subject, followUpBody)}
+                    disabled={!recipientEmail.trim()}
+                    className="inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <span>📧</span> Open in Gmail
+                  </button>
+                  <button
+                    onClick={() => copyToClipboard(followUpEmail.subject, followUpBody, "followUp")}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  >
+                    <span>📋</span> {copiedFollowUp ? "Copied!" : "Copy to Clipboard"}
+                  </button>
+                </div>
+
+                <button
+                  onClick={markFollowUpSent}
+                  disabled={saving || !recipientEmail.trim()}
+                  className="w-full rounded-md border-2 border-dashed border-gray-300 py-2.5 text-sm font-medium text-gray-600 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  ✓ Mark Follow-up as Sent
+                </button>
+              </div>
+            )}
+
+            {sentFollowUp && (
+              <div className="flex items-center gap-2 rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-700">
+                <span>✓</span>
+                <span>Follow-up email sent</span>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Contact form section */}
+        <div className="space-y-2 border-t border-gray-100 pt-3">
+          <Field
+            label="Contact form URL"
+            placeholder="https://agency.com/contact"
+            value={contactFormUrl}
+            onChange={setContactFormUrl}
+            onBlur={saveResearch}
+          />
+          <div className="flex flex-wrap gap-2">
+            {contactFormUrl.trim() && (
+              <a
+                href={contactFormUrl.trim()}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
+              >
+                Open form ↗
+              </a>
+            )}
             <ActionButton
-              onClick={sendFollowUp}
-              disabled={saving || sentFollowUp || !generalEmail.trim()}
+              onClick={logContactForm}
+              disabled={saving || submittedForm || !contactFormUrl.trim()}
+              variant="secondary"
             >
-              {sentFollowUp ? "✓ Follow-up sent" : "Send follow-up"}
+              {submittedForm ? "✓ Form submitted" : "Mark form as submitted"}
             </ActionButton>
-          )}
-          {contactFormUrl.trim() && (
-            <a
-              href={contactFormUrl.trim()}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-md border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              Open form ↗
-            </a>
-          )}
-          <ActionButton
-            onClick={logContactForm}
-            disabled={saving || submittedForm || !contactFormUrl.trim()}
-            variant="secondary"
-          >
-            {submittedForm ? "✓ Form submitted" : "Mark as submitted"}
-          </ActionButton>
-          <ActionButton onClick={() => {}} disabled variant="secondary" title="Coming later">
-            Send fax
-          </ActionButton>
-          <ActionButton onClick={() => {}} disabled variant="secondary" title="Coming later">
-            Send mail
-          </ActionButton>
+          </div>
         </div>
 
+        {/* Pre-call complete CTA */}
         <div className="border-t border-gray-100 pt-3">
+          <p className="mb-2 text-xs text-gray-500">📞 Ready to call?</p>
           <ActionButton
             onClick={() => onAdvance("mark_pre_call_complete")}
             disabled={saving}
             variant="primary"
             full
           >
-            Pre-call complete → start calling
+            Pre-call complete → Start calling
           </ActionButton>
         </div>
       </div>

@@ -517,3 +517,18 @@ export const PARTNER_UNIVERSITIES: PartnerUniversity[] = [
 export function getUniversityBySlug(slug: string): PartnerUniversity | undefined {
   return PARTNER_UNIVERSITIES.find((u) => u.slug === slug);
 }
+
+/**
+ * Derive a human-readable service area string for a university.
+ * Used in email templates to describe the geographic region.
+ *
+ * Special cases handle known colloquial names (e.g., "Bryan-College Station area").
+ * Default: "{university city} area"
+ */
+export function getServiceArea(universitySlug: string): string {
+  // Special cases with colloquial names
+  if (universitySlug === "texas-am") return "Bryan-College Station area";
+
+  const uni = getUniversityBySlug(universitySlug);
+  return uni ? `${uni.city} area` : "the area";
+}
