@@ -474,8 +474,13 @@ function NewSection({
 }
 
 /**
- * NurturingSection - shown for providers in "Nurturing" tab
- * Actions: Follow-up emails, track engagement
+ * NurturingSection - shown for providers in "Nurturing" tab (pre-consent stages)
+ * Actions: Follow-up emails for providers we haven't connected with yet
+ *
+ * NOT shown for:
+ * - queued (should use NewSection)
+ * - consented/activated (they've engaged, follow-up doesn't make sense)
+ * - enrolled/closed (terminal states)
  */
 function NurturingSection({
   ctx,
@@ -492,28 +497,39 @@ function NurturingSection({
   const [saving, setSaving] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Track touchpoints
+  // Track touchpoints + local state for immediate feedback
   const initialEmailTouchpoint = ctx.touchpoints.find((t) => t.type === "pre_call_email_sent");
   const followUpTouchpoint = ctx.touchpoints.find((t) => t.type === "follow_up_email_sent");
   const [sentFollowUp, setSentFollowUp] = useState(Boolean(followUpTouchpoint));
+  const [followUpSentAt, setFollowUpSentAt] = useState<string | null>(
+    followUpTouchpoint?.created_at ?? null,
+  );
 
   // Generate follow-up email
   const universityName = ctx.batch.university_name;
   const followUpEmail = generateFollowUpEmailText(universityName);
   const [emailBody, setEmailBody] = useState(followUpEmail.body);
 
-  // Only show for nurturing statuses (not queued, not enrolled/closed)
-  const nurturingStatuses = new Set([
+  // Only show for pre-consent nurturing statuses
+  // Don't show for consented/activated (they've engaged) or queued (use NewSection)
+  const showForStatuses = new Set([
     "pre_call_outreach",
     "calling",
     "connected_no_consent",
-    "consented",
-    "nurturing",
-    "activated",
   ]);
-  if (!nurturingStatuses.has(ctx.outreach.status)) {
+  if (!showForStatuses.has(ctx.outreach.status)) {
     return null;
   }
+
+  const saveResearch = async () => {
+    try {
+      await onAction("update_research", {
+        research: { general_email: recipientEmail },
+      });
+    } catch {
+      // Silently fail on blur save
+    }
+  };
 
   const openGmail = () => {
     if (!recipientEmail.trim()) {
@@ -551,6 +567,7 @@ function NurturingSection({
         recipientEmail: recipientEmail.trim(),
       });
       setSentFollowUp(true);
+      setFollowUpSentAt(new Date().toISOString());
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to log email");
     } finally {
@@ -585,6 +602,7 @@ function NurturingSection({
               placeholder="info@agency.com"
               value={recipientEmail}
               onChange={setRecipientEmail}
+              onBlur={saveResearch}
               type="email"
             />
 
@@ -632,9 +650,9 @@ function NurturingSection({
             <span>✓</span>
             <span>
               Follow-up sent{" "}
-              {followUpTouchpoint && (
+              {followUpSentAt && (
                 <span className="text-emerald-600">
-                  ({new Date(followUpTouchpoint.created_at).toLocaleDateString()})
+                  ({new Date(followUpSentAt).toLocaleDateString()})
                 </span>
               )}
             </span>
@@ -704,7 +722,7 @@ function CallSection({
   return (
     <section>
       <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
-        2. Call
+        Call
       </h3>
       <div className="space-y-3 rounded-lg border border-gray-100 bg-white p-4">
         {/* Call Script */}
