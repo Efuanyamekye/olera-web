@@ -403,7 +403,7 @@ export default function MultiProviderCardV2({
             /* Guest user: email-first capture form */
             <>
               {/* Provider row with "Replying" animation */}
-              <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50 mb-4">
+              <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50 mb-2">
                 <ProviderAvatar provider={currentProvider} size="sm" className="shrink-0" />
                 <span className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
                   {currentProvider.name}
@@ -418,9 +418,14 @@ export default function MultiProviderCardV2({
                 </span>
               </div>
 
-              {/* Headline */}
+              {/* Question they asked - shown in quotes */}
+              <p className="text-sm text-gray-500 text-center mb-4 px-4 line-clamp-2">
+                &ldquo;{question}&rdquo;
+              </p>
+
+              {/* Headline - personalized with provider first name */}
               <h3 className="font-display text-2xl font-normal text-gray-900 text-center mb-2">
-                Where should they reply?
+                Where should {firstName} reply?
               </h3>
 
               {/* Email form - inset button pattern */}
@@ -470,7 +475,7 @@ export default function MultiProviderCardV2({
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     </span>
                   ) : (
-                    "Get my reply"
+                    "Email me"
                   )}
                 </button>
               </div>
@@ -480,28 +485,50 @@ export default function MultiProviderCardV2({
                 <p className="mt-2 text-sm text-red-600 font-medium">{emailError}</p>
               )}
 
-              {/* Expand to card stack option (only if there are similar providers) */}
+              {/* Expand to card stack - card-style teaser with avatars */}
               {similarProviders.length > 0 && (
-                <div className="mt-6 text-center">
-                  <div className="flex items-center justify-center gap-3 mb-2">
-                    <div className="h-px flex-1 bg-gray-200" />
+                <div className="mt-6">
+                  <div className="flex items-center justify-center gap-3 mb-3">
+                    <div className="h-px w-12 bg-gray-200" />
                     <span className="text-xs text-gray-400 uppercase tracking-wide">or</span>
-                    <div className="h-px flex-1 bg-gray-200" />
+                    <div className="h-px w-12 bg-gray-200" />
                   </div>
                   <button
                     type="button"
                     onClick={handleExpandToCardStack}
                     className="
-                      inline-flex items-center gap-1.5
-                      text-sm font-medium text-primary-600
-                      hover:text-primary-700
-                      transition-colors duration-200
+                      w-full flex items-center justify-between
+                      px-4 py-3
+                      bg-gray-50 hover:bg-gray-100
+                      border border-gray-200 hover:border-gray-300
+                      rounded-xl
+                      transition-all duration-200
+                      group
                     "
                   >
-                    See who else can help
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                    </svg>
+                    <div className="flex items-center gap-3">
+                      {/* Stacked provider avatars */}
+                      <div className="flex -space-x-2">
+                        {similarProviders.slice(0, 3).map((provider, idx) => (
+                          <ProviderAvatar
+                            key={provider.id}
+                            provider={provider}
+                            size="sm"
+                            className="ring-2 ring-gray-50"
+                            style={{ zIndex: 3 - idx }}
+                          />
+                        ))}
+                      </div>
+                      <span className="text-sm font-medium text-gray-700">
+                        {similarProviders.length} similar provider{similarProviders.length !== 1 ? "s" : ""}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 text-sm font-medium text-primary-600 group-hover:text-primary-700">
+                      <span>See who else can help</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </div>
                   </button>
                 </div>
               )}
