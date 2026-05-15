@@ -406,7 +406,7 @@ export default function MultiProviderCardV2({
               </div>
 
               {/* ─── STACK 2: Email capture ─── */}
-              <div className="mb-6">
+              <div>
                 {/* Headline - ties back to getting their answer */}
                 <h3 className="font-display text-xl md:text-2xl font-normal text-gray-900 text-center mb-3">
                   Where should your answer go?
@@ -473,7 +473,7 @@ export default function MultiProviderCardV2({
               {/* ─── STACK 3: Expand option ─── */}
               {similarProviders.length > 0 && (
                 <div>
-                  <div className="flex items-center justify-center gap-3 mb-3">
+                  <div className="flex items-center justify-center gap-3 my-4">
                     <div className="h-px w-12 bg-gray-200" />
                     <span className="text-xs text-gray-400 uppercase tracking-wide">or</span>
                     <div className="h-px w-12 bg-gray-200" />
@@ -482,7 +482,7 @@ export default function MultiProviderCardV2({
                     type="button"
                     onClick={handleExpandToCardStack}
                     className="
-                      w-full flex items-center justify-between
+                      w-full flex items-center justify-center
                       px-4 py-3
                       bg-gray-50 hover:bg-gray-100
                       border border-gray-200 hover:border-gray-300
@@ -491,9 +491,9 @@ export default function MultiProviderCardV2({
                       group
                     "
                   >
-                    <div className="flex items-center gap-3">
-                      {/* Stacked provider avatars */}
-                      <div className="flex -space-x-2">
+                    <div className="flex items-center gap-2">
+                      {/* Stacked provider avatars - tighter overlap */}
+                      <div className="flex -space-x-3">
                         {similarProviders.slice(0, 3).map((provider, idx) => (
                           <ProviderAvatar
                             key={provider.id}
@@ -504,13 +504,10 @@ export default function MultiProviderCardV2({
                           />
                         ))}
                       </div>
-                      <span className="text-sm font-medium text-gray-700">
-                        {similarProviders.length} other{similarProviders.length !== 1 ? "s" : ""}
+                      <span className="text-sm font-medium text-primary-600 group-hover:text-primary-700">
+                        Ask {similarProviders.length} other provider{similarProviders.length !== 1 ? "s" : ""}
                       </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-sm font-medium text-primary-600 group-hover:text-primary-700">
-                      <span>Ask them</span>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 text-primary-600 group-hover:text-primary-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                       </svg>
                     </div>
