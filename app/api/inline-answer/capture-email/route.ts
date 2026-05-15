@@ -297,7 +297,7 @@ export async function POST(req: Request) {
       session_id: sessionId || null,
       // Store variant as entry_point for Q&A conversion attribution
       // This matches how Lead Capture uses entry_point
-      entry_point: resolvedVariant.startsWith("multi_provider") ? `qa_${resolvedVariant}` : `qa_${resolvedVariant}`,
+      entry_point: `qa_${resolvedVariant}`,
       // Also store the raw variant for debugging
       qa_variant: resolvedVariant,
       provider_name: providerName || null,

@@ -387,7 +387,7 @@ export default function MultiProviderCardV2({
                   transition-all duration-200
                 "
               >
-                Save all {totalAsked} providers
+                Save {totalAsked === 1 ? "provider" : `all ${totalAsked} providers`}
               </button>
             </div>
           ) : (
