@@ -393,16 +393,23 @@ export default function MultiProviderCardV2({
           ) : (
             /* Guest user: email-first capture form - 3 stacks with consistent spacing */
             <>
-              {/* ─── STACK 1: Provider with "Sent" confirmation ─── */}
-              <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50 mb-6">
-                <ProviderAvatar provider={currentProvider} size="sm" className="shrink-0" />
-                <span className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
-                  {currentProvider.name}
-                </span>
-                <span className="flex items-center gap-1.5 text-sm text-success-600 shrink-0 ml-3">
-                  <Check size={14} weight="bold" />
-                  <span className="font-medium">Sent</span>
-                </span>
+              {/* ─── STACK 1: Question + Provider ─── */}
+              <div className="mb-6">
+                {/* Question they tapped - reminder of what they asked */}
+                <p className="text-sm text-gray-500 text-center mb-3 px-2 line-clamp-2">
+                  &ldquo;{question}&rdquo;
+                </p>
+                {/* Provider row with "Sent" confirmation */}
+                <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50">
+                  <ProviderAvatar provider={currentProvider} size="sm" className="shrink-0" />
+                  <span className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
+                    {currentProvider.name}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-sm text-success-600 shrink-0 ml-3">
+                    <Check size={14} weight="bold" />
+                    <span className="font-medium">Sent</span>
+                  </span>
+                </div>
               </div>
 
               {/* ─── STACK 2: Email capture ─── */}
