@@ -1215,8 +1215,8 @@ async function fetchWindow(
       } else {
         stage = "clicked";
       }
-    } else if (r.event_type === "lead_received" && r.metadata?.cta_variant) {
-      // Only count lead_received if it has cta_variant attribution
+    } else if (r.event_type === "lead_received") {
+      // Count all lead_received as conversions - those without cta_variant go to "unassigned"
       stage = "converted";
     }
 
