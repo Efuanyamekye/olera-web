@@ -558,7 +558,7 @@ export default function MultiProviderCardV2({
               bg-white border rounded-full
               transition-all duration-200
               focus-within:ring-2 focus-within:ring-gray-200 focus-within:border-gray-900
-              mb-8 mx-2 lg:mx-20
+              mb-12 mx-2 lg:mx-20
               ${emailError ? "border-red-300 ring-2 ring-red-50" : "border-gray-300"}
             `}
           >
