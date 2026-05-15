@@ -1372,8 +1372,11 @@ async function fetchWindow(
       conversionCounts.compare++;
     } else if (ctaVariant === "legacy") {
       conversionCounts.legacy++;
+    } else {
+      // Connections without tracking default to legacy (current default CTA)
+      // This catches conversions where cta_variant wasn't passed due to race conditions
+      conversionCounts.legacy++;
     }
-    // else: no tracking — skip (historical data excluded)
   }
 
   const conversionTotal = Object.values(conversionCounts).reduce((a, b) => a + b, 0);
