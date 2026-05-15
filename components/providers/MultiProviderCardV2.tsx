@@ -402,19 +402,15 @@ export default function MultiProviderCardV2({
           ) : (
             /* Guest user: email-first capture form */
             <>
-              {/* Provider row with "Replying" animation */}
+              {/* Provider row with "Sent" confirmation */}
               <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50 mb-2">
                 <ProviderAvatar provider={currentProvider} size="sm" className="shrink-0" />
                 <span className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
                   {currentProvider.name}
                 </span>
-                <span className="flex items-center gap-1.5 text-sm text-gray-500 shrink-0 ml-3">
-                  <span className="italic">Replying</span>
-                  <span className="flex gap-0.5">
-                    <span className="w-1 h-1 rounded-full bg-amber-600 typing-dot-1" />
-                    <span className="w-1 h-1 rounded-full bg-amber-600 typing-dot-2" />
-                    <span className="w-1 h-1 rounded-full bg-amber-600 typing-dot-3" />
-                  </span>
+                <span className="flex items-center gap-1.5 text-sm text-success-600 shrink-0 ml-3">
+                  <Check size={14} weight="bold" />
+                  <span className="font-medium">Sent</span>
                 </span>
               </div>
 
@@ -423,9 +419,9 @@ export default function MultiProviderCardV2({
                 &ldquo;{question}&rdquo;
               </p>
 
-              {/* Headline - personalized with provider first name */}
+              {/* Headline - ties back to getting their answer */}
               <h3 className="font-display text-2xl font-normal text-gray-900 text-center mb-2">
-                Where should {firstName} reply?
+                Where should your answer go?
               </h3>
 
               {/* Email form - inset button pattern */}
@@ -475,7 +471,7 @@ export default function MultiProviderCardV2({
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                     </span>
                   ) : (
-                    "Email me"
+                    "To my email"
                   )}
                 </button>
               </div>
@@ -542,7 +538,7 @@ export default function MultiProviderCardV2({
           ═══════════════════════════════════════════════════════════════ */}
       {cardState === "expanded" && similarProviders.length > 0 && (
         <div className="p-4 lg:p-6">
-          {/* Provider list with "Replying" animation (shows providers already asked) */}
+          {/* Provider list with "Sent" confirmation (shows providers already asked) */}
           <div className="space-y-2 mb-4">
             {allSentProviders.map((provider) => (
               <div
@@ -553,21 +549,17 @@ export default function MultiProviderCardV2({
                 <span className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
                   {provider.name}
                 </span>
-                <span className="flex items-center gap-1.5 text-sm text-gray-500 shrink-0 ml-3">
-                  <span className="italic">Replying</span>
-                  <span className="flex gap-0.5">
-                    <span className="w-1 h-1 rounded-full bg-amber-600 typing-dot-1" />
-                    <span className="w-1 h-1 rounded-full bg-amber-600 typing-dot-2" />
-                    <span className="w-1 h-1 rounded-full bg-amber-600 typing-dot-3" />
-                  </span>
+                <span className="flex items-center gap-1.5 text-sm text-success-600 shrink-0 ml-3">
+                  <Check size={14} weight="bold" />
+                  <span className="font-medium">Sent</span>
                 </span>
               </div>
             ))}
           </div>
 
-          {/* Headline */}
+          {/* Headline - plural for multiple providers */}
           <h3 className="font-display text-2xl font-normal text-gray-900 text-center mb-2">
-            Where should they reply?
+            Where should your answers go?
           </h3>
 
           {/* Email form persists in expanded state */}
@@ -617,7 +609,7 @@ export default function MultiProviderCardV2({
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 </span>
               ) : (
-                "Get answers"
+                "To my email"
               )}
             </button>
           </div>
