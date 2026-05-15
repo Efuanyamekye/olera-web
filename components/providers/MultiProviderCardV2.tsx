@@ -415,7 +415,7 @@ export default function MultiProviderCardV2({
               {/* ─── STACK 2: Email capture ─── */}
               <div className="mb-6">
                 {/* Headline - ties back to getting their answer */}
-                <h3 className="font-display text-2xl font-normal text-gray-900 text-center mb-3">
+                <h3 className="font-display text-xl md:text-2xl font-normal text-gray-900 text-center mb-3">
                   Where should your answer go?
                 </h3>
 
@@ -554,7 +554,7 @@ export default function MultiProviderCardV2({
           </div>
 
           {/* Headline - singular until multiple providers asked */}
-          <h3 className="font-display text-2xl font-normal text-gray-900 text-center mb-2">
+          <h3 className="font-display text-xl md:text-2xl font-normal text-gray-900 text-center mb-2">
             {allSentProviders.length === 1
               ? "Where should your answer go?"
               : "Where should your answers go?"}
