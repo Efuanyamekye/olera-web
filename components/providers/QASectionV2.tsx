@@ -244,11 +244,6 @@ export default function QASectionV2({
   const submitQuestion = useCallback(async (questionText: string, suggestionIndex?: number) => {
     if (!questionText.trim()) return;
 
-    // Admin preview mode: silent no-op. PreviewModeBanner already tells the
-    // operator submissions are disabled — re-stating it via an error toast
-    // would conflict with "Something went wrong" which implies system failure.
-    if (isPreviewMode()) return;
-
     setSubmitting(true);
     setSubmitStatus("idle");
     if (suggestionIndex !== undefined) setTappedIndex(suggestionIndex);
