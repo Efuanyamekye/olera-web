@@ -77,15 +77,6 @@ export default function MultiProviderCardV2({
   const isLastCard = currentIndex >= similarProviders.length - 1;
   const totalAsked = 1 + askedProviders.length; // 1 = original provider
 
-  // Extract first name from provider name
-  const getFirstName = (name: string) => {
-    const cleanName = name?.replace(/^\([^)]+\)\s*/, "") || "";
-    const rawFirstName = cleanName.split(/\s/)[0] || name?.split(/\s/)[0] || "them";
-    return rawFirstName.replace(/'s$/i, "") || rawFirstName;
-  };
-
-  const firstName = getFirstName(currentProvider.name);
-
   // Handle image load errors
   const handleImageError = (providerId: string) => {
     setFailedImages((prev) => new Set([...prev, providerId]));
