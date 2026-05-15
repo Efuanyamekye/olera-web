@@ -553,9 +553,11 @@ export default function MultiProviderCardV2({
             ))}
           </div>
 
-          {/* Headline - plural for multiple providers */}
+          {/* Headline - singular until multiple providers asked */}
           <h3 className="font-display text-2xl font-normal text-gray-900 text-center mb-2">
-            Where should your answers go?
+            {allSentProviders.length === 1
+              ? "Where should your answer go?"
+              : "Where should your answers go?"}
           </h3>
 
           {/* Email form persists in expanded state */}
