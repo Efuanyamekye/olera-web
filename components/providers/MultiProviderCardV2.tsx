@@ -474,7 +474,7 @@ export default function MultiProviderCardV2({
               {/* ─── STACK 3: Expand option ─── */}
               {similarProviders.length > 0 && (
                 <div className="mx-2 lg:mx-20">
-                  <div className="flex items-center justify-center gap-3 my-4">
+                  <div className="flex items-center justify-center gap-3 my-6">
                     <div className="h-px w-12 bg-gray-200" />
                     <span className="text-xs text-gray-400 uppercase tracking-wide">or</span>
                     <div className="h-px w-12 bg-gray-200" />
