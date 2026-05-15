@@ -409,7 +409,7 @@ export default function MultiProviderCardV2({
               <div>
                 {/* Headline - ties back to getting their answer */}
                 <h3 className="font-display text-xl md:text-2xl font-normal text-gray-900 text-center mb-3">
-                  Where should your answer go?
+                  Where should we send your answer?
                 </h3>
 
                 {/* Email form - inset button pattern */}
@@ -547,8 +547,8 @@ export default function MultiProviderCardV2({
           {/* Headline - singular until multiple providers asked */}
           <h3 className="font-display text-xl md:text-2xl font-normal text-gray-900 text-center mb-2">
             {allSentProviders.length === 1
-              ? "Where should your answer go?"
-              : "Where should your answers go?"}
+              ? "Where should we send your answer?"
+              : "Where should we send your answers?"}
           </h3>
 
           {/* Email form persists in expanded state */}
