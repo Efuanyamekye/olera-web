@@ -394,7 +394,7 @@ export default function MultiProviderCardV2({
             /* Guest user: email-first capture form */
             <>
               {/* ─── STACK 1: Provider with "Sent" confirmation ─── */}
-              <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50 mb-6">
+              <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50 mb-6 mx-2 lg:mx-20">
                 <ProviderAvatar provider={currentProvider} size="sm" className="shrink-0" />
                 <span className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
                   {currentProvider.name}
@@ -419,6 +419,7 @@ export default function MultiProviderCardV2({
                     bg-white border rounded-full
                     transition-all duration-200
                     focus-within:ring-2 focus-within:ring-gray-200 focus-within:border-gray-900
+                    mx-2 lg:mx-20
                     ${emailError ? "border-red-300 ring-2 ring-red-50" : "border-gray-300"}
                   `}
                 >
@@ -472,7 +473,7 @@ export default function MultiProviderCardV2({
 
               {/* ─── STACK 3: Expand option ─── */}
               {similarProviders.length > 0 && (
-                <div>
+                <div className="mx-2 lg:mx-20">
                   <div className="flex items-center justify-center gap-3 my-4">
                     <div className="h-px w-12 bg-gray-200" />
                     <span className="text-xs text-gray-400 uppercase tracking-wide">or</span>
