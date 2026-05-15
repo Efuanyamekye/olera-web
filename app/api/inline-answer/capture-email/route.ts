@@ -6,6 +6,7 @@ import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email"
 import { getSiteUrl } from "@/lib/site-url";
 import { generateUniqueSlugFromName } from "@/lib/slug";
 import { validateEmailStrict } from "@/lib/email-validation";
+import { recordProviderEvent } from "@/lib/analytics/provider-events";
 
 /**
  * POST /api/inline-answer/capture-email
@@ -281,7 +282,33 @@ export async function POST(req: Request) {
   }
 
   // ═══════════════════════════════════════════════════════════════════
-  // 4. Send welcome email (fire-and-forget for new users)
+  // 4. Record lead_received event for conversion tracking
+  // ═══════════════════════════════════════════════════════════════════
+  // Fire lead_received so Q&A conversions show in admin analytics alongside
+  // CTA and Lead Capture conversions. The variant (multi_provider / multi_provider_v2)
+  // is stored as entry_point for attribution.
+  void recordProviderEvent({
+    provider_id: providerId,
+    event_type: "lead_received",
+    profile_id: familyProfileId,
+    metadata: {
+      email: normalizedEmail,
+      guest: !currentUser,
+      session_id: sessionId || null,
+      // Store variant as entry_point for Q&A conversion attribution
+      // This matches how Lead Capture uses entry_point
+      entry_point: resolvedVariant.startsWith("multi_provider") ? `qa_${resolvedVariant}` : `qa_${resolvedVariant}`,
+      // Also store the raw variant for debugging
+      qa_variant: resolvedVariant,
+      provider_name: providerName || null,
+      question_text: questionText || null,
+      sent_provider_ids: sentProviderIds || null,
+      sent_count: sentCount || null,
+    },
+  });
+
+  // ═══════════════════════════════════════════════════════════════════
+  // 5. Send welcome email (fire-and-forget for new users)
   // ═══════════════════════════════════════════════════════════════════
   if (isNewUser) {
     (async () => {
