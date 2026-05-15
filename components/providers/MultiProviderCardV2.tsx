@@ -391,90 +391,95 @@ export default function MultiProviderCardV2({
               </button>
             </div>
           ) : (
-            /* Guest user: email-first capture form */
+            /* Guest user: email-first capture form - 3 stacks with consistent spacing */
             <>
-              {/* Provider row with "Sent" confirmation */}
-              <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50 mb-2">
-                <ProviderAvatar provider={currentProvider} size="sm" className="shrink-0" />
-                <span className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
-                  {currentProvider.name}
-                </span>
-                <span className="flex items-center gap-1.5 text-sm text-success-600 shrink-0 ml-3">
-                  <Check size={14} weight="bold" />
-                  <span className="font-medium">Sent</span>
-                </span>
+              {/* ─── STACK 1: Question + Provider ─── */}
+              <div className="mb-6">
+                {/* Question they asked - shown in quotes above provider */}
+                <p className="text-sm text-gray-500 text-center mb-3 px-2 line-clamp-2">
+                  &ldquo;{question}&rdquo;
+                </p>
+                {/* Provider row with "Sent" confirmation */}
+                <div className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-gray-50">
+                  <ProviderAvatar provider={currentProvider} size="sm" className="shrink-0" />
+                  <span className="flex-1 min-w-0 text-sm font-medium text-gray-900 truncate">
+                    {currentProvider.name}
+                  </span>
+                  <span className="flex items-center gap-1.5 text-sm text-success-600 shrink-0 ml-3">
+                    <Check size={14} weight="bold" />
+                    <span className="font-medium">Sent</span>
+                  </span>
+                </div>
               </div>
 
-              {/* Question they asked - shown in quotes */}
-              <p className="text-sm text-gray-500 text-center mb-4 px-4 line-clamp-2">
-                &ldquo;{question}&rdquo;
-              </p>
+              {/* ─── STACK 2: Email capture ─── */}
+              <div className="mb-6">
+                {/* Headline - ties back to getting their answer */}
+                <h3 className="font-display text-2xl font-normal text-gray-900 text-center mb-3">
+                  Where should your answer go?
+                </h3>
 
-              {/* Headline - ties back to getting their answer */}
-              <h3 className="font-display text-2xl font-normal text-gray-900 text-center mb-2">
-                Where should your answer go?
-              </h3>
-
-              {/* Email form - inset button pattern */}
-              <div
-                className={`
-                  flex items-center gap-2 p-1.5
-                  bg-white border rounded-full
-                  transition-all duration-200
-                  focus-within:ring-2 focus-within:ring-gray-200 focus-within:border-gray-900
-                  ${emailError ? "border-red-300 ring-2 ring-red-50" : "border-gray-300"}
-                `}
-              >
-                <input
-                  ref={inputRef}
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    setEmailError(null);
-                  }}
-                  onKeyDown={handleKeyDown}
-                  placeholder="yourname@email.com"
-                  autoComplete="email"
-                  disabled={isSubmitting}
-                  className="
-                    flex-1 min-w-0 px-4 py-2
-                    text-sm text-gray-900 placeholder-gray-500
-                    bg-transparent border-none outline-none
-                    disabled:opacity-50
-                  "
-                />
-                <button
-                  type="button"
-                  onClick={handleEmailSubmit}
-                  disabled={isSubmitting || !email.trim()}
-                  className="
-                    shrink-0 px-5 py-2.5
-                    text-sm font-semibold text-white
-                    bg-gray-900 rounded-full
-                    hover:bg-gray-800
+                {/* Email form - inset button pattern */}
+                <div
+                  className={`
+                    flex items-center gap-2 p-1.5
+                    bg-white border rounded-full
                     transition-all duration-200
-                    disabled:opacity-40 disabled:cursor-not-allowed
-                  "
+                    focus-within:ring-2 focus-within:ring-gray-200 focus-within:border-gray-900
+                    ${emailError ? "border-red-300 ring-2 ring-red-50" : "border-gray-300"}
+                  `}
                 >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    </span>
-                  ) : (
-                    "To my email"
-                  )}
-                </button>
+                  <input
+                    ref={inputRef}
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setEmailError(null);
+                    }}
+                    onKeyDown={handleKeyDown}
+                    placeholder="yourname@email.com"
+                    autoComplete="email"
+                    disabled={isSubmitting}
+                    className="
+                      flex-1 min-w-0 px-4 py-2
+                      text-sm text-gray-900 placeholder-gray-500
+                      bg-transparent border-none outline-none
+                      disabled:opacity-50
+                    "
+                  />
+                  <button
+                    type="button"
+                    onClick={handleEmailSubmit}
+                    disabled={isSubmitting || !email.trim()}
+                    className="
+                      shrink-0 px-5 py-2.5
+                      text-sm font-semibold text-white
+                      bg-gray-900 rounded-full
+                      hover:bg-gray-800
+                      transition-all duration-200
+                      disabled:opacity-40 disabled:cursor-not-allowed
+                    "
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      </span>
+                    ) : (
+                      "To my email"
+                    )}
+                  </button>
+                </div>
+
+                {/* Error message */}
+                {emailError && (
+                  <p className="mt-2 text-sm text-red-600 font-medium">{emailError}</p>
+                )}
               </div>
 
-              {/* Error message */}
-              {emailError && (
-                <p className="mt-2 text-sm text-red-600 font-medium">{emailError}</p>
-              )}
-
-              {/* Expand to card stack - card-style teaser with avatars */}
+              {/* ─── STACK 3: Expand option ─── */}
               {similarProviders.length > 0 && (
-                <div className="mt-10">
+                <div>
                   <div className="flex items-center justify-center gap-3 mb-3">
                     <div className="h-px w-12 bg-gray-200" />
                     <span className="text-xs text-gray-400 uppercase tracking-wide">or</span>
@@ -507,11 +512,11 @@ export default function MultiProviderCardV2({
                         ))}
                       </div>
                       <span className="text-sm font-medium text-gray-700">
-                        {similarProviders.length} similar provider{similarProviders.length !== 1 ? "s" : ""}
+                        {similarProviders.length} other{similarProviders.length !== 1 ? "s" : ""}
                       </span>
                     </div>
                     <div className="flex items-center gap-1 text-sm font-medium text-primary-600 group-hover:text-primary-700">
-                      <span>See who else can help</span>
+                      <span>Ask them</span>
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                       </svg>
