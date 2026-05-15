@@ -535,7 +535,7 @@ export default function MultiProviderCardV2({
       {cardState === "expanded" && similarProviders.length > 0 && (
         <div className="p-4 lg:p-6">
           {/* Provider list with "Sent" confirmation (shows providers already asked) */}
-          <div className="space-y-2 mb-4">
+          <div className="space-y-2 mb-4 mx-2 lg:mx-20">
             {allSentProviders.map((provider) => (
               <div
                 key={provider.id}
@@ -567,7 +567,7 @@ export default function MultiProviderCardV2({
               bg-white border rounded-full
               transition-all duration-200
               focus-within:ring-2 focus-within:ring-gray-200 focus-within:border-gray-900
-              mb-8
+              mb-8 mx-2 lg:mx-20
               ${emailError ? "border-red-300 ring-2 ring-red-50" : "border-gray-300"}
             `}
           >
