@@ -483,7 +483,7 @@ export default function MultiProviderCardV2({
 
               {/* Expand to card stack - card-style teaser with avatars */}
               {similarProviders.length > 0 && (
-                <div className="mt-6">
+                <div className="mt-10">
                   <div className="flex items-center justify-center gap-3 mb-3">
                     <div className="h-px w-12 bg-gray-200" />
                     <span className="text-xs text-gray-400 uppercase tracking-wide">or</span>
