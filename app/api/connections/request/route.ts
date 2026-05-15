@@ -695,6 +695,7 @@ async function handleGuestConnection({
   if (!providerEmail) connectionMetadata.needs_provider_email = true;
   if (ctaVariant) connectionMetadata.cta_variant = ctaVariant;
   if (entryPoint) connectionMetadata.entry_point = entryPoint;
+  if (sessionId) connectionMetadata.session_id = sessionId;
 
   // Auto-reply from provider (marked as auto to exclude from unread reminders)
   connectionMetadata.thread = [
@@ -759,6 +760,8 @@ async function handleGuestConnection({
       session_id: sessionId || null,
       // cta_variant for CTA A/B testing attribution
       cta_variant: ctaVariant || null,
+      // entry_point for Lead Capture attribution (custom_quote, book_consultation, message_host)
+      entry_point: entryPoint || null,
     },
   });
 
@@ -1604,6 +1607,7 @@ export async function POST(request: Request) {
     if (!providerEmail) connectionMetadata.needs_provider_email = true;
     if (ctaVariant) connectionMetadata.cta_variant = ctaVariant;
     if (entryPoint) connectionMetadata.entry_point = entryPoint;
+    if (sessionId) connectionMetadata.session_id = sessionId;
 
     // Seed an automatic reply from the provider so the seeker has an
     // unread message in their inbox immediately after connecting.
@@ -1672,6 +1676,8 @@ export async function POST(request: Request) {
         session_id: sessionId || null,
         // cta_variant for CTA A/B testing attribution
         cta_variant: ctaVariant || null,
+        // entry_point for Lead Capture attribution (custom_quote, book_consultation, message_host)
+        entry_point: entryPoint || null,
       },
     });
 
