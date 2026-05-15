@@ -38,7 +38,7 @@ import type { ProviderCardData } from "@/lib/types/provider";
  */
 export function BenefitsArmGate({ children }: { children: ReactNode }) {
   const variant = useIntakeVariant();
-  if (variant === "outreach" || variant === "qa_email_capture" || variant === "multi_provider") return null;
+  if (variant === "outreach" || variant === "qa_email_capture" || variant === "multi_provider" || variant === "multi_provider_v2") return null;
   return <>{children}</>;
 }
 

@@ -109,6 +109,8 @@ export function variantSurfaceLabel(variant: IntakeVariant): string {
       return "Q&A email capture (no SBF)";
     case "multi_provider":
       return "Multi-provider comparison";
+    case "multi_provider_v2":
+      return "Multi-provider V2 (email-first)";
   }
 }
 
@@ -131,5 +133,7 @@ export function variantSubLabel(variant: IntakeVariant): string {
       return "Q&A enrichment, no SBF";
     case "multi_provider":
       return "Send question to multiple providers";
+    case "multi_provider_v2":
+      return "Email capture first, optional card stack";
   }
 }

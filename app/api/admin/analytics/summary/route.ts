@@ -174,11 +174,12 @@ type BenefitsFunnelByVariant = {
   availability: BenefitsVariantRow;
   loss: BenefitsVariantRow;
   empathic: BenefitsVariantRow;
-  outreach: BenefitsVariantRow;        // 4th arm: AI outreach module (H1 demand test)
+  outreach: BenefitsVariantRow;           // 4th arm: AI outreach module (H1 demand test)
   qa_email_capture: BenefitsVariantRow;   // 5th arm: inline Q&A answer expansion (H2 UX test)
-  multi_provider: BenefitsVariantRow;  // 6th arm: multi-provider comparison
-  control: BenefitsVariantRow;         // legacy V2
-  money_loss: BenefitsVariantRow;      // legacy V2
+  multi_provider: BenefitsVariantRow;     // 6th arm: multi-provider comparison
+  multi_provider_v2: BenefitsVariantRow;  // 7th arm: multi-provider V2 (email-first)
+  control: BenefitsVariantRow;            // legacy V2
+  money_loss: BenefitsVariantRow;         // legacy V2
   unassigned: BenefitsVariantRow;
 };
 // CTA Variants A/B funnel. Distinct sessions per stage:
@@ -363,11 +364,12 @@ const EMPTY_BENEFITS_FUNNEL_BY_VARIANT = (): BenefitsFunnelByVariant => ({
   availability: EMPTY_BENEFITS_FUNNEL(),
   loss: EMPTY_BENEFITS_FUNNEL(),
   empathic: EMPTY_BENEFITS_FUNNEL(),
-  outreach: EMPTY_BENEFITS_FUNNEL(),        // 4th arm
+  outreach: EMPTY_BENEFITS_FUNNEL(),           // 4th arm
   qa_email_capture: EMPTY_BENEFITS_FUNNEL(),   // 5th arm
-  multi_provider: EMPTY_BENEFITS_FUNNEL(),  // 6th arm
-  control: EMPTY_BENEFITS_FUNNEL(),         // legacy V2
-  money_loss: EMPTY_BENEFITS_FUNNEL(),      // legacy V2
+  multi_provider: EMPTY_BENEFITS_FUNNEL(),     // 6th arm
+  multi_provider_v2: EMPTY_BENEFITS_FUNNEL(),  // 7th arm
+  control: EMPTY_BENEFITS_FUNNEL(),            // legacy V2
+  money_loss: EMPTY_BENEFITS_FUNNEL(),         // legacy V2
   unassigned: EMPTY_BENEFITS_FUNNEL(),
 });
 const EMPTY_CTA_FUNNEL = (): CTAFunnel => ({
@@ -966,11 +968,12 @@ async function fetchWindow(
     | "availability"
     | "loss"
     | "empathic"
-    | "outreach"        // 4th arm
+    | "outreach"           // 4th arm
     | "qa_email_capture"   // 5th arm
-    | "multi_provider"  // 6th arm
-    | "control"         // legacy V2
-    | "money_loss"      // legacy V2
+    | "multi_provider"     // 6th arm
+    | "multi_provider_v2"  // 7th arm
+    | "control"            // legacy V2
+    | "money_loss"         // legacy V2
     | "unassigned";
   const emptyStages = (): Record<keyof BenefitsFunnel, Set<string>> => ({
     impressions: new Set(),
@@ -988,6 +991,7 @@ async function fetchWindow(
     outreach: emptyStages(),
     qa_email_capture: emptyStages(),
     multi_provider: emptyStages(),
+    multi_provider_v2: emptyStages(),
     control: emptyStages(),
     money_loss: emptyStages(),
     unassigned: emptyStages(),
@@ -1010,6 +1014,7 @@ async function fetchWindow(
     "empathic",
     "qa_email_capture",
     "multi_provider",
+    "multi_provider_v2",
     "control",
     "money_loss",
   ]);
@@ -1075,11 +1080,13 @@ async function fetchWindow(
     }
   }
 
-  // Multi-provider 6th-arm. Lives in provider_activity (anonymous events).
+  // Multi-provider 6th/7th arms. Lives in provider_activity (anonymous events).
   // Event mapping:
   //   multi_provider_viewed     → impressions (wrapper mount in arm)
   //   multi_provider_card_shown → started     (card stack rendered)
   //   multi_provider_converted  → saved       (email captured)
+  // Both multi_provider and multi_provider_v2 use the same event types but
+  // are distinguished by metadata.variant. V2 events carry "multi_provider_v2".
   for (const r of (multiProviderRes.data ?? []) as Array<{
     event_type: string;
     metadata: Record<string, unknown> | null;
@@ -1092,7 +1099,11 @@ async function fetchWindow(
       : r.event_type === "multi_provider_converted" ? "saved"
       : undefined;
     if (!stage) continue;
-    benefitsByVariantSets.multi_provider[stage].add(sid);
+    // Route to the correct variant bucket based on metadata.variant
+    const variantMeta = r.metadata?.variant;
+    const isV2 = variantMeta === "multi_provider_v2";
+    const bucket = isV2 ? "multi_provider_v2" : "multi_provider";
+    benefitsByVariantSets[bucket][stage].add(sid);
   }
 
   // Top-line funnel = the 3 benefits arms only (the embedded form). The
@@ -1123,6 +1134,7 @@ async function fetchWindow(
     outreach: sizesFor("outreach"),
     qa_email_capture: sizesFor("qa_email_capture"),
     multi_provider: sizesFor("multi_provider"),
+    multi_provider_v2: sizesFor("multi_provider_v2"),
     control: sizesFor("control"),
     money_loss: sizesFor("money_loss"),
     unassigned: sizesFor("unassigned"),

@@ -24,10 +24,12 @@ interface CaptureEmailPayload {
   providerName?: string;
   questionText?: string;
   sessionId?: string;
-  /** For multi_provider variant: IDs of all providers contacted */
+  /** For multi_provider variants: IDs of all providers contacted */
   sentProviderIds?: string[];
-  /** For multi_provider variant: total number of providers contacted */
+  /** For multi_provider variants: total number of providers contacted */
   sentCount?: number;
+  /** Variant identifier (multi_provider or multi_provider_v2) */
+  variant?: "multi_provider" | "multi_provider_v2";
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,7 +48,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
 
-  const { email, providerId, providerName, questionText, sessionId, sentProviderIds, sentCount } = payload;
+  const { email, providerId, providerName, questionText, sessionId, sentProviderIds, sentCount, variant } = payload;
+  // Default to multi_provider for backwards compatibility
+  const resolvedVariant = variant || "multi_provider";
 
   // Validate email
   if (!email) {
@@ -203,7 +207,7 @@ export async function POST(req: Request) {
           user_id: userId,
           display_name: displayName,
           onboarding_completed: false,
-          signup_source: "multi_provider",
+          signup_source: resolvedVariant,
           session_id: sessionId || null,
         })
         .select("id")
@@ -241,12 +245,12 @@ export async function POST(req: Request) {
       provider_id: providerId,
       provider_name: providerName,
       question_text: questionText,
+      variant: resolvedVariant,
     };
-    // Include multi-provider data if present (from multi_provider variant)
+    // Include multi-provider data if present (from multi_provider variants)
     if (sentProviderIds && sentProviderIds.length > 0) {
       signupContext.sent_provider_ids = sentProviderIds;
       signupContext.sent_count = sentCount || sentProviderIds.length;
-      signupContext.variant = "multi_provider";
     }
 
     const { data: newProfile, error: createErr } = await db
@@ -259,7 +263,7 @@ export async function POST(req: Request) {
         email: normalizedEmail,
         claim_state: "claimed",
         verification_state: "unverified",
-        source: "multi_provider",
+        source: resolvedVariant,
         metadata: {
           signup_context: signupContext,
         },

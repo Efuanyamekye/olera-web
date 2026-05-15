@@ -33,6 +33,7 @@ const VALID_VARIANTS = new Set([
   "outreach",
   "qa_email_capture",
   "multi_provider",
+  "multi_provider_v2",
   "control",          // legacy V2
   "money_loss",       // legacy V2
 ]);
@@ -257,9 +258,11 @@ export async function GET(request: NextRequest) {
           }
         }
       }
-    } else if (variant === "multi_provider") {
-      // multi_provider arm — events live in provider_activity (anonymous).
-      // Stage mapping mirrors the analytics summary route:
+    } else if (variant === "multi_provider" || variant === "multi_provider_v2") {
+      // multi_provider and multi_provider_v2 arms — events live in
+      // provider_activity (anonymous). Both use the same event types but are
+      // distinguished by metadata.variant. Stage mapping mirrors the analytics
+      // summary route:
       //   multi_provider_viewed     → impression
       //   multi_provider_card_shown → started
       //   multi_provider_converted  → submitted
@@ -291,6 +294,13 @@ export async function GET(request: NextRequest) {
       }>) {
         const sid = row.metadata?.session_id;
         if (typeof sid !== "string" || !sid) continue;
+        // Filter to only the requested variant (multi_provider vs multi_provider_v2)
+        const eventVariant = row.metadata?.variant;
+        // V1 events may not have metadata.variant set, treat as multi_provider
+        const isV2Event = eventVariant === "multi_provider_v2";
+        if (variant === "multi_provider_v2" && !isV2Event) continue;
+        if (variant === "multi_provider" && isV2Event) continue;
+
         const stage: VariantSessionRow["furthest_stage"] | null =
           row.event_type === "multi_provider_viewed" ? "impression"
           : row.event_type === "multi_provider_card_shown" ? "started"
@@ -498,8 +508,8 @@ export async function DELETE(request: NextRequest) {
           if (row.asker_email) { auditEmail = row.asker_email; break; }
         }
       }
-    } else if (variant === "multi_provider") {
-      // multi_provider: just get email from the converted event for audit
+    } else if (variant === "multi_provider" || variant === "multi_provider_v2") {
+      // multi_provider / multi_provider_v2: just get email from the converted event for audit
       const { data: events } = await db
         .from("provider_activity")
         .select("metadata")

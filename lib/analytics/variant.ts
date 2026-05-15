@@ -55,15 +55,16 @@ export const INTAKE_VARIANTS = [
   "outreach",
   "qa_email_capture",
   "multi_provider",
+  "multi_provider_v2",
 ] as const;
 
 export type IntakeVariant = (typeof INTAKE_VARIANTS)[number];
 
 /** Narrow alias for the benefits-copy arms. Excludes outreach because the
  *  BenefitsDiscoveryModule never legitimately renders for it, qa_email_capture
- *  because that arm suppresses the SBF entirely, and multi_provider because
- *  that arm uses the MultiProviderCard instead. */
-export type BenefitsVariant = Exclude<IntakeVariant, "outreach" | "qa_email_capture" | "multi_provider">;
+ *  because that arm suppresses the SBF entirely, multi_provider and
+ *  multi_provider_v2 because those arms use the MultiProviderCard instead. */
+export type BenefitsVariant = Exclude<IntakeVariant, "outreach" | "qa_email_capture" | "multi_provider" | "multi_provider_v2">;
 
 const BENEFITS_VARIANTS: BenefitsVariant[] = ["availability", "loss", "empathic"];
 
@@ -83,6 +84,7 @@ export const INTAKE_VARIANT_DEFAULT_WEIGHTS: Record<IntakeVariant, number> = {
   outreach: 20,
   qa_email_capture: 20,
   multi_provider: 0,
+  multi_provider_v2: 0,
 };
 
 export type IntakeWeightMap = Partial<Record<IntakeVariant, number>>;

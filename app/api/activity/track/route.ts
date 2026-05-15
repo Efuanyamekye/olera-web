@@ -188,8 +188,10 @@ export async function POST(request: NextRequest) {
         try {
           const { sendSlackAlert, slackVariantConverted } = await import("@/lib/slack");
           const meta = (metadata as Record<string, unknown>) || {};
+          // Read variant from metadata (V2 events have "multi_provider_v2", V1 events may be undefined)
+          const variantFromMeta = meta.variant === "multi_provider_v2" ? "multi_provider_v2" : "multi_provider";
           const alert = slackVariantConverted({
-            variant: "multi_provider",
+            variant: variantFromMeta,
             email: (meta.email as string) || "unknown",
             providerName: (meta.provider_name as string) || related_provider_id,
             questionText: meta.question_text as string | undefined,

@@ -146,6 +146,10 @@ interface BenefitsFunnelByVariant {
   // stack lets user send the same question to similar providers. Populates
   // impressions and saved (email capture after card flow). Middle stages N/A.
   multi_provider: BenefitsFunnel;
+  // 7th arm (since 2026-05-15) — Multi-provider V2 (email-first). Shows email
+  // capture immediately after first question, with option to expand to card
+  // stack. A/B testing against multi_provider variant.
+  multi_provider_v2: BenefitsFunnel;
   // Legacy V2 arms — historical, retained for the rollup window when V2 data
   // exists. Frozen after cutover.
   control: BenefitsFunnel;
@@ -1498,6 +1502,7 @@ const DRILLABLE_VARIANTS: ReadonlySet<VariantKey> = new Set([
   "outreach",
   "qa_email_capture",
   "multi_provider",
+  "multi_provider_v2",
   "control",
   "money_loss",
 ]);
@@ -1557,6 +1562,7 @@ function BenefitsVariantSplit({
     byVariant.outreach.impressions +
     byVariant.qa_email_capture.impressions +
     byVariant.multi_provider.impressions +
+    byVariant.multi_provider_v2.impressions +
     byVariant.control.impressions +
     byVariant.money_loss.impressions;
   const waitingForFirstImpression = totalAssigned === 0;
@@ -1573,6 +1579,7 @@ function BenefitsVariantSplit({
     { key: "outreach" as const, label: "outreach", description: "Our care team gets pricing, availability, and how to start from the top providers — in one email.", isOutreach: true },
     { key: "qa_email_capture" as const, label: "qa_email_capture", description: "No SBF / no outreach. Q&A enrichment ON with comparison-providers value-promise.", isOutreach: true },
     { key: "multi_provider" as const, label: "multi_provider", description: "Tinder-style card stack — send question to multiple similar providers.", isOutreach: true },
+    { key: "multi_provider_v2" as const, label: "multi_provider_v2", description: "Email-first variant — shows email capture immediately after first question, optional card stack expansion.", isOutreach: true },
   ];
   // Legacy V2 arms only render when they have data in the window — once the
   // historical window rolls past V2, these rows disappear automatically.

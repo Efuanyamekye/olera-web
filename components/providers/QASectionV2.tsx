@@ -5,6 +5,7 @@ import { Star } from "@phosphor-icons/react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useSavedProviders, type SaveProviderData } from "@/hooks/use-saved-providers";
 import MultiProviderCard from "@/components/providers/MultiProviderCard";
+import MultiProviderCardV2 from "@/components/providers/MultiProviderCardV2";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
 import { isPreviewMode } from "@/lib/analytics/preview-mode";
 import type { IntakeVariant } from "@/lib/analytics/variant";
@@ -173,6 +174,8 @@ export default function QASectionV2({
   const [inlineSubmitting, setInlineSubmitting] = useState(false);
   const [inlineSuccess, setInlineSuccess] = useState(false);
   const isMultiProviderVariant = variant === "multi_provider";
+  const isMultiProviderV2Variant = variant === "multi_provider_v2";
+  const isAnyMultiProviderVariant = isMultiProviderVariant || isMultiProviderV2Variant;
   const isQaCaptureArm = variant === "qa_email_capture";
 
   // qa_email_capture arm: fire impression once when the variant resolves so
@@ -274,8 +277,8 @@ export default function QASectionV2({
         // For guests: show enrichment prompt after successful submit.
         // SKIP when:
         //   - Page has a benefits module (spotlight handoff owns the moment)
-        //   - Multi-provider variant (MultiProviderCard handles email capture)
-        if (!user && data.question.id && !hasBenefitsSection && !isMultiProviderVariant) {
+        //   - Multi-provider variants (MultiProviderCard handles email capture)
+        if (!user && data.question.id && !hasBenefitsSection && !isAnyMultiProviderVariant) {
           setEnrichQuestionId(data.question.id);
           setShowEnrichment(true);
         }
@@ -288,8 +291,8 @@ export default function QASectionV2({
       // The Q&A moment is peak intent — the caregiver just articulated
       // their exact worry. Pass the question text to the benefits module
       // so it can quietly bring itself into focus.
-      // SKIP for multi_provider variant — it owns the moment.
-      if (typeof window !== "undefined" && !isMultiProviderVariant) {
+      // SKIP for multi_provider variants — they own the moment.
+      if (typeof window !== "undefined" && !isAnyMultiProviderVariant) {
         window.dispatchEvent(
           new CustomEvent("olera:question-submitted", {
             detail: { question: questionText.trim() },
@@ -310,7 +313,7 @@ export default function QASectionV2({
     } finally {
       setSubmitting(false);
     }
-  }, [providerId, user, honeypot, hasBenefitsSection, isMultiProviderVariant]);
+  }, [providerId, user, honeypot, hasBenefitsSection, isAnyMultiProviderVariant]);
 
   // Handle submit from chat bar
   const handleChatSubmit = () => {
@@ -376,10 +379,11 @@ export default function QASectionV2({
   // ─── Multi-Provider Variant Handlers ────────────────────────────────────────
 
   const handleMultiProviderQuestionTap = useCallback(async (questionText: string, index: number) => {
-    if (!isMultiProviderVariant) return;
+    if (!isAnyMultiProviderVariant) return;
 
-    // Accordion: collapse current if tapping the same question
-    if (expandedQuestion === questionText) {
+    // Accordion: collapse current if tapping the same question (V1 only)
+    // V2 auto-expands after submit, so this check doesn't apply
+    if (isMultiProviderVariant && expandedQuestion === questionText) {
       setExpandedQuestion(null);
       return;
     }
@@ -388,9 +392,11 @@ export default function QASectionV2({
     submitQuestion(questionText, index);
 
     // Expand the multi-provider card
+    // V1: expands immediately on tap
+    // V2: expands immediately after tap (same effect, different UI state)
     setExpandedQuestion(questionText);
     setInlineSuccess(false);
-  }, [isMultiProviderVariant, expandedQuestion, submitQuestion]);
+  }, [isAnyMultiProviderVariant, isMultiProviderVariant, expandedQuestion, submitQuestion]);
 
   const handleMultiProviderSelect = useCallback(async (targetProviderId: string, targetProviderName: string) => {
     if (!expandedQuestion) return;
@@ -419,6 +425,9 @@ export default function QASectionV2({
 
     setInlineSubmitting(true);
 
+    // Determine which variant we're in for correct tracking
+    const currentVariant = isMultiProviderV2Variant ? "multi_provider_v2" : "multi_provider";
+
     try {
       // Capture email via dedicated inline-answer endpoint (handles user creation + welcome email)
       const captureRes = await fetch("/api/inline-answer/capture-email", {
@@ -430,9 +439,10 @@ export default function QASectionV2({
           providerName,
           questionText: expandedQuestion,
           sessionId: getOrCreateSessionId(),
-          // Include all providers contacted for multi_provider variant
+          // Include all providers contacted for multi_provider variants
           sentProviderIds,
           sentCount,
+          variant: currentVariant,
         }),
       });
 
@@ -453,7 +463,7 @@ export default function QASectionV2({
           metadata: {
             question_text: expandedQuestion,
             email,
-            variant: "multi_provider",
+            variant: currentVariant,
             provider_name: providerName,
             sent_count: sentCount,
             sent_provider_ids: sentProviderIds,
@@ -468,7 +478,7 @@ export default function QASectionV2({
     } finally {
       setInlineSubmitting(false);
     }
-  }, [expandedQuestion, providerId, providerName]);
+  }, [expandedQuestion, providerId, providerName, isMultiProviderV2Variant]);
 
   const handleMultiProviderSaveAll = useCallback((providerIds: string[]) => {
     // Save all sent providers (only if not already saved)
@@ -561,9 +571,9 @@ export default function QASectionV2({
   const answeredCount = questions.filter((q) => q.status === "answered" || q.answer).length;
 
   // Determine if we're in post-submit state (success or enrichment)
-  // For multi_provider variant, the card handles everything inline, so we
+  // For multi_provider variants, the card handles everything inline, so we
   // never show the old post-submit enrichment UI.
-  const isPostSubmit = !isMultiProviderVariant && (submitStatus === "success" || showEnrichment);
+  const isPostSubmit = !isAnyMultiProviderVariant && (submitStatus === "success" || showEnrichment);
 
   return (
     <div>
@@ -977,9 +987,10 @@ export default function QASectionV2({
             <div className="space-y-2 mb-4">
               {suggestedQuestions.map((q, i) => {
                 const isTapped = tappedIndex === i;
-                const isMultiExpanded = isMultiProviderVariant && expandedQuestion === q;
-                const isExpanded = isMultiExpanded;
-                const isOtherExpanded = isMultiProviderVariant && expandedQuestion && expandedQuestion !== q;
+                const isMultiV1Expanded = isMultiProviderVariant && expandedQuestion === q;
+                const isMultiV2Expanded = isMultiProviderV2Variant && expandedQuestion === q;
+                const isExpanded = isMultiV1Expanded || isMultiV2Expanded;
+                const isOtherExpanded = isAnyMultiProviderVariant && expandedQuestion && expandedQuestion !== q;
 
                 return (
                   <div key={i}>
@@ -987,7 +998,7 @@ export default function QASectionV2({
                       type="button"
                       onClick={() => {
                         if (submitting) return;
-                        if (isMultiProviderVariant) {
+                        if (isAnyMultiProviderVariant) {
                           handleMultiProviderQuestionTap(q, i);
                         } else {
                           submitQuestion(q, i);
@@ -1012,9 +1023,35 @@ export default function QASectionV2({
                       )}
                     </button>
 
-                    {/* Multi-Provider Card (multi_provider variant only) */}
-                    {isMultiExpanded && (
+                    {/* Multi-Provider Card V1 (multi_provider variant only) */}
+                    {isMultiV1Expanded && (
                       <MultiProviderCard
+                        question={q}
+                        currentProvider={{
+                          id: providerId,
+                          slug: providerSlug || providerId,
+                          name: providerName,
+                          image: providerImage,
+                          priceRange: providerPriceRange,
+                          rating: providerRating,
+                          city: providerCity,
+                          state: providerState,
+                        }}
+                        similarProviders={similarProvidersForMulti}
+                        onProviderSelect={handleMultiProviderSelect}
+                        onEmailSubmit={handleMultiProviderEmailSubmit}
+                        onSaveAll={handleMultiProviderSaveAll}
+                        onCollapse={handleMultiProviderCollapse}
+                        isSubmitting={inlineSubmitting}
+                        isSuccess={inlineSuccess}
+                        questionSent={submitStatus === "success"}
+                        userEmail={user?.email}
+                      />
+                    )}
+
+                    {/* Multi-Provider Card V2 (multi_provider_v2 variant only) */}
+                    {isMultiV2Expanded && (
+                      <MultiProviderCardV2
                         question={q}
                         currentProvider={{
                           id: providerId,
