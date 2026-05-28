@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useProviderProfile } from "@/hooks/useProviderProfile";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { markLeadAsRead } from "@/hooks/useUnreadLeadsCount";
@@ -1524,123 +1525,146 @@ export default function ProviderLeadsPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 w-32 bg-warm-100 rounded-lg mb-2" />
-            <div className="h-4 w-72 bg-warm-50 rounded mb-8" />
-            <div className="h-12 w-full max-w-md bg-vanilla-50 border border-warm-100/60 rounded-xl mb-5" />
-            <div className="space-y-4">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="bg-white rounded-2xl border border-warm-100/60 p-5">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-warm-100 shrink-0" />
-                    <div className="flex-1">
-                      <div className="h-5 w-32 bg-warm-100 rounded mb-2" />
-                      <div className="h-3 w-48 bg-warm-50 rounded" />
-                    </div>
+      <div className="min-h-screen bg-gray-50/50">
+        {/* Header skeleton */}
+        <div className="bg-white border-b border-gray-100">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="py-6 sm:py-8 animate-pulse">
+              <div className="h-4 w-24 bg-gray-100 rounded mb-4" />
+              <div className="h-8 w-32 bg-gray-200 rounded mb-2" />
+              <div className="h-4 w-56 bg-gray-100 rounded" />
+            </div>
+            <div className="flex gap-6 pb-3">
+              <div className="h-5 w-16 bg-gray-100 rounded" />
+              <div className="h-5 w-20 bg-gray-100 rounded" />
+            </div>
+          </div>
+        </div>
+        {/* Content skeleton */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="space-y-3 animate-pulse">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gray-200 shrink-0" />
+                  <div className="flex-1">
+                    <div className="h-4 w-32 bg-gray-200 rounded mb-2" />
+                    <div className="h-3 w-48 bg-gray-100 rounded" />
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     );
   }
 
+  // Calculate counts for tabs
+  const activeCount = leads.filter((l) => l.status !== "archived").length;
+  const archivedCount = leads.filter((l) => l.status === "archived").length;
+  const tabCounts: Record<StatusFilter, number> = {
+    active: activeCount,
+    archived: archivedCount,
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* ── Page header ── */}
-      <div className="mb-5 lg:mb-8">
-        <h1 className="text-2xl lg:text-[28px] font-display font-bold text-gray-900 tracking-tight">
-          Leads
-        </h1>
-        <p className="text-sm lg:text-[15px] text-gray-500 mt-1 lg:mt-1.5 leading-relaxed">
-          Families who found you and connected.
-        </p>
-      </div>
-
-      {/* ── WhatsApp opt-in banner ── */}
-      {showWhatsAppBanner && (
-        <div className="mb-4 lg:mb-5 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="text-xl shrink-0" aria-hidden="true">💬</span>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-emerald-900">Get lead alerts on WhatsApp</p>
-              <p className="text-xs text-emerald-700 mt-0.5">Instant notifications when families reach out — no more missed leads in email.</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={dismissWhatsAppBanner}
-              className="text-xs text-emerald-600 hover:text-emerald-800 px-2 py-1.5"
+    <div className="min-h-screen bg-gray-50/50">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-6 sm:py-8">
+            {/* Back link / Breadcrumb */}
+            <Link
+              href="/provider/matches"
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-500 hover:text-gray-700 transition-colors mb-4"
             >
-              Dismiss
-            </button>
-            <button
-              type="button"
-              onClick={handleWhatsAppOptIn}
-              disabled={whatsappOptingIn}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
-            >
-              {whatsappOptingIn ? "Enabling..." : "Enable"}
-            </button>
-          </div>
-        </div>
-      )}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>
+              Find Families
+            </Link>
 
-      {/* ── Filter tabs + Sort ── */}
-      <div className="flex items-center justify-between gap-3 mb-4 lg:mb-5">
-        {/* Filter tabs - horizontal scroll on mobile */}
-        <div className="overflow-x-auto -mx-4 px-4 lg:mx-0 lg:px-0 flex-1 scrollbar-hide">
-          <div className="flex gap-0.5 bg-vanilla-50 border border-warm-100/60 p-0.5 rounded-xl w-max">
+            <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 tracking-tight">
+              My Leads
+            </h1>
+            <p className="text-[15px] text-gray-500 mt-1">
+              Families who reached out to you
+            </p>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex gap-6 -mb-px">
             {FILTER_TABS.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveFilter(tab.id)}
-                className={[
-                  "px-3.5 lg:px-5 py-2 lg:py-2.5 rounded-[10px] text-[13px] lg:text-sm font-semibold whitespace-nowrap transition-all duration-150 min-h-[40px] lg:min-h-[44px] flex items-center",
+                className={`relative pb-3 text-[15px] font-medium transition-colors ${
                   activeFilter === tab.id
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700",
-                ].join(" ")}
+                    ? "text-gray-900"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
               >
                 {tab.label}
+                {tabCounts[tab.id] > 0 && (
+                  <span className={`ml-1.5 text-[13px] ${
+                    activeFilter === tab.id ? "text-gray-900" : "text-gray-400"
+                  }`}>
+                    ({tabCounts[tab.id]})
+                  </span>
+                )}
+                {activeFilter === tab.id && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900 rounded-full" />
+                )}
               </button>
             ))}
           </div>
         </div>
-
       </div>
+
+      {/* Content */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* ── WhatsApp opt-in banner ── */}
+        {showWhatsAppBanner && (
+          <div className="mb-6 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className="text-xl shrink-0" aria-hidden="true">💬</span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-emerald-900">Get lead alerts on WhatsApp</p>
+                <p className="text-xs text-emerald-700 mt-0.5">Instant notifications when families reach out — no more missed leads.</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={dismissWhatsAppBanner}
+                className="text-xs text-emerald-600 hover:text-emerald-800 px-2 py-1.5"
+              >
+                Dismiss
+              </button>
+              <button
+                type="button"
+                onClick={handleWhatsAppOptIn}
+                disabled={whatsappOptingIn}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {whatsappOptingIn ? "Enabling..." : "Enable"}
+              </button>
+            </div>
+          </div>
+        )}
 
       {/* ── Leads list ── */}
       {filteredLeads.length > 0 ? (
         <>
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-          {/* Table header - desktop only */}
-          <div className="hidden lg:grid grid-cols-[1.8fr_1.5fr_1fr_1fr_0.8fr_0.8fr] gap-5 px-6 py-3 border-b border-gray-100 bg-gray-50/50">
-            <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Name</span>
-            <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Contact</span>
-            <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Care Type</span>
-            <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Location</span>
-            <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Received</span>
-            <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Status</span>
-          </div>
-
-          {/* Lead rows */}
-          {paginatedLeads.map((lead, idx) => (
+          {/* Lead cards */}
+          <div className="space-y-3">
+          {paginatedLeads.map((lead) => (
             <div
               key={lead.id}
               onClick={() => openDrawer(lead)}
-              className={[
-                "group transition-colors duration-150 cursor-pointer",
-                "lg:hover:bg-vanilla-50/80",
-                idx < paginatedLeads.length - 1 ? "border-b border-gray-100 lg:border-gray-200/60" : "",
-              ].join(" ")}
+              className="group bg-white rounded-xl border border-gray-200 hover:border-gray-300 transition-colors duration-150 cursor-pointer"
             >
               {/* Mobile card layout */}
               <div className="lg:hidden px-4 py-4 active:bg-vanilla-50/60">
@@ -1776,40 +1800,30 @@ export default function ProviderLeadsPage() {
         </>
       ) : (
         /* ── Empty state ── */
-        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-          <div className="flex flex-col items-center text-center py-24 px-8">
-            <div className="relative mb-8">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-warm-50 to-vanilla-100 border border-warm-100/60 flex items-center justify-center">
-                <svg className="w-10 h-10 text-warm-300" fill="none" stroke="currentColor" strokeWidth={1.2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-                </svg>
-              </div>
-              <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-primary-100 border-2 border-white flex items-center justify-center">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
-              </div>
-            </div>
-
-            <h3 className="text-xl font-display font-bold text-gray-900 tracking-tight">
-              {activeFilter === "archived" ? "No archived leads" : "No leads yet"}
-            </h3>
-            <p className="text-[15px] text-gray-500 mt-2.5 leading-relaxed max-w-md">
-              {activeFilter === "archived"
-                ? "Leads you archive will appear here."
-                : "When families find your profile and reach out, they\u2019ll appear here. Start connecting to get the conversation going."}
-            </p>
-
-            {activeFilter !== "archived" && (
-              <Link
-                href="/provider/matches"
-                className="mt-8 inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 transition-colors"
-              >
-                Reach out to families looking for care
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                </svg>
-              </Link>
-            )}
-          </div>
+        <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
+          <Image
+            src={activeFilter === "archived" ? "/Declined.png" : "/Pending.png"}
+            alt={activeFilter === "archived" ? "No archived leads" : "No leads yet"}
+            width={180}
+            height={180}
+            className="mb-6"
+          />
+          <h3 className="text-[17px] font-display font-bold text-gray-900 mb-2">
+            {activeFilter === "archived" ? "No archived leads" : "No leads yet"}
+          </h3>
+          <p className="text-[15px] text-gray-500 max-w-sm leading-relaxed">
+            {activeFilter === "archived"
+              ? "Leads you archive will appear here."
+              : "When families find your profile and reach out, they'll appear here."}
+          </p>
+          {activeFilter !== "archived" && (
+            <Link
+              href="/provider/matches"
+              className="mt-6 px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-xl transition-colors"
+            >
+              Find Families
+            </Link>
+          )}
         </div>
       )}
     </div>
