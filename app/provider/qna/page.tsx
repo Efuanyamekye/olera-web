@@ -182,12 +182,12 @@ function PendingQuestionCard({
         )}
         <div className="p-4">
           <div className="flex items-start gap-3">
-            <Avatar name={question.asker_name} size="lg" />
+            <Avatar name={question.asker_name} size="md" />
             <div className="flex-1 min-w-0 pr-4">
               <p className="text-[15px] font-semibold text-gray-900 leading-snug line-clamp-2">
                 {question.question}
               </p>
-              <p className="text-sm text-gray-500 mt-1.5">
+              <p className="text-sm text-gray-400 mt-1.5">
                 {question.asker_name} · {timeAgo(question.created_at)}
               </p>
             </div>
@@ -233,13 +233,13 @@ function PendingQuestionCard({
         <div className="absolute top-6 right-6 w-2.5 h-2.5 rounded-full bg-primary-500 ring-2 ring-white shadow-sm" />
       )}
       <div className="p-6">
-        <div className="flex items-start gap-4">
-          <Avatar name={question.asker_name} size="lg" />
+        <div className="flex items-start gap-3">
+          <Avatar name={question.asker_name} size="md" />
           <div className="flex-1 min-w-0 pr-4">
-            <p className="text-lg font-semibold text-gray-900 leading-snug">
+            <p className="text-[15px] font-semibold text-gray-900 leading-snug">
               {question.question}
             </p>
-            <p className="text-sm text-gray-500 mt-1.5">
+            <p className="text-sm text-gray-400 mt-1.5">
               {question.asker_name} · {timeAgo(question.created_at)}
             </p>
           </div>
@@ -302,10 +302,10 @@ function PublishedQuestionCard({
       <div className={isMobile ? "p-4" : "p-6"}>
         {/* Asker info + badge */}
         <div className="flex items-start gap-3">
-          <Avatar name={question.asker_name} size={isMobile ? "md" : "lg"} />
+          <Avatar name={question.asker_name} size="md" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`font-semibold text-gray-900 ${isMobile ? "text-[15px]" : "text-base"}`}>
+              <span className="text-[15px] font-semibold text-gray-900">
                 {question.asker_name}
               </span>
               {isPendingVerification ? (
@@ -328,7 +328,7 @@ function PublishedQuestionCard({
         </div>
 
         {/* Question */}
-        <p className={`text-gray-900 leading-relaxed mt-4 ${isMobile ? "text-[15px]" : "text-lg font-medium"}`}>
+        <p className="text-[15px] text-gray-900 leading-relaxed mt-4">
           {question.question}
         </p>
 
@@ -336,9 +336,9 @@ function PublishedQuestionCard({
         {question.answer && (
           <div className="mt-5">
             <div className="flex items-start gap-3">
-              <Avatar name="Provider" size={isMobile ? "md" : "lg"} isProvider />
+              <Avatar name="Provider" size="md" isProvider />
               <div className="flex-1 min-w-0">
-                <p className={`font-semibold text-gray-900 ${isMobile ? "text-[15px]" : "text-base"}`}>
+                <p className="text-[15px] font-semibold text-gray-900">
                   Your response
                 </p>
                 <p className="text-sm text-gray-400 mt-0.5">
@@ -346,7 +346,7 @@ function PublishedQuestionCard({
                 </p>
               </div>
             </div>
-            <p className={`text-gray-600 leading-relaxed mt-3 ${isMobile ? "text-[15px]" : "text-base"}`}>
+            <p className="text-[15px] text-gray-600 leading-relaxed mt-3">
               {question.answer}
             </p>
           </div>
@@ -496,12 +496,12 @@ function BottomSheet({
         <div className="flex-1 overflow-y-auto px-4 lg:px-6 py-5">
           {/* Question display */}
           <div className="flex items-start gap-3 mb-5 pb-5 border-b border-gray-100">
-            <Avatar name={question.asker_name} size="lg" />
+            <Avatar name={question.asker_name} size="md" />
             <div className="flex-1 min-w-0">
               <p className="text-[15px] font-semibold text-gray-900 leading-snug">
                 {question.question}
               </p>
-              <p className="text-sm text-gray-500 mt-1.5">
+              <p className="text-sm text-gray-400 mt-1.5">
                 {question.asker_name} · {timeAgo(question.created_at)}
               </p>
             </div>
@@ -615,18 +615,18 @@ function QnASkeleton() {
   return (
     <div className="min-h-screen bg-gray-50/50">
       <div className="bg-white border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="h-4 w-16 bg-gray-200 rounded animate-pulse mb-4" />
           <div className="h-8 w-56 bg-gray-200 rounded animate-pulse mb-2" />
           <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
         </div>
       </div>
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="space-y-4">
           {[0, 1, 2].map((i) => (
             <div key={i} className="bg-white rounded-2xl border border-gray-200/80 p-5 lg:p-6 animate-pulse">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gray-200 shrink-0" />
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-gray-200 shrink-0" />
                 <div className="flex-1">
                   <div className="h-5 w-full max-w-md bg-gray-200 rounded mb-2" />
                   <div className="h-3 w-32 bg-gray-100 rounded" />
@@ -909,7 +909,7 @@ export default function ProviderQnAPage() {
     <div className="min-h-screen bg-gray-50/50">
       {/* Header - sticky below navbar (h-16 = 64px) */}
       <div className="bg-white border-b border-gray-100 sticky top-16 z-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6 sm:py-8">
             {/* Back button - navigates to previous page */}
             <button
@@ -962,7 +962,7 @@ export default function ProviderQnAPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {error ? (
           <div className="text-center py-16">
             <p className="text-[15px] text-red-600">{error}</p>
