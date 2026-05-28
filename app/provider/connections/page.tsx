@@ -1681,19 +1681,24 @@ export default function ProviderLeadsPage() {
                       <h3 className="text-base font-semibold text-gray-900 truncate">
                         {isVerified ? lead.name : formatRedactedName(lead.name)}
                       </h3>
+                      {/* Status badge - always show */}
                       {lead.isNew ? (
                         <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-sky-50 text-sky-700 border border-sky-100 shrink-0">
                           New
                         </span>
-                      ) : lead.status === "replied" && (
+                      ) : lead.status === "replied" ? (
                         <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
                           Replied
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+                          {STATUS_LABELS[lead.status]}
                         </span>
                       )}
                     </div>
 
                     {/* Contact info */}
-                    <div className="mb-1.5">
+                    <div className="mb-1">
                       {isVerified ? (
                         <p className="text-sm text-gray-600 truncate">{lead.email || "—"}</p>
                       ) : (
@@ -1701,8 +1706,8 @@ export default function ProviderLeadsPage() {
                       )}
                     </div>
 
-                    {/* Meta row - care type, location, date */}
-                    <div className="flex items-center gap-1.5 text-[13px] text-gray-500">
+                    {/* Care type + Location */}
+                    <div className="flex items-center gap-1.5 text-[13px] text-gray-500 mb-0.5">
                       {lead.careType?.[0] && (
                         <>
                           <span className="font-medium text-gray-600">{lead.careType[0]}</span>
@@ -1710,15 +1715,11 @@ export default function ProviderLeadsPage() {
                         </>
                       )}
                       <span>{lead.location}</span>
-                      <span className="text-gray-300">·</span>
-                      <span className="text-gray-400">{lead.date}</span>
                     </div>
-                  </div>
 
-                  {/* Chevron */}
-                  <svg className="w-5 h-5 text-gray-300 shrink-0 mt-2.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                  </svg>
+                    {/* Date - separate line, de-emphasized */}
+                    <p className="text-[12px] text-gray-400">{lead.date}</p>
+                  </div>
                 </div>
               </div>
 
