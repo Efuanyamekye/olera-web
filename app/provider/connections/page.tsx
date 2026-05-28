@@ -1682,11 +1682,11 @@ export default function ProviderLeadsPage() {
                         {isVerified ? lead.name : formatRedactedName(lead.name)}
                       </h3>
                       {lead.isNew ? (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-[11px] font-medium bg-sky-50 text-sky-700 border border-sky-100 shrink-0">
+                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-sky-50 text-sky-700 border border-sky-100 shrink-0">
                           New
                         </span>
                       ) : lead.status === "replied" && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-lg text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
+                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
                           Replied
                         </span>
                       )}
@@ -1729,38 +1729,38 @@ export default function ProviderLeadsPage() {
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
                     <span className="text-sm font-semibold text-white">{lead.initials}</span>
                   </div>
-                  <p className="text-[16px] font-semibold text-gray-900 truncate">
+                  <p className="text-[15px] font-semibold text-gray-900 truncate">
                     {isVerified ? lead.name : formatRedactedName(lead.name)}
                   </p>
                 </div>
 
                 {/* Contact - email only (phone shown in drawer) */}
-                <p className="text-[16px] font-medium text-gray-700 truncate min-w-0">
+                <p className="text-[14px] font-medium text-gray-700 truncate min-w-0">
                   {isVerified ? (lead.email || "—") : "••••••••"}
                 </p>
 
                 {/* Care Type */}
-                <span className="text-[16px] font-medium text-gray-700 truncate">
+                <span className="text-[14px] font-medium text-gray-700 truncate">
                   {lead.careType?.[0] || "—"}
                 </span>
 
                 {/* Location */}
-                <span className="text-[16px] font-medium text-gray-700 truncate">{lead.location}</span>
+                <span className="text-[14px] font-medium text-gray-700 truncate">{lead.location}</span>
 
                 {/* Received */}
-                <span className="text-[16px] text-gray-400">{lead.date}</span>
+                <span className="text-[14px] text-gray-400">{lead.date}</span>
 
                 {/* Status badge */}
                 {lead.isNew ? (
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-sky-50 text-sky-700 border border-sky-100">
+                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-sky-50 text-sky-700 border border-sky-100">
                     New
                   </span>
                 ) : lead.status === "replied" ? (
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-amber-50 text-amber-700 border border-amber-100">
+                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100">
                     Replied
                   </span>
                 ) : (
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-gray-50 text-gray-500 border border-gray-200">
+                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
                     {STATUS_LABELS[lead.status]}
                   </span>
                 )}
