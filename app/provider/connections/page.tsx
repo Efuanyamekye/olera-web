@@ -1126,11 +1126,8 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
     status = "archived";
   } else if (hasProviderReply) {
     status = "replied";
-  } else if (conn.status === "pending" && thread.length === 0) {
-    status = "new";
-  } else {
-    status = "no_reply";
   }
+  // If no manual provider reply, status stays "new" regardless of auto-replies
 
   // Build activity timeline
   const activity: ActivityEvent[] = [
@@ -1530,7 +1527,7 @@ export default function ProviderLeadsPage() {
       <div className="min-h-screen bg-gray-50/50">
         {/* Header skeleton */}
         <div className="bg-white border-b border-gray-100">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="py-6 sm:py-8 animate-pulse">
               <div className="h-4 w-24 bg-gray-100 rounded mb-4" />
               <div className="h-8 w-32 bg-gray-200 rounded mb-2" />
@@ -1543,7 +1540,7 @@ export default function ProviderLeadsPage() {
           </div>
         </div>
         {/* Content skeleton */}
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="space-y-3 animate-pulse">
             {[0, 1, 2].map((i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-200 p-4">
@@ -1574,7 +1571,7 @@ export default function ProviderLeadsPage() {
     <div className="min-h-screen bg-gray-50/50">
       {/* Header */}
       <div className="bg-white border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6 sm:py-8">
             {/* Back link / Breadcrumb */}
             <Link
@@ -1626,7 +1623,7 @@ export default function ProviderLeadsPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* ── WhatsApp opt-in banner ── */}
         {showWhatsAppBanner && (
           <div className="mb-6 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
@@ -1731,26 +1728,26 @@ export default function ProviderLeadsPage() {
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
                     <span className="text-sm font-semibold text-white">{lead.initials}</span>
                   </div>
-                  <p className="text-[15px] font-semibold text-gray-900 truncate">
+                  <p className="text-[16px] font-semibold text-gray-900 truncate">
                     {isVerified ? lead.name : formatRedactedName(lead.name)}
                   </p>
                 </div>
 
                 {/* Contact - email only (phone shown in drawer) */}
-                <p className="text-[14px] text-gray-700 truncate min-w-0">
+                <p className="text-[16px] font-medium text-gray-700 truncate min-w-0">
                   {isVerified ? (lead.email || "—") : "••••••••"}
                 </p>
 
                 {/* Care Type */}
-                <span className="text-[14px] text-gray-600 truncate">
+                <span className="text-[16px] font-medium text-gray-700 truncate">
                   {lead.careType?.[0] || "—"}
                 </span>
 
                 {/* Location */}
-                <span className="text-[14px] text-gray-500 truncate">{lead.location}</span>
+                <span className="text-[16px] font-medium text-gray-700 truncate">{lead.location}</span>
 
                 {/* Received */}
-                <span className="text-[14px] text-gray-400">{lead.date}</span>
+                <span className="text-[16px] text-gray-400">{lead.date}</span>
 
                 {/* Status badge */}
                 {lead.isNew ? (
