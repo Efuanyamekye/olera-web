@@ -102,11 +102,20 @@ function Avatar({
   name,
   size = "md",
   isProvider = false,
+  imageUrl,
 }: {
   name: string;
   size?: "sm" | "md" | "lg";
   isProvider?: boolean;
+  imageUrl?: string | null;
 }) {
+  const [imgError, setImgError] = useState(false);
+
+  // Reset error state when imageUrl changes
+  useEffect(() => {
+    setImgError(false);
+  }, [imageUrl]);
+
   const sizeClasses = {
     sm: "w-8 h-8 text-xs",
     md: "w-10 h-10 text-sm",
@@ -116,6 +125,21 @@ function Avatar({
   const initials = getInitials(name);
 
   if (isProvider) {
+    // Show image if available and not errored, otherwise show initials
+    if (imageUrl && !imgError) {
+      return (
+        <div className={`${sizeClasses[size]} rounded-full overflow-hidden shrink-0 ring-2 ring-white shadow-sm`}>
+          <Image
+            src={imageUrl}
+            alt={name}
+            width={40}
+            height={40}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+          />
+        </div>
+      );
+    }
     return (
       <div className={`${sizeClasses[size]} rounded-full bg-gradient-to-br from-primary-100 to-primary-50 flex items-center justify-center shrink-0 ring-2 ring-white shadow-sm`}>
         <span className="font-bold text-primary-700">{initials}</span>
@@ -285,11 +309,15 @@ function PublishedQuestionCard({
   onEdit,
   isMobile,
   onVerifyClick,
+  providerName,
+  providerImageUrl,
 }: {
   question: Question;
   onEdit: (question: Question) => void;
   isMobile: boolean;
   onVerifyClick?: () => void;
+  providerName: string;
+  providerImageUrl?: string | null;
 }) {
   const isPendingVerification = question.answer_status === "pending";
 
@@ -336,7 +364,7 @@ function PublishedQuestionCard({
         {question.answer && (
           <div className="mt-5">
             <div className="flex items-start gap-3">
-              <Avatar name="Provider" size="md" isProvider />
+              <Avatar name={providerName} size="md" isProvider imageUrl={providerImageUrl} />
               <div className="flex-1 min-w-0">
                 <p className="text-[15px] font-semibold text-gray-900">
                   Your response
@@ -987,6 +1015,8 @@ export default function ProviderQnAPage() {
                     onEdit={handleEdit}
                     isMobile={isMobile}
                     onVerifyClick={!isVerified ? openVerificationModal : undefined}
+                    providerName={providerProfile?.display_name || "Provider"}
+                    providerImageUrl={providerProfile?.image_url}
                   />
                 )
               ))}
