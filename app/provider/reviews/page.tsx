@@ -237,7 +237,7 @@ function VideoPanel() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden">
       {/* Section header - consistent styling */}
       <div className="px-5 lg:px-6 pt-5 lg:pt-6 pb-4">
         <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">
@@ -356,20 +356,20 @@ function StatsCard({
   // Loading skeleton
   if (isLoading) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-5 lg:p-6">
-        <div className="h-3 w-20 bg-gray-100 rounded animate-pulse mb-5" />
+      <div>
+        <div className="h-3 w-20 bg-gray-200 rounded animate-pulse mb-5" />
         <div className="flex items-baseline gap-6 mb-5">
           <div>
-            <div className="h-8 w-10 bg-gray-100 rounded animate-pulse mb-1" />
-            <div className="h-4 w-20 bg-gray-50 rounded animate-pulse" />
+            <div className="h-8 w-10 bg-gray-200 rounded animate-pulse mb-1" />
+            <div className="h-4 w-20 bg-gray-100 rounded animate-pulse" />
           </div>
-          <div className="h-8 w-px bg-gray-100" />
+          <div className="h-8 w-px bg-gray-200" />
           <div>
-            <div className="h-8 w-8 bg-gray-100 rounded animate-pulse mb-1" />
-            <div className="h-4 w-16 bg-gray-50 rounded animate-pulse" />
+            <div className="h-8 w-8 bg-gray-200 rounded animate-pulse mb-1" />
+            <div className="h-4 w-16 bg-gray-100 rounded animate-pulse" />
           </div>
         </div>
-        <div className="h-4 w-28 bg-gray-50 rounded animate-pulse" />
+        <div className="h-4 w-28 bg-gray-100 rounded animate-pulse" />
       </div>
     );
   }
@@ -377,13 +377,13 @@ function StatsCard({
   // Empty state with icon and animation
   if (totalSent === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-5 lg:p-6">
+      <div>
         <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
           Your Activity
         </h2>
         <div className="flex flex-col items-center text-center py-2">
           <div
-            className="w-12 h-12 rounded-xl bg-primary-50 border border-primary-100/50 flex items-center justify-center mb-3"
+            className="w-12 h-12 rounded-xl bg-white border border-gray-200 flex items-center justify-center mb-3"
             style={{ animation: "statsFloat 3s ease-in-out infinite" }}
           >
             <MailIcon className="w-5 h-5 text-primary-500" />
@@ -405,7 +405,7 @@ function StatsCard({
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-5 lg:p-6">
+    <div>
       <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-5">
         Your Activity
       </h2>
@@ -416,7 +416,7 @@ function StatsCard({
           <p className="text-3xl font-display font-bold text-gray-900 tracking-tight">{totalSent}</p>
           <p className="text-sm text-gray-500 mt-0.5">requests sent</p>
         </div>
-        <div className="h-8 w-px bg-gray-100" />
+        <div className="h-8 w-px bg-gray-200" />
         <div>
           <p className="text-3xl font-display font-bold text-gray-900 tracking-tight">{thisMonth}</p>
           <p className="text-sm text-gray-500 mt-0.5">this month</p>
@@ -1525,7 +1525,7 @@ export default function ProviderReviewsPage() {
         }
       `}</style>
 
-      <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
+      <div className="min-h-screen bg-gray-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Page header */}
           <div className="mb-5 lg:mb-8">
@@ -1559,7 +1559,7 @@ export default function ProviderReviewsPage() {
           {/* Content grid */}
           <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8 lg:items-stretch">
             {/* Main content card - overflow-hidden for hero image clipping */}
-            <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-5 lg:p-6 mb-6 lg:mb-0 overflow-hidden">
+            <div className="bg-white rounded-2xl border border-gray-200/80 p-5 lg:p-6 mb-6 lg:mb-0 overflow-hidden">
               {view === "landing" ? (
                 <LandingView
                   city={providerCity}

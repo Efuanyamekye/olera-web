@@ -439,7 +439,7 @@ export default function AccountSettingsPage() {
           </div>
 
           {/* Tab Content */}
-          <div className="rounded-2xl bg-white border border-gray-200/80 shadow-sm divide-y divide-gray-100">
+          <div className="rounded-2xl bg-white border border-gray-200/80 divide-y divide-gray-100">
             {activeTab === "account" ? (
               <>
                 {/* ── Account Info ── */}

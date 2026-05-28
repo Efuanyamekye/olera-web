@@ -206,7 +206,7 @@ export default function InterviewCalendar({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl shadow-sm p-8">
+      <div className="bg-white rounded-2xl border border-gray-200/80 p-8">
         <div className="flex items-center justify-center py-12">
           <div className="flex items-center gap-3 text-gray-400">
             <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -224,7 +224,7 @@ export default function InterviewCalendar({
     <div className="space-y-6">
       {/* Upgrade banner for exhausted providers with pending requests */}
       {pendingInboundCount > 0 && (
-        <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 flex items-center justify-between gap-4 shadow-sm">
+        <div className="bg-white border border-gray-200/80 rounded-2xl p-5 sm:p-6 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0">
             <div className="w-11 h-11 rounded-full bg-[#199087]/10 flex items-center justify-center shrink-0">
               <span className="text-lg font-semibold text-[#199087]">{pendingInboundCount}</span>
@@ -257,7 +257,7 @@ export default function InterviewCalendar({
       )}
 
       {/* Calendar card */}
-      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+      <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden">
         {/* Header with month nav */}
         <div className="px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -418,7 +418,7 @@ export default function InterviewCalendar({
 
       {/* Empty state */}
       {interviews.length === 0 && (
-        <div className="bg-white rounded-2xl shadow-sm p-8 sm:p-12 text-center">
+        <div className="bg-white rounded-2xl border border-gray-200/80 p-8 sm:p-12 text-center">
           <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gray-100 flex items-center justify-center">
             <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
