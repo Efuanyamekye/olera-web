@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProviderProfile } from "@/hooks/useProviderProfile";
 import { useProviderVerification } from "@/lib/hooks/useProviderVerification";
@@ -87,14 +88,6 @@ function getInitials(name: string): string {
 
 // ── Icons ──
 
-function QuestionMarkIcon({ className = "w-4 h-4" }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
-    </svg>
-  );
-}
-
 function CloseIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -102,15 +95,6 @@ function CloseIcon({ className = "w-4 h-4" }: { className?: string }) {
     </svg>
   );
 }
-
-function CheckIcon({ className = "w-4 h-4" }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-    </svg>
-  );
-}
-
 
 // ── Avatar Component ──
 
@@ -565,63 +549,59 @@ function BottomSheet({
 
 // ── Empty States ──
 
-function EmptyState({ filter }: { filter: TabFilter }) {
-  if (filter === "published") {
-    return (
-      <div className="flex flex-col items-center text-center py-16 lg:py-24 px-6">
-        {/* Illustration with floating animation */}
-        <div
-          className="w-40 h-40 lg:w-48 lg:h-48 mb-6 relative"
-          style={{ animation: "emptyFloat 3s ease-in-out infinite" }}
-        >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-28 h-28 lg:w-32 lg:h-32 rounded-2xl bg-gradient-to-br from-primary-50 to-vanilla-100 border border-primary-100/50 flex items-center justify-center transform rotate-3 shadow-sm">
-              <QuestionMarkIcon className="w-14 h-14 lg:w-16 lg:h-16 text-primary-300" />
-            </div>
-          </div>
-          {/* Decorative elements */}
-          <div className="absolute top-4 right-6 w-3 h-3 rounded-full bg-amber-200" />
-          <div className="absolute bottom-6 left-6 w-2 h-2 rounded-full bg-primary-200" />
-          <div className="absolute top-10 left-4 w-4 h-1 rounded-full bg-warm-200 transform rotate-45" />
-          <div className="absolute bottom-12 right-4 w-2 h-2 rounded-full bg-warm-300" />
+function EmptyState({ filter, hasAnyPublished }: { filter: TabFilter; hasAnyPublished: boolean }) {
+  // For pending tab: distinguish between "no questions at all" vs "all caught up"
+  if (filter === "pending") {
+    if (hasAnyPublished) {
+      // All questions have been answered
+      return (
+        <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
+          <Image
+            src="/question.png"
+            alt="All caught up"
+            width={180}
+            height={180}
+            className="mb-6"
+          />
+          <h3 className="text-[17px] font-display font-bold text-gray-900 mb-2">All caught up!</h3>
+          <p className="text-[15px] text-gray-500 max-w-sm leading-relaxed">
+            You&apos;ve answered all questions. New questions will appear here when families ask.
+          </p>
         </div>
-        <h3 className="text-xl lg:text-2xl font-display font-bold text-gray-900 tracking-tight">
-          You haven&apos;t published any response
-        </h3>
-        <p className="text-[15px] text-gray-500 mt-2.5 leading-relaxed max-w-sm">
-          Respond to pending Q&As now to get your answers published and visible on your profile.
+      );
+    }
+    // No questions at all
+    return (
+      <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
+        <Image
+          src="/question.png"
+          alt="No questions yet"
+          width={180}
+          height={180}
+          className="mb-6"
+        />
+        <h3 className="text-[17px] font-display font-bold text-gray-900 mb-2">No questions yet</h3>
+        <p className="text-[15px] text-gray-500 max-w-sm leading-relaxed">
+          When families ask questions about your services, they&apos;ll appear here.
         </p>
-        <style jsx>{`
-          @keyframes emptyFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-6px); }
-          }
-        `}</style>
       </div>
     );
   }
 
-  // Pending empty state - "All caught up"
+  // Published tab empty state
   return (
-    <div className="flex flex-col items-center text-center py-16 lg:py-24 px-6">
-      <div
-        className="w-16 h-16 rounded-2xl bg-primary-50 border border-primary-100/50 flex items-center justify-center mb-6"
-        style={{ animation: "emptyFloat 3s ease-in-out infinite" }}
-      >
-        <CheckIcon className="w-8 h-8 text-primary-500" />
-      </div>
-      <h3 className="text-lg lg:text-xl font-display font-bold text-gray-900">
-        All caught up!
-      </h3>
-      <p className="text-[15px] text-gray-500 mt-2 leading-relaxed max-w-sm">
-        You&apos;ve answered all questions from families. New questions will appear here when families ask.
+    <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
+      <Image
+        src="/publish.png"
+        alt="No published answers"
+        width={180}
+        height={180}
+        className="mb-6"
+      />
+      <h3 className="text-[17px] font-display font-bold text-gray-900 mb-2">No published answers</h3>
+      <p className="text-[15px] text-gray-500 max-w-sm leading-relaxed">
+        Answer pending questions to share your expertise on your profile.
       </p>
-      <style jsx>{`
-        @keyframes emptyFloat {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-6px); }
-        }
-      `}</style>
     </div>
   );
 }
@@ -1029,7 +1009,7 @@ export default function ProviderQnAPage() {
           </>
         ) : (
           <div className="bg-white rounded-2xl border border-gray-200/80 min-h-[420px] flex items-center justify-center">
-            <EmptyState filter={activeFilter} />
+            <EmptyState filter={activeFilter} hasAnyPublished={counts.published > 0} />
           </div>
         )}
       </div>
