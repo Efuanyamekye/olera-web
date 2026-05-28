@@ -1569,8 +1569,8 @@ export default function ProviderLeadsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      {/* Header - sticky */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-10">
+      {/* Header - sticky below navbar (h-16 = 64px) */}
+      <div className="bg-white border-b border-gray-100 sticky top-16 z-10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6 sm:py-8">
             {/* Back button - navigates to previous page */}
