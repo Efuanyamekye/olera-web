@@ -1047,7 +1047,7 @@ interface ConnectionWithProfile extends Connection {
 
 function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: string): LeadDetail {
   const meta = conn.metadata as Record<string, unknown> | undefined;
-  const thread = (meta?.thread as Array<{ from_profile_id: string; text: string; created_at: string }>) || [];
+  const thread = (meta?.thread as Array<{ from_profile_id: string; text: string; created_at: string; is_auto_reply?: boolean }>) || [];
   const isArchived = meta?.archived === true;
   const familyProfile = conn.fromProfile;
 
@@ -1117,8 +1117,10 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
   const rawContactPref = familyMeta.contact_preference as string | undefined;
   const contactPreference = rawContactPref ? contactPrefMap[rawContactPref] : undefined;
 
-  // Determine status
-  const hasProviderReply = thread.some((msg) => msg.from_profile_id === providerProfileId);
+  // Determine status - exclude automated replies, only count manual provider responses
+  const hasProviderReply = thread.some(
+    (msg) => msg.from_profile_id === providerProfileId && !msg.is_auto_reply
+  );
   let status: LeadStatus = "new";
   if (isArchived) {
     status = "archived";
@@ -1734,19 +1736,10 @@ export default function ProviderLeadsPage() {
                   </p>
                 </div>
 
-                {/* Contact - email + phone stacked */}
-                <div className="min-w-0">
-                  {isVerified ? (
-                    <>
-                      <p className="text-[14px] text-gray-700 truncate">{lead.email || "—"}</p>
-                      {lead.phone && (
-                        <p className="text-[13px] text-gray-500 truncate mt-0.5">{lead.phone}</p>
-                      )}
-                    </>
-                  ) : (
-                    <p className="text-[14px] text-gray-400">••••••••</p>
-                  )}
-                </div>
+                {/* Contact - email only (phone shown in drawer) */}
+                <p className="text-[14px] text-gray-700 truncate min-w-0">
+                  {isVerified ? (lead.email || "—") : "••••••••"}
+                </p>
 
                 {/* Care Type */}
                 <span className="text-[14px] text-gray-600 truncate">
@@ -1760,25 +1753,19 @@ export default function ProviderLeadsPage() {
                 <span className="text-[14px] text-gray-400">{lead.date}</span>
 
                 {/* Status badge */}
-                <div className="flex items-center justify-between">
-                  {lead.isNew ? (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-sky-50 text-sky-700 border border-sky-100">
-                      New
-                    </span>
-                  ) : lead.status === "replied" ? (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-amber-50 text-amber-700 border border-amber-100">
-                      Replied
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-gray-50 text-gray-500 border border-gray-200">
-                      {STATUS_LABELS[lead.status]}
-                    </span>
-                  )}
-                  {/* Chevron - appears on hover */}
-                  <svg className="w-4 h-4 text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-150" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                  </svg>
-                </div>
+                {lead.isNew ? (
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-sky-50 text-sky-700 border border-sky-100">
+                    New
+                  </span>
+                ) : lead.status === "replied" ? (
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-amber-50 text-amber-700 border border-amber-100">
+                    Replied
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-[12px] font-medium bg-gray-50 text-gray-500 border border-gray-200">
+                    {STATUS_LABELS[lead.status]}
+                  </span>
+                )}
               </div>
             </div>
           ))}
