@@ -1697,28 +1697,24 @@ export default function ProviderLeadsPage() {
                       )}
                     </div>
 
-                    {/* Contact info */}
-                    <div className="mb-1">
-                      {isVerified ? (
-                        <p className="text-sm text-gray-600 truncate">{lead.email || "—"}</p>
-                      ) : (
-                        <p className="text-sm text-gray-400">Verify to see contact info</p>
-                      )}
-                    </div>
+                    {/* Email - truncated */}
+                    <p className="text-sm text-gray-600 truncate mb-1">
+                      {isVerified ? (lead.email || "—") : "Verify to see contact info"}
+                    </p>
 
-                    {/* Care type + Location */}
-                    <div className="flex items-center gap-1.5 text-[13px] text-gray-500 mb-0.5">
-                      {lead.careType?.[0] && (
-                        <>
-                          <span className="font-medium text-gray-600">{lead.careType[0]}</span>
-                          <span className="text-gray-300">·</span>
-                        </>
-                      )}
-                      <span>{lead.location}</span>
-                    </div>
+                    {/* Care type - own line, truncated */}
+                    {lead.careType?.[0] && (
+                      <p className="text-[13px] font-medium text-gray-600 truncate mb-0.5">
+                        {lead.careType[0]}
+                      </p>
+                    )}
 
-                    {/* Date - separate line, de-emphasized */}
-                    <p className="text-[12px] text-gray-400">{lead.date}</p>
+                    {/* Location · Date */}
+                    <p className="text-[13px] text-gray-500 truncate">
+                      {lead.location}
+                      <span className="text-gray-300 mx-1.5">·</span>
+                      <span className="text-gray-400">{lead.date}</span>
+                    </p>
                   </div>
                 </div>
               </div>
