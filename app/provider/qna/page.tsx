@@ -1008,9 +1008,7 @@ export default function ProviderQnAPage() {
             )}
           </>
         ) : (
-          <div className="bg-white rounded-2xl border border-gray-200/80 min-h-[420px] flex items-center justify-center">
-            <EmptyState filter={activeFilter} hasAnyPublished={counts.published > 0} />
-          </div>
+          <EmptyState filter={activeFilter} hasAnyPublished={counts.published > 0} />
         )}
       </div>
 
