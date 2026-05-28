@@ -59,7 +59,7 @@ interface LeadDetail {
 // ── Types ──
 
 type StatusFilter = "active" | "archived";
-type LeadStatus = "new" | "replied" | "no_reply" | "archived";
+type LeadStatus = "new" | "replied" | "archived";
 type Urgency = "immediate" | "within_1_month" | "exploring";
 type ContactMethod = "phone" | "email" | "either";
 
@@ -81,7 +81,6 @@ const URGENCY_LABELS: Record<Urgency, string> = {
 const STATUS_LABELS: Record<LeadStatus, string> = {
   new: "New",
   replied: "Replied",
-  no_reply: "No reply",
   archived: "Archived",
 };
 
