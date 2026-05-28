@@ -983,47 +983,53 @@ export default function ProviderQnAPage() {
 
       {/* Content */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {filteredQuestions.length > 0 ? (
-          <div className="space-y-4">
-            {paginatedQuestions.map((question) => (
-              question.status === "pending" ? (
-                <PendingQuestionCard
-                  key={question.id}
-                  question={question}
-                  onReply={handleReply}
-                  isMobile={isMobile}
-                  isNew={question.isNew}
-                  onMarkAsRead={() => handleMarkAsRead(question.id)}
-                />
-              ) : (
-                <PublishedQuestionCard
-                  key={question.id}
-                  question={question}
-                  onEdit={handleEdit}
-                  isMobile={isMobile}
-                  onVerifyClick={!isVerified ? openVerificationModal : undefined}
-                />
-              )
-            ))}
+        {error ? (
+          <div className="text-center py-16">
+            <p className="text-[15px] text-red-600">{error}</p>
           </div>
+        ) : filteredQuestions.length > 0 ? (
+          <>
+            <div className="space-y-4">
+              {paginatedQuestions.map((question) => (
+                question.status === "pending" ? (
+                  <PendingQuestionCard
+                    key={question.id}
+                    question={question}
+                    onReply={handleReply}
+                    isMobile={isMobile}
+                    isNew={question.isNew}
+                    onMarkAsRead={() => handleMarkAsRead(question.id)}
+                  />
+                ) : (
+                  <PublishedQuestionCard
+                    key={question.id}
+                    question={question}
+                    onEdit={handleEdit}
+                    isMobile={isMobile}
+                    onVerifyClick={!isVerified ? openVerificationModal : undefined}
+                  />
+                )
+              ))}
+            </div>
+
+            {/* Pagination */}
+            {filteredQuestions.length > PAGE_SIZE && (
+              <div className="pt-4">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={filteredQuestions.length}
+                  itemsPerPage={PAGE_SIZE}
+                  onPageChange={setCurrentPage}
+                  itemLabel="questions"
+                  showItemCount={true}
+                />
+              </div>
+            )}
+          </>
         ) : (
           <div className="bg-white rounded-2xl border border-gray-200/80 min-h-[420px] flex items-center justify-center">
             <EmptyState filter={activeFilter} />
-          </div>
-        )}
-
-        {/* Pagination */}
-        {filteredQuestions.length > PAGE_SIZE && (
-          <div className="pt-4">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              totalItems={filteredQuestions.length}
-              itemsPerPage={PAGE_SIZE}
-              onPageChange={setCurrentPage}
-              itemLabel="questions"
-              showItemCount={true}
-            />
           </div>
         )}
       </div>
