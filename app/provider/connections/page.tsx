@@ -1681,7 +1681,7 @@ export default function ProviderLeadsPage() {
                       <h3 className="text-base font-semibold text-gray-900 truncate">
                         {isVerified ? lead.name : formatRedactedName(lead.name)}
                       </h3>
-                      {/* Status badge - 3 states: New (green), Viewed (gray), Replied (amber) */}
+                      {/* Status badge - New (green), Replied (amber), Archived/Viewed (gray) */}
                       {lead.isNew ? (
                         <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
                           New
@@ -1689,6 +1689,10 @@ export default function ProviderLeadsPage() {
                       ) : lead.status === "replied" ? (
                         <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
                           Replied
+                        </span>
+                      ) : lead.status === "archived" ? (
+                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+                          Archived
                         </span>
                       ) : (
                         <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
@@ -1747,7 +1751,7 @@ export default function ProviderLeadsPage() {
                 {/* Received */}
                 <span className="text-[14px] text-gray-400">{lead.date}</span>
 
-                {/* Status badge - 3 states: New (green), Viewed (gray), Replied (amber) */}
+                {/* Status badge - New (green), Replied (amber), Archived/Viewed (gray) */}
                 {lead.isNew ? (
                   <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100">
                     New
@@ -1755,6 +1759,10 @@ export default function ProviderLeadsPage() {
                 ) : lead.status === "replied" ? (
                   <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100">
                     Replied
+                  </span>
+                ) : lead.status === "archived" ? (
+                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
+                    Archived
                   </span>
                 ) : (
                   <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
