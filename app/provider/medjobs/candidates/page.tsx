@@ -114,58 +114,54 @@ export default function ProviderCandidateBrowsePage() {
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
-    <main className="min-h-screen bg-[#FAFAF8]">
-      {/* Hero header */}
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-8 sm:pt-8 sm:pb-10">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 font-display">
-            Hire Local Caregivers
-          </h1>
-          <p className="mt-2 text-base sm:text-lg text-gray-500 max-w-2xl">
-            Pre-vetted students pursuing careers in healthcare — ready to
-            provide quality care in your area.
-          </p>
-
-          {/* Stats bar */}
-          {total > 0 && (
-            <div className="mt-4 flex items-center gap-4">
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-700 bg-primary-50 px-3 py-1 rounded-full">
-                <span className="w-2 h-2 bg-primary-500 rounded-full animate-pulse" />
-                {total} caregiver{total !== 1 ? "s" : ""} available
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
-
+    <main className="min-h-screen bg-gray-50/50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        {/* Filter tabs */}
-        {!loading && candidates.length > 0 && (
-          <div className="flex gap-2 mb-6">
-            <button
-              type="button"
-              onClick={() => setActiveTab("all")}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                activeTab === "all"
-                  ? "bg-gray-900 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-              }`}
-            >
-              All
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab("contacted")}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                activeTab === "contacted"
-                  ? "bg-gray-900 text-white"
-                  : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
-              }`}
-            >
-              Contacted{contacted.size > 0 ? ` (${contacted.size})` : ""}
-            </button>
+        {/* Page header */}
+        <div className="mb-6">
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 font-display mb-0.5 lg:mb-1">
+            Hire caregivers
+          </h1>
+          <p className="text-sm lg:text-[15px] text-gray-500">
+            Pre-vetted students pursuing careers in healthcare — ready to provide quality care in your area
+          </p>
+        </div>
+
+        {/* Tabs row */}
+        <div className="border-b border-gray-200 mb-6">
+          <div className="flex items-center justify-between">
+            {/* Tabs */}
+            <div className="flex items-center gap-6 lg:gap-8">
+              <button
+                type="button"
+                onClick={() => setActiveTab("all")}
+                className={`relative pb-3 text-[15px] transition-colors ${
+                  activeTab === "all"
+                    ? "font-semibold text-gray-900"
+                    : "font-normal text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                All{total > 0 ? ` (${total})` : ""}
+                {activeTab === "all" && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gray-900" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("contacted")}
+                className={`relative pb-3 text-[15px] transition-colors ${
+                  activeTab === "contacted"
+                    ? "font-semibold text-gray-900"
+                    : "font-normal text-gray-400 hover:text-gray-600"
+                }`}
+              >
+                Contacted{contacted.size > 0 ? ` (${contacted.size})` : ""}
+                {activeTab === "contacted" && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-gray-900" />
+                )}
+              </button>
+            </div>
           </div>
-        )}
+        </div>
 
         {/* Filters */}
         <CandidateFilters
@@ -181,7 +177,7 @@ export default function ProviderCandidateBrowsePage() {
             {Array.from({ length: 9 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl shadow-sm overflow-hidden animate-pulse"
+                className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden animate-pulse"
               >
                 <div className="p-6">
                   <div className="flex items-start gap-4 mb-4">

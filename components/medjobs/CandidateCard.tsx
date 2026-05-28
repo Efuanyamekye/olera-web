@@ -174,7 +174,7 @@ export default function CandidateCard({
   return (
     <Link
       href={profileUrl}
-      className="group relative flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 overflow-hidden"
+      className="group relative flex flex-col bg-white rounded-2xl border border-gray-200/80 hover:border-gray-300 transition-colors duration-200 overflow-hidden"
     >
       {/* Contacted badge */}
       {isContacted && (
