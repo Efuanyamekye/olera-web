@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProviderProfile } from "@/hooks/useProviderProfile";
 import { useProviderVerification } from "@/lib/hooks/useProviderVerification";
 import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
 import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
-import VerifyToUnlockPrompt from "@/components/provider/VerifyToUnlockPrompt";
 import Pagination from "@/components/ui/Pagination";
 
 // ── Types ──
@@ -111,53 +111,6 @@ function CheckIcon({ className = "w-4 h-4" }: { className?: string }) {
   );
 }
 
-// ── Tips Accordion Component ──
-
-function TipsAccordion({ title, children }: { title: string; children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="border-t border-gray-100">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-6 py-4 text-left hover:bg-gray-50/50 transition-colors duration-150"
-      >
-        <div className="flex items-center gap-2">
-          <div className="w-1 h-4 bg-gray-300 rounded-full" />
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-            {title}
-          </span>
-        </div>
-        <svg
-          className={`w-4 h-4 text-gray-400 transition-transform duration-300 ease-out ${
-            isOpen ? "rotate-180" : ""
-          }`}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-        </svg>
-      </button>
-      <div
-        className="grid transition-[grid-template-rows] duration-300 ease-out"
-        style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
-      >
-        <div className="overflow-hidden">
-          <div
-            className={`px-6 pb-5 transition-opacity duration-200 ${
-              isOpen ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            {children}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ── Avatar Component ──
 
@@ -675,227 +628,34 @@ function EmptyState({ filter }: { filter: TabFilter }) {
 
 // ── Loading Skeleton ──
 
-// ── Sidebar Component (Desktop Only) ──
-
-function QnASidebar({ publishedCount, providerSlug }: { publishedCount: number; providerSlug: string | null }) {
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-
-  // Calculate a mock visibility score based on published answers
-  const visibilityScore = Math.min(100, 35 + (publishedCount * 15));
-  const scoreLabel = visibilityScore >= 80 ? "Excellent" : visibilityScore >= 60 ? "Good" : visibilityScore >= 40 ? "Building" : "Getting started";
-  const progressPercent = visibilityScore;
-
-  // Close tooltip on outside click
-  useEffect(() => {
-    function handleClickOutside(e: MouseEvent) {
-      if (tooltipRef.current && !tooltipRef.current.contains(e.target as Node)) {
-        setShowTooltip(false);
-      }
-    }
-    if (showTooltip) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [showTooltip]);
-
-  const handleCopyLink = async () => {
-    if (!providerSlug) return;
-    try {
-      const profileUrl = `https://olera.care/provider/${providerSlug}`;
-      await navigator.clipboard.writeText(profileUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback for older browsers
-    }
-  };
-
-  return (
-    <div className="hidden lg:block">
-      <div className="sticky top-24">
-        {/* ── Unified Sidebar Card ── */}
-        <div className="bg-white rounded-2xl border border-gray-200/80">
-
-          {/* ── Section 1: Visibility Score ── */}
-          <div className="p-6">
-            {/* Header with tooltip */}
-            <div className="flex items-center gap-2 mb-5">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                Visibility Score
-              </span>
-              <div className="relative" ref={tooltipRef}>
-                <button
-                  type="button"
-                  onClick={() => setShowTooltip(!showTooltip)}
-                  className="w-[18px] h-[18px] rounded-full flex items-center justify-center text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-200 transition-colors"
-                  aria-label="What is visibility score?"
-                >
-                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                  </svg>
-                </button>
-                {/* Tooltip */}
-                {showTooltip && (
-                  <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-64 p-4 bg-gray-900 text-white text-[13px] rounded-xl shadow-xl z-20">
-                    <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-gray-900 rotate-45" />
-                    <p className="relative leading-relaxed">
-                      Score is based on questions received, your response rate, and answer depth. Higher scores rank you above other providers in family searches.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Score display */}
-            <div className="flex items-end justify-between mb-5">
-              <div className="flex items-baseline gap-0.5">
-                <span className="text-[44px] font-display font-bold text-gray-900 leading-none tracking-tight">
-                  {visibilityScore}
-                </span>
-                <span className="text-lg text-gray-300 font-medium">/100</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-50 border border-primary-100/60">
-                <svg className="w-3.5 h-3.5 text-primary-600" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
-                </svg>
-                <span className="text-xs font-bold text-primary-700">{scoreLabel}</span>
-              </div>
-            </div>
-
-            {/* Progress bar */}
-            <div className="mb-2.5">
-              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-primary-400 to-primary-500 rounded-full transition-all duration-500"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-            </div>
-            <div className="flex justify-between text-xs text-gray-400">
-              <span>Needs work</span>
-              <span>Strong</span>
-              <span>Top 10%</span>
-            </div>
-          </div>
-
-          {/* ── Section 2: Share Profile ── */}
-          <div className="px-6 py-5 border-t border-gray-100">
-            <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
-                <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" />
-                </svg>
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-[15px] font-semibold text-gray-900 leading-snug">
-                  Share your profile with families
-                </h3>
-                <p className="text-[13px] text-gray-500 mt-1 leading-relaxed">
-                  Questions from families help your profile rank in search.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleCopyLink}
-                  className="inline-flex items-center gap-1.5 mt-2 text-[13px] font-semibold text-primary-600 hover:text-primary-700 focus:outline-none focus:underline transition-colors group"
-                >
-                  {copied ? (
-                    <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                      </svg>
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      Copy profile link
-                      <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                      </svg>
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* ── Section 3: Tips for Better Answers (Collapsible) ── */}
-          <TipsAccordion title="Tips for Better Answers">
-            <div className="space-y-4">
-              {/* Tip 1 */}
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
-                  <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">Aim for 80+ words</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Longer answers rank higher</p>
-                </div>
-              </div>
-
-              {/* Tip 2 */}
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
-                  <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">Be specific</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Real details build family trust</p>
-                </div>
-              </div>
-
-              {/* Tip 3 */}
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center shrink-0">
-                  <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">Answers go live on Google</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Published instantly</p>
-                </div>
-              </div>
-            </div>
-          </TipsAccordion>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ── Loading Skeleton ──
 
 function QnASkeleton() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-        <div className="lg:max-w-2xl animate-pulse">
-          <div className="mb-5 lg:mb-8">
-            <div className="h-8 w-56 bg-warm-100 rounded-lg mb-2" />
-            <div className="h-4 w-72 bg-warm-50 rounded" />
-          </div>
-          <div className="h-12 w-64 bg-vanilla-50 border border-warm-100/60 rounded-xl mb-5 lg:mb-6" />
-          <div className="space-y-4">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="bg-white rounded-2xl border border-warm-100/60 p-5 lg:p-6">
-                <div className="flex items-start gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full bg-warm-100 shrink-0" />
-                  <div className="flex-1">
-                    <div className="h-5 w-full max-w-md bg-warm-100 rounded mb-2" />
-                    <div className="h-3 w-32 bg-warm-50 rounded" />
-                  </div>
+    <div className="min-h-screen bg-gray-50/50">
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <div className="h-4 w-16 bg-gray-200 rounded animate-pulse mb-4" />
+          <div className="h-8 w-56 bg-gray-200 rounded animate-pulse mb-2" />
+          <div className="h-4 w-72 bg-gray-100 rounded animate-pulse" />
+        </div>
+      </div>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="space-y-4">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="bg-white rounded-2xl border border-gray-200/80 p-5 lg:p-6 animate-pulse">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-12 h-12 rounded-full bg-gray-200 shrink-0" />
+                <div className="flex-1">
+                  <div className="h-5 w-full max-w-md bg-gray-200 rounded mb-2" />
+                  <div className="h-3 w-32 bg-gray-100 rounded" />
                 </div>
-                <div className="h-24 bg-warm-50/50 rounded-xl mb-4" />
-                <div className="h-12 bg-warm-100/60 rounded-xl" />
               </div>
-            ))}
-          </div>
+              <div className="h-24 bg-gray-100 rounded-xl mb-4" />
+              <div className="h-12 bg-gray-200 rounded-xl" />
+            </div>
+          ))}
         </div>
       </div>
     </div>
@@ -905,6 +665,7 @@ function QnASkeleton() {
 // ── Main Page ──
 
 export default function ProviderQnAPage() {
+  const router = useRouter();
   const { refreshAccountData } = useAuth();
   const providerProfile = useProviderProfile();
   const [activeFilter, setActiveFilter] = useState<TabFilter>("pending");
@@ -1165,98 +926,106 @@ export default function ProviderQnAPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-        {/* ── Page header ── */}
-        <div className="mb-5 lg:mb-8">
-          <h1 className="text-2xl lg:text-[28px] font-display font-bold text-gray-900 tracking-tight">
-            Questions & Answers
-          </h1>
-          <p className="text-sm lg:text-[15px] text-gray-500 mt-1 lg:mt-1.5 leading-relaxed">
-            Answer questions from families and showcase your expertise.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50/50">
+      {/* Header - sticky below navbar (h-16 = 64px) */}
+      <div className="bg-white border-b border-gray-100 sticky top-16 z-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-6 sm:py-8">
+            {/* Back button - navigates to previous page */}
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-500 hover:text-gray-700 transition-colors mb-4"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+              </svg>
+              Back
+            </button>
 
-        {/* ── Tabs (outside grid, full width) ── */}
-        <div className="mb-4 lg:mb-5">
-          <div className="flex gap-0.5 bg-vanilla-50 border border-warm-100/60 p-0.5 rounded-xl w-max">
+            <h1 className="text-2xl sm:text-3xl font-display font-bold text-gray-900 tracking-tight">
+              Questions & Answers
+            </h1>
+            <p className="text-[15px] text-gray-500 mt-1">
+              Answer questions from families and showcase your expertise
+            </p>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex gap-6 -mb-px">
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveFilter(tab.id)}
-                className={[
-                  "px-3.5 lg:px-5 py-2 lg:py-2.5 rounded-[10px] text-[13px] lg:text-sm font-semibold whitespace-nowrap transition-all duration-150 min-h-[40px] lg:min-h-[44px] flex items-center gap-2",
+                className={`relative pb-3 text-[15px] font-medium transition-colors ${
                   activeFilter === tab.id
-                    ? "bg-white text-gray-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700",
-                ].join(" ")}
+                    ? "text-gray-900"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
               >
                 {tab.label}
-                <span className={`text-xs px-1.5 py-0.5 rounded-md ${
-                  activeFilter === tab.id
-                    ? "bg-gray-100 text-gray-600"
-                    : "bg-warm-100/60 text-gray-400"
-                }`}>
-                  {counts[tab.id]}
-                </span>
+                {counts[tab.id] > 0 && (
+                  <span className={`ml-1.5 text-[13px] ${
+                    activeFilter === tab.id ? "text-gray-900" : "text-gray-400"
+                  }`}>
+                    ({counts[tab.id]})
+                  </span>
+                )}
+                {activeFilter === tab.id && (
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-900 rounded-full" />
+                )}
               </button>
             ))}
           </div>
         </div>
+      </div>
 
-        {/* ── Two column layout on desktop (cards + sidebar aligned) ── */}
-        <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8 lg:items-start">
-          {/* Left column - question cards */}
-          <div>
-            {filteredQuestions.length > 0 ? (
-              <div className="space-y-4">
-                {paginatedQuestions.map((question) => (
-                  question.status === "pending" ? (
-                    <PendingQuestionCard
-                      key={question.id}
-                      question={question}
-                      onReply={handleReply}
-                      isMobile={isMobile}
-                      isNew={question.isNew}
-                      onMarkAsRead={() => handleMarkAsRead(question.id)}
-                    />
-                  ) : (
-                    <PublishedQuestionCard
-                      key={question.id}
-                      question={question}
-                      onEdit={handleEdit}
-                      isMobile={isMobile}
-                      onVerifyClick={!isVerified ? openVerificationModal : undefined}
-                    />
-                  )
-                ))}
-              </div>
-            ) : (
-              <div className="bg-white rounded-2xl border border-gray-200/80 lg:min-h-[420px] flex items-center justify-center">
-                <EmptyState filter={activeFilter} />
-              </div>
-            )}
-
-            {/* Pagination */}
-            {filteredQuestions.length > PAGE_SIZE && (
-              <div className="pt-4">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  totalItems={filteredQuestions.length}
-                  itemsPerPage={PAGE_SIZE}
-                  onPageChange={setCurrentPage}
-                  itemLabel="questions"
-                  showItemCount={true}
+      {/* Content */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {filteredQuestions.length > 0 ? (
+          <div className="space-y-4">
+            {paginatedQuestions.map((question) => (
+              question.status === "pending" ? (
+                <PendingQuestionCard
+                  key={question.id}
+                  question={question}
+                  onReply={handleReply}
+                  isMobile={isMobile}
+                  isNew={question.isNew}
+                  onMarkAsRead={() => handleMarkAsRead(question.id)}
                 />
-              </div>
-            )}
+              ) : (
+                <PublishedQuestionCard
+                  key={question.id}
+                  question={question}
+                  onEdit={handleEdit}
+                  isMobile={isMobile}
+                  onVerifyClick={!isVerified ? openVerificationModal : undefined}
+                />
+              )
+            ))}
           </div>
+        ) : (
+          <div className="bg-white rounded-2xl border border-gray-200/80 min-h-[420px] flex items-center justify-center">
+            <EmptyState filter={activeFilter} />
+          </div>
+        )}
 
-          {/* Right column - sidebar (desktop only, aligns with first card) */}
-          <QnASidebar publishedCount={counts.published} providerSlug={providerProfile?.slug ?? null} />
-        </div>
+        {/* Pagination */}
+        {filteredQuestions.length > PAGE_SIZE && (
+          <div className="pt-4">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filteredQuestions.length}
+              itemsPerPage={PAGE_SIZE}
+              onPageChange={setCurrentPage}
+              itemLabel="questions"
+              showItemCount={true}
+            />
+          </div>
+        )}
       </div>
 
       {/* ── Bottom Sheet / Side Drawer ── */}
