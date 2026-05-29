@@ -566,7 +566,8 @@ export default function AdminLeadsPage() {
       ) : (
         <div className="space-y-1">
           {leads.map((lead) => {
-            const needsEmail = lead.metadata?.needs_provider_email === true;
+            // Check live email field, not stale metadata flag
+            const needsEmail = !lead.to_profile?.email;
             const providerEditorId = lead.to_profile?.source_provider_id;
             const providerSlug = (lead.to_profile as ConnectionProfile & { slug?: string })?.slug;
             const providerEngagement = engagement[providerSlug || providerEditorId || lead.to_profile?.id || ""];

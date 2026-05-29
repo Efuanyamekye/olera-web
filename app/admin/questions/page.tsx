@@ -427,7 +427,8 @@ export default function AdminQuestionsPage() {
       ) : (
         <div className="space-y-1">
           {questions.map((q) => {
-            const needsEmail = q.metadata?.needs_provider_email === true;
+            // Check live provider_email field, not stale metadata flag
+            const needsEmail = !q.provider_email;
             const providerLabel = q.provider_name || q.provider_id;
             const isRemoved = q.status === "rejected";
             const isArchived = q.status === "archived";
