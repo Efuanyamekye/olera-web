@@ -45,10 +45,11 @@ export async function GET(request: NextRequest) {
 
     // For needs_email filter: fetch provider slugs that actually have no email (live check)
     // This checks the actual email field, not a stale metadata flag
+    // Include all provider types: provider, organization, caregiver (exclude family)
     let noEmailSlugs: string[] | null = null;
     if (needsEmail) {
       const [{ data: bpNoEmail }, { data: iosNoEmail }] = await Promise.all([
-        db.from("business_profiles").select("slug").in("type", ["organization", "caregiver"]).is("email", null),
+        db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).is("email", null),
         db.from("olera-providers").select("slug").is("email", null).not("deleted", "is", true),
       ]);
       const slugSet = new Set<string>();
@@ -213,8 +214,9 @@ export async function GET(request: NextRequest) {
     // Fetch no-email slugs if not already done
     let noEmailSlugsForCount = noEmailSlugs;
     if (!noEmailSlugsForCount) {
+      // Include all provider types: provider, organization, caregiver (exclude family)
       const [{ data: bpNoEmail }, { data: iosNoEmail }] = await Promise.all([
-        db.from("business_profiles").select("slug").in("type", ["organization", "caregiver"]).is("email", null),
+        db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).is("email", null),
         db.from("olera-providers").select("slug").is("email", null).not("deleted", "is", true),
       ]);
       const slugSet = new Set<string>();

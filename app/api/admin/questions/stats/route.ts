@@ -37,8 +37,9 @@ export async function GET(request: NextRequest) {
     const queryStart = priorFrom ?? from ?? null;
 
     // Pre-fetch provider slugs with no email (live check, not stale flag)
+    // Include all provider types: provider, organization, caregiver (exclude family)
     const [{ data: bpNoEmail }, { data: iosNoEmail }] = await Promise.all([
-      db.from("business_profiles").select("slug").in("type", ["organization", "caregiver"]).is("email", null),
+      db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).is("email", null),
       db.from("olera-providers").select("slug").is("email", null).not("deleted", "is", true),
     ]);
     const noEmailSlugs = new Set<string>();
