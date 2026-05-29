@@ -48,11 +48,33 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // For needs_email filter: pre-fetch provider IDs that have no email
+    // This checks the live business_profiles.email field, not a stale metadata flag
+    // Include all provider types: provider, organization, caregiver (exclude family)
+    let noEmailProviderIds: string[] | null = null;
+    if (needsEmail) {
+      const { data: noEmailProviders } = await db
+        .from("business_profiles")
+        .select("id")
+        .in("type", ["provider", "organization", "caregiver"])
+        .is("email", null);
+
+      noEmailProviderIds = (noEmailProviders ?? []).map((p) => p.id);
+      if (noEmailProviderIds.length === 0) {
+        // No providers without email, return empty result
+        return NextResponse.json(countOnly ? { count: 0 } : { connections: [], total: 0, engagement: {} });
+      }
+    }
+
     // Build base filter helper
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function applyFilters(q: any) {
       if (status) q = q.eq("status", status);
       if (type) q = q.eq("type", type);
+      // Filter by providers with no email (using live data, not stale flag)
+      if (noEmailProviderIds) {
+        q = q.in("to_profile_id", noEmailProviderIds);
+      }
       // Show archived OR non-archived
       if (showArchived) {
         q = q.contains("metadata", { archived: true });
@@ -69,25 +91,6 @@ export async function GET(request: NextRequest) {
       return q;
     }
 
-    // For needs_email count: use inner join and filter on to_profile.email
-    // This is more efficient than pre-fetching IDs and using IN clause
-    if (countOnly && needsEmail) {
-      // Use inner join with to_profile to filter where email is null
-      // Also filter by provider types (exclude family profiles)
-      let countQuery = db
-        .from("connections")
-        .select("to_profile!inner(email, type)", { count: "exact", head: true })
-        .is("to_profile.email", null)
-        .in("to_profile.type", ["provider", "organization", "caregiver"]);
-      countQuery = applyFilters(countQuery);
-      const { count, error } = await countQuery;
-      if (error) {
-        console.error("Leads needs_email count error:", error);
-        return NextResponse.json({ error: "Failed to count leads" }, { status: 500 });
-      }
-      return NextResponse.json({ count: count ?? 0 });
-    }
-
     if (countOnly) {
       let countQuery = db
         .from("connections")
@@ -97,31 +100,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ count: count ?? 0 });
     }
 
-    // For needs_email list: pre-fetch provider IDs with no email
-    // This is needed because the full query uses a different select shape
-    let noEmailProviderIds: string[] | null = null;
-    if (needsEmail) {
-      const { data: noEmailProviders } = await db
-        .from("business_profiles")
-        .select("id")
-        .in("type", ["provider", "organization", "caregiver"])
-        .is("email", null);
-
-      noEmailProviderIds = (noEmailProviders ?? []).map((p) => p.id);
-      if (noEmailProviderIds.length === 0) {
-        return NextResponse.json({ connections: [], total: 0, engagement: {} });
-      }
-    }
-
     // Get total count for pagination
     let totalQuery = db
       .from("connections")
       .select("*", { count: "exact", head: true });
     totalQuery = applyFilters(totalQuery);
-    // Apply noEmailProviderIds filter for list view
-    if (noEmailProviderIds) {
-      totalQuery = totalQuery.in("to_profile_id", noEmailProviderIds);
-    }
     const { count: total } = await totalQuery;
 
     // Fetch connections with joined profile names
@@ -141,10 +124,6 @@ export async function GET(request: NextRequest) {
       .range(offset, offset + limit - 1);
 
     query = applyFilters(query);
-    // Apply noEmailProviderIds filter for list view
-    if (noEmailProviderIds) {
-      query = query.in("to_profile_id", noEmailProviderIds);
-    }
 
     const { data: connections, error } = await query;
 
