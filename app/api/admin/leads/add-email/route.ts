@@ -199,13 +199,21 @@ export async function POST(request: NextRequest) {
     }
 
     // Cross-clear: also send deferred question notifications for this provider
+    // Questions can be stored under various identifiers (slug, UUID, source_provider_id)
     let questionEmailsSent = 0;
-    const providerSlug = profile.slug || profile.source_provider_id;
-    if (providerSlug) {
+    const possibleProviderIds: string[] = [profileId]; // business_profile UUID
+    if (profile.slug) possibleProviderIds.push(profile.slug);
+    if (profile.source_provider_id && !possibleProviderIds.includes(profile.source_provider_id)) {
+      possibleProviderIds.push(profile.source_provider_id);
+    }
+    // Use canonical slug for URLs
+    const canonicalSlug = profile.slug || profile.source_provider_id || profileId;
+
+    if (possibleProviderIds.length > 0) {
       const { data: flaggedQuestions } = await db
         .from("provider_questions")
         .select("id, question, asker_name, metadata")
-        .eq("provider_id", providerSlug)
+        .in("provider_id", possibleProviderIds)
         .contains("metadata", { needs_provider_email: true });
 
       if (flaggedQuestions && flaggedQuestions.length > 0) {
@@ -240,8 +248,8 @@ export async function POST(request: NextRequest) {
                 providerName: profile.display_name || "Provider",
                 askerName: q.asker_name || "A family",
                 question: q.question,
-                providerUrl: appendTrackingParams(`${siteUrl}/provider/${providerSlug}/onboard`, qLogId),
-                providerSlug,
+                providerUrl: appendTrackingParams(`${siteUrl}/provider/${canonicalSlug}/onboard`, qLogId),
+                providerSlug: canonicalSlug,
                 preheader: qaInbox.preheader,
               }),
               emailType: "question_received",

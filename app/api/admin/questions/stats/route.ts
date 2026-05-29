@@ -36,15 +36,15 @@ export async function GET(request: NextRequest) {
     const priorFrom = from ? new Date(from.getTime() - (to.getTime() - from.getTime())) : null;
     const queryStart = priorFrom ?? from ?? null;
 
-    // Pre-fetch provider slugs with no email (live check, not stale flag)
-    // Include all provider types: provider, organization, caregiver (exclude family)
-    const [{ data: bpNoEmail }, { data: iosNoEmail }] = await Promise.all([
-      db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).is("email", null),
-      db.from("olera-providers").select("slug").is("email", null).not("deleted", "is", true),
+    // Pre-fetch provider slugs WITH email (smaller set, better performance)
+    // We'll check if provider is NOT in this set to determine needs-email
+    const [{ data: bpHasEmail }, { data: iosHasEmail }] = await Promise.all([
+      db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).not("email", "is", null),
+      db.from("olera-providers").select("slug").not("email", "is", null).not("deleted", "is", true),
     ]);
-    const noEmailSlugs = new Set<string>();
-    for (const p of bpNoEmail ?? []) if (p.slug) noEmailSlugs.add(p.slug);
-    for (const p of iosNoEmail ?? []) if (p.slug) noEmailSlugs.add(p.slug);
+    const hasEmailSlugs = new Set<string>();
+    for (const p of bpHasEmail ?? []) if (p.slug) hasEmailSlugs.add(p.slug);
+    for (const p of iosHasEmail ?? []) if (p.slug) hasEmailSlugs.add(p.slug);
 
     // One query — pull everything in range+prior with provider_id so we can
     // compute both the needs-email KPI and the total-volume series from
@@ -65,9 +65,9 @@ export async function GET(request: NextRequest) {
 
     const allRows = rows ?? [];
 
-    // Check if provider actually has no email (live data, not stale metadata flag)
+    // Check if provider needs email (provider is NOT in the has-email set)
     const isNeedsEmail = (r: (typeof allRows)[number]) => {
-      return r.status !== "archived" && r.status !== "rejected" && noEmailSlugs.has(r.provider_id);
+      return r.status !== "archived" && r.status !== "rejected" && !hasEmailSlugs.has(r.provider_id);
     };
 
     const inRange = (t: Date) => (from ? t >= from : true) && (dateTo ? t < to : true);

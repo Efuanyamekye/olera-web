@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient, logAuditAction } from "@/lib/admin";
 import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email";
-import { questionReceivedEmail, questionReceivedInbox, assignQuestionVariant } from "@/lib/email-templates";
+import { questionReceivedEmail, questionReceivedInbox, assignQuestionVariant, connectionRequestEmail } from "@/lib/email-templates";
 import { generateProviderSlug } from "@/lib/slugify";
 import { generateNotificationUrl } from "@/lib/claim-tokens";
 
@@ -212,29 +212,93 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Also clear needs_provider_email flags on any pending leads for this provider
-    let flaggedLeads: { id: string; metadata: Record<string, unknown> | null }[] | null = null;
+    // Cross-send: also send deferred lead notification emails for this provider
+    let leadEmailsSent = 0;
     if (provider?.id) {
-      const { data } = await db
+      const { data: flaggedConnections } = await db
         .from("connections")
-        .select("id, metadata")
+        .select("id, message, metadata, from_profile:business_profiles!connections_from_profile_id_fkey(display_name)")
         .eq("to_profile_id", provider.id)
+        .eq("status", "pending")
         .contains("metadata", { needs_provider_email: true });
-      flaggedLeads = data;
-    }
 
-    if (flaggedLeads && flaggedLeads.length > 0) {
-      for (const lead of flaggedLeads) {
-        try {
-          const meta = (lead.metadata as Record<string, unknown>) || {};
-          delete meta.needs_provider_email;
-          meta.email_sent_at = new Date().toISOString();
-          await db
-            .from("connections")
-            .update({ metadata: meta })
-            .eq("id", lead.id);
-        } catch (err) {
-          console.error(`Failed to clear lead flag for ${lead.id}:`, err);
+      if (flaggedConnections && flaggedConnections.length > 0) {
+        const careTypeMap: Record<string, string> = {
+          home_care: "Home Care",
+          home_health: "Home Health Care",
+          assisted_living: "Assisted Living",
+          memory_care: "Memory Care",
+        };
+
+        for (const conn of flaggedConnections) {
+          try {
+            // Skip if already sent (e.g. via leads add-email)
+            const meta = (conn.metadata as Record<string, unknown>) || {};
+            if (meta.email_sent_at) {
+              delete meta.needs_provider_email;
+              await db.from("connections").update({ metadata: meta }).eq("id", conn.id);
+              continue;
+            }
+
+            let careType: string | null = null;
+            let additionalNotes: string | null = null;
+            let familyName = "A family";
+            try {
+              const msg = JSON.parse(conn.message || "{}");
+              careType = msg.care_type ? (careTypeMap[msg.care_type] || msg.care_type) : null;
+              additionalNotes = msg.additional_notes || null;
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              const fromProfile = (conn as any).from_profile as { display_name: string } | null;
+              familyName = fromProfile?.display_name || `${msg.seeker_first_name || ""} ${msg.seeker_last_name || ""}`.trim() || "A family";
+            } catch { /* use defaults */ }
+
+            const emailSubject = `A family is looking for care from ${displayName}`;
+            const emailLogId = await reserveEmailLogId({
+              to: effectiveEmail,
+              subject: emailSubject,
+              emailType: "connection_request",
+              recipientType: "provider",
+              providerId,
+            });
+
+            // Generate one-click URL with signed token for auto-sign-in
+            let viewUrl: string;
+            try {
+              viewUrl = generateNotificationUrl(providerSlug, effectiveEmail, "lead", conn.id, siteUrl);
+              viewUrl = appendTrackingParams(viewUrl, emailLogId);
+            } catch {
+              viewUrl = appendTrackingParams(`${siteUrl}/provider/${providerSlug}/onboard?action=lead&actionId=${conn.id}`, emailLogId);
+            }
+
+            await sendEmail({
+              to: effectiveEmail,
+              subject: emailSubject,
+              html: connectionRequestEmail({
+                providerName: displayName,
+                familyName,
+                careType,
+                message: additionalNotes,
+                viewUrl,
+                providerSlug,
+              }),
+              emailType: "connection_request",
+              recipientType: "provider",
+              providerId,
+              emailLogId: emailLogId ?? undefined,
+            });
+
+            // Clear the flag
+            delete meta.needs_provider_email;
+            meta.email_sent_at = new Date().toISOString();
+            await db
+              .from("connections")
+              .update({ metadata: meta })
+              .eq("id", conn.id);
+
+            leadEmailsSent++;
+          } catch (emailErr) {
+            console.error(`Failed to send deferred lead email for connection ${conn.id}:`, emailErr);
+          }
         }
       }
     }
@@ -250,13 +314,13 @@ export async function POST(request: NextRequest) {
         email: effectiveEmail,
         previous_email: existingEmail || null,
         question_emails_sent: emailsSent,
-        lead_flags_cleared: flaggedLeads?.length ?? 0,
+        lead_emails_sent: leadEmailsSent,
       },
     });
 
     return NextResponse.json({
       success: true,
-      emailsSent,
+      emailsSent: emailsSent + leadEmailsSent,
     });
   } catch (err) {
     console.error("Add email (questions) error:", err);

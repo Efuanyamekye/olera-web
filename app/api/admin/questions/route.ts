@@ -43,35 +43,53 @@ export async function GET(request: NextRequest) {
       searchSlugs = Array.from(slugs);
     }
 
-    // For needs_email filter: fetch provider slugs that actually have no email (live check)
-    // This checks the actual email field, not a stale metadata flag
-    // Include all provider types: provider, organization, caregiver (exclude family)
-    let noEmailSlugs: string[] | null = null;
+    // For needs_email filter: fetch provider slugs that HAVE email (smaller list)
+    // We'll exclude questions from these providers to find those needing email
+    // Flipped logic: providers WITH email is a much smaller set than those WITHOUT
+    let hasEmailSlugs: Set<string> | null = null;
     if (needsEmail) {
-      const [{ data: bpNoEmail }, { data: iosNoEmail }] = await Promise.all([
-        db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).is("email", null),
-        db.from("olera-providers").select("slug").is("email", null).not("deleted", "is", true),
+      const [{ data: bpHasEmail }, { data: iosHasEmail }] = await Promise.all([
+        db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).not("email", "is", null),
+        db.from("olera-providers").select("slug").not("email", "is", null).not("deleted", "is", true),
       ]);
-      const slugSet = new Set<string>();
-      for (const p of bpNoEmail ?? []) if (p.slug) slugSet.add(p.slug);
-      for (const p of iosNoEmail ?? []) if (p.slug) slugSet.add(p.slug);
-      noEmailSlugs = Array.from(slugSet);
-      // If no providers without email, return 0 count for countOnly
-      // For full response, we'll return empty questions but still fetch accurate tabCounts
-      if (noEmailSlugs.length === 0 && countOnly) {
-        return NextResponse.json({ count: 0 });
-      }
+      hasEmailSlugs = new Set<string>();
+      for (const p of bpHasEmail ?? []) if (p.slug) hasEmailSlugs.add(p.slug);
+      for (const p of iosHasEmail ?? []) if (p.slug) hasEmailSlugs.add(p.slug);
     }
 
     // Fast path: return only the count (used by admin dashboard overview)
     if (countOnly) {
+      // For needs_email filter, we need to count in memory (can't use huge IN clause)
+      if (hasEmailSlugs) {
+        // Fetch all non-archived/rejected questions and filter in memory
+        let countQuery = db.from("provider_questions")
+          .select("provider_id")
+          .neq("status", "archived")
+          .neq("status", "rejected")
+          .limit(50000);
+        if (providerId) countQuery = countQuery.eq("provider_id", providerId);
+        if (searchSlugs) {
+          if (searchSlugs.length === 0) return NextResponse.json({ count: 0 });
+          countQuery = countQuery.in("provider_id", searchSlugs);
+        }
+        if (dateFrom) countQuery = countQuery.gte("created_at", dateFrom);
+        if (dateTo) countQuery = countQuery.lt("created_at", dateTo);
+        const { data: allQuestions, error } = await countQuery;
+        if (error) {
+          console.error("Admin questions count error:", error);
+          return NextResponse.json({ error: "Failed to count questions" }, { status: 500 });
+        }
+        // Filter to only questions where provider doesn't have email
+        const needsEmailCount = (allQuestions ?? []).filter(
+          q => q.provider_id && !hasEmailSlugs.has(q.provider_id)
+        ).length;
+        return NextResponse.json({ count: needsEmailCount });
+      }
+
+      // Standard count query (no needs_email filter)
       let countQuery = db.from("provider_questions").select("*", { count: "exact", head: true });
       if (status) countQuery = countQuery.eq("status", status);
       if (providerId) countQuery = countQuery.eq("provider_id", providerId);
-      if (noEmailSlugs) {
-        countQuery = countQuery.in("provider_id", noEmailSlugs);
-        countQuery = countQuery.neq("status", "archived").neq("status", "rejected");
-      }
       if (searchSlugs) {
         if (searchSlugs.length === 0) return NextResponse.json({ count: 0 });
         countQuery = countQuery.in("provider_id", searchSlugs);
@@ -86,20 +104,23 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ count: count ?? 0 });
     }
 
+    // For needs_email filter, we need to fetch more and filter in memory
+    // Fetch extra to account for filtering, then slice to requested page
+    const fetchMultiplier = hasEmailSlugs ? 5 : 1; // Fetch 5x if filtering
+    const fetchLimit = limit * fetchMultiplier;
+    const fetchOffset = hasEmailSlugs ? 0 : offset; // Start from 0 if filtering in memory
+
     let query = db
       .from("provider_questions")
       .select("*", { count: "exact" })
       .order("created_at", { ascending: false })
-      .range(offset, offset + limit - 1);
+      .range(fetchOffset, fetchOffset + fetchLimit - 1);
 
     if (status) query = query.eq("status", status);
     if (providerId) query = query.eq("provider_id", providerId);
 
-    // Handle needs_email filter with empty provider list
-    const skipMainQuery = noEmailSlugs && noEmailSlugs.length === 0;
-
-    if (noEmailSlugs && noEmailSlugs.length > 0) {
-      query = query.in("provider_id", noEmailSlugs);
+    // For needs_email, exclude archived/rejected at DB level
+    if (hasEmailSlugs) {
       query = query.neq("status", "archived").neq("status", "rejected");
     }
     if (searchSlugs) {
@@ -109,20 +130,29 @@ export async function GET(request: NextRequest) {
     if (dateFrom) query = query.gte("created_at", dateFrom);
     if (dateTo) query = query.lt("created_at", dateTo);
 
-    // If filtering by needs_email but no providers are missing emails, skip query
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let questions: any[] = [];
     let count: number | null = 0;
-    if (skipMainQuery) {
-      // No query needed - we know results are empty
+
+    const { data, count: resultCount, error } = await query;
+    if (error) {
+      console.error("Admin questions fetch error:", error);
+      return NextResponse.json({ error: "Failed to fetch questions" }, { status: 500 });
+    }
+
+    if (hasEmailSlugs) {
+      // Filter in memory: only questions where provider doesn't have email
+      const filtered = (data ?? []).filter(
+        q => q.provider_id && !hasEmailSlugs.has(q.provider_id)
+      );
+      // Manual pagination from the filtered results
+      questions = filtered.slice(offset, offset + limit);
+      // For accurate count, we'd need to fetch all - use the filtered length as approximation
+      // Or fetch full count separately (expensive but accurate)
+      count = filtered.length; // This is approximate if there are more than fetchLimit results
     } else {
-      const { data, count: resultCount, error } = await query;
       questions = data ?? [];
       count = resultCount;
-      if (error) {
-        console.error("Admin questions fetch error:", error);
-        return NextResponse.json({ error: "Failed to fetch questions" }, { status: 500 });
-      }
     }
 
     // Enrich with provider display names
@@ -210,32 +240,31 @@ export async function GET(request: NextRequest) {
     }));
 
     // Fetch tab counts for pending, needs_email, and archived
-    // For needs_email count, we need to check actual provider emails (not stale flag)
-    // Fetch no-email slugs if not already done
-    let noEmailSlugsForCount = noEmailSlugs;
-    if (!noEmailSlugsForCount) {
-      // Include all provider types: provider, organization, caregiver (exclude family)
-      const [{ data: bpNoEmail }, { data: iosNoEmail }] = await Promise.all([
-        db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).is("email", null),
-        db.from("olera-providers").select("slug").is("email", null).not("deleted", "is", true),
+    // For needs_email count: fetch all non-archived/rejected and filter in memory (avoid huge IN clause)
+    let hasEmailSlugsForCount = hasEmailSlugs;
+    if (!hasEmailSlugsForCount) {
+      // Fetch providers that HAVE email (smaller set)
+      const [{ data: bpHasEmail }, { data: iosHasEmail }] = await Promise.all([
+        db.from("business_profiles").select("slug").in("type", ["provider", "organization", "caregiver"]).not("email", "is", null),
+        db.from("olera-providers").select("slug").not("email", "is", null).not("deleted", "is", true),
       ]);
-      const slugSet = new Set<string>();
-      for (const p of bpNoEmail ?? []) if (p.slug) slugSet.add(p.slug);
-      for (const p of iosNoEmail ?? []) if (p.slug) slugSet.add(p.slug);
-      noEmailSlugsForCount = Array.from(slugSet);
+      hasEmailSlugsForCount = new Set<string>();
+      for (const p of bpHasEmail ?? []) if (p.slug) hasEmailSlugsForCount.add(p.slug);
+      for (const p of iosHasEmail ?? []) if (p.slug) hasEmailSlugsForCount.add(p.slug);
     }
 
-    // Build needs_email count query using actual provider email check
-    let needsEmailCountQuery = db.from("provider_questions").select("*", { count: "exact", head: true })
+    // Count needs_email in memory by fetching all non-archived/rejected and filtering
+    const { data: allForNeedsEmail } = await db.from("provider_questions")
+      .select("provider_id")
       .neq("status", "archived")
-      .neq("status", "rejected");
-    if (noEmailSlugsForCount.length > 0) {
-      needsEmailCountQuery = needsEmailCountQuery.in("provider_id", noEmailSlugsForCount);
-    }
+      .neq("status", "rejected")
+      .limit(50000);
+    const needsEmailCountValue = (allForNeedsEmail ?? []).filter(
+      q => q.provider_id && !hasEmailSlugsForCount.has(q.provider_id)
+    ).length;
 
-    const [pendingCount, needsEmailCount, archivedCount] = await Promise.all([
+    const [pendingCount, archivedCount] = await Promise.all([
       db.from("provider_questions").select("*", { count: "exact", head: true }).eq("status", "pending"),
-      noEmailSlugsForCount.length > 0 ? needsEmailCountQuery : Promise.resolve({ count: 0 }),
       db.from("provider_questions").select("*", { count: "exact", head: true }).eq("status", "archived"),
     ]);
 
@@ -244,7 +273,7 @@ export async function GET(request: NextRequest) {
       count: count ?? 0,
       tabCounts: {
         pending: pendingCount.count ?? 0,
-        needs_email: needsEmailCount.count ?? 0,
+        needs_email: needsEmailCountValue,
         archived: archivedCount.count ?? 0,
       },
     });
