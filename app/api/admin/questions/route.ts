@@ -104,11 +104,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ count: count ?? 0 });
     }
 
-    // For needs_email filter, we need to fetch more and filter in memory
-    // Fetch extra to account for filtering, then slice to requested page
-    const fetchMultiplier = hasEmailSlugs ? 5 : 1; // Fetch 5x if filtering
-    const fetchLimit = limit * fetchMultiplier;
-    const fetchOffset = hasEmailSlugs ? 0 : offset; // Start from 0 if filtering in memory
+    // For needs_email filter, we fetch all matching questions and filter/paginate in memory
+    // This is necessary because we can't use a SQL IN clause with 100k+ provider slugs
+    // For non-needs_email, we use normal DB pagination
+    const useMemoryPagination = !!hasEmailSlugs;
+    const fetchLimit = useMemoryPagination ? 10000 : limit; // Fetch up to 10k for in-memory filtering
+    const fetchOffset = useMemoryPagination ? 0 : offset;
 
     let query = db
       .from("provider_questions")
@@ -147,9 +148,8 @@ export async function GET(request: NextRequest) {
       );
       // Manual pagination from the filtered results
       questions = filtered.slice(offset, offset + limit);
-      // For accurate count, we'd need to fetch all - use the filtered length as approximation
-      // Or fetch full count separately (expensive but accurate)
-      count = filtered.length; // This is approximate if there are more than fetchLimit results
+      // Count is accurate for the fetched set (up to 10k questions)
+      count = filtered.length;
     } else {
       questions = data ?? [];
       count = resultCount;
