@@ -1555,10 +1555,7 @@ export function reviewRequestEmail(opts: {
     </p>
     <div>${button("Write a review", opts.reviewUrl)}</div>
     <p style="font-size:12px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
-      This email was sent on behalf of ${escapeHtml(opts.providerName)} via Olera.
-    </p>
-    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
-      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from review requests</a>
+      This email was sent on behalf of ${escapeHtml(opts.providerName)} via Olera. Don't want to receive these? Reply directly to let them know.
     </p>
   `, preheader);
 }

@@ -13,8 +13,8 @@ import PasskeysSection from "@/components/account/PasskeysSection";
 type SettingsTab = "account" | "notifications";
 
 // Notification configurations per account type
-// Only activity-based notifications are shown here (controllable by user)
-// Marketing/transactional emails (profile reminders, nudges, etc.) always send and have no toggle
+// Activity-based notifications are controllable by user
+// Transactional emails (auth, connection confirmations) always send
 const FAMILY_NOTIFICATIONS = [
   {
     key: "messages_and_responses",
@@ -27,6 +27,12 @@ const FAMILY_NOTIFICATIONS = [
     title: "Match updates",
     description: "When providers reach out to you on Matches",
     channels: ["email", "whatsapp"] as const,
+  },
+  {
+    key: "followup_reviews",
+    title: "Follow-up & reviews",
+    description: "Requests to share your experience after connecting with a provider",
+    channels: ["email"] as const,
   },
 ] as const;
 

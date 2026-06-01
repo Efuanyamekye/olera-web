@@ -66,6 +66,7 @@ export type NotificationPrefs = {
   // Family preferences
   messages_and_responses?: NotificationChannelPrefs;
   match_updates?: NotificationChannelPrefs;
+  followup_reviews?: NotificationChannelPrefs;
   // Family legacy
   connection_updates?: NotificationChannelPrefs;
   saved_provider_alerts?: NotificationChannelPrefs;

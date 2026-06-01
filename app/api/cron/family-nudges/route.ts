@@ -620,10 +620,9 @@ export async function GET(request: NextRequest) {
         if (thisActivity > existingActivity) {
           existing.lastActivityDate = conn.updated_at;
         }
-        // If any connection had real conversation, mark it
-        if (realConvo) {
-          existing.hadRealConversation = true;
-        }
+        // NOTE: We intentionally do NOT update hadRealConversation here.
+        // We only care about the FIRST connection since that's what the
+        // post-connection followup email asks about.
       }
     }
 
@@ -1055,12 +1054,17 @@ export async function GET(request: NextRequest) {
 
       // ── Legacy: Post-Connection Follow-up (30 days after first connection) ──
       // Only send if there was a real human conversation (not just automated messages)
+      // Respect user's notification preferences and global unsubscribe
+      const notifPrefs = (meta.notification_prefs || {}) as Record<string, Record<string, boolean>>;
+      const followupEmailsEnabled = notifPrefs.followup_reviews?.email !== false; // Default to true
       if (
         hasConnections &&
         connData?.firstConnectionDate &&
         connData.firstConnectionDate <= thirtyDaysAgo &&
         connData.hadRealConversation &&
-        !meta.post_connection_followup_sent
+        !meta.post_connection_followup_sent &&
+        !meta.nudges_unsubscribed &&
+        followupEmailsEnabled
       ) {
         let providerName = "your provider";
         let providerSlug = "";
