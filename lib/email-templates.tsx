@@ -962,18 +962,24 @@ interface EmailProviderCard {
   reviewSnippet?: string | null;
   city: string;
   state: string;
+  /** Price range for display (e.g., "$2,500–4,000/mo" or "Contact for pricing") */
+  priceRange?: string | null;
 }
 
 function providerCardRow(provider: EmailProviderCard, showSnippet = false): string {
   const snippetHtml = showSnippet && provider.reviewSnippet
-    ? `<p style="font-size:13px;color:#6b7280;margin:6px 0 0;line-height:1.4;font-style:italic;">&ldquo;${provider.reviewSnippet.slice(0, 120)}${provider.reviewSnippet.length > 120 ? "..." : ""}&rdquo;</p>`
+    ? `<p style="font-size:13px;color:#6b7280;margin:6px 0 0;line-height:1.4;font-style:italic;">&ldquo;${escapeHtml(provider.reviewSnippet.slice(0, 120))}${provider.reviewSnippet.length > 120 ? "..." : ""}&rdquo;</p>`
+    : "";
+  const priceHtml = provider.priceRange
+    ? `<p style="font-size:13px;color:#059669;margin:4px 0 0;font-weight:500;">${escapeHtml(provider.priceRange)}</p>`
     : "";
   return `
     <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:8px;margin:0 0 8px;">
       <tr><td style="padding:12px 16px;">
-        <a href="${BASE_URL}/provider/${provider.slug}" style="font-size:15px;font-weight:600;color:#111827;text-decoration:none;">${provider.name}</a>
-        <p style="font-size:13px;color:#6b7280;margin:2px 0 0;">${provider.category} &middot; ${provider.city}, ${provider.state}</p>
-        <p style="font-size:13px;color:#d97706;margin:4px 0 0;">&starf; ${provider.rating.toFixed(1)} (${provider.reviewCount.toLocaleString()} reviews) on Google</p>
+        <a href="${BASE_URL}/provider/${provider.slug}" style="font-size:15px;font-weight:600;color:#111827;text-decoration:none;">${escapeHtml(provider.name)}</a>
+        <p style="font-size:13px;color:#6b7280;margin:2px 0 0;">${escapeHtml(provider.category)} &middot; ${escapeHtml(provider.city)}, ${escapeHtml(provider.state)}</p>
+        <p style="font-size:13px;color:#d97706;margin:4px 0 0;">&starf; ${provider.rating.toFixed(1)} (${provider.reviewCount.toLocaleString()} reviews)</p>
+        ${priceHtml}
         ${snippetHtml}
       </td></tr>
     </table>`;
@@ -1101,7 +1107,7 @@ export function dormantReengagementEmail(opts: {
 
 // ── Profile Completion Sequence (4 active + 1 maintenance) ──────────
 
-/** Completion Nudge #1 (Same day): What's missing, why it matters */
+/** Completion Nudge #1 (Day 0, 4h after signup): Helpful onboarding */
 export function completionNudge1Email(opts: {
   familyName: string;
   welcomeUrl: string;
@@ -1111,28 +1117,36 @@ export function completionNudge1Email(opts: {
   city?: string;
 }): string {
   const percent = opts.completionPercent ?? 0;
-  const missing = opts.missingFields ?? [];
-  const missingSummary = missing.length <= 3
-    ? missing.join(", ")
-    : `${missing.slice(0, 3).join(", ")}, and ${missing.length - 3} more`;
   const locationText = opts.city || "your area";
+  const providerText = opts.providerCount
+    ? `${opts.providerCount} providers in ${escapeHtml(locationText)} are ready to help`
+    : `Providers in ${escapeHtml(locationText)} are ready to help`;
+
+  // Identify highest-value missing field for focused CTA
+  const highValueFields = ["Timeline", "Phone", "Payment Methods", "Relationship"];
+  const missing = opts.missingFields ?? [];
+  const topMissing = missing.find(f => highValueFields.includes(f)) || missing[0];
+
+  const preheader = `Help providers in ${locationText} understand how to help you`;
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Complete your profile to connect with providers</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">A quick question about your care search</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, your profile is ${percent}% complete. A few more details will help providers in ${escapeHtml(locationText)} understand your needs.
+      Hi ${firstName(opts.familyName, "there")}, providers respond faster when they understand your situation. Right now, your profile is ${percent}% complete.
     </p>
-    ${missing.length > 0 ? `
-    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin:0 0 20px;">
-      <p style="font-size:13px;font-weight:600;color:#374151;margin:0 0 8px;">Missing information:</p>
-      <p style="font-size:14px;color:#6b7280;margin:0;">${missingSummary}</p>
-    </div>
+    ${topMissing ? `
+    <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
+      <strong>The most helpful thing you can add:</strong> ${escapeHtml(topMissing.toLowerCase())}
+    </p>
     ` : ""}
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      ${opts.providerCount ? `${opts.providerCount} providers are looking for families like yours.` : "Complete profiles get faster responses from providers."}
+      ${providerText} — they just need a bit more context about your needs.
     </p>
-    <div>${button("Complete Your Profile", opts.welcomeUrl)}</div>
-  `);
+    <div>${button("Continue Your Profile", opts.welcomeUrl)}</div>
+    <p style="font-size:12px;color:#d1d5db;margin:24px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
 /** Completion Nudge #2 (Day 2): Progress encouragement, provider count */
@@ -1146,31 +1160,29 @@ export function completionNudge2Email(opts: {
   state?: string;
 }): string {
   const percent = opts.completionPercent ?? 0;
-  const missing = opts.missingFields ?? [];
-  const missingSummary = missing.length <= 3
-    ? missing.join(", ")
-    : `${missing.slice(0, 3).join(", ")}, and ${missing.length - 3} more`;
   const locationText = opts.city || opts.state || "your area";
+  const providerText = opts.providerCount
+    ? `${opts.providerCount} providers in ${escapeHtml(locationText)} are looking for families to help`
+    : `Providers in ${escapeHtml(locationText)} are looking for families to help`;
+
+  const preheader = `You're ${percent}% there — just a few more details`;
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">You're ${percent}% there — let's finish your profile</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${providerText}</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, ${opts.providerCount ? `${opts.providerCount} providers in ${escapeHtml(locationText)} are looking for families like yours.` : `providers in ${escapeHtml(locationText)} are waiting to hear from you.`}
+      Hi ${firstName(opts.familyName, "there")}, you're ${percent}% of the way there.
     </p>
-    ${missing.length > 0 ? `
-    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin:0 0 20px;">
-      <p style="font-size:13px;font-weight:600;color:#374151;margin:0 0 8px;">Still needed:</p>
-      <p style="font-size:14px;color:#6b7280;margin:0;">${missingSummary}</p>
-    </div>
-    ` : ""}
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Complete profiles stand out — providers are more likely to reach out when they can see your full situation.
+      When providers can see your full situation — timeline, care needs, how you'd like to pay — they can reach out with real answers instead of generic questions.
     </p>
-    <div>${button("Complete Your Profile", opts.welcomeUrl)}</div>
-  `);
+    <div>${button("Add a Few Details", opts.welcomeUrl)}</div>
+    <p style="font-size:12px;color:#d1d5db;margin:24px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
-/** Completion Nudge #3 (Day 6): Social proof, urgency */
+/** Completion Nudge #3 (Day 5): Social proof */
 export function completionNudge3Email(opts: {
   familyName: string;
   welcomeUrl: string;
@@ -1181,70 +1193,67 @@ export function completionNudge3Email(opts: {
   state?: string;
 }): string {
   const percent = opts.completionPercent ?? 0;
-  const missing = opts.missingFields ?? [];
-  const missingSummary = missing.length <= 3
-    ? missing.join(", ")
-    : `${missing.slice(0, 3).join(", ")}, and ${missing.length - 3} more`;
-  const locationText = opts.city || opts.state || "your area";
+
+  const preheader = `Your profile is ${percent}% complete`;
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Families with complete profiles hear back 3x faster</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Families with complete profiles hear back faster</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, your profile is ${percent}% complete. ${opts.providerCount ? `${opts.providerCount} providers in ${escapeHtml(locationText)} are actively looking for new clients.` : `Providers in ${escapeHtml(locationText)} are actively looking for new clients.`}
+      Hi ${firstName(opts.familyName, "there")}, here's what we've seen: families who share their full situation — who needs care, when, and how they'll pay — get responses faster.
     </p>
-    ${missing.length > 0 ? `
-    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin:0 0 20px;">
-      <p style="font-size:13px;font-weight:600;color:#374151;margin:0 0 8px;">Quick wins to complete:</p>
-      <p style="font-size:14px;color:#6b7280;margin:0;">${missingSummary}</p>
-    </div>
-    ` : ""}
+    <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
+      Providers can skip the back-and-forth and give you real information right away.
+    </p>
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      A complete profile helps providers understand exactly how they can help you.
+      Your profile is ${percent}% complete. A few more details and you'll be ready to connect.
     </p>
-    <div>${button("Complete Your Profile", opts.welcomeUrl)}</div>
-  `);
+    <div>${button("Finish Up", opts.welcomeUrl)}</div>
+    <p style="font-size:12px;color:#d1d5db;margin:24px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
-/** Completion Nudge #4 (Day 13): Final push with specific providers */
+/** Completion Nudge #4 (Day 7): Show specific providers */
 export function completionNudge4Email(opts: {
   familyName: string;
   welcomeUrl: string;
   missingFields?: string[];
   completionPercent?: number;
   providers?: EmailProviderCard[];
+  providerCount?: number;
   city?: string;
   state?: string;
 }): string {
   const percent = opts.completionPercent ?? 0;
-  const missing = opts.missingFields ?? [];
-  const missingSummary = missing.length <= 3
-    ? missing.join(", ")
-    : `${missing.slice(0, 3).join(", ")}, and ${missing.length - 3} more`;
   const locationText = opts.city || opts.state || "your area";
   const providersHtml = opts.providers?.length ? providerCardsBlock(opts.providers) : "";
+  const remainingCount = (opts.providerCount ?? 0) - (opts.providers?.length ?? 0);
+
+  const preheader = `They're ready to help when you are`;
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Top providers in ${escapeHtml(locationText)} are ready to help</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Providers near you (including these top-rated ones)</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, your profile is ${percent}% complete. Here are some highly-rated providers near you:
+      Hi ${firstName(opts.familyName, "there")}, here are a few highly-rated providers in ${escapeHtml(locationText)}:
     </p>
     ${providersHtml}
-    ${missing.length > 0 ? `
-    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin:0 0 20px;">
-      <p style="font-size:13px;font-weight:600;color:#374151;margin:0 0 8px;">To connect with these providers, add:</p>
-      <p style="font-size:14px;color:#6b7280;margin:0;">${missingSummary}</p>
-    </div>
-    ` : ""}
-    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Complete your profile so these providers can understand your needs and reach out directly.
+    <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
+      ${remainingCount > 0 ? `These providers (and ${remainingCount} others) are looking for families to help. ` : ""}Once your profile is complete, they can see your situation and reach out directly.
     </p>
-    <div>${button("Complete Your Profile", opts.welcomeUrl)}</div>
-  `);
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      You're ${percent}% there.
+    </p>
+    <div>${button("Finish Your Profile", opts.welcomeUrl)}</div>
+    <p style="font-size:12px;color:#d1d5db;margin:24px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
 // ── Profile Publish Sequence (4 active + 1 maintenance) ──────────
 
-/** Publish Nudge #1 (Day 1 after complete): Benefits of publishing */
+/** Publish Nudge #1 (Day 0 after complete): The Flip — let providers come to you */
 export function publishNudge1Email(opts: {
   familyName: string;
   matchesUrl: string;
@@ -1252,24 +1261,37 @@ export function publishNudge1Email(opts: {
   city?: string;
 }): string {
   const cityText = opts.city || "your area";
-  const countText = opts.providerCount ? `${opts.providerCount} ` : "";
+  const providerText = opts.providerCount
+    ? `${opts.providerCount} providers in ${escapeHtml(cityText)} are ready to help`
+    : `Providers in ${escapeHtml(cityText)} are ready to help`;
+
+  const preheader = "No more calling around — let them reach out to you";
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Go live — let providers find you</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Let providers come to you</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, your profile looks great! ${countText}providers in ${escapeHtml(cityText)} are looking for families like yours.
+      Hi ${firstName(opts.familyName, "there")}, instead of calling provider after provider, let them reach out to you.
     </p>
-    <p style="font-size:14px;color:#6b7280;margin:0 0 8px;line-height:1.5;"><strong>When you go live:</strong></p>
-    <ul style="font-size:14px;color:#6b7280;margin:0 0 24px;padding-left:20px;line-height:1.8;">
-      <li>Providers can see your care needs and reach out directly</li>
-      <li>You stay in control — respond only to providers you're interested in</li>
-      <li>Get matched faster than searching on your own</li>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 8px;line-height:1.5;"><strong>Here's how it works:</strong></p>
+    <ul style="font-size:14px;color:#6b7280;margin:0 0 20px;padding-left:20px;line-height:1.8;">
+      <li>${providerText} — they can see your care needs and send you a message</li>
+      <li>Not a phone call. A message you can read on your own time</li>
+      <li>You decide who's worth responding to</li>
     </ul>
-    <div>${button("Go Live Now", opts.matchesUrl)}</div>
-  `);
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      No pressure. You're in control.
+    </p>
+    <div>${button("See How It Works", opts.matchesUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
-/** Publish Nudge #2 (Day 5): Provider count, top rated */
+/** Publish Nudge #2 (Day 2): Show concrete providers who could reach out */
 export function publishNudge2Email(opts: {
   familyName: string;
   matchesUrl: string;
@@ -1278,23 +1300,42 @@ export function publishNudge2Email(opts: {
   city?: string;
 }): string {
   const cityText = opts.city || "your area";
-  const countText = opts.providerCount ? `${opts.providerCount} ` : "";
-  const providersHtml = opts.providers?.length ? providerCardsBlock(opts.providers.slice(0, 3)) : "";
+  const hasProviders = opts.providers && opts.providers.length > 0;
+  const providersHtml = hasProviders ? providerCardsBlock(opts.providers!.slice(0, 3)) : "";
+  const remainingCount = (opts.providerCount ?? 0) - (opts.providers?.length ?? 0);
+
+  // Adjust headline and intro based on whether we have providers to show
+  const headline = hasProviders
+    ? "These providers want to help families like yours"
+    : `Providers in ${escapeHtml(cityText)} want to help families like yours`;
+  const intro = hasProviders
+    ? `here are a few highly-rated providers in ${escapeHtml(cityText)}:`
+    : `providers in ${escapeHtml(cityText)} are looking for families to help.`;
+
+  const preheader = hasProviders
+    ? "These providers help families like yours"
+    : "Providers are looking for families to help";
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${countText}providers in ${escapeHtml(cityText)} are looking</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, providers are actively searching for families in ${escapeHtml(cityText)}. Here are a few who might reach out:
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${headline}</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
+      Hi ${firstName(opts.familyName, "there")}, ${intro}
     </p>
     ${providersHtml}
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Publish your profile to let them know you're looking for care.
+      ${remainingCount > 0 ? `These providers (and ${remainingCount} others) are looking for families to help. ` : ""}When you publish, they can see your needs and reach out. No forms to fill out. No calls to make. They do the work — you choose who to talk to.
     </p>
-    <div>${button("Publish Your Profile", opts.matchesUrl)}</div>
-  `);
+    <div>${button("Let Providers Reach Out", opts.matchesUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
-/** Publish Nudge #3 (Day 6): Social proof with real connection stats */
+/** Publish Nudge #3 (Day 6): Social proof + contrast with the old way */
 export function publishNudge3Email(opts: {
   familyName: string;
   matchesUrl: string;
@@ -1309,32 +1350,39 @@ export function publishNudge3Email(opts: {
   // Build social proof line with real data
   let socialProof: string;
   if (opts.familiesThisWeek && opts.familiesThisWeek >= 5) {
-    socialProof = `${opts.familiesThisWeek} families connected with providers this week on Olera.`;
+    socialProof = `${opts.familiesThisWeek} families got responses this week — without making a single call.`;
   } else if (opts.familiesThisMonth && opts.familiesThisMonth >= 10) {
-    socialProof = `${opts.familiesThisMonth} families found care this month on Olera.`;
+    socialProof = `${opts.familiesThisMonth} families heard back from providers this month — without making a single call.`;
   } else {
-    socialProof = "Families like yours are connecting with care providers every day on Olera.";
+    socialProof = "Families on Olera are hearing back from providers — without making a single call.";
   }
 
-  const providerLine = opts.providerCount
-    ? `${opts.providerCount} providers in ${locationText} are ready to help.`
-    : `Providers in ${locationText} are waiting to hear from you.`;
+  const preheader = "No more phone tag — let providers come to you";
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Families are finding care — you can too</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Skip the phone tag</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, ${socialProof}
+      Hi ${firstName(opts.familyName, "there")}, most families spend hours calling providers, leaving voicemails, waiting for callbacks.
+    </p>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
+      Families on Olera do it differently: they publish what they need, and providers reach out with real answers.
     </p>
     <div style="background:#f0fdfa;border-left:3px solid ${BRAND_COLOR};padding:12px 16px;margin:0 0 24px;border-radius:0 8px 8px 0;">
       <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;">
-        <strong>Your profile is complete.</strong> ${escapeHtml(providerLine)} The sooner you publish, the sooner you can start conversations.
+        ${escapeHtml(socialProof)}
       </p>
     </div>
-    <div>${button("Publish and Start Connecting", opts.matchesUrl)}</div>
-  `);
+    <div>${button("Publish and Let Them Come to You", opts.matchesUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
-/** Publish Nudge #4 (Day 15): Soft touch, no pressure */
+/** Publish Nudge #4 (Day 13): Soft touch + invitation to reply */
 export function publishNudge4Email(opts: {
   familyName: string;
   matchesUrl: string;
@@ -1342,28 +1390,34 @@ export function publishNudge4Email(opts: {
 }): string {
   const cityText = opts.city || "your area";
 
+  const preheader = "Your profile is ready whenever you are";
+
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">We're here when you're ready</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Still thinking it over?</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, we know finding care is a big decision. Take your time — your profile is ready and waiting whenever you are.
+      Hi ${firstName(opts.familyName, "there")}, no rush. Finding care is a big decision.
+    </p>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
+      When you're ready, your profile is set. One click and providers in ${escapeHtml(cityText)} can start reaching out to you.
     </p>
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Providers in ${escapeHtml(cityText)} are still looking for families. When you're ready to connect, just click below.
+      Not sure how it works? Have questions? <strong>Reply to this email</strong> — we're happy to explain.
     </p>
-    <div>${button("Go Live When Ready", opts.matchesUrl)}</div>
-    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
-      Have questions? Reply to this email — we're happy to help.
+    <div>${button("Publish When Ready", opts.matchesUrl)}</div>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
-  `);
+  `, preheader);
 }
 
 // ── Maintenance Phase (monthly, fresh content) ──────────
 
-/** Maintenance email for incomplete profiles — new providers added */
+/** Maintenance email for incomplete profiles — new or top providers */
 export function completionMaintenanceEmail(opts: {
   familyName: string;
   welcomeUrl: string;
   providers?: EmailProviderCard[];
+  /** Count of new providers this month (0 = show top providers instead) */
   newProviderCount?: number;
   missingFields?: string[];
   completionPercent?: number;
@@ -1371,62 +1425,85 @@ export function completionMaintenanceEmail(opts: {
   state?: string;
 }): string {
   const percent = opts.completionPercent ?? 0;
-  const missing = opts.missingFields ?? [];
-  const missingSummary = missing.length <= 3
-    ? missing.join(", ")
-    : `${missing.slice(0, 3).join(", ")}, and ${missing.length - 3} more`;
   const locationText = opts.city || opts.state || "your area";
-  const newText = opts.newProviderCount
-    ? `${opts.newProviderCount} new providers joined Olera in ${locationText} this month.`
-    : `New providers have joined Olera in ${locationText}.`;
+  const hasNewProviders = (opts.newProviderCount ?? 0) > 0;
   const providersHtml = opts.providers?.length ? providerCardsBlock(opts.providers) : "";
 
+  // Dynamic headline and intro based on whether there are actually new providers
+  const headline = hasNewProviders
+    ? `${opts.newProviderCount} new providers joined in ${escapeHtml(locationText)}`
+    : `Top providers in ${escapeHtml(locationText)} you might have missed`;
+
+  const introText = hasNewProviders
+    ? `${opts.newProviderCount} new providers joined Olera in ${escapeHtml(locationText)} this month. Here are a few:`
+    : `Here are some highly-rated providers in ${escapeHtml(locationText)}:`;
+
+  const preheader = hasNewProviders
+    ? `Including some highly-rated options`
+    : `Highly-rated care options near you`;
+
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">New providers in ${escapeHtml(locationText)}</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${headline}</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, ${escapeHtml(newText)} Your profile is ${percent}% complete — finish it to connect.
+      Hi ${firstName(opts.familyName, "there")}, ${introText}
     </p>
-    ${missing.length > 0 ? `
-    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px;margin:0 0 20px;">
-      <p style="font-size:13px;font-weight:600;color:#374151;margin:0 0 8px;">Still needed:</p>
-      <p style="font-size:14px;color:#6b7280;margin:0;">${missingSummary}</p>
-    </div>
-    ` : ""}
     ${providersHtml}
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Complete your profile to see all available providers and start connecting.
+      Your profile is ${percent}% complete. When you're ready to connect with providers like these, we're here.
     </p>
-    <div>${button("Complete Your Profile", opts.welcomeUrl)}</div>
-  `);
+    <div>${button("Continue Your Profile", opts.welcomeUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;text-align:center;">
+      No longer looking for care? <a href="${BASE_URL}/portal/settings" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from updates</a>
+    </p>
+  `, preheader);
 }
 
-/** Maintenance email for unpublished profiles — updated stats */
+/** Maintenance email for unpublished profiles — fresh providers + the value prop */
 export function publishMaintenanceEmail(opts: {
   familyName: string;
   matchesUrl: string;
   providerCount?: number;
-  familiesConnectedThisMonth?: number;
+  newProviderCount?: number;
+  providers?: EmailProviderCard[];
   city?: string;
   state?: string;
 }): string {
   const locationText = opts.city || opts.state || "your area";
-  const statsLine = opts.familiesConnectedThisMonth
-    ? `${opts.familiesConnectedThisMonth} families found care in ${locationText} this month.`
-    : `Families are connecting with providers in ${locationText} every day.`;
+  const hasNewProviders = (opts.newProviderCount ?? 0) > 0;
+  const providersHtml = opts.providers?.length ? providerCardsBlock(opts.providers.slice(0, 3)) : "";
+
+  // Dynamic headline based on new providers
+  const headline = hasNewProviders
+    ? `${opts.newProviderCount} new providers joined in ${escapeHtml(locationText)}`
+    : `Providers in ${escapeHtml(locationText)} are still looking`;
+
+  const preheader = hasNewProviders
+    ? "New care options near you"
+    : "Your profile is ready — let them reach out";
+
+  // Build intro text based on whether we have providers to show
+  const hasProviders = opts.providers && opts.providers.length > 0;
+  const introText = hasProviders
+    ? (hasNewProviders ? "here are some providers who recently joined Olera:" : "here are some highly-rated providers near you:")
+    : "providers are still looking for families to help.";
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Still looking for care?</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, ${escapeHtml(statsLine)}
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${headline}</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
+      Hi ${firstName(opts.familyName, "there")}, ${introText}
     </p>
+    ${providersHtml}
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Your profile is ready — publish it to let providers know you're looking.${opts.providerCount ? ` There are ${opts.providerCount} providers in ${escapeHtml(locationText)} waiting to connect.` : ""}
+      Your profile is ready. When you publish, providers${hasProviders ? " like these" : ""} can see your care needs and reach out — no calls to make, no forms to fill. They do the work, you choose who to talk to.
     </p>
-    <div>${button("Publish Your Profile", opts.matchesUrl)}</div>
+    <div>${button("Let Providers Reach Out", opts.matchesUrl)}</div>
     <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:13px;color:#9ca3af;margin:12px 0 0;line-height:1.5;text-align:center;">
       No longer looking for care? <a href="${BASE_URL}/portal/settings" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from updates</a>
     </p>
-  `);
+  `, preheader);
 }
 
 /** Email sent to clients requesting they leave a review for a provider */

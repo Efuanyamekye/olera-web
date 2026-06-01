@@ -70,6 +70,7 @@ const MAX_MAINTENANCE_NUDGES = 6;          // cap monthly nudges at 6 (stop afte
 const READY_TO_PUBLISH_THRESHOLD = 60;     // ≥60% can publish profile (enrichment completion is sufficient)
 const FULLY_COMPLETE_THRESHOLD = 100;      // ≥100% is "fully complete" — no more completion nudges needed
 const REPUBLISH_GRACE_PERIOD_DAYS = 30;    // don't nudge to re-publish if was published 30+ days ago
+const ACTIVE_CONVERSATION_DAYS = 7;        // skip nudges if user has connection activity within this window
 
 // ── Care type mapping: family profile → olera-providers ──
 
@@ -95,6 +96,7 @@ interface ProviderRec {
   reviewSnippet: string | null;
   city: string;
   state: string;
+  priceRange: string | null;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -208,7 +210,7 @@ async function getTopProviders(
   // Try city + state first
   let query = db
     .from("olera-providers")
-    .select("provider_name, provider_category, slug, city, state, google_rating, google_reviews_data")
+    .select("provider_name, provider_category, slug, city, state, google_rating, google_reviews_data, metadata")
     .eq("state", state)
     .ilike("city", city)
     .or("deleted.is.null,deleted.eq.false")
@@ -227,7 +229,7 @@ async function getTopProviders(
   if (!providers || providers.length < 2) {
     let stateQuery = db
       .from("olera-providers")
-      .select("provider_name, provider_category, slug, city, state, google_rating, google_reviews_data")
+      .select("provider_name, provider_category, slug, city, state, google_rating, google_reviews_data, metadata")
       .eq("state", state)
       .or("deleted.is.null,deleted.eq.false")
       .not("google_rating", "is", null)
@@ -252,6 +254,17 @@ async function getTopProviders(
       reviews?: { text?: string }[];
     } | null;
 
+    // Extract price range from metadata if available
+    const meta = (p as Record<string, unknown>).metadata as Record<string, unknown> | null;
+    let priceRange: string | null = null;
+    if (meta?.price_range) {
+      priceRange = meta.price_range as string;
+    } else if (meta?.lower_price && meta?.upper_price) {
+      priceRange = `$${(meta.lower_price as number).toLocaleString()}–${(meta.upper_price as number).toLocaleString()}/mo`;
+    } else if (meta?.contact_for_pricing) {
+      priceRange = "Contact for pricing";
+    }
+
     return {
       name: p.provider_name,
       category: p.provider_category,
@@ -261,11 +274,50 @@ async function getTopProviders(
       reviewSnippet: grd?.reviews?.[0]?.text?.slice(0, 150) ?? null,
       city: p.city ?? "",
       state: p.state ?? "",
+      priceRange,
     };
   });
 
   topProviderCache.set(key, results);
   return results;
+}
+
+const newProviderCountCache = new Map<string, number>();
+
+/**
+ * Count providers that joined in the last 30 days for a given area.
+ * Used to provide fresh "new providers" content in maintenance emails.
+ */
+async function countNewProvidersInArea(
+  db: DB,
+  city: string,
+  state: string,
+  careTypes: string[],
+): Promise<number> {
+  const key = `new-${cacheKey(city, state, careTypes)}`;
+  if (newProviderCountCache.has(key)) return newProviderCountCache.get(key)!;
+
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const categories = careTypes
+    .map((ct) => CARE_TYPE_TO_CATEGORY[ct])
+    .filter(Boolean);
+
+  let query = db
+    .from("olera-providers")
+    .select("provider_id", { count: "exact", head: true })
+    .eq("state", state)
+    .ilike("city", city)
+    .or("deleted.is.null,deleted.eq.false")
+    .gte("created_at", thirtyDaysAgo);
+
+  if (categories.length > 0) {
+    query = query.in("provider_category", categories);
+  }
+
+  const { count } = await query;
+  const result = count ?? 0;
+  newProviderCountCache.set(key, result);
+  return result;
 }
 
 let connectionStatsCache: { familiesThisWeek: number; familiesThisMonth: number } | null = null;
@@ -472,6 +524,7 @@ export async function GET(request: NextRequest) {
       publishNudges: 0,
       maintenanceNudges: 0,
       skipped: 0,
+      skippedActiveConversation: 0,  // Users skipped because they're actively engaged
     };
 
     // ── Step 1: Fetch family profiles (4h+ old) using paginated fetch ──
@@ -511,24 +564,34 @@ export async function GET(request: NextRequest) {
     const familyIds = families.map((f) => f.id);
     const { data: allConnections } = await db
       .from("connections")
-      .select("from_profile_id, to_profile_id, created_at, type")
+      .select("from_profile_id, to_profile_id, created_at, updated_at, type")
       .in("from_profile_id", familyIds)
       .eq("type", "inquiry")
       .order("created_at", { ascending: true });
 
-    // Build connection map
+    // Build connection map with activity tracking
     const connectionMap = new Map<string, {
       hasConnections: boolean;
       firstConnectionDate: string | null;
       firstToProfileId: string | null;
+      lastActivityDate: string | null;  // Most recent updated_at across all connections
     }>();
     for (const conn of allConnections || []) {
-      if (!connectionMap.has(conn.from_profile_id)) {
+      const existing = connectionMap.get(conn.from_profile_id);
+      if (!existing) {
         connectionMap.set(conn.from_profile_id, {
           hasConnections: true,
           firstConnectionDate: conn.created_at,
           firstToProfileId: conn.to_profile_id,
+          lastActivityDate: conn.updated_at || conn.created_at,
         });
+      } else {
+        // Update lastActivityDate if this connection is more recent
+        const existingActivity = existing.lastActivityDate ? new Date(existing.lastActivityDate).getTime() : 0;
+        const thisActivity = conn.updated_at ? new Date(conn.updated_at).getTime() : 0;
+        if (thisActivity > existingActivity) {
+          existing.lastActivityDate = conn.updated_at;
+        }
       }
     }
 
@@ -554,9 +617,11 @@ export async function GET(request: NextRequest) {
       const firstName = family.display_name?.split(/\s+/)[0] || "there";
       const careTypes = (family.care_types as string[]) || [];
 
-      // ── STOP CONDITION: Profile is published AND fully complete (100%) — SUCCESS! ──
-      // Published users < 100% still get completion nudges to reach full completeness
-      if (isPublished && fullyComplete) {
+      // ── STOP CONDITION: Profile is published (any %) — SUCCESS! ──
+      // Once published, stop all completion nudges. If they're not getting responses,
+      // we'll address it differently (not by nagging about profile completeness).
+      // This is the Airbnb approach: celebrate the publish, don't immediately say "but you're not good enough."
+      if (isPublished) {
         continue;
       }
 
@@ -576,10 +641,24 @@ export async function GET(request: NextRequest) {
         }
       }
 
+      // ── SKIP CONDITION: User has recent conversation activity ──
+      // If they've had connection activity in the last 7 days, they're actively engaged.
+      // Don't nag them with completion nudges — they're already making progress.
+      const hasRecentActivity = connData?.lastActivityDate &&
+        daysSince(connData.lastActivityDate) < ACTIVE_CONVERSATION_DAYS;
+
       // ── PHASE 1: Profile Completion ──
-      // Case A: Not ready to publish yet (< 60%) — nudge to reach publishable state
-      // Case B: Published but not fully complete (< 100%) — nudge to reach 100%
-      const needsCompletionNudges = !readyToPublish || (isPublished && !fullyComplete);
+      // Nudge users who haven't reached the publish threshold yet (< 60%)
+      // Note: Published users (any %) skip this entirely due to stop condition above
+      const wouldNeedCompletionNudges = !readyToPublish;
+
+      // Skip completion nudges if they have recent conversation activity
+      if (wouldNeedCompletionNudges && hasRecentActivity) {
+        counts.skippedActiveConversation++;
+        // Don't `continue` — let them fall through to check other email types
+      }
+
+      const needsCompletionNudges = wouldNeedCompletionNudges && !hasRecentActivity;
       if (needsCompletionNudges) {
         // Use migration-aware function: if they got the old email, skip nudge #1
         const seq = getSequenceWithMigration(
@@ -589,8 +668,10 @@ export async function GET(request: NextRequest) {
 
         if (shouldSendCompletionNudge(seq, family.created_at)) {
           let providerCount: number | undefined;
+          let newProviderCount = 0;
           if (hasLocation) {
             providerCount = await countProvidersInArea(db, family.city!, family.state!, careTypes);
+            newProviderCount = await countNewProvidersInArea(db, family.city!, family.state!, careTypes);
           }
           const topProviders = hasLocation
             ? await getTopProviders(db, family.city!, family.state!, careTypes, 3)
@@ -608,25 +689,31 @@ export async function GET(request: NextRequest) {
           // Step 1: Determine subject, emailType, and increment counters
           let subject: string;
           let emailType: string;
+          const locationText = family.city || family.state || "your area";
 
           if (isMaintenanceNudge) {
-            subject = `New providers in ${family.city || family.state || "your area"}`;
+            // Dynamic subject based on whether there are actually new providers
+            subject = newProviderCount > 0
+              ? `${newProviderCount} new providers joined in ${locationText}`
+              : `Top providers in ${locationText} you might have missed`;
             emailType = "completion_maintenance";
             counts.maintenanceNudges++;
           } else {
             switch (nudgeNumber) {
               case 1:
-                subject = `Your profile is ${completeness.percentage}% complete`;
+                subject = "Quick question about your care search";
                 break;
               case 2:
-                subject = `You're ${completeness.percentage}% there — finish your profile`;
+                subject = providerCount
+                  ? `${providerCount} providers in ${locationText} are looking for families`
+                  : `Providers in ${locationText} are looking for families`;
                 break;
               case 3:
-                subject = "Complete profiles get 3x faster responses";
+                subject = "Families with complete profiles hear back faster";
                 break;
               case 4:
               default:
-                subject = `Top providers in ${family.city || family.state || "your area"} are ready to help`;
+                subject = `Providers near you (including these top-rated ones)`;
                 break;
             }
             emailType = `completion_nudge_${nudgeNumber}`;
@@ -664,6 +751,7 @@ export async function GET(request: NextRequest) {
               familyName: firstName,
               welcomeUrl,
               providers: topProviders,
+              newProviderCount,
               missingFields: completeness.missingFields,
               completionPercent: completeness.percentage,
               city: family.city || undefined,
@@ -711,6 +799,7 @@ export async function GET(request: NextRequest) {
                   missingFields: completeness.missingFields,
                   completionPercent: completeness.percentage,
                   providers: topProviders,
+                  providerCount,
                   city: family.city || undefined,
                   state: family.state || undefined,
                 });
@@ -786,25 +875,35 @@ export async function GET(request: NextRequest) {
           // Step 1: Determine subject, emailType, and increment counters
           let subject: string;
           let emailType: string;
+          const locationText = family.city || family.state || "your area";
+
+          // For maintenance, get new provider count for dynamic subject
+          let newProviderCount = 0;
+          if (isMaintenanceNudge && hasLocation) {
+            newProviderCount = await countNewProvidersInArea(db, family.city!, family.state!, careTypes);
+          }
 
           if (isMaintenanceNudge) {
-            subject = "Still looking for care?";
+            // Dynamic subject based on new providers
+            subject = newProviderCount > 0
+              ? `${newProviderCount} new providers joined in ${locationText}`
+              : `Providers in ${locationText} are still looking`;
             emailType = "publish_maintenance";
             counts.maintenanceNudges++;
           } else {
             switch (nudgeNumber) {
               case 1:
-                subject = "Go live — let providers find you";
+                subject = "Let providers come to you";
                 break;
               case 2:
-                subject = `${providerCount && providerCount > 0 ? providerCount + " " : ""}providers in ${family.city || "your area"} are looking`;
+                subject = "These providers want to help families like yours";
                 break;
               case 3:
-                subject = `Families in ${family.city || family.state || "your area"} are finding care`;
+                subject = "Skip the phone tag";
                 break;
               case 4:
               default:
-                subject = "We're here when you're ready";
+                subject = "Still thinking it over?";
                 break;
             }
             emailType = `publish_nudge_${nudgeNumber}`;
@@ -842,6 +941,8 @@ export async function GET(request: NextRequest) {
               familyName: firstName,
               matchesUrl,
               providerCount,
+              newProviderCount,
+              providers: topProviders,
               city: family.city || undefined,
               state: family.state || undefined,
             });
