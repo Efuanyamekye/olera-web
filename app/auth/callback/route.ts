@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { sendLoopsEvent } from "@/lib/loops";
-import { sendEmail } from "@/lib/email";
+import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email";
 import { welcomeEmail } from "@/lib/email-templates";
 import { generateUniqueSlugFromName } from "@/lib/slug";
 import { sanitizeDisplayName, validateReturnUrl } from "@/lib/validation";
@@ -168,15 +168,23 @@ export async function GET(request: NextRequest) {
         try {
           if (data.user.email) {
             const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+            const emailLogId = await reserveEmailLogId({
+              to: data.user.email,
+              subject: "We're here to help",
+              emailType: "welcome",
+              recipientType: "family",
+            });
             await sendEmail({
               to: data.user.email,
-              subject: "Welcome to Olera",
+              subject: "We're here to help",
               html: welcomeEmail({
-                familyName: displayName.split(/\s+/)[0] || "there",
-                browseUrl: `${siteUrl}/browse`,
+                familyName: displayName,
+                browseUrl: appendTrackingParams(`${siteUrl}/browse`, emailLogId),
+                profileUrl: appendTrackingParams(`${siteUrl}/portal/profile`, emailLogId),
               }),
               emailType: "welcome",
               recipientType: "family",
+              emailLogId: emailLogId ?? undefined,
             });
             // Mark as sent on family profile
             if (newFamilyId) {

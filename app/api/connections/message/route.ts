@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
 import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email";
-import { newMessageEmail } from "@/lib/email-templates";
+import { newMessageEmail, firstName } from "@/lib/email-templates";
 import { sendLoopsEvent } from "@/lib/loops";
 import { sendWhatsApp } from "@/lib/whatsapp";
 import { normalizeUSPhone } from "@/lib/twilio";
@@ -218,7 +218,7 @@ export async function POST(request: Request) {
               : text.trim();
 
           const isFamily = recipientProfile?.type === "family";
-          const msgSubject = `New message from ${senderProfile?.display_name || "someone"} on Olera`;
+          const msgSubject = `${firstName(senderProfile?.display_name || "", "Someone")} sent you a message`;
 
           const msgEmailLogId = await reserveEmailLogId({
             to: recipientEmail,
@@ -298,8 +298,8 @@ export async function POST(request: Request) {
             to: recipientEmail,
             subject: msgSubject,
             html: newMessageEmail({
-              recipientName: recipientProfile?.display_name || "there",
-              senderName: senderProfile?.display_name || "Someone",
+              recipientName: recipientProfile?.display_name || "",
+              senderName: senderProfile?.display_name || "",
               messagePreview: preview,
               viewUrl,
             }),

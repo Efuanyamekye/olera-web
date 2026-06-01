@@ -168,8 +168,8 @@ export async function POST(request: Request) {
             const initiatorName = initiatorBp?.display_name || "there";
 
             const subject = action === "accept"
-              ? `${responderName} accepted your ${isProviderRequest ? "connection request" : "inquiry"} on Olera`
-              : `Update on your ${isProviderRequest ? "connection request" : "care inquiry"} on Olera`;
+              ? `${responderName} responded to your ${isProviderRequest ? "connection request" : "inquiry"}`
+              : `Update on your ${isProviderRequest ? "connection request" : "inquiry"} to ${responderName}`;
 
             // Direct to the appropriate inbox view
             const viewUrl = isProviderRequest

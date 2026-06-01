@@ -171,17 +171,18 @@ export async function POST(request: Request) {
           try {
             if (user.email && !claimToken) {
               const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
-              const wLogId = await reserveEmailLogId({ to: user.email, subject: "Welcome to Olera", emailType: "welcome", recipientType: "family" });
+              const wLogId = await reserveEmailLogId({ to: user.email, subject: "We're here to help", emailType: "welcome", recipientType: "family" });
               const welcomeName = (existingAccount as Account).display_name
                 || user.user_metadata?.full_name
                 || user.user_metadata?.name
                 || "";
               await sendEmail({
                 to: user.email,
-                subject: "Welcome to Olera",
+                subject: "We're here to help",
                 html: welcomeEmail({
-                  familyName: welcomeName.split(/\s+/)[0] || "there",
+                  familyName: welcomeName,
                   browseUrl: appendTrackingParams(`${siteUrl}/browse`, wLogId),
+                  profileUrl: appendTrackingParams(`${siteUrl}/portal/profile`, wLogId),
                 }),
                 emailType: "welcome",
                 recipientType: "family",
@@ -336,13 +337,14 @@ export async function POST(request: Request) {
       try {
         if (user.email && !claimToken) {
           const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
-          const wLogId2 = await reserveEmailLogId({ to: user.email, subject: "Welcome to Olera", emailType: "welcome", recipientType: "family" });
+          const wLogId2 = await reserveEmailLogId({ to: user.email, subject: "We're here to help", emailType: "welcome", recipientType: "family" });
           await sendEmail({
             to: user.email,
-            subject: "Welcome to Olera",
+            subject: "We're here to help",
             html: welcomeEmail({
-              familyName: sanitizedName.split(/\s+/)[0] || "there",
+              familyName: sanitizedName,
               browseUrl: appendTrackingParams(`${siteUrl}/browse`, wLogId2),
+              profileUrl: appendTrackingParams(`${siteUrl}/portal/profile`, wLogId2),
             }),
             emailType: "welcome",
             recipientType: "family",

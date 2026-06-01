@@ -773,7 +773,7 @@ async function handleGuestConnection({
 
       const welcomeEmailLogId = await reserveEmailLogId({
         to: normalizedEmail,
-        subject: `You're connected with ${providerName}`,
+        subject: `Your inquiry to ${providerName} was sent`,
         emailType: "guest_connection",
         recipientType: "family",
       });
@@ -792,7 +792,7 @@ async function handleGuestConnection({
       if (!magicLinkError && magicLinkData?.properties?.action_link) {
         await sendEmail({
           to: normalizedEmail,
-          subject: `You're connected with ${providerName}`,
+          subject: `Your inquiry to ${providerName} was sent`,
           html: guestConnectionEmail({
             familyName: firstName || "there",
             providerName,
@@ -1083,9 +1083,10 @@ async function handleGuestConnection({
       priceRange: (p.metadata?.price_range as string) || null,
     }));
 
+    const careLabel = pricing.careTypeLabel || "senior care";
     await sendEmail({
       to: normalizedEmail,
-      subject: `Care costs for ${providerName}${locationStr ? ` in ${locationStr}` : ""}`,
+      subject: `What ${careLabel.toLowerCase()} costs in ${locationStr || "your area"}`,
       html: careReportEmail({
         seekerFirstName: firstName || "",
         providerName,

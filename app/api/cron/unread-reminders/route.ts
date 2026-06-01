@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
 import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email";
-import { newMessageEmail } from "@/lib/email-templates";
+import { newMessageEmail, unreadReminderEmail, firstName } from "@/lib/email-templates";
 import { withCronRun } from "@/lib/crons/run";
 
 interface ThreadMessage {
@@ -96,31 +96,73 @@ export async function GET(request: NextRequest) {
 
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
       const isFamily = recipient.type === "family";
-      const urSubject2 = `Reminder: You have an unread message from ${sender?.display_name || "someone"} on Olera`;
-      const urLogId2 = await reserveEmailLogId({
+
+      // Different subject and template for families vs providers
+      const senderFirstName = firstName(sender?.display_name || "", isFamily ? "A provider" : "Someone");
+      const urSubject = isFamily
+        ? `${senderFirstName} is waiting to hear from you`
+        : `${senderFirstName} sent you a message`;
+
+      const urLogId = await reserveEmailLogId({
         to: recipient.email,
-        subject: urSubject2,
+        subject: urSubject,
         emailType: "unread_reminder",
         recipientType: isFamily ? "family" : "provider",
       });
 
-      // Route families to portal inbox, providers to provider connections
-      const viewUrl = isFamily
-        ? appendTrackingParams(`${siteUrl}/portal/inbox`, urLogId2)
-        : appendTrackingParams(`${siteUrl}/provider/connections`, urLogId2);
+      // Build view URL with deep link to specific conversation
+      let viewUrl: string;
+      if (isFamily) {
+        // Family: deep link to specific conversation + magic link
+        const redirectPath = appendTrackingParams(
+          `/portal/inbox?id=${conn.id}`,
+          urLogId
+        );
+        viewUrl = `${siteUrl}${redirectPath}`;
+
+        // Generate magic link for one-click access
+        try {
+          const { data: magicLinkData, error: magicLinkError } = await db.auth.admin.generateLink({
+            type: "magiclink",
+            email: recipient.email,
+            options: {
+              redirectTo: `${siteUrl}/auth/magic-link?next=${encodeURIComponent(redirectPath)}`,
+            },
+          });
+          if (!magicLinkError && magicLinkData?.properties?.action_link) {
+            viewUrl = magicLinkData.properties.action_link;
+          }
+        } catch (linkErr) {
+          console.error("[unread-reminders] magic link failed:", linkErr);
+          // Continue with fallback URL
+        }
+      } else {
+        // Provider: link to provider connections page
+        viewUrl = appendTrackingParams(`${siteUrl}/provider/connections`, urLogId);
+      }
+
+      // Use dedicated template for families, generic for providers
+      const emailHtml = isFamily
+        ? unreadReminderEmail({
+            recipientName: recipient.display_name || "",
+            senderName: sender?.display_name || "",
+            messagePreview: preview,
+            viewUrl,
+          })
+        : newMessageEmail({
+            recipientName: recipient.display_name || "",
+            senderName: sender?.display_name || "",
+            messagePreview: preview,
+            viewUrl,
+          });
 
       await sendEmail({
         to: recipient.email,
-        subject: urSubject2,
-        html: newMessageEmail({
-          recipientName: recipient.display_name || "there",
-          senderName: sender?.display_name || "Someone",
-          messagePreview: preview,
-          viewUrl,
-        }),
+        subject: urSubject,
+        html: emailHtml,
         emailType: "unread_reminder",
         recipientType: isFamily ? "family" : "provider",
-        emailLogId: urLogId2 ?? undefined,
+        emailLogId: urLogId ?? undefined,
       });
 
       // Mark as reminded so we don't send again for the same message
