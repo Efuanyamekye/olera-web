@@ -564,10 +564,33 @@ export async function GET(request: NextRequest) {
     const familyIds = families.map((f) => f.id);
     const { data: allConnections } = await db
       .from("connections")
-      .select("from_profile_id, to_profile_id, created_at, updated_at, type")
+      .select("from_profile_id, to_profile_id, created_at, updated_at, type, metadata")
       .in("from_profile_id", familyIds)
       .eq("type", "inquiry")
       .order("created_at", { ascending: true });
+
+    // Helper: Check if connection has real human conversation (messages from both sides)
+    interface ThreadMessage {
+      from_profile_id: string;
+      text: string;
+      created_at: string;
+      is_auto_reply?: boolean;
+    }
+    function hasRealConversation(
+      metadata: Record<string, unknown> | null,
+      familyProfileId: string,
+      providerProfileId: string
+    ): boolean {
+      if (!metadata) return false;
+      const thread = (metadata.thread as ThreadMessage[]) || [];
+      // Filter out auto-reply messages
+      const humanMessages = thread.filter((msg) => !msg.is_auto_reply);
+      if (humanMessages.length < 2) return false;
+      // Check if both parties have sent at least one human message
+      const familySent = humanMessages.some((msg) => msg.from_profile_id === familyProfileId);
+      const providerSent = humanMessages.some((msg) => msg.from_profile_id === providerProfileId);
+      return familySent && providerSent;
+    }
 
     // Build connection map with activity tracking
     const connectionMap = new Map<string, {
@@ -575,8 +598,12 @@ export async function GET(request: NextRequest) {
       firstConnectionDate: string | null;
       firstToProfileId: string | null;
       lastActivityDate: string | null;  // Most recent updated_at across all connections
+      hadRealConversation: boolean;     // Both parties exchanged human messages
     }>();
     for (const conn of allConnections || []) {
+      const connMeta = (conn.metadata || null) as Record<string, unknown> | null;
+      const realConvo = hasRealConversation(connMeta, conn.from_profile_id, conn.to_profile_id);
+
       const existing = connectionMap.get(conn.from_profile_id);
       if (!existing) {
         connectionMap.set(conn.from_profile_id, {
@@ -584,6 +611,7 @@ export async function GET(request: NextRequest) {
           firstConnectionDate: conn.created_at,
           firstToProfileId: conn.to_profile_id,
           lastActivityDate: conn.updated_at || conn.created_at,
+          hadRealConversation: realConvo,
         });
       } else {
         // Update lastActivityDate if this connection is more recent
@@ -591,6 +619,10 @@ export async function GET(request: NextRequest) {
         const thisActivity = conn.updated_at ? new Date(conn.updated_at).getTime() : 0;
         if (thisActivity > existingActivity) {
           existing.lastActivityDate = conn.updated_at;
+        }
+        // If any connection had real conversation, mark it
+        if (realConvo) {
+          existing.hadRealConversation = true;
         }
       }
     }
@@ -1022,11 +1054,12 @@ export async function GET(request: NextRequest) {
       }
 
       // ── Legacy: Post-Connection Follow-up (30 days after first connection) ──
-      // Keep this for families who have connections but haven't been asked for review
+      // Only send if there was a real human conversation (not just automated messages)
       if (
         hasConnections &&
         connData?.firstConnectionDate &&
         connData.firstConnectionDate <= thirtyDaysAgo &&
+        connData.hadRealConversation &&
         !meta.post_connection_followup_sent
       ) {
         let providerName = "your provider";

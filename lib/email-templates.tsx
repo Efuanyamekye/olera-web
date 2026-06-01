@@ -1094,6 +1094,7 @@ export function postConnectionFollowupEmail(opts: {
   providerSlug: string;
   reviewUrl: string;
 }): string {
+  const preheader = `Your feedback helps other families find great care — tell us about ${opts.providerName}`;
   return layout(`
     <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">How was your experience with ${escapeHtml(opts.providerName)}?</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
@@ -1103,7 +1104,13 @@ export function postConnectionFollowupEmail(opts: {
       Your feedback helps other families make informed decisions — and helps great providers get the recognition they deserve.
     </p>
     <div>${button("Share your experience", opts.reviewUrl)}</div>
-  `);
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from follow-up emails</a>
+    </p>
+  `, preheader);
 }
 
 /** Dormant re-engagement — social proof with popular providers */
@@ -1534,6 +1541,7 @@ export function reviewRequestEmail(opts: {
   customMessage: string;
   reviewUrl: string;
 }): string {
+  const preheader = `${opts.providerName} sent you a personal message`;
   return layout(`
     <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${escapeHtml(opts.providerName)} would love your feedback</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
@@ -1549,7 +1557,10 @@ export function reviewRequestEmail(opts: {
     <p style="font-size:12px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
       This email was sent on behalf of ${escapeHtml(opts.providerName)} via Olera.
     </p>
-  `);
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from review requests</a>
+    </p>
+  `, preheader);
 }
 
 /** Care report email — sent to families after connection request (the anti-APFM differentiator) */
