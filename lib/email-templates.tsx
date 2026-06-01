@@ -726,17 +726,23 @@ export function matchesLiveEmail(opts: {
   city: string;
   matchesUrl: string;
 }): string {
+  const preheader = `Providers in ${opts.city} can now see your care needs and reach out to you`;
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Your Matches profile is live!</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, great news — qualified care providers in ${escapeHtml(opts.city)} can now find you on Olera.
-      We'll email you the moment someone reaches out.
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Your care profile is live</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
+      Hi ${firstName(opts.familyName, "there")}, providers in ${escapeHtml(opts.city)} can now see your care needs on Olera.
+    </p>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
+      <strong>What happens next?</strong> When a provider wants to help, they'll send you a message — not a phone call. You can read it on your own time and decide who's worth responding to.
     </p>
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      You're in control. When a provider contacts you, you decide whether to respond.
+      You're in control.
     </p>
-    <div>${button("View your Profile", opts.matchesUrl)}</div>
-  `);
+    <div style="margin:0 0 24px;">${button("View Your Profile", opts.matchesUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+  `, preheader);
 }
 
 /** Email to family when a provider sends a reach-out (Matches F2) */
@@ -747,23 +753,27 @@ export function providerReachOutEmail(opts: {
   message: string | null;
   matchesUrl: string;
 }): string {
+  const preheader = `${opts.providerName} saw your care needs and sent you a message`;
   const messageLine = opts.message
-    ? `<div style="background:#f9fafb;border-left:3px solid ${BRAND_COLOR};padding:12px 16px;margin:0 0 24px;border-radius:0 8px 8px 0;">
+    ? `<div style="background:#f9fafb;border-left:3px solid ${BRAND_COLOR};padding:12px 16px;margin:0 0 20px;border-radius:0 8px 8px 0;">
         <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;">"${escapeHtml(opts.message)}"</p>
       </div>`
     : "";
 
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">A provider in ${escapeHtml(opts.city)} is interested</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${escapeHtml(opts.providerName)} wants to connect</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, <strong>${escapeHtml(opts.providerName)}</strong> in ${escapeHtml(opts.city)} saw your care profile and wants to connect.
+      Hi ${firstName(opts.familyName, "there")}, <strong>${escapeHtml(opts.providerName)}</strong> in ${escapeHtml(opts.city)} saw your care needs and reached out to you.
     </p>
     ${messageLine}
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      You're in control — review their profile and decide if you'd like to start a conversation.
+      Not a phone call — just a message you can read on your own time. Review their profile and decide if they're worth responding to.
     </p>
-    <div>${button("View Message", opts.matchesUrl)}</div>
-  `);
+    <div style="margin:0 0 24px;">${button("View Their Message", opts.matchesUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+  `, preheader);
 }
 
 /** Email to family when they have unanswered messages and Matches is not active (F3) */
@@ -772,16 +782,27 @@ export function matchesNudgeEmail(opts: {
   unansweredCount: number;
   matchesUrl: string;
 }): string {
+  const preheader = "Let providers come to you instead";
+  const providerWord = opts.unansweredCount === 1 ? "provider" : "providers";
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Still waiting to hear back? There's a better way.</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Still waiting to hear back?</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, you've reached out to ${opts.unansweredCount} providers but haven't heard back yet.
+      Hi ${firstName(opts.familyName, "there")}, you've reached out to ${opts.unansweredCount} ${providerWord} but haven't heard back yet. That's frustrating — but there's a better way.
     </p>
-    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      With Matches, providers come to you. Share what you're looking for once, and qualified providers in your area will reach out directly.
+    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
+      Instead of chasing providers one by one, let them come to you. Share your care needs once, and qualified providers will reach out directly.
     </p>
-    <div>${button("Try Matches", opts.matchesUrl)}</div>
-  `);
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Not phone calls. Messages you can read on your own time. You decide who's worth talking to.
+    </p>
+    <div style="margin:0 0 24px;">${button("Let Providers Reach Out", opts.matchesUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
 /** Email to provider when their profile is still incomplete 48hrs after signup (P1) */

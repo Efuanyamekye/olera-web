@@ -130,12 +130,13 @@ export async function POST(request: Request) {
     }
     // If neither (edge case), fallback to plain URL - user will need to sign in
 
+    const providerDisplayName = provider?.display_name || "A care provider";
     await sendEmail({
       to: family.email,
-      subject: `A provider in ${providerCity} is interested in your care needs`,
+      subject: `${providerDisplayName} wants to connect with you`,
       html: providerReachOutEmail({
         familyName: family.display_name || "there",
-        providerName: provider?.display_name || "A care provider",
+        providerName: providerDisplayName,
         city: providerCity,
         message: conn?.message || null,
         matchesUrl: inboxUrl,

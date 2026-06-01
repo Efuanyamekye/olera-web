@@ -94,15 +94,36 @@ export async function GET(request: NextRequest) {
 
           const stats = eligibleFamilyIds.find((f) => f.id === fp.id);
 
-          const mnSubject = "Still waiting to hear back? There's a better way.";
+          const mnSubject = "Still waiting to hear back?";
           const mnLogId = await reserveEmailLogId({ to: fp.email, subject: mnSubject, emailType: "matches_nudge", recipientType: "family" });
+
+          // Build URL with magic link for one-click access
+          const redirectPath = appendTrackingParams("/portal/profile", mnLogId);
+          let matchesUrl = `${siteUrl}${redirectPath}`;
+
+          try {
+            const { data: magicLinkData, error: magicLinkError } = await db.auth.admin.generateLink({
+              type: "magiclink",
+              email: fp.email,
+              options: {
+                redirectTo: `${siteUrl}/auth/magic-link?next=${encodeURIComponent(redirectPath)}`,
+              },
+            });
+            if (!magicLinkError && magicLinkData?.properties?.action_link) {
+              matchesUrl = magicLinkData.properties.action_link;
+            }
+          } catch (linkErr) {
+            console.error("[matches-nudge] magic link failed:", linkErr);
+            // Continue with fallback URL
+          }
+
           await sendEmail({
             to: fp.email,
             subject: mnSubject,
             html: matchesNudgeEmail({
               familyName: fp.display_name || "there",
               unansweredCount: stats?.total || 2,
-              matchesUrl: appendTrackingParams(`${siteUrl}/portal/profile`, mnLogId),
+              matchesUrl,
             }),
             emailType: "matches_nudge",
             recipientType: "family",
