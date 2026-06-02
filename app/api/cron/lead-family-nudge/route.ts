@@ -56,6 +56,7 @@ export async function GET(request: NextRequest) {
         no_email: 0,
         already_sent_this_run: 0,
         send_failed: 0,
+        unsubscribed: 0,
       },
       byType: {
         complete_profile: 0,
@@ -150,6 +151,13 @@ export async function GET(request: NextRequest) {
       const familyMeta = (fromProfile?.metadata as Record<string, unknown>) ?? {};
       const carePost = familyMeta.care_post as { status?: string } | undefined;
       const isPublished = carePost?.status === "active";
+
+      // Respect user's unsubscribe preference
+      if (familyMeta.nudges_unsubscribed === true) {
+        counts.skipped++;
+        counts.skipReasons.unsubscribed++;
+        continue;
+      }
 
       // If complete AND published, skip
       if (isComplete && isPublished) {
