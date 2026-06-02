@@ -1026,6 +1026,7 @@ export function goLiveReminderEmail(opts: {
   const cityText = opts.city || "your area";
   const countText = opts.providerCount ? `${opts.providerCount} care` : "Care";
   const providersHtml = opts.topProviders?.length ? providerCardsBlock(opts.topProviders) : "";
+  const preheader = `${countText} providers in ${cityText} are ready to help — let them reach out to you`;
 
   return layout(`
     <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${countText} providers in ${escapeHtml(cityText)} are looking for families like yours</h1>
@@ -1037,7 +1038,13 @@ export function goLiveReminderEmail(opts: {
       You're always in control — you decide which providers to respond to.
     </p>
     <div>${button("Go Live", opts.matchesUrl)}</div>
-  `);
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
 }
 
 /** Profile incomplete reminder — specific about what's missing */
