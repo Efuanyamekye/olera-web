@@ -927,6 +927,7 @@ export function checklistEmail(opts: {
     })
     .join("");
 
+  const preheader = `${checkedCount} of ${totalItems} documents ready for ${opts.programShortName}`;
   return layout(`
     <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Your Document Checklist</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 4px;line-height:1.5;">
@@ -942,7 +943,10 @@ export function checklistEmail(opts: {
       </p>
     </div>
     <div>${button("View program details", `${BASE_URL}/senior-benefits`)}</div>
-  `);
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Questions? Just reply to this email — we're here to help.
+    </p>
+  `, preheader);
 }
 
 // ── Care Seeker Notification Emails ──────────────────────────────
@@ -2155,6 +2159,12 @@ export function familyNudgeEmail(opts: {
       A complete profile helps providers understand your needs and give you personalized recommendations.
     </p>
     <div>${button("Complete Your Profile", opts.profileUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from profile reminders</a>
+    </p>
   `,
     `Complete your profile to help ${escapeHtml(opts.providerName)} respond to your inquiry`
   );

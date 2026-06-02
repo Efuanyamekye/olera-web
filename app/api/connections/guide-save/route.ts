@@ -648,7 +648,11 @@ export async function POST(request: Request) {
     Open a thread with ${provider.name} &rarr;
   </a>
 
-  <p style="font-size: 12px; color: #9ca3af; margin: 40px 0 0; line-height: 1.6; border-top: 1px solid #f3f4f6; padding-top: 20px;">
+  <p style="font-size: 13px; color: #9ca3af; margin: 24px 0 0; line-height: 1.6;">
+    Questions? Just reply to this email — we're here to help.
+  </p>
+
+  <p style="font-size: 12px; color: #9ca3af; margin: 16px 0 0; line-height: 1.6; border-top: 1px solid #f3f4f6; padding-top: 16px;">
     Olera helps families find and connect with senior care providers. We never sell your info.
   </p>
 </div>
