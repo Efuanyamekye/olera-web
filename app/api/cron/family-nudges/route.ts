@@ -1066,7 +1066,8 @@ export async function GET(request: NextRequest) {
         !meta.nudges_unsubscribed &&
         followupEmailsEnabled
       ) {
-        let providerName = "your provider";
+        // Fetch provider info - skip if provider deleted or has no slug
+        let providerName = "";
         let providerSlug = "";
 
         if (connData.firstToProfileId) {
@@ -1075,10 +1076,15 @@ export async function GET(request: NextRequest) {
             .select("display_name, slug")
             .eq("id", connData.firstToProfileId)
             .single();
-          if (providerBp) {
-            providerName = providerBp.display_name || providerName;
-            providerSlug = providerBp.slug || "";
+          if (providerBp?.slug) {
+            providerName = providerBp.display_name || "your provider";
+            providerSlug = providerBp.slug;
           }
+        }
+
+        // Skip if provider not found or has no slug (would create broken URL)
+        if (!providerSlug) {
+          continue;
         }
 
         if (!dryRun) {
