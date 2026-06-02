@@ -16,6 +16,10 @@ import {
   publishNudge4Email,
   completionMaintenanceEmail,
   publishMaintenanceEmail,
+  // Milestone emails
+  completionCelebrationEmail,
+  monthlyProviderRecommendationsEmail,
+  inactivityReengagementEmail,
 } from "@/lib/email-templates";
 import { withCronRun } from "@/lib/crons/run";
 import type { NudgeSequence, NudgeSequencePhase, FamilyMetadata } from "@/lib/types";
@@ -67,6 +71,10 @@ const COMPLETION_COOLDOWNS = [0, 2, 4, 7]; // days between nudges — same-day, 
 const PUBLISH_COOLDOWNS = [0, 2, 4, 7];    // days between nudges — same-day after complete, Day 2, Day 6, Day 13
 const MAINTENANCE_COOLDOWN = 30;           // days between maintenance nudges
 const MAX_MAINTENANCE_NUDGES = 6;          // cap monthly nudges at 6 (stop after ~8 months total)
+const MAX_MONTHLY_RECOMMENDATIONS = 12;    // cap monthly recommendations at 12 (1 year)
+const MAX_REENGAGEMENT_ATTEMPTS = 2;       // max re-engagement emails (2 total)
+const INACTIVITY_THRESHOLD_DAYS = 30;      // days of inactivity before re-engagement
+const REENGAGEMENT_COOLDOWN_DAYS = 30;     // days between re-engagement attempts
 const READY_TO_PUBLISH_THRESHOLD = 60;     // ≥60% can publish profile (enrichment completion is sufficient)
 const FULLY_COMPLETE_THRESHOLD = 100;      // ≥100% is "fully complete" — no more completion nudges needed
 const REPUBLISH_GRACE_PERIOD_DAYS = 30;    // don't nudge to re-publish if was published 30+ days ago
@@ -523,6 +531,10 @@ export async function GET(request: NextRequest) {
       completionNudges: 0,
       publishNudges: 0,
       maintenanceNudges: 0,
+      // Milestone emails
+      completionCelebrations: 0,
+      monthlyRecommendations: 0,
+      reengagementEmails: 0,
       skipped: 0,
       skippedActiveConversation: 0,  // Users skipped because they're actively engaged
     };
@@ -648,12 +660,105 @@ export async function GET(request: NextRequest) {
       const firstName = family.display_name?.split(/\s+/)[0] || "there";
       const careTypes = (family.care_types as string[]) || [];
 
-      // ── STOP CONDITION: Profile is published (any %) — SUCCESS! ──
-      // Once published, stop all completion nudges. If they're not getting responses,
-      // we'll address it differently (not by nagging about profile completeness).
-      // This is the Airbnb approach: celebrate the publish, don't immediately say "but you're not good enough."
+      // ── PUBLISHED FAMILIES: Monthly Provider Recommendations ──
+      // For published families (SUCCESS state), we don't send nudges anymore.
+      // Instead, send monthly recommendations to keep them engaged with relevant providers.
       if (isPublished) {
-        continue;
+        // Check unsubscribe first
+        if (meta.nudges_unsubscribed === true) {
+          counts.skipped++;
+          continue;
+        }
+
+        // Check if we have location (required for recommendations)
+        if (!hasLocation) {
+          counts.skipped++;
+          continue;
+        }
+
+        // Check monthly cooldown (30 days since last recommendation)
+        const daysSinceLastRec = daysSince(meta.monthly_recommendations_sent_at);
+        if (daysSinceLastRec < 30) {
+          continue; // Not time yet, but don't count as skipped
+        }
+
+        // Check if we've hit the max (12 emails = 1 year)
+        const recCount = meta.monthly_recommendations_count ?? 0;
+        if (recCount >= MAX_MONTHLY_RECOMMENDATIONS) {
+          counts.skipped++;
+          continue; // Give up gracefully after 1 year
+        }
+
+        // Get provider data for recommendations
+        const providerCount = await countProvidersInArea(db, family.city!, family.state!, careTypes);
+        const newProviderCount = await countNewProvidersInArea(db, family.city!, family.state!, careTypes);
+        const topProviders = await getTopProviders(db, family.city!, family.state!, careTypes, 3);
+
+        // Skip if no providers to recommend
+        if (topProviders.length === 0) {
+          counts.skipped++;
+          continue;
+        }
+
+        const locationText = family.city || family.state || "your area";
+        const mrSubject = newProviderCount > 0
+          ? `${newProviderCount} providers in ${locationText} match your search`
+          : `Highly-rated providers in ${locationText}`;
+        const emailType = "monthly_recommendations";
+
+        if (!dryRun) {
+          const logId = await reserveEmailLogId({
+            to: email,
+            subject: mrSubject,
+            emailType,
+            recipientType: "family",
+            metadata: {
+              family_profile_id: family.id,
+              new_provider_count: newProviderCount,
+              provider_count: providerCount,
+            },
+          });
+
+          // Build URLs with tracking
+          const profilePath = appendTrackingParams("/portal/profile", logId);
+          const inboxPath = appendTrackingParams("/portal/inbox", logId);
+          const profileUrl = await generateMagicLinkUrl(db, family, profilePath, siteUrl);
+          const inboxUrl = await generateMagicLinkUrl(db, family, inboxPath, siteUrl);
+
+          const html = monthlyProviderRecommendationsEmail({
+            familyName: firstName,
+            profileUrl,
+            inboxUrl,
+            providers: topProviders,
+            newProviderCount,
+            isPublished: true, // Always true in this branch
+            city: family.city || undefined,
+            state: family.state || undefined,
+          });
+
+          await sendEmail({
+            to: email,
+            subject: mrSubject,
+            html,
+            emailType,
+            recipientType: "family",
+            emailLogId: logId ?? undefined,
+          });
+
+          // Update metadata with timestamp and increment count
+          await db.from("business_profiles")
+            .update({
+              metadata: {
+                ...meta,
+                monthly_recommendations_sent_at: new Date().toISOString(),
+                monthly_recommendations_count: recCount + 1,
+              },
+            })
+            .eq("id", family.id);
+        }
+
+        counts.monthlyRecommendations++;
+        continue; // Done with this published family
       }
 
       // ── STOP CONDITION: User has unsubscribed from nudges ──
@@ -670,6 +775,64 @@ export async function GET(request: NextRequest) {
           counts.skipped++;
           continue;
         }
+      }
+
+      // ── MILESTONE: Completion Celebration (one-time when profile hits 100%) ──
+      // Celebrate reaching full completion before nudging to publish.
+      // This is a positive milestone email, not a nudge.
+      if (fullyComplete && !meta.completion_celebrated_at) {
+        const ccSubject = "Your care profile is complete";
+        const emailType = "completion_celebration";
+
+        if (!dryRun) {
+          const logId = await reserveEmailLogId({
+            to: email,
+            subject: ccSubject,
+            emailType,
+            recipientType: "family",
+            metadata: {
+              family_profile_id: family.id,
+              profile_snapshot: {
+                completeness: completeness.percentage,
+                is_published: isPublished,
+              },
+            },
+          });
+
+          // Build URL with tracking
+          const profilePath = appendTrackingParams("/portal/profile", logId);
+          const profileUrl = await generateMagicLinkUrl(db, family, profilePath, siteUrl);
+
+          const html = completionCelebrationEmail({
+            familyName: firstName,
+            profileUrl,
+            city: family.city || undefined,
+          });
+
+          await sendEmail({
+            to: email,
+            subject: ccSubject,
+            html,
+            emailType,
+            recipientType: "family",
+            emailLogId: logId ?? undefined,
+          });
+
+          // Set celebration flag (one-time only)
+          await db.from("business_profiles")
+            .update({
+              metadata: {
+                ...meta,
+                completion_celebrated_at: new Date().toISOString(),
+                profile_completeness: completeness.percentage,
+              },
+            })
+            .eq("id", family.id);
+        }
+
+        counts.completionCelebrations++;
+        // Don't send any other emails this run — let the celebration stand alone
+        continue;
       }
 
       // ── SKIP CONDITION: User has recent conversation activity ──
@@ -1110,6 +1273,130 @@ export async function GET(request: NextRequest) {
         counts.postConnectionFollowup++;
         continue;
       }
+
+      // ── INACTIVITY RE-ENGAGEMENT ──
+      // Catch-all for families who didn't get any other email and appear inactive.
+      // Uses multiple signals to determine last activity since last_active_at may not be set.
+      // Max 2 attempts ever, 30-day cooldown between attempts.
+
+      // Skip if already maxed out on re-engagement
+      const reengageCount = meta.reengagement_count ?? 0;
+      if (reengageCount >= MAX_REENGAGEMENT_ATTEMPTS) {
+        continue; // Already tried twice, give up
+      }
+
+      // Skip if recently re-engaged
+      const daysSinceReengagement = daysSince(meta.reengagement_sent_at);
+      if (daysSinceReengagement < REENGAGEMENT_COOLDOWN_DAYS) {
+        continue; // Too soon
+      }
+
+      // Skip if we sent ANY email recently (avoid back-to-back emails)
+      // Check nudge sequences, celebration, and monthly recommendations
+      const lastCompletionNudge = meta.completion_sequence?.last_nudge_at;
+      const lastPublishNudge = meta.publish_sequence?.last_nudge_at;
+      const lastCelebration = meta.completion_celebrated_at;
+      const lastMonthlyRec = meta.monthly_recommendations_sent_at;
+      const mostRecentEmail = [lastCompletionNudge, lastPublishNudge, lastCelebration, lastMonthlyRec]
+        .filter(Boolean)
+        .sort()
+        .pop(); // Get the most recent timestamp
+
+      const daysSinceAnyEmail = daysSince(mostRecentEmail);
+      if (daysSinceAnyEmail < 14) {
+        continue; // Got an email recently, don't pile on
+      }
+
+      // Determine last activity using multiple signals (fallback chain)
+      // Priority: last_active_at > connection activity > published_at > profile updated > created
+      const lastActivity = meta.last_active_at
+        || connData?.lastActivityDate
+        || meta.care_post?.published_at
+        || family.created_at;
+
+      const daysSinceActivity = daysSince(lastActivity);
+      if (daysSinceActivity < INACTIVITY_THRESHOLD_DAYS) {
+        continue; // Not inactive enough
+      }
+
+      // Skip if profile is too bare (just signed up and bounced - no meaningful engagement)
+      // Require at least: has email AND (has connections OR 40%+ profile OR has care types)
+      const hasMeaningfulActivity = hasConnections
+        || completeness.percentage >= 40
+        || (careTypes.length > 0);
+      if (!hasMeaningfulActivity) {
+        continue; // No engagement, not worth re-engaging
+      }
+
+      // Skip if no location (needed for provider recommendations)
+      if (!hasLocation) {
+        counts.skipped++;
+        continue;
+      }
+
+      // Get providers for the email
+      const topProviders = await getTopProviders(db, family.city!, family.state!, careTypes, 3);
+      if (topProviders.length === 0) {
+        counts.skipped++;
+        continue;
+      }
+
+      const locationText = family.city || family.state || "your area";
+      const reSubject = `Still searching for care in ${locationText}?`;
+      const emailType = "inactivity_reengagement";
+
+      if (!dryRun) {
+        const logId = await reserveEmailLogId({
+          to: email,
+          subject: reSubject,
+          emailType,
+          recipientType: "family",
+          metadata: {
+            family_profile_id: family.id,
+            days_inactive: daysSinceActivity,
+            reengagement_attempt: reengageCount + 1,
+          },
+        });
+
+        // Build URLs with tracking
+        const profilePath = appendTrackingParams("/portal/profile", logId);
+        const inboxPath = appendTrackingParams("/portal/inbox", logId);
+        const profileUrl = await generateMagicLinkUrl(db, family, profilePath, siteUrl);
+        const inboxUrl = await generateMagicLinkUrl(db, family, inboxPath, siteUrl);
+
+        const html = inactivityReengagementEmail({
+          familyName: firstName,
+          profileUrl,
+          inboxUrl,
+          providers: topProviders,
+          completionPercent: completeness.percentage,
+          isPublished,
+          city: family.city || undefined,
+          state: family.state || undefined,
+        });
+
+        await sendEmail({
+          to: email,
+          subject: reSubject,
+          html,
+          emailType,
+          recipientType: "family",
+          emailLogId: logId ?? undefined,
+        });
+
+        // Update metadata
+        await db.from("business_profiles")
+          .update({
+            metadata: {
+              ...meta,
+              reengagement_sent_at: new Date().toISOString(),
+              reengagement_count: reengageCount + 1,
+            },
+          })
+          .eq("id", family.id);
+      }
+
+      counts.reengagementEmails++;
     }
 
     return NextResponse.json({ status: "ok", dry_run: dryRun, ...counts });

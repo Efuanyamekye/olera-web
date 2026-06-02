@@ -407,6 +407,16 @@ export interface FamilyMetadata {
   // Global opt-out for all nudge sequences (set via /account/settings)
   nudges_unsubscribed?: boolean;
 
+  // ── Milestone Emails ──
+  // One-time celebration when profile reaches 100% complete
+  completion_celebrated_at?: string;
+  // Monthly provider recommendations for published families (max 12)
+  monthly_recommendations_sent_at?: string;
+  monthly_recommendations_count?: number;
+  // Inactivity re-engagement (max 2 attempts)
+  reengagement_sent_at?: string;
+  reengagement_count?: number;
+
   // ── Legacy nudge flags (backward compatibility) ──
   // These are superseded by the sequence system but kept for migration
   go_live_reminder_sent?: boolean;

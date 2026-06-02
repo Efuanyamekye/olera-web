@@ -978,7 +978,7 @@ export function welcomeEmail(opts: {
 
 // ── Provider card helper for email templates ──
 
-interface EmailProviderCard {
+export interface EmailProviderCard {
   name: string;
   category: string;
   slug: string;
@@ -1037,7 +1037,7 @@ export function goLiveReminderEmail(opts: {
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
       You're always in control — you decide which providers to respond to.
     </p>
-    <div>${button("Go Live", opts.matchesUrl)}</div>
+    <div>${button("Let Providers Reach Out", opts.matchesUrl)}</div>
     <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
       Have questions? Just reply to this email — we're here to help.
     </p>
@@ -1045,57 +1045,6 @@ export function goLiveReminderEmail(opts: {
       <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `, preheader);
-}
-
-/** Profile incomplete reminder — specific about what's missing */
-export function familyProfileIncompleteEmail(opts: {
-  familyName: string;
-  welcomeUrl: string;
-  missingCareTypes?: boolean;
-  missingLocation?: boolean;
-  providerCount?: number;
-  state?: string;
-}): string {
-  let headline: string;
-  let body: string;
-
-  if (opts.missingCareTypes && !opts.missingLocation) {
-    headline = "Tell us what you're looking for";
-    body = `We'd love to help you find the right care. Tell us what type of care you need and we'll show you providers that match.`;
-  } else if (!opts.missingCareTypes && opts.missingLocation) {
-    const countText = opts.providerCount ? ` the ${opts.providerCount}` : "";
-    headline = "Add your location to see providers near you";
-    body = `Add your city so we can show you${countText} providers near you. It only takes a moment.`;
-  } else {
-    const stateText = opts.state ? ` in ${opts.state}` : "";
-    headline = `Unlock care options${stateText}`;
-    body = `A few quick details — your care needs and location — will unlock personalized provider matches${stateText}.`;
-  }
-
-  return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${headline}</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, ${body}
-    </p>
-    <div>${button("Complete your profile", opts.welcomeUrl)}</div>
-  `);
-}
-
-/** Provider recommendation — shows top providers matching family's needs */
-export function providerRecommendationEmail(opts: {
-  familyName: string;
-  city: string;
-  providers: EmailProviderCard[];
-  browseUrl: string;
-}): string {
-  return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Top-rated providers in ${escapeHtml(opts.city)} for you</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, we found some highly-rated care providers in ${escapeHtml(opts.city)} that match what you're looking for.
-    </p>
-    ${providerCardsBlock(opts.providers, true)}
-    <div>${button("Browse all providers near you", opts.browseUrl)}</div>
-  `);
 }
 
 /** Post-connection follow-up — asks about experience, builds review system */
@@ -1122,26 +1071,6 @@ export function postConnectionFollowupEmail(opts: {
       <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from follow-up emails</a>
     </p>
   `, preheader);
-}
-
-/** Dormant re-engagement — social proof with popular providers */
-export function dormantReengagementEmail(opts: {
-  familyName: string;
-  state: string;
-  providers: EmailProviderCard[];
-  browseUrl: string;
-}): string {
-  return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Families in ${escapeHtml(opts.state)} are finding care on Olera</h1>
-    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
-      Hi ${firstName(opts.familyName, "there")}, finding the right care takes time — and we're here when you're ready. Here are some providers other families are connecting with:
-    </p>
-    ${providerCardsBlock(opts.providers)}
-    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Whenever you're ready, Olera makes it easy to compare providers, read reviews, and connect directly.
-    </p>
-    <div>${button("Browse providers near you", opts.browseUrl)}</div>
-  `);
 }
 
 // ── Profile Completion Sequence (4 active + 1 maintenance) ──────────
@@ -1536,6 +1465,240 @@ export function publishMaintenanceEmail(opts: {
       Your profile is ready. When you publish, providers${hasProviders ? " like these" : ""} can see your care needs and reach out — no calls to make, no forms to fill. They do the work, you choose who to talk to.
     </p>
     <div>${button("Let Providers Reach Out", opts.matchesUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:13px;color:#9ca3af;margin:12px 0 0;line-height:1.5;text-align:center;">
+      No longer looking for care? <a href="${BASE_URL}/portal/settings" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from updates</a>
+    </p>
+  `, preheader);
+}
+
+// ── Gap Emails (Completion Celebration, Re-engagement, Saved Updates, Recommendations) ──
+
+/** Completion celebration — sent once when profile reaches 100% (unpublished users only) */
+export function completionCelebrationEmail(opts: {
+  familyName: string;
+  profileUrl: string;
+  city?: string;
+}): string {
+  const cityText = opts.city || "your area";
+  const preheader = `Providers in ${cityText} can now understand exactly what you need`;
+
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Your care profile is complete</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
+      Hi ${firstName(opts.familyName, "there")}, you did it — your profile is complete and ready to publish.
+    </p>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 8px;line-height:1.5;"><strong>When you publish:</strong></p>
+    <ul style="font-size:14px;color:#6b7280;margin:0 0 20px;padding-left:20px;line-height:1.8;">
+      <li>Providers in ${escapeHtml(cityText)} can see your care needs</li>
+      <li>They can reach out to you directly</li>
+      <li>You decide who to respond to — no pressure</li>
+    </ul>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      No calls to make, no forms to fill. Providers do the outreach — you stay in control.
+    </p>
+    <div>${button("Let Providers Reach Out", opts.profileUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+    </p>
+  `, preheader);
+}
+
+/** Inactivity re-engagement — sent to families who haven't been active for 30+ days */
+export function inactivityReengagementEmail(opts: {
+  familyName: string;
+  profileUrl: string;
+  inboxUrl: string;
+  providers?: EmailProviderCard[];
+  completionPercent?: number;
+  isPublished: boolean;
+  city?: string;
+  state?: string;
+}): string {
+  const locationText = opts.city || opts.state || "your area";
+  const providersHtml = opts.providers?.length ? providerCardsBlock(opts.providers.slice(0, 3)) : "";
+  const preheader = "Highly-rated providers are ready to help when you are";
+
+  // Determine CTA based on profile state
+  let ctaHtml: string;
+  if (opts.isPublished) {
+    ctaHtml = `
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Providers can already find you — check your inbox for any messages you may have missed.
+    </p>
+    <div>${button("Check Your Inbox", opts.inboxUrl)}</div>`;
+  } else if ((opts.completionPercent ?? 0) >= 60) {
+    ctaHtml = `
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Your profile is ready. When you publish, providers like these can see your needs and reach out directly.
+    </p>
+    <div>${button("Let Providers Reach Out", opts.profileUrl)}</div>`;
+  } else {
+    const percent = opts.completionPercent ?? 0;
+    ctaHtml = `
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Your profile is ${percent}% complete. When you're ready to connect, we're here.
+    </p>
+    <div>${button("Continue Your Profile", opts.profileUrl)}</div>`;
+  }
+
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Still searching for care in ${escapeHtml(locationText)}?</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
+      Hi ${firstName(opts.familyName, "there")}, finding the right care takes time — and we're here when you're ready.
+    </p>
+    <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
+      Here are some highly-rated providers near you:
+    </p>
+    ${providersHtml}
+    ${ctaHtml}
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:13px;color:#9ca3af;margin:12px 0 0;line-height:1.5;text-align:center;">
+      No longer looking for care? <a href="${BASE_URL}/portal/settings" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from updates</a>
+    </p>
+  `, preheader);
+}
+
+/** Saved provider update — describes what's new */
+export interface SavedProviderUpdate {
+  name: string;
+  slug: string;
+  updateType: "new_reviews" | "profile_updated" | "price_updated";
+  newRating?: number;
+  newReviewCount?: number;
+}
+
+/** Weekly digest for families with saved providers — updates + recommendations */
+export function savedProviderDigestEmail(opts: {
+  familyName: string;
+  savedUrl: string;
+  updates?: SavedProviderUpdate[];
+  /** The primary saved provider to base recommendations on */
+  primarySavedProvider?: EmailProviderCard;
+  recommendations?: EmailProviderCard[];
+  city?: string;
+}): string {
+  const hasUpdates = opts.updates && opts.updates.length > 0;
+  const hasRecommendations = opts.recommendations && opts.recommendations.length > 0;
+  const cityText = opts.city || "your area";
+
+  // Build updates section
+  let updatesHtml = "";
+  if (hasUpdates) {
+    const updateLines = opts.updates!.map((u) => {
+      if (u.updateType === "new_reviews" && u.newRating && u.newReviewCount) {
+        return `<li><a href="${BASE_URL}/provider/${u.slug}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">${escapeHtml(u.name)}</a> — new reviews (now ${u.newRating.toFixed(1)}★ from ${u.newReviewCount} reviews)</li>`;
+      } else if (u.updateType === "profile_updated") {
+        return `<li><a href="${BASE_URL}/provider/${u.slug}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">${escapeHtml(u.name)}</a> — updated their profile</li>`;
+      } else if (u.updateType === "price_updated") {
+        return `<li><a href="${BASE_URL}/provider/${u.slug}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">${escapeHtml(u.name)}</a> — updated pricing information</li>`;
+      }
+      return `<li><a href="${BASE_URL}/provider/${u.slug}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">${escapeHtml(u.name)}</a></li>`;
+    }).join("");
+
+    updatesHtml = `
+    <p style="font-size:14px;color:#374151;margin:0 0 12px;line-height:1.5;font-weight:600;">Updates this week:</p>
+    <ul style="font-size:14px;color:#6b7280;margin:0 0 24px;padding-left:20px;line-height:1.8;">
+      ${updateLines}
+    </ul>`;
+  }
+
+  // Build recommendations section
+  let recommendationsHtml = "";
+  if (hasRecommendations) {
+    const basedOnText = opts.primarySavedProvider
+      ? `Based on ${escapeHtml(opts.primarySavedProvider.name)}, families also connected with:`
+      : `Providers in ${escapeHtml(cityText)} you might like:`;
+
+    recommendationsHtml = `
+    <div style="border-top:1px solid #e5e7eb;padding-top:20px;margin-top:8px;">
+      <p style="font-size:14px;color:#374151;margin:0 0 12px;line-height:1.5;font-weight:600;">Similar providers you might like</p>
+      <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.5;">${basedOnText}</p>
+      ${providerCardsBlock(opts.recommendations!.slice(0, 2))}
+    </div>`;
+  }
+
+  // Dynamic headline and preheader
+  const headline = hasUpdates
+    ? "Updates on providers you're considering"
+    : "Providers similar to ones you saved";
+  const preheader = hasUpdates
+    ? "New reviews and similar providers you might like"
+    : "Highly-rated providers near you";
+
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${headline}</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
+      Hi ${firstName(opts.familyName, "there")}, here's what's happening with the providers you're considering:
+    </p>
+    ${updatesHtml}
+    ${recommendationsHtml}
+    <div style="margin-top:24px;">${button("View All Your Saves", opts.savedUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
+      Have questions? Just reply to this email — we're here to help.
+    </p>
+    <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
+      <a href="${BASE_URL}/portal/settings" style="color:#d1d5db;text-decoration:underline;">Manage your email preferences</a>
+    </p>
+  `, preheader);
+}
+
+/** Monthly provider recommendations — new providers + top recommendations */
+export function monthlyProviderRecommendationsEmail(opts: {
+  familyName: string;
+  profileUrl: string;
+  inboxUrl: string;
+  providers?: EmailProviderCard[];
+  newProviderCount?: number;
+  isPublished: boolean;
+  city?: string;
+  state?: string;
+}): string {
+  const locationText = opts.city || opts.state || "your area";
+  const hasNewProviders = (opts.newProviderCount ?? 0) > 0;
+  const providersHtml = opts.providers?.length ? providerCardsBlock(opts.providers.slice(0, 3)) : "";
+
+  // Dynamic headline based on new providers
+  const headline = hasNewProviders
+    ? `${opts.newProviderCount} providers in ${escapeHtml(locationText)} match your search`
+    : `Highly-rated providers in ${escapeHtml(locationText)}`;
+
+  const preheader = hasNewProviders
+    ? "Including some top-rated options near you"
+    : "Top-rated care options you might have missed";
+
+  // Intro text
+  const introText = hasNewProviders
+    ? `here are some providers who recently joined Olera:`
+    : `here are some top-rated providers you might have missed:`;
+
+  // CTA based on publish state
+  const ctaHtml = opts.isPublished
+    ? `
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      These providers can already see your profile. Check your inbox for messages.
+    </p>
+    <div>${button("Check Your Inbox", opts.inboxUrl)}</div>`
+    : `
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Your profile is ready. When you publish, providers like these can see your care needs and reach out — no calls to make, no forms to fill.
+    </p>
+    <div>${button("Let Providers Reach Out", opts.profileUrl)}</div>`;
+
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">${headline}</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
+      Hi ${firstName(opts.familyName, "there")}, ${introText}
+    </p>
+    ${providersHtml}
+    ${ctaHtml}
     <p style="font-size:13px;color:#9ca3af;margin:24px 0 0;line-height:1.5;">
       Have questions? Just reply to this email — we're here to help.
     </p>
