@@ -682,6 +682,9 @@ export async function GET(request: NextRequest) {
           followup_stage: templateStage as FollowupStage,
           followup_sent_at: sentAt,
           followup_sent_by: "cron:lead-followup-sequence",
+          // Increment nudge_count for backwards compatibility with admin panel display
+          nudge_count: ((lead.metadata.nudge_count as number) || 0) + 1,
+          nudged_at: sentAt,
         };
 
         // Stage 6 re-engagement: clear stopped fields from stage 5 (stuck)
