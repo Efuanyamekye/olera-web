@@ -193,7 +193,8 @@ export async function GET(request: NextRequest) {
       const thread = (meta.thread as ThreadMessage[]) || [];
 
       // Check if provider has REALLY responded (non-auto, non-system, with actual text)
-      const providerResponded = thread.some(
+      // OR explicitly marked the lead as replied / already connected
+      const hasThreadResponse = thread.some(
         (m) =>
           m.from_profile_id === conn.to_profile_id &&
           m.is_auto_reply !== true &&
@@ -201,6 +202,9 @@ export async function GET(request: NextRequest) {
           m.from_profile_id !== "system" &&
           !!m.text?.trim()
       );
+      const markedReplied = meta.marked_replied === true;
+      const alreadyConnected = meta.archive_reason === "already_connected";
+      const providerResponded = hasThreadResponse || markedReplied || alreadyConnected;
       if (providerResponded) {
         counts.skipped++;
         counts.skipReasons.responded++;
