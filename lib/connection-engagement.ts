@@ -29,7 +29,12 @@ export interface EngagementData {
   contactRevealed: boolean;
   phoneClicked: boolean;
   emailLinkClicked: boolean;
+  continueInInbox: boolean;
   providerMessaged: boolean;
+  /** Provider explicitly marked the lead as "Replied" in their drawer */
+  markedReplied: boolean;
+  /** Provider archived with reason "already_connected" */
+  alreadyConnected: boolean;
   lastActivityAt: string | null;
   /** Set by cron when all automated outreach is exhausted */
   needsCall?: boolean;
@@ -153,12 +158,14 @@ export function getEngagementLevel(
   if (
     engagement.providerMessaged ||
     engagement.phoneClicked ||
-    engagement.emailLinkClicked
+    engagement.emailLinkClicked ||
+    engagement.markedReplied ||    // Provider explicitly marked as "Replied"
+    engagement.alreadyConnected    // Provider archived with "Already connected" reason
   ) {
     // Provider reached out - this is success
     baseLevel = "connected";
-  } else if (engagement.contactRevealed) {
-    // Provider revealed contact info - actively interested
+  } else if (engagement.contactRevealed || engagement.continueInInbox) {
+    // Provider revealed contact info or clicked to continue in inbox - actively interested
     baseLevel = "engaged";
   } else if (engagement.leadOpened) {
     // Provider viewed the lead - passive interest
@@ -198,7 +205,9 @@ export function isConnected(engagement: EngagementData): boolean {
   return (
     engagement.providerMessaged ||
     engagement.phoneClicked ||
-    engagement.emailLinkClicked
+    engagement.emailLinkClicked ||
+    engagement.markedReplied ||
+    engagement.alreadyConnected
   );
 }
 

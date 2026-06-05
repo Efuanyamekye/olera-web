@@ -246,6 +246,11 @@ export async function GET(request: NextRequest) {
       );
       const responded = !!providerMsg;
 
+      // Check metadata for explicit connection signals from provider
+      const markedReplied = meta.marked_replied === true;
+      const archiveReason = meta.archive_reason as string | undefined;
+      const alreadyConnected = archiveReason === "already_connected";
+
       // Check if family has replied AFTER provider's response
       // This determines if we need to nudge the family
       // Only counts REAL replies (non-auto, non-system, with actual text)
@@ -396,6 +401,9 @@ export async function GET(request: NextRequest) {
         waitingOn,
         lastMessageAt,
         temperature,
+        // Explicit connection signals from provider metadata
+        markedReplied,
+        alreadyConnected,
         // For engagement-based "Needs Call" tab
         needsCall: meta.followup_stopped_reason === "needs_call" || meta.needs_call === true,
       };
@@ -578,7 +586,10 @@ export async function GET(request: NextRequest) {
         contactRevealed: eng?.contact_revealed ?? false,
         phoneClicked: eng?.phone_clicked ?? false,
         emailLinkClicked: eng?.email_link_clicked ?? false,
+        continueInInbox: eng?.continue_in_inbox ?? false,
         providerMessaged: c.responded,
+        markedReplied: c.markedReplied,
+        alreadyConnected: c.alreadyConnected,
         lastActivityAt: combinedLastActivity,
         needsCall: c.needsCall,
       };
@@ -600,7 +611,8 @@ export async function GET(request: NextRequest) {
         // Funnel stats (based on provider engagement)
         if (eng?.lead_opened) providerViewedCount++;
         if (eng?.contact_revealed || eng?.phone_clicked || eng?.email_link_clicked || eng?.continue_in_inbox) providerEngagedCount++;
-        if (c.responded) respondedCount++;
+        // Count as responded if: sent message, marked as replied, or already connected
+        if (c.responded || c.markedReplied || c.alreadyConnected) respondedCount++;
         if (c.familyRepliedAfterProvider) connectedCount++;
       }
     }
@@ -667,9 +679,10 @@ export async function GET(request: NextRequest) {
     }));
 
     // Per-provider engagement data for UI badges (keyed by provider activityKey)
-    // Note: "messaged" is NOT included here because it's per-connection, not per-provider.
-    // The frontend should use c.responded directly for the "Messaged" badge.
-    const engagement: Record<string, { email_clicked: boolean; lead_opened: boolean; contact_revealed: boolean; phone_copied: boolean; email_copied: boolean; phone_clicked: boolean; email_link_clicked: boolean }> = {};
+    // Note: "messaged", "markedReplied", "alreadyConnected" are NOT included here
+    // because they're per-connection, not per-provider. The frontend should use
+    // c.responded, c.markedReplied, c.alreadyConnected directly.
+    const engagement: Record<string, { email_clicked: boolean; lead_opened: boolean; contact_revealed: boolean; phone_copied: boolean; email_copied: boolean; phone_clicked: boolean; email_link_clicked: boolean; continue_in_inbox: boolean }> = {};
     for (const c of pageRaw) {
       const key = c.provider.activityKey;
       if (key && !engagement[key]) {
@@ -682,6 +695,7 @@ export async function GET(request: NextRequest) {
           email_copied: eng?.email_copied ?? false,
           phone_clicked: eng?.phone_clicked ?? false,
           email_link_clicked: eng?.email_link_clicked ?? false,
+          continue_in_inbox: eng?.continue_in_inbox ?? false,
         };
       }
     }
