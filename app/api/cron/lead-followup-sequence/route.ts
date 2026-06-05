@@ -240,13 +240,32 @@ export async function GET(request: NextRequest) {
     // Collect all connection IDs to check for engagement events
     const allConnectionIds = connections.map((c) => c.id);
 
+    // Also collect provider keys (slug/source_provider_id/id) for provider-level engagement
+    // This catches multi-lead emails where connection_id is null in events
+    const providerKeyMap = new Map<string, Set<string>>(); // provider_key -> connection_ids
+    for (const conn of connections) {
+      const toProfile = Array.isArray(conn.to_profile) ? conn.to_profile[0] : conn.to_profile;
+      const keys = [
+        toProfile?.slug,
+        toProfile?.source_provider_id,
+        toProfile?.id,
+      ].filter(Boolean) as string[];
+      for (const key of keys) {
+        if (!providerKeyMap.has(key)) providerKeyMap.set(key, new Set());
+        providerKeyMap.get(key)!.add(conn.id);
+      }
+    }
+    const allProviderKeys = [...providerKeyMap.keys()];
+
     // Query provider_activity for any engagement events on these connections
     // FAIL-CLOSED: if we can't check engagement, don't send (Rule #1 protection)
+    // Include one_click_access to catch multi-lead email clicks (where connection_id is null)
     const ENGAGEMENT_QUERY_LIMIT = 100000;
+    const allEngagementEvents = [...ENGAGEMENT_EVENTS, "one_click_access"] as const;
     const { data: engagementEvents, error: engagementError } = await db
       .from("provider_activity")
-      .select("metadata")
-      .in("event_type", ENGAGEMENT_EVENTS)
+      .select("provider_id, event_type, metadata")
+      .in("event_type", allEngagementEvents)
       .limit(ENGAGEMENT_QUERY_LIMIT);
 
     if (engagementEvents && engagementEvents.length >= ENGAGEMENT_QUERY_LIMIT) {
@@ -264,11 +283,24 @@ export async function GET(request: NextRequest) {
     // Build a Set of connection IDs that have been engaged with
     const engagedConnectionIds = new Set<string>();
     const connectionIdSet = new Set(allConnectionIds);
+    // Also track engaged PROVIDERS (catches multi-lead email clicks)
+    const engagedProviderIds = new Set<string>();
+
     for (const event of engagementEvents || []) {
       const meta = event.metadata as Record<string, unknown>;
       const connId = (meta?.connection_id as string) || (meta?.lead_id as string);
+
+      // Match by connection_id if available
       if (connId && connectionIdSet.has(connId)) {
         engagedConnectionIds.add(connId);
+      }
+
+      // For one_click_access and lead_opened, also track the provider as engaged
+      // This catches multi-lead emails where connection_id is null
+      if ((event.event_type === "one_click_access" || event.event_type === "lead_opened") && event.provider_id) {
+        if (allProviderKeys.includes(event.provider_id)) {
+          engagedProviderIds.add(event.provider_id);
+        }
       }
     }
 
@@ -309,8 +341,18 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // Check if provider has engaged with this lead
-      if (engagedConnectionIds.has(conn.id)) {
+      // Check if provider has engaged with this lead (connection-level or provider-level)
+      // Provider-level check catches multi-lead email clicks where connection_id is null
+      const providerKeys = [
+        toProfile?.slug,
+        toProfile?.source_provider_id,
+        toProfile?.id,
+      ].filter(Boolean) as string[];
+      const isEngaged =
+        engagedConnectionIds.has(conn.id) ||
+        providerKeys.some((key) => engagedProviderIds.has(key));
+
+      if (isEngaged) {
         // Mark as engaged and stop sequence
         if (!dryRun) {
           const updatedMeta = {

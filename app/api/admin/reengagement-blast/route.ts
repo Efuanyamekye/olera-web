@@ -390,6 +390,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Update metadata for all connections
+      // Clear needs_call flag so connections move out of "Needs Call" tab after re-engagement
       const sentAt = new Date().toISOString();
       for (const lead of group.leads) {
         const updatedMeta = {
@@ -399,6 +400,7 @@ export async function POST(request: NextRequest) {
           followup_sent_by: `admin:${adminUser.email}`,
           followup_stopped_at: null,
           followup_stopped_reason: null,
+          needs_call: null, // Clear needs_call flag from stage 7
         };
 
         await db

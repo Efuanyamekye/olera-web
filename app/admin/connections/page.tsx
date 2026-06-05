@@ -141,8 +141,20 @@ export default function ConnectionsTrackerPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
   // Re-engagement blast state
+  interface BlastPreviewData {
+    providers: Array<{ email: string; name: string; leadCount: number; subject: string }>;
+    sampleEmailHtml: string | null;
+    totalProviders: number;
+  }
+  interface BlastResultData {
+    providers_emailed?: number;
+    leads_included?: number;
+    skipped?: number;
+    message?: string;
+    preview?: BlastPreviewData;
+  }
   const [blastLoading, setBlastLoading] = useState(false);
-  const [blastResult, setBlastResult] = useState<{ type: "preview" | "sent"; data: Record<string, unknown> } | null>(null);
+  const [blastResult, setBlastResult] = useState<{ type: "preview" | "sent"; data: BlastResultData } | null>(null);
   const [blastError, setBlastError] = useState<string | null>(null);
   const [showEmailPreview, setShowEmailPreview] = useState(false);
 
@@ -533,11 +545,11 @@ export default function ConnectionsTrackerPage() {
               </div>
 
               {/* Preview details - show provider list and email preview button */}
-              {blastResult.type === "preview" && blastResult.data.preview && (
+              {blastResult.type === "preview" && blastResult.data.preview != null && (
                 <div className="mt-3 pt-3 border-t border-amber-200">
                   <div className="flex items-center justify-between mb-2">
                     <span className="font-medium text-gray-700">Recipients (first 10):</span>
-                    {(blastResult.data.preview as { sampleEmailHtml?: string }).sampleEmailHtml && (
+                    {blastResult.data.preview.sampleEmailHtml && (
                       <button
                         onClick={() => setShowEmailPreview(true)}
                         className="text-amber-700 hover:text-amber-900 underline"
@@ -547,7 +559,7 @@ export default function ConnectionsTrackerPage() {
                     )}
                   </div>
                   <div className="space-y-1 max-h-40 overflow-y-auto">
-                    {((blastResult.data.preview as { providers?: Array<{ email: string; name: string; leadCount: number; subject: string }> }).providers || []).map((p, i) => (
+                    {blastResult.data.preview.providers.map((p, i) => (
                       <div key={i} className="flex items-center justify-between py-1 px-2 bg-gray-50 rounded">
                         <div>
                           <span className="font-medium text-gray-900">{p.name}</span>
@@ -563,7 +575,7 @@ export default function ConnectionsTrackerPage() {
           )}
 
           {/* Email Preview Modal */}
-          {showEmailPreview && blastResult?.data.preview && (
+          {showEmailPreview && blastResult?.data.preview != null && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowEmailPreview(false)}>
               <div className="bg-white rounded-xl shadow-xl max-w-2xl max-h-[80vh] overflow-hidden" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center justify-between px-4 py-3 border-b bg-gray-50">
@@ -578,7 +590,7 @@ export default function ConnectionsTrackerPage() {
                   <div
                     className="prose prose-sm max-w-none"
                     dangerouslySetInnerHTML={{
-                      __html: (blastResult.data.preview as { sampleEmailHtml?: string }).sampleEmailHtml || "<p>No preview available</p>",
+                      __html: blastResult.data.preview.sampleEmailHtml || "<p>No preview available</p>",
                     }}
                   />
                 </div>
