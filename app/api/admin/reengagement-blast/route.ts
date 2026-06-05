@@ -401,6 +401,9 @@ export async function POST(request: NextRequest) {
           followup_stopped_at: null,
           followup_stopped_reason: null,
           needs_call: null, // Clear needs_call flag from stage 7
+          // Increment nudge_count for consistency with cron and admin panel display
+          nudge_count: ((lead.metadata.nudge_count as number) || 0) + 1,
+          nudged_at: sentAt,
         };
 
         await db
