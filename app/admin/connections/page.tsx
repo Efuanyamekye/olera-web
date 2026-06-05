@@ -157,13 +157,18 @@ export default function ConnectionsTrackerPage() {
   const [blastResult, setBlastResult] = useState<{ type: "preview" | "sent"; data: BlastResultData } | null>(null);
   const [blastError, setBlastError] = useState<string | null>(null);
   const [showEmailPreview, setShowEmailPreview] = useState(false);
+  const [blastDismissed, setBlastDismissed] = useState(false);
 
-  const runReengagementBlast = useCallback(async (dryRun: boolean) => {
+  const runReengagementBlast = useCallback(async (dryRun: boolean, target: "stuck" | "needs_call") => {
     setBlastLoading(true);
     setBlastError(null);
     setBlastResult(null);
+    setBlastDismissed(false);
     try {
-      const res = await fetch(`/api/admin/reengagement-blast${dryRun ? "?dry_run=true" : ""}`, {
+      const params = new URLSearchParams();
+      if (dryRun) params.set("dry_run", "true");
+      params.set("target", target);
+      const res = await fetch(`/api/admin/reengagement-blast?${params.toString()}`, {
         method: "POST",
       });
       const data = await res.json();
@@ -178,6 +183,13 @@ export default function ConnectionsTrackerPage() {
       setBlastLoading(false);
     }
   }, []);
+
+  // Reset blast state when switching tabs
+  useEffect(() => {
+    setBlastResult(null);
+    setBlastError(null);
+    setBlastDismissed(false);
+  }, [activeFilter]);
 
   // Debounce search input by 300ms
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -486,21 +498,21 @@ export default function ConnectionsTrackerPage() {
         })}
       </div>
 
-      {/* Re-engagement Blast Controls - show on Stuck or Needs Call tab */}
-      {(activeFilter === "stuck" || activeFilter === "needs_call") && (
+      {/* Re-engagement Blast Controls - show on Stuck or Needs Call tab, hide after successful send */}
+      {(activeFilter === "stuck" || activeFilter === "needs_call") && !blastDismissed && (
         <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h3 className="text-sm font-semibold text-amber-900">Re-engagement Blast (Final Email)</h3>
               <p className="text-xs text-amber-700 mt-1">
-                Send the &quot;One more try&quot; email to all stuck/needs-call providers who haven&apos;t engaged.
+                Send the &quot;One more try&quot; email to all <span className="font-medium">{activeFilter === "stuck" ? "Stuck" : "Needs Call"}</span> providers who haven&apos;t engaged.
                 <br />
                 <span className="text-amber-600 font-medium">✓ Only sends to providers who have NOT viewed the lead.</span>
               </p>
             </div>
             <div className="flex gap-2 shrink-0">
               <button
-                onClick={() => runReengagementBlast(true)}
+                onClick={() => runReengagementBlast(true, activeFilter as "stuck" | "needs_call")}
                 disabled={blastLoading}
                 className="px-3 py-1.5 text-xs font-medium text-amber-700 bg-white border border-amber-300 rounded-lg hover:bg-amber-50 disabled:opacity-50"
               >
@@ -508,8 +520,9 @@ export default function ConnectionsTrackerPage() {
               </button>
               <button
                 onClick={() => {
-                  if (confirm("Send re-engagement emails to all stuck providers? This cannot be undone.")) {
-                    runReengagementBlast(false);
+                  const tabName = activeFilter === "stuck" ? "Stuck" : "Needs Call";
+                  if (confirm(`Send re-engagement emails to all ${tabName} providers? This cannot be undone.`)) {
+                    runReengagementBlast(false, activeFilter as "stuck" | "needs_call");
                   }
                 }}
                 disabled={blastLoading}
@@ -569,6 +582,21 @@ export default function ConnectionsTrackerPage() {
                       </div>
                     ))}
                   </div>
+                </div>
+              )}
+
+              {/* Done button after successful send - dismisses the card */}
+              {blastResult.type === "sent" && (
+                <div className="mt-3 pt-3 border-t border-emerald-200 flex justify-end">
+                  <button
+                    onClick={() => {
+                      setBlastDismissed(true);
+                      setBlastResult(null);
+                    }}
+                    className="px-4 py-1.5 text-xs font-medium text-emerald-700 bg-white border border-emerald-300 rounded-lg hover:bg-emerald-50"
+                  >
+                    Done
+                  </button>
                 </div>
               )}
             </div>

@@ -34,6 +34,8 @@ export async function POST(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
   const dryRun = searchParams.get("dry_run") === "true";
+  // Target filter: "stuck" or "needs_call" - only email providers in that specific tab
+  const targetFilter = searchParams.get("target") as "stuck" | "needs_call" | null;
 
   const db = getServiceClient();
   const siteUrl = getSiteUrl();
@@ -176,6 +178,20 @@ export async function POST(request: NextRequest) {
       ) {
         counts.filtered_engaged++;
         return false;
+      }
+
+      // Apply target filter if specified (respects which tab user is on)
+      if (targetFilter) {
+        const needsCall = meta.needs_call === true;
+        const isStuck = stage === 5 || (stage === undefined && daysSince >= 14 && daysSince < 24);
+        const isNeedsCall = stage === 7 || needsCall || (stage === undefined && daysSince >= 24);
+
+        if (targetFilter === "stuck" && !isStuck) {
+          return false;
+        }
+        if (targetFilter === "needs_call" && !isNeedsCall) {
+          return false;
+        }
       }
 
       // Include if:
