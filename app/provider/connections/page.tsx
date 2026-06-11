@@ -271,10 +271,10 @@ function LeadDetailInlineView({
           (lead.email || lead.phone) && (
             <div>
               <h4 className="text-base font-display font-bold text-gray-900 mb-1.5">Contact</h4>
-              <div className="space-y-2.5">
+              <div className="space-y-1.5">
                 {lead.phone && (
-                  <div className="group flex items-center gap-2.5">
-                    <svg className="w-5 h-5 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <div className="group flex items-center gap-2">
+                    <svg className="w-4 h-4 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                     </svg>
                     <p className="text-[15px] text-gray-900 flex-1 truncate">{lead.phone}</p>
@@ -300,8 +300,8 @@ function LeadDetailInlineView({
                   </div>
                 )}
                 {lead.email && (
-                  <div className="group flex items-center gap-2.5">
-                    <svg className="w-5 h-5 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <div className="group flex items-center gap-2">
+                    <svg className="w-4 h-4 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                     </svg>
                     <p className="text-[15px] text-gray-900 flex-1 truncate">{lead.email}</p>
@@ -516,7 +516,7 @@ function LeadDetailInlineView({
                 onClick={onArchiveClick}
                 className="flex-1 px-4 py-3.5 border border-gray-300 bg-white text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all flex items-center justify-center gap-2"
               >
-                Pass on lead
+                Decline
               </button>
               <button
                 type="button"
@@ -540,7 +540,7 @@ function LeadDetailInlineView({
               <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
-              Free to message — you&apos;re never charged for a lead
+              Free to message — you won&apos;t be charged
             </p>
           </div>
         ) : (
@@ -729,11 +729,11 @@ function LeadDetailDrawer({
     (lead.email || lead.phone) ? (
       <div>
         <p className="text-lg font-semibold text-gray-900 mb-2.5">Contact information</p>
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {lead.phone && (
-            <div className="group flex items-center gap-3">
+            <div className="group flex items-center gap-2">
               {/* Phone icon */}
-              <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
               </svg>
               <div className="min-w-0">
@@ -762,9 +762,9 @@ function LeadDetailDrawer({
             </div>
           )}
           {lead.email && (
-            <div className="group flex items-center gap-3">
+            <div className="group flex items-center gap-2">
               {/* Email icon */}
-              <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
               </svg>
               <div className="min-w-0">
@@ -1124,13 +1124,13 @@ function LeadDetailDrawer({
   const ActiveFooter = isVerified ? (
     <div className="space-y-3">
       <div className="flex items-center gap-3">
-        {/* Secondary action - Pass on lead */}
+        {/* Secondary action - Decline lead */}
         <button
           type="button"
           onClick={() => onArchiveClick?.(lead.id)}
           className="flex-1 px-4 py-3.5 border border-gray-300 bg-white text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all flex items-center justify-center gap-2"
         >
-          Pass on lead
+          Decline
         </button>
 
         {/* Primary action - Message */}
@@ -1157,7 +1157,7 @@ function LeadDetailDrawer({
         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
         </svg>
-        Free to message — you&apos;re never charged for a lead
+        Free to message — you won&apos;t be charged
       </p>
     </div>
   ) : (

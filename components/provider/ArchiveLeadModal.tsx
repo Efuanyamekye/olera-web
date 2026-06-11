@@ -51,7 +51,7 @@ export default function ArchiveLeadModal({
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-100">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-900">Pass on this inquiry</h2>
+            <h2 className="text-lg font-bold text-gray-900">Decline this inquiry</h2>
             <button
               onClick={onClose}
               disabled={submitting}
@@ -64,7 +64,7 @@ export default function ArchiveLeadModal({
             </button>
           </div>
           <p className="text-sm text-gray-500 mt-1">
-            We'll let <span className="font-medium text-gray-700">{leadName}</span> know you've passed and suggest other providers who might be a better fit.
+            We'll let <span className="font-medium text-gray-700">{leadName}</span> know you've declined and suggest other providers who might be a better fit.
           </p>
         </div>
 
@@ -128,7 +128,7 @@ export default function ArchiveLeadModal({
             disabled={!selectedReason || submitting}
             className="px-5 py-2 bg-gray-900 hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl transition-colors"
           >
-            {submitting ? "Passing on lead..." : "Pass on lead"}
+            {submitting ? "Declining lead..." : "Decline lead"}
           </button>
         </div>
       </div>
