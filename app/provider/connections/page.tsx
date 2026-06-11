@@ -194,9 +194,9 @@ function LeadDetailInlineView({
   return (
     <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-10rem)] flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex-none px-4 py-4 border-b border-gray-100 bg-white">
+      <div className="shrink-0 px-4 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
-          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white flex-none`}>
+          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
             {lead.initials}
           </div>
           <div className="min-w-0 flex-1">
@@ -208,7 +208,7 @@ function LeadDetailInlineView({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors flex-none -mt-1"
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors shrink-0 -mt-1"
             aria-label="Close lead details"
           >
             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -448,7 +448,7 @@ function LeadDetailInlineView({
       </div>
 
       {/* Footer actions */}
-      <div className="flex-none border-t border-gray-100 px-6 pt-4 pb-4 bg-white z-10">
+      <div className="shrink-0 border-t border-gray-100 px-6 pt-4 pb-4 bg-white z-10">
         {lead.status === "archived" ? (
           // Archived footer - Restore/Delete
           restored ? (
