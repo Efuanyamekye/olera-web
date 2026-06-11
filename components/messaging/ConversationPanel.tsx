@@ -251,7 +251,7 @@ function ProviderPassedCard({
   return (
     <div className={`flex ${isProviderView ? 'justify-end' : 'justify-start'}`}>
       <div className="max-w-[420px] w-full">
-        <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-200">
+        <div className="rounded-2xl overflow-hidden border border-gray-200">
           {/* Subtle gray header - minimal color */}
           <div className="bg-gradient-to-r from-gray-600 to-gray-500 px-5 py-3">
             <div className="flex items-center gap-2">
@@ -353,7 +353,7 @@ function CareRequestCard({ careRequest, time, dateStr, isInbound, otherName, oth
         )
       )}
       <div className="max-w-[420px]">
-        <div className={`rounded-2xl ${isInbound ? "rounded-bl-md" : "rounded-br-md"} overflow-hidden shadow-sm border border-gray-200`}>
+        <div className={`rounded-2xl ${isInbound ? "rounded-bl-md" : "rounded-br-md"} overflow-hidden border border-gray-200`}>
           {/* Teal gradient header */}
           <div className="bg-gradient-to-r from-primary-600 to-primary-500 px-5 py-3">
             <div className="flex items-center gap-2">
