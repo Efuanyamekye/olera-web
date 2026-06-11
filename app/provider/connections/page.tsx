@@ -192,7 +192,7 @@ function LeadDetailInlineView({
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 max-h-[calc(100vh-8rem)] flex flex-col">
+    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 max-h-[calc(100vh-10rem)] flex flex-col overflow-hidden">
       {/* Header */}
       <div className="shrink-0 px-6 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
@@ -219,7 +219,7 @@ function LeadDetailInlineView({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-6 pt-6 pb-10 space-y-6">
+      <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-6 pb-10 space-y-6">
         {/* Archived banner */}
         {lead.status === "archived" && lead.archivedDate && (
           <div className="flex items-start gap-3.5 rounded-2xl bg-gray-50 border border-gray-100 px-5 py-4">
@@ -1281,7 +1281,7 @@ function LeadDetailDrawer({
           </div>
 
           {/* Mobile scrollable content */}
-          <div className="flex-1 overflow-y-auto px-5 py-5">
+          <div className="flex-1 min-h-0 overflow-y-auto px-5 py-5">
             {ScrollableContent}
           </div>
 
@@ -1301,7 +1301,7 @@ function LeadDetailDrawer({
           </div>
 
           {/* Desktop scrollable content */}
-          <div className="flex-1 overflow-y-auto px-6 py-6">
+          <div className="flex-1 min-h-0 overflow-y-auto px-6 py-6">
             {ScrollableContent}
           </div>
 
