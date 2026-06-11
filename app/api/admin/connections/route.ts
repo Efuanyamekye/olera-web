@@ -856,23 +856,29 @@ export async function GET(request: NextRequest) {
 
     // Query for connections with failed email delivery to provider
     // This catches: bounced, suppressed (invalid address), or send errors
-    const connectionIdsInView = searched.map(c => c.id);
+    // Note: Only finds emails with connection_id in metadata (added June 2026)
+    const connectionIdsInView = new Set(searched.map(c => c.id));
     const connectionsWithDeliveryFailure = new Set<string>();
 
-    if (connectionIdsInView.length > 0) {
-      // Query email_log for provider emails that failed/bounced for these connections
+    if (connectionIdsInView.size > 0) {
+      // Scope query to the date range we're viewing (or last 90 days if no filter)
+      const fallbackDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString();
+      const queryDateFrom = dateFrom || fallbackDate;
+
+      // Query email_log for provider emails that failed/bounced
       const { data: failedEmails } = await db
         .from("email_log")
         .select("metadata")
         .eq("recipient_type", "provider")
         .or("status.eq.failed,bounced_at.not.is.null")
-        .limit(5000);
+        .gte("created_at", queryDateFrom)
+        .limit(2000);
 
-      // Extract connection_ids from failed emails
+      // Extract connection_ids from failed emails (O(1) lookup with Set)
       for (const email of failedEmails ?? []) {
         const meta = email.metadata as Record<string, unknown> | null;
         const connId = meta?.connection_id as string | undefined;
-        if (connId && connectionIdsInView.includes(connId)) {
+        if (connId && connectionIdsInView.has(connId)) {
           connectionsWithDeliveryFailure.add(connId);
         }
       }
