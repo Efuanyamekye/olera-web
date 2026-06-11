@@ -1365,13 +1365,24 @@ function timeAgo(dateStr: string): string {
   const diffMins = Math.floor(diffMs / (1000 * 60));
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const diffWeeks = Math.floor(diffDays / 7);
+  const diffMonths = Math.floor(diffDays / 30);
+  const diffYears = Math.floor(diffDays / 365);
 
-  if (diffMins < 1) return "Just now";
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
-  return `${Math.floor(diffDays / 30)}mo ago`;
+  // Spell out time units for readability
+  if (diffMins < 1) return "just now";
+  if (diffMins === 1) return "one minute ago";
+  if (diffMins < 60) return `${diffMins} minutes ago`;
+  if (diffHours === 1) return "one hour ago";
+  if (diffHours < 24) return `${diffHours} hours ago`;
+  if (diffDays === 1) return "one day ago";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffWeeks === 1) return "one week ago";
+  if (diffDays < 30) return `${diffWeeks} weeks ago`;
+  if (diffMonths === 1) return "one month ago";
+  if (diffDays < 365) return `${diffMonths} months ago`;
+  if (diffYears === 1) return "one year ago";
+  return `${diffYears} years ago`;
 }
 
 function getInitials(name: string): string {
