@@ -486,9 +486,9 @@ function LeadDetailDrawer({
 
   // ── Free Lead Banner ──
   const FreeLeadBanner = !freeLeadBannerDismissed && lead.status !== "archived" ? (
-    <div className="relative flex items-start gap-3.5 rounded-2xl bg-white border border-gray-200 px-4 py-4 sm:px-5 shadow-sm hover:shadow-md transition-shadow duration-200">
-      {/* Gift icon in teal circle with subtle pulse animation */}
-      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-primary-500 flex items-center justify-center shrink-0 animate-pulse-subtle">
+    <div className="relative flex items-start gap-3.5 rounded-xl bg-white border-l-4 border-primary-500 px-4 py-4 sm:px-5 animate-banner-entry">
+      {/* Gift icon in teal circle */}
+      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-primary-500 flex items-center justify-center shrink-0">
         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
         </svg>
@@ -496,28 +496,28 @@ function LeadDetailDrawer({
 
       {/* Add CSS animation in style tag */}
       <style jsx>{`
-        @keyframes pulse-subtle {
-          0%, 100% {
-            opacity: 1;
-            transform: scale(1);
+        @keyframes banner-entry {
+          0% {
+            opacity: 0;
+            transform: translateX(-12px);
           }
-          50% {
-            opacity: 0.85;
-            transform: scale(1.05);
+          100% {
+            opacity: 1;
+            transform: translateX(0);
           }
         }
-        .animate-pulse-subtle {
-          animation: pulse-subtle 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .animate-banner-entry {
+          animation: banner-entry 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
 
       {/* Content */}
       <div className="flex-1 min-w-0 pr-6">
         <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 leading-snug">
-          These leads are free — no charge to you.
+          Leads are free — no charge.
         </h3>
         <p className="text-[14px] sm:text-[15px] text-gray-600 mt-1.5 leading-relaxed">
-          Message families directly to discuss their needs and see if they&apos;re a good fit. Pass on any leads that aren&apos;t the right match.
+          Message the families that fit, and pass on the ones that don&apos;t.
         </p>
       </div>
 
