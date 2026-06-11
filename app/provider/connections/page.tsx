@@ -949,32 +949,40 @@ function LeadDetailDrawer({
       {ArchivedBanner}
 
       {/* Summary Card */}
-      <div className="rounded-2xl bg-stone-50 px-6 py-4 space-y-1">
-        <p className="text-[15px] font-semibold text-gray-900">
-          Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
-        </p>
-        {lead.timeline && (
-          <p className="text-[15px] text-gray-700">
-            Hoping to start {
-              lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
-              lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
-              lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
-              lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
-              lead.timeline
-            }
+      <div className="rounded-2xl bg-stone-50 px-4 py-4 flex gap-4">
+        {/* Large icon */}
+        <div className="shrink-0 w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
+          <svg className="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+          </svg>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0 space-y-1">
+          <p className="text-[15px] font-semibold text-gray-900 leading-snug">
+            Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
           </p>
-        )}
-        {lead.paymentMethods && lead.paymentMethods.length > 0 && (
-          <>
-            <div className="border-t border-gray-200 mt-3 pt-2" />
-            <div className="flex items-center gap-2.5 text-gray-700">
-              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
-              </svg>
-              <p className="text-[15px]">Can pay with {lead.paymentMethods.join(", ")}</p>
-            </div>
-          </>
-        )}
+          {lead.timeline && (
+            <p className="text-[15px] text-gray-700 leading-snug">
+              Hoping to start {
+                lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
+                lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
+                lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
+                lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
+                lead.timeline
+              }
+            </p>
+          )}
+          {lead.paymentMethods && lead.paymentMethods.length > 0 && (
+            <p className="text-[15px] text-gray-700 leading-snug">
+              Payment: {
+                lead.paymentMethods.length <= 2
+                  ? lead.paymentMethods.join(", ")
+                  : `${lead.paymentMethods.slice(0, 2).join(", ")}, +${lead.paymentMethods.length - 2} more`
+              }
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Contact */}
@@ -982,10 +990,10 @@ function LeadDetailDrawer({
         (lead.email || lead.phone) && (
           <div>
             <h4 className="text-base font-display font-bold text-gray-900 mb-1.5">Contact</h4>
-            <div className="space-y-2.5">
+            <div className="space-y-1.5">
               {lead.phone && (
-                <div className="group flex items-center gap-2.5">
-                  <svg className="w-5 h-5 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <div className="group flex items-center gap-1.5">
+                  <svg className="w-4 h-4 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                   </svg>
                   <p className="text-[15px] text-gray-900 flex-1 truncate">{lead.phone}</p>
@@ -1011,8 +1019,8 @@ function LeadDetailDrawer({
                 </div>
               )}
               {lead.email && (
-                <div className="group flex items-center gap-2.5">
-                  <svg className="w-5 h-5 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <div className="group flex items-center gap-1.5">
+                  <svg className="w-4 h-4 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                   </svg>
                   <p className="text-[15px] text-gray-900 flex-1 truncate">{lead.email}</p>
