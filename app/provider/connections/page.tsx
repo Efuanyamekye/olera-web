@@ -262,7 +262,7 @@ function LeadDetailInlineView({
             )}
             {lead.paymentMethods && lead.paymentMethods.length > 0 && (
               <p className="text-[15px] text-gray-700 leading-snug">
-                Payment: {
+                Can pay with {
                   lead.paymentMethods.length <= 2
                     ? lead.paymentMethods.join(", ")
                     : `${lead.paymentMethods.slice(0, 2).join(", ")}, +${lead.paymentMethods.length - 2} more`
@@ -973,7 +973,7 @@ function LeadDetailDrawer({
           )}
           {lead.paymentMethods && lead.paymentMethods.length > 0 && (
             <p className="text-[15px] text-gray-700 leading-snug">
-              Payment: {
+              Can pay with {
                 lead.paymentMethods.length <= 2
                   ? lead.paymentMethods.join(", ")
                   : `${lead.paymentMethods.slice(0, 2).join(", ")}, +${lead.paymentMethods.length - 2} more`
