@@ -25,6 +25,8 @@ const FROM_ADDRESS = "Olera <noreply@olera.care>";
  * domain has a proven sending reputation.
  */
 const PROVIDER_NOTIFY_FROM_TYPES = new Set<string>([
+  "connection_request",
+  "first_lead_celebration",
   "question_received",
   "provider_nudge",
   "profile_incomplete_nudge",

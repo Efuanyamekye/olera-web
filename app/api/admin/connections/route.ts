@@ -119,7 +119,7 @@ function one<T>(p: ProfileJoin<T>): T | undefined {
 
 // Workflow-based tab filters (legacy)
 type WorkflowState = "needs_attention" | "awaiting_provider" | "awaiting_family" | "connected" | "stuck";
-type TabFilter = "all" | WorkflowState | EngagementLevel | FamilyEngagementLevel | "no_email" | "declined";
+type TabFilter = "all" | WorkflowState | EngagementLevel | FamilyEngagementLevel | "no_email" | "declined" | "delivery_failed";
 
 // Stuck threshold: 3+ nudges with no response
 const STUCK_NUDGE_THRESHOLD = 3;
@@ -142,6 +142,7 @@ interface EngagementCounts {
   needs_follow_up: number;
   no_email: number; // Cross-cutting filter: providers without email
   declined: number; // Provider archived with decline reasons
+  delivery_failed: number; // Email attempted but bounced/failed/suppressed
 }
 
 // Family engagement-based tab counts (family perspective)
@@ -853,6 +854,30 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Query for connections with failed email delivery to provider
+    // This catches: bounced, suppressed (invalid address), or send errors
+    const connectionIdsInView = searched.map(c => c.id);
+    const connectionsWithDeliveryFailure = new Set<string>();
+
+    if (connectionIdsInView.length > 0) {
+      // Query email_log for provider emails that failed/bounced for these connections
+      const { data: failedEmails } = await db
+        .from("email_log")
+        .select("metadata")
+        .eq("recipient_type", "provider")
+        .or("status.eq.failed,bounced_at.not.is.null")
+        .limit(5000);
+
+      // Extract connection_ids from failed emails
+      for (const email of failedEmails ?? []) {
+        const meta = email.metadata as Record<string, unknown> | null;
+        const connId = meta?.connection_id as string | undefined;
+        if (connId && connectionIdsInView.includes(connId)) {
+          connectionsWithDeliveryFailure.add(connId);
+        }
+      }
+    }
+
     // Workflow-based counts (legacy)
     const workflowCounts: WorkflowCounts = {
       all: 0,
@@ -872,6 +897,7 @@ export async function GET(request: NextRequest) {
       needs_follow_up: 0,
       no_email: 0,
       declined: 0,
+      delivery_failed: 0,
     };
 
     // Family engagement-based counts (family perspective)
@@ -978,6 +1004,12 @@ export async function GET(request: NextRequest) {
           engagementCounts.declined++;
         }
 
+        // Count delivery failures (email attempted but bounced/failed/suppressed)
+        // Only count if provider HAS email (no_email is a separate category)
+        if (c.provider.email?.trim() && connectionsWithDeliveryFailure.has(c.id)) {
+          engagementCounts.delivery_failed++;
+        }
+
         // Count family engagement levels
         // Exclude declined archives from "all" count (consistent with provider perspective)
         if (!isDeclinedArchive) {
@@ -1038,6 +1070,12 @@ export async function GET(request: NextRequest) {
       // Special filter: no_email (provider perspective only - cross-cutting filter)
       if (responseFilter === "no_email" && perspective === "provider") {
         list = list.filter((c) => !c.provider.email?.trim());
+      }
+      // Special filter: delivery_failed (email attempted but bounced/failed/suppressed)
+      else if (responseFilter === "delivery_failed" && perspective === "provider") {
+        list = list.filter((c) =>
+          c.provider.email?.trim() && connectionsWithDeliveryFailure.has(c.id)
+        );
       }
       // Special filter: declined (provider archived with decline reasons)
       else if (responseFilter === "declined" && perspective === "provider") {

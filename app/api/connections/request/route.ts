@@ -809,6 +809,7 @@ async function handleGuestConnection({
         emailType: "connection_request",
         recipientType: "provider",
         providerId: toProfileId,
+        metadata: { connection_id: newConnection.id },
       });
 
       // Generate one-click claim URLs with signed tokens
@@ -870,6 +871,7 @@ async function handleGuestConnection({
           emailType: "first_lead_celebration",
           recipientType: "provider",
           providerId: toProfileId,
+          metadata: { connection_id: newConnection.id },
         });
 
         let celebrationViewUrl: string;
@@ -1894,6 +1896,7 @@ export async function POST(request: Request) {
           emailType: "connection_request",
           recipientType: "provider",
           providerId: toProfileId,
+          metadata: { connection_id: newConnection.id },
         });
 
         // Generate one-click claim URLs with signed tokens
@@ -1954,6 +1957,7 @@ export async function POST(request: Request) {
             emailType: "first_lead_celebration",
             recipientType: "provider",
             providerId: toProfileId,
+            metadata: { connection_id: newConnection.id },
           });
 
           let celebrationViewUrl: string;
