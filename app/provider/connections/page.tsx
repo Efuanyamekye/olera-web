@@ -106,6 +106,8 @@ function LeadDetailInlineView({
   onContinueInInbox,
   onArchiveClick,
   onVerifyClick,
+  onRestore,
+  onDelete,
 }: {
   lead: LeadDetail;
   isVerified: boolean;
@@ -115,18 +117,45 @@ function LeadDetailInlineView({
   onContinueInInbox?: (leadId: string) => void;
   onArchiveClick?: () => void;
   onVerifyClick?: () => void;
+  onRestore?: (leadId: string) => void;
+  onDelete?: (leadId: string) => void;
 }) {
-  const router = useRouter();
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [restored, setRestored] = useState(false);
 
   const displayName = isVerified ? lead.name : formatRedactedName(lead.name);
 
-  const copyToClipboard = (text: string, field: "phone" | "email") => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-    if (field === "phone") onPhoneClick?.(lead.id);
-    if (field === "email") onEmailClick?.(lead.id);
-    setTimeout(() => setCopiedField(null), 2000);
+  const copyToClipboard = async (text: string, field: "phone" | "email") => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      if (field === "phone") onPhoneClick?.(lead.id);
+      if (field === "email") onEmailClick?.(lead.id);
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error);
+      // Still set the field to show feedback, but copy failed
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 1000);
+    }
+  };
+
+  const handleRestore = () => {
+    if (!lead) return;
+    setRestored(true);
+    onRestore?.(lead.id);
+    setTimeout(() => {
+      setRestored(false);
+      setShowDeleteConfirm(false);
+      onClose();
+    }, 1500);
+  };
+
+  const handleDelete = () => {
+    if (!lead) return;
+    onDelete?.(lead.id);
+    onClose();
   };
 
   // Status tag
@@ -171,6 +200,7 @@ function LeadDetailInlineView({
           <button
             onClick={onClose}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
+            aria-label="Close lead details"
           >
             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -303,6 +333,12 @@ function LeadDetailInlineView({
                 </span>
               </p>
             )}
+            {lead.careNeeds && lead.careNeeds.length > 0 && (
+              <p className="text-base text-gray-700">
+                <span className="text-gray-500">Help with:</span>{" "}
+                <span className="font-medium text-gray-900">{lead.careNeeds.join(", ")}</span>
+              </p>
+            )}
             {lead.careRecipient && (
               <p className="text-base text-gray-700">
                 <span className="text-gray-500">Who needs care:</span>{" "}
@@ -311,10 +347,51 @@ function LeadDetailInlineView({
                 </span>
               </p>
             )}
+            {(() => {
+              const parts: string[] = [];
+              if (lead.contactPreference) {
+                const contactMap: Record<string, string> = {
+                  phone: "Prefers calls",
+                  email: "Prefers email",
+                  either: "Call or email",
+                };
+                parts.push(contactMap[lead.contactPreference] || lead.contactPreference);
+              }
+              if (lead.schedulePreference) {
+                const scheduleMap: Record<string, string> = {
+                  mornings: "Mornings",
+                  afternoons: "Afternoons",
+                  evenings: "Evenings",
+                  overnight: "Overnight",
+                  full_time: "Full-time / Live-in",
+                  flexible: "Flexible",
+                };
+                parts.push(scheduleMap[lead.schedulePreference] || lead.schedulePreference);
+              }
+              const preferencesDisplay = parts.length > 0 ? parts.join(" · ") : null;
+              return preferencesDisplay ? (
+                <p className="text-base text-gray-700">
+                  <span className="text-gray-500">Preferences:</span>{" "}
+                  <span className="font-medium text-gray-900">{preferencesDisplay}</span>
+                </p>
+              ) : null;
+            })()}
             {lead.paymentMethods && lead.paymentMethods.length > 0 && (
               <p className="text-base text-gray-700">
                 <span className="text-gray-500">Can pay via:</span>{" "}
                 <span className="font-medium text-gray-900">{lead.paymentMethods.join(", ")}</span>
+              </p>
+            )}
+            {lead.profileCompleteness !== undefined && (
+              <p className="text-base text-gray-700">
+                <span className="text-gray-500">Profile:</span>{" "}
+                <span className="font-medium text-gray-900">{lead.profileCompleteness}% complete</span>
+              </p>
+            )}
+            {lead.memberSince && (
+              <p className="text-base text-gray-700">
+                <span className="text-gray-500">Member since:</span>{" "}
+                <span className="font-medium text-gray-900">{lead.memberSince}</span>
               </p>
             )}
           </div>
@@ -323,7 +400,74 @@ function LeadDetailInlineView({
 
       {/* Footer actions */}
       <div className="shrink-0 border-t border-gray-100 px-6 pt-4 pb-4 bg-white">
-        {isVerified ? (
+        {lead.status === "archived" ? (
+          // Archived footer - Restore/Delete
+          restored ? (
+            <div className="flex flex-col items-center justify-center gap-3 py-2">
+              <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+              </div>
+              <p className="text-[15px] font-semibold text-gray-900">Lead restored</p>
+              <p className="text-[13px] text-gray-500">Moved back to active leads</p>
+            </div>
+          ) : showDeleteConfirm ? (
+            <div className="rounded-2xl border border-red-200 bg-red-50/50 px-5 py-5">
+              <div className="flex items-start gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[15px] font-semibold text-gray-900">Delete permanently?</p>
+                  <p className="text-[13px] text-gray-500 mt-1 leading-relaxed">This will permanently remove this lead and any message history. This action can&apos;t be undone.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  className="flex-1 inline-flex items-center justify-center px-4 py-3 rounded-xl border border-gray-200 bg-white text-[14px] font-semibold text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-all duration-150"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="flex-1 inline-flex items-center justify-center px-4 py-3 rounded-xl bg-red-600 text-[14px] font-semibold text-white hover:bg-red-700 transition-colors"
+                >
+                  Yes, Delete Forever
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirm(true)}
+                className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all duration-150"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+                Delete
+              </button>
+              <button
+                type="button"
+                onClick={handleRestore}
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary-600 text-sm font-semibold text-white hover:bg-primary-700 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182" />
+                </svg>
+                Restore
+              </button>
+            </div>
+          )
+        ) : isVerified ? (
+          // Active footer - Message/Pass on lead
           <div className="flex flex-col items-center gap-4">
             <button
               type="button"
@@ -342,17 +486,16 @@ function LeadDetailInlineView({
                 return 'Message Care Seeker';
               })()}
             </button>
-            {lead.status !== "archived" && (
-              <button
-                type="button"
-                onClick={onArchiveClick}
-                className="text-[13px] text-gray-500 hover:text-gray-900 hover:underline transition-colors py-3 px-4"
-              >
-                Pass on lead
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={onArchiveClick}
+              className="text-[13px] text-gray-500 hover:text-gray-900 hover:underline transition-colors py-3 px-4"
+            >
+              Pass on lead
+            </button>
           </div>
         ) : (
+          // Not verified footer
           <button
             type="button"
             onClick={onVerifyClick}
@@ -2206,6 +2349,8 @@ export default function ProviderLeadsPage() {
                 }}
                 onArchiveClick={() => setLeadIdToArchive(selectedLead.id)}
                 onVerifyClick={handleVerifyFromDrawer}
+                onRestore={handleRestoreLead}
+                onDelete={handleDeleteLead}
               />
             </div>
           )}
