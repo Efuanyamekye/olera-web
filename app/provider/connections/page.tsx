@@ -2151,6 +2151,19 @@ export default function ProviderLeadsPage() {
     }
   }, [currentPage, totalPages]);
 
+  // When a lead is selected and page size changes, ensure the selected lead is on current page
+  useEffect(() => {
+    if (selectedLead && filteredLeads.length > 0) {
+      const leadIndex = filteredLeads.findIndex(l => l.id === selectedLead.id);
+      if (leadIndex !== -1) {
+        const correctPage = Math.floor(leadIndex / activePageSize) + 1;
+        if (correctPage !== currentPage && correctPage <= totalPages) {
+          setCurrentPage(correctPage);
+        }
+      }
+    }
+  }, [selectedLead, activePageSize, filteredLeads, currentPage, totalPages]);
+
   const paginatedLeads = useMemo(() => {
     const startIndex = (currentPage - 1) * activePageSize;
     return filteredLeads.slice(startIndex, startIndex + activePageSize);
