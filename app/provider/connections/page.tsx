@@ -255,7 +255,7 @@ function LeadDetailInlineView({
           )}
           {lead.paymentMethods && lead.paymentMethods.length > 0 && (
             <>
-              <div className="border-t border-gray-200 -mx-6" />
+              <div className="border-t border-gray-200 mt-3 pt-2" />
               <div className="flex items-center gap-2.5 text-gray-700">
                 <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
@@ -958,7 +958,7 @@ function LeadDetailDrawer({
         )}
         {lead.paymentMethods && lead.paymentMethods.length > 0 && (
           <>
-            <div className="border-t border-gray-200 -mx-6" />
+            <div className="border-t border-gray-200 mt-3 pt-2" />
             <div className="flex items-center gap-2.5 text-gray-700">
               <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
