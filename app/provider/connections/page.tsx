@@ -352,26 +352,32 @@ function LeadDetailInlineView({
           <div className="space-y-1.5">
             <h4 className="text-base font-display font-bold text-gray-900">Details</h4>
 
-            {!showFullDetails ? (
-              <>
-                <p className="text-[15px] text-gray-900 leading-relaxed">
-                  {getTruncatedText(lead.aboutSituation, 80)}
-                </p>
-                {lead.aboutSituation.length > 80 && (
-                  <button
-                    onClick={() => setShowFullDetails(true)}
-                    className="flex items-center gap-1.5 text-[15px] font-medium text-teal-700 hover:text-teal-800 transition-colors"
-                    aria-expanded="false"
-                    aria-label="Read full details"
-                  >
-                    Read more
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                    </svg>
-                  </button>
-                )}
-              </>
-            ) : (
+            {/* Show "Read more" if text is long OR if there are additional details to show */}
+            {(() => {
+              const hasMoreDetails = lead.careRecipient || lead.contactPreference || lead.schedulePreference || (lead.careNeeds && lead.careNeeds.length > 0) || lead.memberSince;
+              const hasLongText = lead.aboutSituation.length > 80;
+              const showExpandButton = hasLongText || hasMoreDetails;
+
+              return !showFullDetails ? (
+                <>
+                  <p className="text-[15px] text-gray-900 leading-relaxed">
+                    {getTruncatedText(lead.aboutSituation, 80)}
+                  </p>
+                  {showExpandButton && (
+                    <button
+                      onClick={() => setShowFullDetails(true)}
+                      className="flex items-center gap-1.5 text-[15px] font-medium text-teal-700 hover:text-teal-800 transition-colors"
+                      aria-expanded="false"
+                      aria-label="Read full details"
+                    >
+                      Read more
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                      </svg>
+                    </button>
+                  )}
+                </>
+              ) : (
               <div className="space-y-4">
                 <p className="text-[15px] text-gray-900 leading-relaxed">
                   {lead.aboutSituation}
@@ -442,7 +448,8 @@ function LeadDetailInlineView({
                   )}
                 </div>
               </div>
-            )}
+              );
+            })()}
           </div>
         )}
       </div>
