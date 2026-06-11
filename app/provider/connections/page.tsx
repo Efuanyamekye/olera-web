@@ -15,6 +15,7 @@ import { formatRedactedName } from "@/lib/utils/pii-redaction";
 import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
 import VerifyToUnlockPrompt from "@/components/provider/VerifyToUnlockPrompt";
 import Pagination from "@/components/ui/Pagination";
+import { Tooltip } from "@/components/ui/Tooltip";
 import ArchiveLeadModal from "@/components/provider/ArchiveLeadModal";
 import {
   calculateLeadQualityScore,
@@ -267,10 +268,9 @@ function LeadDetailInlineView({
 
           return (
             <div
-              className={`group relative rounded-xl px-3.5 py-2.5 flex items-center gap-3 ${colors?.bg || 'bg-gray-50'} border ${colors?.border || 'border-gray-200'}`}
-              title={explanation}
+              className={`relative rounded-xl px-3.5 py-2.5 flex items-center gap-3 ${colors?.bg || 'bg-gray-50'} border ${colors?.border || 'border-gray-200'}`}
             >
-              {/* Icon */}
+              {/* Tier Icon */}
               <div className={`shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${colors?.iconBg || 'bg-gray-100'}`}>
                 {iconType?.type === "flame" ? (
                   <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
@@ -301,12 +301,20 @@ function LeadDetailInlineView({
                 </p>
               </div>
 
-              {/* Info icon for tooltip hint */}
-              <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
-                </svg>
-              </div>
+              {/* Info tooltip */}
+              {explanation && (
+                <Tooltip content={explanation} position="bottom">
+                  <button
+                    type="button"
+                    className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-white/60 transition-colors"
+                    aria-label="What does this mean?"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                    </svg>
+                  </button>
+                </Tooltip>
+              )}
             </div>
           );
         })()}
@@ -1027,10 +1035,9 @@ function LeadDetailDrawer({
 
         return (
           <div
-            className={`rounded-xl px-3.5 py-3 flex items-center gap-3 ${colors?.bg || 'bg-gray-50'} border ${colors?.border || 'border-gray-200'}`}
-            title={explanation}
+            className={`relative rounded-xl px-3.5 py-3 flex items-center gap-3 ${colors?.bg || 'bg-gray-50'} border ${colors?.border || 'border-gray-200'}`}
           >
-            {/* Icon */}
+            {/* Tier Icon */}
             <div className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${colors?.iconBg || 'bg-gray-100'}`}>
               {iconType?.type === "flame" ? (
                 <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
@@ -1060,6 +1067,21 @@ function LeadDetailDrawer({
                 {lead.careType?.[0] || "Care"} · {lead.location || "Location unknown"}
               </p>
             </div>
+
+            {/* Info tooltip */}
+            {explanation && (
+              <Tooltip content={explanation} position="bottom">
+                <button
+                  type="button"
+                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-white/60 active:bg-white/80 transition-colors"
+                  aria-label="What does this mean?"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                  </svg>
+                </button>
+              </Tooltip>
+            )}
           </div>
         );
       })()}
