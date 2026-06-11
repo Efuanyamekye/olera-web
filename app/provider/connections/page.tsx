@@ -125,7 +125,20 @@ function LeadDetailInlineView({
   const [restored, setRestored] = useState(false);
   const [showFullDetails, setShowFullDetails] = useState(false);
 
+  // Reset collapsed state when lead changes
+  useEffect(() => {
+    setShowFullDetails(false);
+  }, [lead.id]);
+
   const displayName = isVerified ? lead.name : formatRedactedName(lead.name);
+
+  // Smart text truncation that respects word boundaries
+  const getTruncatedText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    const truncated = text.substring(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(' ');
+    return lastSpace > 0 ? truncated.substring(0, lastSpace) + '...' : truncated + '...';
+  };
 
   const copyToClipboard = async (text: string, field: "phone" | "email") => {
     try {
@@ -179,7 +192,7 @@ function LeadDetailInlineView({
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 max-h-[calc(100vh-3rem)] flex flex-col">
+    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 max-h-[calc(100vh-4rem)] flex flex-col">
       {/* Header */}
       <div className="shrink-0 px-6 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
@@ -240,6 +253,17 @@ function LeadDetailInlineView({
                 lead.timeline
               }
             </p>
+          )}
+          {lead.paymentMethods && lead.paymentMethods.length > 0 && (
+            <>
+              <div className="border-t border-gray-200 -mx-6" />
+              <div className="flex items-center gap-2.5 text-gray-700">
+                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
+                </svg>
+                <p className="text-[15px]">Can pay with {lead.paymentMethods.join(", ")}</p>
+              </div>
+            </>
           )}
         </div>
 
@@ -324,12 +348,14 @@ function LeadDetailInlineView({
             {!showFullDetails ? (
               <>
                 <p className="text-[15px] text-gray-900 leading-relaxed">
-                  &ldquo;{lead.aboutSituation.length > 80 ? lead.aboutSituation.substring(0, 80) + "..." : lead.aboutSituation}&rdquo;
+                  &ldquo;{getTruncatedText(lead.aboutSituation, 80)}&rdquo;
                 </p>
                 {lead.aboutSituation.length > 80 && (
                   <button
                     onClick={() => setShowFullDetails(true)}
                     className="flex items-center gap-1.5 text-[15px] font-semibold text-teal-700 hover:text-teal-800 transition-colors"
+                    aria-expanded="false"
+                    aria-label="Read full details"
                   >
                     Read more
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -346,6 +372,8 @@ function LeadDetailInlineView({
                 <button
                   onClick={() => setShowFullDetails(false)}
                   className="flex items-center gap-1.5 text-[15px] font-semibold text-teal-700 hover:text-teal-800 transition-colors"
+                  aria-expanded="true"
+                  aria-label="Show less details"
                 >
                   Show less
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
