@@ -178,9 +178,9 @@ function LeadDetailInlineView({
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden sticky top-6 max-h-[calc(100vh-8rem)] flex flex-col">
+    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-3rem)] flex flex-col">
       {/* Header */}
-      <div className="shrink-0 px-6 py-4 border-b border-gray-100">
+      <div className="shrink-0 px-6 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
           <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
             {lead.initials}
@@ -399,7 +399,7 @@ function LeadDetailInlineView({
       </div>
 
       {/* Footer actions */}
-      <div className="shrink-0 border-t border-gray-100 px-6 pt-4 pb-4 bg-white">
+      <div className="shrink-0 border-t border-gray-100 px-6 pt-4 pb-4 bg-white z-10">
         {lead.status === "archived" ? (
           // Archived footer - Restore/Delete
           restored ? (
@@ -1054,7 +1054,7 @@ function LeadDetailDrawer({
           </div>
 
           {/* Mobile sticky header */}
-          <div className="shrink-0 px-5 pb-4 border-b border-gray-100">
+          <div className="shrink-0 px-5 pb-4 border-b border-gray-100 bg-white">
             {StickyHeader}
           </div>
 
@@ -1064,7 +1064,7 @@ function LeadDetailDrawer({
           </div>
 
           {/* Mobile sticky footer */}
-          <div className="shrink-0 border-t border-gray-100 px-5 pt-4 pb-4 bg-white">
+          <div className="shrink-0 border-t border-gray-100 px-5 pt-4 pb-4 bg-white z-10">
             {StickyFooter}
           </div>
         </div>
@@ -1074,7 +1074,7 @@ function LeadDetailDrawer({
         {/* ═══════════════════════════════════════════════════════════════ */}
         <div className="hidden lg:flex lg:flex-col lg:h-full">
           {/* Desktop sticky header */}
-          <div className="shrink-0 px-6 py-5 border-b border-gray-100">
+          <div className="shrink-0 px-6 py-5 border-b border-gray-100 bg-white">
             {StickyHeader}
           </div>
 
@@ -1084,7 +1084,7 @@ function LeadDetailDrawer({
           </div>
 
           {/* Desktop sticky footer */}
-          <div className="shrink-0 border-t border-gray-100 px-6 pt-4 pb-5 bg-white">
+          <div className="shrink-0 border-t border-gray-100 px-6 pt-4 pb-5 bg-white z-10">
             {StickyFooter}
           </div>
         </div>
