@@ -3536,7 +3536,7 @@ export function providerFollowupDay1NotViewedEmail(opts: FollowupEmailOpts): str
 /**
  * Day 1 Follow-up: Scenario B - Provider HAS viewed the lead
  * Subject: "Still deciding on [Name]?"
- * Pushes for binary decision: MESSAGE or PASS ON.
+ * Pushes for binary decision: MESSAGE or DECLINE.
  *
  * Note: viewedCount can be passed via metadata to adjust copy for partial viewing.
  * If not provided, assumes all leads were viewed.
@@ -3619,9 +3619,9 @@ export function providerFollowupDay1ViewedEmail(
     ? "Message families →"
     : (hasName ? `Message ${escapeHtml(safeFamilyName)} →` : "Message the family →");
 
-  const passButtonText = isMultiple
-    ? "Pass on these leads →"
-    : "Pass on this lead →";
+  const declineButtonText = isMultiple
+    ? "Decline leads →"
+    : "Decline lead →";
 
   return layout(`
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">${greeting}</p>
@@ -3629,7 +3629,7 @@ export function providerFollowupDay1ViewedEmail(
     <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
       <tr>
         <td style="padding-right:12px;">${button(messageButtonText, opts.viewUrl)}</td>
-        <td>${button(passButtonText, opts.viewUrl)}</td>
+        <td>${button(declineButtonText, opts.viewUrl)}</td>
       </tr>
     </table>
     ${loganLightSignature()}
@@ -3707,7 +3707,7 @@ export function providerFollowupDay3Email(opts: FollowupEmailOpts): string {
         ${line2}
       </p>
       <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-        Whenever you have a moment: if it feels like a fit, send ${pronouns.object} a message. And if it's not, a quick pass lets ${pronouns.object} know, so ${pronouns.pronounLower} can keep looking without wondering. Either one is a real help to ${pronouns.object}.
+        Whenever you have a moment: if it feels like a fit, send ${pronouns.object} a message. And if it's not, a quick decline lets ${pronouns.object} know, so ${pronouns.pronounLower} can keep looking without wondering. Either one is a real help to ${pronouns.object}.
       </p>`;
   }
 
@@ -3716,9 +3716,9 @@ export function providerFollowupDay3Email(opts: FollowupEmailOpts): string {
     ? "Message families →"
     : (hasName ? `Message ${escapeHtml(safeFamilyName)} →` : "Message the family →");
 
-  const passButtonText = isMultiple
-    ? "Pass on these leads →"
-    : "Pass on this lead →";
+  const declineButtonText = isMultiple
+    ? "Decline leads →"
+    : "Decline lead →";
 
   return layout(`
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">${greeting}</p>
@@ -3726,7 +3726,7 @@ export function providerFollowupDay3Email(opts: FollowupEmailOpts): string {
     <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
       <tr>
         <td style="padding-right:12px;">${button(messageButtonText, opts.viewUrl)}</td>
-        <td>${button(passButtonText, opts.viewUrl)}</td>
+        <td>${button(declineButtonText, opts.viewUrl)}</td>
       </tr>
     </table>
     ${loganLightSignature()}
@@ -3756,7 +3756,7 @@ export function providerFollowupDay6Email(opts: FollowupEmailOpts): string {
     : `${pronouns.pronounLower}'s`;
 
   // Build preheader - dynamic pronoun
-  const preheader = `Message ${pronouns.object} if it's a fit, or pass if it's not.`;
+  const preheader = `Message ${pronouns.object} if it's a fit, or decline if it's not.`;
 
   // Build greeting
   const greeting = `Hi ${escapeHtml(opts.providerName || "there")},`;
@@ -3785,7 +3785,7 @@ export function providerFollowupDay6Email(opts: FollowupEmailOpts): string {
         They reached out about a week ago and haven't heard back yet. If you've been meaning to get to it, there's still time. A quick message from you could be just what they're hoping for.
       </p>
       <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
-        And if it's not a fit, no problem at all. Just pass on the leads and let us know why — we'll share that with them so they can keep looking.
+        And if it's not a fit, no problem at all. Just decline the leads and let us know why — we'll share that with them so they can keep looking.
       </p>
       <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
         Either way, thanks for taking a look.
@@ -3804,7 +3804,7 @@ export function providerFollowupDay6Email(opts: FollowupEmailOpts): string {
         ${pronouns.pronoun} reached out about a week ago, looking for ${careTypeRef}${recipientRef}${cityRef}, and hasn't heard back yet. If you've been meaning to get to it, there's still time. A quick message from you could be just what ${pronounContractionLower} hoping for.
       </p>
       <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.5;">
-        And if it's not a fit, no problem at all. Just pass on the lead and let us know why — we'll share that with ${escapeHtml(familyRef)} so ${pronouns.pronounLower} can keep looking.
+        And if it's not a fit, no problem at all. Just decline the lead and let us know why — we'll share that with ${escapeHtml(familyRef)} so ${pronouns.pronounLower} can keep looking.
       </p>
       <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
         Either way, thanks for taking a look.
@@ -3816,9 +3816,9 @@ export function providerFollowupDay6Email(opts: FollowupEmailOpts): string {
     ? "Message families →"
     : (hasName ? `Message ${escapeHtml(safeFamilyName)} →` : "Message the family →");
 
-  const passButtonText = isMultiple
-    ? "Pass on these leads →"
-    : "Pass on this lead →";
+  const declineButtonText = isMultiple
+    ? "Decline leads →"
+    : "Decline lead →";
 
   return layout(`
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">${greeting}</p>
@@ -3826,7 +3826,7 @@ export function providerFollowupDay6Email(opts: FollowupEmailOpts): string {
     <table cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
       <tr>
         <td style="padding-right:12px;">${button(messageButtonText, opts.viewUrl)}</td>
-        <td>${button(passButtonText, opts.viewUrl)}</td>
+        <td>${button(declineButtonText, opts.viewUrl)}</td>
       </tr>
     </table>
     ${loganHeavySignature()}

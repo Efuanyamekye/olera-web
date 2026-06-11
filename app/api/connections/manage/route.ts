@@ -236,7 +236,7 @@ export async function POST(request: Request) {
         // only allows pending/accepted/declined/expired, not archived).
 
         // Differentiate between lead archiving (from /provider/connections) and inbox archiving:
-        // - If archiveReason is provided (non-empty) = lead archiving (pass on lead) → set lead_archived
+        // - If archiveReason is provided (non-empty) = lead archiving (decline lead) → set lead_archived
         // - If no archiveReason or source="inbox" = inbox archiving (hide conversation) → set archived
         const isLeadArchive = archiveReason && archiveReason.trim().length > 0;
 
