@@ -194,7 +194,7 @@ function LeadDetailInlineView({
   return (
     <div className="bg-white rounded-xl border border-gray-200 sticky top-6 max-h-[calc(100vh-10rem)] flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 px-6 py-4 border-b border-gray-100 bg-white">
+      <div className="shrink-0 px-4 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
           <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
             {lead.initials}
@@ -219,7 +219,7 @@ function LeadDetailInlineView({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-6 pb-10 space-y-6">
+      <div className="flex-1 min-h-0 overflow-y-auto px-5 pt-5 pb-5 space-y-6">
         {/* Archived banner */}
         {lead.status === "archived" && lead.archivedDate && (
           <div className="flex items-start gap-3.5 rounded-2xl bg-gray-50 border border-gray-100 px-5 py-4">
@@ -238,7 +238,7 @@ function LeadDetailInlineView({
         )}
 
         {/* Summary Card */}
-        <div className="rounded-2xl bg-stone-50 px-6 py-4 space-y-1">
+        <div className="rounded-2xl bg-stone-50 px-4 py-4 space-y-1.5">
           <p className="text-[15px] font-semibold text-gray-900">
             Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
           </p>
@@ -273,7 +273,7 @@ function LeadDetailInlineView({
               <h4 className="text-base font-display font-bold text-gray-900 mb-1.5">Contact</h4>
               <div className="space-y-1.5">
                 {lead.phone && (
-                  <div className="group flex items-center gap-2">
+                  <div className="group flex items-center gap-1.5">
                     <svg className="w-4 h-4 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                     </svg>
@@ -300,7 +300,7 @@ function LeadDetailInlineView({
                   </div>
                 )}
                 {lead.email && (
-                  <div className="group flex items-center gap-2">
+                  <div className="group flex items-center gap-1.5">
                     <svg className="w-4 h-4 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                     </svg>
@@ -347,7 +347,7 @@ function LeadDetailInlineView({
             {!showFullDetails ? (
               <>
                 <p className="text-[15px] text-gray-900 leading-relaxed">
-                  &ldquo;{getTruncatedText(lead.aboutSituation, 80)}&rdquo;
+                  {getTruncatedText(lead.aboutSituation, 80)}
                 </p>
                 {lead.aboutSituation.length > 80 && (
                   <button
@@ -366,7 +366,7 @@ function LeadDetailInlineView({
             ) : (
               <div className="space-y-4">
                 <p className="text-[15px] text-gray-900 leading-relaxed">
-                  &ldquo;{lead.aboutSituation}&rdquo;
+                  {lead.aboutSituation}
                 </p>
                 <button
                   onClick={() => setShowFullDetails(false)}
@@ -731,7 +731,7 @@ function LeadDetailDrawer({
         <p className="text-lg font-semibold text-gray-900 mb-2.5">Contact information</p>
         <div className="space-y-1.5">
           {lead.phone && (
-            <div className="group flex items-center gap-2">
+            <div className="group flex items-center gap-1.5">
               {/* Phone icon */}
               <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
@@ -762,7 +762,7 @@ function LeadDetailDrawer({
             </div>
           )}
           {lead.email && (
-            <div className="group flex items-center gap-2">
+            <div className="group flex items-center gap-1.5">
               {/* Email icon */}
               <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
@@ -814,7 +814,7 @@ function LeadDetailDrawer({
     <div>
       <p className="text-lg font-semibold text-gray-900 mb-2.5">About their situation</p>
       <p className="text-base font-medium text-gray-900 leading-relaxed">
-        &ldquo;{lead.aboutSituation}&rdquo;
+        {lead.aboutSituation}
       </p>
     </div>
   ) : null;
@@ -1050,7 +1050,7 @@ function LeadDetailDrawer({
           {!showFullDetails ? (
             <>
               <p className="text-[15px] text-gray-900 leading-relaxed">
-                &ldquo;{getTruncatedText(lead.aboutSituation, 80)}&rdquo;
+                {getTruncatedText(lead.aboutSituation, 80)}
               </p>
               {lead.aboutSituation.length > 80 && (
                 <button
@@ -1069,7 +1069,7 @@ function LeadDetailDrawer({
           ) : (
             <div className="space-y-4">
               <p className="text-[15px] text-gray-900 leading-relaxed">
-                &ldquo;{lead.aboutSituation}&rdquo;
+                {lead.aboutSituation}
               </p>
               <button
                 onClick={() => setShowFullDetails(false)}
@@ -1276,12 +1276,12 @@ function LeadDetailDrawer({
           </div>
 
           {/* Mobile sticky header */}
-          <div className="shrink-0 px-5 pb-4 border-b border-gray-100 bg-white">
+          <div className="shrink-0 px-4 py-4 border-b border-gray-100 bg-white">
             {StickyHeader}
           </div>
 
           {/* Mobile scrollable content */}
-          <div className="flex-1 min-h-0 overflow-y-auto px-5 py-5">
+          <div className="flex-1 min-h-0 overflow-y-auto px-5 pt-5 pb-5">
             {ScrollableContent}
           </div>
 
@@ -1296,12 +1296,12 @@ function LeadDetailDrawer({
         {/* ═══════════════════════════════════════════════════════════════ */}
         <div className="hidden lg:flex lg:flex-col lg:h-full">
           {/* Desktop sticky header */}
-          <div className="shrink-0 px-6 py-5 border-b border-gray-100 bg-white">
+          <div className="shrink-0 px-4 py-4 border-b border-gray-100 bg-white">
             {StickyHeader}
           </div>
 
           {/* Desktop scrollable content */}
-          <div className="flex-1 min-h-0 overflow-y-auto px-6 py-6">
+          <div className="flex-1 min-h-0 overflow-y-auto px-5 pt-5 pb-5">
             {ScrollableContent}
           </div>
 
