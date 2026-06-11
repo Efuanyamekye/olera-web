@@ -249,7 +249,7 @@ function ProviderPassedCard({
     : `They've reviewed your inquiry and won't be able to help at this time.`;
 
   return (
-    <div className="flex justify-center">
+    <div className={`flex ${isProviderView ? 'justify-end' : 'justify-start'}`}>
       <div className="max-w-[420px] w-full">
         <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-200">
           {/* Subtle gray header - minimal color */}
