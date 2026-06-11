@@ -72,7 +72,7 @@ type ContactMethod = "phone" | "email" | "either";
 
 const FILTER_TABS: { id: StatusFilter; label: string }[] = [
   { id: "active", label: "Active" },
-  { id: "archived", label: "Archived" },
+  { id: "archived", label: "Declined" },
 ];
 
 const PAGE_SIZE = 15;
@@ -2505,17 +2505,17 @@ export default function ProviderLeadsPage() {
         <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
           <Image
             src={activeFilter === "archived" ? "/Declined.png" : "/Pending.png"}
-            alt={activeFilter === "archived" ? "No archived leads" : "No leads yet"}
+            alt={activeFilter === "archived" ? "No declined leads" : "No leads yet"}
             width={180}
             height={180}
             className="mb-6"
           />
           <h3 className="text-[17px] font-display font-bold text-gray-900 mb-2">
-            {activeFilter === "archived" ? "No archived leads" : "No leads yet"}
+            {activeFilter === "archived" ? "No declined leads" : "No leads yet"}
           </h3>
           <p className="text-[15px] text-gray-500 max-w-sm leading-relaxed">
             {activeFilter === "archived"
-              ? "Leads you archive will appear here."
+              ? "Leads you decline will appear here."
               : "When families find your profile and reach out, they'll appear here."}
           </p>
           {activeFilter !== "archived" && (
