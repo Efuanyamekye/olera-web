@@ -595,7 +595,6 @@ function LeadDetailDrawer({
   onPhoneClick,
   onEmailClick,
   onContinueInInbox,
-  onMarkAsReplied,
   onArchiveClick,
   isVerified = true,
   onVerifyClick,
@@ -608,7 +607,6 @@ function LeadDetailDrawer({
   onPhoneClick?: (leadId: string) => void;
   onEmailClick?: (leadId: string) => void;
   onContinueInInbox?: (leadId: string) => void;
-  onMarkAsReplied?: (leadId: string) => void;
   onArchiveClick?: (leadId: string) => void;
   isVerified?: boolean;
   onVerifyClick?: () => void;
@@ -1498,18 +1496,15 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
   const contactPreference = rawContactPref ? contactPrefMap[rawContactPref] : undefined;
 
   // Determine status - exclude automated replies, only count manual provider responses
-  // Also check for manually marked as replied via drawer action
   const hasProviderReply = thread.some(
     (msg) => msg.from_profile_id === providerProfileId && !msg.is_auto_reply
   );
-  const markedReplied = meta?.marked_replied === true;
   let status: LeadStatus = "new";
   if (isArchived) {
     status = "archived";
-  } else if (hasProviderReply || markedReplied) {
+  } else if (hasProviderReply) {
     status = "replied";
   }
-  // If no manual provider reply and not manually marked, status stays "new"
 
   // Build activity timeline
   const activity: ActivityEvent[] = [
@@ -1592,7 +1587,6 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
 
   // Map archive reason code to display label
   const archiveReasonLabel = archiveReason ? ({
-    already_connected: "Already connected",
     not_a_fit: "Not a good fit",
     not_accepting_clients: "Not accepting new clients",
     unable_to_reach: "Unable to reach",
@@ -1602,7 +1596,7 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
   // Compute what the status would be if not archived (for restore)
   // This is based on reply state, not stored status
   let preArchiveStatus: LeadStatus = "new";
-  if (hasProviderReply || markedReplied) {
+  if (hasProviderReply) {
     preArchiveStatus = "replied";
   }
 
@@ -1908,50 +1902,8 @@ export default function ProviderLeadsPage() {
     setSelectedLeadId(null);
   }, []);
 
-  const handleMarkAsReplied = useCallback(async (leadId: string) => {
-    // Update local state immediately
-    setLeads((prev) =>
-      prev.map((l) =>
-        l.id === leadId ? { ...l, status: "replied" as LeadStatus } : l
-      )
-    );
-
-    // Persist to backend (update connection metadata)
-    if (isSupabaseConfigured()) {
-      try {
-        const supabase = createClient();
-        // Find the connection ID for this lead
-        const lead = leads.find((l) => l.id === leadId);
-        const connectionId = lead?.connectionId || leadId;
-
-        // Get current connection to preserve metadata
-        const { data: conn } = await supabase
-          .from("connections")
-          .select("metadata")
-          .eq("id", connectionId)
-          .single();
-
-        if (conn) {
-          const existingMeta = (conn.metadata || {}) as Record<string, unknown>;
-          await supabase
-            .from("connections")
-            .update({
-              metadata: {
-                ...existingMeta,
-                marked_replied: true,
-                marked_replied_at: new Date().toISOString(),
-              },
-            })
-            .eq("id", connectionId);
-        }
-      } catch (err) {
-        console.error("[markAsReplied] Failed:", err);
-      }
-    }
-  }, [leads]);
   const handleArchiveLead = useCallback(async (leadId: string, reason: string, message?: string) => {
     const reasonLabel = {
-      already_connected: "Already connected",
       not_a_fit: "Not a good fit",
       not_accepting_clients: "Not accepting new clients",
       unable_to_reach: "Unable to reach",
@@ -1966,12 +1918,6 @@ export default function ProviderLeadsPage() {
     }
     const connectionId = lead.connectionId || leadId;
     const previousStatus = lead.status || "new";
-
-    // If "already_connected", auto-mark as replied before archiving
-    // (they've communicated outside Olera, so it's effectively replied)
-    if (reason === "already_connected" && lead?.status === "new") {
-      await handleMarkAsReplied(leadId);
-    }
 
     // Optimistic UI update
     setLeads((prev) =>
@@ -2024,7 +1970,7 @@ export default function ProviderLeadsPage() {
         )
       );
     }
-  }, [leads, handleMarkAsReplied]);
+  }, [leads]);
 
   const handleArchiveFromModal = useCallback(async (reason: string, message: string) => {
     if (!leadIdToArchive) return;
@@ -2662,7 +2608,6 @@ export default function ProviderLeadsPage() {
         onClose={closeDrawer}
         onRestore={handleRestoreLead}
         onDelete={handleDeleteLead}
-        onMarkAsReplied={handleMarkAsReplied}
         onArchiveClick={setLeadIdToArchive}
         onPhoneClick={(leadId) => {
           if (!providerProfile) return;

@@ -202,9 +202,7 @@ export async function GET(request: NextRequest) {
           m.from_profile_id !== "system" &&
           !!m.text?.trim()
       );
-      const markedReplied = meta.marked_replied === true;
-      const alreadyConnected = meta.archive_reason === "already_connected";
-      const providerResponded = hasThreadResponse || markedReplied || alreadyConnected;
+      const providerResponded = hasThreadResponse;
       if (providerResponded) {
         counts.skipped++;
         counts.skipReasons.responded++;

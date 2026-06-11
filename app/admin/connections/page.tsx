@@ -6,7 +6,7 @@ import PulseHeader from "@/components/admin/PulseHeader";
 import { resolveRange, type DateRangeValue } from "@/components/admin/DateRangePopover";
 import ConnectionRow, { type ConnectionRowData } from "@/components/admin/ConnectionRow";
 
-// Per-provider engagement data (does NOT include "messaged", "markedReplied", "alreadyConnected" since those are per-connection)
+// Per-provider engagement data (messaged/providerResponded is per-connection via c.responded)
 type Engagement = { email_clicked: boolean; lead_opened: boolean; contact_revealed: boolean; phone_copied: boolean; email_copied: boolean; phone_clicked: boolean; email_link_clicked: boolean; continue_in_inbox: boolean };
 
 // Direction type for inbound/outbound toggle

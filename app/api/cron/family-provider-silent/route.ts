@@ -262,7 +262,7 @@ export async function GET(request: NextRequest) {
 
       // Determine if provider actively passed (specific archive reasons only)
       // Only "not_accepting_clients" and "not_a_fit" indicate active pass
-      // Other reasons (unable_to_reach, already_connected, other) don't count
+      // Other reasons (unable_to_reach, other) don't count
       const providerPassed = ["not_accepting_clients", "not_a_fit"].includes(
         meta.archive_reason as string
       );

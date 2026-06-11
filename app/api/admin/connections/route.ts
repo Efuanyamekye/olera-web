@@ -19,9 +19,8 @@ import {
   type FamilyEngagementData,
 } from "@/lib/connection-engagement";
 
-// Valid archive reasons from provider portal
+// Valid archive reasons from provider portal (must match ArchiveLeadModal)
 const VALID_ARCHIVE_REASONS = [
-  "already_connected",
   "not_a_fit",
   "not_accepting_clients",
   "unable_to_reach",
@@ -484,15 +483,12 @@ export async function GET(request: NextRequest) {
       const responded = !!providerMsg;
 
       // Check metadata for explicit connection signals from provider
-      const markedReplied = meta.marked_replied === true;
       const archiveReason = parseArchiveReason(meta.archive_reason);
       // Check both lead_archived (new) and archived (old) for backward compatibility
       // Only treat archived as lead archive if it has an archive_reason (indicating it's a passed lead, not inbox archive)
       const hasArchiveReason = !!archiveReason;
       const archived = meta.lead_archived === true || (meta.archived === true && hasArchiveReason);
       const archivedAt = meta.archived_at as string | undefined;
-      // Only treat as "already_connected" if CURRENTLY archived with that reason
-      const alreadyConnected = archived && archiveReason === "already_connected";
 
       // Extract admin override (manually marked status)
       const adminOverride = meta.admin_override ? parseAdminOverride(meta.admin_override) : null;
@@ -669,9 +665,6 @@ export async function GET(request: NextRequest) {
         waitingOn,
         lastMessageAt,
         temperature,
-        // Explicit connection signals from provider metadata
-        markedReplied,
-        alreadyConnected,
         // Archive state (provider archived in their portal)
         archived,
         archiveReason,
@@ -929,8 +922,6 @@ export async function GET(request: NextRequest) {
         emailLinkClicked: eng?.email_link_clicked ?? false,
         continueInInbox: eng?.continue_in_inbox ?? false,
         providerMessaged: c.responded,
-        markedReplied: c.markedReplied,
-        alreadyConnected: c.alreadyConnected,
         adminMarkedViewed,
         adminMarkedConnected,
         lastActivityAt: combinedLastActivity,
@@ -944,7 +935,7 @@ export async function GET(request: NextRequest) {
 
       // Calculate family engagement level for this connection
       const familyEngagementData: FamilyEngagementData = {
-        providerResponded: c.responded || c.markedReplied || c.alreadyConnected,
+        providerResponded: c.responded,
         providerRespondedAt: c.providerRespondedAt,
         familyReplied: c.familyRepliedAfterProvider,
         familyMessageCount: c.familyMessageCountAfterProvider,
@@ -964,8 +955,7 @@ export async function GET(request: NextRequest) {
 
         // Count engagement levels (provider perspective)
         // Exclude declined archives from "all" count (they go to "Declined" tab)
-        // Exception: "already_connected" archives are included (they appear in "Connected" tab)
-        const isDeclinedArchive = c.archived && c.archiveReason && c.archiveReason !== "already_connected";
+        const isDeclinedArchive = c.archived && c.archiveReason;
         if (!isDeclinedArchive) {
           engagementCounts.all++;
         }
@@ -998,8 +988,8 @@ export async function GET(request: NextRequest) {
         // Funnel stats (based on provider engagement)
         // Viewed = opened lead drawer
         if (eng?.lead_opened) providerViewedCount++;
-        // Count as responded if: sent message, marked as replied, or already connected
-        if (c.responded || c.markedReplied || c.alreadyConnected) respondedCount++;
+        // Count as responded if provider sent a message
+        if (c.responded) respondedCount++;
         if (c.familyRepliedAfterProvider) connectedCount++;
       }
     }
@@ -1034,12 +1024,10 @@ export async function GET(request: NextRequest) {
     // Filtering by workflow state or engagement level
     let list = searched.filter(c => c.workflowState !== null); // Exclude inactive providers
 
-    // For "all" tab: exclude archived connections (they go to "Passed" tab)
-    // Exceptions:
-    // - "already_connected" archives appear in "Connected" tab instead
-    // - Corrupted archives (archived=true but archiveReason=null) appear in "All" tab so admins can see/fix them
+    // For "all" tab: exclude archived connections (they go to "Declined" tab)
+    // Exception: Corrupted archives (archived=true but archiveReason=null) appear in "All" tab so admins can see/fix them
     if (responseFilter === "all") {
-      list = list.filter(c => !c.archived || c.archiveReason === "already_connected" || !c.archiveReason);
+      list = list.filter(c => !c.archived || !c.archiveReason);
     }
 
     // Check if filter is an engagement level (provider or family)
@@ -1054,11 +1042,10 @@ export async function GET(request: NextRequest) {
       // Special filter: declined (provider archived with decline reasons)
       else if (responseFilter === "declined" && perspective === "provider") {
         list = list.filter((c) => {
-          // Provider archived with a decline reason (not "already_connected")
+          // Provider archived with a decline reason
           // BUT: exclude if admin manually verified as connected (admin override > provider archive)
           return c.archived &&
                  c.archiveReason &&
-                 c.archiveReason !== "already_connected" &&
                  c.adminOverride?.status !== "connected";
         });
       } else if (perspective === "family") {
@@ -1084,10 +1071,9 @@ export async function GET(request: NextRequest) {
               !c.archived
             );
           } else if (responseFilter === "connected") {
-            // Connected: Include both active connections AND "already_connected" archives
+            // Connected: providers who messaged, copied phone, or copied email
             list = list.filter((c) =>
-              connectionEngagementLevels.get(c.id) === "connected" ||
-              (c.archived && c.archiveReason === "already_connected")
+              connectionEngagementLevels.get(c.id) === "connected" && !c.archived
             );
           } else {
             // Other engagement levels (new, viewed): exclude archived
@@ -1136,8 +1122,6 @@ export async function GET(request: NextRequest) {
 
     // Per-CONNECTION engagement data for UI badges (keyed by connection_id)
     // This shows engagement specific to each connection, not aggregated across all provider's connections.
-    // "messaged", "markedReplied", "alreadyConnected" are already per-connection via
-    // c.responded, c.markedReplied, c.alreadyConnected.
     const engagement: Record<string, { email_clicked: boolean; lead_opened: boolean; contact_revealed: boolean; phone_copied: boolean; email_copied: boolean; phone_clicked: boolean; email_link_clicked: boolean; continue_in_inbox: boolean }> = {};
     for (const c of pageRaw) {
       const eng = connectionEngagement.get(c.id);

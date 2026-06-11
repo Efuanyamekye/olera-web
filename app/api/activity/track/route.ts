@@ -15,8 +15,8 @@ const PROVIDER_EVENT_TYPES = [
   "review_viewed",
   "one_click_access",
   "contact_revealed",
-  "phone_clicked",            // Provider clicked phone link (tel:) to call family
-  "email_link_clicked",       // Provider clicked email link (mailto:) to email family
+  "phone_clicked",            // Provider copied phone number from lead drawer
+  "email_link_clicked",       // Provider copied email address from lead drawer
   "continue_in_inbox",        // Provider clicked "Continue in Inbox" from lead drawer
   "reviews_cta_clicked",
   "analytics_teaser_impression",

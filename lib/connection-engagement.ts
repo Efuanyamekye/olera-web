@@ -87,14 +87,13 @@ export interface EngagementData {
   emailClicked: boolean;
   leadOpened: boolean;
   contactRevealed: boolean;
+  /** Provider copied phone number (triggers "phone_clicked" event) */
   phoneClicked: boolean;
+  /** Provider copied email address (triggers "email_link_clicked" event) */
   emailLinkClicked: boolean;
   continueInInbox: boolean;
+  /** Provider sent a message through the inbox */
   providerMessaged: boolean;
-  /** Provider explicitly marked the lead as "Replied" in their drawer */
-  markedReplied: boolean;
-  /** Provider archived with reason "already_connected" */
-  alreadyConnected: boolean;
   /** Admin manually marked this connection as "viewed" (verified off-platform activity) */
   adminMarkedViewed: boolean;
   /** Admin manually marked this connection as "connected" (verified off-platform activity) */
@@ -299,11 +298,10 @@ export function getEngagementLevel(
   } else if (
     engagement.providerMessaged ||
     engagement.phoneClicked ||
-    engagement.emailLinkClicked ||
-    engagement.markedReplied ||    // Provider explicitly marked as "Replied"
-    engagement.alreadyConnected    // Provider archived with "Already connected" reason
+    engagement.emailLinkClicked
   ) {
-    // Provider reached out - this is success (automatic tracking)
+    // Provider reached out - this is success
+    // Connected when: sent message, copied phone, or copied email
     baseLevel = "connected";
   } else if (
     engagement.leadOpened
@@ -352,16 +350,18 @@ export function getEngagementLevel(
 
 /**
  * Check if a connection is considered successful.
- * Connected = provider took action to reach the family (automatically tracked or admin-verified).
+ * Connected = provider took action to reach the family:
+ *   - Sent a message through inbox
+ *   - Copied phone number
+ *   - Copied email address
+ *   - Admin manually verified connection
  */
 export function isConnected(engagement: EngagementData): boolean {
   return (
     engagement.adminMarkedConnected ||
     engagement.providerMessaged ||
     engagement.phoneClicked ||
-    engagement.emailLinkClicked ||
-    engagement.markedReplied ||
-    engagement.alreadyConnected
+    engagement.emailLinkClicked
   );
 }
 
