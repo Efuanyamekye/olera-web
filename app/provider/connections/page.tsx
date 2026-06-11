@@ -793,8 +793,7 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
   const thread = (meta?.thread as Array<{ from_profile_id: string; text: string; created_at: string; is_auto_reply?: boolean }>) || [];
   // Check both lead_archived (new) and archived (old) for backward compatibility
   // Only treat archived as lead archive if it has a valid archive_reason (indicating it's a passed lead, not inbox archive)
-  const archiveReason = meta?.archive_reason;
-  const hasValidArchiveReason = typeof archiveReason === 'string' && archiveReason.trim().length > 0;
+  const hasValidArchiveReason = typeof meta?.archive_reason === 'string' && (meta.archive_reason as string).trim().length > 0;
   const isArchived = meta?.lead_archived === true || (meta?.archived === true && hasValidArchiveReason);
   const familyProfile = conn.fromProfile;
 
