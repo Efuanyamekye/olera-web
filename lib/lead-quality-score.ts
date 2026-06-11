@@ -61,12 +61,21 @@ export interface LeadQualityResult {
 
 // Tier 1: Intent (35 points max)
 // Timeline is the strongest signal of hiring readiness
-const INTENT_SCORES = {
+// Handle both raw values (from metadata) and normalized values
+const INTENT_SCORES: Record<string, number> = {
+  // Immediate / ASAP variants
   immediate: 35,
+  asap: 35,
+  // Within 1 month variants
   within_1_month: 25,
+  within_month: 25,
+  // Within 3 months variants
   within_3_months: 12,
+  few_months: 12,
+  // Exploring variants
   exploring: 0,
-} as const;
+  researching: 0,
+};
 
 // Tier 2: Contact Readiness (25 points max)
 const CONTACT_PHONE = 15; // Phone = ready to be called
@@ -92,15 +101,15 @@ export function calculateLeadQualityScore(input: LeadQualityInput): LeadQualityR
 
   // ─── Tier 1: Intent (35 max) ───────────────────────────────────────────────
   let intentScore = 0;
-  const timeline = meta.timeline as keyof typeof INTENT_SCORES | undefined;
+  const timeline = meta.timeline as string | undefined;
 
   if (timeline && timeline in INTENT_SCORES) {
     intentScore = INTENT_SCORES[timeline];
 
     // Add highlight for urgent timelines
-    if (timeline === "immediate") {
+    if (intentScore === 35) {
       highlights.push("Hiring immediately");
-    } else if (timeline === "within_1_month") {
+    } else if (intentScore === 25) {
       highlights.push("Hiring within a month");
     }
   }

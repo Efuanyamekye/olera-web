@@ -3564,8 +3564,8 @@ export function providerFollowupDay1ViewedEmail(
 
   // Build preheader - action-oriented, decision push
   const preheader = isMultiple
-    ? "Message them, or pass — either one takes a second."
-    : `Message ${pronouns.object}, or pass — either one takes a second.`;
+    ? "Message them, or decline — either one takes a second."
+    : `Message ${pronouns.object}, or decline — either one takes a second.`;
 
   // Build greeting
   const greeting = `Hi ${escapeHtml(opts.providerName || "there")},`;
@@ -3596,7 +3596,7 @@ export function providerFollowupDay1ViewedEmail(
         ${leadsListHtml}
       </ul>
       <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-        Message them if they're a good fit. And if they're not, a quick pass lets them know to keep looking — so they're not left waiting and wondering.
+        Message them if they're a good fit. And if they're not, a quick decline lets them know to keep looking — so they're not left waiting and wondering.
       </p>`;
   } else {
     // Single lead - viewed scenario with decision push
@@ -3610,7 +3610,7 @@ export function providerFollowupDay1ViewedEmail(
         You opened ${escapeHtml(familyRef)}'s request earlier — ${pronounContractionLower} looking for ${careTypeRef}${recipientRef}${cityRef}. From here it's one of two clicks:
       </p>
       <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-        Message ${pronouns.object} if ${pronounContractionLower} a good fit. And if ${pronounContractionLower} not, a quick pass lets ${pronouns.object} know to keep looking — so ${pronounContractionLower} not left waiting and wondering.
+        Message ${pronouns.object} if ${pronounContractionLower} a good fit. And if ${pronounContractionLower} not, a quick decline lets ${pronouns.object} know to keep looking — so ${pronounContractionLower} not left waiting and wondering.
       </p>`;
   }
 
