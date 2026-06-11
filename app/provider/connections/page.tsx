@@ -1581,9 +1581,9 @@ export default function ProviderLeadsPage() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* ── Free Leads Banner ── */}
+      {/* Content - Two-pane layout on desktop */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* ── Free Leads Banner ── (Full width above columns) */}
         {!freeLeadBannerDismissed && leads.length > 0 && (
           <div className="mb-6 relative flex items-center gap-4 rounded-xl bg-white border-l-4 border-primary-500 px-5 py-4 sm:px-6 sm:py-5 animate-banner-entry">
             {/* Gift icon in teal circle */}
@@ -1661,17 +1661,45 @@ export default function ProviderLeadsPage() {
           </div>
         )}
 
+        {/* ── Two-pane layout (desktop) / Single column (mobile) ── */}
+        <div className="lg:flex lg:gap-6">
+          {/* Left pane: Leads list (collapses when lead selected on desktop) */}
+          <div className={`transition-all duration-300 ${
+            selectedLead ? 'lg:w-[280px]' : 'lg:flex-1'
+          }`}>
       {/* ── Leads list ── */}
       {filteredLeads.length > 0 ? (
         <>
           {/* Lead cards */}
           <div className="space-y-3">
-          {paginatedLeads.map((lead) => (
+          {paginatedLeads.map((lead) => {
+            const isSelected = selectedLeadId === lead.id;
+            const isCondensedView = !!selectedLead; // Show condensed cards when any lead is selected
+
+            return (
             <div
               key={lead.id}
               onClick={() => openDrawer(lead)}
-              className="group relative bg-white rounded-xl border border-gray-200 hover:border-gray-300 transition-colors duration-150 cursor-pointer"
+              className={`group relative bg-white rounded-xl border transition-all duration-200 cursor-pointer ${
+                isSelected
+                  ? 'border-primary-500 shadow-sm'
+                  : 'border-gray-200 hover:border-gray-300'
+              }`}
             >
+              {/* Condensed view for desktop when a lead is selected */}
+              {isCondensedView && (
+                <div className="hidden lg:flex items-center gap-3 px-4 py-3">
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
+                    <span className="text-sm font-semibold text-white">{lead.initials}</span>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-900 truncate">
+                    {isVerified ? lead.name : formatRedactedName(lead.name)}
+                  </p>
+                </div>
+              )}
+
+              {/* Full card view (mobile always, desktop when nothing selected) */}
+              <div className={isCondensedView ? 'lg:hidden' : ''}>
               {/* Mobile card layout */}
               <div className="lg:hidden px-4 py-4 active:bg-vanilla-50/60">
                 <div className="flex items-start gap-3">
@@ -1776,8 +1804,10 @@ export default function ProviderLeadsPage() {
                   </span>
                 )}
               </div>
+              </div>
             </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Pagination */}
@@ -1822,9 +1852,71 @@ export default function ProviderLeadsPage() {
           )}
         </div>
       )}
+          </div>
+          {/* End left pane */}
+
+          {/* Right pane: Lead details (desktop only, hidden on mobile) */}
+          {selectedLead && (
+            <div className="hidden lg:block lg:flex-1 transition-all duration-300">
+              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden sticky top-6 max-h-[calc(100vh-8rem)]">
+                {/* Lead details - Inline view for desktop */}
+                <div className="flex flex-col h-full">
+                  {/* Header */}
+                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                    <h2 className="text-lg font-semibold text-gray-900">
+                      {isVerified ? selectedLead.name : formatRedactedName(selectedLead.name)}
+                    </h2>
+                    <button
+                      onClick={() => setSelectedLeadId(null)}
+                      className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                    {/* Contact Info */}
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-900 mb-3">Contact</h3>
+                      <div className="space-y-2 text-sm">
+                        {selectedLead.email && (
+                          <div><span className="text-gray-600">Email:</span> <span className="font-medium">{isVerified ? selectedLead.email : '••••••••'}</span></div>
+                        )}
+                        {selectedLead.phone && (
+                          <div><span className="text-gray-600">Phone:</span> <span className="font-medium">{isVerified ? selectedLead.phone : '••••••••'}</span></div>
+                        )}
+                        <div><span className="text-gray-600">Location:</span> <span className="font-medium">{selectedLead.location}</span></div>
+                      </div>
+                    </div>
+
+                    {/* Care Type */}
+                    {selectedLead.careType && selectedLead.careType.length > 0 && (
+                      <div>
+                        <h3 className="text-sm font-semibold text-gray-900 mb-3">Care Needed</h3>
+                        <div className="space-y-1 text-sm">
+                          {selectedLead.careType.map((type, idx) => (
+                            <div key={idx}>{type}</div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="text-sm text-gray-500 italic">More details coming soon...</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          {/* End right pane */}
+        </div>
+        {/* End two-pane layout */}
     </div>
 
-      {/* ── Lead detail drawer ── */}
+      {/* ── Lead detail drawer (mobile only) ── */}
+      <div className="lg:hidden">
       <LeadDetailDrawer
         lead={selectedLead}
         isOpen={isDrawerOpen}
@@ -1875,6 +1967,7 @@ export default function ProviderLeadsPage() {
         isVerified={isVerified}
         onVerifyClick={handleVerifyFromDrawer}
       />
+      </div>
 
       {/* ── Verification Modal ── */}
       <VerificationMethodModal
