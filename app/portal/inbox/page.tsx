@@ -715,7 +715,7 @@ function InboxContent() {
 
   // Helper: call the server-side manage API (bypasses RLS)
   const manageConnection = useCallback(
-    async (payload: { connectionId: string; action: string; reportReason?: string; reportDetails?: string }) => {
+    async (payload: { connectionId: string; action: string; reportReason?: string; reportDetails?: string; source?: string }) => {
       const res = await fetch("/api/connections/manage", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -811,7 +811,7 @@ function InboxContent() {
     if (selectedIdRef.current === connectionId) setSelectedId(null);
 
     try {
-      await manageConnection({ connectionId, action: "archive" });
+      await manageConnection({ connectionId, action: "archive", source: "inbox" });
 
       // API confirmed — now update local state
       const existingMeta = (conn.metadata as Record<string, unknown>) || {};
@@ -837,7 +837,7 @@ function InboxContent() {
     if (!conn) return;
 
     try {
-      await manageConnection({ connectionId, action: "unarchive" });
+      await manageConnection({ connectionId, action: "unarchive", source: "inbox" });
 
       // API confirmed — now update local state
       const meta = (conn.metadata as Record<string, unknown>) || {};

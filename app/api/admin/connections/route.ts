@@ -484,7 +484,8 @@ export async function GET(request: NextRequest) {
 
       // Check metadata for explicit connection signals from provider
       const markedReplied = meta.marked_replied === true;
-      const archived = meta.archived === true;
+      // Check both lead_archived (new) and archived (old) for backward compatibility
+      const archived = meta.lead_archived === true || meta.archived === true;
       const archiveReason = parseArchiveReason(meta.archive_reason);
       const archivedAt = meta.archived_at as string | undefined;
       // Only treat as "already_connected" if CURRENTLY archived with that reason

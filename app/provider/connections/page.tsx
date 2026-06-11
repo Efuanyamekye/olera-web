@@ -128,9 +128,30 @@ function LeadDetailDrawer({
   const [restored, setRestored] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
+  const [freeLeadBannerDismissed, setFreeLeadBannerDismissed] = useState(false);
 
   // Display name: full name if verified, redacted if not
   const displayName = lead ? (isVerified ? lead.name : formatRedactedName(lead.name)) : "";
+
+  // Check if free lead banner was dismissed (localStorage)
+  useEffect(() => {
+    try {
+      const dismissed = localStorage.getItem("olera_free_lead_banner_dismissed");
+      setFreeLeadBannerDismissed(dismissed === "true");
+    } catch {
+      // localStorage unavailable
+    }
+  }, []);
+
+  // Dismiss free lead banner and persist to localStorage
+  const dismissFreeLeadBanner = () => {
+    setFreeLeadBannerDismissed(true);
+    try {
+      localStorage.setItem("olera_free_lead_banner_dismissed", "true");
+    } catch {
+      // localStorage unavailable
+    }
+  };
 
   // Copy to clipboard with feedback
   const copyToClipboard = (text: string, field: "phone" | "email") => {
@@ -463,10 +484,45 @@ function LeadDetailDrawer({
     </div>
   ) : null;
 
+  // ── Free Lead Banner ──
+  const FreeLeadBanner = !freeLeadBannerDismissed && lead.status !== "archived" ? (
+    <div className="relative flex items-start gap-3.5 rounded-2xl bg-gray-50 border border-gray-200 px-4 py-4 sm:px-5">
+      {/* Gift icon in teal circle */}
+      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-primary-500 flex items-center justify-center shrink-0">
+        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+        </svg>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 min-w-0 pr-6">
+        <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 leading-snug">
+          This lead is free — no charge to you.
+        </h3>
+        <p className="text-[14px] sm:text-[15px] text-gray-600 mt-1.5 leading-relaxed">
+          Message the family to learn about their needs and see if they&apos;re a good fit. If not, pass on the lead so they know to keep looking.
+        </p>
+      </div>
+
+      {/* Close button */}
+      <button
+        type="button"
+        onClick={dismissFreeLeadBanner}
+        className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1"
+        aria-label="Dismiss banner"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  ) : null;
+
   // ── Scrollable Content ──
   const ScrollableContent = (
     <div className="space-y-10">
       {ArchivedBanner}
+      {FreeLeadBanner}
       {ContactInfoSection}
       {AboutSituationSection}
       {CareDetailsSection}
@@ -718,7 +774,8 @@ interface ConnectionWithProfile extends Connection {
 function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: string): LeadDetail {
   const meta = conn.metadata as Record<string, unknown> | undefined;
   const thread = (meta?.thread as Array<{ from_profile_id: string; text: string; created_at: string; is_auto_reply?: boolean }>) || [];
-  const isArchived = meta?.archived === true;
+  // Check both lead_archived (new) and archived (old) for backward compatibility
+  const isArchived = meta?.lead_archived === true || meta?.archived === true;
   const familyProfile = conn.fromProfile;
 
   // Parse the message JSON for care details
@@ -1314,6 +1371,7 @@ export default function ProviderLeadsPage() {
         body: JSON.stringify({
           connectionId,
           action: "unarchive",
+          source: "connections",
         }),
       });
 
