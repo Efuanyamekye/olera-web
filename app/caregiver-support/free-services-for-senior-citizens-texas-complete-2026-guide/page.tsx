@@ -198,8 +198,15 @@ export default async function FreeServicesForSeniorsPage() {
       .order("published_at", { ascending: false })
       .limit(3);
     related = data;
-  } catch {
-    // Supabase not configured during build - skip related articles
+  } catch (error) {
+    // Only catch Supabase configuration errors during build
+    // Re-throw other errors so we see them
+    if (error instanceof Error && error.message.includes("Supabase is not configured")) {
+      // Expected during static generation without env vars
+    } else {
+      console.error("[article] Failed to fetch related articles:", error);
+      // Don't throw - degrade gracefully, but log it
+    }
   }
 
   return (

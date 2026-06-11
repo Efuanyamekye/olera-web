@@ -314,13 +314,13 @@ function getMetroCostFactors(): Record<string, number> {
   _loadAttempted = true;
 
   // Server-side only: try to load from filesystem
-  // Use eval to prevent webpack from trying to bundle this
+  // (webpack config excludes fs/path from client bundle)
   if (typeof window === 'undefined' && typeof process !== 'undefined') {
     try {
-      // Use eval to hide require from webpack's static analysis
-      const dynamicRequire = eval('require');
-      const fs = dynamicRequire("fs");
-      const path = dynamicRequire("path");
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const fs = require("fs");
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const path = require("path");
       const filePath = path.join(process.cwd(), "public/data/metro-cost-factors.json");
       const data = JSON.parse(fs.readFileSync(filePath, "utf-8")) as Record<string, number>;
       _metroCostFactors = data;

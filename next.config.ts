@@ -196,6 +196,25 @@ const nextConfig: NextConfig = {
       { source: "/sitemap-index.xml", destination: "/api/sitemap" },
     ];
   },
+
+  // Turbopack configuration (Next.js 16+ default)
+  turbopack: {
+    // Turbopack automatically excludes Node.js built-ins from client bundles
+    // No additional config needed for fs/path exclusion
+  },
+
+  // Webpack configuration (fallback when not using Turbopack)
+  webpack: (config, { isServer }) => {
+    // Don't bundle fs/path for client-side (causes build errors in pricing-config.ts)
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;
