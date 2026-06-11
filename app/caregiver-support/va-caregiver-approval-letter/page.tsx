@@ -238,13 +238,16 @@ const faqJsonLd = {
 
 export default async function VACaregiverApprovalLetterPage() {
   const supabase = await createClient();
-  const { data: related } = await supabase
-    .from("content_articles")
-    .select("id, slug, title, cover_image_url, care_types, reading_time")
-    .eq("status", "published")
-    .not("published_at", "is", null)
-    .order("published_at", { ascending: false })
-    .limit(3);
+  // During build without Supabase configured, related will be null
+  const { data: related } = supabase
+    ? await supabase
+        .from("content_articles")
+        .select("id, slug, title, cover_image_url, care_types, reading_time")
+        .eq("status", "published")
+        .not("published_at", "is", null)
+        .order("published_at", { ascending: false })
+        .limit(3)
+    : { data: null };
   return (
     <main className="min-h-screen bg-white">
       {/* JSON-LD */}

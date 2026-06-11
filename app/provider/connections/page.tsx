@@ -595,9 +595,18 @@ function LeadDetailDrawer({
   const [restored, setRestored] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
+  const [showFullDetails, setShowFullDetails] = useState(false);
 
   // Display name: full name if verified, redacted if not
   const displayName = lead ? (isVerified ? lead.name : formatRedactedName(lead.name)) : "";
+
+  // Helper to truncate text at word boundary
+  const getTruncatedText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text;
+    const truncated = text.substring(0, maxLength);
+    const lastSpace = truncated.lastIndexOf(' ');
+    return lastSpace > 0 ? truncated.substring(0, lastSpace) + '...' : truncated + '...';
+  };
 
   // Copy to clipboard with feedback
   const copyToClipboard = (text: string, field: "phone" | "email") => {
@@ -628,8 +637,9 @@ function LeadDetailDrawer({
       setRestored(false);
       setShowDeleteConfirm(false);
       setCopiedField(null);
+      setShowFullDetails(false);
     }
-  }, [lead]);
+  }, [lead?.id]);
 
   // Close on Escape key
   useEffect(() => {

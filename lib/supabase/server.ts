@@ -1,12 +1,27 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
+/**
+ * Creates a Supabase server client.
+ * Returns null during build if Supabase env vars are not configured.
+ */
 export async function createClient() {
+  // During build time (static generation), Supabase may not be configured
+  // Return null instead of throwing to allow builds to succeed
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_URL === "https://your-project-id.supabase.co"
   ) {
+    // Only throw in runtime contexts where Supabase is actually needed
+    // During build (no cookies available), return null
+    try {
+      await cookies();
+    } catch {
+      // Build time - cookies not available
+      return null;
+    }
+
     throw new Error(
       "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local"
     );

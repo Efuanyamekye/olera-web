@@ -304,30 +304,46 @@ export const PRICING_DATA_SOURCE = {
  */
 let _metroCostFactors: Record<string, number> | null = null;
 
-function getMetroCostFactors(): Record<string, number> {
+async function getMetroCostFactors(): Promise<Record<string, number>> {
   if (_metroCostFactors) return _metroCostFactors;
+
   try {
-    // Dynamic import for server-side use
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const fs = require("fs");
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const path = require("path");
-    const filePath = path.join(process.cwd(), "public/data/metro-cost-factors.json");
-    _metroCostFactors = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    // Try fetch first (works in both browser and server)
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL || ""}/data/metro-cost-factors.json`
+    );
+    if (res.ok) {
+      _metroCostFactors = await res.json();
+      return _metroCostFactors;
+    }
   } catch {
-    // Client-side or file not found — fall back to empty (factor = 1.0 for all)
-    _metroCostFactors = {};
+    // If fetch fails, try server-side file read
+    if (typeof window === 'undefined') {
+      try {
+        const fs = await import("fs");
+        const path = await import("path");
+        const filePath = path.join(process.cwd(), "public/data/metro-cost-factors.json");
+        const raw = fs.readFileSync(filePath, "utf-8");
+        _metroCostFactors = JSON.parse(raw);
+        return _metroCostFactors;
+      } catch {
+        // Fall through to empty object
+      }
+    }
   }
-  return _metroCostFactors!;
+
+  // Client-side or file not found — fall back to empty (factor = 1.0 for all)
+  _metroCostFactors = {};
+  return _metroCostFactors;
 }
 
 /**
  * Get metro-level cost adjustment factor for a city.
  * Returns 1.0 if city is not in a metro area or data unavailable.
  */
-export function getMetroFactor(city: string | null | undefined, state: string): number {
+export async function getMetroFactor(city: string | null | undefined, state: string): Promise<number> {
   if (!city) return 1.0;
-  const factors = getMetroCostFactors();
+  const factors = await getMetroCostFactors();
   const key = `${city}|${normalizeStateCode(state)}`;
   return factors[key] ?? 1.0;
 }
@@ -398,11 +414,11 @@ export function getPricingConfig(category: string): CategoryPricingConfig {
  * For categories with hourly rates, returns hourly.
  * For monthly categories, returns monthly.
  */
-export function getRegionalEstimate(
+export async function getRegionalEstimate(
   category: string,
   state: string,
   city?: string | null
-): { low: number; high: number; unit: PriceUnit; formatted: string; isMetroAdjusted: boolean } | null {
+): Promise<{ low: number; high: number; unit: PriceUnit; formatted: string; isMetroAdjusted: boolean } | null> {
   const config = getPricingConfig(category);
   // Normalize to display name for switch matching
   const cat = PROFILE_CATEGORY_TO_CONFIG_KEY[category] ?? category;
@@ -415,7 +431,7 @@ export function getRegionalEstimate(
   const costs = STATE_MEDIAN_COSTS[stateCode] ?? NATIONAL_MEDIANS;
 
   // Metro adjustment factor (1.0 = state average, >1 = more expensive metro)
-  const metroFactor = city ? getMetroFactor(city, state) : 1.0;
+  const metroFactor = city ? await getMetroFactor(city, state) : 1.0;
   const isMetroAdjusted = metroFactor !== 1.0;
 
   switch (cat) {
