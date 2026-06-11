@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 
 interface TooltipProps {
   /** The content to display in the tooltip */
@@ -22,6 +23,7 @@ interface TooltipProps {
  * - Hover on desktop with configurable delay
  * - Tap to toggle on mobile (tap outside to close)
  * - Smart positioning (flips if not enough space)
+ * - Renders via portal to avoid clipping by parent containers
  * - Smooth fade animation
  * - Apple-inspired design
  *
@@ -40,19 +42,22 @@ export function Tooltip({
   className = "",
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [tooltipStyle, setTooltipStyle] = useState<React.CSSProperties>({});
+  const [arrowStyle, setArrowStyle] = useState<React.CSSProperties>({});
   const [actualPosition, setActualPosition] = useState(position);
-  const [horizontalOffset, setHorizontalOffset] = useState(0);
+  const [mounted, setMounted] = useState(false);
   const triggerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isTouchDevice = useRef(false);
 
-  // Detect touch device
+  // Only render portal on client
   useEffect(() => {
+    setMounted(true);
     isTouchDevice.current = "ontouchstart" in window || navigator.maxTouchPoints > 0;
   }, []);
 
-  // Calculate position and flip if needed
+  // Calculate position using fixed positioning
   const updatePosition = useCallback(() => {
     if (!triggerRef.current || !tooltipRef.current) return;
 
@@ -61,47 +66,65 @@ export function Tooltip({
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
     const padding = 12; // Min distance from viewport edge
+    const gap = 8; // Gap between trigger and tooltip
 
     // Vertical positioning - flip if needed
+    let verticalPosition = position;
     if (position === "top") {
       const spaceAbove = triggerRect.top;
-      if (spaceAbove < tooltipRect.height + padding) {
-        setActualPosition("bottom");
-      } else {
-        setActualPosition("top");
+      if (spaceAbove < tooltipRect.height + gap + padding) {
+        verticalPosition = "bottom";
       }
     } else {
       const spaceBelow = viewportHeight - triggerRect.bottom;
-      if (spaceBelow < tooltipRect.height + padding) {
-        setActualPosition("top");
-      } else {
-        setActualPosition("bottom");
+      if (spaceBelow < tooltipRect.height + gap + padding) {
+        verticalPosition = "top";
       }
     }
+    setActualPosition(verticalPosition);
 
-    // Horizontal positioning - shift if overflowing
+    // Calculate vertical position
+    let top: number;
+    if (verticalPosition === "top") {
+      top = triggerRect.top - tooltipRect.height - gap;
+    } else {
+      top = triggerRect.bottom + gap;
+    }
+
+    // Horizontal positioning - center on trigger, but clamp to viewport
     const triggerCenter = triggerRect.left + triggerRect.width / 2;
-    const tooltipHalfWidth = tooltipRect.width / 2;
+    let left = triggerCenter - tooltipRect.width / 2;
 
-    // Check right overflow
-    const rightEdge = triggerCenter + tooltipHalfWidth;
-    if (rightEdge > viewportWidth - padding) {
-      setHorizontalOffset(viewportWidth - padding - rightEdge);
+    // Clamp to viewport edges
+    if (left < padding) {
+      left = padding;
+    } else if (left + tooltipRect.width > viewportWidth - padding) {
+      left = viewportWidth - padding - tooltipRect.width;
     }
-    // Check left overflow
-    else if (triggerCenter - tooltipHalfWidth < padding) {
-      setHorizontalOffset(padding - (triggerCenter - tooltipHalfWidth));
-    }
-    // No overflow - center it
-    else {
-      setHorizontalOffset(0);
-    }
-  }, [position]);
+
+    // Calculate arrow position (always points to trigger center)
+    const arrowLeft = triggerCenter - left;
+
+    setTooltipStyle({
+      position: "fixed",
+      top: `${top}px`,
+      left: `${left}px`,
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible ? "translateY(0)" : "translateY(4px)",
+      pointerEvents: isVisible ? "auto" : "none",
+    });
+
+    setArrowStyle({
+      left: `${arrowLeft}px`,
+    });
+  }, [position, isVisible]);
 
   // Update position when visible
   useEffect(() => {
     if (isVisible) {
+      // Initial position calculation
       updatePosition();
+      // Recalculate on scroll/resize
       window.addEventListener("scroll", updatePosition, true);
       window.addEventListener("resize", updatePosition);
       return () => {
@@ -162,13 +185,39 @@ export function Tooltip({
     setIsVisible((prev) => !prev);
   }, []);
 
-  const positionClasses = actualPosition === "top"
-    ? "bottom-full mb-2"
-    : "top-full mt-2";
-
   const arrowClasses = actualPosition === "top"
     ? "top-full border-t-gray-900"
     : "bottom-full border-b-gray-900 rotate-180";
+
+  // Tooltip element - rendered via portal to escape clipping containers
+  const tooltipElement = (
+    <div
+      ref={tooltipRef}
+      role="tooltip"
+      style={tooltipStyle}
+      className={`
+        max-w-[280px] w-max px-3 py-2
+        bg-gray-900 text-white text-[13px] leading-relaxed
+        rounded-lg shadow-lg
+        transition-all duration-150 ease-out
+        z-[9999]
+      `}
+    >
+      {content}
+
+      {/* Arrow - positioned to point at trigger */}
+      <div
+        style={arrowStyle}
+        className={`
+          absolute ${arrowClasses}
+          -translate-x-1/2
+          w-0 h-0
+          border-l-[6px] border-r-[6px] border-t-[6px]
+          border-l-transparent border-r-transparent
+        `}
+      />
+    </div>
+  );
 
   return (
     <div
@@ -180,41 +229,8 @@ export function Tooltip({
     >
       {children}
 
-      {/* Tooltip */}
-      <div
-        ref={tooltipRef}
-        role="tooltip"
-        style={{
-          transform: `translateX(calc(-50% + ${horizontalOffset}px)) ${isVisible ? "translateY(0)" : "translateY(4px)"}`,
-        }}
-        className={`
-          absolute left-1/2 ${positionClasses}
-          max-w-[280px] w-max px-3 py-2
-          bg-gray-900 text-white text-[13px] leading-relaxed
-          rounded-lg shadow-lg
-          transition-all duration-150 ease-out
-          ${isVisible
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-          }
-          z-50
-        `}
-      >
-        {content}
-
-        {/* Arrow - stays centered on trigger */}
-        <div
-          style={{
-            transform: `translateX(calc(-50% - ${horizontalOffset}px))`,
-          }}
-          className={`
-            absolute left-1/2 ${arrowClasses}
-            w-0 h-0
-            border-l-[6px] border-r-[6px] border-t-[6px]
-            border-l-transparent border-r-transparent
-          `}
-        />
-      </div>
+      {/* Render tooltip via portal to document.body */}
+      {mounted && createPortal(tooltipElement, document.body)}
     </div>
   );
 }
