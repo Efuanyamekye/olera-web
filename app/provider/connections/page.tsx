@@ -123,6 +123,7 @@ function LeadDetailInlineView({
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [showFullDetails, setShowFullDetails] = useState(false);
 
   const displayName = isVerified ? lead.name : formatRedactedName(lead.name);
 
@@ -187,19 +188,14 @@ function LeadDetailInlineView({
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
+              <h2 className="text-xl font-semibold text-gray-900 truncate">{displayName}</h2>
               {statusTag}
             </div>
-            <div className="flex items-center gap-3 mt-0.5">
-              {lead.location && (
-                <p className="text-sm text-gray-600 truncate">{lead.location}</p>
-              )}
-              <p className="text-sm text-gray-500 shrink-0 ml-auto">{lead.date}</p>
-            </div>
+            <p className="text-[15px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors shrink-0 -mt-1"
             aria-label="Close lead details"
           >
             <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -210,7 +206,7 @@ function LeadDetailInlineView({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-10">
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
         {/* Archived banner */}
         {lead.status === "archived" && lead.archivedDate && (
           <div className="flex items-start gap-3.5 rounded-2xl bg-gray-50 border border-gray-100 px-5 py-4">
@@ -228,24 +224,41 @@ function LeadDetailInlineView({
           </div>
         )}
 
-        {/* Contact Information */}
+        {/* Summary Card */}
+        <div className="rounded-2xl bg-stone-50 px-6 py-5 space-y-3">
+          <p className="text-sm text-gray-600">They&apos;re looking for</p>
+          <h3 className="text-2xl font-semibold text-gray-900 leading-tight">
+            {lead.careType?.[0] || "Care"} in {lead.location || "their area"}
+          </h3>
+          {lead.timeline && (
+            <p className="text-base text-gray-700">
+              Hoping to start {
+                lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
+                lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
+                lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
+                lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
+                lead.timeline
+              }
+            </p>
+          )}
+        </div>
+
+        {/* Contact */}
         {isVerified ? (
-          (lead.email || lead.phone) ? (
+          (lead.email || lead.phone) && (
             <div>
-              <p className="text-lg font-semibold text-gray-900 mb-2.5">Contact information</p>
-              <div className="space-y-2">
+              <h4 className="text-base font-bold text-gray-900 mb-3">Contact</h4>
+              <div className="space-y-2.5">
                 {lead.phone && (
-                  <div className="group flex items-center gap-3">
-                    <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <div className="group flex items-center gap-2.5">
+                    <svg className="w-5 h-5 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                     </svg>
-                    <div className="min-w-0">
-                      <p className="text-base font-medium text-gray-900 truncate">{lead.phone}</p>
-                    </div>
+                    <p className="text-[15px] text-gray-900 flex-1 truncate">{lead.phone}</p>
                     <button
                       type="button"
                       onClick={() => copyToClipboard(lead.phone!, "phone")}
-                      className={`p-2 md:p-1.5 rounded-md transition-all shrink-0 ${
+                      className={`p-1.5 rounded-md transition-all shrink-0 ${
                         copiedField === "phone"
                           ? "bg-primary-100 text-primary-700"
                           : "text-gray-400 hover:text-gray-700 hover:bg-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100"
@@ -264,17 +277,15 @@ function LeadDetailInlineView({
                   </div>
                 )}
                 {lead.email && (
-                  <div className="group flex items-center gap-3">
-                    <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <div className="group flex items-center gap-2.5">
+                    <svg className="w-5 h-5 text-gray-700 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                     </svg>
-                    <div className="min-w-0">
-                      <p className="text-base font-medium text-gray-900 truncate">{lead.email}</p>
-                    </div>
+                    <p className="text-[15px] text-gray-900 flex-1 truncate">{lead.email}</p>
                     <button
                       type="button"
                       onClick={() => copyToClipboard(lead.email!, "email")}
-                      className={`p-2 md:p-1.5 rounded-md transition-all shrink-0 ${
+                      className={`p-1.5 rounded-md transition-all shrink-0 ${
                         copiedField === "email"
                           ? "bg-primary-100 text-primary-700"
                           : "text-gray-400 hover:text-gray-700 hover:bg-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100"
@@ -294,7 +305,7 @@ function LeadDetailInlineView({
                 )}
               </div>
             </div>
-          ) : null
+          )
         ) : (
           <div className="px-3.5 py-3 border border-gray-200 rounded-lg bg-gray-50">
             <VerifyToUnlockPrompt
@@ -305,97 +316,100 @@ function LeadDetailInlineView({
           </div>
         )}
 
-        {/* About their situation */}
+        {/* Details (collapsible) */}
         {lead.aboutSituation && (
-          <div>
-            <p className="text-lg font-semibold text-gray-900 mb-2.5">About their situation</p>
-            <p className="text-base font-medium text-gray-900 leading-relaxed">
-              &ldquo;{lead.aboutSituation}&rdquo;
-            </p>
+          <div className="space-y-3">
+            <h4 className="text-base font-bold text-gray-900">Details</h4>
+
+            {!showFullDetails ? (
+              <>
+                <p className="text-[15px] text-gray-900 leading-relaxed">
+                  &ldquo;{lead.aboutSituation.length > 80 ? lead.aboutSituation.substring(0, 80) + "..." : lead.aboutSituation}&rdquo;
+                </p>
+                {lead.aboutSituation.length > 80 && (
+                  <button
+                    onClick={() => setShowFullDetails(true)}
+                    className="flex items-center gap-1.5 text-[15px] font-semibold text-teal-700 hover:text-teal-800 transition-colors"
+                  >
+                    Read more
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </button>
+                )}
+              </>
+            ) : (
+              <div className="space-y-4">
+                <p className="text-[15px] text-gray-900 leading-relaxed">
+                  &ldquo;{lead.aboutSituation}&rdquo;
+                </p>
+                <button
+                  onClick={() => setShowFullDetails(false)}
+                  className="flex items-center gap-1.5 text-[15px] font-semibold text-teal-700 hover:text-teal-800 transition-colors"
+                >
+                  Show less
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                  </svg>
+                </button>
+
+                <div className="pt-4 border-t border-gray-200 space-y-3">
+                  {lead.careRecipient && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-[15px] text-gray-600">Who needs care</span>
+                      <span className="text-[15px] font-medium text-gray-900">
+                        {lead.careRecipient}{lead.careRecipientAge ? `, ${lead.careRecipientAge}` : ""}
+                      </span>
+                    </div>
+                  )}
+                  {(() => {
+                    const parts: string[] = [];
+                    if (lead.contactPreference) {
+                      const contactMap: Record<string, string> = {
+                        phone: "Phone calls",
+                        email: "Email",
+                        either: "Call or email",
+                      };
+                      parts.push(contactMap[lead.contactPreference] || lead.contactPreference);
+                    }
+                    if (lead.schedulePreference) {
+                      const scheduleMap: Record<string, string> = {
+                        mornings: "mornings",
+                        afternoons: "afternoons",
+                        evenings: "evenings",
+                        overnight: "overnight",
+                        full_time: "full-time",
+                        flexible: "flexible",
+                      };
+                      parts.push(scheduleMap[lead.schedulePreference] || lead.schedulePreference);
+                    }
+                    const preferencesDisplay = parts.length > 0 ? parts.join(", ") : null;
+                    return preferencesDisplay ? (
+                      <div className="flex items-center justify-between">
+                        <span className="text-[15px] text-gray-600">Preferences</span>
+                        <span className="text-[15px] font-medium text-gray-900 text-right">{preferencesDisplay}</span>
+                      </div>
+                    ) : null;
+                  })()}
+                  {lead.careNeeds && lead.careNeeds.length > 0 && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-[15px] text-gray-600">Help with</span>
+                      <span className="text-[15px] font-medium text-gray-900 text-right">{lead.careNeeds.join(", ")}</span>
+                    </div>
+                  )}
+                  {lead.memberSince && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-[15px] text-gray-600">Member since</span>
+                      <span className="text-[15px] font-medium text-gray-900">
+                        {lead.memberSince}{lead.profileCompleteness !== undefined ? ` · profile ${lead.profileCompleteness}%` : ""}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         )}
-
-        {/* Care details */}
-        <div>
-          <p className="text-lg font-semibold text-gray-900 mb-2.5">Care details</p>
-          <div className="space-y-3">
-            {(lead.timeline || lead.careType) && (
-              <p className="text-base text-gray-700">
-                <span className="text-gray-500">Needs:</span>{" "}
-                <span className="font-medium text-gray-900">
-                  {lead.careType?.[0] || "Care"}{lead.timeline ? ` in ${
-                    lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
-                    lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "~1 month" :
-                    lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "~3 months" :
-                    lead.timeline === "exploring" || lead.timeline === "researching" ? "(exploring)" :
-                    lead.timeline
-                  }` : ""}
-                </span>
-              </p>
-            )}
-            {lead.careNeeds && lead.careNeeds.length > 0 && (
-              <p className="text-base text-gray-700">
-                <span className="text-gray-500">Help with:</span>{" "}
-                <span className="font-medium text-gray-900">{lead.careNeeds.join(", ")}</span>
-              </p>
-            )}
-            {lead.careRecipient && (
-              <p className="text-base text-gray-700">
-                <span className="text-gray-500">Who needs care:</span>{" "}
-                <span className="font-medium text-gray-900">
-                  {lead.careRecipient}{lead.careRecipientAge ? `, ${lead.careRecipientAge} years old` : ""}
-                </span>
-              </p>
-            )}
-            {(() => {
-              const parts: string[] = [];
-              if (lead.contactPreference) {
-                const contactMap: Record<string, string> = {
-                  phone: "Prefers calls",
-                  email: "Prefers email",
-                  either: "Call or email",
-                };
-                parts.push(contactMap[lead.contactPreference] || lead.contactPreference);
-              }
-              if (lead.schedulePreference) {
-                const scheduleMap: Record<string, string> = {
-                  mornings: "Mornings",
-                  afternoons: "Afternoons",
-                  evenings: "Evenings",
-                  overnight: "Overnight",
-                  full_time: "Full-time / Live-in",
-                  flexible: "Flexible",
-                };
-                parts.push(scheduleMap[lead.schedulePreference] || lead.schedulePreference);
-              }
-              const preferencesDisplay = parts.length > 0 ? parts.join(" · ") : null;
-              return preferencesDisplay ? (
-                <p className="text-base text-gray-700">
-                  <span className="text-gray-500">Preferences:</span>{" "}
-                  <span className="font-medium text-gray-900">{preferencesDisplay}</span>
-                </p>
-              ) : null;
-            })()}
-            {lead.paymentMethods && lead.paymentMethods.length > 0 && (
-              <p className="text-base text-gray-700">
-                <span className="text-gray-500">Can pay via:</span>{" "}
-                <span className="font-medium text-gray-900">{lead.paymentMethods.join(", ")}</span>
-              </p>
-            )}
-            {lead.profileCompleteness !== undefined && (
-              <p className="text-base text-gray-700">
-                <span className="text-gray-500">Profile:</span>{" "}
-                <span className="font-medium text-gray-900">{lead.profileCompleteness}% complete</span>
-              </p>
-            )}
-            {lead.memberSince && (
-              <p className="text-base text-gray-700">
-                <span className="text-gray-500">Member since:</span>{" "}
-                <span className="font-medium text-gray-900">{lead.memberSince}</span>
-              </p>
-            )}
-          </div>
-        </div>
       </div>
 
       {/* Footer actions */}
