@@ -238,32 +238,40 @@ function LeadDetailInlineView({
         )}
 
         {/* Summary Card */}
-        <div className="rounded-2xl bg-stone-50 px-4 py-4 space-y-1.5">
-          <p className="text-[15px] font-semibold text-gray-900">
-            Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
-          </p>
-          {lead.timeline && (
-            <p className="text-[15px] text-gray-700">
-              Hoping to start {
-                lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
-                lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
-                lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
-                lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
-                lead.timeline
-              }
+        <div className="rounded-2xl bg-stone-50 px-4 py-4 flex gap-4">
+          {/* Large icon */}
+          <div className="shrink-0 w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
+            <svg className="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            </svg>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0 space-y-1">
+            <p className="text-[15px] font-semibold text-gray-900 leading-snug">
+              Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
             </p>
-          )}
-          {lead.paymentMethods && lead.paymentMethods.length > 0 && (
-            <>
-              <div className="border-t border-gray-200 mt-3 pt-2" />
-              <div className="flex items-center gap-2.5 text-gray-700">
-                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a2.25 2.25 0 0 0-2.25-2.25H15a3 3 0 1 1-6 0H5.25A2.25 2.25 0 0 0 3 12m18 0v6a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 9m18 0V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v3" />
-                </svg>
-                <p className="text-[15px]">Can pay with {lead.paymentMethods.join(", ")}</p>
-              </div>
-            </>
-          )}
+            {lead.timeline && (
+              <p className="text-[15px] text-gray-700 leading-snug">
+                Hoping to start {
+                  lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
+                  lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
+                  lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
+                  lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
+                  lead.timeline
+                }
+              </p>
+            )}
+            {lead.paymentMethods && lead.paymentMethods.length > 0 && (
+              <p className="text-[15px] text-gray-700 leading-snug">
+                Payment: {
+                  lead.paymentMethods.length <= 2
+                    ? lead.paymentMethods.join(", ")
+                    : `${lead.paymentMethods.slice(0, 2).join(", ")}, +${lead.paymentMethods.length - 2} more`
+                }
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Contact */}
