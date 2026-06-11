@@ -547,8 +547,8 @@ export default function ConversationPanel({
 
   // Track thread length to detect new messages
   const prevThreadLengthRef = useRef<number>(0);
-  const thread = (connection?.metadata as Record<string, unknown>)?.thread as ThreadMessage[] | undefined;
-  const currentThreadLength = thread?.length ?? 0;
+  const currentThread = (connection?.metadata as Record<string, unknown>)?.thread as ThreadMessage[] | undefined;
+  const currentThreadLength = currentThread?.length ?? 0;
 
   // Auto-scroll to bottom only when a new message is added or conversation changes
   useEffect(() => {
