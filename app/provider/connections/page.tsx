@@ -123,6 +123,26 @@ function LeadDetailInlineView({
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [restored, setRestored] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+
+  // Check if banner was dismissed this session
+  useEffect(() => {
+    try {
+      const dismissed = sessionStorage.getItem("olera_free_lead_banner_dismissed");
+      setBannerDismissed(dismissed === "true");
+    } catch {
+      // sessionStorage unavailable
+    }
+  }, []);
+
+  const dismissBanner = () => {
+    setBannerDismissed(true);
+    try {
+      sessionStorage.setItem("olera_free_lead_banner_dismissed", "true");
+    } catch {
+      // sessionStorage unavailable
+    }
+  };
 
   const displayName = isVerified ? lead.name : formatRedactedName(lead.name);
 
@@ -396,6 +416,33 @@ function LeadDetailInlineView({
             )}
           </div>
         </div>
+
+        {/* Free lead banner */}
+        {!bannerDismissed && lead.status !== "archived" && (
+          <div className="relative flex items-center gap-4 rounded-xl bg-white border-l-4 border-primary-500 shadow-sm p-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shrink-0">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[15px] font-semibold text-gray-900">Free lead!</p>
+              <p className="text-[13px] text-gray-600 mt-0.5">
+                This care seeker requested info from you. Message them to start the conversation — no cost to connect.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={dismissBanner}
+              className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
+              aria-label="Dismiss banner"
+            >
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Footer actions */}
@@ -467,12 +514,19 @@ function LeadDetailInlineView({
             </div>
           )
         ) : isVerified ? (
-          // Active footer - Message/Pass on lead
-          <div className="flex flex-col items-center gap-4">
+          // Active footer - Message/Decline horizontal layout
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={onArchiveClick}
+              className="flex-1 px-4 py-3.5 border border-gray-300 bg-white text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all flex items-center justify-center gap-2"
+            >
+              Decline
+            </button>
             <button
               type="button"
               onClick={() => onContinueInInbox?.(lead.id)}
-              className="w-full px-4 py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
+              className="flex-[2] px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
             >
               <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
@@ -485,13 +539,6 @@ function LeadDetailInlineView({
                 }
                 return 'Message Care Seeker';
               })()}
-            </button>
-            <button
-              type="button"
-              onClick={onArchiveClick}
-              className="text-[13px] text-gray-500 hover:text-gray-900 hover:underline transition-colors py-3 px-4"
-            >
-              Pass on lead
             </button>
           </div>
         ) : (
@@ -545,6 +592,26 @@ function LeadDetailDrawer({
   const [restored, setRestored] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+
+  // Check if banner was dismissed this session
+  useEffect(() => {
+    try {
+      const dismissed = sessionStorage.getItem("olera_free_lead_banner_dismissed");
+      setBannerDismissed(dismissed === "true");
+    } catch {
+      // sessionStorage unavailable
+    }
+  }, []);
+
+  const dismissBanner = () => {
+    setBannerDismissed(true);
+    try {
+      sessionStorage.setItem("olera_free_lead_banner_dismissed", "true");
+    } catch {
+      // sessionStorage unavailable
+    }
+  };
 
   // Display name: full name if verified, redacted if not
   const displayName = lead ? (isVerified ? lead.name : formatRedactedName(lead.name)) : "";
@@ -880,6 +947,33 @@ function LeadDetailDrawer({
     </div>
   ) : null;
 
+  // ── Free Lead Banner ──
+  const FreeLeadBanner = !bannerDismissed && lead && lead.status !== "archived" ? (
+    <div className="relative flex items-center gap-4 rounded-xl bg-white border-l-4 border-primary-500 shadow-sm p-4">
+      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center shrink-0">
+        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+        </svg>
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-[15px] font-semibold text-gray-900">Free lead!</p>
+        <p className="text-[13px] text-gray-600 mt-0.5">
+          This care seeker requested info from you. Message them to start the conversation — no cost to connect.
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={dismissBanner}
+        className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
+        aria-label="Dismiss banner"
+      >
+        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  ) : null;
+
   // ── Scrollable Content ──
   const ScrollableContent = (
     <div className="space-y-10">
@@ -887,17 +981,27 @@ function LeadDetailDrawer({
       {ContactInfoSection}
       {AboutSituationSection}
       {CareDetailsSection}
+      {FreeLeadBanner}
     </div>
   );
 
-  // ── Active Footer (Message Care Seeker + Pass on lead link) ──
+  // ── Active Footer (Message + Decline horizontal layout) ──
   const ActiveFooter = isVerified ? (
-    <div className="flex flex-col items-center gap-4">
-      {/* Primary action - polished for Airbnb-style hierarchy */}
+    <div className="flex items-center gap-3">
+      {/* Secondary action - Decline */}
+      <button
+        type="button"
+        onClick={() => onArchiveClick?.(lead.id)}
+        className="flex-1 px-4 py-3.5 border border-gray-300 bg-white text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all flex items-center justify-center gap-2"
+      >
+        Decline
+      </button>
+
+      {/* Primary action - Message */}
       <button
         type="button"
         onClick={handleContinueInInbox}
-        className="w-full px-4 py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-all flex items-center justify-center gap-2"
+        className="flex-[2] px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-all flex items-center justify-center gap-2"
       >
         <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
@@ -911,15 +1015,6 @@ function LeadDetailDrawer({
           }
           return 'Message Care Seeker';
         })()}
-      </button>
-
-      {/* Secondary action - subtle text link */}
-      <button
-        type="button"
-        onClick={() => onArchiveClick?.(lead.id)}
-        className="text-[13px] text-gray-500 hover:text-gray-900 hover:underline transition-colors py-3 px-4"
-      >
-        Pass on lead
       </button>
     </div>
   ) : (
@@ -2020,55 +2115,7 @@ export default function ProviderLeadsPage() {
       </div>
 
       {/* Content - Two-pane layout on desktop */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* ── Free Leads Banner ── (Full width above columns) */}
-        {!freeLeadBannerDismissed && leads.length > 0 && (
-          <div className="mb-6 relative flex items-center gap-4 rounded-xl bg-white border-l-4 border-primary-500 px-5 py-4 sm:px-6 sm:py-5 animate-banner-entry">
-            {/* Gift icon in teal circle */}
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary-500 flex items-center justify-center shrink-0">
-              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-              </svg>
-            </div>
-
-            {/* Add CSS animation */}
-            <style jsx>{`
-              @keyframes banner-entry {
-                0% {
-                  opacity: 0;
-                  transform: translateX(-12px);
-                }
-                100% {
-                  opacity: 1;
-                  transform: translateX(0);
-                }
-              }
-              .animate-banner-entry {
-                animation: banner-entry 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-              }
-            `}</style>
-
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-tight">
-                Leads are free — no charge.
-              </h3>
-              <p className="text-sm sm:text-[15px] text-gray-600 mt-1.5 leading-relaxed">
-                Message the families that fit, and pass on the ones that don&apos;t.
-              </p>
-            </div>
-
-            {/* Got it button */}
-            <button
-              type="button"
-              onClick={dismissFreeLeadBanner}
-              className="shrink-0 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
-            >
-              Got it
-            </button>
-          </div>
-        )}
-
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* ── WhatsApp opt-in banner ── */}
         {showWhatsAppBanner && (
           <div className="mb-6 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
