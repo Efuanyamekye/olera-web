@@ -2140,8 +2140,9 @@ export default function ProviderLeadsPage() {
     setCurrentPage(1);
   }, [activeFilter]);
 
-  // Paginate filtered leads
-  const totalPages = Math.ceil(filteredLeads.length / PAGE_SIZE);
+  // Paginate filtered leads - reduce page size when detail view is open
+  const activePageSize = selectedLead ? 10 : PAGE_SIZE;
+  const totalPages = Math.ceil(filteredLeads.length / activePageSize);
 
   // Reset to last valid page if current page exceeds total (e.g., after data refresh)
   useEffect(() => {
@@ -2151,9 +2152,9 @@ export default function ProviderLeadsPage() {
   }, [currentPage, totalPages]);
 
   const paginatedLeads = useMemo(() => {
-    const startIndex = (currentPage - 1) * PAGE_SIZE;
-    return filteredLeads.slice(startIndex, startIndex + PAGE_SIZE);
-  }, [filteredLeads, currentPage]);
+    const startIndex = (currentPage - 1) * activePageSize;
+    return filteredLeads.slice(startIndex, startIndex + activePageSize);
+  }, [filteredLeads, currentPage, activePageSize]);
 
   // Loading state
   if (isLoading) {
@@ -2445,13 +2446,13 @@ export default function ProviderLeadsPage() {
         </div>
 
         {/* Pagination */}
-        {filteredLeads.length > PAGE_SIZE && (
+        {filteredLeads.length > activePageSize && (
           <div className="mt-6">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               totalItems={filteredLeads.length}
-              itemsPerPage={PAGE_SIZE}
+              itemsPerPage={activePageSize}
               onPageChange={setCurrentPage}
               itemLabel="leads"
             />
@@ -2491,7 +2492,7 @@ export default function ProviderLeadsPage() {
 
           {/* Right pane: Lead details (desktop only, hidden on mobile) */}
           {selectedLead && (
-            <div className="hidden lg:block lg:flex-1 transition-all duration-300">
+            <div className="hidden lg:block lg:flex-1 lg:self-start transition-all duration-300">
               <LeadDetailInlineView
                 lead={selectedLead}
                 isVerified={isVerified}
