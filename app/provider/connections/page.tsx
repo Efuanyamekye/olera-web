@@ -58,6 +58,7 @@ interface LeadDetail {
   // Profile metadata
   profileCompleteness?: number;
   memberSince?: string;
+  imageUrl?: string;
 }
 
 // ── Types ──
@@ -192,13 +193,23 @@ function LeadDetailInlineView({
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-4.5rem)] flex flex-col overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-6rem)] flex flex-col overflow-hidden">
       {/* Header */}
       <div className="shrink-0 px-4 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
-          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
-            {lead.initials}
-          </div>
+          {lead.imageUrl ? (
+            <Image
+              src={lead.imageUrl}
+              alt={lead.name}
+              width={48}
+              height={48}
+              className="w-12 h-12 rounded-xl object-cover shrink-0"
+            />
+          ) : (
+            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
+              {lead.initials}
+            </div>
+          )}
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
@@ -722,9 +733,19 @@ function LeadDetailDrawer({
 
   const StickyHeader = (
     <div className="flex items-start gap-3">
-      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
-        {lead.initials}
-      </div>
+      {lead.imageUrl ? (
+        <Image
+          src={lead.imageUrl}
+          alt={lead.name}
+          width={48}
+          height={48}
+          className="w-12 h-12 rounded-xl object-cover shrink-0"
+        />
+      ) : (
+        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
+          {lead.initials}
+        </div>
+      )}
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
@@ -1635,6 +1656,7 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
     // Profile metadata
     profileCompleteness,
     memberSince,
+    imageUrl: familyProfile?.image_url || undefined,
     // Store computed pre-archive status for restore (used by handleRestoreLead)
     _previousStatus: isArchived ? preArchiveStatus : undefined,
   } as LeadDetail & { _previousStatus?: LeadStatus };
@@ -2365,9 +2387,19 @@ export default function ProviderLeadsPage() {
               {/* Condensed view for desktop when a lead is selected */}
               {isCondensedView && (
                 <div className="hidden lg:flex items-center gap-3 px-4 py-3">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
-                    <span className="text-sm font-semibold text-white">{lead.initials}</span>
-                  </div>
+                  {lead.imageUrl ? (
+                    <Image
+                      src={lead.imageUrl}
+                      alt={lead.name}
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-xl object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
+                      <span className="text-sm font-semibold text-white">{lead.initials}</span>
+                    </div>
+                  )}
                   <p className="text-sm font-semibold text-gray-900 truncate">
                     {isVerified ? lead.name : formatRedactedName(lead.name)}
                   </p>
@@ -2380,9 +2412,19 @@ export default function ProviderLeadsPage() {
               <div className="lg:hidden px-4 py-4 active:bg-vanilla-50/60">
                 <div className="flex items-start gap-3">
                   {/* Avatar */}
-                  <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
-                    <span className="text-sm font-semibold text-white">{lead.initials}</span>
-                  </div>
+                  {lead.imageUrl ? (
+                    <Image
+                      src={lead.imageUrl}
+                      alt={lead.name}
+                      width={44}
+                      height={44}
+                      className="w-11 h-11 rounded-xl object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className={`w-11 h-11 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
+                      <span className="text-sm font-semibold text-white">{lead.initials}</span>
+                    </div>
+                  )}
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
@@ -2437,9 +2479,19 @@ export default function ProviderLeadsPage() {
               <div className="hidden lg:grid grid-cols-[1.8fr_1.5fr_1fr_1fr_0.8fr_0.8fr] gap-5 items-center px-6 py-4">
                 {/* Name */}
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
-                    <span className="text-sm font-semibold text-white">{lead.initials}</span>
-                  </div>
+                  {lead.imageUrl ? (
+                    <Image
+                      src={lead.imageUrl}
+                      alt={lead.name}
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-xl object-cover shrink-0"
+                    />
+                  ) : (
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center shrink-0`}>
+                      <span className="text-sm font-semibold text-white">{lead.initials}</span>
+                    </div>
+                  )}
                   <p className="text-[15px] font-semibold text-gray-900 truncate">
                     {isVerified ? lead.name : formatRedactedName(lead.name)}
                   </p>
