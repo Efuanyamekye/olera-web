@@ -545,17 +545,28 @@ export default function ConversationPanel({
     setMessageText("");
   }, [connection?.id]);
 
-  // Auto-scroll to bottom when thread updates
+  // Track thread length to detect new messages
+  const prevThreadLengthRef = useRef<number>(0);
+  const thread = (connection?.metadata as Record<string, unknown>)?.thread as ThreadMessage[] | undefined;
+  const currentThreadLength = thread?.length ?? 0;
+
+  // Auto-scroll to bottom only when a new message is added or conversation changes
   useEffect(() => {
-    if (conversationRef.current) {
-      requestAnimationFrame(() => {
-        conversationRef.current?.scrollTo({
-          top: conversationRef.current.scrollHeight,
-          behavior: "smooth",
+    const prevLength = prevThreadLengthRef.current;
+    prevThreadLengthRef.current = currentThreadLength;
+
+    // Only scroll if thread grew (new message) or this is a new conversation
+    if (currentThreadLength > prevLength || prevLength === 0) {
+      if (conversationRef.current) {
+        requestAnimationFrame(() => {
+          conversationRef.current?.scrollTo({
+            top: conversationRef.current.scrollHeight,
+            behavior: "smooth",
+          });
         });
-      });
+      }
     }
-  }, [connection?.metadata]);
+  }, [connection?.id, currentThreadLength]);
 
   const handleSendMessage = useCallback(async () => {
     // Allow sending if user has activeProfile OR a valid claimToken (guest)
