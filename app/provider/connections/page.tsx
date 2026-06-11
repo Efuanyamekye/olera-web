@@ -238,36 +238,27 @@ function LeadDetailInlineView({
         )}
 
         {/* Summary Card */}
-        <div className="rounded-2xl bg-stone-50 px-4 py-4 flex gap-4">
-          {/* Large icon */}
-          <div className="shrink-0 w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
-            <svg className="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+        <div className="rounded-2xl bg-gray-50 px-4 py-3 flex gap-3">
+          {/* Icon */}
+          <div className="shrink-0 w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
+            <svg className="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
             </svg>
           </div>
 
           {/* Content */}
-          <div className="flex-1 min-w-0 space-y-1">
+          <div className="flex-1 min-w-0 space-y-0.5">
             <p className="text-[15px] font-semibold text-gray-900 leading-snug">
               Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
             </p>
             {lead.timeline && (
-              <p className="text-[15px] text-gray-700 leading-snug">
+              <p className="text-[14px] text-gray-600 leading-snug">
                 Hoping to start {
                   lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
                   lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
                   lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
                   lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
                   lead.timeline
-                }
-              </p>
-            )}
-            {lead.paymentMethods && lead.paymentMethods.length > 0 && (
-              <p className="text-[15px] text-gray-700 leading-snug">
-                Can pay with {
-                  lead.paymentMethods.length <= 2
-                    ? lead.paymentMethods.join(", ")
-                    : `${lead.paymentMethods.slice(0, 2).join(", ")}, +${lead.paymentMethods.length - 2} more`
                 }
               </p>
             )}
@@ -354,7 +345,7 @@ function LeadDetailInlineView({
 
             {/* Show "Read more" if text is long OR if there are additional details to show */}
             {(() => {
-              const hasMoreDetails = lead.careRecipient || lead.contactPreference || lead.schedulePreference || (lead.careNeeds && lead.careNeeds.length > 0) || lead.memberSince;
+              const hasMoreDetails = lead.careRecipient || lead.contactPreference || lead.schedulePreference || (lead.careNeeds && lead.careNeeds.length > 0) || lead.memberSince || (lead.paymentMethods && lead.paymentMethods.length > 0);
               const hasLongText = lead.aboutSituation.length > 80;
               const showExpandButton = hasLongText || hasMoreDetails;
 
@@ -444,6 +435,12 @@ function LeadDetailInlineView({
                       <span className="text-[15px] font-medium text-gray-900">
                         {lead.memberSince}{lead.profileCompleteness !== undefined ? ` · profile ${lead.profileCompleteness}%` : ""}
                       </span>
+                    </div>
+                  )}
+                  {lead.paymentMethods && lead.paymentMethods.length > 0 && (
+                    <div className="flex items-start justify-between gap-4">
+                      <span className="text-[15px] text-gray-600 shrink-0">Can pay with</span>
+                      <span className="text-[15px] font-medium text-gray-900 text-right">{lead.paymentMethods.join(", ")}</span>
                     </div>
                   )}
                 </div>
