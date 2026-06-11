@@ -440,18 +440,18 @@ function LeadDetailInlineView({
                       <span className="text-[15px] font-medium text-gray-900 text-right">{lead.careNeeds.join(", ")}</span>
                     </div>
                   )}
+                  {lead.paymentMethods && lead.paymentMethods.length > 0 && (
+                    <div className="flex items-start justify-between gap-4">
+                      <span className="text-[15px] text-gray-600 shrink-0">Can pay with</span>
+                      <span className="text-[15px] font-medium text-gray-900 text-right">{lead.paymentMethods.join(", ")}</span>
+                    </div>
+                  )}
                   {lead.memberSince && (
                     <div className="flex items-center justify-between">
                       <span className="text-[15px] text-gray-600">Member since</span>
                       <span className="text-[15px] font-medium text-gray-900">
                         {lead.memberSince}{lead.profileCompleteness !== undefined ? ` · profile ${lead.profileCompleteness}%` : ""}
                       </span>
-                    </div>
-                  )}
-                  {lead.paymentMethods && lead.paymentMethods.length > 0 && (
-                    <div className="flex items-start justify-between gap-4">
-                      <span className="text-[15px] text-gray-600 shrink-0">Can pay with</span>
-                      <span className="text-[15px] font-medium text-gray-900 text-right">{lead.paymentMethods.join(", ")}</span>
                     </div>
                   )}
                 </div>
@@ -926,16 +926,16 @@ function LeadDetailDrawer({
             <span className="font-medium text-gray-900">{preferencesDisplay}</span>
           </p>
         )}
-        {lead.paymentMethods && lead.paymentMethods.length > 0 && (
-          <p className="text-base text-gray-700">
-            <span className="text-gray-500">Can pay via:</span>{" "}
-            <span className="font-medium text-gray-900">{lead.paymentMethods.join(", ")}</span>
-          </p>
-        )}
         {lead.profileCompleteness !== undefined && (
           <p className="text-base text-gray-700">
             <span className="text-gray-500">Profile:</span>{" "}
             <span className="font-medium text-gray-900">{lead.profileCompleteness}% complete</span>
+          </p>
+        )}
+        {lead.paymentMethods && lead.paymentMethods.length > 0 && (
+          <p className="text-base text-gray-700">
+            <span className="text-gray-500">Can pay via:</span>{" "}
+            <span className="font-medium text-gray-900">{lead.paymentMethods.join(", ")}</span>
           </p>
         )}
         {lead.memberSince && (
@@ -993,15 +993,6 @@ function LeadDetailDrawer({
                 lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
                 lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
                 lead.timeline
-              }
-            </p>
-          )}
-          {lead.paymentMethods && lead.paymentMethods.length > 0 && (
-            <p className="text-[15px] text-gray-700 leading-snug">
-              Can pay with {
-                lead.paymentMethods.length <= 2
-                  ? lead.paymentMethods.join(", ")
-                  : `${lead.paymentMethods.slice(0, 2).join(", ")}, +${lead.paymentMethods.length - 2} more`
               }
             </p>
           )}
