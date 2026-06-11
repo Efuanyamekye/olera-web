@@ -41,6 +41,7 @@ export function Tooltip({
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [actualPosition, setActualPosition] = useState(position);
+  const [horizontalOffset, setHorizontalOffset] = useState(0);
   const triggerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -58,22 +59,42 @@ export function Tooltip({
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const tooltipRect = tooltipRef.current.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    const padding = 12; // Min distance from viewport edge
 
-    // Check if there's enough space in preferred position
+    // Vertical positioning - flip if needed
     if (position === "top") {
       const spaceAbove = triggerRect.top;
-      if (spaceAbove < tooltipRect.height + 12) {
+      if (spaceAbove < tooltipRect.height + padding) {
         setActualPosition("bottom");
       } else {
         setActualPosition("top");
       }
     } else {
       const spaceBelow = viewportHeight - triggerRect.bottom;
-      if (spaceBelow < tooltipRect.height + 12) {
+      if (spaceBelow < tooltipRect.height + padding) {
         setActualPosition("top");
       } else {
         setActualPosition("bottom");
       }
+    }
+
+    // Horizontal positioning - shift if overflowing
+    const triggerCenter = triggerRect.left + triggerRect.width / 2;
+    const tooltipHalfWidth = tooltipRect.width / 2;
+
+    // Check right overflow
+    const rightEdge = triggerCenter + tooltipHalfWidth;
+    if (rightEdge > viewportWidth - padding) {
+      setHorizontalOffset(viewportWidth - padding - rightEdge);
+    }
+    // Check left overflow
+    else if (triggerCenter - tooltipHalfWidth < padding) {
+      setHorizontalOffset(padding - (triggerCenter - tooltipHalfWidth));
+    }
+    // No overflow - center it
+    else {
+      setHorizontalOffset(0);
     }
   }, [position]);
 
@@ -163,25 +184,31 @@ export function Tooltip({
       <div
         ref={tooltipRef}
         role="tooltip"
+        style={{
+          transform: `translateX(calc(-50% + ${horizontalOffset}px)) ${isVisible ? "translateY(0)" : "translateY(4px)"}`,
+        }}
         className={`
-          absolute left-1/2 -translate-x-1/2 ${positionClasses}
+          absolute left-1/2 ${positionClasses}
           max-w-[280px] w-max px-3 py-2
           bg-gray-900 text-white text-[13px] leading-relaxed
           rounded-lg shadow-lg
           transition-all duration-150 ease-out
           ${isVisible
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 translate-y-1 pointer-events-none"
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
           }
           z-50
         `}
       >
         {content}
 
-        {/* Arrow */}
+        {/* Arrow - stays centered on trigger */}
         <div
+          style={{
+            transform: `translateX(calc(-50% - ${horizontalOffset}px))`,
+          }}
           className={`
-            absolute left-1/2 -translate-x-1/2 ${arrowClasses}
+            absolute left-1/2 ${arrowClasses}
             w-0 h-0
             border-l-[6px] border-r-[6px] border-t-[6px]
             border-l-transparent border-r-transparent
