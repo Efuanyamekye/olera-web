@@ -271,7 +271,7 @@ function LeadDetailInlineView({
         {isVerified ? (
           (lead.email || lead.phone) && (
             <div>
-              <h4 className="text-base font-bold text-gray-900 mb-1.5">Contact</h4>
+              <h4 className="text-base font-display font-bold text-gray-900 mb-1.5">Contact</h4>
               <div className="space-y-2.5">
                 {lead.phone && (
                   <div className="group flex items-center gap-2.5">
@@ -343,7 +343,7 @@ function LeadDetailInlineView({
         {/* Details (collapsible) */}
         {lead.aboutSituation && (
           <div className="space-y-1.5">
-            <h4 className="text-base font-bold text-gray-900">Details</h4>
+            <h4 className="text-base font-display font-bold text-gray-900">Details</h4>
 
             {!showFullDetails ? (
               <>
@@ -975,7 +975,7 @@ function LeadDetailDrawer({
       {isVerified ? (
         (lead.email || lead.phone) && (
           <div>
-            <h4 className="text-base font-bold text-gray-900 mb-1.5">Contact</h4>
+            <h4 className="text-base font-display font-bold text-gray-900 mb-1.5">Contact</h4>
             <div className="space-y-2.5">
               {lead.phone && (
                 <div className="group flex items-center gap-2.5">
@@ -1047,7 +1047,7 @@ function LeadDetailDrawer({
       {/* Details (collapsible) */}
       {lead.aboutSituation && (
         <div className="space-y-1.5">
-          <h4 className="text-base font-bold text-gray-900">Details</h4>
+          <h4 className="text-base font-display font-bold text-gray-900">Details</h4>
 
           {!showFullDetails ? (
             <>
