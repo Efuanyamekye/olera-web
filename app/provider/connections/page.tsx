@@ -219,7 +219,7 @@ function LeadDetailInlineView({
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+      <div className="flex-1 overflow-y-auto px-6 pt-6 pb-10 space-y-6">
         {/* Archived banner */}
         {lead.status === "archived" && lead.archivedDate && (
           <div className="flex items-start gap-3.5 rounded-2xl bg-gray-50 border border-gray-100 px-5 py-4">
