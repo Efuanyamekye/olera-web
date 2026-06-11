@@ -2467,19 +2467,19 @@ export default function ProviderLeadsPage() {
 
                 {/* Status badge - New (green), Replied (amber), Archived/Viewed (gray) */}
                 {lead.isNew ? (
-                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100">
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100">
                     New
                   </span>
                 ) : lead.status === "replied" ? (
-                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100">
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100">
                     Replied
                   </span>
                 ) : lead.status === "archived" ? (
-                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
-                    Archived
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
+                    Declined
                   </span>
                 ) : (
-                  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-lg text-[12px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
                     Viewed
                   </span>
                 )}
