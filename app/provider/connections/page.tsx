@@ -201,10 +201,10 @@ function LeadDetailInlineView({
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h2 className="text-xl font-semibold text-gray-900 truncate">{displayName}</h2>
+              <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
               {statusTag}
             </div>
-            <p className="text-[15px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
+            <p className="text-[14px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
           </div>
           <button
             onClick={onClose}
@@ -723,10 +723,10 @@ function LeadDetailDrawer({
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-semibold text-gray-900 truncate">{displayName}</h2>
+          <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
           {statusTag}
         </div>
-        <p className="text-[15px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
+        <p className="text-[14px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
       </div>
     </div>
   );
