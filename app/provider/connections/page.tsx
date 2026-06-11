@@ -264,12 +264,14 @@ function LeadDetailInlineView({
             </p>
             {lead.timeline && (
               <p className="text-[14px] text-gray-600 leading-snug">
-                Hoping to start {
-                  lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
-                  lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
-                  lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
-                  lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
-                  lead.timeline
+                {lead.timeline === "exploring" || lead.timeline === "researching"
+                  ? "Just researching options"
+                  : `Hoping to start ${
+                      lead.timeline === "asap" || lead.timeline === "immediate" ? "ASAP" :
+                      lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within a month" :
+                      lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "in a few months" :
+                      lead.timeline
+                    }`
                 }
               </p>
             )}
@@ -898,13 +900,13 @@ function LeadDetailDrawer({
           <p className="text-base text-gray-700">
             <span className="text-gray-500">Needs:</span>{" "}
             <span className="font-medium text-gray-900">
-              {lead.careType?.[0] || "Care"}{lead.timeline ? ` in ${
-                lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
-                lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "~1 month" :
-                lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "~3 months" :
-                lead.timeline === "exploring" || lead.timeline === "researching" ? "(exploring)" :
-                lead.timeline
-              }` : ""}
+              {lead.careType?.[0] || "Care"}{lead.timeline ? (
+                lead.timeline === "asap" || lead.timeline === "immediate" ? " ASAP" :
+                lead.timeline === "within_month" || lead.timeline === "within_1_month" ? " within a month" :
+                lead.timeline === "few_months" || lead.timeline === "within_3_months" ? " in a few months" :
+                lead.timeline === "exploring" || lead.timeline === "researching" ? " (researching)" :
+                ` ${lead.timeline}`
+              ) : ""}
             </span>
           </p>
         )}
@@ -987,12 +989,14 @@ function LeadDetailDrawer({
           </p>
           {lead.timeline && (
             <p className="text-[15px] text-gray-700 leading-snug">
-              Hoping to start {
-                lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
-                lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
-                lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "within a few months" :
-                lead.timeline === "exploring" || lead.timeline === "researching" ? "(currently exploring options)" :
-                lead.timeline
+              {lead.timeline === "exploring" || lead.timeline === "researching"
+                ? "Just researching options"
+                : `Hoping to start ${
+                    lead.timeline === "asap" || lead.timeline === "immediate" ? "ASAP" :
+                    lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within a month" :
+                    lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "in a few months" :
+                    lead.timeline
+                  }`
               }
             </p>
           )}
