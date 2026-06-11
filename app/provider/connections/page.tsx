@@ -95,6 +95,280 @@ function avatarGradient(name: string): string {
   return AVATAR_GRADIENTS[Math.abs(hash) % AVATAR_GRADIENTS.length];
 }
 
+// ── Lead detail inline view (desktop) ──
+
+function LeadDetailInlineView({
+  lead,
+  isVerified,
+  onClose,
+  onPhoneClick,
+  onEmailClick,
+  onContinueInInbox,
+  onArchiveClick,
+  onVerifyClick,
+}: {
+  lead: LeadDetail;
+  isVerified: boolean;
+  onClose: () => void;
+  onPhoneClick?: (leadId: string) => void;
+  onEmailClick?: (leadId: string) => void;
+  onContinueInInbox?: (leadId: string) => void;
+  onArchiveClick?: () => void;
+  onVerifyClick?: () => void;
+}) {
+  const router = useRouter();
+  const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
+
+  const displayName = isVerified ? lead.name : formatRedactedName(lead.name);
+
+  const copyToClipboard = (text: string, field: "phone" | "email") => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    if (field === "phone") onPhoneClick?.(lead.id);
+    if (field === "email") onEmailClick?.(lead.id);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  // Status tag
+  const statusTag = lead.status === "archived" ? (
+    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+      Archived
+    </span>
+  ) : lead.isNew ? (
+    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
+      New
+    </span>
+  ) : lead.status === "replied" ? (
+    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
+      Replied
+    </span>
+  ) : (
+    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+      Viewed
+    </span>
+  );
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden sticky top-6 max-h-[calc(100vh-8rem)] flex flex-col">
+      {/* Header */}
+      <div className="shrink-0 px-6 py-4 border-b border-gray-100">
+        <div className="flex items-start gap-3">
+          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
+            {lead.initials}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
+              {statusTag}
+            </div>
+            <div className="flex items-center gap-3 mt-0.5">
+              {lead.location && (
+                <p className="text-sm text-gray-600 truncate">{lead.location}</p>
+              )}
+              <p className="text-sm text-gray-500 shrink-0 ml-auto">{lead.date}</p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors shrink-0"
+          >
+            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto px-6 py-6 space-y-10">
+        {/* Archived banner */}
+        {lead.status === "archived" && lead.archivedDate && (
+          <div className="flex items-start gap-3.5 rounded-2xl bg-gray-50 border border-gray-100 px-5 py-4">
+            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-[15px] font-semibold text-gray-800">Archived on {lead.archivedDate}</p>
+              {lead.archiveReason && (
+                <p className="text-[13px] text-gray-400 mt-0.5">Reason: {lead.archiveReason}</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Contact Information */}
+        {isVerified ? (
+          (lead.email || lead.phone) ? (
+            <div>
+              <p className="text-lg font-semibold text-gray-900 mb-2.5">Contact information</p>
+              <div className="space-y-2">
+                {lead.phone && (
+                  <div className="group flex items-center gap-3">
+                    <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                    </svg>
+                    <div className="min-w-0">
+                      <p className="text-base font-medium text-gray-900 truncate">{lead.phone}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard(lead.phone!, "phone")}
+                      className={`p-2 md:p-1.5 rounded-md transition-all shrink-0 ${
+                        copiedField === "phone"
+                          ? "bg-primary-100 text-primary-700"
+                          : "text-gray-400 hover:text-gray-700 hover:bg-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100"
+                      }`}
+                    >
+                      {copiedField === "phone" ? (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                )}
+                {lead.email && (
+                  <div className="group flex items-center gap-3">
+                    <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                    </svg>
+                    <div className="min-w-0">
+                      <p className="text-base font-medium text-gray-900 truncate">{lead.email}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => copyToClipboard(lead.email!, "email")}
+                      className={`p-2 md:p-1.5 rounded-md transition-all shrink-0 ${
+                        copiedField === "email"
+                          ? "bg-primary-100 text-primary-700"
+                          : "text-gray-400 hover:text-gray-700 hover:bg-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100"
+                      }`}
+                    >
+                      {copiedField === "email" ? (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : null
+        ) : (
+          <div className="px-3.5 py-3 border border-gray-200 rounded-lg bg-gray-50">
+            <VerifyToUnlockPrompt
+              action="see contact info"
+              onVerifyClick={onVerifyClick || (() => {})}
+              variant="block"
+            />
+          </div>
+        )}
+
+        {/* About their situation */}
+        {lead.aboutSituation && (
+          <div>
+            <p className="text-lg font-semibold text-gray-900 mb-2.5">About their situation</p>
+            <p className="text-base font-medium text-gray-900 leading-relaxed">
+              &ldquo;{lead.aboutSituation}&rdquo;
+            </p>
+          </div>
+        )}
+
+        {/* Care details */}
+        <div>
+          <p className="text-lg font-semibold text-gray-900 mb-2.5">Care details</p>
+          <div className="space-y-3">
+            {(lead.timeline || lead.careType) && (
+              <p className="text-base text-gray-700">
+                <span className="text-gray-500">Needs:</span>{" "}
+                <span className="font-medium text-gray-900">
+                  {lead.careType?.[0] || "Care"}{lead.timeline ? ` in ${
+                    lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
+                    lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "~1 month" :
+                    lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "~3 months" :
+                    lead.timeline === "exploring" || lead.timeline === "researching" ? "(exploring)" :
+                    lead.timeline
+                  }` : ""}
+                </span>
+              </p>
+            )}
+            {lead.careRecipient && (
+              <p className="text-base text-gray-700">
+                <span className="text-gray-500">Who needs care:</span>{" "}
+                <span className="font-medium text-gray-900">
+                  {lead.careRecipient}{lead.careRecipientAge ? `, ${lead.careRecipientAge} years old` : ""}
+                </span>
+              </p>
+            )}
+            {lead.paymentMethods && lead.paymentMethods.length > 0 && (
+              <p className="text-base text-gray-700">
+                <span className="text-gray-500">Can pay via:</span>{" "}
+                <span className="font-medium text-gray-900">{lead.paymentMethods.join(", ")}</span>
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer actions */}
+      <div className="shrink-0 border-t border-gray-100 px-6 pt-4 pb-4 bg-white">
+        {isVerified ? (
+          <div className="flex flex-col items-center gap-4">
+            <button
+              type="button"
+              onClick={() => onContinueInInbox?.(lead.id)}
+              className="w-full px-4 py-4 bg-primary-600 text-white text-base font-semibold rounded-xl hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+              </svg>
+              {(() => {
+                if (!lead.name) return 'Message Care Seeker';
+                const firstName = lead.name.split(' ')[0];
+                if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
+                  return `Message ${firstName}`;
+                }
+                return 'Message Care Seeker';
+              })()}
+            </button>
+            {lead.status !== "archived" && (
+              <button
+                type="button"
+                onClick={onArchiveClick}
+                className="text-[13px] text-gray-500 hover:text-gray-900 hover:underline transition-colors py-3 px-4"
+              >
+                Pass on lead
+              </button>
+            )}
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={onVerifyClick}
+            className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-all flex items-center justify-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+            </svg>
+            Verify to continue
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Lead detail drawer ──
 
 function LeadDetailDrawer({
@@ -1885,56 +2159,54 @@ export default function ProviderLeadsPage() {
           {/* Right pane: Lead details (desktop only, hidden on mobile) */}
           {selectedLead && (
             <div className="hidden lg:block lg:flex-1 transition-all duration-300">
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden sticky top-6 max-h-[calc(100vh-8rem)]">
-                {/* Lead details - Inline view for desktop */}
-                <div className="flex flex-col h-full">
-                  {/* Header */}
-                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                    <h2 className="text-lg font-semibold text-gray-900">
-                      {isVerified ? selectedLead.name : formatRedactedName(selectedLead.name)}
-                    </h2>
-                    <button
-                      onClick={closeDrawer}
-                      className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    >
-                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                    {/* Contact Info */}
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900 mb-3">Contact</h3>
-                      <div className="space-y-2 text-sm">
-                        {selectedLead.email && (
-                          <div><span className="text-gray-600">Email:</span> <span className="font-medium">{isVerified ? selectedLead.email : '••••••••'}</span></div>
-                        )}
-                        {selectedLead.phone && (
-                          <div><span className="text-gray-600">Phone:</span> <span className="font-medium">{isVerified ? selectedLead.phone : '••••••••'}</span></div>
-                        )}
-                        <div><span className="text-gray-600">Location:</span> <span className="font-medium">{selectedLead.location}</span></div>
-                      </div>
-                    </div>
-
-                    {/* Care Type */}
-                    {selectedLead.careType && selectedLead.careType.length > 0 && (
-                      <div>
-                        <h3 className="text-sm font-semibold text-gray-900 mb-3">Care Needed</h3>
-                        <div className="space-y-1 text-sm">
-                          {selectedLead.careType.map((type, idx) => (
-                            <div key={idx}>{type}</div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="text-sm text-gray-500 italic">More details coming soon...</div>
-                  </div>
-                </div>
-              </div>
+              <LeadDetailInlineView
+                lead={selectedLead}
+                isVerified={isVerified}
+                onClose={closeDrawer}
+                onPhoneClick={(leadId) => {
+                  if (!providerProfile) return;
+                  const providerKey = providerProfile.slug || providerProfile.source_provider_id || providerProfile.id;
+                  fetch("/api/activity/track", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      provider_id: providerKey,
+                      event_type: "phone_clicked",
+                      metadata: { lead_id: leadId },
+                    }),
+                  }).catch(() => {});
+                }}
+                onEmailClick={(leadId) => {
+                  if (!providerProfile) return;
+                  const providerKey = providerProfile.slug || providerProfile.source_provider_id || providerProfile.id;
+                  fetch("/api/activity/track", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      provider_id: providerKey,
+                      event_type: "email_link_clicked",
+                      metadata: { lead_id: leadId },
+                    }),
+                  }).catch(() => {});
+                }}
+                onContinueInInbox={(leadId) => {
+                  if (!providerProfile) return;
+                  const providerKey = providerProfile.slug || providerProfile.source_provider_id || providerProfile.id;
+                  fetch("/api/activity/track", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      provider_id: providerKey,
+                      event_type: "continue_in_inbox",
+                      metadata: { lead_id: leadId },
+                    }),
+                  }).catch(() => {});
+                  router.push(`/provider/inbox?id=${selectedLead.connectionId || selectedLead.id}`);
+                  closeDrawer();
+                }}
+                onArchiveClick={() => setLeadIdToArchive(selectedLead.id)}
+                onVerifyClick={handleVerifyFromDrawer}
+              />
             </div>
           )}
           {/* End right pane */}
