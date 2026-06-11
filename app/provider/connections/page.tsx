@@ -178,7 +178,7 @@ function LeadDetailInlineView({
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-3rem)] flex flex-col">
+    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 max-h-[calc(100vh-3rem)] flex flex-col">
       {/* Header */}
       <div className="shrink-0 px-6 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
