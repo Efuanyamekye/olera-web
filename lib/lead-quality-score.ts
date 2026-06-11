@@ -217,13 +217,13 @@ export function calculateLeadQualityScore(input: LeadQualityInput): LeadQualityR
 export function getLeadQualityExplanation(tier: LeadQualityResult["tier"]): string {
   switch (tier) {
     case "hot":
-      return "Immediate timeline · Phone provided · Complete profile";
+      return "High priority: Needs care immediately, shared phone number, and has a complete profile. Most likely to hire.";
     case "strong":
-      return "Near-term timeline · Good profile details";
+      return "Good prospect: Planning to hire soon and has shared detailed information about their care needs.";
     case "good":
-      return "Has shared care needs · Some profile info";
+      return "Interested: Has a timeline and shared some information. May need follow-up to understand their needs.";
     case "exploring":
-      return "Early in their search · May need more time";
+      return "Early stage: Just starting their search. May take longer to make a decision.";
   }
 }
 
@@ -242,24 +242,24 @@ export function getLeadQualityColor(tier: LeadQualityResult["tier"]): {
       return {
         bg: "bg-rose-50",
         text: "text-rose-700",
-        border: "border-rose-100",
-        iconBg: "bg-rose-100",
+        border: "border-rose-200",
+        iconBg: "bg-rose-200/70",  // More visible on rose-50 background
         iconText: "text-rose-600",
       };
     case "strong":
       return {
         bg: "bg-amber-50",
         text: "text-amber-700",
-        border: "border-amber-100",
-        iconBg: "bg-amber-100",
+        border: "border-amber-200",
+        iconBg: "bg-amber-200/70",  // More visible
         iconText: "text-amber-600",
       };
     case "good":
       return {
         bg: "bg-sky-50",
         text: "text-sky-700",
-        border: "border-sky-100",
-        iconBg: "bg-sky-100",
+        border: "border-sky-200",
+        iconBg: "bg-sky-200/70",  // More visible
         iconText: "text-sky-600",
       };
     case "exploring":
@@ -267,7 +267,7 @@ export function getLeadQualityColor(tier: LeadQualityResult["tier"]): {
         bg: "bg-gray-50",
         text: "text-gray-600",
         border: "border-gray-200",
-        iconBg: "bg-gray-100",
+        iconBg: "bg-gray-200/70",  // More visible
         iconText: "text-gray-500",
       };
   }
