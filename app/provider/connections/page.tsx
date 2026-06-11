@@ -128,30 +128,9 @@ function LeadDetailDrawer({
   const [restored, setRestored] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
-  const [freeLeadBannerDismissed, setFreeLeadBannerDismissed] = useState(false);
 
   // Display name: full name if verified, redacted if not
   const displayName = lead ? (isVerified ? lead.name : formatRedactedName(lead.name)) : "";
-
-  // Check if free lead banner was dismissed this session (sessionStorage)
-  useEffect(() => {
-    try {
-      const dismissed = sessionStorage.getItem("olera_free_lead_banner_dismissed");
-      setFreeLeadBannerDismissed(dismissed === "true");
-    } catch {
-      // sessionStorage unavailable
-    }
-  }, []);
-
-  // Dismiss free lead banner for this session only (reappears on next login)
-  const dismissFreeLeadBanner = () => {
-    setFreeLeadBannerDismissed(true);
-    try {
-      sessionStorage.setItem("olera_free_lead_banner_dismissed", "true");
-    } catch {
-      // sessionStorage unavailable
-    }
-  };
 
   // Copy to clipboard with feedback
   const copyToClipboard = (text: string, field: "phone" | "email") => {
@@ -484,62 +463,10 @@ function LeadDetailDrawer({
     </div>
   ) : null;
 
-  // ── Free Lead Banner ──
-  const FreeLeadBanner = !freeLeadBannerDismissed && lead.status !== "archived" ? (
-    <div className="relative flex items-start gap-3.5 rounded-xl bg-white border-l-4 border-primary-500 px-4 py-4 sm:px-5 animate-banner-entry">
-      {/* Gift icon in teal circle */}
-      <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-primary-500 flex items-center justify-center shrink-0">
-        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
-        </svg>
-      </div>
-
-      {/* Add CSS animation in style tag */}
-      <style jsx>{`
-        @keyframes banner-entry {
-          0% {
-            opacity: 0;
-            transform: translateX(-12px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-        .animate-banner-entry {
-          animation: banner-entry 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-      `}</style>
-
-      {/* Content */}
-      <div className="flex-1 min-w-0 pr-6">
-        <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 leading-snug">
-          Leads are free — no charge.
-        </h3>
-        <p className="text-[14px] sm:text-[15px] text-gray-600 mt-1.5 leading-relaxed">
-          Message the families that fit, and pass on the ones that don&apos;t.
-        </p>
-      </div>
-
-      {/* Close button */}
-      <button
-        type="button"
-        onClick={dismissFreeLeadBanner}
-        className="absolute top-3 right-3 sm:top-4 sm:right-4 p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1"
-        aria-label="Dismiss banner"
-      >
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-  ) : null;
-
   // ── Scrollable Content ──
   const ScrollableContent = (
     <div className="space-y-10">
       {ArchivedBanner}
-      {FreeLeadBanner}
       {ContactInfoSection}
       {AboutSituationSection}
       {CareDetailsSection}
@@ -1057,6 +984,7 @@ export default function ProviderLeadsPage() {
   const fetchedRef = useRef(false);
   const [whatsappBannerDismissed, setWhatsappBannerDismissed] = useState(false);
   const [whatsappOptingIn, setWhatsappOptingIn] = useState(false);
+  const [freeLeadBannerDismissed, setFreeLeadBannerDismissed] = useState(false);
 
   // Verification state
   const { isVerified } = useProviderVerification();
@@ -1096,6 +1024,26 @@ export default function ProviderLeadsPage() {
       openVerificationModalRaw();
     }, 100);
   }, [providerProfile?.id, selectedLeadId, openVerificationModalRaw]);
+
+  // Check if free lead banner was dismissed this session (sessionStorage)
+  useEffect(() => {
+    try {
+      const dismissed = sessionStorage.getItem("olera_free_lead_banner_dismissed");
+      setFreeLeadBannerDismissed(dismissed === "true");
+    } catch {
+      // sessionStorage unavailable
+    }
+  }, []);
+
+  // Dismiss free lead banner for this session only (reappears on next login)
+  const dismissFreeLeadBanner = () => {
+    setFreeLeadBannerDismissed(true);
+    try {
+      sessionStorage.setItem("olera_free_lead_banner_dismissed", "true");
+    } catch {
+      // sessionStorage unavailable
+    }
+  };
 
   // If auth is done loading and there's no provider profile, stop showing skeletons.
   // This prevents eternal loading when the signed-in user doesn't own a provider listing.
@@ -1635,6 +1583,54 @@ export default function ProviderLeadsPage() {
 
       {/* Content */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* ── Free Leads Banner ── */}
+        {!freeLeadBannerDismissed && leads.length > 0 && (
+          <div className="mb-6 relative flex items-center gap-4 rounded-xl bg-white border-l-4 border-primary-500 px-5 py-4 sm:px-6 sm:py-5 animate-banner-entry">
+            {/* Gift icon in teal circle */}
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary-500 flex items-center justify-center shrink-0">
+              <svg className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 11.25v8.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1 0 9.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1 1 14.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+              </svg>
+            </div>
+
+            {/* Add CSS animation */}
+            <style jsx>{`
+              @keyframes banner-entry {
+                0% {
+                  opacity: 0;
+                  transform: translateX(-12px);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+              }
+              .animate-banner-entry {
+                animation: banner-entry 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+              }
+            `}</style>
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 leading-tight">
+                Leads are free — no charge.
+              </h3>
+              <p className="text-sm sm:text-[15px] text-gray-600 mt-1.5 leading-relaxed">
+                Message the families that fit, and pass on the ones that don&apos;t.
+              </p>
+            </div>
+
+            {/* Got it button */}
+            <button
+              type="button"
+              onClick={dismissFreeLeadBanner}
+              className="shrink-0 bg-gray-900 hover:bg-gray-800 text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2"
+            >
+              Got it
+            </button>
+          </div>
+        )}
+
         {/* ── WhatsApp opt-in banner ── */}
         {showWhatsAppBanner && (
           <div className="mb-6 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
