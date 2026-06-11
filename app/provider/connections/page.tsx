@@ -16,6 +16,14 @@ import VerificationMethodModal from "@/components/provider/VerificationMethodMod
 import VerifyToUnlockPrompt from "@/components/provider/VerifyToUnlockPrompt";
 import Pagination from "@/components/ui/Pagination";
 import ArchiveLeadModal from "@/components/provider/ArchiveLeadModal";
+import {
+  calculateLeadQualityScore,
+  getLeadQualityColor,
+  getLeadQualityIcon,
+  getLeadQualityExplanation,
+  type LeadQualityResult,
+} from "@/lib/lead-quality-score";
+import type { FamilyMetadata } from "@/lib/types";
 
 // ── Lead types (previously from mock file) ──
 
@@ -59,6 +67,8 @@ interface LeadDetail {
   profileCompleteness?: number;
   memberSince?: string;
   imageUrl?: string;
+  // Lead quality score
+  leadQuality?: LeadQualityResult;
 }
 
 // ── Types ──
@@ -175,19 +185,19 @@ function LeadDetailInlineView({
 
   // Status tag
   const statusTag = lead.status === "archived" ? (
-    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
       Archived
     </span>
   ) : lead.isNew ? (
-    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
+    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
       New
     </span>
   ) : lead.status === "replied" ? (
-    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
+    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
       Replied
     </span>
   ) : (
-    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
       Viewed
     </span>
   );
@@ -248,35 +258,58 @@ function LeadDetailInlineView({
           </div>
         )}
 
-        {/* Summary Card */}
-        <div className="rounded-2xl bg-gray-50 px-4 py-3 flex gap-3">
-          {/* Icon */}
-          <div className="shrink-0 w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center">
-            <svg className="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-            </svg>
-          </div>
+        {/* Quality Summary Card */}
+        {(() => {
+          const quality = lead.leadQuality;
+          const colors = quality ? getLeadQualityColor(quality.tier) : null;
+          const iconType = quality ? getLeadQualityIcon(quality.tier) : null;
+          const explanation = quality ? getLeadQualityExplanation(quality.tier) : "";
 
-          {/* Content */}
-          <div className="flex-1 min-w-0 space-y-0.5">
-            <p className="text-[15px] font-semibold text-gray-900 leading-snug">
-              Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
-            </p>
-            {lead.timeline && (
-              <p className="text-[14px] text-gray-600 leading-snug">
-                {lead.timeline === "exploring" || lead.timeline === "researching"
-                  ? "Just researching options"
-                  : `Hoping to start ${
-                      lead.timeline === "asap" || lead.timeline === "immediate" ? "ASAP" :
-                      lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within a month" :
-                      lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "in a few months" :
-                      lead.timeline
-                    }`
-                }
-              </p>
-            )}
-          </div>
-        </div>
+          return (
+            <div
+              className={`group relative rounded-xl px-3.5 py-2.5 flex items-center gap-3 ${colors?.bg || 'bg-gray-50'} border ${colors?.border || 'border-gray-200'}`}
+              title={explanation}
+            >
+              {/* Icon */}
+              <div className={`shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${colors?.iconBg || 'bg-gray-100'}`}>
+                {iconType?.type === "flame" ? (
+                  <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clipRule="evenodd" />
+                  </svg>
+                ) : iconType?.type === "star" ? (
+                  <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
+                    <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                  </svg>
+                ) : iconType?.type === "search" ? (
+                  <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                  </svg>
+                ) : (
+                  <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                )}
+              </div>
+
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <p className={`text-[15px] font-display font-semibold leading-tight ${colors?.text || 'text-gray-900'}`}>
+                  {quality?.label || "Lead"}
+                </p>
+                <p className="text-[13px] text-gray-500 leading-tight mt-0.5">
+                  {lead.careType?.[0] || "Care"} · {lead.location || "Location unknown"}
+                </p>
+              </div>
+
+              {/* Info icon for tooltip hint */}
+              <div className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+                </svg>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Contact */}
         {isVerified ? (
@@ -399,6 +432,18 @@ function LeadDetailInlineView({
                 </button>
 
                 <div className="pt-4 border-t border-gray-200 space-y-3">
+                  {lead.timeline && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-[15px] text-gray-600">Hiring timeline</span>
+                      <span className="text-[15px] font-medium text-gray-900">
+                        {lead.timeline === "immediate" || lead.timeline === "asap" ? "ASAP" :
+                         lead.timeline === "within_1_month" || lead.timeline === "within_month" ? "Within a month" :
+                         lead.timeline === "within_3_months" || lead.timeline === "few_months" ? "Within 3 months" :
+                         lead.timeline === "exploring" || lead.timeline === "researching" ? "Still exploring" :
+                         lead.timeline}
+                      </span>
+                    </div>
+                  )}
                   {lead.careRecipient && (
                     <div className="flex items-center justify-between">
                       <span className="text-[15px] text-gray-600">Who needs care</span>
@@ -714,19 +759,19 @@ function LeadDetailDrawer({
   // ── Sticky Header Content ──
   // Status tag matches list view styling
   const statusTag = lead.status === "archived" ? (
-    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
       Archived
     </span>
   ) : lead.isNew ? (
-    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
+    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
       New
     </span>
   ) : lead.status === "replied" ? (
-    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
+    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
       Replied
     </span>
   ) : (
-    <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
       Viewed
     </span>
   );
@@ -973,35 +1018,51 @@ function LeadDetailDrawer({
       {/* Archived banner */}
       {ArchivedBanner}
 
-      {/* Summary Card */}
-      <div className="rounded-2xl bg-stone-50 px-4 py-4 flex gap-4">
-        {/* Large icon */}
-        <div className="shrink-0 w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
-          <svg className="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-          </svg>
-        </div>
+      {/* Quality Summary Card */}
+      {(() => {
+        const quality = lead.leadQuality;
+        const colors = quality ? getLeadQualityColor(quality.tier) : null;
+        const iconType = quality ? getLeadQualityIcon(quality.tier) : null;
+        const explanation = quality ? getLeadQualityExplanation(quality.tier) : "";
 
-        {/* Content */}
-        <div className="flex-1 min-w-0 space-y-1">
-          <p className="text-[15px] font-semibold text-gray-900 leading-snug">
-            Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
-          </p>
-          {lead.timeline && (
-            <p className="text-[15px] text-gray-700 leading-snug">
-              {lead.timeline === "exploring" || lead.timeline === "researching"
-                ? "Just researching options"
-                : `Hoping to start ${
-                    lead.timeline === "asap" || lead.timeline === "immediate" ? "ASAP" :
-                    lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within a month" :
-                    lead.timeline === "few_months" || lead.timeline === "within_3_months" ? "in a few months" :
-                    lead.timeline
-                  }`
-              }
-            </p>
-          )}
-        </div>
-      </div>
+        return (
+          <div
+            className={`rounded-xl px-3.5 py-3 flex items-center gap-3 ${colors?.bg || 'bg-gray-50'} border ${colors?.border || 'border-gray-200'}`}
+            title={explanation}
+          >
+            {/* Icon */}
+            <div className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${colors?.iconBg || 'bg-gray-100'}`}>
+              {iconType?.type === "flame" ? (
+                <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
+                  <path fillRule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clipRule="evenodd" />
+                </svg>
+              ) : iconType?.type === "star" ? (
+                <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
+                  <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                </svg>
+              ) : iconType?.type === "search" ? (
+                <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                </svg>
+              ) : (
+                <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+              )}
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 min-w-0">
+              <p className={`text-base font-display font-semibold leading-tight ${colors?.text || 'text-gray-900'}`}>
+                {quality?.label || "Lead"}
+              </p>
+              <p className="text-[13px] text-gray-500 leading-tight mt-0.5">
+                {lead.careType?.[0] || "Care"} · {lead.location || "Location unknown"}
+              </p>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Contact */}
       {isVerified ? (
@@ -1118,6 +1179,18 @@ function LeadDetailDrawer({
               </button>
 
               <div className="pt-4 border-t border-gray-200 space-y-3">
+                {lead.timeline && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-[15px] text-gray-600">Hiring timeline</span>
+                    <span className="text-[15px] font-medium text-gray-900">
+                      {lead.timeline === "immediate" || lead.timeline === "asap" ? "ASAP" :
+                       lead.timeline === "within_1_month" || lead.timeline === "within_month" ? "Within a month" :
+                       lead.timeline === "within_3_months" || lead.timeline === "few_months" ? "Within 3 months" :
+                       lead.timeline === "exploring" || lead.timeline === "researching" ? "Still exploring" :
+                       lead.timeline}
+                    </span>
+                  </div>
+                )}
                 {lead.careRecipient && (
                   <div className="flex items-center justify-between">
                     <span className="text-[15px] text-gray-600">Who needs care</span>
@@ -1136,6 +1209,12 @@ function LeadDetailDrawer({
                   <div className="flex items-center justify-between">
                     <span className="text-[15px] text-gray-600">Help with</span>
                     <span className="text-[15px] font-medium text-gray-900 text-right">{lead.careNeeds.join(", ")}</span>
+                  </div>
+                )}
+                {lead.paymentMethods && lead.paymentMethods.length > 0 && (
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="text-[15px] text-gray-600 shrink-0">Can pay with</span>
+                    <span className="text-[15px] font-medium text-gray-900 text-right">{lead.paymentMethods.join(", ")}</span>
                   </div>
                 )}
                 {lead.memberSince && (
@@ -1422,7 +1501,8 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
   // Only treat archived as lead archive if it has a valid archive_reason (indicating it's a passed lead, not inbox archive)
   const hasValidArchiveReason = typeof meta?.archive_reason === 'string' && (meta.archive_reason as string).trim().length > 0;
   const isArchived = meta?.lead_archived === true || (meta?.archived === true && hasValidArchiveReason);
-  const familyProfile = conn.fromProfile;
+  // Normalize familyProfile in case Supabase returns an array
+  const familyProfile = Array.isArray(conn.fromProfile) ? conn.fromProfile[0] : conn.fromProfile;
 
   // Parse the message JSON for care details
   let careDetails: Record<string, unknown> = {};
@@ -1620,6 +1700,17 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
     ? new Date(familyProfile.created_at).toLocaleDateString("en-US", { month: "short", year: "numeric" })
     : undefined;
 
+  // Calculate lead quality score
+  const leadQuality = calculateLeadQualityScore({
+    phone,
+    displayName: fullName,
+    careTypes: profileCareTypes,
+    metadata: familyMeta as FamilyMetadata,
+    thread,
+    familyProfileId: familyProfile?.id,
+    connectionCount: undefined, // Would need additional query - skip for now
+  });
+
   return {
     id: conn.id,
     connectionId: conn.id,
@@ -1657,6 +1748,8 @@ function mapConnectionToLead(conn: ConnectionWithProfile, providerProfileId: str
     profileCompleteness,
     memberSince,
     imageUrl: familyProfile?.image_url || undefined,
+    // Lead quality score
+    leadQuality,
     // Store computed pre-archive status for restore (used by handleRestoreLead)
     _previousStatus: isArchived ? preArchiveStatus : undefined,
   } as LeadDetail & { _previousStatus?: LeadStatus };
@@ -2387,19 +2480,19 @@ export default function ProviderLeadsPage() {
                       </h3>
                       {/* Status badge - New (green), Replied (amber), Archived/Viewed (gray) */}
                       {lead.isNew ? (
-                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
+                        <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
                           New
                         </span>
                       ) : lead.status === "replied" ? (
-                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
+                        <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
                           Replied
                         </span>
                       ) : lead.status === "archived" ? (
-                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+                        <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
                           Archived
                         </span>
                       ) : (
-                        <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
+                        <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
                           Viewed
                         </span>
                       )}
@@ -2467,19 +2560,19 @@ export default function ProviderLeadsPage() {
 
                 {/* Status badge - New (green), Replied (amber), Archived/Viewed (gray) */}
                 {lead.isNew ? (
-                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100">
+                  <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100">
                     New
                   </span>
                 ) : lead.status === "replied" ? (
-                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100">
+                  <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100">
                     Replied
                   </span>
                 ) : lead.status === "archived" ? (
-                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
+                  <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
                     Declined
                   </span>
                 ) : (
-                  <span className="inline-flex items-center justify-center px-2 py-0.5 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
+                  <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200">
                     Viewed
                   </span>
                 )}
