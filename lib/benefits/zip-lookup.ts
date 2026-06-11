@@ -84,14 +84,18 @@ export async function zipToCounty(zip: string): Promise<string | null> {
         countyCache = await res.json();
       }
     } catch {
-      // If fetch fails (e.g., during SSR), try dynamic import
-      try {
-        const fs = await import("fs");
-        const path = await import("path");
-        const filePath = path.join(process.cwd(), "public/data/zip-county.json");
-        const raw = fs.readFileSync(filePath, "utf-8");
-        countyCache = JSON.parse(raw);
-      } catch {
+      // If fetch fails (e.g., during SSR), try dynamic import (server-side only)
+      if (typeof window === 'undefined') {
+        try {
+          const fs = await import("fs");
+          const path = await import("path");
+          const filePath = path.join(process.cwd(), "public/data/zip-county.json");
+          const raw = fs.readFileSync(filePath, "utf-8");
+          countyCache = JSON.parse(raw);
+        } catch {
+          return null;
+        }
+      } else {
         return null;
       }
     }
