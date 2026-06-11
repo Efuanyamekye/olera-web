@@ -1045,6 +1045,26 @@ export default function ProviderLeadsPage() {
     }
   };
 
+  // Clear selected lead when pagination or filter changes to avoid showing details for non-visible leads
+  useEffect(() => {
+    setSelectedLeadId(null);
+    setIsDrawerOpen(false);
+  }, [currentPage, activeFilter]);
+
+  // Sync drawer state when window resizes across lg breakpoint (1024px)
+  // If on mobile and lead is selected but drawer not open, open it
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth < 1024;
+      if (isMobile && selectedLeadId && !isDrawerOpen) {
+        setIsDrawerOpen(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [selectedLeadId, isDrawerOpen]);
+
   // If auth is done loading and there's no provider profile, stop showing skeletons.
   // This prevents eternal loading when the signed-in user doesn't own a provider listing.
   useEffect(() => {
@@ -1169,6 +1189,7 @@ export default function ProviderLeadsPage() {
 
   const closeDrawer = useCallback(() => {
     setIsDrawerOpen(false);
+    setSelectedLeadId(null);
   }, []);
 
   const handleMarkAsReplied = useCallback(async (leadId: string) => {
@@ -1665,7 +1686,7 @@ export default function ProviderLeadsPage() {
         <div className="lg:flex lg:gap-6">
           {/* Left pane: Leads list (collapses when lead selected on desktop) */}
           <div className={`transition-all duration-300 ${
-            selectedLead ? 'lg:w-[280px]' : 'lg:flex-1'
+            selectedLead ? 'lg:w-[280px]' : 'lg:flex-1 lg:max-w-5xl lg:mx-auto'
           }`}>
       {/* ── Leads list ── */}
       {filteredLeads.length > 0 ? (
@@ -1679,7 +1700,13 @@ export default function ProviderLeadsPage() {
             return (
             <div
               key={lead.id}
-              onClick={() => openDrawer(lead)}
+              onClick={() => {
+                if (isSelected) {
+                  closeDrawer();
+                } else {
+                  openDrawer(lead);
+                }
+              }}
               className={`group relative bg-white rounded-xl border transition-all duration-200 cursor-pointer ${
                 isSelected
                   ? 'border-primary-500 shadow-sm'
@@ -1867,7 +1894,7 @@ export default function ProviderLeadsPage() {
                       {isVerified ? selectedLead.name : formatRedactedName(selectedLead.name)}
                     </h2>
                     <button
-                      onClick={() => setSelectedLeadId(null)}
+                      onClick={closeDrawer}
                       className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
                     >
                       <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
