@@ -303,32 +303,30 @@ export const PRICING_DATA_SOURCE = {
  * Methodology: MSA pop-weighted FMR / state pop-weighted-median FMR
  */
 let _metroCostFactors: Record<string, number> | null = null;
+let _loadAttempted = false;
 
-async function getMetroCostFactors(): Promise<Record<string, number>> {
+function getMetroCostFactors(): Record<string, number> {
+  // Return cached value if available
   if (_metroCostFactors) return _metroCostFactors;
 
-  try {
-    // Try fetch first (works in both browser and server)
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || ""}/data/metro-cost-factors.json`
-    );
-    if (res.ok) {
-      _metroCostFactors = await res.json();
-      return _metroCostFactors;
-    }
-  } catch {
-    // If fetch fails, try server-side file read
-    if (typeof window === 'undefined') {
-      try {
-        const fs = await import("fs");
-        const path = await import("path");
-        const filePath = path.join(process.cwd(), "public/data/metro-cost-factors.json");
-        const raw = fs.readFileSync(filePath, "utf-8");
-        _metroCostFactors = JSON.parse(raw);
-        return _metroCostFactors;
-      } catch {
-        // Fall through to empty object
-      }
+  // Only attempt load once to avoid repeated failures
+  if (_loadAttempted) return {};
+  _loadAttempted = true;
+
+  // Server-side only: try to load from filesystem
+  // Use eval to prevent webpack from trying to bundle this
+  if (typeof window === 'undefined' && typeof process !== 'undefined') {
+    try {
+      // Use eval to hide require from webpack's static analysis
+      const dynamicRequire = eval('require');
+      const fs = dynamicRequire("fs");
+      const path = dynamicRequire("path");
+      const filePath = path.join(process.cwd(), "public/data/metro-cost-factors.json");
+      const data = JSON.parse(fs.readFileSync(filePath, "utf-8")) as Record<string, number>;
+      _metroCostFactors = data;
+      return data;
+    } catch {
+      // Fall through - file not found or read error
     }
   }
 
@@ -341,9 +339,9 @@ async function getMetroCostFactors(): Promise<Record<string, number>> {
  * Get metro-level cost adjustment factor for a city.
  * Returns 1.0 if city is not in a metro area or data unavailable.
  */
-export async function getMetroFactor(city: string | null | undefined, state: string): Promise<number> {
+export function getMetroFactor(city: string | null | undefined, state: string): number {
   if (!city) return 1.0;
-  const factors = await getMetroCostFactors();
+  const factors = getMetroCostFactors();
   const key = `${city}|${normalizeStateCode(state)}`;
   return factors[key] ?? 1.0;
 }
@@ -414,11 +412,11 @@ export function getPricingConfig(category: string): CategoryPricingConfig {
  * For categories with hourly rates, returns hourly.
  * For monthly categories, returns monthly.
  */
-export async function getRegionalEstimate(
+export function getRegionalEstimate(
   category: string,
   state: string,
   city?: string | null
-): Promise<{ low: number; high: number; unit: PriceUnit; formatted: string; isMetroAdjusted: boolean } | null> {
+): { low: number; high: number; unit: PriceUnit; formatted: string; isMetroAdjusted: boolean } | null {
   const config = getPricingConfig(category);
   // Normalize to display name for switch matching
   const cat = PROFILE_CATEGORY_TO_CONFIG_KEY[category] ?? category;
@@ -431,7 +429,7 @@ export async function getRegionalEstimate(
   const costs = STATE_MEDIAN_COSTS[stateCode] ?? NATIONAL_MEDIANS;
 
   // Metro adjustment factor (1.0 = state average, >1 = more expensive metro)
-  const metroFactor = city ? await getMetroFactor(city, state) : 1.0;
+  const metroFactor = city ? getMetroFactor(city, state) : 1.0;
   const isMetroAdjusted = metroFactor !== 1.0;
 
   switch (cat) {
