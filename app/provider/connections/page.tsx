@@ -192,7 +192,7 @@ function LeadDetailInlineView({
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-10rem)] flex flex-col overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-3rem)] flex flex-col overflow-hidden">
       {/* Header */}
       <div className="shrink-0 px-4 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
@@ -1833,6 +1833,14 @@ export default function ProviderLeadsPage() {
   const openDrawer = useCallback((lead: LeadDetail) => {
     setSelectedLeadId(lead.id);
     setIsDrawerOpen(true);
+    // On desktop, scroll to activate sticky positioning for the detail panel
+    // This ensures the footer actions are immediately visible
+    // Only scroll if we're near the top (don't scroll up if user is already scrolled down)
+    if (window.innerWidth >= 1024 && window.scrollY < 200) {
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 200, behavior: 'smooth' });
+      });
+    }
     // Clear "New" badge once viewed and persist to database
     if (lead.isNew && providerProfile) {
       setLeads((prev) =>
