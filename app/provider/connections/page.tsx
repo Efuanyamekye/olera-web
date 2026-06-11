@@ -239,12 +239,11 @@ function LeadDetailInlineView({
 
         {/* Summary Card */}
         <div className="rounded-2xl bg-stone-50 px-6 py-4 space-y-1">
-          <p className="text-sm text-gray-600">They&apos;re looking for</p>
-          <h3 className="text-base font-bold text-gray-900">
-            {lead.careType?.[0] || "Care"} in {lead.location || "their area"}
-          </h3>
+          <p className="text-[15px] font-semibold text-gray-900">
+            Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
+          </p>
           {lead.timeline && (
-            <p className="text-base text-gray-700">
+            <p className="text-[15px] text-gray-700">
               Hoping to start {
                 lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
                 lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
@@ -943,12 +942,11 @@ function LeadDetailDrawer({
 
       {/* Summary Card */}
       <div className="rounded-2xl bg-stone-50 px-6 py-4 space-y-1">
-        <p className="text-sm text-gray-600">They&apos;re looking for</p>
-        <h3 className="text-base font-bold text-gray-900">
-          {lead.careType?.[0] || "Care"} in {lead.location || "their area"}
-        </h3>
+        <p className="text-[15px] font-semibold text-gray-900">
+          Looking for {lead.careType?.[0] || "care"} in {lead.location || "their area"}
+        </p>
         {lead.timeline && (
-          <p className="text-base text-gray-700">
+          <p className="text-[15px] text-gray-700">
             Hoping to start {
               lead.timeline === "asap" || lead.timeline === "immediate" ? "immediately" :
               lead.timeline === "within_month" || lead.timeline === "within_1_month" ? "within about a month" :
