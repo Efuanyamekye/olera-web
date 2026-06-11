@@ -238,7 +238,7 @@ function LeadDetailInlineView({
         )}
 
         {/* Summary Card */}
-        <div className="rounded-2xl bg-stone-50 px-6 py-5 space-y-2">
+        <div className="rounded-2xl bg-stone-50 px-6 py-4 space-y-1">
           <p className="text-sm text-gray-600">They&apos;re looking for</p>
           <h3 className="text-base font-bold text-gray-900">
             {lead.careType?.[0] || "Care"} in {lead.location || "their area"}
@@ -271,7 +271,7 @@ function LeadDetailInlineView({
         {isVerified ? (
           (lead.email || lead.phone) && (
             <div>
-              <h4 className="text-base font-bold text-gray-900 mb-2">Contact</h4>
+              <h4 className="text-base font-bold text-gray-900 mb-1.5">Contact</h4>
               <div className="space-y-2.5">
                 {lead.phone && (
                   <div className="group flex items-center gap-2.5">
@@ -342,7 +342,7 @@ function LeadDetailInlineView({
 
         {/* Details (collapsible) */}
         {lead.aboutSituation && (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <h4 className="text-base font-bold text-gray-900">Details</h4>
 
             {!showFullDetails ? (
@@ -942,7 +942,7 @@ function LeadDetailDrawer({
       {ArchivedBanner}
 
       {/* Summary Card */}
-      <div className="rounded-2xl bg-stone-50 px-6 py-5 space-y-2">
+      <div className="rounded-2xl bg-stone-50 px-6 py-4 space-y-1">
         <p className="text-sm text-gray-600">They&apos;re looking for</p>
         <h3 className="text-base font-bold text-gray-900">
           {lead.careType?.[0] || "Care"} in {lead.location || "their area"}
@@ -975,7 +975,7 @@ function LeadDetailDrawer({
       {isVerified ? (
         (lead.email || lead.phone) && (
           <div>
-            <h4 className="text-base font-bold text-gray-900 mb-2">Contact</h4>
+            <h4 className="text-base font-bold text-gray-900 mb-1.5">Contact</h4>
             <div className="space-y-2.5">
               {lead.phone && (
                 <div className="group flex items-center gap-2.5">
@@ -1046,7 +1046,7 @@ function LeadDetailDrawer({
 
       {/* Details (collapsible) */}
       {lead.aboutSituation && (
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <h4 className="text-base font-bold text-gray-900">Details</h4>
 
           {!showFullDetails ? (
