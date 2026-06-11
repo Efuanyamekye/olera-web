@@ -142,6 +142,7 @@ interface EngagementCounts {
   connected: number;
   needs_follow_up: number;
   no_email: number; // Cross-cutting filter: providers without email
+  declined: number; // Provider archived with decline reasons
 }
 
 // Family engagement-based tab counts (family perspective)
@@ -877,6 +878,7 @@ export async function GET(request: NextRequest) {
       connected: 0,
       needs_follow_up: 0,
       no_email: 0,
+      declined: 0,
     };
 
     // Family engagement-based counts (family perspective)
@@ -979,6 +981,11 @@ export async function GET(request: NextRequest) {
         // Count providers without email (cross-cutting filter)
         if (!c.provider.email?.trim()) {
           engagementCounts.no_email++;
+        }
+
+        // Count declined (provider archived with decline reasons)
+        if (isDeclinedArchive) {
+          engagementCounts.declined++;
         }
 
         // Count family engagement levels
