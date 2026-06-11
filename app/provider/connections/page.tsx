@@ -192,7 +192,7 @@ function LeadDetailInlineView({
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 max-h-[calc(100vh-4rem)] flex flex-col">
+    <div className="bg-white rounded-xl border border-gray-200 sticky top-6 max-h-[calc(100vh-8rem)] flex flex-col">
       {/* Header */}
       <div className="shrink-0 px-6 py-4 border-b border-gray-100 bg-white">
         <div className="flex items-start gap-3">
@@ -238,9 +238,9 @@ function LeadDetailInlineView({
         )}
 
         {/* Summary Card */}
-        <div className="rounded-2xl bg-stone-50 px-6 py-5 space-y-3">
+        <div className="rounded-2xl bg-stone-50 px-6 py-5 space-y-2">
           <p className="text-sm text-gray-600">They&apos;re looking for</p>
-          <h3 className="text-2xl font-semibold text-gray-900 leading-tight">
+          <h3 className="text-base font-bold text-gray-900">
             {lead.careType?.[0] || "Care"} in {lead.location || "their area"}
           </h3>
           {lead.timeline && (
@@ -942,9 +942,9 @@ function LeadDetailDrawer({
       {ArchivedBanner}
 
       {/* Summary Card */}
-      <div className="rounded-2xl bg-stone-50 px-6 py-5 space-y-3">
+      <div className="rounded-2xl bg-stone-50 px-6 py-5 space-y-2">
         <p className="text-sm text-gray-600">They&apos;re looking for</p>
-        <h3 className="text-2xl font-semibold text-gray-900 leading-tight">
+        <h3 className="text-base font-bold text-gray-900">
           {lead.careType?.[0] || "Care"} in {lead.location || "their area"}
         </h3>
         {lead.timeline && (
