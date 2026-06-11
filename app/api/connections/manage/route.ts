@@ -504,10 +504,17 @@ export async function POST(request: Request) {
         // Determine which flag to remove based on source or what's set:
         // - source="connections" OR only lead_archived set → remove lead_archived
         // - source="inbox" OR only archived set → remove archived
-        // - If source not specified, use intelligent fallback
+        // - If both flags set and no source, check for archive_reason to determine which is primary
 
-        const isConnectionsUnarchive = source === "connections" || (hasLeadArchived && !hasInboxArchived);
-        const isInboxUnarchive = source === "inbox" || (!hasLeadArchived && hasInboxArchived);
+        const hasArchiveReason = existingMeta.archive_reason !== undefined && existingMeta.archive_reason !== null;
+
+        const isConnectionsUnarchive = source === "connections"
+          || (hasLeadArchived && !hasInboxArchived)
+          || (!source && hasLeadArchived && hasInboxArchived && hasArchiveReason); // Fallback: both flags + reason = lead archive
+
+        const isInboxUnarchive = source === "inbox"
+          || (!hasLeadArchived && hasInboxArchived)
+          || (!source && hasLeadArchived && hasInboxArchived && !hasArchiveReason); // Fallback: both flags + no reason = inbox archive
 
         if (isConnectionsUnarchive) {
           // Unarchiving lead from connections page
@@ -516,8 +523,16 @@ export async function POST(request: Request) {
           delete cleanMeta.archive_message;
           delete cleanMeta.archived_by;
           delete cleanMeta.archived_at;
-          // Only remove archived_from_status if inbox is not archived
-          if (!hasInboxArchived) {
+
+          // For old data: if archived flag has archive_reason, it represents lead archiving
+          // Delete it so inbox conversation becomes visible again
+          const hadArchiveReason = existingMeta.archive_reason !== undefined && existingMeta.archive_reason !== null;
+          if (hasInboxArchived && hadArchiveReason) {
+            delete cleanMeta.archived;
+          }
+
+          // Only remove archived_from_status if inbox is not archived (or we just removed archived flag)
+          if (!hasInboxArchived || hadArchiveReason) {
             delete cleanMeta.archived_from_status;
           }
         } else if (isInboxUnarchive) {
