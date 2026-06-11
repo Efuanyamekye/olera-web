@@ -194,7 +194,8 @@ function LeadDetailInlineView({
   return (
     <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-10rem)] flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="shrink-0 h-20 px-4 border-b border-gray-100 bg-white flex items-center gap-3">
+      <div className="shrink-0 px-4 py-4 border-b border-gray-100 bg-white">
+        <div className="flex items-start gap-3">
           <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${avatarGradient(lead.name)} flex items-center justify-center text-base font-semibold text-white shrink-0`}>
             {lead.initials}
           </div>
@@ -214,6 +215,7 @@ function LeadDetailInlineView({
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
             </svg>
           </button>
+        </div>
       </div>
 
       {/* Scrollable content */}
