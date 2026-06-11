@@ -271,7 +271,7 @@ function LeadDetailInlineView({
         {isVerified ? (
           (lead.email || lead.phone) && (
             <div>
-              <h4 className="text-base font-bold text-gray-900 mb-3">Contact</h4>
+              <h4 className="text-base font-bold text-gray-900 mb-2">Contact</h4>
               <div className="space-y-2.5">
                 {lead.phone && (
                   <div className="group flex items-center gap-2.5">
@@ -342,7 +342,7 @@ function LeadDetailInlineView({
 
         {/* Details (collapsible) */}
         {lead.aboutSituation && (
-          <div className="space-y-3">
+          <div className="space-y-2">
             <h4 className="text-base font-bold text-gray-900">Details</h4>
 
             {!showFullDetails ? (
@@ -353,7 +353,7 @@ function LeadDetailInlineView({
                 {lead.aboutSituation.length > 80 && (
                   <button
                     onClick={() => setShowFullDetails(true)}
-                    className="flex items-center gap-1.5 text-[15px] font-semibold text-teal-700 hover:text-teal-800 transition-colors"
+                    className="flex items-center gap-1.5 text-[15px] font-medium text-teal-700 hover:text-teal-800 transition-colors"
                     aria-expanded="false"
                     aria-label="Read full details"
                   >
@@ -975,7 +975,7 @@ function LeadDetailDrawer({
       {isVerified ? (
         (lead.email || lead.phone) && (
           <div>
-            <h4 className="text-base font-bold text-gray-900 mb-3">Contact</h4>
+            <h4 className="text-base font-bold text-gray-900 mb-2">Contact</h4>
             <div className="space-y-2.5">
               {lead.phone && (
                 <div className="group flex items-center gap-2.5">
@@ -1046,7 +1046,7 @@ function LeadDetailDrawer({
 
       {/* Details (collapsible) */}
       {lead.aboutSituation && (
-        <div className="space-y-3">
+        <div className="space-y-2">
           <h4 className="text-base font-bold text-gray-900">Details</h4>
 
           {!showFullDetails ? (
@@ -1057,7 +1057,7 @@ function LeadDetailDrawer({
               {lead.aboutSituation.length > 80 && (
                 <button
                   onClick={() => setShowFullDetails(true)}
-                  className="flex items-center gap-1.5 text-[15px] font-semibold text-teal-700 hover:text-teal-800 transition-colors"
+                  className="flex items-center gap-1.5 text-[15px] font-medium text-teal-700 hover:text-teal-800 transition-colors"
                   aria-expanded="false"
                   aria-label="Read full details"
                 >
