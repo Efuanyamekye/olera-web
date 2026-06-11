@@ -514,10 +514,10 @@ function LeadDetailDrawer({
       {/* Content */}
       <div className="flex-1 min-w-0 pr-6">
         <h3 className="text-base sm:text-[17px] font-semibold text-gray-900 leading-snug">
-          This lead is free — no charge to you.
+          These leads are free — no charge to you.
         </h3>
         <p className="text-[14px] sm:text-[15px] text-gray-600 mt-1.5 leading-relaxed">
-          Message the family to learn about their needs and see if they&apos;re a good fit. If not, pass on the lead so they know to keep looking.
+          Message families directly to discuss their needs and see if they&apos;re a good fit. Pass on any leads that aren&apos;t the right match.
         </p>
       </div>
 
