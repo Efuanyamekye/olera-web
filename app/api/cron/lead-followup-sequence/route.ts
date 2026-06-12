@@ -208,6 +208,7 @@ export async function GET(request: NextRequest) {
         nudge_cap: 0, // Frequency gate held this stage — provider over the weekly nudge budget
         admin_marked_connected: 0, // Admin verified provider connected off-platform
         provider_archived: 0, // Provider archived lead in their portal (not a fit, not taking clients, etc.)
+        admin_archived_provider: 0, // Admin archived the provider (no emails to them)
       },
       dry_run: dryRun,
     };
@@ -229,7 +230,7 @@ export async function GET(request: NextRequest) {
         metadata,
         created_at,
         from_profile:business_profiles!connections_from_profile_id_fkey(display_name, care_types, metadata),
-        to_profile:business_profiles!connections_to_profile_id_fkey(id, display_name, slug, source_provider_id, email, city)
+        to_profile:business_profiles!connections_to_profile_id_fkey(id, display_name, slug, source_provider_id, email, city, metadata)
       `
       )
       .eq("type", "inquiry")
@@ -394,6 +395,14 @@ export async function GET(request: NextRequest) {
         }
         counts.skipped++;
         counts.skipReasons.provider_archived = (counts.skipReasons.provider_archived || 0) + 1;
+        continue;
+      }
+
+      // Check if provider is admin-archived (no emails sent to them)
+      const toProfileMeta = (toProfile?.metadata as Record<string, unknown>) ?? {};
+      if (toProfileMeta.admin_archived === true) {
+        counts.skipped++;
+        counts.skipReasons.admin_archived_provider = (counts.skipReasons.admin_archived_provider || 0) + 1;
         continue;
       }
 

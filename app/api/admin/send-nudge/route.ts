@@ -111,6 +111,15 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Check if provider is admin-archived
+  const providerMeta = (providerProfile?.metadata as Record<string, unknown>) ?? {};
+  if (providerMeta.admin_archived === true) {
+    return NextResponse.json(
+      { error: "This provider is archived. No emails can be sent to them." },
+      { status: 400 }
+    );
+  }
+
   // Check cooldown
   const meta = (connection.metadata as Record<string, unknown>) ?? {};
   const lastNudgedAt = meta.nudged_at as string | undefined;

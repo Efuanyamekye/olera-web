@@ -76,6 +76,8 @@ export interface ConnectionRowData {
   archivedAt?: string;
   /** Email issue type for "Needs Email" tab */
   emailIssueType?: "no_email" | "failed" | "invalid" | null;
+  /** Admin archived this provider - no emails sent to them */
+  isProviderArchived?: boolean;
 }
 
 // Per-provider engagement data from list API (does NOT include "messaged")
@@ -299,13 +301,14 @@ export default function ConnectionRow({
   c,
   perspective = "provider",
   engagement,
-  onDelete,
+  onArchiveProvider,
   onNudgeSuccess,
 }: {
   c: ConnectionRowData;
   perspective?: Perspective;
   engagement?: Engagement;
-  onDelete?: (id: string) => void;
+  /** Called when user clicks archive/unarchive icon on provider row */
+  onArchiveProvider?: (providerId: string, providerName: string | null, isArchived: boolean) => void;
   onNudgeSuccess?: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -1017,14 +1020,18 @@ export default function ConnectionRow({
 
   // Provider archived this lead - show as declined with reduced opacity
   const isDeclined = c.archived && c.archiveReason;
+  // Admin archived the provider - show as dimmed with amber tint
+  const isAdminArchived = c.isProviderArchived;
 
   return (
     <div className="group">
       {/* Collapsed row - enhanced with more context */}
       <div className={`flex w-full items-center gap-3 px-4 py-4 transition-colors ${
-        isDeclined
-          ? "bg-gray-50/80 hover:bg-gray-100/80 opacity-75"
-          : "hover:bg-stone-50/60"
+        isAdminArchived
+          ? "bg-amber-50/40 hover:bg-amber-50/60 opacity-70"
+          : isDeclined
+            ? "bg-gray-50/80 hover:bg-gray-100/80 opacity-75"
+            : "hover:bg-stone-50/60"
       }`}>
         <button
           onClick={toggle}
@@ -1035,7 +1042,12 @@ export default function ConnectionRow({
           <div className="flex items-center gap-2">
             <span className="font-medium text-gray-900 truncate">{family}</span>
             <span className="text-gray-400">→</span>
-            <span className="font-medium text-gray-900 truncate">{provider}</span>
+            <span className={`font-medium truncate ${isAdminArchived ? "text-gray-500" : "text-gray-900"}`}>{provider}</span>
+            {isAdminArchived && (
+              <span className="px-1.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 rounded">
+                Archived
+              </span>
+            )}
             <EngagementBadges engagement={engagement} messaged={c.responded} markedReplied={c.markedReplied} alreadyConnected={c.alreadyConnected} adminOverride={c.adminOverride} compact />
           </div>
           {/* Secondary line: care type + timeline | waiting status | nudge info | archive badge | no email badge */}
@@ -1099,19 +1111,31 @@ export default function ConnectionRow({
           })()}
         </span>
 
-        {/* Delete button - hover reveal */}
-        {onDelete && (
+        {/* Archive provider button - hover reveal */}
+        {onArchiveProvider && c.provider.id && (
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onDelete(c.id);
+              onArchiveProvider(c.provider.id!, c.provider.display_name, !!c.isProviderArchived);
             }}
-            className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 text-gray-300 hover:text-red-500 transition-all"
-            title="Delete connection"
+            className={`opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 transition-all ${
+              c.isProviderArchived
+                ? "text-gray-400 hover:text-blue-500"
+                : "text-gray-300 hover:text-amber-600"
+            }`}
+            title={c.isProviderArchived ? "Unarchive provider" : "Archive provider"}
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
+            {c.isProviderArchived ? (
+              // Unarchive icon (arrow-up-tray from Heroicons)
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+            ) : (
+              // Archive icon (archive-box from Heroicons)
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+              </svg>
+            )}
           </button>
         )}
 

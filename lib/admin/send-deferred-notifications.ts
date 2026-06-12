@@ -72,6 +72,25 @@ export async function sendDeferredNotificationsForProvider(
   };
 
   // ─────────────────────────────────────────────────────────────────────────
+  // 0. Check if provider is admin-archived (skip all notifications)
+  // ─────────────────────────────────────────────────────────────────────────
+  if (profileId) {
+    const { data: providerProfile } = await db
+      .from("business_profiles")
+      .select("metadata")
+      .eq("id", profileId)
+      .maybeSingle();
+
+    const providerMeta = (providerProfile?.metadata as Record<string, unknown>) ?? {};
+    if (providerMeta.admin_archived === true) {
+      console.log(
+        `[send-deferred] Skipping notifications for admin-archived provider ${providerSlug}`
+      );
+      return result;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
   // 1. Send deferred LEAD notifications
   // ─────────────────────────────────────────────────────────────────────────
 

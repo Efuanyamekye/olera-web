@@ -29,6 +29,7 @@ interface EngagementCounts {
   needs_follow_up: number;
   declined: number;
   needs_email: number;
+  archived: number;
 }
 
 interface FamilyEngagementCounts {
@@ -84,7 +85,7 @@ type FamilyEngagementLevel = "new" | "awaiting" | "connected" | "needs_follow_up
 type Perspective = "provider" | "family";
 
 // Engagement-based tabs
-type ProviderFilterKey = "all" | EngagementLevel | "needs_email" | "declined";
+type ProviderFilterKey = "all" | EngagementLevel | "needs_email" | "declined" | "archived";
 type FamilyFilterKey = "all" | FamilyEngagementLevel;
 type FilterKey = ProviderFilterKey | FamilyFilterKey;
 
@@ -103,6 +104,7 @@ const PROVIDER_TABS: TabConfig[] = [
   { key: "declined", label: "Declined", description: "Provider declined lead (not a fit, not accepting clients, etc.)", emptyMessage: "No declined leads." },
   { key: "needs_follow_up", label: "Needs Follow-up", description: "No activity for 10+ days, requires manual intervention", emptyMessage: "No providers need follow-up." },
   { key: "needs_email", label: "Needs Email", description: "Provider has no email, invalid email, or delivery failed", emptyMessage: "All providers have working emails." },
+  { key: "archived", label: "Archived", description: "Admin-archived providers - no emails sent to them", emptyMessage: "No archived providers." },
   { key: "all", label: "All", description: "Everything", emptyMessage: "No connections yet." },
 ];
 
@@ -530,10 +532,16 @@ export default function ConnectionsTrackerPage() {
   const [statsExpanded, setStatsExpanded] = useState(false);
   const [actionsExpanded, setActionsExpanded] = useState(false);
 
-  // Delete state
-  const [pendingDelete, setPendingDelete] = useState<ConnectionRowData | null>(null);
-  const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  // Archive provider state
+  const [pendingArchive, setPendingArchive] = useState<{
+    providerId: string;
+    providerName: string | null;
+    isArchived: boolean;
+    connectionCount: number;
+  } | null>(null);
+  const [archiving, setArchiving] = useState(false);
+  const [archiveError, setArchiveError] = useState<string | null>(null);
+  const [archiveReason, setArchiveReason] = useState<string>("");
 
   // Debounce search input by 300ms
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -663,62 +671,45 @@ export default function ConnectionsTrackerPage() {
     return outboundList.outboundCounts[key] ?? 0;
   };
 
-  // Delete handlers
-  const requestDelete = (id: string) => {
-    const connection = list?.connections.find(c => c.id === id);
-    if (connection) {
-      setPendingDelete(connection);
-      setDeleteError(null);
-    }
+  // Handle archive provider button click
+  const handleArchiveProvider = (providerId: string, providerName: string | null, isArchived: boolean) => {
+    // Count how many connections this provider has in current list
+    const connectionCount = list?.connections.filter(c => c.provider.id === providerId).length ?? 0;
+    setPendingArchive({ providerId, providerName, isArchived, connectionCount });
+    setArchiveError(null);
+    setArchiveReason("");
   };
 
-  const confirmDelete = async () => {
-    if (!pendingDelete) return;
+  const confirmArchive = async () => {
+    if (!pendingArchive) return;
 
-    setDeleting(true);
-    setDeleteError(null);
-
-    // Optimistic removal - update both connections list and engagement counts
-    const connectionToDelete = pendingDelete;
-    setList(prev => {
-      if (!prev) return null;
-
-      // Decrement the appropriate engagement count
-      const engagementLevel = connectionToDelete.engagementLevel;
-      const updatedCounts = { ...prev.engagementCounts };
-      if (engagementLevel && updatedCounts[engagementLevel] > 0) {
-        updatedCounts[engagementLevel]--;
-        updatedCounts.all--;
-      }
-
-      return {
-        ...prev,
-        connections: prev.connections.filter(c => c.id !== connectionToDelete.id),
-        total: prev.total - 1,
-        engagementCounts: updatedCounts,
-      };
-    });
+    setArchiving(true);
+    setArchiveError(null);
 
     try {
-      const res = await fetch(`/api/admin/connections/${connectionToDelete.id}`, {
-        method: "DELETE",
+      const res = await fetch(`/api/admin/providers/${pendingArchive.providerId}/archive`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: pendingArchive.isArchived ? "unarchive" : "archive",
+          reason: archiveReason || undefined,
+        }),
       });
 
+      const data = await res.json().catch(() => ({}));
+
       if (res.ok) {
-        setPendingDelete(null);
-        // Refetch to get accurate funnel stats (optimistic update handles immediate UI)
+        setPendingArchive(null);
+        setArchiveReason("");
+        // Refetch to update tab counts and move connections to appropriate tabs
         fetchConnections();
       } else {
-        // Rollback on error
-        fetchConnections();
-        const data = await res.json().catch(() => ({}));
-        setDeleteError(data.error || "Failed to delete connection");
+        setArchiveError(data.error || "Failed to archive provider");
       }
     } catch {
-      fetchConnections();
-      setDeleteError("Network error");
+      setArchiveError("Network error");
     } finally {
-      setDeleting(false);
+      setArchiving(false);
     }
   };
 
@@ -1036,7 +1027,7 @@ export default function ConnectionsTrackerPage() {
                   engagement={
                     c.provider.activityKey ? list.engagement[c.provider.activityKey] : undefined
                   }
-                  onDelete={requestDelete}
+                  onArchiveProvider={handleArchiveProvider}
                   onNudgeSuccess={fetchConnections}
                 />
               ))}
@@ -1081,53 +1072,80 @@ export default function ConnectionsTrackerPage() {
         </p>
       )}
 
-      {/* Delete confirmation modal */}
-      {pendingDelete && (
+      {/* Archive provider confirmation modal */}
+      {pendingArchive && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="delete-connection-title"
+          aria-labelledby="archive-provider-title"
         >
           <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full">
-            <h3 id="delete-connection-title" className="text-base font-semibold text-gray-900 mb-3">
-              Delete this connection?
+            <h3 id="archive-provider-title" className="text-base font-semibold text-gray-900 mb-3">
+              {pendingArchive.isArchived ? "Unarchive this provider?" : "Archive this provider?"}
             </h3>
-            <dl className="text-sm text-gray-700 space-y-1.5 mb-4">
-              <div className="flex gap-2">
-                <dt className="w-20 shrink-0 text-gray-400">Family</dt>
-                <dd className="text-gray-900">{pendingDelete.family.display_name || "Unknown"}</dd>
-              </div>
-              <div className="flex gap-2">
-                <dt className="w-20 shrink-0 text-gray-400">Provider</dt>
-                <dd className="text-gray-900">{pendingDelete.provider.display_name || "Unknown"}</dd>
-              </div>
-            </dl>
-            <p className="text-[12px] text-gray-500 leading-relaxed mb-5">
-              This will permanently delete this connection and all associated messages. This cannot be undone.
+            <p className="text-sm text-gray-700 mb-4">
+              <span className="text-gray-400">Provider:</span>{" "}
+              <span className="font-medium text-gray-900">{pendingArchive.providerName || "Unknown"}</span>
             </p>
-            {deleteError && (
-              <p className="text-[12px] text-red-600 mb-3">{deleteError}</p>
+            {pendingArchive.isArchived ? (
+              <p className="text-[12px] text-gray-500 leading-relaxed mb-5">
+                This will unarchive the provider. Their connections will return to the appropriate tabs and email sequences may resume.
+              </p>
+            ) : (
+              <>
+                <p className="text-[12px] text-gray-500 leading-relaxed mb-4">
+                  All connections to this provider will move to the Archived tab. No future emails will be sent to this provider (nudges, follow-ups, digests). Families will continue to receive their emails.
+                </p>
+                <div className="mb-5">
+                  <label htmlFor="archive-reason" className="block text-xs font-medium text-gray-600 mb-1.5">
+                    Reason (optional)
+                  </label>
+                  <select
+                    id="archive-reason"
+                    value={archiveReason}
+                    onChange={(e) => setArchiveReason(e.target.value)}
+                    className="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  >
+                    <option value="">Select a reason...</option>
+                    <option value="provider_requested_no_emails">Provider requested no emails</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="duplicate">Duplicate</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </>
+            )}
+            {archiveError && (
+              <p className="text-[12px] text-red-600 mb-3">{archiveError}</p>
             )}
             <div className="flex justify-end gap-2">
               <button
                 type="button"
                 onClick={() => {
-                  setPendingDelete(null);
-                  setDeleteError(null);
+                  setPendingArchive(null);
+                  setArchiveError(null);
+                  setArchiveReason("");
                 }}
-                disabled={deleting}
+                disabled={archiving}
                 className="text-xs font-medium text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-md disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 type="button"
-                onClick={confirmDelete}
-                disabled={deleting}
-                className="text-xs font-medium text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-md disabled:opacity-50"
+                onClick={confirmArchive}
+                disabled={archiving}
+                className={`text-xs font-medium text-white px-3 py-1.5 rounded-md disabled:opacity-50 ${
+                  pendingArchive.isArchived
+                    ? "bg-blue-600 hover:bg-blue-700"
+                    : "bg-amber-600 hover:bg-amber-700"
+                }`}
               >
-                {deleting ? "Deleting..." : "Delete"}
+                {archiving
+                  ? pendingArchive.isArchived ? "Unarchiving..." : "Archiving..."
+                  : pendingArchive.isArchived ? "Unarchive" : "Archive"
+                }
               </button>
             </div>
           </div>

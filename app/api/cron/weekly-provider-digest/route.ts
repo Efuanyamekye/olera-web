@@ -722,6 +722,13 @@ export async function GET(request: NextRequest) {
         continue;
       }
 
+      // Skip if provider is admin-archived (no emails sent to them)
+      if (meta.admin_archived === true) {
+        sentEmails.add(emailKey);
+        bumpSkip("admin_archived");
+        continue;
+      }
+
       const openQ = openQuestionsByProvider.get(providerId);
 
       // Signal gate: views, CTA clicks, leads, this-week questions, OR a live

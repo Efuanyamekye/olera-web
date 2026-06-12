@@ -118,6 +118,12 @@ export async function GET(request: NextRequest) {
         continue;
       }
 
+      // Skip if provider is admin-archived (no emails sent to them)
+      if (meta.admin_archived === true) {
+        counts.skipped++;
+        continue;
+      }
+
       // Get email
       let email = provider.email;
       let recipientName = meta.verification_submission
