@@ -345,9 +345,8 @@ export default function ConnectionRow({
   const [pendingEmailEdit, setPendingEmailEdit] = useState<{ oldEmail: string; newEmail: string } | null>(null);
   const editEmailTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Mark status modal state
+  // Mark as Connected modal state
   const [showMarkStatusModal, setShowMarkStatusModal] = useState(false);
-  const [markStatusType, setMarkStatusType] = useState<"viewed" | "connected">("connected");
   const [markStatusReason, setMarkStatusReason] = useState("");
   const [markStatusNotes, setMarkStatusNotes] = useState("");
   const [markingStatus, setMarkingStatus] = useState(false);
@@ -744,7 +743,7 @@ export default function ConnectionRow({
     }
   }
 
-  // Mark connection status (admin verification of off-platform activity)
+  // Mark connection as connected (admin verification of off-platform activity)
   async function handleMarkStatus() {
     if (!markStatusReason.trim()) {
       setMarkStatusError("Please select a reason");
@@ -759,7 +758,7 @@ export default function ConnectionRow({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          status: markStatusType,
+          status: "connected",
           reason: markStatusReason,
           notes: markStatusNotes.trim() || undefined,
         }),
@@ -1179,14 +1178,12 @@ export default function ConnectionRow({
                         >
                           Fact Sheet
                         </button>
-                        <div className="relative">
-                          <button
-                            onClick={() => setShowMarkStatusModal(true)}
-                            className="px-3 py-1.5 rounded-lg border border-blue-300 text-blue-700 text-sm font-medium hover:bg-blue-50"
-                          >
-                            Mark Status ▼
-                          </button>
-                        </div>
+                        <button
+                          onClick={() => setShowMarkStatusModal(true)}
+                          className="px-3 py-1.5 rounded-lg border border-emerald-300 text-emerald-700 text-sm font-medium hover:bg-emerald-50"
+                        >
+                          ✓ Mark Connected
+                        </button>
                       </>
                     )}
                   </div>
@@ -1921,7 +1918,7 @@ export default function ConnectionRow({
         />
       )}
 
-      {/* Mark Status Modal */}
+      {/* Mark as Connected Modal */}
       {showMarkStatusModal && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
@@ -1938,106 +1935,84 @@ export default function ConnectionRow({
           }}
         >
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Mark Connection as {markStatusType === "viewed" ? "Viewed" : "Connected"}
-            </h3>
-
-            {/* Status Type Selection */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => {
-                    setMarkStatusType("viewed");
-                    setMarkStatusReason("");
-                  }}
-                  className={`flex-1 px-4 py-2 rounded-lg border text-sm font-medium ${
-                    markStatusType === "viewed"
-                      ? "border-blue-600 bg-blue-50 text-blue-700"
-                      : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  Viewed
-                </button>
-                <button
-                  onClick={() => {
-                    setMarkStatusType("connected");
-                    setMarkStatusReason("");
-                  }}
-                  className={`flex-1 px-4 py-2 rounded-lg border text-sm font-medium ${
-                    markStatusType === "connected"
-                      ? "border-emerald-600 bg-emerald-50 text-emerald-700"
-                      : "border-gray-300 text-gray-700 hover:bg-gray-50"
-                  }`}
-                >
-                  Connected
-                </button>
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Mark as Connected</h3>
+                <p className="text-sm text-gray-500">Verify this provider contacted the family</p>
               </div>
             </div>
 
-            {/* Reason Selection */}
+            {/* Reason Selection - Polished radio buttons */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Reason *</label>
-              <select
-                value={markStatusReason}
-                onChange={(e) => setMarkStatusReason(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option value="">Select a reason...</option>
-                {markStatusType === "viewed" ? (
-                  <>
-                    <option value="Called provider - they viewed the lead">Called provider - they viewed the lead</option>
-                    <option value="Provider confirmed via email">Provider confirmed via email</option>
-                    <option value="Found evidence in notes">Found evidence in notes</option>
-                    <option value="Other (see notes)">Other (see notes)</option>
-                  </>
-                ) : (
-                  <>
-                    <option value="Called provider - they connected with family">Called provider - they connected with family</option>
-                    <option value="Called family - they confirmed provider contacted them">Called family - they confirmed provider contacted them</option>
-                    <option value="Provider confirmed connection via email">Provider confirmed connection via email</option>
-                    <option value="Found evidence in conversation thread">Found evidence in conversation thread</option>
-                    <option value="Other (see notes)">Other (see notes)</option>
-                  </>
-                )}
-              </select>
+              <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                How did you verify?
+              </label>
+              <div className="space-y-2">
+                {[
+                  { value: "Called provider — confirmed they contacted family", icon: "📞" },
+                  { value: "Provider replied to admin outreach", icon: "📧" },
+                  { value: "Verified in platform messages", icon: "💬" },
+                  { value: "Other", icon: "📝" },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => setMarkStatusReason(option.value)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg border text-left transition-all ${
+                      markStatusReason === option.value
+                        ? "border-emerald-500 bg-emerald-50 ring-1 ring-emerald-500"
+                        : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                    }`}
+                  >
+                    <span className="text-lg">{option.icon}</span>
+                    <span className={`text-sm ${markStatusReason === option.value ? "text-emerald-900 font-medium" : "text-gray-700"}`}>
+                      {option.value}
+                    </span>
+                    {markStatusReason === option.value && (
+                      <svg className="w-5 h-5 text-emerald-600 ml-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            {/* Notes */}
+            {/* Notes - only show when "Other" is selected or always available */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Notes (optional)</label>
+              <label className="block text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                Notes {markStatusReason === "Other" ? "(required)" : "(optional)"}
+              </label>
               <textarea
                 value={markStatusNotes}
                 onChange={(e) => setMarkStatusNotes(e.target.value)}
-                placeholder="Additional context..."
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder={markStatusReason === "Other" ? "Describe how you verified..." : "Additional context..."}
+                rows={2}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder:text-gray-400"
               />
             </div>
 
             {/* Impact Message */}
-            <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
-              <p className="text-sm text-blue-800">
-                {markStatusType === "viewed" ? (
-                  <>
-                    • Move to <strong>Viewed</strong> tab<br />
-                    • Email sequence continues from viewed stage
-                  </>
-                ) : (
-                  <>
-                    • Move to <strong>Connected</strong> tab<br />
-                    • <strong>Stop email sequence</strong><br />
-                    • Mark as admin-verified
-                  </>
-                )}
+            <div className="mb-5 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-xs text-gray-600">
+                <span className="font-medium text-gray-900">What happens:</span> Connection moves to Connected tab, email sequence stops, and this verification is logged.
               </p>
             </div>
 
             {/* Success */}
             {markStatusSuccess && (
               <div className="mb-4 p-3 bg-emerald-50 rounded-lg border border-emerald-200">
-                <p className="text-sm text-emerald-800">
-                  ✓ Marked as {markStatusType === "viewed" ? "viewed" : "connected"}! Connection will move to {markStatusType === "viewed" ? "Viewed" : "Connected"} tab.
+                <p className="text-sm text-emerald-800 flex items-center gap-2">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Marked as connected! Moving to Connected tab.
                 </p>
               </div>
             )}
@@ -2060,20 +2035,26 @@ export default function ConnectionRow({
                   setMarkStatusSuccess(false);
                 }}
                 disabled={markingStatus || markStatusSuccess}
-                className="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-50 disabled:opacity-50 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleMarkStatus}
-                disabled={markingStatus || markStatusSuccess || !markStatusReason}
-                className={`flex-1 px-4 py-2 rounded-lg text-white text-sm font-medium disabled:opacity-50 ${
-                  markStatusType === "viewed"
-                    ? "bg-blue-600 hover:bg-blue-700"
-                    : "bg-emerald-600 hover:bg-emerald-700"
-                }`}
+                disabled={markingStatus || markStatusSuccess || !markStatusReason || (markStatusReason === "Other" && !markStatusNotes.trim())}
+                className="flex-1 px-4 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                {markingStatus ? "Marking..." : `Mark as ${markStatusType === "viewed" ? "Viewed" : "Connected"}`}
+                {markingStatus ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    Marking...
+                  </span>
+                ) : (
+                  "Mark as Connected"
+                )}
               </button>
             </div>
           </div>

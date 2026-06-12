@@ -11,24 +11,17 @@ import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
  * in engagement level calculation.
  */
 
-const VALID_STATUSES = ["viewed", "connected"] as const;
+const VALID_STATUSES = ["connected"] as const;
 type AdminOverrideStatus = typeof VALID_STATUSES[number];
 
-const PRESET_REASONS = {
-  viewed: [
-    "Called provider - they viewed the lead",
-    "Provider confirmed via email",
-    "Found evidence in notes",
-    "Other (see notes)",
-  ],
-  connected: [
-    "Called provider - they connected with family",
-    "Called family - they confirmed provider contacted them",
-    "Provider confirmed connection via email",
-    "Found evidence in conversation thread",
-    "Other (see notes)",
-  ],
-} as const;
+// Reasons admin can select when marking a connection as connected
+// These reflect how the admin verified the connection happened
+const CONNECTED_REASONS = [
+  "Called provider — confirmed they contacted family",
+  "Provider replied to admin outreach",
+  "Verified in platform messages",
+  "Other",
+] as const;
 
 interface MarkStatusRequest {
   status: AdminOverrideStatus;
