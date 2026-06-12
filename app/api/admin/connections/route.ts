@@ -393,11 +393,10 @@ export async function GET(request: NextRequest) {
       .order("created_at", { ascending: false })
       .limit(FETCH_CAP);
 
-    // For "archived" tab: include connection-level archived leads (from leads page)
-    // For other tabs: exclude them (they should only appear in Archived tab)
-    if (responseFilter !== "archived") {
-      q = q.not("metadata", "cs", JSON.stringify({ archived: true }));
-    }
+    // NOTE: We do NOT exclude archived connections at query level.
+    // All connections are fetched, then filtered in-memory so that:
+    // - engagementCounts.archived can be computed for all tabs
+    // - The correct connections are shown per tab
     if (dateFrom) q = q.gte("created_at", dateFrom);
     if (dateTo) q = q.lte("created_at", dateTo);
 
