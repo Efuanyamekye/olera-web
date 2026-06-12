@@ -11,20 +11,8 @@ import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
  * in engagement level calculation.
  */
 
-const VALID_STATUSES = ["connected"] as const;
-type AdminOverrideStatus = typeof VALID_STATUSES[number];
-
-// Reasons admin can select when marking a connection as connected
-// These reflect how the admin verified the connection happened
-const CONNECTED_REASONS = [
-  "Called provider — confirmed they contacted family",
-  "Provider replied to admin outreach",
-  "Verified in platform messages",
-  "Other",
-] as const;
-
 interface MarkStatusRequest {
-  status: AdminOverrideStatus;
+  status: "connected";
   reason: string;
   notes?: string;
 }
@@ -49,9 +37,9 @@ export async function POST(
     const { status, reason, notes } = body;
 
     // Validate inputs
-    if (!status || !VALID_STATUSES.includes(status)) {
+    if (status !== "connected") {
       return NextResponse.json(
-        { error: `Invalid status. Must be one of: ${VALID_STATUSES.join(", ")}` },
+        { error: "Invalid status. Only 'connected' is supported." },
         { status: 400 }
       );
     }
@@ -59,6 +47,14 @@ export async function POST(
     if (!reason?.trim()) {
       return NextResponse.json(
         { error: "Reason is required" },
+        { status: 400 }
+      );
+    }
+
+    // Require notes when reason is "Other"
+    if (reason === "Other" && !notes?.trim()) {
+      return NextResponse.json(
+        { error: "Notes are required when reason is 'Other'" },
         { status: 400 }
       );
     }
