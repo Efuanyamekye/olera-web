@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import {
   formatAge,
   type ConnectionTemperature,
@@ -9,6 +9,7 @@ import {
 import EmailStatusPill from "@/components/admin/EmailStatusPill";
 import EmailPreviewModal from "@/components/admin/EmailPreviewModal";
 import ProviderFactSheetModal from "@/components/admin/ProviderFactSheetModal";
+import EmailVerificationBadge, { type VerificationStatus } from "@/components/admin/EmailVerificationBadge";
 
 interface ProfileCompleteness {
   percentage: number;
@@ -364,14 +365,104 @@ export default function ConnectionRow({
   const [isCachedResult, setIsCachedResult] = useState(false);
   const [autoSuggestAttempted, setAutoSuggestAttempted] = useState(false);
 
+  // Email verification state
+  const [verificationStatus, setVerificationStatus] = useState<VerificationStatus>("idle");
+  const [candidateStatuses, setCandidateStatuses] = useState<Map<string, VerificationStatus>>(new Map());
+  const [forceSubmit, setForceSubmit] = useState(false);
+  const verifyDebounceRef = useRef<NodeJS.Timeout | null>(null);
+
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (editEmailTimeoutRef.current) {
         clearTimeout(editEmailTimeoutRef.current);
       }
+      if (verifyDebounceRef.current) {
+        clearTimeout(verifyDebounceRef.current);
+      }
     };
   }, []);
+
+  // Verify a single email address
+  const verifyEmail = useCallback(async (email: string): Promise<VerificationStatus> => {
+    if (!email || !email.includes("@")) return "idle";
+
+    try {
+      const res = await fetch("/api/admin/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!res.ok) return "unknown";
+
+      const data = await res.json();
+      const result = data.results?.[0];
+      if (!result) return "unknown";
+
+      return result.status as VerificationStatus;
+    } catch {
+      return "unknown";
+    }
+  }, []);
+
+  // Batch verify multiple email addresses
+  const batchVerifyEmails = useCallback(async (emails: string[]): Promise<Map<string, VerificationStatus>> => {
+    const results = new Map<string, VerificationStatus>();
+    if (emails.length === 0) return results;
+
+    // Initialize all as verifying
+    emails.forEach(e => results.set(e, "verifying"));
+
+    try {
+      const res = await fetch("/api/admin/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ emails }),
+      });
+
+      if (!res.ok) {
+        emails.forEach(e => results.set(e, "unknown"));
+        return results;
+      }
+
+      const data = await res.json();
+      for (const r of data.results || []) {
+        results.set(r.email, r.status as VerificationStatus);
+      }
+
+      // Fill in any missing with unknown
+      emails.forEach(e => {
+        if (!results.has(e)) results.set(e, "unknown");
+      });
+
+      return results;
+    } catch {
+      emails.forEach(e => results.set(e, "unknown"));
+      return results;
+    }
+  }, []);
+
+  // Handle email input blur - trigger verification after debounce
+  const handleEmailBlur = useCallback((email: string, mode: "edit" | "add") => {
+    // Clear any pending verification
+    if (verifyDebounceRef.current) {
+      clearTimeout(verifyDebounceRef.current);
+    }
+
+    // Skip verification if email is empty or invalid format
+    if (!email || !email.includes("@")) {
+      setVerificationStatus("idle");
+      return;
+    }
+
+    // Debounce verification
+    verifyDebounceRef.current = setTimeout(async () => {
+      setVerificationStatus("verifying");
+      const status = await verifyEmail(email);
+      setVerificationStatus(status);
+    }, 300);
+  }, [verifyEmail]);
 
   // Auto-suggest email when drawer opens and provider has no email
   useEffect(() => {
@@ -387,6 +478,7 @@ export default function ConnectionRow({
         setFoundEmails([]);
         setEmailToUrlMap(new Map());
         setIsCachedResult(false);
+        setCandidateStatuses(new Map());
 
         try {
           const res = await fetch("/api/admin/connections/find-provider-email", {
@@ -402,9 +494,10 @@ export default function ConnectionRow({
             setEmailSource(data.source);
             setFoundUrl(data.foundUrl || null);
             setIsCachedResult(data.cached || false);
-            if (data.candidates && data.candidates.length > 0) {
-              setFoundEmails(data.candidates);
-            }
+
+            const candidates: string[] = data.candidates?.length > 0 ? data.candidates : [data.email];
+            setFoundEmails(candidates);
+
             // Build email -> URL map from candidatesWithUrls
             if (data.candidatesWithUrls && Array.isArray(data.candidatesWithUrls)) {
               const urlMap = new Map<string, string>();
@@ -414,6 +507,21 @@ export default function ConnectionRow({
                 }
               }
               setEmailToUrlMap(urlMap);
+            }
+
+            // Batch verify all candidates
+            if (candidates.length > 0) {
+              // Set all to verifying initially (use lowercase for consistency with API response)
+              setCandidateStatuses(new Map(candidates.map(e => [e.toLowerCase(), "verifying" as VerificationStatus])));
+
+              const verifiedStatuses = await batchVerifyEmails(candidates);
+              setCandidateStatuses(verifiedStatuses);
+
+              // Also set the main input verification status (normalize to lowercase for lookup)
+              const mainStatus = verifiedStatuses.get(data.email.toLowerCase());
+              if (mainStatus) {
+                setVerificationStatus(mainStatus);
+              }
             }
           } else if (res.ok && !data.email) {
             // No email found or insufficient data
@@ -442,8 +550,11 @@ export default function ConnectionRow({
       setIsCachedResult(false);
       setFoundEmails([]);
       setEmailToUrlMap(new Map());
+      setVerificationStatus("idle");
+      setCandidateStatuses(new Map());
+      setForceSubmit(false);
     }
-  }, [open, detail, autoSuggestAttempted, c.provider.id]);
+  }, [open, detail, autoSuggestAttempted, c.provider.id, batchVerifyEmails]);
 
   // Fact sheet modal state
   const [showFactSheet, setShowFactSheet] = useState(false);
@@ -764,7 +875,10 @@ export default function ConnectionRow({
       const res = await fetch(`/api/admin/connections/${c.id}/edit-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ newEmail: pendingEmailEdit.newEmail }),
+        body: JSON.stringify({
+          newEmail: pendingEmailEdit.newEmail,
+          force: forceSubmit, // Pass force flag to bypass verification check
+        }),
       });
 
       const data = await res.json();
@@ -801,7 +915,8 @@ export default function ConnectionRow({
           editEmailTimeoutRef.current = null;
         }, warning ? 5000 : 3000);
       } else {
-        setEditEmailError(data.error || "Failed to update email");
+        // Use descriptive message if available (e.g., for 422 undeliverable errors)
+        setEditEmailError(data.message || data.error || "Failed to update email");
       }
     } catch {
       setEditEmailError("Network error");
@@ -813,6 +928,12 @@ export default function ConnectionRow({
   async function handleFindEmail(mode: "edit" | "add" = "edit", forceRefresh = false) {
     if (!c.provider.id) return;
 
+    // Clear any pending onBlur verification to prevent race condition
+    if (verifyDebounceRef.current) {
+      clearTimeout(verifyDebounceRef.current);
+      verifyDebounceRef.current = null;
+    }
+
     setFindingEmail(true);
     setFindEmailError(null);
     setFoundEmails([]);
@@ -820,6 +941,8 @@ export default function ConnectionRow({
     setEmailSource(null);
     setFoundUrl(null);
     setIsCachedResult(false);
+    setCandidateStatuses(new Map());
+    setVerificationStatus("idle");
 
     try {
       const res = await fetch("/api/admin/connections/find-provider-email", {
@@ -847,10 +970,9 @@ export default function ConnectionRow({
         setFoundUrl(data.foundUrl || null);
         setIsCachedResult(data.cached || false);
 
-        // Store all candidates for potential dropdown
-        if (data.candidates && data.candidates.length > 0) {
-          setFoundEmails(data.candidates);
-        }
+        const candidates: string[] = data.candidates?.length > 0 ? data.candidates : [data.email];
+        setFoundEmails(candidates);
+
         // Build email -> URL map from candidatesWithUrls
         if (data.candidatesWithUrls && Array.isArray(data.candidatesWithUrls)) {
           const urlMap = new Map<string, string>();
@@ -860,6 +982,21 @@ export default function ConnectionRow({
             }
           }
           setEmailToUrlMap(urlMap);
+        }
+
+        // Batch verify all candidates
+        if (candidates.length > 0) {
+          // Set all to verifying initially (use lowercase for consistency with API response)
+          setCandidateStatuses(new Map(candidates.map(e => [e.toLowerCase(), "verifying" as VerificationStatus])));
+
+          const verifiedStatuses = await batchVerifyEmails(candidates);
+          setCandidateStatuses(verifiedStatuses);
+
+          // Also set the main input verification status (normalize to lowercase for lookup)
+          const mainStatus = verifiedStatuses.get(data.email.toLowerCase());
+          if (mainStatus) {
+            setVerificationStatus(mainStatus);
+          }
         }
       } else if (res.ok && !data.email) {
         // No email found or insufficient data
@@ -1243,6 +1380,10 @@ export default function ConnectionRow({
                                   setIsCachedResult(false);
                                   setFoundEmails([]);
                                   setEmailToUrlMap(new Map());
+                                  // Clear verification state
+                                  setVerificationStatus("idle");
+                                  setCandidateStatuses(new Map());
+                                  setForceSubmit(false);
                                 }}
                                 className="text-xs text-gray-500 hover:text-gray-700 shrink-0"
                               >
@@ -1264,6 +1405,9 @@ export default function ConnectionRow({
                                   value={editEmailInput}
                                   onChange={(e) => {
                                     setEditEmailInput(e.target.value);
+                                    // Reset verification when typing
+                                    setVerificationStatus("idle");
+                                    setForceSubmit(false);
                                     // Clear source indicator if user manually edits away from found emails
                                     if (emailSource && foundEmails.length > 0 && !foundEmails.includes(e.target.value)) {
                                       setEmailSource(null);
@@ -1271,6 +1415,7 @@ export default function ConnectionRow({
                                       setIsCachedResult(false);
                                     }
                                   }}
+                                  onBlur={() => handleEmailBlur(editEmailInput, "edit")}
                                   placeholder="New provider email..."
                                   className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                                   disabled={editingEmailLoading || findingEmail}
@@ -1300,11 +1445,20 @@ export default function ConnectionRow({
                               </div>
                               <button
                                 type="submit"
-                                disabled={editingEmailLoading || findingEmail || !editEmailInput.trim() || editEmailInput === detail.provider.email}
+                                disabled={editingEmailLoading || findingEmail || !editEmailInput.trim() || editEmailInput === detail.provider.email || (verificationStatus === "invalid" && !forceSubmit)}
                                 className="px-3 py-1 text-sm font-medium text-white bg-teal-600 rounded hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {editingEmailLoading ? "Saving..." : "Save"}
                               </button>
+                              {verificationStatus === "invalid" && !forceSubmit && (
+                                <button
+                                  type="button"
+                                  onClick={() => setForceSubmit(true)}
+                                  className="text-xs text-gray-500 hover:text-gray-700 underline"
+                                >
+                                  Save anyway
+                                </button>
+                              )}
                               <button
                                 type="button"
                                 onClick={() => {
@@ -1322,6 +1476,9 @@ export default function ConnectionRow({
                                   setEmailSource(null);
                                   setFoundUrl(null);
                                   setIsCachedResult(false);
+                                  setVerificationStatus("idle");
+                                  setCandidateStatuses(new Map());
+                                  setForceSubmit(false);
                                 }}
                                 disabled={editingEmailLoading || findingEmail}
                                 className="px-2 py-1 text-sm text-gray-500 hover:text-gray-700"
@@ -1329,6 +1486,8 @@ export default function ConnectionRow({
                                 Cancel
                               </button>
                             </div>
+                            {/* Verification badge */}
+                            <EmailVerificationBadge status={verificationStatus} />
                             {findEmailError && <p className="text-xs text-amber-600">{findEmailError}</p>}
                             {emailSource && (
                               <p className="text-xs text-gray-500">
@@ -1353,25 +1512,59 @@ export default function ConnectionRow({
                             )}
                             {foundEmails.length > 1 && (
                               <div className="flex flex-wrap gap-1 mt-1">
-                                {[...new Set(foundEmails)].map((email) => (
-                                  <button
-                                    key={email}
-                                    type="button"
-                                    onClick={() => {
-                                      setEditEmailInput(email);
-                                      // Update source URL to match selected candidate
-                                      setFoundUrl(emailToUrlMap.get(email) || null);
-                                    }}
-                                    className={`px-2 py-0.5 text-xs rounded border transition-colors ${
-                                      editEmailInput === email
-                                        ? "bg-amber-100 border-amber-300 text-amber-800"
-                                        : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
-                                    }`}
-                                    disabled={editingEmailLoading || findingEmail}
-                                  >
-                                    {email}
-                                  </button>
-                                ))}
+                                {/* Sort candidates: valid/risky/unknown first, invalid last */}
+                                {[...new Set(foundEmails)]
+                                  .sort((a, b) => {
+                                    // Normalize to lowercase for Map lookup (API returns lowercase keys)
+                                    const statusA = candidateStatuses.get(a.toLowerCase()) || "unknown";
+                                    const statusB = candidateStatuses.get(b.toLowerCase()) || "unknown";
+                                    const isInvalidA = statusA === "invalid" ? 1 : 0;
+                                    const isInvalidB = statusB === "invalid" ? 1 : 0;
+                                    return isInvalidA - isInvalidB;
+                                  })
+                                  .map((email) => {
+                                    // Normalize to lowercase for Map lookup (API returns lowercase keys)
+                                    const status = candidateStatuses.get(email.toLowerCase());
+                                    const isInvalid = status === "invalid";
+                                    const isVerifying = status === "verifying";
+                                    const statusIcon = status === "valid" ? "✓" : status === "risky" ? "⚠️" : status === "invalid" ? "✗" : isVerifying ? "..." : "";
+
+                                    return (
+                                      <button
+                                        key={email}
+                                        type="button"
+                                        onClick={() => {
+                                          setEditEmailInput(email);
+                                          // Update source URL to match selected candidate
+                                          setFoundUrl(emailToUrlMap.get(email) || null);
+                                          // Update verification status to match selected candidate
+                                          if (status && status !== "verifying") {
+                                            setVerificationStatus(status);
+                                          }
+                                        }}
+                                        className={`px-2 py-0.5 text-xs rounded border transition-colors inline-flex items-center gap-1 ${
+                                          editEmailInput === email
+                                            ? "bg-amber-100 border-amber-300 text-amber-800"
+                                            : isInvalid
+                                              ? "bg-gray-50 border-gray-200 text-gray-400 opacity-60"
+                                              : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+                                        }`}
+                                        disabled={editingEmailLoading || findingEmail}
+                                      >
+                                        <span className={isInvalid ? "line-through" : ""}>{email}</span>
+                                        {statusIcon && (
+                                          <span className={
+                                            status === "valid" ? "text-emerald-600" :
+                                            status === "risky" ? "text-amber-600" :
+                                            status === "invalid" ? "text-red-500" :
+                                            "text-gray-400"
+                                          }>
+                                            {statusIcon}
+                                          </span>
+                                        )}
+                                      </button>
+                                    );
+                                  })}
                               </div>
                             )}
                             {editEmailError && <p className="text-xs text-red-600">{editEmailError}</p>}
@@ -1392,6 +1585,9 @@ export default function ConnectionRow({
                               value={emailInput}
                               onChange={(e) => {
                                 setEmailInput(e.target.value);
+                                // Reset verification when typing
+                                setVerificationStatus("idle");
+                                setForceSubmit(false);
                                 // Clear source indicator if user manually edits away from found emails
                                 if (emailSource && foundEmails.length > 0 && !foundEmails.includes(e.target.value)) {
                                   setEmailSource(null);
@@ -1399,6 +1595,7 @@ export default function ConnectionRow({
                                   setIsCachedResult(false);
                                 }
                               }}
+                              onBlur={() => handleEmailBlur(emailInput, "add")}
                               placeholder={findingEmail ? "Searching..." : "Add provider email..."}
                               className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                               disabled={addingEmail || findingEmail}
@@ -1427,12 +1624,23 @@ export default function ConnectionRow({
                           </div>
                           <button
                             type="submit"
-                            disabled={addingEmail || findingEmail || !emailInput.trim()}
+                            disabled={addingEmail || findingEmail || !emailInput.trim() || (verificationStatus === "invalid" && !forceSubmit)}
                             className="px-3 py-1 text-sm font-medium text-white bg-teal-600 rounded hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                             {addingEmail ? "Adding..." : "Add"}
                           </button>
+                          {verificationStatus === "invalid" && !forceSubmit && (
+                            <button
+                              type="button"
+                              onClick={() => setForceSubmit(true)}
+                              className="text-xs text-gray-500 hover:text-gray-700 underline"
+                            >
+                              Add anyway
+                            </button>
+                          )}
                         </div>
+                        {/* Verification badge */}
+                        <EmailVerificationBadge status={verificationStatus} />
                         {findEmailError && <p className="text-xs text-amber-600">{findEmailError}</p>}
                         {emailSource && (
                           <p className="text-xs text-gray-500">
@@ -1457,25 +1665,59 @@ export default function ConnectionRow({
                         )}
                         {foundEmails.length > 1 && (
                           <div className="flex flex-wrap gap-1 mt-1">
-                            {[...new Set(foundEmails)].map((email) => (
-                              <button
-                                key={email}
-                                type="button"
-                                onClick={() => {
-                                  setEmailInput(email);
-                                  // Update source URL to match selected candidate
-                                  setFoundUrl(emailToUrlMap.get(email) || null);
-                                }}
-                                className={`px-2 py-0.5 text-xs rounded border transition-colors ${
-                                  emailInput === email
-                                    ? "bg-amber-100 border-amber-300 text-amber-800"
-                                    : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
-                                }`}
-                                disabled={addingEmail || findingEmail}
-                              >
-                                {email}
-                              </button>
-                            ))}
+                            {/* Sort candidates: valid/risky/unknown first, invalid last */}
+                            {[...new Set(foundEmails)]
+                              .sort((a, b) => {
+                                // Normalize to lowercase for Map lookup (API returns lowercase keys)
+                                const statusA = candidateStatuses.get(a.toLowerCase()) || "unknown";
+                                const statusB = candidateStatuses.get(b.toLowerCase()) || "unknown";
+                                const isInvalidA = statusA === "invalid" ? 1 : 0;
+                                const isInvalidB = statusB === "invalid" ? 1 : 0;
+                                return isInvalidA - isInvalidB;
+                              })
+                              .map((email) => {
+                                // Normalize to lowercase for Map lookup (API returns lowercase keys)
+                                const status = candidateStatuses.get(email.toLowerCase());
+                                const isInvalid = status === "invalid";
+                                const isVerifying = status === "verifying";
+                                const statusIcon = status === "valid" ? "✓" : status === "risky" ? "⚠️" : status === "invalid" ? "✗" : isVerifying ? "..." : "";
+
+                                return (
+                                  <button
+                                    key={email}
+                                    type="button"
+                                    onClick={() => {
+                                      setEmailInput(email);
+                                      // Update source URL to match selected candidate
+                                      setFoundUrl(emailToUrlMap.get(email) || null);
+                                      // Update verification status to match selected candidate
+                                      if (status && status !== "verifying") {
+                                        setVerificationStatus(status);
+                                      }
+                                    }}
+                                    className={`px-2 py-0.5 text-xs rounded border transition-colors inline-flex items-center gap-1 ${
+                                      emailInput === email
+                                        ? "bg-amber-100 border-amber-300 text-amber-800"
+                                        : isInvalid
+                                          ? "bg-gray-50 border-gray-200 text-gray-400 opacity-60"
+                                          : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100"
+                                    }`}
+                                    disabled={addingEmail || findingEmail}
+                                  >
+                                    <span className={isInvalid ? "line-through" : ""}>{email}</span>
+                                    {statusIcon && (
+                                      <span className={
+                                        status === "valid" ? "text-emerald-600" :
+                                        status === "risky" ? "text-amber-600" :
+                                        status === "invalid" ? "text-red-500" :
+                                        "text-gray-400"
+                                      }>
+                                        {statusIcon}
+                                      </span>
+                                    )}
+                                  </button>
+                                );
+                              })}
                           </div>
                         )}
                         {emailError && (

@@ -5,6 +5,7 @@ import { connectionRequestEmail } from "@/lib/email-templates";
 import { generateLeadClaimUrl, generateProviderPortalUrl } from "@/lib/claim-tokens";
 import { getSiteUrl } from "@/lib/site-url";
 import { sendDeferredNotificationsForProvider } from "@/lib/admin/send-deferred-notifications";
+import { verifyAndCache } from "@/lib/email-verification";
 
 /**
  * POST /api/admin/connections/[id]/edit-email
@@ -34,6 +35,7 @@ export async function POST(
     const { id: connectionId } = await params;
     const body = await request.json();
     const newEmail = body.newEmail?.trim();
+    const force = body.force === true;
 
     // Validation
     if (!newEmail) {
@@ -43,6 +45,20 @@ export async function POST(
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(newEmail)) {
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
+    }
+
+    // Safety net: verify email unless force flag is set
+    if (!force) {
+      const verdict = await verifyAndCache(newEmail);
+      if (verdict.status === "invalid") {
+        return NextResponse.json(
+          {
+            error: "undeliverable",
+            message: "That address can't receive mail — it would bounce.",
+          },
+          { status: 422 }
+        );
+      }
     }
 
     const db = getServiceClient();
