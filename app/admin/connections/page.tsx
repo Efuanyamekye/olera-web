@@ -532,16 +532,16 @@ export default function ConnectionsTrackerPage() {
   const [statsExpanded, setStatsExpanded] = useState(false);
   const [actionsExpanded, setActionsExpanded] = useState(false);
 
-  // Archive provider state
+  // Archive connection state (archives individual connections, like leads page)
   const [pendingArchive, setPendingArchive] = useState<{
-    providerId: string;
+    connectionId: string;
+    familyName: string | null;
     providerName: string | null;
-    isArchived: boolean;
-    connectionCount: number;
+    isArchived: boolean; // true if connection is already archived (for unarchive)
   } | null>(null);
   const [archiving, setArchiving] = useState(false);
   const [archiveError, setArchiveError] = useState<string | null>(null);
-  const [archiveReason, setArchiveReason] = useState<string>("");
+  const [archiveReason, setArchiveReason] = useState("");
 
   // Debounce search input by 300ms
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -671,13 +671,10 @@ export default function ConnectionsTrackerPage() {
     return outboundList.outboundCounts[key] ?? 0;
   };
 
-  // Handle archive provider button click
-  const handleArchiveProvider = (providerId: string, providerName: string | null, isArchived: boolean) => {
-    // Count how many connections this provider has in current list
-    const connectionCount = list?.connections.filter(c => c.provider.id === providerId).length ?? 0;
-    setPendingArchive({ providerId, providerName, isArchived, connectionCount });
+  // Handle archive connection button click (same as leads page archive)
+  const handleArchiveConnection = (connectionId: string, familyName: string | null, providerName: string | null, isArchived: boolean) => {
+    setPendingArchive({ connectionId, familyName, providerName, isArchived });
     setArchiveError(null);
-    setArchiveReason("");
   };
 
   const confirmArchive = async () => {
@@ -687,13 +684,21 @@ export default function ConnectionsTrackerPage() {
     setArchiveError(null);
 
     try {
-      const res = await fetch(`/api/admin/providers/${pendingArchive.providerId}/archive`, {
-        method: "POST",
+      // Use the same API as leads page for consistency
+      const action = pendingArchive.isArchived ? "unarchive" : "archive";
+      const body: { ids: string[]; action: string; reason?: string } = {
+        ids: [pendingArchive.connectionId],
+        action,
+      };
+      // Include reason when archiving (not when unarchiving)
+      if (action === "archive" && archiveReason.trim()) {
+        body.reason = archiveReason.trim();
+      }
+
+      const res = await fetch("/api/admin/leads", {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: pendingArchive.isArchived ? "unarchive" : "archive",
-          reason: archiveReason || undefined,
-        }),
+        body: JSON.stringify(body),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -701,10 +706,10 @@ export default function ConnectionsTrackerPage() {
       if (res.ok) {
         setPendingArchive(null);
         setArchiveReason("");
-        // Refetch to update tab counts and move connections to appropriate tabs
+        // Refetch to update tab counts and move connection to appropriate tab
         fetchConnections();
       } else {
-        setArchiveError(data.error || "Failed to archive provider");
+        setArchiveError(data.error || "Failed to archive connection");
       }
     } catch {
       setArchiveError("Network error");
@@ -1027,7 +1032,7 @@ export default function ConnectionsTrackerPage() {
                   engagement={
                     c.provider.activityKey ? list.engagement[c.provider.activityKey] : undefined
                   }
-                  onArchiveProvider={handleArchiveProvider}
+                  onArchiveConnection={handleArchiveConnection}
                   onNudgeSuccess={fetchConnections}
                 />
               ))}
@@ -1072,49 +1077,44 @@ export default function ConnectionsTrackerPage() {
         </p>
       )}
 
-      {/* Archive provider confirmation modal */}
+      {/* Archive connection confirmation modal (same as leads page) */}
       {pendingArchive && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="archive-provider-title"
+          aria-labelledby="archive-connection-title"
         >
           <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full">
-            <h3 id="archive-provider-title" className="text-base font-semibold text-gray-900 mb-3">
-              {pendingArchive.isArchived ? "Unarchive this provider?" : "Archive this provider?"}
+            <h3 id="archive-connection-title" className="text-base font-semibold text-gray-900 mb-3">
+              {pendingArchive.isArchived ? "Unarchive this connection?" : "Archive this connection?"}
             </h3>
-            <p className="text-sm text-gray-700 mb-4">
-              <span className="text-gray-400">Provider:</span>{" "}
-              <span className="font-medium text-gray-900">{pendingArchive.providerName || "Unknown"}</span>
-            </p>
-            {pendingArchive.isArchived ? (
-              <p className="text-[12px] text-gray-500 leading-relaxed mb-5">
-                This will unarchive the provider. Their connections will return to the appropriate tabs and email sequences may resume.
+            <div className="text-sm text-gray-700 mb-4 space-y-1">
+              <p>
+                <span className="text-gray-400">Family:</span>{" "}
+                <span className="font-medium text-gray-900">{pendingArchive.familyName || "Unknown"}</span>
               </p>
-            ) : (
-              <>
-                <p className="text-[12px] text-gray-500 leading-relaxed mb-4">
-                  All connections to this provider will move to the Archived tab. No future emails will be sent to this provider (nudges, follow-ups, digests). Families will continue to receive their emails.
-                </p>
-                <div className="mb-5">
-                  <label htmlFor="archive-reason" className="block text-xs font-medium text-gray-600 mb-1.5">
-                    Reason (optional)
-                  </label>
-                  <select
-                    id="archive-reason"
-                    value={archiveReason}
-                    onChange={(e) => setArchiveReason(e.target.value)}
-                    className="w-full text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                  >
-                    <option value="">Select a reason...</option>
-                    <option value="provider_requested_no_emails">Provider requested no emails</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="duplicate">Duplicate</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </>
+              <p>
+                <span className="text-gray-400">Provider:</span>{" "}
+                <span className="font-medium text-gray-900">{pendingArchive.providerName || "Unknown"}</span>
+              </p>
+            </div>
+            <p className="text-[12px] text-gray-500 leading-relaxed mb-3">
+              {pendingArchive.isArchived
+                ? "This will unarchive the connection. It will return to the appropriate tab based on engagement status."
+                : "This connection will move to the Archived tab. You can unarchive it later if needed."
+              }
+            </p>
+            {/* Reason textarea - only show when archiving, not unarchiving */}
+            {!pendingArchive.isArchived && (
+              <textarea
+                value={archiveReason}
+                onChange={(e) => setArchiveReason(e.target.value)}
+                placeholder="Reason for archiving (e.g. provider unreachable after 2 attempts)..."
+                className="w-full mb-4 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none resize-none"
+                rows={3}
+                autoFocus
+              />
             )}
             {archiveError && (
               <p className="text-[12px] text-red-600 mb-3">{archiveError}</p>
@@ -1135,7 +1135,7 @@ export default function ConnectionsTrackerPage() {
               <button
                 type="button"
                 onClick={confirmArchive}
-                disabled={archiving}
+                disabled={archiving || (!pendingArchive.isArchived && !archiveReason.trim())}
                 className={`text-xs font-medium text-white px-3 py-1.5 rounded-md disabled:opacity-50 ${
                   pendingArchive.isArchived
                     ? "bg-blue-600 hover:bg-blue-700"

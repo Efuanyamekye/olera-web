@@ -301,14 +301,14 @@ export default function ConnectionRow({
   c,
   perspective = "provider",
   engagement,
-  onArchiveProvider,
+  onArchiveConnection,
   onNudgeSuccess,
 }: {
   c: ConnectionRowData;
   perspective?: Perspective;
   engagement?: Engagement;
-  /** Called when user clicks archive/unarchive icon on provider row */
-  onArchiveProvider?: (providerId: string, providerName: string | null, isArchived: boolean) => void;
+  /** Called when user clicks archive/unarchive icon on connection row */
+  onArchiveConnection?: (connectionId: string, familyName: string | null, providerName: string | null, isArchived: boolean) => void;
   onNudgeSuccess?: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -1020,8 +1020,8 @@ export default function ConnectionRow({
 
   // Provider archived this lead - show as declined with reduced opacity
   const isDeclined = c.archived && c.archiveReason;
-  // Admin archived the provider - show as dimmed with amber tint
-  const isAdminArchived = c.isProviderArchived;
+  // Admin archived (either provider-level OR connection-level without reason)
+  const isAdminArchived = c.isProviderArchived || (c.archived && !c.archiveReason);
 
   return (
     <div className="group">
@@ -1111,21 +1111,24 @@ export default function ConnectionRow({
           })()}
         </span>
 
-        {/* Archive provider button - hover reveal */}
-        {onArchiveProvider && c.provider.id && (
+        {/* Archive connection button - hover reveal */}
+        {/* Don't show for provider-declined connections (they already made their decision) */}
+        {onArchiveConnection && !isDeclined && (
           <button
             onClick={(e) => {
               e.stopPropagation();
-              onArchiveProvider(c.provider.id!, c.provider.display_name, !!c.isProviderArchived);
+              // Connection is admin-archived if c.archived is true without a provider decline reason
+              const isConnectionArchived = c.archived && !c.archiveReason;
+              onArchiveConnection(c.id, c.family.display_name, c.provider.display_name, isConnectionArchived);
             }}
             className={`opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 transition-all ${
-              c.isProviderArchived
+              c.archived && !c.archiveReason
                 ? "text-gray-400 hover:text-blue-500"
                 : "text-gray-300 hover:text-amber-600"
             }`}
-            title={c.isProviderArchived ? "Unarchive provider" : "Archive provider"}
+            title={c.archived && !c.archiveReason ? "Unarchive connection" : "Archive connection"}
           >
-            {c.isProviderArchived ? (
+            {c.archived && !c.archiveReason ? (
               // Unarchive icon (arrow-up-tray from Heroicons)
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
