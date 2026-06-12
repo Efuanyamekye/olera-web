@@ -1118,7 +1118,7 @@ export default function ConnectionRow({
             onClick={(e) => {
               e.stopPropagation();
               // Connection is admin-archived if c.archived is true without a provider decline reason
-              const isConnectionArchived = c.archived && !c.archiveReason;
+              const isConnectionArchived = c.archived === true && !c.archiveReason;
               onArchiveConnection(c.id, c.family.display_name, c.provider.display_name, isConnectionArchived);
             }}
             className={`opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 transition-all ${
