@@ -1280,23 +1280,15 @@ export default function ConnectionRow({
                     {c.engagementLevel === "connected" && (
                       <span className="text-sm text-emerald-600 font-medium">Provider reached out to family</span>
                     )}
-                    {/* Fallback for needs_follow_up when no phone (banner won't show) but has email */}
-                    {c.engagementLevel === "needs_follow_up" && !detail.provider.phone && detail.provider.hasEmail && (
+                    {/* Fallback for needs_follow_up when no phone (banner won't show) */}
+                    {/* Note: needs_follow_up always has email (otherwise would be in "Needs Email" tab) */}
+                    {c.engagementLevel === "needs_follow_up" && !detail.provider.phone && (
                       <button
                         onClick={() => showNudgePreview("/api/admin/send-manual-nudge", "Manual nudge sent to provider.")}
                         disabled={nudging || loadingPreview}
                         className="px-4 py-2 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 disabled:opacity-50"
                       >
                         {loadingPreview ? "Loading..." : nudging ? "Sending..." : "Nudge Provider"}
-                      </button>
-                    )}
-                    {/* Fact Sheet for needs_follow_up when no phone and no email */}
-                    {c.engagementLevel === "needs_follow_up" && !detail.provider.phone && !detail.provider.hasEmail && (
-                      <button
-                        onClick={() => setShowFactSheet(true)}
-                        className="px-3 py-1.5 rounded-lg border border-gray-300 text-gray-700 text-sm font-medium hover:bg-gray-100"
-                      >
-                        Fact Sheet
                       </button>
                     )}
                   </>
