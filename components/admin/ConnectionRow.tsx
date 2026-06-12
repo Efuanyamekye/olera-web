@@ -301,14 +301,21 @@ export default function ConnectionRow({
   c,
   perspective = "provider",
   engagement,
-  onArchiveConnection,
+  onConnectionAction,
   onNudgeSuccess,
 }: {
   c: ConnectionRowData;
   perspective?: Perspective;
   engagement?: Engagement;
-  /** Called when user clicks archive/unarchive icon on connection row */
-  onArchiveConnection?: (connectionId: string, familyName: string | null, providerName: string | null, isArchived: boolean) => void;
+  /** Called when user clicks action icon on connection row - opens multi-action dialog */
+  onConnectionAction?: (
+    connectionId: string,
+    providerId: string | null,
+    familyName: string | null,
+    providerName: string | null,
+    isArchived: boolean,
+    isProviderArchived: boolean
+  ) => void;
   onNudgeSuccess?: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -1111,34 +1118,30 @@ export default function ConnectionRow({
           })()}
         </span>
 
-        {/* Archive connection button - hover reveal */}
+        {/* Actions button - hover reveal */}
         {/* Don't show for provider-declined connections (they already made their decision) */}
-        {onArchiveConnection && !isDeclined && (
+        {onConnectionAction && !isDeclined && (
           <button
             onClick={(e) => {
               e.stopPropagation();
-              // Connection is admin-archived if c.archived is true without a provider decline reason
               const isConnectionArchived = c.archived === true && !c.archiveReason;
-              onArchiveConnection(c.id, c.family.display_name, c.provider.display_name, isConnectionArchived);
+              const isProviderArchived = c.isProviderArchived === true;
+              onConnectionAction(
+                c.id,
+                c.provider.id ?? null,
+                c.family.display_name,
+                c.provider.display_name,
+                isConnectionArchived,
+                isProviderArchived
+              );
             }}
-            className={`opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 transition-all ${
-              c.archived && !c.archiveReason
-                ? "text-gray-400 hover:text-blue-500"
-                : "text-gray-300 hover:text-amber-600"
-            }`}
-            title={c.archived && !c.archiveReason ? "Unarchive connection" : "Archive connection"}
+            className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 transition-all text-gray-300 hover:text-gray-600"
+            title="Actions"
           >
-            {c.archived && !c.archiveReason ? (
-              // Unarchive icon (arrow-up-tray from Heroicons)
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-              </svg>
-            ) : (
-              // Archive icon (archive-box from Heroicons)
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-              </svg>
-            )}
+            {/* Ellipsis vertical icon (more options) */}
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+            </svg>
           </button>
         )}
 
