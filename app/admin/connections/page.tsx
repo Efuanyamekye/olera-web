@@ -100,8 +100,8 @@ const PROVIDER_TABS: TabConfig[] = [
   { key: "new", label: "New", description: "Lead sent, provider hasn't viewed", emptyMessage: "No new leads waiting to be viewed." },
   { key: "viewed", label: "Viewed", description: "Provider opened the lead drawer", emptyMessage: "No leads have been viewed yet." },
   { key: "connected", label: "Connected", description: "Provider reached out to family", emptyMessage: "No connected leads yet." },
-  { key: "needs_follow_up", label: "Needs Follow-up", description: "No activity for 10+ days, requires manual intervention", emptyMessage: "No providers need follow-up." },
   { key: "declined", label: "Declined", description: "Provider declined lead (not a fit, not accepting clients, etc.)", emptyMessage: "No declined leads." },
+  { key: "needs_follow_up", label: "Needs Follow-up", description: "No activity for 10+ days, requires manual intervention", emptyMessage: "No providers need follow-up." },
   { key: "needs_email", label: "Needs Email", description: "Provider has no email, invalid email, or delivery failed", emptyMessage: "All providers have working emails." },
   { key: "all", label: "All", description: "Everything", emptyMessage: "No connections yet." },
 ];
