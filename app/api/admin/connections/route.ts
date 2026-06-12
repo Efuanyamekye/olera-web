@@ -492,11 +492,13 @@ export async function GET(request: NextRequest) {
       const responded = !!providerMsg;
 
       // Check metadata for explicit connection signals from provider
+      // archiveReason = valid provider decline reason (not_a_fit, not_accepting_clients, etc.)
+      // This distinguishes provider-declined (Declined tab) from admin-archived (Archived tab)
       const archiveReason = parseArchiveReason(meta.archive_reason);
-      // Check both lead_archived (new) and archived (old) for backward compatibility
-      // Only treat archived as lead archive if it has an archive_reason (indicating it's a passed lead, not inbox archive)
-      const hasArchiveReason = !!archiveReason;
-      const archived = meta.lead_archived === true || (meta.archived === true && hasArchiveReason);
+      // archived = true if provider declined OR admin archived from leads page
+      // - Provider decline: archived=true + valid archiveReason → Declined tab
+      // - Admin archive: archived=true + no valid archiveReason → Archived tab
+      const archived = meta.lead_archived === true || meta.archived === true;
       const archivedAt = meta.archived_at as string | undefined;
 
       // Extract admin override (manually marked status)
