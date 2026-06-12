@@ -1031,14 +1031,10 @@ export async function GET(request: NextRequest) {
         workflowCounts[c.workflowState]++;
 
         // Count engagement levels (provider perspective)
-        // Declined archives go to "Declined" tab; corrupted archives go to "All" tab only
         const isDeclinedArchive = c.archived && c.archiveReason;
 
-        // "All" count: include everything except properly declined archives
-        // (corrupted archives appear in "All" tab so count them there)
-        if (!isDeclinedArchive) {
-          engagementCounts.all++;
-        }
+        // "All" count: include everything (all tabs combined)
+        engagementCounts.all++;
 
         // Determine email issue type FIRST (needed for engagement level counting)
         // Combines: no email, delivery failed, or invalid email
@@ -1075,10 +1071,8 @@ export async function GET(request: NextRequest) {
         }
 
         // Count family engagement levels
-        // Exclude declined archives from "all" count (consistent with provider perspective)
-        if (!isDeclinedArchive) {
-          familyEngagementCounts.all++;
-        }
+        // "All" includes everything (all tabs combined)
+        familyEngagementCounts.all++;
         familyEngagementCounts[familyEngResult.level]++;
 
         // Funnel stats (based on provider engagement)
@@ -1120,11 +1114,7 @@ export async function GET(request: NextRequest) {
     // Filtering by workflow state or engagement level
     let list = searched.filter(c => c.workflowState !== null); // Exclude inactive providers
 
-    // For "all" tab: exclude archived connections (they go to "Declined" tab)
-    // Exception: Corrupted archives (archived=true but archiveReason=null) appear in "All" tab so admins can see/fix them
-    if (responseFilter === "all") {
-      list = list.filter(c => !c.archived || !c.archiveReason);
-    }
+    // "All" tab: no additional filtering - shows everything (all tabs combined)
 
     // Check if filter is an engagement level (provider or family)
     const providerEngagementLevels: EngagementLevel[] = ["new", "viewed", "connected", "needs_follow_up"];
@@ -1138,14 +1128,9 @@ export async function GET(request: NextRequest) {
         list = list.filter((c) => (c as typeof c & { emailIssueType: EmailIssueType }).emailIssueType !== null && !c.archived);
       }
       // Special filter: declined (provider archived with decline reasons)
+      // Provider decline always wins - even if admin previously marked as connected
       else if (responseFilter === "declined" && perspective === "provider") {
-        list = list.filter((c) => {
-          // Provider archived with a decline reason
-          // BUT: exclude if admin manually verified as connected (admin override > provider archive)
-          return c.archived &&
-                 c.archiveReason &&
-                 c.adminOverride?.status !== "connected";
-        });
+        list = list.filter((c) => c.archived && c.archiveReason);
       } else if (perspective === "family") {
         // Family perspective - filter by family engagement level
         const isFamilyEngagementFilter = familyEngagementLevels.includes(responseFilter as FamilyEngagementLevel);
