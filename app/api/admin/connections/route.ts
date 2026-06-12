@@ -1174,12 +1174,17 @@ export async function GET(request: NextRequest) {
       }
       // Special filter: needs_email (provider perspective only)
       // Combines: no email, delivery failed, or invalid email
-      // Exclude provider-level archives and provider-declined
+      // Exclude: provider-level archives, provider-declined, AND connection-level archives without engagement
+      // (connection-level archives without engagement belong to Archived tab, not Needs Email)
       else if (responseFilter === "needs_email" && perspective === "provider") {
         list = list.filter((c) => {
-          const isProviderDeclined = c.archived && !!c.archiveReason;
+          const isConnectionArchivedByAdmin = c.archived === true && !c.archiveReason;
+          const engLevel = connectionEngagementLevels.get(c.id);
+          const hasEngagement = engLevel && engLevel !== "new";
+          const belongsToArchivedTab = c.isProviderArchived || (isConnectionArchivedByAdmin && !hasEngagement);
+          const isProviderDeclined = c.archived === true && !!c.archiveReason;
           return (c as typeof c & { emailIssueType: EmailIssueType }).emailIssueType !== null &&
-            !c.isProviderArchived && !isProviderDeclined;
+            !belongsToArchivedTab && !isProviderDeclined;
         });
       }
       // Special filter: declined (provider explicitly declined with reason)
