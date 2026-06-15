@@ -133,10 +133,12 @@ function LeadDetailInlineView({
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
   const [restored, setRestored] = useState(false);
   const [showFullDetails, setShowFullDetails] = useState(false);
+  const [showOverflowMenu, setShowOverflowMenu] = useState(false);
 
-  // Reset collapsed state when lead changes
+  // Reset collapsed state and close menu when lead changes
   useEffect(() => {
     setShowFullDetails(false);
+    setShowOverflowMenu(false);
   }, [lead.id]);
 
   const displayName = isVerified ? lead.name : formatRedactedName(lead.name);
@@ -218,15 +220,50 @@ function LeadDetailInlineView({
             </div>
             <p className="text-[14px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-gray-100 transition-colors shrink-0 -mt-1"
-            aria-label="Close lead details"
-          >
-            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div className="flex items-center gap-1 shrink-0 -mt-1">
+            {/* Overflow menu */}
+            {lead.status !== "archived" && isVerified && (
+              <div className="relative">
+                <button
+                  onClick={() => setShowOverflowMenu(!showOverflowMenu)}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  aria-label="More options"
+                >
+                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                  </svg>
+                </button>
+                {showOverflowMenu && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setShowOverflowMenu(false)} />
+                    <div className="absolute right-0 top-full mt-1 w-44 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                      <button
+                        onClick={() => {
+                          setShowOverflowMenu(false);
+                          onArchiveClick?.();
+                        }}
+                        className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                      >
+                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                        </svg>
+                        Decline inquiry
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+            <button
+              onClick={onClose}
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-label="Close lead details"
+            >
+              <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -556,34 +593,25 @@ function LeadDetailInlineView({
             </button>
           )
         ) : isVerified ? (
-          // Active footer - horizontal layout with helper text
+          // Active footer - full width message button with helper text
           <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={onArchiveClick}
-                className="flex-1 px-4 py-3.5 border border-gray-300 bg-white text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all flex items-center justify-center gap-2"
-              >
-                Decline
-              </button>
-              <button
-                type="button"
-                onClick={() => onContinueInInbox?.(lead.id)}
-                className="flex-[2] px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
-              >
-                <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-                </svg>
-                {(() => {
-                  if (!lead.name) return 'Message Care Seeker';
-                  const firstName = lead.name.split(' ')[0];
-                  if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
-                    return `Message ${firstName}`;
-                  }
-                  return 'Message Care Seeker';
-                })()}
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => onContinueInInbox?.(lead.id)}
+              className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+              </svg>
+              {(() => {
+                if (!lead.name) return 'Message Care Seeker';
+                const firstName = lead.name.split(' ')[0];
+                if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
+                  return `Message ${firstName}`;
+                }
+                return 'Message Care Seeker';
+              })()}
+            </button>
             <p className="text-center text-[13px] text-gray-500 flex items-center justify-center gap-1.5">
               <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -638,6 +666,7 @@ function LeadDetailDrawer({
   const [restored, setRestored] = useState(false);
   const [copiedField, setCopiedField] = useState<"phone" | "email" | null>(null);
   const [showFullDetails, setShowFullDetails] = useState(false);
+  const [showOverflowMenu, setShowOverflowMenu] = useState(false);
 
   // Display name: full name if verified, redacted if not
   const displayName = lead ? (isVerified ? lead.name : formatRedactedName(lead.name)) : "";
@@ -670,6 +699,7 @@ function LeadDetailDrawer({
     if (!isOpen) {
       setRestored(false);
       setCopiedField(null);
+      setShowOverflowMenu(false);
     }
   }, [isOpen]);
 
@@ -678,6 +708,7 @@ function LeadDetailDrawer({
       setRestored(false);
       setCopiedField(null);
       setShowFullDetails(false);
+      setShowOverflowMenu(false);
     }
   }, [lead?.id]);
 
@@ -760,6 +791,39 @@ function LeadDetailDrawer({
         </div>
         <p className="text-[14px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
       </div>
+      {/* Overflow menu */}
+      {lead.status !== "archived" && isVerified && (
+        <div className="relative shrink-0">
+          <button
+            onClick={() => setShowOverflowMenu(!showOverflowMenu)}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors -mt-1"
+            aria-label="More options"
+          >
+            <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+            </svg>
+          </button>
+          {showOverflowMenu && (
+            <>
+              <div className="fixed inset-0 z-10" onClick={() => setShowOverflowMenu(false)} />
+              <div className="absolute right-0 top-full mt-1 w-44 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+                <button
+                  onClick={() => {
+                    setShowOverflowMenu(false);
+                    onArchiveClick?.(lead.id);
+                  }}
+                  className="w-full px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                  </svg>
+                  Decline inquiry
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 
@@ -1245,39 +1309,28 @@ function LeadDetailDrawer({
     </div>
   );
 
-  // ── Active Footer (horizontal layout with helper text) ──
+  // ── Active Footer (full width message button with helper text) ──
   const ActiveFooter = isVerified ? (
     <div className="space-y-3">
-      <div className="flex items-center gap-3">
-        {/* Secondary action - Decline lead */}
-        <button
-          type="button"
-          onClick={() => onArchiveClick?.(lead.id)}
-          className="flex-1 px-4 py-3.5 border border-gray-300 bg-white text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all flex items-center justify-center gap-2"
-        >
-          Decline
-        </button>
-
-        {/* Primary action - Message */}
-        <button
-          type="button"
-          onClick={handleContinueInInbox}
-          className="flex-[2] px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-all flex items-center justify-center gap-2"
-        >
-          <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-          </svg>
-          {(() => {
-            if (!lead.name) return 'Message Care Seeker';
-            const firstName = lead.name.split(' ')[0];
-            // Use first name if it looks real (more than 1 char, not a placeholder)
-            if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
-              return `Message ${firstName}`;
-            }
-            return 'Message Care Seeker';
-          })()}
-        </button>
-      </div>
+      {/* Primary action - Message */}
+      <button
+        type="button"
+        onClick={handleContinueInInbox}
+        className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-all flex items-center justify-center gap-2"
+      >
+        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+        </svg>
+        {(() => {
+          if (!lead.name) return 'Message Care Seeker';
+          const firstName = lead.name.split(' ')[0];
+          // Use first name if it looks real (more than 1 char, not a placeholder)
+          if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
+            return `Message ${firstName}`;
+          }
+          return 'Message Care Seeker';
+        })()}
+      </button>
       <p className="text-center text-[13px] text-gray-500 flex items-center justify-center gap-1.5">
         <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -1415,15 +1468,15 @@ function timeAgo(dateStr: string): string {
   if (diffMins < 1) return "just now";
   if (diffMins === 1) return "one minute ago";
   if (diffMins < 60) return `${diffMins} minutes ago`;
-  if (diffHours === 1) return "one hour ago";
+  if (diffHours === 1) return "1 hour ago";
   if (diffHours < 24) return `${diffHours} hours ago`;
-  if (diffDays === 1) return "one day ago";
+  if (diffDays === 1) return "1 day ago";
   if (diffDays < 7) return `${diffDays} days ago`;
-  if (diffWeeks === 1) return "one week ago";
+  if (diffWeeks === 1) return "1 week ago";
   if (diffDays < 30) return `${diffWeeks} weeks ago`;
-  if (diffMonths === 1) return "one month ago";
+  if (diffMonths === 1) return "1 month ago";
   if (diffDays < 365) return `${diffMonths} months ago`;
-  if (diffYears === 1) return "one year ago";
+  if (diffYears === 1) return "1 year ago";
   return `${diffYears} years ago`;
 }
 
