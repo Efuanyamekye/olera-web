@@ -2524,7 +2524,7 @@ export default function ProviderLeadsPage() {
               </div>
 
               {/* Desktop table layout */}
-              <div className="hidden lg:grid grid-cols-[1.8fr_1.5fr_1fr_1fr_0.8fr_0.8fr] gap-5 items-center px-6 py-4">
+              <div className="hidden lg:grid grid-cols-[1.8fr_1.5fr_1fr_1fr_0.8fr_auto] gap-5 items-center px-6 py-4">
                 {/* Name */}
                 <div className="flex items-center gap-3 min-w-0">
                   {lead.imageUrl ? (
