@@ -805,8 +805,8 @@ function LeadDetailDrawer({
           </button>
           {showOverflowMenu && (
             <>
-              <div className="fixed inset-0 z-10" onClick={() => setShowOverflowMenu(false)} />
-              <div className="absolute right-0 top-full mt-1 w-44 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-20">
+              <div className="fixed inset-0 z-[80]" onClick={() => setShowOverflowMenu(false)} />
+              <div className="absolute right-0 top-full mt-1 w-44 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-[90]">
                 <button
                   onClick={() => {
                     setShowOverflowMenu(false);
@@ -1466,7 +1466,7 @@ function timeAgo(dateStr: string): string {
 
   // Spell out time units for readability
   if (diffMins < 1) return "just now";
-  if (diffMins === 1) return "one minute ago";
+  if (diffMins === 1) return "1 minute ago";
   if (diffMins < 60) return `${diffMins} minutes ago`;
   if (diffHours === 1) return "1 hour ago";
   if (diffHours < 24) return `${diffHours} hours ago`;
