@@ -918,16 +918,16 @@ export default function ConnectionsTrackerPage() {
             <div className="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-3">
               <FunnelStat label="Viewed Lead" value={list.providerActions.viewed} />
               <FunnelStat
-                label="Copied Phone"
+                label="Called"
                 value={list.providerActions.copiedPhoneRate}
                 format="percent"
-                subtitle={`${list.providerActions.copiedPhone} copied`}
+                subtitle={`${list.providerActions.copiedPhone} called`}
               />
               <FunnelStat
-                label="Copied Email"
+                label="Emailed"
                 value={list.providerActions.copiedEmailRate}
                 format="percent"
-                subtitle={`${list.providerActions.copiedEmail} copied`}
+                subtitle={`${list.providerActions.copiedEmail} emailed`}
               />
               <FunnelStat
                 label="Messaged"
