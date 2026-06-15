@@ -173,16 +173,18 @@ interface FunnelStats {
 }
 
 // Provider action breakdown stats
-// Simplified: viewed, copied phone, copied email, messaged
+// Tracks: viewed, copied phone, copied email, messaged, declined
 interface ProviderActions {
   viewed: number;
   copiedPhone: number;
   copiedEmail: number;
   messaged: number;
+  declined: number;
   // Rates as percentage of viewed
   copiedPhoneRate: number;
   copiedEmailRate: number;
   messagedRate: number;
+  declinedRate: number;
 }
 
 export async function GET(request: NextRequest) {
@@ -939,6 +941,7 @@ export async function GET(request: NextRequest) {
     // Provider action counts (per-connection, not raw events)
     let copiedPhoneCount = 0;
     let copiedEmailCount = 0;
+    let declinedCount = 0;
 
     // Calculate engagement level for each connection and store it
     const connectionEngagementLevels = new Map<string, EngagementLevel>();
@@ -1076,6 +1079,8 @@ export async function GET(request: NextRequest) {
         // Provider action counts (per-connection)
         if (eng?.phone_copied || eng?.phone_clicked) copiedPhoneCount++;
         if (eng?.email_copied || eng?.email_link_clicked) copiedEmailCount++;
+        // Declined = provider explicitly declined (has archive reason, not admin-archived)
+        if (isProviderDeclined && !isAdminArchived) declinedCount++;
       }
     }
 
@@ -1098,9 +1103,11 @@ export async function GET(request: NextRequest) {
       copiedPhone: copiedPhoneCount,
       copiedEmail: copiedEmailCount,
       messaged: respondedCount, // Actual messages sent, not just "clicked inbox"
+      declined: declinedCount, // Provider explicitly declined the lead
       copiedPhoneRate: providerViewedCount > 0 ? Math.round((copiedPhoneCount / providerViewedCount) * 100) : 0,
       copiedEmailRate: providerViewedCount > 0 ? Math.round((copiedEmailCount / providerViewedCount) * 100) : 0,
       messagedRate: providerViewedCount > 0 ? Math.round((respondedCount / providerViewedCount) * 100) : 0,
+      declinedRate: providerViewedCount > 0 ? Math.round((declinedCount / providerViewedCount) * 100) : 0,
     };
 
     // Filtering by workflow state or engagement level

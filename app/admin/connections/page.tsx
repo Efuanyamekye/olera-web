@@ -55,9 +55,11 @@ interface ProviderActions {
   copiedPhone: number;
   copiedEmail: number;
   messaged: number;
+  declined: number;
   copiedPhoneRate: number;
   copiedEmailRate: number;
   messagedRate: number;
+  declinedRate: number;
 }
 
 interface ListResponse {
@@ -913,7 +915,7 @@ export default function ConnectionsTrackerPage() {
           </button>
 
           {actionsExpanded && list?.providerActions && (
-            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-3">
               <FunnelStat label="Viewed Lead" value={list.providerActions.viewed} />
               <FunnelStat
                 label="Copied Phone"
@@ -932,6 +934,12 @@ export default function ConnectionsTrackerPage() {
                 value={list.providerActions.messagedRate}
                 format="percent"
                 subtitle={`${list.providerActions.messaged} sent`}
+              />
+              <FunnelStat
+                label="Declined"
+                value={list.providerActions.declinedRate}
+                format="percent"
+                subtitle={`${list.providerActions.declined} declined`}
               />
             </div>
           )}
