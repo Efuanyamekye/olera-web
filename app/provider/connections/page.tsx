@@ -175,26 +175,6 @@ function LeadDetailInlineView({
       onClose();
     }, 1500);
   };
-
-  // Status tag
-  const statusTag = lead.status === "archived" ? (
-    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
-      Archived
-    </span>
-  ) : lead.isNew ? (
-    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
-      New
-    </span>
-  ) : lead.status === "replied" ? (
-    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
-      Replied
-    </span>
-  ) : (
-    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
-      Viewed
-    </span>
-  );
-
   return (
     <div className="bg-white rounded-xl border border-gray-200 sticky top-6 h-[calc(100vh-6rem)] flex flex-col overflow-hidden">
       {/* Header */}
@@ -774,26 +754,6 @@ function LeadDetailDrawer({
   };
 
   if (!lead) return null;
-
-  // ── Sticky Header Content ──
-  // Status tag matches list view styling
-  const statusTag = lead.status === "archived" ? (
-    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
-      Archived
-    </span>
-  ) : lead.isNew ? (
-    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-emerald-50 text-emerald-700 border border-emerald-100 shrink-0">
-      New
-    </span>
-  ) : lead.status === "replied" ? (
-    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-amber-50 text-amber-700 border border-amber-100 shrink-0">
-      Replied
-    </span>
-  ) : (
-    <span className="inline-flex items-center justify-center px-1.5 py-1 rounded-lg text-[11px] font-medium leading-none bg-gray-50 text-gray-500 border border-gray-200 shrink-0">
-      Viewed
-    </span>
-  );
 
   // Quality badge for mobile header
   const qualityBadge = lead.leadQuality ? (() => {
