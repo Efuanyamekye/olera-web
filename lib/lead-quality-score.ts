@@ -248,19 +248,21 @@ export function getLeadQualityColor(tier: LeadQualityResult["tier"]): {
 } {
   switch (tier) {
     case "hot":
+      // Warm orange - enthusiastic & urgent, not alarming like red
       return {
-        bg: "bg-rose-50",
-        text: "text-rose-700",
-        border: "border-rose-200",
-        iconBg: "bg-rose-200/70",  // More visible on rose-50 background
-        iconText: "text-rose-600",
+        bg: "bg-orange-50",
+        text: "text-orange-700",
+        border: "border-orange-200",
+        iconBg: "bg-orange-200/70",
+        iconText: "text-orange-600",
       };
     case "strong":
+      // Warm amber-orange - engaged & interested
       return {
         bg: "bg-amber-50",
         text: "text-amber-700",
         border: "border-amber-200",
-        iconBg: "bg-amber-200/70",  // More visible
+        iconBg: "bg-amber-200/70",
         iconText: "text-amber-600",
       };
     case "good":

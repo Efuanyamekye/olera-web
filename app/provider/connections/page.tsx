@@ -214,13 +214,52 @@ function LeadDetailInlineView({
             </div>
           )}
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
+            {/* Name + Quality badge inline */}
+            <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
+              {/* Quality tier badge - compact pill */}
+              {lead.leadQuality && (() => {
+                const colors = getLeadQualityColor(lead.leadQuality.tier);
+                const iconType = getLeadQualityIcon(lead.leadQuality.tier);
+                const explanation = getLeadQualityExplanation(lead.leadQuality.tier);
+                return (
+                  <Tooltip content={explanation} position="bottom">
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border}`}>
+                      {iconType.type === "flame" && (
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                          <path fillRule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                      {iconType.type === "star" && (
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                          <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                      {iconType.type === "search" && (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                        </svg>
+                      )}
+                      {iconType.type === "clock" && (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                      )}
+                      {lead.leadQuality.label}
+                    </span>
+                  </Tooltip>
+                );
+              })()}
               {statusTag}
             </div>
-            <p className="text-[14px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
+            {/* Care type · Location as subtitle */}
+            <p className="text-[14px] text-gray-600 mt-0.5">
+              {lead.careType?.[0] || "Care"} · {lead.location || "Location unknown"}
+            </p>
           </div>
+          {/* Date + actions - right aligned */}
           <div className="flex items-center gap-1 shrink-0 -mt-1">
+            <span className="text-[13px] text-gray-400 mr-1">{lead.date}</span>
             {/* Overflow menu */}
             {lead.status !== "archived" && isVerified && (
               <div className="relative">
@@ -333,66 +372,6 @@ function LeadDetailInlineView({
             </div>
           </div>
         )}
-
-        {/* Quality Summary Card */}
-        {(() => {
-          const quality = lead.leadQuality;
-          const colors = quality ? getLeadQualityColor(quality.tier) : null;
-          const iconType = quality ? getLeadQualityIcon(quality.tier) : null;
-          const explanation = quality ? getLeadQualityExplanation(quality.tier) : "";
-
-          return (
-            <div
-              className={`relative rounded-xl px-3.5 py-2.5 flex items-center gap-3 ${colors?.bg || 'bg-gray-50'} border ${colors?.border || 'border-gray-200'}`}
-            >
-              {/* Tier Icon */}
-              <div className={`shrink-0 w-9 h-9 rounded-lg flex items-center justify-center ${colors?.iconBg || 'bg-gray-100'}`}>
-                {iconType?.type === "flame" ? (
-                  <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
-                    <path fillRule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clipRule="evenodd" />
-                  </svg>
-                ) : iconType?.type === "star" ? (
-                  <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
-                    <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
-                  </svg>
-                ) : iconType?.type === "search" ? (
-                  <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                  </svg>
-                ) : (
-                  <svg className={`w-[18px] h-[18px] ${colors?.iconText || 'text-gray-500'}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                  </svg>
-                )}
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 min-w-0">
-                <p className={`text-[15px] font-display font-semibold leading-tight ${colors?.text || 'text-gray-900'}`}>
-                  {quality?.label || "Lead"}
-                </p>
-                <p className="text-[13px] text-gray-500 leading-tight mt-0.5">
-                  {lead.careType?.[0] || "Care"} · {lead.location || "Location unknown"}
-                </p>
-              </div>
-
-              {/* Info tooltip */}
-              {explanation && (
-                <Tooltip content={explanation} position="bottom">
-                  <button
-                    type="button"
-                    className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center bg-white/50 text-gray-500 hover:bg-white/80 hover:text-gray-700 transition-colors"
-                    aria-label="What does this mean?"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                    </svg>
-                  </button>
-                </Tooltip>
-              )}
-            </div>
-          );
-        })()}
 
         {/* Contact */}
         {isVerified ? (
@@ -817,6 +796,40 @@ function LeadDetailDrawer({
     </span>
   );
 
+  // Quality badge for mobile header
+  const qualityBadge = lead.leadQuality ? (() => {
+    const colors = getLeadQualityColor(lead.leadQuality.tier);
+    const iconType = getLeadQualityIcon(lead.leadQuality.tier);
+    const explanation = getLeadQualityExplanation(lead.leadQuality.tier);
+    return (
+      <Tooltip content={explanation} position="bottom">
+        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${colors.bg} ${colors.text} border ${colors.border} shrink-0`}>
+          {iconType.type === "flame" && (
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+              <path fillRule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clipRule="evenodd" />
+            </svg>
+          )}
+          {iconType.type === "star" && (
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+              <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
+            </svg>
+          )}
+          {iconType.type === "search" && (
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+          )}
+          {iconType.type === "clock" && (
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          )}
+          {lead.leadQuality.label}
+        </span>
+      </Tooltip>
+    );
+  })() : null;
+
   const StickyHeader = (
     <div className="flex items-start gap-3">
       {lead.imageUrl ? (
@@ -833,11 +846,16 @@ function LeadDetailDrawer({
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+        {/* Name + Quality badge + Status */}
+        <div className="flex items-center gap-2 flex-wrap">
           <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
+          {qualityBadge}
           {statusTag}
         </div>
-        <p className="text-[14px] text-gray-600 mt-0.5">Reached out {lead.date}</p>
+        {/* Care type · Location · Date */}
+        <p className="text-[13px] text-gray-500 mt-0.5">
+          {lead.careType?.[0] || "Care"} · {lead.location || "Location"} · {lead.date}
+        </p>
       </div>
       {/* Overflow menu */}
       {lead.status !== "archived" && isVerified && (
@@ -1153,66 +1171,6 @@ function LeadDetailDrawer({
     <div className="space-y-6">
       {/* Declined banner */}
       {DeclinedBanner}
-
-      {/* Quality Summary Card */}
-      {(() => {
-        const quality = lead.leadQuality;
-        const colors = quality ? getLeadQualityColor(quality.tier) : null;
-        const iconType = quality ? getLeadQualityIcon(quality.tier) : null;
-        const explanation = quality ? getLeadQualityExplanation(quality.tier) : "";
-
-        return (
-          <div
-            className={`relative rounded-xl px-3.5 py-3 flex items-center gap-3 ${colors?.bg || 'bg-gray-50'} border ${colors?.border || 'border-gray-200'}`}
-          >
-            {/* Tier Icon */}
-            <div className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${colors?.iconBg || 'bg-gray-100'}`}>
-              {iconType?.type === "flame" ? (
-                <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071-.136 9.742 9.742 0 0 0-3.539 6.176 7.547 7.547 0 0 1-1.705-1.715.75.75 0 0 0-1.152-.082A9 9 0 1 0 15.68 4.534a7.46 7.46 0 0 1-2.717-2.248ZM15.75 14.25a3.75 3.75 0 1 1-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 0 1 1.925-3.546 3.75 3.75 0 0 1 3.255 3.718Z" clipRule="evenodd" />
-                </svg>
-              ) : iconType?.type === "star" ? (
-                <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="currentColor" viewBox="0 0 24 24">
-                  <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z" clipRule="evenodd" />
-                </svg>
-              ) : iconType?.type === "search" ? (
-                <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                </svg>
-              ) : (
-                <svg className={`w-5 h-5 ${colors?.iconText || 'text-gray-500'}`} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-              )}
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              <p className={`text-base font-display font-semibold leading-tight ${colors?.text || 'text-gray-900'}`}>
-                {quality?.label || "Lead"}
-              </p>
-              <p className="text-[13px] text-gray-500 leading-tight mt-0.5">
-                {lead.careType?.[0] || "Care"} · {lead.location || "Location unknown"}
-              </p>
-            </div>
-
-            {/* Info tooltip */}
-            {explanation && (
-              <Tooltip content={explanation} position="bottom">
-                <button
-                  type="button"
-                  className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center bg-white/50 text-gray-500 hover:bg-white/80 active:bg-white/90 hover:text-gray-700 transition-colors"
-                  aria-label="What does this mean?"
-                >
-                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
-                  </svg>
-                </button>
-              </Tooltip>
-            )}
-          </div>
-        );
-      })()}
 
       {/* Contact */}
       {isVerified ? (
