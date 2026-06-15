@@ -510,7 +510,7 @@ export default function ConnectionsTrackerPage() {
   const initialDirection = searchParams.get("direction") === "outbound" ? "outbound" : "inbound";
 
   const [range, setRange] = useState<DateRangeValue>({
-    preset: "30d",
+    preset: "all",
     customFrom: "",
     customTo: "",
   });
