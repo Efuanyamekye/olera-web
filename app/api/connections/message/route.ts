@@ -13,6 +13,14 @@ interface ThreadMessage {
   text: string;
   created_at: string;
   is_auto_reply?: boolean;
+  type?: "quick_reply_request" | "quick_reply_response";
+}
+
+interface QuickReplyRequest {
+  question: string;
+  options: readonly string[];
+  sent_at: string;
+  answered_at?: string;
 }
 
 /**
@@ -28,10 +36,12 @@ interface ThreadMessage {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { connectionId, text, claimToken } = body as {
+    const { connectionId, text, claimToken, messageType, quickReplyOptions } = body as {
       connectionId?: string;
       text?: string;
       claimToken?: string;
+      messageType?: "quick_reply_request" | "quick_reply_response";
+      quickReplyOptions?: readonly string[];
     };
 
     if (!connectionId || !text?.trim()) {
@@ -124,11 +134,23 @@ export async function POST(request: Request) {
       (connection.metadata as Record<string, unknown>) || {};
     const existingThread = (existingMeta.thread as ThreadMessage[]) || [];
 
+    const now = new Date().toISOString();
+
+    // Check if there's a pending quick reply request
+    const existingQuickReply = existingMeta.quick_reply_request as QuickReplyRequest | undefined;
+    const hasPendingQuickReply = existingQuickReply && !existingQuickReply.answered_at;
+
+    // Build the new message
     const newMessage: ThreadMessage = {
       from_profile_id: profileId,
       text: text.trim(),
-      created_at: new Date().toISOString(),
+      created_at: now,
     };
+
+    // Add message type if specified
+    if (messageType) {
+      newMessage.type = messageType;
+    }
 
     const updatedThread = [...existingThread, newMessage];
 
@@ -141,7 +163,34 @@ export async function POST(request: Request) {
 
     // Prepare metadata update - will be written once at the end after email sending
     // Store this for later to avoid duplicate database updates
-    let metadataToUpdate = { ...existingMeta, thread: updatedThread };
+    let metadataToUpdate: Record<string, unknown> = { ...existingMeta, thread: updatedThread };
+
+    // Handle quick reply request: store the question/options in metadata
+    if (messageType === "quick_reply_request") {
+      // Reject if there's already a pending quick reply request
+      if (hasPendingQuickReply) {
+        return NextResponse.json(
+          { error: "A quick reply request is already pending" },
+          { status: 400 }
+        );
+      }
+
+      const quickReplyRequest: QuickReplyRequest = {
+        question: text.trim(),
+        options: quickReplyOptions || [],
+        sent_at: now,
+      };
+      metadataToUpdate.quick_reply_request = quickReplyRequest;
+    }
+
+    // Handle quick reply response OR any message from family when quick reply is pending
+    // Auto-mark as answered when family responds
+    if (hasPendingQuickReply && profileId === familyProfileId) {
+      metadataToUpdate.quick_reply_request = {
+        ...existingQuickReply,
+        answered_at: now,
+      };
+    }
 
     // Use admin client to bypass RLS (needed for guest flow)
     const { error: updateError } = await admin

@@ -25,6 +25,7 @@ import {
   type LeadQualityResult,
 } from "@/lib/lead-quality-score";
 import type { FamilyMetadata } from "@/lib/types";
+import { QUICK_REPLY_CONFIG } from "@/lib/quick-reply-config";
 
 // ── Lead types (previously from mock file) ──
 
@@ -116,6 +117,7 @@ function LeadDetailInlineView({
   onPhoneClick,
   onEmailClick,
   onContinueInInbox,
+  onQuickReplyRequest,
   onArchiveClick,
   onVerifyClick,
   onRestore,
@@ -126,6 +128,7 @@ function LeadDetailInlineView({
   onPhoneClick?: (leadId: string) => void;
   onEmailClick?: (leadId: string) => void;
   onContinueInInbox?: (leadId: string) => void;
+  onQuickReplyRequest?: (leadId: string) => void;
   onArchiveClick?: () => void;
   onVerifyClick?: () => void;
   onRestore?: (leadId: string) => void;
@@ -559,31 +562,53 @@ function LeadDetailInlineView({
             </button>
           )
         ) : isVerified ? (
-          // Active footer - full width message button with helper text
+          // Active footer - show "Check if they're a fit" for new leads, "Message" for replied
           <div className="space-y-3">
-            <button
-              type="button"
-              onClick={() => onContinueInInbox?.(lead.id)}
-              className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-              </svg>
-              {(() => {
-                if (!lead.name) return 'Message Care Seeker';
-                const firstName = lead.name.split(' ')[0];
-                if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
-                  return `Message ${firstName}`;
-                }
-                return 'Message Care Seeker';
-              })()}
-            </button>
-            <p className="text-center text-[13px] text-gray-500 flex items-center justify-center gap-1.5">
-              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-              Free to message — you won&apos;t be charged
-            </p>
+            {lead.status === "new" ? (
+              // Quick reply button for leads provider hasn't messaged yet
+              <>
+                <button
+                  type="button"
+                  onClick={() => onQuickReplyRequest?.(lead.id)}
+                  className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+                  </svg>
+                  Check if they&apos;re a fit
+                </button>
+                <p className="text-center text-[13px] text-gray-500">
+                  Free — you won&apos;t be charged
+                </p>
+              </>
+            ) : (
+              // Regular message button for leads that have been replied to
+              <>
+                <button
+                  type="button"
+                  onClick={() => onContinueInInbox?.(lead.id)}
+                  className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors flex items-center justify-center gap-2"
+                >
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+                  </svg>
+                  {(() => {
+                    if (!lead.name) return 'Message Care Seeker';
+                    const firstName = lead.name.split(' ')[0];
+                    if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
+                      return `Message ${firstName}`;
+                    }
+                    return 'Message Care Seeker';
+                  })()}
+                </button>
+                <p className="text-center text-[13px] text-gray-500 flex items-center justify-center gap-1.5">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                  </svg>
+                  Free to message — you won&apos;t be charged
+                </p>
+              </>
+            )}
           </div>
         ) : (
           // Not verified footer
@@ -613,6 +638,7 @@ function LeadDetailDrawer({
   onPhoneClick,
   onEmailClick,
   onContinueInInbox,
+  onQuickReplyRequest,
   onArchiveClick,
   isVerified = true,
   onVerifyClick,
@@ -624,6 +650,7 @@ function LeadDetailDrawer({
   onPhoneClick?: (leadId: string) => void;
   onEmailClick?: (leadId: string) => void;
   onContinueInInbox?: (leadId: string) => void;
+  onQuickReplyRequest?: (leadId: string) => void;
   onArchiveClick?: (leadId: string) => void;
   isVerified?: boolean;
   onVerifyClick?: () => void;
@@ -1203,34 +1230,62 @@ function LeadDetailDrawer({
     </div>
   );
 
+  // Handler for quick reply request
+  const handleQuickReplyRequest = () => {
+    if (!lead) return;
+    onQuickReplyRequest?.(lead.id);
+    onClose();
+  };
+
   // ── Active Footer (full width message button with helper text) ──
   const ActiveFooter = isVerified ? (
     <div className="space-y-3">
-      {/* Primary action - Message */}
-      <button
-        type="button"
-        onClick={handleContinueInInbox}
-        className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-all flex items-center justify-center gap-2"
-      >
-        <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-        </svg>
-        {(() => {
-          if (!lead.name) return 'Message Care Seeker';
-          const firstName = lead.name.split(' ')[0];
-          // Use first name if it looks real (more than 1 char, not a placeholder)
-          if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
-            return `Message ${firstName}`;
-          }
-          return 'Message Care Seeker';
-        })()}
-      </button>
-      <p className="text-center text-[13px] text-gray-500 flex items-center justify-center gap-1.5">
-        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
-        Free to message — you won&apos;t be charged
-      </p>
+      {lead.status === "new" ? (
+        // Quick reply button for leads provider hasn't messaged yet
+        <>
+          <button
+            type="button"
+            onClick={handleQuickReplyRequest}
+            className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-all flex items-center justify-center gap-2"
+          >
+            <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
+            </svg>
+            Check if they&apos;re a fit
+          </button>
+          <p className="text-center text-[13px] text-gray-500">
+            Free — you won&apos;t be charged
+          </p>
+        </>
+      ) : (
+        // Regular message button for leads that have been replied to
+        <>
+          <button
+            type="button"
+            onClick={handleContinueInInbox}
+            className="w-full px-4 py-3.5 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 active:bg-primary-800 transition-all flex items-center justify-center gap-2"
+          >
+            <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+            </svg>
+            {(() => {
+              if (!lead.name) return 'Message Care Seeker';
+              const firstName = lead.name.split(' ')[0];
+              // Use first name if it looks real (more than 1 char, not a placeholder)
+              if (firstName.length > 1 && firstName.toLowerCase() !== 'care') {
+                return `Message ${firstName}`;
+              }
+              return 'Message Care Seeker';
+            })()}
+          </button>
+          <p className="text-center text-[13px] text-gray-500 flex items-center justify-center gap-1.5">
+            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            Free to message — you won&apos;t be charged
+          </p>
+        </>
+      )}
     </div>
   ) : (
     <button
@@ -2063,6 +2118,58 @@ export default function ProviderLeadsPage() {
     }
   }, [leads]);
 
+  // Handle quick reply request - send pre-written question and navigate to inbox
+  const handleQuickReplyRequest = useCallback(async (leadId: string) => {
+    const lead = leads.find((l) => l.id === leadId);
+    const connectionId = lead?.connectionId || leadId;
+
+    try {
+      const response = await fetch("/api/connections/message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          connectionId,
+          text: QUICK_REPLY_CONFIG.question,
+          messageType: "quick_reply_request",
+          quickReplyOptions: QUICK_REPLY_CONFIG.options,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error("[quick-reply] API failed:", await response.text());
+        alert("Couldn't send message. Please try again.");
+        return;
+      }
+
+      // Update lead status optimistically
+      setLeads((prev) =>
+        prev.map((l) =>
+          l.id === leadId ? { ...l, status: "replied" as LeadStatus } : l
+        )
+      );
+
+      // Track the action
+      if (providerProfile) {
+        const providerKey = providerProfile.slug || providerProfile.source_provider_id || providerProfile.id;
+        fetch("/api/activity/track", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider_id: providerKey,
+            event_type: "quick_reply_sent",
+            metadata: { lead_id: leadId },
+          }),
+        }).catch(() => {});
+      }
+
+      // Navigate to inbox
+      router.push(`/provider/inbox?id=${connectionId}`);
+    } catch (err) {
+      console.error("[quick-reply] Failed:", err);
+      alert("Couldn't send message. Please try again.");
+    }
+  }, [leads, providerProfile, router]);
+
   // WhatsApp opt-in: show banner if provider has phone, hasn't opted in, and hasn't dismissed
   const providerMeta = (providerProfile?.metadata || {}) as Record<string, unknown>;
   const showWhatsAppBanner =
@@ -2573,6 +2680,7 @@ export default function ProviderLeadsPage() {
                   router.push(`/provider/inbox?id=${selectedLead.connectionId || selectedLead.id}`);
                   closeDrawer();
                 }}
+                onQuickReplyRequest={handleQuickReplyRequest}
                 onArchiveClick={() => setLeadIdToArchive(selectedLead.id)}
                 onVerifyClick={handleVerifyFromDrawer}
                 onRestore={handleRestoreLead}
@@ -2631,6 +2739,7 @@ export default function ProviderLeadsPage() {
             }),
           }).catch(() => {});
         }}
+        onQuickReplyRequest={handleQuickReplyRequest}
         isVerified={isVerified}
         onVerifyClick={handleVerifyFromDrawer}
       />
