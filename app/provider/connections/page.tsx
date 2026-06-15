@@ -374,26 +374,6 @@ function LeadDetailInlineView({
                       </svg>
                       Call
                     </a>
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard(lead.phone!, "phone")}
-                      className={`p-1 rounded-md transition-all shrink-0 ${
-                        copiedField === "phone"
-                          ? "bg-primary-100 text-primary-700"
-                          : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-                      }`}
-                      title="Copy"
-                    >
-                      {copiedField === "phone" ? (
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
-                      ) : (
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-                        </svg>
-                      )}
-                    </button>
                   </div>
                 )}
                 {lead.email && (
@@ -412,26 +392,6 @@ function LeadDetailInlineView({
                       </svg>
                       Email
                     </a>
-                    <button
-                      type="button"
-                      onClick={() => copyToClipboard(lead.email!, "email")}
-                      className={`p-1 rounded-md transition-all shrink-0 ${
-                        copiedField === "email"
-                          ? "bg-primary-100 text-primary-700"
-                          : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-                      }`}
-                      title="Copy"
-                    >
-                      {copiedField === "email" ? (
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                        </svg>
-                      ) : (
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-                        </svg>
-                      )}
-                    </button>
                   </div>
                 )}
               </div>
@@ -686,18 +646,20 @@ function LeadDetailDrawer({
   };
 
   // Copy to clipboard with feedback
-  const copyToClipboard = (text: string, field: "phone" | "email") => {
-    navigator.clipboard.writeText(text);
-    setCopiedField(field);
-
-    // Track copy action (marks as connected)
-    if (field === "phone") {
-      onPhoneClick?.(lead?.id || "");
-    } else {
-      onEmailClick?.(lead?.id || "");
+  const copyToClipboard = async (text: string, field: "phone" | "email") => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      // Track copy action (marks as connected) - only on successful copy
+      if (field === "phone") onPhoneClick?.(lead?.id || "");
+      if (field === "email") onEmailClick?.(lead?.id || "");
+      setTimeout(() => setCopiedField(null), 2000);
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error);
+      // Still show feedback, but copy failed - don't track
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 1000);
     }
-
-    setTimeout(() => setCopiedField(null), 2000);
   };
 
   // Reset state when drawer closes or lead changes
@@ -922,26 +884,6 @@ function LeadDetailDrawer({
                 </svg>
                 Call
               </a>
-              <button
-                type="button"
-                onClick={() => copyToClipboard(lead.phone!, "phone")}
-                className={`p-1 rounded-md transition-all shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 ${
-                  copiedField === "phone"
-                    ? "bg-primary-100 text-primary-700"
-                    : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-                }`}
-                aria-label={copiedField === "phone" ? "Copied!" : "Copy phone"}
-              >
-                {copiedField === "phone" ? (
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                  </svg>
-                ) : (
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-                  </svg>
-                )}
-              </button>
             </div>
           )}
           {lead.email && (
@@ -960,26 +902,6 @@ function LeadDetailDrawer({
                 </svg>
                 Email
               </a>
-              <button
-                type="button"
-                onClick={() => copyToClipboard(lead.email!, "email")}
-                className={`p-1 rounded-md transition-all shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 ${
-                  copiedField === "email"
-                    ? "bg-primary-100 text-primary-700"
-                    : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-                }`}
-                aria-label={copiedField === "email" ? "Copied!" : "Copy email"}
-              >
-                {copiedField === "email" ? (
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                  </svg>
-                ) : (
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-                  </svg>
-                )}
-              </button>
             </div>
           )}
         </div>
@@ -1152,26 +1074,6 @@ function LeadDetailDrawer({
                     </svg>
                     Call
                   </a>
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(lead.phone!, "phone")}
-                    className={`p-1 rounded-md transition-all shrink-0 ${
-                      copiedField === "phone"
-                        ? "bg-primary-100 text-primary-700"
-                        : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-                    }`}
-                    title="Copy"
-                  >
-                    {copiedField === "phone" ? (
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                      </svg>
-                    ) : (
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-                      </svg>
-                    )}
-                  </button>
                 </div>
               )}
               {lead.email && (
@@ -1190,26 +1092,6 @@ function LeadDetailDrawer({
                     </svg>
                     Email
                   </a>
-                  <button
-                    type="button"
-                    onClick={() => copyToClipboard(lead.email!, "email")}
-                    className={`p-1 rounded-md transition-all shrink-0 ${
-                      copiedField === "email"
-                        ? "bg-primary-100 text-primary-700"
-                        : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-                    }`}
-                    title="Copy"
-                  >
-                    {copiedField === "email" ? (
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                      </svg>
-                    ) : (
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 0 1-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 0 1 1.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 0 0-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 0 1-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 0 0-3.375-3.375h-1.5a1.125 1.125 0 0 1-1.125-1.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H9.75" />
-                      </svg>
-                    )}
-                  </button>
                 </div>
               )}
             </div>
