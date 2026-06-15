@@ -250,7 +250,6 @@ function LeadDetailInlineView({
                   </Tooltip>
                 );
               })()}
-              {statusTag}
             </div>
             {/* Care type · Location as subtitle */}
             <p className="text-[14px] text-gray-600 mt-0.5">
@@ -846,11 +845,10 @@ function LeadDetailDrawer({
         </div>
       )}
       <div className="min-w-0 flex-1">
-        {/* Name + Quality badge + Status */}
+        {/* Name + Quality badge */}
         <div className="flex items-center gap-2 flex-wrap">
           <h2 className="text-lg font-semibold text-gray-900 truncate">{displayName}</h2>
           {qualityBadge}
-          {statusTag}
         </div>
         {/* Care type · Location · Date */}
         <p className="text-[13px] text-gray-500 mt-0.5">
