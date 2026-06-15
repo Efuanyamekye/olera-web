@@ -54,14 +54,10 @@ interface ProviderActions {
   viewed: number;
   copiedPhone: number;
   copiedEmail: number;
-  clickedPhone: number;
-  clickedEmail: number;
-  continuedToInbox: number;
+  messaged: number;
   copiedPhoneRate: number;
   copiedEmailRate: number;
-  clickedPhoneRate: number;
-  clickedEmailRate: number;
-  continuedToInboxRate: number;
+  messagedRate: number;
 }
 
 interface ListResponse {
@@ -917,7 +913,7 @@ export default function ConnectionsTrackerPage() {
           </button>
 
           {actionsExpanded && list?.providerActions && (
-            <div className="mt-4 grid grid-cols-3 sm:grid-cols-6 gap-3">
+            <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
               <FunnelStat label="Viewed Lead" value={list.providerActions.viewed} />
               <FunnelStat
                 label="Copied Phone"
@@ -932,22 +928,10 @@ export default function ConnectionsTrackerPage() {
                 subtitle={`${list.providerActions.copiedEmail} copied`}
               />
               <FunnelStat
-                label="Clicked to Call"
-                value={list.providerActions.clickedPhoneRate}
+                label="Messaged"
+                value={list.providerActions.messagedRate}
                 format="percent"
-                subtitle={`${list.providerActions.clickedPhone} called`}
-              />
-              <FunnelStat
-                label="Clicked to Email"
-                value={list.providerActions.clickedEmailRate}
-                format="percent"
-                subtitle={`${list.providerActions.clickedEmail} emailed`}
-              />
-              <FunnelStat
-                label="Continued to Inbox"
-                value={list.providerActions.continuedToInboxRate}
-                format="percent"
-                subtitle={`${list.providerActions.continuedToInbox} clicked`}
+                subtitle={`${list.providerActions.messaged} sent`}
               />
             </div>
           )}

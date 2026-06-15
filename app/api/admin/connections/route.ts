@@ -173,19 +173,16 @@ interface FunnelStats {
 }
 
 // Provider action breakdown stats
+// Simplified: viewed, copied phone, copied email, messaged
 interface ProviderActions {
   viewed: number;
   copiedPhone: number;
   copiedEmail: number;
-  clickedPhone: number;
-  clickedEmail: number;
-  continuedToInbox: number;
+  messaged: number;
   // Rates as percentage of viewed
   copiedPhoneRate: number;
   copiedEmailRate: number;
-  clickedPhoneRate: number;
-  clickedEmailRate: number;
-  continuedToInboxRate: number;
+  messagedRate: number;
 }
 
 export async function GET(request: NextRequest) {
@@ -829,46 +826,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Query provider actions with metadata for detailed breakdown
-    // Simplified: viewed (opened drawer), copied phone (connected), copied email (connected)
-    let actionViewedCount = 0;
-    let actionCopiedPhoneCount = 0;
-    let actionCopiedEmailCount = 0;
-
-    if (allProviderKeys.length > 0) {
-      let actionQuery = db
-        .from("provider_activity")
-        .select("event_type, metadata")
-        .in("provider_id", allProviderKeys)
-        .in("event_type", ["lead_opened", "phone_clicked", "email_link_clicked", "contact_revealed"]);
-
-      // Apply date filters to match the connections date range
-      if (dateFrom) actionQuery = actionQuery.gte("created_at", dateFrom);
-      if (dateTo) actionQuery = actionQuery.lte("created_at", dateTo);
-
-      const { data: actionEvents } = await actionQuery.limit(10000);
-
-      for (const ev of actionEvents ?? []) {
-        if (ev.event_type === "lead_opened") {
-          actionViewedCount++;
-        } else if (ev.event_type === "phone_clicked") {
-          // Copying phone = connecting
-          actionCopiedPhoneCount++;
-        } else if (ev.event_type === "email_link_clicked") {
-          // Copying email = connecting
-          actionCopiedEmailCount++;
-        } else if (ev.event_type === "contact_revealed") {
-          // Legacy event (pre-simplification): still count for historical data
-          const meta = ev.metadata as Record<string, unknown> | null;
-          if (meta?.contact_type === "phone") {
-            actionCopiedPhoneCount++;
-          } else {
-            actionCopiedEmailCount++;
-          }
-        }
-      }
-    }
-
     // Query for connections with failed email delivery to provider
     // This catches: bounced, suppressed (invalid address), or send errors
     // Note: Only finds emails with connection_id in metadata (added June 2026)
@@ -979,6 +936,9 @@ export async function GET(request: NextRequest) {
     let providerViewedCount = 0;
     let respondedCount = 0;
     let connectedCount = 0;
+    // Provider action counts (per-connection, not raw events)
+    let copiedPhoneCount = 0;
+    let copiedEmailCount = 0;
 
     // Calculate engagement level for each connection and store it
     const connectionEngagementLevels = new Map<string, EngagementLevel>();
@@ -1113,6 +1073,9 @@ export async function GET(request: NextRequest) {
         // Count as responded if provider sent a message
         if (c.responded) respondedCount++;
         if (c.familyRepliedAfterProvider) connectedCount++;
+        // Provider action counts (per-connection)
+        if (eng?.phone_copied || eng?.phone_clicked) copiedPhoneCount++;
+        if (eng?.email_copied || eng?.email_link_clicked) copiedEmailCount++;
       }
     }
 
@@ -1128,19 +1091,16 @@ export async function GET(request: NextRequest) {
       connectedRate: totalActive > 0 ? Math.round((connectedCount / totalActive) * 100) : 0,
     };
 
-    // Provider action breakdown - rates as percentage of viewed
+    // Provider action breakdown - per-connection counts, rates as percentage of viewed
+    // Uses connection-level metrics (not raw events) for consistency with Connection Funnel
     const providerActions: ProviderActions = {
-      viewed: actionViewedCount,
-      copiedPhone: actionCopiedPhoneCount,
-      copiedEmail: actionCopiedEmailCount,
-      clickedPhone: actionCopiedPhoneCount, // Same as copied (simplified)
-      clickedEmail: actionCopiedEmailCount, // Same as copied (simplified)
-      continuedToInbox: 0, // No longer tracked
-      copiedPhoneRate: actionViewedCount > 0 ? Math.round((actionCopiedPhoneCount / actionViewedCount) * 100) : 0,
-      copiedEmailRate: actionViewedCount > 0 ? Math.round((actionCopiedEmailCount / actionViewedCount) * 100) : 0,
-      clickedPhoneRate: actionViewedCount > 0 ? Math.round((actionCopiedPhoneCount / actionViewedCount) * 100) : 0,
-      clickedEmailRate: actionViewedCount > 0 ? Math.round((actionCopiedEmailCount / actionViewedCount) * 100) : 0,
-      continuedToInboxRate: 0, // No longer tracked
+      viewed: providerViewedCount,
+      copiedPhone: copiedPhoneCount,
+      copiedEmail: copiedEmailCount,
+      messaged: respondedCount, // Actual messages sent, not just "clicked inbox"
+      copiedPhoneRate: providerViewedCount > 0 ? Math.round((copiedPhoneCount / providerViewedCount) * 100) : 0,
+      copiedEmailRate: providerViewedCount > 0 ? Math.round((copiedEmailCount / providerViewedCount) * 100) : 0,
+      messagedRate: providerViewedCount > 0 ? Math.round((respondedCount / providerViewedCount) * 100) : 0,
     };
 
     // Filtering by workflow state or engagement level
