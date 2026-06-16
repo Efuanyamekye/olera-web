@@ -725,9 +725,16 @@ export async function GET(request: NextRequest) {
       : visible;
 
     // Build provider keys for engagement lookup
+    // Use ALL provider identifiers (slug, source_provider_id, id) to match detail API behavior
+    // This ensures we find lead_opened events regardless of which key was used when storing them
+    // (e.g., a provider who viewed a lead before getting a slug assigned)
     const allProviderKeys = [...new Set(
-      searched.map((c) => c.provider.activityKey).filter(Boolean) as string[]
-    )].slice(0, 1000);
+      searched.flatMap((c) => [
+        c.provider.slug,
+        c.provider.source_provider_id,
+        c.provider.id,
+      ].filter(Boolean))
+    )].slice(0, 3000) as string[];
 
     // Per-provider engagement tracking
     // CONNECTION-SPECIFIC engagement tracking (not provider-level)
