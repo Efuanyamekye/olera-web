@@ -221,7 +221,7 @@ export async function POST(request: NextRequest) {
 
     const { data: profile } = await db
       .from("business_profiles")
-      .select("id, display_name, slug, metadata")
+      .select("id, display_name, slug, metadata, email")
       .eq("account_id", account.id)
       .in("type", ["organization", "caregiver"])
       .single();
@@ -271,11 +271,27 @@ export async function POST(request: NextRequest) {
       : process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
     const results: { name: string; email?: string; status: "sent" | "skipped" | "failed"; error?: string }[] = [];
 
+    // Get the provider's emails for self-email validation (both login email and business email)
+    const providerEmails = new Set<string>();
+    if (user.email) providerEmails.add(user.email.toLowerCase().trim());
+    if (profile.email) providerEmails.add((profile.email as string).toLowerCase().trim());
+
     // Collect background logging tasks for link shares
     const linkLogTasks: Promise<unknown>[] = [];
 
     // Process each client
     for (const client of clients) {
+      // Prevent providers from sending review requests to themselves
+      const clientEmailNormalized = client.email?.toLowerCase().trim();
+      if (clientEmailNormalized && providerEmails.has(clientEmailNormalized)) {
+        results.push({
+          name: client.name,
+          email: client.email,
+          status: "failed",
+          error: "You can't request a review from yourself. Please enter your client's email.",
+        });
+        continue;
+      }
       // Handle "link" delivery method - log to email_log in background, respond immediately
       if (delivery_method === "link") {
         // Log the link share in background (don't block response)
@@ -326,8 +342,23 @@ export async function POST(request: NextRequest) {
             },
           });
 
-          if (emailResult.success) {
+          if (emailResult.success && !emailResult.skipped) {
             results.push({ name: client.name, email: client.email, status: "sent" });
+          } else if (emailResult.skipped) {
+            // Email was suppressed - provide user-friendly error message
+            let userFriendlyError = "This email couldn't be delivered.";
+            if (emailResult.skipReason === "suppressed") {
+              userFriendlyError = "This email address appears to be invalid or has previously bounced. Please try a different email.";
+            } else if (emailResult.skipReason === "preference_disabled") {
+              userFriendlyError = "The recipient has disabled email notifications.";
+            }
+            console.log(`Email skipped for ${client.email}: ${emailResult.skipReason}`);
+            results.push({
+              name: client.name,
+              email: client.email,
+              status: "failed",
+              error: userFriendlyError,
+            });
           } else {
             console.error(`Email send returned error for ${client.email}:`, emailResult.error);
             results.push({
