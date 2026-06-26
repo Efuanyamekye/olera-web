@@ -1654,6 +1654,61 @@ function ProviderOnboardingContent() {
                     </p>
                   </div>
                 )}
+
+                {/* Subtle dispute note for claimed listings */}
+                {selectedOrg?.claimState === "claimed" && !emailValidation.error && !emailAccountError && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Are you the rightful owner? Login or{" "}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        // Navigate to results screen with dispute option
+                        if (selectedOrg) {
+                          const disputeResult: SearchResult = selectedOrg.source === "olera-providers"
+                            ? {
+                                provider_id: selectedOrg.providerId || "",
+                                provider_name: selectedOrg.name,
+                                slug: selectedOrg.slug,
+                                city: selectedOrg.city,
+                                state: selectedOrg.state,
+                                email: selectedOrg.email,
+                                provider_images: selectedOrg.imageUrl || null,
+                                _source: "olera-providers",
+                                _claimed: true,
+                                _emailMatch: false,
+                              }
+                            : {
+                                id: selectedOrg.providerId || "",
+                                display_name: selectedOrg.name,
+                                slug: selectedOrg.slug,
+                                city: selectedOrg.city,
+                                state: selectedOrg.state,
+                                email: selectedOrg.email,
+                                image_url: selectedOrg.imageUrl || null,
+                                account_id: null,
+                                source_provider_id: null,
+                                claim_state: "claimed",
+                                _source: "business_profiles",
+                                _claimed: true,
+                                _emailMatch: false,
+                              };
+                          setDisputingResult(disputeResult);
+                          setDisputeName("");
+                          setDisputeEmail(formData.email);
+                          setDisputePhone("");
+                          setDisputeRole("");
+                          setDisputeReason("");
+                          setDisputeError("");
+                          setDisputeSubmitted(false);
+                          setScreen("dispute");
+                        }
+                      }}
+                      className="text-primary-600 hover:text-primary-700 font-medium hover:underline"
+                    >
+                      Submit a dispute
+                    </button>
+                  </p>
+                )}
               </div>
 
               {/* Error */}
@@ -2784,16 +2839,11 @@ function ProviderOnboardingContent() {
         </nav>
 
         <div className="flex-1 px-4 py-8 md:py-12 pb-24">
-          <div className="max-w-md mx-auto">
-            {/* Amber dispute card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-amber-200 p-8">
-              {/* Header with amber icon */}
+          <div className="max-w-xl mx-auto">
+            {/* Clean dispute card */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8">
+              {/* Header */}
               <div className="text-center mb-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center mx-auto mb-4 shadow-sm border border-amber-200/60">
-                  <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
                 <h2 className="text-xl font-display font-bold text-gray-900 tracking-tight">
                   Dispute this page
                 </h2>
@@ -2804,7 +2854,7 @@ function ProviderOnboardingContent() {
 
               {/* Form fields */}
               <div className="space-y-4">
-                {/* Full name */}
+                {/* Full name - full width */}
                 <div className="space-y-1.5">
                   <label htmlFor="dispute-name" className="block text-[13px] font-semibold text-gray-700">
                     Full name <span className="text-red-500">*</span>
@@ -2815,41 +2865,42 @@ function ProviderOnboardingContent() {
                     value={disputeName}
                     onChange={(e) => setDisputeName(e.target.value)}
                     placeholder="Your full name"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent focus:bg-white transition-all min-h-[48px]"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 focus:bg-white transition-all min-h-[48px]"
                   />
                 </div>
 
-                {/* Email */}
-                <div className="space-y-1.5">
-                  <label htmlFor="dispute-email" className="block text-[13px] font-semibold text-gray-700">
-                    Email <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="dispute-email"
-                    type="email"
-                    value={disputeEmail}
-                    onChange={(e) => setDisputeEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent focus:bg-white transition-all min-h-[48px]"
-                  />
+                {/* Email + Phone - side by side on desktop */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label htmlFor="dispute-email" className="block text-[13px] font-semibold text-gray-700">
+                      Email <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      id="dispute-email"
+                      type="email"
+                      value={disputeEmail}
+                      onChange={(e) => setDisputeEmail(e.target.value)}
+                      placeholder="you@example.com"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 focus:bg-white transition-all min-h-[48px]"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label htmlFor="dispute-phone" className="block text-[13px] font-semibold text-gray-700">
+                      Phone <span className="text-gray-400 font-normal">(optional)</span>
+                    </label>
+                    <input
+                      id="dispute-phone"
+                      type="tel"
+                      value={disputePhone}
+                      onChange={(e) => setDisputePhone(e.target.value)}
+                      placeholder="(555) 123-4567"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 focus:bg-white transition-all min-h-[48px]"
+                    />
+                  </div>
                 </div>
 
-                {/* Phone */}
-                <div className="space-y-1.5">
-                  <label htmlFor="dispute-phone" className="block text-[13px] font-semibold text-gray-700">
-                    Phone <span className="text-gray-400 font-normal">(optional)</span>
-                  </label>
-                  <input
-                    id="dispute-phone"
-                    type="tel"
-                    value={disputePhone}
-                    onChange={(e) => setDisputePhone(e.target.value)}
-                    placeholder="(555) 123-4567"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent focus:bg-white transition-all min-h-[48px]"
-                  />
-                </div>
-
-                {/* Role dropdown */}
+                {/* Role dropdown - full width */}
                 <div className="space-y-1.5">
                   <label htmlFor="dispute-role" className="block text-[13px] font-semibold text-gray-700">
                     Your role <span className="text-red-500">*</span>
@@ -2858,7 +2909,7 @@ function ProviderOnboardingContent() {
                     id="dispute-role"
                     value={disputeRole}
                     onChange={(e) => setDisputeRole(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent focus:bg-white transition-all min-h-[48px] appearance-none cursor-pointer"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 focus:bg-white transition-all min-h-[48px] appearance-none cursor-pointer"
                     style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.75rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.25em 1.25em', paddingRight: '2.5rem' }}
                   >
                     <option value="">Select your role...</option>
@@ -2868,7 +2919,7 @@ function ProviderOnboardingContent() {
                   </select>
                 </div>
 
-                {/* Reason */}
+                {/* Reason - full width */}
                 <div className="space-y-1.5">
                   <label htmlFor="dispute-reason" className="block text-[13px] font-semibold text-gray-700">
                     Why should you manage this page? <span className="text-red-500">*</span>
@@ -2879,7 +2930,7 @@ function ProviderOnboardingContent() {
                     onChange={(e) => setDisputeReason(e.target.value)}
                     placeholder="Explain your connection to this organization..."
                     rows={3}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-transparent focus:bg-white transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-primary-400 focus:bg-white transition-all resize-none"
                   />
                 </div>
 
@@ -2911,7 +2962,6 @@ function ProviderOnboardingContent() {
             onClick: handleDisputeSubmit,
             loading: disputeSubmitting,
             disabled: !disputeName.trim() || !disputeEmail.trim() || !disputeRole || !disputeReason.trim(),
-            variant: "amber",
           }}
         />
       </div>

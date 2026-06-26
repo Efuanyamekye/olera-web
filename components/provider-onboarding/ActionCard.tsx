@@ -110,7 +110,7 @@ const TOOLTIP_CONTENT: Record<ActionCardState, { text: string; showTos?: boolean
     showTos: true,
   },
   "already-claimed": {
-    text: "Someone else has verified ownership of this listing. If you believe this is incorrect, submit a dispute and we'll review within 2–3 business days.",
+    text: "This listing is claimed but not yet verified. If you're the owner, submit a dispute and we'll review within 2–3 business days.",
     showTos: true,
   },
   "dispute-submitted": {
@@ -1349,7 +1349,7 @@ export default function ActionCard({
               <InfoTooltip content={TOOLTIP_CONTENT["already-claimed"].text} showTos={TOOLTIP_CONTENT["already-claimed"].showTos} />
             </h3>
             <p className="text-[15px] text-gray-500">
-              Someone else is managing this listing. If you believe this is an error, you can submit a dispute.
+              This listing is claimed but not yet verified. If you&apos;re the owner, submit a dispute.
             </p>
           </div>
 

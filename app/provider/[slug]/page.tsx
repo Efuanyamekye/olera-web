@@ -21,7 +21,6 @@ import type { SectionItem } from "@/components/providers/SectionNav";
 import ClaimBadge from "@/components/providers/ClaimBadge";
 import MobileGalleryActionBar from "@/components/providers/MobileGalleryActionBar";
 import MobileProviderTopNav from "@/components/providers/MobileProviderTopNav";
-import MobileClaimLink from "@/components/providers/MobileClaimLink";
 import MobilePricingTooltip from "@/components/providers/MobilePricingTooltip";
 import MobileClaimTooltip from "@/components/providers/MobileClaimTooltip";
 import { MobileManageLink } from "@/components/providers/MobileManageLink";
@@ -464,14 +463,19 @@ export default async function ProviderPage({
     if (claimMeta?.accepted_payments) acceptedPayments = claimMeta.accepted_payments;
   }
 
-  // Only show "Claimed" badge when provider is BOTH claimed AND verified
-  // "verified" = admin-approved or self-verified, "not_required" = high-trust auto-verified
-  // Also check badge_approved for extra defense (should always be in sync with verification_state)
+  // Compute tri-state badge display: "unclaimed" | "verified" | "claimed"
+  // - "verified": provider is claimed AND verified (admin-approved, self-verified, or high-trust auto-verified)
+  // - "claimed": provider is claimed but NOT yet verified (pending verification, unverified, or rejected)
+  // - "unclaimed": provider is not claimed (unclaimed, pending claim, rejected claim, or archived)
   const badgeApproved = (claimMeta as Record<string, unknown> | null)?.badge_approved === true;
-  const displayClaimState = (actualClaimState === "claimed" &&
-    (actualVerificationState === "verified" || actualVerificationState === "not_required" || badgeApproved))
-    ? "claimed"
-    : "unclaimed";
+  const computeBadgeDisplayState = (): "unclaimed" | "verified" | "claimed" => {
+    if (actualClaimState !== "claimed") return "unclaimed";
+    if (actualVerificationState === "verified" ||
+        actualVerificationState === "not_required" ||
+        badgeApproved) return "verified";
+    return "claimed"; // claimed but not verified
+  };
+  const displayClaimState = computeBadgeDisplayState();
 
   const answeredQuestions = qaResult.questions as { id: string; question: string; answer: string; asker_name: string; created_at: string }[];
   const realReviewCount = qaResult.reviewCount;
@@ -788,15 +792,14 @@ export default async function ProviderPage({
                   rating: rating || undefined,
                 }}
               />
-              {images.length > 0 && (
-                <div className="absolute top-4 left-4 z-20 hidden md:block">
-                  <ClaimBadge
-                    claimState={displayClaimState}
-                    providerName={profile.display_name}
-                    claimUrl={`/provider/onboarding?org=${profile.slug}`}
-                  />
-                </div>
-              )}
+              {/* Badge always shows regardless of images - positioned over gallery/fallback */}
+              <div className="absolute top-4 left-4 z-20">
+                <ClaimBadge
+                  displayState={displayClaimState}
+                  providerName={profile.display_name}
+                  claimUrl={`/provider/onboarding?org=${profile.slug}`}
+                />
+              </div>
             </div>
 
             {/* Identity */}
@@ -896,7 +899,7 @@ export default async function ProviderPage({
                   <div className="flex items-center gap-3">
                     {/* Avatar */}
                     <div className="relative flex-shrink-0">
-                      {displayClaimState === "claimed" && staff?.image ? (
+                      {displayClaimState === "verified" && staff?.image ? (
                         <Image
                           src={staff.image}
                           alt={staff.name || "Manager"}
@@ -904,21 +907,27 @@ export default async function ProviderPage({
                           height={48}
                           className="w-12 h-12 rounded-full object-cover"
                         />
-                      ) : displayClaimState === "claimed" && staff?.name ? (
+                      ) : displayClaimState === "verified" && staff?.name ? (
                         <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
                           <span className="text-sm font-semibold text-gray-500">
                             {getInitials(staff.name)}
                           </span>
                         </div>
+                      ) : displayClaimState === "claimed" ? (
+                        <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                          </svg>
+                        </div>
                       ) : (
                         <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
                           <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
                           </svg>
                         </div>
                       )}
-                      {/* Verification badge */}
-                      {displayClaimState === "claimed" && (
+                      {/* Verification badge - only show for verified state */}
+                      {displayClaimState === "verified" && (
                         <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-white rounded-full flex items-center justify-center">
                           <svg className="w-4 h-4 text-primary-500" viewBox="0 0 20 20" fill="currentColor">
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
@@ -929,14 +938,24 @@ export default async function ProviderPage({
 
                     {/* Text content */}
                     <div className="flex-1 min-w-0">
-                      {displayClaimState === "claimed" ? (
+                      {displayClaimState === "verified" ? (
                         <>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-primary-600 tracking-wide">CLAIMED</span>
-                            <MobileClaimTooltip content="This business has been verified and is actively managed by its owner on Olera." />
+                            <span className="text-xs font-bold text-primary-600 tracking-wide">VERIFIED</span>
+                            <MobileClaimTooltip content="This listing has been verified and is managed by the owner. Information is kept up to date." />
                           </div>
                           <p className="text-sm text-gray-600 mt-0.5">
                             Managed by <span className="font-semibold text-gray-900">{staff?.name || profile.display_name}</span>
+                          </p>
+                        </>
+                      ) : displayClaimState === "claimed" ? (
+                        <>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-gray-400 tracking-wide">CLAIMED</span>
+                            <MobileClaimTooltip content="This listing is claimed but not yet verified." />
+                          </div>
+                          <p className="text-sm text-gray-500 mt-0.5">
+                            Pending verification
                           </p>
                         </>
                       ) : (
@@ -1045,27 +1064,43 @@ export default async function ProviderPage({
               />
               </div>
 
-              {/* Managed by — only show when staff data exists, hidden on mobile */}
-              {hasStaff && (
+              {/* Claim status section — matches mobile layout, hidden on mobile */}
+              {(displayClaimState === "verified" || displayClaimState === "claimed") && (
                 <div className="hidden md:flex items-center gap-2.5 mt-4">
                   <div className="relative flex-shrink-0">
-                    {staff!.image ? (
-                      <Image src={staff!.image} alt={staff!.name} width={28} height={28} className="w-7 h-7 rounded-full object-cover" />
+                    {displayClaimState === "verified" ? (
+                      // Verified: show staff image or initials
+                      staff?.image ? (
+                        <Image src={staff.image} alt={staff.name || profile.display_name} width={28} height={28} className="w-7 h-7 rounded-full object-cover" />
+                      ) : (
+                        <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">
+                          <span className="text-[10px] font-semibold text-gray-500">{getInitials(staff?.name || profile.display_name)}</span>
+                        </div>
+                      )
                     ) : (
+                      // Claimed: show person icon (matches mobile)
                       <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">
-                        <span className="text-[10px] font-semibold text-gray-500">{getInitials(staff!.name)}</span>
+                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
                       </div>
                     )}
-                    {displayClaimState === "claimed" && (
+                    {displayClaimState === "verified" && (
                       <svg className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 text-[#198087]" viewBox="0 0 20 20" fill="currentColor">
                         <circle cx="10" cy="10" r="10" fill="white" />
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
                       </svg>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500">
-                    Managed by: <span className="font-medium text-gray-700">{staff!.name}</span>
-                  </p>
+                  {displayClaimState === "verified" ? (
+                    <p className="text-sm text-gray-500">
+                      Managed by: <span className="font-medium text-gray-700">{staff?.name || profile.display_name}</span>
+                    </p>
+                  ) : (
+                    <p className="text-sm text-gray-500">
+                      Pending verification
+                    </p>
+                  )}
                 </div>
               )}
             </div>
@@ -1414,7 +1449,7 @@ export default async function ProviderPage({
                             <span className="text-3xl font-bold text-gray-500">{getInitials(staff!.name)}</span>
                           </div>
                         )}
-                        {displayClaimState === "claimed" && (
+                        {displayClaimState === "verified" && (
                           <svg className="absolute bottom-0 right-0 w-6 h-6 text-[#198087]" viewBox="0 0 20 20" fill="currentColor">
                             <circle cx="10" cy="10" r="10" fill="white" />
                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
