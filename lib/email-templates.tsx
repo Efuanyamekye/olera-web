@@ -2454,12 +2454,13 @@ export function publishNudge2Email(opts: {
   familyName: string;
   matchesUrl: string;
   providerCount?: number;
-  providers?: EmailProviderCard[];
+  /** Photo + hairline compare cards (the matches-email / completion_nudge_4 style). */
+  providers?: CompareCardItem[];
   city?: string;
 }): string {
   const cityText = opts.city || "your area";
   const hasProviders = opts.providers && opts.providers.length > 0;
-  const providersHtml = hasProviders ? providerCardsBlock(opts.providers!.slice(0, 3)) : "";
+  const providersHtml = hasProviders ? compareCardsBlock(opts.providers!.slice(0, 3)) : "";
   const remainingCount = (opts.providerCount ?? 0) - (opts.providers?.length ?? 0);
 
   // Adjust headline and intro based on whether we have providers to show

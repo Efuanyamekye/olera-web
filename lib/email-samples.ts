@@ -264,7 +264,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "Profile ≥60% complete, not published, ~day 2.",
     why: "Show a top-rated provider list — make the inbound opportunity tangible.",
     render: () => publishNudge2Email({
-      unsubscribeId: "sample-id", familyName: F.familyName, matchesUrl: F.matchesUrl, providerCount: 24, providers: FAM_CARDS, city: "Killeen",
+      unsubscribeId: "sample-id", familyName: F.familyName, matchesUrl: F.matchesUrl, providerCount: 24, providers: FAM_RECS, city: "Killeen",
     }),
   },
   {

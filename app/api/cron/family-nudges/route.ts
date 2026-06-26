@@ -1104,16 +1104,28 @@ export async function GET(request: NextRequest) {
                   city: family.city || undefined,
                 });
                 break;
-              case 2:
+              case 2: {
+                // Photo + hairline cards (completion_nudge_4 / R3 style), not the
+                // boxed text cards. Each directory provider gets a category stock
+                // image so cards never render blank.
+                const pubCards: CompareCardItem[] = topProviders.map((p, i) => ({
+                  name: p.name,
+                  viewUrl: `${siteUrl}/provider/${p.slug}`,
+                  imageUrl: categoryStockImage(p.category, i),
+                  priceRange: p.priceRange ?? null,
+                  rating: p.rating || null,
+                  reviewCount: p.reviewCount || null,
+                }));
                 html = publishNudge2Email({
                   unsubscribeId: family.id,
                   familyName: firstName,
                   matchesUrl,
                   providerCount,
-                  providers: topProviders,
+                  providers: pubCards,
                   city: family.city || undefined,
                 });
                 break;
+              }
               case 3:
                 html = publishNudge3Email({
                   unsubscribeId: family.id,
