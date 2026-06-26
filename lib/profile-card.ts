@@ -103,7 +103,7 @@ export function profileToCard(profile: Profile): CardProfile {
     name: profile.display_name,
     location,
     imageUrl: profile.image_url,
-    verified: profile.claim_state === "claimed" && profile.verification_state === "verified",
+    verified: profile.claim_state === "claimed" && (profile.verification_state === "verified" || profile.verification_state === "not_required"),
     careTypes: profile.care_types || [],
     category,
     priceLabel,

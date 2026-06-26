@@ -465,8 +465,11 @@ export default async function ProviderPage({
   }
 
   // Only show "Claimed" badge when provider is BOTH claimed AND verified
-  // This prevents the trust signal from appearing before verification is complete
-  const displayClaimState = (actualClaimState === "claimed" && actualVerificationState === "verified")
+  // "verified" = admin-approved or self-verified, "not_required" = high-trust auto-verified
+  // Also check badge_approved for extra defense (should always be in sync with verification_state)
+  const badgeApproved = (claimMeta as Record<string, unknown> | null)?.badge_approved === true;
+  const displayClaimState = (actualClaimState === "claimed" &&
+    (actualVerificationState === "verified" || actualVerificationState === "not_required" || badgeApproved))
     ? "claimed"
     : "unclaimed";
 

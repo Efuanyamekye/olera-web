@@ -41,8 +41,11 @@ export default function VerificationStatusCard({
   verificationState,
   onRequestVerification,
 }: VerificationStatusCardProps) {
-  // Don't render if already verified (admin-approved badge OR self-verified)
-  if (metadata?.badge_approved || verificationState === "verified") {
+  // Don't render if already verified:
+  // - badge_approved = admin-approved badge
+  // - verified = self-verified or admin-approved
+  // - not_required = high-trust auto-verified at claim time
+  if (metadata?.badge_approved || verificationState === "verified" || verificationState === "not_required") {
     return null;
   }
 
