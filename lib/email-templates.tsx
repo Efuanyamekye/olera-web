@@ -1228,22 +1228,22 @@ export function providerSilentEmail(opts: {
     if (hasDeclineMessage) {
       openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> isn't able to take new families right now and left you a message:`;
     } else if (hasRecommendedProviders) {
-      openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> isn't able to take new families right now — but you've got other strong options nearby worth comparing:`;
+      openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> isn't able to take new families right now, but you've got other strong options nearby worth comparing:`;
     } else {
-      openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> isn't able to take new families right now — but there are other providers in your area worth a look.`;
+      openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> isn't able to take new families right now, but there are other providers in your area worth a look.`;
     }
   } else {
-    openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> hasn't gotten back to you yet — and the good thing about Olera is you're never limited to just one.${hasRecommendedProviders ? " Here are a few other providers near you worth comparing:" : ""}`;
+    openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> hasn't gotten back to you yet, and the good thing about Olera is you're never limited to just one.${hasRecommendedProviders ? " Here are a few other providers near you worth comparing:" : ""}`;
   }
 
   // Adjust closing line based on whether we showed recommendations
   const closingLine = opts.providerPassed
     ? (hasRecommendedProviders
-        ? `You can reach out to any of them the same way — directly, in your inbox, with no forms and no flood of calls. Message as many as you'd like, or just one. It's your call.`
-        : `You can browse providers and reach out the same way — directly, in your inbox, with no forms and no flood of calls. It's your call.`)
+        ? `You can reach out to any of them the same way, directly in your inbox, with no forms and no flood of calls. Message as many as you'd like, or just one. It's your call.`
+        : `You can browse providers and reach out the same way, directly in your inbox, with no forms and no flood of calls. It's your call.`)
     : (hasRecommendedProviders
-        ? `You can reach out to any of them the same way — directly, in your inbox, with no forms and no flood of calls. Message as many as you'd like, or just one. It's your call.<br><br>And if ${escapeHtml(opts.providerName)} does get back to you, that conversation will still be right there waiting.`
-        : `You can browse providers and reach out the same way — directly, in your inbox, with no forms and no flood of calls.<br><br>And if ${escapeHtml(opts.providerName)} does get back to you, that conversation will still be right there waiting.`);
+        ? `You can reach out to any of them the same way, directly in your inbox, with no forms and no flood of calls. Message as many as you'd like, or just one. It's your call.<br><br>And if ${escapeHtml(opts.providerName)} does get back to you, that conversation will still be right there waiting.`
+        : `You can browse providers and reach out the same way, directly in your inbox, with no forms and no flood of calls.<br><br>And if ${escapeHtml(opts.providerName)} does get back to you, that conversation will still be right there waiting.`);
 
   // Show provider's decline message if present (similar to message preview style)
   // Only say "plenty of other options" if we actually have recommendations
@@ -1269,11 +1269,7 @@ export function providerSilentEmail(opts: {
       ${openingLine}
     </p>
     ${declineMessageSection}
-    ${hasRecommendedProviders ? `
-    <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:0 0 24px;">
-      ${providersSection}
-    </div>
-    ` : ""}
+    ${hasRecommendedProviders ? `<div style="margin:0 0 24px;">${providersSection}</div>` : ""}
     <div style="margin:0 0 24px;">${button("Compare more providers near you", opts.browseUrl)}</div>
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">
@@ -1281,7 +1277,7 @@ export function providerSilentEmail(opts: {
     </p>
     ${benefitsQuizModule(opts.benefitsQuizUrl)}
     <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.5;">
-      Questions, or want a hand choosing? A real person is here — <a href="${BASE_URL}/contact" style="color:${BRAND_COLOR};text-decoration:none;">contact us anytime</a>.
+      Questions, or want a hand choosing? A real person is here. <a href="${BASE_URL}/contact" style="color:${BRAND_COLOR};text-decoration:none;">Contact us anytime</a>.
     </p>
     <p style="font-size:15px;color:#374151;margin:0 0 4px;line-height:1.5;">
       Warmly,
@@ -1290,7 +1286,7 @@ export function providerSilentEmail(opts: {
       The Olera team
     </p>
     ${authorBylineBlock({ topBorder: true })}
-  `, `You're never limited to one — here are others worth comparing.`);
+  `, `You're never limited to one. Here are others worth comparing.`);
 }
 
 /** Email #6: Email to family when provider is STILL silent after 7+ days - trust recovery with intervention */
@@ -5231,21 +5227,19 @@ export function day10AwaitingEmail(opts: {
       Hi ${escapeHtml(familyFirstName)},
     </p>
     <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.5;">
-      You heard back from <strong>${safeProviderName}</strong> — that's a good place to be. If you've been meaning to reply but haven't found the moment, that's completely normal; there's a lot to weigh, and there's no wrong pace.
+      You heard back from <strong>${safeProviderName}</strong>, and that's a good place to be. If you've been meaning to reply but haven't found the moment, that's completely normal; there's a lot to weigh, and there's no wrong pace.
     </p>
     ${hasRecs ? `
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">
       One thing that helps before you decide: seeing how they stack up against a couple of others nearby.
     </p>
-    <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:0 0 20px;">
-      ${providersSection}
-    </div>
+    <div style="margin:0 0 24px;">${providersSection}</div>
     <div style="margin:0 0 24px;">${button("Compare your options", opts.alternativesUrl)}</div>
     ` : ""}
     ${benefitsQuizModule(opts.benefitsQuizUrl)}
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
     <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.5;">
-      Ready to keep going? <a href="${opts.inboxUrl}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">Pick up right where you left off</a> with ${safeProviderName}. And if you'd rather not weigh it alone, a real person on our team is glad to help you think it through — <a href="${opts.supportUrl}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">just reach out</a>.
+      Ready to keep going? <a href="${opts.inboxUrl}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">Pick up right where you left off</a> with ${safeProviderName}. And if you'd rather not weigh it alone, a real person on our team is glad to help you think it through. <a href="${opts.supportUrl}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">Just reach out</a>.
     </p>
     <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.5;">
       We're not going anywhere.
@@ -5257,5 +5251,5 @@ export function day10AwaitingEmail(opts: {
       The Olera team
     </p>
     ${authorBylineBlock({ topBorder: true })}
-  `, `You heard back from ${opts.providerName} — here's how to weigh your options.`);
+  `, `You heard back from ${opts.providerName}. Here's how to weigh your options.`);
 }

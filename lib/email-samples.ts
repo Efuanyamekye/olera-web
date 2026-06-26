@@ -118,7 +118,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
   },
   {
     id: "family_provider_silent", audience: "family", group: "Family · Compare cascade",
-    label: "R2 · Provider silent → compare", subject: "You're never limited to one — here are others worth comparing.",
+    label: "R2 · Provider silent → compare", subject: "A few other providers near you",
     emailType: "family_provider_silent", cron: "family-comms-coordinator",
     who: "Engaged family (sent ≥1 message), 96–120h in, no provider has responded anywhere, and ≥3 responsive alternatives exist nearby.",
     why: "Compare-led hero — the provider went quiet, so show 2–3 responsive alternatives plus a benefits-quiz value-exchange. You're never limited to one.",
