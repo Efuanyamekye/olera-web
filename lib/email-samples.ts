@@ -181,7 +181,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     why: "Warm inbound lead — a provider is actively waiting; nudge the family to reply, with a preview of the provider's message.",
     render: () => familyPendingReachOutNudgeEmail({
       familyName: F.familyName, providerName: F.providerName, providerCity: "Killeen, TX",
-      messagePreview: "Hi! We'd love to help with care for your mother — when's a good time to talk?",
+      messagePreview: "Hi! We'd love to help with care for your mother. When's a good time to talk?",
       daysSinceReachOut: 3, viewUrl: F.inboxUrl,
     }),
   },
@@ -290,7 +290,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
   },
   {
     id: "go_live_reminder", audience: "family", group: "Family · Profile sequences",
-    label: "Go-live reminder", subject: "Your profile is ready — let providers find you",
+    label: "Go-live reminder", subject: "Providers in Killeen are looking for families like yours",
     emailType: "go_live_reminder", cron: "lead-family-nudge",
     who: "Profile complete enough to publish; reminded to flip it live.",
     why: "Convert a complete-but-private profile into a published one so providers can reach out.",
