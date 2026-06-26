@@ -1145,7 +1145,7 @@ function benefitsQuizModule(url?: string | null): string {
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
     <p style="font-size:14px;color:#6b7280;margin:0 0 4px;line-height:1.5;">
       It also helps to know what you can afford.
-      <a href="${url}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">See programs you may qualify for</a> — a quick 2-minute check that also sharpens your matches.
+      <a href="${url}" style="color:${BRAND_COLOR};text-decoration:none;font-weight:600;">See programs you may qualify for</a>. It takes about 2 minutes and can show what may help lower the cost of care.
     </p>
   `;
 }
@@ -1343,6 +1343,18 @@ export function providerStillSilentEmail(opts: {
  * have alternatives to show (≥3 from the coordinator); falls back to the gentle
  * guide-led version when we don't. Benefits quiz rides alongside as the closer.
  */
+/**
+ * Single source of truth for the R3 never-engaged inbox subject — mirrors
+ * completionNudgeSubject so the coordinator's pre-send log reservation and the
+ * preview drawer can't drift from what the template implies. `hasAlts` is the
+ * same branch the template uses to pick compare-led vs guide-fallback.
+ */
+export function familyNeverEngagedSubject(hasAlts: boolean): string {
+  return hasAlts
+    ? "A few care options near you worth a look"
+    : "What could help you pay for care";
+}
+
 export function familyNeverEngagedEmail(opts: {
   familyName: string;
   providerName: string;
@@ -1360,65 +1372,59 @@ export function familyNeverEngagedEmail(opts: {
 
   const providersSection = hasRecs ? compareCardsBlock(opts.recommendedProviders!) : "";
 
-  // Compare-led body (we have options to show)
+  // Compare-led body (we have options to show) — confident, compare-HERO angle.
+  // Matches the completion_nudge_4 bar: h1 headline + de-boxed photo/hairline
+  // cards as the hero (compareCardsBlock carries its own separators, so no gray
+  // wrapper box), benefits as the soft closer, founder byline.
   if (hasRecs) {
     return layout(`
-    <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.5;">
-      Hi ${escapeHtml(familyFirstName)},
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 10px;line-height:1.25;">You have real choices nearby</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.6;">
+      Hi ${escapeHtml(familyFirstName)}, finding the right care is a big decision, and you&rsquo;ve got real options. Here are a few providers near you worth comparing side by side:
     </p>
-    <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.5;">
-      Finding the right care is a big decision, and you don't have to settle on the first option. Here are a few providers near you worth comparing:
-    </p>
-    <div style="background:#f9fafb;border-radius:8px;padding:20px;margin:0 0 24px;">
-      ${providersSection}
-    </div>
-    ${opts.browseUrl ? `<div style="margin:0 0 24px;">${button("Compare more providers near you", opts.browseUrl)}</div>` : ""}
+    ${providersSection}
+    ${opts.browseUrl ? `<div style="margin:24px 0 0;">${button("Compare more providers near you", opts.browseUrl)}</div>` : ""}
     ${benefitsQuizModule(opts.benefitsQuizUrl)}
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
-    <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">
-      And <strong>${escapeHtml(opts.providerName)}</strong> is still there whenever you're ready — message them anytime from <a href="${opts.inboxUrl}" style="color:${BRAND_COLOR};text-decoration:none;">your inbox</a>. No forms, no phone calls you didn't ask for. New to all this? Our <a href="${opts.guideUrl}" style="color:${BRAND_COLOR};text-decoration:none;">free guide</a> walks through what to look for.
+    <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.6;">
+      And <strong>${escapeHtml(opts.providerName)}</strong> is still there whenever you&rsquo;re ready. Message them anytime from <a href="${opts.inboxUrl}" style="color:${BRAND_COLOR};text-decoration:none;">your inbox</a>, with no forms and no calls you didn&rsquo;t ask for. New to all this? Our <a href="${opts.guideUrl}" style="color:${BRAND_COLOR};text-decoration:none;">free guide</a> walks through what to look for.
     </p>
-    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.5;">
-      Want a hand choosing? A real person is here — <a href="${BASE_URL}/contact" style="color:${BRAND_COLOR};text-decoration:none;">contact us anytime</a>.
-    </p>
-    <p style="font-size:15px;color:#374151;margin:0 0 4px;line-height:1.5;">
-      Warmly,
-    </p>
-    <p style="font-size:15px;color:#374151;margin:0;line-height:1.5;">
-      The Olera team
+    <p style="font-size:14px;color:#6b7280;margin:0 0 0;line-height:1.6;">
+      Want a hand choosing? A real person is here. <a href="${BASE_URL}/contact" style="color:${BRAND_COLOR};text-decoration:underline;">Contact us anytime</a>.
     </p>
     ${authorBylineBlock({ topBorder: true })}
-  `, `A few other providers near you worth comparing.`);
+  `, `A few real options near you, worth a look. No rush.`);
   }
 
-  // Fallback: gentle guide-led body (no alternatives to show)
+  // Fallback (no alternatives to show — the thinnest hand). Lead with RECOGNITION,
+  // not presumption: care searches stall for everyone, usually on two questions —
+  // who's good, and how to pay. We make the second one (the real paralyzer, and our
+  // strongest free asset) the hero; the guide drops to a soft inline link; the human
+  // offer routes to /contact, never "reply" (From is noreply@). One reassurance line.
+  const hasQuiz = !!opts.benefitsQuizUrl;
+  const heroCta = hasQuiz
+    ? button("See what could help with the cost", opts.benefitsQuizUrl!)
+    : button("Get the free guide", opts.guideUrl);
   return layout(`
-    <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.5;">
-      Hi ${escapeHtml(familyFirstName)},
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 10px;line-height:1.3;">Choosing care for someone you love is a lot to carry</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.6;">
+      Hi ${escapeHtml(familyFirstName)}, you&rsquo;re weighing options, cost, trust, and timing all at once, trying to make a call you won&rsquo;t second-guess. It&rsquo;s completely normal for a search like that to stall for a while. So take it at your pace.
     </p>
-    <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.5;">
-      It's completely okay if you're still thinking things over — finding the right care isn't a small decision. While you do, here's a free guide that walks through what to look for, what to ask, and how families pay for care:
+    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.6;">
+      ${hasQuiz
+        ? "When you&rsquo;re ready, the heaviest part is usually the cost, and that&rsquo;s the one we can help lift first. A quick look shows which programs and benefits could help cover it. Most families are surprised by what they qualify for."
+        : "When you&rsquo;re ready, here&rsquo;s a free guide that walks through what to look for, what to ask, and how families actually pay for care."}
     </p>
-    <div style="margin:0 0 24px;">${button("Get the free guide", opts.guideUrl)}</div>
-    ${benefitsQuizModule(opts.benefitsQuizUrl)}
+    <div style="margin:0 0 24px;">${heroCta}</div>
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
-    <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">
-      And whenever you're ready, <strong>${escapeHtml(opts.providerName)}</strong> is still there. You can message them anytime, right from <a href="${opts.inboxUrl}" style="color:${BRAND_COLOR};text-decoration:none;">your inbox</a> — no forms, no phone calls you didn't ask for. Just reach out when it feels right.
+    <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.6;">
+      And whenever you&rsquo;re ready, <strong>${escapeHtml(opts.providerName)}</strong> is still there. Message them anytime from <a href="${opts.inboxUrl}" style="color:${BRAND_COLOR};text-decoration:none;">your inbox</a>, with no forms and no calls you didn&rsquo;t ask for.${hasQuiz ? ` New to all this? Our <a href="${opts.guideUrl}" style="color:${BRAND_COLOR};text-decoration:none;">free guide</a> covers what to look for and what to ask.` : ""}
     </p>
-    <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">
-      We're not going anywhere. Take all the time you need.
-    </p>
-    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.5;">
-      If anything would help, or you just want to talk it through, a real person is here — <a href="${BASE_URL}/contact" style="color:${BRAND_COLOR};text-decoration:none;">contact us anytime</a>.
-    </p>
-    <p style="font-size:15px;color:#374151;margin:0 0 4px;line-height:1.5;">
-      Warmly,
-    </p>
-    <p style="font-size:15px;color:#374151;margin:0;line-height:1.5;">
-      The Olera team
+    <p style="font-size:14px;color:#6b7280;margin:0 0 0;line-height:1.6;">
+      No rush. The conversation will be here when you&rsquo;re ready. And if you&rsquo;d rather talk it through with a real person, you can <a href="${BASE_URL}/contact" style="color:${BRAND_COLOR};text-decoration:underline;">contact us anytime</a>.
     </p>
     ${authorBylineBlock({ topBorder: true })}
-  `, `We're not going anywhere, and your provider is still one message away.`);
+  `, `When you're ready, a little help with the heaviest part: the cost.`);
 }
 
 /** Email to admin when a provider claims their page */

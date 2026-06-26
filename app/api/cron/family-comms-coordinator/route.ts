@@ -10,6 +10,7 @@ import {
   connectionOutcomeCheckEmail,
   providerSilentEmail,
   familyNeverEngagedEmail,
+  familyNeverEngagedSubject,
   day10AwaitingEmail,
   familyPendingReachOutNudgeEmail,
   familyNudgeEmail,
@@ -460,9 +461,7 @@ export async function GET(request: NextRequest) {
           return {
             rung: "never_engaged",
             emailType: "family_never_engaged",
-            subject: hasAlts3
-              ? "A few other providers near you worth comparing"
-              : "A quick resource while you're thinking things over",
+            subject: familyNeverEngagedSubject(hasAlts3),
             metadata: { connection_id: r3trigger.id, recommended_count: alts3.length },
             buildHtml: (eid) => {
               const guideUrl = `${siteUrl}${appendTrackingParams("/olera-senior-care-guide-one-page.pdf", eid)}`;

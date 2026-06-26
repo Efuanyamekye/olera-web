@@ -16,6 +16,7 @@ import {
   connectionOutcomeCheckEmail,
   providerSilentEmail,
   familyNeverEngagedEmail,
+  familyNeverEngagedSubject,
   day10AwaitingEmail,
   familyPendingReachOutNudgeEmail,
   familyNudgeEmail,
@@ -139,7 +140,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
   },
   {
     id: "family_never_engaged_compare", audience: "family", group: "Family · Compare cascade",
-    label: "R3 · Never-engaged → compare", subject: "A few other providers near you worth comparing",
+    label: "R3 · Never-engaged → compare", subject: familyNeverEngagedSubject(true),
     emailType: "family_never_engaged", cron: "family-comms-coordinator",
     who: "Family never sent a message on any connection, 120–144h in, no provider responded — and ≥3 nearby alternatives exist.",
     why: "Gentle resource nudge for families who stalled before reaching out. With alternatives available, lead with compare cards.",
@@ -150,7 +151,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
   },
   {
     id: "family_never_engaged_fallback", audience: "family", group: "Family · Compare cascade",
-    label: "R3 · Never-engaged → guide fallback (<3 alts)", subject: "A quick resource while you're thinking things over",
+    label: "R3 · Never-engaged → guide fallback (<3 alts)", subject: familyNeverEngagedSubject(false),
     emailType: "family_never_engaged", cron: "family-comms-coordinator",
     who: "Same as R3, but fewer than 3 responsive alternatives are available nearby.",
     why: "When we can't honestly surface alternatives, fall back to a how-to-choose guide PDF rather than a thin compare list.",
