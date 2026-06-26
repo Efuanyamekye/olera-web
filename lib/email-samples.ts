@@ -31,6 +31,7 @@ import {
   publishNudge2Email,
   publishNudge3Email,
   publishNudge4Email,
+  publishNudgeSubject,
   goLiveReminderEmail,
   matchesNudgeEmail,
   staleConversationFamilyEmail,
@@ -248,7 +249,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
   },
   {
     id: "publish_nudge_1", audience: "family", group: "Family · Profile sequences",
-    label: "Publish · day 0", subject: "Let providers come to you",
+    label: "Publish · day 0", subject: publishNudgeSubject(1),
     emailType: "publish_nudge_1", cron: "family-nudges",
     who: "Profile ≥60% complete but not yet published — same day it crossed the threshold.",
     why: "Open the publish arc — pitch the inbound/passive flow of going live.",
@@ -258,7 +259,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
   },
   {
     id: "publish_nudge_2", audience: "family", group: "Family · Profile sequences",
-    label: "Publish · day 2", subject: "These providers want to help families like yours",
+    label: "Publish · day 2", subject: publishNudgeSubject(2),
     emailType: "publish_nudge_2", cron: "family-nudges",
     who: "Profile ≥60% complete, not published, ~day 2.",
     why: "Show a top-rated provider list — make the inbound opportunity tangible.",
@@ -268,7 +269,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
   },
   {
     id: "publish_nudge_3", audience: "family", group: "Family · Profile sequences",
-    label: "Publish · day 6", subject: "Skip the phone tag",
+    label: "Publish · day 6", subject: publishNudgeSubject(3),
     emailType: "publish_nudge_3", cron: "family-nudges",
     who: "Profile ≥60% complete, not published, ~day 6.",
     why: "Platform-wide social proof (families this week/month), no-pressure tone.",
@@ -279,7 +280,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
   },
   {
     id: "publish_nudge_4", audience: "family", group: "Family · Profile sequences",
-    label: "Publish · day 13 (last)", subject: "Still thinking it over?",
+    label: "Publish · day 13 (last)", subject: publishNudgeSubject(4),
     emailType: "publish_nudge_4", cron: "family-nudges",
     who: "Profile ≥60% complete, not published, ~day 13 — final publish touch.",
     why: "Soft, no-pressure last word before the sequence goes quiet.",

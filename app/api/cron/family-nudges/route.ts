@@ -15,6 +15,7 @@ import {
   publishNudge2Email,
   publishNudge3Email,
   publishNudge4Email,
+  publishNudgeSubject,
   completionMaintenanceEmail,
   publishMaintenanceEmail,
   // Milestone emails
@@ -1050,21 +1051,7 @@ export async function GET(request: NextRequest) {
             emailType = "publish_maintenance";
             counts.maintenanceNudges++;
           } else {
-            switch (nudgeNumber) {
-              case 1:
-                subject = "Let providers come to you";
-                break;
-              case 2:
-                subject = "These providers want to help families like yours";
-                break;
-              case 3:
-                subject = "Skip the phone tag";
-                break;
-              case 4:
-              default:
-                subject = "Still thinking it over?";
-                break;
-            }
+            subject = publishNudgeSubject(nudgeNumber);
             emailType = `publish_nudge_${nudgeNumber}`;
             counts.publishNudges++;
             // Also increment legacy counter for backward compat reporting
