@@ -956,17 +956,7 @@ export default async function ProviderPage({
                           </div>
                           <p className="text-sm text-gray-500 mt-0.5">
                             Are you the owner?{" "}
-                            <MobileManageLink
-                              providerName={profile.display_name}
-                              providerSlug={profile.slug}
-                              providerId={profile.id}
-                              sourceProviderId={profile.source_provider_id}
-                              providerEmail={profile.email}
-                              providerCity={profile.city}
-                              providerState={profile.state}
-                              claimState={actualClaimState}
-                              claimAccountId={claimAccountId}
-                            />
+                            <MobileManageLink providerSlug={profile.slug} />
                           </p>
                         </>
                       ) : (
@@ -977,17 +967,7 @@ export default async function ProviderPage({
                           </div>
                           <p className="text-sm text-gray-500 mt-0.5">
                             Are you the owner?{" "}
-                            <MobileManageLink
-                              providerName={profile.display_name}
-                              providerSlug={profile.slug}
-                              providerId={profile.id}
-                              sourceProviderId={profile.source_provider_id}
-                              providerEmail={profile.email}
-                              providerCity={profile.city}
-                              providerState={profile.state}
-                              claimState={actualClaimState}
-                              claimAccountId={claimAccountId}
-                            />
+                            <MobileManageLink providerSlug={profile.slug} />
                           </p>
                         </>
                       )}
