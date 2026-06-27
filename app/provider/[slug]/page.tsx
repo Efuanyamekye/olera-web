@@ -952,10 +952,21 @@ export default async function ProviderPage({
                         <>
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs font-bold text-gray-400 tracking-wide">CLAIMED</span>
-                            <MobileClaimTooltip content="This listing is claimed but not yet verified." />
+                            <MobileClaimTooltip content="This listing has been claimed. If you're the owner, you can manage this page." />
                           </div>
                           <p className="text-sm text-gray-500 mt-0.5">
-                            Pending verification
+                            Are you the owner?{" "}
+                            <MobileManageLink
+                              providerName={profile.display_name}
+                              providerSlug={profile.slug}
+                              providerId={profile.id}
+                              sourceProviderId={profile.source_provider_id}
+                              providerEmail={profile.email}
+                              providerCity={profile.city}
+                              providerState={profile.state}
+                              claimState={actualClaimState}
+                              claimAccountId={claimAccountId}
+                            />
                           </p>
                         </>
                       ) : (
@@ -974,6 +985,8 @@ export default async function ProviderPage({
                               providerEmail={profile.email}
                               providerCity={profile.city}
                               providerState={profile.state}
+                              claimState={actualClaimState}
+                              claimAccountId={claimAccountId}
                             />
                           </p>
                         </>
@@ -1049,58 +1062,42 @@ export default async function ProviderPage({
                 </div>
               )}
 
-              {/* ── "Manage this page" CTA — hidden on mobile for cleaner hero ── */}
-              <div className="hidden md:block">
-              <ManagePageCTA
-                providerSlug={profile.slug}
-                providerName={profile.display_name}
-                providerId={profile.id}
-                sourceProviderId={profile.source_provider_id}
-                providerEmail={profile.email}
-                providerCity={profile.city}
-                providerState={profile.state}
-                isClaimed={actualClaimState === "claimed"}
-                claimAccountId={claimAccountId}
-              />
-              </div>
+              {/* ── "Manage this page" CTA — only for unclaimed/claimed, not verified ── */}
+              {displayClaimState !== "verified" && (
+                <div className="hidden md:block">
+                <ManagePageCTA
+                  providerSlug={profile.slug}
+                  providerName={profile.display_name}
+                  providerId={profile.id}
+                  sourceProviderId={profile.source_provider_id}
+                  providerEmail={profile.email}
+                  providerCity={profile.city}
+                  providerState={profile.state}
+                  isClaimed={actualClaimState === "claimed"}
+                  claimAccountId={claimAccountId}
+                />
+                </div>
+              )}
 
-              {/* Claim status section — matches mobile layout, hidden on mobile */}
-              {(displayClaimState === "verified" || displayClaimState === "claimed") && (
+              {/* Verified status section — only show for verified providers, hidden on mobile */}
+              {displayClaimState === "verified" && (
                 <div className="hidden md:flex items-center gap-2.5 mt-4">
                   <div className="relative flex-shrink-0">
-                    {displayClaimState === "verified" ? (
-                      // Verified: show staff image or initials
-                      staff?.image ? (
-                        <Image src={staff.image} alt={staff.name || profile.display_name} width={28} height={28} className="w-7 h-7 rounded-full object-cover" />
-                      ) : (
-                        <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">
-                          <span className="text-[10px] font-semibold text-gray-500">{getInitials(staff?.name || profile.display_name)}</span>
-                        </div>
-                      )
+                    {staff?.image ? (
+                      <Image src={staff.image} alt={staff.name || profile.display_name} width={28} height={28} className="w-7 h-7 rounded-full object-cover" />
                     ) : (
-                      // Claimed: show person icon (matches mobile)
                       <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                        </svg>
+                        <span className="text-[10px] font-semibold text-gray-500">{getInitials(staff?.name || profile.display_name)}</span>
                       </div>
                     )}
-                    {displayClaimState === "verified" && (
-                      <svg className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 text-[#198087]" viewBox="0 0 20 20" fill="currentColor">
-                        <circle cx="10" cy="10" r="10" fill="white" />
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-                      </svg>
-                    )}
+                    <svg className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 text-[#198087]" viewBox="0 0 20 20" fill="currentColor">
+                      <circle cx="10" cy="10" r="10" fill="white" />
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                    </svg>
                   </div>
-                  {displayClaimState === "verified" ? (
-                    <p className="text-sm text-gray-500">
-                      Managed by: <span className="font-medium text-gray-700">{staff?.name || profile.display_name}</span>
-                    </p>
-                  ) : (
-                    <p className="text-sm text-gray-500">
-                      Pending verification
-                    </p>
-                  )}
+                  <p className="text-sm text-gray-500">
+                    Managed by: <span className="font-medium text-gray-700">{staff?.name || profile.display_name}</span>
+                  </p>
                 </div>
               )}
             </div>

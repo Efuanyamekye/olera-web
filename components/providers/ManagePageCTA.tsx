@@ -117,12 +117,6 @@ export default function ManagePageCTA({
     };
   }, [open]);
 
-  // Owner goes to dashboard
-  const handleGoToDashboard = useCallback(() => {
-    setOpen(false);
-    router.push("/provider");
-  }, [router]);
-
   // Claim flow: Route to unified onboarding page with org pre-selected
   // User already knows which org they're claiming, so pre-fill it
   const handleClaimClick = useCallback(() => {
@@ -146,15 +140,15 @@ export default function ManagePageCTA({
     );
   }, [router, providerSlug, providerName, sourceProviderId, providerId]);
 
-  // Don't show CTA if claimed and user is not the owner
-  // (they can see the "Claimed" badge - no action needed)
-  if (isClaimed && !isOwner) {
+  // Hide CTA for claimed owners - they're in limbo until verified
+  // They can access portal via header navigation
+  if (isOwner) {
     return null;
   }
 
   return (
     <>
-      {/* Inline CTA trigger - only shown when unclaimed OR when user is owner */}
+      {/* Inline CTA trigger - shown for unclaimed or claimed non-owners */}
       <div className="mt-4 flex items-center gap-2 text-sm">
         <svg
           className="w-4 h-4 text-gray-400 flex-shrink-0"
@@ -169,27 +163,13 @@ export default function ManagePageCTA({
             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
           />
         </svg>
-        {isOwner ? (
-          <>
-            <span className="text-gray-500">You manage this page.</span>
-            <button
-              onClick={handleGoToDashboard}
-              className="text-primary-600 hover:text-primary-700 font-medium transition-colors"
-            >
-              Go to Dashboard <span aria-hidden="true">→</span>
-            </button>
-          </>
-        ) : (
-          <>
-            <span className="text-gray-500">Is this your business?</span>
-            <button
-              onClick={() => setOpen(true)}
-              className="text-primary-600 hover:text-primary-700 font-medium transition-colors"
-            >
-              Manage this page <span aria-hidden="true">→</span>
-            </button>
-          </>
-        )}
+        <span className="text-gray-500">Is this your business?</span>
+        <button
+          onClick={() => setOpen(true)}
+          className="text-primary-600 hover:text-primary-700 font-medium transition-colors"
+        >
+          Manage this page <span aria-hidden="true">→</span>
+        </button>
       </div>
 
       {/* Modal */}
@@ -221,34 +201,8 @@ export default function ManagePageCTA({
               </svg>
             </button>
 
-            {/* CASE 1: Owner → Go to Dashboard */}
-            {isOwner && (
-              <div className="text-center">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-600 to-primary-700 flex items-center justify-center mx-auto mb-4 shadow-sm">
-                  <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.516 2.17a.75.75 0 00-1.032 0 11.209 11.209 0 01-7.877 3.08.75.75 0 00-.722.515A12.74 12.74 0 002.25 9.75c0 5.942 4.064 10.933 9.563 12.348a.749.749 0 00.374 0c5.499-1.415 9.563-6.406 9.563-12.348 0-1.39-.223-2.73-.635-3.985a.75.75 0 00-.722-.516l-.143.001c-2.996 0-5.717-1.17-7.734-3.08zm3.094 8.016a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <h2 className="text-lg font-display font-bold text-gray-900 mb-1.5">
-                  You manage this page
-                </h2>
-                <p className="text-[15px] text-gray-500 leading-relaxed mb-6">
-                  Update info, respond to families, and manage your presence.
-                </p>
-                <button
-                  onClick={handleGoToDashboard}
-                  className="w-full py-3.5 bg-primary-600 text-white font-semibold rounded-xl hover:bg-primary-700 active:scale-[0.99] transition-all min-h-[48px] flex items-center justify-center gap-1.5"
-                >
-                  Go to Dashboard
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            )}
-
-            {/* CASE 2: Claimed → Dispute (primary) + Sign in (secondary teal link) */}
-            {isClaimed && !isOwner && (
+            {/* CASE 1: Claimed → Dispute (primary) + Sign in (secondary teal link) */}
+            {isClaimed && (
               <div className="text-center">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-100 to-amber-50 flex items-center justify-center mx-auto mb-4 shadow-sm border border-amber-200/60">
                   <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -283,7 +237,7 @@ export default function ManagePageCTA({
               </div>
             )}
 
-            {/* CASE 3: Unclaimed → Claim card (new centered design) */}
+            {/* CASE 2: Unclaimed → Claim card */}
             {!isClaimed && (
               <div className="text-center">
                 {/* Icon */}
@@ -316,22 +270,18 @@ export default function ManagePageCTA({
               </div>
             )}
 
-            {/* Divider + Removal link (for all cases except owner) */}
-            {!isOwner && (
-              <>
-                <div className="flex items-center gap-3 mt-5">
-                  <div className="flex-1 h-px bg-gray-200" />
-                  <span className="text-xs text-gray-400">or</span>
-                  <div className="flex-1 h-px bg-gray-200" />
-                </div>
-                <button
-                  onClick={handleRemoval}
-                  className="w-full mt-4 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-                >
-                  Request to hide or remove page
-                </button>
-              </>
-            )}
+            {/* Divider + Removal link */}
+            <div className="flex items-center gap-3 mt-5">
+              <div className="flex-1 h-px bg-gray-200" />
+              <span className="text-xs text-gray-400">or</span>
+              <div className="flex-1 h-px bg-gray-200" />
+            </div>
+            <button
+              onClick={handleRemoval}
+              className="w-full mt-4 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              Request to hide or remove page
+            </button>
           </div>
         </div>
       )}

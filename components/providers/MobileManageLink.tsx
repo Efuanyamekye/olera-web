@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ManageListingModal from "./ManageListingModal";
+import type { ClaimState } from "@/lib/types";
 
 interface MobileManageLinkProps {
   providerName: string;
@@ -11,6 +12,8 @@ interface MobileManageLinkProps {
   providerEmail?: string | null;
   providerCity?: string | null;
   providerState?: string | null;
+  claimState?: ClaimState;
+  claimAccountId?: string | null;
 }
 
 export function MobileManageLink({
@@ -21,6 +24,8 @@ export function MobileManageLink({
   providerEmail,
   providerCity,
   providerState,
+  claimState,
+  claimAccountId,
 }: MobileManageLinkProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -46,6 +51,8 @@ export function MobileManageLink({
         providerEmail={providerEmail}
         providerCity={providerCity}
         providerState={providerState}
+        claimState={claimState}
+        claimAccountId={claimAccountId}
       />
     </>
   );
