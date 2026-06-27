@@ -128,35 +128,30 @@ export default function RemovalRequestPage() {
 
   // ── Form screen ──
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-white">
-      {/* Minimal top nav */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-100 shrink-0">
-        <div className="max-w-lg mx-auto px-4 sm:px-6 h-14 flex items-center">
+    <div className="min-h-[100dvh] bg-white">
+      {/* Form content */}
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 pt-6 pb-40">
+        {/* Back link + Title */}
+        <div className="mb-5">
           <Link
             href={`/provider/${slug}`}
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors mb-3"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to listing
           </Link>
+          <h1 className="text-2xl font-display font-bold text-gray-900 tracking-tight">
+            Request to hide or remove page
+          </h1>
+          <p className="text-sm text-gray-500 mt-1.5">
+            Please provide your contact details so we can verify your request.
+          </p>
         </div>
-      </div>
 
-      {/* Scrollable form */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-lg mx-auto px-4 sm:px-6 py-6 space-y-5">
-          <div>
-            <h1 className="text-2xl font-display font-bold text-gray-900 tracking-tight">
-              Request to hide or remove page
-            </h1>
-            <p className="text-sm text-gray-500 mt-1.5">
-              Please provide your contact details so we can verify your request.
-            </p>
-          </div>
-
-          {/* Full name */}
+        <div className="space-y-5">
+          {/* Full name - full width */}
           <div className="space-y-1.5">
             <label htmlFor="removal-full-name" className="block text-[13px] font-semibold text-gray-700">
               Full name <span className="text-red-500">*</span>
@@ -171,57 +166,57 @@ export default function RemovalRequestPage() {
             />
           </div>
 
-          {/* Email */}
-          <div className="space-y-1.5">
-            <label htmlFor="removal-email" className="block text-[13px] font-semibold text-gray-700">
-              Business email <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="removal-email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.com"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white transition-all min-h-[48px]"
+          {/* Email + Phone - side by side on desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label htmlFor="removal-email" className="block text-[13px] font-semibold text-gray-700">
+                Business email <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="removal-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@company.com"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white transition-all min-h-[48px]"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label htmlFor="removal-phone" className="block text-[13px] font-semibold text-gray-700">
+                Business phone <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="removal-phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="(555) 123-4567"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white transition-all min-h-[48px]"
+              />
+            </div>
+          </div>
+
+          {/* Action + Reason - side by side on desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Select
+              label="Action"
+              required
+              options={ACTION_OPTIONS}
+              value={action}
+              onChange={setAction}
+              placeholder="Select action"
+            />
+            <Select
+              label="Reason"
+              required
+              options={REASON_OPTIONS}
+              value={reason}
+              onChange={setReason}
+              placeholder="Select reason"
             />
           </div>
 
-          {/* Phone */}
-          <div className="space-y-1.5">
-            <label htmlFor="removal-phone" className="block text-[13px] font-semibold text-gray-700">
-              Business phone <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="removal-phone"
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="(555) 123-4567"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-base placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white transition-all min-h-[48px]"
-            />
-          </div>
-
-          {/* Hide or delete */}
-          <Select
-            label="Action"
-            required
-            options={ACTION_OPTIONS}
-            value={action}
-            onChange={setAction}
-            placeholder="Select action"
-          />
-
-          {/* Reason */}
-          <Select
-            label="Reason"
-            required
-            options={REASON_OPTIONS}
-            value={reason}
-            onChange={setReason}
-            placeholder="Select reason"
-          />
-
-          {/* Additional details */}
+          {/* Additional details - full width */}
           <div className="space-y-1.5">
             <label htmlFor="removal-details" className="block text-[13px] font-semibold text-gray-700">
               Additional details <span className="text-gray-400 font-normal">(optional)</span>
@@ -247,12 +242,12 @@ export default function RemovalRequestPage() {
         </div>
       </div>
 
-      {/* Fixed footer with submit button */}
+      {/* Sticky footer with submit button */}
       <div
-        className="shrink-0 border-t border-gray-100 bg-white px-4 pt-4"
+        className="fixed bottom-0 left-0 right-0 z-20 border-t border-gray-100 bg-white"
         style={{ paddingBottom: "max(env(safe-area-inset-bottom, 0px), 16px)" }}
       >
-        <div className="max-w-lg mx-auto">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 pt-4">
           <Button
             fullWidth
             size="lg"

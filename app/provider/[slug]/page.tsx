@@ -453,14 +453,28 @@ export default async function ProviderPage({
     actualClaimState = claimResult.claim_state;
     claimAccountId = claimResult.account_id;
     actualVerificationState = claimResult.verification_state ?? actualVerificationState;
-    // Overlay the editorial fields the provider edits in their dashboard but
-    // that don't exist on the directory row — owner story, payment types,
-    // staff screening, itemized pricing. This makes a directory-linked CLAIMED
-    // provider's public page show the same editorial data as an account-first
-    // provider (Chunk 4 Step 2). iOS/directory metadata has none of these.
-    claimMeta = claimResult.metadata as ExtendedMetadata | null;
-    if (claimMeta?.staff) staff = claimMeta.staff;
-    if (claimMeta?.accepted_payments) acceptedPayments = claimMeta.accepted_payments;
+
+    // Only overlay editorial metadata if the claim is verified.
+    // Unverified providers' edits should not appear on the public page.
+    // badge_approved is an admin override that grants verified status.
+    const claimMetadataRaw = claimResult.metadata as Record<string, unknown> | null;
+    const badgeApprovedOverride = claimMetadataRaw?.badge_approved === true;
+    const isVerifiedClaim =
+      claimResult.claim_state === "claimed" &&
+      (claimResult.verification_state === "verified" ||
+       claimResult.verification_state === "not_required" ||
+       badgeApprovedOverride);
+
+    if (isVerifiedClaim) {
+      // Overlay the editorial fields the provider edits in their dashboard but
+      // that don't exist on the directory row — owner story, payment types,
+      // staff screening, itemized pricing. This makes a directory-linked CLAIMED
+      // provider's public page show the same editorial data as an account-first
+      // provider (Chunk 4 Step 2). iOS/directory metadata has none of these.
+      claimMeta = claimResult.metadata as ExtendedMetadata | null;
+      if (claimMeta?.staff) staff = claimMeta.staff;
+      if (claimMeta?.accepted_payments) acceptedPayments = claimMeta.accepted_payments;
+    }
   }
 
   // Compute tri-state badge display: "unclaimed" | "verified" | "claimed"
@@ -956,7 +970,17 @@ export default async function ProviderPage({
                           </div>
                           <p className="text-sm text-gray-500 mt-0.5">
                             Are you the owner?{" "}
-                            <MobileManageLink providerSlug={profile.slug} />
+                            <MobileManageLink
+                              providerName={profile.display_name}
+                              providerSlug={profile.slug}
+                              providerId={profile.id}
+                              sourceProviderId={profile.source_provider_id}
+                              providerEmail={profile.email}
+                              providerCity={profile.city}
+                              providerState={profile.state}
+                              claimState={actualClaimState}
+                              claimAccountId={claimAccountId}
+                            />
                           </p>
                         </>
                       ) : (
@@ -967,7 +991,17 @@ export default async function ProviderPage({
                           </div>
                           <p className="text-sm text-gray-500 mt-0.5">
                             Are you the owner?{" "}
-                            <MobileManageLink providerSlug={profile.slug} />
+                            <MobileManageLink
+                              providerName={profile.display_name}
+                              providerSlug={profile.slug}
+                              providerId={profile.id}
+                              sourceProviderId={profile.source_provider_id}
+                              providerEmail={profile.email}
+                              providerCity={profile.city}
+                              providerState={profile.state}
+                              claimState={actualClaimState}
+                              claimAccountId={claimAccountId}
+                            />
                           </p>
                         </>
                       )}

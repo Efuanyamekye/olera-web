@@ -373,7 +373,7 @@ export default function Select({
         onKeyDown={handleKeyDown}
         disabled={disabled}
         className={[
-          "w-full pr-10 rounded-lg border text-left transition-all cursor-pointer",
+          "w-full pr-10 rounded-lg border text-left transition-all cursor-pointer truncate",
           sizeClasses[size],
           isOpen
             ? "border-primary-400 ring-2 ring-primary-100 bg-white"

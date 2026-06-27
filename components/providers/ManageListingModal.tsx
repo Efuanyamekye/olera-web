@@ -86,7 +86,7 @@ function InfoTooltip({ content }: { content: string }) {
   );
 }
 
-type ModalView = "choice" | "removal" | "dispute";
+type ModalView = "choice" | "removal";
 
 const ACTION_OPTIONS = [
   { value: "hide", label: "Hide page" },
@@ -193,16 +193,6 @@ export default function ManageListingModal({
 
   const canSubmit = !!fullName.trim() && !!email.trim() && !!phone.trim() && !!action && !!reason;
 
-  // Dispute form state
-  const [disputeName, setDisputeName] = useState("");
-  const [disputeRole, setDisputeRole] = useState("");
-  const [disputeReason, setDisputeReason] = useState("");
-  const [disputeSubmitting, setDisputeSubmitting] = useState(false);
-  const [disputeError, setDisputeError] = useState<string | null>(null);
-  const [disputeSubmitted, setDisputeSubmitted] = useState(false);
-
-  const canSubmitDispute = !!disputeName.trim() && !!disputeRole && !!disputeReason.trim();
-
   // Ownership detection
   const isClaimed = claimState === "claimed";
   const isOwner = isClaimed && !!account && !!claimAccountId && account.id === claimAccountId;
@@ -235,12 +225,6 @@ export default function ManageListingModal({
       setDetails("");
       setFormError(null);
       setSubmitted(false);
-      // Reset dispute form
-      setDisputeName("");
-      setDisputeRole("");
-      setDisputeReason("");
-      setDisputeError(null);
-      setDisputeSubmitted(false);
     }, 200);
   }
 
@@ -249,20 +233,6 @@ export default function ManageListingModal({
   function handleClaimClick() {
     onClose();
     router.push(`/provider/onboarding?org=${providerSlug}`);
-  }
-
-  function handleDisputeClick() {
-    if (isMobile) {
-      // Navigate to dedicated page on mobile
-      const params = new URLSearchParams({
-        provider_name: providerName,
-        provider_id: sourceProviderId || providerId,
-      });
-      router.push(`/for-providers/dispute/${providerSlug}?${params.toString()}`);
-    } else {
-      // Show inline form on desktop
-      setView("dispute");
-    }
   }
 
   // Show removal form in modal (desktop) or navigate to page (mobile)
@@ -321,47 +291,10 @@ export default function ManageListingModal({
     }
   }
 
-  async function handleDisputeSubmit() {
-    if (!canSubmitDispute) {
-      setDisputeError("Please fill in all required fields.");
-      return;
-    }
-
-    setDisputeSubmitting(true);
-    setDisputeError(null);
-
-    try {
-      const res = await fetch("/api/disputes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          provider_id: sourceProviderId || providerId,
-          provider_name: providerName,
-          claimant_name: disputeName.trim(),
-          claimant_role: disputeRole,
-          reason: disputeReason.trim(),
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || "Failed to submit dispute");
-      }
-
-      setDisputeSubmitted(true);
-    } catch (err) {
-      setDisputeError(
-        err instanceof Error ? err.message : "Something went wrong. Please try again."
-      );
-    } finally {
-      setDisputeSubmitting(false);
-    }
-  }
-
-  const modalTitle = view === "removal" ? "Request removal" : view === "dispute" ? "Dispute claim" : "Manage listing";
+  const modalTitle = view === "removal" ? "Request removal" : "Manage listing";
 
   // Sticky footer for removal view
-  const removalFooter = view === "removal" && !submitted ? (
+  const modalFooter = view === "removal" && !submitted ? (
     <div className="pt-4 border-t border-gray-100">
       <Button
         fullWidth
@@ -378,23 +311,6 @@ export default function ManageListingModal({
       </p>
     </div>
   ) : undefined;
-
-  // Sticky footer for dispute view
-  const disputeFooter = view === "dispute" && !disputeSubmitted ? (
-    <div className="pt-4 border-t border-gray-100">
-      <Button
-        fullWidth
-        size="lg"
-        onClick={handleDisputeSubmit}
-        loading={disputeSubmitting}
-        disabled={!canSubmitDispute}
-      >
-        Submit dispute
-      </Button>
-    </div>
-  ) : undefined;
-
-  const modalFooter = removalFooter || disputeFooter;
 
   return (
     <Modal
@@ -439,49 +355,8 @@ export default function ManageListingModal({
             </div>
           )}
 
-          {/* CASE 2: Claimed + NOT Owner → Dispute (primary) + Sign in (secondary teal link) */}
-          {isClaimed && !isOwner && (
-            <div className="rounded-2xl border border-amber-100 bg-amber-50/60 p-5">
-              <div className="flex items-start gap-3 mb-4">
-                <div className="w-10 h-10 bg-amber-500 rounded-xl flex items-center justify-center shrink-0">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-semibold text-gray-900 mb-0.5">
-                    This listing is claimed
-                  </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
-                    Someone has already verified ownership of <strong>{providerName}</strong>. If you believe this is incorrect, you can dispute the claim.
-                  </p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={handleDisputeClick}
-                className="w-full py-3 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white rounded-xl text-sm font-semibold transition-colors flex items-center justify-center gap-1.5"
-              >
-                Dispute this claim
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-              <p className="mt-3 text-sm text-gray-500 text-center">
-                This is yours?{" "}
-                <button
-                  type="button"
-                  onClick={handleClaimClick}
-                  className="font-semibold text-primary-600 hover:text-primary-700 transition-colors"
-                >
-                  Sign in
-                </button>
-              </p>
-            </div>
-          )}
-
-          {/* CASE 3: Unclaimed → Claim card (centered design matching ActionCard) */}
-          {!isClaimed && (
+          {/* CASE 2: Unclaimed OR Claimed (not owner) → Claim card (routes to onboarding) */}
+          {!isOwner && (
             <div className="rounded-2xl border border-primary-100 bg-primary-50/60 p-6">
               {/* Centered header */}
               <div className="text-center mb-5">
@@ -689,121 +564,6 @@ export default function ManageListingModal({
         </div>
       )}
 
-      {/* ── Dispute View (Desktop only) ── */}
-      {view === "dispute" && (
-        <div className="pt-2 pb-4">
-          {/* Success state */}
-          {disputeSubmitted ? (
-            <div className="text-center py-8 animate-wizard-in">
-              <div className="relative inline-block mb-6">
-                <div className="w-16 h-16 bg-primary-50 rounded-2xl flex items-center justify-center shadow-sm">
-                  <svg className="w-8 h-8 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                  </svg>
-                </div>
-                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center ring-2 ring-white">
-                  <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-              </div>
-
-              <h2 className="text-xl font-bold text-gray-900 mb-1">Dispute submitted</h2>
-              <p className="text-base font-medium text-gray-800 mb-3">We&apos;ll review your claim</p>
-              <p className="text-gray-500 text-sm max-w-sm mx-auto leading-relaxed mb-6">
-                Our team will review your dispute and get back to you within 2–3 business days.
-              </p>
-
-              <Button onClick={handleClose} size="md">
-                Done
-              </Button>
-            </div>
-          ) : (
-            <>
-              {/* Back button */}
-              <button
-                type="button"
-                onClick={() => setView("choice")}
-                className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-500 hover:text-gray-700 transition-colors mb-5 -ml-0.5"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Back
-              </button>
-
-              {/* Header with context */}
-              <div className="mb-6">
-                <h2 className="text-lg font-display font-bold text-gray-900 tracking-tight">
-                  Dispute this claim
-                </h2>
-                <p className="text-sm text-gray-500 mt-1.5 leading-relaxed">
-                  Tell us about your connection to <strong className="text-gray-700">{providerName}</strong> and why you believe you should manage this listing.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                {/* Full name */}
-                <div className="space-y-1.5">
-                  <label htmlFor="modal-dispute-name" className="block text-[13px] font-semibold text-gray-700">
-                    Full name <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="modal-dispute-name"
-                    type="text"
-                    value={disputeName}
-                    onChange={(e) => setDisputeName(e.target.value)}
-                    placeholder="Your full name"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white transition-all min-h-[48px]"
-                  />
-                </div>
-
-                {/* Role */}
-                <Select
-                  label="Your role"
-                  required
-                  options={[
-                    { value: "Owner", label: "Owner" },
-                    { value: "Administrator", label: "Administrator" },
-                    { value: "Executive Director", label: "Executive Director" },
-                    { value: "Office Manager", label: "Office Manager" },
-                    { value: "Marketing / Communications", label: "Marketing / Communications" },
-                    { value: "Staff Member", label: "Staff Member" },
-                    { value: "Other", label: "Other" },
-                  ]}
-                  value={disputeRole}
-                  onChange={setDisputeRole}
-                  placeholder="Select your role..."
-                />
-
-                {/* Reason */}
-                <div className="space-y-1.5">
-                  <label htmlFor="modal-dispute-reason" className="block text-[13px] font-semibold text-gray-700">
-                    Why should you manage this listing? <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    id="modal-dispute-reason"
-                    value={disputeReason}
-                    onChange={(e) => setDisputeReason(e.target.value)}
-                    placeholder="Explain your connection to this organization..."
-                    rows={4}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-[15px] placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent focus:ring-primary-300 focus:bg-white resize-none transition-all"
-                  />
-                </div>
-
-                {disputeError && (
-                  <div className="flex items-center gap-2 px-3 py-2.5 bg-red-50 border border-red-100 rounded-lg">
-                    <svg className="w-4 h-4 text-red-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-                    </svg>
-                    <p className="text-sm text-red-700" role="alert">{disputeError}</p>
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      )}
       </div>
     </Modal>
   );

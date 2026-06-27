@@ -199,11 +199,11 @@ export default function HireCaregiversBoard() {
       <div className="mb-5 flex items-center gap-2 sm:hidden">
         <button
           onClick={() => setMobileFilterOpen("university")}
-          className={`flex-1 flex items-center justify-between px-3 py-2.5 bg-white border rounded-xl text-sm transition-colors ${
+          className={`flex-1 min-w-0 flex items-center justify-between px-3 py-2.5 bg-white border rounded-xl text-sm transition-colors ${
             universityId ? "border-primary-300 text-primary-700" : "border-gray-200 text-gray-700"
           }`}
         >
-          <span className="truncate">
+          <span className="truncate min-w-0">
             {universityId
               ? universities.find((u) => u.id === universityId)?.name || "University"
               : "All universities"}
@@ -214,11 +214,11 @@ export default function HireCaregiversBoard() {
         </button>
         <button
           onClick={() => setMobileFilterOpen("availability")}
-          className={`flex-1 flex items-center justify-between px-3 py-2.5 bg-white border rounded-xl text-sm transition-colors ${
+          className={`flex-1 min-w-0 flex items-center justify-between px-3 py-2.5 bg-white border rounded-xl text-sm transition-colors ${
             availability ? "border-primary-300 text-primary-700" : "border-gray-200 text-gray-700"
           }`}
         >
-          <span className="truncate">{availability ? availLabel : "All availability"}</span>
+          <span className="truncate min-w-0">{availability ? availLabel : "All availability"}</span>
           <svg className="w-4 h-4 text-gray-400 shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
