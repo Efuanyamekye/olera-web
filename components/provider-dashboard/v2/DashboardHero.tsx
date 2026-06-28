@@ -76,7 +76,7 @@ const SECTION_IMAGES: Record<NudgeSectionId, string> = {
   about: "/images/for-providers/dashboard-hero-about.jpg",
   pricing: "/images/for-providers/dashboard-hero-pricing.jpg",
   services: "/images/for-providers/dashboard-hero-services.jpg",
-  screening: "/images/for-providers/dashboard-hero-screening.jpg",
+  screening: "/images/for-providers/dashboard-hero-overview.jpg", // reuses overview (original had white strip)
   payment: "/images/for-providers/dashboard-hero-payment.jpg",
   overview: "/images/for-providers/dashboard-hero-overview.jpg",
 };
@@ -160,6 +160,9 @@ interface Props {
    *  suppress the redundant post-edit managed-ads nudge when the hero itself
    *  is already showing the managed-ads banner. */
   onBannerResolved?: (bannerId: string) => void;
+  /** True if the provider has an active ad boost request. When true, the
+   *  reviews banner is shown instead of managed_ads in the cold tier. */
+  hasActiveBoostRequest?: boolean;
 }
 
 /** The hero's chosen action, flattened for the mobile sticky bar to mirror. */
@@ -214,6 +217,7 @@ export default function DashboardHero({
   providerSlug,
   onHeroAction,
   onBannerResolved,
+  hasActiveBoostRequest = false,
 }: Props) {
   // Per-browser visit counter, read once per mount (lazy init runs a single
   // time, even under StrictMode's double-invoked effects). Drives the cold-tier
@@ -226,6 +230,7 @@ export default function DashboardHero({
     category,
     rotationCount,
     managedAdsVariant ?? "direct_reach",
+    hasActiveBoostRequest,
   );
 
   // Robinhood-style dismiss: only the non-essential banner is hideable, and only
@@ -668,12 +673,27 @@ function managedAdsHook(variant: ManagedAdsVariant): Hook {
   };
 }
 
+/** Reviews banner — shown when provider already has an active ad boost request.
+ *  Instead of showing "Get my launch plan" again, we nudge them to collect
+ *  reviews, which strengthens their profile for when families arrive via ads. */
+function reviewsHook(): Hook {
+  return {
+    bannerId: "reviews",
+    headline: "Collect reviews from families.",
+    subline:
+      "Reviews build trust with new families. Send a quick invite to past clients and let their words do the selling.",
+    cta: { label: "Get more reviews", href: "/provider/reviews" },
+    imageUrl: TIER_SPIKE_IMAGE,
+  };
+}
+
 function resolveHook(
   data: ProviderDashboardV2Data,
   completeness: ProfileCompleteness,
   category: ProfileCategory | null,
   rotationCount: number,
   managedAdsVariant: ManagedAdsVariant,
+  hasActiveBoostRequest: boolean,
 ): Hook {
   const { greeting } = data;
 
@@ -724,12 +744,22 @@ function resolveHook(
   //
   // Every ROTATE_EVERY-th visit we rotate to a secondary so neither the
   // activation nudge nor the market insight is lost — alternating completion
-  // (when there's a gap) and the market read across rotations.
+  // (when there's a gap) and the market read across rotations. Providers with
+  // active ads see the reviews banner on rotation visits too — keeps the
+  // reviews nudge visible more often to drive review collection.
   if (rotationCount > 0 && rotationCount % ROTATE_EVERY === 0) {
+    if (hasActiveBoostRequest) return reviewsHook();
     const altCompletion = Math.floor(rotationCount / ROTATE_EVERY) % 2 === 0;
     if (next && altCompletion) return coldCompletionHook(next);
     return marketIntelHook();
   }
+
+  // If the provider already has an active ad boost request, show the reviews
+  // banner instead of "Get my launch plan" — no point pitching ads to someone
+  // who already bought in. Reviews strengthen their profile for when families
+  // arrive via ads.
+  if (hasActiveBoostRequest) return reviewsHook();
+
   return managedAdsHook(managedAdsVariant);
 }
 
@@ -752,6 +782,7 @@ export function buildBannerPreviews(): BannerPreview[] {
     { bannerId: "questions", hook: questionsHook(2) },
     { bannerId: "find_families_live", hook: nearbyFamiliesHook(1) },
     { bannerId: "managed_ads", hook: managedAdsHook("direct_reach") },
+    { bannerId: "reviews", hook: reviewsHook() },
     { bannerId: "find_families_intel", hook: marketIntelHook() },
     { bannerId: "view_spike", hook: viewSpikeHook(33, 12, 9) },
   ];

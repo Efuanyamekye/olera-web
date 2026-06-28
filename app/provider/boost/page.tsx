@@ -7,7 +7,6 @@ import { useProviderProfile } from "@/hooks/useProviderProfile";
 import { useProfileSectionEditor } from "@/hooks/useProfileSectionEditor";
 import type { SectionId } from "@/components/provider-dashboard/edit-modals/types";
 import { trackProviderEvent } from "@/lib/analytics/track-provider-event";
-import { managedAdsPitchCopy } from "@/lib/analytics/managed-ads-variant-copy";
 import { useManagedAdsVariant, isManagedAdsPreviewMode } from "@/hooks/use-managed-ads-variant";
 import type {
   AdBoostEligibility,
@@ -624,17 +623,6 @@ function ProgressRing({ percent }: { percent: number }) {
   );
 }
 
-/** The three reasons managed ads beat any DIY/agency alternative — compressed
- *  to label-scale (icon + 2–3 words + a short tail), a scannable proof list, NOT
- *  the old competing 3-column paragraph grid. Lives in the support column. */
-const VALUE_PROPS = [
-  { title: "Market read first", tail: "We start with where families are already looking." },
-  { title: "Plan before launch", tail: "Timing, channel, and budget get confirmed with you." },
-  { title: "No ad chores", tail: "No ad account, no keywords, no agency handoff." },
-];
-
-const STEP_LABELS = ["Timing", "Budget", "Confirm"] as const;
-
 /**
  * The apply experience — a light three-beat flow (Airbnb-leaning), one decision
  * per screen, on a two-column transactional split:
@@ -666,7 +654,7 @@ function ApplyExperience({
   submitError,
   provider,
   demand,
-  managedAdsVariant,
+  managedAdsVariant: _managedAdsVariant,
   onSubmit,
 }: {
   /** True when the provider already clears the 70% gate. False → the submit
@@ -690,7 +678,6 @@ function ApplyExperience({
   const weekLabel = weekOptions.find((w) => w.value === selectedWeek)?.label ?? null;
   const channelLabel = CHANNELS.find((c) => c.value === channel)?.label ?? "Google + Meta";
   const stop = budgetStop(selectedBudget);
-  const copy = managedAdsPitchCopy(managedAdsVariant);
 
   const canAdvance = step === 0 ? !!selectedWeek : step === 1 ? !!stop : true;
 
@@ -698,48 +685,56 @@ function ApplyExperience({
     <div className="grid lg:grid-cols-[1fr_360px] gap-10 lg:gap-16 items-start">
       {/* ─────────── LEFT: action spine ─────────── */}
       <div className="min-w-0">
-        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary-600">
-          Managed Ads Launch Plan
-        </p>
+        {/* Mobile back link - above the banner for steps > 0 */}
+        {step > 0 && (
+          <button
+            type="button"
+            onClick={() => setStep(step - 1)}
+            className="sm:hidden inline-flex items-center gap-1.5 mb-4 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            Back
+          </button>
+        )}
 
-        {/* Breadcrumb — text, not a stepper widget. Past steps are tappable. */}
-        <nav className="mt-3 flex items-center gap-2 text-sm" aria-label="Progress">
-          {STEP_LABELS.map((label, i) => (
-            <span key={label} className="flex items-center gap-2">
-              {i > 0 && <span className="text-gray-300">·</span>}
-              <button
-                type="button"
-                disabled={i >= step}
-                onClick={() => i < step && setStep(i)}
-                className={`${
-                  i === step
-                    ? "font-semibold text-gray-900"
-                    : i < step
-                      ? "text-gray-400 hover:text-gray-600"
-                      : "text-gray-300 cursor-default"
-                } transition-colors`}
-              >
-                <span className="tabular-nums">{i + 1}</span> {label}
-              </button>
-            </span>
-          ))}
-        </nav>
+        <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary-600 mb-2">
+          Managed Ads
+        </p>
 
         {/* ── Step 0: Timing & channel ── */}
         {step === 0 && (
           <div>
-            <h1 className="mt-5 font-display font-bold text-[clamp(2rem,5vw,2.9rem)] text-gray-900 leading-[1.06] tracking-tight">
-              {copy.headline}<br />
-              <span className="text-primary-600 italic">{copy.accent}</span>.
+            <h1 className="font-display font-bold text-[clamp(1.75rem,4vw,2.5rem)] text-gray-900 leading-[1.1] tracking-tight">
+              When should we start?
             </h1>
-            <p className="mt-4 text-lg text-gray-500 leading-relaxed max-w-md">
-              {copy.body}
+            <p className="mt-3 text-gray-500 leading-relaxed max-w-lg">
+              {(() => {
+                const category = humanCategoryLabel(provider.category);
+                const place =
+                  demand.scope === "city" && provider.city
+                    ? provider.city
+                    : provider.state
+                      ? provider.state
+                      : "your area";
+                const timeframe = demand.windowDays === 7 ? "this week" : `in the last ${demand.windowDays} days`;
+
+                return demand.count >= 5 ? (
+                  <>
+                    <span className="font-semibold text-gray-900">{demand.count} families in {place}</span>{" "}
+                    searched for {category} {timeframe}. Pick a week and we'll start putting your page in front of them.
+                  </>
+                ) : (
+                  <>
+                    Families in {place} are searching for {category}. Pick a week and we'll start putting your page in front of them.
+                  </>
+                );
+              })()}
             </p>
 
-            <DemandDiagnosis provider={provider} demand={demand} />
-
-            <fieldset className="mt-9">
-              <legend className="text-sm font-medium text-gray-900 mb-3">Pick your week</legend>
+            <fieldset className="mt-8">
+              <legend className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">Start week</legend>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {weekOptions.map((w) => {
                   const active = selectedWeek === w.value;
@@ -749,37 +744,50 @@ function ApplyExperience({
                       type="button"
                       aria-pressed={active}
                       onClick={() => setSelectedWeek(w.value)}
-                      className={`rounded-2xl border px-3 py-4 text-center text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 ${
+                      className={`rounded-2xl border px-3 py-4 text-center transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 ${
                         active
-                          ? "border-primary-500 bg-primary-50/70 text-primary-700"
-                          : "border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50/70"
+                          ? "border-primary-500 bg-primary-50/70"
+                          : "border-gray-200 hover:border-gray-300 hover:bg-gray-50/70"
                       }`}
                     >
-                      {w.label}
+                      <span className={`block text-xs uppercase tracking-wide ${active ? "text-primary-600" : "text-gray-400"}`}>
+                        Week of
+                      </span>
+                      <span className={`block text-base font-semibold mt-0.5 ${active ? "text-primary-700" : "text-gray-900"}`}>
+                        {w.label.replace("Week of ", "")}
+                      </span>
                     </button>
                   );
                 })}
               </div>
             </fieldset>
 
-            <fieldset className="mt-7">
-              <legend className="text-sm font-medium text-gray-900 mb-3">Where we advertise</legend>
+            <fieldset className="mt-8">
+              <legend className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-3">Where we'll advertise</legend>
               <div className="flex flex-wrap gap-2.5">
                 {CHANNELS.map((c) => {
                   const active = channel === c.value;
+                  const isRecommended = c.value === "both";
                   return (
                     <button
                       key={c.value}
                       type="button"
                       aria-pressed={active}
                       onClick={() => setChannel(c.value)}
-                      className={`rounded-full border px-4 py-2 text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 ${
+                      className={`relative rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 ${
                         active
                           ? "border-primary-500 bg-primary-50/70 text-primary-700"
                           : "border-gray-200 text-gray-700 hover:border-gray-300 hover:bg-gray-50/70"
                       }`}
                     >
                       {c.label}
+                      {isRecommended && (
+                        <span className={`ml-2 inline-flex rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                          active ? "bg-primary-600 text-white" : "bg-primary-100 text-primary-700"
+                        }`}>
+                          Recommended
+                        </span>
+                      )}
                     </button>
                   );
                 })}
@@ -791,17 +799,17 @@ function ApplyExperience({
         {/* ── Step 1: Budget ── */}
         {step === 1 && (
           <div>
-            <h2 className="mt-5 text-2xl font-display font-semibold text-gray-900">
-              Choose a starting budget
+            <h2 className="text-[clamp(1.5rem,4vw,2rem)] font-display font-bold text-gray-900 leading-tight">
+              Choose your monthly budget
             </h2>
-            <p className="mt-3 text-gray-500 leading-relaxed max-w-md">
-              This is not a charge. It gives us a concrete plan to review with you
-              before anything goes live. Your first $50 is on us.
+            <p className="mt-3 text-gray-500 leading-relaxed max-w-lg">
+              What we'll spend each month finding you families. No card today — nothing goes live until we confirm with you.
             </p>
 
-            <fieldset className="mt-8 pt-3">
+            <fieldset className="mt-8">
               <legend className="sr-only">Monthly budget</legend>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {/* Desktop: horizontal row, Mobile: vertical stack */}
+              <div className="hidden sm:grid sm:grid-cols-4 gap-3">
                 {BUDGET_STOPS.map((b) => {
                   const active = selectedBudget === b.value;
                   return (
@@ -831,41 +839,67 @@ function ApplyExperience({
                   );
                 })}
               </div>
+              {/* Mobile: vertical stack */}
+              <div className="flex flex-col gap-3 sm:hidden">
+                {BUDGET_STOPS.map((b) => {
+                  const active = selectedBudget === b.value;
+                  return (
+                    <button
+                      key={b.value}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => setSelectedBudget(b.value)}
+                      className={`relative flex items-center gap-3 rounded-2xl border px-5 py-4 text-left transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/40 ${
+                        active
+                          ? "border-primary-500 bg-primary-50/70"
+                          : "border-gray-200 hover:border-gray-300 hover:bg-gray-50/70"
+                      }`}
+                    >
+                      <span className={`text-2xl font-bold tracking-tight tabular-nums leading-none ${active ? "text-primary-700" : "text-gray-900"}`}>
+                        {b.amount}
+                      </span>
+                      <span className={`text-sm ${active ? "text-primary-600/80" : "text-gray-400"}`}>
+                        {b.sublabel}
+                      </span>
+                      {b.recommended && (
+                        <span className="ml-auto rounded-full bg-primary-600 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
+                          Recommended
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </fieldset>
 
-            {/* Estimate HERO — the payoff of this step, big and central. The
-                range answers "what do I get?" right where the eye is; reach tier
-                ($50) shows a phrase, no fake number. The caveat lives in the
-                summary card (not duplicated here) to keep this bold. */}
+            {/* Dynamic outcome text based on budget selection */}
             {stop && (
-              <div key={stop.value} className="mt-9 animate-[fadeIn_180ms_ease-out]">
-                {stop.kind === "leads" ? (
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-display font-bold text-5xl text-gray-900 tabular-nums tracking-tight">
-                      {stop.headline}
-                    </span>
-                    <span className="text-lg text-gray-500">{stop.unit}</span>
-                  </div>
-                ) : (
-                  <p className="font-display font-bold text-3xl text-gray-900 tracking-tight">
-                    {stop.headline}
-                  </p>
-                )}
-                <p className="mt-2.5 text-gray-500 leading-relaxed max-w-md">{stop.estimate}</p>
+              <div key={stop.value} className="mt-8 animate-[fadeIn_180ms_ease-out]">
+                <h3 className="font-display font-bold text-2xl text-gray-900">
+                  {stop.kind === "leads" ? `${stop.headline} ${stop.unit}` : stop.headline}
+                </h3>
+                <p className="mt-1.5 text-gray-500">{stop.estimate}</p>
               </div>
             )}
 
-            {/* The one honest line — factual + social-proofed, not a warning. */}
-            <p className="mt-7 text-sm text-gray-400 leading-relaxed max-w-md">
-              {BUDGET_HONEST_LINE}
-            </p>
+            {/* Back link - desktop only */}
+            <button
+              type="button"
+              onClick={() => setStep(0)}
+              className="hidden sm:inline-flex items-center gap-1.5 mt-8 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+              </svg>
+              Back
+            </button>
           </div>
         )}
 
         {/* ── Step 2: Review & confirm ── */}
         {step === 2 && (
           <div>
-            <h2 className="mt-5 text-2xl font-display font-semibold text-gray-900">
+            <h2 className="text-2xl font-display font-semibold text-gray-900">
               Get your launch plan
             </h2>
             <p className="mt-3 text-gray-500 leading-relaxed max-w-md">
@@ -892,86 +926,106 @@ function ApplyExperience({
               </Link>
               .
             </p>
+
+            {/* Back link - desktop only */}
+            <button
+              type="button"
+              onClick={() => setStep(1)}
+              className="hidden sm:inline-flex items-center gap-1.5 mt-8 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+              </svg>
+              Back
+            </button>
           </div>
         )}
 
-        {/* ── Footer nav — shared across steps ── */}
+        {/* Mobile reassurance text - matches sidebar */}
+        <p className="mt-8 sm:hidden text-xs text-gray-400 leading-relaxed">
+          No card today. We confirm everything with you before your campaign goes live, and you can cancel anytime.
+        </p>
+
+        {/* Spacer for mobile sticky CTA */}
+        <div className="h-32 sm:hidden" />
+      </div>
+
+      {/* ─────────── RIGHT: live summary + proof (sticky) ─────────── */}
+      <aside className="lg:sticky lg:top-12 space-y-6 hidden sm:block">
+        <CampaignSummary
+          step={step}
+          weekLabel={weekLabel}
+          channelLabel={channelLabel}
+          stop={stop}
+          canAdvance={canAdvance}
+          onContinue={() => setStep(step + 1)}
+          onSubmit={onSubmit}
+          submitting={submitting}
+          submitError={submitError}
+          eligible={eligible}
+        />
+      </aside>
+
+      {/* Mobile sticky CTA */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden bg-white border-t border-gray-200 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         {step === 2 && submitError && (
-          <p className="mt-6 text-sm text-red-600">{submitError}</p>
+          <p className="text-sm text-red-600 mb-3">{submitError}</p>
         )}
-        <div className="mt-9 flex items-center gap-5">
-          {step > 0 && (
-            <button
-              type="button"
-              onClick={() => setStep(step - 1)}
-              className="text-sm font-medium text-gray-500 hover:text-gray-800 transition-colors"
-            >
-              Back
-            </button>
-          )}
-          {step < 2 ? (
+        {step === 1 ? (
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Monthly budget</p>
+              <p className="text-xl font-bold text-gray-900">{stop?.amount ?? "—"}</p>
+            </div>
             <button
               type="button"
               disabled={!canAdvance}
               onClick={() => setStep(step + 1)}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 px-9 py-4 bg-gray-900 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-[16px] font-semibold rounded-full active:scale-[0.99] transition-all duration-200"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-[15px] font-semibold rounded-full active:scale-[0.99] transition-all duration-200"
             >
               Continue
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
               </svg>
             </button>
-          ) : (
-            <button
-              type="button"
-              disabled={submitting}
-              onClick={onSubmit}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 px-9 py-4 bg-gray-900 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-[16px] font-semibold rounded-full active:scale-[0.99] transition-all duration-200"
-            >
-              {submitting ? "Sending…" : eligible ? "Get my launch plan" : "Queue my launch plan"}
-              {!submitting && (
+          </div>
+        ) : (
+          <>
+            {step < 2 ? (
+              <button
+                type="button"
+                disabled={!canAdvance}
+                onClick={() => setStep(step + 1)}
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-[16px] font-semibold rounded-full active:scale-[0.99] transition-all duration-200"
+              >
+                Continue
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
                 </svg>
-              )}
-            </button>
-          )}
-        </div>
-        {step === 2 && (
-          <p className="text-xs text-gray-400 mt-4 leading-relaxed max-w-md">
-            {eligible
-              ? "No charge yet. We confirm the budget with you before launch. Your first $50 is on us."
-              : "No charge to queue, and none until we confirm the budget with you before launch. Your first $50 is on us."}
-          </p>
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled={submitting}
+                onClick={onSubmit}
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 bg-gray-900 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-[16px] font-semibold rounded-full active:scale-[0.99] transition-all duration-200"
+              >
+                {submitting ? "Sending…" : eligible ? "Get my launch plan" : "Queue my launch plan"}
+                {!submitting && (
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                  </svg>
+                )}
+              </button>
+            )}
+            {step === 0 && (
+              <p className="text-sm text-gray-400 text-center mt-3">
+                Next: choose your budget
+              </p>
+            )}
+          </>
         )}
       </div>
-
-      {/* ─────────── RIGHT: live summary + proof (sticky) ─────────── */}
-      <aside className="lg:sticky lg:top-12 space-y-6">
-        <CampaignSummary
-          eligible={eligible}
-          weekLabel={weekLabel}
-          channelLabel={channelLabel}
-          stop={stop}
-        />
-
-        {/* Value props — quiet, scannable proof, only on the entry step. On the
-            budget step the estimate hero is the focus; on confirm the review is
-            self-contained — repeating the props there is dead column. */}
-        {step === 0 && (
-          <ul className="space-y-3.5 px-1">
-            {VALUE_PROPS.map((p) => (
-              <li key={p.title} className="flex gap-2.5">
-                <CheckIcon className="mt-0.5 w-4 h-4 shrink-0 text-primary-500" />
-                <span className="text-sm leading-snug">
-                  <span className="font-medium text-gray-900">{p.title}</span>
-                  <span className="text-gray-500"> — {p.tail}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </aside>
     </div>
   );
 }
@@ -985,73 +1039,41 @@ function ReviewRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-function DemandDiagnosis({
-  provider,
-  demand,
-}: {
-  provider: BoostStateResponse["provider"];
-  demand: BoostStateResponse["demand"];
-}) {
-  const category = humanCategoryLabel(provider.category);
-  const place =
-    demand.scope === "city" && provider.city
-      ? provider.city
-      : provider.state
-        ? provider.state
-        : "your area";
-  const count = demand.count >= 5 ? demand.count : null;
-
-  return (
-    <div className="mt-8 rounded-2xl border border-primary-100/70 bg-primary-50/40 px-5 py-5">
-      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-primary-600">
-        Local diagnosis
-      </p>
-      <p className="mt-2 text-[17px] font-semibold leading-snug text-gray-900">
-        {count
-          ? `${count.toLocaleString()} families looked at ${category} options in ${place} in the last ${demand.windowDays} days.`
-          : `Families in ${place} are searching for ${category} before they ever reach your page.`}
-      </p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <PlanPoint title="Where they look" body="Google, Meta, and local feeds." />
-        <PlanPoint title="Where they land" body="Your Olera page, not a broker form." />
-        <PlanPoint title="What you get" body="A clear read on spend, clicks, and families delivered." />
-      </div>
-    </div>
-  );
-}
-
-function PlanPoint({ title, body }: { title: string; body: string }) {
-  return (
-    <div>
-      <p className="text-sm font-semibold text-gray-900">{title}</p>
-      <p className="mt-1 text-sm leading-snug text-gray-500">{body}</p>
-    </div>
-  );
-}
 
 /** The live "Your campaign" card — accumulates as the provider picks (week →
- *  channel → budget + estimate). The single resting point of the flow; the
- *  estimate's reach→lead shift carries the honesty, capped by one caveat. */
+ *  channel → budget + estimate). Contains the Continue button on desktop. */
 function CampaignSummary({
-  eligible,
+  step,
   weekLabel,
   channelLabel,
   stop,
+  canAdvance,
+  onContinue,
+  onSubmit,
+  submitting,
+  submitError,
+  eligible,
 }: {
-  eligible: boolean;
+  step: number;
   weekLabel: string | null;
   channelLabel: string;
   stop: BudgetStop | null;
+  canAdvance: boolean;
+  onContinue: () => void;
+  onSubmit: () => void;
+  submitting: boolean;
+  submitError: string | null;
+  eligible: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-gray-200/80 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_12px_32px_-16px_rgba(42,24,16,0.12)]">
+    <div className="rounded-2xl border border-gray-200/80 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04),0_12px_32px_-16px_rgba(42,24,16,0.12)]">
       <p className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-400">
-        Your launch plan
+        {step >= 1 ? "Your launch plan" : "Your plan so far"}
       </p>
 
-      <dl className="mt-4 space-y-3.5">
+      <dl className="mt-4 space-y-3">
         <div className="flex items-baseline justify-between gap-4">
-          <dt className="text-sm text-gray-500">Launch</dt>
+          <dt className="text-sm text-gray-500">{step >= 1 ? "Launch" : "Start week"}</dt>
           <dd className={`text-sm font-medium text-right ${weekLabel ? "text-gray-900" : "text-gray-300"}`}>
             {weekLabel ?? "Pick a week"}
           </dd>
@@ -1061,43 +1083,60 @@ function CampaignSummary({
           <dd className="text-sm font-medium text-gray-900 text-right">{channelLabel}</dd>
         </div>
         <div className="flex items-baseline justify-between gap-4">
-          <dt className="text-sm text-gray-500">Starting budget</dt>
-          <dd className={`text-sm font-medium text-right ${stop ? "text-gray-900" : "text-gray-300"}`}>
-            {stop?.label ?? "Pick a budget"}
+          <dt className="text-sm text-gray-500">{step >= 1 ? "Monthly budget" : "Budget"}</dt>
+          <dd className={`text-sm font-medium text-right ${step >= 1 && stop ? "text-gray-900" : "text-gray-300"}`}>
+            {step >= 1 && stop ? stop.label : "Next step"}
           </dd>
         </div>
       </dl>
 
-      <div className="mt-5 pt-5 border-t border-gray-100">
-        {stop ? (
-          <>
-            {/* Compact estimate (the big version lives in the left hero on the
-                budget step). Cross-fades on selection (keyed) — calm, no jump. */}
-            <p key={stop.value} className="text-sm font-medium text-gray-900 animate-[fadeIn_150ms_ease-out]">
-              {estimateSummary(stop)}
-            </p>
-            <p className="mt-2 text-xs text-gray-400 leading-relaxed">{BUDGET_ESTIMATE_CAVEAT}</p>
-            {!eligible && (
-              <p className="mt-3 text-xs text-gray-400 leading-relaxed">
-                Queued now — plan first, launch once your profile&apos;s ready for the families we send.
-              </p>
-            )}
-          </>
-        ) : eligible ? (
-          <p className="flex items-center gap-2 text-sm text-primary-700">
-            <CheckIcon className="w-4 h-4 shrink-0" />
-            Ready to launch when you confirm.
-          </p>
+      {/* Reassurance text */}
+      <p className="mt-4 text-xs text-gray-400 leading-relaxed">
+        No card today. We confirm everything with you before your campaign goes live, and you can cancel anytime.
+      </p>
+
+      {/* Continue button - inside the card on desktop */}
+      <div className="mt-5">
+        {step === 2 && submitError && (
+          <p className="text-sm text-red-600 mb-3">{submitError}</p>
+        )}
+        {step < 2 ? (
+          <button
+            type="button"
+            disabled={!canAdvance}
+            onClick={onContinue}
+            className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed text-white text-[16px] font-semibold rounded-full active:scale-[0.99] transition-all duration-200"
+          >
+            Continue
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>
+          </button>
         ) : (
-          <p className="text-sm text-gray-500 leading-relaxed">
-            We&apos;ll <span className="font-medium text-gray-900">queue the plan now</span> and launch
-            only after your profile&apos;s ready for the families we send.
+          <button
+            type="button"
+            disabled={submitting}
+            onClick={onSubmit}
+            className="w-full inline-flex items-center justify-center gap-2.5 py-3.5 bg-gray-900 hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed text-white text-[16px] font-semibold rounded-full active:scale-[0.99] transition-all duration-200"
+          >
+            {submitting ? "Sending…" : eligible ? "Get my launch plan" : "Queue my launch plan"}
+            {!submitting && (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+              </svg>
+            )}
+          </button>
+        )}
+        {step === 0 && (
+          <p className="mt-3 text-sm text-gray-400 text-center">
+            Next: choose your budget
           </p>
         )}
       </div>
     </div>
   );
 }
+
 
 function humanCategoryLabel(category: string | null): string {
   const labels: Record<string, string> = {
@@ -1115,8 +1154,8 @@ function humanCategoryLabel(category: string | null): string {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 lg:pt-16 pb-24">
+    <div className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 lg:pt-14 pb-24">
         {children}
       </div>
     </div>

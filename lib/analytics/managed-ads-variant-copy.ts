@@ -28,15 +28,15 @@ export function managedAdsPitchCopy(variant: ManagedAdsVariant): ManagedAdsPitch
   switch (variant) {
     case "local_plan":
       return {
-        headline: "Send local families",
-        accent: "straight to your page",
-        body: "We run Google, Meta, and local ads for your market. You pick timing and budget; we handle setup and send interested families to your Olera page.",
+        headline: "Reach families",
+        accent: "already searching for care",
+        body: "We run the ads, point them at the families most likely to choose you, and send every one straight to your page.",
       };
     case "direct_reach":
       return {
         headline: "Reach families",
         accent: "already searching for care",
-        body: "We run the ads where families are already looking — and send every one of them straight to your Olera page.",
+        body: "We run the ads, point them at the families most likely to choose you, and send every one straight to your page.",
       };
   }
 }

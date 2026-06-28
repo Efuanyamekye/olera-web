@@ -14,10 +14,7 @@ interface AdsTabProps {
   familiesInCity?: number | null;
 }
 
-export default function AdsTab({
-  city,
-  familiesInCity,
-}: AdsTabProps) {
+export default function AdsTab(_props: AdsTabProps) {
   const [campaign, setCampaign] = useState<CampaignState | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -160,14 +157,12 @@ export default function AdsTab({
     <div className="bg-white rounded-2xl border border-stone-200/80 p-6 sm:p-8">
       {/* Headline */}
       <h2 className="text-[26px] sm:text-[30px] font-bold text-stone-900 tracking-tight leading-tight mb-2">
-        Put your page in front of local families.
+        Reach families already searching for care.
       </h2>
 
-      {/* Subtitle with demand context */}
+      {/* Subtitle */}
       <p className="text-sm text-stone-500 mb-6">
-        {familiesInCity && familiesInCity > 0
-          ? `${familiesInCity.toLocaleString()} ${familiesInCity === 1 ? "family is" : "families are"} actively searching in ${city || "your area"} today.`
-          : `Families in ${city || "your area"} are searching for senior care before they ever reach your page.`}
+        We run the ads, point them at the families most likely to choose you, and send every one straight to your page.
       </p>
 
       {/* How it works card */}
@@ -208,15 +203,18 @@ export default function AdsTab({
         href="/provider/boost"
         className="w-full flex items-center justify-center gap-2 bg-stone-900 hover:bg-stone-800 text-white font-medium py-3.5 rounded-xl transition-colors"
       >
-        Build your launch plan
+        Start my free campaign
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
         </svg>
       </Link>
 
-      {/* Footer note */}
-      <p className="mt-4 text-xs text-stone-400 text-center">
-        No charge until you confirm. Your first $50 is on us.
+      {/* Helper text */}
+      <p className="flex items-center justify-center gap-2 text-sm text-stone-500 mt-4">
+        <span className="text-[#199087]">✦</span>
+        <span>
+          First campaign on us — <span className="text-[#199087] font-medium">$50, free</span>
+        </span>
       </p>
     </div>
   );

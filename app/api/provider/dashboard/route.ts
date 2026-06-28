@@ -110,6 +110,7 @@ export async function GET(request: NextRequest) {
       leadsRes,
       oleraGeoRes,
       publishedFamiliesRes,
+      adBoostRequestRes,
     ] = await Promise.all([
       // All provider_activity events in the prior+current window for delta
       // + activity feed. 20k limit should be ample for a single provider.
@@ -182,6 +183,16 @@ export async function GET(request: NextRequest) {
         .not("lat", "is", null)
         .not("lng", "is", null)
         .limit(5000),
+
+      // Active ad boost request — drives banner prioritization (show reviews
+      // banner instead of managed_ads when provider already has a launch plan).
+      db
+        .from("ad_campaign_requests")
+        .select("id, status")
+        .eq("provider_id", profile.id)
+        .in("status", ["pending_profile", "requested", "scheduled", "live"])
+        .limit(1)
+        .maybeSingle(),
     ]);
 
     if (eventsRes.error) {
@@ -480,6 +491,10 @@ export async function GET(request: NextRequest) {
       },
       cohort: cohortDemand,
       nearbyFamilies: { count: nearbyFamiliesCount },
+      // True if the provider has an active ad boost request (pending_profile,
+      // requested, scheduled, or live). Used to show reviews banner instead of
+      // managed_ads banner on the dashboard.
+      hasActiveBoostRequest: !!adBoostRequestRes.data,
     });
   } catch (err) {
     console.error("[provider/dashboard] fatal:", err);

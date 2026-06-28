@@ -2128,6 +2128,7 @@ function bannerLabel(banner: string): string {
     find_families_live: "Find Families — family near you",
     view_spike: "View spike",
     find_families_intel: "Find Families — market intel",
+    reviews: "Collect reviews",
   };
   return map[banner] ?? banner;
 }
@@ -2143,6 +2144,7 @@ function bannerCohort(banner: string): string {
     find_families_live: "no inbound — live family nearby",
     find_families_intel: "quiet — complete profile, no leads",
     view_spike: "rising views — reinforcement",
+    reviews: "has active ads — reviews nudge",
   };
   return map[banner] ?? "";
 }

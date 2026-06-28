@@ -14,7 +14,7 @@
 export const HERO_DISMISS_KEY = "olera_hero_dismissed_date";
 
 /** A banner that carries an X. Promotional / housekeeping nags only. */
-const DISMISSIBLE_BANNER_IDS = new Set(["managed_ads", "find_families_intel"]);
+const DISMISSIBLE_BANNER_IDS = new Set(["managed_ads", "find_families_intel", "reviews"]);
 export function isDismissibleBanner(bannerId: string): boolean {
   return DISMISSIBLE_BANNER_IDS.has(bannerId) || bannerId.startsWith("completion:");
 }

@@ -74,6 +74,10 @@ export interface ProviderDashboardV2Data {
    *  the provider — the rare "concrete leads" that drive the hero's
    *  high-priority "family near you" tier. */
   nearbyFamilies: { count: number };
+  /** True if the provider has an active ad boost request (pending_profile,
+   *  requested, scheduled, or live). Drives banner prioritization — shows
+   *  reviews banner instead of managed_ads when they already have a launch plan. */
+  hasActiveBoostRequest: boolean;
 }
 
 /**

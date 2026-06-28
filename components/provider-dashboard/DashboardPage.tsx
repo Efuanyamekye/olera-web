@@ -417,6 +417,7 @@ function DashboardContent({
                 providerSlug={profile.slug}
                 onHeroAction={setHeroAction}
                 onBannerResolved={setHeroBannerId}
+                hasActiveBoostRequest={v2Data.hasActiveBoostRequest}
               />
             </div>
           ) : (
@@ -429,7 +430,7 @@ function DashboardContent({
               not as an always-on card. The earned, high-intent moment. Hidden
               when the hero already resolved to the managed-ads banner, so the
               pitch never doubles on one screen. */}
-          {showEditNudge && heroBannerId !== "managed_ads" && (
+          {showEditNudge && heroBannerId !== "managed_ads" && !v2Data?.hasActiveBoostRequest && (
             <PostEditAdsNudge
               providerSlug={profile.slug}
               providerName={profile.display_name}
