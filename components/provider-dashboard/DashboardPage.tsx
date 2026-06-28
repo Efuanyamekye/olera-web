@@ -469,6 +469,21 @@ function DashboardContent({
             </div>
           )}
 
+          {/* Questions engagement (mobile only) — the desktop copy lives in the
+              sticky sidebar; on phones the sidebar is hidden, so surface it here
+              in the flow. Top hairline separates it from the activity block. */}
+          {v2Data && v2Data.questions.received > 0 && (
+            <div
+              className="lg:hidden"
+              style={{ animation: "card-enter 0.25s ease-out both", animationDelay: "90ms" }}
+            >
+              <QuestionsCard
+                questions={v2Data.questions}
+                className="border-t border-gray-100 pt-4"
+              />
+            </div>
+          )}
+
           {/* Profile sections. On mobile they're a flat list: chromeless
               sections separated by hairlines (divide-y) + whitespace — the
               narrow screen is the container. On desktop they're carded with
@@ -560,6 +575,16 @@ function DashboardContent({
               <StatsOnlyCard
                 data={v2Data}
                 profileSlug={profile.slug}
+              />
+            )}
+
+            {/* Questions engagement — persistent count + click-through to the
+                answer flow. Only when they've ever received one (no empty card).
+                Hairline separates it from the bare stats block above. */}
+            {v2Data && (v2Data.questions?.received ?? 0) > 0 && (
+              <QuestionsCard
+                questions={v2Data.questions}
+                className="border-t border-gray-100 pt-4"
               />
             )}
 
@@ -1352,6 +1377,77 @@ function StatsOnlyCard({
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Persistent Questions card. Surfaces lifetime question engagement and the
+ * action number (unanswered) at a glance, with a click-through to the existing
+ * answer flow (/provider/qna). Only rendered when the provider has ever
+ * received a question — no empty "0 questions" card for the majority who
+ * haven't, matching the activity card's `length > 0` gate.
+ *
+ * Bare block (no card chrome) to sit cleanly beside the equally-bare
+ * StatsOnlyCard in the desktop sidebar and among the chromeless mobile flow.
+ * The hero already surfaces unanswered as its Priority-2 banner, but that's a
+ * single rotating slot — when a fresher lead wins the hero, questions fall off
+ * it entirely. This card keeps the count persistently in reach.
+ */
+function QuestionsCard({
+  questions,
+  className = "",
+}: {
+  questions: { received: number; answered: number; unanswered: number };
+  className?: string;
+}) {
+  const { received, answered, unanswered } = questions;
+  const hasUnanswered = unanswered > 0;
+
+  return (
+    <div className={`space-y-3 ${className}`}>
+      <div className="flex items-baseline justify-between">
+        <h3 className="text-base font-display font-bold text-gray-900">
+          Questions
+        </h3>
+        <span className="text-xs text-gray-400 tabular-nums">
+          {received} asked
+        </span>
+      </div>
+
+      {hasUnanswered ? (
+        <div className="space-y-1">
+          <p className="font-display text-[32px] font-semibold text-gray-900 leading-none tabular-nums tracking-tight">
+            {unanswered}
+          </p>
+          <p className="text-sm text-gray-500">
+            {unanswered === 1 ? "question" : "questions"} waiting for your reply
+          </p>
+          <Link
+            href="/provider/qna"
+            className="inline-block text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
+          >
+            Answer now →
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-1">
+          <p className="font-display text-[20px] font-semibold text-gray-900 leading-tight">
+            All caught up
+          </p>
+          <p className="text-sm text-gray-500">
+            {answered === received
+              ? `You've answered all ${received === 1 ? "your question" : `${received} questions`}`
+              : `You've answered ${answered} of ${received}`}
+          </p>
+          <Link
+            href="/provider/qna"
+            className="inline-block text-sm font-medium text-primary-600 hover:text-primary-700 transition-colors"
+          >
+            View questions →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

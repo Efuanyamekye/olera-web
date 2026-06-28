@@ -42,6 +42,14 @@ export interface ProviderDashboardV2Data {
     answeredCount: number;
     windowDays: number;
   };
+  /** All-time question counts for the persistent Questions card. `received` and
+   *  `answered` are lifetime (capped at the last 500); `unanswered` matches the
+   *  hero banner / Q&A queue's action number. */
+  questions: {
+    received: number;
+    answered: number;
+    unanswered: number;
+  };
   recentActivity: Array<{
     id: string;
     kind: "question" | "question_answered" | "lead" | "review";

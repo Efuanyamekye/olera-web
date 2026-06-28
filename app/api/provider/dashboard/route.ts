@@ -283,6 +283,28 @@ export async function GET(request: NextRequest) {
       windowDays: 90,
     };
 
+    // ── Questions summary (all-time) ──
+    // Lifetime counts for the dashboard's persistent Questions card. All-time
+    // (not windowed) because provider volume is low — an honest lifetime "1"
+    // beats a windowed "0". Computed from the already-fetched `questions` array
+    // (capped at the last 500), so no extra query.
+    //
+    // `received`/`answered` count only MANAGEABLE questions — everything except
+    // admin-removed (rejected) and dismissed (archived) — the same exclusion the
+    // hero's `unansweredAll` uses. Two reasons: (1) so a rejected spam question
+    // can't inflate "N asked" above what the provider can actually act on, and
+    // (2) so the card stays internally consistent (received = answered +
+    // unanswered, since the manageable set partitions exactly on answer text).
+    const manageableQuestions = questions.filter(
+      (q) => q.status !== "archived" && q.status !== "rejected",
+    );
+    const answeredManageable = manageableQuestions.filter((q) => !!q.answer?.trim()).length;
+    const questionsSummary = {
+      received: manageableQuestions.length,
+      answered: answeredManageable,
+      unanswered: unansweredAll.length,
+    };
+
     // ── Recent activity feed (discrete, action-bearing events only) ──
     // Questions, leads, reviews — each a distinct thing the provider might want
     // to respond to. Anonymous page_views are intentionally NOT emitted here;
@@ -448,6 +470,7 @@ export async function GET(request: NextRequest) {
       greeting: greetingSignals,
       reviews: reviewsSummary,
       responseRate: responseRateSummary,
+      questions: questionsSummary,
       recentActivity,
       views: {
         thisPeriod: viewsThisPeriod,
