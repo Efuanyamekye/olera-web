@@ -7,6 +7,25 @@
 
 ## Current Focus
 
+### 2026-06-28 — Ad Boost (managed ads) attribution fix: count + tag inquiries (PR #1239 → staging, MERGED `d7f55c3d`)
+
+Franchil's first managed-ads lead exposed an attribution bug. Admin "Families delivered" counted only `benefits_completed` (a side quiz the provider page barely surfaces), so a real inquiry read as **0 delivered** while the provider's own `/provider/boost` showed **1 lead** from the same campaign.
+
+**Diagnosis:** a managed ad points at a provider page whose natural conversion is the inquiry CTA (`lead_received`), but that was never UTM-tagged. Only the benefits quiz carried `utm_campaign` (an instrumentation accident, not a product decision). So the ROI counter measured the wrong funnel. Confirmed John Turman's lead fired untagged; no UTM anywhere in his session.
+
+**Shipped (all in #1239):**
+- **Count redefinition** (`lib/ad-boost/delivered.server.ts`): delivered family = campaign-tagged `lead_received` (PRIMARY) OR `benefits_completed` (secondary), deduped within funnel. `listLeadsByCampaign` merges inquiries (care need + state from the connection record, **no PHI**) with benefits. `getCampaignStats` (provider-facing visitors/leads) left untouched, so no provider number moves.
+- **Forward instrumentation** (`lib/ad-boost/managed-utm.ts` + `components/providers/ManagedUtmCapture.tsx` + 5 routes): capture managed UTM once at provider-page load into a first-touch cookie (`olera_mutm`, 6h TTL, `olera_managed` only), read server-side in all 6 `lead_received` emit sites (`connections/request` guest+auth, `compare-save`, `guide-save`, `inline-answer/capture-email`, `create-inquiry`). Cookie rides the same-origin fetches the CTAs already make → covers ~10 callers with **zero client-body edits**.
+- **Backfill (prod, applied separately):** stamped John's existing `lead_received` + connection with `utm_campaign=franchil-killeen-jun26` (+ `attribution_backfill` audit marker) so the redefined count includes the pre-instrumentation lead. Admin now reads **1**, matching the provider view (verified in Vercel preview).
+
+**Pre-test + merge:** count/list verified against live prod data (=1), cookie round-trip unit-tested, all lead fetches confirmed to send the cookie (default credentials), `tsc` 0, content-regression check clean (`[slug]/page.tsx` additive only). Squash-merged.
+
+**Decisions:** delivered = tagged inquiry NOT benefits quiz; cookie over per-caller threading (10+ callers); first-touch + 6h TTL bounds cross-provider bleed (documented limitation, immaterial at pilot).
+
+**Next up:** (1) **prove forward auto-tagging live** (managed UTM link → multi-step inquiry → new `lead_received` carries tag — the deployed "1" is still the backfilled lead); (2) promote staging → main; (3) enter Franchil spend/clicks ($11.40 / 5) so cost-per-family computes (~$11.40); (4) **family-side safety net** — does the [[project_family_help_cascade]] fire for ad-driven leads if the provider ghosts? John is waiting on Hilda; (5) PRs #1224/#1226 touch `[slug]/page.tsx`, need trivial rebase vs the 2-line `ManagedUtmCapture` add. Memory: [[project_ad_boost_attribution]]. Notion: handoff (Branch Handoff Reports, Status=Merged) + "Email to Hilda — first lead" draft.
+
+**Provider comms:** Franchil's first lead (John, home care, Killeen, "as soon as possible") sat **unopened by Hilda 14h+**. TJ sent email + text 2026-06-28, calling within 24h. Open thread = whether she actions it. Hilda: hilda@franchilcare.com / (254) 322-9251.
+
 ### 2026-06-28 — Provider Image Strategy #2: licensed stock/fallback library rebuild (branch `claude/stock-image-section-ef6lqj`, NOT yet merged)
 
 Executed the "own our stock & fallback licenses" arm of the Provider Image Strategy (Notion `3845903a…`). The 15 old category-fallback images (`public/images/fallback/`) were inherited from the iOS app with **no documented license** (provenance unknown; SCRATCHPAD even noted a Shutterstock OG image) — exactly the actively-monitored risk the doc flags. Replaced the whole set with a **provably-licensed library + a documented license record + a validation guard.**
