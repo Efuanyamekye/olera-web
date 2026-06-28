@@ -6,6 +6,7 @@ import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email"
 import { getSiteUrl } from "@/lib/site-url";
 import { generateUniqueSlugFromName } from "@/lib/slug";
 import { recordProviderEvent } from "@/lib/analytics/provider-events";
+import { readManagedUtmFromRequest, managedUtmMetadata } from "@/lib/ad-boost/managed-utm";
 import { emailReturningUserSignInLink } from "@/lib/auth/returning-user";
 
 /**
@@ -43,6 +44,9 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as RequestBody;
     const { email, providers, sessionId } = body;
+    // Managed-ads attribution from the provider-page-load cookie (rides along on
+    // this same-origin fetch). See lib/ad-boost/managed-utm.
+    const managedUtm = readManagedUtmFromRequest(request);
 
     // Validation
     if (!email || !providers || providers.length === 0) {
@@ -597,6 +601,7 @@ export async function POST(request: Request) {
           session_id: sessionId || null,
           cta_variant: "compare",
           source: "compare_save",
+          ...managedUtmMetadata(managedUtm),
         },
       });
 

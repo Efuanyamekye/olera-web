@@ -9,6 +9,7 @@ import { generateUniqueSlugFromName } from "@/lib/slug";
 import { generateProviderSlug } from "@/lib/slugify";
 import { validateEmailStrict } from "@/lib/email-validation";
 import { recordProviderEvent } from "@/lib/analytics/provider-events";
+import { readManagedUtmFromRequest, managedUtmMetadata } from "@/lib/ad-boost/managed-utm";
 import { syncIntentToProfile } from "@/lib/sync-intent-to-profile";
 import { emailReturningUserSignInLink } from "@/lib/auth/returning-user";
 
@@ -52,6 +53,9 @@ export async function POST(req: Request) {
   } catch {
     return NextResponse.json({ error: "Invalid JSON body." }, { status: 400 });
   }
+  // Managed-ads attribution from the provider-page-load cookie (rides along on
+  // this same-origin fetch). See lib/ad-boost/managed-utm.
+  const managedUtm = readManagedUtmFromRequest(req);
 
   const { email, providerId, providerName, questionText, sessionId, sentProviderIds, sentCount, variant } = payload;
   // Default to multi_provider for backwards compatibility
@@ -388,6 +392,7 @@ export async function POST(req: Request) {
       question_text: questionText || null,
       sent_provider_ids: sentProviderIds || null,
       sent_count: sentCount || null,
+      ...managedUtmMetadata(managedUtm),
     },
   });
 

@@ -14,6 +14,7 @@ import { getSiteUrl } from "@/lib/site-url";
 import { generateUniqueSlugFromName } from "@/lib/slug";
 import { syncIntentToProfile, recipientMap, timelineMap, careTypeMap } from "@/lib/sync-intent-to-profile";
 import { recordProviderEvent } from "@/lib/analytics/provider-events";
+import { readManagedUtmFromRequest, managedUtmMetadata, type ManagedUtm } from "@/lib/ad-boost/managed-utm";
 import { emailReturningUserSignInLink } from "@/lib/auth/returning-user";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +62,9 @@ interface GuestConnectionParams {
   ctaVariant?: string | null;
   /** Entry point for lead capture (custom_quote, book_consultation, message_host) */
   entryPoint?: string | null;
+  /** Managed-ads attribution from the provider-page-load cookie. Stamped onto
+   *  the lead_received event so an ad-driven inquiry is credited to its campaign. */
+  managedUtm?: ManagedUtm;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   admin: any;
 }
@@ -77,6 +81,7 @@ async function handleGuestConnection({
   ctaVariant,
   entryPoint,
   admin,
+  managedUtm,
 }: GuestConnectionParams) {
   // Validate email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -710,6 +715,9 @@ async function handleGuestConnection({
       cta_variant: entryPoint ? (ctaVariant || null) : (ctaVariant || "legacy"),
       // entry_point for Lead Capture attribution (custom_quote, book_consultation, message_host)
       entry_point: entryPoint || null,
+      // Managed-ads campaign attribution (utm_source/utm_campaign) — the signal
+      // behind Ad Boost "families delivered". See lib/ad-boost/managed-utm.
+      ...managedUtmMetadata(managedUtm || {}),
     },
   });
 
@@ -1217,6 +1225,10 @@ async function handleGuestConnection({
 export async function POST(request: Request) {
   try {
     const body = await request.json();
+    // Managed-ads attribution from the provider-page-load cookie (set by
+    // ManagedUtmCapture). Cookie rides along on this same-origin fetch, so no
+    // client caller needs to thread UTM. See lib/ad-boost/managed-utm.
+    const managedUtm = readManagedUtmFromRequest(request);
     const {
       providerId,
       providerName,
@@ -1281,6 +1293,7 @@ export async function POST(request: Request) {
         sessionId,
         ctaVariant,
         entryPoint,
+        managedUtm,
         admin,
       });
     }
@@ -1752,6 +1765,9 @@ export async function POST(request: Request) {
         cta_variant: entryPoint ? (ctaVariant || null) : (ctaVariant || "legacy"),
         // entry_point for Lead Capture attribution (custom_quote, book_consultation, message_host)
         entry_point: entryPoint || null,
+        // Managed-ads campaign attribution (utm_source/utm_campaign) — the signal
+        // behind Ad Boost "families delivered". See lib/ad-boost/managed-utm.
+        ...managedUtmMetadata(managedUtm),
       },
     });
 

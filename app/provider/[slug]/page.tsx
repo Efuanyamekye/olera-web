@@ -34,6 +34,7 @@ import ReviewsSection from "@/components/providers/ReviewsSection";
 import CMSQualitySection from "@/components/providers/CMSQualitySection";
 import AiTrustSignalsSection from "@/components/providers/AiTrustSignalsSection";
 import ScrollToConnectionCard from "@/components/providers/ScrollToConnectionCard";
+import ManagedUtmCapture from "@/components/providers/ManagedUtmCapture";
 import { LeadCaptureSheetWrapper } from "@/components/providers/lead-capture";
 import BenefitsDiscoveryModule from "@/components/providers/BenefitsDiscoveryModule";
 import type { BenefitsProgram } from "@/components/providers/BenefitsDiscoveryModule";
@@ -743,6 +744,7 @@ export default async function ProviderPage({
   return (
     <div className="min-h-screen pb-20 md:pb-0">
       <ViewTracker providerId={slug} />
+      <ManagedUtmCapture />
 
       {/* Structured data */}
       <script

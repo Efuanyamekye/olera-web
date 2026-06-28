@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { recordProviderEvent } from "@/lib/analytics/provider-events";
+import { readManagedUtmFromRequest, managedUtmMetadata } from "@/lib/ad-boost/managed-utm";
 
 function getAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -22,6 +23,9 @@ function getAdminClient() {
  */
 export async function POST(request: Request) {
   try {
+    // Managed-ads attribution from the provider-page-load cookie (rides along on
+    // this same-origin fetch). See lib/ad-boost/managed-utm.
+    const managedUtm = readManagedUtmFromRequest(request);
     const supabase = await createServerClient();
     const {
       data: { user },
@@ -225,6 +229,7 @@ export async function POST(request: Request) {
         // session_id makes leads joinable back to arm impressions in
         // seeker_activity / provider_activity for cannibalization analysis.
         session_id: sessionId || null,
+        ...managedUtmMetadata(managedUtm),
       },
     });
 
