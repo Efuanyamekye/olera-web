@@ -1,0 +1,444 @@
+{
+  "_comment": "License manifest for served fallback stock images. Every file in this directory MUST have an entry here. Sources: Pexels and Unsplash licenses (both free for commercial use, modification allowed, no attribution required) — see the per-source URLs in \"sources\" below. Do not add stock without a recorded source URL + license.",
+  "images": [
+    {
+      "file": "home-care-01.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372534",
+      "source_url": "https://www.pexels.com/photo/29372534/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-02.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372709",
+      "source_url": "https://www.pexels.com/photo/29372709/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-03.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372712",
+      "source_url": "https://www.pexels.com/photo/29372712/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-04.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372734",
+      "source_url": "https://www.pexels.com/photo/29372734/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-06.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29354077",
+      "source_url": "https://www.pexels.com/photo/29354077/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-07.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29354079",
+      "source_url": "https://www.pexels.com/photo/29354079/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-08.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372705",
+      "source_url": "https://www.pexels.com/photo/29372705/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-09.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372692",
+      "source_url": "https://www.pexels.com/photo/29372692/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-10.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372722",
+      "source_url": "https://www.pexels.com/photo/29372722/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-11.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372741",
+      "source_url": "https://www.pexels.com/photo/29372741/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-13.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372740",
+      "source_url": "https://www.pexels.com/photo/29372740/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-14.jpg",
+      "category": "home-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372713",
+      "source_url": "https://www.pexels.com/photo/29372713/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "assisted-living-01.jpg",
+      "category": "assisted-living",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18429308",
+      "source_url": "https://www.pexels.com/photo/18429308/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "assisted-living-02.jpg",
+      "category": "assisted-living",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18429370",
+      "source_url": "https://www.pexels.com/photo/18429370/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "assisted-living-03.jpg",
+      "category": "assisted-living",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18459198",
+      "source_url": "https://www.pexels.com/photo/18459198/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "assisted-living-04.jpg",
+      "category": "assisted-living",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18459203",
+      "source_url": "https://www.pexels.com/photo/18459203/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "assisted-living-05.jpg",
+      "category": "assisted-living",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18459207",
+      "source_url": "https://www.pexels.com/photo/18459207/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "assisted-living-06.jpg",
+      "category": "assisted-living",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18509794",
+      "source_url": "https://www.pexels.com/photo/18509794/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "nursing-home-01.jpg",
+      "category": "nursing-home",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18459247",
+      "source_url": "https://www.pexels.com/photo/18459247/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "nursing-home-02.jpg",
+      "category": "nursing-home",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18459210",
+      "source_url": "https://www.pexels.com/photo/18459210/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "nursing-home-03.jpg",
+      "category": "nursing-home",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "16364306",
+      "source_url": "https://www.pexels.com/photo/16364306/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "nursing-home-04.jpg",
+      "category": "nursing-home",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "16364307",
+      "source_url": "https://www.pexels.com/photo/16364307/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "nursing-home-05.jpg",
+      "category": "nursing-home",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18429373",
+      "source_url": "https://www.pexels.com/photo/18429373/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "memory-care-01.jpg",
+      "category": "memory-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18459192",
+      "source_url": "https://www.pexels.com/photo/18459192/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "memory-care-02.jpg",
+      "category": "memory-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "16364305",
+      "source_url": "https://www.pexels.com/photo/16364305/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "memory-care-03.jpg",
+      "category": "memory-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18429415",
+      "source_url": "https://www.pexels.com/photo/18429415/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "memory-care-04.jpg",
+      "category": "memory-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29372727",
+      "source_url": "https://www.pexels.com/photo/29372727/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "memory-care-05.jpg",
+      "category": "memory-care",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18509802",
+      "source_url": "https://www.pexels.com/photo/18509802/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "independent-living-01.jpg",
+      "category": "independent-living",
+      "source": "Pexels",
+      "photographer": "Juan Luis Seco",
+      "photo_id": "22798367",
+      "source_url": "https://www.pexels.com/photo/22798367/",
+      "photographer_url": "https://www.pexels.com/@juan-luis-seco-1235220579/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "independent-living-02.jpg",
+      "category": "independent-living",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18509796",
+      "source_url": "https://www.pexels.com/photo/18509796/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "general-02.jpg",
+      "category": "general",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18429374",
+      "source_url": "https://www.pexels.com/photo/18429374/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "general-03.jpg",
+      "category": "general",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "18459208",
+      "source_url": "https://www.pexels.com/photo/18459208/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "general-04.jpg",
+      "category": "general",
+      "source": "Pexels",
+      "photographer": "Jsme Mila",
+      "photo_id": "29373893",
+      "source_url": "https://www.pexels.com/photo/29373893/",
+      "photographer_url": "https://www.pexels.com/@jsme-mila-523821574/",
+      "license": "Pexels License",
+      "added": "2026-06-27"
+    },
+    {
+      "file": "home-care-15.jpg",
+      "category": "home-care",
+      "source": "Unsplash",
+      "photographer": "Age Cymru",
+      "photo_id": "GPrh_GLiWCI",
+      "source_url": "https://unsplash.com/photos/GPrh_GLiWCI",
+      "license": "Unsplash License",
+      "added": "2026-06-28"
+    },
+    {
+      "file": "home-care-16.jpg",
+      "category": "home-care",
+      "source": "Unsplash",
+      "photographer": "Age Cymru",
+      "photo_id": "dMhB7w99ju8",
+      "source_url": "https://unsplash.com/photos/dMhB7w99ju8",
+      "license": "Unsplash License",
+      "added": "2026-06-28"
+    },
+    {
+      "file": "home-care-17.jpg",
+      "category": "home-care",
+      "source": "Unsplash",
+      "photographer": "Age Cymru",
+      "photo_id": "qW3DLnehg9w",
+      "source_url": "https://unsplash.com/photos/qW3DLnehg9w",
+      "license": "Unsplash License",
+      "added": "2026-06-28"
+    },
+    {
+      "file": "home-care-18.jpg",
+      "category": "home-care",
+      "source": "Unsplash",
+      "photographer": "Topsphere Media",
+      "photo_id": "WxRd7byFxs4",
+      "source_url": "https://unsplash.com/photos/WxRd7byFxs4",
+      "license": "Unsplash License",
+      "added": "2026-06-28"
+    },
+    {
+      "file": "nursing-home-09.jpg",
+      "category": "nursing-home",
+      "source": "Unsplash",
+      "photographer": "Maria Luisa Queiroz",
+      "photo_id": "KlBltbAwxWk",
+      "source_url": "https://unsplash.com/photos/KlBltbAwxWk",
+      "license": "Unsplash License",
+      "added": "2026-06-28"
+    },
+    {
+      "file": "nursing-home-10.jpg",
+      "category": "nursing-home",
+      "source": "Unsplash",
+      "photographer": "CDC",
+      "photo_id": "Jusy7vxGPLM",
+      "source_url": "https://unsplash.com/photos/Jusy7vxGPLM",
+      "license": "Unsplash License",
+      "added": "2026-06-28"
+    }
+  ],
+  "sources": {
+    "Pexels": {
+      "url": "https://www.pexels.com/license/",
+      "commercial_use": true,
+      "modification_allowed": true,
+      "attribution_required": false
+    },
+    "Unsplash": {
+      "url": "https://unsplash.com/license",
+      "commercial_use": true,
+      "modification_allowed": true,
+      "attribution_required": false
+    }
+  },
+  "verified_on": "2026-06-28",
+  "restrictions": "No standalone resale (prints/merch); no implying depicted people endorse Olera; no compiling to build a competing stock service."
+}

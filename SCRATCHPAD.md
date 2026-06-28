@@ -7,6 +7,31 @@
 
 ## Current Focus
 
+### 2026-06-28 — Provider Image Strategy #2: licensed stock/fallback library rebuild (branch `claude/stock-image-section-ef6lqj`, NOT yet merged)
+
+Executed the "own our stock & fallback licenses" arm of the Provider Image Strategy (Notion `3845903a…`). The 15 old category-fallback images (`public/images/fallback/`) were inherited from the iOS app with **no documented license** (provenance unknown; SCRATCHPAD even noted a Shutterstock OG image) — exactly the actively-monitored risk the doc flags. Replaced the whole set with a **provably-licensed library + a documented license record + a validation guard.**
+
+**What shipped (all on the branch):**
+- **Library: 39 images**, all license-documented. Sources: **Pexels** (Jsme Mila care-documentary set) + **Unsplash** (Age Cymru / Centre for Ageing Better, CDC, etc.). Both licenses verified clean (free, commercial, no attribution, resize OK).
+- **`public/images/fallback/CREDITS.json`** — the license manifest (per-image source/photographer/photo URL/license + a `sources` block). This IS the strategy's "documented license for every stock image."
+- **`scripts/check-fallback-licenses.js`** — fails if any served image lacks a manifest entry (enforces "license on file"). Passes 39/39.
+- **`docs/stock-image-pipeline.md`** — the process (only-licensed sources → optimize → classify → place → record → wire), incl. the **mandatory resize step** (TJ's ask).
+- **`lib/types/provider.ts`** — `CATEGORY_FALLBACK_POOLS` rewired to the new files (deduped, named arrays per category).
+
+**Pipeline used:** intake to `stock-intake/` via plain `git push` from a local session (GitHub web uploader chokes on ~300 MB; git doesn't) → optimize with **sharp** (1920px, mozjpeg q80, ~3-6 MB → ~150-350 KB) → classify by viewing → curate → place as `{category}-NN.jpg` → manifest → wire pools → remove raw originals (squash-merge keeps the ~300 MB of raw out of `staging` history).
+
+**Curation evolved through TJ redlines (the WHY):**
+- Dedup near-identical photographer *series* (5 hair-grooming frames, repeated kitchen/stairs/bed shots) → distinct scenes only.
+- **Tailored per-category briefs**, not one rule: home care = care being given OR an obvious pro (scrubs), never a lone recipient; AL = vibrant community; memory care = gentle 1:1; nursing = skilled care w/ dignity; IL = active lifestyle (solo OK if vibrant).
+- **Aspirational/polished over documentary** (TJ's call) — this is why most candid Jsme Mila *home-care* shots underperform; the sourced Unsplash scrubs/Age-Cymru images carry that category.
+- **Phased quality pass:** removed the 8 clear "lone recipient / still-life" failures now (they signal isolation — the family's fear — not care); kept candid relationship shots as **temporary filler** to hold rotation until aspirational replacements arrive, then dilute.
+
+**Current per-category state (pool sizes):** home-care 16 (only ~4 truly aspirational — all sourced scrubs; rest filler), assisted-living 6 ✅, nursing-home 7 ✅, memory-care 5 🆗, independent-living 4 ⚠️ (only 1 true IL image), general/default 3. **Biggest gaps: home care (~6-8) + independent living (~4)** — need aspirational, caregiver-present backfill.
+
+**Decisions:** keep-current + add + dilute-over-time (not hard cut); Pexels+Unsplash both clean for our use; squash-merge to staging; benched 3 staff-only Unsplash shots in `stock-intake/` for later.
+
+**Next up:** (1) **TJ sources aspirational backfill** — home care ~6-8 (caregiver+senior, bright, scrubs OK), IL ~4 (active lifestyle: gardening/walking/exercise/social dining) — best from **Age Cymru** ([Unsplash](https://unsplash.com/@age_cymru)) + **Centre for Ageing Better** ([Pexels](https://www.pexels.com/@centre-for-ageing-better-55954677/) · [Unsplash](https://unsplash.com/@ageing_better)); drop in `stock-intake/`, I wire + then dilute the candid filler. (2) Open PR → staging → squash-merge. (3) **Couldn't run `tsc`/`build`** in the cloud container (no `node_modules`) — needs local `npm run build` or Vercel preview before merge. (4) Separate **email** stock set lives on Supabase (`content-images/fallback`, used by `lib/email-samples.ts` + `lib/family-comms/alternatives.ts`) — same unprovable provenance, logical future cleanup. Memory: Notion `3845903a…` (Provider Image Strategy).
+
 ### 2026-06-25 (PM) — Family-comms email CREATIVE redesign: full completion sequence + shared design-system, PROMOTED to prod (branch `mighty-carson`, PRs #1213-1216 → staging, #1217 → main)
 
 Phase 3 (redesign the legacy email creative the coordinator/engine renders) continued from R6 `family_nudge`. Redesigned the **whole `completion_nudge_1-4` sequence** (the OLD `family-nudges` engine, day 0/2/6/13) and stood up a **shared email design-system**, then **promoted everything to production** ahead of the next cron sends. SCRATCHPAD logged separately per [[feedback_scratchpad_out_of_code_prs]].
