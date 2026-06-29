@@ -807,82 +807,141 @@ function ActivitySummary({
 
 // ---------------------------------------------------------------------------
 // Campaign tracker — shown at the top of Find Families for a provider running a
-// live managed-ads campaign. Surfaces the same since-launch performance the
-// Boost page tracks (visitors + families delivered) PLUS questions, which are
-// campaign engagement too. The questions cell carries the action (unanswered +
-// "Answer questions") since that's the thing the provider can act on right now.
+// live managed-ads campaign. Warm "campaign home" treatment (Perena/Wispr-
+// leaning): a vanilla hero that ORIENTS rather than dumping a cold stats box —
+// a serif "Your campaign is live", reassuring subline, the since-launch metrics
+// (visitors + families delivered + questions), with the waiting question
+// elevated as the one action. Early-stage zeros read as "day N, working", not
+// "broken". `compact` drops the headline/subline for the above-leads placement,
+// where the leads below are the story.
 // ---------------------------------------------------------------------------
+
+function CampaignMetric({
+  value,
+  label,
+  accent = false,
+}: {
+  value: number;
+  label: string;
+  accent?: boolean;
+}) {
+  return (
+    <div>
+      <p
+        className={`font-display text-[30px] md:text-[34px] font-semibold leading-none tabular-nums tracking-tight ${
+          accent ? "text-primary-700" : "text-warm-950"
+        }`}
+      >
+        {value.toLocaleString()}
+      </p>
+      <p className="mt-1.5 text-sm text-gray-500">{label}</p>
+    </div>
+  );
+}
 
 function CampaignTrackerCard({
   stats,
+  compact = false,
 }: {
   stats: NonNullable<BoostStateResponse["campaignStats"]>;
+  compact?: boolean;
 }) {
-  const sinceLabel = new Date(stats.since).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+  const launch = new Date(stats.since);
+  const sinceLabel = launch.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  const dayN = Math.max(
+    1,
+    Math.floor((Date.now() - launch.getTime()) / (24 * 60 * 60 * 1000)) + 1,
+  );
   const { questions } = stats;
+  const hasUnanswered = questions.unanswered > 0;
 
   return (
-    <div className="rounded-2xl border border-gray-200/80 bg-white p-5 lg:p-6">
-      <div className="mb-4 flex items-center gap-2">
+    <div className="relative overflow-hidden rounded-3xl border border-vanilla-200 bg-gradient-to-br from-vanilla-100 to-white px-6 py-7 shadow-[0_2px_20px_-6px_rgba(42,24,16,0.10)] md:px-9 md:py-9">
+      {/* Eyebrow — live pulse + day count, so the zeros below read as "early". */}
+      <div className="mb-3 flex items-center gap-2">
         <span className="relative flex h-2 w-2" aria-hidden>
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75" />
           <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-500" />
         </span>
-        <p className="text-[13px] font-medium text-gray-500">
-          Campaign live · since {sinceLabel}
-        </p>
+        <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-primary-700">
+          Live · day {dayN} · since {sinceLabel}
+        </span>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="space-y-0.5">
-          <p className="font-display text-[28px] font-semibold leading-none tabular-nums tracking-tight text-gray-900">
-            {stats.visitors.toLocaleString()}
+      {!compact && (
+        <>
+          <h2 className="font-display text-[26px] leading-[1.12] tracking-tight text-warm-950 md:text-[34px]">
+            Your campaign is live.
+          </h2>
+          <p className="mt-2.5 max-w-md text-[15px] leading-relaxed text-gray-500">
+            We&apos;re putting your page in front of families searching for care
+            nearby. New inquiries and questions land here as they come.
           </p>
-          <p className="text-sm text-gray-500">
-            {stats.visitors === 1 ? "Visitor" : "Visitors"}
-          </p>
-        </div>
-        <div className="space-y-0.5">
-          <p className="font-display text-[28px] font-semibold leading-none tabular-nums tracking-tight text-gray-900">
-            {stats.leads.toLocaleString()}
-          </p>
-          <p className="text-sm text-gray-500">
-            {stats.leads === 1 ? "Family delivered" : "Families delivered"}
-          </p>
-        </div>
-        <div className="space-y-0.5">
-          <p className="font-display text-[28px] font-semibold leading-none tabular-nums tracking-tight text-gray-900">
+        </>
+      )}
+
+      <div className={`grid max-w-lg grid-cols-3 gap-5 md:gap-7 ${compact ? "" : "mt-7"}`}>
+        <CampaignMetric value={stats.visitors} label={stats.visitors === 1 ? "Visitor" : "Visitors"} />
+        <CampaignMetric value={stats.leads} label={stats.leads === 1 ? "Family delivered" : "Families delivered"} />
+        <div>
+          <p
+            className={`font-display text-[30px] md:text-[34px] font-semibold leading-none tabular-nums tracking-tight ${
+              hasUnanswered ? "text-primary-700" : "text-warm-950"
+            }`}
+          >
             {questions.received.toLocaleString()}
           </p>
-          <p className="text-sm text-gray-500">
+          <p className="mt-1.5 text-sm text-gray-500">
             {questions.received === 1 ? "Question" : "Questions"}
           </p>
-          {questions.unanswered > 0 && (
-            <p className="text-xs font-medium text-primary-600">
-              {questions.unanswered} unanswered
-            </p>
+          {hasUnanswered && (
+            <Link
+              href="/provider/qna"
+              className="group mt-1 inline-flex items-center text-sm font-semibold text-primary-600 transition-colors hover:text-primary-700"
+            >
+              Answer now
+              <span className="ml-1 transition-transform group-hover:translate-x-0.5">→</span>
+            </Link>
           )}
         </div>
       </div>
 
-      <div className="mt-5 flex items-center gap-4">
-        {questions.unanswered > 0 && (
-          <Link
-            href="/provider/qna"
-            className="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700"
-          >
-            Answer questions →
-          </Link>
-        )}
+      <div className="mt-6">
         <Link
           href="/provider/boost"
-          className="text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
+          className="text-sm font-medium text-gray-500 transition-colors hover:text-gray-700"
         >
-          View campaign →
+          View campaign details →
         </Link>
+      </div>
+    </div>
+  );
+}
+
+// The three-step "how families reach you" orientation strip under the hero —
+// turns the empty-state void into a calm walk-through of how the campaign
+// delivers families, so an all-zeros provider understands the wait. Label-scale,
+// no paragraphs.
+function CampaignFlowStrip() {
+  const steps = [
+    { n: "1", label: "We run the ads" },
+    { n: "2", label: "Families find your page" },
+    { n: "3", label: "They reach out here" },
+  ];
+  return (
+    <div className="mt-10">
+      <p className="mb-5 text-center text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+        How families reach you
+      </p>
+      <div className="mx-auto grid max-w-xl grid-cols-3 gap-4">
+        {steps.map((s) => (
+          <div key={s.n} className="flex flex-col items-center text-center">
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-vanilla-100 font-display text-[15px] text-warm-950">
+              {s.n}
+            </span>
+            <p className="mt-2.5 text-[13px] leading-snug text-gray-500">{s.label}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -2040,26 +2099,24 @@ export default function ProviderMatchesPage() {
     }
     return (
       <div className="min-h-[100dvh] bg-gradient-to-b from-vanilla-50 via-white to-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
-          {liveCampaign ? (
-            // Already running a campaign → show the tracker, not the "get a
-            // campaign" pitch. No family has landed nearby yet, but the campaign
-            // is out there working, so frame the wait honestly.
-            <div className="space-y-5">
-              <CampaignTrackerCard stats={liveCampaign} />
-              <p className="text-center text-sm text-gray-500">
-                No families have landed in your area just yet — your campaign is out
-                there bringing them in. New inquiries and questions show up here.
-              </p>
-            </div>
-          ) : (
+        {liveCampaign ? (
+          // Already running a campaign → the warm "campaign home": orient + a
+          // calm walk-through of how families arrive, so the empty early-stage
+          // state reads as "working", not a lifeless stats box. Narrow + centered
+          // for an intimate, composed feel (Perena/Wispr).
+          <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+            <CampaignTrackerCard stats={liveCampaign} />
+            <CampaignFlowStrip />
+          </div>
+        ) : (
+          <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
             <ManagedAdsPitch
               ctaHref="/provider/boost"
               providerSlug={providerProfile.slug}
               providerName={providerProfile.display_name}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -2089,7 +2146,7 @@ export default function ProviderMatchesPage() {
           they came looking for campaign results. */}
       {liveCampaign && (
         <div className="mb-6">
-          <CampaignTrackerCard stats={liveCampaign} />
+          <CampaignTrackerCard stats={liveCampaign} compact />
         </div>
       )}
 
