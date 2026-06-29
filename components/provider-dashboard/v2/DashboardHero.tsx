@@ -631,6 +631,18 @@ function engagementCompletionHook(viewCount: number, next: NextAction): Hook {
   };
 }
 
+/** Views-to-ads banner (≥10 views, complete profile): leverage existing traffic
+ *  to pitch ads — they have eyeballs, help them convert more. */
+function viewsToAdsHook(viewCount: number): Hook {
+  return {
+    bannerId: "views_to_ads",
+    headline: `${viewCount} families viewed your page this month.`,
+    subline: "Turn views into leads.",
+    cta: { label: "See how", href: "/provider/boost" },
+    imageUrl: TIER_SPIKE_IMAGE,
+  };
+}
+
 /** Cold-tier completion banner (sparse traffic): the section's own headline. */
 function coldCompletionHook(next: NextAction): Hook {
   return {
@@ -735,6 +747,13 @@ function resolveHook(
     return engagementCompletionHook(greeting.viewsThisPeriod, next);
   }
 
+  // Priority 5b — meaningful traffic (≥10 views) with a COMPLETE profile and no
+  // active boost. They have eyeballs but no completion lever to pull — pitch ads
+  // as the way to convert views into leads.
+  if (greeting.viewsThisPeriod >= ENGAGEMENT_VIEW_THRESHOLD && !next && !hasActiveBoostRequest) {
+    return viewsToAdsHook(greeting.viewsThisPeriod);
+  }
+
   // Priorities 6-7 — the cold, empty-handed majority (~99%): no leads, no
   // questions, no nearby family, sparse traffic. Managed Ads leads here — it's
   // the one lever that GENERATES demand (external paid acquisition) rather than
@@ -785,6 +804,7 @@ export function buildBannerPreviews(): BannerPreview[] {
     { bannerId: "reviews", hook: reviewsHook() },
     { bannerId: "find_families_intel", hook: marketIntelHook() },
     { bannerId: "view_spike", hook: viewSpikeHook(33, 12, 9) },
+    { bannerId: "views_to_ads", hook: viewsToAdsHook(15) },
   ];
   for (const sectionId of NUDGE_SECTION_IDS) {
     previews.push({

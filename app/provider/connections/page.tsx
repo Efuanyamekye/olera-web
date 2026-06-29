@@ -25,6 +25,8 @@ import {
 } from "@/lib/lead-quality-score";
 import { deriveLeadSignals } from "@/lib/provider/lead-signals";
 import { QUICK_REPLY_CONFIG } from "@/lib/quick-reply-config";
+import ContextualAdsNudge from "@/components/provider/ContextualAdsNudge";
+import { useHasActiveBoostRequest } from "@/hooks/useHasActiveBoostRequest";
 
 // ── Lead types (previously from mock file) ──
 
@@ -1900,6 +1902,15 @@ export default function ProviderLeadsPage() {
   // Track progress for auto-dismiss countdown (100 to 0)
   const [quickReplyProgress, setQuickReplyProgress] = useState(100);
 
+  // Ads nudge state — shown once per session on leads page
+  // Use sessionStorage to persist dismissal across navigation within the session
+  const [showAdsNudge, setShowAdsNudge] = useState(false);
+  const [adsNudgeDismissed, setAdsNudgeDismissed] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return sessionStorage.getItem("olera_ads_nudge_leads_dismissed") === "true";
+  });
+  const hasActiveBoostRequest = useHasActiveBoostRequest();
+
   // Verification state
   const { isVerified } = useProviderVerification();
   const {
@@ -2043,12 +2054,18 @@ export default function ProviderLeadsPage() {
       });
 
       setLeads(mappedLeads);
+
+      // Show ads nudge once per session if there are active leads
+      const hasActiveLeads = mappedLeads.some((l) => l.status !== "archived");
+      if (isInitialLoad && hasActiveLeads && !adsNudgeDismissed) {
+        setShowAdsNudge(true);
+      }
     } catch (err) {
       console.error("Failed to fetch leads:", err);
     } finally {
       if (isInitialLoad) setIsLoading(false);
     }
-  }, [providerProfile]);
+  }, [providerProfile, adsNudgeDismissed]);
 
   // Initial fetch
   useEffect(() => {
@@ -2806,6 +2823,23 @@ export default function ProviderLeadsPage() {
               itemsPerPage={activePageSize}
               onPageChange={setCurrentPage}
               itemLabel="leads"
+            />
+          </div>
+        )}
+
+        {/* Ads nudge — shown once per session when provider has leads */}
+        {showAdsNudge && providerProfile?.slug && activeFilter === "active" && (
+          <div className="mt-6">
+            <ContextualAdsNudge
+              context="lead"
+              providerSlug={providerProfile.slug}
+              providerName={providerProfile.display_name}
+              hasActiveBoostRequest={hasActiveBoostRequest === true}
+              onDismiss={() => {
+                setShowAdsNudge(false);
+                setAdsNudgeDismissed(true);
+                sessionStorage.setItem("olera_ads_nudge_leads_dismissed", "true");
+              }}
             />
           </div>
         )}

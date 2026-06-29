@@ -710,6 +710,10 @@ function ApplyExperience({
               When should we start?
             </h1>
             <p className="mt-3 text-gray-500 leading-relaxed max-w-lg">
+              We'll run ads to bring families to your page.{" "}
+              <span className="font-semibold text-primary-600">First $50 on us.</span>
+            </p>
+            <p className="mt-2 text-sm text-gray-400">
               {(() => {
                 const category = humanCategoryLabel(provider.category);
                 const place =
@@ -722,12 +726,11 @@ function ApplyExperience({
 
                 return demand.count >= 5 ? (
                   <>
-                    <span className="font-semibold text-gray-900">{demand.count} families in {place}</span>{" "}
-                    searched for {category} {timeframe}. Pick a week and we'll start putting your page in front of them.
+                    {demand.count} families in {place} searched for {category} {timeframe}.
                   </>
                 ) : (
                   <>
-                    Families in {place} are searching for {category}. Pick a week and we'll start putting your page in front of them.
+                    Families in {place} are searching for {category}.
                   </>
                 );
               })()}
