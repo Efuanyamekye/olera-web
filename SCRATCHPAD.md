@@ -7,6 +7,22 @@
 
 ## Current Focus
 
+### 2026-06-29 — Second managed-ads provider live: Abode Home Care (concierge ad setup, no repo code)
+
+Set up our **2nd Ad Boost campaign** end to end (Franchil was #1). All ops / external systems, no repo code changed.
+
+**Provider:** Abode Home Care, Merrillville IN (`home_care_agency`), slug `abode-home-care-merrillville-in-y3em`, verified + claimed, 96% complete, $50 intended, requested "both" channels. Contact `kolacooper@abodehomecare.org` (email_validity `unverified`; null `lat/lng`).
+
+**Ops done:**
+- `ad_campaign_requests` row (`0dae57f7…`): `channel=google`, `campaign_tag=abode-merrillville-jun26`, `status` scheduled → **live**, admin_note set. **Google-only at $50** (skip Meta even though "both" requested — splitting $50 buys neither; same call as Franchil).
+- Built + published the **Google Search campaign** (TJ click-by-click): Search-only (Display + Search Partners OFF), **Maximize clicks $2.50 cap**, Merrillville **20mi Presence-only**, **EN+ES**, **AI Max OFF** (protects the URL tag), **$50 campaign-total** budget, flight **Jun 29 → Jul 27**. 12 phrase-match keywords + 11 negatives. Tagged Final URL `…/provider/abode-home-care-merrillville-in-y3em?utm_source=olera_managed&utm_campaign=abode-merrillville-jun26`. In Google policy review (Pending).
+- **Blocker hit + fixed:** phone number in a description = policy block, shows as a generic "Fix your ad" with **no highlighted asset** (confusing). Removed → published clean. AI Max briefly read "on" in Review but confirmed **OFF** in Campaign settings post-publish.
+- Provider email: Gmail draft + Notion copy-paste page ("Email to Kola — Abode Home Care campaign live"). Team update posted to **#ai-product-development**.
+
+**Reusable artifact (the real durable output):** created Notion **"SOP — Managed Ads (Ad Boost): Google Ads Campaign Setup (any provider)"** under Product Development — full generalized click-by-click + keyword/ad/email templates + troubleshooting table + Abode worked example. Append each future provider as a worked example. Memory: `project_managed_ads_setup_sop`.
+
+**Next up:** (1) Confirm "Kola" is her first name → send the Gmail draft. (2) Watch Google flip Pending → Eligible (hours). (3) Optional data hygiene: geocode Abode's null `lat/lng` (breaks organic Find Families matching), ZeroBounce her email before the first lead. (4) Keep the funnel moving — goal is a **new provider signing up every week**.
+
 ### 2026-06-28 — Ad Boost (managed ads) attribution fix: count + tag inquiries (PR #1239 → staging, MERGED `d7f55c3d`)
 
 Franchil's first managed-ads lead exposed an attribution bug. Admin "Families delivered" counted only `benefits_completed` (a side quiz the provider page barely surfaces), so a real inquiry read as **0 delivered** while the provider's own `/provider/boost` showed **1 lead** from the same campaign.
