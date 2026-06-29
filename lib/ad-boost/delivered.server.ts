@@ -143,6 +143,42 @@ export async function getCampaignStats(
   return { visitors: sessions.size, leads };
 }
 
+/** Questions a campaign drew in, counted the SAME way visitors/leads are: since
+ *  the launch anchor, no UTM needed (the tracker is a since-launch time window,
+ *  not UTM attribution). `received`/`unanswered` exclude admin-removed (rejected)
+ *  and dismissed (archived) questions — the same "manageable" exclusion the
+ *  provider dashboard card and hero use — so a spam question can't inflate the
+ *  campaign's question count. */
+export interface CampaignQuestions {
+  received: number;
+  unanswered: number;
+}
+
+export async function getCampaignQuestions(
+  db: ReturnType<typeof getServiceClient>,
+  options: { providerIdVariants: string[]; since: string },
+): Promise<CampaignQuestions> {
+  const variants = options.providerIdVariants.filter(
+    (v): v is string => typeof v === "string" && v.length > 0,
+  );
+  if (variants.length === 0) return { received: 0, unanswered: 0 };
+
+  const { data, error } = await db
+    .from("provider_questions")
+    .select("answer, status")
+    .in("provider_id", variants)
+    .gte("created_at", options.since)
+    .limit(5000);
+
+  if (error || !data) return { received: 0, unanswered: 0 };
+
+  const manageable = (data as Array<{ answer: string | null; status: string }>).filter(
+    (q) => q.status !== "archived" && q.status !== "rejected",
+  );
+  const unanswered = manageable.filter((q) => !q.answer?.trim()).length;
+  return { received: manageable.length, unanswered };
+}
+
 // UI care-need bucket → human label (mirror of CARE_NEED_LABELS in
 // app/api/benefits/save-results). Kept tiny + local to avoid coupling.
 const CARE_NEED_LABELS: Record<string, string> = {

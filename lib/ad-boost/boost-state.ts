@@ -49,9 +49,15 @@ export interface BoostStateResponse {
   /** Families delivered so far by this provider's campaign (UTM-tagged benefits
    *  conversions). Legacy ROI signal — see campaignStats for real performance. */
   delivered: number;
-  /** Real campaign performance: visitors + leads on the provider's page since
-   *  launch. Null until the campaign is live. `since` is an ISO timestamp. */
-  campaignStats: { visitors: number; leads: number; since: string } | null;
+  /** Real campaign performance: visitors + leads + questions on the provider's
+   *  page since launch. Null until the campaign is live. `since` is an ISO
+   *  timestamp. Questions are counted the same since-launch way (no UTM). */
+  campaignStats: {
+    visitors: number;
+    leads: number;
+    questions: { received: number; unanswered: number };
+    since: string;
+  } | null;
 }
 
 const TTL_MS = 60_000;

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
 import { loadAdBoostEligibility } from "@/lib/ad-boost/eligibility.server";
-import { countDeliveredByCampaign, getCampaignStats } from "@/lib/ad-boost/delivered.server";
+import { countDeliveredByCampaign, getCampaignStats, getCampaignQuestions } from "@/lib/ad-boost/delivered.server";
 import { sendSlackAlert, slackAdBoostRequested } from "@/lib/slack";
 import { BUDGET_VALUES } from "@/lib/ad-boost/estimate";
 
@@ -101,16 +101,21 @@ export async function GET() {
   // actually driving traffic; pre-live it's null and the UI shows a "numbers
   // arrive once live" state. Launch anchor = the requested setup week (when the
   // ads start), falling back to created_at for older rows with no week.
-  let campaignStats: { visitors: number; leads: number; since: string } | null = null;
+  let campaignStats:
+    | { visitors: number; leads: number; questions: { received: number; unanswered: number }; since: string }
+    | null = null;
   if (latest && latest.status === "live") {
     const since = new Date(
       latest.requested_setup_week || latest.created_at,
     ).toISOString();
-    const stats = await getCampaignStats(db, {
-      providerIdVariants: [elig.slug, elig.profileId],
-      since,
-    });
-    campaignStats = { ...stats, since };
+    const providerIdVariants = [elig.slug, elig.profileId];
+    // Questions are campaign engagement too — counted the same since-launch way
+    // as visitors/leads. Parallel with the page-traffic query.
+    const [stats, questions] = await Promise.all([
+      getCampaignStats(db, { providerIdVariants, since }),
+      getCampaignQuestions(db, { providerIdVariants, since }),
+    ]);
+    campaignStats = { ...stats, questions, since };
   }
 
   return NextResponse.json({
