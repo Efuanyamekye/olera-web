@@ -67,6 +67,10 @@ const PROVIDER_ACTION_EVENT_TYPES = [
   "managed_ads_requested",
   "your_market_viewed",
   "your_market_playbook_clicked",
+  // Ad pitch touchpoint tracking
+  "ads_touchpoint_viewed",
+  "ads_touchpoint_clicked",
+  "ads_touchpoint_dismissed",
 ];
 
 /**

@@ -57,6 +57,8 @@ export default function HireCaregiversCard({
     >
       <Link
         href="/medjobs/candidates"
+        target="_blank"
+        rel="noopener noreferrer"
         className="mb-3 inline-flex items-center gap-1 text-sm font-medium text-primary-600 hover:text-primary-700"
       >
         more info ↗

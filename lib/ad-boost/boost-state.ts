@@ -30,6 +30,8 @@ export interface BoostRequest {
 
 export interface BoostStateResponse {
   eligibility: AdBoostEligibility;
+  /** True if provider is verified or verification not required (high-trust). */
+  isVerified: boolean;
   provider: {
     slug: string;
     displayName: string | null;

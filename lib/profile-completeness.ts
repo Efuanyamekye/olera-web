@@ -138,15 +138,14 @@ function scorePricing(meta: ExtendedMetadata): number {
 
 function scoreStaffScreening(meta: ExtendedMetadata): number {
   const count = meta.staff_screening?.length ?? 0;
-  if (count >= 5) return 100;
-  if (count >= 3) return 75;
+  if (count >= 3) return 100;
   if (count >= 1) return 50;
   return 0;
 }
 
 function scoreCareServices(profile: Profile): number {
   const count = profile.care_types?.length ?? 0;
-  if (count >= 5) return 100;
+  if (count >= 3) return 100;
   if (count >= 1) return 50;
   return 0;
 }

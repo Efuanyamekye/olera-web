@@ -31,6 +31,22 @@ import {
 } from "@/lib/analytics/provider-email-funnels";
 import { HeroCard, buildBannerPreviews } from "@/components/provider-dashboard/v2/DashboardHero";
 
+// Pitch Touchpoints — ad pitch surface engagement tracking
+interface TouchpointData {
+  touchpoint: string;
+  label: string;
+  viewed: number;
+  clicked: number;
+  dismissed: number;
+  ctr: number;
+}
+
+interface TouchpointsResponse {
+  range: { from: string; to: string };
+  touchpoints: TouchpointData[];
+  totals: { viewed: number; clicked: number; dismissed: number };
+}
+
 interface WindowedCounts {
   page_view: number;
   search_click: number;
@@ -451,6 +467,14 @@ export default function AdminAnalyticsPage() {
         loading={loading && !!summary}
       >
         <DashboardBannersCard summary={summary} />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        title="Ads Pitch Touchpoints"
+        storageKey="pitchTouchpoints"
+        defaultCollapsed={true}
+      >
+        <PitchTouchpointsCard />
       </CollapsibleSection>
 
       <CollapsibleSection
@@ -3543,6 +3567,107 @@ function formatRelative(iso: string): string {
 }
 
 // ── Footer ───────────────────────────────────────────────────────────────
+
+// ── Pitch Touchpoints ─────────────────────────────────────────────────────
+// Ad pitch surface engagement — which nudges/banners drive providers toward
+// the boost page. Separate from the managed-ads funnel (which tracks conversion).
+
+function PitchTouchpointsCard() {
+  const [data, setData] = useState<TouchpointsResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/ad-boost/touchpoints")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load");
+        return res.json();
+      })
+      .then((json) => {
+        setData(json);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return <div className="h-24 flex items-center justify-center text-gray-400 text-sm">Loading…</div>;
+  }
+
+  if (!data) {
+    return <p className="text-gray-400 text-sm">Failed to load touchpoint data.</p>;
+  }
+
+  if (data.touchpoints.length === 0) {
+    return (
+      <p className="text-gray-400 text-sm py-4">
+        No touchpoint data yet. Events will appear once providers see the pitch surfaces.
+      </p>
+    );
+  }
+
+  return (
+    <>
+      <p className="text-xs text-gray-500 mb-3">
+        Last 30 days · Distinct providers per touchpoint · CTR = Clicked ÷ Viewed
+      </p>
+      <div className="overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead>
+            <tr className="border-b border-gray-100">
+              <th className="text-left py-2 pr-4 text-xs font-medium uppercase tracking-wide text-gray-400">
+                Touchpoint
+              </th>
+              <th className="text-right py-2 px-3 text-xs font-medium uppercase tracking-wide text-gray-400">
+                Viewed
+              </th>
+              <th className="text-right py-2 px-3 text-xs font-medium uppercase tracking-wide text-gray-400">
+                Clicked
+              </th>
+              <th className="text-right py-2 px-3 text-xs font-medium uppercase tracking-wide text-gray-400">
+                CTR
+              </th>
+              <th className="text-right py-2 pl-3 text-xs font-medium uppercase tracking-wide text-gray-400">
+                Dismissed
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.touchpoints.map((t) => (
+              <tr key={t.touchpoint} className="border-b border-gray-50 last:border-0">
+                <td className="py-2.5 pr-4 text-gray-900">{t.label}</td>
+                <td className="py-2.5 px-3 text-right tabular-nums text-gray-700">{t.viewed}</td>
+                <td className="py-2.5 px-3 text-right tabular-nums text-gray-700">{t.clicked}</td>
+                <td className="py-2.5 px-3 text-right tabular-nums font-medium text-gray-900">
+                  {t.viewed > 0 ? `${t.ctr}%` : "—"}
+                </td>
+                <td className="py-2.5 pl-3 text-right tabular-nums text-gray-500">{t.dismissed}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="border-t border-gray-200">
+              <td className="py-2.5 pr-4 font-medium text-gray-900">Total</td>
+              <td className="py-2.5 px-3 text-right tabular-nums font-medium text-gray-900">
+                {data.totals.viewed}
+              </td>
+              <td className="py-2.5 px-3 text-right tabular-nums font-medium text-gray-900">
+                {data.totals.clicked}
+              </td>
+              <td className="py-2.5 px-3 text-right tabular-nums font-medium text-gray-900">
+                {data.totals.viewed > 0
+                  ? `${Math.round((data.totals.clicked / data.totals.viewed) * 100)}%`
+                  : "—"}
+              </td>
+              <td className="py-2.5 pl-3 text-right tabular-nums font-medium text-gray-500">
+                {data.totals.dismissed}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </>
+  );
+}
 
 function FootNote({ summary }: { summary: SummaryResponse | null }) {
   return (

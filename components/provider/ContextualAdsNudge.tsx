@@ -50,10 +50,16 @@ export default function ContextualAdsNudge({
     if (!providerSlug || !assignedVariant || firedView.current || isManagedAdsPreviewMode()) return;
     if (hasActiveBoostRequest) return; // Don't track view if suppressed
     firedView.current = true;
+    const source = context === "question" ? "post_question" : "leads_page";
     trackProviderEvent(providerSlug, "managed_ads_pitch_viewed", {
       provider_name: providerName,
-      source: context === "question" ? "post_question" : "leads_page",
+      source,
       managed_ads_variant: assignedVariant,
+    });
+    // Separate touchpoint tracking for behavior analysis
+    trackProviderEvent(providerSlug, "ads_touchpoint_viewed", {
+      touchpoint: source,
+      provider_name: providerName,
     });
   }, [assignedVariant, providerName, providerSlug, context, hasActiveBoostRequest]);
 
@@ -76,10 +82,16 @@ export default function ContextualAdsNudge({
           href="/provider/boost"
           onClick={() => {
             if (providerSlug) {
+              const source = context === "question" ? "post_question" : "leads_page";
               trackProviderEvent(providerSlug, "managed_ads_cta_clicked", {
                 provider_name: providerName,
-                source: context === "question" ? "post_question" : "leads_page",
+                source,
                 managed_ads_variant: assignedVariant ?? "direct_reach",
+              });
+              // Separate touchpoint tracking for behavior analysis
+              trackProviderEvent(providerSlug, "ads_touchpoint_clicked", {
+                touchpoint: source,
+                provider_name: providerName,
               });
             }
           }}
@@ -92,7 +104,15 @@ export default function ContextualAdsNudge({
         </Link>
         <button
           type="button"
-          onClick={onDismiss}
+          onClick={() => {
+            if (providerSlug) {
+              trackProviderEvent(providerSlug, "ads_touchpoint_dismissed", {
+                touchpoint: context === "question" ? "post_question" : "leads_page",
+                provider_name: providerName,
+              });
+            }
+            onDismiss();
+          }}
           aria-label="Dismiss"
           className="ml-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full text-gray-400 hover:bg-white/60 hover:text-gray-600"
         >

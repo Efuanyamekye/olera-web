@@ -207,6 +207,7 @@ export async function GET(request: NextRequest) {
     const dateTo = searchParams.get("date_to");
     const limit = Math.min(Number(searchParams.get("limit")) || 50, 200);
     const offset = Number(searchParams.get("offset")) || 0;
+    const countOnly = searchParams.get("count_only") === "true";
 
     const db = getServiceClient();
 
@@ -1355,6 +1356,17 @@ export async function GET(request: NextRequest) {
       messagedRate: providerViewedCount > 0 ? Math.round((respondedCount / providerViewedCount) * 100) : 0,
       declinedRate: providerViewedCount > 0 ? Math.round((declinedCount / providerViewedCount) * 100) : 0,
     };
+
+    // Early return for count_only mode — skip filtering/pagination, just return counts
+    if (countOnly) {
+      return NextResponse.json({
+        total: engagementCounts.all,
+        engagementCounts,
+        familyEngagementCounts,
+        funnelStats,
+        providerActions,
+      });
+    }
 
     // Filtering by workflow state or engagement level
     let list = searched.filter(c => c.workflowState !== null); // Exclude inactive providers

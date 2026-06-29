@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useProviderProfile } from "@/hooks/useProviderProfile";
 import { useProfileSectionEditor } from "@/hooks/useProfileSectionEditor";
+import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
+import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
 import type { SectionId } from "@/components/provider-dashboard/edit-modals/types";
 import { trackProviderEvent } from "@/lib/analytics/track-provider-event";
 import { useManagedAdsVariant, isManagedAdsPreviewMode } from "@/hooks/use-managed-ads-variant";
@@ -213,6 +215,21 @@ export default function ProviderBoostPage() {
     onSaved: handleSectionSaved,
   });
 
+  // Verification modal — final step after profile completion. On verify,
+  // refresh state to trigger auto-promotion from pending_profile → requested.
+  const {
+    isOpen: isVerificationModalOpen,
+    open: openVerificationModal,
+    close: closeVerificationModal,
+    handleSubmit: handleVerificationSubmit,
+  } = useVerificationModal({
+    profileId: providerProfile?.id ?? "",
+    onVerified: () => {
+      refreshAccountData();
+      fetchState();
+    },
+  });
+
   if (error) {
     return (
       <Shell>
@@ -267,11 +284,25 @@ export default function ProviderBoostPage() {
           <PendingProfile
             request={pendingRequest}
             eligibility={state.eligibility}
+            isVerified={state.isVerified ?? false}
             onEditSection={openEditor}
+            onVerify={openVerificationModal}
           />
         </div>
         {/* Inline section editors — finish a section without leaving this page. */}
         {editorModals}
+        {/* Verification modal — final step after profile completion. */}
+        <VerificationMethodModal
+          isOpen={isVerificationModalOpen}
+          onClose={closeVerificationModal}
+          onSubmit={handleVerificationSubmit}
+          businessName={providerProfile?.display_name ?? ""}
+          businessWebsite={providerProfile?.website}
+          profileId={providerProfile?.id}
+          userEmail={user?.email}
+          userName={providerProfile?.display_name ?? undefined}
+          allowDismiss={false}
+        />
       </Shell>
     );
   }
@@ -433,28 +464,37 @@ function CampaignFacts({ request }: { request: BoostRequest }) {
 }
 
 /**
- * Standing order queued under 70%. This is the page that used to be the
- * dead-end "CompletenessGate" — a flat chore list with no forward action. Now
- * the provider has already committed (picked a week + channel), so the same
+ * Standing order queued under 70% OR unverified. This is the page that used to
+ * be the dead-end "CompletenessGate" — a flat chore list with no forward action.
+ * Now the provider has already committed (picked a week + channel), so the same
  * completion work is reframed as the LAST step to launch a campaign they own.
  * One prominent next action (the highest-impact gap), the rest as a quiet
- * "what's left" list. Momentum, not homework.
+ * "what's left" list. When profile is complete, verification becomes the final
+ * step. Momentum, not homework.
  */
 function PendingProfile({
   request,
   eligibility,
+  isVerified,
   onEditSection,
+  onVerify,
 }: {
   request: BoostRequest;
   eligibility: AdBoostEligibility;
+  /** True if provider is verified or verification not required. */
+  isVerified: boolean;
   /** Opens the section editor inline on this page (no navigation). */
   onEditSection: (sectionId: SectionId) => void;
+  /** Opens the verification modal (final step after profile completion). */
+  onVerify: () => void;
 }) {
   const remaining = Math.max(0, eligibility.threshold - eligibility.overall);
   const topGap = eligibility.missingSections[0] ?? null;
   const restGaps = eligibility.missingSections.slice(1);
   const hasBoosters =
     eligibility.boosters.reviews === null || eligibility.boosters.responseRate === null;
+  // Profile is complete (no missing sections) but not verified — verification is the final step.
+  const needsVerification = !topGap && !isVerified;
 
   return (
     <div className="max-w-2xl">
@@ -476,26 +516,46 @@ function PendingProfile({
       <CampaignFacts request={request} />
 
       {/* Progress toward launch — the actionable "to go" leads, big number
-          matches the bar, target surfaced beneath (not buried in prose). */}
-      <div className="mt-8 flex items-baseline gap-3">
-        <span className="text-4xl font-display font-bold text-gray-900 tabular-nums leading-none">
-          {eligibility.overall}%
-        </span>
-        <span className="text-gray-500">complete</span>
-      </div>
-      <div className="mt-3 h-1.5 w-full rounded-full bg-warm-100 overflow-hidden">
-        <div
-          className="h-full rounded-full bg-primary-500 transition-all"
-          style={{ width: `${Math.min(100, eligibility.overall)}%` }}
-        />
-      </div>
-      <p className="mt-2.5 text-sm text-gray-500">
-        <span className="font-medium text-gray-900">{remaining}% to go</span> to launch
-      </p>
+          matches the bar, target surfaced beneath (not buried in prose).
+          When profile is complete but unverified, show verification as final step. */}
+      {needsVerification ? (
+        <>
+          <div className="mt-8 flex items-center gap-3">
+            <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary-500 text-white">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+            </span>
+            <span className="text-gray-900 font-medium">Profile complete</span>
+          </div>
+          <p className="mt-3 text-sm text-gray-500">
+            One last step: verify your account so we can launch your campaign.
+          </p>
+        </>
+      ) : (
+        <>
+          <div className="mt-8 flex items-baseline gap-3">
+            <span className="text-4xl font-display font-bold text-gray-900 tabular-nums leading-none">
+              {eligibility.overall}%
+            </span>
+            <span className="text-gray-500">complete</span>
+          </div>
+          <div className="mt-3 h-1.5 w-full rounded-full bg-warm-100 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-primary-500 transition-all"
+              style={{ width: `${Math.min(100, eligibility.overall)}%` }}
+            />
+          </div>
+          <p className="mt-2.5 text-sm text-gray-500">
+            <span className="font-medium text-gray-900">{remaining}% to go</span> to launch
+          </p>
+        </>
+      )}
 
       {/* THE single next action — the highest-impact gap. Opens the editor
-          INLINE (no navigation), so they never leave the campaign-setup flow. */}
-      {topGap && (
+          INLINE (no navigation), so they never leave the campaign-setup flow.
+          When profile is complete, verification is the final step. */}
+      {topGap ? (
         <button
           type="button"
           onClick={() => onEditSection(topGap.id as SectionId)}
@@ -506,7 +566,18 @@ function PendingProfile({
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
           </svg>
         </button>
-      )}
+      ) : needsVerification ? (
+        <button
+          type="button"
+          onClick={onVerify}
+          className="inline-flex items-center gap-2.5 mt-8 px-8 py-3.5 bg-gray-900 hover:bg-gray-800 text-white text-[16px] font-semibold rounded-full active:scale-[0.98] transition-all duration-200"
+        >
+          Verify your account
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
+          </svg>
+        </button>
+      ) : null}
 
       {/* Everything else — secondary, scannable, no longer the hero. */}
       {restGaps.length > 0 && (

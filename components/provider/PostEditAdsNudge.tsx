@@ -35,6 +35,11 @@ export default function PostEditAdsNudge({
       source: "post_edit",
       managed_ads_variant: assignedVariant,
     });
+    // Separate touchpoint tracking for behavior analysis
+    trackProviderEvent(providerSlug, "ads_touchpoint_viewed", {
+      touchpoint: "post_edit",
+      provider_name: providerName,
+    });
   }, [assignedVariant, providerName, providerSlug]);
 
   return (
@@ -58,6 +63,11 @@ export default function PostEditAdsNudge({
                 source: "post_edit",
                 managed_ads_variant: assignedVariant ?? "direct_reach",
               });
+              // Separate touchpoint tracking for behavior analysis
+              trackProviderEvent(providerSlug, "ads_touchpoint_clicked", {
+                touchpoint: "post_edit",
+                provider_name: providerName,
+              });
             }
           }}
           className="inline-flex items-center gap-1 rounded-full bg-gray-900 px-3.5 py-1.5 text-sm font-medium text-white transition-transform hover:gap-1.5 active:scale-[0.98]"
@@ -69,7 +79,15 @@ export default function PostEditAdsNudge({
         </Link>
         <button
           type="button"
-          onClick={onDismiss}
+          onClick={() => {
+            if (providerSlug) {
+              trackProviderEvent(providerSlug, "ads_touchpoint_dismissed", {
+                touchpoint: "post_edit",
+                provider_name: providerName,
+              });
+            }
+            onDismiss();
+          }}
           aria-label="Dismiss"
           className="ml-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full text-gray-400 hover:bg-white/60 hover:text-gray-600"
         >

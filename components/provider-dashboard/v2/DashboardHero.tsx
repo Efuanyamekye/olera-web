@@ -301,7 +301,24 @@ export default function DashboardHero({
       source: "hero",
       managed_ads_variant: managedAdsVariant,
     });
+    // Separate touchpoint tracking for behavior analysis
+    trackProviderEvent(providerSlug, "ads_touchpoint_viewed", {
+      touchpoint: "hero_managed_ads",
+      provider_name: firstName,
+    });
   }, [hidden, bannerId, firstName, managedAdsVariant, providerSlug]);
+
+  // Track views_to_ads banner separately for touchpoint analysis
+  const firedViewsToAdsPitch = useRef(false);
+  useEffect(() => {
+    if (hidden || bannerId !== "views_to_ads" || firedViewsToAdsPitch.current) return;
+    if (isManagedAdsPreviewMode()) return;
+    firedViewsToAdsPitch.current = true;
+    trackProviderEvent(providerSlug, "ads_touchpoint_viewed", {
+      touchpoint: "hero_views_to_ads",
+      provider_name: firstName,
+    });
+  }, [hidden, bannerId, firstName, providerSlug]);
 
   // Tell the dashboard which banner won this visit, so it can suppress the
   // post-edit managed-ads nudge when the hero is already the managed-ads pitch.
@@ -367,6 +384,18 @@ export default function DashboardHero({
         provider_name: firstName,
         source: "hero",
         managed_ads_variant: managedAdsVariant ?? "direct_reach",
+      });
+      // Separate touchpoint tracking for behavior analysis
+      trackProviderEvent(providerSlug, "ads_touchpoint_clicked", {
+        touchpoint: "hero_managed_ads",
+        provider_name: firstName,
+      });
+    }
+    // Track views_to_ads clicks for touchpoint analysis
+    if (bannerId === "views_to_ads") {
+      trackProviderEvent(providerSlug, "ads_touchpoint_clicked", {
+        touchpoint: "hero_views_to_ads",
+        provider_name: firstName,
       });
     }
   };

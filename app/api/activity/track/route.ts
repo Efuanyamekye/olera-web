@@ -42,6 +42,10 @@ const PROVIDER_EVENT_TYPES = [
   "your_market_playbook_clicked", // Provider tapped a Your Market playbook step
   // Review SMS demand signal
   "review_no_email_signal",    // Provider clicked "I only have their phone number" on reviews
+  // Ad pitch touchpoint tracking (separate from managed_ads funnel)
+  "ads_touchpoint_viewed",     // Provider saw an ad pitch touchpoint (nudge/banner)
+  "ads_touchpoint_clicked",    // Provider clicked a touchpoint CTA
+  "ads_touchpoint_dismissed",  // Provider dismissed a touchpoint
 ] as const;
 
 const FAMILY_EVENT_TYPES = [

@@ -49,12 +49,13 @@ export async function GET() {
     .limit(1)
     .maybeSingle();
 
-  // Standing-order release: a campaign queued under 70% auto-promotes the moment
-  // the provider crosses the threshold. We re-check on every boost-page load
-  // (profile saves are client-direct with no server hook, so this is the
-  // promotion point), flip pending_profile -> requested, and page the concierge
-  // now — not at submit — so the queue only ever holds actionable work.
-  if (latest && latest.status === "pending_profile" && elig.eligibility.eligible) {
+  // Standing-order release: a campaign queued under 70% (or unverified) auto-
+  // promotes the moment the provider crosses the threshold AND verifies. We
+  // re-check on every boost-page load (profile saves are client-direct with no
+  // server hook, so this is the promotion point), flip pending_profile ->
+  // requested, and page the concierge now — not at submit — so the queue only
+  // ever holds actionable work.
+  if (latest && latest.status === "pending_profile" && elig.eligibility.eligible && elig.isVerified) {
     const { data: promoted } = await db
       .from("ad_campaign_requests")
       .update({
@@ -120,6 +121,7 @@ export async function GET() {
 
   return NextResponse.json({
     eligibility: elig.eligibility,
+    isVerified: elig.isVerified,
     provider: {
       slug: elig.slug,
       displayName: elig.displayName,
@@ -142,10 +144,10 @@ export async function POST(request: NextRequest) {
 
   // Standing-order model: a provider can queue a campaign at any completeness.
   // Under 70% it lands as `pending_profile` (queued, concierge NOT paged); it
-  // auto-promotes to `requested` the moment they cross the threshold (see GET).
-  // The completeness gate still protects ad ROI — it just guards the *launch*,
-  // not entry. No 403; commitment-first is the whole point.
-  const queued = !elig.eligibility.eligible;
+  // auto-promotes to `requested` the moment they cross the threshold AND verify
+  // (see GET). Both completeness AND verification gate the *launch*, not entry.
+  // No 403; commitment-first is the whole point.
+  const queued = !elig.eligibility.eligible || !elig.isVerified;
 
   let body: { setupWeek?: unknown; channel?: unknown; intendedMonthlyBudget?: unknown };
   try {
