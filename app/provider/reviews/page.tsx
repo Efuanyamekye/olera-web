@@ -893,12 +893,12 @@ function SendRequestForm({
               <svg className="w-3.5 h-3.5 text-stone-300 cursor-help" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
               </svg>
-              {/* Tooltip */}
-              <div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-stone-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-10">
+              {/* Tooltip - centered to avoid clipping on mobile */}
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 bg-stone-900 text-white text-xs rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none z-10">
                 <p className="leading-relaxed">
                   Without Google connected, reviews are collected on Olera. Connect your Google Business Profile to get reviews directly on Google.
                 </p>
-                <div className="absolute top-full right-3 border-4 border-transparent border-t-stone-900" />
+                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-stone-900" />
               </div>
             </div>
           </div>
@@ -1404,8 +1404,8 @@ export default function ProviderReviewsPage() {
 
           {/* Content grid */}
           <div className="lg:grid lg:grid-cols-[1fr,340px] lg:gap-8 lg:items-stretch">
-            {/* Main content card - overflow-hidden for hero image clipping */}
-            <div className="bg-white rounded-2xl border border-gray-200/80 p-5 lg:p-6 mb-6 lg:mb-0 overflow-hidden">
+            {/* Main content card */}
+            <div className="bg-white rounded-2xl border border-gray-200/80 p-5 lg:p-6 mb-6 lg:mb-0">
               {view === "landing" ? (
                 <LandingView
                   city={providerCity}

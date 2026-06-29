@@ -24,7 +24,16 @@ import {
   managedAdsVariantLabel,
   managedAdsVariantSubLabel,
 } from "@/lib/analytics/managed-ads-variant-copy";
+import {
+  MOBILE_NAV_VARIANTS,
+  type MobileNavVariant,
+} from "@/lib/analytics/mobile-nav-variant";
+import {
+  mobileNavVariantLabel,
+  mobileNavVariantSubLabel,
+} from "@/lib/analytics/mobile-nav-variant-copy";
 import CTAVariantSessionsList from "@/components/admin/CTAVariantSessionsList";
+import MobileNavVariantSessionsList from "@/components/admin/MobileNavVariantSessionsList";
 import {
   PROVIDER_EMAIL_FUNNEL_LABELS,
   PROVIDER_EMAIL_FUNNEL_ORDER,
@@ -458,6 +467,15 @@ export default function AdminAnalyticsPage() {
         loading={loading && !!summary}
       >
         <ManagedAdsVariantsCard summary={summary} loading={loading} range={range} />
+      </CollapsibleSection>
+
+      <CollapsibleSection
+        title="Provider Hub Mobile Nav"
+        storageKey="mobileNavVariants"
+        defaultCollapsed={true}
+        loading={loading && !!summary}
+      >
+        <MobileNavVariantsCard />
       </CollapsibleSection>
 
       <CollapsibleSection
@@ -3686,6 +3704,447 @@ function FootNote({ summary }: { summary: SummaryResponse | null }) {
           </span>
         </span>
       )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Provider Hub Mobile Nav — A/B test for provider dashboard mobile navigation
+// ─────────────────────────────────────────────────────────────────────────────
+
+function MobileNavVariantsCard() {
+  return (
+    <>
+      <p className="text-xs text-gray-500 mb-5">
+        A/B test for Provider Hub mobile navigation. Tests different layouts (hamburger menu vs bottom tab bar) for logged-in providers on mobile devices.
+      </p>
+      <MobileNavTrafficAllocationControl />
+      <div className="mt-8 pt-6 border-t border-gray-100">
+        <MobileNavAnalytics />
+      </div>
+    </>
+  );
+}
+
+function buildMobileNavEqualSplit(): Record<MobileNavVariant, number> {
+  const n = MOBILE_NAV_VARIANTS.length;
+  const base = Math.floor(100 / n);
+  const remainder = 100 - base * n;
+  return Object.fromEntries(
+    MOBILE_NAV_VARIANTS.map((v, i) => [v, base + (i === 0 ? remainder : 0)]),
+  ) as Record<MobileNavVariant, number>;
+}
+
+// Preview URL for mobile nav variants — uses provider dashboard
+const MOBILE_NAV_PREVIEW_URL = "/provider";
+
+function mobileNavPreviewUrl(arm: string): string {
+  return `${MOBILE_NAV_PREVIEW_URL}?preview_mobile_nav=${encodeURIComponent(arm)}`;
+}
+
+function MobileNavTrafficAllocationControl() {
+  const [loaded, setLoaded] = useState(false);
+  const initial = useMemo(buildMobileNavEqualSplit, []);
+  const [weights, setWeights] = useState<Record<MobileNavVariant, number>>(initial);
+  const [savedWeights, setSavedWeights] = useState<Record<MobileNavVariant, number>>(initial);
+  const [version, setVersion] = useState<number>(0);
+  const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: "ok" | "err"; msg: string } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/analytics/mobile-nav-variant-weights", { cache: "no-store" })
+      .then(async (r) => {
+        if (cancelled) return;
+        if (!r.ok) {
+          setFeedback({ kind: "err", msg: `Failed to load current allocation (${r.status}).` });
+          setLoaded(true);
+          return;
+        }
+        const data = await r.json().catch(() => null);
+        if (!data) {
+          setFeedback({ kind: "err", msg: "Failed to parse current allocation." });
+          setLoaded(true);
+          return;
+        }
+        const w = (data.weights ?? {}) as Partial<Record<MobileNavVariant, number>>;
+        const merged = Object.fromEntries(
+          MOBILE_NAV_VARIANTS.map((v) => [v, typeof w[v] === "number" ? (w[v] as number) : 0]),
+        ) as Record<MobileNavVariant, number>;
+        setWeights(merged);
+        setSavedWeights(merged);
+        setVersion(typeof data.version === "number" ? data.version : 0);
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setFeedback({ kind: "err", msg: "Network error loading allocation — try refreshing." });
+        setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const sum = MOBILE_NAV_VARIANTS.reduce((s, v) => s + (weights[v] || 0), 0);
+  const sumIsValid = sum === 100;
+  const isDirty = MOBILE_NAV_VARIANTS.some((v) => weights[v] !== savedWeights[v]);
+  const canSave = loaded && sumIsValid && isDirty && !saving;
+
+  const setArm = (arm: MobileNavVariant, raw: string) => {
+    const n = raw === "" ? 0 : parseInt(raw, 10);
+    if (Number.isNaN(n)) return;
+    setWeights((prev) => ({ ...prev, [arm]: Math.max(0, Math.min(100, n)) }));
+    if (feedback?.kind === "ok") setFeedback(null);
+  };
+
+  const reset = () => {
+    setWeights(savedWeights);
+    setFeedback(null);
+  };
+
+  const save = async () => {
+    setSaving(true);
+    setFeedback(null);
+    try {
+      const res = await fetch("/api/admin/analytics/mobile-nav-variant-weights", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ weights }),
+      });
+      const body = await res.json().catch(() => null);
+      if (!res.ok) {
+        setFeedback({ kind: "err", msg: body?.error || `Save failed (${res.status})` });
+      } else {
+        const w = (body?.weights ?? {}) as Partial<Record<MobileNavVariant, number>>;
+        const merged = { ...weights };
+        for (const v of MOBILE_NAV_VARIANTS) {
+          if (typeof w[v] === "number") merged[v] = w[v] as number;
+        }
+        setSavedWeights(merged);
+        setWeights(merged);
+        setVersion(typeof body?.version === "number" ? body.version : version + 1);
+        setFeedback({ kind: "ok", msg: "Saved — returning sessions reshuffle on their next visit." });
+      }
+    } catch {
+      setFeedback({ kind: "err", msg: "Network error — try again." });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="pt-2">
+      <div className="flex items-baseline justify-between mb-1">
+        <div className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
+          Traffic allocation
+        </div>
+        <div className="text-[11px] text-gray-400 tabular-nums">v{version}</div>
+      </div>
+      <p className="text-[11px] text-gray-400 mb-3">
+        Live dial for the mobile nav variant split. Set any arm to 0 to dark it out. Saves apply to new + returning provider sessions on their next mobile visit.
+      </p>
+
+      <div
+        className="grid gap-3 mb-3"
+        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
+      >
+        {MOBILE_NAV_VARIANTS.map((v) => (
+          <label
+            key={v}
+            className="flex flex-col gap-1 rounded-lg border border-gray-200 bg-white px-3 py-2"
+          >
+            <span className="text-[11px] font-medium text-gray-700">{mobileNavVariantLabel(v)}</span>
+            <span className="text-[10px] text-gray-400 leading-tight">{mobileNavVariantSubLabel(v)}</span>
+            <div className="flex items-baseline gap-1 mt-1">
+              <input
+                type="number"
+                min={0}
+                max={100}
+                step={1}
+                disabled={!loaded || saving}
+                value={weights[v]}
+                onChange={(e) => setArm(v, e.target.value)}
+                className="w-16 text-right tabular-nums text-base font-medium text-gray-900 bg-transparent border-b border-gray-200 focus:border-gray-900 focus:outline-none disabled:opacity-50"
+              />
+              <span className="text-xs text-gray-400">%</span>
+              <a
+                href={mobileNavPreviewUrl(v)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="ml-auto text-[10px] text-gray-400 hover:text-gray-700 underline underline-offset-2"
+                title="Open the provider dashboard with this mobile nav variant forced."
+              >
+                Preview ↗
+              </a>
+            </div>
+          </label>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-3 flex-wrap">
+        <span
+          className={`text-[12px] tabular-nums px-2 py-0.5 rounded ${
+            sumIsValid
+              ? "bg-emerald-50 text-emerald-700"
+              : "bg-amber-50 text-amber-700"
+          }`}
+        >
+          Sum: {sum} / 100{sumIsValid ? "" : ` (${sum > 100 ? "+" : ""}${sum - 100})`}
+        </span>
+        <button
+          type="button"
+          onClick={save}
+          disabled={!canSave}
+          className={`text-xs font-medium px-3 py-1.5 rounded-lg transition-colors ${
+            canSave
+              ? "bg-gray-900 text-white hover:bg-gray-800"
+              : "bg-gray-100 text-gray-400 cursor-not-allowed"
+          }`}
+        >
+          {saving ? "Saving…" : "Save allocation"}
+        </button>
+        {isDirty && !saving && (
+          <button
+            type="button"
+            onClick={reset}
+            className="text-xs text-gray-500 hover:text-gray-800 underline underline-offset-2"
+          >
+            Discard changes
+          </button>
+        )}
+        {feedback && (
+          <span
+            className={`text-[11px] ${
+              feedback.kind === "ok" ? "text-emerald-700" : "text-rose-700"
+            }`}
+          >
+            {feedback.msg}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Mobile Nav Analytics — Device breakdown and variant funnel metrics
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface DeviceBreakdown {
+  ua_class: string;
+  visit_count: number;
+  unique_providers: number;
+}
+
+interface VariantFunnelRow {
+  variant: string;
+  impressions: number;
+  questions_answered: number;
+  leads_connected: number;
+  reviews_shared: number;
+  boost_requested: number;
+}
+
+interface MobileNavStatsResponse {
+  range: { from: string; to: string };
+  deviceBreakdown: DeviceBreakdown[];
+  variantFunnel: VariantFunnelRow[];
+}
+
+function MobileNavAnalytics() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [data, setData] = useState<MobileNavStatsResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Expanded variant for drill-in
+  const expandedRaw = searchParams.get("mobile_nav_variant");
+  const validKeys = new Set<string>(MOBILE_NAV_VARIANTS);
+  const expandedVariant = expandedRaw && validKeys.has(expandedRaw) ? expandedRaw : null;
+
+  const toggleVariant = useCallback(
+    (key: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (expandedVariant === key) {
+        params.delete("mobile_nav_variant");
+      } else {
+        params.set("mobile_nav_variant", key);
+      }
+      const qs = params.toString();
+      router.replace(qs ? `/admin/analytics?${qs}` : "/admin/analytics", { scroll: false });
+    },
+    [searchParams, expandedVariant, router],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/admin/analytics/mobile-nav-stats", { cache: "no-store" })
+      .then(async (r) => {
+        if (cancelled) return;
+        if (!r.ok) {
+          setError(`Failed to load stats (${r.status})`);
+          setLoading(false);
+          return;
+        }
+        const json = await r.json().catch(() => null);
+        if (!json) {
+          setError("Failed to parse response");
+          setLoading(false);
+          return;
+        }
+        setData(json);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setError("Network error loading stats");
+        setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Date range for sessions list (last 30 days)
+  const now = new Date();
+  const dateFrom = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const dateTo = now.toISOString();
+
+  if (loading) {
+    return (
+      <div className="py-8 text-center">
+        <div className="inline-block w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="py-4 text-center text-sm text-rose-600">{error}</div>
+    );
+  }
+
+  if (!data) return null;
+
+  return (
+    <div className="space-y-6">
+      {/* Device Breakdown */}
+      <div>
+        <h4 className="text-[11px] font-medium uppercase tracking-wider text-gray-400 mb-3">
+          Device Breakdown (Last 30 Days)
+        </h4>
+        {data.deviceBreakdown.length === 0 ? (
+          <p className="text-sm text-gray-400 italic">No data yet</p>
+        ) : (
+          <div className="grid grid-cols-3 gap-3">
+            {data.deviceBreakdown.map((row) => (
+              <div
+                key={row.ua_class}
+                className="rounded-lg border border-gray-200 bg-white px-4 py-3"
+              >
+                <div className="text-[10px] font-medium uppercase tracking-wider text-gray-400 mb-1">
+                  {row.ua_class === "mobile" ? "Mobile" : row.ua_class === "desktop" ? "Desktop" : row.ua_class === "tablet" ? "Tablet" : row.ua_class}
+                </div>
+                <div className="text-2xl font-semibold text-gray-900 tabular-nums">
+                  {row.unique_providers.toLocaleString()}
+                </div>
+                <div className="text-[11px] text-gray-400">
+                  unique providers ({row.visit_count.toLocaleString()} visits)
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Variant Funnel */}
+      <div>
+        <h4 className="text-[11px] font-medium uppercase tracking-wider text-gray-400 mb-3">
+          Variant Conversion Funnel (Last 30 Days)
+        </h4>
+        {data.variantFunnel.length === 0 ? (
+          <p className="text-sm text-gray-400 italic">No variant impressions yet. Set bottom_tabs to &gt;0% to start collecting data.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-2 pr-4 text-[11px] font-medium text-gray-500">Variant</th>
+                  <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Impressions</th>
+                  <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Questions</th>
+                  <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Leads</th>
+                  <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Reviews</th>
+                  <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Boost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.variantFunnel.map((row) => {
+                  const qRate = row.impressions > 0 ? ((row.questions_answered / row.impressions) * 100).toFixed(1) : "—";
+                  const lRate = row.impressions > 0 ? ((row.leads_connected / row.impressions) * 100).toFixed(1) : "—";
+                  const rRate = row.impressions > 0 ? ((row.reviews_shared / row.impressions) * 100).toFixed(1) : "—";
+                  const bRate = row.impressions > 0 ? ((row.boost_requested / row.impressions) * 100).toFixed(1) : "—";
+                  const isExpanded = expandedVariant === row.variant;
+                  return (
+                    <Fragment key={row.variant}>
+                      <tr
+                        className="border-b border-gray-100 cursor-pointer hover:bg-gray-50/50 transition-colors"
+                        onClick={() => toggleVariant(row.variant)}
+                      >
+                        <td className="py-2 pr-4">
+                          <div className="flex items-center gap-2">
+                            <svg
+                              className={`w-3 h-3 text-gray-400 transition-transform ${isExpanded ? "rotate-90" : ""}`}
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                            <span className="font-medium text-gray-900">{mobileNavVariantLabel(row.variant as MobileNavVariant)}</span>
+                          </div>
+                        </td>
+                        <td className="text-right py-2 px-3 tabular-nums text-gray-700">
+                          {row.impressions.toLocaleString()}
+                        </td>
+                        <td className="text-right py-2 px-3 tabular-nums">
+                          <span className="text-gray-900">{row.questions_answered}</span>
+                          <span className="text-gray-400 text-[10px] ml-1">({qRate}%)</span>
+                        </td>
+                        <td className="text-right py-2 px-3 tabular-nums">
+                          <span className="text-gray-900">{row.leads_connected}</span>
+                          <span className="text-gray-400 text-[10px] ml-1">({lRate}%)</span>
+                        </td>
+                        <td className="text-right py-2 px-3 tabular-nums">
+                          <span className="text-gray-900">{row.reviews_shared}</span>
+                          <span className="text-gray-400 text-[10px] ml-1">({rRate}%)</span>
+                        </td>
+                        <td className="text-right py-2 px-3 tabular-nums">
+                          <span className="text-gray-900">{row.boost_requested}</span>
+                          <span className="text-gray-400 text-[10px] ml-1">({bRate}%)</span>
+                        </td>
+                      </tr>
+                      {isExpanded && (
+                        <tr>
+                          <td colSpan={6} className="p-4 bg-gray-50/40">
+                            <MobileNavVariantSessionsList variant={row.variant} dateFrom={dateFrom} dateTo={dateTo} />
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <p className="text-[10px] text-gray-400 mt-2">
+          Questions = answered, Leads = contacted (inbox/phone/email), Reviews = CTA clicked, Boost = ads requested
+        </p>
+      </div>
     </div>
   );
 }

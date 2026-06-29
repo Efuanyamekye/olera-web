@@ -8,6 +8,7 @@ import { useProviderDashboardData } from "@/hooks/useProviderDashboardData";
 import { useProviderDashboardV2Data } from "@/hooks/useProviderDashboardV2Data";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
+import { useMobileNavVariant } from "@/hooks/use-mobile-nav-variant";
 import {
   calculateProfileCompleteness,
   type ExtendedMetadata,
@@ -232,6 +233,7 @@ function DashboardContent({
   v2Data: import("@/hooks/useProviderDashboardV2Data").ProviderDashboardV2Data | null;
 }) {
   const guided = useGuidedOnboarding(completeness);
+  const mobileNavVariant = useMobileNavVariant();
   const [showCompletenessSheet, setShowCompletenessSheet] = useState(false);
   const [showActivityModal, setShowActivityModal] = useState(false);
   // Mirrors the hero's chosen next-action so the mobile sticky bar shows the
@@ -607,8 +609,11 @@ function DashboardContent({
       </div>
       )}
 
-      {/* Spacer so the last card clears the fixed mobile action bar. */}
-      {!previewMode && heroAction && <div className="lg:hidden h-20" aria-hidden />}
+      {/* Spacer so the last card clears the fixed mobile action bar.
+          Not needed when bottom tabs are active (layout handles spacing). */}
+      {!previewMode && heroAction && mobileNavVariant !== "bottom_tabs" && (
+        <div className="lg:hidden h-20" aria-hidden />
+      )}
 
       {/* Edit Modals */}
       {editingSection === "overview" && <EditOverviewModal {...modalProps} />}
@@ -642,8 +647,9 @@ function DashboardContent({
 
       {/* Sticky mobile action bar — keeps the hero's chosen next-action in
           thumb reach across the whole scroll (Airbnb Reserve / Wise Send /
-          Robinhood Buy). Hidden in preview and when the tier carries no CTA. */}
-      {!previewMode && heroAction && (
+          Robinhood Buy). Hidden in preview, when bottom tabs are active
+          (they replace this bar), and when the tier carries no CTA. */}
+      {!previewMode && heroAction && mobileNavVariant !== "bottom_tabs" && (
         <MobileActionBar action={heroAction} onOpenSection={setEditingSection} />
       )}
 

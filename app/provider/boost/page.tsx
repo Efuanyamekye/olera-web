@@ -10,6 +10,7 @@ import VerificationMethodModal from "@/components/provider/VerificationMethodMod
 import type { SectionId } from "@/components/provider-dashboard/edit-modals/types";
 import { trackProviderEvent } from "@/lib/analytics/track-provider-event";
 import { useManagedAdsVariant, isManagedAdsPreviewMode } from "@/hooks/use-managed-ads-variant";
+import { useMobileNavVariant } from "@/hooks/use-mobile-nav-variant";
 import type {
   AdBoostEligibility,
   AdBoostMissingSection,
@@ -76,6 +77,7 @@ export default function ProviderBoostPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const assignedVariant = useManagedAdsVariant(state?.provider.slug ?? null);
+  const mobileNavVariant = useMobileNavVariant();
 
   const fetchState = useCallback(async () => {
     setLoading(true);
@@ -746,6 +748,7 @@ function ApplyExperience({
   onSubmit: () => void;
 }) {
   const [step, setStep] = useState(0); // 0 Timing · 1 Budget · 2 Confirm
+  const mobileNavVariant = useMobileNavVariant();
   const weekLabel = weekOptions.find((w) => w.value === selectedWeek)?.label ?? null;
   const channelLabel = CHANNELS.find((c) => c.value === channel)?.label ?? "Google + Meta";
   const stop = budgetStop(selectedBudget);
@@ -1040,8 +1043,15 @@ function ApplyExperience({
         />
       </aside>
 
-      {/* Mobile sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden bg-white border-t border-gray-200 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+      {/* Mobile sticky CTA - raised above bottom tabs when bottom_tabs variant is active */}
+      <div
+        className={`fixed left-0 right-0 z-50 sm:hidden bg-white border-t border-gray-200 px-4 py-4 ${
+          mobileNavVariant === "bottom_tabs"
+            ? ""
+            : "bottom-0 pb-[calc(1rem+env(safe-area-inset-bottom))]"
+        }`}
+        style={mobileNavVariant === "bottom_tabs" ? { bottom: "calc(72px + env(safe-area-inset-bottom, 0px))" } : undefined}
+      >
         {step === 2 && submitError && (
           <p className="text-sm text-red-600 mb-3">{submitError}</p>
         )}

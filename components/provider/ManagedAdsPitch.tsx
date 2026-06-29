@@ -6,6 +6,7 @@ import PlatformMarquee from "@/components/provider/PlatformMarquee";
 import { trackProviderEvent } from "@/lib/analytics/track-provider-event";
 import { managedAdsPitchCopy } from "@/lib/analytics/managed-ads-variant-copy";
 import { useManagedAdsVariant, isManagedAdsPreviewMode } from "@/hooks/use-managed-ads-variant";
+import { useMobileNavVariant } from "@/hooks/use-mobile-nav-variant";
 
 /**
  * The Managed Ads pitch — shared between the boost page (above the gate/picker)
@@ -57,6 +58,7 @@ export default function ManagedAdsPitch({
 }) {
   const assignedVariant = useManagedAdsVariant(providerSlug);
   const copy = managedAdsPitchCopy(assignedVariant ?? "direct_reach");
+  const mobileNavVariant = useMobileNavVariant();
   const firedView = useRef(false);
 
   useEffect(() => {
@@ -119,9 +121,16 @@ export default function ManagedAdsPitch({
         </div>
       )}
 
-      {/* Mobile sticky CTA - fixed at bottom of viewport */}
+      {/* Mobile sticky CTA - fixed at bottom of viewport, raised above bottom tabs when active */}
       {ctaHref && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 sm:hidden bg-white border-t border-gray-200 px-4 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        <div
+          className={`fixed left-0 right-0 z-50 sm:hidden bg-white border-t border-gray-200 px-4 py-4 ${
+            mobileNavVariant === "bottom_tabs"
+              ? ""
+              : "bottom-0 pb-[calc(1rem+env(safe-area-inset-bottom))]"
+          }`}
+          style={mobileNavVariant === "bottom_tabs" ? { bottom: "calc(72px + env(safe-area-inset-bottom, 0px))" } : undefined}
+        >
           <p className="flex items-center gap-2 text-sm text-gray-600 mb-3">
             <span className="text-primary-600">✦</span>
             <span>
@@ -141,8 +150,8 @@ export default function ManagedAdsPitch({
         </div>
       )}
 
-      {/* Spacer for mobile sticky CTA */}
-      {ctaHref && <div className="h-36 sm:hidden" />}
+      {/* Spacer for mobile sticky CTA - taller when bottom tabs are present */}
+      {ctaHref && <div className={`sm:hidden ${mobileNavVariant === "bottom_tabs" ? "h-48" : "h-36"}`} />}
     </div>
   );
 }

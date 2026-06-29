@@ -46,6 +46,8 @@ const PROVIDER_EVENT_TYPES = [
   "ads_touchpoint_viewed",     // Provider saw an ad pitch touchpoint (nudge/banner)
   "ads_touchpoint_clicked",    // Provider clicked a touchpoint CTA
   "ads_touchpoint_dismissed",  // Provider dismissed a touchpoint
+  // Mobile nav variant A/B test
+  "mobile_nav_variant_impression", // Provider mobile nav rendered with variant
 ] as const;
 
 const FAMILY_EVENT_TYPES = [
@@ -339,13 +341,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Enrich provider events with device classification
+    const userAgent = request.headers.get("user-agent");
+    const enrichedProviderMetadata = {
+      ...(metadata || {}),
+      ua_class: classifyUserAgent(userAgent),
+    };
+
     const { error } = await db.from("provider_activity").insert({
       provider_id,
       profile_id: profile_id || null,
       event_type,
       email_log_id: email_log_id || null,
       email_type: email_type || null,
-      metadata: metadata || {},
+      metadata: enrichedProviderMetadata,
     });
 
     if (error) {

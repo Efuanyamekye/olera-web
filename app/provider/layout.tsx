@@ -156,5 +156,6 @@ export default function ProviderLayout({ children }: { children: ReactNode }) {
     );
   }
 
+  // Bottom tabs spacer is now handled in LayoutShell for all pages
   return <>{children}</>;
 }

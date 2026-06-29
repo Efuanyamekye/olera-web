@@ -16,6 +16,10 @@ import { useUnreadQnACount } from "@/hooks/useUnreadQnACount";
 import { useUnreadReviewsCount } from "@/hooks/useUnreadReviewsCount";
 import { useUnreadLeadsCount } from "@/hooks/useUnreadLeadsCount";
 import { useInterestedProviders } from "@/hooks/useInterestedProviders";
+import { useMobileNavVariant } from "@/hooks/use-mobile-nav-variant";
+import MobileBottomTabs from "@/components/shared/MobileBottomTabs";
+import MoreBottomSheet from "@/components/shared/MoreBottomSheet";
+import { trackProviderEvent } from "@/lib/analytics/track-provider-event";
 
 export default function Navbar() {
   const router = useRouter();
@@ -32,6 +36,7 @@ export default function Navbar() {
     useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const mobileNavImpressionFired = useRef(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { visible: navbarVisible } = useNavbar();
   const { savedCount, hasInitialized: savedInitialized } = useSavedProviders();
@@ -61,6 +66,10 @@ export default function Navbar() {
   const reviewsCount = useUnreadReviewsCount(activeProviderId);
   const [isAdmin, setIsAdmin] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMoreSheetOpen, setIsMoreSheetOpen] = useState(false);
+
+  // Mobile nav variant for A/B testing bottom tabs vs hamburger
+  const mobileNavVariant = useMobileNavVariant();
 
   // Track client-side mount for createPortal (SSR-safe)
   useEffect(() => {
@@ -102,6 +111,8 @@ export default function Navbar() {
     (pathname.startsWith("/medjobs/candidates") && activeProfile?.type === "organization") ||
     // Claim/onboard flow shows provider portal nav
     (pathname.startsWith("/provider/") && pathname.endsWith("/onboard")) ||
+    // Account settings page when user is a provider - show provider nav
+    (pathname.startsWith("/account") && activeProfile?.type === "organization") ||
     // Unified inbox when active profile is a provider
     isInboxProviderMode;
   const isMinimalNav = pathname.startsWith("/welcome") || pathname.startsWith("/provider/welcome");
@@ -118,6 +129,21 @@ export default function Navbar() {
     pathname.startsWith("/provider/qna") ||
     pathname.startsWith("/provider/medjobs");
   const isProviderWelcome = pathname.startsWith("/provider/welcome");
+
+  // Track mobile nav variant impression — fires once per page load on mobile provider portal
+  useEffect(() => {
+    // Skip if already fired, not mounted, not provider portal, or no variant assigned yet
+    if (mobileNavImpressionFired.current || !mounted || !isProviderPortal || !mobileNavVariant) return;
+    // Skip if not on mobile viewport (lg breakpoint = 1024px)
+    if (typeof window === "undefined" || window.innerWidth >= 1024) return;
+    // Skip if no provider to attribute the event to
+    if (!activeProviderId) return;
+
+    mobileNavImpressionFired.current = true;
+    trackProviderEvent(activeProviderId, "mobile_nav_variant_impression", {
+      variant: mobileNavVariant,
+    });
+  }, [mounted, isProviderPortal, mobileNavVariant, activeProviderId]);
 
   // Provider detail page detection — has its own mobile nav (MobileProviderTopNav)
   // Pattern: /provider/[slug] where slug is not a known portal route
@@ -369,7 +395,7 @@ export default function Navbar() {
                   </svg>
                   {item.label}
                   {item.badge > 0 && (
-                    <span className="ml-auto min-w-[18px] h-[18px] flex items-center justify-center px-1 text-[10px] font-bold text-white bg-primary-600 rounded-full">
+                    <span className="ml-auto min-w-[18px] h-[18px] flex items-center justify-center px-1 text-[10px] font-bold text-white bg-red-500 rounded-full">
                       {item.badge}
                     </span>
                   )}
@@ -481,7 +507,7 @@ export default function Navbar() {
                 </svg>
                 Inbox
                 {unreadInboxCount > 0 && (
-                  <span className="ml-auto text-[10px] font-bold text-white bg-primary-600 rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+                  <span className="ml-auto text-[10px] font-bold text-white bg-red-500 rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
                     {unreadInboxCount}
                   </span>
                 )}
@@ -635,7 +661,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`${navbarVisible ? "sticky" : "fixed"} top-0 left-0 right-0 z-50 bg-white ${isProviderDetailPage ? "hidden md:block" : ""} ${isPortal || isProviderPortal || pathname.startsWith("/welcome") ? "border-b border-gray-200" : isScrolled && navbarVisible ? "shadow-sm" : ""}`}
+        className={`${navbarVisible ? "sticky" : "fixed"} top-0 left-0 right-0 z-50 bg-white ${isProviderDetailPage ? "hidden md:block" : ""} ${isInboxPage && mobileNavVariant === "bottom_tabs" ? "hidden lg:block" : ""} ${isPortal || isProviderPortal || pathname.startsWith("/welcome") ? "border-b border-gray-200" : isScrolled && navbarVisible ? "shadow-sm" : ""}`}
         style={{
           transform: navbarVisible ? "translateY(0)" : "translateY(-100%)",
           transition: "transform 200ms cubic-bezier(0.33, 1, 0.68, 1)"
@@ -834,7 +860,7 @@ export default function Navbar() {
                             </div>
                           )}
                           {(providerInboxCount > 0 || newLeadsCount > 0 || qnaCount > 0 || reviewsCount > 0) && (
-                            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-primary-600 rounded-full border-2 border-white" />
+                            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
                           )}
                         </button>
                         {isUserMenuOpen && signedInDropdown}
@@ -915,7 +941,7 @@ export default function Navbar() {
                             </div>
                           )}
                           {(unreadInboxCount > 0 || matchesPendingCount > 0) && (
-                            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-primary-600 rounded-full border-2 border-white" />
+                            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white" />
                           )}
                         </button>
                         {isUserMenuOpen && signedInDropdown}
@@ -952,22 +978,40 @@ export default function Navbar() {
                 )}
               </div>
 
-              {/* Mobile Menu Button — always on right */}
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="lg:hidden w-11 h-11 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:text-gray-700 hover:bg-gray-200 transition-colors"
-                aria-label="Toggle menu"
-              >
-                {isMobileMenuOpen ? (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                ) : (
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
-                )}
-              </button>
+              {/* Mobile Menu Button — direct link to settings for bottom_tabs variant, hamburger otherwise */}
+              {isProviderPortal && mobileNavVariant === "bottom_tabs" ? (
+                /* Direct link to account settings for bottom_tabs variant — just avatar, no menu icon */
+                <Link
+                  href="/account/settings"
+                  className="lg:hidden flex items-center justify-center w-11 h-11 border border-gray-200 rounded-full hover:shadow-md transition-all focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  aria-label="Account settings"
+                >
+                  {activeProfile?.image_url ? (
+                    <Image src={activeProfile.image_url} alt={displayName} width={36} height={36} className="w-9 h-9 rounded-full object-cover aspect-square" />
+                  ) : (
+                    <div className="w-9 h-9 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center text-sm font-semibold">
+                      {initials || "?"}
+                    </div>
+                  )}
+                </Link>
+              ) : (
+                /* Hamburger button for default variant */
+                <button
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="lg:hidden w-11 h-11 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:text-gray-700 hover:bg-gray-200 transition-colors"
+                  aria-label="Toggle menu"
+                >
+                  {isMobileMenuOpen ? (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                  )}
+                </button>
+              )}
             </div>
           </div>
 
@@ -1111,13 +1155,27 @@ export default function Navbar() {
                             </svg>
                             <span className="text-[15px]">{item.label}</span>
                             {item.badge > 0 && (
-                              <span className="ml-auto min-w-[20px] h-5 flex items-center justify-center px-1.5 text-[10px] font-bold text-white bg-primary-600 rounded-full">
+                              <span className="ml-auto min-w-[20px] h-5 flex items-center justify-center px-1.5 text-[10px] font-bold text-white bg-red-500 rounded-full">
                                 {item.badge}
                               </span>
                             )}
                           </Link>
                         );
                       })}
+
+                      {/* Account Settings */}
+                      <div className="my-3 border-t border-gray-100" />
+                      <Link
+                        href="/account/settings"
+                        className="flex items-center gap-3 px-3 py-3 text-gray-600 hover:text-primary-600 hover:bg-gray-50 rounded-xl transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span className="text-[15px]">Account Settings</span>
+                      </Link>
 
                       {/* Switch to Family */}
                       {hasFamilyProfile && (
@@ -1232,7 +1290,7 @@ export default function Navbar() {
                                   </svg>
                                   <span className="text-[15px]">{item.label}</span>
                                   {item.badge > 0 && (
-                                    <span className="ml-auto min-w-[20px] h-5 flex items-center justify-center px-1.5 text-[10px] font-bold text-white bg-primary-600 rounded-full">
+                                    <span className="ml-auto min-w-[20px] h-5 flex items-center justify-center px-1.5 text-[10px] font-bold text-white bg-red-500 rounded-full">
                                       {item.badge}
                                     </span>
                                   )}
@@ -1503,6 +1561,23 @@ export default function Navbar() {
           megaMenuCloseTimer.current = setTimeout(() => setIsFindCareOpen(false), 200);
         }}
       />
+
+      {/* Mobile Bottom Tabs — only shown for provider portal when variant is bottom_tabs */}
+      {isProviderPortal && mobileNavVariant === "bottom_tabs" && (
+        <div className="lg:hidden">
+          <MobileBottomTabs
+            hasNotifications={providerInboxCount > 0 || qnaCount > 0 || newLeadsCount > 0}
+            onMorePress={() => setIsMoreSheetOpen(true)}
+          />
+          <MoreBottomSheet
+            isOpen={isMoreSheetOpen}
+            onClose={() => setIsMoreSheetOpen(false)}
+            inboxCount={providerInboxCount}
+            qnaCount={qnaCount}
+            leadsCount={newLeadsCount}
+          />
+        </div>
+      )}
     </>
   );
 }

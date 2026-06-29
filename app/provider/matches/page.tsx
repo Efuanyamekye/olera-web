@@ -29,6 +29,7 @@ import VerificationMethodModal from "@/components/provider/VerificationMethodMod
 import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
 import { getCachedBoostState, cacheBoostState, type BoostStateResponse } from "@/lib/ad-boost/boost-state";
 import { Star, Briefcase, LinkSimple, Check } from "@phosphor-icons/react";
+import { useMobileNavVariant } from "@/hooks/use-mobile-nav-variant";
 
 
 // ── Timeline config ──
@@ -992,6 +993,7 @@ export default function ProviderMatchesPage() {
   const providerProfile = useProviderProfile();
   const { user, membership, refreshAccountData } = useAuth();
   const { metadata: dashboardMetadata } = useProviderDashboardData(providerProfile);
+  const mobileNavVariant = useMobileNavVariant();
   // Fetch v2 data (reviews, response rate) for accurate profile completeness
   const v2 = useProviderDashboardV2Data("30d", true, user?.id);
   // Seed from the module snapshot when we already have fresh leads for this
@@ -2335,7 +2337,10 @@ export default function ProviderMatchesPage() {
       <button
         type="button"
         onClick={() => setIsFiltersModalOpen(true)}
-        className="sm:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+        className={`sm:hidden fixed right-6 z-40 w-14 h-14 bg-primary-600 hover:bg-primary-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95 ${
+          mobileNavVariant === "bottom_tabs" ? "" : "bottom-6"
+        }`}
+        style={mobileNavVariant === "bottom_tabs" ? { bottom: "calc(72px + 16px + env(safe-area-inset-bottom, 0px))" } : undefined}
         aria-label="Open filters"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">

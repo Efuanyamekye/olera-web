@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
@@ -9,6 +10,7 @@ import GooglePlaceSearch from "@/components/providers/GooglePlaceSearch";
 import VerificationMethodModal from "@/components/provider/VerificationMethodModal";
 import { useVerificationModal } from "@/lib/hooks/useVerificationModal";
 import PasskeysSection from "@/components/account/PasskeysSection";
+import { useMobileNavVariant } from "@/hooks/use-mobile-nav-variant";
 
 type SettingsTab = "account" | "notifications";
 
@@ -79,7 +81,7 @@ type NotificationKey =
 
 export default function AccountSettingsPage() {
   const router = useRouter();
-  const { user, activeProfile, refreshAccountData } = useAuth();
+  const { user, activeProfile, profiles, refreshAccountData } = useAuth();
 
   // Determine account type for notifications
   const profileType = activeProfile?.type;
@@ -88,6 +90,8 @@ export default function AccountSettingsPage() {
   const isCaregiver = profileType === "caregiver" || profileType === "student";
   const isProvider = isOrganization || isCaregiver;
 
+  // Mobile nav variant for providers
+  const mobileNavVariant = useMobileNavVariant();
   // Verification state (for providers only)
   const verificationState = activeProfile?.verification_state as string | null;
   const isVerified =
@@ -406,10 +410,35 @@ export default function AccountSettingsPage() {
     return "Family";
   };
 
+  // Show bottom tabs UI for organization providers with bottom_tabs variant
+  // (caregivers have different nav - the mobile nav variant is for org providers only)
+  // Default to true when variant is null (brief moment during load) to prevent flash
+  const showBottomTabs = isOrganization && mobileNavVariant !== "current";
+
   return (
     <div className="min-h-screen bg-gray-50/50">
-      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-6">
-        <div className="mb-5">
+      {/* Mobile header with back button (provider with bottom_tabs variant) */}
+      {showBottomTabs && (
+        <div className="lg:hidden sticky top-0 z-40 bg-white border-b border-gray-200">
+          <div className="flex items-center gap-3 px-4 py-3">
+            <Link
+              href="/provider"
+              className="flex items-center justify-center w-10 h-10 -ml-2 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+            </Link>
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900">Account Settings</h1>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Desktop header (or mobile without bottom_tabs) */}
+        <div className={`mb-5 ${showBottomTabs ? "hidden lg:block" : ""}`}>
           <h2 className="text-2xl font-display font-bold text-gray-900">
             Account Settings
           </h2>
@@ -445,12 +474,12 @@ export default function AccountSettingsPage() {
             </div>
           </div>
 
-          {/* Tab Content */}
-          <div className="rounded-2xl bg-white border border-gray-200/80 divide-y divide-gray-100">
+          {/* Tab Content - flat sections on mobile, card container on desktop */}
+          <div className="divide-y divide-gray-100 bg-white lg:rounded-2xl lg:border lg:border-gray-200/80">
             {activeTab === "account" ? (
               <>
                 {/* ── Account Info ── */}
-                <div className="p-6">
+                <div className="px-4 py-5 lg:p-6">
                   <div className="divide-y divide-gray-100">
                     <AccountRow
                       label="Email"
@@ -507,7 +536,7 @@ export default function AccountSettingsPage() {
 
                 {/* ── Subscription (Providers only) ── */}
                 {isProvider && (
-                  <div className="p-6">
+                  <div className="px-4 py-5 lg:p-6">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-[15px] font-semibold text-gray-900">
                         Olera Pro
@@ -595,7 +624,7 @@ export default function AccountSettingsPage() {
 
                 {/* ── Google Business Profile (Providers only, when not connected) ── */}
                 {isProvider && (
-                  <div className="p-6">
+                  <div className="px-4 py-5 lg:p-6">
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-[15px] font-semibold text-gray-900">
                         Google Business Profile
@@ -705,7 +734,7 @@ export default function AccountSettingsPage() {
                 )}
 
                 {/* ── Delete Account ── */}
-                <div className="p-6">
+                <div className="px-4 py-5 lg:p-6 border-b border-gray-100">
                   <div className="flex items-start justify-between">
                     <div>
                       <p className="text-[15px] font-semibold text-gray-900">
@@ -725,10 +754,27 @@ export default function AccountSettingsPage() {
                     </button>
                   </div>
                 </div>
+
+                {/* ── Sign Out (bottom_tabs variant only - current variant has it in hamburger menu) ── */}
+                {showBottomTabs && (
+                  <div className="px-4 py-5 lg:p-6">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const supabase = createClient();
+                        await supabase.auth.signOut();
+                        router.push("/");
+                      }}
+                      className="w-full py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-xl text-[15px] font-medium text-gray-700 transition-colors"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                )}
               </>
             ) : (
               /* ── Notifications Tab ── */
-              <div className="p-6">
+              <div className="px-4 py-5 lg:p-6">
                 {notifError && (
                   <div className="mb-4 px-3 py-2 rounded-lg bg-rose-50/80 border border-rose-100/60">
                     <p className="text-[13px] text-rose-600 font-medium">{notifError}</p>
@@ -883,6 +929,9 @@ export default function AccountSettingsPage() {
 
         </div>
       </div>
+
+      {/* Bottom tabs are rendered by the Navbar for /account when user is organization */}
+      {/* MoreBottomSheet is also handled by Navbar, no need to duplicate here */}
     </div>
   );
 }
