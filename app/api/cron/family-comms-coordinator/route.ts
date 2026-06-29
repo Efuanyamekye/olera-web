@@ -5,7 +5,11 @@ import { withCronRun } from "@/lib/crons/run";
 import { getSiteUrl } from "@/lib/site-url";
 import { generateFamilyInboxUrl } from "@/lib/claim-tokens";
 import { calculateFamilyCompleteness } from "@/lib/admin/profile-completeness";
-import { findAlternativeProviders, careTypeToBrowseSlug } from "@/lib/family-comms/alternatives";
+import {
+  findAlternativeProviders,
+  careTypeToBrowseSlug,
+  categoryStockImage,
+} from "@/lib/family-comms/alternatives";
 import {
   connectionOutcomeCheckEmail,
   providerSilentEmail,
@@ -13,8 +17,27 @@ import {
   familyNeverEngagedSubject,
   day10AwaitingEmail,
   familyPendingReachOutNudgeEmail,
-  familyNudgeEmail,
+  completionNudge1Email,
+  completionNudge2Email,
+  completionNudge3Email,
+  completionNudge4Email,
+  completionMaintenanceEmail,
+  completionNudgeSubject,
 } from "@/lib/email-templates";
+import type { CompareCardItem } from "@/lib/email-templates";
+import {
+  getSequenceWithMigration,
+  shouldSendCompletionNudge,
+  advanceSequence,
+  COMPLETION_ACTIVE_COUNT,
+  MAX_MAINTENANCE_NUDGES,
+} from "@/lib/family-comms/nudge-sequence";
+import {
+  countProvidersInArea,
+  countNewProvidersInArea,
+  getTopProviders,
+} from "@/lib/family-comms/provider-recs.server";
+import type { NudgeSequence } from "@/lib/types";
 
 /**
  * GET /api/cron/family-comms-coordinator
@@ -37,8 +60,12 @@ import {
  *   3. never-engaged → compare cards (guide fallback)      → family_never_engaged
  *   4. provider-responded → compare + how-to-choose        → day_10_awaiting
  *   5. pending reach-out      → family_reach_out_nudge
- *   6. stuck → completion-as-value-exchange (the quiz)     → family_nudge
- *      (publish nudges are DEMOTED out — owned by the subordinated family-nudges cron)
+ *   6. completion track (signup cadence)  → completion_nudge_1-4 / completion_maintenance
+ *      (Track 2 / Option B: the coordinator is now the SINGLE owner of the "fill your
+ *      profile" ask — for ALL incomplete families, with OR without a connection. It
+ *      reuses the family-nudges completion cadence + step-state, so in-flight sequences
+ *      continue seamlessly. PUBLISH nudges remain DEMOTED to the subordinated
+ *      family-nudges cron.)
  *
  * Sends flow through sendEmail(), which now enforces the per-family nudge cap, so
  * the coordinator can never over-mail. ?dry_run=true returns the per-family
@@ -70,6 +97,9 @@ interface ProfileRow {
   metadata?: Record<string, unknown> | null;
   lat?: number | null;
   lng?: number | null;
+  created_at?: string | null;
+  image_url?: string | null;
+  description?: string | null;
 }
 
 interface ConnRow {
@@ -181,7 +211,7 @@ export async function GET(request: NextRequest) {
     //    connections drive rung 5. day-10 (rung 4) keys off provider-response age, not
     //    connection age, so we pull all pending/accepted inquiries (the rung filters).
     const familySel =
-      "id, display_name, email, phone, city, state, care_types, account_id, metadata, lat, lng";
+      "id, display_name, email, phone, city, state, care_types, account_id, metadata, lat, lng, created_at, image_url, description";
     const providerSel = "id, display_name, slug, city, state, care_types, metadata";
 
     const { data: inquiryRows, error: inqErr } = await db
@@ -229,6 +259,33 @@ export async function GET(request: NextRequest) {
       const b = ensure(row.to_profile_id);
       b.requests.push(row);
       if (!b.profile) b.profile = norm(row.to_profile);
+    }
+
+    // 2b. Second candidate source (Track 2 / Option B): the completion rung must reach
+    //     incomplete families with NO connection too. Page through all family profiles
+    //     (4h post-signup grace) and merge — a family already bucketed via a connection
+    //     keeps its connection context; a connection-less family gets an empty bucket
+    //     with just its profile. Completeness is computed per-family in the loop; the
+    //     expensive provider fetches still run only after the completion rung is picked.
+    const profileGraceCutoff = new Date(now - 4 * HOUR).toISOString();
+    const FAM_PAGE = 1000;
+    for (let pageFrom = 0; ; pageFrom += FAM_PAGE) {
+      const { data: profRows, error: profErr } = await db
+        .from("business_profiles")
+        .select(familySel)
+        .eq("type", "family")
+        .lte("created_at", profileGraceCutoff)
+        .order("created_at", { ascending: false })
+        .range(pageFrom, pageFrom + FAM_PAGE - 1);
+      if (profErr) throw new Error(`family profile fetch: ${profErr.message}`);
+      const rows = (profRows as unknown as ProfileRow[]) || [];
+      for (const p of rows) {
+        const b = ensure(p.id);
+        // Connection joins win for context, but the standalone row is the authoritative
+        // profile source (and the only one for connection-less families).
+        if (!b.profile) b.profile = p;
+      }
+      if (rows.length < FAM_PAGE) break;
     }
 
     // 3. Evaluate each family through the ladder; send the first eligible rung.
@@ -291,6 +348,20 @@ export async function GET(request: NextRequest) {
       // completeness threshold meaningfully).
       const completeness = calculateFamilyCompleteness(fp, directEmail || "");
       const isComplete = completeness.percentage >= 60;
+
+      // ── Completion-rung inputs (Track 2 / Option B) ─────────────────────
+      // The completion track keys off signup cadence (the only anchor a connection-less
+      // family has). recentConnActivity mirrors family-nudges' "don't nag the actively
+      // engaged" guard — one-sided, so it also defers families a higher rung didn't claim.
+      // Connection-less families have empty threads → false.
+      const recentConnActivity = [...fam.inquiries, ...fam.requests].some((c) =>
+        threadOf(c).some((m) => m.created_at && now - new Date(m.created_at).getTime() < 7 * DAY),
+      );
+      const familyCity = fp.city || undefined;
+      const familyState = fp.state || undefined;
+      const familyCareTypes = (fp.care_types as string[] | null) || [];
+      const familyFirstName = fp.display_name?.split(/\s+/)[0] || "there";
+      const familyCreatedAt = fp.created_at || new Date(now).toISOString();
 
       // ── Compare-led URL builders (v2 flywheel) ──────────────────────────
       // Both read authEmailFinal at *invocation* time (inside buildHtml, after the
@@ -591,48 +662,105 @@ export async function GET(request: NextRequest) {
           };
         }
 
-        // ── Rung 6: stuck → completion as VALUE-EXCHANGE (the quiz) — inquiry ≥2d,
-        //    profile incomplete, cooldown 7d. v2: completion is never a naked ask —
-        //    the quiz both sharpens matches AND surfaces benefits. PUBLISH nudges are
-        //    DEMOTED out of the coordinator entirely: the subordinated family-nudges
-        //    machine owns them now (so complete-but-unpublished families match no
-        //    coordinator rung here). ──
-        if (!isComplete) {
-          const flag = "family_nudged_at";
-          const r6 = fam.inquiries.find((c) => {
-            if (ageMs(c) < 2 * DAY) return false;
-            const last = metaOf(c)[flag] as string | undefined;
-            return !last || now - new Date(last).getTime() > 7 * DAY;
-          });
-          if (r6) {
-            const provider = norm(r6.to_profile);
-            const providerName = provider?.display_name || "the provider";
+        // ── Rung 6: completion track (Track 2 / Option B) — the SINGLE owner of the
+        //    "fill your profile" ask. Fires for ANY incomplete family on signup cadence
+        //    (days 0/2/6/13, then monthly maintenance), with OR without a connection,
+        //    unless they have recent connection activity (let the engaged be). Reuses the
+        //    family-nudges completion sequence + step-state in
+        //    business_profiles.metadata.completion_sequence, so a sequence in flight when
+        //    ownership moved continues seamlessly. PUBLISH stays demoted to family-nudges.
+        if (!isComplete && !recentConnActivity) {
+          const seq = getSequenceWithMigration(
+            familyMeta.completion_sequence as NudgeSequence | undefined,
+            familyMeta.profile_incomplete_reminder_sent as boolean | undefined,
+          );
+          const nudgeNumber = seq.nudge_count + 1;
+          const isMaintenance = seq.phase === "maintenance";
+          const maintenanceExhausted =
+            isMaintenance && nudgeNumber > COMPLETION_ACTIVE_COUNT + MAX_MAINTENANCE_NUDGES;
+          if (shouldSendCompletionNudge(seq, familyCreatedAt) && !maintenanceExhausted) {
+            const hasLocation = !!(familyCity && familyState);
+            const locationText = familyCity || familyState || "your area";
+            const emailType = isMaintenance ? "completion_maintenance" : `completion_nudge_${nudgeNumber}`;
+            // Subject built WITHOUT providerCount (it degrades gracefully) so dry-run
+            // skips the provider fetch — completion is the dominant volume.
+            const subject = isMaintenance
+              ? `Top providers in ${locationText} you might have missed`
+              : completionNudgeSubject(nudgeNumber, { city: familyCity, state: familyState });
             return {
               rung: "lead_complete",
-              emailType: "family_nudge",
-              // The real inbox subject (front-loaded, mobile-safe). The cost hook
-              // rides in the template's preheader so both show in the inbox row.
-              subject: "A few more care options near you",
-              metadata: { connection_id: r6.id },
-              buildHtml: (eid) => {
-                const profileUrl = appendTrackingParams(`${siteUrl}/portal/profile`, eid);
-                return familyNudgeEmail({
-                  unsubscribeId: fam.familyId,
-                  familyName,
-                  providerName,
-                  missingFields: completeness.missingFields.slice(0, 5),
-                  completionPercent: completeness.percentage,
-                  profileUrl,
-                  benefitsQuizUrl: buildQuizUrl(eid),
-                });
-              },
-              stamp: async (sentAt) => {
-                for (const c of fam.inquiries) {
-                  await db
-                    .from("connections")
-                    .update({ metadata: { ...metaOf(c), [flag]: sentAt, family_nudged_by: "cron:family-comms-coordinator" } })
-                    .eq("id", c.id);
+              emailType,
+              subject,
+              metadata: { family_profile_id: fam.familyId, completion_nudge_number: nudgeNumber },
+              // Provider data fetched lazily (real send only, not dry-run).
+              buildHtml: async (eid) => {
+                const welcomeUrl = generateFamilyInboxUrl(
+                  authEmailFinal,
+                  appendTrackingParams("/welcome", eid),
+                  siteUrl,
+                );
+                const providerCount = hasLocation
+                  ? await countProvidersInArea(db, familyCity!, familyState!, familyCareTypes)
+                  : undefined;
+                if (isMaintenance) {
+                  const [newProviderCount, topProviders] = hasLocation
+                    ? await Promise.all([
+                        countNewProvidersInArea(db, familyCity!, familyState!, familyCareTypes),
+                        getTopProviders(db, familyCity!, familyState!, familyCareTypes, 3),
+                      ])
+                    : [0, []];
+                  return completionMaintenanceEmail({
+                    unsubscribeId: fam.familyId,
+                    familyName: familyFirstName,
+                    welcomeUrl,
+                    providers: topProviders,
+                    newProviderCount,
+                    missingFields: completeness.missingFields,
+                    completionPercent: completeness.percentage,
+                    city: familyCity,
+                    state: familyState,
+                  });
                 }
+                const common = {
+                  unsubscribeId: fam.familyId,
+                  familyName: familyFirstName,
+                  welcomeUrl,
+                  missingFields: completeness.missingFields,
+                  completionPercent: completeness.percentage,
+                  providerCount,
+                  city: familyCity,
+                };
+                switch (nudgeNumber) {
+                  case 1:
+                    return completionNudge1Email(common).html;
+                  case 2:
+                    return completionNudge2Email({ ...common, state: familyState }).html;
+                  case 3:
+                    return completionNudge3Email({ ...common, state: familyState }).html;
+                  case 4:
+                  default: {
+                    const topProviders = hasLocation
+                      ? await getTopProviders(db, familyCity!, familyState!, familyCareTypes, 3)
+                      : [];
+                    const recCards: CompareCardItem[] = topProviders.map((p, i) => ({
+                      name: p.name,
+                      viewUrl: `${siteUrl}/provider/${p.slug}`,
+                      imageUrl: categoryStockImage(p.category, i),
+                      priceRange: p.priceRange ?? null,
+                      rating: p.rating || null,
+                      reviewCount: p.reviewCount || null,
+                    }));
+                    return completionNudge4Email({ ...common, state: familyState, providers: recCards }).html;
+                  }
+                }
+              },
+              stamp: async () => {
+                // Advance the sequence on the SHARED familyMeta object so the generic
+                // post-send business_profiles stamp persists it in ONE write (no second
+                // update → no clobber). family-nudges reads the same field.
+                familyMeta.completion_sequence = advanceSequence(nudgeNumber, COMPLETION_ACTIVE_COUNT);
+                familyMeta.profile_incomplete_reminder_sent = true;
+                familyMeta.profile_completeness = completeness.percentage;
               },
             };
           }

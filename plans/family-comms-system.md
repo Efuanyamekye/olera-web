@@ -298,3 +298,61 @@ No new schema for the cap. Coordinator reuses existing metadata flags + adds
 `last_coordinator_email_at` / `last_coordinator_rung` (free-form `connections.metadata` /
 `business_profiles.metadata`, no migration). Migration 115 (self-report event type) still
 must be applied before the outcome-check rung sends in prod.
+
+## Track 2 — Option B build spec (locked 2026-06-29 with TJ)
+
+**Decision:** Option B — *absorb the completion ask into the coordinator only*. Not the full
+family-nudges rewrite (the original "don't consolidate" call at lines 270–282 still holds for
+publish/recs/reengagement; it went stale only for completion, which became split-brained and
+dominant). Full findings + the A/B/C analysis: Notion "Family Comms Track 2 — Consolidation
+Design Report" (Branch Handoff Reports, 2026-06-29). Memory `project_family_comms_track2_consolidation`.
+
+**Why B / the problem it fixes:** the "fill your profile" ask is sent by BOTH engines — coordinator
+R6 `family_nudge` (~28.7/day, families *with* an inquiry) AND family-nudges `completion_nudge_1-4`
+(~32.8/day, families by signup cadence) = ~61/day duplicated. The cap holds (≤3/7d), so this is a
+**coherence problem, not volume**: ~2 families/day get two different asks the same day. B makes the
+brain the single owner of completion.
+
+### The four UX guardrails (non-negotiable success criteria — B's win is coherence, NOT fewer emails)
+1. **One ask per family per moment** — never two emails same day (structurally guaranteed: one cron, one pick).
+2. **Respect what they've already given** — never ask for a field we already have (use `humanizeFields` + completeness `missingFields`).
+3. **Always value-exchange, never a naked ask** — "add your timeline so we can show better matches," never "your profile is incomplete" (already the locked v2 framing).
+4. **Sensible decay, not a hard cut** — after the active sequence, drop to the existing low-frequency maintenance lane; don't keep hammering non-responders.
+
+(We are NOT trimming completion volume on spec — 28% open at the 3rd touch is healthy, opens are noisy post-Apple-MPP. Trimming becomes a dial inside the unified track, turned later only if action-data — does the nudge drive completion — ever justifies it.)
+
+### The unified completion rung (replaces R6)
+
+A new lowest coordinator rung that fires for **all incomplete families, with OR without a connection**,
+on **signup-relative cadence** (the answer to "how to reconcile state-based rungs vs day-offset
+sequences": signup is the only universal anchor; a family with no inquiry has no connection clock).
+
+- **Cadence + step-state: reuse the family-nudges helpers verbatim** — `getSequenceWithMigration(meta.completion_sequence, meta.profile_incomplete_reminder_sent)`, `shouldSendCompletionNudge(seq, created_at)` (cooldowns `[0,2,4,7]` = days 0/2/6/13, then 30d maintenance, cap +6), `completionNudgeSubject(n, …)`. Step-state stays in `business_profiles.metadata.completion_sequence` — **the SAME field family-nudges writes today, so in-flight sequences continue seamlessly across the cutover.**
+- **Email types emitted: `completion_nudge_${n}` / `completion_maintenance`** (the redesigned creative), NOT `family_nudge`. **`family_nudge` (R6's type) is retired.** When the family also has a relevant inquiry, pass `providerName` / alternatives for richer copy, but the base ask is the completion template. Both types already in `FAMILY_NUDGE_EMAIL_TYPES` → no cap change.
+- **Ported guards:** 4h post-signup grace; skip if active conversation (<7d connection activity) — guardrail-aligned.
+- **Completion celebration (100%) moves too** — the whole completion lifecycle (active 1-4 + maintenance + celebration) lands in the coordinator so completion is single-brained. (Celebration is cap-exempt, ~1/30d.)
+
+### Second candidate source (the real architectural lift)
+
+The coordinator builds `fams` ONLY from `connections` rows today (route.ts:213–232) — a family with
+no connection never enters the loop. B adds a second source:
+- After the connection pass, fetch incomplete family profiles: `business_profiles` where `type='family'`, paginated (port `lib/providers/nudges.server.ts` query), `created_at <= now-4h`.
+- `ensure(family.id)` so a family already bucketed via a connection is **merged, not duplicated**; no-connection families get a bucket with empty `inquiries/requests` + a profile.
+- **GOTCHA: add `created_at` to `familySel`** (route.ts:184 — currently absent; cadence can't compute without it).
+- Cost: completeness is a JS calc over ~738 families (cheap); the expensive calls (provider counts, alternatives) still run only after a rung is picked.
+
+### family-nudges changes (subtractive)
+- **Remove** the completion branch (route.ts ~806+) + the celebration branch (~745–798). 
+- **Keep** monthly recommendations (published families), the publish sequence, re-engagement, post-connection follow-up.
+- Keep the 20h coordinator-awareness guard (now mainly protects the publish track; with completion gone, coordinator↔family-nudges collisions drop near zero — publish=complete-unpublished and recs=published, neither of which the coordinator touches).
+
+### Behavior change to flag
+B means the coordinator will **start emailing families with NO inquiry** (pure profile-completion lifecycle) — a population it never touched before (that was family-nudges' job). Net volume should NOT rise (we move ~61/day → one decision, deduped), but the coordinator's footprint expands and family-nudges shrinks. Validate the selection mix in dry-run before promoting.
+
+### Cutover / rollback
+- One PR off `staging`. The coordinator runs daily, so the rung fires on deploy — validate FIRST via `?dry_run=true` against live data on the Vercel preview: confirm completion-rung volume ≈ old (R6 `family_nudge` + `completion_nudge`) deduped, and that no family is selected by the coordinator AND still eligible in family-nudges the same day.
+- No env kill-switch (per `feedback_no_killswitch_for_slow_leaks`) — **rollback = revert the PR**. Both engine edits ship together so there's no completion-gap window.
+- Spot-check a delivered completion email in a real inbox after first prod run (the still-open inbox-validation item).
+
+### Open question still to settle before coding
+- **Subject/template source when a no-connection family hits the rung:** `completionNudgeSubject` takes `providerCount/city/state` (no providerName needed) → works for no-connection families as-is. Confirm the completion template degrades gracefully with no `providerName`/alternatives (it should — those are the family-nudges path today, which has no connection context).
