@@ -104,6 +104,16 @@ export function shouldIndexBenefitsProgram(program: BenefitsProgramForQuality): 
   return status !== "under-review" && status !== "needs-changes";
 }
 
+/**
+ * Public discovery policy for Benefits listing surfaces. Keep existing Benefits
+ * listings stable, but hide explicit review-gated statuses from state pages.
+ * Indexability remains stricter and is handled by shouldIndexBenefitsProgram.
+ */
+export function shouldDiscoverBenefitsProgram(program: BenefitsProgramForQuality): boolean {
+  const status = program.contentStatus;
+  return status !== "under-review" && status !== "needs-changes";
+}
+
 export function benefitsNoindexRobots() {
   return {
     index: false,

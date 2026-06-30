@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getStateById, activeStateIds } from "@/data/waiver-library";
+import { getStateById, activeStateIds, type WaiverProgram } from "@/data/waiver-library";
 import { ProgramList } from "@/components/waiver-library/ProgramList";
 import { StateOutline } from "@/components/waiver-library/StateOutline";
 import { FaqAccordion } from "@/components/waiver-library/FaqAccordion";
 import { pipelineDrafts } from "@/data/pipeline-drafts";
 import { StatePageV3 } from "@/components/waiver-library/StatePageV3";
 import { createClient } from "@/lib/supabase/server";
+import { getEnrichedProgram } from "@/lib/program-data";
+import { shouldDiscoverBenefitsProgram } from "@/lib/benefits/program-content-quality";
 
 const STATE_FAQS: Record<string, { question: string; answer: string }[]> = {
   texas: [
@@ -66,7 +68,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? pipelineIntro.split(/[.!?]\s/)[0] + "." // First sentence
     : state.description;
 
-  const title = `Senior Benefits in ${state.name} — ${state.programs.length} Programs | Olera`;
+  const programCount = stateDrafts?.stateOverview
+    ? state.programs
+        .map((program): WaiverProgram => getEnrichedProgram(stateId, program.id) ?? program)
+        .filter(shouldDiscoverBenefitsProgram).length
+    : state.programs.length;
+
+  const title = `Senior Benefits in ${state.name} — ${programCount} Programs | Olera`;
   return {
     title,
     description,
@@ -92,8 +100,16 @@ export default async function StatePage({ params }: Props) {
   // V3 state page if pipeline has generated a state overview
   const stateDrafts = pipelineDrafts[state.abbreviation];
   if (stateDrafts?.stateOverview) {
+    const discoverablePrograms = state.programs
+      .map((program): WaiverProgram => getEnrichedProgram(stateId, program.id) ?? program)
+      .filter(shouldDiscoverBenefitsProgram);
+    const displayState = {
+      ...state,
+      programs: discoverablePrograms,
+    };
+
     // Pass lightweight pipeline program refs for linking (avoids bundling full draft data)
-    const pipelinePrograms = (stateDrafts.programs || []).map((p) => ({
+    const pipelinePrograms = (stateDrafts.programs || []).filter(shouldDiscoverBenefitsProgram).map((p) => ({
       id: p.id,
       name: p.name,
       shortName: p.shortName,
@@ -169,7 +185,7 @@ export default async function StatePage({ params }: Props) {
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
         {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
-        <StatePageV3 state={state} overview={stateDrafts.stateOverview} pipelinePrograms={pipelinePrograms} familyQuestions={familyQuestions} draftedAt={stateDrafts.draftedAt} />
+        <StatePageV3 state={displayState} overview={stateDrafts.stateOverview} pipelinePrograms={pipelinePrograms} familyQuestions={familyQuestions} draftedAt={stateDrafts.draftedAt} />
       </>
     );
   }

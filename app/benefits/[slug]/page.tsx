@@ -4,6 +4,7 @@ import { getStateById, allStates, type StateData, type WaiverProgram } from "@/d
 import { pipelineDrafts, type PipelineStateOverview, type PipelineDraft } from "@/data/pipeline-drafts";
 import { StatePageV3 } from "@/components/waiver-library/StatePageV3";
 import { createClient } from "@/lib/supabase/server";
+import { shouldDiscoverBenefitsProgram } from "@/lib/benefits/program-content-quality";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -76,10 +77,11 @@ function resolveSlug(slug: string): {
   if (stateMetadata) {
     const drafts = pipelineDrafts[stateMetadata.abbreviation];
     if (drafts?.stateOverview) {
+      const discoverablePrograms = (drafts.programs || []).filter(shouldDiscoverBenefitsProgram);
       // Build a state object where programs come from pipeline, metadata from waiver-library
       const state: StateData = {
         ...stateMetadata,
-        programs: (drafts.programs || []).map(draftToWaiverProgram),
+        programs: discoverablePrograms.map(draftToWaiverProgram),
       };
       return {
         type: "state",
@@ -93,13 +95,14 @@ function resolveSlug(slug: string): {
   // Region match (counties, metros, non-state entities in pipeline-drafts)
   for (const [, drafts] of Object.entries(pipelineDrafts)) {
     if (drafts.isRegion && drafts.slug === slug && drafts.stateOverview) {
+      const discoverablePrograms = (drafts.programs || []).filter(shouldDiscoverBenefitsProgram);
       // Build a synthetic StateData for the region using pipeline program data
       const state: StateData = {
         id: drafts.slug,
         name: drafts.regionName || slug,
         abbreviation: drafts.parentState || slug.toUpperCase().slice(0, 2),
         description: "",
-        programs: (drafts.programs || []).map(draftToWaiverProgram),
+        programs: discoverablePrograms.map(draftToWaiverProgram),
       };
       return {
         type: "region",

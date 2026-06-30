@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/FL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-06-06T09:47:54.124Z
+ * Last updated: 2026-06-23T04:17:17.511Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2831,6 +2831,518 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://agingresources.org/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "medicaid-for-aged-and-disabled-meds-ad",
+      "name": "Medicaid for Aged and Disabled (MEDS-AD)",
+      "shortName": "MEDS-AD",
+      "tagline": "Full Medicaid coverage for low-income Floridians who are 65 or older or disabled.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false
+      },
+      "intro": "If your loved one is 65 or older or has a disability, MEDS-AD is the Florida Medicaid pathway that may provide full medical coverage when income and assets are very limited. It is different from SMMC-LTC: MEDS-AD is regular SSI-related Medicaid coverage, while SMMC-LTC adds long-term care services after a separate level-of-care process.\n\nFor April 2026 standards, Florida lists MEDS-AD income limits of $1,171/month for one person and $1,588/month for a couple. The asset limits are $5,000 for one person and $6,000 for a couple. People who already receive SSI are automatically eligible for Medicaid and usually do not need a separate ACCESS Florida application unless nursing home or waiver services are needed.\n\nThe cleanest starting point is the MyACCESS application. If your loved one needs home and community-based services or nursing home care, the DCF Medicaid page says to check the HCBS/Waivers or Nursing Home option during the application so the case is routed for the right long-term care review.",
+      "savingsRange": "$5,000 - $20,000/year",
+      "savingsSource": "Estimated value of full Medicaid medical coverage; exact value depends on covered services used.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65+ or disabled",
+          "Florida resident",
+          "Income below $1,171/month for one person",
+          "Assets below $5,000 for one person",
+          "SSI recipients are usually automatically eligible"
+        ],
+        "ageRequirement": "65+ or disabled",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1171
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1588
+          }
+        ],
+        "assetLimits": {
+          "individual": 5000,
+          "couple": 6000,
+          "countedAssets": [
+            "Bank accounts",
+            "Cash",
+            "Investments",
+            "Non-exempt property"
+          ],
+          "exemptAssets": [
+            "Certain excluded resources under SSI-related Medicaid rules",
+            "Resources excluded by DCF policy"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Must be a U.S. citizen or qualified non-citizen",
+          "Must provide proof of identity",
+          "Must live in Florida or intend to remain in Florida",
+          "Must have or apply for a Social Security number",
+          "Must apply for other benefits they may be eligible for, such as pensions, Social Security, or Medicare"
+        ],
+        "povertyLevelReference": "MEDS-AD uses 88% FPL standards in Florida's April 2026 SSI-related financial eligibility chart."
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online through MyACCESS, by paper application, at a Family Resource Center, through a DCF community partner, or by requesting a telephone application at 850-300-4323.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Start with MyACCESS",
+            "description": "Create or sign in to a MyACCESS account at myaccess.myflfamilies.com and choose Medical Assistance. If your loved one needs waiver or nursing home services, check the HCBS/Waivers or Nursing Home option on the Benefit Information screen."
+          },
+          {
+            "step": 2,
+            "title": "Gather income and asset proof",
+            "description": "DCF may ask for Social Security award letters, pension statements, bank statements, identity documents, Florida residency proof, citizenship or qualified non-citizen proof, and health insurance information."
+          },
+          {
+            "step": 3,
+            "title": "Upload or submit documents",
+            "description": "Use MyACCESS to upload documents, or submit paper documents through a DCF Family Resource Center or community partner. Missing documents are one of the main reasons a Medicaid case slows down."
+          },
+          {
+            "step": 4,
+            "title": "Watch for DCF notices",
+            "description": "DCF sends requests and decisions through the MyACCESS account and by notice. Respond quickly if DCF asks for more information so coverage is not delayed or denied."
+          },
+          {
+            "step": 5,
+            "title": "Ask about the right pathway if care needs are higher",
+            "description": "If your loved one needs help at home, assisted living, or nursing home care, ask DCF or the Elder Helpline whether the case also needs HCBS, SMMC-LTC, PACE, or nursing home review."
+          }
+        ],
+        "processingTime": "DCF says eligibility decisions are made within 45 days once all information needed to decide the case is available.",
+        "waitlist": null,
+        "tip": "If your loved one already receives SSI, confirm whether Medicaid is already active before filing a new application. SSI recipients are generally automatically eligible for Medicaid.",
+        "urls": [
+          {
+            "label": "Florida DCF Medicaid",
+            "url": "https://www.myflfamilies.com/medicaid"
+          },
+          {
+            "label": "MyACCESS application",
+            "url": "https://myaccess.myflfamilies.com/"
+          },
+          {
+            "label": "SSI-Related Medicaid Fact Sheet",
+            "url": "https://www.myflfamilies.com/documents/59481.pdf"
+          },
+          {
+            "label": "April 2026 SSI-Related Financial Eligibility Standards",
+            "url": "https://www.myflfamilies.com/documents/30451.pdf"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Government-issued photo ID",
+        "Social Security card or proof of Social Security number application",
+        "Proof of Florida residency",
+        "Proof of U.S. citizenship or qualified non-citizen status",
+        "Most recent Social Security award letter",
+        "Pension or retirement income statements",
+        "Bank statements for checking and savings accounts",
+        "Investment account statements",
+        "Life insurance policy documents if applicable",
+        "Health insurance cards, including Medicare if applicable",
+        "Proof of medical expenses if DCF asks for them",
+        "Legal representative paperwork if someone else is applying"
+      ],
+      "contacts": [
+        {
+          "label": "DCF Customer Contact Center",
+          "phone": "850-300-4323",
+          "description": "Main DCF line for public assistance and paper or telephone application requests.",
+          "hours": null
+        },
+        {
+          "label": "Elder Helpline",
+          "phone": "1-800-963-5337",
+          "description": "Statewide helpline for older adults who need help finding aging and long-term care resources.",
+          "hours": "Business hours vary by region"
+        }
+      ],
+      "applicationNotes": [
+        "MEDS-AD is not the same thing as SMMC-LTC. MEDS-AD can provide Medicaid coverage; SMMC-LTC is the long-term care managed care program for people who meet nursing home level of care.",
+        "SSI recipients are generally Medicaid eligible automatically. A separate ACCESS Florida application may be needed when nursing home or waiver services are requested.",
+        "The April 2026 MEDS-AD income and asset limits are lower than the HCBS waiver limits, so families should ask which Medicaid coverage group fits the care situation."
+      ],
+      "relatedPrograms": [
+        "Statewide Medicaid Managed Care Long-Term Care Program (SMMC-LTC) HCBS Waivers",
+        "Medicaid Medicare Savings Programs (QMB, SLMB, QI)",
+        "Program of All-Inclusive Care for the Elderly (PACE)"
+      ],
+      "contentSections": [
+        {
+          "type": "income-table",
+          "title": "April 2026 MEDS-AD financial limits",
+          "rows": [
+            {
+              "householdSize": "Individual",
+              "monthlyIncomeLimit": "$1,171",
+              "assetLimit": "$5,000"
+            },
+            {
+              "householdSize": "Couple",
+              "monthlyIncomeLimit": "$1,588",
+              "assetLimit": "$6,000"
+            }
+          ]
+        },
+        {
+          "type": "callout",
+          "tone": "info",
+          "text": "If the person needs long-term care at home or in a facility, mark HCBS/Waivers or Nursing Home in the Medicaid application. That tells DCF the case may need a long-term care pathway, not only regular medical coverage."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Is MEDS-AD the same as Florida's long-term care waiver?",
+          "answer": "No. MEDS-AD is a Medicaid coverage group for low-income people who are 65 or older or disabled. SMMC-LTC is the long-term care managed care program that can pay for home and community-based services after a separate level-of-care process."
+        },
+        {
+          "question": "What are the April 2026 MEDS-AD limits?",
+          "answer": "Florida's April 2026 SSI-related financial chart lists MEDS-AD limits of $1,171/month income and $5,000 assets for one person. For a couple, the listed limits are $1,588/month income and $6,000 assets."
+        },
+        {
+          "question": "Does my parent need to apply if they already receive SSI?",
+          "answer": "Usually no for regular Medicaid coverage. DCF says Florida residents who receive SSI are automatically eligible for Medicaid from Social Security. A separate ACCESS Florida application may still be needed if nursing home services or waiver services are requested."
+        },
+        {
+          "question": "What if my loved one needs home care, not just a Medicaid card?",
+          "answer": "Use the Medicaid application, but make sure the application identifies the need for HCBS/Waivers or Nursing Home services. You should also contact the Elder Helpline or local ADRC because long-term care services involve additional screening beyond regular Medicaid eligibility."
+        },
+        {
+          "question": "How long does DCF take to decide?",
+          "answer": "DCF says it makes an eligibility decision within 45 days once all information needed to decide the case is available. The clock can stretch if documents are missing or if another disability or long-term care review is needed."
+        },
+        {
+          "question": "Can a caregiver apply on behalf of an older parent?",
+          "answer": "A caregiver can help complete the MyACCESS application and upload documents. If DCF needs to speak with someone other than the applicant or share protected information, legal representative or authorized representative paperwork may be needed."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "income-table",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "ShieldCheck",
+      "phone": "850-300-4323",
+      "sourceUrl": "https://www.myflfamilies.com/medicaid",
+      "contentStatus": "under-review",
+      "draftedAt": "2026-06-23"
+    },
+    {
+      "id": "long-term-care-ombudsman-program",
+      "name": "Long-Term Care Ombudsman Program",
+      "shortName": "LTC Ombudsman",
+      "tagline": "Free advocacy when a loved one in a Florida long-term care facility is not being treated safely or fairly.",
+      "programType": "navigator",
+      "complexity": "simple",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": false
+      },
+      "intro": "If your loved one lives in a nursing home, assisted living facility, adult family care home, or continuing care retirement community, Florida's Long-Term Care Ombudsman Program can help when something feels wrong. Ombudsmen investigate complaints, explain resident rights, and advocate for quality of life and care.\n\nThis is not Medicaid and it does not pay for care. It is a free, confidential advocacy program focused on residents of long-term care facilities. Florida says the program works through 14 district offices that cover the state, with volunteers and staff investigating and resolving complaints made by or on behalf of residents.\n\nCall 1-888-831-0404 when you need help with facility discharge threats, care concerns, rights violations, communication problems, or unresolved complaints.",
+      "savingsRange": "",
+      "savingsSource": "Free advocacy service",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Free service",
+          "For long-term care facility residents",
+          "Families and representatives can call",
+          "Covers nursing homes and assisted living facilities",
+          "Complaints are confidential"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Concern must involve a resident of a licensed long-term care facility",
+          "Covers nursing homes, assisted living facilities, adult family care homes, and continuing care retirement communities",
+          "Can be contacted by residents, family members, friends, staff, or anyone concerned about resident treatment"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the statewide Ombudsman line at 1-888-831-0404 or the Tallahassee office at 850-414-2323 to request help or file a complaint.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Write down the facility concern",
+            "description": "Note the facility name, resident name, dates, staff involved if known, and what outcome your loved one wants. Ombudsman complaints are confidential."
+          },
+          {
+            "step": 2,
+            "title": "Call the Ombudsman Program",
+            "description": "Call 1-888-831-0404 toll-free or 850-414-2323. Explain that you need help with a long-term care facility resident's rights, care, discharge, or quality-of-life concern."
+          },
+          {
+            "step": 3,
+            "title": "Ask about urgent rights deadlines",
+            "description": "If the facility is trying to discharge or transfer your loved one, ask about hearing deadlines immediately. Florida's resident-rights material says some nursing home transfer or discharge hearing requests have time-sensitive protections."
+          },
+          {
+            "step": 4,
+            "title": "Stay available for follow-up",
+            "description": "The local ombudsman or district office may need details, documents, or permission from the resident before investigating or advocating."
+          }
+        ],
+        "processingTime": "Phone help is available when the program receives the request; investigation timing depends on the complaint and district office.",
+        "waitlist": null,
+        "tip": "For discharge or transfer notices, call quickly. Some rights protections depend on acting within short time windows.",
+        "urls": [
+          {
+            "label": "Florida Long-Term Care Ombudsman Program",
+            "url": "https://elderaffairs.org/programs-and-services/long-term-care-ombudsman-program/"
+          },
+          {
+            "label": "File a Complaint",
+            "url": "https://elderaffairs.org/resources/file-a-complaint/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Facility name and address",
+        "Resident's name",
+        "Short description of the complaint",
+        "Dates of incidents or notices",
+        "Copies of discharge or transfer notices if applicable",
+        "Names of staff or witnesses if known",
+        "Resident or representative contact information"
+      ],
+      "contacts": [
+        {
+          "label": "Long-Term Care Ombudsman Program",
+          "phone": "1-888-831-0404",
+          "description": "Toll-free complaint and resident advocacy line.",
+          "hours": null
+        },
+        {
+          "label": "Long-Term Care Ombudsman Tallahassee Office",
+          "phone": "850-414-2323",
+          "description": "Program office phone listed by Florida Elder Affairs.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "The program is focused on long-term care facility residents, not people receiving care only at home.",
+        "Ombudsmen advocate for the resident. Their role is not to mediate a compromise if the resident's rights or wishes point in another direction.",
+        "For abuse, neglect, threatened harm, or exploitation, Florida also lists the Abuse Hotline at 1-800-962-2873."
+      ],
+      "relatedPrograms": [
+        "Statewide Medicaid Managed Care Long-Term Care Program (SMMC-LTC) HCBS Waivers",
+        "Legal Aid for Seniors (Area Agency Legal Services)",
+        "SHINE (Serving Health Insurance Needs of Elders)"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "tone": "warning",
+          "text": "A facility discharge or transfer notice can have short appeal deadlines. Call the Ombudsman Program quickly if your loved one receives one."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Who can call the Ombudsman Program?",
+          "answer": "Residents can call, and so can family members, friends, facility staff, or anyone concerned about a resident's treatment. The program handles complaints made by or on behalf of residents."
+        },
+        {
+          "question": "Does the Ombudsman Program cost anything?",
+          "answer": "No. Florida describes it as a no-cost advocacy and complaint-resolution program for long-term care facility residents."
+        },
+        {
+          "question": "What kinds of facilities are covered?",
+          "answer": "The program covers residents of nursing homes, assisted living facilities, adult family care homes, and continuing care retirement communities."
+        },
+        {
+          "question": "Can the Ombudsman help if a facility is trying to discharge my parent?",
+          "answer": "Yes, discharge and transfer concerns are a core reason to call. Florida's resident-rights information explains that residents may have hearing rights and time-sensitive protections, so call quickly."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": false,
+        "hasDocumentChecklist": true,
+        "visualTone": "minimal"
+      },
+      "icon": "Scales",
+      "phone": "1-888-831-0404",
+      "sourceUrl": "https://elderaffairs.org/programs-and-services/long-term-care-ombudsman-program/",
+      "contentStatus": "under-review",
+      "draftedAt": "2026-06-23"
+    },
+    {
+      "id": "national-family-caregiver-support-program",
+      "name": "National Family Caregiver Support Program",
+      "shortName": "Family Caregiver Support",
+      "tagline": "Support, respite, training, and practical help for Florida family caregivers.",
+      "programType": "resource",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true
+      },
+      "intro": "If you are caring for an older parent at home, Florida's National Family Caregiver Support Program can connect you with services that reduce the pressure on the caregiver, not just the person receiving care. Services may include information, help getting access to services, counseling, support groups, caregiver training, respite care, transportation, material aid, legal assistance, and supplemental services.\n\nFlorida administers the program through Title III-E of the federal Older Americans Act. Funds go to Area Agencies on Aging, which contract with local providers, so the exact services and availability depend on your region.\n\nThe program can serve adult family members caring for someone age 60 or older. It can also serve grandparents or other relatives age 55 or older who care for children 18 or younger, or children of any age who have disabilities.",
+      "savingsRange": "",
+      "savingsSource": "Free or locally funded caregiver support services; availability varies by Area Agency on Aging.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Adult family caregiver",
+          "Caring for someone age 60+",
+          "Grandparent or relative caregiver age 55+ may qualify",
+          "Services vary by region",
+          "Apply through the local ADRC or Area Agency on Aging"
+        ],
+        "ageRequirement": "Care recipient 60+ or relative caregiver 55+ for child caregiving",
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Adult family member providing in-home or community care for a person age 60 or older",
+          "Grandparent or relative age 55 or older caring for a child age 18 or younger",
+          "Grandparent or relative age 55 or older caring for a child of any age with a disability",
+          "Service availability depends on local Area Agency on Aging funding and providers"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Elder Helpline at 1-800-963-5337 or contact the local Aging and Disability Resource Center to ask what caregiver support services are available.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the Elder Helpline",
+            "description": "Call 1-800-963-5337 and say you are caring for an older adult and want to ask about the National Family Caregiver Support Program."
+          },
+          {
+            "step": 2,
+            "title": "Identify the local ADRC or Area Agency on Aging",
+            "description": "The helpline or DOEA ADRC directory can route you to the correct regional agency. Florida has 11 Area Agencies on Aging operating as ADRCs."
+          },
+          {
+            "step": 3,
+            "title": "Ask what is available now",
+            "description": "Ask specifically about respite care, caregiver training, support groups, counseling, transportation, material aid, legal assistance, and supplemental services."
+          },
+          {
+            "step": 4,
+            "title": "Complete any local intake",
+            "description": "The local provider may ask about the care recipient's age, disability status, living situation, caregiving tasks, urgency, and whether respite or other supports are currently available."
+          }
+        ],
+        "processingTime": "Varies by Area Agency on Aging and local provider availability.",
+        "waitlist": "Possible. Respite and supplemental services depend on local funding and provider capacity.",
+        "tip": "Ask for the full menu of caregiver services, not only respite. Some regions may have support groups, counseling, or training even when respite funding is limited.",
+        "urls": [
+          {
+            "label": "National Family Caregiver Support Program",
+            "url": "https://elderaffairs.org/programs-and-services/national-family-caregiver-support-program/"
+          },
+          {
+            "label": "Florida Caregiving Programs",
+            "url": "https://elderaffairs.org/programs-and-services/caregiving/"
+          },
+          {
+            "label": "Aging and Disability Resource Centers",
+            "url": "https://elderaffairs.org/resources/aging-and-disability-resource-centers-adrcs/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Caregiver name and contact information",
+        "Care recipient name and age",
+        "Care recipient address and county",
+        "Brief description of caregiving tasks",
+        "Information about dementia, disability, or functional limitations if relevant",
+        "Urgency of respite or support need",
+        "Legal relationship or representative paperwork if requested by the local provider"
+      ],
+      "contacts": [
+        {
+          "label": "Elder Helpline",
+          "phone": "1-800-963-5337",
+          "description": "Statewide entry point for local ADRC and Area Agency on Aging referrals.",
+          "hours": "Business hours vary by region"
+        },
+        {
+          "label": "Florida Department of Elder Affairs",
+          "phone": "850-414-2000",
+          "description": "State office for Elder Affairs program information.",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [
+        "The exact services are local. One county may have respite openings while another may emphasize support groups, counseling, or training.",
+        "This program supports the caregiver. If your loved one needs Medicaid-funded hands-on care, also ask about SMMC-LTC, CCE, HCE, PACE, or other home care programs.",
+        "Grandparents and older relatives raising children may qualify under different caregiver rules than adult children caring for older parents."
+      ],
+      "relatedPrograms": [
+        "Respite for Elders Living in Everyday Families (RELIEF) Program",
+        "Community Care for the Elderly (CCE) Program",
+        "Home Care for the Elderly (HCE) Program",
+        "Alzheimer's Disease Initiative (ADI) Respite Services"
+      ],
+      "contentSections": [
+        {
+          "type": "callout",
+          "tone": "tip",
+          "text": "Ask your local ADRC what is available this month. The program is federally authorized, but services are delivered through local Area Agencies on Aging and can vary by region."
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Is this only for caregivers of people with dementia?",
+          "answer": "No. Florida says the program can help adult family members who provide in-home or community care for a person age 60 or older. Dementia caregivers may also qualify for other programs, such as ADI respite."
+        },
+        {
+          "question": "Can I get respite care through this program?",
+          "answer": "Possibly. Florida lists respite care as one of the services under the National Family Caregiver Support Program, but availability depends on the local Area Agency on Aging and provider capacity."
+        },
+        {
+          "question": "Do I apply through the state or my local agency?",
+          "answer": "Start with the Elder Helpline at 1-800-963-5337 or your local ADRC. The state administers the program, but services are allocated to Area Agencies on Aging and delivered by local providers."
+        },
+        {
+          "question": "Can grandparents raising grandchildren qualify?",
+          "answer": "Yes. Florida says services are available to grandparents and relatives age 55 or older who care for children 18 or younger, or children of any age who have disabilities."
+        },
+        {
+          "question": "What if respite is not available in my county?",
+          "answer": "Ask about the other caregiver supports too. The program may also connect you to counseling, support groups, caregiver training, material aid, transportation, legal assistance, or supplemental services."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "HandHeart",
+      "phone": "1-800-963-5337",
+      "sourceUrl": "https://elderaffairs.org/programs-and-services/national-family-caregiver-support-program/",
+      "contentStatus": "under-review",
+      "draftedAt": "2026-06-23"
     }
   ],
   "stateOverview": {
