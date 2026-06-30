@@ -120,6 +120,8 @@ export interface SendEmailOptions {
   replyTo?: string;
   /** Recipient's profile ID for checking notification preferences. If provided, controllable notifications will respect user preferences. */
   recipientProfileId?: string;
+  /** When set, adds a List-Unsubscribe header pointing at this URL (deliverability + inbox one-click affordance). Family lifecycle/nudge sends pass the care-unsubscribe URL. */
+  listUnsubscribeUrl?: string;
 }
 
 function getServiceDb() {
@@ -578,6 +580,17 @@ export async function sendEmail(
       : undefined);
   if (replyTo) {
     sendPayload.replyTo = replyTo;
+  }
+  // List-Unsubscribe: points at the care-seeker unsubscribe page, which auto-POSTs
+  // the opt-out on mount (effectively one-click for a human, scanner-safe since a
+  // plain GET runs no JS). Improves deliverability and gives Gmail/Apple Mail the
+  // native unsubscribe affordance. We intentionally omit List-Unsubscribe-Post
+  // (RFC 8058 one-click) until the endpoint accepts that POST shape.
+  if (options.listUnsubscribeUrl) {
+    sendPayload.headers = {
+      ...(sendPayload.headers || {}),
+      "List-Unsubscribe": `<${options.listUnsubscribeUrl}>`,
+    };
   }
   const { data, error } = await resend.emails.send(sendPayload);
 

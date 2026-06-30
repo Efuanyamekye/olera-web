@@ -27,6 +27,18 @@ export function careUnsubscribeUrl(unsubscribeId?: string): string {
     : `${BASE_URL}/account/settings`;
 }
 
+/**
+ * Shared care-seeker unsubscribe footer for lifecycle / nudge emails. Every
+ * family nudge needs a visible opt-out (CAN-SPAM) — the coordinator compare-
+ * cascade rungs (outcome-check, provider-silent, never-engaged, day-10,
+ * pending-reach-out, stale) were missing it while the completion/publish
+ * sequences had one. Readable gray (#9ca3af), not the near-invisible #d1d5db.
+ */
+function careUnsubscribeFooter(unsubscribeId?: string): string {
+  return `<div style="height:1px;background:#eef1f0;margin:28px 0 0;"></div>
+    <p style="font-size:12px;color:#9ca3af;margin:14px 0 0;line-height:1.5;">You're getting this because you reached out for care on Olera. <a href="${careUnsubscribeUrl(unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe</a> from care-search updates.</p>`;
+}
+
 // ── Layout helpers ──────────────────────────────────────────────
 
 /**
@@ -1216,6 +1228,8 @@ export function providerSilentEmail(opts: {
   city: string | null;
   /** Benefits quiz deep-link (the closer). Omitted by transactional callers. */
   benefitsQuizUrl?: string | null;
+  /** Family profile id for the unsubscribe footer. */
+  unsubscribeId?: string;
 }): string {
   const familyFirstName = firstName(opts.familyName, "there");
   const hasDeclineMessage = opts.providerPassed && opts.declineMessage?.trim();
@@ -1286,6 +1300,7 @@ export function providerSilentEmail(opts: {
       The Olera team
     </p>
     ${authorBylineBlock({ topBorder: true })}
+    ${careUnsubscribeFooter(opts.unsubscribeId)}
   `, `You're never limited to one. Here are others worth comparing.`);
 }
 
@@ -1362,6 +1377,8 @@ export function familyNeverEngagedEmail(opts: {
   browseUrl?: string | null;
   /** Benefits quiz deep-link (the closer). */
   benefitsQuizUrl?: string | null;
+  /** Family profile id for the unsubscribe footer. */
+  unsubscribeId?: string;
 }): string {
   const familyFirstName = firstName(opts.familyName, "there");
   const hasRecs = !!opts.recommendedProviders?.length;
@@ -1389,6 +1406,7 @@ export function familyNeverEngagedEmail(opts: {
       Want a hand choosing? A real person is here. <a href="${BASE_URL}/contact" style="color:${BRAND_COLOR};text-decoration:underline;">Contact us anytime</a>.
     </p>
     ${authorBylineBlock({ topBorder: true })}
+    ${careUnsubscribeFooter(opts.unsubscribeId)}
   `, `A few real options near you, worth a look. No rush.`);
   }
 
@@ -1420,6 +1438,7 @@ export function familyNeverEngagedEmail(opts: {
       No rush. The conversation will be here when you&rsquo;re ready. And if you&rsquo;d rather talk it through with a real person, you can <a href="${BASE_URL}/contact" style="color:${BRAND_COLOR};text-decoration:underline;">contact us anytime</a>.
     </p>
     ${authorBylineBlock({ topBorder: true })}
+    ${careUnsubscribeFooter(opts.unsubscribeId)}
   `, `When you're ready, a little help with the heaviest part: the cost.`);
 }
 
@@ -1883,7 +1902,7 @@ export function matchesNudgeEmail(opts: {
       Questions? <a href="${BASE_URL}/contact" style="color:#9ca3af;text-decoration:underline;">Contact us</a>
     </p>
     <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `, preheader);
 }
@@ -2140,7 +2159,7 @@ export function goLiveReminderEmail(opts: {
       Have questions? <a href="${BASE_URL}/contact" style="color:#9ca3af;text-decoration:underline;">Contact us anytime</a>, we're here to help.
     </p>
     <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `, preheader);
 }
@@ -2168,7 +2187,7 @@ export function postConnectionFollowupEmail(opts: {
       Have questions? <a href="${BASE_URL}/contact" style="color:#9ca3af;text-decoration:underline;">Contact us anytime</a>, we're here to help.
     </p>
     <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from follow-up emails</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from follow-up emails</a>
     </p>
   `, preheader);
 }
@@ -2216,7 +2235,7 @@ export function completionNudge1Email(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `,
       // Preheader (inbox preview after the subject) — the subject is the warm
@@ -2271,7 +2290,7 @@ export function completionNudge2Email(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `,
       // Subject carries the count; preheader carries the next step.
@@ -2317,7 +2336,7 @@ export function completionNudge3Email(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `,
       // Subject is the warm hook; preheader carries the mechanism.
@@ -2372,7 +2391,7 @@ export function completionNudge4Email(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `,
       // Subject lists the providers; preheader carries the low-pressure tone.
@@ -2438,7 +2457,7 @@ export function publishNudge1Email(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `, preheader);
 }
@@ -2486,7 +2505,7 @@ export function publishNudge2Email(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `, preheader);
 }
@@ -2534,7 +2553,7 @@ export function publishNudge3Email(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `, preheader);
 }
@@ -2565,7 +2584,7 @@ export function publishNudge4Email(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `, preheader);
 }
@@ -2702,7 +2721,7 @@ export function completionCelebrationEmail(opts: {
       Have questions? Just reply to this email — we're here to help.
     </p>
     <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from care search updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from care search updates</a>
     </p>
   `, preheader);
 }
@@ -2847,7 +2866,7 @@ export function savedProviderDigestEmail(opts: {
       Have questions? Just reply to this email — we're here to help.
     </p>
     <p style="font-size:12px;color:#d1d5db;margin:12px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Manage your email preferences</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Manage your email preferences</a>
     </p>
   `, preheader);
 }
@@ -4738,7 +4757,7 @@ export function familyNudgeEmail(opts: {
     </p>
     ${authorBylineBlock({ topBorder: true })}
     <p style="font-size:12px;color:#d1d5db;margin:20px 0 0;line-height:1.5;text-align:center;">
-      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#d1d5db;text-decoration:underline;">Unsubscribe from these updates</a>
+      <a href="${careUnsubscribeUrl(opts.unsubscribeId)}" style="color:#9ca3af;text-decoration:underline;">Unsubscribe from these updates</a>
     </p>
   `,
     // Preheader (inbox preview text, after the subject) — NOT the subject, which
@@ -5117,6 +5136,8 @@ export function familyPendingReachOutNudgeEmail(opts: {
   messagePreview: string | null;
   daysSinceReachOut: number;
   viewUrl: string;
+  /** Family profile id for the unsubscribe footer. */
+  unsubscribeId?: string;
 }): string {
   const safeProviderName = escapeHtml(opts.providerName);
   const daysText = opts.daysSinceReachOut === 1 ? "1 day" : `${opts.daysSinceReachOut} days`;
@@ -5140,6 +5161,7 @@ export function familyPendingReachOutNudgeEmail(opts: {
     <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">
       Questions? <a href="${BASE_URL}/contact" style="color:#9ca3af;text-decoration:underline;">Contact us</a>
     </p>
+    ${careUnsubscribeFooter(opts.unsubscribeId)}
   `, `${opts.providerName} is still waiting for your response`);
 }
 
@@ -5181,6 +5203,8 @@ export function staleConversationFamilyEmail(opts: {
   providerName: string;
   daysSinceLastMessage: number;
   viewUrl: string;
+  /** Family profile id for the unsubscribe footer. */
+  unsubscribeId?: string;
 }): string {
   const safeProviderName = escapeHtml(opts.providerName);
   const daysText = opts.daysSinceLastMessage === 1 ? "1 day" : `${opts.daysSinceLastMessage} days`;
@@ -5197,6 +5221,7 @@ export function staleConversationFamilyEmail(opts: {
     <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">
       Questions? <a href="${BASE_URL}/contact" style="color:#9ca3af;text-decoration:underline;">Contact us</a>
     </p>
+    ${careUnsubscribeFooter(opts.unsubscribeId)}
   `, `${opts.providerName} is still here to help. Continue the conversation`);
 }
 
@@ -5215,6 +5240,8 @@ export function day10AwaitingEmail(opts: {
   recommendedProviders?: CompareCardItem[];
   /** Benefits quiz deep-link (the closer). */
   benefitsQuizUrl?: string | null;
+  /** Family profile id for the unsubscribe footer. */
+  unsubscribeId?: string;
 }): string {
   const familyFirstName = firstName(opts.familyName, "there");
   const safeProviderName = escapeHtml(opts.providerName);
@@ -5251,5 +5278,6 @@ export function day10AwaitingEmail(opts: {
       The Olera team
     </p>
     ${authorBylineBlock({ topBorder: true })}
+    ${careUnsubscribeFooter(opts.unsubscribeId)}
   `, `You heard back from ${opts.providerName}. Here's how to weigh your options.`);
 }

@@ -23,6 +23,7 @@ import {
   completionNudge4Email,
   completionMaintenanceEmail,
   completionNudgeSubject,
+  careUnsubscribeUrl,
 } from "@/lib/email-templates";
 import type { CompareCardItem } from "@/lib/email-templates";
 import {
@@ -483,6 +484,7 @@ export async function GET(request: NextRequest) {
               const link = (v: string) =>
                 `${siteUrl}${appendTrackingParams(`/connection-outcome?cid=${r1.id}&v=${v}`, eid)}`;
               return connectionOutcomeCheckEmail({
+                unsubscribeUrl: careUnsubscribeUrl(fam.familyId),
                 familyName,
                 providerName,
                 yesUrl: link("yes"),
@@ -532,6 +534,7 @@ export async function GET(request: NextRequest) {
                 const browseUrl = buildBrowseUrl(provider, eid);
                 const recommendedProviders = alts.map((p) => toCard(p, eid));
                 return providerSilentEmail({
+                  unsubscribeId: fam.familyId,
                   familyName,
                   providerName,
                   providerPassed,
@@ -592,6 +595,7 @@ export async function GET(request: NextRequest) {
               const inboxUrl = generateFamilyInboxUrl(authEmailFinal, appendTrackingParams("/portal/inbox", eid), siteUrl);
               const recommendedProviders = hasAlts3 ? alts3.map((p) => toCard(p, eid)) : undefined;
               return familyNeverEngagedEmail({
+                unsubscribeId: fam.familyId,
                 familyName,
                 providerName,
                 guideUrl,
@@ -654,6 +658,7 @@ export async function GET(request: NextRequest) {
               const supportUrl = "mailto:support@olera.care?subject=Help%20with%20next%20steps";
               const recommendedProviders = hasAlts4 ? alts4.slice(0, 2).map((p) => toCard(p, eid)) : undefined;
               return day10AwaitingEmail({
+                unsubscribeId: fam.familyId,
                 familyName,
                 providerName,
                 inboxUrl,
@@ -690,6 +695,7 @@ export async function GET(request: NextRequest) {
             buildHtml: (eid) => {
               const viewUrl = generateFamilyInboxUrl(authEmailFinal, appendTrackingParams("/portal/inbox", eid), siteUrl);
               return familyPendingReachOutNudgeEmail({
+                unsubscribeId: fam.familyId,
                 familyName,
                 providerName,
                 providerCity,
@@ -885,6 +891,7 @@ export async function GET(request: NextRequest) {
         recipientType: "family",
         metadata: { ...plan.metadata, coordinator_rung: plan.rung },
         emailLogId: emailLogId ?? undefined,
+        listUnsubscribeUrl: careUnsubscribeUrl(fam.familyId),
       });
       if (!success) {
         counts.skipped++;

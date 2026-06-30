@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { sendEmail, reserveEmailLogId } from "@/lib/email";
-import { connectionResponseEmail, providerSilentEmail } from "@/lib/email-templates";
+import { connectionResponseEmail, providerSilentEmail, careUnsubscribeUrl } from "@/lib/email-templates";
 import { sendLoopsEvent } from "@/lib/loops";
 import { getSiteUrl } from "@/lib/site-url";
 import { generateFamilyInboxUrl } from "@/lib/claim-tokens";
@@ -461,6 +461,7 @@ export async function POST(request: Request) {
 
               // Send email using existing providerSilentEmail template
               const html = providerSilentEmail({
+                unsubscribeId: familyProfileId,
                 familyName: familyProfile.display_name || "there",
                 providerName,
                 providerPassed: true, // This changes the email copy to "isn't able to take new families"
@@ -482,6 +483,7 @@ export async function POST(request: Request) {
                   recommended_count: recommendedProviders.length,
                 },
                 emailLogId: emailLogId ?? undefined,
+                listUnsubscribeUrl: careUnsubscribeUrl(familyProfileId),
               });
 
               console.log("[manage] Sent provider declined email to family:", familyEmailForSending);

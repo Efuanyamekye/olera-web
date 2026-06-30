@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
 import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email";
-import { staleConversationProviderEmail, staleConversationFamilyEmail } from "@/lib/email-templates";
+import { staleConversationProviderEmail, staleConversationFamilyEmail, careUnsubscribeUrl } from "@/lib/email-templates";
 import { withCronRun } from "@/lib/crons/run";
 import { getSiteUrl } from "@/lib/site-url";
 import { generateFamilyInboxUrl } from "@/lib/claim-tokens";
@@ -305,11 +305,13 @@ export async function GET(request: NextRequest) {
             providerName,
             daysSinceLastMessage,
             viewUrl: familyViewUrl,
+            unsubscribeId: familyProfile?.id,
           }),
           emailType: "stale_conversation",
           recipientType: "family",
           emailLogId: familyLogId ?? undefined,
           recipientProfileId: familyProfile?.id,
+          listUnsubscribeUrl: familyProfile?.id ? careUnsubscribeUrl(familyProfile.id) : undefined,
         });
 
         if (familySuccess) {

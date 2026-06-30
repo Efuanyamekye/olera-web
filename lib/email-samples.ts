@@ -110,6 +110,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "Inquiry sent 48–72h ago, the provider hasn't replied in-thread, and the family hasn't reported an outcome yet.",
     why: "Ground-truth sensor — asks \"Did they get back to you?\" to catch stalled connections early and trigger the help cascade.",
     render: () => connectionOutcomeCheckEmail({
+      unsubscribeUrl: "https://olera.care/unsubscribe/care?id=sample-id",
       familyName: F.familyName, providerName: F.providerName,
       yesUrl: "https://olera.care/connection-outcome?v=yes",
       notYetUrl: "https://olera.care/connection-outcome?v=not_yet",
@@ -123,6 +124,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "Engaged family (sent ≥1 message), 96–120h in, no provider has responded anywhere, and ≥3 responsive alternatives exist nearby.",
     why: "Compare-led hero — the provider went quiet, so show 2–3 responsive alternatives plus a benefits-quiz value-exchange. You're never limited to one.",
     render: () => providerSilentEmail({
+      unsubscribeId: "sample-id",
       familyName: F.familyName, providerName: F.providerName, providerPassed: false,
       recommendedProviders: FAM_RECS, browseUrl: F.browseUrl, city: "Killeen", benefitsQuizUrl: F.quizUrl,
     }),
@@ -134,6 +136,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "Same as R2, but the provider explicitly declined (left a message) rather than going silent.",
     why: "Soften the decline and immediately redirect to responsive alternatives — turn a 'no' into momentum.",
     render: () => providerSilentEmail({
+      unsubscribeId: "sample-id",
       familyName: F.familyName, providerName: F.providerName, providerPassed: true,
       declineMessage: "We're at capacity for new clients this month, so sorry.",
       recommendedProviders: FAM_RECS, browseUrl: F.browseUrl, city: "Killeen", benefitsQuizUrl: F.quizUrl,
@@ -146,6 +149,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "Family never sent a message on any connection, 120–144h in, no provider responded — and ≥3 nearby alternatives exist.",
     why: "Gentle resource nudge for families who stalled before reaching out. With alternatives available, lead with compare cards.",
     render: () => familyNeverEngagedEmail({
+      unsubscribeId: "sample-id",
       familyName: F.familyName, providerName: F.providerName, guideUrl: F.guideUrl, inboxUrl: F.inboxUrl,
       recommendedProviders: FAM_RECS, browseUrl: F.browseUrl, benefitsQuizUrl: F.quizUrl,
     }),
@@ -157,6 +161,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "Same as R3, but fewer than 3 responsive alternatives are available nearby.",
     why: "When we can't honestly surface alternatives, fall back to a how-to-choose guide PDF rather than a thin compare list.",
     render: () => familyNeverEngagedEmail({
+      unsubscribeId: "sample-id",
       familyName: F.familyName, providerName: F.providerName, guideUrl: F.guideUrl, inboxUrl: F.inboxUrl,
       benefitsQuizUrl: F.quizUrl,
     }),
@@ -168,6 +173,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "A provider replied 9–11 days ago and the family hasn't replied back since that first response.",
     why: "Warm hand-off — help the family weigh this provider against 2 others and teach how to choose, so the thread doesn't stall.",
     render: () => day10AwaitingEmail({
+      unsubscribeId: "sample-id",
       familyName: F.familyName, providerName: F.providerName, inboxUrl: F.inboxUrl,
       supportUrl: "mailto:support@olera.care?subject=Help%20with%20next%20steps", alternativesUrl: F.browseUrl,
       recommendedProviders: FAM_RECS.slice(0, 2), benefitsQuizUrl: F.quizUrl,
@@ -180,6 +186,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "A provider initiated the connection (inbound), it's been pending ≥3 days, and the family hasn't replied.",
     why: "Warm inbound lead — a provider is actively waiting; nudge the family to reply, with a preview of the provider's message.",
     render: () => familyPendingReachOutNudgeEmail({
+      unsubscribeId: "sample-id",
       familyName: F.familyName, providerName: F.providerName, providerCity: "Killeen, TX",
       messagePreview: "Hi! We'd love to help with care for your mother. When's a good time to talk?",
       daysSinceReachOut: 3, viewUrl: F.inboxUrl,
@@ -306,6 +313,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "A thread with ≥2 human messages went quiet 5+ days ago. Sent to the family (the provider gets a mirror).",
     why: "Reactivate a stuck conversation before it dies — low-pressure re-open.",
     render: () => staleConversationFamilyEmail({
+      unsubscribeId: "sample-id",
       familyName: F.familyName, providerName: F.providerName, daysSinceLastMessage: 6, viewUrl: F.inboxUrl,
     }),
   },
