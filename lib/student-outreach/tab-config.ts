@@ -372,6 +372,12 @@ export interface RowCardCallbacks {
   onStopOutreach: (reason: StopOutreachReason) => Promise<void>;
   /** Reset attention. Wired to mark_unread action. */
   onMarkUnread: () => Promise<void>;
+  /** Whole-prospect Archive (halts cadence, parks the row). Wired to the
+   *  `archive` action. Shown in the overflow for any non-archived row. */
+  onArchive?: () => Promise<void>;
+  /** Reopen a closed/archived row. Wired to the `reopen` action; shown in
+   *  the overflow only for closed/archived rows. */
+  onReopen?: () => Promise<void>;
   /** Jump to the public directory page (provider rows only). */
   onOpenDirectory?: () => void;
   /** Jump to the unified Logs feed pre-filtered to this row's history. */

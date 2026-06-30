@@ -59,7 +59,9 @@ const REPLIES_STATUSES: Status[] = ["outreach_sent", "engaged"];
 // Terminal states (not_interested, do_not_contact, wrong_contact,
 // redirected) are NOT archived — they stay in All only as historical
 // records.
-const ARCHIVE_STATUSES: Status[] = ["no_response_closed"];
+// Manually "archived" rows (whole-prospect Archive action) join no_response_closed
+// in the Archive tab — both are "parked, reopenable" rather than terminal.
+const ARCHIVE_STATUSES: Status[] = ["no_response_closed", "archived"];
 const PARTNER_STATUSES: Status[] = ["active_partner"];
 const CLOSED_STATUSES: Status[] = [
   "not_interested",
@@ -67,6 +69,7 @@ const CLOSED_STATUSES: Status[] = [
   "do_not_contact",
   "wrong_contact",
   "redirected",
+  "archived",
 ];
 // Legacy active-partner values (pre-migration 065); still surface in Partners.
 const PARTNER_ALL: string[] = [...PARTNER_STATUSES, "agreed", "distributed"];

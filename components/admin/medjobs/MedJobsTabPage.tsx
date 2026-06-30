@@ -34,6 +34,7 @@ import type {
   TabUnreadCounts,
   TabRow,
 } from "@/lib/student-outreach/types";
+import { CLOSED_STATUSES } from "@/lib/student-outreach/types";
 import {
   STOP_OUTREACH_ACTIONS,
   MENU_TABS,
@@ -403,6 +404,28 @@ export function MedJobsTabPage({
           catch (e) { setError(e instanceof Error ? e.message : "Action failed"); }
         }}
         onMarkUnread={async () => setStakeholderRead(row, false, true)}
+        onArchive={
+          row.status === "archived"
+            ? undefined
+            : async () => {
+                if (
+                  !window.confirm(
+                    "Archive this prospect? This halts outreach and parks it. You can reopen it later.",
+                  )
+                )
+                  return;
+                try { await callAction(row.id, "archive"); }
+                catch (e) { setError(e instanceof Error ? e.message : "Action failed"); }
+              }
+        }
+        onReopen={
+          CLOSED_STATUSES.includes(row.status)
+            ? async () => {
+                try { await callAction(row.id, "reopen"); }
+                catch (e) { setError(e instanceof Error ? e.message : "Action failed"); }
+              }
+            : undefined
+        }
         onOpenDirectory={
           row.kind === "provider" && row.provider_slug
             ? () => {

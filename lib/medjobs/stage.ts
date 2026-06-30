@@ -49,6 +49,7 @@ const CLOSED_STATUSES = new Set<string>([
   "do_not_contact",
   "wrong_contact",
   "redirected",
+  "archived",
 ]);
 
 const OUTREACH_ACTIVE_STATUSES = new Set<string>(["outreach_sent", "engaged"]);

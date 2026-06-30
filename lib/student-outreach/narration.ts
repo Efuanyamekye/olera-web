@@ -72,6 +72,8 @@ export function narrateTouchpoint(t: Touchpoint, ctx: NarrationContext): Narrate
         text = `Row closed — contact was unreachable.`;
       } else if (to === "redirected") {
         text = `Row redirected to a different stakeholder.`;
+      } else if (to === "archived") {
+        text = `Prospect archived — outreach halted. Can be reopened.`;
       } else {
         text = `Row moved from ${fromLabel} to ${toLabel}.`;
       }

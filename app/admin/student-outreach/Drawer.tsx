@@ -33,6 +33,7 @@ import StyledSelect from "@/components/ui/Select";
 import {
   KIND_LABELS,
   STATUS_LABELS,
+  CLOSED_STATUSES,
   type Contact,
   type DrawerContext,
   type ResearchData,
@@ -177,11 +178,18 @@ export function Drawer(props: DrawerProps) {
 function DrawerHeaderOverflow({
   onMarkUnread,
   onStopOutreach,
+  onArchive,
+  onReopen,
 }: {
   onMarkUnread: () => Promise<void>;
   /** When provided, a "Stop all outreach" item appears under Mark as unread —
    *  a hard stop that cancels every queued email and call for the row. */
   onStopOutreach?: () => Promise<void>;
+  /** Whole-prospect Archive — halts the cadence and parks the row. Shown for
+   *  any non-archived row, separate from Stop all outreach. */
+  onArchive?: () => Promise<void>;
+  /** Reopen a closed/archived row back into active workflow. */
+  onReopen?: () => Promise<void>;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -219,6 +227,28 @@ function DrawerHeaderOverflow({
           >
             Mark as unread
           </button>
+          {onReopen && (
+            <button
+              onClick={() => {
+                setOpen(false);
+                void onReopen();
+              }}
+              className="block w-full px-3 py-1.5 text-left text-xs font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Reopen
+            </button>
+          )}
+          {onArchive && (
+            <button
+              onClick={() => {
+                setOpen(false);
+                void onArchive();
+              }}
+              className="block w-full px-3 py-1.5 text-left text-xs font-medium text-gray-700 hover:bg-gray-50"
+            >
+              Archive
+            </button>
+          )}
           {onStopOutreach && (
             <button
               onClick={() => {
@@ -441,6 +471,37 @@ function StakeholderDrawer({
                     setError(
                       e instanceof Error ? e.message : "Failed to stop outreach",
                     );
+                  }
+                }
+              : undefined
+          }
+          // Archive — whole-prospect park (halts cadence). Offered on any
+          // non-archived row, in any tab; reopen revives it.
+          onArchive={
+            ctx && ctx.outreach.status !== "archived"
+              ? async () => {
+                  if (
+                    !window.confirm(
+                      "Archive this prospect? This halts outreach and parks it. You can reopen it later.",
+                    )
+                  )
+                    return;
+                  try {
+                    await action("archive");
+                  } catch (e) {
+                    setError(e instanceof Error ? e.message : "Failed to archive");
+                  }
+                }
+              : undefined
+          }
+          // Reopen — only on closed/archived rows.
+          onReopen={
+            ctx && CLOSED_STATUSES.includes(ctx.outreach.status)
+              ? async () => {
+                  try {
+                    await action("reopen");
+                  } catch (e) {
+                    setError(e instanceof Error ? e.message : "Failed to reopen");
                   }
                 }
               : undefined

@@ -51,6 +51,7 @@ const CLOSED_STATUSES = new Set([
   "not_interested",
   "do_not_contact",
   "wrong_contact",
+  "archived",
 ]);
 
 interface Props {
@@ -206,6 +207,23 @@ export function MedJobsEntityListPage({ tab, title, subtitle }: Props) {
               setError(e instanceof Error ? e.message : "Action failed");
             }
           }}
+          onArchive={
+            row.status === "archived"
+              ? undefined
+              : async () => {
+                  if (
+                    !window.confirm(
+                      "Archive this prospect? This halts outreach and parks it. You can reopen it later.",
+                    )
+                  )
+                    return;
+                  try {
+                    await callAction(row.id, "archive");
+                  } catch (e) {
+                    setError(e instanceof Error ? e.message : "Action failed");
+                  }
+                }
+          }
           onReopen={
             isClosed
               ? async () => {

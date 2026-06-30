@@ -277,6 +277,7 @@ function StatusBadge({ status }: { status: Status }) {
     do_not_contact: "bg-red-50 text-red-700",
     wrong_contact: "bg-gray-100 text-gray-500",
     redirected: "bg-gray-100 text-gray-500",
+    archived: "bg-amber-50 text-amber-700",
   };
   return (
     <span className={`whitespace-nowrap rounded-full px-2.5 py-0.5 text-xs font-medium ${styles[status] ?? "bg-gray-100 text-gray-700"}`}>

@@ -18,7 +18,11 @@ export type Status =
   | "no_response_closed"
   | "do_not_contact"
   | "wrong_contact"
-  | "redirected";
+  | "redirected"
+  // Whole-prospect "Archive" — halts the running cadence and parks the row.
+  // Distinct from the other closed statuses in that it is explicitly meant to
+  // be reopened later (the campus page shows it as an "Archived" tag).
+  | "archived";
 
 /**
  * Legacy values still accepted by the DB CHECK constraint but no longer
@@ -768,6 +772,7 @@ export const STATUS_LABELS: Record<Status | LegacyStatus, string> = {
   do_not_contact: "Do Not Contact",
   wrong_contact: "Wrong Contact",
   redirected: "Redirected",
+  archived: "Archived",
   // Legacy — only present on un-migrated historical rows.
   agreed: "Partner",
   distributed: "Partner",
@@ -813,6 +818,7 @@ export function statusGroup(status: Status | LegacyStatus): StatusGroup {
     case "do_not_contact":
     case "wrong_contact":
     case "redirected":
+    case "archived":
       return "closed";
   }
 }
@@ -837,6 +843,7 @@ export const CLOSED_STATUSES: Status[] = [
   "do_not_contact",
   "wrong_contact",
   "redirected",
+  "archived",
 ];
 
 /** Stages from which "Mark as Partner" should be visible as a CTA. */

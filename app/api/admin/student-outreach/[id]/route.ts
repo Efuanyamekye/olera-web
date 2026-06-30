@@ -37,6 +37,7 @@ import {
   type NamedContact,
 } from "@/lib/medjobs/smartlead-bridge";
 import { nextBusinessDayET } from "@/lib/student-outreach/business-day";
+import { CLOSED_STATUSES } from "@/lib/student-outreach/types";
 import { getProviderOwnership } from "@/lib/providers/ownership.server";
 import {
   deriveRepliesState,
@@ -196,6 +197,12 @@ export async function POST(
         break;
       case "reopen":
         await handleReopen(db, row, user.id);
+        break;
+      // Whole-prospect Archive — halts the running cadence and parks the row
+      // under the "Archived" status (separate from Stop outreach). Available
+      // from any card/drawer overflow in any In-Basket tab; reopen revives it.
+      case "archive":
+        await handleArchive(db, row, user.id);
         break;
 
       // ── Channel logs ────────────────────────────────────────────────
@@ -1546,8 +1553,49 @@ async function handleMarkPartner(
   await stopRowSmartleadDrips(db, row, userId);
 }
 
+/**
+ * Whole-prospect Archive. Halts the running cadence (cancels every pending
+ * cold + activation task and pauses the Smartlead email drips), then parks the
+ * row under the "archived" status. Distinct from Stop outreach — archived rows
+ * are explicitly meant to be reopened (handleReopen), and they surface on the
+ * campus page as an "Archived" tag. Allowed from any non-archived status so the
+ * action works from every In-Basket tab.
+ */
+async function handleArchive(db: DB, row: OutreachRow, userId: string) {
+  if (row.status === "archived") return;
+
+  // Halt the cadence: cancel all pending tasks (same hard stop as Stop
+  // outreach), then pause the Smartlead cold + activation drips so no further
+  // emails fire after archiving.
+  await db
+    .from("student_outreach_tasks")
+    .update({
+      status: "cancelled",
+      completed_at: new Date().toISOString(),
+      completed_by: userId,
+    })
+    .eq("outreach_id", row.id)
+    .eq("status", "pending");
+  await stopRowSmartleadDrips(db, row, userId);
+
+  // Park the whole prospect. reopen_at / snoozed_until are cleared so a cron
+  // sweep never auto-revives an archived row — reopen is an explicit action.
+  await touchOutreach(db, row.id, userId, {
+    status: "archived",
+    reopen_at: null,
+    snoozed_until: null,
+  });
+  await insertTouchpoint(db, row.id, "stage_change", userId, {
+    payload: { from: row.status, to: "archived", archived: true },
+  });
+}
+
 async function handleReopen(db: DB, row: OutreachRow, userId: string) {
-  if (row.status !== "no_response_closed" && row.status !== "wrong_contact") {
+  // Reopen any closed/archived row (not_interested, do_not_contact,
+  // no_response_closed, wrong_contact, redirected, archived). Previously this
+  // only allowed no_response_closed + wrong_contact, which is why archived /
+  // not-interested rows ("unable to reopen") were stuck.
+  if (!CLOSED_STATUSES.includes(row.status)) {
     throw new Error(`Cannot reopen from status "${row.status}"`);
   }
   // Reset cadence and go back to researched (admin already did the research before closing).

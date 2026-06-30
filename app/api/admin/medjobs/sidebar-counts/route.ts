@@ -48,6 +48,7 @@ const CLOSED_STATUSES = [
   "not_interested",
   "do_not_contact",
   "wrong_contact",
+  "archived",
 ];
 
 const REPLIES_STATUSES = ["outreach_sent", "engaged"];

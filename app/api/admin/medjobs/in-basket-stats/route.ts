@@ -34,6 +34,7 @@ const CLOSED_STATUSES = [
   "not_interested",
   "do_not_contact",
   "wrong_contact",
+  "archived",
 ];
 
 // Touchpoint type → hero breakdown bucket. Anything not mapped falls

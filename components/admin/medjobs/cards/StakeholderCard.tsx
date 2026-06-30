@@ -416,9 +416,13 @@ export function PrimaryAction({
 export function OverflowMenu({
   items,
   onStopOutreach,
+  onArchive,
 }: {
   items: OverflowItem[];
   onStopOutreach: (reason: StopOutreachReason) => Promise<void>;
+  /** Whole-prospect Archive — rendered as its own item, separate from the
+   *  Stop-outreach picker. Omitted for already-archived rows. */
+  onArchive?: () => Promise<void>;
 }) {
   const [open, setOpen] = useState(false);
   const [showReasons, setShowReasons] = useState(false);
@@ -488,6 +492,11 @@ export function OverflowMenu({
                 </MenuItem>
               ))}
               {items.length > 0 && <div className="my-1 border-t border-gray-100" />}
+              {onArchive && (
+                <MenuItem onClick={() => { void onArchive(); close(); }}>
+                  Archive
+                </MenuItem>
+              )}
               <MenuItem onClick={() => setShowReasons(true)} danger>
                 Stop outreach…
               </MenuItem>
@@ -581,7 +590,13 @@ export function buildUniversalOverflow(cb: RowCardCallbacks): ReactNode {
   if (cb.onSeeLogHistory) {
     items.push({ label: "See log history", onClick: cb.onSeeLogHistory });
   }
-  return <OverflowMenu items={items} onStopOutreach={cb.onStopOutreach} />;
+  return (
+    <OverflowMenu
+      items={items}
+      onStopOutreach={cb.onStopOutreach}
+      onArchive={cb.onArchive}
+    />
+  );
 }
 
 export function buildRowSlots(tab: TabKey, row: TabRow, cb: RowCardCallbacks): RowSlots {
