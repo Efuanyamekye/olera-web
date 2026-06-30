@@ -137,13 +137,13 @@ export default function Navbar() {
     // Skip if not on mobile viewport (lg breakpoint = 1024px)
     if (typeof window === "undefined" || window.innerWidth >= 1024) return;
     // Skip if no provider to attribute the event to
-    if (!activeProviderId) return;
+    if (!activeProviderSlug) return;
 
     mobileNavImpressionFired.current = true;
-    trackProviderEvent(activeProviderId, "mobile_nav_variant_impression", {
+    trackProviderEvent(activeProviderSlug, "mobile_nav_variant_impression", {
       variant: mobileNavVariant,
     });
-  }, [mounted, isProviderPortal, mobileNavVariant, activeProviderId]);
+  }, [mounted, isProviderPortal, mobileNavVariant, activeProviderSlug]);
 
   // Provider detail page detection — has its own mobile nav (MobileProviderTopNav)
   // Pattern: /provider/[slug] where slug is not a known portal route
@@ -1149,13 +1149,13 @@ export default function Navbar() {
                               if (hasProviderProfile && providerProfileId) switchProfile(providerProfileId);
                               setIsMobileMenuOpen(false);
                               // Track key navigation actions for A/B test analysis
-                              if (activeProviderId && item.label === "Find Families") {
-                                trackProviderEvent(activeProviderId, "nav_families_clicked", {
+                              if (activeProviderSlug && item.label === "Find Families") {
+                                trackProviderEvent(activeProviderSlug, "nav_families_clicked", {
                                   variant: mobileNavVariant ?? "current",
                                   source: "hamburger_menu",
                                 });
-                              } else if (activeProviderId && item.label === "Hire Caregivers") {
-                                trackProviderEvent(activeProviderId, "nav_hire_clicked", {
+                              } else if (activeProviderSlug && item.label === "Hire Caregivers") {
+                                trackProviderEvent(activeProviderSlug, "nav_hire_clicked", {
                                   variant: mobileNavVariant ?? "current",
                                   source: "hamburger_menu",
                                 });
@@ -1581,15 +1581,15 @@ export default function Navbar() {
             hasNotifications={providerInboxCount > 0 || qnaCount > 0 || newLeadsCount > 0}
             onMorePress={() => setIsMoreSheetOpen(true)}
             onNavClick={(tabKey) => {
-              if (!activeProviderId) return;
+              if (!activeProviderSlug) return;
               // Track key navigation actions for A/B test analysis
               if (tabKey === "families") {
-                trackProviderEvent(activeProviderId, "nav_families_clicked", {
+                trackProviderEvent(activeProviderSlug, "nav_families_clicked", {
                   variant: "bottom_tabs",
                   source: "bottom_tabs",
                 });
               } else if (tabKey === "hire") {
-                trackProviderEvent(activeProviderId, "nav_hire_clicked", {
+                trackProviderEvent(activeProviderSlug, "nav_hire_clicked", {
                   variant: "bottom_tabs",
                   source: "bottom_tabs",
                 });
