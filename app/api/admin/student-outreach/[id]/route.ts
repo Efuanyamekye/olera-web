@@ -895,6 +895,15 @@ async function transitionStage(
     payload: { from: row.status, to },
   });
 
+  // Entering a closed status (Stop outreach → Not interested / No response /
+  // Wrong contact / DNC / Redirected) must also halt the Smartlead email drip
+  // for every enrolled recipient — cancelTasksByType above only clears CRM
+  // call tasks; the cold/activation emails live in Smartlead. Best-effort,
+  // inert for rows that were never enrolled.
+  if (CLOSED_STATUSES.includes(to)) {
+    await stopRowSmartleadDrips(db, row, userId);
+  }
+
   if (effects.taskToQueue) {
     await queueTask(db, row.id, effects.taskToQueue, userId);
   }
@@ -914,15 +923,39 @@ async function transitionStage(
 async function stopRowSmartleadDrips(db: DB, row: OutreachRow, userId: string) {
   const cold = row.research_data?.smartlead;
   const activation = row.research_data?.smartlead_activation;
-  const targets: Array<{ campaignId: number; email: string }> = [];
-  const add = (cid: number | undefined, email: string | null | undefined) => {
-    if (typeof cid === "number" && email) targets.push({ campaignId: cid, email });
+  const coldCid = cold?.campaign_id;
+  const actCid = activation?.campaign_id;
+  if (typeof coldCid !== "number" && typeof actCid !== "number") return;
+
+  // Gather EVERY email enrolled under this row, not just the stored general
+  // lead_email. With the sub-prospect fan-out (offices/orgs enroll the General
+  // Contact + every emailable individual), pausing only lead_email would leave
+  // each member's cold drip running after archive/conversion. Collect the
+  // General Contact, the Decision Maker, and every active named contact, then
+  // pause each in both the cold and activation campaigns (pauseLeadDrips dedups
+  // and silently skips emails that aren't actually leads).
+  const emails = new Set<string>();
+  const addEmail = (e: string | null | undefined) => {
+    const v = e?.trim().toLowerCase();
+    if (v) emails.add(v);
   };
-  add(cold?.campaign_id, cold?.lead_email);
-  add(activation?.campaign_id, activation?.lead_email);
-  // The engaged contact (activation lead) may also still sit in the cold
-  // campaign — pause them there too (pauseLeadDrips dedups + skips misses).
-  add(cold?.campaign_id, activation?.lead_email);
+  addEmail(cold?.lead_email);
+  addEmail(activation?.lead_email);
+  addEmail(row.research_data?.general_contact?.email);
+  addEmail(row.research_data?.decision_maker?.email);
+  const { data: contactRows } = await db
+    .from("student_outreach_contacts")
+    .select("email")
+    .eq("outreach_id", row.id);
+  for (const c of (contactRows ?? []) as Array<{ email: string | null }>) {
+    addEmail(c.email);
+  }
+
+  const targets: Array<{ campaignId: number; email: string }> = [];
+  for (const email of emails) {
+    if (typeof coldCid === "number") targets.push({ campaignId: coldCid, email });
+    if (typeof actCid === "number") targets.push({ campaignId: actCid, email });
+  }
   if (targets.length === 0) return;
 
   try {
@@ -2591,8 +2624,9 @@ async function enrollRowIntoWelcomeCampaign(
  * Day 0, and activation tasks alike — and record the stop so the drawer no
  * longer reads as an active cadence. Status is left unchanged (this halts
  * automated sends without closing the row, so the admin can still book a
- * meeting or make a partner manually). Smartlead's email drip auto-pauses on
- * reply; per-lead Smartlead pause is not part of this MVP off-switch.
+ * meeting or make a partner manually). The Smartlead email drip is paused for
+ * every enrolled recipient too (best-effort) — otherwise the hard stop would
+ * cancel CRM call tasks while cold emails kept sending from Smartlead.
  */
 async function handleStopAllOutreach(db: DB, row: OutreachRow, userId: string) {
   await db
@@ -2604,6 +2638,10 @@ async function handleStopAllOutreach(db: DB, row: OutreachRow, userId: string) {
     })
     .eq("outreach_id", row.id)
     .eq("status", "pending");
+  // Halt the Smartlead email drip for every fanned-out recipient (the CRM
+  // task cancel above only stops call tasks; cold/activation emails live in
+  // Smartlead). Best-effort, inert without SMARTLEAD_API_KEY.
+  await stopRowSmartleadDrips(db, row, userId);
   await insertTouchpoint(db, row.id, "note_added", userId, {
     channel: "system",
     payload: { reason: "outreach_stopped" },
@@ -2649,16 +2687,21 @@ function requireProgramPdf(
 /**
  * Fan a row's named Specific Contacts out into Smartlead leads. Every active
  * contact with a usable email becomes its own lead alongside the General
- * Contact, EXCEPT the org-level General Office/Inbox roles and the General
- * Contact email itself (those are the "general" lead). Optionally restricted to
- * `selectedIds` — the contacts the admin left checked in the launch modal.
+ * Contact, EXCEPT the org-level General Office/Inbox roles (those ARE the
+ * General Contact). Optionally restricted to `selectedIds` — the contacts the
+ * admin left checked in the launch modal.
+ *
+ * NOTE: contacts are intentionally NOT deduped against the General Contact
+ * email. Department rows store the chair's email == general_contact.email, and
+ * the dept_head launch modal renders no separate general row, so dropping the
+ * chair here would hide it from the launch preview. Any genuine same-email
+ * duplication is collapsed by Smartlead's per-campaign email dedupe at send.
  */
 function fanOutFromContacts(
   row: { research_data: ResearchData | null },
   contacts: Contact[],
   selectedIds?: Set<string>,
 ): NamedContact[] {
-  const gcEmail = row.research_data?.general_contact?.email?.trim().toLowerCase() ?? null;
   const out: NamedContact[] = [];
   const seen = new Set<string>();
   for (const c of contacts) {
@@ -2667,7 +2710,6 @@ function fanOutFromContacts(
     if (!email) continue;
     if (c.role === "General Office" || c.role === "General Inbox") continue;
     const lc = email.toLowerCase();
-    if (gcEmail && lc === gcEmail) continue; // the General Contact lead, not a named one
     if (selectedIds && !selectedIds.has(c.id)) continue;
     if (seen.has(lc)) continue;
     seen.add(lc);
