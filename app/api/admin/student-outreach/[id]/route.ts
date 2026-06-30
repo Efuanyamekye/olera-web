@@ -706,43 +706,14 @@ async function loadDrawerContext(outreachId: string): Promise<DrawerContext | nu
   // Stakeholder rows: no general-contact concept; the Decision Maker slot
   // (or legacy student_outreach_contacts data, if no Decision Maker is set
   // yet) carries the named recipients.
-  const previewDm = row.research_data?.decision_maker;
-  const previewContacts: NamedContact[] = [];
-  if (
-    previewDm &&
-    !previewDm.unavailable &&
-    previewDm.email &&
-    previewDm.email.trim()
-  ) {
-    const [first, ...rest] = (previewDm.name ?? "").trim().split(/\s+/);
-    previewContacts.push({
-      contact_id: `dm:${row.id}`,
-      email: previewDm.email.trim(),
-      first_name: first || null,
-      last_name: rest.length > 0 ? rest.join(" ") : null,
-      title: null,
-      role: previewDm.role ?? null,
-    });
-  } else if (!previewDm) {
-    // Backward-compat for rows enrolled BEFORE the Decision Maker
-    // migration — surface existing student_outreach_contacts entries
-    // (active, email present, not General Office/Inbox) as preview
-    // recipients so the modal doesn't suddenly hide leads the cron is
-    // still managing.
-    for (const c of (contacts ?? []) as Contact[]) {
-      if (c.status !== "active") continue;
-      if (!c.email || !c.email.trim()) continue;
-      if (c.role === "General Office" || c.role === "General Inbox") continue;
-      previewContacts.push({
-        contact_id: c.id,
-        email: c.email,
-        first_name: c.first_name,
-        last_name: c.last_name,
-        title: c.title,
-        role: c.role,
-      });
-    }
-  }
+  // Preview the DEFAULT fan-out (what enrolls if the admin doesn't uncheck
+  // anyone): providers → General Contact + Decision Maker; offices/orgs →
+  // General Contact + every emailable individual; departments → General Contact
+  // + chair. Mirrors enrollRowIntoSmartlead's no-selection path.
+  const previewContacts: NamedContact[] = defaultFanOutContacts(
+    row,
+    (contacts ?? []) as Contact[],
+  );
   const gc = row.research_data?.general_contact;
   const previewRow: BridgeRow = {
     outreach_id: row.id,
@@ -2164,8 +2135,11 @@ async function handleScheduleSequence(
   // the lead into its campus campaign FIRST so any skip (no email / already
   // enrolled) or API failure aborts BEFORE any CRM mutation — no orphaned
   // tasks, no half-transitioned row. enrollRowIntoSmartlead throws on skip
-  // or failure and writes the linkage + touchpoint on success.
-  await enrollRowIntoSmartlead(db, row, userId);
+  // or failure and writes the linkage + touchpoint on success. Pass the
+  // launch-modal recipient selection so Smartlead fans out to exactly the
+  // individuals the admin kept checked (general + each sub-prospect), matching
+  // the per-recipient call tasks.
+  await enrollRowIntoSmartlead(db, row, userId, body.recipients);
 
   // Smartlead owns the email drip — we only queue CRM-side call tasks.
   const tasksToInsert = plan.filter((p) => p.task_type === "outreach_followup_call");
@@ -2672,7 +2646,85 @@ function requireProgramPdf(
  * Throws on skip (no email / already enrolled) or API failure so the action
  * surfaces the reason to the admin and aborts before queueing call tasks.
  */
-async function enrollRowIntoSmartlead(db: DB, row: OutreachRow, userId: string) {
+/**
+ * Fan a row's named Specific Contacts out into Smartlead leads. Every active
+ * contact with a usable email becomes its own lead alongside the General
+ * Contact, EXCEPT the org-level General Office/Inbox roles and the General
+ * Contact email itself (those are the "general" lead). Optionally restricted to
+ * `selectedIds` — the contacts the admin left checked in the launch modal.
+ */
+function fanOutFromContacts(
+  row: { research_data: ResearchData | null },
+  contacts: Contact[],
+  selectedIds?: Set<string>,
+): NamedContact[] {
+  const gcEmail = row.research_data?.general_contact?.email?.trim().toLowerCase() ?? null;
+  const out: NamedContact[] = [];
+  const seen = new Set<string>();
+  for (const c of contacts) {
+    if (c.status !== "active") continue;
+    const email = c.email?.trim();
+    if (!email) continue;
+    if (c.role === "General Office" || c.role === "General Inbox") continue;
+    const lc = email.toLowerCase();
+    if (gcEmail && lc === gcEmail) continue; // the General Contact lead, not a named one
+    if (selectedIds && !selectedIds.has(c.id)) continue;
+    if (seen.has(lc)) continue;
+    seen.add(lc);
+    out.push({
+      contact_id: c.id,
+      email,
+      first_name: c.first_name,
+      last_name: c.last_name,
+      title: c.title,
+      role: c.role,
+    });
+  }
+  return out;
+}
+
+/**
+ * Default (un-filtered) Smartlead fan-out for a row — what enrolls if the admin
+ * doesn't uncheck anyone in the launch modal. Drives both the GET drawer
+ * preview and the POST enrollment fallback.
+ *
+ *   providers              → General Contact + ONE Decision Maker (MVP cap;
+ *                            the research_data.decision_maker slot)
+ *   offices / orgs         → General Contact + EVERY emailable individual
+ *   departments            → General Contact + the chair (the one contact)
+ *
+ * Legacy provider rows with no Decision Maker slot fall through to the
+ * contacts-table fan-out so previously-enrolled leads still surface.
+ */
+function defaultFanOutContacts(
+  row: { id: string; kind: string | null; research_data: ResearchData | null },
+  contacts: Contact[],
+): NamedContact[] {
+  if (row.kind === "provider") {
+    const dm = row.research_data?.decision_maker;
+    if (dm && !dm.unavailable && dm.email && dm.email.trim()) {
+      const [first, ...rest] = (dm.name ?? "").trim().split(/\s+/);
+      return [
+        {
+          contact_id: `dm:${row.id}`,
+          email: dm.email.trim(),
+          first_name: first || null,
+          last_name: rest.length > 0 ? rest.join(" ") : null,
+          title: null,
+          role: dm.role ?? null,
+        },
+      ];
+    }
+  }
+  return fanOutFromContacts(row, contacts);
+}
+
+async function enrollRowIntoSmartlead(
+  db: DB,
+  row: OutreachRow,
+  userId: string,
+  recipients?: RecipientPlan[],
+) {
   // Stabilization guard: without the magic-link secret, rowToLeads silently
   // bakes the PROGRAM_URL marketing page (/medjobs/providers) into each lead's
   // welcome_url — which is exactly the "magic link drops me on the general
@@ -2736,26 +2788,55 @@ async function enrollRowIntoSmartlead(db: DB, row: OutreachRow, userId: string) 
     }
   }
 
-  // v9.x Decision Maker fan-out: General Contact + ONE Decision Maker (max
-  // 2 leads per row). Replaces the prior multi-contact fan-out — admins
-  // identify a single decision maker during pre-flight and store them in
-  // `research_data.decision_maker`. When absent or marked unavailable, the
-  // row enrolls with the General Contact lead only.
-  const dm = row.research_data?.decision_maker;
-  const namedContacts: NamedContact[] = [];
-  if (dm && !dm.unavailable && dm.email && dm.email.trim()) {
-    const [first, ...rest] = (dm.name ?? "").trim().split(/\s+/);
-    const lastName = rest.length > 0 ? rest.join(" ") : null;
-    namedContacts.push({
-      // Synthetic contact_id so the D2 webhook can attribute back to the
-      // Decision Maker slot without a contacts-table row.
-      contact_id: `dm:${row.id}`,
-      email: dm.email.trim(),
-      first_name: first || null,
-      last_name: lastName,
-      title: null,
-      role: dm.role ?? null,
-    });
+  // Sub-prospect fan-out: every emailable individual on the row becomes its
+  // own Smartlead lead alongside the General Contact (offices/orgs → ALL
+  // individuals; departments → the chair; providers → the Decision Maker).
+  // When the launch modal passes a recipient selection, enroll exactly the
+  // individuals the admin left checked; otherwise fall back to the default
+  // per-type fan-out. Contacts are loaded from the table so each lead keeps
+  // its title (drives the formal "Dear Dr. <Last>," salutation).
+  const { data: contactRows } = await db
+    .from("student_outreach_contacts")
+    .select("id, first_name, last_name, name, title, role, email, status")
+    .eq("outreach_id", row.id);
+  const activeContacts = (contactRows ?? []) as Contact[];
+
+  let namedContacts: NamedContact[];
+  if (recipients && recipients.length > 0) {
+    const selectedIds = new Set(
+      recipients
+        .filter(
+          (r) =>
+            r.recipient_kind === "specific" &&
+            r.channels?.email &&
+            r.contact_id,
+        )
+        .map((r) => r.contact_id as string),
+    );
+    namedContacts = fanOutFromContacts(row, activeContacts, selectedIds);
+    // Provider Decision Maker stored only in research_data (no contacts-table
+    // row) and selected via its synthetic dm: id — include it too.
+    const dm = row.research_data?.decision_maker;
+    if (
+      dm &&
+      !dm.unavailable &&
+      dm.email &&
+      dm.email.trim() &&
+      recipients.some((r) => r.contact_id === `dm:${row.id}` && r.channels?.email) &&
+      !namedContacts.some((c) => c.email.toLowerCase() === dm.email!.trim().toLowerCase())
+    ) {
+      const [first, ...rest] = (dm.name ?? "").trim().split(/\s+/);
+      namedContacts.push({
+        contact_id: `dm:${row.id}`,
+        email: dm.email.trim(),
+        first_name: first || null,
+        last_name: rest.length > 0 ? rest.join(" ") : null,
+        title: null,
+        role: dm.role ?? null,
+      });
+    }
+  } else {
+    namedContacts = defaultFanOutContacts(row, activeContacts);
   }
 
   const gc = row.research_data?.general_contact;
