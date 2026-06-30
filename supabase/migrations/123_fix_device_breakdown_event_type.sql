@@ -1,11 +1,11 @@
--- Fix Device Breakdown to use mobile_nav_variant_impression instead of dashboard_arrival
+-- Fix Device Breakdown to capture both desktop and mobile traffic
 --
--- The Device Breakdown section was using dashboard_arrival events, which only fire
--- on specific redirects (e.g., ?from=qa-success). This meant mobile users weren't
--- being counted since they don't trigger dashboard_arrival.
+-- The Device Breakdown section was using only dashboard_arrival events, which
+-- missed most mobile traffic. This migration combines both event types:
+--   - dashboard_arrival: captures desktop visits (and some mobile redirects)
+--   - mobile_nav_variant_impression: captures mobile A/B test visits
 --
--- This migration updates the function to use mobile_nav_variant_impression events,
--- which correctly capture all mobile provider dashboard visits for the A/B test.
+-- Also filters out events without ua_class metadata to remove "unknown" noise.
 
 DROP FUNCTION IF EXISTS get_provider_device_breakdown(TIMESTAMPTZ, TIMESTAMPTZ);
 
@@ -22,14 +22,15 @@ LANGUAGE sql
 STABLE
 AS $$
   SELECT
-    COALESCE(metadata->>'ua_class', 'unknown') AS ua_class,
+    metadata->>'ua_class' AS ua_class,
     COUNT(*) AS visit_count,
     COUNT(DISTINCT provider_id) AS unique_providers
   FROM provider_activity
   WHERE created_at >= from_date
     AND created_at < to_date
-    AND event_type = 'mobile_nav_variant_impression'
-  GROUP BY COALESCE(metadata->>'ua_class', 'unknown')
+    AND event_type IN ('dashboard_arrival', 'mobile_nav_variant_impression')
+    AND metadata->>'ua_class' IS NOT NULL
+  GROUP BY metadata->>'ua_class'
   ORDER BY visit_count DESC;
 $$;
 
