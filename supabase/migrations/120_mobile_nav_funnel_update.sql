@@ -6,6 +6,10 @@
 --
 -- These metrics help determine if the bottom_tabs variant improves
 -- discoverability of key actions compared to the hamburger menu.
+--
+-- Must DROP first because return type changed (added columns).
+
+DROP FUNCTION IF EXISTS get_mobile_nav_variant_funnel(TIMESTAMPTZ, TIMESTAMPTZ);
 
 CREATE OR REPLACE FUNCTION get_mobile_nav_variant_funnel(
   from_date TIMESTAMPTZ,
