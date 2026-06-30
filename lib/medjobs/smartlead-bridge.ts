@@ -57,7 +57,6 @@ export interface NamedContact {
    *  formal recipients still get "Dear <Last>," fallback, not "Hi <First>,". */
   title?: string | null;
   role: string | null;
-  email_verdict?: "valid" | "invalid" | "risky" | "unknown" | null;
   suppressed?: boolean;
 }
 
@@ -79,8 +78,6 @@ export interface BridgeRow {
   first_name: string | null;
   /** `research_data.smartlead.campaign_id` already set → already enrolled. */
   already_enrolled: boolean;
-  /** Cached pre-send verification verdict (lib/email-verification). */
-  email_verdict?: "valid" | "invalid" | "risky" | "unknown" | null;
   /** In the shared bounce/complaint suppression set (same one Resend honors). */
   suppressed?: boolean;
   /** Specific Contacts attached to this outreach row. Each becomes an
@@ -104,8 +101,7 @@ export type SkipReason =
   | "already_in_flight"
   | "already_enrolled"
   | "no_email"
-  | "suppressed"
-  | "unverified_email";
+  | "suppressed";
 
 export interface SelectionResult {
   eligible: BridgeRow[];
@@ -145,17 +141,15 @@ export function selectEligibleRows(rows: BridgeRow[]): SelectionResult {
   for (const row of rows) {
     let reason: SkipReason | null = null;
 
+    // NOTE: email verification is intentionally NOT a gate in the medjobs
+    // flow. ZeroBounce verdicts still exist for non-medjobs uses (family /
+    // provider nudges, digests) but never block cold/activation enrollment
+    // here — admins decide reachability. There is no `unverified_email` skip.
     if (TERMINAL.has(row.status)) reason = "terminal_status";
     else if (IN_FLIGHT.has(row.status)) reason = "already_in_flight";
     else if (row.already_enrolled) reason = "already_enrolled";
     else if (!hasAnyUsableEmail(row)) reason = "no_email";
     else if (row.suppressed && !hasUsableNamedContact(row)) reason = "suppressed";
-    else if (
-      row.email_verdict === "invalid" &&
-      (!row.email?.trim() || !hasUsableNamedContact(row))
-    ) {
-      reason = "unverified_email";
-    }
 
     if (reason) skipped.push({ outreach_id: row.outreach_id, reason });
     else eligible.push(row);
@@ -170,9 +164,8 @@ function hasAnyUsableEmail(row: BridgeRow): boolean {
 }
 
 function hasUsableNamedContact(row: BridgeRow): boolean {
-  return (row.contacts ?? []).some(
-    (c) => c.email && c.email.trim() && !c.suppressed && c.email_verdict !== "invalid",
-  );
+  // No email_verdict gate — verification never blocks medjobs enrollment.
+  return (row.contacts ?? []).some((c) => c.email && c.email.trim() && !c.suppressed);
 }
 
 /**
@@ -262,7 +255,7 @@ export function rowToLeads(row: BridgeRow, campus: CampusContext): FannedLead[] 
   });
 
   const generalEmail = row.email?.trim();
-  if (generalEmail && !row.suppressed && row.email_verdict !== "invalid") {
+  if (generalEmail && !row.suppressed) {
     leads.push({
       outreach_id: row.outreach_id,
       contact_id: null,
@@ -292,7 +285,6 @@ export function rowToLeads(row: BridgeRow, campus: CampusContext): FannedLead[] 
     const email = c.email?.trim();
     if (!email) continue;
     if (c.suppressed) continue;
-    if (c.email_verdict === "invalid") continue;
     const firstName = c.first_name?.trim() || "";
     const lastName = c.last_name?.trim() || "";
     const salutation = isFormal

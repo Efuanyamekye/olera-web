@@ -56,10 +56,22 @@ const PROVIDER_NOTIFY_FROM_TYPES = new Set<string>([
  * Every other (transactional) type stays cache-only and never makes a network
  * call on the send path. All checks fail OPEN (verify error → not suppressed).
  */
-const VERIFY_ON_SEND_TYPES = new Set<string>([
-  ...PROVIDER_NOTIFY_FROM_TYPES,
-  "weekly_analytics_digest",
+// MedJobs email types are intentionally EXCLUDED from verify-on-send. Per the
+// MedJobs flow decision (Task 3), email verification must never block or flag a
+// medjobs send — admins decide reachability. ZeroBounce stays for every other
+// cold/mixed type (provider nudges, digests). These types keep their domain
+// ring-fencing (they're still in PROVIDER_NOTIFY_FROM_TYPES); only the
+// suppression lever is removed for them.
+const MEDJOBS_NO_VERIFY_TYPES = new Set<string>([
+  "medjobs_student_interest",
+  "medjobs_candidate_ready",
 ]);
+
+const VERIFY_ON_SEND_TYPES = new Set<string>(
+  [...PROVIDER_NOTIFY_FROM_TYPES, "weekly_analytics_digest"].filter(
+    (t) => !MEDJOBS_NO_VERIFY_TYPES.has(t),
+  ),
+);
 
 /**
  * Resolve the From address. Precedence: explicit caller value > cold provider-

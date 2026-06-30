@@ -110,8 +110,13 @@ an explicit `outreach_ids[]`.
 | status ∈ {engaged, meeting_scheduled, active_partner} | `already_in_flight` |
 | `research_data.smartlead.campaign_id` already set | `already_enrolled` |
 | effective General Contact email missing | `no_email` |
-| email fails pre-send verification (`lib/email-verification.ts`) | `unverified_email` |
 | duplicate email within this batch | `duplicate_in_batch` |
+
+> **Email verification is NOT a gate (removed 2026-06).** ZeroBounce verdicts
+> never block or flag a medjobs enrollment — admins decide reachability. The
+> former `unverified_email` skip and the `email_verdict` field on `BridgeRow` /
+> `NamedContact` were removed. ZeroBounce remains for non-medjobs lanes (family /
+> provider nudges, digests).
 
 **Email source:** effective General Contact email =
 `research_data.general_contact.email` (override) ?? `business_profile` directory
