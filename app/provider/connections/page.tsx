@@ -2295,6 +2295,15 @@ export default function ProviderLeadsPage() {
     const lead = leads.find((l) => l.id === leadId);
     const connectionId = lead?.connectionId || leadId;
 
+    // Build personalized question based on family name
+    const firstName = lead?.name?.split(' ')[0];
+    const lowerName = firstName?.toLowerCase() || '';
+    const isGenericName = !firstName || firstName.length <= 1 || lowerName === 'care' || lowerName === 'family' || lowerName === 'seeker';
+    const hasRealName = !isGenericName;
+    const questionText = hasRealName
+      ? `Hi ${firstName}, thanks for reaching out! To understand your care needs better, can you let us know how much help you are looking for?`
+      : `Hi there, thanks for reaching out! To understand your care needs better, can you let us know how much help you are looking for?`;
+
     setQuickReplySendingId(leadId);
     try {
       const response = await fetch("/api/connections/message", {
@@ -2302,7 +2311,7 @@ export default function ProviderLeadsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           connectionId,
-          text: QUICK_REPLY_CONFIG.question,
+          text: questionText,
           messageType: "quick_reply_request",
           quickReplyOptions: QUICK_REPLY_CONFIG.options,
         }),

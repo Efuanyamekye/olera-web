@@ -162,7 +162,7 @@ export async function GET(request: NextRequest) {
 
       // Get provider names/slugs
       const { data: profiles } = await db
-        .from("profiles")
+        .from("business_profiles")
         .select("id, display_name, slug")
         .in("id", providerIds)
         .limit(providerIds.length);

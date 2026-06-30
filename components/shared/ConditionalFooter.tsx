@@ -3,19 +3,16 @@
 import { usePathname } from "next/navigation";
 import Footer from "./Footer";
 import SimpleFooter from "./SimpleFooter";
-import { useMobileNavVariant } from "@/hooks/use-mobile-nav-variant";
 import { useAuth } from "@/components/auth/AuthProvider";
 
 /**
  * Renders the appropriate footer based on page context:
  *  - Inbox views: no footer
- *  - Hub / account pages: simple legal-only footer
+ *  - Hub / account pages: simple legal-only footer (desktop only for providers)
  *  - Marketing / public pages: full footer
- *  - Mobile provider pages with bottom_tabs: no footer (bottom tabs replace it)
  */
 export default function ConditionalFooter() {
   const pathname = usePathname();
-  const mobileNavVariant = useMobileNavVariant();
   const { activeProfile } = useAuth();
   const isProvider = activeProfile?.type === "organization";
 
@@ -37,15 +34,12 @@ export default function ConditionalFooter() {
     return null;
   }
 
-  // Logged-in providers get SimpleFooter on ALL pages (not just hub)
-  // For bottom_tabs variant: hide on mobile, show on desktop
-  // For current variant: show SimpleFooter everywhere
-  // When variant is null (brief moment during navigation), default to hidden on mobile
-  // to prevent layout shift - better to briefly hide than briefly show
+  // Logged-in providers get SimpleFooter on desktop only.
+  // On mobile, footer is hidden for all variants - screen real estate is tight
+  // and support/legal links can be accessed via settings.
   if (isProvider) {
-    const hideOnMobile = mobileNavVariant !== "current";
     return (
-      <div className={hideOnMobile ? "hidden lg:block" : undefined}>
+      <div className="hidden lg:block">
         <SimpleFooter />
       </div>
     );

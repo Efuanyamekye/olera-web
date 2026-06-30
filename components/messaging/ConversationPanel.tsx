@@ -630,10 +630,20 @@ export default function ConversationPanel({
   const handleQuickReplySelect = useCallback(async (option: string) => {
     if (!connection || (!activeProfile && !claimToken)) return;
     setSending(true);
+
+    // Map quick reply options to warmer, conversational responses
+    const responseMap: Record<string, string> = {
+      "A few hours a week": "Thanks for getting back to me! I'm looking for a few hours of help each week. What does that typically look like with your agency?",
+      "Daily": "Thanks for getting back to me! I need daily care. Do you have availability for that?",
+      "Full-time or live-in": "Thanks for getting back to me! I'm looking for full-time or live-in care. Is that something you offer?",
+      "Still figuring it out": "Thanks for getting back to me! I'm still figuring out exactly what I need — can you tell me a bit about your services?",
+    };
+    const responseText = responseMap[option] || option;
+
     try {
       const requestBody: Record<string, string> = {
         connectionId: connection.id,
-        text: option,
+        text: responseText,
         messageType: "quick_reply_response",
       };
       if (claimToken) {

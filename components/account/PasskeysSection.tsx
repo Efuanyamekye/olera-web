@@ -132,7 +132,7 @@ export default function PasskeysSection() {
   if (!supported || loadFailed) return null;
 
   return (
-    <div className="p-6">
+    <div className="py-4">
       <div className="flex items-center justify-between mb-1">
         <p className="text-[15px] font-semibold text-gray-900">Passkeys</p>
         {passkeys.length > 0 && (
