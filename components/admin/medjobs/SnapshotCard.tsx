@@ -1525,6 +1525,26 @@ function ResearchActionFooter({
       ? "Launch outreach (override) →"
       : "Launch outreach →";
 
+  // Prepare recipients (materialize decision makers with an email into named
+  // contacts) and open the cadence pre-flight review. Shared by the normal
+  // Launch button and the call modal's "Override & launch outreach" escape
+  // hatch — the latter skips the launchEnabled gate (override already written).
+  const prepareAndOpenReview = async () => {
+    if (beforeLaunch) await beforeLaunch();
+    const dms = (ctx.outreach.research_data as Record<string, unknown>).decision_makers;
+    if (Array.isArray(dms)) {
+      const existing = new Set(ctx.contacts.map((c) => c.email?.toLowerCase()).filter(Boolean) as string[]);
+      const gcLc = ctx.outreach.research_data?.general_contact?.email?.toLowerCase();
+      for (const m of dms as Array<{ name?: string; title?: string; email?: string; phone?: string }>) {
+        const em = m.email?.trim().toLowerCase();
+        if (!em || em === gcLc || existing.has(em)) continue;
+        existing.add(em);
+        await action("add_contact", { name: m.name, title: m.title ?? null, role: m.title ?? null, email: m.email, phone: m.phone });
+      }
+    }
+    setShowPreFlight(true);
+  };
+
   return (
     <div className="border-t border-gray-200 pt-4">
       {/* Two clean actions only — the website lives in the green source link by
@@ -1549,23 +1569,7 @@ function ResearchActionFooter({
               return;
             }
             try {
-              if (beforeLaunch) await beforeLaunch();
-              // Materialize decision makers (research_data.decision_makers) with
-              // an email into named contacts so they're selectable recipients
-              // alongside the general contact — same pattern as the office's
-              // advisors. Deduped against existing contacts + the general email.
-              const dms = (ctx.outreach.research_data as Record<string, unknown>).decision_makers;
-              if (Array.isArray(dms)) {
-                const existing = new Set(ctx.contacts.map((c) => c.email?.toLowerCase()).filter(Boolean) as string[]);
-                const gcLc = ctx.outreach.research_data?.general_contact?.email?.toLowerCase();
-                for (const m of dms as Array<{ name?: string; title?: string; email?: string; phone?: string }>) {
-                  const em = m.email?.trim().toLowerCase();
-                  if (!em || em === gcLc || existing.has(em)) continue;
-                  existing.add(em);
-                  await action("add_contact", { name: m.name, title: m.title ?? null, role: m.title ?? null, email: m.email, phone: m.phone });
-                }
-              }
-              setShowPreFlight(true);
+              await prepareAndOpenReview();
             } catch (e) {
               setError(
                 e instanceof Error ? e.message : "Failed to prepare launch",
@@ -1642,6 +1646,9 @@ function ResearchActionFooter({
           onCancel={() => setShowCallForEmail(false)}
           onDone={() => setShowCallForEmail(false)}
           setError={setError}
+          // Escape hatch when the provider can't be reached by phone: override
+          // the confirm-call gate and open the cadence review directly.
+          onOverrideLaunch={prepareAndOpenReview}
         />
       )}
     </div>

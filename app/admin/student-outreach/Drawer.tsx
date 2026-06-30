@@ -20,10 +20,6 @@ import { DrawerShell } from "@/components/admin/medjobs/DrawerShell";
 import { ProviderProspectDrawerBody } from "@/components/admin/medjobs/ProviderProspectDrawerBody";
 import { NextStepCard } from "@/components/admin/medjobs/NextStepCard";
 import { PreFlightCallModal } from "@/components/admin/medjobs/PreFlightCallModal";
-import {
-  CallOutcomeModal,
-  type OutcomeChoice,
-} from "@/components/admin/medjobs/CallOutcomeModal";
 import { ProviderPreFlightModal } from "@/components/admin/medjobs/ProviderPreFlightModal";
 import { linkageFromResearchData } from "@/lib/medjobs/smartlead-inbox";
 import { SpecificContactsSection } from "@/components/admin/medjobs/SpecificContactsSection";
@@ -85,30 +81,6 @@ type ActionFn = (
   opts?: { silent?: boolean },
 ) => Promise<DrawerContext>;
 
-// Dept-head pre-launch intro call — a recommended, non-gating courtesy call.
-// All three outcomes log a research call (no stage change); the email sequence
-// still launches explicitly afterward.
-const INTRO_CALL_OUTCOMES: OutcomeChoice[] = [
-  {
-    key: "connected",
-    label: "Reached them",
-    blurb: "Spoke with the department head (or their office). Introduced ourselves + Dr. DuBose.",
-    tone: "happy",
-  },
-  {
-    key: "voicemail",
-    label: "Left a voicemail",
-    blurb: "Left a brief professional message that information is on the way.",
-    tone: "neutral",
-  },
-  {
-    key: "no_answer",
-    label: "No answer",
-    blurb: "Nobody picked up. Launch anyway — the intro email still goes out.",
-    tone: "neutral",
-  },
-];
-
 // v8.10.37: terminal closed statuses — Step Board hides for these so the
 // drawer doesn't invite adding workflow steps to a closed/DNC stakeholder.
 // Mirrors DangerZone's terminal-suppression rule.
@@ -117,6 +89,7 @@ const TERMINAL_STATUSES: Status[] = [
   "do_not_contact",
   "wrong_contact",
   "redirected",
+  "archived",
   "no_response_closed",
 ];
 
@@ -1154,19 +1127,15 @@ function ResearchModePanel({
   const type = ctx.outreach.stakeholder_type;
   const isOffice = isOfficeType(type);
   const [showPreFlight, setShowPreFlight] = useState(false);
+  // Pre-flight confirm call (offices + dept heads with a main phone). Blocking
+  // when a main phone is on file; the modal carries an always-on Override &
+  // launch button as the escape hatch when the contact can't be reached.
   const [showCallConfirm, setShowCallConfirm] = useState(false);
-  // Dept heads get an optional, NON-blocking pre-launch intro call (when a
-  // phone exists). It never gates launch — purely a courtesy + a logged touch.
-  const [showIntroCall, setShowIntroCall] = useState(false);
 
   // Readiness gating per stage.
   const haveContact = ctx.contacts.some((c) => c.status === "active");
   const primaryContact = ctx.contacts.find((c) => c.status === "active") ?? ctx.contacts[0] ?? null;
   const deptHeadPhone = type === "dept_head" ? (primaryContact?.phone ?? null) : null;
-  const deptHeadContactName =
-    [primaryContact?.title, primaryContact?.first_name, primaryContact?.last_name]
-      .filter(Boolean)
-      .join(" ") || null;
   const eligibleEmail = ctx.contacts.filter(
     (c) => c.status === "active" && c.email,
   ).length;
@@ -1239,14 +1208,34 @@ function ResearchModePanel({
   const requiresCall = isOffice && Boolean(officePhone);
   const officeCanLaunch = hasOfficeEmail && (requiresCall ? verificationState.can_launch : true);
 
+  // Non-office pre-flight call (P1, "all types"): dept heads confirm on the
+  // dept-head MAIN number when one is on file; with no number there's nothing
+  // to call, so they launch directly. Professors have no main number here, so
+  // they always launch directly. The launch flow records research-complete
+  // (non-office rows keep the prospect step) then opens the recipient review.
+  const launchNonOffice = async () => {
+    if (ctx.outreach.status === "prospect") await action("mark_research_complete");
+    setShowPreFlight(true);
+  };
+  const nonOfficeMainPhone = type === "dept_head" ? deptHeadPhone : null;
+  const nonOfficeRequiresCall = Boolean(nonOfficeMainPhone);
+  const nonOfficeCanLaunch =
+    ready && (nonOfficeRequiresCall ? verificationState.can_launch : true);
+
+  // One confirm-call modal serves both shapes — the phone it dials and the
+  // launch flow it runs (and its always-on Override & launch button) switch
+  // on whether the row is office-shaped.
+  const confirmPhone = isOffice ? officePhone : nonOfficeMainPhone;
+  const confirmLaunch = isOffice ? launchOffice : launchNonOffice;
+
   // Unified orientation across all stakeholder types (no per-type drift). Only
-  // the phoneless-office case drops the "call to confirm" clause.
-  const orientation =
-    isOffice && !requiresCall ? (
-      <>Check the info, then launch outreach.</>
-    ) : (
-      <>Check the info, call to confirm, then launch outreach.</>
-    );
+  // the no-main-phone case drops the "call to confirm" clause.
+  const callRequiredHere = isOffice ? requiresCall : nonOfficeRequiresCall;
+  const orientation = !callRequiredHere ? (
+    <>Check the info, then launch outreach.</>
+  ) : (
+    <>Check the info, call to confirm, then launch outreach.</>
+  );
 
   // Less is more: no readiness checklist on any stakeholder pre-flight. The
   // disabled-until-ready CTA (and its tooltip) already communicate what's needed.
@@ -1262,28 +1251,33 @@ function ResearchModePanel({
     // visual drift from the office flow.
     cta = (
       <div className="flex flex-wrap items-center gap-2">
-        {type === "dept_head" && deptHeadPhone && (
+        {nonOfficeRequiresCall && (
           <button
-            onClick={() => setShowIntroCall(true)}
+            onClick={() => setShowCallConfirm(true)}
             className="inline-flex items-center gap-1.5 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 hover:bg-gray-50"
           >
             📞 Call to Confirm
           </button>
         )}
         <button
-          onClick={async () => {
-            try {
-              await action("mark_research_complete");
-              setShowPreFlight(true);
-            } catch (e) {
-              setError(e instanceof Error ? e.message : "Action failed");
-            }
+          onClick={() => {
+            if (nonOfficeCanLaunch) void launchNonOffice();
+            else if (!ready) setError("Add a contact first.");
+            else setError("Confirm the dept head on a Pre-Flight call, or override Pre-Flight.");
           }}
-          disabled={!ready}
-          title={ready ? "Review recipients and launch outreach." : "Add a contact first."}
+          disabled={!nonOfficeCanLaunch}
+          title={
+            nonOfficeCanLaunch
+              ? "Review recipients and launch outreach."
+              : !ready
+                ? "Add a contact first."
+                : "Confirm on a call first, or override Pre-Flight."
+          }
           className="rounded-md bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Launch outreach →
+          {nonOfficeRequiresCall && verificationState.status === "overridden"
+            ? "Launch outreach (override) →"
+            : "Launch outreach →"}
         </button>
       </div>
     );
@@ -1350,44 +1344,14 @@ function ResearchModePanel({
         <PreFlightCallModal
           organizationName={ctx.outreach.organization_name}
           campusName={ctx.campus.name}
-          phone={officePhone}
+          phone={confirmPhone}
           action={action}
           onCancel={() => setShowCallConfirm(false)}
           onDone={() => setShowCallConfirm(false)}
           setError={setError}
-        />
-      )}
-      {showIntroCall && (
-        <CallOutcomeModal
-          title="Intro call (recommended)"
-          subtitle={
-            <>
-              {ctx.outreach.organization_name}
-              {deptHeadContactName ? ` · ${deptHeadContactName}` : ""}
-              {deptHeadPhone ? ` · ${deptHeadPhone}` : ""}
-            </>
-          }
-          scriptLabel="Suggested script"
-          script={`"Hello, this is [your name], assistant to Dr. Logan DuBose at Olera. I'm reaching out about the Student Caregiver Program for ${
-            ctx.campus.name?.trim() || "your campus"
-          } students, which places pre-health students in paid caregiver roles with older adults. Before I send any details, are you the right person in the department to talk with, or is there a better contact?"`}
-          outcomes={INTRO_CALL_OUTCOMES}
-          onCancel={() => setShowIntroCall(false)}
-          onSubmit={async (outcomeKey, notes) => {
-            setError(null);
-            try {
-              // log_research_call records the call without advancing the stage —
-              // the row still launches via the email sequence afterward.
-              await action("log_research_call", {
-                outcome: outcomeKey ?? "connected",
-                notes,
-              });
-              setShowIntroCall(false);
-            } catch (e) {
-              setError(e instanceof Error ? e.message : "Failed to log the intro call");
-              throw e;
-            }
-          }}
+          // Always-available escape hatch: override the confirm-call gate and
+          // go straight to the per-recipient launch review.
+          onOverrideLaunch={confirmLaunch}
         />
       )}
       {showPreFlight && isOffice && (

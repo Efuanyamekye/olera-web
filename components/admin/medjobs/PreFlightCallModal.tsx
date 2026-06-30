@@ -55,6 +55,7 @@ export function PreFlightCallModal({
   onCancel,
   onDone,
   setError,
+  onOverrideLaunch,
 }: {
   organizationName: string;
   campusName?: string | null;
@@ -63,6 +64,11 @@ export function PreFlightCallModal({
   onCancel: () => void;
   onDone: () => void;
   setError: (msg: string | null) => void;
+  /** When provided, an always-visible "Override & launch outreach" button is
+   *  shown in the modal footer. It bypasses the confirm-call requirement
+   *  (writes pre_flight_overridden) and then runs the caller's launch flow —
+   *  the escape hatch for when a contact can't be reached by phone. */
+  onOverrideLaunch?: () => Promise<void> | void;
 }) {
   const campus = campusName?.trim() || "campus";
   const script = `"Hi, this is [your name] from Dr. DuBose's office, calling about his Student Caregiver Program for ${campus} students. I'd like to send your team an email with the details, and wanted to check first on the best address to send it to."`;
@@ -108,6 +114,22 @@ export function PreFlightCallModal({
       notesPlaceholder="What did they confirm? Anything useful for outreach copy?"
       onCancel={onCancel}
       onSubmit={dispatch}
+      extraAction={
+        onOverrideLaunch
+          ? {
+              label: "Override & launch outreach",
+              savingLabel: "Launching…",
+              onClick: async () => {
+                setError(null);
+                // Bypass the confirm-call gate (e.g. unreachable by phone),
+                // then run the caller's launch flow.
+                await action("override_pre_flight");
+                onDone();
+                await onOverrideLaunch();
+              },
+            }
+          : undefined
+      }
     />
   );
 }

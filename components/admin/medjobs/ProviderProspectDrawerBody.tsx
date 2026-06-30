@@ -92,16 +92,26 @@ export function ProviderProspectDrawerBody({ ctx, action, setError, activeTab }:
     preFlightOverridden,
   );
 
+  // Pre-flight call rule (P1): the confirm call is to the MAIN number only
+  // (the General Contact line) — never an individual/decision-maker number.
+  // The call is REQUIRED only when a main phone is on file; with no main
+  // phone there's nothing to call, so the row launches on email alone.
+  const mainPhone =
+    gc.phone !== undefined ? gc.phone : ctx.provider_business_profile?.phone ?? null;
+  const hasMainPhone = Boolean(mainPhone && String(mainPhone).trim());
+
   // R5: partners (stakeholder rows) often have no phone, so they can't do a
-  // confirm call — email alone is enough to launch. Providers keep the full
-  // gate (email + verified-on-call / override).
+  // confirm call — email alone is enough to launch. Providers gate on the
+  // confirm-call (or override) ONLY when a main phone exists; phoneless
+  // providers launch directly on a valid email.
   const isPartner = outreach.kind != null && outreach.kind !== "provider";
-  const launchEnabled = isPartner
-    ? hasEmail
-    : hasEmail && verificationState.can_launch;
+  const launchEnabled =
+    isPartner || !hasMainPhone
+      ? hasEmail
+      : hasEmail && verificationState.can_launch;
   const launchDisabledReason = !hasEmail
     ? "Add an email — General Contact or Decision Maker."
-    : !isPartner && !verificationState.can_launch
+    : !isPartner && hasMainPhone && !verificationState.can_launch
       ? "Confirm contacts on a Pre-Flight call, or override Pre-Flight."
       : undefined;
 

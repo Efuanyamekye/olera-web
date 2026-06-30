@@ -44,6 +44,14 @@ interface Props {
   /** Dispatch happens in the parent. outcomeKey is null when logging a
    *  note-only resolve (allowNotesOnly). */
   onSubmit: (outcomeKey: string | null, notes: string | null) => Promise<void>;
+  /** Optional secondary footer action shown on the LEFT, separate from the
+   *  outcome cards (e.g. pre-flight "Override & launch outreach"). Always
+   *  enabled — it does not require a selected outcome. */
+  extraAction?: {
+    label: string;
+    savingLabel?: string;
+    onClick: () => Promise<void>;
+  };
 }
 
 export function CallOutcomeModal({
@@ -59,11 +67,25 @@ export function CallOutcomeModal({
   savingLabel = "Logging…",
   onCancel,
   onSubmit,
+  extraAction,
 }: Props) {
   const [outcome, setOutcome] = useState<string | null>(null);
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
+  const [extraSaving, setExtraSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const runExtra = async () => {
+    if (!extraAction) return;
+    setExtraSaving(true);
+    setError(null);
+    try {
+      await extraAction.onClick();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Action failed");
+      setExtraSaving(false);
+    }
+  };
 
   const canSubmit =
     outcome !== null || (allowNotesOnly && notes.trim().length > 0);
@@ -88,16 +110,25 @@ export function CallOutcomeModal({
       onCancel={onCancel}
       footer={
         <>
+          {extraAction && (
+            <button
+              onClick={runExtra}
+              disabled={saving || extraSaving}
+              className="mr-auto rounded-md border border-primary-300 bg-primary-50 px-3 py-1.5 text-sm font-medium text-primary-700 hover:bg-primary-100 disabled:opacity-50"
+            >
+              {extraSaving ? (extraAction.savingLabel ?? "Launching…") : extraAction.label}
+            </button>
+          )}
           <button
             onClick={onCancel}
-            disabled={saving}
+            disabled={saving || extraSaving}
             className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
             Cancel
           </button>
           <button
             onClick={submit}
-            disabled={saving || !canSubmit}
+            disabled={saving || extraSaving || !canSubmit}
             className="rounded-md bg-gray-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
           >
             {saving ? savingLabel : submitLabel}
