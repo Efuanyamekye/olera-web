@@ -48,6 +48,8 @@ const PROVIDER_EVENT_TYPES = [
   "ads_touchpoint_dismissed",  // Provider dismissed a touchpoint
   // Mobile nav variant A/B test
   "mobile_nav_variant_impression", // Provider mobile nav rendered with variant
+  "nav_families_clicked",          // Provider clicked Find Families (mobile nav)
+  "nav_hire_clicked",              // Provider clicked Hire Caregivers (mobile nav)
 ] as const;
 
 const FAMILY_EVENT_TYPES = [

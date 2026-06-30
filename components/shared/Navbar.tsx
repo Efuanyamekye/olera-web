@@ -1149,13 +1149,13 @@ export default function Navbar() {
                               if (hasProviderProfile && providerProfileId) switchProfile(providerProfileId);
                               setIsMobileMenuOpen(false);
                               // Track key navigation actions for A/B test analysis
-                              if (activeProviderSlug && item.label === "Find Families") {
-                                trackProviderEvent(activeProviderSlug, "nav_families_clicked", {
+                              if (activeProviderId && item.label === "Find Families") {
+                                trackProviderEvent(activeProviderId, "nav_families_clicked", {
                                   variant: mobileNavVariant ?? "current",
                                   source: "hamburger_menu",
                                 });
-                              } else if (activeProviderSlug && item.label === "Hire Caregivers") {
-                                trackProviderEvent(activeProviderSlug, "nav_hire_clicked", {
+                              } else if (activeProviderId && item.label === "Hire Caregivers") {
+                                trackProviderEvent(activeProviderId, "nav_hire_clicked", {
                                   variant: mobileNavVariant ?? "current",
                                   source: "hamburger_menu",
                                 });
@@ -1581,15 +1581,15 @@ export default function Navbar() {
             hasNotifications={providerInboxCount > 0 || qnaCount > 0 || newLeadsCount > 0}
             onMorePress={() => setIsMoreSheetOpen(true)}
             onNavClick={(tabKey) => {
-              if (!activeProviderSlug) return;
+              if (!activeProviderId) return;
               // Track key navigation actions for A/B test analysis
               if (tabKey === "families") {
-                trackProviderEvent(activeProviderSlug, "nav_families_clicked", {
+                trackProviderEvent(activeProviderId, "nav_families_clicked", {
                   variant: "bottom_tabs",
                   source: "bottom_tabs",
                 });
               } else if (tabKey === "hire") {
-                trackProviderEvent(activeProviderSlug, "nav_hire_clicked", {
+                trackProviderEvent(activeProviderId, "nav_hire_clicked", {
                   variant: "bottom_tabs",
                   source: "bottom_tabs",
                 });
