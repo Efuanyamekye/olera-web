@@ -13,6 +13,24 @@ import type { NudgeSequence, NudgeSequencePhase } from "@/lib/types";
 
 export const COMPLETION_ACTIVE_COUNT = 4;
 export const PUBLISH_ACTIVE_COUNT = 4;
+
+/**
+ * Engagement gate for the completion track (Track 2 / Option B). A family that has been
+ * sent COMPLETION_GHOST_MIN_SENDS completion nudges and opened NONE of them has proven it
+ * isn't reading. We cut the sequence early rather than carry a non-opener through nudge_4 +
+ * the monthly maintenance tail (the bulk of completion volume). Openers ride the full
+ * sequence unchanged. Self-healing: if they ever open one, opens>0 flips them back in — we
+ * persist no "ghosted" flag, so re-engagement resumes the sequence automatically.
+ *
+ * The window captures EITHER a full active burst (4 nudges in 13d) OR ~4 monthly
+ * maintenance sends, so a long-dormant non-opener still trips the >=3 threshold.
+ */
+export const COMPLETION_GHOST_MIN_SENDS = 3;
+export const COMPLETION_GHOST_WINDOW_DAYS = 120;
+
+export function isCompletionGhost(sends: number, opens: number): boolean {
+  return sends >= COMPLETION_GHOST_MIN_SENDS && opens === 0;
+}
 export const COMPLETION_COOLDOWNS = [0, 2, 4, 7]; // days between nudges — same-day, Day 2, Day 6, Day 13
 export const PUBLISH_COOLDOWNS = [0, 2, 4, 7]; // days between nudges — same-day after complete, Day 2, Day 6, Day 13
 export const MAINTENANCE_COOLDOWN = 30; // days between maintenance nudges

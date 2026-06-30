@@ -31,6 +31,8 @@ import {
   advanceSequence,
   COMPLETION_ACTIVE_COUNT,
   MAX_MAINTENANCE_NUDGES,
+  COMPLETION_GHOST_WINDOW_DAYS,
+  isCompletionGhost,
 } from "@/lib/family-comms/nudge-sequence";
 import {
   countProvidersInArea,
@@ -201,7 +203,7 @@ export async function GET(request: NextRequest) {
       skipped: 0,
       dry_run: dryRun,
       byRung: {} as Record<string, number>,
-      stops: { unsubscribed: 0, self_reported_yes: 0, active_thread: 0, no_email: 0, no_rung: 0, send_failed: 0 },
+      stops: { unsubscribed: 0, self_reported_yes: 0, active_thread: 0, no_email: 0, no_rung: 0, send_failed: 0, completion_ghost: 0 },
     };
     const bump = (rung: string) => {
       counts.byRung[rung] = (counts.byRung[rung] || 0) + 1;
@@ -286,6 +288,55 @@ export async function GET(request: NextRequest) {
         if (!b.profile) b.profile = p;
       }
       if (rows.length < FAM_PAGE) break;
+    }
+
+    // 2c. Completion engagement (Track 2 / Option B engagement gate): one batched read of
+    //     completion-email open history, aggregated per recipient. The completion rung uses
+    //     this to cut families that have been sent >=3 completion nudges and opened none —
+    //     stop wasting the monthly tail on proven non-openers. Keyed by recipient address
+    //     (what email_log stores); the rung looks up by the family's profile email.
+    const COMPLETION_EMAIL_TYPES = [
+      "completion_nudge_1",
+      "completion_nudge_2",
+      "completion_nudge_3",
+      "completion_nudge_4",
+      "completion_maintenance",
+    ];
+    const ghostKey = (e: string | null | undefined) => (e || "").trim().toLowerCase();
+    const completionEngagement = new Map<string, { sends: number; opens: number }>();
+    {
+      const windowStart = new Date(now - COMPLETION_GHOST_WINDOW_DAYS * DAY).toISOString();
+      const EL_PAGE = 1000;
+      for (let elFrom = 0; ; elFrom += EL_PAGE) {
+        const { data: elRows, error: elErr } = await db
+          .from("email_log")
+          .select("recipient, first_opened_at")
+          .eq("recipient_type", "family")
+          .eq("status", "sent")
+          .in("email_type", COMPLETION_EMAIL_TYPES)
+          .gte("created_at", windowStart)
+          .range(elFrom, elFrom + EL_PAGE - 1);
+        if (elErr) {
+          // Non-load-bearing: the gate is an optimization. On read failure, degrade to
+          // "gate off" (clear the map → nobody suppressed → pre-gate behavior) rather than
+          // abort the whole family-comms run. Clear (not just break) so we never act on a
+          // PARTIAL map — partial open-history could misclassify an opener whose opened
+          // sends were in an un-fetched page. All-or-nothing keeps the gate strictly safe.
+          console.error(`[family-comms-coordinator] completion engagement fetch failed (gate off this run): ${elErr.message}`);
+          completionEngagement.clear();
+          break;
+        }
+        const rows = (elRows as { recipient: string | null; first_opened_at: string | null }[]) || [];
+        for (const r of rows) {
+          const k = ghostKey(r.recipient);
+          if (!k) continue;
+          const e = completionEngagement.get(k) || { sends: 0, opens: 0 };
+          e.sends++;
+          if (r.first_opened_at) e.opens++;
+          completionEngagement.set(k, e);
+        }
+        if (rows.length < EL_PAGE) break;
+      }
     }
 
     // 3. Evaluate each family through the ladder; send the first eligible rung.
@@ -402,7 +453,9 @@ export async function GET(request: NextRequest) {
         distanceMi: p.distanceMi,
       });
 
-      // Build the ladder for this family; first non-null plan wins.
+      // Build the ladder for this family; first non-null plan wins. `ghostSkip` is set by
+      // the completion rung when it suppresses a non-opener (distinct skip reason vs no_rung).
+      let ghostSkip = false;
       const plan = await pickRung();
 
       async function pickRung(): Promise<RungPlan | null> {
@@ -679,6 +732,14 @@ export async function GET(request: NextRequest) {
           const maintenanceExhausted =
             isMaintenance && nudgeNumber > COMPLETION_ACTIVE_COUNT + MAX_MAINTENANCE_NUDGES;
           if (shouldSendCompletionNudge(seq, familyCreatedAt) && !maintenanceExhausted) {
+            // Engagement gate: a family sent >=3 completion nudges with ZERO opens has
+            // proven it isn't reading — stop before nudge_4 + the monthly tail. Openers
+            // (opens>0) ride the full sequence. Self-healing: an open lets them back in.
+            const eng = completionEngagement.get(ghostKey(directEmail));
+            if (eng && isCompletionGhost(eng.sends, eng.opens)) {
+              ghostSkip = true;
+              return null;
+            }
             const hasLocation = !!(familyCity && familyState);
             const locationText = familyCity || familyState || "your area";
             const emailType = isMaintenance ? "completion_maintenance" : `completion_nudge_${nudgeNumber}`;
@@ -771,7 +832,8 @@ export async function GET(request: NextRequest) {
 
       if (!plan) {
         counts.skipped++;
-        counts.stops.no_rung++;
+        if (ghostSkip) counts.stops.completion_ghost++;
+        else counts.stops.no_rung++;
         continue;
       }
 
