@@ -343,6 +343,31 @@ export default function PrivacyPage() {
           Personal Data, We cannot guarantee its absolute security.
         </p>
 
+        {/* ── SMS / Text Messaging ── */}
+        <h2>SMS / Text Messaging</h2>
+        <p>
+          If You provide Your mobile phone number, You may receive text messages
+          from Olera about Your care search, such as alerts when a provider
+          responds to or reaches out about Your inquiry, care-benefit results You
+          requested, and account verification codes. You agree to receive these
+          messages by submitting Your number through our forms.
+        </p>
+        <p>
+          <strong>Message frequency varies.</strong> Message and data rates may
+          apply depending on Your mobile carrier and plan. Reply STOP to any
+          message to opt out at any time, or reply HELP for help.
+        </p>
+        <p>
+          <strong>
+            We do not sell, rent, or share Your mobile phone number or Your SMS
+            consent with any third parties or affiliates for their own marketing
+            or promotional purposes.
+          </strong>{" "}
+          Mobile information is used solely to deliver the messages described
+          above and is shared only with the service providers that help Us send
+          them (for example, our SMS delivery vendor).
+        </p>
+
         {/* ── Data Deletion Request Procedure ── */}
         <h2>Data Deletion Request Procedure</h2>
         <p>

@@ -5,6 +5,7 @@ import { getServiceClient } from "@/lib/admin";
 import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email";
 import { providerReachOutEmail, providerReachOutConfirmationEmail } from "@/lib/email-templates";
 import { sendSlackAlert } from "@/lib/slack";
+import { sendReactiveFamilyAlert } from "@/lib/sms/reactive-alerts";
 
 /**
  * POST /api/matches/notify-reach-out
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
         .single(),
       db
         .from("business_profiles")
-        .select("display_name, email, city, account_id, claim_token")
+        .select("display_name, email, city, account_id, claim_token, phone, state, phone_validity")
         .eq("id", toProfileId)
         .single(),
     ]);
@@ -153,6 +154,28 @@ export async function POST(request: Request) {
     // The family can still see the message when they log in, just won't get email notification
     if (!familyEmailSuccess) {
       console.error("[notify-reach-out] Family email notification failed:", familyEmailError);
+    }
+
+    // Reactive SMS alert (Tier 1) — transactional, gated by phone/opt-out/quiet
+    // hours inside the helper. Uses a STABLE inbox URL (not the 1h magic link),
+    // since a quiet-hours-deferred text could be delivered the next morning.
+    try {
+      const smsPath = conn?.id ? `/portal/inbox?id=${conn.id}` : "/portal/inbox";
+      let smsUrl = `${siteUrl}${smsPath}`;
+      if (!family.account_id && family.claim_token) {
+        const sep = smsPath.includes("?") ? "&" : "?";
+        smsUrl = `${siteUrl}${smsPath}${sep}token=${family.claim_token}`;
+      }
+      await sendReactiveFamilyAlert({
+        familyProfileId: toProfileId,
+        phone: family.phone,
+        state: family.state,
+        phoneValidity: family.phone_validity,
+        emailType: "provider_reach_out",
+        body: `Olera: ${providerDisplayName} in ${providerCity} reached out about your care needs. Read & reply: ${smsUrl}`,
+      });
+    } catch (smsErr) {
+      console.error("[notify-reach-out] Reactive SMS failed:", smsErr);
     }
 
     // Slack alert (fire-and-forget)

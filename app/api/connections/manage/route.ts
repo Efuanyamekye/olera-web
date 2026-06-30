@@ -6,6 +6,7 @@ import { connectionResponseEmail, providerSilentEmail, careUnsubscribeUrl } from
 import { sendLoopsEvent } from "@/lib/loops";
 import { getSiteUrl } from "@/lib/site-url";
 import { generateFamilyInboxUrl } from "@/lib/claim-tokens";
+import { sendReactiveFamilyAlert } from "@/lib/sms/reactive-alerts";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getAdminClient(): any {
@@ -141,7 +142,7 @@ export async function POST(request: Request) {
           const [{ data: initiatorBp }, { data: responderBp }] = await Promise.all([
             admin
               .from("business_profiles")
-              .select("email, display_name, account_id, type")
+              .select("email, display_name, account_id, type, phone, state, phone_validity")
               .eq("id", initiatorProfileId)
               .single(),
             admin
@@ -191,6 +192,25 @@ export async function POST(request: Request) {
               emailType: 'connection_response',
               recipientType: isProviderRequest ? 'provider' : 'family',
             });
+
+            // Reactive SMS (Tier 1): a provider got back to the family on THEIR
+            // inquiry. Accept-only — a decline is poor as a first text and stays
+            // email. Stable inbox URL (queue-safe). Helper applies all gates.
+            if (!isProviderRequest && action === "accept") {
+              try {
+                const smsUrl = `${getSiteUrl()}/portal/inbox?id=${connectionId}`;
+                await sendReactiveFamilyAlert({
+                  familyProfileId: initiatorProfileId,
+                  phone: initiatorBp?.phone,
+                  state: initiatorBp?.state,
+                  phoneValidity: initiatorBp?.phone_validity,
+                  emailType: "connection_response",
+                  body: `Olera: ${responderName} responded to your care inquiry. Read & reply: ${smsUrl}`,
+                });
+              } catch (smsErr) {
+                console.error(`[manage] reactive SMS failed:`, smsErr);
+              }
+            }
           }
         } catch (emailErr) {
           console.error(`[manage] ${action} email failed:`, emailErr);

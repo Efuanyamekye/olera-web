@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import type { LeadCaptureFormData } from "./types";
+import { SmsConsentDisclosure } from "@/components/sms/SmsConsentDisclosure";
 
 interface LeadCaptureFormProps {
   isLoggedIn: boolean;
@@ -194,6 +195,9 @@ export default function LeadCaptureForm({
           {displayError}
         </p>
       )}
+
+      {/* SMS consent disclosure (carrier-required at point of phone collection) */}
+      <SmsConsentDisclosure />
 
       {/* Submit button */}
       <button

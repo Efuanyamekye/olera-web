@@ -51,6 +51,7 @@ import type { MatchableProvider } from "@/lib/benefits/provider-tie-in";
 import type { WaiverProgram } from "@/data/waiver-library";
 import EmpathicSingleStep from "@/components/providers/BenefitsDiscoveryModule.empathic";
 import ResultsSheet from "@/components/benefits/ResultsSheet";
+import { SmsConsentDisclosure } from "@/components/sms/SmsConsentDisclosure";
 
 /** Minimal program shape passed from the provider page server component. */
 export interface BenefitsProgram {
@@ -668,10 +669,11 @@ export default function BenefitsDiscoveryModule({
             </div>
           </label>
 
-          {/* Combined consent — covers both channels honestly */}
+          {/* Consent — email (magic link) + carrier-compliant SMS disclosure */}
           <p className="mt-2.5 text-[12px] leading-relaxed text-gray-400">
-            We&apos;ll save your matches and email you a magic link to come back. If you add a phone, you&apos;ll get one text (reply STOP to opt out). We never sell your info.
+            We&apos;ll save your matches and email you a magic link to come back. We never sell your info.
           </p>
+          <SmsConsentDisclosure className="mt-1.5" />
 
           {error && (
             <p className="mt-2 text-[13px] text-red-600" role="alert">

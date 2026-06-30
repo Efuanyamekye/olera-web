@@ -33,6 +33,10 @@
       "schedule": "0 14 * * *"
     },
     {
+      "path": "/api/cron/sms-queue-flush",
+      "schedule": "0 * * * *"
+    },
+    {
       "path": "/api/cron/matches-unread",
       "schedule": "0 * * * *"
     },
