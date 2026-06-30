@@ -7,6 +7,28 @@
 
 ## Current Focus
 
+### 2026-06-29 — Question engagement → Find Families campaign tracker + warm redesign (PRs #1241/#1243 merged, #1245 open)
+
+Reframe: provider **questions** are campaign engagement and belong where a provider running ads looks for results (**Find Families**), not only the profile dashboard. Shipped in three PRs.
+
+**1. Questions on the dashboards — PR #1241 → staging, MERGED.** Surfacing existing Q&A metrics, not new infra (the `provider_questions` table, `/provider/qna` answer UI, `/admin/questions` queue all already existed).
+- `app/api/provider/dashboard/route.ts`: new all-time `questions {received, answered, unanswered}` summary, computed from the array it already fetches (no extra query). Counts only *manageable* questions (excludes `rejected`/`archived`) so spam can't inflate "asked" and `received = answered + unanswered` holds.
+- `components/provider-dashboard/DashboardPage.tsx`: `QuestionsCard` (sticky sidebar + mobile flow), only when `received > 0`.
+- `app/admin/page.tsx`: "Questions" total-asked stat card → `/admin/questions`.
+
+**2. Campaign tracker on Find Families — PR #1243 → staging, MERGED.** For a **live**-campaign provider, `/provider/matches` shows a tracker at top: Visitors / Families delivered / Questions (unanswered + CTA), counted **since launch** — same time-window the boost page uses for visitors/leads, **no new UTM plumbing**.
+- `lib/ad-boost/delivered.server.ts`: `getCampaignQuestions` (received + unanswered since launch, same manageable exclusion).
+- `app/api/provider/ad-boost/request/route.ts`: `campaignStats` now carries `questions` (parallel query, live only). `lib/ad-boost/boost-state.ts`: type extended.
+- `app/provider/matches/page.tsx`: fetch boost state; live-campaign provider with no nearby families sees the tracker instead of the (wrong) "get a campaign" pitch.
+- **Dejank (same PR):** module-level matches snapshot so back-nav (answer a question → back) repaints leads instantly instead of a cold skeleton + full re-fetch. Pitch branch holds the skeleton until campaign status is known (no pitch→tracker flash on cold load).
+- Verified live: Franchil tracker = Visitors 17 · Families delivered 1 · Questions 1 (1 unanswered).
+
+**3. Warm hero redesign — PR #1245 → staging, OPEN (awaiting TJ test).** `/design-improvements` punch pass after TJ flagged the tracker as a "lifeless dashboard, no orientation." Studied the inspiration set (Robinhood/Wispr/Perena); chose **warm vanilla / boutique** direction (TJ picked it). Serif "Your campaign is live" hero on a warm vanilla card, eyebrow "Live · day N" reframes zeros as early-days, waiting question elevated to the one teal action, calm "How families reach you 1·2·3" strip fills the void, narrowed/centered (max-w-2xl), `compact` mode for the above-leads placement. All in `app/provider/matches/page.tsx`. No new data — same metrics reshaped to orient.
+
+**Decisions:** questions counted *since launch* (matches the existing tracker, no UTM needed) not strict UTM attribution; #1241 dashboard cards stay the home for non-ads providers; warm-light over dark-hero for the senior-care calm.
+
+**Next up:** (1) TJ test #1245 on preview, then merge to staging. (2) Optionally fold the warm treatment + a Questions cell into the `/provider/boost` tracker for consistency. (3) Promote staging → main once QA'd. (4) **REMOVE TEST SEEDS** on Aggie Home Care (`tj@findmedjobs.co`): live campaign `d7a663e5-24cb-4af0-81e4-75b66039e239` + question `d628f21d-4fef-4a27-b19f-12a15346600e`.
+
 ### 2026-06-29 — Second managed-ads provider live: Abode Home Care (concierge ad setup, no repo code)
 
 Set up our **2nd Ad Boost campaign** end to end (Franchil was #1). All ops / external systems, no repo code changed.
