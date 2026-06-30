@@ -1148,6 +1148,18 @@ export default function Navbar() {
                               // Switch to provider profile if not already active
                               if (hasProviderProfile && providerProfileId) switchProfile(providerProfileId);
                               setIsMobileMenuOpen(false);
+                              // Track key navigation actions for A/B test analysis
+                              if (activeProviderSlug && item.label === "Find Families") {
+                                trackProviderEvent(activeProviderSlug, "nav_families_clicked", {
+                                  variant: mobileNavVariant ?? "current",
+                                  source: "hamburger_menu",
+                                });
+                              } else if (activeProviderSlug && item.label === "Hire Caregivers") {
+                                trackProviderEvent(activeProviderSlug, "nav_hire_clicked", {
+                                  variant: mobileNavVariant ?? "current",
+                                  source: "hamburger_menu",
+                                });
+                              }
                             }}
                           >
                             <svg className={`w-5 h-5 shrink-0 ${active ? "text-primary-600" : "text-gray-400"}`} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -1568,6 +1580,21 @@ export default function Navbar() {
           <MobileBottomTabs
             hasNotifications={providerInboxCount > 0 || qnaCount > 0 || newLeadsCount > 0}
             onMorePress={() => setIsMoreSheetOpen(true)}
+            onNavClick={(tabKey) => {
+              if (!activeProviderSlug) return;
+              // Track key navigation actions for A/B test analysis
+              if (tabKey === "families") {
+                trackProviderEvent(activeProviderSlug, "nav_families_clicked", {
+                  variant: "bottom_tabs",
+                  source: "bottom_tabs",
+                });
+              } else if (tabKey === "hire") {
+                trackProviderEvent(activeProviderSlug, "nav_hire_clicked", {
+                  variant: "bottom_tabs",
+                  source: "bottom_tabs",
+                });
+              }
+            }}
           />
           <MoreBottomSheet
             isOpen={isMoreSheetOpen}

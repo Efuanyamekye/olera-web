@@ -8,6 +8,8 @@ interface MobileBottomTabsProps {
   hasNotifications: boolean;
   /** Callback when More tab is tapped */
   onMorePress: () => void;
+  /** Callback to track navigation clicks */
+  onNavClick?: (tabKey: string) => void;
 }
 
 interface TabConfig {
@@ -76,6 +78,7 @@ const TABS: TabConfig[] = [
 export default function MobileBottomTabs({
   hasNotifications,
   onMorePress,
+  onNavClick,
 }: MobileBottomTabsProps) {
   const pathname = usePathname();
 
@@ -102,6 +105,7 @@ export default function MobileBottomTabs({
             <Link
               key={tab.key}
               href={tab.href}
+              onClick={() => onNavClick?.(tab.key)}
               className={`flex flex-col items-center justify-center flex-1 h-full gap-0.5 transition-colors ${
                 active ? "text-primary-600" : "text-gray-500"
               }`}

@@ -3941,6 +3941,8 @@ interface DeviceBreakdown {
 interface VariantFunnelRow {
   variant: string;
   impressions: number;
+  families_clicked: number;
+  hire_clicked: number;
   questions_answered: number;
   leads_connected: number;
   reviews_shared: number;
@@ -4074,6 +4076,8 @@ function MobileNavAnalytics() {
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-2 pr-4 text-[11px] font-medium text-gray-500">Variant</th>
                   <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Impressions</th>
+                  <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Families</th>
+                  <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Hire</th>
                   <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Questions</th>
                   <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Leads</th>
                   <th className="text-right py-2 px-3 text-[11px] font-medium text-gray-500">Reviews</th>
@@ -4082,6 +4086,8 @@ function MobileNavAnalytics() {
               </thead>
               <tbody>
                 {data.variantFunnel.map((row) => {
+                  const fRate = row.impressions > 0 ? (((row.families_clicked ?? 0) / row.impressions) * 100).toFixed(1) : "—";
+                  const hRate = row.impressions > 0 ? (((row.hire_clicked ?? 0) / row.impressions) * 100).toFixed(1) : "—";
                   const qRate = row.impressions > 0 ? ((row.questions_answered / row.impressions) * 100).toFixed(1) : "—";
                   const lRate = row.impressions > 0 ? ((row.leads_connected / row.impressions) * 100).toFixed(1) : "—";
                   const rRate = row.impressions > 0 ? ((row.reviews_shared / row.impressions) * 100).toFixed(1) : "—";
@@ -4111,6 +4117,14 @@ function MobileNavAnalytics() {
                           {row.impressions.toLocaleString()}
                         </td>
                         <td className="text-right py-2 px-3 tabular-nums">
+                          <span className="text-gray-900">{row.families_clicked ?? 0}</span>
+                          <span className="text-gray-400 text-[10px] ml-1">({fRate}%)</span>
+                        </td>
+                        <td className="text-right py-2 px-3 tabular-nums">
+                          <span className="text-gray-900">{row.hire_clicked ?? 0}</span>
+                          <span className="text-gray-400 text-[10px] ml-1">({hRate}%)</span>
+                        </td>
+                        <td className="text-right py-2 px-3 tabular-nums">
                           <span className="text-gray-900">{row.questions_answered}</span>
                           <span className="text-gray-400 text-[10px] ml-1">({qRate}%)</span>
                         </td>
@@ -4129,7 +4143,7 @@ function MobileNavAnalytics() {
                       </tr>
                       {isExpanded && (
                         <tr>
-                          <td colSpan={6} className="p-4 bg-gray-50/40">
+                          <td colSpan={8} className="p-4 bg-gray-50/40">
                             <MobileNavVariantSessionsList variant={row.variant} dateFrom={dateFrom} dateTo={dateTo} />
                           </td>
                         </tr>
@@ -4142,7 +4156,7 @@ function MobileNavAnalytics() {
           </div>
         )}
         <p className="text-[10px] text-gray-400 mt-2">
-          Questions = answered, Leads = contacted (inbox/phone/email), Reviews = CTA clicked, Boost = ads requested
+          Families = clicked Find Families, Hire = clicked Hire Caregivers, Questions = answered, Leads = contacted (inbox/phone/email), Reviews = CTA clicked, Boost = ads requested
         </p>
       </div>
     </div>
