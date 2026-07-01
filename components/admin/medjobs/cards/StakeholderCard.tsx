@@ -654,9 +654,15 @@ function callsSlots(row: TabRow, cb: RowCardCallbacks): RowSlots {
   const purposeHint = purposeHintForCadenceDay(cadenceDay);
   const footnoteLines: ReactNode[] = [];
   if (purposeHint) {
+    // Prefix the day (Day 3 / Day 5 / Day 7) so a recipient's successive calls
+    // read as distinct cadence steps, never as duplicates — even on the rare
+    // occasion two land close together.
     footnoteLines.push(
-      <p key="purpose" className="mt-0.5 text-[11px] italic text-gray-500">
-        {purposeHint}
+      <p key="purpose" className="mt-0.5 text-[11px] text-gray-500">
+        {cadenceDay != null && (
+          <span className="font-medium text-gray-600">Day {cadenceDay} · </span>
+        )}
+        <span className="italic">{purposeHint}</span>
       </p>,
     );
   }

@@ -87,12 +87,17 @@ export async function POST(request: NextRequest) {
 
     // Verify uniqueness — no existing student_outreach row for this
     // provider × campus pair. Check by olera_provider_id in research_data.
+    //
+    // olera_provider_id is stored as a JSONB *string*, so we must extract it
+    // as TEXT with `->>` and compare to the string value. The prior `->`
+    // (jsonb) form produced `jsonb = text`, which errors → the check silently
+    // returned null → every repeat materialize inserted a DUPLICATE row.
     const { data: existing } = await db
       .from("student_outreach")
       .select("id")
       .eq("kind", "provider")
       .eq("campus_id", campus.id)
-      .filter("research_data->olera_provider_id", "eq", provider.provider_id)
+      .eq("research_data->>olera_provider_id", provider.provider_id)
       .maybeSingle();
 
     if (existing) {
@@ -146,6 +151,24 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (insertErr || !inserted) {
+      // Race-safe idempotency: two near-simultaneous materialize calls both
+      // pass the existence check above and try to insert. Once the partial
+      // unique index (campus_id, olera_provider_id WHERE kind='provider') is
+      // in place, the loser hits a unique violation (23505) — re-read and
+      // return the winner's row instead of erroring, so the caller still gets
+      // one row, never a duplicate.
+      if (insertErr?.code === "23505") {
+        const { data: raced } = await db
+          .from("student_outreach")
+          .select("id")
+          .eq("kind", "provider")
+          .eq("campus_id", campus.id)
+          .eq("research_data->>olera_provider_id", provider.provider_id)
+          .maybeSingle();
+        if (raced) {
+          return NextResponse.json({ id: raced.id, already_materialized: true });
+        }
+      }
       const msg = insertErr?.message ?? "Insert failed";
       console.error("[materialize] insert error:", msg);
       // The most likely cause if migration 073 hasn't run yet is a

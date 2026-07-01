@@ -185,6 +185,13 @@ export function planSequence(input: SequencerInput, now: Date = new Date()): Que
       (input.call_scripts ?? []).map((s) => [s.day, s.script]),
     );
 
+    // Keep a recipient's successive calls on DISTINCT business days. Business-
+    // day rounding (nextBusinessDayET) can otherwise collapse Day 3 and Day 5
+    // onto the same date, so two legitimate calls stack on one day and read as
+    // a duplicate. We track the last call date per recipient and push a later
+    // call to the business day after it when they'd otherwise coincide.
+    const lastCallDueMsByRecipient = new Map<string, number>();
+
     for (const day of days) {
       for (const step of day.steps) {
         const dueAt = new Date(now.getTime() + day.day * DAY_MS);
@@ -253,10 +260,19 @@ export function planSequence(input: SequencerInput, now: Date = new Date()): Que
               /\{recipient_name\}/g,
               r.recipient_name || "the right person",
             );
+            // Calls only land on a business day (ET). Keep this recipient's
+            // successive calls on distinct days: if rounding would put this
+            // call on/before the previous one, push it to the next business day.
+            const recipientKey = r.contact_id ?? "__general__";
+            let callDue = nextBusinessDayET(dueAt);
+            const lastDueMs = lastCallDueMsByRecipient.get(recipientKey);
+            if (lastDueMs != null && callDue.getTime() <= lastDueMs) {
+              callDue = nextBusinessDayET(new Date(lastDueMs + DAY_MS));
+            }
+            lastCallDueMsByRecipient.set(recipientKey, callDue.getTime());
             tasks.push({
               task_type: "outreach_followup_call",
-              // Calls only land on a business day (ET); emails keep their raw date.
-              due_at: nextBusinessDayET(dueAt),
+              due_at: callDue,
               payload: {
                 day: day.day,
                 label: step.label ?? "Follow-up call",
