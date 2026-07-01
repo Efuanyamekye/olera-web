@@ -93,6 +93,9 @@ export function MedJobsTabPage({
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [rows, setRows] = useState<TabRow[]>([]);
   const [tabCounts, setTabCounts] = useState<TabCounts | null>(null);
+  // Total queued calls across all days (Calls-tab denominator; the tab_counts
+  // `calls` value is the "due today" numerator).
+  const [callsTotal, setCallsTotal] = useState<number | null>(null);
   const [tabUnreadCounts, setTabUnreadCounts] = useState<TabUnreadCounts | null>(null);
   const [providerProspects, setProviderProspects] = useState<ProviderProspectRow[]>([]);
   // Active partners (TabRows) for the Partners audience tab's active section.
@@ -215,6 +218,7 @@ export function MedJobsTabPage({
         setCampuses(data.campuses ?? []);
         setTabCounts(data.tab_counts ?? null);
         setTabUnreadCounts(data.tab_unread_counts ?? null);
+        setCallsTotal(typeof data.calls_total === "number" ? data.calls_total : null);
 
         // Ordered lists. A view change (skeleton) takes the fresh server order;
         // a SILENT refresh merges in place — existing rows keep their position
@@ -546,8 +550,11 @@ export function MedJobsTabPage({
 
   const isInboxEmpty = useMemo(() => {
     if (!tabCounts) return false;
+    // Queued calls (even none due today) count as work, so the Calls tab —
+    // with its "0/N" badge — stays visible.
+    if ((callsTotal ?? 0) > 0) return false;
     return TABS.every((t) => (tabCounts[t.key] ?? 0) === 0);
-  }, [tabCounts]);
+  }, [tabCounts, callsTotal]);
 
   const setTabAndUrl = useCallback(
     (next: TabKey) => {
@@ -644,6 +651,14 @@ export function MedJobsTabPage({
               const unread = tabUnreadCounts?.[t.key] ?? 0;
               const active = t.key === tab;
               const isUnreadTab = unread > 0;
+              // Calls tab shows "due today / total queued" (always, even 0/N),
+              // bold when there are unread calls due today. Every other tab
+              // keeps the generic "unread/total" (or bare total) badge.
+              const isCallsTab = t.key === "calls";
+              const callsBadge =
+                isCallsTab && callsTotal != null && callsTotal > 0
+                  ? `${count}/${callsTotal}`
+                  : null;
               return (
                 <button
                   key={t.key}
@@ -666,7 +681,7 @@ export function MedJobsTabPage({
                   }`}
                 >
                   {t.label}
-                  {count > 0 && (
+                  {(callsBadge ?? (count > 0 ? String(count) : null)) && (
                     <span
                       className={`ml-1.5 text-xs tabular-nums ${
                         isUnreadTab
@@ -674,7 +689,7 @@ export function MedJobsTabPage({
                           : "text-gray-400"
                       }`}
                     >
-                      {isUnreadTab ? `${unread}/${count}` : count}
+                      {callsBadge ?? (isUnreadTab ? `${unread}/${count}` : count)}
                     </span>
                   )}
                 </button>
@@ -978,11 +993,10 @@ function ListSkeleton() {
 }
 
 
-// ── v10 Bullet 7 (2026-06-04): Calls tab sectioned rendering ──────────────
-// Splits the rows into Today + Upcoming sections. "Today" = due_at by
-// end-of-day local; everything past that is Upcoming, grouped by day.
-// Sort priority: within Today, clicked-not-activated rows surface FIRST
-// (engagement-driven priority bump from Pass A strategy depth).
+// ── Calls tab sectioned rendering ─────────────────────────────────────────
+// One top-level section PER DAY — Today, Tomorrow, then each weekday/date —
+// so every call sits on its own due day (no "Upcoming" wrapper, no window).
+// Within Today, clicked-not-activated rows surface FIRST (engagement bump).
 
 function CallsSectioned({
   rows,
@@ -997,15 +1011,15 @@ function CallsSectioned({
     return d.getTime();
   })();
 
-  // Partition by due_at; rows without due_call_task fall into Today as
-  // safety (overdue or anomalous — admin still sees them).
+  // Partition by due_at; rows without a due task fall into Today as safety
+  // (overdue or anomalous — admin still sees them).
   const todayRows: TabRow[] = [];
-  const upcomingRows: TabRow[] = [];
+  const laterRows: TabRow[] = [];
   for (const r of rows) {
     const dueIso = r.due_call_task?.due_at;
     const due = dueIso ? new Date(dueIso).getTime() : 0;
     if (!dueIso || due <= endOfToday) todayRows.push(r);
-    else upcomingRows.push(r);
+    else laterRows.push(r);
   }
 
   // Today: clicked-not-activated first, then by due_at ASC.
@@ -1018,27 +1032,27 @@ function CallsSectioned({
     return ad.localeCompare(bd);
   });
 
-  // Upcoming: by due_at ASC. Group by day label for visual scanning.
-  upcomingRows.sort((a, b) =>
+  // Later: by due_at ASC, then group by day label — insertion order (soonest
+  // first) is preserved by Map, so the sections render in chronological order.
+  laterRows.sort((a, b) =>
     (a.due_call_task?.due_at ?? "").localeCompare(b.due_call_task?.due_at ?? ""),
   );
-  const upcomingByDay = new Map<string, TabRow[]>();
-  for (const r of upcomingRows) {
+  const laterByDay = new Map<string, TabRow[]>();
+  for (const r of laterRows) {
     const dueIso = r.due_call_task?.due_at;
     if (!dueIso) continue;
     const label = formatUpcomingDayLabel(dueIso);
-    const list = upcomingByDay.get(label) ?? [];
+    const list = laterByDay.get(label) ?? [];
     list.push(r);
-    upcomingByDay.set(label, list);
+    laterByDay.set(label, list);
   }
 
+  const dayHeader = "mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500";
   return (
     <div className="space-y-6">
       {todayRows.length > 0 && (
         <section>
-          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-            Today’s Calls ({todayRows.length})
-          </h3>
+          <h3 className={dayHeader}>Today ({todayRows.length})</h3>
           <ul className="space-y-2">
             {todayRows.map((row) => (
               <li key={row.row_key ?? row.id}>{renderRow(row)}</li>
@@ -1046,27 +1060,18 @@ function CallsSectioned({
           </ul>
         </section>
       )}
-      {upcomingByDay.size > 0 && (
-        <section>
-          <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-            Upcoming ({upcomingRows.length})
+      {[...laterByDay.entries()].map(([dayLabel, dayRows]) => (
+        <section key={dayLabel}>
+          <h3 className={dayHeader}>
+            {dayLabel} ({dayRows.length})
           </h3>
-          <div className="space-y-4">
-            {[...upcomingByDay.entries()].map(([dayLabel, dayRows]) => (
-              <div key={dayLabel}>
-                <p className="mb-1 text-[11px] font-medium uppercase tracking-wide text-gray-400">
-                  {dayLabel} · {dayRows.length}
-                </p>
-                <ul className="space-y-2">
-                  {dayRows.map((row) => (
-                    <li key={row.row_key ?? row.id}>{renderRow(row)}</li>
-                  ))}
-                </ul>
-              </div>
+          <ul className="space-y-2">
+            {dayRows.map((row) => (
+              <li key={row.row_key ?? row.id}>{renderRow(row)}</li>
             ))}
-          </div>
+          </ul>
         </section>
-      )}
+      ))}
     </div>
   );
 }
