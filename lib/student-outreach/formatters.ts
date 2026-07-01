@@ -7,13 +7,27 @@
  */
 
 export function formatDueDate(iso: string): string {
+  // The day-count MUST be measured in calendar days (local midnight
+  // boundaries), not raw elapsed hours. The Calls tab groups cards into
+  // per-day sections with the same calendar-day math (formatUpcomingDayLabel);
+  // if this used rounded elapsed hours instead, two calls on the SAME day
+  // could read "in 5d" and "in 6d" purely because their clock-times differ —
+  // making a card grouped under "Monday" nonsensically say "in 6d". Same
+  // boundary math here keeps the countdown and the section header in sync.
   const due = new Date(iso);
-  const diffMin = Math.round((due.getTime() - Date.now()) / 60_000);
-  if (diffMin < -60 * 24) return `${Math.round(-diffMin / (60 * 24))}d overdue`;
-  if (diffMin < 0) return "due now";
-  if (diffMin < 60) return `in ${diffMin}m`;
-  if (diffMin < 60 * 24) return `in ${Math.round(diffMin / 60)}h`;
-  return `in ${Math.round(diffMin / (60 * 24))}d`;
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const dueDayStart = new Date(due.getFullYear(), due.getMonth(), due.getDate()).getTime();
+  const dayDiff = Math.round((dueDayStart - startOfToday) / 86_400_000);
+  if (dayDiff < 0) return `${-dayDiff}d overdue`;
+  if (dayDiff === 0) {
+    // Due today — intraday precision still helps the Today queue.
+    const diffMin = Math.round((due.getTime() - now.getTime()) / 60_000);
+    if (diffMin < 0) return "due now";
+    if (diffMin < 60) return `in ${diffMin}m`;
+    return `in ${Math.round(diffMin / 60)}h`;
+  }
+  return `in ${dayDiff}d`;
 }
 
 export function formatRelative(iso: string): string {
