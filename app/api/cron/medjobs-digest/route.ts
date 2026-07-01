@@ -4,6 +4,7 @@ import { sendEmail } from "@/lib/email";
 import { newCandidateAlertEmail } from "@/lib/medjobs-email-templates";
 import { sendSlackAlert } from "@/lib/slack";
 import { getTrackLabel } from "@/lib/medjobs-helpers";
+import { getClientStatus, type ProviderMetadata } from "@/lib/medjobs/clients";
 import type { StudentMetadata } from "@/lib/types";
 import { withCronRun } from "@/lib/crons/run";
 
@@ -44,11 +45,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: "No new candidates this week", sent: 0 });
     }
 
-    // Get providers who have organization or caregiver profiles with email
-    // For now, send to all claimed providers. Later: filter by MedJobs interest/subscription.
-    const { data: providers, error: providersError } = await db
+    // Get providers who have organization or caregiver profiles with email,
+    // then narrow to MedJobs *clients* only. A client is a provider in the
+    // 90-day pilot (interview_terms_accepted_at) or with an active paid
+    // subscription — the same definition /admin/medjobs/clients uses
+    // (getClientStatus). This digest is a client benefit, NOT a directory
+    // blast: without this filter it emails every claimed provider (~529),
+    // which is not what MedJobs (Logan's targeted work) intends.
+    const { data: allProviders, error: providersError } = await db
       .from("business_profiles")
-      .select("id, display_name, email")
+      .select("id, display_name, email, metadata")
       .in("type", ["organization", "caregiver"])
       .eq("claim_state", "claimed")
       .eq("is_active", true)
@@ -57,6 +63,19 @@ export async function GET(request: NextRequest) {
     if (providersError) {
       console.error("[medjobs-digest] providers query error:", providersError);
       return NextResponse.json({ error: "Query failed" }, { status: 500 });
+    }
+
+    const providers = (allProviders || []).filter(
+      (p) => getClientStatus(p.metadata as ProviderMetadata | null).isClient,
+    );
+
+    if (providers.length === 0) {
+      // No MedJobs clients to notify — skip rather than blast the directory.
+      return NextResponse.json({
+        newStudents: newStudents.length,
+        providersSent: 0,
+        message: "No MedJobs clients to notify",
+      });
     }
 
     const candidates = newStudents.map((s) => {
