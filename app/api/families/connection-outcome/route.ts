@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         to_profile_id,
         metadata,
         from_profile:business_profiles!connections_from_profile_id_fkey(care_types, lat, lng),
-        to_profile:business_profiles!connections_to_profile_id_fkey(id, display_name, city, state, care_types)
+        to_profile:business_profiles!connections_to_profile_id_fkey(id, display_name, city, state, care_types, account_id, metadata)
       `,
       )
       .eq("id", cid)
@@ -74,17 +74,32 @@ export async function POST(request: NextRequest) {
       source: "email_link",
     };
 
-    // If family confirms connection ("yes"), mark it as connected.
-    // This is additive data — doesn't override existing connection signals.
+    // If family confirms connection ("yes"), mark it as connected — BUT only if
+    // the provider is claimed AND verified. Unclaimed/unverified providers can't
+    // see family PII, so they couldn't have actually contacted the family.
     if (value === "yes") {
-      meta.family_confirmed = true;
-      meta.family_confirmed_at = now;
-      // Only stop the sequence if it isn't already stopped
-      // (provider may have already connected via phone/email/message)
-      if (!meta.followup_stopped_at) {
-        meta.followup_stopped_at = now;
-        meta.followup_stopped_reason = "family_confirmed";
+      const providerMeta = (toProfile?.metadata as Record<string, unknown>) || {};
+      const isProviderClaimed = !!(toProfile?.account_id);
+      const verificationState = providerMeta.verification_state as string | undefined;
+      // Provider can see family PII if: verified, not_required, or no verification_state (legacy)
+      const isProviderVerified = !verificationState ||
+                                  verificationState === "verified" ||
+                                  verificationState === "not_required";
+
+      // Only set family_confirmed if provider could actually see family contact info
+      if (isProviderClaimed && isProviderVerified) {
+        meta.family_confirmed = true;
+        meta.family_confirmed_at = now;
+        // Only stop the sequence if it isn't already stopped
+        // (provider may have already connected via phone/email/message)
+        if (!meta.followup_stopped_at) {
+          meta.followup_stopped_at = now;
+          meta.followup_stopped_reason = "family_confirmed";
+        }
       }
+      // Note: outcome is still recorded in meta.outcome regardless — that's the
+      // family's self-report. We just don't treat it as a confirmed connection
+      // if the provider couldn't have seen their contact info.
     }
 
     const { error: updErr } = await db
