@@ -120,7 +120,9 @@ export function ProviderProspectDrawerBody({ ctx, action, setError, activeTab }:
       ? hasEmail
       : hasEmail && verificationState.can_launch;
   const launchDisabledReason = !hasEmail
-    ? "Add an email — General Contact or Decision Maker."
+    ? hasMainPhone
+      ? "No email on file. Add an email, or use Call to Confirm → Override & launch to run a calls-only cadence."
+      : "Add an email — General Contact or Decision Maker."
     : !isPartner && hasMainPhone && !verificationState.can_launch
       ? "Confirm contacts on a Pre-Flight call, or override Pre-Flight."
       : undefined;
