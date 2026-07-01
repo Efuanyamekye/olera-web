@@ -244,7 +244,7 @@ export function adBoostQueuedEmail(opts: {
     <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">The next best step is to ${nextStep}. Once your page clears the launch threshold, we&rsquo;ll move the request into setup and email you before the campaign goes live.</p>
     <p style="font-size:15px;color:#374151;margin:0 0 26px;line-height:1.65;">We will not send paid traffic to a thin page. That protects your first $50 promotional test and gives families a better reason to contact you.</p>
     <div>${button("Finish launch setup", opts.ctaUrl)}</div>
-    ${authorBylineBlock({ topBorder: true })}
+    ${adBoostAuthorBylineBlock({ topBorder: true })}
     <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
       <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
     </div>`,
@@ -273,7 +273,7 @@ export function adBoostRequestedEmail(opts: {
       <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;"><strong>Requested setup week:</strong> ${launchWeek}</p>
     </div>
     <div>${button("View Ad Boost", opts.ctaUrl)}</div>
-    ${authorBylineBlock({ topBorder: true })}
+    ${adBoostAuthorBylineBlock({ topBorder: true })}
     <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
       <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
     </div>`,
@@ -302,7 +302,7 @@ export function adBoostReadyEmail(opts: {
     </div>
     <p style="font-size:15px;color:#374151;margin:0 0 26px;line-height:1.65;">The first $50 promotional test is still on us. Once it is complete, we can review the results together and talk through the right monthly budget.</p>
     <div>${button("View Ad Boost", opts.ctaUrl)}</div>
-    ${authorBylineBlock({ topBorder: true })}
+    ${adBoostAuthorBylineBlock({ topBorder: true })}
     <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
       <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
     </div>`,
@@ -495,6 +495,28 @@ function authorBylineBlock(opts: { topBorder?: boolean; heading?: string; tail?:
             <img src="${photoUrl}" alt="Dr. Logan DuBose" width="48" height="48" style="border-radius:50%;display:block;" />
           </td>
           <td style="vertical-align:top;font-size:13px;line-height:1.5;color:#6b7280;">${heading}${byline}${tail}</td>
+        </tr>
+      </table>
+    </div>`;
+}
+
+function adBoostAuthorBylineBlock(opts: { topBorder?: boolean } = {}): string {
+  const photoUrl =
+    "https://ocaabzfiiikjcgqwhbwr.supabase.co/storage/v1/object/public/content-images/team/tj.jpg";
+  const wrapStyle = opts.topBorder
+    ? "margin:24px 0 0;padding:16px 0 0;border-top:1px solid #f3f4f6;"
+    : "margin:24px 0 0;";
+
+  return `
+    <div style="${wrapStyle}">
+      <table cellpadding="0" cellspacing="0" style="margin:0;">
+        <tr>
+          <td style="vertical-align:top;padding-right:12px;">
+            <img src="${photoUrl}" alt="TJ Falohun" width="48" height="48" style="border-radius:50%;display:block;" />
+          </td>
+          <td style="vertical-align:top;font-size:13px;line-height:1.5;color:#6b7280;">
+            <p style="margin:0;">Olera is built by <a href="https://www.linkedin.com/in/tfalohun/" style="color:${BRAND_COLOR};text-decoration:underline;">TJ Falohun</a>, a PhD researcher in biomedical engineering, and <a href="https://www.linkedin.com/in/logan-dubose/" style="color:${BRAND_COLOR};text-decoration:underline;">Dr. Logan DuBose</a>, co-founder and physician-researcher funded by NIH SBIR. We&rsquo;re working to make senior care easier to understand and compare.</p>
+          </td>
         </tr>
       </table>
     </div>`;
