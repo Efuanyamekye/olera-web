@@ -73,6 +73,13 @@ interface DrawerProps {
   /** Which In Basket tab the drawer was opened from — threaded to NextStepCard
    *  so the awaiting-reply call affordance adapts (Emails → link, else button). */
   activeTab?: TabKey;
+  /** Per-recipient focus (Model 2): when the drawer is opened from a fanned-out
+   *  card, this mirrors that card's subject so the header reads the right name —
+   *  a General Contact card → the org/provider name; a Specific/Decision-Maker
+   *  card → that person's name. Null/absent for org-level (non-fan-out) cards. */
+  focusRecipientKind?: "general" | "specific" | null;
+  focusRecipientName?: string | null;
+  focusRecipientRole?: string | null;
 }
 
 type ActionFn = (
@@ -139,6 +146,9 @@ export function Drawer(props: DrawerProps) {
       onClose={props.onClose}
       onAction={props.onAction ?? (() => {})}
       activeTab={props.activeTab}
+      focusRecipientKind={props.focusRecipientKind ?? null}
+      focusRecipientName={props.focusRecipientName ?? null}
+      focusRecipientRole={props.focusRecipientRole ?? null}
     />
   );
 }
@@ -258,12 +268,18 @@ function StakeholderDrawer({
   onAction,
   seedName,
   activeTab,
+  focusRecipientKind = null,
+  focusRecipientName = null,
+  focusRecipientRole = null,
 }: {
   outreachId: string;
   onClose: () => void;
   onAction: (refreshed: DrawerContext | null) => void;
   seedName?: string;
   activeTab?: TabKey;
+  focusRecipientKind?: "general" | "specific" | null;
+  focusRecipientName?: string | null;
+  focusRecipientRole?: string | null;
 }) {
   const [ctx, setCtx] = useState<DrawerContext | null>(null);
   const [loading, setLoading] = useState(true);
@@ -363,13 +379,31 @@ function StakeholderDrawer({
           const contactDisplay = personName
             ? [honorific, personName].filter(Boolean).join(" ")
             : null;
-          // Role shown in the subline: explicit `role`, else a non-honorific title.
-          const contactRole =
+          const primaryRole =
             primary?.role || (primary?.title && !honorific ? primary.title.trim() : null);
           const orgDisplay = cleanOrgName(ctx.outreach.organization_name);
-          const headline = contactDisplay || orgDisplay;
-          const showOrgInSubline =
-            !!contactDisplay && contactDisplay !== orgDisplay;
+          const isProvider = ctx.outreach.kind === "provider";
+
+          // Resolve the drawer subject.
+          //   Part B — opened from a fanned-out card: mirror that card's
+          //     subject. General Contact card → the org/provider name; a
+          //     Specific/Decision-Maker card → that person's name.
+          //   Part A — org-level (non-fan-out) card: providers lead with the
+          //     org (the general contact IS the business); stakeholders lead
+          //     with the individual contact's name.
+          let headline: string;
+          let contactRole: string | null;
+          if (focusRecipientKind === "specific" && focusRecipientName) {
+            headline = focusRecipientName;
+            contactRole = focusRecipientRole ?? primaryRole;
+          } else if (focusRecipientKind === "general") {
+            headline = orgDisplay;
+            contactRole = null; // the org is the subject — no person role
+          } else {
+            headline = isProvider ? orgDisplay : contactDisplay || orgDisplay;
+            contactRole = primaryRole;
+          }
+          const showOrgInSubline = headline !== orgDisplay;
           // v8.10.37: surface a small "★ Partner since {date}" indicator
           // for active partners. NextStepPanel is suppressed for partners,
           // so without this header cue the drawer wouldn't show their

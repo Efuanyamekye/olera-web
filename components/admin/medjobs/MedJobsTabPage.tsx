@@ -121,6 +121,12 @@ export function MedJobsTabPage({
   const [openOutreachName, setOpenOutreachName] = useState<string | undefined>(undefined);
   const [openProviderName, setOpenProviderName] = useState<string | undefined>(undefined);
   const [openCandidateSeed, setOpenCandidateSeed] = useState<CandidateRow | undefined>(undefined);
+  // Per-recipient focus (Model 2): when a fanned-out card opens the shared
+  // drawer, remember which recipient it was so the drawer header reads the
+  // right subject (general → org name; specific → that person's name).
+  const [openFocusKind, setOpenFocusKind] = useState<"general" | "specific" | null>(null);
+  const [openFocusName, setOpenFocusName] = useState<string | null>(null);
+  const [openFocusRole, setOpenFocusRole] = useState<string | null>(null);
   const [bulkResearchCampus, setBulkResearchCampus] = useState<ResearchCampusCard | null>(null);
 
   useEffect(() => {
@@ -392,7 +398,20 @@ export function MedJobsTabPage({
         row={row}
         recentlyMoved={isRecent(row.id)}
         onOpenDrawer={() => {
-          setOpenOutreachName(row.organization_name || undefined);
+          // Seed the instant-render headline with the same subject the drawer
+          // will settle on: a Specific card seeds the person's name, everything
+          // else seeds the org name — so there's no flash on open.
+          setOpenOutreachName(
+            (row.recipient_kind === "specific"
+              ? row.primary_contact_name || row.organization_name
+              : row.organization_name) || undefined,
+          );
+          // Mirror the clicked card's recipient into the drawer header. Only
+          // fanned-out cards (Calls/Replies) carry recipient_kind; org-level
+          // cards leave focus null so the kind-aware default applies.
+          setOpenFocusKind(row.recipient_kind ?? null);
+          setOpenFocusName(row.recipient_kind ? row.primary_contact_name ?? null : null);
+          setOpenFocusRole(row.recipient_kind ? row.primary_contact_role ?? null : null);
           setOpenOutreachId(row.id);
           setStakeholderRead(row, true, false); // drawer persists mark_read
         }}
@@ -863,12 +882,18 @@ export function MedJobsTabPage({
           outreachId={openOutreachId}
           seedName={openOutreachName}
           activeTab={tab}
+          focusRecipientKind={openFocusKind}
+          focusRecipientName={openFocusName}
+          focusRecipientRole={openFocusRole}
           onClose={() => {
             // No refetch on close. Read state was already applied
             // optimistically on open (markRowReadLocally), and any real
             // action inside the drawer refreshed via onAction. Closing a
             // drawer you only viewed must not reload + re-sort the list.
             setOpenOutreachId(null);
+            setOpenFocusKind(null);
+            setOpenFocusName(null);
+            setOpenFocusRole(null);
           }}
           onAction={handleDrawerAction}
         />
