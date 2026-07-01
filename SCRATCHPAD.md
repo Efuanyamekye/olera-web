@@ -15,6 +15,16 @@ Provider copy was iterated in a real inbox (`tj@findmedjobs.co`): no provider-na
 
 Validation: `npx --no-install tsc --noEmit`, `git diff --check`, `npm run check:crons`; live Resend samples delivered for the requested email. Test account seeded with Ready/Queued/Promotion profiles on `tj@findmedjobs.co`; active profile was last set to the queued scenario. Next: QA the queued and promotion flows on the PR preview, then merge to staging.
 
+### 2026-07-01 — Franchil Ad Boost follow-up sent; 2-lead pilot signal (docs-only quicksave)
+
+Reviewed current Ad Boost queue + Franchil detail page with TJ. Active queue now shows 4 provider requests: Franchil (live, Jun 22 setup), Abode Home Care (live, Jun 29), Miracle-Lightstar (requested, Jul 6), Legacy Haven (queued at 48% profile completion). Franchil detail currently shows **19 visitors · 2 leads · 11% conversion · 2 families delivered**. Manual spend/click inputs are still blank in admin, so cost/family is not yet computed in the UI; earlier Google number on record was `$11.40 / 5 clicks`, but that needs confirming before quoting cost per family.
+
+Hilda replied to the launch email saying one lead had converted through the campaign and asked to review monthly pricing/budget once the promotional campaign is complete. TJ sent a response that: (1) agreed to send a wrap-up summary after the promo campaign finishes, (2) noted the dashboard now shows 2 family leads from 19 visitors, (3) asked about lead quality and whether the second lead came through clearly, and (4) promised final visitors/leads/spend/cost-per-lead plus a simple next-step budget recommendation after wrap.
+
+**Decision:** Do not push a paid continuation too hard yet; acknowledge her requested timing and use the interim reply to learn whether the leads are real/good-fit. Treat current signal as strong pilot proof that paid search can create family demand, but not yet a validated CAC until spend/clicks and lead quality are reconciled.
+
+**Next up:** enter current Google spend/clicks for Franchil in `/admin/ad-boost`; verify both leads are real/non-duplicate and whether Hilda connected with them; when the promo completes, send Hilda the promised results summary + budget recommendation.
+
 ### 2026-06-29 — Question engagement → Find Families campaign tracker + warm redesign (PRs #1241/#1243 merged, #1245 open)
 
 Reframe: provider **questions** are campaign engagement and belong where a provider running ads looks for results (**Find Families**), not only the profile dashboard. Shipped in three PRs.
