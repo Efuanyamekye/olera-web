@@ -8,12 +8,12 @@
 
 export function formatDueDate(iso: string): string {
   // The day-count MUST be measured in calendar days (local midnight
-  // boundaries), not raw elapsed hours. The Calls tab groups cards into
-  // per-day sections with the same calendar-day math (formatUpcomingDayLabel);
-  // if this used rounded elapsed hours instead, two calls on the SAME day
-  // could read "in 5d" and "in 6d" purely because their clock-times differ —
-  // making a card grouped under "Monday" nonsensically say "in 6d". Same
-  // boundary math here keeps the countdown and the section header in sync.
+  // boundaries), not raw elapsed hours. Otherwise two timestamps on the SAME
+  // day could read "in 5d" and "in 6d" purely because their clock-times differ
+  // (e.g. an 11 AM vs an 8 PM slot on the same date). Counting whole calendar
+  // days keeps the countdown aligned with how a human reads the date.
+  // (Used by the drawer's NextStepCard; the Calls tab itself now shows the
+  // explicit date in each day-section header instead of a relative countdown.)
   const due = new Date(iso);
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
