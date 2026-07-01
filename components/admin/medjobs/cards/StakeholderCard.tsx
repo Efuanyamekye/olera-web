@@ -612,11 +612,21 @@ export function buildRowSlots(tab: TabKey, row: TabRow, cb: RowCardCallbacks): R
   // v9 final: pill removed from row cards. The pill restated entity-
   // type / tab default (every Prospects row showed "Prospect", every
   // Replies row showed "In Outreach") without telling the admin what
-  // to do next. The footnote already carries action-oriented copy
-  // ("Ready to launch outreach", "Reply 2d ago", "Call due Tue 3pm")
-  // which is the better operational signal. StagePill export stays
-  // for use inside the drawer's NextStepCard / status headers, but
-  // row cards run without it.
+  // to do next. StagePill export stays for use inside the drawer's
+  // NextStepCard / status headers, but row cards run without it.
+  //
+  // v11: the third line is standardized to a single "Last activity" stamp
+  // across EVERY tab — one consistent line, one consistent card height. The
+  // per-tab footnote each slot builder computes above is intentionally
+  // overridden here; the richer status detail (next step, reply state,
+  // meeting time, closed reason) still lives in the drawer.
+  slots.footnote = (
+    <p className="mt-0.5 text-[11px] text-gray-400">
+      {row.last_activity_at
+        ? `Last activity ${formatRelative(row.last_activity_at)}`
+        : "No activity yet"}
+    </p>
+  );
   return slots;
 }
 
