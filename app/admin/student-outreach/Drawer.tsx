@@ -38,7 +38,11 @@ import {
 } from "@/lib/student-outreach/types";
 import { OUTREACH_DAYS_BY_TYPE } from "@/lib/student-outreach/cadence";
 import type { TabKey } from "@/lib/student-outreach/tab-config";
-import { cleanOrgName } from "@/lib/student-outreach/formatters";
+import {
+  cleanOrgName,
+  displayContactName,
+  displayContactRole,
+} from "@/lib/student-outreach/formatters";
 import {
   DEPARTMENTS,
   OTHER,
@@ -361,26 +365,12 @@ function StakeholderDrawer({
           // subline; if no contact exists yet, the org name takes the
           // headline so the card isn't blank.
           const primary = ctx.contacts.find((c) => c.status === "active") ?? ctx.contacts[0] ?? null;
-          // The `title` field doubles as the contact's ROLE in the add-contact
-          // UI (SpecificContactsSection stores the role picker value as
-          // `title`, e.g. "Assistant Dean"), so it must NOT stand in as the
-          // person's name. Only prepend it when it's a genuine honorific
-          // (Dr./Prof./…); otherwise the person's name leads and the role
-          // drops to the subline.
-          const HONORIFIC_RE = /^(dr|prof|professor|mr|mrs|ms|mx)\.?$/i;
-          const honorific =
-            primary?.title && HONORIFIC_RE.test(primary.title.trim())
-              ? primary.title.trim()
-              : null;
-          const personName =
-            [primary?.first_name, primary?.last_name].filter(Boolean).join(" ").trim() ||
-            primary?.name ||
-            null;
-          const contactDisplay = personName
-            ? [honorific, personName].filter(Boolean).join(" ")
-            : null;
-          const primaryRole =
-            primary?.role || (primary?.title && !honorific ? primary.title.trim() : null);
+          // Shared name/role display (formatters.displayContactName): the
+          // person's name leads; a non-honorific `title` (the add-contact UI
+          // stores the role there) never stands in as the name and instead
+          // becomes the subline role. Same helper the In-Basket cards use.
+          const contactDisplay = primary ? displayContactName(primary) : null;
+          const primaryRole = primary ? displayContactRole(primary) : null;
           const orgDisplay = cleanOrgName(ctx.outreach.organization_name);
           const isProvider = ctx.outreach.kind === "provider";
 

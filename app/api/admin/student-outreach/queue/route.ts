@@ -40,6 +40,7 @@ import {
 } from "@/lib/student-outreach/state-derivation";
 import { countProspectGeneration } from "@/lib/medjobs/prospect-counts";
 import { resolvePartnerProspectUnlocks } from "@/lib/medjobs/partner-prospect-gate";
+import { displayContactName, displayContactRole } from "@/lib/student-outreach/formatters";
 import type {
   AwaitingCallbackKind,
   Campus,
@@ -1270,14 +1271,14 @@ async function hydrateRows(
     phone: string | null;
   }>) {
     if (primaryByOutreach.has(c.outreach_id)) continue;
-    const composed = [c.title, c.first_name, c.last_name]
-      .map((s) => s?.trim() ?? "")
-      .filter(Boolean)
-      .join(" ");
+    // Shared display logic: `title` doubles as the role in the add-contact UI,
+    // so displayContactName only prepends it when it's a real honorific — the
+    // person's name leads, the role goes to `role`. Keeps card titles in sync
+    // with the drawer header.
     primaryByOutreach.set(c.outreach_id, {
-      name: composed || c.name,
+      name: displayContactName(c) ?? c.name,
       phone: c.phone,
-      role: c.role,
+      role: displayContactRole(c),
     });
   }
 
