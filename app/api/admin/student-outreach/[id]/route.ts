@@ -1099,9 +1099,9 @@ async function handleUpdateGeneralContact(
       nextGc[flag] = body[flag];
     }
   }
-  if (body.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email.trim())) {
-    throw new Error("Invalid email");
-  }
+  // Email format is intentionally NOT validated in the medjobs flow — the
+  // admin confirms addresses via pre-flight research + call. (Malformed
+  // addresses are handled downstream by Smartlead/Resend, not blocked here.)
   if (body.zip && !/^\d{5}(?:-\d{4})?$/.test(body.zip.trim())) {
     throw new Error("ZIP must be 5 digits (or 5+4)");
   }
@@ -1226,9 +1226,8 @@ async function handleUpdateDecisionMaker(
   if (typeof body.unavailable === "boolean") {
     nextDm.unavailable = body.unavailable;
   }
-  if (body.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email.trim())) {
-    throw new Error("Invalid Decision Maker email");
-  }
+  // Email format not validated in the medjobs flow (admin confirms by
+  // research + call; downstream services handle malformed addresses).
   const nextResearch: ResearchData = { ...current, decision_maker: nextDm };
   await touchOutreach(db, row.id, userId, { research_data: nextResearch });
 }
@@ -3136,9 +3135,8 @@ async function handleAddContact(
     if (body.email?.trim()) fullName = body.email.trim();
     else throw new Error("Contact needs a name or an email");
   }
-  if (body.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
-    throw new Error("Invalid email");
-  }
+  // No email-format validation in the medjobs flow (admin confirms by
+  // research + call; downstream services handle malformed addresses).
 
   // If marking primary, demote existing primaries.
   if (body.is_primary) {
@@ -3224,9 +3222,8 @@ async function handleUpdateContact(
   userId: string,
 ) {
   if (!body.contact_id) throw new Error("contact_id required");
-  if (body.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
-    throw new Error("Invalid email");
-  }
+  // No email-format validation in the medjobs flow (admin confirms by
+  // research + call; downstream services handle malformed addresses).
   if (body.is_primary) {
     await db
       .from("student_outreach_contacts")
