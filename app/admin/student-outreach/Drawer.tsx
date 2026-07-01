@@ -345,12 +345,27 @@ function StakeholderDrawer({
           // subline; if no contact exists yet, the org name takes the
           // headline so the card isn't blank.
           const primary = ctx.contacts.find((c) => c.status === "active") ?? ctx.contacts[0] ?? null;
-          const contactDisplay = primary
-            ? [primary.title, primary.first_name, primary.last_name]
-                .filter(Boolean)
-                .join(" ")
-                .trim() || primary.name || null
+          // The `title` field doubles as the contact's ROLE in the add-contact
+          // UI (SpecificContactsSection stores the role picker value as
+          // `title`, e.g. "Assistant Dean"), so it must NOT stand in as the
+          // person's name. Only prepend it when it's a genuine honorific
+          // (Dr./Prof./…); otherwise the person's name leads and the role
+          // drops to the subline.
+          const HONORIFIC_RE = /^(dr|prof|professor|mr|mrs|ms|mx)\.?$/i;
+          const honorific =
+            primary?.title && HONORIFIC_RE.test(primary.title.trim())
+              ? primary.title.trim()
+              : null;
+          const personName =
+            [primary?.first_name, primary?.last_name].filter(Boolean).join(" ").trim() ||
+            primary?.name ||
+            null;
+          const contactDisplay = personName
+            ? [honorific, personName].filter(Boolean).join(" ")
             : null;
+          // Role shown in the subline: explicit `role`, else a non-honorific title.
+          const contactRole =
+            primary?.role || (primary?.title && !honorific ? primary.title.trim() : null);
           const orgDisplay = cleanOrgName(ctx.outreach.organization_name);
           const headline = contactDisplay || orgDisplay;
           const showOrgInSubline =
@@ -392,7 +407,7 @@ function StakeholderDrawer({
                   </>
                 )}
                 {ctx.campus.name} · {KIND_LABELS[ctx.outreach.kind ?? ctx.outreach.stakeholder_type]}
-                {primary?.role && ` · ${primary.role}`}
+                {contactRole && ` · ${contactRole}`}
               </p>
               {isPartner && (
                 <p className="mt-1 text-xs font-medium text-emerald-700">
