@@ -372,20 +372,6 @@ export const CRON_REGISTRY: CronJob[] = [
 
   // ── MedJobs (student talent marketplace) ───────────────────────────
   {
-    id: "medjobs-digest",
-    name: "MedJobs weekly candidate digest",
-    description: "Weekly roundup to MedJobs provider clients of new student candidates from the past week.",
-    recipientCohort: "MedJobs provider clients.",
-    audience: "MedJobs",
-    fn: "digest",
-    schedule: "0 13 * * 1",
-    humanSchedule: "Mondays, 13:00 UTC (~8 AM CT)",
-    path: "/api/cron/medjobs-digest",
-    emailTypes: ["new_candidate_alert"],
-    successSignal: "Provider opens a candidate / books an interview.",
-    relatedAdminPath: "/admin/medjobs/candidates",
-  },
-  {
     id: "medjobs-nudge",
     name: "MedJobs student nudges",
     description: "Activation cadence for newly-signed-up MedJobs students — Day 1 / Day 3 / Day 5 nudges to complete their profile.",
