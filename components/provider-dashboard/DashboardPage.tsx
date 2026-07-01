@@ -71,20 +71,48 @@ export default function DashboardPage() {
   // Modal state
   const [editingSection, setEditingSection] = useState<SectionId | null>(null);
 
-  // Arrival tracking: when the dashboard mounts with `?from=qa-success`, the
-  // provider just answered a question on /provider/[slug]/onboard and was
-  // auto-redirected here. Fire one dashboard_arrival event so the admin Q&A
-  // funnel can measure whether the redirect mechanic is working separately
-  // from whether the dashboard hero successfully nudges them into action
-  // (the existing edited_profile column tracks the latter). Strip the param
-  // so reloads don't replay; ref-guarded so a re-render doesn't double-fire.
+  // Arrival tracking: fires once per session for Device Breakdown analytics.
+  // Uses sessionStorage to dedupe across page navigations (consistent with how
+  // mobile_nav_variant_impression dedupes via Navbar's persistent ref).
+  // When `?from=` param is present, that source is captured; otherwise "direct".
+  // Strip the ?from= param after capturing so reloads don't replay.
   const firedArrival = useRef(false);
   useEffect(() => {
     if (firedArrival.current) return;
     if (!profile) return;
-    const fromParam = searchParams.get("from");
-    if (!fromParam) return;
+
+    // Session-level deduplication: only fire once per browser session per provider.
+    // Wrapped in try-catch because sessionStorage throws in Safari private mode.
+    const sessionKey = `dashboard_arrival_${profile.slug}`;
+    let alreadyFired = false;
+    try {
+      alreadyFired = typeof window !== "undefined" && !!sessionStorage.getItem(sessionKey);
+    } catch {
+      // sessionStorage unavailable - fall back to ref-only deduplication
+    }
+
+    if (alreadyFired) {
+      firedArrival.current = true;
+      // Still strip ?from= if present, even if we don't fire
+      const fromParam = searchParams.get("from");
+      if (fromParam) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("from");
+        router.replace(url.pathname + (url.search ? url.search : ""));
+      }
+      return;
+    }
+
     firedArrival.current = true;
+    try {
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem(sessionKey, "1");
+      }
+    } catch {
+      // sessionStorage unavailable - ref deduplication still works for this page session
+    }
+
+    const fromParam = searchParams.get("from");
     fetch("/api/activity/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -94,14 +122,18 @@ export default function DashboardPage() {
         actor_type: "provider",
         provider_id: profile.slug,
         event_type: "dashboard_arrival",
-        metadata: { source: fromParam },
+        metadata: { source: fromParam || "direct" },
       }),
     }).catch(() => {
       /* fire-and-forget */
     });
-    const url = new URL(window.location.href);
-    url.searchParams.delete("from");
-    router.replace(url.pathname + (url.search ? url.search : ""));
+
+    // Strip ?from= param if present
+    if (fromParam) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("from");
+      router.replace(url.pathname + (url.search ? url.search : ""));
+    }
   }, [profile, searchParams, router]);
 
   // Deep-link to a specific edit modal: a `?edit=<section>` link (the
