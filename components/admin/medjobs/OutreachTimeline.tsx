@@ -84,6 +84,9 @@ interface PastRow {
   icon: string;
   title: string;
   subline: string | null;
+  /** Show the row's timestamp as an explicit calendar date ("Jul 2, 2026")
+   *  rather than the relative "2d ago" form. Set for email sends. */
+  explicitDate: boolean;
   /** When the past event is an email_sent, this carries the
    *  email_log_id so the row can render engagement chips (legacy
    *  source — Bullet 5 prefers payload-based engagement). */
@@ -116,6 +119,19 @@ export function OutreachTimeline({ ctx, action, setError }: Props) {
     const future: FutureRow[] = [];
     const past: PastRow[] = [];
 
+    // The earliest email_sent touchpoint is the initial outreach email; every
+    // later one is a cadence follow-up. Rank up front so the loop can label
+    // them "Initial outreach email sent" vs "Outreach email sent".
+    const initialEmailSentId = ctx.touchpoints
+      .filter((t) => t.touchpoint_type === "email_sent")
+      .reduce<{ id: string; created_at: string } | null>(
+        (earliest, t) =>
+          !earliest || t.created_at < earliest.created_at
+            ? { id: t.id, created_at: t.created_at }
+            : earliest,
+        null,
+      )?.id ?? null;
+
     // Past events from touchpoints. narrateTouchpoint handles the
     // copy variants per type; we extract both the legacy email_log_id
     // AND the full payload so EngagementChips can prefer the new
@@ -127,15 +143,25 @@ export function OutreachTimeline({ ctx, action, setError }: Props) {
       const emailLogId = isEmailSent
         ? ((payload?.email_log_id as string | undefined) ?? null)
         : null;
+      // Outreach emails get a plain, date-stamped label: the very first is the
+      // "Initial outreach email sent"; the rest are cadence follow-ups.
+      const title = isEmailSent
+        ? tp.id === initialEmailSentId
+          ? "Initial outreach email sent"
+          : "Outreach email sent"
+        : n.text;
       past.push({
         kind: "past",
         key: `tp-${tp.id}`,
         whenIso: tp.created_at,
         icon: iconForTouchpoint(tp.touchpoint_type),
-        title: n.text,
+        title,
         // n.detail owns the subline now — narration split title vs detail so a
         // free-form note is never rendered twice (it used to land in both).
         subline: n.detail,
+        // Email sends show an explicit date ("Jul 2, 2026") instead of the
+        // relative "2d ago" stamp used for other history rows.
+        explicitDate: isEmailSent,
         emailLogId,
         emailSentPayload: isEmailSent ? payload : null,
         admin: n.admin ?? null,
@@ -151,7 +177,7 @@ export function OutreachTimeline({ ctx, action, setError }: Props) {
         typeof payload?.recipient_name === "string"
           ? (payload.recipient_name as string)
           : null;
-      const title = futureTitleFor(t.task_type, day, payload, recipientName);
+      const title = futureTitleFor(t.task_type, payload, recipientName);
       const isCallTask = t.task_type === "outreach_followup_call";
       future.push({
         kind: "future",
@@ -327,9 +353,11 @@ function TimelineRowView({
    *  attached when the row is a future call task. */
   onLogCall?: () => void;
 }) {
+  // Upcoming rows and email sends read as explicit dates ("Jul 2, 2026"); other
+  // past-activity rows keep the compact relative "2d ago" stamp.
   const whenLabel =
-    row.kind === "future"
-      ? formatFuture(row.whenIso)
+    row.kind === "future" || row.explicitDate
+      ? formatQueueDate(row.whenIso)
       : formatPast(row.whenIso);
   // Only surface the Log CTA when the task is actually due (due_at <=
   // now). Future-scheduled tasks render as queued items without the
@@ -547,7 +575,7 @@ function syntheticUpcomingEmailRows(ctx: DrawerContext): FutureRow[] {
       key: `sl-${cadenceKey}-${day.day}`,
       whenIso: new Date(dueMs).toISOString(),
       icon: "✉",
-      title: `Day ${day.day} email queued`,
+      title: "Email queued",
       subline: "via Smartlead",
       callTask: null,
     });
@@ -585,23 +613,21 @@ function iconForTaskType(type: string): string {
 
 function futureTitleFor(
   taskType: string,
-  day: number | null,
   payload: Record<string, unknown> | null,
   recipientName?: string | null,
 ): string {
-  const dayLabel = day != null ? `Day ${day} ` : "";
+  // No "Day N" prefix — the queued date (shown on the row) is the anchor the
+  // admin reads, not the cadence day number.
   const recipientSuffix = recipientName ? ` to ${recipientName}` : "";
   switch (taskType) {
     case "outreach_email_send":
-      return `${dayLabel}email queued${recipientSuffix}`;
+      return `Email queued${recipientSuffix}`;
     case "outreach_followup_email":
-      return `${dayLabel}follow-up email queued${recipientSuffix}`;
+      return `Follow-up email queued${recipientSuffix}`;
     case "outreach_followup_call":
-      return recipientName
-        ? `${dayLabel}call to ${recipientName}`
-        : `${dayLabel}call queued`;
+      return recipientName ? `Call to ${recipientName}` : "Call queued";
     case "outreach_day_0":
-      return "Day 0 outreach queued";
+      return "Outreach queued";
     case "manual_followup": {
       const summary =
         typeof payload?.notes === "string"
@@ -636,17 +662,12 @@ function formatPast(iso: string): string {
   return new Date(iso).toLocaleDateString();
 }
 
-function formatFuture(iso: string): string {
-  const ms = new Date(iso).getTime() - Date.now();
-  if (ms < 0) {
-    const days = Math.round(-ms / 86_400_000);
-    return days >= 1 ? `${days}d overdue` : "due now";
-  }
-  const min = Math.round(ms / 60_000);
-  if (min < 60) return `in ${min}m`;
-  const hr = Math.round(min / 60);
-  if (hr < 24) return `in ${hr}h`;
-  const d = Math.round(hr / 24);
-  if (d < 60) return `in ${d}d`;
-  return new Date(iso).toLocaleDateString();
+// Explicit calendar date for queued (future) rows and email sends —
+// "Jul 2, 2026". Uses the browser's local day, matching the Calls-tab sections.
+function formatQueueDate(iso: string): string {
+  return new Date(iso).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
