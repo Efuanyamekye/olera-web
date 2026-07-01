@@ -108,6 +108,10 @@ export interface ConnectionRowData {
   followupStage?: number | null;
   /** Why the sequence stopped */
   followupStoppedReason?: string | null;
+  /** Tagged as "no contact found" in Needs Email tab - sinks to bottom of list */
+  noContactFound?: boolean;
+  /** When the "no contact found" tag was added */
+  noContactFoundAt?: string | null;
 }
 
 // Per-provider engagement data from list API (does NOT include "messaged")
@@ -120,6 +124,7 @@ interface Engagement {
   phone_clicked: boolean;
   email_link_clicked: boolean;
   continue_in_inbox?: boolean;
+  family_confirmed?: boolean;
   // Note: "messaged" is passed separately since it's per-connection, not per-provider
 }
 
@@ -329,6 +334,7 @@ function EngagementBadges({
     { icon: "📧", label: "Emailed", active: engagement?.email_link_clicked ?? false },
     { icon: "📨", label: "Continued in Inbox", active: engagement?.continue_in_inbox ?? false },
     { icon: "💬", label: "Messaged", active: isMessaged ?? false },
+    { icon: "✓", label: "Family confirmed", active: engagement?.family_confirmed ?? false },
     { icon: "✓", label: "Marked Replied", active: markedReplied },
     { icon: "🤝", label: "Already Connected", active: alreadyConnected },
     { icon: "✓", label: adminVerifiedLabel, active: !!adminOverride, highlight: true },
@@ -417,6 +423,7 @@ export default function ConnectionRow({
   const [editEmailInput, setEditEmailInput] = useState("");
   const [editEmailError, setEditEmailError] = useState<string | null>(null);
   const [editEmailSuccess, setEditEmailSuccess] = useState(false);
+  const [editEmailSuccessMsg, setEditEmailSuccessMsg] = useState<string | null>(null);
   const [editingEmailLoading, setEditingEmailLoading] = useState(false);
   const [pendingEmailEdit, setPendingEmailEdit] = useState<{ oldEmail: string; newEmail: string } | null>(null);
   const editEmailTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -452,6 +459,15 @@ export default function ConnectionRow({
   const [trustingEmail, setTrustingEmail] = useState(false);
   const [trustEmailSuccess, setTrustEmailSuccess] = useState(false);
   const [trustEmailError, setTrustEmailError] = useState<string | null>(null);
+
+  // "No contact found" tag state (for Needs Email tab)
+  const [noContactTagged, setNoContactTagged] = useState(c.noContactFound ?? false);
+  const [togglingNoContactTag, setTogglingNoContactTag] = useState(false);
+
+  // Sync noContactTagged with prop when it changes (e.g., parent refresh, other admin action)
+  useEffect(() => {
+    setNoContactTagged(c.noContactFound ?? false);
+  }, [c.noContactFound]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -976,6 +992,18 @@ export default function ConnectionRow({
             },
           });
         }
+
+        // Clear "no contact found" tag if it was set (email is now found)
+        if (noContactTagged) {
+          setNoContactTagged(false);
+          // Clear on server side before refresh to avoid race condition
+          await fetch(`/api/admin/connections/${c.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ noContactFound: false }),
+          }).catch(() => {/* silent fail */});
+        }
+
         // Notify parent to refresh list
         onNudgeSuccess?.();
       } else {
@@ -1004,7 +1032,11 @@ export default function ConnectionRow({
     const oldEmail = detail?.provider.email || "(none)";
     const newEmail = editEmailInput.trim();
 
-    if (oldEmail === newEmail) {
+    // Block "same email" UNLESS we're overriding a delivery issue or verification failure.
+    // For Delivery Issues: admin confirmed the email works (called provider), wants to trust it.
+    const isOverridingIssue = c.emailIssueType === "failed" || c.emailIssueType === "invalid" ||
+                               verificationStatus === "invalid" || verificationStatus === "risky";
+    if (oldEmail === newEmail && !isOverridingIssue) {
       setEditEmailError("New email is the same as current email");
       return;
     }
@@ -1029,8 +1061,9 @@ export default function ConnectionRow({
         body: JSON.stringify({
           newEmail: pendingEmailEdit.newEmail,
           // Force when the operator is overriding a failed auto-check — either from
-          // a prior 422 (forceKind) or because the inline verdict is invalid/risky.
-          force: forceKind !== null || verificationStatus === "invalid" || verificationStatus === "risky",
+          // a prior 422 (forceKind), the inline verdict is invalid/risky, or the
+          // provider is in Delivery Issues (already known to have email issues).
+          force: forceKind !== null || verificationStatus === "invalid" || verificationStatus === "risky" || c.emailIssueType === "failed" || c.emailIssueType === "invalid",
         }),
       });
 
@@ -1038,6 +1071,16 @@ export default function ConnectionRow({
 
       if (res.ok && data.success) {
         setEditEmailSuccess(true);
+        // Show appropriate success message based on operation type
+        setEditEmailSuccessMsg(
+          data.trusted && data.resent
+            ? "Email trusted! Day 0 resent. Sequence restarted."
+            : data.trusted && data.resendFailed
+              ? "Email trusted but resend failed. Check email logs."
+              : data.trusted
+                ? "Email trusted!"
+                : "Email updated! Day 0 notification sent. Sequence restarted."
+        );
         setEditEmailInput("");
         setForceKind(null);
 
@@ -1058,6 +1101,17 @@ export default function ConnectionRow({
           });
         }
 
+        // Clear "no contact found" tag if it was set (email is now found/fixed)
+        if (noContactTagged) {
+          setNoContactTagged(false);
+          // Clear on server side before refresh to avoid race condition
+          await fetch(`/api/admin/connections/${c.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ noContactFound: false }),
+          }).catch(() => {/* silent fail */});
+        }
+
         // Notify parent to refresh list
         onNudgeSuccess?.();
 
@@ -1065,6 +1119,7 @@ export default function ConnectionRow({
         editEmailTimeoutRef.current = setTimeout(() => {
           setEditingEmail(false);
           setEditEmailSuccess(false);
+          setEditEmailSuccessMsg(null);
           setEditEmailError(null);
           editEmailTimeoutRef.current = null;
         }, warning ? 5000 : 3000);
@@ -1123,6 +1178,33 @@ export default function ConnectionRow({
       setTrustEmailError("Network error");
     } finally {
       setTrustingEmail(false);
+    }
+  }
+
+  // Toggle "no contact found" tag for Needs Email tab
+  async function handleToggleNoContactTag() {
+    setTogglingNoContactTag(true);
+
+    try {
+      const res = await fetch(`/api/admin/connections/${c.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          noContactFound: !noContactTagged,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setNoContactTagged(data.noContactFound);
+        // Notify parent to refresh list (this will reorder the connection)
+        onNudgeSuccess?.();
+      }
+    } catch {
+      // Silent fail - button state will remain as is
+    } finally {
+      setTogglingNoContactTag(false);
     }
   }
 
@@ -1347,6 +1429,15 @@ export default function ConnectionRow({
                    c.emailIssueType === "no_email" ? "No email" :
                    c.emailIssueType === "failed" ? "Failed" :
                    "Invalid"}
+                </span>
+              </>
+            )}
+            {/* "No contact found" tag indicator - shown in Needs Email tab */}
+            {noContactTagged && !emailSuccess && (
+              <>
+                <span className="text-gray-300">|</span>
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-purple-50 text-purple-600" title={c.noContactFoundAt ? `Tagged ${daysAgo(c.noContactFoundAt)}` : "No contact found"}>
+                  No contact
                 </span>
               </>
             )}
@@ -1706,7 +1797,8 @@ export default function ConnectionRow({
                                       editEmailTimeoutRef.current = null;
                                     }
                                     setEditingEmail(true);
-                                    setEditEmailInput(detail.provider.email || "");
+                                    const existingEmail = detail.provider.email || "";
+                                    setEditEmailInput(existingEmail);
                                     setEditEmailError(null);
                                     setEditEmailSuccess(false);
                                     // Clear previous find email state
@@ -1724,6 +1816,12 @@ export default function ConnectionRow({
                                     setTrustScoreStatus("idle");
                                     setTrustScoreReason("");
                                     setCandidateTrustScores(new Map());
+
+                                    // Auto-verify for providers with email issues (Delivery Issues tab)
+                                    // This shows the verification status immediately without requiring blur
+                                    if ((c.emailIssueType === "failed" || c.emailIssueType === "invalid") && existingEmail) {
+                                      handleEmailBlur(existingEmail, "edit");
+                                    }
                                   }}
                                   className="text-xs text-gray-500 hover:text-gray-700 shrink-0"
                                 >
@@ -1798,12 +1896,24 @@ export default function ConnectionRow({
                                   buried link. The confirm modal is the safety net. */}
                               <button
                                 type="submit"
-                                disabled={editingEmailLoading || findingEmail || !editEmailInput.trim() || editEmailInput === detail.provider.email}
+                                disabled={
+                                  editingEmailLoading ||
+                                  findingEmail ||
+                                  !editEmailInput.trim() ||
+                                  // Allow override of existing email when it's known to have issues
+                                  // (either from fresh verification or from existing emailIssueType)
+                                  (editEmailInput === detail.provider.email &&
+                                    verificationStatus !== "invalid" &&
+                                    verificationStatus !== "risky" &&
+                                    forceKind === null &&
+                                    c.emailIssueType !== "failed" &&
+                                    c.emailIssueType !== "invalid")
+                                }
                                 className="px-3 py-1 text-sm font-medium text-white bg-teal-600 rounded hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 {editingEmailLoading
                                   ? "Saving..."
-                                  : verificationStatus === "invalid" || verificationStatus === "risky" || forceKind !== null
+                                  : verificationStatus === "invalid" || verificationStatus === "risky" || forceKind !== null || c.emailIssueType === "failed" || c.emailIssueType === "invalid"
                                     ? "Save anyway"
                                     : "Save"}
                               </button>
@@ -1840,7 +1950,7 @@ export default function ConnectionRow({
                             </div>
                             {/* Verification and trust score badges */}
                             <div className="flex items-center gap-3">
-                              <EmailVerificationBadge status={verificationStatus} />
+                              <EmailVerificationBadge status={verificationStatus} showHelperText />
                               <TrustScoreBadge status={trustScoreStatus} reason={trustScoreReason} />
                             </div>
                             {findEmailError && <p className="text-xs text-amber-600">{findEmailError}</p>}
@@ -1929,9 +2039,9 @@ export default function ConnectionRow({
                               </div>
                             )}
                             {editEmailError && <p className="text-xs text-red-600">{editEmailError}</p>}
-                            {editEmailSuccess && (
+                            {editEmailSuccess && editEmailSuccessMsg && (
                               <p className="text-xs text-emerald-600">
-                                Email updated! Day 0 notification sent. Sequence restarted.
+                                {editEmailSuccessMsg}
                               </p>
                             )}
                           </form>
@@ -1999,7 +2109,7 @@ export default function ConnectionRow({
                         </div>
                         {/* Verification and trust score badges */}
                         <div className="flex items-center gap-3">
-                          <EmailVerificationBadge status={verificationStatus} />
+                          <EmailVerificationBadge status={verificationStatus} showHelperText />
                           <TrustScoreBadge status={trustScoreStatus} reason={trustScoreReason} />
                         </div>
                         {findEmailError && <p className="text-xs text-amber-600">{findEmailError}</p>}
@@ -2092,6 +2202,32 @@ export default function ConnectionRow({
                         )}
                         {emailSuccess && (
                           <p className="text-xs text-emerald-600">Email added! First notification sent to provider.</p>
+                        )}
+                        {/* "No contact found" tag button - for Needs Email tab */}
+                        {c.emailIssueType === "no_email" && !emailSuccess && (
+                          <div className="flex items-center gap-2 mt-2 pt-2 border-t border-gray-200">
+                            <button
+                              type="button"
+                              onClick={handleToggleNoContactTag}
+                              disabled={togglingNoContactTag}
+                              className={`px-2 py-1 text-xs font-medium rounded transition-colors disabled:opacity-50 ${
+                                noContactTagged
+                                  ? "bg-purple-100 text-purple-700 hover:bg-purple-200"
+                                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                              }`}
+                            >
+                              {togglingNoContactTag
+                                ? "Updating..."
+                                : noContactTagged
+                                  ? "Tagged"
+                                  : "Tag as no contact"}
+                            </button>
+                            {noContactTagged && (
+                              <span className="text-xs text-gray-400">
+                                (will sink to bottom of list)
+                              </span>
+                            )}
+                          </div>
                         )}
                       </form>
                     ) : (

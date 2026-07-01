@@ -105,8 +105,161 @@ export async function POST(
 
     const oldEmail = toProfile.email?.trim() || null;
 
+    // Special case: "trusting" the same email (force + same email)
+    // This happens when admin confirms a failed/invalid email actually works.
+    // We trust it AND resend Day 0 (since original may have failed).
     if (oldEmail === newEmail) {
-      return NextResponse.json({ error: "New email is the same as current email" }, { status: 400 });
+      if (!force) {
+        return NextResponse.json({ error: "New email is the same as current email" }, { status: 400 });
+      }
+
+      // Trust the email first
+      await markEmailTrusted(newEmail, {
+        reason: "admin",
+        note: `trust-existing-email on connection ${connectionId}`,
+        createdBy: `admin:${admin.id}`,
+      });
+
+      // Now resend Day 0 notification (the original may have failed)
+      // This ensures the provider actually receives the lead notification
+      const fromProfile = Array.isArray(conn.from_profile) ? conn.from_profile[0] : conn.from_profile;
+      const familyName = fromProfile?.display_name || "A family";
+      const careTypes = fromProfile?.care_types as string[] | null;
+      const careType = careTypes?.[0] || null;
+      const providerName = toProfile.display_name || "Provider";
+      const providerSlug = toProfile.slug || toProfile.source_provider_id || toProfile.id;
+
+      // Get care recipient from family metadata
+      const familyMeta = (fromProfile?.metadata as Record<string, unknown>) || {};
+      const relationshipRaw = familyMeta.relationship_to_recipient as string | undefined;
+      const careRecipientMap: Record<string, string | null> = {
+        parent: "their parent",
+        spouse: "their spouse",
+        grandparent: "their grandparent",
+        myself: "themselves",
+        other: null,
+      };
+      const careRecipient = relationshipRaw
+        ? (careRecipientMap[relationshipRaw] !== undefined ? careRecipientMap[relationshipRaw] : null)
+        : null;
+
+      // Get provider city
+      let city: string | null = null;
+      if (toProfile.source_provider_id) {
+        const { data: iosProvider } = await db
+          .from("olera-providers")
+          .select("city")
+          .eq("provider_id", toProfile.source_provider_id)
+          .maybeSingle();
+        city = iosProvider?.city || null;
+      }
+
+      // Get current email version (don't increment - email didn't change)
+      const meta = (conn.metadata || {}) as Record<string, unknown>;
+      const emailVersion = (meta.email_version as number) || 1;
+      const now = new Date().toISOString();
+
+      // Send Day 0 email
+      const emailLogId = await reserveEmailLogId({
+        to: newEmail,
+        subject: `${familyName} is interested in your care services`,
+        emailType: "connection_request",
+        recipientType: "provider",
+        providerId: toProfile.id,
+        metadata: {
+          connection_id: connectionId,
+          email_version: emailVersion,
+          sent_by: `admin:${admin.id}`,
+          is_trust_resend: true,
+        },
+      });
+
+      const claimUrl = generateLeadClaimUrl(providerSlug, newEmail, connectionId, siteUrl);
+      const viewUrl = appendTrackingParams(claimUrl, emailLogId);
+      const manageListingUrl = generateProviderPortalUrl(providerSlug, newEmail, "manage", siteUrl);
+      const settingsUrl = generateProviderPortalUrl(providerSlug, newEmail, "settings", siteUrl);
+
+      const html = connectionRequestEmail({
+        providerName,
+        familyName,
+        careType,
+        city,
+        careRecipient,
+        viewUrl,
+        manageListingUrl,
+        settingsUrl,
+      });
+
+      const { success, error: sendError } = await sendEmail({
+        to: newEmail,
+        subject: `${familyName} is interested in your care services`,
+        html,
+        emailType: "connection_request",
+        recipientType: "provider",
+        providerId: toProfile.id,
+        metadata: {
+          connection_id: connectionId,
+          email_version: emailVersion,
+          sent_by: `admin:${admin.id}`,
+          is_trust_resend: true,
+        },
+        emailLogId: emailLogId ?? undefined,
+      });
+
+      if (!success) {
+        console.error("[edit-email] Trust resend failed:", sendError);
+        // Email is still trusted, but resend failed
+        return NextResponse.json({
+          success: true,
+          trusted: true,
+          resendFailed: true,
+          newEmail,
+          message: "Email trusted but resend failed. Check email logs.",
+        });
+      }
+
+      // Reset sequence metadata (fresh start with trusted email)
+      const updatedMeta = {
+        ...meta,
+        email_sent_at: now,
+        followup_stage: 0,
+        followup_sent_at: null,
+        followup_sent_by: null,
+        followup_stopped_at: null,
+        followup_stopped_reason: null,
+        needs_call: false,
+        nudge_count: 0,
+        nudged_at: null,
+      };
+
+      const { error: metaError } = await db
+        .from("connections")
+        .update({ metadata: updatedMeta })
+        .eq("id", connectionId);
+
+      if (metaError) {
+        console.error("[edit-email] Trust resend metadata update failed:", metaError);
+        // Email was sent but metadata not updated - warn admin
+        return NextResponse.json({
+          success: true,
+          trusted: true,
+          resent: true,
+          warning: "Email trusted and resent, but sequence state may be inconsistent.",
+          newEmail,
+        });
+      }
+
+      console.log(
+        `[edit-email] Trusted and resent Day 0 for connection ${connectionId}: ${newEmail}`
+      );
+
+      return NextResponse.json({
+        success: true,
+        trusted: true,
+        resent: true,
+        newEmail,
+        message: "Email trusted and Day 0 resent. Sequence restarted.",
+      });
     }
 
     // Protection: If this account is claimed (has account_id) AND already has an email,

@@ -71,7 +71,7 @@ interface FollowupMetadata {
   followup_sent_at?: string | null;
   followup_sent_by?: string;
   followup_stopped_at?: string | null;
-  followup_stopped_reason?: "connected" | "responded" | "admin_marked_connected" | null;
+  followup_stopped_reason?: "connected" | "responded" | "admin_marked_connected" | "family_confirmed" | null;
   thread?: ThreadMessage[];
 }
 
@@ -366,9 +366,9 @@ export async function GET(request: NextRequest) {
       }
 
       // Check if sequence was already stopped for a REAL connection
-      // Skip if stopped for actual connection ("connected", "responded") or admin verification
+      // Skip if stopped for actual connection ("connected", "responded"), admin verification, or family confirmation
       const stopReason = meta.followup_stopped_reason;
-      const isRealStop = stopReason === "connected" || stopReason === "responded" || stopReason === "admin_marked_connected";
+      const isRealStop = stopReason === "connected" || stopReason === "responded" || stopReason === "admin_marked_connected" || stopReason === "family_confirmed";
       if (meta.followup_stopped_at && isRealStop) {
         counts.skipped++;
         counts.skipReasons.sequence_stopped++;

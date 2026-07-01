@@ -549,6 +549,9 @@ export async function GET(request: NextRequest) {
       // Extract admin override (manually marked status)
       const adminOverride = meta.admin_override ? parseAdminOverride(meta.admin_override) : null;
 
+      // Family self-reported that provider got back to them (ground-truth connection signal)
+      const familyConfirmed = meta.family_confirmed === true;
+
       // Check if family has replied AFTER provider's response
       // This determines if we need to nudge the family
       // Only counts REAL replies (non-auto, non-system, with actual text)
@@ -739,6 +742,8 @@ export async function GET(request: NextRequest) {
         archivedAt,
         // Admin override for manual status marking
         adminOverride,
+        // Family self-reported provider got back to them
+        familyConfirmed,
         // For engagement-based "Needs Call" tab
         needsCall: meta.followup_stopped_reason === "needs_call" || meta.needs_call === true,
         // When Day 0 email was sent (for staleness calculation)
@@ -793,6 +798,10 @@ export async function GET(request: NextRequest) {
         } : null,
         // Admin hidden flag - hides from admin UI without affecting anything else
         adminHidden: meta.admin_hidden === true,
+        // "No contact found" tag - team searched but couldn't find contact info
+        // Tagged connections sink to bottom of Needs Email tab
+        noContactFound: meta.no_contact_found === true,
+        noContactFoundAt: (meta.no_contact_found_at as string) || null,
       };
     });
 
@@ -1105,6 +1114,7 @@ export async function GET(request: NextRequest) {
       phone_clicked: boolean;
       email_link_clicked: boolean;
       continue_in_inbox: boolean;
+      family_confirmed: boolean;
     }>();
 
     for (const c of searched) {
@@ -1142,6 +1152,7 @@ export async function GET(request: NextRequest) {
         emailLinkClicked: eng?.email_link_clicked ?? false,
         continueInInbox: eng?.continue_in_inbox ?? false,
         providerMessaged: c.responded,
+        familyConfirmed: c.familyConfirmed,
         adminMarkedViewed,
         adminMarkedConnected,
         lastActivityAt: combinedLastActivity,
@@ -1168,6 +1179,7 @@ export async function GET(request: NextRequest) {
         phone_clicked: eng?.phone_clicked ?? false,
         email_link_clicked: eng?.email_link_clicked ?? false,
         continue_in_inbox: eng?.continue_in_inbox ?? false,
+        family_confirmed: c.familyConfirmed,
       });
 
       // Calculate family engagement level for this connection
@@ -1491,6 +1503,7 @@ export async function GET(request: NextRequest) {
 
     // Sort by most recent first
     // For "declined" tab: sort by archive date (most recently declined first)
+    // For "needs_email" tab: untagged first, then tagged (both groups sorted by date)
     // For other tabs: sort by creation date (most recent inquiry first)
     list.sort((a, b) => {
       if (responseFilter === "declined") {
@@ -1500,6 +1513,16 @@ export async function GET(request: NextRequest) {
         const aTime = aDate && !isNaN(aDate.getTime()) ? aDate.getTime() : 0;
         const bTime = bDate && !isNaN(bDate.getTime()) ? bDate.getTime() : 0;
         return bTime - aTime; // Most recently archived first
+      } else if (responseFilter === "needs_email") {
+        // For Needs Email: untagged connections first, tagged sink to bottom
+        // Within each group, sort by date (most recent first)
+        const aTagged = a.noContactFound ? 1 : 0;
+        const bTagged = b.noContactFound ? 1 : 0;
+        if (aTagged !== bTagged) return aTagged - bTagged; // Untagged (0) before tagged (1)
+        // Same tag status: sort by date
+        const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
+        const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
+        return bTime - aTime; // Most recent first
       } else {
         const aTime = a.created_at ? new Date(a.created_at).getTime() : 0;
         const bTime = b.created_at ? new Date(b.created_at).getTime() : 0;
@@ -1523,7 +1546,7 @@ export async function GET(request: NextRequest) {
     // Per-CONNECTION engagement data for UI badges (keyed by connection_id)
     // Use pre-computed values from connectionBadgeData (computed during engagement level calculation)
     // This ensures badge data matches tab placement - both use the same computed values
-    const engagement: Record<string, { email_clicked: boolean; lead_opened: boolean; contact_revealed: boolean; phone_copied: boolean; email_copied: boolean; phone_clicked: boolean; email_link_clicked: boolean; continue_in_inbox: boolean }> = {};
+    const engagement: Record<string, { email_clicked: boolean; lead_opened: boolean; contact_revealed: boolean; phone_copied: boolean; email_copied: boolean; phone_clicked: boolean; email_link_clicked: boolean; continue_in_inbox: boolean; family_confirmed: boolean }> = {};
     for (const c of pageRaw) {
       const badge = connectionBadgeData.get(c.id);
       if (badge) {

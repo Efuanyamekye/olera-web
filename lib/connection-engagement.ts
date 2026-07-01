@@ -94,6 +94,8 @@ export interface EngagementData {
   continueInInbox: boolean;
   /** Provider sent a message through the inbox */
   providerMessaged: boolean;
+  /** Family self-reported that the provider got back to them */
+  familyConfirmed: boolean;
   /** Admin manually marked this connection as "viewed" (verified off-platform activity) */
   adminMarkedViewed: boolean;
   /** Admin manually marked this connection as "connected" (verified off-platform activity) */
@@ -306,24 +308,28 @@ export function getEngagementLevel(
   const isStale = sequenceComplete;
 
   // Determine engagement level
-  // PRIORITY: Admin override > Automatic tracking > Sequence-based escalation
+  // PRIORITY: Connection signals > Admin overrides > Automatic tracking > Sequence-based escalation
+  // Note: familyConfirmed and provider actions OVERRIDE adminMarkedViewed because they are
+  // ground-truth connection signals. adminMarkedViewed is a softer "they looked" signal.
   let level: EngagementLevel;
 
   if (engagement.adminMarkedConnected) {
     // Admin manually verified this connection (off-platform activity)
     // Takes highest priority - admin has confirmed provider connected
     level = "connected";
-  } else if (engagement.adminMarkedViewed) {
-    // Admin manually verified provider viewed the lead
-    // Keep in viewed tab - admin action always respected
-    level = "viewed";
   } else if (
     engagement.providerMessaged ||
     engagement.phoneClicked ||
-    engagement.emailLinkClicked
+    engagement.emailLinkClicked ||
+    engagement.familyConfirmed
   ) {
-    // Provider reached out - this is success
+    // Provider reached out (or family confirmed they did) - this is success
+    // This OVERRIDES adminMarkedViewed because actual connection > "just viewed"
     level = "connected";
+  } else if (engagement.adminMarkedViewed) {
+    // Admin manually verified provider viewed the lead
+    // Respected only when no actual connection signals exist
+    level = "viewed";
   } else if (engagement.leadOpened) {
     // Provider opened the lead drawer
     level = "viewed";
@@ -356,7 +362,8 @@ export function isConnected(engagement: EngagementData): boolean {
     engagement.adminMarkedConnected ||
     engagement.providerMessaged ||
     engagement.phoneClicked ||
-    engagement.emailLinkClicked
+    engagement.emailLinkClicked ||
+    engagement.familyConfirmed
   );
 }
 

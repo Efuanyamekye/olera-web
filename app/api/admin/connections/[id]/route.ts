@@ -156,7 +156,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       provider?.id,
       providerProfileId,
     ].filter(Boolean) as string[];
-    let engagement = { email_clicked: false, lead_opened: false, contact_revealed: false, phone_copied: false, email_copied: false, phone_clicked: false, email_link_clicked: false, messaged: false };
+    let engagement = { email_clicked: false, lead_opened: false, contact_revealed: false, phone_copied: false, email_copied: false, phone_clicked: false, email_link_clicked: false, messaged: false, family_confirmed: false };
     if (engagementKeys.length > 0) {
       const { data: events } = await db
         .from("provider_activity")
@@ -198,6 +198,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
       (m) => m.from_profile_id === providerProfileId && m.is_auto_reply !== true && !!m.text?.trim()
     );
     engagement.messaged = providerMessaged;
+
+    // Family self-reported that provider got back to them (ground-truth connection signal)
+    engagement.family_confirmed = meta.family_confirmed === true;
 
     // Email trail — every notification sent to this provider since the lead
     // arrived (provider_id keys both manual nudges and the consolidated cron
@@ -431,6 +434,72 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     });
   } catch (err) {
     console.error("[connections/:id] fatal:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+}
+
+/**
+ * PATCH /api/admin/connections/[id] — update connection metadata
+ * Used for admin actions like tagging "no contact found" in Needs Email tab.
+ */
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const user = await getAuthUser();
+    if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    const admin = await getAdminUser(user.id);
+    if (!admin) return NextResponse.json({ error: "Access denied" }, { status: 403 });
+
+    const { id } = await params;
+    const body = await req.json();
+    const db = getServiceClient();
+
+    // First fetch the existing connection
+    const { data: existing, error: fetchError } = await db
+      .from("connections")
+      .select("id, metadata")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error("[connections/:id PATCH] fetch error:", fetchError);
+      return NextResponse.json({ error: "Failed to fetch connection" }, { status: 500 });
+    }
+    if (!existing) {
+      return NextResponse.json({ error: "Connection not found" }, { status: 404 });
+    }
+
+    const meta = (existing.metadata as Record<string, unknown>) || {};
+
+    // Handle "no contact found" tag toggle
+    if ("noContactFound" in body) {
+      const shouldTag = body.noContactFound === true;
+      if (shouldTag) {
+        meta.no_contact_found = true;
+        meta.no_contact_found_at = new Date().toISOString();
+        meta.no_contact_found_by = admin.email || user.id;
+      } else {
+        // Untag - remove the flag
+        delete meta.no_contact_found;
+        delete meta.no_contact_found_at;
+        delete meta.no_contact_found_by;
+      }
+    }
+
+    // Update the connection metadata
+    const { error: updateError } = await db
+      .from("connections")
+      .update({ metadata: meta })
+      .eq("id", id);
+
+    if (updateError) {
+      console.error("[connections/:id PATCH] update error:", updateError);
+      return NextResponse.json({ error: "Failed to update connection" }, { status: 500 });
+    }
+
+    console.log(`[connections/:id PATCH] Connection ${id} updated by admin ${user.id}:`, body);
+    return NextResponse.json({ success: true, noContactFound: meta.no_contact_found === true });
+  } catch (err) {
+    console.error("[connections/:id PATCH] fatal:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
