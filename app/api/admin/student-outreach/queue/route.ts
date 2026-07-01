@@ -1101,8 +1101,9 @@ async function idsByPartnersWithTasks(db: DB, opts: QueryOpts): Promise<string[]
 async function idsByCallsDue(db: DB, opts: QueryOpts): Promise<string[]> {
   // Calls tab surfaces ALL queued calls, however far out (no date window) —
   // the client groups them into per-day sections (Today, Tomorrow, …). Past-due
-  // rows are included (overdue calls fall into Today). The pageSize cap below
-  // is the only bound (a safety valve, ordered soonest-first).
+  // rows are included (overdue calls fall into Today). No cap — every queued
+  // call surfaces; the explicit high limit just lifts PostgREST's silent
+  // 1000-row default so nothing is truncated.
   let q = db
     .from("student_outreach_tasks")
     .select("outreach_id, due_at, student_outreach!inner(campus_id, stakeholder_type, organization_name)")
@@ -1110,7 +1111,8 @@ async function idsByCallsDue(db: DB, opts: QueryOpts): Promise<string[]> {
     .eq("task_type", "outreach_followup_call")
     .not("student_outreach.status", "in", `(${PARTNER_ALL.map((s) => `"${s}"`).join(",")})`)
     .order("due_at", { ascending: true })
-    .order("id", { ascending: true });
+    .order("id", { ascending: true })
+    .limit(10000);
   if (opts.campusId) q = q.eq("student_outreach.campus_id", opts.campusId);
   if (opts.type) q = q.eq("student_outreach.stakeholder_type", opts.type);
   if (opts.search) q = q.ilike("student_outreach.organization_name", `%${opts.search}%`);
@@ -1121,7 +1123,8 @@ async function idsByCallsDue(db: DB, opts: QueryOpts): Promise<string[]> {
     if (seen.has(t.outreach_id)) continue;
     seen.add(t.outreach_id);
     ids.push(t.outreach_id);
-    if (ids.length >= opts.pageSize) break;
+    // No pageSize cap on Calls — every queued call surfaces (grouped per day
+    // client-side). The query's own row ceiling is the only bound.
   }
   return ids;
 }
