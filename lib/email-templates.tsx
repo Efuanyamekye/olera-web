@@ -1286,6 +1286,10 @@ export interface CompareCardItem {
   rating?: number | null;
   reviewCount?: number | null;
   distanceMi?: number | null;
+  /** Short honest "why we picked this" line (e.g. "Highly Rated · State Licensed").
+   *  Built from verified signals upstream; omitted when there's nothing to stand
+   *  behind. Never a response-time claim. */
+  reason?: string | null;
   /** Tolerated (some callers build cards with a slug); not rendered. */
   slug?: string;
 }
@@ -1304,9 +1308,15 @@ function compareCardRow(p: CompareCardItem): string {
   const price = p.priceRange
     ? `<p style="font-size:13px;color:#6b7280;margin:0;line-height:1.4;">${escapeHtml(p.priceRange)}</p>`
     : "";
+  // The "why we picked this" line — the curated-shortlist differentiator. Sits
+  // right under the name in a confident green, above the raw rating/distance meta.
+  const reason = p.reason
+    ? `<p style="font-size:13px;color:#047857;font-weight:500;margin:0 0 3px;line-height:1.4;">${escapeHtml(p.reason)}</p>`
+    : "";
   const textCol = `
         <td style="vertical-align:top;">
           <p style="font-size:16px;color:${BRAND_COLOR};font-weight:600;margin:0 0 3px;line-height:1.3;">${escapeHtml(p.name)}</p>
+          ${reason}
           ${meta}
           ${price}
         </td>`;
@@ -1340,12 +1350,27 @@ export function providerSilentEmail(opts: {
   recommendedProviders: CompareCardItem[];
   browseUrl: string;
   city: string | null;
+  /** Care type the family inquired about (friendly label, e.g. "memory care"),
+   *  used for the entry-bridge opening sentence. Optional — degrades cleanly. */
+  careType?: string | null;
   /** Benefits quiz deep-link (the closer). Omitted by transactional callers. */
   benefitsQuizUrl?: string | null;
   /** Family profile id for the unsubscribe footer. */
   unsubscribeId?: string;
 }): string {
   const familyFirstName = firstName(opts.familyName, "there");
+  // Entry-bridge sentence: name their actual situation (care type + city) so the
+  // email reads as "Olera is helping me with THIS", not a generic blast. Only
+  // when we have the context; degrades to nothing otherwise.
+  const bridgeContext = [
+    opts.careType ? `about ${escapeHtml(opts.careType.toLowerCase())}` : "",
+    opts.city ? `in ${escapeHtml(opts.city)}` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const bridge = bridgeContext
+    ? `You reached out to <strong>${escapeHtml(opts.providerName)}</strong> ${bridgeContext}. `
+    : "";
   const hasDeclineMessage = opts.providerPassed && opts.declineMessage?.trim();
   const hasRecommendedProviders = opts.recommendedProviders.length > 0;
 
@@ -1360,6 +1385,8 @@ export function providerSilentEmail(opts: {
     } else {
       openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> isn't able to take new families right now, but there are other providers in your area worth a look.`;
     }
+  } else if (bridge) {
+    openingLine = `${bridge}They haven't gotten back to you yet, and the good thing about Olera is you're never limited to just one.${hasRecommendedProviders ? " Here are a few others worth comparing:" : ""}`;
   } else {
     openingLine = `<strong>${escapeHtml(opts.providerName)}</strong> hasn't gotten back to you yet, and the good thing about Olera is you're never limited to just one.${hasRecommendedProviders ? " Here are a few other providers near you worth comparing:" : ""}`;
   }

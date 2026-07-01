@@ -1,4 +1,6 @@
 import { getServiceClient } from "@/lib/admin";
+import { buildHighlights } from "@/lib/provider-highlights";
+import type { AiTrustSignals, CMSData, GoogleReviewsData } from "@/lib/types";
 
 /**
  * Shared alternative-provider finder for the family help cascade.
@@ -51,6 +53,11 @@ export interface RecommendedProvider {
   reviewCount: number | null;
   /** Miles from the family, when both family + provider coordinates are known. */
   distanceMi: number | null;
+  /** One short, honest "why we picked this" line built from verified signals
+   *  (trust signals / reviews / CMS quality) via the provider-highlights
+   *  waterfall. Null when the provider has no signal worth standing behind —
+   *  fewer honest reasons beat generic ones. NEVER a response-time claim. */
+  reason: string | null;
 }
 
 // Category stock images, re-hosted on Supabase storage — olera.care/images/* is
@@ -172,19 +179,31 @@ export async function findAlternativeProviders(
   ];
   const top = ranked.slice(0, 3);
 
-  // Ratings live on olera-providers, not business_profiles — join via source_provider_id.
-  const ratingByProvider = new Map<string, { rating: number | null; reviewCount: number | null }>();
+  // Ratings + trust/quality signals live on olera-providers, not business_profiles
+  // — join via source_provider_id. The trust/CMS JSONB powers the honest "why we
+  // picked this" reason (buildHighlights), same waterfall the provider pages use.
+  interface ProviderEnrich {
+    rating: number | null;
+    reviewCount: number | null;
+    reviews: GoogleReviewsData | null;
+    trustSignals: AiTrustSignals | null;
+    cmsData: CMSData | null;
+  }
+  const enrichByProvider = new Map<string, ProviderEnrich>();
   const srcIds = top.map((p) => p.source_provider_id).filter(Boolean) as string[];
   if (srcIds.length) {
     const { data: provs } = await db
       .from("olera-providers")
-      .select("provider_id, google_rating, google_reviews_data")
+      .select("provider_id, google_rating, google_reviews_data, ai_trust_signals, cms_data")
       .in("provider_id", srcIds);
     for (const pr of provs || []) {
-      const grd = (pr.google_reviews_data as { rating?: number; review_count?: number } | null) || {};
-      ratingByProvider.set(pr.provider_id as string, {
-        rating: grd.rating ?? (pr.google_rating as number | null) ?? null,
-        reviewCount: grd.review_count ?? null,
+      const reviews = (pr.google_reviews_data as GoogleReviewsData | null) || null;
+      enrichByProvider.set(pr.provider_id as string, {
+        rating: reviews?.rating ?? (pr.google_rating as number | null) ?? null,
+        reviewCount: reviews?.review_count ?? null,
+        reviews,
+        trustSignals: (pr.ai_trust_signals as AiTrustSignals | null) || null,
+        cmsData: (pr.cms_data as CMSData | null) || null,
       });
     }
   }
@@ -194,10 +213,25 @@ export async function findAlternativeProviders(
     const meta = (p.metadata as Record<string, unknown> | null) || {};
     const realImg =
       typeof p.image_url === "string" && p.image_url.startsWith("https://") ? p.image_url : null;
-    const rt = (p.source_provider_id && ratingByProvider.get(p.source_provider_id as string)) || {
+    const rt: ProviderEnrich = (p.source_provider_id && enrichByProvider.get(p.source_provider_id as string)) || {
       rating: null,
       reviewCount: null,
+      reviews: null,
+      trustSignals: null,
+      cmsData: null,
     };
+    // The honest "why" line — up to 2 verified highlights (trust > longevity >
+    // reviews > CMS), joined. skipCapability so we never fall back to a bare
+    // category label as a "reason". Null when nothing verified exists.
+    const highlights = buildHighlights({
+      trustSignals: rt.trustSignals,
+      googleReviews: rt.reviews,
+      cmsData: rt.cmsData,
+      careTypes: (p.care_types as string[]) || undefined,
+      maxItems: 2,
+      skipCapability: true,
+    });
+    const reason = highlights.length ? highlights.map((h) => h.label).join(" · ") : null;
     const pLat = typeof p.lat === "number" ? p.lat : null;
     // Distance only when it's plausibly "nearby" — beyond ~75mi it's not a useful
     // proximity signal (e.g. a family arranging out-of-state care) and would read as
@@ -217,6 +251,7 @@ export async function findAlternativeProviders(
       rating: rt.rating,
       reviewCount: rt.reviewCount,
       distanceMi,
+      reason,
     };
   });
 }

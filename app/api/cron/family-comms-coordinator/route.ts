@@ -10,6 +10,7 @@ import {
   careTypeToBrowseSlug,
   categoryStockImage,
 } from "@/lib/family-comms/alternatives";
+import { normalizeCareLabel } from "@/lib/provider-highlights";
 import {
   connectionOutcomeCheckEmail,
   providerSilentEmail,
@@ -452,6 +453,7 @@ export async function GET(request: NextRequest) {
         rating: p.rating,
         reviewCount: p.reviewCount,
         distanceMi: p.distanceMi,
+        reason: p.reason,
       });
 
       // Build the ladder for this family; first non-null plan wins. `ghostSkip` is set by
@@ -542,6 +544,9 @@ export async function GET(request: NextRequest) {
                   recommendedProviders,
                   browseUrl,
                   city: provider?.city || null,
+                  careType: normalizeCareLabel(
+                    ((provider?.care_types as string[] | undefined)?.[0] || "").split("|")[0].trim(),
+                  ),
                   benefitsQuizUrl: buildQuizUrl(eid),
                 });
               },
