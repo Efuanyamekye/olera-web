@@ -7,6 +7,14 @@
 
 ## Current Focus
 
+### 2026-07-01 — Ad Boost request email automation (branch `codex/adboost-request-emails`)
+
+Built provider-facing email automation for Ad Boost requests, replacing the manual Franchil-style first-touch with status-aware sends. New migration `125_ad_boost_request_email_markers.sql` adds queued/requested/promotion sent markers; `lib/ad-boost/notifications.server.ts` reserves the marker before send and clears it if Resend fails/skips; `/api/provider/ad-boost/request` now sends queued vs requested emails on submission and a promotion email when a queued request becomes ready.
+
+Provider copy was iterated in a real inbox (`tj@findmedjobs.co`): no provider-name framing in headlines/preheaders, no vague "as-is" phrasing, TJ-led Ad Boost byline/photo, and explicit readiness language ("your Olera page has enough detail for us to start setting up the campaign"). Email Gallery samples now include `ad_boost_queued`, `ad_boost_requested`, and `ad_boost_ready`.
+
+Validation: `npx --no-install tsc --noEmit`, `git diff --check`, `npm run check:crons`; live Resend samples delivered for the requested email. Test account seeded with Ready/Queued/Promotion profiles on `tj@findmedjobs.co`; active profile was last set to the queued scenario. Next: QA the queued and promotion flows on the PR preview, then merge to staging.
+
 ### 2026-06-29 — Question engagement → Find Families campaign tracker + warm redesign (PRs #1241/#1243 merged, #1245 open)
 
 Reframe: provider **questions** are campaign engagement and belong where a provider running ads looks for results (**Find Families**), not only the profile dashboard. Shipped in three PRs.
