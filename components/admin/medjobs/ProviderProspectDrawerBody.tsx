@@ -26,6 +26,7 @@ import { useState } from "react";
 import type { DrawerContext } from "@/lib/student-outreach/types";
 import type { TabKey } from "@/lib/student-outreach/tab-config";
 import { getVerificationState } from "@/lib/student-outreach/verification-state";
+import { decisionMakerEmailRecipients } from "@/lib/student-outreach/decision-makers";
 import { NextStepCard } from "@/components/admin/medjobs/NextStepCard";
 import { OutreachTimeline } from "@/components/admin/medjobs/OutreachTimeline";
 import { ProviderSnapshotCard } from "@/components/admin/medjobs/SnapshotCard";
@@ -75,9 +76,18 @@ export function ProviderProspectDrawerBody({ ctx, action, setError, activeTab }:
   // Maker show in the checklist but DON'T gate — the philosophy is "do we
   // know enough to confidently send outreach to the correct person?", not
   // "force perfect data collection".
-  const dm = ctx.outreach.research_data?.decision_maker;
-  const hasDecisionMakerEmail = Boolean(dm?.email && dm.email.includes("@"));
-  const hasEmail = hasGeneralEmail || hasDecisionMakerEmail;
+  // Decision-maker emails come from BOTH research_data.decision_makers
+  // (plural, current UI) and the legacy singular slot — decisionMakerEmailRecipients
+  // reads both. Also count any already-materialized emailable contact, so a
+  // provider with a decision-maker email (but no general email) can launch.
+  const hasDecisionMakerEmail =
+    decisionMakerEmailRecipients(
+      ctx.outreach.research_data as Record<string, unknown> | null,
+    ).length > 0;
+  const hasContactEmail = ctx.contacts.some(
+    (c) => c.status === "active" && Boolean(c.email && c.email.trim()),
+  );
+  const hasEmail = hasGeneralEmail || hasDecisionMakerEmail || hasContactEmail;
 
   // v9.x simplified verification gate. Two unlock paths:
   //   1. Verified — admin confirmed contacts on a call.

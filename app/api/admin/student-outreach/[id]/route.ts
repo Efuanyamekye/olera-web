@@ -38,6 +38,7 @@ import {
 } from "@/lib/medjobs/smartlead-bridge";
 import { nextBusinessDayET } from "@/lib/student-outreach/business-day";
 import { CLOSED_STATUSES } from "@/lib/student-outreach/types";
+import { decisionMakerEmailRecipients } from "@/lib/student-outreach/decision-makers";
 import { getProviderOwnership } from "@/lib/providers/ownership.server";
 import {
   deriveRepliesState,
@@ -2729,33 +2730,39 @@ function fanOutFromContacts(
  * doesn't uncheck anyone in the launch modal. Drives both the GET drawer
  * preview and the POST enrollment fallback.
  *
- *   providers              → General Contact + ONE Decision Maker (MVP cap;
- *                            the research_data.decision_maker slot)
+ *   providers              → General Contact + EVERY emailable Decision Maker
+ *                            (research_data.decision_makers plural + legacy
+ *                            singular slot + any materialized contacts)
  *   offices / orgs         → General Contact + EVERY emailable individual
  *   departments            → General Contact + the chair (the one contact)
- *
- * Legacy provider rows with no Decision Maker slot fall through to the
- * contacts-table fan-out so previously-enrolled leads still surface.
  */
 function defaultFanOutContacts(
   row: { id: string; kind: string | null; research_data: ResearchData | null },
   contacts: Contact[],
 ): NamedContact[] {
   if (row.kind === "provider") {
-    const dm = row.research_data?.decision_maker;
-    if (dm && !dm.unavailable && dm.email && dm.email.trim()) {
-      const [first, ...rest] = (dm.name ?? "").trim().split(/\s+/);
-      return [
-        {
-          contact_id: `dm:${row.id}`,
-          email: dm.email.trim(),
-          first_name: first || null,
-          last_name: rest.length > 0 ? rest.join(" ") : null,
+    // Decision makers live in research_data (plural decision_makers + legacy
+    // singular) pre-launch, and as materialized contacts post-launch. Merge
+    // both, deduped by email — contacts first so a materialized DM's real
+    // contact_id wins the modal preview match.
+    const fromContacts = fanOutFromContacts(row, contacts);
+    const seen = new Set(fromContacts.map((c) => c.email.toLowerCase()));
+    const dmRecipients: NamedContact[] = decisionMakerEmailRecipients(
+      row.research_data as Record<string, unknown> | null,
+    )
+      .filter((d) => !seen.has(d.email.toLowerCase()))
+      .map((d, i) => {
+        const [first, ...rest] = (d.name ?? "").trim().split(/\s+/);
+        return {
+          contact_id: `dm:${row.id}:${i}`,
+          email: d.email,
+          first_name: d.first_name ?? (first || null),
+          last_name: d.last_name ?? (rest.length > 0 ? rest.join(" ") : null),
           title: null,
-          role: dm.role ?? null,
-        },
-      ];
-    }
+          role: d.role,
+        };
+      });
+    return [...fromContacts, ...dmRecipients];
   }
   return fanOutFromContacts(row, contacts);
 }
