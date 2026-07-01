@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { FAMILY_NUDGE_EMAIL_TYPES } from "@/lib/email-governance";
+import { type ConnectionLike } from "@/lib/connection-temperature";
+import { computeFamilyOutcome, tallyFamilyOutcomes, type FamilyOutcome } from "@/lib/family-comms/outcome";
 
 /**
  * Family Comms learn-signals — the first-principles family-engagement +
@@ -77,6 +79,22 @@ const COMPARE_BEARING = new Set([
   "family_never_engaged",
   "day_10_awaiting",
 ]);
+
+// ── Per-family OUTCOME (Phase 0) ─────────────────────────────────────────────
+// The outcome distribution is a rolling snapshot of the recent funnel, NOT the
+// email date-range: a family that connected two months ago is still connected.
+// We classify every family that inquired in this lookback (bounds the query and
+// gives a meaningful denominator). Independent of the date picker by design —
+// noted in the UI.
+const OUTCOME_LOOKBACK_DAYS = 90;
+// seeker_activity events that mean the family engaged the GUIDANCE journey
+// (compare alternatives / saved a guide / benefits quiz) — the "guided" signal.
+const GUIDANCE_EVENTS = [
+  "compare_cta_converted",
+  "guide_cta_converted",
+  "benefits_started",
+  "benefits_completed",
+] as const;
 
 interface EmailRow {
   email_type: string;
@@ -309,6 +327,68 @@ export async function GET(request: NextRequest) {
     .map((_, i) => new Date(trendEnd - (TREND_WEEKS - 1 - i) * WEEK).toISOString());
   const cutoverWeekIndex = weekStartsISO.findIndex((iso) => Date.parse(iso) >= anchorMs);
 
+  // ── Per-family OUTCOME distribution (Phase 0) ───────────────────────────
+  // "We measure sends, not outcomes" — the fix. For every family that inquired
+  // in the lookback, derive connected / active / guided / stalled from signals
+  // we already have (connection threads + self-report + guidance activity).
+  const outcomeStartISO = new Date(now - OUTCOME_LOOKBACK_DAYS * DAY).toISOString();
+  const outcomes = { total: 0, connected: 0, active: 0, guided: 0, stalled: 0, lookbackDays: OUTCOME_LOOKBACK_DAYS };
+  {
+    // Inquiry connections drive the population; group by the family (from_profile_id).
+    const { data: connData, error: connErr } = await db
+      .from("connections")
+      .select("id, status, created_at, from_profile_id, to_profile_id, metadata")
+      .eq("type", "inquiry")
+      .gte("created_at", outcomeStartISO)
+      .lte("created_at", toISO)
+      .limit(20000);
+    if (connErr) {
+      // Non-load-bearing: the outcome panel is additive. On failure, leave the
+      // distribution empty rather than fail the whole dashboard.
+      console.error("[family-comms-analytics] connections query failed (outcome panel off):", connErr);
+    } else {
+      // Which families engaged the guidance journey in the lookback → the
+      // "guided" signal. One narrow read, keyed by family profile_id.
+      const guidedFamilies = new Set<string>();
+      const { data: guideActs, error: guideErr } = await db
+        .from("seeker_activity")
+        .select("profile_id")
+        .in("event_type", GUIDANCE_EVENTS as unknown as string[])
+        .gte("created_at", outcomeStartISO)
+        .lte("created_at", toISO)
+        .limit(100000);
+      if (guideErr) {
+        console.error("[family-comms-analytics] guidance-activity query failed (guided undercounted):", guideErr);
+      } else {
+        for (const r of (guideActs as { profile_id: string | null }[]) || []) {
+          if (r.profile_id) guidedFamilies.add(r.profile_id);
+        }
+      }
+
+      const byFamily = new Map<string, ConnectionLike[]>();
+      for (const r of (connData as unknown as ConnectionLike[]) || []) {
+        const fid = r.from_profile_id;
+        if (!fid) continue;
+        const list = byFamily.get(fid);
+        if (list) list.push(r);
+        else byFamily.set(fid, [r]);
+      }
+
+      const perFamily: FamilyOutcome[] = [];
+      for (const [familyId, inquiries] of byFamily) {
+        perFamily.push(
+          computeFamilyOutcome({ inquiries, guidanceEngaged: guidedFamilies.has(familyId) }, now),
+        );
+      }
+      const tally = tallyFamilyOutcomes(perFamily);
+      outcomes.total = perFamily.length;
+      outcomes.connected = tally.connected;
+      outcomes.active = tally.active;
+      outcomes.guided = tally.guided;
+      outcomes.stalled = tally.stalled;
+    }
+  }
+
   return NextResponse.json({
     range: { from: fromISO, to: toISO },
     generatedAt: new Date(now).toISOString(),
@@ -324,6 +404,7 @@ export async function GET(request: NextRequest) {
     funnel,
     sensor,
     conversions,
+    outcomes,
     cutover: {
       anchor: CUTOVER_ANCHOR_ISO,
       cutoverWeekIndex, // which trend bucket the flip falls in (-1 if outside)
