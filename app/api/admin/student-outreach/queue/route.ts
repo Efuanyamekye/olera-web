@@ -1451,7 +1451,16 @@ async function hydrateRows(
       const tps = tpsByOutreach.get(id) ?? [];
       const seen = new Map<string, ReplyRecipient>();
       for (const tp of tps) {
-        if (tp.touchpoint_type !== "email_sent") continue;
+        // Include repliers/bouncers, not just who we emailed: a provider with
+        // no general email is emailed only through a decision maker, whose reply
+        // must surface as that person's card — even if the email_sent event was
+        // never received (only the reply was).
+        if (
+          tp.touchpoint_type !== "email_sent" &&
+          tp.touchpoint_type !== "email_replied" &&
+          tp.touchpoint_type !== "email_bounced"
+        )
+          continue;
         const tpAny = tp as unknown as {
           contact_id: string | null;
           payload: Record<string, unknown> | null;

@@ -290,8 +290,45 @@ async function resolveRow(
         return { id: row.id, status: row.status, research_data: row.research_data ?? null };
       }
     }
+    // Fan-out rows enroll multiple addresses but store only the first as
+    // lead_email; match the reply against the full enrolled-emails array
+    // (stored lowercased) so a reply from any recipient still resolves.
+    const { data: arr } = await supabase
+      .from("student_outreach")
+      .select("id, status, research_data")
+      .filter("research_data->smartlead->lead_emails", "cs", JSON.stringify([email]))
+      .limit(1);
+    const arrRow = (arr ?? [])[0] as
+      | { id: string; status: string; research_data: Record<string, unknown> | null }
+      | undefined;
+    if (arrRow) {
+      return { id: arrRow.id, status: arrRow.status, research_data: arrRow.research_data ?? null };
+    }
   }
   return null;
+}
+
+/** Attribute a no-custom_fields event (reply/bounce/unsubscribe carry no
+ *  contact_id) to the right CRM contact by matching the enrolled lead address
+ *  against the row's Specific Contacts. Returns the named contact's id + role
+ *  when it matches one; null when it's the general contact or unmatched (leave
+ *  the touchpoint attributed to the General Contact). */
+async function resolveContactByEmail(
+  outreachId: string,
+  email: string | undefined,
+): Promise<{ contactId: string; role: string | null } | null> {
+  if (!email) return null;
+  const { data } = await supabase
+    .from("student_outreach_contacts")
+    .select("id, role, title")
+    .eq("outreach_id", outreachId)
+    .ilike("email", email)
+    .limit(1);
+  const c = (data ?? [])[0] as
+    | { id: string; role: string | null; title: string | null }
+    | undefined;
+  if (!c) return null;
+  return { contactId: c.id, role: c.role ?? c.title ?? null };
 }
 
 /** Check whether a touchpoint of `type` already exists for this row with the
@@ -619,6 +656,20 @@ Deno.serve(async (req: Request) => {
         kind,
       });
       return new Response("ok (unmatched)", { status: 200 });
+    }
+
+    // Reply/bounce/unsubscribe events carry no custom_fields, so contact_id is
+    // null even when a specific Named Contact (e.g. a decision maker on a
+    // provider with no general email) is the one who replied. Attribute the
+    // event to that contact by matching the enrolled lead address, so the
+    // Emails-tab card + timeline show the real recipient, not the org.
+    if (!extract.contactId && extract.email) {
+      const named = await resolveContactByEmail(row.id, extract.email);
+      if (named) {
+        extract.contactId = named.contactId;
+        extract.recipientKind = "named";
+        if (named.role && !extract.role) extract.role = named.role;
+      }
     }
 
     switch (kind) {

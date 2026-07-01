@@ -2934,11 +2934,25 @@ async function enrollRowIntoSmartlead(
   // Named Contact fan-out so the D2 webhook can resolve a Smartlead event's
   // `contact_id` custom field back to a CRM contact without re-querying.
   const enrolledContactIds = namedContacts.map((c) => c.contact_id);
+  // Every email actually enrolled (General Contact + each Named Contact). The
+  // reply/bounce webhook carries no custom_fields, so it resolves the row by
+  // matching the replier's address against these — which is why lead_email must
+  // NOT be null for a provider with no general email (it falls back to the
+  // first named/decision-maker email so replies still map back to the row).
+  const enrolledEmails = Array.from(
+    new Set(
+      [
+        ...(bridgeRow.email ? [bridgeRow.email] : []),
+        ...namedContacts.map((c) => c.email).filter((e): e is string => Boolean(e)),
+      ].map((e) => e.trim().toLowerCase()),
+    ),
+  );
   const nextResearch: ResearchData = {
     ...row.research_data,
     smartlead: {
       campaign_id: enroll.campaign_id,
-      lead_email: bridgeRow.email,
+      lead_email: bridgeRow.email ?? namedContacts[0]?.email ?? null,
+      lead_emails: enrolledEmails,
       enrolled_at: new Date().toISOString(),
       enrolled_contact_ids: enrolledContactIds,
     },

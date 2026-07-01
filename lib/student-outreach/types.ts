@@ -237,8 +237,16 @@ export interface ResearchData {
    *  mirrors the fan-out for fast lookup without re-querying Smartlead. */
   smartlead?: {
     campaign_id: number;
+    /** Primary resolvable address for reply/bounce webhooks (which carry no
+     *  custom_fields). The General Contact email when present, else the first
+     *  enrolled named/decision-maker email — so a provider with no general
+     *  email is still resolvable by the address that replied. */
     lead_email: string | null;
     enrolled_at: string;
+    /** Every email enrolled for this row (General Contact + each Named
+     *  Contact). The reply/bounce webhook matches the replier against this
+     *  list so DM-only providers resolve to the row. */
+    lead_emails?: string[];
     /** v9.x Named-Contact fan-out: contact_ids of Specific Contacts that
      *  were enrolled alongside the General Contact. Empty array (or
      *  undefined for rows enrolled before fan-out shipped) means General
