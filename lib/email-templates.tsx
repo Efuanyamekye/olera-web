@@ -224,7 +224,6 @@ export function adBoostQueuedEmail(opts: {
   missingSectionLabel?: string | null;
   needsVerification?: boolean;
 }): string {
-  const name = escapeHtml(opts.providerName);
   const nextStep = opts.needsVerification
     ? "finish verification"
     : opts.missingSectionLabel
@@ -235,7 +234,7 @@ export function adBoostQueuedEmail(opts: {
   return layout(
     `
     <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Ad Boost request received</p>
-    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">We saved your launch plan for ${name}</h1>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">We saved your Ad Boost launch plan</h1>
     <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Thanks for requesting managed ads. Your preferred setup week is <strong>${launchWeek}</strong>, and your campaign is queued while your Olera page gets ready for paid traffic.</p>
     <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 20px;">
       <p style="font-size:14px;color:#374151;margin:0 0 8px;line-height:1.5;"><strong>Current readiness:</strong> ${opts.completeness}% complete</p>
@@ -248,7 +247,7 @@ export function adBoostQueuedEmail(opts: {
     <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
       <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
     </div>`,
-    `${opts.providerName}'s Ad Boost request is queued while your page gets ready.`,
+    "Your Ad Boost request is queued while your page gets ready.",
   );
 }
 
@@ -276,7 +275,7 @@ export function adBoostRequestedEmail(opts: {
     <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
       <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
     </div>`,
-    `Your Ad Boost request for ${opts.providerName} is ready for setup.`,
+    "Your Ad Boost request is ready for setup.",
   );
 }
 
@@ -286,14 +285,13 @@ export function adBoostReadyEmail(opts: {
   setupWeek: string;
   channel?: string | null;
 }): string {
-  const name = escapeHtml(opts.providerName);
   const launchWeek = formatEmailDate(opts.setupWeek);
   const channel = formatAdBoostChannel(opts.channel);
 
   return layout(
     `
     <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Ad Boost now launch-ready</p>
-    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">${name} is ready for campaign setup</h1>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">Your Ad Boost request is now launch-ready</h1>
     <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Good news: your page now clears the launch threshold, so your queued Ad Boost request has moved into the setup queue.</p>
     <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">We&rsquo;ll use your Olera page as the landing page for the ${channel} campaign, with families who reach out appearing in your dashboard.</p>
     <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 24px;">
@@ -305,7 +303,7 @@ export function adBoostReadyEmail(opts: {
     <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
       <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
     </div>`,
-    `${opts.providerName}'s Ad Boost request is now ready for setup.`,
+    "Your Ad Boost request is now ready for setup.",
   );
 }
 
