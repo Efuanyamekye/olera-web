@@ -40,7 +40,6 @@ import type {
   TabKey,
 } from "@/lib/student-outreach/tab-config";
 import { STAGE_DISPLAY, type Stage } from "@/lib/medjobs/stage";
-import { smartleadInboxUrl } from "@/lib/medjobs/smartlead-inbox";
 
 // ── RowCard ──────────────────────────────────────────────────────────────
 
@@ -696,13 +695,6 @@ function repliesSlots(row: TabRow, cb: RowCardCallbacks): RowSlots {
       <p className="mt-0.5 text-[11px] text-gray-500">{line}</p>
     ) : null;
   };
-  // v10 Bullet 9 (2026-06-04): Smartlead inbox deep-link as headline
-  // accessory. Opens the master inbox at this row's thread context so
-  // admin doesn't have to find the thread manually. Only shown when
-  // the row has Smartlead linkage (post-bridge enrollment). Reused
-  // across replies states (engaged / needs_followup / wants_meeting)
-  // where admin would want to read the actual thread before logging.
-  const inboxLink = renderSmartleadInboxLink(row.smartlead_linkage);
   switch (state) {
     case "mid_cadence":
       return {
@@ -712,13 +704,11 @@ function repliesSlots(row: TabRow, cb: RowCardCallbacks): RowSlots {
     case "engaged":
       return {
         footnote: buildFootnote("Reply received — open to review"),
-        headlineAccessory: inboxLink,
         overflowMenu: buildUniversalOverflow(cb),
       };
     case "wants_meeting":
       return {
         footnote: buildFootnote("Wants to meet"),
-        headlineAccessory: inboxLink,
         overflowMenu: buildUniversalOverflow(cb),
       };
     case "booked":
@@ -735,7 +725,6 @@ function repliesSlots(row: TabRow, cb: RowCardCallbacks): RowSlots {
         footnote: row.followup_notes ? (
           <ExpandableNote text={row.followup_notes} />
         ) : buildFootnote("Meeting completed — follow-up needed"),
-        headlineAccessory: inboxLink,
         overflowMenu: buildUniversalOverflow(cb),
       };
     case "awaiting_callback": {
@@ -820,40 +809,6 @@ function allSlots(row: TabRow, cb: RowCardCallbacks): RowSlots {
     ) : null,
     overflowMenu: buildUniversalOverflow(cb),
   };
-}
-
-// ── v10 Bullet 9 (2026-06-04): Smartlead inbox deep-link ──────────────────
-
-/**
- * "Reply via Smartlead inbox →" deep-link button. Reads the row's
- * smartlead_linkage (written by the queue endpoint from research_data.
- * smartlead.{lead_id, campaign_id}) and constructs an `app.smartlead.ai`
- * master-inbox URL scoped to the thread.
- *
- * Fallback: when lead_id is missing (legacy row pre-bridge), the link
- * points at the master inbox root and the admin finds the thread
- * manually. Better than no affordance at all.
- *
- * Verify the URL convention live during Bullet 9 build (logged in
- * plans/medjobs-known-issues.md).
- */
-function renderSmartleadInboxLink(
-  linkage: TabRow["smartlead_linkage"],
-): ReactNode {
-  const url = smartleadInboxUrl(linkage);
-  if (!url) return null;
-  return (
-    <a
-      href={url}
-      target="_blank"
-      rel="noopener noreferrer"
-      onClick={(e) => e.stopPropagation()}
-      title="Open this thread in the Smartlead master inbox to read or reply."
-      className="shrink-0 rounded-md border border-gray-200 bg-white px-2 py-0.5 text-[10px] font-semibold text-gray-700 hover:bg-gray-50"
-    >
-      ↗ Smartlead inbox
-    </a>
-  );
 }
 
 // Inbox URL construction lives in lib/medjobs/smartlead-inbox.ts so the
