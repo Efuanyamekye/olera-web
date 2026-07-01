@@ -433,7 +433,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     label: "Requested · launch-ready", subject: "Your Ad Boost request is ready for setup",
     emailType: "ad_boost_requested",
     who: "Provider submitted an Ad Boost request while complete enough and verified.",
-    why: "Automate the Franchil-style initial handoff: profile looks launchable, first $50 promo, and the provider can watch results in Ad Boost.",
+    why: "Automate the Franchil-style initial handoff: the page has enough detail to start setup, the first $50 promo is clear, and the provider can watch results in Ad Boost.",
     render: () => adBoostRequestedEmail({
       providerName: "Miracle-Lightstar LLC",
       ctaUrl: "https://olera.care/provider/boost?ref=email&eid=sample",
