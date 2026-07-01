@@ -215,6 +215,101 @@ export function providerManagedAdsEmail(opts: {
   );
 }
 
+export function adBoostQueuedEmail(opts: {
+  providerName: string;
+  ctaUrl: string;
+  setupWeek: string;
+  completeness: number;
+  threshold: number;
+  missingSectionLabel?: string | null;
+  needsVerification?: boolean;
+}): string {
+  const name = escapeHtml(opts.providerName);
+  const nextStep = opts.needsVerification
+    ? "finish verification"
+    : opts.missingSectionLabel
+      ? `finish ${escapeHtml(opts.missingSectionLabel.toLowerCase())}`
+      : "finish your profile";
+  const launchWeek = formatEmailDate(opts.setupWeek);
+
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Ad Boost request received</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">We saved your launch plan for ${name}</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Thanks for requesting managed ads. Your preferred setup week is <strong>${launchWeek}</strong>, and your campaign is queued while your Olera page gets ready for paid traffic.</p>
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 20px;">
+      <p style="font-size:14px;color:#374151;margin:0 0 8px;line-height:1.5;"><strong>Current readiness:</strong> ${opts.completeness}% complete</p>
+      <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;"><strong>Launch threshold:</strong> ${opts.threshold}% complete and verified</p>
+    </div>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">The next best step is to ${nextStep}. Once your page clears the launch threshold, we&rsquo;ll move the request into setup and email you before the campaign goes live.</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 26px;line-height:1.65;">We will not send paid traffic to a thin page. That protects your first $50 promotional test and gives families a better reason to contact you.</p>
+    <div>${button("Finish launch setup", opts.ctaUrl)}</div>
+    ${authorBylineBlock({ topBorder: true })}
+    <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
+      <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
+    </div>`,
+    `${opts.providerName}'s Ad Boost request is queued while your page gets ready.`,
+  );
+}
+
+export function adBoostRequestedEmail(opts: {
+  providerName: string;
+  ctaUrl: string;
+  setupWeek: string;
+  channel?: string | null;
+}): string {
+  const name = escapeHtml(opts.providerName);
+  const launchWeek = formatEmailDate(opts.setupWeek);
+  const channel = formatAdBoostChannel(opts.channel);
+
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Ad Boost setup</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">We can launch ${name} as-is</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Your managed-ads request came through, and your profile is in good shape for the campaign setup queue.</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Here&rsquo;s how it works: we run a local ${channel} campaign for families searching for care, send them straight to your Olera page, and any who reach out land directly in your dashboard.</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">To get started, the first $50 of ad spend is on us. That is enough to get the campaign live and let you see the flow end to end. After that, you choose the monthly budget and we run the campaign.</p>
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 24px;">
+      <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;"><strong>Requested setup week:</strong> ${launchWeek}</p>
+    </div>
+    <div>${button("View Ad Boost", opts.ctaUrl)}</div>
+    ${authorBylineBlock({ topBorder: true })}
+    <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
+      <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
+    </div>`,
+    `Your Ad Boost request for ${opts.providerName} is ready for setup.`,
+  );
+}
+
+export function adBoostReadyEmail(opts: {
+  providerName: string;
+  ctaUrl: string;
+  setupWeek: string;
+  channel?: string | null;
+}): string {
+  const name = escapeHtml(opts.providerName);
+  const launchWeek = formatEmailDate(opts.setupWeek);
+  const channel = formatAdBoostChannel(opts.channel);
+
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Ad Boost now launch-ready</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">${name} is ready for campaign setup</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Good news: your page now clears the launch threshold, so your queued Ad Boost request has moved into the setup queue.</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">We&rsquo;ll use your Olera page as the landing page for the ${channel} campaign, with families who reach out appearing in your dashboard.</p>
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 24px;">
+      <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;"><strong>Requested setup week:</strong> ${launchWeek}</p>
+    </div>
+    <p style="font-size:15px;color:#374151;margin:0 0 26px;line-height:1.65;">The first $50 promotional test is still on us. Once it is complete, we can review the results together and talk through the right monthly budget.</p>
+    <div>${button("View Ad Boost", opts.ctaUrl)}</div>
+    ${authorBylineBlock({ topBorder: true })}
+    <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
+      <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
+    </div>`,
+    `${opts.providerName}'s Ad Boost request is now ready for setup.`,
+  );
+}
+
 /**
  * Find Families digest variant — a provider with a real published care-seeker
  * within ~50mi (the scarce, high-intent signal). Distinct from the managed-ads
@@ -3314,6 +3409,28 @@ function humanCategoryLabel(category: string | null): string {
     independent_living: "independent living",
   };
   return map[category] ?? category.replace(/_/g, " ");
+}
+
+function formatAdBoostChannel(channel: string | null | undefined): string {
+  if (channel === "google") return "Google";
+  if (channel === "meta") return "Meta";
+  if (channel === "both") return "Google and Meta";
+  return "Google";
+}
+
+function formatEmailDate(value: string): string {
+  const [year, month, day] = value.split("-").map((part) => Number.parseInt(part, 10));
+  const date =
+    year && month && day
+      ? new Date(Date.UTC(year, month - 1, day))
+      : new Date(value);
+  if (Number.isNaN(date.getTime())) return escapeHtml(value);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 function digestHeadline(opts: DigestOpts): string {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
 import { loadAdBoostEligibility } from "@/lib/ad-boost/eligibility.server";
 import { countDeliveredByCampaign, getCampaignStats, getCampaignQuestions } from "@/lib/ad-boost/delivered.server";
+import { sendAdBoostRequestEmail } from "@/lib/ad-boost/notifications.server";
 import { sendSlackAlert, slackAdBoostRequested } from "@/lib/slack";
 import { BUDGET_VALUES } from "@/lib/ad-boost/estimate";
 
@@ -84,6 +85,19 @@ export async function GET() {
         launchReady: true,
       });
       await sendSlackAlert(alert.text, alert.blocks);
+      await sendAdBoostRequestEmail({
+        requestId: promoted.id,
+        kind: "promotion",
+        providerName: elig.displayName ?? elig.slug,
+        providerSlug: elig.slug,
+        providerEmail: elig.email,
+        setupWeek: promoted.requested_setup_week,
+        channel: promoted.channel,
+        intendedMonthlyBudget: promoted.intended_monthly_budget,
+        completeness: elig.eligibility.overall,
+        eligibility: elig.eligibility,
+        isVerified: elig.isVerified,
+      });
     }
   }
 
@@ -261,6 +275,20 @@ export async function POST(request: NextRequest) {
     });
     await sendSlackAlert(alert.text, alert.blocks);
   }
+
+  await sendAdBoostRequestEmail({
+    requestId: inserted.id,
+    kind: queued ? "queued" : "requested",
+    providerName: elig.displayName ?? elig.slug,
+    providerSlug: elig.slug,
+    providerEmail: elig.email,
+    setupWeek,
+    channel,
+    intendedMonthlyBudget,
+    completeness: elig.eligibility.overall,
+    eligibility: elig.eligibility,
+    isVerified: elig.isVerified,
+  });
 
   return NextResponse.json({ ok: true, request: inserted, queued });
 }

@@ -43,6 +43,9 @@ import {
   coldProviderRankEmail,
   providerLeadDigestEmail,
   providerManagedAdsEmail,
+  adBoostQueuedEmail,
+  adBoostRequestedEmail,
+  adBoostReadyEmail,
 } from "@/lib/email-templates";
 
 export interface EmailVariant {
@@ -408,6 +411,48 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     label: "Managed ads", subject: "140 families searched for care near Austin this week",
     emailType: "provider_managed_ads",
     render: () => providerManagedAdsEmail({ providerName: "Evergreen Home Care", providerSlug: "evergreen-home-care", ctaUrl: `${SAMPLE_LINK}?action=ads`, city: "Austin", category: "home_care_agency", localDemand: 140 }),
+  },
+  {
+    id: "ad_boost_queued", audience: "provider", group: "Provider · Ad Boost",
+    label: "Queued · profile needed", subject: "Your Ad Boost request is saved",
+    emailType: "ad_boost_queued",
+    who: "Provider submitted an Ad Boost launch plan while below the launch threshold or before verification.",
+    why: "Confirm the request is saved, explain why it is queued, and point them to the next profile/verification step.",
+    render: () => adBoostQueuedEmail({
+      providerName: "Legacy Haven Senior Care",
+      ctaUrl: "https://olera.care/provider/boost?ref=email&eid=sample",
+      setupWeek: "2026-07-06",
+      completeness: 48,
+      threshold: 70,
+      missingSectionLabel: "Photos",
+      needsVerification: true,
+    }),
+  },
+  {
+    id: "ad_boost_requested", audience: "provider", group: "Provider · Ad Boost",
+    label: "Requested · launch-ready", subject: "Your Ad Boost request is ready for setup",
+    emailType: "ad_boost_requested",
+    who: "Provider submitted an Ad Boost request while complete enough and verified.",
+    why: "Automate the Franchil-style initial handoff: profile looks launchable, first $50 promo, and the provider can watch results in Ad Boost.",
+    render: () => adBoostRequestedEmail({
+      providerName: "Miracle-Lightstar LLC",
+      ctaUrl: "https://olera.care/provider/boost?ref=email&eid=sample",
+      setupWeek: "2026-07-06",
+      channel: "both",
+    }),
+  },
+  {
+    id: "ad_boost_ready", audience: "provider", group: "Provider · Ad Boost",
+    label: "Promotion · now ready", subject: "Your Ad Boost request is now launch-ready",
+    emailType: "ad_boost_ready",
+    who: "Provider had a queued Ad Boost request and later cleared completeness plus verification.",
+    why: "Close the loop when queued work becomes actionable, without making the provider resubmit.",
+    render: () => adBoostReadyEmail({
+      providerName: "Legacy Haven Senior Care",
+      ctaUrl: "https://olera.care/provider/boost?ref=email&eid=sample",
+      setupWeek: "2026-07-06",
+      channel: "google",
+    }),
   },
 ];
 

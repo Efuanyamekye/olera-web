@@ -24,7 +24,7 @@ const NINETY_DAYS_MS = 90 * 24 * 60 * 60 * 1000;
 // address/city/state, image_url, care_types, description + metadata).
 // Also fetch verification_state to gate ads behind verification.
 const PROFILE_SELECT =
-  "id, slug, source_provider_id, display_name, category, description, image_url, address, city, state, care_types, metadata, verification_state";
+  "id, slug, source_provider_id, display_name, email, category, description, image_url, address, city, state, care_types, metadata, verification_state";
 
 // The completeness-relevant subset of a provider's business_profiles row.
 interface ProfileRow {
@@ -32,6 +32,7 @@ interface ProfileRow {
   slug: string | null;
   source_provider_id: string | null;
   display_name: string | null;
+  email: string | null;
   category: string | null;
   description: string | null;
   image_url: string | null;
@@ -49,6 +50,7 @@ export type AdBoostEligibilityResult =
       profileId: string;
       slug: string;
       displayName: string | null;
+      email: string | null;
       city: string | null;
       state: string | null;
       category: string | null;
@@ -131,7 +133,7 @@ export async function loadAdBoostEligibility(): Promise<AdBoostEligibilityResult
     profileRow.source_provider_id
       ? db
           .from("olera-providers")
-          .select("google_reviews_data, google_rating, provider_images, provider_logo")
+          .select("email, google_reviews_data, google_rating, provider_images, provider_logo")
           .eq("provider_id", profileRow.source_provider_id)
           .maybeSingle()
       : Promise.resolve({ data: null, error: null }),
@@ -155,6 +157,7 @@ export async function loadAdBoostEligibility(): Promise<AdBoostEligibilityResult
   const googleData = (
     googleReviewsRes as {
       data: {
+        email: string | null;
         google_reviews_data: { rating?: number | null; review_count?: number | null } | null;
         google_rating: number | null;
         provider_images: string | null;
@@ -224,6 +227,7 @@ export async function loadAdBoostEligibility(): Promise<AdBoostEligibilityResult
     profileId: profileRow.id,
     slug: profileRow.slug,
     displayName: profileRow.display_name,
+    email: profileRow.email ?? googleData?.email ?? null,
     city: profileRow.city,
     state: profileRow.state,
     category: profileRow.category,
