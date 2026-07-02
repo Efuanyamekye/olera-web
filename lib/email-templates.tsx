@@ -101,13 +101,12 @@ function button(label: string, href: string): string {
   return `<a href="${href}" style="display:inline-block;padding:12px 24px;background:${BRAND_COLOR};color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;border-radius:8px;">${label}</a>`;
 }
 
-// Secondary CTA — teal outline on transparent. Used for the "explore more"
-// browse links so they read as clearly subordinate to a filled primary action
-// (e.g. the per-card "Introduce me" on compare emails). One accent, two weights:
-// filled = act on THIS provider, outline = go look at more. (1px less padding than
-// button() so the border doesn't change the box size.)
-function secondaryButton(label: string, href: string): string {
-  return `<a href="${href}" style="display:inline-block;padding:11px 23px;background:transparent;color:${BRAND_COLOR};font-size:14px;font-weight:600;text-decoration:none;border:1px solid ${BRAND_COLOR};border-radius:8px;">${label}</a>`;
+// "Explore more" browse CTA — a calm teal text link with a trailing arrow, in the
+// same restrained register as the per-card "Introduce me" links (no heavy pill
+// competing with the content). Center it in a block for a clean "see more" footer.
+// (Distinct from the muted-gray secondaryLink and underlined ctaLink defined below.)
+function browseLink(label: string, href: string): string {
+  return `<a href="${href}" style="color:${BRAND_COLOR};font-size:14px;font-weight:600;text-decoration:none;">${label}&nbsp;&rarr;</a>`;
 }
 
 /**
@@ -1309,54 +1308,51 @@ export interface CompareCardItem {
 }
 
 function compareCardRow(p: CompareCardItem): string {
+  // One muted meta line — rating · distance · price — instead of three stacked
+  // lines. Fewer lines = a calmer, Airbnb-style listing row.
   const stars =
-    p.rating != null ? `★ ${p.rating.toFixed(1)}${p.reviewCount ? ` (${p.reviewCount})` : ""}` : "";
+    p.rating != null ? `★&nbsp;${p.rating.toFixed(1)}${p.reviewCount ? ` (${p.reviewCount})` : ""}` : "";
   const dist =
     p.distanceMi != null
-      ? `${p.distanceMi < 10 ? p.distanceMi.toFixed(1) : Math.round(p.distanceMi)} mi away`
+      ? `${p.distanceMi < 10 ? p.distanceMi.toFixed(1) : Math.round(p.distanceMi)} mi`
       : "";
-  const metaLine = [stars, dist].filter(Boolean).join("&nbsp;&nbsp;·&nbsp;&nbsp;");
+  const price = p.priceRange ? escapeHtml(p.priceRange) : "";
+  const metaLine = [stars, dist, price].filter(Boolean).join("&nbsp;&nbsp;·&nbsp;&nbsp;");
   const meta = metaLine
-    ? `<p style="font-size:13px;color:#6b7280;margin:0 0 2px;line-height:1.4;">${metaLine}</p>`
+    ? `<p style="font-size:13px;color:#6b7280;margin:3px 0 0;line-height:1.4;">${metaLine}</p>`
     : "";
-  const price = p.priceRange
-    ? `<p style="font-size:13px;color:#6b7280;margin:0;line-height:1.4;">${escapeHtml(p.priceRange)}</p>`
-    : "";
-  // The "why we picked this" line — the curated-shortlist differentiator. Sits
-  // right under the name in a confident green, above the raw rating/distance meta.
+  // The "why we picked this" line — the curated-shortlist differentiator, in a
+  // confident green under the name.
   const reason = p.reason
-    ? `<p style="font-size:13px;color:#047857;font-weight:500;margin:0 0 3px;line-height:1.4;">${escapeHtml(p.reason)}</p>`
+    ? `<p style="font-size:13px;color:#047857;font-weight:500;margin:3px 0 0;line-height:1.4;">${escapeHtml(p.reason)}</p>`
     : "";
-  const textCol = `
-        <td style="vertical-align:top;">
-          <p style="font-size:16px;color:${BRAND_COLOR};font-weight:600;margin:0 0 3px;line-height:1.3;">${escapeHtml(p.name)}</p>
-          ${reason}
-          ${meta}
-          ${price}
-        </td>`;
-  // Image is an enhancement layer — name/meta/price carry the card with images off
-  // (and when a legacy caller supplies no imageUrl, the row degrades to text-only).
+  // Image is an enhancement layer — the text carries the row with images off.
+  // Top-aligned: a standard listing row where the content is a touch taller than
+  // the thumbnail.
   const imageCol = p.imageUrl
-    ? `<td width="72" style="vertical-align:top;padding-right:14px;">
-          <img src="${p.imageUrl}" alt="${escapeHtml(p.name)}" width="72" height="72" style="width:72px;height:72px;border-radius:10px;object-fit:cover;display:block;background:#eef1f0;border:0;" />
+    ? `<td width="64" style="vertical-align:top;padding-right:14px;">
+          <img src="${p.imageUrl}" alt="${escapeHtml(p.name)}" width="64" height="64" style="width:64px;height:64px;border-radius:10px;object-fit:cover;display:block;background:#eef1f0;border:0;" />
         </td>`
     : "";
-  // One-tap "introduce me" — a per-provider action, so it's a SEPARATE anchor
-  // (never nested inside the card's view link). Left-aligned to sit under the text.
-  const introBtn = p.introUrl
-    ? `<div style="margin:10px 0 0 ${p.imageUrl ? "86px" : "0"};">
-        <a href="${p.introUrl}" style="display:inline-block;font-size:13px;font-weight:600;color:#ffffff;background:${BRAND_COLOR};padding:8px 16px;border-radius:8px;text-decoration:none;">Introduce me &rarr;</a>
-      </div>`
+  // One-tap "introduce me" — a calm teal text link as the last line of the
+  // content, not a pill on a lower row. Its own anchor (never nested inside the
+  // card's view link), and no fixed width to clip on mobile. Airbnb-style: airy,
+  // a clear affordance, one accent.
+  const introLink = p.introUrl
+    ? `<a href="${p.introUrl}" style="display:inline-block;margin:8px 0 0;color:${BRAND_COLOR};font-size:14px;font-weight:600;text-decoration:none;">Introduce me&nbsp;&rarr;</a>`
     : "";
   return `
-    <div>
-      <a href="${p.viewUrl}" style="text-decoration:none;display:block;">
-        <table cellpadding="0" cellspacing="0" width="100%" style="margin:0;"><tr>
-          ${imageCol}${textCol}
-        </tr></table>
-      </a>
-      ${introBtn}
-    </div>`;
+    <table cellpadding="0" cellspacing="0" width="100%" style="margin:0;"><tr>
+      ${imageCol}
+      <td style="vertical-align:top;">
+        <a href="${p.viewUrl}" style="text-decoration:none;">
+          <p style="font-size:16px;color:${BRAND_COLOR};font-weight:600;margin:0;line-height:1.3;">${escapeHtml(p.name)}</p>
+          ${reason}
+          ${meta}
+        </a>
+        ${introLink}
+      </td>
+    </tr></table>`;
 }
 
 /** Stacked compare cards with hairline separators (Zillow/Airbnb listing rhythm). */
@@ -1449,7 +1445,7 @@ export function providerSilentEmail(opts: {
     </p>
     ${declineMessageSection}
     ${hasRecommendedProviders ? `<div style="margin:0 0 24px;">${providersSection}</div>` : ""}
-    <div style="margin:0 0 24px;">${secondaryButton("Compare more providers near you", opts.browseUrl)}</div>
+    <div style="margin:8px 0 24px;text-align:center;">${browseLink("Compare more providers near you", opts.browseUrl)}</div>
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">
       ${closingLine}
@@ -1561,7 +1557,7 @@ export function familyNeverEngagedEmail(opts: {
       Hi ${escapeHtml(familyFirstName)}, finding the right care is a big decision, and you&rsquo;ve got real options. Here are a few providers near you worth comparing side by side:
     </p>
     ${providersSection}
-    ${opts.browseUrl ? `<div style="margin:24px 0 0;">${secondaryButton("Compare more providers near you", opts.browseUrl)}</div>` : ""}
+    ${opts.browseUrl ? `<div style="margin:24px 0 0;text-align:center;">${browseLink("Compare more providers near you", opts.browseUrl)}</div>` : ""}
     ${benefitsQuizModule(opts.benefitsQuizUrl)}
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.6;">
@@ -5448,7 +5444,7 @@ export function day10AwaitingEmail(opts: {
       One thing that helps before you decide: seeing how they stack up against a couple of others nearby.
     </p>
     <div style="margin:0 0 24px;">${providersSection}</div>
-    <div style="margin:0 0 24px;">${(hasRecs ? secondaryButton : button)("Compare your options", opts.alternativesUrl)}</div>
+    <div style="margin:0 0 24px;${hasRecs ? "text-align:center;" : ""}">${hasRecs ? browseLink("Compare your options", opts.alternativesUrl) : button("Compare your options", opts.alternativesUrl)}</div>
     ` : ""}
     ${benefitsQuizModule(opts.benefitsQuizUrl)}
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
