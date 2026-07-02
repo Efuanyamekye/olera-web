@@ -42,7 +42,7 @@ interface Summary {
   compareClick: { sends: number; opened: number; clicked: number; openRate: number; clickRate: number };
   emailPerformance: PerfRow[];
   funnel: {
-    emailed: number; opened: number; clicked: number; answered: number;
+    emailed: number; opened: number; clicked: number; introRequested: number; answered: number;
     engaged: number; benefitsStarted: number; benefitsCompleted: number; published: number;
   };
   sensor: { sent: number; answered: number; yes: number; no: number; notYet: number; responseRate: number; yesRate: number };
@@ -408,10 +408,11 @@ export default function FamilyCommsAnalyticsPage() {
       {data && !error && (
         <>
           {/* Top-line stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 mb-6">
             <Stat label="Emails sent" value={num(data.totals.sent)} info="Total family emails sent in this window (recipient is a family, not a provider)." />
             <Stat label="Open rate" value={pct(data.totals.sent ? data.totals.opened / (data.totals.delivered || data.totals.sent) : 0)} sub={`${num(data.totals.opened)} opened`} info="Share of delivered family emails that were opened (Resend webhook)." />
             <Stat label="Click rate" value={pct(data.totals.opened ? data.totals.clicked / data.totals.opened : 0)} sub={`${num(data.totals.clicked)} clicked`} info="Share of opened emails where a link was clicked." />
+            <Stat label="Intros requested" value={num(data.funnel.introRequested)} sub="one-tap intros" accent info="Families who tapped 'Introduce me' on a compare card, creating a real inquiry to that provider (B2). The clearest signal the curated shortlist drove action — the connection-driver we built it for." />
             <Stat label="Reply rate" value={pct(sensor?.responseRate ?? 0)} sub={`${num(sensor?.answered ?? 0)} / ${num(sensor?.sent ?? 0)} answered`} accent info={`Share of "Outcome check" emails where the family answered the question "Did the provider get back to you?" — our ground-truth signal. ${num(sensor?.answered ?? 0)} of ${num(sensor?.sent ?? 0)} sent answered.`} />
             <Stat label="Provider got back" value={pct(sensor?.yesRate ?? 0)} sub="of those who answered" info="Of families who answered the outcome-check, the share who said YES, a provider did get back to them. A 'no / not yet' routes them into the help cascade." />
             <Stat label="Went live" value={num(conv?.published ?? 0)} sub="profiles published" accent info="Family care-seeker profiles that were published (went live) in this window — the North-Star proxy. Counts the action across all families, not attributed to a single email." />
@@ -433,6 +434,7 @@ export default function FamilyCommsAnalyticsPage() {
                   <FunnelStep label="Emailed" value={f.emailed} base={f.emailed} />
                   <FunnelStep label="Opened" value={f.opened} base={f.emailed} />
                   <FunnelStep label="Clicked" value={f.clicked} base={f.emailed} />
+                  <FunnelStep label="Introductions requested" value={f.introRequested} base={f.emailed} />
                   <FunnelStep label="Replied to outcome-check" value={f.answered} base={f.emailed} />
                   <FunnelStep label="Saved compare / guide" value={f.engaged} base={f.emailed} />
                   <FunnelStep label="Benefits quiz completed" value={f.benefitsCompleted} base={f.emailed} />

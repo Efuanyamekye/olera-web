@@ -49,6 +49,7 @@ const TYPE_LABELS: Record<string, string> = {
   family_outcome_check: "Outcome check (sensor)",
   family_provider_silent: "Provider silent → compare",
   family_never_engaged: "Never engaged → compare",
+  family_provider_silent_guidance: "Provider silent → guidance (thin market)",
   day_10_awaiting: "Awaiting match → how-to-choose",
   family_reach_out_nudge: "Pending reach-out",
   family_nudge: "Stuck → completion value-exchange",
@@ -105,6 +106,20 @@ interface EmailRow {
   first_clicked_at: string | null;
   bounced_at: string | null;
   complained_at: string | null;
+  metadata: Record<string, unknown> | null;
+}
+
+// The thin-market Guidance branch reuses the family_never_engaged email TYPE
+// (governed, no new type), but is a distinct rung. Split it into its own
+// performance row via the coordinator_rung stamped on email_log.metadata, so the
+// Guidance send never hides inside the never-engaged compare numbers.
+const GUIDANCE_RUNG = "provider_silent_guidance";
+const GUIDANCE_PERF_TYPE = "family_provider_silent_guidance";
+function effectiveEmailType(r: EmailRow): string {
+  if (r.email_type === "family_never_engaged" && r.metadata?.coordinator_rung === GUIDANCE_RUNG) {
+    return GUIDANCE_PERF_TYPE;
+  }
+  return r.email_type;
 }
 
 interface ActivityRow {
@@ -158,7 +173,7 @@ export async function GET(request: NextRequest) {
   const { data: emailData, error: emailErr } = await db
     .from("email_log")
     .select(
-      "email_type, created_at, status, delivered_at, first_opened_at, first_clicked_at, bounced_at, complained_at",
+      "email_type, created_at, status, delivered_at, first_opened_at, first_clicked_at, bounced_at, complained_at, metadata",
     )
     .in("email_type", familyTypes)
     .eq("recipient_type", "family")
@@ -184,6 +199,21 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "seeker_activity query failed" }, { status: 500 });
   }
   const acts = (actData || []) as ActivityRow[];
+
+  // ── One-tap intro requests in the window (B2) ───────────────────────────
+  // The clearest signal that the curated shortlist drove ACTION: a family tapped
+  // "Introduce me" on a compare card, creating a real inquiry. Tagged
+  // source=one_tap_intro on the connection_sent activity event (distinct from the
+  // normal form-based inquiry). This is the connection-driver metric B2 exists for.
+  const { count: introRequestedCount, error: introErr } = await db
+    .from("seeker_activity")
+    .select("id", { count: "exact", head: true })
+    .eq("event_type", "connection_sent")
+    .eq("metadata->>source", "one_tap_intro")
+    .gte("created_at", fromISO)
+    .lte("created_at", toISO);
+  if (introErr) console.error("[family-comms-analytics] intro-requested query failed:", introErr);
+  const introRequested = introRequestedCount ?? 0;
 
   // ── Per-type email performance (window) + per-type weekly send trend ────
   type Perf = {
@@ -227,7 +257,8 @@ export async function GET(request: NextRequest) {
   for (const r of emails) {
     const ts = Date.parse(r.created_at);
     const inWindow = ts >= fromMs && ts <= toMs;
-    const p = ensure(r.email_type);
+    const effType = effectiveEmailType(r);
+    const p = ensure(effType);
 
     // weekly send trend (independent of the window)
     const wb = weekBucket(ts, trendEnd);
@@ -245,7 +276,7 @@ export async function GET(request: NextRequest) {
     if (r.bounced_at) { p.bounced += 1; totals.bounced += 1; }
     if (r.complained_at) { p.complained += 1; totals.complained += 1; }
 
-    if (COMPARE_BEARING.has(r.email_type)) {
+    if (COMPARE_BEARING.has(effType)) {
       compareSends += 1;
       if (r.first_opened_at) compareSendsOpened += 1;
       if (r.first_clicked_at) compareSendsClicked += 1;
@@ -301,6 +332,7 @@ export async function GET(request: NextRequest) {
     emailed: totals.sent,
     opened: totals.opened,
     clicked: totals.clicked,
+    introRequested,
     answered: sensor.answered,
     engaged: conversions.compareSaved + conversions.guideSaved,
     benefitsStarted: conversions.benefitsStarted,
