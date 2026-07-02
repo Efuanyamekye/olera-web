@@ -101,6 +101,15 @@ function button(label: string, href: string): string {
   return `<a href="${href}" style="display:inline-block;padding:12px 24px;background:${BRAND_COLOR};color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;border-radius:8px;">${label}</a>`;
 }
 
+// Secondary CTA — teal outline on transparent. Used for the "explore more"
+// browse links so they read as clearly subordinate to a filled primary action
+// (e.g. the per-card "Introduce me" on compare emails). One accent, two weights:
+// filled = act on THIS provider, outline = go look at more. (1px less padding than
+// button() so the border doesn't change the box size.)
+function secondaryButton(label: string, href: string): string {
+  return `<a href="${href}" style="display:inline-block;padding:11px 23px;background:transparent;color:${BRAND_COLOR};font-size:14px;font-weight:600;text-decoration:none;border:1px solid ${BRAND_COLOR};border-radius:8px;">${label}</a>`;
+}
+
 /**
  * Profile-completion ("sell the output") email — the weekly-digest variant for
  * CLAIMED providers who haven't added their owner story yet. Instead of a
@@ -1440,7 +1449,7 @@ export function providerSilentEmail(opts: {
     </p>
     ${declineMessageSection}
     ${hasRecommendedProviders ? `<div style="margin:0 0 24px;">${providersSection}</div>` : ""}
-    <div style="margin:0 0 24px;">${button("Compare more providers near you", opts.browseUrl)}</div>
+    <div style="margin:0 0 24px;">${secondaryButton("Compare more providers near you", opts.browseUrl)}</div>
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.5;">
       ${closingLine}
@@ -1552,7 +1561,7 @@ export function familyNeverEngagedEmail(opts: {
       Hi ${escapeHtml(familyFirstName)}, finding the right care is a big decision, and you&rsquo;ve got real options. Here are a few providers near you worth comparing side by side:
     </p>
     ${providersSection}
-    ${opts.browseUrl ? `<div style="margin:24px 0 0;">${button("Compare more providers near you", opts.browseUrl)}</div>` : ""}
+    ${opts.browseUrl ? `<div style="margin:24px 0 0;">${secondaryButton("Compare more providers near you", opts.browseUrl)}</div>` : ""}
     ${benefitsQuizModule(opts.benefitsQuizUrl)}
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
     <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.6;">
@@ -5439,7 +5448,7 @@ export function day10AwaitingEmail(opts: {
       One thing that helps before you decide: seeing how they stack up against a couple of others nearby.
     </p>
     <div style="margin:0 0 24px;">${providersSection}</div>
-    <div style="margin:0 0 24px;">${button("Compare your options", opts.alternativesUrl)}</div>
+    <div style="margin:0 0 24px;">${(hasRecs ? secondaryButton : button)("Compare your options", opts.alternativesUrl)}</div>
     ` : ""}
     ${benefitsQuizModule(opts.benefitsQuizUrl)}
     <div style="height:1px;background:#e5e7eb;margin:24px 0;"></div>
