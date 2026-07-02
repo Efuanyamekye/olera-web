@@ -186,6 +186,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     subject: v.subject,
     emailType: v.emailType,
   }));
+  const sampleLabelByEmailType = new Map(samplePreviewTypes.map((v) => [v.emailType, v.label]));
 
   const db = getServiceClient();
   const since = new Date(Date.now() - windowDays * 24 * 60 * 60 * 1000).toISOString();
@@ -226,8 +227,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   let rollup30d: { sent: number; delivered: number; opened: number; clicked: number; bounced: number; complained: number } | null = null;
   let trend: Array<{ week: string; sent: number; delivered: number; opened: number; clicked: number }> = [];
   const previewTypes: string[] = [];
-  // Per-variant rollup (only meaningful when a job's one email_type fans out into templates, like
-  // the weekly digest). `variants[].split` carries the rank-led vs plain breakdown for weekly_digest.
+  // Per-variant/type rollup. The weekly digest fans one email_type into several content variants;
+  // multi-email jobs like Ad Boost fan one automation into several email_type values.
+  // `variants[].split` carries the rank-led vs plain breakdown for weekly_digest.
   // `converted`/`convRate`/`convEvent`/`convLabel` carry the downstream-conversion attribution.
   type VariantOut = VStat & {
     key: string; label: string; split?: { withRank: VStat; plain: VStat };
@@ -242,6 +244,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const wkWithRank = emptyVStat();
     const wkPlain = emptyVStat();
     const isDigestJob = id === "weekly-provider-digest";
+    const shouldBreakDownByEmailType = !isDigestJob && (job.emailTypes.length > 1 || samplePreviewTypes.length > 1);
     try {
       // Fetch the wider of (rollup window, trend window) so a short window (7d) doesn't starve the
       // fixed 4-week trend. The rollup + variants then gate to `since` per-row; the trend to trendSince.
@@ -273,15 +276,15 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
           if (e.first_clicked_at) w.clicked += 1;
           weekMap.set(wk, w);
         }
-        // Variant breakdown — only the weekly digest fans one email_type into multiple templates,
-        // so classifyVariant's digest-specific patterns only make sense there. For any other job
-        // the subjects wouldn't match and would all collapse into a bogus "weekly_digest" bucket.
         if (inWindow && isDigestJob) {
           const { variant, ledWithRank } = classifyVariant(e.subject, e.metadata);
           (vAgg[variant] ??= emptyVStat());
           accVStat(vAgg[variant], e);
           (vSends[variant] ??= []).push({ providerId: e.provider_id, sentAt: Date.parse(e.created_at), delivered: !!e.delivered_at });
           if (variant === "weekly_digest") accVStat(ledWithRank ? wkWithRank : wkPlain, e);
+        } else if (inWindow && shouldBreakDownByEmailType) {
+          (vAgg[e.email_type] ??= emptyVStat());
+          accVStat(vAgg[e.email_type], e);
         }
         if (inWindow && e.html_body && !seenPreviewTypes.has(e.email_type)) seenPreviewTypes.add(e.email_type);
       }
@@ -332,6 +335,15 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
             convRate: stat.delivered > 0 ? converted / stat.delivered : 0,
             convEvent: evType,
             convLabel: CONVERSION_LABEL[k],
+          };
+        });
+      } else if (shouldBreakDownByEmailType) {
+        variants = job.emailTypes.map((emailType) => {
+          const stat = vAgg[emailType] ?? emptyVStat();
+          return {
+            key: emailType,
+            label: sampleLabelByEmailType.get(emailType) ?? emailType,
+            ...stat,
           };
         });
       }

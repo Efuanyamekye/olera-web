@@ -613,20 +613,27 @@ export default function AutomationDetailPage() {
 
                   {data.variants && data.variants.length > 1 && (
                     <div className="mt-6">
-                      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">By variant · last {data.windowDays} days</h3>
+                      {(() => {
+                        const hasConversion = data.variants.some((v) => Boolean(v.convLabel));
+                        const breakdownLabel = data.job.id === "weekly-provider-digest" ? "By variant" : "By email type";
+                        return (
+                          <>
+                      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">{breakdownLabel} · last {data.windowDays} days</h3>
                       {/* No overflow-hidden here: the per-row trigger tooltips are absolutely positioned and must escape the wrapper. */}
                       <div className="rounded-xl border border-gray-200">
                         <table className="w-full text-sm">
                           <thead>
                             <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs text-gray-500">
-                              <th className="px-4 py-2 font-medium">Variant</th>
+                              <th className="px-4 py-2 font-medium">{data.job.id === "weekly-provider-digest" ? "Variant" : "Email type"}</th>
                               <th className="px-4 py-2 text-right font-medium">Sent</th>
                               <th className="px-4 py-2 text-right font-medium">Delivered</th>
                               <th className="px-4 py-2 text-right font-medium">Opened</th>
                               <th className="px-4 py-2 text-right font-medium">Clicked</th>
+                              {hasConversion && (
                               <th className="px-4 py-2 text-right font-medium">
                                 <span className="inline-flex items-center">Converted<InfoDot text="Share of delivered emails where the provider took that variant's goal action (answered, opened a lead, worked the market, claimed, published, or re-visited the portal) within 14 days of the send — last-touch, so a single action is never double-counted across consecutive weekly sends. This is the honest signal: opens are inflated by Apple Mail's privacy proxy. Note: very recent sends may still be inside their 14-day window." /></span>
                               </th>
+                              )}
                               <th className="px-4 py-2 text-right font-medium">Bounced</th>
                             </tr>
                           </thead>
@@ -643,6 +650,7 @@ export default function AutomationDetailPage() {
                                   <td className="px-4 py-2 text-right tabular-nums">{v.sent > 0 ? pct(v.delivered, v.sent) : "—"}</td>
                                   <td className="px-4 py-2 text-right tabular-nums">{v.sent > 0 ? pct(v.opened, v.sent) : "—"}</td>
                                   <td className="px-4 py-2 text-right tabular-nums">{v.sent > 0 ? pct(v.clicked, v.sent) : "—"}</td>
+                                  {hasConversion && (
                                   <td className="px-4 py-2 text-right">
                                     {v.sent > 0 && v.delivered > 0 ? (
                                       <div className="leading-tight">
@@ -651,6 +659,7 @@ export default function AutomationDetailPage() {
                                       </div>
                                     ) : "—"}
                                   </td>
+                                  )}
                                   <td className={`px-4 py-2 text-right tabular-nums ${v.bounced + v.complained > 0 ? "text-amber-600" : "text-gray-300"}`}>{v.sent > 0 ? (v.bounced + v.complained || "—") : "—"}</td>
                                 </tr>
                                 {v.split && (["withRank", "plain"] as const).map((sk) => {
@@ -662,7 +671,9 @@ export default function AutomationDetailPage() {
                                       <td className="px-4 py-1.5 text-right tabular-nums">{s.sent > 0 ? pct(s.delivered, s.sent) : "—"}</td>
                                       <td className="px-4 py-1.5 text-right tabular-nums">{s.sent > 0 ? pct(s.opened, s.sent) : "—"}</td>
                                       <td className="px-4 py-1.5 text-right tabular-nums">{s.sent > 0 ? pct(s.clicked, s.sent) : "—"}</td>
+                                      {hasConversion && (
                                       <td className="px-4 py-1.5 text-right text-gray-300">—</td>
+                                      )}
                                       <td className="px-4 py-1.5 text-right tabular-nums text-gray-300">{s.sent > 0 ? (s.bounced + s.complained || "—") : "—"}</td>
                                     </tr>
                                   );
@@ -672,7 +683,13 @@ export default function AutomationDetailPage() {
                           </tbody>
                         </table>
                       </div>
-                      <p className="mt-2 text-xs text-gray-400">Open/click rates are % of sent. Converted is % of delivered who took the variant&apos;s goal action within 14 days. Variants are inferred from the email for sends before tagging was added.</p>
+                      <p className="mt-2 text-xs text-gray-400">
+                        Open/click rates are % of sent.
+                        {hasConversion ? " Converted is % of delivered who took the variant's goal action within 14 days. Variants are inferred from the email for sends before tagging was added." : " Rows are grouped by email_type so this monitor shows which lifecycle emails are actually going out."}
+                      </p>
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
 
