@@ -3,7 +3,7 @@ import { getServiceClient } from "@/lib/admin";
 import { sendEmail, reserveEmailLogId, appendTrackingParams } from "@/lib/email";
 import { withCronRun } from "@/lib/crons/run";
 import { getSiteUrl } from "@/lib/site-url";
-import { generateFamilyInboxUrl } from "@/lib/claim-tokens";
+import { generateFamilyInboxUrl, generateIntroUrl } from "@/lib/claim-tokens";
 import { calculateFamilyCompleteness } from "@/lib/admin/profile-completeness";
 import {
   findAlternativeProviders,
@@ -11,6 +11,7 @@ import {
   categoryStockImage,
 } from "@/lib/family-comms/alternatives";
 import { normalizeCareLabel } from "@/lib/provider-highlights";
+import { familySelfReportedYes } from "@/lib/family-comms/outcome";
 import {
   connectionOutcomeCheckEmail,
   providerSilentEmail,
@@ -357,10 +358,14 @@ export async function GET(request: NextRequest) {
         counts.stops.unsubscribed++;
         continue;
       }
-      const selfReportedYes = fam.inquiries.some(
-        (c) => (metaOf(c).outcome as { value?: string } | undefined)?.value === "yes",
-      );
-      if (selfReportedYes) {
+      // The sensor's own predicate drives the "connected" stop — one definition of
+      // "the provider got back to me" shared with the Phase-0 outcome layer
+      // (lib/family-comms/outcome). NOTE: we deliberately do NOT stop on
+      // computeFamilyOutcome() === "connected" here — that folds in
+      // isSuccessfulConnection (provider merely *responded*), which is exactly R4's
+      // target (provider replied, family hasn't). Stopping on it would silently kill
+      // the awaiting-match rung. Self-report "yes" is the only unambiguous "done".
+      if (familySelfReportedYes(fam.inquiries)) {
         counts.skipped++;
         counts.stops.self_reported_yes++;
         continue;
@@ -437,16 +442,25 @@ export async function GET(request: NextRequest) {
       const buildQuizUrl = (eid: string | null): string =>
         generateFamilyInboxUrl(authEmailFinal, appendTrackingParams("/benefits/finder", eid), siteUrl);
       // Map an alternative provider → a compare card (image + rating + distance), with a
-      // tracked, auth deep-linked view URL. Shared across the compare rungs (R2/R3/R4).
+      // tracked, auth deep-linked view URL AND a one-tap "introduce me" write link (B2).
+      // The intro link carries the family + this provider + the source inquiry (whose
+      // intent it forwards) in a signed token; per-provider consent, never a blast-all.
+      // `sourceConnectionId` is the family's original inquiry for this rung. Shared
+      // across the compare rungs (R2/R3/R4).
       const toCard = (
         p: Awaited<ReturnType<typeof findAlternativeProviders>>[number],
         eid: string | null,
+        sourceConnectionId: string,
       ) => ({
         name: p.name,
         viewUrl: generateFamilyInboxUrl(
           authEmailFinal,
           appendTrackingParams(`/provider/${p.slug}?rp=${p.slug}`, eid),
           siteUrl,
+        ),
+        introUrl: appendTrackingParams(
+          generateIntroUrl(fam.familyId, p.profileId, sourceConnectionId, authEmailFinal, siteUrl),
+          eid,
         ),
         imageUrl: p.imageUrl,
         priceRange: p.priceRange,
@@ -506,11 +520,12 @@ export async function GET(request: NextRequest) {
         // ── Rung 2: provider silent → alternatives — inquiry 96-120h, family engaged,
         //    provider silent everywhere, ≥3 responsive alternatives ──
         const alreadyAlt = fam.inquiries.some((c) => metaOf(c).family_alternatives_sent_at);
+        const alreadyGuidance = fam.inquiries.some((c) => metaOf(c).family_guidance_sent_at);
         const r2trigger = fam.inquiries.find((c) => {
           const a = ageMs(c);
           return a >= 96 * HOUR && a <= 120 * HOUR;
         });
-        if (r2trigger && familyEngagedAnywhere && !providerRespondedAnywhere && !alreadyAlt) {
+        if (r2trigger && familyEngagedAnywhere && !providerRespondedAnywhere && !alreadyAlt && !alreadyGuidance) {
           const provider = norm(r2trigger.to_profile);
           const providerName = provider?.display_name || "the provider";
           const alts = await findAlternativeProviders(
@@ -534,7 +549,7 @@ export async function GET(request: NextRequest) {
               metadata: { connection_id: r2trigger.id, recommended_count: alts.length, provider_passed: providerPassed },
               buildHtml: (eid) => {
                 const browseUrl = buildBrowseUrl(provider, eid);
-                const recommendedProviders = alts.map((p) => toCard(p, eid));
+                const recommendedProviders = alts.map((p) => toCard(p, eid, r2trigger.id));
                 return providerSilentEmail({
                   unsubscribeId: fam.familyId,
                   familyName,
@@ -567,6 +582,48 @@ export async function GET(request: NextRequest) {
               },
             };
           }
+          // ── The switch flips: Matchmaking → Guidance ────────────────────────
+          // Family engaged, provider silent, but the market is too thin for a real
+          // shortlist (<3 alternatives). Going silent here is the designed-away dead
+          // end (direction-doc blind spot #1). Instead, pivot to the guidance journey:
+          // lead with the cost/benefits unlock (the real paralyzer) + the guide, keep
+          // the original provider reachable. Reuses the never-engaged template's
+          // guide-led fallback (recommendedProviders omitted) + its governed emailType
+          // so no new email_type / governance wiring is needed.
+          return {
+            rung: "provider_silent_guidance",
+            emailType: "family_never_engaged",
+            subject: familyNeverEngagedSubject(false),
+            metadata: { connection_id: r2trigger.id, guidance: true, alternatives_count: alts.length },
+            buildHtml: (eid) => {
+              const guideUrl = `${siteUrl}${appendTrackingParams("/olera-senior-care-guide-one-page.pdf", eid)}`;
+              const inboxUrl = generateFamilyInboxUrl(authEmailFinal, appendTrackingParams("/portal/inbox", eid), siteUrl);
+              return familyNeverEngagedEmail({
+                unsubscribeId: fam.familyId,
+                familyName,
+                providerName,
+                guideUrl,
+                inboxUrl,
+                recommendedProviders: undefined,
+                browseUrl: null,
+                benefitsQuizUrl: buildQuizUrl(eid),
+              });
+            },
+            stamp: async (sentAt) => {
+              for (const c of fam.inquiries) {
+                await db
+                  .from("connections")
+                  .update({
+                    metadata: {
+                      ...metaOf(c),
+                      family_guidance_sent_at: sentAt,
+                      family_guidance_sent_by: "cron:family-comms-coordinator",
+                    },
+                  })
+                  .eq("id", c.id);
+              }
+            },
+          };
         }
 
         // ── Rung 3: never engaged → resource — inquiry 120-144h, family NEVER engaged,
@@ -598,7 +655,7 @@ export async function GET(request: NextRequest) {
             buildHtml: (eid) => {
               const guideUrl = `${siteUrl}${appendTrackingParams("/olera-senior-care-guide-one-page.pdf", eid)}`;
               const inboxUrl = generateFamilyInboxUrl(authEmailFinal, appendTrackingParams("/portal/inbox", eid), siteUrl);
-              const recommendedProviders = hasAlts3 ? alts3.map((p) => toCard(p, eid)) : undefined;
+              const recommendedProviders = hasAlts3 ? alts3.map((p) => toCard(p, eid, r3trigger.id)) : undefined;
               return familyNeverEngagedEmail({
                 unsubscribeId: fam.familyId,
                 familyName,
@@ -661,7 +718,7 @@ export async function GET(request: NextRequest) {
               const inboxUrl = generateFamilyInboxUrl(authEmailFinal, appendTrackingParams("/portal/inbox", eid), siteUrl);
               const alternativesUrl = buildBrowseUrl(provider, eid);
               const supportUrl = "mailto:support@olera.care?subject=Help%20with%20next%20steps";
-              const recommendedProviders = hasAlts4 ? alts4.slice(0, 2).map((p) => toCard(p, eid)) : undefined;
+              const recommendedProviders = hasAlts4 ? alts4.slice(0, 2).map((p) => toCard(p, eid, r4.id)) : undefined;
               return day10AwaitingEmail({
                 unsubscribeId: fam.familyId,
                 familyName,

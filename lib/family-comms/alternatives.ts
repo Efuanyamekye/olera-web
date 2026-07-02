@@ -44,6 +44,8 @@ export function careTypeToBrowseSlug(careType?: string | null): string | null {
 export interface RecommendedProvider {
   name: string;
   slug: string;
+  /** business_profiles id — the to_profile_id for a one-tap intro inquiry (B2). */
+  profileId: string;
   url: string;
   priceRange: string | null;
   /** Real facility/logo photo when available, else a rotated category stock image. Always set. */
@@ -245,6 +247,7 @@ export async function findAlternativeProviders(
     return {
       name: p.display_name as string,
       slug: p.slug as string,
+      profileId: p.id as string,
       url: `/provider/${p.slug}?rp=${p.slug}`,
       priceRange: (meta.price_range as string) || null,
       imageUrl: realImg || categoryStockImage((p.care_types as string[])?.[0], i),

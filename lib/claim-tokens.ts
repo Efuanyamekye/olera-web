@@ -293,3 +293,89 @@ export function generateFamilyInboxUrl(
   url.searchParams.set("next", destination);
   return url.toString();
 }
+
+/**
+ * ── One-tap intro tokens (B2) ────────────────────────────────────────────────
+ *
+ * Authorizes a single family→provider inquiry created from an email link (a GET
+ * write). Signs the whole payload — family, target provider, the source inquiry
+ * whose intent we carry forward, and the family's email — so none of it can be
+ * tampered in the URL. Same HMAC-SHA256 + base64url + 72h-expiry scheme as the
+ * claim tokens above, but a distinct signature domain ("intro:") so an intro
+ * token can never be replayed as a claim token or vice versa.
+ */
+interface IntroTokenPayload {
+  /** The family's business_profiles id — from_profile_id of the new inquiry. */
+  familyProfileId: string;
+  /** The alternative provider's business_profiles id — to_profile_id. */
+  targetProviderId: string;
+  /** The original inquiry we carry care-type/intent forward from. */
+  sourceConnectionId: string;
+  /** The family's email — for rate limiting + post-write one-click auth. */
+  email: string;
+  expiresAt: number;
+}
+
+interface IntroTokenData extends IntroTokenPayload {
+  signature: string;
+}
+
+function generateIntroSignature(p: IntroTokenPayload): string {
+  const data = `intro:${p.familyProfileId}:${p.targetProviderId}:${p.sourceConnectionId}:${p.email}:${p.expiresAt}`;
+  return createHmac("sha256", TOKEN_SECRET).update(data).digest("hex").slice(0, 32);
+}
+
+export function generateIntroToken(
+  familyProfileId: string,
+  targetProviderId: string,
+  sourceConnectionId: string,
+  email: string,
+): string {
+  const expiresAt = Date.now() + TOKEN_EXPIRY_HOURS * 60 * 60 * 1000;
+  const payload: IntroTokenPayload = { familyProfileId, targetProviderId, sourceConnectionId, email, expiresAt };
+  const tokenData: IntroTokenData = { ...payload, signature: generateIntroSignature(payload) };
+  return Buffer.from(JSON.stringify(tokenData))
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=/g, "");
+}
+
+export function validateIntroToken(
+  token: string,
+):
+  | { valid: true; familyProfileId: string; targetProviderId: string; sourceConnectionId: string; email: string }
+  | { valid: false; error: string } {
+  try {
+    const base64 = token.replace(/-/g, "+").replace(/_/g, "/");
+    const tokenData: IntroTokenData = JSON.parse(Buffer.from(base64, "base64").toString("utf-8"));
+    const { familyProfileId, targetProviderId, sourceConnectionId, email, expiresAt, signature } = tokenData;
+    if (!familyProfileId || !targetProviderId || !sourceConnectionId || !email || !expiresAt || !signature) {
+      return { valid: false, error: "Invalid token format" };
+    }
+    if (Date.now() > expiresAt) return { valid: false, error: "Token has expired" };
+    const expected = generateIntroSignature({ familyProfileId, targetProviderId, sourceConnectionId, email, expiresAt });
+    if (signature !== expected) return { valid: false, error: "Invalid token signature" };
+    return { valid: true, familyProfileId, targetProviderId, sourceConnectionId, email };
+  } catch {
+    return { valid: false, error: "Failed to parse token" };
+  }
+}
+
+/**
+ * Build a one-tap intro URL for an email compare card. Clicking it creates the
+ * inquiry to `targetProviderId` (carrying the source inquiry's intent), notifies
+ * the provider, signs the family in, and lands them on the confirmation screen.
+ */
+export function generateIntroUrl(
+  familyProfileId: string,
+  targetProviderId: string,
+  sourceConnectionId: string,
+  email: string,
+  baseUrl: string = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care",
+): string {
+  const token = generateIntroToken(familyProfileId, targetProviderId, sourceConnectionId, email);
+  const url = new URL(`${baseUrl}/api/family-intro`);
+  url.searchParams.set("tok", token);
+  return url.toString();
+}

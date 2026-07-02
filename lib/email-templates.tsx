@@ -1290,6 +1290,11 @@ export interface CompareCardItem {
    *  Built from verified signals upstream; omitted when there's nothing to stand
    *  behind. Never a response-time claim. */
   reason?: string | null;
+  /** One-tap "introduce me" write link (B2). When set, the card gets an
+   *  "Introduce me" button that creates a real inquiry to this provider —
+   *  per-provider consent ("ask this one"), never a blast-all. Omitted →
+   *  the card stays a plain view link (legacy/transactional callers). */
+  introUrl?: string | null;
   /** Tolerated (some callers build cards with a slug); not rendered. */
   slug?: string;
 }
@@ -1327,12 +1332,22 @@ function compareCardRow(p: CompareCardItem): string {
           <img src="${p.imageUrl}" alt="${escapeHtml(p.name)}" width="72" height="72" style="width:72px;height:72px;border-radius:10px;object-fit:cover;display:block;background:#eef1f0;border:0;" />
         </td>`
     : "";
+  // One-tap "introduce me" — a per-provider action, so it's a SEPARATE anchor
+  // (never nested inside the card's view link). Left-aligned to sit under the text.
+  const introBtn = p.introUrl
+    ? `<div style="margin:10px 0 0 ${p.imageUrl ? "86px" : "0"};">
+        <a href="${p.introUrl}" style="display:inline-block;font-size:13px;font-weight:600;color:#ffffff;background:${BRAND_COLOR};padding:8px 16px;border-radius:8px;text-decoration:none;">Introduce me &rarr;</a>
+      </div>`
+    : "";
   return `
-    <a href="${p.viewUrl}" style="text-decoration:none;display:block;">
-      <table cellpadding="0" cellspacing="0" width="100%" style="margin:0;"><tr>
-        ${imageCol}${textCol}
-      </tr></table>
-    </a>`;
+    <div>
+      <a href="${p.viewUrl}" style="text-decoration:none;display:block;">
+        <table cellpadding="0" cellspacing="0" width="100%" style="margin:0;"><tr>
+          ${imageCol}${textCol}
+        </tr></table>
+      </a>
+      ${introBtn}
+    </div>`;
 }
 
 /** Stacked compare cards with hairline separators (Zillow/Airbnb listing rhythm). */

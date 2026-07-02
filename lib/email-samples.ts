@@ -72,9 +72,9 @@ export interface EmailVariant {
 // ── Family fixtures ────────────────────────────────────────────────────────
 const STOCK = "https://ocaabzfiiikjcgqwhbwr.supabase.co/storage/v1/object/public/content-images/fallback";
 const FAM_RECS: CompareCardItem[] = [
-  { name: "Golden Years Home Care", viewUrl: "https://olera.care/provider/golden-years", imageUrl: `${STOCK}/home-care-1.jpg`, priceRange: "$25–30/hr", rating: 4.8, reviewCount: 42, distanceMi: 2.3, reason: "Highly Rated · State Licensed" },
-  { name: "Comfort First Caregivers", viewUrl: "https://olera.care/provider/comfort-first", imageUrl: `${STOCK}/home-care-2.jpg`, priceRange: null, rating: 4.6, reviewCount: 18, distanceMi: 4.1, reason: "Well Reviewed" },
-  { name: "Hill Country Home Aides", viewUrl: "https://olera.care/provider/hill-country", imageUrl: `${STOCK}/home-care-3.jpg`, priceRange: "from $24/hr", rating: null, reviewCount: null, distanceMi: 6.0, reason: null },
+  { name: "Golden Years Home Care", viewUrl: "https://olera.care/provider/golden-years", introUrl: "https://olera.care/api/family-intro?tok=sample", imageUrl: `${STOCK}/home-care-1.jpg`, priceRange: "$25–30/hr", rating: 4.8, reviewCount: 42, distanceMi: 2.3, reason: "Highly Rated · State Licensed" },
+  { name: "Comfort First Caregivers", viewUrl: "https://olera.care/provider/comfort-first", introUrl: "https://olera.care/api/family-intro?tok=sample", imageUrl: `${STOCK}/home-care-2.jpg`, priceRange: null, rating: 4.6, reviewCount: 18, distanceMi: 4.1, reason: "Well Reviewed" },
+  { name: "Hill Country Home Aides", viewUrl: "https://olera.care/provider/hill-country", introUrl: "https://olera.care/api/family-intro?tok=sample", imageUrl: `${STOCK}/home-care-3.jpg`, priceRange: "from $24/hr", rating: null, reviewCount: null, distanceMi: 6.0, reason: null },
 ];
 const F = {
   familyName: "Maria Garcia",
