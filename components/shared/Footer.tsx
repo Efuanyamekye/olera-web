@@ -337,6 +337,9 @@ export default function Footer({ hideDiscoveryZone = false }: { hideDiscoveryZon
               <Link href="/terms" className="flex items-center min-h-[44px] px-3 text-gray-400 hover:text-gray-600 text-sm transition-colors">
                 Terms
               </Link>
+              <Link href="/messaging-terms" className="flex items-center min-h-[44px] px-3 text-gray-400 hover:text-gray-600 text-sm transition-colors">
+                SMS Terms
+              </Link>
               <Link href="/contact" className="flex items-center min-h-[44px] px-3 text-gray-400 hover:text-gray-600 text-sm transition-colors">
                 Support
               </Link>
