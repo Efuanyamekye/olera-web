@@ -160,6 +160,12 @@ export default function AdminDoNotContactPage() {
                   Loading…
                 </td>
               </tr>
+            ) : error ? (
+              <tr>
+                <td colSpan={6} className="text-center py-8 text-gray-400">
+                  Couldn’t load the list — see the error above.
+                </td>
+              </tr>
             ) : entries.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-8 text-gray-500">
@@ -202,10 +208,12 @@ export default function AdminDoNotContactPage() {
         </table>
       </div>
 
-      <p className="text-xs text-gray-500 mt-4">
-        {entries.length} {entries.length === 1 ? "entry" : "entries"}
-        {search.trim() && ` matching "${search}"`}
-      </p>
+      {!error && (
+        <p className="text-xs text-gray-500 mt-4">
+          {entries.length} {entries.length === 1 ? "entry" : "entries"}
+          {search.trim() && ` matching "${search}"`}
+        </p>
+      )}
 
       {/* Add modal */}
       {showAddModal && (
