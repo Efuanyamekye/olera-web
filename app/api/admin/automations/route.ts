@@ -247,8 +247,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
   const { job_id, action } = body;
-  if (!job_id || !CRON_REGISTRY.some((j) => j.id === job_id)) {
+  const job = job_id ? CRON_REGISTRY.find((j) => j.id === job_id) : undefined;
+  if (!job_id || !job) {
     return NextResponse.json({ error: "Unknown job_id" }, { status: 400 });
+  }
+  if (!job.path.startsWith("/api/cron/")) {
+    return NextResponse.json({ error: "Only scheduled cron jobs can be paused or resumed" }, { status: 400 });
   }
   if (action !== "pause" && action !== "resume") {
     return NextResponse.json({ error: "action must be 'pause' or 'resume'" }, { status: 400 });

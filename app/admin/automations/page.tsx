@@ -9,7 +9,7 @@ import {
   RESEND_BOUNCE_WARN,
 } from "@/lib/email-thresholds";
 
-type Fn = "nudge" | "alert" | "digest" | "outreach" | "refresh" | "maintenance";
+type Fn = "nudge" | "alert" | "digest" | "outreach" | "event" | "refresh" | "maintenance";
 interface Rollup {
   sent: number;
   delivered: number;
@@ -68,7 +68,7 @@ interface ApiResponse {
   note: string;
 }
 
-const FN_LABEL: Record<Fn, string> = { nudge: "nudge", alert: "alert", digest: "digest", outreach: "outreach", refresh: "data refresh", maintenance: "maintenance" };
+const FN_LABEL: Record<Fn, string> = { nudge: "nudge", alert: "alert", digest: "digest", outreach: "outreach", event: "event-triggered", refresh: "data refresh", maintenance: "maintenance" };
 
 function timeAgo(iso: string | null): string {
   if (!iso) return "—";
@@ -314,6 +314,7 @@ export default function AutomationsPage() {
                   <div className="overflow-hidden rounded-xl border border-gray-200 divide-y divide-gray-100">
                     {jobs.map((job) => {
                       const r = job.rollup30d;
+                      const canPause = job.path.startsWith("/api/cron/");
                       return (
                         <div key={job.id} className="group relative px-4 py-2.5 transition-colors hover:bg-gray-50/70">
                           <Link href={`/admin/automations/${job.id}`} className="absolute inset-0" aria-label={`Open ${job.name}`} />
@@ -328,7 +329,7 @@ export default function AutomationsPage() {
                                 <span className="text-xs text-gray-400">{job.humanSchedule}</span>
                               </div>
                               <div className="mt-0.5 truncate text-xs text-gray-400" title={job.lastRun ? `Last run: ${runResult(job.lastRun.summary) || job.lastRun.status}${job.lastRun.error ? ` — ${job.lastRun.error}` : ""}` : undefined}>
-                                {job.lastRun ? `Last run ${timeAgo(job.lastRun.startedAt)}` : "No runs yet"}
+                                {job.fn === "event" ? "Event-triggered monitor" : job.lastRun ? `Last run ${timeAgo(job.lastRun.startedAt)}` : "No runs yet"}
                                 {r ? (
                                   <>
                                     <span className="text-gray-300"> · </span>
@@ -344,13 +345,15 @@ export default function AutomationsPage() {
                               </div>
                             </div>
                             <div className="flex shrink-0 items-center gap-2">
-                              <button
-                                disabled={busy === `pause:${job.id}`}
-                                onClick={() => togglePause(job)}
-                                className={`relative z-10 rounded-lg border px-2 py-0.5 text-xs font-medium opacity-0 transition group-hover:opacity-100 disabled:opacity-40 ${job.paused ? "border-emerald-200 text-emerald-700 hover:bg-emerald-50" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
-                              >
-                                {busy === `pause:${job.id}` ? "…" : job.paused ? "Resume" : "Pause"}
-                              </button>
+                              {canPause && (
+                                <button
+                                  disabled={busy === `pause:${job.id}`}
+                                  onClick={() => togglePause(job)}
+                                  className={`relative z-10 rounded-lg border px-2 py-0.5 text-xs font-medium opacity-0 transition group-hover:opacity-100 disabled:opacity-40 ${job.paused ? "border-emerald-200 text-emerald-700 hover:bg-emerald-50" : "border-gray-200 text-gray-600 hover:bg-gray-50"}`}
+                                >
+                                  {busy === `pause:${job.id}` ? "…" : job.paused ? "Resume" : "Pause"}
+                                </button>
+                              )}
                               <span className="text-sm text-gray-300 transition-colors group-hover:text-gray-500">→</span>
                             </div>
                           </div>

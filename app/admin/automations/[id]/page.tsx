@@ -35,6 +35,12 @@ interface RunRow {
   error: string | null;
   triggered_by: string;
 }
+interface SamplePreviewType {
+  id: string;
+  label: string;
+  subject: string;
+  emailType: string;
+}
 interface DetailResponse {
   job: {
     id: string;
@@ -57,6 +63,7 @@ interface DetailResponse {
   trend: Array<{ week: string; sent: number; delivered: number; opened: number; clicked: number }>;
   variants: VariantRow[];
   previewTypes: string[];
+  samplePreviewTypes: SamplePreviewType[];
   runs: RunRow[];
   windowDays: number;
 }
@@ -364,7 +371,7 @@ export default function AutomationDetailPage() {
       if (reqId !== reqSeq.current) return; // a newer window selection superseded this fetch
       setData(d);
       const isDigestJob = d.job.id === "weekly-provider-digest";
-      setPreviewType((prev) => prev ?? (isDigestJob ? DIGEST_SAMPLES[0].key : (d.previewTypes[0] ?? null)));
+      setPreviewType((prev) => prev ?? (isDigestJob ? DIGEST_SAMPLES[0].key : (d.samplePreviewTypes[0]?.id ?? d.previewTypes[0] ?? null)));
       const bestRun = d.runs.find((rr) => { const s = rr.summary?.sent; return typeof s === "number" && s > 0; }) ?? d.runs[0] ?? null;
       setSelectedRun((prev) => prev ?? bestRun?.id ?? null);
     } catch (e) {
@@ -379,15 +386,17 @@ export default function AutomationDetailPage() {
     if (!id || !previewType) return;
     setPreview("loading");
     let cancelled = false;
-    // Digest sample keys fetch a rendered variant sample; other jobs fetch their latest real email.
-    const isSample = DIGEST_SAMPLES.some((s) => s.key === previewType);
+    // Sample keys fetch a rendered fixture; other values fetch the latest real email.
+    const isSample =
+      DIGEST_SAMPLES.some((s) => s.key === previewType) ||
+      data?.samplePreviewTypes.some((s) => s.id === previewType);
     const qs = isSample ? `variant=${encodeURIComponent(previewType)}` : `type=${encodeURIComponent(previewType)}`;
     fetch(`/api/admin/automations/${id}/preview?${qs}`)
       .then((r) => (r.ok ? r.json() : r.status === 404 ? Promise.resolve("none") : Promise.reject(new Error())))
       .then((d) => { if (!cancelled) setPreview(d === "none" ? "none" : (d as PreviewResponse)); })
       .catch(() => { if (!cancelled) setPreview("none"); });
     return () => { cancelled = true; };
-  }, [id, previewType]);
+  }, [id, previewType, data?.samplePreviewTypes]);
 
   useEffect(() => {
     if (!id || !selectedRun) { setRecipients(null); return; }
@@ -440,6 +449,7 @@ export default function AutomationDetailPage() {
   }
 
   const ghostBtn = "rounded-lg border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50";
+  const canPause = data?.job.path.startsWith("/api/cron/") ?? false;
 
   return (
     <div className="max-w-5xl">
@@ -460,7 +470,9 @@ export default function AutomationDetailPage() {
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h1 className="text-2xl font-semibold tracking-tight text-gray-900">{data.job.name}</h1>
-                {data.paused ? (
+                {data.job.fn === "event" ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-teal-50 px-2 py-0.5 text-[11px] font-medium text-teal-700 ring-1 ring-inset ring-teal-200"><span className="h-1.5 w-1.5 rounded-full bg-teal-500" />Event monitor</span>
+                ) : data.paused ? (
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-700 ring-1 ring-inset ring-amber-200"><span className="h-1.5 w-1.5 rounded-full bg-amber-400" />Paused</span>
                 ) : (
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Active</span>
@@ -495,9 +507,11 @@ export default function AutomationDetailPage() {
             </div>
             <div className="flex shrink-0 items-center gap-2">
               {data.job.relatedAdminPath && <Link href={data.job.relatedAdminPath} className={ghostBtn}>Related queue →</Link>}
-              <button disabled={busy} onClick={togglePause} className={`${ghostBtn} ${data.paused ? "border-emerald-200 text-emerald-700 hover:bg-emerald-50" : ""}`}>
-                {busy ? "…" : data.paused ? "Resume" : "Pause"}
-              </button>
+              {canPause && (
+                <button disabled={busy} onClick={togglePause} className={`${ghostBtn} ${data.paused ? "border-emerald-200 text-emerald-700 hover:bg-emerald-50" : ""}`}>
+                  {busy ? "…" : data.paused ? "Resume" : "Pause"}
+                </button>
+              )}
             </div>
           </div>
 
@@ -698,8 +712,11 @@ export default function AutomationDetailPage() {
               {/* Email preview — the digest shows a sample of each variant; other jobs show the latest real send */}
               {(() => {
                 const isDigest = data.job.id === "weekly-provider-digest";
-                if (!isDigest && data.previewTypes.length === 0) return null;
-                const sampleSel = DIGEST_SAMPLES.some((s) => s.key === previewType);
+                const sampleTypes = isDigest
+                  ? DIGEST_SAMPLES.map((s) => ({ id: s.key, label: s.label }))
+                  : data.samplePreviewTypes.map((s) => ({ id: s.id, label: s.label }));
+                if (sampleTypes.length === 0 && data.previewTypes.length === 0) return null;
+                const sampleSel = sampleTypes.some((s) => s.id === previewType);
                 const fullUrl = previewType
                   ? `/api/admin/automations/${id}/preview?${sampleSel ? `variant=${encodeURIComponent(previewType)}` : `type=${encodeURIComponent(previewType)}`}&raw=1`
                   : null;
@@ -707,7 +724,7 @@ export default function AutomationDetailPage() {
                   <div className="overflow-hidden rounded-xl border border-gray-200">
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 px-4 py-2.5">
                       <div className="flex min-w-0 items-center gap-2 text-sm">
-                        <span className="font-medium text-gray-700">{isDigest ? "Email samples" : "Latest email"}</span>
+                        <span className="font-medium text-gray-700">{sampleTypes.length > 0 ? "Email samples" : "Latest email"}</span>
                         {preview && typeof preview === "object" && (
                           <span className="truncate text-xs text-gray-400">
                             {preview.sample
@@ -725,10 +742,10 @@ export default function AutomationDetailPage() {
                         {fullUrl && <a href={fullUrl} target="_blank" rel="noreferrer" className="text-xs text-teal-700 hover:underline">Open full ↗</a>}
                       </div>
                     </div>
-                    {isDigest && (
+                    {sampleTypes.length > 0 && (
                       <div className="flex flex-wrap gap-1.5 border-b border-gray-100 bg-gray-50/40 px-4 py-2">
-                        {DIGEST_SAMPLES.map((s) => (
-                          <button key={s.key} onClick={() => { setPreviewType(s.key); setPreviewExpanded(false); }} className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${previewType === s.key ? "bg-gray-900 text-white" : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"}`}>
+                        {sampleTypes.map((s) => (
+                          <button key={s.id} onClick={() => { setPreviewType(s.id); setPreviewExpanded(false); }} className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${previewType === s.id ? "bg-gray-900 text-white" : "border border-gray-200 bg-white text-gray-600 hover:bg-gray-50"}`}>
                             {s.label}
                           </button>
                         ))}
@@ -741,7 +758,7 @@ export default function AutomationDetailPage() {
                       </div>
                     )}
                     {preview === "loading" && <div className="px-4 py-8 text-center text-sm text-gray-400">Loading preview…</div>}
-                    {preview === "none" && <div className="px-4 py-8 text-center text-sm text-gray-400">{isDigest ? "Couldn't render this sample." : "No rendered email on file yet for this type."}</div>}
+                    {preview === "none" && <div className="px-4 py-8 text-center text-sm text-gray-400">{sampleSel ? "Couldn't render this sample." : "No rendered email on file yet for this type."}</div>}
                     {preview && typeof preview === "object" && (
                       <div className="relative bg-white">
                         <iframe srcDoc={preview.html} title="Email preview" className={`w-full bg-white transition-[height] ${previewExpanded ? "h-[720px]" : "h-[320px]"}`} sandbox="" />

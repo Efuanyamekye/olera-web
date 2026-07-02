@@ -61,6 +61,10 @@
       "schedule": "0 14 * * *"
     },
     {
+      "path": "/api/cron/ad-boost-profile-reminders",
+      "schedule": "30 14 * * *"
+    },
+    {
       "path": "/api/cron/provider-welcome",
       "schedule": "0 * * * *"
     },

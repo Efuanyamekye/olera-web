@@ -3,6 +3,7 @@ import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { getCronJob } from "@/lib/crons/registry";
 import { providerWeeklyDigestEmail, coldProviderRankEmail, providerProfileCompletionEmail, providerLeadDigestEmail, providerManagedAdsEmail } from "@/lib/email-templates";
 import { resolveFromAddress } from "@/lib/email";
+import { getVariant } from "@/lib/email-samples";
 
 /** Pull the inbox preview text (preheader) out of a rendered email's hidden preheader div. */
 function extractPreheader(html: string): string | null {
@@ -139,15 +140,31 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const variant = searchParams.get("variant");
   if (variant) {
     const sample = digestVariantSample(variant);
-    if (!sample) return NextResponse.json({ error: `Unknown variant "${variant}"` }, { status: 404 });
-    if (raw) return new NextResponse(sample.html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+    if (sample) {
+      if (raw) return new NextResponse(sample.html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
+      return NextResponse.json({
+        variant,
+        html: sample.html,
+        subject: sample.subject,
+        sample: true,
+        from: resolveFromAddress(undefined, job.emailTypes[0]),
+        preheader: extractPreheader(sample.html),
+      });
+    }
+
+    const registered = getVariant(variant);
+    if (!registered || registered.cron !== job.id) {
+      return NextResponse.json({ error: `Unknown variant "${variant}"` }, { status: 404 });
+    }
+    const html = registered.render();
+    if (raw) return new NextResponse(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
     return NextResponse.json({
       variant,
-      html: sample.html,
-      subject: sample.subject,
+      html,
+      subject: registered.subject,
       sample: true,
-      from: resolveFromAddress(undefined, job.emailTypes[0]),
-      preheader: extractPreheader(sample.html),
+      from: resolveFromAddress(undefined, registered.emailType),
+      preheader: extractPreheader(html),
     });
   }
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { getCronJob, isEmailJob } from "@/lib/crons/registry";
+import { variantsForCron } from "@/lib/email-samples";
 
 /**
  * GET /api/admin/automations/[id]
@@ -179,6 +180,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const windowDays = ALLOWED_WINDOWS.includes(daysParam) ? daysParam : 30;
   const job = getCronJob(id);
   if (!job) return NextResponse.json({ error: "Unknown automation" }, { status: 404 });
+  const samplePreviewTypes = variantsForCron(id).map((v) => ({
+    id: v.id,
+    label: v.label,
+    subject: v.subject,
+    emailType: v.emailType,
+  }));
 
   const db = getServiceClient();
   const since = new Date(Date.now() - windowDays * 24 * 60 * 60 * 1000).toISOString();
@@ -345,6 +352,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     trend,
     variants,
     previewTypes,
+    samplePreviewTypes,
     runs,
     windowDays,
   });

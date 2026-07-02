@@ -17,7 +17,7 @@
 export type CronAudience = "Providers" | "Care seekers" | "MedJobs" | "Students" | "Internal" | "Data & maintenance";
 
 /** What kind of automation it is — shown as a chip; also tells us whether to expect an email rollup. */
-export type CronFn = "nudge" | "alert" | "digest" | "outreach" | "refresh" | "maintenance";
+export type CronFn = "nudge" | "alert" | "digest" | "outreach" | "event" | "refresh" | "maintenance";
 
 export interface CronJob {
   /** Stable id. Matches the route folder name under app/api/cron/ and cron_runs.job_id. */
@@ -80,6 +80,48 @@ export const CRON_REGISTRY: CronJob[] = [
     emailTypes: ["verification_reminder_7d", "verification_reminder_21d"],
     successSignal: "Provider completes verification.",
     relatedAdminPath: "/admin/verification",
+  },
+  {
+    id: "ad-boost-profile-reminders",
+    name: "Ad Boost profile reminders",
+    description:
+      "Nudges providers whose Ad Boost launch plan is queued because their profile is still below the launch threshold. If a queued provider has become launch-ready, promotes the request instead of sending a reminder.",
+    recipientCohort:
+      "Providers with a pending-profile Ad Boost request that is at least 48 hours old and has not received this reminder yet.",
+    audience: "Providers",
+    fn: "nudge",
+    schedule: "30 14 * * *",
+    humanSchedule: "Daily, 14:30 UTC (~9–10 AM ET)",
+    path: "/api/cron/ad-boost-profile-reminders",
+    emailTypes: ["ad_boost_profile_reminder", "ad_boost_ready"],
+    successSignal: "Provider completes the page/verification work and the queued campaign moves into setup.",
+    relatedAdminPath: "/admin/ad-boost",
+  },
+  {
+    id: "ad-boost-emails",
+    name: "Ad Boost emails",
+    description:
+      "Event-triggered visibility for Find Families / Ad Boost provider emails: launch-plan receipt, queued-profile follow-up, launch-ready promotion, campaign launch, campaign-attributed lead, early traction, and starter-promo wrap-up.",
+    recipientCohort:
+      "Providers who request, queue, launch, or receive activity from Find Families managed-ad campaigns.",
+    audience: "Providers",
+    fn: "event",
+    schedule: "event-triggered",
+    humanSchedule: "Event-triggered by Ad Boost request, admin status changes, lead delivery, and metric saves",
+    path: "/admin/ad-boost",
+    emailTypes: [
+      "ad_boost_queued",
+      "ad_boost_requested",
+      "ad_boost_profile_reminder",
+      "ad_boost_ready",
+      "ad_boost_campaign_launched",
+      "ad_boost_lead_delivered",
+      "ad_boost_traction",
+      "ad_boost_promo_complete",
+    ],
+    successSignal:
+      "Provider completes setup, sees campaign progress, opens campaign-attributed leads, or replies to the promo wrap-up.",
+    relatedAdminPath: "/admin/ad-boost",
   },
   {
     id: "provider-welcome",

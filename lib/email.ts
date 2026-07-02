@@ -27,6 +27,7 @@ const FROM_ADDRESS = "Olera <noreply@olera.care>";
  * Verification, separately, applies to the WHOLE digest (see VERIFY_ON_SEND_TYPES).
  */
 const PROVIDER_NOTIFY_FROM_TYPES = new Set<string>([
+  "ad_boost_profile_reminder",
   "ad_boost_lead_delivered",
   "ad_boost_campaign_launched",
   "ad_boost_traction",

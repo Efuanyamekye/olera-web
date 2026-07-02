@@ -44,6 +44,7 @@ import {
   providerLeadDigestEmail,
   providerManagedAdsEmail,
   adBoostQueuedEmail,
+  adBoostProfileReminderEmail,
   adBoostRequestedEmail,
   adBoostReadyEmail,
   adBoostLeadDeliveredEmail,
@@ -420,6 +421,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     id: "ad_boost_queued", audience: "provider", group: "Provider · Ad Boost",
     label: "Queued · profile needed", subject: "Your Ad Boost request is saved",
     emailType: "ad_boost_queued",
+    cron: "ad-boost-emails",
     who: "Provider submitted an Ad Boost launch plan while below the launch threshold or before verification.",
     why: "Confirm the request is saved, explain why it is queued, and point them to the next profile/verification step.",
     render: () => adBoostQueuedEmail({
@@ -436,6 +438,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     id: "ad_boost_requested", audience: "provider", group: "Provider · Ad Boost",
     label: "Requested · launch-ready", subject: "Your Ad Boost request is ready for setup",
     emailType: "ad_boost_requested",
+    cron: "ad-boost-emails",
     who: "Provider submitted an Ad Boost request while complete enough and verified.",
     why: "Automate the Franchil-style initial handoff: the page has enough detail to start setup, the first $50 promo is clear, and the provider can watch results in Ad Boost.",
     render: () => adBoostRequestedEmail({
@@ -446,9 +449,27 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     }),
   },
   {
+    id: "ad_boost_profile_reminder", audience: "provider", group: "Provider · Ad Boost",
+    label: "Reminder · finish profile", subject: "Finish your Ad Boost launch setup",
+    emailType: "ad_boost_profile_reminder",
+    cron: "ad-boost-emails",
+    who: "Provider submitted an Ad Boost launch plan, stayed queued for 48+ hours, and has not cleared the profile/verification launch threshold.",
+    why: "Recover queued launch plans before they go cold, while explaining that the work protects the promotional ad test.",
+    render: () => adBoostProfileReminderEmail({
+      providerName: "Legacy Haven Senior Care",
+      ctaUrl: "https://olera.care/provider/boost?ref=email&eid=sample",
+      setupWeek: "2026-07-06",
+      completeness: 48,
+      threshold: 70,
+      missingSectionLabel: "Photos",
+      needsVerification: false,
+    }),
+  },
+  {
     id: "ad_boost_ready", audience: "provider", group: "Provider · Ad Boost",
     label: "Promotion · now ready", subject: "Your Ad Boost request is now launch-ready",
     emailType: "ad_boost_ready",
+    cron: "ad-boost-emails",
     who: "Provider had a queued Ad Boost request and later cleared completeness plus verification.",
     why: "Close the loop when queued work becomes actionable, without making the provider resubmit.",
     render: () => adBoostReadyEmail({
@@ -462,6 +483,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     id: "ad_boost_lead_delivered", audience: "provider", group: "Provider · Ad Boost",
     label: "Lead delivered", subject: "Your Find Families campaign brought in a new family",
     emailType: "ad_boost_lead_delivered",
+    cron: "ad-boost-emails",
     who: "Provider with a live Ad Boost campaign receives a campaign-attributed family inquiry.",
     why: "Make the managed-ads value explicit at the moment a real family arrives, without sending a second generic lead email.",
     render: () => adBoostLeadDeliveredEmail({
@@ -477,6 +499,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     id: "ad_boost_campaign_launched", audience: "provider", group: "Provider · Ad Boost",
     label: "Campaign launched", subject: "Your Find Families campaign is live",
     emailType: "ad_boost_campaign_launched",
+    cron: "ad-boost-emails",
     who: "Provider campaign status is moved to live by the concierge team.",
     why: "Confirm the campaign has launched, set expectations for where leads arrive, and reinforce that the first $50 promo is being monitored.",
     render: () => adBoostCampaignLaunchedEmail({
@@ -489,6 +512,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     id: "ad_boost_traction", audience: "provider", group: "Provider · Ad Boost",
     label: "Early traction", subject: "Your Find Families campaign is getting activity",
     emailType: "ad_boost_traction",
+    cron: "ad-boost-emails",
     who: "Concierge team enters spend/click metrics for a live campaign.",
     why: "Give the provider a concrete progress update before the starter promo wraps.",
     render: () => adBoostTractionEmail({
@@ -504,6 +528,7 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     id: "ad_boost_promo_complete", audience: "provider", group: "Provider · Ad Boost",
     label: "Promo complete", subject: "Your starter campaign is complete",
     emailType: "ad_boost_promo_complete",
+    cron: "ad-boost-emails",
     who: "Concierge team marks the starter campaign ended.",
     why: "Close the loop on the $50 promotional test and invite a budget/results discussion, matching Franchil's requested next step.",
     render: () => adBoostPromoCompleteEmail({

@@ -259,6 +259,42 @@ export function adBoostQueuedEmail(opts: {
   );
 }
 
+export function adBoostProfileReminderEmail(opts: {
+  providerName: string;
+  ctaUrl: string;
+  setupWeek: string;
+  completeness: number;
+  threshold: number;
+  missingSectionLabel?: string | null;
+  needsVerification?: boolean;
+}): string {
+  const nextStep = opts.needsVerification
+    ? "finish verification"
+    : opts.missingSectionLabel
+      ? `finish ${escapeHtml(opts.missingSectionLabel.toLowerCase())}`
+      : "finish your profile";
+  const launchWeek = formatEmailDate(opts.setupWeek);
+
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Ad Boost launch setup</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">Your launch plan is still waiting on your page</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Your Ad Boost launch plan for ${escapeHtml(opts.providerName)} is saved for the week of <strong>${launchWeek}</strong>. Before we send paid traffic to it, your Olera page needs a little more detail.</p>
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 20px;">
+      <p style="font-size:14px;color:#374151;margin:0 0 8px;line-height:1.5;"><strong>Current readiness:</strong> ${opts.completeness}% complete</p>
+      <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;"><strong>Launch threshold:</strong> ${opts.threshold}% complete and verified</p>
+    </div>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">The next best step is to ${nextStep}. Once the page clears the launch threshold, we&rsquo;ll move your request into setup automatically.</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 26px;line-height:1.65;">This protects your $50 promotional test: families are more likely to contact you when the page has enough detail to trust.</p>
+    <div>${button("Finish launch setup", opts.ctaUrl)}</div>
+    ${adBoostAuthorBylineBlock({ topBorder: true })}
+    <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
+      <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
+    </div>`,
+    "Your Ad Boost launch plan is saved, but your page still needs one more step.",
+  );
+}
+
 export function adBoostRequestedEmail(opts: {
   providerName: string;
   ctaUrl: string;

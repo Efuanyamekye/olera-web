@@ -1,5 +1,6 @@
 import { getServiceClient } from "@/lib/admin";
 import {
+  adBoostProfileReminderEmail,
   adBoostQueuedEmail,
   adBoostReadyEmail,
   adBoostRequestedEmail,
@@ -11,24 +12,31 @@ import {
 } from "@/lib/email";
 import type { AdBoostEligibility } from "./eligibility";
 
-type AdBoostRequestEmailKind = "queued" | "requested" | "promotion";
+type AdBoostRequestEmailKind =
+  | "queued"
+  | "requested"
+  | "promotion"
+  | "profile_reminder";
 
 const SENT_COLUMN: Record<AdBoostRequestEmailKind, string> = {
   queued: "queued_email_sent_at",
   requested: "requested_email_sent_at",
   promotion: "promotion_email_sent_at",
+  profile_reminder: "profile_reminder_email_sent_at",
 };
 
 const EMAIL_TYPE: Record<AdBoostRequestEmailKind, string> = {
   queued: "ad_boost_queued",
   requested: "ad_boost_requested",
   promotion: "ad_boost_ready",
+  profile_reminder: "ad_boost_profile_reminder",
 };
 
 const SUBJECT: Record<AdBoostRequestEmailKind, string> = {
   queued: "Your Ad Boost request is saved",
   requested: "Your Ad Boost request is ready for setup",
   promotion: "Your Ad Boost request is now launch-ready",
+  profile_reminder: "Finish your Ad Boost launch setup",
 };
 
 export async function sendAdBoostRequestEmail(opts: {
@@ -111,6 +119,16 @@ export async function sendAdBoostRequestEmail(opts: {
           missingSectionLabel: opts.eligibility.missingSections[0]?.label ?? null,
           needsVerification: !opts.isVerified,
         })
+      : opts.kind === "profile_reminder"
+        ? adBoostProfileReminderEmail({
+            providerName: opts.providerName,
+            ctaUrl,
+            setupWeek: opts.setupWeek,
+            completeness: opts.completeness,
+            threshold: opts.eligibility.threshold,
+            missingSectionLabel: opts.eligibility.missingSections[0]?.label ?? null,
+            needsVerification: !opts.isVerified,
+          })
       : opts.kind === "promotion"
         ? adBoostReadyEmail({
             providerName: opts.providerName,
