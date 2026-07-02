@@ -3260,6 +3260,21 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 
 ## Session Log
 
+### 2026-07-02 — Find Families / Ad Boost email lifecycle + admin visibility
+
+Built the provider-facing Find Families managed-ads email lifecycle on branch
+`codex/adboost-lead-email`: request received/queued, launch-ready promotion,
+campaign launched, campaign-attributed lead delivered, early traction, promo
+complete, and queued-profile reminder. Added migrations `126` and `127` for
+idempotent send markers; TJ ran `127` in Supabase after the reminder work.
+Added Admin → Automations visibility with an `Ad Boost emails` event monitor
+and `Ad Boost profile reminders` scheduled cron, including sample chips and
+per-email-type sent/delivered/open/click/bounce rows. Validation passed:
+`npx --no-install tsc --noEmit`, `npm run check:crons`, `git diff --check`,
+and Ad Boost sample render smoke test. Pre-test found/fixed reminder preference
+threading (`recipientProfileId`). Next: QA Vercel preview, then merge PR to
+`staging` when TJ approves.
+
 ### 2026-06-11 (PM) — seniorlistings.net cold-domain warm-up stood up; Resend rotation pool closed
 
 Built then closed the Resend sticky sender-pool rotation (#1023, `lib/email.ts` `resolveSender`, env-gated, unit-tested) after TJ reframed `seniorlistings.net` to the Smartlead cold lane (warm-only, not a Resend secondary). Then stood the domain up end-to-end (infra only, no repo code): Google Workspace + GoDaddy DNS (MX/SPF/DMARC/DKIM all authenticated) + Smartlead connect (cleared the Domain-Wide-Delegation + "app blocked"/App-Access-Trusted hurdles) + warm-up started 2026-06-11 (seasoned ~early-July). No code merged (rotation parked). Detail in Current Focus + memory `project_email_deliverability`.
