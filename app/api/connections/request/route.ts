@@ -15,6 +15,7 @@ import { generateUniqueSlugFromName } from "@/lib/slug";
 import { syncIntentToProfile, recipientMap, timelineMap, careTypeMap } from "@/lib/sync-intent-to-profile";
 import { recordProviderEvent } from "@/lib/analytics/provider-events";
 import { readManagedUtmFromRequest, managedUtmMetadata, type ManagedUtm } from "@/lib/ad-boost/managed-utm";
+import { sendAdBoostLeadDeliveredEmail } from "@/lib/ad-boost/lead-notifications.server";
 import { emailReturningUserSignInLink } from "@/lib/auth/returning-user";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -762,69 +763,86 @@ async function handleGuestConnection({
         emailSubject = "A family is looking for care";
       }
 
-      // Reserve email log ID for tracking before generating links
-      const emailLogId = await reserveEmailLogId({
-        to: providerEmail,
-        subject: emailSubject,
-        emailType: "connection_request",
-        recipientType: "provider",
-        providerId: toProfileId,
-        metadata: { connection_id: newConnection.id },
-      });
-
-      // Generate one-click claim URLs with signed tokens
       const siteUrl = getSiteUrl();
-      const slugForUrls = providerSlug || toProfileId;
-
-      let viewUrl: string;
-      let manageListingUrl: string;
-      let settingsUrl: string;
-
-      try {
-        const { generateLeadClaimUrl, generateProviderPortalUrl } = await import("@/lib/claim-tokens");
-        // Use direct claim-lead route for faster one-click access (skips onboard page)
-        viewUrl = generateLeadClaimUrl(slugForUrls, providerEmail, newConnection.id, siteUrl);
-        manageListingUrl = generateProviderPortalUrl(slugForUrls, providerEmail, "manage", siteUrl);
-        settingsUrl = generateProviderPortalUrl(slugForUrls, providerEmail, "settings", siteUrl);
-        // Append email tracking params to main CTA
-        viewUrl = appendTrackingParams(viewUrl, emailLogId);
-      } catch {
-        // Fallback: direct URLs without tokens (goes to onboard page)
-        viewUrl = appendTrackingParams(
-          `${siteUrl}/provider/${slugForUrls}/onboard?action=lead&actionId=${newConnection.id}`,
-          emailLogId
-        );
-        manageListingUrl = `${siteUrl}/provider/${slugForUrls}/onboard?action=manage`;
-        settingsUrl = `${siteUrl}/provider/${slugForUrls}/onboard?action=settings`;
-      }
 
       // Get care recipient display value
       const careRecipientDisplay = intentData?.careRecipient
         ? (careRecipientDisplayMap[intentData.careRecipient] || null)
         : null;
 
-      await sendEmail({
-        to: providerEmail,
-        subject: emailSubject,
-        html: connectionRequestEmail({
-          providerName: providerDisplayName || providerName,
-          familyName: firstName || "A family",
-          careType: careTypeDisplay,
-          city: providerCity,
-          careRecipient: careRecipientDisplay,
-          viewUrl,
-          manageListingUrl,
-          settingsUrl,
-        }),
-        emailType: 'connection_request',
-        recipientType: 'provider',
-        providerId: toProfileId,
-        emailLogId: emailLogId ?? undefined,
-        recipientProfileId: toProfileId,
+      const adBoostLeadEmail = await sendAdBoostLeadDeliveredEmail({
+        managedUtm: managedUtm || {},
+        connectionId: newConnection.id,
+        providerEmail,
+        providerName: providerDisplayName || providerName,
+        providerSlug,
+        providerProfileId: toProfileId,
+        familyName: firstName || "A family",
+        careType: careTypeDisplay,
+        city: providerCity,
+        careRecipient: careRecipientDisplay,
       });
+      const adBoostHandled =
+        adBoostLeadEmail.sent || adBoostLeadEmail.skipped === "already_sent";
+      const shouldSendGenericLeadEmail =
+        !managedUtm?.utmCampaign ||
+        adBoostLeadEmail.skipped === "not_managed" ||
+        adBoostLeadEmail.skipped === "missing_campaign" ||
+        adBoostLeadEmail.skipped === "unknown_campaign";
+
+      if (shouldSendGenericLeadEmail) {
+        const emailLogId = await reserveEmailLogId({
+          to: providerEmail,
+          subject: emailSubject,
+          emailType: "connection_request",
+          recipientType: "provider",
+          providerId: toProfileId,
+          metadata: { connection_id: newConnection.id },
+        });
+
+        const slugForUrls = providerSlug || toProfileId;
+        let viewUrl: string;
+        let manageListingUrl: string;
+        let settingsUrl: string;
+
+        try {
+          const { generateLeadClaimUrl, generateProviderPortalUrl } = await import("@/lib/claim-tokens");
+          viewUrl = generateLeadClaimUrl(slugForUrls, providerEmail, newConnection.id, siteUrl);
+          manageListingUrl = generateProviderPortalUrl(slugForUrls, providerEmail, "manage", siteUrl);
+          settingsUrl = generateProviderPortalUrl(slugForUrls, providerEmail, "settings", siteUrl);
+          viewUrl = appendTrackingParams(viewUrl, emailLogId);
+        } catch {
+          viewUrl = appendTrackingParams(
+            `${siteUrl}/provider/${slugForUrls}/onboard?action=lead&actionId=${newConnection.id}`,
+            emailLogId
+          );
+          manageListingUrl = `${siteUrl}/provider/${slugForUrls}/onboard?action=manage`;
+          settingsUrl = `${siteUrl}/provider/${slugForUrls}/onboard?action=settings`;
+        }
+
+        await sendEmail({
+          to: providerEmail,
+          subject: emailSubject,
+          html: connectionRequestEmail({
+            providerName: providerDisplayName || providerName,
+            familyName: firstName || "A family",
+            careType: careTypeDisplay,
+            city: providerCity,
+            careRecipient: careRecipientDisplay,
+            viewUrl,
+            manageListingUrl,
+            settingsUrl,
+          }),
+          emailType: 'connection_request',
+          recipientType: 'provider',
+          providerId: toProfileId,
+          emailLogId: emailLogId ?? undefined,
+          recipientProfileId: toProfileId,
+        });
+      }
 
       // Send first lead celebration email if this is the provider's first lead
-      if (isFirstLead) {
+      if (isFirstLead && !adBoostHandled) {
         const celebrationEmailLogId = await reserveEmailLogId({
           to: providerEmail,
           subject: "You got your first lead!",
@@ -1860,68 +1878,86 @@ export async function POST(request: Request) {
           emailSubject = "A family is looking for care";
         }
 
-        // Reserve email log ID for tracking before generating links
-        const emailLogId = await reserveEmailLogId({
-          to: providerEmail,
-          subject: emailSubject,
-          emailType: "connection_request",
-          recipientType: "provider",
-          providerId: toProfileId,
-          metadata: { connection_id: newConnection.id },
-        });
-
-        // Generate one-click claim URLs with signed tokens
         const siteUrl = getSiteUrl();
-        const slugForUrlsAuth = providerSlug || toProfileId;
-
-        let viewUrl: string;
-        let manageListingUrlAuth: string;
-        let settingsUrlAuth: string;
-
-        try {
-          const { generateLeadClaimUrl, generateProviderPortalUrl } = await import("@/lib/claim-tokens");
-          // Use direct claim-lead route for faster one-click access (skips onboard page)
-          viewUrl = generateLeadClaimUrl(slugForUrlsAuth, providerEmail, newConnection.id, siteUrl);
-          manageListingUrlAuth = generateProviderPortalUrl(slugForUrlsAuth, providerEmail, "manage", siteUrl);
-          settingsUrlAuth = generateProviderPortalUrl(slugForUrlsAuth, providerEmail, "settings", siteUrl);
-          viewUrl = appendTrackingParams(viewUrl, emailLogId);
-        } catch {
-          // Fallback: direct URLs without tokens (goes to onboard page)
-          viewUrl = appendTrackingParams(
-            `${siteUrl}/provider/${slugForUrlsAuth}/onboard?action=lead&actionId=${newConnection.id}`,
-            emailLogId
-          );
-          manageListingUrlAuth = `${siteUrl}/provider/${slugForUrlsAuth}/onboard?action=manage`;
-          settingsUrlAuth = `${siteUrl}/provider/${slugForUrlsAuth}/onboard?action=settings`;
-        }
 
         // Get care recipient display value
         const careRecipientDisplayAuth = careRecipient
           ? (careRecipientDisplayMapAuth[careRecipient] || null)
           : null;
 
-        await sendEmail({
-          to: providerEmail,
-          subject: emailSubject,
-          html: connectionRequestEmail({
-            providerName: providerDisplayName || providerName,
-            familyName: account.display_name || "A family",
-            careType: careTypeDisplayAuth,
-            city: providerCity,
-            careRecipient: careRecipientDisplayAuth,
-            viewUrl,
-            manageListingUrl: manageListingUrlAuth,
-            settingsUrl: settingsUrlAuth,
-          }),
-          emailType: 'connection_request',
-          recipientType: 'provider',
-          providerId: toProfileId,
-          emailLogId: emailLogId ?? undefined,
-          recipientProfileId: toProfileId,
+        const adBoostLeadEmail = await sendAdBoostLeadDeliveredEmail({
+          managedUtm,
+          connectionId: newConnection.id,
+          providerEmail,
+          providerName: providerDisplayName || providerName,
+          providerSlug,
+          providerProfileId: toProfileId,
+          familyName: account.display_name || "A family",
+          careType: careTypeDisplayAuth,
+          city: providerCity,
+          careRecipient: careRecipientDisplayAuth,
         });
+        const adBoostHandled =
+          adBoostLeadEmail.sent || adBoostLeadEmail.skipped === "already_sent";
+        const shouldSendGenericLeadEmail =
+          !managedUtm.utmCampaign ||
+          adBoostLeadEmail.skipped === "not_managed" ||
+          adBoostLeadEmail.skipped === "missing_campaign" ||
+          adBoostLeadEmail.skipped === "unknown_campaign";
+
+        if (shouldSendGenericLeadEmail) {
+          const emailLogId = await reserveEmailLogId({
+            to: providerEmail,
+            subject: emailSubject,
+            emailType: "connection_request",
+            recipientType: "provider",
+            providerId: toProfileId,
+            metadata: { connection_id: newConnection.id },
+          });
+
+          const slugForUrlsAuth = providerSlug || toProfileId;
+          let viewUrl: string;
+          let manageListingUrlAuth: string;
+          let settingsUrlAuth: string;
+
+          try {
+            const { generateLeadClaimUrl, generateProviderPortalUrl } = await import("@/lib/claim-tokens");
+            viewUrl = generateLeadClaimUrl(slugForUrlsAuth, providerEmail, newConnection.id, siteUrl);
+            manageListingUrlAuth = generateProviderPortalUrl(slugForUrlsAuth, providerEmail, "manage", siteUrl);
+            settingsUrlAuth = generateProviderPortalUrl(slugForUrlsAuth, providerEmail, "settings", siteUrl);
+            viewUrl = appendTrackingParams(viewUrl, emailLogId);
+          } catch {
+            viewUrl = appendTrackingParams(
+              `${siteUrl}/provider/${slugForUrlsAuth}/onboard?action=lead&actionId=${newConnection.id}`,
+              emailLogId
+            );
+            manageListingUrlAuth = `${siteUrl}/provider/${slugForUrlsAuth}/onboard?action=manage`;
+            settingsUrlAuth = `${siteUrl}/provider/${slugForUrlsAuth}/onboard?action=settings`;
+          }
+
+          await sendEmail({
+            to: providerEmail,
+            subject: emailSubject,
+            html: connectionRequestEmail({
+              providerName: providerDisplayName || providerName,
+              familyName: account.display_name || "A family",
+              careType: careTypeDisplayAuth,
+              city: providerCity,
+              careRecipient: careRecipientDisplayAuth,
+              viewUrl,
+              manageListingUrl: manageListingUrlAuth,
+              settingsUrl: settingsUrlAuth,
+            }),
+            emailType: 'connection_request',
+            recipientType: 'provider',
+            providerId: toProfileId,
+            emailLogId: emailLogId ?? undefined,
+            recipientProfileId: toProfileId,
+          });
+        }
 
         // Send first lead celebration email if this is the provider's first lead
-        if (isFirstLeadAuth) {
+        if (isFirstLeadAuth && !adBoostHandled) {
           const celebrationEmailLogId = await reserveEmailLogId({
             to: providerEmail,
             subject: "You got your first lead!",

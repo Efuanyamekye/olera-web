@@ -90,6 +90,10 @@ export const EMAIL_TYPE_TO_PREF_KEY: Record<string, { prefKey: string; profileTy
   provider_reach_out: { prefKey: "match_updates", profileType: "family" },
 
   // Provider/Organization notifications
+  ad_boost_lead_delivered: { prefKey: "new_leads", profileType: "organization" },
+  ad_boost_campaign_launched: { prefKey: "new_leads", profileType: "organization" },
+  ad_boost_traction: { prefKey: "new_leads", profileType: "organization" },
+  ad_boost_promo_complete: { prefKey: "new_leads", profileType: "organization" },
   connection_request: { prefKey: "new_leads", profileType: "organization" },
   new_review: { prefKey: "reviews_and_questions", profileType: "organization" },
   question_received: { prefKey: "reviews_and_questions", profileType: "organization" },

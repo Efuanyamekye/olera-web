@@ -315,6 +315,189 @@ export function adBoostReadyEmail(opts: {
   );
 }
 
+export function adBoostLeadDeliveredEmail(opts: {
+  providerName: string;
+  familyName: string;
+  careType: string | null;
+  city?: string | null;
+  careRecipient?: string | null;
+  viewUrl: string;
+}): string {
+  const safeFamilyName = firstName(opts.familyName, "");
+  const familyRef = safeFamilyName || "A family";
+  const careType = opts.careType ? opts.careType.toLowerCase() : "care";
+  const city = opts.city ? ` in ${escapeHtml(opts.city)}` : "";
+  const recipient = opts.careRecipient ? ` for ${escapeHtml(opts.careRecipient)}` : "";
+  const leadLine = `${escapeHtml(familyRef)}${city} is looking for ${escapeHtml(careType)}${recipient}.`;
+  const buttonText = safeFamilyName
+    ? `View ${escapeHtml(safeFamilyName)}'s request`
+    : "View the family's request";
+
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Find Families campaign</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">Your campaign brought in a new family</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 16px;line-height:1.65;">Good news: a family reached out through your Ad Boost campaign for ${escapeHtml(opts.providerName)}.</p>
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 20px;">
+      <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;">${leadLine}</p>
+    </div>
+    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">Open the request to see the family&rsquo;s contact details and respond from your Olera dashboard.</p>
+    <div>${button(buttonText, opts.viewUrl)}</div>
+    ${adBoostAuthorBylineBlock({ topBorder: true })}
+    <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
+      <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">This lead was attributed to your Find Families campaign. More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
+    </div>`,
+    "A new family reached out through your Find Families campaign.",
+  );
+}
+
+export function adBoostCampaignLaunchedEmail(opts: {
+  providerName: string;
+  ctaUrl: string;
+  channel?: string | null;
+}): string {
+  const channel = formatAdBoostChannel(opts.channel);
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Find Families campaign</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">Your campaign is live</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Your Find Families campaign for ${escapeHtml(opts.providerName)} is now running.</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">We&rsquo;re sending local families from ${channel} to your Olera page. When someone reaches out, they&rsquo;ll appear in your dashboard and we&rsquo;ll email you.</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 26px;line-height:1.65;">The first $50 promotional test is still on us. We&rsquo;ll keep watching the early signal and summarize what happened before you choose any monthly budget.</p>
+    <div>${button("View campaign", opts.ctaUrl)}</div>
+    ${adBoostAuthorBylineBlock({ topBorder: true })}
+    <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
+      <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
+    </div>`,
+    "Your Find Families campaign is live.",
+  );
+}
+
+export function adBoostTractionEmail(opts: {
+  providerName: string;
+  ctaUrl: string;
+  visitors: number;
+  leads: number;
+  clicks?: number | null;
+  spendCents?: number | null;
+}): string {
+  const spend = opts.spendCents != null ? `$${(opts.spendCents / 100).toFixed(2)}` : null;
+  const conversion =
+    opts.visitors > 0 ? `${Math.min(100, Math.round((opts.leads / opts.visitors) * 100))}%` : "—";
+  const costPerFamily =
+    opts.spendCents != null && opts.spendCents > 0 && opts.leads > 0
+      ? `$${(opts.spendCents / 100 / opts.leads).toFixed(0)}`
+      : "—";
+
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Campaign traction</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">Your campaign is getting activity</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">Here&rsquo;s the early signal from the Find Families campaign for ${escapeHtml(opts.providerName)}.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:10px;margin:0 0 20px;">
+      <tr>
+        <td style="padding:14px;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
+          <p style="font-size:20px;font-weight:700;color:#111827;margin:0;">${opts.visitors.toLocaleString()}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Visitors</p>
+        </td>
+        <td style="padding:14px;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
+          <p style="font-size:20px;font-weight:700;color:#111827;margin:0;">${opts.leads.toLocaleString()}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Families</p>
+        </td>
+        <td style="padding:14px;border-bottom:1px solid #e5e7eb;">
+          <p style="font-size:20px;font-weight:700;color:#111827;margin:0;">${conversion}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Conversion</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:14px;border-right:1px solid #e5e7eb;">
+          <p style="font-size:16px;font-weight:700;color:#111827;margin:0;">${opts.clicks != null ? opts.clicks.toLocaleString() : "—"}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Ad clicks</p>
+        </td>
+        <td style="padding:14px;border-right:1px solid #e5e7eb;">
+          <p style="font-size:16px;font-weight:700;color:#111827;margin:0;">${spend ?? "—"}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Ad spend</p>
+        </td>
+        <td style="padding:14px;">
+          <p style="font-size:16px;font-weight:700;color:#111827;margin:0;">${costPerFamily}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Cost / family</p>
+        </td>
+      </tr>
+    </table>
+    <p style="font-size:15px;color:#374151;margin:0 0 26px;line-height:1.65;">We&rsquo;ll keep watching the campaign and use this signal to recommend the right monthly budget after the promotional test.</p>
+    <div>${button("View performance", opts.ctaUrl)}</div>
+    ${adBoostAuthorBylineBlock({ topBorder: true })}
+    <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
+      <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
+    </div>`,
+    `${opts.visitors.toLocaleString()} visitors and ${opts.leads.toLocaleString()} families so far.`,
+  );
+}
+
+export function adBoostPromoCompleteEmail(opts: {
+  providerName: string;
+  ctaUrl: string;
+  visitors: number;
+  leads: number;
+  clicks?: number | null;
+  spendCents?: number | null;
+  intendedMonthlyBudget?: number | null;
+}): string {
+  const spend = opts.spendCents != null ? `$${(opts.spendCents / 100).toFixed(2)}` : "—";
+  const costPerFamily =
+    opts.spendCents != null && opts.spendCents > 0 && opts.leads > 0
+      ? `$${(opts.spendCents / 100 / opts.leads).toFixed(0)}`
+      : "—";
+  const budgetLine = opts.intendedMonthlyBudget
+    ? `When you&rsquo;re ready, we can use your original $${opts.intendedMonthlyBudget}/mo budget as a starting point and adjust from the results.`
+    : "When you&rsquo;re ready, we can talk through the monthly budget that makes sense from the results.";
+
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Promotional campaign complete</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">Your starter campaign is complete</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">The first promotional Find Families campaign for ${escapeHtml(opts.providerName)} has wrapped. Here&rsquo;s the result summary before you decide whether to continue.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:10px;margin:0 0 20px;">
+      <tr>
+        <td style="padding:14px;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
+          <p style="font-size:20px;font-weight:700;color:#111827;margin:0;">${opts.visitors.toLocaleString()}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Visitors</p>
+        </td>
+        <td style="padding:14px;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">
+          <p style="font-size:20px;font-weight:700;color:#111827;margin:0;">${opts.leads.toLocaleString()}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Families</p>
+        </td>
+        <td style="padding:14px;border-bottom:1px solid #e5e7eb;">
+          <p style="font-size:20px;font-weight:700;color:#111827;margin:0;">${opts.clicks != null ? opts.clicks.toLocaleString() : "—"}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Ad clicks</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:14px;border-right:1px solid #e5e7eb;">
+          <p style="font-size:16px;font-weight:700;color:#111827;margin:0;">${spend}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Ad spend</p>
+        </td>
+        <td style="padding:14px;border-right:1px solid #e5e7eb;">
+          <p style="font-size:16px;font-weight:700;color:#111827;margin:0;">${costPerFamily}</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Cost / family</p>
+        </td>
+        <td style="padding:14px;">
+          <p style="font-size:16px;font-weight:700;color:#111827;margin:0;">$50</p>
+          <p style="font-size:12px;color:#6b7280;margin:4px 0 0;">Starter promo</p>
+        </td>
+      </tr>
+    </table>
+    <p style="font-size:15px;color:#374151;margin:0 0 18px;line-height:1.65;">${budgetLine}</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 26px;line-height:1.65;">Reply to this email and we&rsquo;ll review the numbers together before anything else runs.</p>
+    <div>${button("Review results", opts.ctaUrl)}</div>
+    ${adBoostAuthorBylineBlock({ topBorder: true })}
+    <div style="margin:26px 0 0;padding:14px 0 0;border-top:1px solid #f3f4f6;">
+      <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;">More details: <a href="${BASE_URL}/managed-ads-terms" style="color:#9ca3af;text-decoration:underline;">Managed Ads terms</a></p>
+    </div>`,
+    `Your starter campaign delivered ${opts.leads.toLocaleString()} families.`,
+  );
+}
+
 /**
  * Find Families digest variant — a provider with a real published care-seeker
  * within ~50mi (the scarce, high-intent signal). Distinct from the managed-ads

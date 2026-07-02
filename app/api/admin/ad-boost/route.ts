@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { countDeliveredByCampaign, listLeadsByCampaign, getCampaignStats } from "@/lib/ad-boost/delivered.server";
+import { sendAdBoostLifecycleEmail } from "@/lib/ad-boost/lifecycle-notifications.server";
 
 /**
  * Admin concierge queue for Provider Ad Boost (managed lead-gen).
@@ -21,7 +22,7 @@ const VALID_STATUSES = ["pending_profile", "requested", "scheduled", "live", "en
 const VALID_CHANNELS = ["google", "meta", "both"];
 
 const ROW_SELECT =
-  "id, provider_id, provider_slug, display_name, requested_setup_week, completeness_at_submit, status, channel, intended_monthly_budget, campaign_tag, admin_note, created_at, updated_at, deleted_at, ad_spend_cents, ad_clicks";
+  "id, provider_id, provider_slug, display_name, requested_setup_week, completeness_at_submit, status, channel, intended_monthly_budget, campaign_tag, admin_note, created_at, updated_at, deleted_at, ad_spend_cents, ad_clicks, launched_email_sent_at, traction_email_sent_at, promo_complete_email_sent_at";
 
 export async function GET(request: NextRequest) {
   const user = await getAuthUser();
@@ -231,6 +232,19 @@ export async function POST(request: NextRequest) {
 
   const db = getServiceClient();
 
+  const { data: current, error: currentError } = await db
+    .from("ad_campaign_requests")
+    .select(ROW_SELECT)
+    .eq("id", body.id)
+    .maybeSingle();
+  if (currentError) {
+    console.error("[admin/ad-boost] current fetch failed:", currentError);
+    return NextResponse.json({ error: currentError.message }, { status: 500 });
+  }
+  if (!current) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   // When launching (status -> live) with no tag yet, default the campaign_tag to
   // the request id so attribution always has a stable, persisted key. The admin
   // page always sends campaign_tag (null when the field is empty), so we resolve
@@ -239,11 +253,6 @@ export async function POST(request: NextRequest) {
   if (update.status === "live") {
     let effectiveTag = update.campaign_tag as string | null | undefined;
     if (effectiveTag === undefined) {
-      const { data: current } = await db
-        .from("ad_campaign_requests")
-        .select("campaign_tag")
-        .eq("id", body.id)
-        .maybeSingle();
       effectiveTag = current?.campaign_tag ?? null;
     }
     if (!effectiveTag) {
@@ -261,6 +270,26 @@ export async function POST(request: NextRequest) {
   if (error || !data) {
     console.error("[admin/ad-boost] update failed:", error);
     return NextResponse.json({ error: error?.message ?? "Update failed" }, { status: 500 });
+  }
+
+  const metricsWereSaved =
+    body.ad_spend_cents !== undefined || body.ad_clicks !== undefined;
+  const lifecycleSends: Array<Promise<unknown>> = [];
+
+  if (data.status === "live" && current.status !== "live") {
+    lifecycleSends.push(sendAdBoostLifecycleEmail({ request: data, kind: "launched" }));
+  }
+
+  if (data.status === "live" && metricsWereSaved) {
+    lifecycleSends.push(sendAdBoostLifecycleEmail({ request: data, kind: "traction" }));
+  }
+
+  if (data.status === "ended" && current.status !== "ended") {
+    lifecycleSends.push(sendAdBoostLifecycleEmail({ request: data, kind: "promo_complete" }));
+  }
+
+  if (lifecycleSends.length > 0) {
+    await Promise.all(lifecycleSends);
   }
 
   return NextResponse.json({ request: data });
