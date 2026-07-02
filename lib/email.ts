@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { shouldSendNotification, isControllableNotification, getPrefKeyForEmailType } from "./notification-prefs";
 import { isUndeliverable, verifyAndCache, effectiveStatus } from "./email-verification";
 import { NUDGE_EMAIL_TYPES, NUDGE_WEEKLY_CAP, NUDGE_WINDOW_DAYS, isGovernedNudge, FAMILY_NUDGE_EMAIL_TYPES, FAMILY_NUDGE_WEEKLY_CAP, isGovernedFamilyNudge } from "./email-governance";
+import { isEmailDoNotContact } from "./do-not-contact";
 
 const FROM_ADDRESS = "Olera <noreply@olera.care>";
 
@@ -447,6 +448,18 @@ export async function sendEmail(
       PROVIDER_NOTIFY_FROM_TYPES.has(emailType) ||
       (!!process.env.PROVIDER_NOTIFY_FROM && from === process.env.PROVIDER_NOTIFY_FROM);
     let suppressReason: string | null = null;
+    // Do-Not-Contact kill switch (admin-managed, cross-channel HARD suppression).
+    // Checked FIRST and NOT overridable by the email_overrides trust allowlist
+    // below — a recipient who demanded "remove me from everything" outranks any
+    // send-anyway signal. Auth/verification mail is already excluded by the
+    // SUPPRESSION_EXEMPT_TYPES guard on this whole block. Fails open.
+    if (await isEmailDoNotContact(soleRecipient)) {
+      console.log(`[email] Suppressed ${emailType} to ${soleRecipient} — on do-not-contact list`);
+      if (existingLogId) {
+        updateEmailLog(existingLogId, { status: "failed", errorMessage: "Suppressed: do-not-contact list" });
+      }
+      return { success: true, skipped: true, skipReason: "do_not_contact", emailLogId: existingLogId ?? undefined };
+    }
     if (await isSuppressedRecipient(soleRecipient)) {
       suppressReason = "prior bounce/complaint on record";
     } else if (VERIFY_ON_SEND_TYPES.has(emailType)) {

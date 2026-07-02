@@ -1,6 +1,7 @@
 import twilio from "twilio";
 import { createClient } from "@supabase/supabase-js";
 import { shouldSendNotification } from "./notification-prefs";
+import { isPhoneDoNotContact } from "./do-not-contact";
 
 let twilioClient: twilio.Twilio | null = null;
 
@@ -90,6 +91,16 @@ export async function sendSMS(
   options: SendSMSOptions
 ): Promise<{ success: boolean; error?: string; skipped?: boolean }> {
   const { to, body, recipientProfileId, notificationType, emailType, recipientType, recipientLogProfileId, metadata } = options;
+
+  // Do-Not-Contact kill switch — cross-channel HARD suppression (admin-managed).
+  // A number here has asked to be removed from all Olera comms. Fails open.
+  if (await isPhoneDoNotContact(to)) {
+    console.log(`[sms] Skipped to ${to} - on do-not-contact list`);
+    if (emailType) {
+      await logSms({ to, body, emailType, recipientType, providerId: recipientLogProfileId, status: "failed", errorMessage: "Suppressed: do-not-contact list", metadata });
+    }
+    return { success: true, skipped: true };
+  }
 
   // Check notification preferences if profile ID and type provided
   if (recipientProfileId && notificationType) {
