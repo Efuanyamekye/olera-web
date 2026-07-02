@@ -20,6 +20,8 @@ interface Question {
   created_at: string;
   updated_at: string;
   metadata?: Record<string, unknown> | null;
+  is_account_claimed?: boolean;
+  verification_state?: string | null;
 }
 
 type TabValue = "unanswered" | "needs_email" | "answered" | "removed" | "archived" | "";
@@ -46,6 +48,77 @@ const STATUS_COLORS: Record<string, string> = {
   answered: "bg-gray-50 text-gray-500",
   rejected: "bg-gray-50 text-gray-400",
 };
+
+function ProviderStatusBadge({ question }: { question: Question }) {
+  const providerName = question.provider_name || question.provider_id;
+  const verificationLink = `/admin/verification?search=${encodeURIComponent(providerName)}`;
+
+  // Verified or not_required claimed providers: show checkmark linking to verification page
+  if (question.is_account_claimed && (question.verification_state === "verified" || question.verification_state === "not_required")) {
+    return (
+      <Link
+        href={verificationLink}
+        onClick={(e) => e.stopPropagation()}
+        className="text-emerald-600 hover:text-emerald-700 transition-colors"
+        title="Verified & Claimed — click to view"
+      >
+        <svg className="w-3.5 h-3.5 inline" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+        </svg>
+      </Link>
+    );
+  }
+
+  // Claimed but pending verification
+  if (question.is_account_claimed && question.verification_state === "pending") {
+    return (
+      <Link
+        href={verificationLink}
+        onClick={(e) => e.stopPropagation()}
+        className="px-1.5 py-0.5 text-[10px] font-medium bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors"
+        title="Click to review verification"
+      >
+        Pending
+      </Link>
+    );
+  }
+
+  // Claimed but rejected verification
+  if (question.is_account_claimed && question.verification_state === "rejected") {
+    return (
+      <Link
+        href={verificationLink}
+        onClick={(e) => e.stopPropagation()}
+        className="px-1.5 py-0.5 text-[10px] font-medium bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+        title="Verification was rejected"
+      >
+        Rejected
+      </Link>
+    );
+  }
+
+  // Not claimed
+  if (!question.is_account_claimed) {
+    return (
+      <span
+        className="px-1.5 py-0.5 text-[10px] font-medium bg-gray-100 text-gray-500 rounded"
+        title="Provider has not claimed their account"
+      >
+        Unclaimed
+      </span>
+    );
+  }
+
+  // Claimed but unverified (catch-all for any claimed provider not matching above states)
+  return (
+    <span
+      className="px-1.5 py-0.5 text-[10px] font-medium bg-blue-100 text-blue-700 rounded"
+      title="Account claimed but not yet verified"
+    >
+      Claimed
+    </span>
+  );
+}
 
 function InlineEmailInput({
   providerSlug,
@@ -549,6 +622,7 @@ export default function AdminQuestionsPage() {
                           {providerLabel}
                         </a>
                       )}
+                      <ProviderStatusBadge question={q} />
                       {needsEmail && !isRemoved && (
                         <span className="inline-flex items-center gap-1.5 font-medium text-gray-600">
                           <span className={`w-1.5 h-1.5 rounded-full ${emailIsDead ? "bg-amber-500" : "bg-gray-300"}`} />

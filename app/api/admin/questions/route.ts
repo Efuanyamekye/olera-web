@@ -204,11 +204,13 @@ export async function GET(request: NextRequest) {
       let providerNames: Record<string, string> = {};
       let providerEditorIds: Record<string, string> = {};
       let providerEmails: Record<string, string> = {};
+      let providerClaimStatus: Record<string, boolean> = {};
+      let providerVerificationState: Record<string, string> = {};
       if (slugs.length > 0) {
         // Try business_profiles first
         const { data: bpProviders } = await db
           .from("business_profiles")
-          .select("slug, display_name, source_provider_id, email")
+          .select("slug, display_name, source_provider_id, email, account_id, metadata")
           .in("slug", slugs);
         providerNames = Object.fromEntries(
           (bpProviders ?? []).map((p) => [p.slug, p.display_name])
@@ -218,6 +220,15 @@ export async function GET(request: NextRequest) {
         );
         for (const p of bpProviders ?? []) {
           if (p.slug && p.email) providerEmails[p.slug] = p.email;
+        }
+
+        // Build claim/verification status maps
+        for (const p of bpProviders ?? []) {
+          if (p.slug) {
+            providerClaimStatus[p.slug] = !!p.account_id;
+            const meta = p.metadata as Record<string, unknown> | null;
+            providerVerificationState[p.slug] = (meta?.verification_state as string) || "unverified";
+          }
         }
 
         // For slugs not found in business_profiles, try olera-providers
@@ -241,6 +252,8 @@ export async function GET(request: NextRequest) {
         provider_name: providerNames[q.provider_id] || null,
         provider_editor_id: providerEditorIds[q.provider_id] || null,
         provider_email: providerEmails[q.provider_id] || null,
+        is_account_claimed: providerClaimStatus[q.provider_id] ?? false,
+        verification_state: providerVerificationState[q.provider_id] || null,
       }));
 
       return NextResponse.json({ questions: enriched, count });
@@ -274,11 +287,13 @@ export async function GET(request: NextRequest) {
     let providerNames: Record<string, string> = {};
     let providerEditorIds: Record<string, string> = {};
     let providerEmails: Record<string, string> = {};
+    let providerClaimStatus: Record<string, boolean> = {};
+    let providerVerificationState: Record<string, string> = {};
     if (slugs.length > 0) {
       // Try business_profiles first
       const { data: bpProviders } = await db
         .from("business_profiles")
-        .select("slug, display_name, source_provider_id, email")
+        .select("slug, display_name, source_provider_id, email, account_id, metadata")
         .in("slug", slugs);
       providerNames = Object.fromEntries(
         (bpProviders ?? []).map((p) => [p.slug, p.display_name])
@@ -288,6 +303,15 @@ export async function GET(request: NextRequest) {
       );
       for (const p of bpProviders ?? []) {
         if (p.slug && p.email) providerEmails[p.slug] = p.email;
+      }
+
+      // Build claim/verification status maps
+      for (const p of bpProviders ?? []) {
+        if (p.slug) {
+          providerClaimStatus[p.slug] = !!p.account_id;
+          const meta = p.metadata as Record<string, unknown> | null;
+          providerVerificationState[p.slug] = (meta?.verification_state as string) || "unverified";
+        }
       }
 
       // For slugs not found in business_profiles, try olera-providers
@@ -351,6 +375,8 @@ export async function GET(request: NextRequest) {
       provider_name: providerNames[q.provider_id] || null,
       provider_editor_id: providerEditorIds[q.provider_id] || null,
       provider_email: providerEmails[q.provider_id] || null,
+      is_account_claimed: providerClaimStatus[q.provider_id] ?? false,
+      verification_state: providerVerificationState[q.provider_id] || null,
     }));
 
     // Fetch tab counts for pending, needs_email, and archived
