@@ -97,6 +97,7 @@ export async function GET() {
         completeness: elig.eligibility.overall,
         eligibility: elig.eligibility,
         isVerified: elig.isVerified,
+        recipientProfileId: elig.profileId,
       });
     }
   }
@@ -288,6 +289,7 @@ export async function POST(request: NextRequest) {
     completeness: elig.eligibility.overall,
     eligibility: elig.eligibility,
     isVerified: elig.isVerified,
+    recipientProfileId: elig.profileId,
   });
 
   return NextResponse.json({ ok: true, request: inserted, queued });

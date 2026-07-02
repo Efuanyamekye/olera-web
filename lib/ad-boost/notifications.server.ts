@@ -51,6 +51,7 @@ export async function sendAdBoostRequestEmail(opts: {
   completeness: number;
   eligibility: AdBoostEligibility;
   isVerified: boolean;
+  recipientProfileId?: string;
 }): Promise<{ sent: boolean; skipped?: string }> {
   const recipient = opts.providerEmail?.trim().toLowerCase();
   if (!recipient) {
@@ -152,6 +153,7 @@ export async function sendAdBoostRequestEmail(opts: {
     providerId: opts.providerSlug,
     metadata,
     emailLogId: emailLogId ?? undefined,
+    recipientProfileId: opts.recipientProfileId,
   });
 
   if (!result.success || result.skipped) {

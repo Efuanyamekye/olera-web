@@ -272,6 +272,7 @@ export async function GET(request: NextRequest) {
             completeness: eligibility.overall,
             eligibility,
             isVerified,
+            recipientProfileId: profile.id,
           });
           counts.promoted++;
           continue;
@@ -294,6 +295,7 @@ export async function GET(request: NextRequest) {
           completeness: eligibility.overall,
           eligibility,
           isVerified,
+          recipientProfileId: profile.id,
         });
 
         if (result.sent) {
