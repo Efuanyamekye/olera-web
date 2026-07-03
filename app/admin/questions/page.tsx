@@ -13,6 +13,7 @@ interface Question {
   provider_name: string | null;
   provider_editor_id: string | null;
   provider_email: string | null;
+  provider_phone: string | null;
   asker_name: string;
   asker_email: string | null;
   question: string;
@@ -241,7 +242,22 @@ function InlineEmailInput({
     }, 300);
   }, [email, verifyAndScore]);
 
+  // Cleanup debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (verifyDebounceRef.current) {
+        clearTimeout(verifyDebounceRef.current);
+      }
+    };
+  }, []);
+
   async function handleFindEmail() {
+    // Clear any pending onBlur verification to prevent race condition
+    if (verifyDebounceRef.current) {
+      clearTimeout(verifyDebounceRef.current);
+      verifyDebounceRef.current = null;
+    }
+
     setFindingEmail(true);
     setFindError(null);
     setEmailSource(null);
@@ -913,6 +929,12 @@ export default function AdminQuestionsPage() {
                           </div>
                         ) : (
                           <span className="text-gray-400 text-xs">No email on file</span>
+                        )}
+                        {/* Phone */}
+                        {firstQ.provider_phone && (
+                          <a href={`tel:${firstQ.provider_phone}`} className="block text-blue-600 hover:underline">
+                            {firstQ.provider_phone}
+                          </a>
                         )}
                       </div>
                     </div>

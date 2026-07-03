@@ -204,13 +204,14 @@ export async function GET(request: NextRequest) {
       let providerNames: Record<string, string> = {};
       let providerEditorIds: Record<string, string> = {};
       let providerEmails: Record<string, string> = {};
+      let providerPhones: Record<string, string> = {};
       let providerClaimStatus: Record<string, boolean> = {};
       let providerVerificationState: Record<string, string> = {};
       if (slugs.length > 0) {
         // Try business_profiles first
         const { data: bpProviders } = await db
           .from("business_profiles")
-          .select("slug, display_name, source_provider_id, email, account_id, metadata")
+          .select("slug, display_name, source_provider_id, email, phone, account_id, metadata")
           .in("slug", slugs);
         providerNames = Object.fromEntries(
           (bpProviders ?? []).map((p) => [p.slug, p.display_name])
@@ -220,6 +221,7 @@ export async function GET(request: NextRequest) {
         );
         for (const p of bpProviders ?? []) {
           if (p.slug && p.email) providerEmails[p.slug] = p.email;
+          if (p.slug && p.phone) providerPhones[p.slug] = p.phone;
         }
 
         // Build claim/verification status maps
@@ -236,13 +238,14 @@ export async function GET(request: NextRequest) {
         if (missingSlugs.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
-            .select("slug, provider_id, provider_name, email")
+            .select("slug, provider_id, provider_name, email, phone")
             .in("slug", missingSlugs)
             .not("deleted", "is", true);
           for (const p of iosProviders ?? []) {
             if (p.slug && p.provider_name) providerNames[p.slug] = p.provider_name;
             if (p.slug && p.provider_id) providerEditorIds[p.slug] = p.provider_id;
             if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
+            if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
           }
         }
       }
@@ -252,6 +255,7 @@ export async function GET(request: NextRequest) {
         provider_name: providerNames[q.provider_id] || null,
         provider_editor_id: providerEditorIds[q.provider_id] || null,
         provider_email: providerEmails[q.provider_id] || null,
+        provider_phone: providerPhones[q.provider_id] || null,
         is_account_claimed: providerClaimStatus[q.provider_id] ?? false,
         verification_state: providerVerificationState[q.provider_id] || null,
       }));
@@ -287,13 +291,14 @@ export async function GET(request: NextRequest) {
     let providerNames: Record<string, string> = {};
     let providerEditorIds: Record<string, string> = {};
     let providerEmails: Record<string, string> = {};
+    let providerPhones: Record<string, string> = {};
     let providerClaimStatus: Record<string, boolean> = {};
     let providerVerificationState: Record<string, string> = {};
     if (slugs.length > 0) {
       // Try business_profiles first
       const { data: bpProviders } = await db
         .from("business_profiles")
-        .select("slug, display_name, source_provider_id, email, account_id, metadata")
+        .select("slug, display_name, source_provider_id, email, phone, account_id, metadata")
         .in("slug", slugs);
       providerNames = Object.fromEntries(
         (bpProviders ?? []).map((p) => [p.slug, p.display_name])
@@ -303,6 +308,7 @@ export async function GET(request: NextRequest) {
       );
       for (const p of bpProviders ?? []) {
         if (p.slug && p.email) providerEmails[p.slug] = p.email;
+        if (p.slug && p.phone) providerPhones[p.slug] = p.phone;
       }
 
       // Build claim/verification status maps
@@ -319,13 +325,14 @@ export async function GET(request: NextRequest) {
       if (missingSlugs.length > 0) {
         const { data: iosProviders } = await db
           .from("olera-providers")
-          .select("slug, provider_id, provider_name, email")
+          .select("slug, provider_id, provider_name, email, phone")
           .in("slug", missingSlugs)
           .not("deleted", "is", true);
         for (const p of iosProviders ?? []) {
           if (p.slug && p.provider_name) providerNames[p.slug] = p.provider_name;
           if (p.slug && p.provider_id) providerEditorIds[p.slug] = p.provider_id;
           if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
+          if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
         }
 
         // Also try by provider_id for legacy slugs
@@ -375,6 +382,7 @@ export async function GET(request: NextRequest) {
       provider_name: providerNames[q.provider_id] || null,
       provider_editor_id: providerEditorIds[q.provider_id] || null,
       provider_email: providerEmails[q.provider_id] || null,
+      provider_phone: providerPhones[q.provider_id] || null,
       is_account_claimed: providerClaimStatus[q.provider_id] ?? false,
       verification_state: providerVerificationState[q.provider_id] || null,
     }));
