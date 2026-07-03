@@ -656,6 +656,15 @@ export default function AdminQuestionsPage() {
                     )}
                   </div>
 
+                  {/* Latest question date */}
+                  <span className="text-xs text-gray-400 flex-shrink-0">
+                    {formatDate(
+                      providerQuestions.reduce((latest, q) =>
+                        q.created_at > latest ? q.created_at : latest,
+                        providerQuestions[0].created_at
+                      )
+                    )}
+                  </span>
                 </button>
 
                 {/* Expanded content */}
