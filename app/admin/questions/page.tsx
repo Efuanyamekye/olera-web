@@ -141,6 +141,44 @@ function InlineEmailInput({
   const [forceKind, setForceKind] = useState<"undeliverable" | "risky" | null>(null);
   const hasExistingEmail = !!existingEmail && !emailIsDead;
 
+  // Email finding state
+  const [findingEmail, setFindingEmail] = useState(false);
+  const [emailSource, setEmailSource] = useState<"scrape" | "perplexity" | null>(null);
+  const [foundUrl, setFoundUrl] = useState<string | null>(null);
+  const [findError, setFindError] = useState<string | null>(null);
+
+  async function handleFindEmail() {
+    setFindingEmail(true);
+    setFindError(null);
+    setEmailSource(null);
+    setFoundUrl(null);
+
+    try {
+      const res = await fetch("/api/admin/connections/find-provider-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ providerId: providerSlug }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.email) {
+          setEmail(data.email);
+          setEmailSource(data.source || null);
+          setFoundUrl(data.foundUrl || null);
+        } else {
+          setFindError("No email found");
+        }
+      } else {
+        setFindError("Search failed");
+      }
+    } catch {
+      setFindError("Network error");
+    } finally {
+      setFindingEmail(false);
+    }
+  }
+
   async function submit(force: boolean) {
     if (!email.trim() || !providerSlug) return;
 
@@ -197,32 +235,65 @@ function InlineEmailInput({
       <div className="flex items-center gap-2">
         <input
           type="email"
-          placeholder="provider@email.com"
+          placeholder={findingEmail ? "Searching..." : "provider@email.com"}
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-64 px-3.5 py-2 text-sm bg-white border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:border-gray-900 focus:ring-4 focus:ring-gray-900/5 placeholder:text-gray-300 transition"
-          disabled={saving}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            // Clear find results when manually editing
+            if (emailSource || findError) {
+              setEmailSource(null);
+              setFoundUrl(null);
+              setFindError(null);
+            }
+          }}
+          className="flex-1 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-900/5 placeholder:text-gray-300 transition"
+          disabled={saving || findingEmail}
           required
           autoComplete="off"
         />
         <button
-          type="submit"
-          disabled={saving || !email.trim()}
-          className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium bg-gray-900 text-white hover:bg-gray-800 active:scale-[0.98] transition disabled:opacity-40 disabled:active:scale-100"
+          type="button"
+          onClick={handleFindEmail}
+          disabled={saving || findingEmail}
+          className="shrink-0 px-3 py-1.5 text-xs font-medium text-teal-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition"
         >
-          {saving ? (
-            "Checking…"
-          ) : (
+          {findingEmail ? "..." : "✦ Find"}
+        </button>
+        <button
+          type="submit"
+          disabled={saving || findingEmail || !email.trim()}
+          className="shrink-0 px-4 py-1.5 text-sm font-medium rounded-lg text-white bg-teal-600 hover:bg-teal-700 disabled:opacity-50 transition"
+        >
+          {saving ? "..." : hasExistingEmail ? "Send" : "Add & send"}
+        </button>
+      </div>
+
+      {/* Source info */}
+      {emailSource && (
+        <p className="text-xs text-gray-500">
+          Found via {emailSource === "scrape" ? "web scraping" : "AI analysis"}
+          {foundUrl && (
             <>
-              {hasExistingEmail ? "Send" : "Add & send"}
-              <span aria-hidden className="text-white/50">→</span>
+              {" · "}
+              <a
+                href={foundUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                View source
+              </a>
             </>
           )}
-        </button>
-        {hasExistingEmail && !error && !saving && email === existingEmail && (
-          <span className="text-xs text-gray-400">on file</span>
-        )}
-      </div>
+        </p>
+      )}
+
+      {/* Find error */}
+      {findError && (
+        <p className="text-xs text-amber-600">{findError}</p>
+      )}
+
+      {/* Submit error */}
       {error && (
         <p className="text-xs text-gray-500">
           {error}
@@ -711,23 +782,12 @@ export default function AdminQuestionsPage() {
                                 {firstQ.provider_email} — delivery failed
                               </p>
                             )}
-                            <div className="flex items-center gap-2">
-                              <InlineEmailInput
-                                providerSlug={providerId}
-                                existingEmail={firstQ.provider_email}
-                                emailIsDead={emailIsDead}
-                                onEmailAdded={fetchQuestions}
-                              />
-                              <a
-                                href={`https://www.google.com/search?q=${encodeURIComponent(`${providerLabel} contact email`)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
-                                title="Search for email"
-                              >
-                                Find →
-                              </a>
-                            </div>
+                            <InlineEmailInput
+                              providerSlug={providerId}
+                              existingEmail={firstQ.provider_email}
+                              emailIsDead={emailIsDead}
+                              onEmailAdded={fetchQuestions}
+                            />
                           </div>
                         ) : (
                           <span className="text-gray-400 text-xs">No email on file</span>
