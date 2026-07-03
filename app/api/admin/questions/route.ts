@@ -261,6 +261,7 @@ export async function GET(request: NextRequest) {
     }
 
     // For delivery_issues, show questions where email was on file but delivery failed
+    // Exclude answered questions since they're resolved (provider responded somehow)
     if (deliveryIssues) {
       let deliveryIssuesQuery = db
         .from("provider_questions")
@@ -268,6 +269,7 @@ export async function GET(request: NextRequest) {
         .contains("metadata", { email_dead: true })
         .neq("status", "archived")
         .neq("status", "rejected")
+        .neq("status", "answered")
         .order("created_at", { ascending: false })
         .limit(10000);
 
@@ -664,7 +666,7 @@ export async function GET(request: NextRequest) {
     const [pendingQuestions, needsEmailCount, deliveryIssuesCount, notInterestedCount, archivedCount] = await Promise.all([
       db.from("provider_questions").select("id, metadata").eq("status", "pending"),
       db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { needs_provider_email: true }).neq("status", "archived").neq("status", "rejected"),
-      db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { email_dead: true }).neq("status", "archived").neq("status", "rejected"),
+      db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { email_dead: true }).neq("status", "archived").neq("status", "rejected").neq("status", "answered"),
       db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { provider_not_interested: true }).neq("status", "archived").neq("status", "rejected"),
       db.from("provider_questions").select("*", { count: "exact", head: true }).eq("status", "archived"),
     ]);

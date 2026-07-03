@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
         query = query.neq("status", "archived").neq("status", "rejected");
       } else if (tab === "delivery_issues") {
         query = query.contains("metadata", { email_dead: true });
-        query = query.neq("status", "archived").neq("status", "rejected");
+        query = query.neq("status", "archived").neq("status", "rejected").neq("status", "answered");
       } else if (tab === "not_interested") {
         query = query.contains("metadata", { provider_not_interested: true });
         query = query.neq("status", "archived").neq("status", "rejected");
@@ -129,7 +129,17 @@ export async function GET(request: NextRequest) {
       hasMore = rows.length === PAGE_SIZE;
     }
 
-    const questionRows = allQuestions;
+    // For unanswered tab, filter out questions that belong in other tabs
+    // (same logic as the main API)
+    let questionRows = allQuestions;
+    if (tab === "unanswered") {
+      questionRows = allQuestions.filter((q) => {
+        const meta = q.metadata as Record<string, unknown> | null;
+        if (meta?.email_dead === true) return false;
+        if (meta?.provider_not_interested === true) return false;
+        return true;
+      });
+    }
 
     // Collect unique provider slugs
     const slugs = [...new Set(questionRows.map((q) => q.provider_id).filter(Boolean))];
