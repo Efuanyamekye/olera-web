@@ -224,6 +224,37 @@ export async function POST(request: NextRequest) {
       leadsUnsubscribed: !!profileMeta.leads_unsubscribed,
     });
 
+    // Clear email_dead and needs_provider_email flags from questions for this provider.
+    // These flags were set when the previous email bounced or was missing — now that
+    // we have a working email, clear them so the questions leave the "Delivery Issues"
+    // and "Needs Email" tabs.
+    const allSlugVariants = [providerSlug, ...additionalSlugVariants];
+    const { data: flaggedQuestions } = await db
+      .from("provider_questions")
+      .select("id, metadata")
+      .in("provider_id", allSlugVariants);
+
+    let questionFlagsCleared = 0;
+    if (flaggedQuestions?.length) {
+      for (const q of flaggedQuestions) {
+        const meta = (q.metadata || {}) as Record<string, unknown>;
+        if (meta.email_dead || meta.needs_provider_email) {
+          delete meta.email_dead;
+          delete meta.needs_provider_email;
+          const { error: updateErr } = await db
+            .from("provider_questions")
+            .update({ metadata: meta })
+            .eq("id", q.id);
+          if (!updateErr) {
+            questionFlagsCleared++;
+          }
+        }
+      }
+      if (questionFlagsCleared > 0) {
+        console.log(`[add-email] Cleared email_dead/needs_provider_email flags from ${questionFlagsCleared} question(s) for ${providerSlug}`);
+      }
+    }
+
     await logAuditAction({
       adminUserId: adminUser.id,
       action: "add_provider_email_via_questions",
@@ -237,6 +268,7 @@ export async function POST(request: NextRequest) {
         question_emails_sent: result.questionEmailsSent,
         lead_emails_sent: result.leadEmailsSent,
         leads_skipped: result.leadsSkipped,
+        question_flags_cleared: questionFlagsCleared,
       },
     });
 

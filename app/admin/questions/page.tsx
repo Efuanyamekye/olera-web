@@ -495,6 +495,7 @@ export default function AdminQuestionsPage() {
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const toastRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [expandedProviders, setExpandedProviders] = useState<Set<string>>(new Set());
+  const [editingEmailProviders, setEditingEmailProviders] = useState<Set<string>>(new Set());
 
   function showToast(message: string, type: "success" | "error" = "success") {
     if (toastRef.current) clearTimeout(toastRef.current);
@@ -921,18 +922,67 @@ export default function AdminQuestionsPage() {
 
                       {/* Contact info */}
                       <div className="mt-1.5 space-y-1 text-sm">
-                        {/* Email - show link if exists and not dead, otherwise show input */}
+                        {/* Email handling:
+                            1. Has email, not dead → show email link
+                            2. Has email, dead (delivery issues) → show failed email + Edit button, form on edit
+                            3. No email (needs email) → show form with auto-search
+                        */}
                         {firstQ.provider_email && !emailIsDead ? (
+                          // Case 1: Has working email
                           <a href={`mailto:${firstQ.provider_email}`} className="block text-blue-600 hover:underline truncate">
                             {firstQ.provider_email}
                           </a>
-                        ) : groupNeedsEmail ? (
-                          <div className="pt-1">
-                            {emailIsDead && firstQ.provider_email && (
+                        ) : emailIsDead && firstQ.provider_email ? (
+                          // Case 2: Delivery issues - has email but it failed
+                          editingEmailProviders.has(providerId) ? (
+                            // Editing mode - show form WITHOUT auto-search
+                            <div className="pt-1">
                               <p className="text-xs text-red-500 mb-1.5">
                                 {firstQ.provider_email} — delivery failed
                               </p>
-                            )}
+                              <InlineEmailInput
+                                providerSlug={providerId}
+                                existingEmail={firstQ.provider_email}
+                                emailIsDead={emailIsDead}
+                                onEmailAdded={() => {
+                                  setEditingEmailProviders((prev) => {
+                                    const next = new Set(prev);
+                                    next.delete(providerId);
+                                    return next;
+                                  });
+                                  fetchQuestions();
+                                }}
+                                autoSearch={false}
+                              />
+                              <button
+                                onClick={() => setEditingEmailProviders((prev) => {
+                                  const next = new Set(prev);
+                                  next.delete(providerId);
+                                  return next;
+                                })}
+                                className="mt-2 text-xs text-gray-500 hover:text-gray-700"
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          ) : (
+                            // Not editing - show failed email + Edit button
+                            <div className="pt-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-red-500 line-through">{firstQ.provider_email}</span>
+                                <span className="text-xs text-red-500">— delivery failed</span>
+                              </div>
+                              <button
+                                onClick={() => setEditingEmailProviders((prev) => new Set(prev).add(providerId))}
+                                className="mt-1.5 text-xs text-blue-600 hover:text-blue-700 hover:underline"
+                              >
+                                Edit email
+                              </button>
+                            </div>
+                          )
+                        ) : groupNeedsEmail ? (
+                          // Case 3: No email - show form with auto-search
+                          <div className="pt-1">
                             <InlineEmailInput
                               providerSlug={providerId}
                               existingEmail={firstQ.provider_email}

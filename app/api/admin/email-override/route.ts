@@ -126,6 +126,7 @@ async function handle(params: {
   let questionEmailsSent = 0;
   let leadEmailsSent = 0;
   let questionsRemaining = 0;
+  let questionFlagsCleared = 0;
   if (providerSlug && (provider || iosProvider)) {
     const iosProviderId = provider?.source_provider_id || iosProvider?.provider_id;
     const variantSet = new Set<string>();
@@ -146,6 +147,36 @@ async function handle(params: {
     questionEmailsSent = result.questionEmailsSent;
     leadEmailsSent = result.leadEmailsSent;
 
+    // Clear email_dead and needs_provider_email flags from questions for this provider.
+    // These flags were set when the previous email bounced or was missing — now that
+    // we have a working email, clear them so the questions leave the "Delivery Issues"
+    // and "Needs Email" tabs.
+    const allSlugVariants = [providerSlug, ...Array.from(variantSet)];
+    const { data: flaggedQuestions } = await db
+      .from("provider_questions")
+      .select("id, metadata")
+      .in("provider_id", allSlugVariants);
+
+    if (flaggedQuestions?.length) {
+      for (const q of flaggedQuestions) {
+        const qMeta = (q.metadata || {}) as Record<string, unknown>;
+        if (qMeta.email_dead || qMeta.needs_provider_email) {
+          delete qMeta.email_dead;
+          delete qMeta.needs_provider_email;
+          const { error: updateErr } = await db
+            .from("provider_questions")
+            .update({ metadata: qMeta })
+            .eq("id", q.id);
+          if (!updateErr) {
+            questionFlagsCleared++;
+          }
+        }
+      }
+      if (questionFlagsCleared > 0) {
+        console.log(`[email-override] Cleared email_dead/needs_provider_email flags from ${questionFlagsCleared} question(s) for ${providerSlug}`);
+      }
+    }
+
     // How many questions are still waiting (so the operator knows whether to
     // run it again). Counts pending questions across all variants that haven't
     // been emailed yet.
@@ -165,14 +196,14 @@ async function handle(params: {
     action: "email_override_trust",
     targetType: provider ? "business_profile" : iosProvider ? "olera_provider" : "email",
     targetId: provider?.id || iosProvider?.provider_id || email,
-    details: { email, reason, note, provider_slug: providerSlug ?? null, questionEmailsSent, leadEmailsSent, questionsRemaining },
+    details: { email, reason, note, provider_slug: providerSlug ?? null, questionEmailsSent, leadEmailsSent, questionsRemaining, questionFlagsCleared },
   });
 
   return NextResponse.json({
     success: true,
     email,
     reason,
-    flushed: { questionEmailsSent, leadEmailsSent, questionsRemaining },
+    flushed: { questionEmailsSent, leadEmailsSent, questionsRemaining, questionFlagsCleared },
     message: providerSlug
       ? `Trusted ${email} and sent ${questionEmailsSent} question + ${leadEmailsSent} lead notification(s).` +
         (questionsRemaining > 0

@@ -501,6 +501,37 @@ export async function POST(
         leadsUnsubscribed,
       });
 
+      // Also clear email_dead and needs_provider_email flags from questions for this provider.
+      // These flags were set when the previous email bounced or was missing — now that
+      // we have a working email, clear them so the questions leave the "Delivery Issues"
+      // and "Needs Email" tabs.
+      const allSlugVariants = [providerSlug, ...additionalSlugVariants];
+      const { data: flaggedQuestions } = await db
+        .from("provider_questions")
+        .select("id, metadata")
+        .in("provider_id", allSlugVariants);
+
+      let questionFlagsCleared = 0;
+      if (flaggedQuestions?.length) {
+        for (const q of flaggedQuestions) {
+          const qMeta = (q.metadata || {}) as Record<string, unknown>;
+          if (qMeta.email_dead || qMeta.needs_provider_email) {
+            delete qMeta.email_dead;
+            delete qMeta.needs_provider_email;
+            const { error: updateErr } = await db
+              .from("provider_questions")
+              .update({ metadata: qMeta })
+              .eq("id", q.id);
+            if (!updateErr) {
+              questionFlagsCleared++;
+            }
+          }
+        }
+        if (questionFlagsCleared > 0) {
+          console.log(`[edit-email] Cleared email_dead/needs_provider_email flags from ${questionFlagsCleared} question(s) for ${providerSlug}`);
+        }
+      }
+
       console.log(
         `[edit-email] Deferred notifications sent: ${deferredResult.leadEmailsSent} leads, ` +
         `${deferredResult.questionEmailsSent} questions, ${deferredResult.leadsSkipped} skipped`
