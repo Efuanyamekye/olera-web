@@ -134,6 +134,20 @@ export async function POST(request: NextRequest) {
       .maybeSingle();
     const providerQuestionsArchived = !!qSuppression;
 
+    // Check if provider is marked "not interested" (soft reject from admin).
+    // If any existing question for this provider has the flag, mark this one too.
+    // The question still enters the queue but goes to "Not Interested" tab.
+    let providerNotInterested = false;
+    if (!providerQuestionsArchived) {
+      const { data: existingMarked } = await db
+        .from("provider_questions")
+        .select("id")
+        .eq("provider_id", provider_id)
+        .contains("metadata", { provider_not_interested: true })
+        .limit(1);
+      providerNotInterested = (existingMarked?.length ?? 0) > 0;
+    }
+
     const { data: newQuestion, error } = await db
       .from("provider_questions")
       .insert({
@@ -144,6 +158,7 @@ export async function POST(request: NextRequest) {
         asker_user_id: askerUserId,
         status: providerQuestionsArchived ? "archived" : "pending",
         is_public: !providerQuestionsArchived,
+        metadata: providerNotInterested ? { provider_not_interested: true } : null,
       })
       .select("id, question, asker_name, status, created_at")
       .single();

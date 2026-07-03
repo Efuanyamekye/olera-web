@@ -98,12 +98,13 @@ export async function GET(request: NextRequest) {
       } else if (tab === "delivery_issues") {
         query = query.contains("metadata", { email_dead: true });
         query = query.neq("status", "archived").neq("status", "rejected");
+      } else if (tab === "not_interested") {
+        query = query.contains("metadata", { provider_not_interested: true });
+        query = query.neq("status", "archived").neq("status", "rejected");
       } else if (tab === "unanswered") {
         query = query.eq("status", "pending");
       } else if (tab === "answered") {
         query = query.eq("status", "answered");
-      } else if (tab === "removed") {
-        query = query.eq("status", "rejected");
       } else if (tab === "archived") {
         query = query.eq("status", "archived");
       }

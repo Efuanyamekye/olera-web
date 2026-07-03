@@ -27,14 +27,14 @@ interface Question {
   verification_state?: string | null;
 }
 
-type TabValue = "unanswered" | "needs_email" | "delivery_issues" | "answered" | "removed" | "archived" | "";
+type TabValue = "unanswered" | "needs_email" | "delivery_issues" | "not_interested" | "answered" | "archived" | "";
 
 const TABS: { label: string; value: TabValue; showCount?: boolean }[] = [
   { label: "Needs Email", value: "needs_email", showCount: true },
   { label: "Delivery Issues", value: "delivery_issues", showCount: true },
   { label: "Unanswered", value: "unanswered", showCount: true },
   { label: "Answered", value: "answered" },
-  { label: "Removed", value: "removed" },
+  { label: "Not Interested", value: "not_interested", showCount: true },
   { label: "Archived", value: "archived", showCount: true },
   { label: "All", value: "" },
 ];
@@ -43,7 +43,6 @@ const STATUS_LABELS: Record<string, string> = {
   pending: "Live",
   approved: "Live",
   answered: "Answered",
-  rejected: "Removed",
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -481,13 +480,16 @@ export default function AdminQuestionsPage() {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [range, setRange] = useState<DateRangeValue>({ preset: "30d", customFrom: "", customTo: "" });
-  const [tabCounts, setTabCounts] = useState<{ pending: number; needs_email: number; delivery_issues: number; archived: number }>({ pending: 0, needs_email: 0, delivery_issues: 0, archived: 0 });
+  const [tabCounts, setTabCounts] = useState<{ pending: number; needs_email: number; delivery_issues: number; not_interested: number; archived: number }>({ pending: 0, needs_email: 0, delivery_issues: 0, not_interested: 0, archived: 0 });
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [archiveTarget, setArchiveTarget] = useState<string | null>(null);
   const [archiveReason, setArchiveReason] = useState("");
   const [archiveProviderTarget, setArchiveProviderTarget] = useState<{ providerId: string; providerName: string } | null>(null);
   const [archiveProviderReason, setArchiveProviderReason] = useState("");
+  const [notInterestedTarget, setNotInterestedTarget] = useState<{ providerId: string; providerName: string; isMarked: boolean } | null>(null);
+  const [notInterestedReason, setNotInterestedReason] = useState("");
+  const [notInterestedNotes, setNotInterestedNotes] = useState("");
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -510,9 +512,9 @@ export default function AdminQuestionsPage() {
       // Map tab value for export
       if (activeTab === "needs_email") params.set("tab", "needs_email");
       else if (activeTab === "delivery_issues") params.set("tab", "delivery_issues");
+      else if (activeTab === "not_interested") params.set("tab", "not_interested");
       else if (activeTab === "unanswered") params.set("tab", "unanswered");
       else if (activeTab === "answered") params.set("tab", "answered");
-      else if (activeTab === "removed") params.set("tab", "removed");
       else if (activeTab === "archived") params.set("tab", "archived");
       else params.set("tab", "all");
 
@@ -557,10 +559,10 @@ export default function AdminQuestionsPage() {
         params.set("needs_email", "true");
       } else if (activeTab === "delivery_issues") {
         params.set("delivery_issues", "true");
+      } else if (activeTab === "not_interested") {
+        params.set("not_interested", "true");
       } else if (activeTab === "unanswered") {
         params.set("status", "pending");
-      } else if (activeTab === "removed") {
-        params.set("status", "rejected");
       } else if (activeTab === "archived") {
         params.set("status", "archived");
       } else if (activeTab) {
@@ -689,6 +691,30 @@ export default function AdminQuestionsPage() {
     }
   };
 
+  // Mark provider as not interested (soft reject) - questions stay visible but
+  // no emails are sent. Reversible.
+  const handleMarkNotInterested = async (providerId: string, reason: string, notes: string, unmark: boolean) => {
+    setActionLoading(`notinterested:${providerId}`);
+    try {
+      const res = await fetch("/api/admin/questions/mark-not-interested", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ providerId, reason: reason || null, notes: notes || null, unmark }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed");
+      setNotInterestedTarget(null);
+      setNotInterestedReason("");
+      setNotInterestedNotes("");
+      showToast(data.message || (unmark ? "Provider unmarked" : "Provider marked as not interested"));
+      await fetchQuestions();
+    } catch {
+      showToast(unmark ? "Failed to unmark provider" : "Failed to mark provider", "error");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   return (
     <div>
       <PulseHeader
@@ -764,6 +790,7 @@ export default function AdminQuestionsPage() {
           const tabCount = tab.value === "unanswered" ? tabCounts.pending
             : tab.value === "needs_email" ? tabCounts.needs_email
             : tab.value === "delivery_issues" ? tabCounts.delivery_issues
+            : tab.value === "not_interested" ? tabCounts.not_interested
             : tab.value === "archived" ? tabCounts.archived
             : null;
 
@@ -813,9 +840,18 @@ export default function AdminQuestionsPage() {
               </div>
               <p className="text-sm text-gray-400">No delivery issues</p>
             </div>
+          ) : activeTab === "not_interested" ? (
+            <div className="space-y-3">
+              <div className="w-10 h-10 mx-auto rounded-full bg-gray-50 flex items-center justify-center">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-sm text-gray-400">No providers marked as not interested</p>
+            </div>
           ) : (
             <p className="text-sm text-gray-400">
-              No {activeTab === "unanswered" ? "unanswered" : activeTab === "removed" ? "removed" : activeTab || ""} questions
+              No {activeTab === "unanswered" ? "unanswered" : activeTab || ""} questions
             </p>
           )}
         </div>
@@ -835,6 +871,7 @@ export default function AdminQuestionsPage() {
               (q) => q.metadata?.needs_provider_email === true
             );
             const emailIsDead = activeQuestions.some((q) => q.metadata?.email_dead === true);
+            const isProviderNotInterested = providerQuestions.some((q) => q.metadata?.provider_not_interested === true);
 
             return (
               <div key={providerId} className="border border-gray-100 rounded-xl overflow-hidden">
@@ -876,6 +913,13 @@ export default function AdminQuestionsPage() {
                           No email
                         </span>
                       )
+                    )}
+
+                    {/* Not Interested badge */}
+                    {isProviderNotInterested && (
+                      <span className="px-1.5 py-0.5 text-xs font-medium bg-orange-50 text-orange-600 rounded flex-shrink-0">
+                        Not Interested
+                      </span>
                     )}
                   </div>
 
@@ -1015,6 +1059,21 @@ export default function AdminQuestionsPage() {
                       >
                         Archive Provider
                       </button>
+                      <button
+                        onClick={() => {
+                          setNotInterestedTarget({ providerId, providerName: providerLabel, isMarked: isProviderNotInterested });
+                          setNotInterestedReason("");
+                          setNotInterestedNotes("");
+                        }}
+                        disabled={actionLoading === `notinterested:${providerId}`}
+                        className={`px-3 py-1.5 text-xs font-medium border rounded-lg transition disabled:opacity-50 ${
+                          isProviderNotInterested
+                            ? "text-green-600 hover:text-green-700 border-green-200 hover:bg-green-50"
+                            : "text-gray-600 hover:text-orange-700 border-gray-200 hover:bg-white"
+                        }`}
+                      >
+                        {isProviderNotInterested ? "Unmark Not Interested" : "Mark Not Interested"}
+                      </button>
                     </div>
 
                     {/* Individual questions */}
@@ -1109,7 +1168,7 @@ export default function AdminQuestionsPage() {
           <p className="text-sm text-gray-500">
             {(() => {
               const providerCount = groupQuestionsByProvider(questions).size;
-              const label = activeTab === "needs_email" ? "needing email" : activeTab === "delivery_issues" ? "with delivery issues" : activeTab === "unanswered" ? "unanswered" : activeTab === "removed" ? "removed" : activeTab === "archived" ? "archived" : "total";
+              const label = activeTab === "needs_email" ? "needing email" : activeTab === "delivery_issues" ? "with delivery issues" : activeTab === "not_interested" ? "not interested" : activeTab === "unanswered" ? "unanswered" : activeTab === "archived" ? "archived" : "total";
               if (count <= PAGE_SIZE) {
                 return `${providerCount} ${providerCount === 1 ? "provider" : "providers"}, ${count} questions ${label}`;
               }
@@ -1208,6 +1267,87 @@ export default function AdminQuestionsPage() {
                 className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50"
               >
                 {actionLoading === `provider:${archiveProviderTarget.providerId}` ? "Archiving..." : "Archive provider"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mark Not Interested dialog */}
+      {notInterestedTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <h3 className="text-lg font-semibold text-gray-900">
+              {notInterestedTarget.isMarked ? "Unmark Not Interested" : "Mark Not Interested"}
+            </h3>
+            {notInterestedTarget.isMarked ? (
+              <p className="mt-2 text-sm text-gray-600">
+                Unmark <span className="font-medium text-gray-900">{notInterestedTarget.providerName}</span> as
+                not interested. Their questions will return to the normal queue and emails will resume.
+              </p>
+            ) : (
+              <>
+                <p className="mt-2 text-sm text-gray-600">
+                  Mark <span className="font-medium text-gray-900">{notInterestedTarget.providerName}</span> as
+                  not interested. Questions will move to the Not Interested tab and no emails will be sent.
+                  This is reversible — you can unmark them later.
+                </p>
+                <div className="mt-3">
+                  <label className="block text-xs font-medium text-gray-700 mb-1.5">Why is provider not interested?</label>
+                  <select
+                    value={notInterestedReason}
+                    onChange={(e) => setNotInterestedReason(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
+                  >
+                    <option value="">Select a reason...</option>
+                    <option value="Provider declined via phone">Provider declined via phone</option>
+                    <option value="Provider requested no questions">Provider requested no questions</option>
+                    <option value="Not accepting new clients">Not accepting new clients</option>
+                    <option value="Not a good fit">Not a good fit</option>
+                    <option value="Duplicate/spam questions">Duplicate/spam questions</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {notInterestedReason === "Other" && (
+                  <textarea
+                    value={notInterestedNotes}
+                    onChange={(e) => setNotInterestedNotes(e.target.value)}
+                    placeholder="Please provide details..."
+                    className="w-full mt-3 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none resize-none"
+                    rows={3}
+                  />
+                )}
+              </>
+            )}
+            <div className="mt-4 flex justify-end gap-3">
+              <button
+                onClick={() => { setNotInterestedTarget(null); setNotInterestedReason(""); setNotInterestedNotes(""); }}
+                disabled={actionLoading === `notinterested:${notInterestedTarget.providerId}`}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleMarkNotInterested(
+                  notInterestedTarget.providerId,
+                  notInterestedReason,
+                  notInterestedNotes,
+                  notInterestedTarget.isMarked
+                )}
+                disabled={
+                  actionLoading === `notinterested:${notInterestedTarget.providerId}` ||
+                  (!notInterestedTarget.isMarked && !notInterestedReason) ||
+                  (!notInterestedTarget.isMarked && notInterestedReason === "Other" && !notInterestedNotes.trim())
+                }
+                className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50 ${
+                  notInterestedTarget.isMarked
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-orange-600 hover:bg-orange-700"
+                }`}
+              >
+                {actionLoading === `notinterested:${notInterestedTarget.providerId}`
+                  ? (notInterestedTarget.isMarked ? "Unmarking..." : "Marking...")
+                  : (notInterestedTarget.isMarked ? "Unmark" : "Mark Not Interested")}
               </button>
             </div>
           </div>
