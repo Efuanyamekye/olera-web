@@ -27,10 +27,11 @@ interface Question {
   verification_state?: string | null;
 }
 
-type TabValue = "unanswered" | "needs_email" | "answered" | "removed" | "archived" | "";
+type TabValue = "unanswered" | "needs_email" | "delivery_issues" | "answered" | "removed" | "archived" | "";
 
 const TABS: { label: string; value: TabValue; showCount?: boolean }[] = [
   { label: "Needs Email", value: "needs_email", showCount: true },
+  { label: "Delivery Issues", value: "delivery_issues", showCount: true },
   { label: "Unanswered", value: "unanswered", showCount: true },
   { label: "Answered", value: "answered" },
   { label: "Removed", value: "removed" },
@@ -480,7 +481,7 @@ export default function AdminQuestionsPage() {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [range, setRange] = useState<DateRangeValue>({ preset: "30d", customFrom: "", customTo: "" });
-  const [tabCounts, setTabCounts] = useState<{ pending: number; needs_email: number; archived: number }>({ pending: 0, needs_email: 0, archived: 0 });
+  const [tabCounts, setTabCounts] = useState<{ pending: number; needs_email: number; delivery_issues: number; archived: number }>({ pending: 0, needs_email: 0, delivery_issues: 0, archived: 0 });
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [archiveTarget, setArchiveTarget] = useState<string | null>(null);
@@ -507,6 +508,7 @@ export default function AdminQuestionsPage() {
       const params = new URLSearchParams();
       // Map tab value for export
       if (activeTab === "needs_email") params.set("tab", "needs_email");
+      else if (activeTab === "delivery_issues") params.set("tab", "delivery_issues");
       else if (activeTab === "unanswered") params.set("tab", "unanswered");
       else if (activeTab === "answered") params.set("tab", "answered");
       else if (activeTab === "removed") params.set("tab", "removed");
@@ -552,6 +554,8 @@ export default function AdminQuestionsPage() {
       });
       if (activeTab === "needs_email") {
         params.set("needs_email", "true");
+      } else if (activeTab === "delivery_issues") {
+        params.set("delivery_issues", "true");
       } else if (activeTab === "unanswered") {
         params.set("status", "pending");
       } else if (activeTab === "removed") {
@@ -758,6 +762,7 @@ export default function AdminQuestionsPage() {
         {TABS.map((tab) => {
           const tabCount = tab.value === "unanswered" ? tabCounts.pending
             : tab.value === "needs_email" ? tabCounts.needs_email
+            : tab.value === "delivery_issues" ? tabCounts.delivery_issues
             : tab.value === "archived" ? tabCounts.archived
             : null;
 
@@ -797,6 +802,15 @@ export default function AdminQuestionsPage() {
                 </svg>
               </div>
               <p className="text-sm text-gray-400">All questions have provider emails</p>
+            </div>
+          ) : activeTab === "delivery_issues" ? (
+            <div className="space-y-3">
+              <div className="w-10 h-10 mx-auto rounded-full bg-gray-50 flex items-center justify-center">
+                <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-sm text-gray-400">No delivery issues</p>
             </div>
           ) : (
             <p className="text-sm text-gray-400">
@@ -1045,7 +1059,7 @@ export default function AdminQuestionsPage() {
           <p className="text-sm text-gray-500">
             {(() => {
               const providerCount = groupQuestionsByProvider(questions).size;
-              const label = activeTab === "needs_email" ? "needing email" : activeTab === "unanswered" ? "unanswered" : activeTab === "removed" ? "removed" : activeTab === "archived" ? "archived" : "total";
+              const label = activeTab === "needs_email" ? "needing email" : activeTab === "delivery_issues" ? "with delivery issues" : activeTab === "unanswered" ? "unanswered" : activeTab === "removed" ? "removed" : activeTab === "archived" ? "archived" : "total";
               if (count <= PAGE_SIZE) {
                 return `${providerCount} ${providerCount === 1 ? "provider" : "providers"}, ${count} questions ${label}`;
               }

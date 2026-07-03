@@ -8,7 +8,7 @@ import { getAuthUser, getAdminUser, getServiceClient, logAuditAction } from "@/l
  * By default exports "needs_email" questions with provider contact info.
  *
  * Query params:
- *   tab - "needs_email" (default), "unanswered", "answered", "archived", "all"
+ *   tab - "needs_email" (default), "delivery_issues", "unanswered", "answered", "archived", "all"
  *   date_from - ISO date (inclusive)
  *   date_to - ISO date (exclusive)
  *   search - filter by provider name
@@ -94,6 +94,9 @@ export async function GET(request: NextRequest) {
       // Apply tab filter
       if (tab === "needs_email") {
         query = query.contains("metadata", { needs_provider_email: true });
+        query = query.neq("status", "archived").neq("status", "rejected");
+      } else if (tab === "delivery_issues") {
+        query = query.contains("metadata", { email_dead: true });
         query = query.neq("status", "archived").neq("status", "rejected");
       } else if (tab === "unanswered") {
         query = query.eq("status", "pending");

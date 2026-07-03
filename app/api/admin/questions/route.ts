@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get("status");
     const providerId = searchParams.get("provider_id");
     const needsEmail = searchParams.get("needs_email") === "true";
+    const deliveryIssues = searchParams.get("delivery_issues") === "true";
     const countOnly = searchParams.get("count_only") === "true";
     const limit = parseInt(searchParams.get("limit") || "50", 10);
     const offset = parseInt(searchParams.get("offset") || "0", 10);
@@ -98,13 +99,10 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        // Count only questions where provider exists, not archived, and has no
-        // USABLE email — either none on file, or one verified undeliverable
-        // (email_dead, set when the send path suppressed it).
+        // Count only questions where provider exists, not archived, and has no email on file
         const validCount = (questionsForCount ?? []).filter((q) => {
           const status = providerStatus.get(q.provider_id);
-          const emailDead = (q.metadata as Record<string, unknown> | null)?.email_dead === true;
-          return status?.exists && !status.isArchived && (!status.hasEmail || emailDead);
+          return status?.exists && !status.isArchived && !status.hasEmail;
         }).length;
 
         return NextResponse.json({ count: validCount });
@@ -185,13 +183,10 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // Filter to valid questions only: provider exists, not archived, and has
-      // no USABLE email — either none on file, or one verified undeliverable
-      // (email_dead, set when the send path suppressed it).
+      // Filter to valid questions only: provider exists, not archived, and has no email on file
       const validQuestions = (allNeedsEmailQuestions ?? []).filter((q) => {
         const pStatus = providerStatusMap.get(q.provider_id);
-        const emailDead = (q.metadata as Record<string, unknown> | null)?.email_dead === true;
-        return pStatus?.exists && !pStatus.isArchived && (!pStatus.hasEmail || emailDead);
+        return pStatus?.exists && !pStatus.isArchived && !pStatus.hasEmail;
       });
 
       // Apply pagination manually
@@ -263,7 +258,95 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ questions: enriched, count });
     }
 
-    // Standard query path (non-needs_email)
+    // For delivery_issues, show questions where email was on file but delivery failed
+    if (deliveryIssues) {
+      let deliveryIssuesQuery = db
+        .from("provider_questions")
+        .select("*")
+        .contains("metadata", { email_dead: true })
+        .neq("status", "archived")
+        .neq("status", "rejected")
+        .order("created_at", { ascending: false })
+        .limit(10000);
+
+      if (searchSlugs) {
+        if (searchSlugs.length === 0) return NextResponse.json({ questions: [], count: 0 });
+        deliveryIssuesQuery = (deliveryIssuesQuery as any).in("provider_id", searchSlugs);
+      }
+      if (dateFrom) deliveryIssuesQuery = (deliveryIssuesQuery as any).gte("created_at", dateFrom);
+      if (dateTo) deliveryIssuesQuery = (deliveryIssuesQuery as any).lt("created_at", dateTo);
+
+      const { data: allDeliveryIssuesQuestions, error: deliveryIssuesError } = await deliveryIssuesQuery;
+      if (deliveryIssuesError) {
+        console.error("Admin questions fetch error:", deliveryIssuesError);
+        return NextResponse.json({ error: "Failed to fetch questions" }, { status: 500 });
+      }
+
+      // Apply pagination
+      const questions = (allDeliveryIssuesQuestions ?? []).slice(offset, offset + limit);
+      const count = (allDeliveryIssuesQuestions ?? []).length;
+
+      // Enrich with provider data
+      const slugs = [...new Set(questions.map((q) => q.provider_id).filter(Boolean))];
+      let providerNames: Record<string, string> = {};
+      let providerEditorIds: Record<string, string> = {};
+      let providerEmails: Record<string, string> = {};
+      let providerPhones: Record<string, string> = {};
+      let providerClaimStatus: Record<string, boolean> = {};
+      let providerVerificationState: Record<string, string> = {};
+      if (slugs.length > 0) {
+        const { data: bpProviders } = await db
+          .from("business_profiles")
+          .select("slug, display_name, source_provider_id, email, phone, account_id, metadata")
+          .in("slug", slugs);
+        providerNames = Object.fromEntries(
+          (bpProviders ?? []).map((p) => [p.slug, p.display_name])
+        );
+        providerEditorIds = Object.fromEntries(
+          (bpProviders ?? []).filter((p) => p.source_provider_id).map((p) => [p.slug, p.source_provider_id])
+        );
+        for (const p of bpProviders ?? []) {
+          if (p.slug && p.email) providerEmails[p.slug] = p.email;
+          if (p.slug && p.phone) providerPhones[p.slug] = p.phone;
+        }
+        for (const p of bpProviders ?? []) {
+          if (p.slug) {
+            providerClaimStatus[p.slug] = !!p.account_id;
+            const meta = p.metadata as Record<string, unknown> | null;
+            providerVerificationState[p.slug] = (meta?.verification_state as string) || "unverified";
+          }
+        }
+
+        const missingSlugs = slugs.filter((s) => !providerNames[s]);
+        if (missingSlugs.length > 0) {
+          const { data: iosProviders } = await db
+            .from("olera-providers")
+            .select("slug, provider_id, provider_name, email, phone")
+            .in("slug", missingSlugs)
+            .not("deleted", "is", true);
+          for (const p of iosProviders ?? []) {
+            if (p.slug && p.provider_name) providerNames[p.slug] = p.provider_name;
+            if (p.slug && p.provider_id) providerEditorIds[p.slug] = p.provider_id;
+            if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
+            if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
+          }
+        }
+      }
+
+      const enriched = questions.map((q) => ({
+        ...q,
+        provider_name: providerNames[q.provider_id] || null,
+        provider_editor_id: providerEditorIds[q.provider_id] || null,
+        provider_email: providerEmails[q.provider_id] || null,
+        provider_phone: providerPhones[q.provider_id] || null,
+        is_account_claimed: providerClaimStatus[q.provider_id] ?? false,
+        verification_state: providerVerificationState[q.provider_id] || null,
+      }));
+
+      return NextResponse.json({ questions: enriched, count });
+    }
+
+    // Standard query path (non-needs_email, non-delivery_issues)
     let query = db
       .from("provider_questions")
       .select("*", { count: "exact" })
@@ -387,10 +470,11 @@ export async function GET(request: NextRequest) {
       verification_state: providerVerificationState[q.provider_id] || null,
     }));
 
-    // Fetch tab counts for pending, needs_email, and archived
-    const [pendingCount, needsEmailCount, archivedCount] = await Promise.all([
+    // Fetch tab counts for pending, needs_email, delivery_issues, and archived
+    const [pendingCount, needsEmailCount, deliveryIssuesCount, archivedCount] = await Promise.all([
       db.from("provider_questions").select("*", { count: "exact", head: true }).eq("status", "pending"),
       db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { needs_provider_email: true }).neq("status", "archived").neq("status", "rejected"),
+      db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { email_dead: true }).neq("status", "archived").neq("status", "rejected"),
       db.from("provider_questions").select("*", { count: "exact", head: true }).eq("status", "archived"),
     ]);
 
@@ -400,6 +484,7 @@ export async function GET(request: NextRequest) {
       tabCounts: {
         pending: pendingCount.count ?? 0,
         needs_email: needsEmailCount.count ?? 0,
+        delivery_issues: deliveryIssuesCount.count ?? 0,
         archived: archivedCount.count ?? 0,
       },
     });

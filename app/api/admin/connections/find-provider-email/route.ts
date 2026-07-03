@@ -156,9 +156,9 @@ export async function POST(request: NextRequest) {
       if (iosProvider) {
         // Build context directly from olera-providers
         const ctx: ProviderContext = {
-          providerName: iosProvider.provider_name || providerId,
+          name: iosProvider.provider_name || providerId,
           website: iosProvider.website || null,
-          placeId: iosProvider.place_id || null,
+          place_id: iosProvider.place_id || null,
           city: iosProvider.city || null,
           state: iosProvider.state || null,
         };
