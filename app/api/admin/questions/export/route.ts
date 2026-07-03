@@ -94,6 +94,8 @@ export async function GET(request: NextRequest) {
       // Apply tab filter
       if (tab === "needs_email") {
         query = query.contains("metadata", { needs_provider_email: true });
+        // Exclude email_dead - those belong in delivery_issues
+        query = (query as any).not("metadata", "cs", '{"email_dead":true}');
         query = query.neq("status", "archived").neq("status", "rejected");
       } else if (tab === "delivery_issues") {
         query = query.contains("metadata", { email_dead: true });

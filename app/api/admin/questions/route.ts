@@ -49,11 +49,13 @@ export async function GET(request: NextRequest) {
     // Fast path: return only the count (used by admin dashboard overview)
     if (countOnly) {
       // For needs_email, we must verify provider status (exists, not archived, no email)
+      // Exclude email_dead questions - they belong in Delivery Issues tab
       if (needsEmail) {
         let countQuery = db
           .from("provider_questions")
           .select("provider_id, metadata")
           .contains("metadata", { needs_provider_email: true })
+          .not("metadata", "cs", '{"email_dead":true}')
           .neq("status", "archived")
           .neq("status", "rejected");
         if (searchSlugs) {
@@ -154,11 +156,13 @@ export async function GET(request: NextRequest) {
 
     // For needs_email, we need to verify provider status before pagination
     // to ensure count and results match
+    // Exclude email_dead questions - they belong in Delivery Issues tab
     if (needsEmail) {
       let needsEmailQuery = db
         .from("provider_questions")
         .select("*")
         .contains("metadata", { needs_provider_email: true })
+        .not("metadata", "cs", '{"email_dead":true}')
         .neq("status", "archived")
         .neq("status", "rejected")
         .order("created_at", { ascending: false })
@@ -870,9 +874,10 @@ export async function GET(request: NextRequest) {
 
     // Fetch tab counts. The "pending" count needs special handling to exclude
     // questions that belong in other priority tabs (delivery_issues, not_interested).
+    // Note: needs_email excludes email_dead (those go to delivery_issues)
     const [pendingQuestions, needsEmailCount, deliveryIssuesCount, notInterestedCount, archivedCount] = await Promise.all([
       db.from("provider_questions").select("id, metadata").eq("status", "pending"),
-      db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { needs_provider_email: true }).neq("status", "archived").neq("status", "rejected"),
+      db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { needs_provider_email: true }).not("metadata", "cs", '{"email_dead":true}').neq("status", "archived").neq("status", "rejected"),
       db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { email_dead: true }).neq("status", "archived").neq("status", "rejected").neq("status", "answered"),
       db.from("provider_questions").select("*", { count: "exact", head: true }).contains("metadata", { provider_not_interested: true }).neq("status", "archived").neq("status", "rejected"),
       db.from("provider_questions").select("*", { count: "exact", head: true }).eq("status", "archived"),
