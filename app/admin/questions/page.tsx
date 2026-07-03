@@ -656,78 +656,92 @@ export default function AdminQuestionsPage() {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {/* Archive provider button */}
-                    <span
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setArchiveProviderTarget({ providerId, providerName: providerLabel });
-                        setArchiveProviderReason("");
-                      }}
-                      className="text-xs text-gray-400 hover:text-amber-700 transition-colors cursor-pointer"
-                    >
-                      Archive provider
-                    </span>
-
-                    {/* Link to provider */}
-                    {firstQ.provider_editor_id ? (
-                      <Link
-                        href={`/admin/directory/${firstQ.provider_editor_id}`}
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-xs text-gray-400 hover:text-primary-600 transition-colors"
-                      >
-                        View →
-                      </Link>
-                    ) : (
-                      <a
-                        href={`/provider/${providerId}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-xs text-gray-400 hover:text-primary-600 transition-colors"
-                      >
-                        View →
-                      </a>
-                    )}
-                  </div>
                 </button>
 
                 {/* Expanded content */}
                 {isExpanded && (
-                  <div className="border-t border-gray-100">
-                    {/* Email input - shown once for the whole provider group */}
-                    {groupNeedsEmail && (
-                      <div className="px-5 py-4 bg-gray-50/50 border-b border-gray-100">
-                        <p className="mb-2 text-[13px] text-gray-500 leading-relaxed">
-                          {emailIsDead ? (
-                            <>
-                              The address on file can&apos;t receive mail
-                              {firstQ.provider_email ? <span className="text-gray-400"> ({firstQ.provider_email})</span> : null}
-                              {` — add a working one to forward all ${questionCount} questions.`}
-                            </>
-                          ) : (
-                            <>No email on file — add one to forward all {questionCount} questions.</>
-                          )}
+                  <div className="border-t border-gray-100 bg-stone-50/40 px-5 py-4">
+                    {/* Provider Info Card - matches Connections page layout */}
+                    <div className="bg-white rounded-lg border border-gray-200 p-3 max-w-md mb-4">
+                      {/* Header row: PROVIDER label + View link */}
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">Provider</span>
+                        {firstQ.provider_editor_id ? (
+                          <Link
+                            href={`/admin/directory/${firstQ.provider_editor_id}`}
+                            className="text-xs text-blue-600 hover:underline"
+                          >
+                            View
+                          </Link>
+                        ) : (
                           <a
-                            href={`https://www.google.com/search?q=${encodeURIComponent(`${providerLabel} contact email`)}`}
+                            href={`/provider/${providerId}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="ml-1.5 whitespace-nowrap text-gray-400 underline underline-offset-2 hover:text-gray-700 transition-colors"
+                            className="text-xs text-blue-600 hover:underline"
                           >
-                            find one →
+                            View
                           </a>
-                        </p>
-                        <InlineEmailInput
-                          providerSlug={providerId}
-                          existingEmail={firstQ.provider_email}
-                          emailIsDead={emailIsDead}
-                          onEmailAdded={fetchQuestions}
-                        />
+                        )}
                       </div>
-                    )}
+
+                      {/* Provider name */}
+                      <p className="font-medium text-gray-900 text-sm">{providerLabel}</p>
+
+                      {/* Contact info */}
+                      <div className="mt-1.5 space-y-1 text-sm">
+                        {/* Email - show link if exists and not dead, otherwise show input */}
+                        {firstQ.provider_email && !emailIsDead ? (
+                          <a href={`mailto:${firstQ.provider_email}`} className="block text-blue-600 hover:underline truncate">
+                            {firstQ.provider_email}
+                          </a>
+                        ) : groupNeedsEmail ? (
+                          <div className="pt-1">
+                            {emailIsDead && firstQ.provider_email && (
+                              <p className="text-xs text-red-500 mb-1.5">
+                                {firstQ.provider_email} — delivery failed
+                              </p>
+                            )}
+                            <div className="flex items-center gap-2">
+                              <InlineEmailInput
+                                providerSlug={providerId}
+                                existingEmail={firstQ.provider_email}
+                                emailIsDead={emailIsDead}
+                                onEmailAdded={fetchQuestions}
+                              />
+                              <a
+                                href={`https://www.google.com/search?q=${encodeURIComponent(`${providerLabel} contact email`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-xs text-gray-400 hover:text-gray-600 whitespace-nowrap"
+                                title="Search for email"
+                              >
+                                Find →
+                              </a>
+                            </div>
+                          </div>
+                        ) : (
+                          <span className="text-gray-400 text-xs">No email on file</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200">
+                      <button
+                        onClick={() => {
+                          setArchiveProviderTarget({ providerId, providerName: providerLabel });
+                          setArchiveProviderReason("");
+                        }}
+                        disabled={actionLoading === `provider:${providerId}`}
+                        className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-amber-700 border border-gray-200 rounded-lg hover:bg-white transition disabled:opacity-50"
+                      >
+                        Archive Provider
+                      </button>
+                    </div>
 
                     {/* Individual questions */}
-                    <div className="divide-y divide-gray-100">
+                    <div className="divide-y divide-gray-100 -mx-5">
                       {providerQuestions.map((q) => {
                         const isRemoved = q.status === "rejected";
                         const isArchived = q.status === "archived";
