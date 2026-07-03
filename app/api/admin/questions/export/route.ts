@@ -137,6 +137,7 @@ export async function GET(request: NextRequest) {
         const meta = q.metadata as Record<string, unknown> | null;
         if (meta?.email_dead === true) return false;
         if (meta?.provider_not_interested === true) return false;
+        if (meta?.needs_provider_email === true) return false;
         return true;
       });
     }

@@ -464,12 +464,15 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Failed to fetch questions" }, { status: 500 });
       }
 
-      // Filter out questions with email_dead or provider_not_interested flags
-      // (backup filter in case the query doesn't work as expected)
+      // Filter out questions that belong in other tabs:
+      // - email_dead → Delivery Issues tab
+      // - provider_not_interested → Not Interested tab
+      // - needs_provider_email → Needs Email tab
       const filteredQuestions = (allUnansweredQuestions ?? []).filter((q) => {
         const meta = q.metadata as Record<string, unknown> | null;
         if (meta?.email_dead === true) return false;
         if (meta?.provider_not_interested === true) return false;
+        if (meta?.needs_provider_email === true) return false;
         return true;
       });
 
@@ -671,11 +674,12 @@ export async function GET(request: NextRequest) {
       db.from("provider_questions").select("*", { count: "exact", head: true }).eq("status", "archived"),
     ]);
 
-    // Calculate true "unanswered" count by excluding questions with flags
+    // Calculate true "unanswered" count by excluding questions that belong in other tabs
     const trueUnansweredCount = (pendingQuestions.data ?? []).filter((q) => {
       const meta = q.metadata as Record<string, unknown> | null;
       if (meta?.email_dead === true) return false;
       if (meta?.provider_not_interested === true) return false;
+      if (meta?.needs_provider_email === true) return false;
       return true;
     }).length;
 

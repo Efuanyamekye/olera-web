@@ -864,14 +864,16 @@ export default function AdminQuestionsPage() {
             const isExpanded = expandedProviders.has(providerId);
             const questionCount = providerQuestions.length;
 
-            // Check if any active question in this group needs email
+            // Check provider email status based on actual data, not stale metadata flags
             const activeQuestions = providerQuestions.filter(
               (q) => q.status !== "rejected" && q.status !== "archived"
             );
-            const groupNeedsEmail = activeQuestions.some(
-              (q) => q.metadata?.needs_provider_email === true
-            );
+            // Provider currently has no email on file
+            const hasNoEmail = !firstQ.provider_email;
+            // Email was on file but delivery failed
             const emailIsDead = activeQuestions.some((q) => q.metadata?.email_dead === true);
+            // Show "needs email" state if no email OR if email is dead (needs replacement)
+            const groupNeedsEmail = hasNoEmail || emailIsDead;
             const isProviderNotInterested = providerQuestions.some((q) => q.metadata?.provider_not_interested === true);
 
             return (
