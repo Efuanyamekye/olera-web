@@ -149,11 +149,14 @@ export async function GET(request: NextRequest) {
     const providerInfo: Record<string, ProviderInfo> = {};
 
     if (slugs.length > 0) {
-      // Try business_profiles first
+      // Try business_profiles first (include source_provider_id for email fallback)
       const { data: bpProviders } = await db
         .from("business_profiles")
-        .select("slug, display_name, city, state, phone, email, address_line1, address_line2")
+        .select("slug, display_name, city, state, phone, email, address_line1, address_line2, source_provider_id")
         .in("slug", slugs);
+
+      // Track which slugs need email fallback from olera-providers
+      const slugsNeedingEmailFallback: { slug: string; sourceId: string }[] = [];
 
       for (const p of bpProviders ?? []) {
         if (p.slug) {
@@ -166,20 +169,57 @@ export async function GET(request: NextRequest) {
             email: p.email || "",
             address: addressParts.join(", "),
           };
+          // If no email but has source_provider_id, mark for fallback lookup
+          if (!p.email && p.source_provider_id) {
+            slugsNeedingEmailFallback.push({ slug: p.slug, sourceId: p.source_provider_id });
+          }
         }
       }
 
       // For slugs not found in business_profiles, try olera-providers
       const missingSlugs = slugs.filter((s) => !providerInfo[s]);
+      const sourceIdsForFallback = slugsNeedingEmailFallback.map((x) => x.sourceId);
+
+      // Build OR conditions (only include non-empty arrays)
+      const orConditions: string[] = [];
       if (missingSlugs.length > 0) {
+        orConditions.push(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',')})`);
+      }
+      if (sourceIdsForFallback.length > 0) {
+        orConditions.push(`provider_id.in.(${sourceIdsForFallback.map(s => `"${s}"`).join(',')})`);
+      }
+
+      if (orConditions.length > 0) {
         const { data: iosProviders } = await db
           .from("olera-providers")
-          .select("slug, provider_name, city, state, phone, email, address")
-          .in("slug", missingSlugs)
+          .select("slug, provider_id, provider_name, city, state, phone, email, address")
+          .or(orConditions.join(','))
           .not("deleted", "is", true);
 
+        // Build lookup by provider_id for email/phone fallback
+        const iosByProviderId = new Map<string, { email?: string; phone?: string }>();
         for (const p of iosProviders ?? []) {
-          if (p.slug) {
+          if (p.provider_id) {
+            iosByProviderId.set(p.provider_id, { email: p.email || undefined, phone: p.phone || undefined });
+          }
+        }
+
+        // Fill in email/phone for business_profiles providers via source_provider_id fallback
+        for (const { slug, sourceId } of slugsNeedingEmailFallback) {
+          const fallback = iosByProviderId.get(sourceId);
+          if (fallback) {
+            if (!providerInfo[slug].email && fallback.email) {
+              providerInfo[slug].email = fallback.email;
+            }
+            if (!providerInfo[slug].phone && fallback.phone) {
+              providerInfo[slug].phone = fallback.phone;
+            }
+          }
+        }
+
+        // Fill in data for providers only in olera-providers
+        for (const p of iosProviders ?? []) {
+          if (p.slug && !providerInfo[p.slug]) {
             providerInfo[p.slug] = {
               name: p.provider_name || "",
               city: p.city || "",
