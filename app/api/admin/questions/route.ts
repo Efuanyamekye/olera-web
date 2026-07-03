@@ -83,12 +83,23 @@ export async function GET(request: NextRequest) {
           .filter((p) => p.source_provider_id && !p.email)
           .map((p) => p.source_provider_id as string);
 
+        // Build OR conditions for olera-providers query (only include non-empty arrays)
+        const orConditions: string[] = [];
+        if (providerIds.length > 0) {
+          orConditions.push(`slug.in.(${providerIds.map(s => `"${s}"`).join(',')})`);
+        }
+        if (sourceProviderIds.length > 0) {
+          orConditions.push(`provider_id.in.(${sourceProviderIds.map(s => `"${s}"`).join(',')})`);
+        }
+
         // Look up providers in olera-providers (by slug OR source_provider_id for email fallback)
-        const { data: oleraProviders } = await db
-          .from("olera-providers")
-          .select("slug, email, provider_id")
-          .or(`slug.in.(${providerIds.map(s => `"${s}"`).join(',')}),provider_id.in.(${sourceProviderIds.map(s => `"${s}"`).join(',')})`)
-          .not("deleted", "is", true);
+        const { data: oleraProviders } = orConditions.length > 0
+          ? await db
+              .from("olera-providers")
+              .select("slug, email, provider_id")
+              .or(orConditions.join(','))
+              .not("deleted", "is", true)
+          : { data: [] };
 
         // Build olera email lookup by provider_id for fallback
         const oleraEmailByProviderId = new Map<string, string>();
@@ -180,12 +191,23 @@ export async function GET(request: NextRequest) {
         .filter((p) => p.source_provider_id && !p.email)
         .map((p) => p.source_provider_id as string);
 
+      // Build OR conditions for olera-providers query (only include non-empty arrays)
+      const orConditionsForFilter: string[] = [];
+      if (providerIds.length > 0) {
+        orConditionsForFilter.push(`slug.in.(${providerIds.map(s => `"${s}"`).join(',')})`);
+      }
+      if (sourceProviderIdsForFilter.length > 0) {
+        orConditionsForFilter.push(`provider_id.in.(${sourceProviderIdsForFilter.map(s => `"${s}"`).join(',')})`);
+      }
+
       // Look up providers in olera-providers (by slug OR source_provider_id for email fallback)
-      const { data: oleraProvidersForFilter } = await db
-        .from("olera-providers")
-        .select("slug, email, provider_id")
-        .or(`slug.in.(${providerIds.map(s => `"${s}"`).join(',')}),provider_id.in.(${sourceProviderIdsForFilter.map(s => `"${s}"`).join(',')})`)
-        .not("deleted", "is", true);
+      const { data: oleraProvidersForFilter } = orConditionsForFilter.length > 0
+        ? await db
+            .from("olera-providers")
+            .select("slug, email, provider_id")
+            .or(orConditionsForFilter.join(','))
+            .not("deleted", "is", true)
+        : { data: [] };
 
       // Build olera email lookup by provider_id for fallback
       const oleraEmailByProviderIdForFilter = new Map<string, string>();
@@ -266,11 +288,21 @@ export async function GET(request: NextRequest) {
 
         // Query olera-providers for missing slugs AND for email fallback via source_provider_id
         const sourceIdsToQuery = sourceIdsForEmailFallback.map((x) => x.sourceId);
-        if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
+
+        // Build OR conditions (only include non-empty arrays)
+        const iosOrConditions: string[] = [];
+        if (missingSlugs.length > 0) {
+          iosOrConditions.push(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',')})`);
+        }
+        if (sourceIdsToQuery.length > 0) {
+          iosOrConditions.push(`provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',')})`);
+        }
+
+        if (iosOrConditions.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
             .select("slug, provider_id, provider_name, email, phone")
-            .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',') || '""'})`)
+            .or(iosOrConditions.join(','))
             .not("deleted", "is", true);
 
           // Build lookup by provider_id for email fallback
@@ -383,11 +415,20 @@ export async function GET(request: NextRequest) {
         const missingSlugs = slugs.filter((s) => !providerNames[s]);
         const sourceIdsToQuery = sourceIdsForFallback.map((x) => x.sourceId);
 
-        if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
+        // Build OR conditions (only include non-empty arrays)
+        const iosOrConditions: string[] = [];
+        if (missingSlugs.length > 0) {
+          iosOrConditions.push(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',')})`);
+        }
+        if (sourceIdsToQuery.length > 0) {
+          iosOrConditions.push(`provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',')})`);
+        }
+
+        if (iosOrConditions.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
             .select("slug, provider_id, provider_name, email, phone")
-            .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',') || '""'})`)
+            .or(iosOrConditions.join(','))
             .not("deleted", "is", true);
 
           // Build lookup by provider_id for email fallback
@@ -493,11 +534,20 @@ export async function GET(request: NextRequest) {
         const missingSlugs = slugs.filter((s) => !providerNames[s]);
         const sourceIdsToQuery = sourceIdsForFallback.map((x) => x.sourceId);
 
-        if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
+        // Build OR conditions (only include non-empty arrays)
+        const iosOrConditions: string[] = [];
+        if (missingSlugs.length > 0) {
+          iosOrConditions.push(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',')})`);
+        }
+        if (sourceIdsToQuery.length > 0) {
+          iosOrConditions.push(`provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',')})`);
+        }
+
+        if (iosOrConditions.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
             .select("slug, provider_id, provider_name, email, phone")
-            .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',') || '""'})`)
+            .or(iosOrConditions.join(','))
             .not("deleted", "is", true);
 
           // Build lookup by provider_id for email fallback
@@ -617,11 +667,20 @@ export async function GET(request: NextRequest) {
         const missingSlugs = slugs.filter((s) => !providerNames[s]);
         const sourceIdsToQuery = sourceIdsForFallback.map((x) => x.sourceId);
 
-        if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
+        // Build OR conditions (only include non-empty arrays)
+        const iosOrConditions: string[] = [];
+        if (missingSlugs.length > 0) {
+          iosOrConditions.push(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',')})`);
+        }
+        if (sourceIdsToQuery.length > 0) {
+          iosOrConditions.push(`provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',')})`);
+        }
+
+        if (iosOrConditions.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
             .select("slug, provider_id, provider_name, email, phone")
-            .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',') || '""'})`)
+            .or(iosOrConditions.join(','))
             .not("deleted", "is", true);
 
           // Build lookup by provider_id for email fallback
@@ -726,11 +785,22 @@ export async function GET(request: NextRequest) {
       const missingSlugs = slugs.filter((s) => !providerNames[s]);
       const sourceIdsToQuery = sourceIdsForFallback.map((x) => x.sourceId);
 
-      if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
+      // Build OR conditions (only include non-empty arrays)
+      // For legacy support, also check provider_id for missingSlugs (some stored as provider_id, not slug)
+      const iosOrConditions: string[] = [];
+      if (missingSlugs.length > 0) {
+        iosOrConditions.push(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',')})`);
+      }
+      const providerIdsToCheck = [...missingSlugs, ...sourceIdsToQuery];
+      if (providerIdsToCheck.length > 0) {
+        iosOrConditions.push(`provider_id.in.(${providerIdsToCheck.map(s => `"${s}"`).join(',')})`);
+      }
+
+      if (iosOrConditions.length > 0) {
         const { data: iosProviders } = await db
           .from("olera-providers")
           .select("slug, provider_id, provider_name, email, phone")
-          .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${[...missingSlugs, ...sourceIdsToQuery].map(s => `"${s}"`).join(',') || '""'})`)
+          .or(iosOrConditions.join(','))
           .not("deleted", "is", true);
 
         // Build lookup by provider_id for email fallback
