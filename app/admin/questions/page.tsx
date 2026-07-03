@@ -250,6 +250,19 @@ function formatDate(dateStr: string): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+// Group questions by provider_id, preserving order of first appearance
+function groupQuestionsByProvider(questions: Question[]): Map<string, Question[]> {
+  const groups = new Map<string, Question[]>();
+  for (const q of questions) {
+    const key = q.provider_id;
+    if (!groups.has(key)) {
+      groups.set(key, []);
+    }
+    groups.get(key)!.push(q);
+  }
+  return groups;
+}
+
 const PAGE_SIZE = 50;
 
 export default function AdminQuestionsPage() {
@@ -272,6 +285,7 @@ export default function AdminQuestionsPage() {
   const [exporting, setExporting] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
   const toastRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [expandedProviders, setExpandedProviders] = useState<Set<string>>(new Set());
 
   function showToast(message: string, type: "success" | "error" = "success") {
     if (toastRef.current) clearTimeout(toastRef.current);
@@ -357,10 +371,23 @@ export default function AdminQuestionsPage() {
     }
   }, [activeTab, page, range, debouncedSearch]);
 
-  // Reset page when tab, date, or search changes
+  // Reset page and expanded state when tab, date, or search changes
   useEffect(() => {
     setPage(0);
+    setExpandedProviders(new Set());
   }, [activeTab, range, debouncedSearch]);
+
+  const toggleProvider = (providerId: string) => {
+    setExpandedProviders((prev) => {
+      const next = new Set(prev);
+      if (next.has(providerId)) {
+        next.delete(providerId);
+      } else {
+        next.add(providerId);
+      }
+      return next;
+    });
+  };
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -570,154 +597,206 @@ export default function AdminQuestionsPage() {
           )}
         </div>
       ) : (
-        <div className="divide-y divide-gray-100">
-          {questions.map((q) => {
-            const needsEmail = q.metadata?.needs_provider_email === true;
-            const emailIsDead = q.metadata?.email_dead === true;
-            const providerLabel = q.provider_name || q.provider_id;
-            const isRemoved = q.status === "rejected";
-            const isArchived = q.status === "archived";
-            const isLive = q.status === "pending" || q.status === "approved";
-            const showEmailInput = needsEmail && !isRemoved && !isArchived;
+        <div className="space-y-2">
+          {Array.from(groupQuestionsByProvider(questions)).map(([providerId, providerQuestions]) => {
+            const firstQ = providerQuestions[0];
+            const providerLabel = firstQ.provider_name || providerId;
+            const isExpanded = expandedProviders.has(providerId);
+            const questionCount = providerQuestions.length;
+
+            // Check if any question in this group needs email
+            const groupNeedsEmail = providerQuestions.some(
+              (q) => q.metadata?.needs_provider_email === true && q.status !== "rejected" && q.status !== "archived"
+            );
+            const emailIsDead = providerQuestions.some((q) => q.metadata?.email_dead === true);
 
             return (
-              <div
-                key={q.id}
-                className={`group px-5 py-4 transition-colors ${
-                  isRemoved || isArchived ? "opacity-40" : "hover:bg-gray-50/60"
-                }`}
-              >
-                {/* Main row */}
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <a
-                      href={`/provider/${q.provider_id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`text-[15px] font-medium leading-snug transition-colors ${
-                        isRemoved
-                          ? "text-gray-400 line-through"
-                          : "text-gray-900 hover:text-primary-600"
-                      }`}
+              <div key={providerId} className="border border-gray-100 rounded-xl overflow-hidden">
+                {/* Provider header - clickable to expand/collapse */}
+                <button
+                  onClick={() => toggleProvider(providerId)}
+                  className="w-full px-5 py-4 flex items-center justify-between gap-4 hover:bg-gray-50/60 transition-colors text-left"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    {/* Chevron */}
+                    <svg
+                      className={`w-4 h-4 text-gray-400 transition-transform flex-shrink-0 ${isExpanded ? "rotate-90" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      {q.question}
-                    </a>
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
 
-                    <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-400">
-                      <span>{q.asker_name}</span>
-                      {q.provider_editor_id ? (
-                        <Link
-                          href={`/admin/directory/${q.provider_editor_id}`}
-                          className="hover:text-primary-600 transition-colors"
-                        >
-                          {providerLabel}
-                        </Link>
-                      ) : (
-                        <a
-                          href={`/provider/${q.provider_id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-primary-600 transition-colors"
-                        >
-                          {providerLabel}
-                        </a>
-                      )}
-                      <ProviderStatusBadge question={q} />
-                      {needsEmail && !isRemoved && (
-                        <span className="inline-flex items-center gap-1.5 font-medium text-gray-600">
-                          <span className={`w-1.5 h-1.5 rounded-full ${emailIsDead ? "bg-amber-500" : "bg-gray-300"}`} />
-                          {emailIsDead ? "Email bounced" : "Needs email"}
-                        </span>
-                      )}
-                      <span>{formatDate(q.created_at)}</span>
-                    </div>
-                  </div>
+                    {/* Provider name */}
+                    <span className="font-medium text-gray-900 truncate">{providerLabel}</span>
 
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {isLive && (
-                      <>
-                        <button
-                          onClick={() => { setArchiveTarget(q.id); setArchiveReason(""); }}
-                          disabled={actionLoading === q.id}
-                          className="opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 text-xs text-gray-400 hover:text-amber-600 transition-all duration-200 disabled:opacity-40"
-                        >
-                          Archive
-                        </button>
-                        <button
-                          onClick={() => { setArchiveProviderTarget({ providerId: q.provider_id, providerName: providerLabel }); setArchiveProviderReason(""); }}
-                          disabled={actionLoading === `provider:${q.provider_id}`}
-                          className="opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 text-xs text-gray-400 hover:text-amber-700 transition-all duration-200 disabled:opacity-40"
-                        >
-                          Archive provider
-                        </button>
-                        <button
-                          onClick={() => handleRemove(q.id)}
-                          disabled={actionLoading === q.id}
-                          className="opacity-0 translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 text-xs text-gray-400 hover:text-red-500 transition-all duration-200 disabled:opacity-40"
-                        >
-                          Remove
-                        </button>
-                      </>
-                    )}
-                    {isArchived && (
-                      <button
-                        onClick={() => handleRestore(q.id)}
-                        disabled={actionLoading === q.id}
-                        className="text-xs text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-40"
-                      >
-                        Unarchive
-                      </button>
-                    )}
-                    {isRemoved && (
-                      <button
-                        onClick={() => handleRestore(q.id)}
-                        disabled={actionLoading === q.id}
-                        className="text-xs text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-40"
-                      >
-                        Restore
-                      </button>
-                    )}
-                    {!isLive && !isRemoved && !isArchived && (
-                      <span className={`px-2 py-0.5 text-[11px] font-medium rounded ${STATUS_COLORS[q.status] || "bg-gray-50 text-gray-400"}`}>
-                        {STATUS_LABELS[q.status] || q.status}
+                    {/* Status badge */}
+                    <ProviderStatusBadge question={firstQ} />
+
+                    {/* Question count */}
+                    <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-full flex-shrink-0">
+                      {questionCount} {questionCount === 1 ? "question" : "questions"}
+                    </span>
+
+                    {/* Needs email indicator */}
+                    {groupNeedsEmail && (
+                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 flex-shrink-0">
+                        <span className={`w-1.5 h-1.5 rounded-full ${emailIsDead ? "bg-amber-500" : "bg-gray-300"}`} />
+                        {emailIsDead ? "Email bounced" : "Needs email"}
                       </span>
                     )}
                   </div>
-                </div>
 
-                {q.answer && (
-                  <div className="mt-2.5 pl-4 border-l-2 border-gray-100">
-                    <p className="text-sm text-gray-500">{q.answer}</p>
-                  </div>
-                )}
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {/* Archive provider button */}
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setArchiveProviderTarget({ providerId, providerName: providerLabel });
+                        setArchiveProviderReason("");
+                      }}
+                      className="text-xs text-gray-400 hover:text-amber-700 transition-colors cursor-pointer"
+                    >
+                      Archive provider
+                    </span>
 
-                {showEmailInput && (
-                  <div className="mt-3.5">
-                    <p className="mb-2 text-[13px] text-gray-500 leading-relaxed">
-                      {emailIsDead ? (
-                        <>
-                          The address on file can&apos;t receive mail
-                          {q.provider_email ? <span className="text-gray-400"> ({q.provider_email})</span> : null}
-                          {" — add a working one to forward this question."}
-                        </>
-                      ) : (
-                        <>No email on file — add one to forward this question.</>
-                      )}
+                    {/* Link to provider */}
+                    {firstQ.provider_editor_id ? (
+                      <Link
+                        href={`/admin/directory/${firstQ.provider_editor_id}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-xs text-gray-400 hover:text-primary-600 transition-colors"
+                      >
+                        View →
+                      </Link>
+                    ) : (
                       <a
-                        href={`https://www.google.com/search?q=${encodeURIComponent(`${providerLabel} contact email`)}`}
+                        href={`/provider/${providerId}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="ml-1.5 whitespace-nowrap text-gray-400 underline underline-offset-2 hover:text-gray-700 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-xs text-gray-400 hover:text-primary-600 transition-colors"
                       >
-                        find one →
+                        View →
                       </a>
-                    </p>
-                    <InlineEmailInput
-                      providerSlug={q.provider_id}
-                      existingEmail={q.provider_email}
-                      emailIsDead={emailIsDead}
-                      onEmailAdded={fetchQuestions}
-                    />
+                    )}
+                  </div>
+                </button>
+
+                {/* Expanded content */}
+                {isExpanded && (
+                  <div className="border-t border-gray-100">
+                    {/* Email input - shown once for the whole provider group */}
+                    {groupNeedsEmail && (
+                      <div className="px-5 py-4 bg-gray-50/50 border-b border-gray-100">
+                        <p className="mb-2 text-[13px] text-gray-500 leading-relaxed">
+                          {emailIsDead ? (
+                            <>
+                              The address on file can&apos;t receive mail
+                              {firstQ.provider_email ? <span className="text-gray-400"> ({firstQ.provider_email})</span> : null}
+                              {` — add a working one to forward all ${questionCount} questions.`}
+                            </>
+                          ) : (
+                            <>No email on file — add one to forward all {questionCount} questions.</>
+                          )}
+                          <a
+                            href={`https://www.google.com/search?q=${encodeURIComponent(`${providerLabel} contact email`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-1.5 whitespace-nowrap text-gray-400 underline underline-offset-2 hover:text-gray-700 transition-colors"
+                          >
+                            find one →
+                          </a>
+                        </p>
+                        <InlineEmailInput
+                          providerSlug={providerId}
+                          existingEmail={firstQ.provider_email}
+                          emailIsDead={emailIsDead}
+                          onEmailAdded={fetchQuestions}
+                        />
+                      </div>
+                    )}
+
+                    {/* Individual questions */}
+                    <div className="divide-y divide-gray-100">
+                      {providerQuestions.map((q) => {
+                        const isRemoved = q.status === "rejected";
+                        const isArchived = q.status === "archived";
+                        const isLive = q.status === "pending" || q.status === "approved";
+
+                        return (
+                          <div
+                            key={q.id}
+                            className={`group px-5 py-3 transition-colors ${
+                              isRemoved || isArchived ? "opacity-40" : "hover:bg-gray-50/60"
+                            }`}
+                          >
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 min-w-0">
+                                <p className={`text-sm leading-snug ${isRemoved ? "text-gray-400 line-through" : "text-gray-700"}`}>
+                                  {q.question}
+                                </p>
+                                <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
+                                  <span>{q.asker_name}</span>
+                                  <span>{formatDate(q.created_at)}</span>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                {isLive && (
+                                  <>
+                                    <button
+                                      onClick={() => { setArchiveTarget(q.id); setArchiveReason(""); }}
+                                      disabled={actionLoading === q.id}
+                                      className="opacity-0 group-hover:opacity-100 text-xs text-gray-400 hover:text-amber-600 transition-all disabled:opacity-40"
+                                    >
+                                      Archive
+                                    </button>
+                                    <button
+                                      onClick={() => handleRemove(q.id)}
+                                      disabled={actionLoading === q.id}
+                                      className="opacity-0 group-hover:opacity-100 text-xs text-gray-400 hover:text-red-500 transition-all disabled:opacity-40"
+                                    >
+                                      Remove
+                                    </button>
+                                  </>
+                                )}
+                                {isArchived && (
+                                  <button
+                                    onClick={() => handleRestore(q.id)}
+                                    disabled={actionLoading === q.id}
+                                    className="text-xs text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-40"
+                                  >
+                                    Unarchive
+                                  </button>
+                                )}
+                                {isRemoved && (
+                                  <button
+                                    onClick={() => handleRestore(q.id)}
+                                    disabled={actionLoading === q.id}
+                                    className="text-xs text-gray-400 hover:text-gray-900 transition-colors disabled:opacity-40"
+                                  >
+                                    Restore
+                                  </button>
+                                )}
+                                {!isLive && !isRemoved && !isArchived && (
+                                  <span className={`px-2 py-0.5 text-[11px] font-medium rounded ${STATUS_COLORS[q.status] || "bg-gray-50 text-gray-400"}`}>
+                                    {STATUS_LABELS[q.status] || q.status}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+
+                            {q.answer && (
+                              <div className="mt-2 pl-4 border-l-2 border-gray-100">
+                                <p className="text-sm text-gray-500">{q.answer}</p>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>
@@ -729,10 +808,14 @@ export default function AdminQuestionsPage() {
       {!loading && questions.length > 0 && (
         <div className="flex items-center justify-between mt-6 px-2">
           <p className="text-sm text-gray-500">
-            {count <= PAGE_SIZE
-              ? `${count} ${activeTab === "needs_email" ? "needing email" : activeTab === "unanswered" ? "unanswered" : activeTab === "removed" ? "removed" : activeTab === "archived" ? "archived" : "total"}`
-              : `${page * PAGE_SIZE + 1}–${Math.min((page + 1) * PAGE_SIZE, count)} of ${count}`
-            }
+            {(() => {
+              const providerCount = groupQuestionsByProvider(questions).size;
+              const label = activeTab === "needs_email" ? "needing email" : activeTab === "unanswered" ? "unanswered" : activeTab === "removed" ? "removed" : activeTab === "archived" ? "archived" : "total";
+              if (count <= PAGE_SIZE) {
+                return `${providerCount} ${providerCount === 1 ? "provider" : "providers"}, ${count} questions ${label}`;
+              }
+              return `${providerCount} providers on this page · ${page * PAGE_SIZE + 1}–${Math.min((page + 1) * PAGE_SIZE, count)} of ${count} questions`;
+            })()}
           </p>
           {count > PAGE_SIZE && (
             <div className="flex gap-2">
