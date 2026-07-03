@@ -638,7 +638,7 @@ export default function AdminQuestionsPage() {
                     <ProviderStatusBadge question={firstQ} />
 
                     {/* Question count */}
-                    <span className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded-full flex-shrink-0">
+                    <span className="px-1.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-500 rounded flex-shrink-0">
                       {questionCount} {questionCount === 1 ? "question" : "questions"}
                     </span>
 
