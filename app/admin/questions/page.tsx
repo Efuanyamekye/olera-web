@@ -562,12 +562,13 @@ export default function AdminQuestionsPage() {
       } else if (activeTab === "not_interested") {
         params.set("not_interested", "true");
       } else if (activeTab === "unanswered") {
-        params.set("status", "pending");
+        params.set("unanswered", "true");
       } else if (activeTab === "archived") {
         params.set("status", "archived");
-      } else if (activeTab) {
-        params.set("status", activeTab);
+      } else if (activeTab === "answered") {
+        params.set("status", "answered");
       }
+      // "all" tab: no filter
       const { from, to } = resolveRange(range);
       if (from) params.set("date_from", from);
       if (to) params.set("date_to", to);
