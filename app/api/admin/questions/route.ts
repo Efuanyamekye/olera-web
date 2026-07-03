@@ -72,18 +72,29 @@ export async function GET(request: NextRequest) {
         // Get unique provider IDs and check their status
         const providerIds = [...new Set((questionsForCount ?? []).map((q) => q.provider_id).filter(Boolean))];
 
-        // Look up providers in business_profiles
+        // Look up providers in business_profiles (include source_provider_id for fallback)
         const { data: bpProviders } = await db
           .from("business_profiles")
-          .select("slug, email, is_active")
+          .select("slug, email, is_active, source_provider_id")
           .in("slug", providerIds);
 
-        // Look up providers in olera-providers (legacy)
+        // Collect source_provider_ids for fallback email lookup
+        const sourceProviderIds = (bpProviders ?? [])
+          .filter((p) => p.source_provider_id && !p.email)
+          .map((p) => p.source_provider_id as string);
+
+        // Look up providers in olera-providers (by slug OR source_provider_id for email fallback)
         const { data: oleraProviders } = await db
           .from("olera-providers")
-          .select("slug, email")
-          .in("slug", providerIds)
+          .select("slug, email, provider_id")
+          .or(`slug.in.(${providerIds.map(s => `"${s}"`).join(',')}),provider_id.in.(${sourceProviderIds.map(s => `"${s}"`).join(',')})`)
           .not("deleted", "is", true);
+
+        // Build olera email lookup by provider_id for fallback
+        const oleraEmailByProviderId = new Map<string, string>();
+        for (const p of oleraProviders ?? []) {
+          if (p.provider_id && p.email) oleraEmailByProviderId.set(p.provider_id, p.email);
+        }
 
         // Build provider status map
         const providerStatus = new Map<string, { exists: boolean; hasEmail: boolean; isArchived: boolean }>();
@@ -92,7 +103,9 @@ export async function GET(request: NextRequest) {
         }
         for (const p of bpProviders ?? []) {
           if (p.slug) {
-            providerStatus.set(p.slug, { exists: true, hasEmail: !!p.email, isArchived: p.is_active === false });
+            // Check business_profiles email first, then fallback to olera-providers via source_provider_id
+            const hasEmail = !!p.email || (p.source_provider_id ? !!oleraEmailByProviderId.get(p.source_provider_id) : false);
+            providerStatus.set(p.slug, { exists: true, hasEmail, isArchived: p.is_active === false });
           }
         }
         for (const p of oleraProviders ?? []) {
@@ -156,18 +169,29 @@ export async function GET(request: NextRequest) {
       // Get unique provider IDs and check their status
       const providerIds = [...new Set((allNeedsEmailQuestions ?? []).map((q) => q.provider_id).filter(Boolean))];
 
-      // Look up providers in business_profiles
+      // Look up providers in business_profiles (include source_provider_id for fallback)
       const { data: bpProvidersForFilter } = await db
         .from("business_profiles")
-        .select("slug, email, is_active")
+        .select("slug, email, is_active, source_provider_id")
         .in("slug", providerIds);
 
-      // Look up providers in olera-providers (legacy)
+      // Collect source_provider_ids for fallback email lookup
+      const sourceProviderIdsForFilter = (bpProvidersForFilter ?? [])
+        .filter((p) => p.source_provider_id && !p.email)
+        .map((p) => p.source_provider_id as string);
+
+      // Look up providers in olera-providers (by slug OR source_provider_id for email fallback)
       const { data: oleraProvidersForFilter } = await db
         .from("olera-providers")
-        .select("slug, email")
-        .in("slug", providerIds)
+        .select("slug, email, provider_id")
+        .or(`slug.in.(${providerIds.map(s => `"${s}"`).join(',')}),provider_id.in.(${sourceProviderIdsForFilter.map(s => `"${s}"`).join(',')})`)
         .not("deleted", "is", true);
+
+      // Build olera email lookup by provider_id for fallback
+      const oleraEmailByProviderIdForFilter = new Map<string, string>();
+      for (const p of oleraProvidersForFilter ?? []) {
+        if (p.provider_id && p.email) oleraEmailByProviderIdForFilter.set(p.provider_id, p.email);
+      }
 
       // Build provider status map
       const providerStatusMap = new Map<string, { exists: boolean; hasEmail: boolean; isArchived: boolean }>();
@@ -176,7 +200,9 @@ export async function GET(request: NextRequest) {
       }
       for (const p of bpProvidersForFilter ?? []) {
         if (p.slug) {
-          providerStatusMap.set(p.slug, { exists: true, hasEmail: !!p.email, isArchived: p.is_active === false });
+          // Check business_profiles email first, then fallback to olera-providers via source_provider_id
+          const hasEmail = !!p.email || (p.source_provider_id ? !!oleraEmailByProviderIdForFilter.get(p.source_provider_id) : false);
+          providerStatusMap.set(p.slug, { exists: true, hasEmail, isArchived: p.is_active === false });
         }
       }
       for (const p of oleraProvidersForFilter ?? []) {
@@ -230,17 +256,45 @@ export async function GET(request: NextRequest) {
           }
         }
 
+        // Collect source_provider_ids for email fallback (where business_profiles has no email)
+        const sourceIdsForEmailFallback = (bpProviders ?? [])
+          .filter((p) => p.slug && !p.email && p.source_provider_id)
+          .map((p) => ({ slug: p.slug as string, sourceId: p.source_provider_id as string }));
+
         // For slugs not found in business_profiles, try olera-providers
         const missingSlugs = slugs.filter((s) => !providerNames[s]);
-        if (missingSlugs.length > 0) {
+
+        // Query olera-providers for missing slugs AND for email fallback via source_provider_id
+        const sourceIdsToQuery = sourceIdsForEmailFallback.map((x) => x.sourceId);
+        if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
             .select("slug, provider_id, provider_name, email, phone")
-            .in("slug", missingSlugs)
+            .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',') || '""'})`)
             .not("deleted", "is", true);
+
+          // Build lookup by provider_id for email fallback
+          const iosEmailByProviderId = new Map<string, string>();
+          const iosPhoneByProviderId = new Map<string, string>();
           for (const p of iosProviders ?? []) {
-            if (p.slug && p.provider_name) providerNames[p.slug] = p.provider_name;
-            if (p.slug && p.provider_id) providerEditorIds[p.slug] = p.provider_id;
+            if (p.provider_id && p.email) iosEmailByProviderId.set(p.provider_id, p.email);
+            if (p.provider_id && p.phone) iosPhoneByProviderId.set(p.provider_id, p.phone);
+          }
+
+          // Fill in email/phone for business_profiles providers via source_provider_id fallback
+          for (const { slug, sourceId } of sourceIdsForEmailFallback) {
+            if (!providerEmails[slug] && iosEmailByProviderId.has(sourceId)) {
+              providerEmails[slug] = iosEmailByProviderId.get(sourceId)!;
+            }
+            if (!providerPhones[slug] && iosPhoneByProviderId.has(sourceId)) {
+              providerPhones[slug] = iosPhoneByProviderId.get(sourceId)!;
+            }
+          }
+
+          // Fill in data for providers only in olera-providers
+          for (const p of iosProviders ?? []) {
+            if (p.slug && p.provider_name && !providerNames[p.slug]) providerNames[p.slug] = p.provider_name;
+            if (p.slug && p.provider_id && !providerEditorIds[p.slug]) providerEditorIds[p.slug] = p.provider_id;
             if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
             if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
           }
@@ -321,16 +375,38 @@ export async function GET(request: NextRequest) {
           }
         }
 
+        // Collect source_provider_ids for email fallback (where business_profiles has no email)
+        const sourceIdsForFallback = (bpProviders ?? [])
+          .filter((p) => p.slug && !p.email && p.source_provider_id)
+          .map((p) => ({ slug: p.slug as string, sourceId: p.source_provider_id as string }));
+
         const missingSlugs = slugs.filter((s) => !providerNames[s]);
-        if (missingSlugs.length > 0) {
+        const sourceIdsToQuery = sourceIdsForFallback.map((x) => x.sourceId);
+
+        if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
             .select("slug, provider_id, provider_name, email, phone")
-            .in("slug", missingSlugs)
+            .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',') || '""'})`)
             .not("deleted", "is", true);
+
+          // Build lookup by provider_id for email fallback
+          const iosEmailById = new Map<string, string>();
+          const iosPhoneById = new Map<string, string>();
           for (const p of iosProviders ?? []) {
-            if (p.slug && p.provider_name) providerNames[p.slug] = p.provider_name;
-            if (p.slug && p.provider_id) providerEditorIds[p.slug] = p.provider_id;
+            if (p.provider_id && p.email) iosEmailById.set(p.provider_id, p.email);
+            if (p.provider_id && p.phone) iosPhoneById.set(p.provider_id, p.phone);
+          }
+
+          // Fill in email/phone for business_profiles providers via source_provider_id fallback
+          for (const { slug, sourceId } of sourceIdsForFallback) {
+            if (!providerEmails[slug] && iosEmailById.has(sourceId)) providerEmails[slug] = iosEmailById.get(sourceId)!;
+            if (!providerPhones[slug] && iosPhoneById.has(sourceId)) providerPhones[slug] = iosPhoneById.get(sourceId)!;
+          }
+
+          for (const p of iosProviders ?? []) {
+            if (p.slug && p.provider_name && !providerNames[p.slug]) providerNames[p.slug] = p.provider_name;
+            if (p.slug && p.provider_id && !providerEditorIds[p.slug]) providerEditorIds[p.slug] = p.provider_id;
             if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
             if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
           }
@@ -409,16 +485,38 @@ export async function GET(request: NextRequest) {
           }
         }
 
+        // Collect source_provider_ids for email fallback (where business_profiles has no email)
+        const sourceIdsForFallback = (bpProviders ?? [])
+          .filter((p) => p.slug && !p.email && p.source_provider_id)
+          .map((p) => ({ slug: p.slug as string, sourceId: p.source_provider_id as string }));
+
         const missingSlugs = slugs.filter((s) => !providerNames[s]);
-        if (missingSlugs.length > 0) {
+        const sourceIdsToQuery = sourceIdsForFallback.map((x) => x.sourceId);
+
+        if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
             .select("slug, provider_id, provider_name, email, phone")
-            .in("slug", missingSlugs)
+            .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',') || '""'})`)
             .not("deleted", "is", true);
+
+          // Build lookup by provider_id for email fallback
+          const iosEmailById = new Map<string, string>();
+          const iosPhoneById = new Map<string, string>();
           for (const p of iosProviders ?? []) {
-            if (p.slug && p.provider_name) providerNames[p.slug] = p.provider_name;
-            if (p.slug && p.provider_id) providerEditorIds[p.slug] = p.provider_id;
+            if (p.provider_id && p.email) iosEmailById.set(p.provider_id, p.email);
+            if (p.provider_id && p.phone) iosPhoneById.set(p.provider_id, p.phone);
+          }
+
+          // Fill in email/phone for business_profiles providers via source_provider_id fallback
+          for (const { slug, sourceId } of sourceIdsForFallback) {
+            if (!providerEmails[slug] && iosEmailById.has(sourceId)) providerEmails[slug] = iosEmailById.get(sourceId)!;
+            if (!providerPhones[slug] && iosPhoneById.has(sourceId)) providerPhones[slug] = iosPhoneById.get(sourceId)!;
+          }
+
+          for (const p of iosProviders ?? []) {
+            if (p.slug && p.provider_name && !providerNames[p.slug]) providerNames[p.slug] = p.provider_name;
+            if (p.slug && p.provider_id && !providerEditorIds[p.slug]) providerEditorIds[p.slug] = p.provider_id;
             if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
             if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
           }
@@ -511,16 +609,38 @@ export async function GET(request: NextRequest) {
           }
         }
 
+        // Collect source_provider_ids for email fallback (where business_profiles has no email)
+        const sourceIdsForFallback = (bpProviders ?? [])
+          .filter((p) => p.slug && !p.email && p.source_provider_id)
+          .map((p) => ({ slug: p.slug as string, sourceId: p.source_provider_id as string }));
+
         const missingSlugs = slugs.filter((s) => !providerNames[s]);
-        if (missingSlugs.length > 0) {
+        const sourceIdsToQuery = sourceIdsForFallback.map((x) => x.sourceId);
+
+        if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
           const { data: iosProviders } = await db
             .from("olera-providers")
             .select("slug, provider_id, provider_name, email, phone")
-            .in("slug", missingSlugs)
+            .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${sourceIdsToQuery.map(s => `"${s}"`).join(',') || '""'})`)
             .not("deleted", "is", true);
+
+          // Build lookup by provider_id for email fallback
+          const iosEmailById = new Map<string, string>();
+          const iosPhoneById = new Map<string, string>();
           for (const p of iosProviders ?? []) {
-            if (p.slug && p.provider_name) providerNames[p.slug] = p.provider_name;
-            if (p.slug && p.provider_id) providerEditorIds[p.slug] = p.provider_id;
+            if (p.provider_id && p.email) iosEmailById.set(p.provider_id, p.email);
+            if (p.provider_id && p.phone) iosPhoneById.set(p.provider_id, p.phone);
+          }
+
+          // Fill in email/phone for business_profiles providers via source_provider_id fallback
+          for (const { slug, sourceId } of sourceIdsForFallback) {
+            if (!providerEmails[slug] && iosEmailById.has(sourceId)) providerEmails[slug] = iosEmailById.get(sourceId)!;
+            if (!providerPhones[slug] && iosPhoneById.has(sourceId)) providerPhones[slug] = iosPhoneById.get(sourceId)!;
+          }
+
+          for (const p of iosProviders ?? []) {
+            if (p.slug && p.provider_name && !providerNames[p.slug]) providerNames[p.slug] = p.provider_name;
+            if (p.slug && p.provider_id && !providerEditorIds[p.slug]) providerEditorIds[p.slug] = p.provider_id;
             if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
             if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
           }
@@ -597,32 +717,43 @@ export async function GET(request: NextRequest) {
         }
       }
 
+      // Collect source_provider_ids for email fallback (where business_profiles has no email)
+      const sourceIdsForFallback = (bpProviders ?? [])
+        .filter((p) => p.slug && !p.email && p.source_provider_id)
+        .map((p) => ({ slug: p.slug as string, sourceId: p.source_provider_id as string }));
+
       // For slugs not found in business_profiles, try olera-providers
       const missingSlugs = slugs.filter((s) => !providerNames[s]);
-      if (missingSlugs.length > 0) {
+      const sourceIdsToQuery = sourceIdsForFallback.map((x) => x.sourceId);
+
+      if (missingSlugs.length > 0 || sourceIdsToQuery.length > 0) {
         const { data: iosProviders } = await db
           .from("olera-providers")
           .select("slug, provider_id, provider_name, email, phone")
-          .in("slug", missingSlugs)
+          .or(`slug.in.(${missingSlugs.map(s => `"${s}"`).join(',') || '""'}),provider_id.in.(${[...missingSlugs, ...sourceIdsToQuery].map(s => `"${s}"`).join(',') || '""'})`)
           .not("deleted", "is", true);
+
+        // Build lookup by provider_id for email fallback
+        const iosEmailById = new Map<string, string>();
+        const iosPhoneById = new Map<string, string>();
         for (const p of iosProviders ?? []) {
-          if (p.slug && p.provider_name) providerNames[p.slug] = p.provider_name;
-          if (p.slug && p.provider_id) providerEditorIds[p.slug] = p.provider_id;
-          if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
-          if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
+          if (p.provider_id && p.email) iosEmailById.set(p.provider_id, p.email);
+          if (p.provider_id && p.phone) iosPhoneById.set(p.provider_id, p.phone);
         }
 
-        // Also try by provider_id for legacy slugs
-        const stillMissing = missingSlugs.filter((s) => !providerNames[s]);
-        if (stillMissing.length > 0) {
-          const { data: legacyProviders } = await db
-            .from("olera-providers")
-            .select("provider_id, provider_name")
-            .in("provider_id", stillMissing)
-            .not("deleted", "is", true);
-          for (const p of legacyProviders ?? []) {
-            if (p.provider_id && p.provider_name) providerNames[p.provider_id] = p.provider_name;
-          }
+        // Fill in email/phone for business_profiles providers via source_provider_id fallback
+        for (const { slug, sourceId } of sourceIdsForFallback) {
+          if (!providerEmails[slug] && iosEmailById.has(sourceId)) providerEmails[slug] = iosEmailById.get(sourceId)!;
+          if (!providerPhones[slug] && iosPhoneById.has(sourceId)) providerPhones[slug] = iosPhoneById.get(sourceId)!;
+        }
+
+        for (const p of iosProviders ?? []) {
+          if (p.slug && p.provider_name && !providerNames[p.slug]) providerNames[p.slug] = p.provider_name;
+          if (p.slug && p.provider_id && !providerEditorIds[p.slug]) providerEditorIds[p.slug] = p.provider_id;
+          if (p.slug && p.email && !providerEmails[p.slug]) providerEmails[p.slug] = p.email;
+          if (p.slug && p.phone && !providerPhones[p.slug]) providerPhones[p.slug] = p.phone;
+          // Also handle legacy provider_id as slug
+          if (p.provider_id && p.provider_name && !providerNames[p.provider_id]) providerNames[p.provider_id] = p.provider_name;
         }
 
         // Strategy 4: reverse-match auto-generated slugs for providers with slug=null
@@ -634,7 +765,7 @@ export async function GET(request: NextRequest) {
             const namePrefix = slugParts.slice(0, 3).join("-");
             const { data: candidates } = await db
               .from("olera-providers")
-              .select("provider_id, provider_name, state")
+              .select("provider_id, provider_name, state, email, phone")
               .not("deleted", "is", true)
               .is("slug", null)
               .ilike("provider_name", `${namePrefix.replace(/-/g, "%")}%`)
@@ -645,6 +776,9 @@ export async function GET(request: NextRequest) {
                 if (generatedSlug === missingSlug) {
                   providerNames[missingSlug] = c.provider_name;
                   providerEditorIds[missingSlug] = c.provider_id;
+                  // Also capture email/phone from Strategy 4 matches
+                  if (c.email && !providerEmails[missingSlug]) providerEmails[missingSlug] = c.email;
+                  if (c.phone && !providerPhones[missingSlug]) providerPhones[missingSlug] = c.phone;
                   break;
                 }
               }
