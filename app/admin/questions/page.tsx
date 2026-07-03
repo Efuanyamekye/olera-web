@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import PulseHeader from "@/components/admin/PulseHeader";
 import { resolveRange, type DateRangeValue } from "@/components/admin/DateRangePopover";
+import EmailVerificationBadge, { type VerificationStatus } from "@/components/admin/EmailVerificationBadge";
+import TrustScoreBadge, { type TrustScoreStatus } from "@/components/admin/TrustScoreBadge";
 
 interface Question {
   id: string;
@@ -150,11 +152,104 @@ function InlineEmailInput({
   const [findError, setFindError] = useState<string | null>(null);
   const [autoSearchAttempted, setAutoSearchAttempted] = useState(false);
 
+  // Email verification and trust score state
+  const [verificationStatus, setVerificationStatus] = useState<VerificationStatus>("idle");
+  const [trustScoreStatus, setTrustScoreStatus] = useState<TrustScoreStatus>("idle");
+  const [trustScoreReason, setTrustScoreReason] = useState("");
+  const verifyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const blurRequestIdRef = useRef(0);
+
+  // Verify email address
+  const verifyEmail = useCallback(async (emailToVerify: string): Promise<VerificationStatus> => {
+    if (!emailToVerify || !emailToVerify.includes("@")) return "idle";
+
+    try {
+      const res = await fetch("/api/admin/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailToVerify }),
+      });
+
+      if (!res.ok) return "unknown";
+
+      const data = await res.json();
+      const result = data.results?.[0];
+      if (!result) return "unknown";
+
+      return result.status as VerificationStatus;
+    } catch {
+      return "unknown";
+    }
+  }, []);
+
+  // Fetch trust score for email
+  const fetchTrustScore = useCallback(async (emailToCheck: string): Promise<{ level: TrustScoreStatus; reason: string }> => {
+    if (!emailToCheck || !emailToCheck.includes("@") || !providerSlug) {
+      return { level: "idle", reason: "" };
+    }
+
+    try {
+      const res = await fetch("/api/admin/connections/preview-trust-score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailToCheck, providerId: providerSlug }),
+      });
+
+      if (!res.ok) return { level: "idle", reason: "" };
+
+      const data = await res.json();
+      return { level: data.level as TrustScoreStatus, reason: data.reason || "" };
+    } catch {
+      return { level: "idle", reason: "" };
+    }
+  }, [providerSlug]);
+
+  // Run verification and trust scoring in parallel
+  const verifyAndScore = useCallback(async (emailToCheck: string) => {
+    if (!emailToCheck || !emailToCheck.includes("@")) {
+      setVerificationStatus("idle");
+      setTrustScoreStatus("idle");
+      setTrustScoreReason("");
+      return;
+    }
+
+    const requestId = ++blurRequestIdRef.current;
+
+    setVerificationStatus("verifying");
+    setTrustScoreStatus("scoring");
+
+    const [verifyStatus, trustResult] = await Promise.all([
+      verifyEmail(emailToCheck),
+      fetchTrustScore(emailToCheck),
+    ]);
+
+    // Only update if this is still the latest request
+    if (blurRequestIdRef.current === requestId) {
+      setVerificationStatus(verifyStatus);
+      setTrustScoreStatus(trustResult.level);
+      setTrustScoreReason(trustResult.reason);
+    }
+  }, [verifyEmail, fetchTrustScore]);
+
+  // Debounced verification on blur
+  const handleEmailBlur = useCallback(() => {
+    if (verifyDebounceRef.current) {
+      clearTimeout(verifyDebounceRef.current);
+    }
+    verifyDebounceRef.current = setTimeout(() => {
+      verifyAndScore(email);
+    }, 300);
+  }, [email, verifyAndScore]);
+
   async function handleFindEmail() {
     setFindingEmail(true);
     setFindError(null);
     setEmailSource(null);
     setFoundUrl(null);
+    // Reset verification state when searching
+    setVerificationStatus("idle");
+    setTrustScoreStatus("idle");
+    setTrustScoreReason("");
 
     try {
       const res = await fetch("/api/admin/connections/find-provider-email", {
@@ -169,6 +264,8 @@ function InlineEmailInput({
           setEmail(data.email);
           setEmailSource(data.source || null);
           setFoundUrl(data.foundUrl || null);
+          // Verify the found email
+          verifyAndScore(data.email);
         } else {
           setFindError("No email found");
         }
@@ -250,13 +347,18 @@ function InlineEmailInput({
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
-            // Clear find results when manually editing
+            // Clear find results and verification when manually editing
             if (emailSource || findError) {
               setEmailSource(null);
               setFoundUrl(null);
               setFindError(null);
             }
+            // Reset verification when typing
+            setVerificationStatus("idle");
+            setTrustScoreStatus("idle");
+            setTrustScoreReason("");
           }}
+          onBlur={handleEmailBlur}
           className="flex-1 px-3 py-1.5 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-gray-400 focus:ring-2 focus:ring-gray-900/5 placeholder:text-gray-300 transition"
           disabled={saving || findingEmail}
           required
@@ -297,6 +399,14 @@ function InlineEmailInput({
             </>
           )}
         </p>
+      )}
+
+      {/* Verification and trust score badges */}
+      {(verificationStatus !== "idle" || trustScoreStatus !== "idle") && (
+        <div className="flex items-center gap-3">
+          <EmailVerificationBadge status={verificationStatus} showHelperText />
+          <TrustScoreBadge status={trustScoreStatus} reason={trustScoreReason} />
+        </div>
       )}
 
       {/* Find error */}
