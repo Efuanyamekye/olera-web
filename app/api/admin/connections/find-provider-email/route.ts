@@ -86,14 +86,106 @@ export async function POST(request: NextRequest) {
     const db = getServiceClient();
     const adminUserId = admin.id;
 
-    // Fetch provider from business_profiles
-    const { data: provider, error: providerError } = await db
-      .from("business_profiles")
-      .select("id, display_name, website, city, state, source_provider_id, metadata")
-      .eq("id", providerId)
-      .maybeSingle();
+    // Check if providerId is a UUID or a slug
+    const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(providerId);
 
-    if (providerError || !provider) {
+    // Fetch provider from business_profiles (by UUID or slug depending on format)
+    let provider: {
+      id: string;
+      display_name: string | null;
+      website: string | null;
+      city: string | null;
+      state: string | null;
+      source_provider_id: string | null;
+      metadata: unknown;
+    } | null = null;
+
+    if (isUuid) {
+      // Query by UUID
+      const { data: providerById } = await db
+        .from("business_profiles")
+        .select("id, display_name, website, city, state, source_provider_id, metadata")
+        .eq("id", providerId)
+        .maybeSingle();
+
+      provider = providerById;
+    } else {
+      // Query by slug
+      const { data: providerBySlug } = await db
+        .from("business_profiles")
+        .select("id, display_name, website, city, state, source_provider_id, metadata")
+        .eq("slug", providerId)
+        .maybeSingle();
+
+      provider = providerBySlug;
+    }
+
+    if (!provider) {
+      // Try olera-providers directly as final fallback (by slug first, then provider_id)
+      let iosProvider: {
+        provider_id: string | null;
+        provider_name: string | null;
+        website: string | null;
+        place_id: string | null;
+        city: string | null;
+        state: string | null;
+      } | null = null;
+
+      // Try by slug first
+      const { data: iosBySlug } = await db
+        .from("olera-providers")
+        .select("provider_id, provider_name, website, place_id, city, state")
+        .eq("slug", providerId)
+        .not("deleted", "is", true)
+        .maybeSingle();
+
+      if (iosBySlug) {
+        iosProvider = iosBySlug;
+      } else {
+        // Try by provider_id (legacy format)
+        const { data: iosByProviderId } = await db
+          .from("olera-providers")
+          .select("provider_id, provider_name, website, place_id, city, state")
+          .eq("provider_id", providerId)
+          .not("deleted", "is", true)
+          .maybeSingle();
+
+        iosProvider = iosByProviderId;
+      }
+
+      if (iosProvider) {
+        // Build context directly from olera-providers
+        const ctx: ProviderContext = {
+          providerName: iosProvider.provider_name || providerId,
+          website: iosProvider.website || null,
+          placeId: iosProvider.place_id || null,
+          city: iosProvider.city || null,
+          state: iosProvider.state || null,
+        };
+
+        let result;
+        try {
+          result = await findEmail(ctx);
+        } catch (enrichmentError) {
+          console.error("[find-provider-email] Enrichment failed (ios fallback):", enrichmentError);
+          return NextResponse.json({
+            error: "Email enrichment failed. The provider's website may be inaccessible.",
+            email: null,
+            source: null,
+            candidates: [],
+          });
+        }
+
+        return NextResponse.json({
+          email: result.email,
+          source: result.source,
+          foundUrl: result.foundUrl || null,
+          candidates: result.candidates || [],
+          candidatesWithUrls: result.candidatesWithUrls || [],
+          cached: false,
+        });
+      }
+
       return NextResponse.json(
         { error: "Provider not found" },
         { status: 404 }
