@@ -125,11 +125,13 @@ function InlineEmailInput({
   existingEmail,
   emailIsDead,
   onEmailAdded,
+  autoSearch = false,
 }: {
   providerSlug: string;
   existingEmail?: string | null;
   emailIsDead?: boolean;
   onEmailAdded: () => void;
+  autoSearch?: boolean;
 }) {
   // Don't pre-fill a dead address — the operator needs to replace it.
   const [email, setEmail] = useState(emailIsDead ? "" : existingEmail || "");
@@ -146,6 +148,7 @@ function InlineEmailInput({
   const [emailSource, setEmailSource] = useState<"scrape" | "perplexity" | null>(null);
   const [foundUrl, setFoundUrl] = useState<string | null>(null);
   const [findError, setFindError] = useState<string | null>(null);
+  const [autoSearchAttempted, setAutoSearchAttempted] = useState(false);
 
   async function handleFindEmail() {
     setFindingEmail(true);
@@ -178,6 +181,14 @@ function InlineEmailInput({
       setFindingEmail(false);
     }
   }
+
+  // Auto-search on mount if enabled and no email exists
+  useEffect(() => {
+    if (autoSearch && !hasExistingEmail && !autoSearchAttempted) {
+      setAutoSearchAttempted(true);
+      handleFindEmail();
+    }
+  }, [autoSearch, hasExistingEmail, autoSearchAttempted]);
 
   async function submit(force: boolean) {
     if (!email.trim() || !providerSlug) return;
@@ -787,6 +798,7 @@ export default function AdminQuestionsPage() {
                               existingEmail={firstQ.provider_email}
                               emailIsDead={emailIsDead}
                               onEmailAdded={fetchQuestions}
+                              autoSearch
                             />
                           </div>
                         ) : (
