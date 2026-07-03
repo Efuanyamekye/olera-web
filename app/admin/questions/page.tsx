@@ -604,11 +604,14 @@ export default function AdminQuestionsPage() {
             const isExpanded = expandedProviders.has(providerId);
             const questionCount = providerQuestions.length;
 
-            // Check if any question in this group needs email
-            const groupNeedsEmail = providerQuestions.some(
-              (q) => q.metadata?.needs_provider_email === true && q.status !== "rejected" && q.status !== "archived"
+            // Check if any active question in this group needs email
+            const activeQuestions = providerQuestions.filter(
+              (q) => q.status !== "rejected" && q.status !== "archived"
             );
-            const emailIsDead = providerQuestions.some((q) => q.metadata?.email_dead === true);
+            const groupNeedsEmail = activeQuestions.some(
+              (q) => q.metadata?.needs_provider_email === true
+            );
+            const emailIsDead = activeQuestions.some((q) => q.metadata?.email_dead === true);
 
             return (
               <div key={providerId} className="border border-gray-100 rounded-xl overflow-hidden">
@@ -639,12 +642,17 @@ export default function AdminQuestionsPage() {
                       {questionCount} {questionCount === 1 ? "question" : "questions"}
                     </span>
 
-                    {/* Needs email indicator */}
+                    {/* Email status badge - matches Connections page styling */}
                     {groupNeedsEmail && (
-                      <span className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-600 flex-shrink-0">
-                        <span className={`w-1.5 h-1.5 rounded-full ${emailIsDead ? "bg-amber-500" : "bg-gray-300"}`} />
-                        {emailIsDead ? "Email bounced" : "Needs email"}
-                      </span>
+                      emailIsDead ? (
+                        <span className="px-1.5 py-0.5 text-xs font-medium bg-red-50 text-red-600 rounded flex-shrink-0">
+                          Failed
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.5 text-xs font-medium bg-amber-50 text-amber-600 rounded flex-shrink-0">
+                          No email
+                        </span>
+                      )
                     )}
                   </div>
 
