@@ -26,8 +26,117 @@ export default function IntegrationsPage() {
       </div>
 
       <SmartleadCard />
+      <BackfillCard />
       <CalendlyCard />
     </main>
+  );
+}
+
+function BackfillCard() {
+  const [loading, setLoading] = useState(false);
+  const [preview, setPreview] = useState<
+    { found: number; unresolved: number; scanned: number; capped: boolean } | null
+  >(null);
+  const [result, setResult] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const runPreview = async () => {
+    setLoading(true);
+    setError(null);
+    setResult(null);
+    setPreview(null);
+    try {
+      const res = await fetch("/api/admin/medjobs/backfill-smartlead-replies");
+      const body = (await res.json()) as {
+        replies_found?: number;
+        replies_unresolved?: number;
+        leads_scanned?: number;
+        capped?: boolean;
+        error?: string;
+      };
+      if (!res.ok) throw new Error(body.error ?? `HTTP ${res.status}`);
+      setPreview({
+        found: body.replies_found ?? 0,
+        unresolved: body.replies_unresolved ?? 0,
+        scanned: body.leads_scanned ?? 0,
+        capped: !!body.capped,
+      });
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const runImport = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/medjobs/backfill-smartlead-replies", { method: "POST" });
+      const body = (await res.json()) as {
+        imported?: number;
+        skipped_duplicate?: number;
+        capped?: boolean;
+        error?: string;
+      };
+      if (!res.ok) throw new Error(body.error ?? `HTTP ${res.status}`);
+      setResult(
+        `Imported ${body.imported ?? 0} past reply(ies) (${body.skipped_duplicate ?? 0} already in).` +
+          (body.capped ? " More remain — click Import again to continue." : ""),
+      );
+      setPreview(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Unknown error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="rounded-xl border border-gray-200 bg-white p-6">
+      <h2 className="text-lg font-semibold text-gray-900">Import past replies</h2>
+      <p className="mt-1 text-sm text-gray-600">
+        Pulls in replies that came in before the connection was live — including out-of-office — so you
+        can work those leads. Safe to run again; it won&apos;t duplicate anything.
+      </p>
+
+      <div className="mt-3 flex gap-2">
+        <button
+          onClick={runPreview}
+          disabled={loading}
+          className="rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+        >
+          {loading && !preview ? "Checking…" : "Preview"}
+        </button>
+        {preview && (
+          <button
+            onClick={runImport}
+            disabled={loading}
+            className="rounded-md bg-primary-600 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
+          >
+            {loading ? "Importing…" : `Import ${preview.found} reply(ies)`}
+          </button>
+        )}
+      </div>
+
+      {preview && (
+        <p className="mt-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
+          Found <strong>{preview.found}</strong> past reply(ies)
+          {preview.unresolved > 0 ? ` (${preview.unresolved} couldn't be matched to a lead)` : ""}. Press
+          Import to bring them into the app.
+        </p>
+      )}
+      {result && (
+        <p className="mt-3 rounded-md border border-primary-200 bg-primary-50 px-3 py-2 text-sm text-primary-800">
+          ✓ {result}
+        </p>
+      )}
+      {error && (
+        <p className="mt-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+    </section>
   );
 }
 
