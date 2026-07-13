@@ -147,8 +147,8 @@ export async function GET(request: NextRequest) {
 
     // Join tracking with provider data
     const providerMap = new Map((providerRows || []).map((p) => [p.provider_id, p as ProviderRow]));
-    const providers: OutreachProvider[] = (trackingRows as TrackingRow[])
-      .map((t) => {
+    const providers = (trackingRows as TrackingRow[])
+      .map((t): OutreachProvider | null => {
         const p = providerMap.get(t.provider_id);
         if (!p) return null;
         return {
