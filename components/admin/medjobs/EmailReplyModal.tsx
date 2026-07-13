@@ -145,12 +145,10 @@ export function EmailReplyModal({
       return;
     }
     if (outcomeKey === "ooo_restart") {
-      try {
-        await action("ooo_restart", { notes });
-        onClose();
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "Restart failed");
-      }
+      // Let errors propagate to the outcome modal (it shows them + resets its
+      // Saving state); on success onClose unmounts it.
+      await action("ooo_restart", { notes });
+      onClose();
       return;
     }
     if (outcomeKey === "meeting_booked") {

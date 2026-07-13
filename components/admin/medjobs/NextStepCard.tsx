@@ -255,6 +255,9 @@ function InOutreachBody({
   // warm activation cadence? Drives the headline copy (replaces the old green
   // "Activation cadence running" box).
   const activationRunning = isActivationRunning(ctx);
+  // Custom cadences show their admin-given name; activation/outreach use the
+  // generic label.
+  const customCadenceName = currentCustomCadenceName(ctx);
   const nextActivationCall = ctx.pending_tasks
     .filter(
       (t) =>
@@ -286,27 +289,30 @@ function InOutreachBody({
     typeof confirmCallTask?.payload?.day === "number"
       ? (confirmCallTask.payload.day as number)
       : null;
-  const confirmScriptLabel = activationRunning
-    ? "Activation call script"
-    : confirmDay != null
-      ? `Day ${confirmDay} script`
-      : "Call script";
+  const confirmScriptLabel = customCadenceName
+    ? "Custom cadence call"
+    : activationRunning
+      ? "Activation call script"
+      : confirmDay != null
+        ? `Day ${confirmDay} script`
+        : "Call script";
 
-  // Custom cadences show their admin-given name; activation/outreach use the
-  // generic label.
-  const customCadenceName = currentCustomCadenceName(ctx);
   const headline = customCadenceName
     ? `Awaiting reply to ${customCadenceName}`
     : `Awaiting reply to ${activationRunning ? "activation" : "outreach"} cadence`;
-  const subline = activationRunning
-    ? nextActivationCall
-      ? `Next call ${formatDueDate(nextActivationCall.due_at)}`
-      : "Follow-ups queued"
-    : nextEmail
-      ? `Next: Day ${nextEmail.payload?.day ?? "?"} email · due ${formatDueDate(nextEmail.due_at)}`
-      : lastEmailSent
-        ? `Last email sent ${formatRelative(lastEmailSent.created_at)} · cadence complete`
-        : "Outreach in flight";
+  const subline = customCadenceName
+    ? confirmCallTask
+      ? `Next call ${formatDueDate(confirmCallTask.due_at)}`
+      : "Cadence in flight"
+    : activationRunning
+      ? nextActivationCall
+        ? `Next call ${formatDueDate(nextActivationCall.due_at)}`
+        : "Follow-ups queued"
+      : nextEmail
+        ? `Next: Day ${nextEmail.payload?.day ?? "?"} email · due ${formatDueDate(nextEmail.due_at)}`
+        : lastEmailSent
+          ? `Last email sent ${formatRelative(lastEmailSent.created_at)} · cadence complete`
+          : "Outreach in flight";
 
   // Call-first everywhere EXCEPT the Emails tab. A call-due row (CallDueBody)
   // already reads call-first on every surface; an awaiting-reply row with a
