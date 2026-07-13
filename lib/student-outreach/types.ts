@@ -281,6 +281,18 @@ export interface ResearchData {
     lead_email: string | null;
     enrolled_at: string;
   };
+  /** Custom cadence Smartlead linkage — a bespoke, one-lead campaign the admin
+   *  composed by hand from the reply drawer (free-text emails + timed calls).
+   *  Holds the LATEST custom cadence (enough for reply-matching + "resume last
+   *  cadence"); prior custom campaigns aren't retained. Set by
+   *  handleLaunchCustomCadence. */
+  smartlead_custom?: {
+    campaign_id: number;
+    lead_email: string | null;
+    enrolled_at: string;
+    /** Admin-provided name, shown as the drawer headline ("Awaiting reply to …"). */
+    name?: string | null;
+  };
 }
 
 export interface Campus {

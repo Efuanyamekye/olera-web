@@ -52,7 +52,15 @@ export interface DerivedState {
 // (tab, card, drawer), the moment the new cadence launches (not when its first
 // email sends). Forward-structured: add a launch reason here and every surface
 // picks it up.
-export const SEQUENCE_LAUNCH_REASONS = ["activation_launched"] as const;
+export const SEQUENCE_LAUNCH_REASONS = [
+  "activation_launched",
+  // Admin-composed custom cadence launched from the reply drawer.
+  "custom_sequence_launched",
+  // "OOO reply — restart last cadence" resumes the current cadence; it counts as
+  // a fresh start so the OOO auto-reply before it is consumed and the row goes
+  // back to "awaiting reply."
+  "cadence_restarted",
+] as const;
 export const SEQUENCE_STOP_REASONS = ["activation_stopped", "outreach_stopped"] as const;
 
 type ReasonTouchpoint = {

@@ -685,3 +685,23 @@ export async function pauseLeadInCampaign(
     `/campaigns/${campaignId}/leads/${leadId}/pause`
   );
 }
+
+/**
+ * Resume a paused lead's drip within a campaign (the counterpart to
+ * pauseLeadInCampaign). Used by the "OOO reply — restart last cadence" flow:
+ * Smartlead auto-pauses a lead's sequence when it detects a reply (including an
+ * out-of-office auto-reply), so this un-pauses them to keep the drip going once
+ * they're back.
+ *
+ * Endpoint follows Smartlead's documented "resume lead by campaign id" API —
+ * verify against current docs before go-live (dormant until the key is set).
+ */
+export async function resumeLeadInCampaign(
+  campaignId: number,
+  leadId: number
+): Promise<SmartleadResult<{ ok?: boolean }>> {
+  return smartleadRequest(
+    "POST",
+    `/campaigns/${campaignId}/leads/${leadId}/resume`
+  );
+}

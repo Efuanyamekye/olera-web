@@ -292,7 +292,12 @@ function InOutreachBody({
       ? `Day ${confirmDay} script`
       : "Call script";
 
-  const headline = `Awaiting reply to ${activationRunning ? "activation" : "outreach"} cadence`;
+  // Custom cadences show their admin-given name; activation/outreach use the
+  // generic label.
+  const customCadenceName = currentCustomCadenceName(ctx);
+  const headline = customCadenceName
+    ? `Awaiting reply to ${customCadenceName}`
+    : `Awaiting reply to ${activationRunning ? "activation" : "outreach"} cadence`;
   const subline = activationRunning
     ? nextActivationCall
       ? `Next call ${formatDueDate(nextActivationCall.due_at)}`
@@ -441,6 +446,34 @@ function isPartnerRow(ctx: DrawerContext): boolean {
  */
 function isActivationRunning(ctx: DrawerContext): boolean {
   return activationSequenceRunning(ctx.touchpoints);
+}
+
+/**
+ * Name of the custom cadence currently awaiting a reply — when a custom cadence
+ * is the most recent launch (newer than any activation launch). Drives the
+ * drawer headline. Returns null when the current cadence is outreach or
+ * activation (those use the generic label).
+ */
+function currentCustomCadenceName(ctx: DrawerContext): string | null {
+  let customAt: string | null = null;
+  let customName: string | null = null;
+  let activationAt: string | null = null;
+  for (const t of ctx.touchpoints) {
+    if (t.touchpoint_type !== "note_added") continue;
+    const p = (t.payload ?? {}) as Record<string, unknown>;
+    if (p.reason === "custom_sequence_launched") {
+      if (customAt === null || t.created_at > customAt) {
+        customAt = t.created_at;
+        customName = typeof p.name === "string" && p.name.trim() ? p.name.trim() : null;
+      }
+    } else if (p.reason === "activation_launched") {
+      if (activationAt === null || t.created_at > activationAt) activationAt = t.created_at;
+    }
+  }
+  if (!customAt) return null;
+  // A later activation launch supersedes the custom cadence naming.
+  if (activationAt && activationAt > customAt) return null;
+  return customName;
 }
 
 // ── call_due ─────────────────────────────────────────────────────────────

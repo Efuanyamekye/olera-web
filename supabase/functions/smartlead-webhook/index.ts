@@ -280,6 +280,7 @@ async function resolveRow(
       "research_data->smartlead->>lead_email",
       "research_data->smartlead_activation->>lead_email",
       "research_data->smartlead_welcome->>lead_email",
+      "research_data->smartlead_custom->>lead_email",
     ]) {
       const { data } = await supabase
         .from("student_outreach")

@@ -32,10 +32,13 @@ import {
   buildSmartleadPreview,
   enrollRowIntoCampusCampaign,
   enrollActivationLead,
+  enrollCustomCadence,
   pauseLeadDrips,
   type BridgeRow,
+  type CustomEmailStep,
   type NamedContact,
 } from "@/lib/medjobs/smartlead-bridge";
+import { getLeadByEmail, resumeLeadInCampaign } from "@/lib/smartlead";
 import { nextBusinessDayET } from "@/lib/student-outreach/business-day";
 import { CLOSED_STATUSES } from "@/lib/student-outreach/types";
 import { decisionMakerEmailRecipients } from "@/lib/student-outreach/decision-makers";
@@ -372,6 +375,12 @@ export async function POST(
       // snapshots are persisted on the launch touchpoint for it to use.
       case "launch_activation":
         await handleLaunchActivation(db, row, body, user.id);
+        break;
+      case "launch_custom_cadence":
+        await handleLaunchCustomCadence(db, row, body, user.id);
+        break;
+      case "ooo_restart":
+        await handleOooRestart(db, row, user.id);
         break;
 
       // Hard stop — cancels EVERY pending outreach task (cold email/call +
@@ -2410,6 +2419,242 @@ async function handleLaunchActivation(
 
   // Surface the row as unread so the new activation work boosts the tab.
   await db.from("student_outreach").update({ viewed_at: null }).eq("id", row.id);
+}
+
+/**
+ * Launch an admin-composed CUSTOM cadence from the reply drawer: free-text email
+ * steps become a bespoke Smartlead campaign, call steps become CRM call
+ * reminders, and a `custom_sequence_launched` marker drops the row back to
+ * "awaiting reply to <name>" (via the shared cutoff). Best-effort on the
+ * Smartlead side — a send error never undoes the queued calls.
+ */
+async function handleLaunchCustomCadence(
+  db: DB,
+  row: OutreachRow,
+  body: {
+    name?: string;
+    steps?: Array<{ type: "email" | "call"; day: number; subject?: string; body?: string; script?: string }>;
+    recipient?: {
+      name?: string | null;
+      email?: string | null;
+      phone?: string | null;
+      contact_id?: string | null;
+      first_name?: string | null;
+      last_name?: string | null;
+    };
+    source?: string;
+  },
+  userId: string,
+) {
+  const name = (body.name ?? "").trim() || "Custom cadence";
+  const rawSteps = body.steps ?? [];
+  const emailSteps: CustomEmailStep[] = rawSteps
+    .filter((s) => s.type === "email")
+    .map((s) => ({
+      day: Math.max(0, Math.floor(Number(s.day) || 0)),
+      subject: (s.subject ?? "").trim(),
+      body: (s.body ?? "").trim(),
+    }));
+  const callSteps = rawSteps
+    .filter((s) => s.type === "call")
+    .map((s) => ({ day: Math.max(0, Math.floor(Number(s.day) || 0)), script: (s.script ?? "").trim() }));
+
+  if (emailSteps.length === 0 && callSteps.length === 0) {
+    throw new Error("Add at least one step to the cadence.");
+  }
+  if (emailSteps.some((s) => !s.subject || !s.body)) {
+    throw new Error("Every email step needs a subject and a body.");
+  }
+
+  const recipient = body.recipient ?? {};
+
+  // 1. Clear the previous cadence's still-pending reminders so old + new don't
+  //    mix (the reply usually did this; this makes it certain — R3).
+  await db
+    .from("student_outreach_tasks")
+    .update({ status: "cancelled" })
+    .eq("outreach_id", row.id)
+    .eq("status", "pending")
+    .in("task_type", ["outreach_followup_call", "outreach_email_send", "outreach_day_0"]);
+
+  // 2. Queue the custom CALL reminders (business days only) when we have a phone.
+  const now = Date.now();
+  if (recipient.phone && callSteps.length > 0) {
+    const callInserts = callSteps.map((s) => ({
+      outreach_id: row.id,
+      task_type: "outreach_followup_call" as const,
+      due_at: nextBusinessDayET(new Date(now + s.day * DAY_MS)).toISOString(),
+      payload: {
+        cadence: "custom",
+        cadence_name: name,
+        day: s.day,
+        label: "Custom cadence call",
+        script: s.script || null,
+        recipient_name: recipient.name ?? null,
+        recipient_phone: recipient.phone ?? null,
+        recipient_contact_id: recipient.contact_id ?? null,
+      },
+      created_by: userId,
+    }));
+    const { error } = await db.from("student_outreach_tasks").insert(callInserts);
+    if (error) throw new Error(error.message);
+  }
+
+  // 3. Provision the bespoke Smartlead campaign + enroll the one contact
+  //    (best-effort — a Smartlead error must not undo the calls above).
+  let emailDelivery = "smartlead_pending";
+  let campaignId: number | undefined;
+  if (recipient.email && emailSteps.length > 0) {
+    try {
+      const { data: campusRow } = await db
+        .from("student_outreach_campuses")
+        .select("name, city, slug")
+        .eq("id", row.campus_id)
+        .maybeSingle();
+      const campus = campusRow as { name?: string; city?: string | null; slug?: string | null } | null;
+      const yyyymm = new Date().toISOString().slice(0, 7);
+      const enroll = await enrollCustomCadence({
+        outreach_id: row.id,
+        organizationName: row.organization_name,
+        campus: {
+          name: campus?.name ?? "Unknown Campus",
+          city: campus?.city ?? null,
+          slug: campus?.slug ?? null,
+        },
+        campaignName: `MedJobs Custom — ${name} — ${row.organization_name} — ${yyyymm}`,
+        emailSteps,
+        recipient: {
+          email: recipient.email,
+          first_name: recipient.first_name ?? null,
+          last_name: recipient.last_name ?? null,
+          contact_id: recipient.contact_id ?? null,
+        },
+        is_partner: row.kind !== "provider",
+        stakeholder_type: row.stakeholder_type,
+      });
+      if (enroll.skipped_reason) {
+        emailDelivery = `smartlead_skipped_${enroll.skipped_reason}`;
+      } else if (!enroll.ok || !enroll.campaign_id) {
+        emailDelivery = "smartlead_error";
+        console.error(
+          "[launch_custom_cadence] enrollment error:",
+          enroll.errors.map((e) => `${e.stage}: ${e.message}`).join("; "),
+        );
+      } else {
+        emailDelivery = "smartlead_enrolled";
+        campaignId = enroll.campaign_id;
+      }
+    } catch (e) {
+      emailDelivery = "smartlead_error";
+      console.error("[launch_custom_cadence] enrollment threw:", e instanceof Error ? e.message : e);
+    }
+  }
+
+  // 4. Persist the custom-cadence linkage (reply-matching + "resume last").
+  if (campaignId && recipient.email) {
+    const nextResearch: ResearchData = {
+      ...row.research_data,
+      smartlead_custom: {
+        campaign_id: campaignId,
+        lead_email: recipient.email,
+        enrolled_at: new Date().toISOString(),
+        name,
+      },
+    };
+    await db.from("student_outreach").update({ research_data: nextResearch }).eq("id", row.id);
+  }
+
+  // 5. Marker note — feeds the reply cutoff + the drawer headline.
+  await insertTouchpoint(db, row.id, "note_added", userId, {
+    channel: "system",
+    payload: {
+      reason: "custom_sequence_launched",
+      name,
+      source: body.source ?? "reply",
+      email_delivery: emailDelivery,
+      email_steps: emailSteps.length,
+      call_steps: callSteps.length,
+    },
+  });
+}
+
+/**
+ * "OOO reply — restart last cadence": an out-of-office auto-reply paused the
+ * Smartlead sequence AND our webhook cancelled the call reminders + surfaced a
+ * "they replied." This (1) resumes the lead in the last cadence's campaign,
+ * (2) restores the call reminders that reply cancelled, and (3) drops a
+ * `cadence_restarted` marker so the shared cutoff consumes the OOO reply and the
+ * row returns to "awaiting reply." (Status left as-is for the MVP.)
+ */
+async function handleOooRestart(db: DB, row: OutreachRow, userId: string) {
+  const rd = (row.research_data ?? {}) as ResearchData;
+
+  // 1. Resume the lead in the most recently enrolled campaign.
+  type Link = { campaign_id: number; lead_email: string | null; enrolled_at: string };
+  const links: Link[] = [];
+  for (const l of [rd.smartlead, rd.smartlead_activation, rd.smartlead_welcome, rd.smartlead_custom]) {
+    if (l && typeof l.campaign_id === "number") {
+      links.push({ campaign_id: l.campaign_id, lead_email: l.lead_email ?? null, enrolled_at: l.enrolled_at });
+    }
+  }
+  links.sort((a, b) => b.enrolled_at.localeCompare(a.enrolled_at));
+  const last = links[0];
+
+  let resume = "no_campaign";
+  if (last?.campaign_id && last.lead_email) {
+    try {
+      const lookup = await getLeadByEmail(last.lead_email);
+      const leadId = lookup.ok ? lookup.data?.id ?? null : null;
+      if (leadId == null) {
+        resume = "lead_not_found";
+      } else {
+        const res = await resumeLeadInCampaign(last.campaign_id, leadId);
+        resume = res.ok ? "resumed" : "resume_error";
+        if (!res.ok) console.error("[ooo_restart] resume error:", res.error);
+      }
+    } catch (e) {
+      resume = "resume_error";
+      console.error("[ooo_restart] resume threw:", e instanceof Error ? e.message : e);
+    }
+  }
+
+  // 2. Restore the call reminders the OOO reply cancelled — the batch tied to
+  //    that reply, re-dating any that slipped into the past.
+  const { data: replies } = await db
+    .from("student_outreach_touchpoints")
+    .select("created_at")
+    .eq("outreach_id", row.id)
+    .eq("touchpoint_type", "email_replied")
+    .order("created_at", { ascending: false })
+    .limit(1);
+  const oooAt = ((replies ?? [])[0] as { created_at?: string } | undefined)?.created_at;
+  let callsRestored = 0;
+  if (oooAt) {
+    const buffer = new Date(new Date(oooAt).getTime() - 5 * 60_000).toISOString();
+    const { data: sup } = await db
+      .from("student_outreach_tasks")
+      .select("id, due_at")
+      .eq("outreach_id", row.id)
+      .eq("status", "superseded")
+      .eq("task_type", "outreach_followup_call")
+      .gte("completed_at", buffer);
+    const nowMs = Date.now();
+    for (const t of (sup ?? []) as Array<{ id: string; due_at: string | null }>) {
+      const stillFuture = !!t.due_at && new Date(t.due_at).getTime() > nowMs;
+      const due_at = stillFuture ? t.due_at : nextBusinessDayET(new Date(nowMs)).toISOString();
+      await db
+        .from("student_outreach_tasks")
+        .update({ status: "pending", completed_at: null, due_at })
+        .eq("id", t.id);
+      callsRestored += 1;
+    }
+  }
+
+  // 3. Reset the row — cutoff consumes the OOO reply → back to "awaiting reply."
+  await insertTouchpoint(db, row.id, "note_added", userId, {
+    channel: "system",
+    payload: { reason: "cadence_restarted", source: "ooo", resume, calls_restored: callsRestored },
+  });
 }
 
 /**

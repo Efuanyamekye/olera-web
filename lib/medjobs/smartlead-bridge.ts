@@ -1378,6 +1378,144 @@ export async function enrollActivationLead(input: ActivationEnrollInput): Promis
   return result;
 }
 
+// ── Custom cadence (admin-composed, per-reply) ───────────────────────────
+
+export interface CustomEmailStep {
+  /** Days after launch this email sends (0 = the first send slot). */
+  day: number;
+  subject: string;
+  body: string;
+}
+
+/**
+ * Render an admin-typed email body to Smartlead HTML. UNLIKE the template path
+ * (toSmartleadHtml) this runs NO token substitution — the text is sent verbatim
+ * — but it DOES append the standard signature so custom emails stay consistent.
+ * The signature's Calendly link carries {{outreach_id}}, so the enrolled lead
+ * must set that custom field (enrollCustomCadence does).
+ */
+function toCustomSmartleadHtml(
+  body: string,
+  campusSlug: string | null,
+  pdfAudience: "provider" | "student",
+  programLandingUrl: string,
+): string {
+  const pdfUrl = campusSlug
+    ? `https://olera.care/api/medjobs/program-pdf?university=${campusSlug}&audience=${pdfAudience}`
+    : PROGRAM_URL;
+  return bodyToHtml(body) + composeSmartleadFooterHtml(pdfUrl, programLandingUrl);
+}
+
+/**
+ * Build a Smartlead sequence from admin-typed email steps. Delays are relative
+ * to the previous EMAIL step (Smartlead's model), so the FIRST email's delay is
+ * its OWN day number — a cadence whose first email is Day 2 (a Day-0 call comes
+ * first) sends on Day 2, not immediately. Calls are CRM tasks, never in this
+ * sequence, so they don't affect email timing.
+ */
+export function buildCustomEmailSequence(
+  emailSteps: CustomEmailStep[],
+  opts: { campusSlug?: string | null; isPartner?: boolean; stakeholderType?: StakeholderType | null } = {},
+): SmartleadSequenceStep[] {
+  const sorted = [...emailSteps].sort((a, b) => a.day - b.day);
+  const pdfAudience: "provider" | "student" = opts.isPartner ? "student" : "provider";
+  const programLandingUrl = opts.isPartner
+    ? partnerLandingUrl(opts.stakeholderType ?? "student_org")
+    : PROGRAM_URL;
+  const steps: SmartleadSequenceStep[] = [];
+  let prevDay = 0;
+  let seq = 0;
+  for (const s of sorted) {
+    seq += 1;
+    const delay = seq === 1 ? s.day : s.day - prevDay;
+    steps.push({
+      seq_number: seq,
+      seq_delay_details: { delay_in_days: Math.max(0, delay) },
+      subject: s.subject,
+      email_body: toCustomSmartleadHtml(s.body, opts.campusSlug ?? null, pdfAudience, programLandingUrl),
+    });
+    prevDay = s.day;
+  }
+  return steps;
+}
+
+export interface CustomCadenceEnrollInput {
+  outreach_id: string;
+  organizationName: string;
+  campus: CampusContext;
+  campaignName: string;
+  emailSteps: CustomEmailStep[];
+  recipient: { email: string; first_name?: string | null; last_name?: string | null; contact_id?: string | null };
+  is_partner?: boolean;
+  stakeholder_type?: StakeholderType | null;
+  senderEmails?: string[];
+  schedule?: Record<string, unknown>;
+}
+
+/**
+ * Enroll ONE contact into a BESPOKE custom-cadence campaign. Always provisions a
+ * NEW campaign (the free-text sequence is unique to this reply, so it can't be
+ * shared like the outreach/activation campaigns). The lead carries the
+ * outreach_id custom field so the signature's Calendly link resolves. The new
+ * campaign auto-registers the reply webhook (provisionCampaign). Best-effort +
+ * inert when SMARTLEAD_API_KEY is unset.
+ */
+export async function enrollCustomCadence(input: CustomCadenceEnrollInput): Promise<EnrollResult> {
+  const result: EnrollResult = { ok: false, created: false, enrolled: false, mailbox_warnings: [], errors: [] };
+
+  const email = input.recipient.email?.trim();
+  if (!email) {
+    result.skipped_reason = "no_email";
+    return result;
+  }
+  if (input.emailSteps.length === 0) {
+    result.errors.push({ stage: "build", message: "no email steps" });
+    return result;
+  }
+
+  const firstName = input.recipient.first_name?.trim() || "";
+  const lead: SmartleadLead = {
+    email,
+    first_name: firstName,
+    company_name: input.organizationName,
+    custom_fields: {
+      campus: input.campus.name,
+      catchment_city: input.campus.city ?? "",
+      outreach_id: input.outreach_id,
+      recipient_kind: firstName ? "named" : "general",
+      contact_id: input.recipient.contact_id ?? "",
+    },
+  };
+
+  const mb = await resolveMailboxPool(input.senderEmails);
+  result.mailbox_warnings = mb.pool.warnings;
+  if (!mb.ok) {
+    result.errors.push({ stage: "resolveMailboxPool", message: mb.error ?? "no mailboxes" });
+    return result;
+  }
+  const steps = buildCustomEmailSequence(input.emailSteps, {
+    campusSlug: input.campus.slug ?? null,
+    isPartner: input.is_partner ?? false,
+    stakeholderType: input.stakeholder_type ?? null,
+  });
+  const prov = await provisionCampaign(input.campaignName, mb.pool.ids, steps);
+  result.errors.push(...prov.errors);
+  if (!prov.campaign_id) return result;
+  result.campaign_id = prov.campaign_id;
+  result.created = true;
+
+  const added = await addLeads(prov.campaign_id, [lead]);
+  if (!added.ok) {
+    result.errors.push({ stage: "addLeads", message: added.error ?? "addLeads failed" });
+    return result;
+  }
+  result.enrolled = true;
+
+  result.errors.push(...(await finalizeCampaign(prov.campaign_id, input.schedule ?? defaultSchedule())));
+  result.ok = result.errors.length === 0;
+  return result;
+}
+
 // ── Stop drips on conversion ─────────────────────────────────────────────
 
 export interface PauseDripsResult {

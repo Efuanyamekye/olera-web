@@ -64,7 +64,8 @@ async function collectCampaigns(
     const cold = (rd.smartlead as { campaign_id?: number } | undefined)?.campaign_id;
     const act = (rd.smartlead_activation as { campaign_id?: number } | undefined)?.campaign_id;
     const welcome = (rd.smartlead_welcome as { campaign_id?: number } | undefined)?.campaign_id;
-    for (const cid of [cold, act, welcome]) {
+    const custom = (rd.smartlead_custom as { campaign_id?: number } | undefined)?.campaign_id;
+    for (const cid of [cold, act, welcome, custom]) {
       if (typeof cid === "number" && Number.isFinite(cid) && !campaigns.has(cid)) {
         campaigns.set(cid, r.campuses?.slug ?? null);
       }
