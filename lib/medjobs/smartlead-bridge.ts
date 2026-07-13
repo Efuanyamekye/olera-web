@@ -1104,10 +1104,12 @@ export interface EnrollInput {
   campus: CampusContext;
   /** Used only when no campus campaign exists yet (this row is the first). */
   campaignName: string;
-  /** The campus's existing Smartlead campaign id, looked up by the caller from
-   *  a sibling row's `research_data.smartlead.campaign_id` (approach b). When
-   *  present, the lead is added to it; when absent, a new campaign is provisioned. */
-  existingCampaignId?: number;
+  /** The campus's existing Smartlead campaign id(s) for this audience, looked up
+   *  by the caller from sibling rows' `research_data.smartlead.campaign_id`. The
+   *  lead is added to the first one that STILL EXISTS in Smartlead; a fresh
+   *  campaign is provisioned only when the list is empty or every candidate was
+   *  deleted (all 404). */
+  existingCampaignIds?: number[];
   cadenceKey?: CadenceKey;
   senderEmails?: string[];
   adminFirstName?: string;
@@ -1127,10 +1129,39 @@ export interface EnrollResult {
 }
 
 /**
+ * Add leads to the first candidate campaign that STILL EXISTS in Smartlead.
+ * Tries each id in order:
+ *   - success → returns that campaign id (the live one to reuse).
+ *   - 404 (campaign was deleted) → moves on to the next candidate.
+ *   - any other error → stops and returns it (not a "deleted" case; retrying
+ *     other campaigns could double-add).
+ * Returns `campaignId: null` (no error) when the list is empty or every
+ * candidate is gone — the caller then provisions a fresh campaign. This is what
+ * makes reuse correct: one live campaign per (campus, audience), never a
+ * duplicate spawned just because a stale id was listed first.
+ */
+async function addLeadsToExistingCampaign(
+  campaignIds: number[],
+  leads: SmartleadLead[],
+): Promise<{ campaignId: number | null; error?: string }> {
+  for (const id of campaignIds) {
+    const added = await addLeads(id, leads);
+    if (added.ok) return { campaignId: id };
+    if (added.status !== 404) {
+      return { campaignId: null, error: added.error ?? "addLeads failed" };
+    }
+    console.warn(
+      `[smartlead-bridge] campaign ${id} not found (404) — trying next candidate / will provision fresh`,
+    );
+  }
+  return { campaignId: null };
+}
+
+/**
  * Enroll ONE CRM row into its campus's Smartlead campaign — the per-row path
- * the `schedule_sequence` integration drives. If `existingCampaignId` is given
- * (a sibling row already created the campus campaign), the lead is appended to
- * it; otherwise this row is the first and a new PAUSED campaign is provisioned.
+ * the `schedule_sequence` integration drives. If `existingCampaignIds` are given
+ * (sibling rows already created the campus campaign), the lead is appended to the
+ * first that still exists; otherwise a new PAUSED campaign is provisioned.
  *
  * Like `launchCampaign`: status follows SMARTLEAD_AUTO_START_CAMPAIGNS (default
  * PAUSED), never writes the CRM (the caller writes the linkage + touchpoint
@@ -1153,29 +1184,26 @@ export async function enrollRowIntoCampusCampaign(input: EnrollInput): Promise<E
   }
   const leads = fanned.map((f) => f.lead);
 
-  // Existing campus campaign → append these leads. If that campaign was
-  // deleted in Smartlead (a stale id lingering on a sibling row → 404), don't
-  // fail — fall through and provision a fresh campaign instead.
-  if (input.existingCampaignId) {
-    const added = await addLeads(input.existingCampaignId, leads);
-    if (added.ok) {
-      result.campaign_id = input.existingCampaignId;
+  // Reuse the campus's LIVE campaign for this audience. Add to the first
+  // candidate that still exists; only if the list is empty or every candidate
+  // was deleted (all 404) do we provision a fresh one below.
+  const existingIds = input.existingCampaignIds ?? [];
+  if (existingIds.length > 0) {
+    const reuse = await addLeadsToExistingCampaign(existingIds, leads);
+    if (reuse.error) {
+      result.errors.push({ stage: "addLeads", message: reuse.error });
+      return result;
+    }
+    if (reuse.campaignId != null) {
+      result.campaign_id = reuse.campaignId;
       result.enrolled = true;
       result.ok = true;
       return result;
     }
-    if (added.status !== 404) {
-      result.errors.push({ stage: "addLeads", message: added.error ?? "addLeads failed" });
-      return result;
-    }
-    console.warn(
-      `[smartlead-bridge] campus campaign ${input.existingCampaignId} not found (404) — provisioning a fresh one`,
-    );
-    // fall through to provision a new campaign below
+    // every candidate was deleted → fall through to provision a fresh one
   }
 
-  // First row for this campus (or the reused campaign was deleted) → provision
-  // a new PAUSED campaign.
+  // No live campus campaign for this audience → provision a new PAUSED campaign.
   const mb = await resolveMailboxPool(input.senderEmails);
   result.mailbox_warnings = mb.pool.warnings;
   if (!mb.ok) {
@@ -1210,10 +1238,11 @@ export interface ActivationEnrollInput {
   campus: CampusContext;
   /** Used only when no campus ACTIVATION campaign exists yet. */
   campaignName: string;
-  /** The campus's existing activation campaign id (from a sibling row's
-   *  research_data.smartlead_activation.campaign_id). Append to it when set;
-   *  provision a new PAUSED activation campaign when absent. */
-  existingCampaignId?: number;
+  /** The campus's existing activation campaign id(s) (from sibling rows'
+   *  research_data.smartlead_activation.campaign_id). The lead is added to the
+   *  first one that still exists; a fresh campaign is provisioned only when the
+   *  list is empty or every candidate was deleted. */
+  existingCampaignIds?: number[];
   /** Partner (stakeholder) rows get the Recruitment Partner Portal link as
    *  their welcome_url; providers get the provider magic link (DF-3b). */
   is_partner?: boolean;
@@ -1298,28 +1327,26 @@ export async function enrollActivationLead(input: ActivationEnrollInput): Promis
     },
   };
 
-  // Existing campus activation campaign → append this lead. If that campaign
-  // was deleted in Smartlead (stale id → 404), fall through and provision a
-  // fresh one instead of failing.
-  if (input.existingCampaignId) {
-    const added = await addLeads(input.existingCampaignId, [lead]);
-    if (added.ok) {
-      result.campaign_id = input.existingCampaignId;
+  // Reuse the campus's LIVE activation campaign. Add to the first candidate
+  // that still exists; only if the list is empty or every candidate was deleted
+  // (all 404) do we provision a fresh one below.
+  const existingIds = input.existingCampaignIds ?? [];
+  if (existingIds.length > 0) {
+    const reuse = await addLeadsToExistingCampaign(existingIds, [lead]);
+    if (reuse.error) {
+      result.errors.push({ stage: "addLeads", message: reuse.error });
+      return result;
+    }
+    if (reuse.campaignId != null) {
+      result.campaign_id = reuse.campaignId;
       result.enrolled = true;
       result.ok = true;
       return result;
     }
-    if (added.status !== 404) {
-      result.errors.push({ stage: "addLeads", message: added.error ?? "addLeads failed" });
-      return result;
-    }
-    console.warn(
-      `[smartlead-bridge] activation campaign ${input.existingCampaignId} not found (404) — provisioning a fresh one`,
-    );
-    // fall through to provision a new activation campaign below
+    // every candidate was deleted → fall through to provision a fresh one
   }
 
-  // First activation for this campus (or the reused campaign was deleted) →
+  // No live activation campaign for this campus (or all were deleted) →
   // provision a new PAUSED activation campaign.
   const mb = await resolveMailboxPool(input.senderEmails);
   result.mailbox_warnings = mb.pool.warnings;

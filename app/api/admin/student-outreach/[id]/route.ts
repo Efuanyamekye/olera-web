@@ -2466,10 +2466,13 @@ async function enrollRowIntoActivationCampaign(
     provider: "",
   };
   const audienceLabel = AUDIENCE_LABEL[audienceKey] ?? "Partner";
+  // Reuse the campus's activation campaign for this audience: this row's own id
+  // first, then every sibling's. The bridge adds to the first that still exists
+  // and only makes a fresh one if all are gone.
+  const existingCampaignIds: number[] = [];
   const ownCid = row.research_data?.smartlead_activation?.campaign_id;
-  let existingCampaignId: number | undefined =
-    typeof ownCid === "number" ? ownCid : undefined;
-  if (!existingCampaignId) {
+  if (typeof ownCid === "number") existingCampaignIds.push(ownCid);
+  {
     const { data: siblings } = await db
       .from("student_outreach")
       .select("kind, stakeholder_type, research_data")
@@ -2484,9 +2487,8 @@ async function enrollRowIntoActivationCampaign(
         s.kind !== "provider" ? s.stakeholder_type ?? "student_org" : "provider";
       if (sAudience !== audienceKey) continue; // one activation campaign per audience
       const cid = s.research_data?.smartlead_activation?.campaign_id;
-      if (typeof cid === "number") {
-        existingCampaignId = cid;
-        break;
+      if (typeof cid === "number" && !existingCampaignIds.includes(cid)) {
+        existingCampaignIds.push(cid);
       }
     }
   }
@@ -2497,7 +2499,7 @@ async function enrollRowIntoActivationCampaign(
     organizationName: row.organization_name,
     campus: { name: campusName, city: campus?.city ?? null, slug: campus?.slug ?? null },
     campaignName: `MedJobs ${audienceLabel ? audienceLabel + " " : ""}Activation — ${campusName} — ${yyyymm}`,
-    existingCampaignId,
+    existingCampaignIds,
     recipient,
     is_partner: thisIsPartner,
     stakeholder_type: row.stakeholder_type,
@@ -2574,12 +2576,13 @@ async function enrollRowIntoWelcomeCampaign(
   // Hard PDF gate — the welcome cadence is always partner-facing (student flyer).
   requireProgramPdf(campus?.slug ?? null, "student", campusName);
 
-  // Reuse the campus's existing WELCOME campaign id (this row's own linkage,
-  // then any sibling's); the first partner welcomed in a campus provisions one.
+  // Reuse the campus's WELCOME campaign: this row's own linkage first, then any
+  // sibling's. The bridge adds to the first that still exists and only
+  // provisions a fresh one if all are gone.
+  const existingCampaignIds: number[] = [];
   const ownCid = row.research_data?.smartlead_welcome?.campaign_id;
-  let existingCampaignId: number | undefined =
-    typeof ownCid === "number" ? ownCid : undefined;
-  if (!existingCampaignId) {
+  if (typeof ownCid === "number") existingCampaignIds.push(ownCid);
+  {
     const { data: siblings } = await db
       .from("student_outreach")
       .select("research_data")
@@ -2587,9 +2590,8 @@ async function enrollRowIntoWelcomeCampaign(
       .neq("id", row.id);
     for (const s of (siblings ?? []) as Array<{ research_data: ResearchData | null }>) {
       const cid = s.research_data?.smartlead_welcome?.campaign_id;
-      if (typeof cid === "number") {
-        existingCampaignId = cid;
-        break;
+      if (typeof cid === "number" && !existingCampaignIds.includes(cid)) {
+        existingCampaignIds.push(cid);
       }
     }
   }
@@ -2600,7 +2602,7 @@ async function enrollRowIntoWelcomeCampaign(
     organizationName: row.organization_name,
     campus: { name: campusName, city: campus?.city ?? null, slug: campus?.slug ?? null },
     campaignName: `MedJobs Partner Welcome — ${campusName} — ${yyyymm}`,
-    existingCampaignId,
+    existingCampaignIds,
     recipient: {
       email: recipientEmail,
       first_name: named?.first_name ?? null,
@@ -2833,7 +2835,11 @@ async function enrollRowIntoSmartlead(
     .select("kind, stakeholder_type, research_data")
     .eq("campus_id", row.campus_id)
     .neq("id", row.id);
-  let existingCampaignId: number | undefined;
+  // Collect EVERY campaign id this audience has used at the campus (not just the
+  // first). The bridge adds the lead to the first one that still exists in
+  // Smartlead and only provisions a fresh campaign if all are gone — so a stale
+  // (deleted) id listed first no longer blocks reuse of a live one.
+  const existingCampaignIds: number[] = [];
   for (const s of (siblings ?? []) as Array<{
     kind: string | null;
     stakeholder_type: string | null;
@@ -2843,9 +2849,8 @@ async function enrollRowIntoSmartlead(
       s.kind !== "provider" ? s.stakeholder_type ?? "student_org" : "provider";
     if (sAudience !== audienceKey) continue; // one cold campaign per audience
     const cid = s.research_data?.smartlead?.campaign_id;
-    if (typeof cid === "number") {
-      existingCampaignId = cid;
-      break;
+    if (typeof cid === "number" && !existingCampaignIds.includes(cid)) {
+      existingCampaignIds.push(cid);
     }
   }
 
@@ -2924,7 +2929,7 @@ async function enrollRowIntoSmartlead(
     row: bridgeRow,
     campus: { name: campusName, city: campusCity, slug: campusSlug },
     campaignName: `MedJobs ${audienceLabel ? audienceLabel + " " : ""}— ${campusName} — ${yyyymm}`,
-    existingCampaignId,
+    existingCampaignIds,
     cadenceKey,
   });
 
