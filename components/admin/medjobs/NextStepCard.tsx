@@ -233,8 +233,18 @@ function InOutreachBody({
 
   // A landed reply drives the one-line status (and is pulled into the reply
   // modal); otherwise we're awaiting one. The outcome cards live in the modal.
+  //
+  // Only replies to the CURRENT sequence count. Once a post-outreach sequence is
+  // launched (activation today; custom sequences later), the reply that
+  // triggered it belongs to the prior phase and is consumed — so we ignore
+  // replies from BEFORE the current sequence started, and the card falls through
+  // to "Awaiting reply to <sequence>" + a "No reply yet" modal until they reply
+  // to the NEW sequence. With nothing running, the cutoff is null and every
+  // reply counts (the outreach phase) — unchanged behavior.
+  const sequenceStartedAt = currentSequenceStartedAt(ctx);
   const latestReply = ctx.touchpoints
     .filter((t) => t.touchpoint_type === "email_replied")
+    .filter((t) => sequenceStartedAt == null || t.created_at > sequenceStartedAt)
     .sort((a, b) => b.created_at.localeCompare(a.created_at))[0];
 
   // Which cadence are we awaiting a reply to — the cold outreach drip or the
@@ -424,8 +434,9 @@ function isPartnerRow(ctx: DrawerContext): boolean {
  * a launch with no later stop. A hard "stop all outreach" (outreach_stopped)
  * counts as a stop too, so the drawer stops reading as activation-in-flight.
  */
-function isActivationRunning(ctx: DrawerContext): boolean {
-  const latestReasonAt = (reason: string): string | null =>
+/** Timestamp of the most recent `note_added` carrying `reason`, or null. */
+function latestNoteReasonAt(ctx: DrawerContext, reason: string): string | null {
+  return (
     ctx.touchpoints
       .filter(
         (t) =>
@@ -434,14 +445,60 @@ function isActivationRunning(ctx: DrawerContext): boolean {
       )
       .map((t) => t.created_at)
       .sort()
-      .at(-1) ?? null;
-  const launchedAt = latestReasonAt("activation_launched");
-  const stoppedAt =
-    [latestReasonAt("activation_stopped"), latestReasonAt("outreach_stopped")]
+      .at(-1) ?? null
+  );
+}
+
+// Post-outreach sequences that, once launched, become the cadence we await a
+// reply to. Today only the activation cadence lives here; when custom
+// post-reply sequences ship, add their launch reason to LAUNCH (and, if they
+// can be halted on their own, their stop reason to STOP) — the
+// "which reply counts" cutoff below then covers them with no other change.
+const SEQUENCE_LAUNCH_REASONS = ["activation_launched"] as const;
+const SEQUENCE_STOP_REASONS = ["activation_stopped", "outreach_stopped"] as const;
+
+/** Newest timestamp across a set of note reasons that hasn't since been
+ *  superseded by a stop, or null. */
+function newestRunningReasonAt(
+  ctx: DrawerContext,
+  launchReasons: readonly string[],
+  stopReasons: readonly string[],
+): string | null {
+  const launchedAt =
+    launchReasons
+      .map((r) => latestNoteReasonAt(ctx, r))
       .filter((d): d is string => d != null)
       .sort()
       .at(-1) ?? null;
-  return !!launchedAt && (!stoppedAt || stoppedAt < launchedAt);
+  if (!launchedAt) return null;
+  const stoppedAt =
+    stopReasons
+      .map((r) => latestNoteReasonAt(ctx, r))
+      .filter((d): d is string => d != null)
+      .sort()
+      .at(-1) ?? null;
+  return !stoppedAt || stoppedAt < launchedAt ? launchedAt : null;
+}
+
+/**
+ * When the CURRENT post-outreach sequence started — the newest launch marker
+ * that hasn't since been stopped — or null when none is running.
+ *
+ * This is the cutoff for "which reply counts": a reply from BEFORE this moment
+ * belongs to the prior (outreach) phase and is consumed once the sequence it
+ * triggered is running. Reads from the LIST of launch reasons above, so future
+ * custom sequences drop in there without touching the reply logic.
+ */
+function currentSequenceStartedAt(ctx: DrawerContext): string | null {
+  return newestRunningReasonAt(ctx, SEQUENCE_LAUNCH_REASONS, SEQUENCE_STOP_REASONS);
+}
+
+function isActivationRunning(ctx: DrawerContext): boolean {
+  // Activation is the only post-outreach sequence today, so a running sequence
+  // IS activation. When custom sequences ship, this stays activation-specific
+  // (only the "activation_launched" marker), while the general cutoff lives in
+  // currentSequenceStartedAt — and the headline will need the sequence's name.
+  return newestRunningReasonAt(ctx, ["activation_launched"], SEQUENCE_STOP_REASONS) != null;
 }
 
 // ── call_due ─────────────────────────────────────────────────────────────
