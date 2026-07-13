@@ -44,6 +44,76 @@ export interface DerivedState {
   last_activity_at: string | null;
 }
 
+// ── Post-outreach sequence cutoff ─────────────────────────────────────────
+// When a reply to one cadence triggers a NEW cadence (activation today; custom
+// sequences later), the reply that triggered it belongs to the finished phase.
+// `currentSequenceStartedAt` marks the boundary — replies before it are
+// consumed, so the row reads "awaiting reply to the new cadence" everywhere
+// (tab, card, drawer), the moment the new cadence launches (not when its first
+// email sends). Forward-structured: add a launch reason here and every surface
+// picks it up.
+export const SEQUENCE_LAUNCH_REASONS = ["activation_launched"] as const;
+export const SEQUENCE_STOP_REASONS = ["activation_stopped", "outreach_stopped"] as const;
+
+type ReasonTouchpoint = {
+  touchpoint_type: string;
+  payload: unknown;
+  created_at: string;
+};
+
+/** Newest `note_added` timestamp among `launchReasons` that hasn't since been
+ *  superseded by one among `stopReasons`, or null. Order-independent. */
+function runningSequenceStartedAt(
+  touchpoints: ReadonlyArray<ReasonTouchpoint>,
+  launchReasons: readonly string[],
+  stopReasons: readonly string[],
+): string | null {
+  const reasonOf = (p: unknown): string | null => {
+    if (p && typeof p === "object" && "reason" in p) {
+      const r = (p as Record<string, unknown>).reason;
+      return typeof r === "string" ? r : null;
+    }
+    return null;
+  };
+  const latestFor = (reasons: readonly string[]): string | null => {
+    let latest: string | null = null;
+    for (const tp of touchpoints) {
+      if (tp.touchpoint_type !== "note_added") continue;
+      const r = reasonOf(tp.payload);
+      if (r != null && reasons.includes(r) && (latest === null || tp.created_at > latest)) {
+        latest = tp.created_at;
+      }
+    }
+    return latest;
+  };
+  const launchedAt = latestFor(launchReasons);
+  if (!launchedAt) return null;
+  const stoppedAt = latestFor(stopReasons);
+  return !stoppedAt || stoppedAt < launchedAt ? launchedAt : null;
+}
+
+/**
+ * The moment the CURRENT post-outreach sequence started (any launch reason), or
+ * null when none is running. The cutoff for "which reply counts."
+ */
+export function currentSequenceStartedAt(
+  touchpoints: ReadonlyArray<ReasonTouchpoint>,
+): string | null {
+  return runningSequenceStartedAt(touchpoints, SEQUENCE_LAUNCH_REASONS, SEQUENCE_STOP_REASONS);
+}
+
+/**
+ * Whether the ACTIVATION cadence specifically is running. Stays
+ * activation-specific (only the "activation_launched" marker) so that when
+ * custom sequences ship, "activation running" doesn't fire for them — the
+ * general cutoff above still covers every sequence.
+ */
+export function activationSequenceRunning(
+  touchpoints: ReadonlyArray<ReasonTouchpoint>,
+): boolean {
+  return runningSequenceStartedAt(touchpoints, ["activation_launched"], SEQUENCE_STOP_REASONS) != null;
+}
+
 /**
  * Single source of truth for per-row state derivation. Walks touchpoints
  * DESC and picks the first event in each category. Newer events
@@ -54,6 +124,10 @@ export interface DerivedState {
  * call_connected without awaiting_callback clears the state.
  */
 export function deriveStateFromTouchpoints(touchpoints: TouchpointRow[]): DerivedState {
+  // Boundary of the current cadence: a reply from before the newest sequence
+  // launch belongs to the finished phase and no longer counts as "the reply."
+  const seqStartedAt = currentSequenceStartedAt(touchpoints);
+
   let meeting_state: DerivedState["meeting_state"] = "none";
   let meeting_at: string | null = null;
   let meetingDecided = false;
@@ -115,7 +189,13 @@ export function deriveStateFromTouchpoints(touchpoints: TouchpointRow[]): Derive
     // touchpoint is no longer generated (handleResumeOutreach was dropped
     // along with the manual "Try again" affordance).
 
-    if (isReply && last_reply_at === null) last_reply_at = tp.created_at;
+    if (
+      isReply &&
+      last_reply_at === null &&
+      (seqStartedAt === null || tp.created_at > seqStartedAt)
+    ) {
+      last_reply_at = tp.created_at;
+    }
 
     if (!callbackResolved && (isReply || isConnectedNoCallback)) {
       callbackResolved = true;
