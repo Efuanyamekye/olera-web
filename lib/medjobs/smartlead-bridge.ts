@@ -1153,20 +1153,29 @@ export async function enrollRowIntoCampusCampaign(input: EnrollInput): Promise<E
   }
   const leads = fanned.map((f) => f.lead);
 
-  // Existing campus campaign → just append these leads.
+  // Existing campus campaign → append these leads. If that campaign was
+  // deleted in Smartlead (a stale id lingering on a sibling row → 404), don't
+  // fail — fall through and provision a fresh campaign instead.
   if (input.existingCampaignId) {
-    result.campaign_id = input.existingCampaignId;
     const added = await addLeads(input.existingCampaignId, leads);
-    if (!added.ok) {
+    if (added.ok) {
+      result.campaign_id = input.existingCampaignId;
+      result.enrolled = true;
+      result.ok = true;
+      return result;
+    }
+    if (added.status !== 404) {
       result.errors.push({ stage: "addLeads", message: added.error ?? "addLeads failed" });
       return result;
     }
-    result.enrolled = true;
-    result.ok = true;
-    return result;
+    console.warn(
+      `[smartlead-bridge] campus campaign ${input.existingCampaignId} not found (404) — provisioning a fresh one`,
+    );
+    // fall through to provision a new campaign below
   }
 
-  // First row for this campus → provision a new PAUSED campaign.
+  // First row for this campus (or the reused campaign was deleted) → provision
+  // a new PAUSED campaign.
   const mb = await resolveMailboxPool(input.senderEmails);
   result.mailbox_warnings = mb.pool.warnings;
   if (!mb.ok) {
@@ -1289,20 +1298,29 @@ export async function enrollActivationLead(input: ActivationEnrollInput): Promis
     },
   };
 
-  // Existing campus activation campaign → just append this lead.
+  // Existing campus activation campaign → append this lead. If that campaign
+  // was deleted in Smartlead (stale id → 404), fall through and provision a
+  // fresh one instead of failing.
   if (input.existingCampaignId) {
-    result.campaign_id = input.existingCampaignId;
     const added = await addLeads(input.existingCampaignId, [lead]);
-    if (!added.ok) {
+    if (added.ok) {
+      result.campaign_id = input.existingCampaignId;
+      result.enrolled = true;
+      result.ok = true;
+      return result;
+    }
+    if (added.status !== 404) {
       result.errors.push({ stage: "addLeads", message: added.error ?? "addLeads failed" });
       return result;
     }
-    result.enrolled = true;
-    result.ok = true;
-    return result;
+    console.warn(
+      `[smartlead-bridge] activation campaign ${input.existingCampaignId} not found (404) — provisioning a fresh one`,
+    );
+    // fall through to provision a new activation campaign below
   }
 
-  // First activation for this campus → provision a new PAUSED activation campaign.
+  // First activation for this campus (or the reused campaign was deleted) →
+  // provision a new PAUSED activation campaign.
   const mb = await resolveMailboxPool(input.senderEmails);
   result.mailbox_warnings = mb.pool.warnings;
   if (!mb.ok) {
