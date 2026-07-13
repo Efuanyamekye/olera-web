@@ -38,10 +38,8 @@ function SmartleadCard() {
   const [error, setError] = useState<string | null>(null);
 
   const connect = async () => {
-    if (!secret.trim()) {
-      setError("Paste your Smartlead webhook secret first.");
-      return;
-    }
+    // Secret is optional: when left blank the server uses the value already
+    // saved in its environment. Pasting one is only needed to override that.
     setLoading(true);
     setError(null);
     setResult(null);
@@ -89,17 +87,19 @@ function SmartleadCard() {
     <section className="rounded-xl border border-gray-200 bg-white p-6">
       <h2 className="text-lg font-semibold text-gray-900">Smartlead replies</h2>
       <p className="mt-1 text-sm text-gray-600">
-        Registers our reply line on every campus campaign so provider replies,
-        opens, and bounces show up in the Emails tab. Uses the Smartlead key
-        already in production.
+        Turns on provider replies. Connects every campaign so replies, opens,
+        and bounces show up in the Emails tab. Just press the button — you can
+        leave the box below blank.
       </p>
       <label className="mt-4 block">
-        <span className="mb-1 block text-xs font-medium text-gray-700">Webhook secret</span>
+        <span className="mb-1 block text-xs font-medium text-gray-700">
+          Webhook secret <span className="font-normal text-gray-400">(optional — leave blank to use the saved one)</span>
+        </span>
         <input
           type="text"
           value={secret}
           onChange={(e) => setSecret(e.target.value)}
-          placeholder="Paste SMARTLEAD_WEBHOOK_SECRET"
+          placeholder="Leave blank"
           className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm font-mono focus:border-gray-400 focus:outline-none"
         />
       </label>
