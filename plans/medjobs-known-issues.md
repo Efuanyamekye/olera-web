@@ -83,4 +83,37 @@ Status: Drain log — bugs and optimizations surfaced during phase builds.
 
 ## Resolved
 
-(none yet)
+### 2026-07-13 — Smartlead replies never appeared in the UI (webhook never registered)
+- Found in: MedJobs In Basket reply-visibility investigation
+- Severity: blocker (admin couldn't trust the UI for whether an email came in)
+- Owner: Claude
+- Root cause: campaign provisioning (`smartlead-bridge.ts:provisionCampaign`) created
+  campaigns but NEVER registered the reply webhook. The only registration path was
+  the manual "Connect Smartlead replies" admin button, which was never run against
+  the live campaigns — so every campaign was born "No Webhooks Yet", Smartlead POSTed
+  nothing, the edge function saw 0 invocations, and no touchpoints were ever written.
+  (Receiver was healthy the whole time: JWT off, `SMARTLEAD_WEBHOOK_SECRET` set.)
+- Fix:
+  - Auto-register the webhook at campaign creation inside `provisionCampaign`
+    (best-effort — isolated from `errors`/`ok` so a webhook hiccup can't fail an
+    enrollment). Reads `SMARTLEAD_WEBHOOK_SECRET` from the Vercel env.
+  - Idempotent reconcile (`register-smartlead-webhooks`): lists existing webhooks and
+    only creates/updates ours (no duplicates); now covers `smartlead_welcome` too;
+    GET is a read-only status dry-run.
+  - Edge function hardening: reply resolution falls back to `from_email` → enrolled
+    `lead_emails` when `sl_lead_email` is absent; added the `smartlead_welcome`
+    lead_email resolve path.
+  - Optional backfill (`backfill-smartlead-replies`, dry-run-first) to import replies
+    that predate registration — deterministic via `custom_fields.outreach_id`,
+    idempotent, and intentionally NOT replaying live side effects (no viewed_at reset,
+    no task supersession) so it can't cancel currently-queued calls.
+  - Fixed the smartlead-webhook README (`--no-verify-jwt` was missing) + `.env.example`.
+- Manual steps to activate (code alone does not fix live state):
+  1. Set `SMARTLEAD_WEBHOOK_SECRET` on Vercel (prod + preview), identical to the value
+     on the Supabase edge function.
+  2. Redeploy the edge function: `supabase functions deploy smartlead-webhook --no-verify-jwt`
+     (the resolve-path + fallback changes).
+  3. Run the reconcile once (Integrations → "Connect Smartlead replies") to wire the
+     existing campaigns.
+  4. Verify: a campaign's Webhooks pane in Smartlead shows our URL; send a real reply
+     and confirm it lands in the Emails tab.

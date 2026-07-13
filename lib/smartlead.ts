@@ -193,23 +193,226 @@ export async function attachEmailAccounts(
 }
 
 /**
- * Register a webhook on a campaign so Smartlead POSTs lifecycle events
- * (reply / open / click / bounce / unsubscribe) to our edge function. Called
- * once per campus campaign by the admin "Connect Smartlead replies" button.
- * Endpoint/shape follows Smartlead's documented create-webhook API — verify
- * against current docs before go-live (this module is dormant until the key
- * is set, so shape drift is harmless until then).
+ * The Smartlead lifecycle events the MedJobs edge function ingests. Single
+ * source of truth shared by the auto-registration path (campaign creation)
+ * and the admin reconcile endpoint so the two can never drift.
+ *
+ * NOTE: `EMAIL_BOUNCE` is intentionally absent — Smartlead's API rejects it as
+ * an invalid webhook event type (confirmed live). Bounces therefore do NOT flow
+ * through this webhook today; the edge function still handles a bounce payload
+ * defensively if one ever arrives, but none is registered. Do not add it back
+ * without re-verifying against Smartlead's accepted event-type list.
+ */
+export const SMARTLEAD_WEBHOOK_EVENT_TYPES = [
+  "EMAIL_SENT",
+  "EMAIL_OPEN",
+  "EMAIL_LINK_CLICK",
+  "EMAIL_REPLY",
+  "LEAD_UNSUBSCRIBED",
+] as const;
+
+/** Display name used for the MedJobs webhook in Smartlead's campaign settings. */
+export const SMARTLEAD_WEBHOOK_NAME = "MedJobs CRM";
+
+/** URL path of our Supabase edge function (the bit that identifies OUR webhook
+ *  regardless of the `?secret=` query, which can rotate). */
+const SMARTLEAD_WEBHOOK_PATH = "/functions/v1/smartlead-webhook";
+
+/**
+ * Build the MedJobs webhook URL from the Supabase project URL + a secret.
+ * Returns null when either input is unavailable (server env not configured) so
+ * callers can degrade gracefully instead of registering a broken URL.
+ */
+export function buildSmartleadWebhookUrl(secret: string): string | null {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!base || !secret) return null;
+  return `${base.replace(/\/+$/, "")}${SMARTLEAD_WEBHOOK_PATH}?secret=${encodeURIComponent(secret)}`;
+}
+
+/** True when a Smartlead webhook URL points at OUR edge function. Matches on the
+ *  URL PATH only, so a rotated `?secret=` still matches (we update it in place
+ *  rather than creating a duplicate). */
+export function isMedjobsWebhook(webhookUrl: string | undefined | null): boolean {
+  if (!webhookUrl) return false;
+  try {
+    return new URL(webhookUrl).pathname.endsWith(SMARTLEAD_WEBHOOK_PATH);
+  } catch {
+    return webhookUrl.includes(SMARTLEAD_WEBHOOK_PATH);
+  }
+}
+
+/** Case-insensitive set equality between a webhook's event_types and the desired
+ *  set. Used to decide whether an existing MedJobs webhook needs updating. */
+export function sameEventTypeSet(a: string[] | undefined, b: readonly string[]): boolean {
+  if (!a) return false;
+  const sa = new Set(a.map((s) => s.toUpperCase()));
+  if (sa.size !== b.length) return false;
+  return b.every((t) => sa.has(t.toUpperCase()));
+}
+
+/** Whether an existing webhook URL already carries the desired secret. Lets us
+ *  skip a redundant update when both the path and the secret already match. */
+function webhookSecretMatches(webhookUrl: string | undefined, desiredSecret: string): boolean {
+  if (!webhookUrl) return false;
+  try {
+    return (new URL(webhookUrl).searchParams.get("secret") ?? "") === desiredSecret;
+  } catch {
+    return false;
+  }
+}
+
+export interface SmartleadWebhook {
+  id: number;
+  name?: string;
+  webhook_url?: string;
+  event_types?: string[];
+}
+
+/**
+ * List the webhooks registered on a campaign. Read-only — the diagnostic that
+ * lets us SEE whether our webhook is wired (the codebase previously had no way
+ * to check, only to create). Response shape is normalized defensively:
+ * Smartlead has returned a bare array, `{ data: [...] }`, or `{ webhooks: [...] }`
+ * across versions.
+ */
+export async function listCampaignWebhooks(
+  campaignId: number,
+): Promise<SmartleadResult<SmartleadWebhook[]>> {
+  const raw = await smartleadRequest<unknown>("GET", `/campaigns/${campaignId}/webhooks`);
+  if (!raw.ok) return { ok: false, error: raw.error, status: raw.status };
+
+  const d = raw.data;
+  let arr: unknown[] = [];
+  if (Array.isArray(d)) arr = d;
+  else if (d && typeof d === "object") {
+    const o = d as Record<string, unknown>;
+    if (Array.isArray(o.data)) arr = o.data;
+    else if (Array.isArray(o.webhooks)) arr = o.webhooks;
+  }
+
+  const webhooks: SmartleadWebhook[] = arr.map((w) => {
+    const o = (w ?? {}) as Record<string, unknown>;
+    return {
+      id: typeof o.id === "number" ? o.id : Number(o.id) || 0,
+      name: typeof o.name === "string" ? o.name : undefined,
+      webhook_url:
+        typeof o.webhook_url === "string"
+          ? o.webhook_url
+          : typeof o.url === "string"
+            ? o.url
+            : undefined,
+      event_types: Array.isArray(o.event_types)
+        ? (o.event_types as unknown[]).map(String)
+        : undefined,
+    };
+  });
+  return { ok: true, data: webhooks, status: raw.status };
+}
+
+/**
+ * Register or UPDATE a webhook on a campaign. Passing `id` updates that webhook
+ * in place (Smartlead's upsert-by-id); omitting it (id=null) creates a new one.
+ * Endpoint/shape follows Smartlead's documented create-webhook API.
+ *
+ * Prefer `ensureCampaignWebhook` over calling this directly — it lists first and
+ * only creates when ours is genuinely absent, so repeated runs never stack
+ * duplicate webhooks (which would double-deliver every event).
  */
 export async function createCampaignWebhook(
   campaignId: number,
-  webhook: { name: string; webhookUrl: string; eventTypes: string[] },
+  webhook: { name: string; webhookUrl: string; eventTypes: readonly string[]; id?: number | null },
 ): Promise<SmartleadResult<{ id?: number }>> {
   return smartleadRequest("POST", `/campaigns/${campaignId}/webhooks`, {
-    id: null,
+    id: webhook.id ?? null,
     name: webhook.name,
     webhook_url: webhook.webhookUrl,
-    event_types: webhook.eventTypes,
+    event_types: [...webhook.eventTypes],
   });
+}
+
+export interface EnsureWebhookResult {
+  ok: boolean;
+  /** "skipped" only from `ensureMedjobsCampaignWebhook` when env is unconfigured. */
+  status: "created" | "updated" | "exists" | "error" | "skipped";
+  error?: string;
+}
+
+/**
+ * Idempotently ensure the MedJobs webhook is registered on a campaign with the
+ * right URL (incl. secret) and event types. Lists existing webhooks, matches
+ * ours by URL path, and creates OR updates as needed — safe to run repeatedly,
+ * never creating duplicates.
+ */
+export async function ensureCampaignWebhook(
+  campaignId: number,
+  webhookUrl: string,
+  eventTypes: readonly string[] = SMARTLEAD_WEBHOOK_EVENT_TYPES,
+): Promise<EnsureWebhookResult> {
+  const list = await listCampaignWebhooks(campaignId);
+  if (!list.ok) {
+    return { ok: false, status: "error", error: list.error ?? "listCampaignWebhooks failed" };
+  }
+
+  let desiredSecret = "";
+  try {
+    desiredSecret = new URL(webhookUrl).searchParams.get("secret") ?? "";
+  } catch {
+    desiredSecret = "";
+  }
+
+  const existing = (list.data ?? []).find((w) => isMedjobsWebhook(w.webhook_url));
+
+  if (existing) {
+    const upToDate =
+      sameEventTypeSet(existing.event_types, eventTypes) &&
+      webhookSecretMatches(existing.webhook_url, desiredSecret);
+    if (upToDate) return { ok: true, status: "exists" };
+    const upd = await createCampaignWebhook(campaignId, {
+      id: existing.id,
+      name: SMARTLEAD_WEBHOOK_NAME,
+      webhookUrl,
+      eventTypes,
+    });
+    return upd.ok
+      ? { ok: true, status: "updated" }
+      : { ok: false, status: "error", error: upd.error };
+  }
+
+  const created = await createCampaignWebhook(campaignId, {
+    name: SMARTLEAD_WEBHOOK_NAME,
+    webhookUrl,
+    eventTypes,
+  });
+  return created.ok
+    ? { ok: true, status: "created" }
+    : { ok: false, status: "error", error: created.error };
+}
+
+/**
+ * Best-effort webhook registration using the SERVER env secret — the path the
+ * campaign-provisioning code calls so every new campus campaign is wired at
+ * birth. Returns `status: "skipped"` (never throws, never errors the caller)
+ * when `SMARTLEAD_WEBHOOK_SECRET` / `NEXT_PUBLIC_SUPABASE_URL` are unset, so a
+ * missing env var degrades to "no webhook yet" rather than failing enrollment.
+ * The reconcile endpoint wires anything this skips.
+ */
+export async function ensureMedjobsCampaignWebhook(
+  campaignId: number,
+): Promise<EnsureWebhookResult> {
+  const secret = (process.env.SMARTLEAD_WEBHOOK_SECRET ?? "").trim();
+  const url = buildSmartleadWebhookUrl(secret);
+  if (!url) {
+    return {
+      ok: false,
+      status: "skipped",
+      error: "SMARTLEAD_WEBHOOK_SECRET or NEXT_PUBLIC_SUPABASE_URL unset",
+    };
+  }
+  try {
+    return await ensureCampaignWebhook(campaignId, url);
+  } catch (e) {
+    return { ok: false, status: "error", error: e instanceof Error ? e.message : String(e) };
+  }
 }
 
 /**
@@ -363,6 +566,65 @@ export async function updateLeadInCampaign(
     `/campaigns/${campaignId}/leads/${leadId}`,
     patch
   );
+}
+
+/**
+ * One entry in a lead's email thread. `type` is Smartlead's direction marker
+ * ("SENT" for our outbound sequence steps, "REPLY" for the prospect's inbound
+ * reply). Field names vary across Smartlead versions, so the reader normalizes
+ * defensively — verify the live shape via the backfill dry-run before applying.
+ */
+export interface SmartleadMessage {
+  type: string;
+  email_body?: string;
+  subject?: string;
+  time?: string;
+  /** Best available stable id for dedupe (message id, else stats id). */
+  message_id?: string;
+  /** The address the message came from (the prospect, on a REPLY). */
+  from_email?: string;
+}
+
+/**
+ * Fetch a lead's full message history within a campaign (SENT steps + REPLYs).
+ * Read-only. Used by the reply BACKFILL to import replies that predate webhook
+ * registration. Response shape is normalized defensively: Smartlead has returned
+ * a bare array, `{ history: [...] }`, or `{ data: [...] }` across versions.
+ */
+export async function getLeadMessageHistory(
+  campaignId: number,
+  leadId: number,
+): Promise<SmartleadResult<SmartleadMessage[]>> {
+  const raw = await smartleadRequest<unknown>(
+    "GET",
+    `/campaigns/${campaignId}/leads/${leadId}/message-history`,
+  );
+  if (!raw.ok) return { ok: false, error: raw.error, status: raw.status };
+
+  const d = raw.data;
+  let arr: unknown[] = [];
+  if (Array.isArray(d)) arr = d;
+  else if (d && typeof d === "object") {
+    const o = d as Record<string, unknown>;
+    if (Array.isArray(o.history)) arr = o.history;
+    else if (Array.isArray(o.data)) arr = o.data;
+    else if (Array.isArray(o.message_history)) arr = o.message_history;
+  }
+
+  const messages: SmartleadMessage[] = arr.map((m) => {
+    const o = (m ?? {}) as Record<string, unknown>;
+    const str = (v: unknown): string | undefined =>
+      typeof v === "string" && v ? v : typeof v === "number" ? String(v) : undefined;
+    return {
+      type: String(o.type ?? o.email_type ?? o.stats_type ?? "").toUpperCase(),
+      email_body: str(o.email_body ?? o.body ?? o.email_message ?? o.message),
+      subject: str(o.subject ?? o.email_subject),
+      time: str(o.time ?? o.event_timestamp ?? o.sent_time ?? o.created_at),
+      message_id: str(o.message_id ?? o.stats_id ?? o.id ?? o.email_message_id),
+      from_email: str(o.from_email ?? o.from),
+    };
+  });
+  return { ok: true, data: messages, status: raw.status };
 }
 
 /**

@@ -54,21 +54,29 @@ function SmartleadCard() {
       const body = (await res.json()) as {
         ok?: boolean;
         total?: number;
-        registered?: number[];
+        created?: number[];
+        updated?: number[];
+        exists?: number[];
+        wired?: number;
         failed?: { campaign_id: number; error?: string }[];
         error?: string;
       };
       if (!res.ok) throw new Error(body.error ?? `HTTP ${res.status}`);
-      const reg = body.registered?.length ?? 0;
+      const total = body.total ?? 0;
+      const wired = body.wired ?? 0;
+      const newCount = body.created?.length ?? 0;
+      const updatedCount = body.updated?.length ?? 0;
+      const alreadyCount = body.exists?.length ?? 0;
       const fail = body.failed?.length ?? 0;
+      const breakdown = `${newCount} newly connected, ${updatedCount} updated, ${alreadyCount} already wired`;
       if (fail > 0) {
         const detail = body.failed
           ?.map((f) => `#${f.campaign_id}: ${f.error ?? "unknown error"}`)
           .join(" · ");
-        setError(`Connected ${reg} of ${body.total ?? reg}. ${fail} failed — ${detail}`);
+        setError(`Wired ${wired} of ${total} (${breakdown}). ${fail} failed — ${detail}`);
         setResult(null);
       } else {
-        setResult(`Connected ${reg} of ${body.total ?? reg} campaign(s).`);
+        setResult(`Wired ${wired} of ${total} campaign(s): ${breakdown}.`);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");

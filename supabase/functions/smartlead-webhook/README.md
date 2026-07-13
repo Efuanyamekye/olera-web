@@ -55,12 +55,28 @@ defensive but written against the documented shape, not a live payload.
 ## Activate
 
 1. `supabase secrets set SMARTLEAD_WEBHOOK_SECRET=<random-string>`
-2. `supabase functions deploy smartlead-webhook`
-3. In Smartlead → Settings → Webhooks, subscribe the function URL to all six
-   event types (sent / open / click / reply / bounce / unsubscribe), appending
-   `?secret=<same-string>` (or set the `x-smartlead-secret` header).
-4. Send a Smartlead test event; confirm a touchpoint lands on the matching row
-   and the engagement counter updates for an open/click test.
+2. `supabase functions deploy smartlead-webhook --no-verify-jwt`
+
+   `--no-verify-jwt` is REQUIRED — Smartlead sends webhook POSTs without a
+   Supabase JWT (same as Stripe/Resend). Without it, the platform gateway
+   rejects every Smartlead call before this function runs, and nothing lands.
+   (Auth is still enforced: this function checks the `?secret=` / `x-smartlead-secret`
+   shared secret in its own code.)
+3. Set the **same** `SMARTLEAD_WEBHOOK_SECRET` value as an env var on the Vercel
+   app (prod + preview). The app uses it to auto-register this webhook on every
+   campaign it provisions, and the Integrations "Connect Smartlead replies"
+   reconcile uses it to wire existing campaigns.
+4. Registration: new campaigns are wired automatically at creation. To wire
+   campaigns that already exist, run the reconcile once — admin → MedJobs →
+   Integrations → "Connect Smartlead replies" (idempotent; safe to re-run). It
+   registers the events sent / open / click / reply / unsubscribe. (`EMAIL_BOUNCE`
+   is deliberately omitted — Smartlead rejects it as an invalid event type.)
+5. Send a real reply (or a Smartlead test event); confirm a touchpoint lands on
+   the matching row and the engagement counter updates for an open/click test.
+
+Verify registration any time via the Integrations page dry-run (GET
+`/api/admin/medjobs/register-smartlead-webhooks`), which reports per campaign
+whether our webhook is present.
 
 Do not activate until the warmup window clears and Logan has signed off on the
 launch flow (Operational Brief D2 gate).

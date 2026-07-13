@@ -272,11 +272,14 @@ async function resolveRow(
     }
   }
   if (email) {
-    // Match by the lead email stored in either smartlead linkage — cold first,
-    // then activation. Both store the prospect's address as `lead_email`.
+    // Match by the lead email stored in any smartlead linkage — cold, then
+    // activation, then partner-welcome. All three store the prospect's address
+    // as `lead_email`. (Welcome was previously omitted, so welcome-cadence
+    // replies never resolved.)
     for (const path of [
       "research_data->smartlead->>lead_email",
       "research_data->smartlead_activation->>lead_email",
+      "research_data->smartlead_welcome->>lead_email",
     ]) {
       const { data } = await supabase
         .from("student_outreach")
@@ -647,11 +650,33 @@ Deno.serve(async (req: Request) => {
     if (kind === "ignore") return new Response("ok (ignored)", { status: 200 });
 
     const extract = extractLead(raw, kind);
-    const row = await resolveRow(extract.outreachId, extract.email);
+    let row = await resolveRow(extract.outreachId, extract.email);
+
+    // Reply-resolution fallback (defense in depth). EMAIL_REPLY carries no
+    // custom_fields, so it resolves purely by matching the LEAD address against
+    // stored lead_email(s). If Smartlead's payload doesn't populate the field we
+    // read as the lead (`sl_lead_email`), the primary lookup above misses. On a
+    // reply, though, `from_email` IS the prospect — so retry against it. This is
+    // SAFE because resolveRow only matches known-enrolled addresses (the stored
+    // lead_email paths + the lead_emails array), never an arbitrary mailbox.
+    if (
+      !row &&
+      kind === "reply" &&
+      extract.fromEmail &&
+      extract.fromEmail !== extract.email
+    ) {
+      row = await resolveRow(undefined, extract.fromEmail);
+      if (row) {
+        // Attribute/annotate off the address that actually matched.
+        extract.email = extract.fromEmail;
+      }
+    }
+
     if (!row) {
       console.warn("[smartlead-webhook] could not map event to a row", {
         outreachId: extract.outreachId,
         email: extract.email,
+        fromEmail: extract.fromEmail,
         campaignId: extract.campaignId,
         kind,
       });

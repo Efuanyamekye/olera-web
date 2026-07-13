@@ -21,12 +21,14 @@ import {
   addLeads,
   attachEmailAccounts,
   createCampaign,
+  ensureMedjobsCampaignWebhook,
   getLeadByEmail,
   listEmailAccounts,
   pauseLeadInCampaign,
   saveSequence,
   setCampaignSchedule,
   setCampaignStatus,
+  type EnsureWebhookResult,
   type SmartleadLead,
   type SmartleadSequenceStep,
 } from "@/lib/smartlead";
@@ -935,7 +937,7 @@ async function provisionCampaign(
   name: string,
   poolIds: number[],
   steps: SmartleadSequenceStep[],
-): Promise<{ campaign_id?: number; errors: StageError[] }> {
+): Promise<{ campaign_id?: number; errors: StageError[]; webhook?: EnsureWebhookResult }> {
   const errors: StageError[] = [];
   const created = await createCampaign(name);
   if (!created.ok || !created.data) {
@@ -947,7 +949,31 @@ async function provisionCampaign(
   if (!attached.ok) errors.push({ stage: "attachEmailAccounts", message: attached.error ?? "attach failed" });
   const saved = await saveSequence(campaignId, steps);
   if (!saved.ok) errors.push({ stage: "saveSequence", message: saved.error ?? "save failed" });
-  return { campaign_id: campaignId, errors };
+
+  // Wire the reply/open/bounce webhook at birth so events stream into the CRM
+  // without a separate manual step (the missing link that left every campaign
+  // "No Webhooks Yet"). STRICTLY best-effort: the result is returned in its own
+  // channel and NEVER pushed onto `errors`, because callers gate `ok` on
+  // `errors.length === 0` and route.ts THROWS on `!ok` — a webhook hiccup must
+  // not fail an enrollment whose campaign + leads succeeded. Anything skipped
+  // (env unset) or failed here is recoverable via the reconcile endpoint and by
+  // the next campaign's provisioning.
+  let webhook: EnsureWebhookResult | undefined;
+  try {
+    webhook = await ensureMedjobsCampaignWebhook(campaignId);
+    if (!webhook.ok && webhook.status !== "skipped") {
+      console.warn(
+        `[smartlead-bridge] webhook registration for campaign ${campaignId} failed: ${webhook.error ?? "unknown"}`,
+      );
+    }
+  } catch (e) {
+    console.warn(
+      `[smartlead-bridge] webhook registration threw for campaign ${campaignId}:`,
+      e instanceof Error ? e.message : e,
+    );
+  }
+
+  return { campaign_id: campaignId, errors, webhook };
 }
 
 /**
