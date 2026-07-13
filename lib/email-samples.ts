@@ -52,6 +52,7 @@ import {
   coldProviderRankEmail,
   providerLeadDigestEmail,
   providerManagedAdsEmail,
+  providerFindFamiliesDigestEmail,
   adBoostQueuedEmail,
   adBoostProfileReminderEmail,
   adBoostRequestedEmail,
@@ -559,6 +560,16 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     emailType: "weekly_analytics_digest", cron: "weekly-provider-digest",
     render: () => providerWeeklyDigestEmail({
       ...SAMPLE_BASE, viewsThisWeek: 9, ctaClicks: 2, leadsReceived: 0, questionsReceived: 0, marketRank: null,
+    }),
+  },
+  {
+    id: "provider_find_families", audience: "provider", group: "Provider · Weekly digest",
+    label: "Digest · find families", subject: "3 families near you are looking for care",
+    emailType: "weekly_analytics_digest", cron: "weekly-provider-digest",
+    render: () => providerFindFamiliesDigestEmail({
+      providerName: "Evergreen Home Care", providerSlug: "evergreen-home-care",
+      ctaUrl: `${SAMPLE_LINK}?action=matches`,
+      nearbyCount: 3, nearestTown: "Round Rock", careNeed: "home care", timeline: "immediate",
     }),
   },
   {
