@@ -278,6 +278,7 @@ interface CityRowProps {
   onToggleProvider: (providerId: string) => void;
   onSelectAllInCity: (providerIds: string[]) => void;
   onEmailSaved: (providerId: string, newEmail: string) => void;
+  onQuickAction: (providerId: string, action: "not_interested" | "archived") => void;
 }
 
 function CityRow({
@@ -291,6 +292,7 @@ function CityRow({
   onToggleProvider,
   onSelectAllInCity,
   onEmailSaved,
+  onQuickAction,
 }: CityRowProps) {
   const [showOnlyWithEmail, setShowOnlyWithEmail] = useState(false);
 
@@ -429,7 +431,7 @@ function CityRow({
               {/* Provider Cards */}
               <div className="divide-y divide-gray-100">
                 {filteredProviders.map((provider) => (
-                  <div key={provider.provider_id} className="px-5 py-3 pl-10 flex items-center gap-3 hover:bg-white transition-colors">
+                  <div key={provider.provider_id} className="group px-5 py-3 pl-10 flex items-center gap-3 hover:bg-white transition-colors">
                     <input
                       type="checkbox"
                       checked={selectedProviders.has(provider.provider_id)}
@@ -469,6 +471,34 @@ function CityRow({
                         onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
                       />
                     </div>
+
+                    {/* Hover Actions - Archive / Not Interested */}
+                    {stage !== "archived" && stage !== "not_interested" && (
+                      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-2 shrink-0 transition-opacity">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onQuickAction(provider.provider_id, "not_interested");
+                          }}
+                          className="px-2 py-1 text-xs text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                          title="Mark as Not Interested"
+                        >
+                          Not Interested
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onQuickAction(provider.provider_id, "archived");
+                          }}
+                          className="px-2 py-1 text-xs text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                          title="Archive (invalid/test account)"
+                        >
+                          Archive
+                        </button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -684,6 +714,42 @@ export default function ProviderOutreachPage() {
     }
   };
 
+  // Quick action for single provider (hover actions)
+  const handleQuickAction = async (providerId: string, action: "not_interested" | "archived") => {
+    setActionLoading(true);
+    try {
+      const res = await fetch("/api/admin/provider-outreach/update-stage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          provider_ids: [providerId],
+          stage: action,
+        }),
+      });
+
+      if (res.ok) {
+        const actionLabel = action === "not_interested" ? "Not Interested" : "Archived";
+        showToast(`Marked as ${actionLabel}`, "success");
+
+        // Refresh data
+        if (stage === "not_contacted") {
+          fetchCities();
+          fetchProviders();
+        } else {
+          fetchProviders();
+        }
+      } else {
+        const err = await res.json();
+        showToast(err.error || "Failed to update", "error");
+      }
+    } catch (err) {
+      console.error("Failed to quick action:", err);
+      showToast("Failed to update", "error");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   // Available actions based on current stage
   const getAvailableActions = (): { stage: OutreachStage; label: string; color: string }[] => {
     switch (stage) {
@@ -876,6 +942,7 @@ export default function ProviderOutreachPage() {
                       fetchCities();
                     }
                   }}
+                  onQuickAction={handleQuickAction}
                 />
               ))}
             </div>
