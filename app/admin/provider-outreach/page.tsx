@@ -1173,17 +1173,20 @@ export default function ProviderOutreachPage() {
       case "in_sequence":
         return [
           { stage: "needs_call", label: "Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
+          { stage: "not_contacted", label: "Reset to Not Contacted", color: "bg-gray-500 hover:bg-gray-600" },
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
         ];
       case "needs_call":
         return [
           { stage: "called", label: "Mark Called", color: "bg-purple-600 hover:bg-purple-700" },
+          { stage: "not_contacted", label: "Reset to Not Contacted", color: "bg-gray-500 hover:bg-gray-600" },
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
         ];
       case "called":
         return [
-          { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
           { stage: "needs_call", label: "Back to Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
+          { stage: "not_contacted", label: "Reset to Not Contacted", color: "bg-gray-500 hover:bg-gray-600" },
+          { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
         ];
       case "hidden":
         // Hidden is NOT terminal - can unhide
