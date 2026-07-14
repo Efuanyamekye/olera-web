@@ -518,7 +518,7 @@ function CityRow({
   onEmailSaved,
   onOpenActionModal,
 }: CityRowProps) {
-  const [showOnlyWithEmail, setShowOnlyWithEmail] = useState(false);
+  const [emailFilter, setEmailFilter] = useState<"all" | "with" | "without">("all");
 
   // Auto email lookup state
   const [lookingUpEmails, setLookingUpEmails] = useState<Set<string>>(new Set());
@@ -637,10 +637,10 @@ function CityRow({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isExpanded, loadingProviders, cityProviders]);
 
-  const filteredProviders = showOnlyWithEmail
-    ? cityProviders.filter((p) => p.email && p.email.trim())
-    : cityProviders;
-  const providersWithEmail = cityProviders.filter((p) => p.email && p.email.trim());
+  const filteredProviders =
+    emailFilter === "with" ? cityProviders.filter((p) => p.email && p.email.trim()) :
+    emailFilter === "without" ? cityProviders.filter((p) => !p.email || !p.email.trim()) :
+    cityProviders;
 
   const allSelected = filteredProviders.length > 0 && filteredProviders.every((p) => selectedProviders.has(p.provider_id));
   const someSelected = filteredProviders.some((p) => selectedProviders.has(p.provider_id)) && !allSelected;
@@ -717,54 +717,53 @@ function CityRow({
           ) : (
             <>
               {/* Filter & Select Bar */}
-              <div className="px-5 py-2 border-b border-gray-100 flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={allSelected}
-                      ref={(el) => {
-                        if (el) el.indeterminate = someSelected;
-                      }}
-                      onChange={() => {
-                        if (allSelected) {
-                          filteredProviders.forEach((p) => {
-                            if (selectedProviders.has(p.provider_id)) {
-                              onToggleProvider(p.provider_id);
-                            }
-                          });
-                        } else {
-                          onSelectAllInCity(filteredProviders.map((p) => p.provider_id));
-                        }
-                      }}
-                      className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                    />
-                    <span className="text-xs text-gray-500">
-                      Select all {filteredProviders.length}
-                    </span>
-                  </div>
-
-                  {/* Quick select with email only */}
-                  {providersWithEmail.length > 0 && providersWithEmail.length < cityProviders.length && (
-                    <button
-                      type="button"
-                      onClick={() => onSelectAllInCity(providersWithEmail.map((p) => p.provider_id))}
-                      className="text-xs text-primary-600 hover:text-primary-700 font-medium"
-                    >
-                      Select {providersWithEmail.length} with email
-                    </button>
-                  )}
-                </div>
-
-                {/* Filter toggle */}
+              <div className="px-5 py-2 border-b border-gray-100 flex items-center gap-6">
+                {/* Select all */}
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={showOnlyWithEmail}
-                    onChange={(e) => setShowOnlyWithEmail(e.target.checked)}
+                    checked={allSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = someSelected;
+                    }}
+                    onChange={() => {
+                      if (allSelected) {
+                        filteredProviders.forEach((p) => {
+                          if (selectedProviders.has(p.provider_id)) {
+                            onToggleProvider(p.provider_id);
+                          }
+                        });
+                      } else {
+                        onSelectAllInCity(filteredProviders.map((p) => p.provider_id));
+                      }
+                    }}
+                    className="w-3.5 h-3.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                  />
+                  <span className="text-xs text-gray-500">
+                    Select all {filteredProviders.length}
+                  </span>
+                </label>
+
+                {/* Show only with email */}
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={emailFilter === "with"}
+                    onChange={(e) => setEmailFilter(e.target.checked ? "with" : "all")}
                     className="w-3.5 h-3.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                   />
                   <span className="text-xs text-gray-500">Show only with email</span>
+                </label>
+
+                {/* Show only without email */}
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={emailFilter === "without"}
+                    onChange={(e) => setEmailFilter(e.target.checked ? "without" : "all")}
+                    className="w-3.5 h-3.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                  />
+                  <span className="text-xs text-gray-500">Show only without email</span>
                 </label>
               </div>
 
@@ -853,7 +852,7 @@ function CityRow({
               </div>
 
               {/* Show count if filtered */}
-              {showOnlyWithEmail && filteredProviders.length < cityProviders.length && (
+              {emailFilter !== "all" && filteredProviders.length < cityProviders.length && (
                 <div className="px-5 py-2 text-xs text-gray-400 border-t border-gray-100">
                   Showing {filteredProviders.length} of {cityProviders.length} providers
                 </div>
@@ -872,7 +871,7 @@ function CityRow({
 
 export default function ProviderOutreachPage() {
   // State filter
-  const [selectedState, setSelectedState] = useState<string>("TX");
+  const [selectedState, setSelectedState] = useState<string>("AL");
 
   // Stage tab
   const [stage, setStage] = useState<OutreachStage>("not_contacted");
