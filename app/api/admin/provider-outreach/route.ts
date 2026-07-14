@@ -117,11 +117,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ providers, stage_counts: stageCounts });
     }
 
-    // For active stages (in_sequence, needs_call, called): query tracking but exclude claimed
-    // For terminal stages (not_interested, archived): query tracking as-is
-    const activeStages: OutreachStage[] = ["in_sequence", "needs_call", "called"];
-    const isActiveStage = activeStages.includes(stage);
-
+    // For ALL non-claimed stages: query tracking but exclude providers who have since claimed
+    // This ensures a provider only appears in ONE tab (Claimed wins if they've claimed)
     let trackingQuery = db
       .from("provider_outreach_tracking")
       .select("*")
@@ -155,9 +152,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Failed to fetch provider details" }, { status: 500 });
     }
 
-    // For active stages, exclude providers who have since claimed
+    // Exclude providers who have since claimed (they belong in "Claimed" tab now)
     let claimedProviderIds = new Set<string>();
-    if (isActiveStage && providerIds.length > 0) {
+    if (providerIds.length > 0) {
       const { data: claimedBps } = await db
         .from("business_profiles")
         .select("source_provider_id")
@@ -173,8 +170,8 @@ export async function GET(request: NextRequest) {
       .map((t): OutreachProvider | null => {
         const p = providerMap.get(t.provider_id);
         if (!p) return null;
-        // Skip if provider has claimed (for active stages)
-        if (isActiveStage && claimedProviderIds.has(p.provider_id)) return null;
+        // Skip if provider has claimed - they belong in Claimed tab now
+        if (claimedProviderIds.has(p.provider_id)) return null;
         return {
           provider_id: p.provider_id,
           provider_name: p.provider_name,
@@ -416,8 +413,6 @@ async function getStageCounts(
     .select("provider_id, stage")
     .eq("state", state);
 
-  const activeStages = ["in_sequence", "needs_call", "called"];
-
   if (trackingRows) {
     for (const row of trackingRows) {
       const stage = row.stage as OutreachStage;
@@ -426,8 +421,8 @@ async function getStageCounts(
         continue;
       }
 
-      // For active stages, don't count if provider has since claimed
-      if (activeStages.includes(stage) && claimedProviderIds.has(row.provider_id)) {
+      // Don't count if provider has since claimed - they belong in Claimed now
+      if (claimedProviderIds.has(row.provider_id)) {
         continue;
       }
 
