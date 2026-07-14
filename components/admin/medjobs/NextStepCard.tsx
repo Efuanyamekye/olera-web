@@ -174,17 +174,13 @@ function StageBody({
     case "in_outreach":
       return <InOutreachBody ctx={ctx} action={action} setError={setError} activeTab={activeTab} />;
     case "call_due":
-      // A due call makes the row call_due, but the Next step must still read
-      // tab-appropriately — same design/buttons as any card. In the Emails tab
-      // that's the reply-first face (InOutreachBody, which surfaces the due call
-      // as its secondary "Call" link); every other tab keeps the call-first
-      // CallDueBody. This keeps custom and activation cadences identical across
-      // tabs — the cadence's shape no longer changes how the card looks.
-      return activeTab === "replies" ? (
-        <InOutreachBody ctx={ctx} action={action} setError={setError} activeTab={activeTab} />
-      ) : (
-        <CallDueBody ctx={ctx} action={action} setError={setError} />
-      );
+      // A due call raises priority to call_due, but the Next step must look and
+      // behave like every other in-cadence card — so it renders the SAME
+      // tab-aware body: call-first in the Calls tab, reply-first in the Emails
+      // tab, with the due call surfaced as the "Call" action either way. Custom
+      // and activation cadences therefore render identically to any other row on
+      // every tab; the cadence's shape never changes how the card looks.
+      return <InOutreachBody ctx={ctx} action={action} setError={setError} activeTab={activeTab} />;
     case "meeting_set":
       return <MeetingSetBody ctx={ctx} action={action} setError={setError} />;
     case "follow_up":
@@ -499,102 +495,10 @@ function currentCustomCadenceName(ctx: DrawerContext): string | null {
 }
 
 // ── call_due ─────────────────────────────────────────────────────────────
-
-/**
- * v9.1 Graize 05.13 audit (Item 5): Calls drawer Next Step
- * restructured so the three actions are unmistakable:
- *   1. CALL pill — names the step the row is on
- *   2. Phone link — one tap to dial
- *   3. Suggested script (collapsible) — sourced from the next
- *      pending outreach_followup_call task's payload, which carries
- *      the resolved script set at PreFlight time
- *   4. Log call outcome button — the action that advances the row
- *
- * The script is shown as a `<details>` so it doesn't dominate the
- * card visually, but is one click away when admin needs it.
- */
-function CallDueBody({
-  ctx,
-  action,
-  setError,
-}: {
-  ctx: DrawerContext;
-  action: ActionFn;
-  setError: (m: string | null) => void;
-}) {
-  const [showFollowUp, setShowFollowUp] = useState(false);
-
-  const primaryContact =
-    ctx.contacts.find((c) => c.is_primary && c.status === "active") ??
-    ctx.contacts.find((c) => c.status === "active") ??
-    null;
-  const contactName = primaryContact
-    ? [primaryContact.title, primaryContact.first_name, primaryContact.last_name]
-        .filter(Boolean)
-        .join(" ")
-        .trim() || primaryContact.name
-    : null;
-
-  const nextCallTask = ctx.pending_tasks
-    .filter((t) => t.task_type === "outreach_followup_call")
-    .sort((a, b) => a.due_at.localeCompare(b.due_at))[0];
-  const callScript =
-    typeof nextCallTask?.payload?.script === "string"
-      ? (nextCallTask.payload.script as string)
-      : null;
-  const callDay =
-    typeof nextCallTask?.payload?.day === "number"
-      ? (nextCallTask.payload.day as number)
-      : null;
-  const callLabel = isPartnerRow(ctx) ? "Call contact" : "Call provider";
-
-  return (
-    <>
-      <div className="flex items-center gap-2">
-        <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-blue-700">
-          Call
-        </span>
-      </div>
-      <p className="mt-2 text-sm font-medium text-gray-900">Next step: call to follow up</p>
-      {nextCallTask && (
-        <p className="mt-1 text-xs text-gray-500">
-          Next call {formatDueDate(nextCallTask.due_at)}
-        </p>
-      )}
-      {primaryContact?.phone && (
-        <p className="mt-1 text-sm">
-          <a
-            href={`tel:${primaryContact.phone}`}
-            className="font-semibold text-primary-700 hover:underline"
-          >
-            📞 {primaryContact.phone}
-          </a>
-          {contactName && (
-            <span className="ml-2 text-xs text-gray-500">· {contactName}</span>
-          )}
-        </p>
-      )}
-      <div className="mt-3">
-        <button
-          onClick={() => setShowFollowUp(true)}
-          className="rounded-md bg-primary-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-primary-700"
-        >
-          ☎ {callLabel}
-        </button>
-      </div>
-      {showFollowUp && (
-        <CallFollowUpModal
-          ctx={ctx}
-          action={action}
-          script={callScript}
-          scriptLabel={callDay != null ? `Day ${callDay} script` : "Call script"}
-          onClose={() => setShowFollowUp(false)}
-          setError={setError}
-        />
-      )}
-    </>
-  );
-}
+// A call-due row no longer has its own Next-step body — it renders the shared
+// InOutreachBody (see StageBody) so every card looks and behaves the same,
+// tab-aware, whether or not a call happens to be due. The old bespoke CallDueBody
+// was the source of the "custom cadence looks different" drift and was removed.
 
 // ── meeting_set ──────────────────────────────────────────────────────────
 
