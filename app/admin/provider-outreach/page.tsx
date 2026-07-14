@@ -98,36 +98,58 @@ function StageBadge({ stage }: { stage: OutreachStage }) {
 // Contact Status Badges
 // ─────────────────────────────────────────────────────────────────────────────
 
-function EmailBadge({ email }: { email: string | null }) {
-  if (email) {
-    return (
-      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded bg-emerald-50 text-emerald-700">
-        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-        </svg>
-        Email
-      </span>
-    );
+// Format phone number for display
+function formatPhone(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
   }
-  return (
-    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded bg-amber-50 text-amber-600">
-      <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-      </svg>
-      No Email
-    </span>
-  );
+  if (digits.length === 11 && digits[0] === "1") {
+    return `(${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
+  }
+  return phone;
 }
 
-function PhoneBadge({ phone }: { phone: string | null }) {
-  if (!phone) return null;
+// Provider Contact Display - shows actual email/phone like Questions page
+function ProviderContactInfo({
+  email,
+  phone,
+  slug,
+}: {
+  email: string | null;
+  phone: string | null;
+  slug: string | null;
+}) {
   return (
-    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium rounded bg-gray-100 text-gray-600">
-      <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
-      </svg>
-      Phone
-    </span>
+    <div className="flex flex-col gap-1 text-sm">
+      {/* Email */}
+      {email ? (
+        <a
+          href={`mailto:${email}`}
+          className="text-primary-600 hover:text-primary-700 hover:underline truncate"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {email}
+        </a>
+      ) : (
+        <span className="text-amber-600 text-xs flex items-center gap-1">
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+          </svg>
+          No email
+        </span>
+      )}
+      {/* Phone */}
+      {phone && (
+        <a
+          href={`tel:${phone.replace(/\D/g, "")}`}
+          className="text-primary-600 hover:text-primary-700 hover:underline"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {formatPhone(phone)}
+        </a>
+      )}
+    </div>
   );
 }
 
@@ -156,9 +178,16 @@ function CityRow({
   onToggleProvider,
   onSelectAllInCity,
 }: CityRowProps) {
+  const [showOnlyWithEmail, setShowOnlyWithEmail] = useState(false);
+
   const cityProviders = providers.filter((p) => (p.city || "(No City)") === city.city);
-  const allSelected = cityProviders.length > 0 && cityProviders.every((p) => selectedProviders.has(p.provider_id));
-  const someSelected = cityProviders.some((p) => selectedProviders.has(p.provider_id)) && !allSelected;
+  const filteredProviders = showOnlyWithEmail
+    ? cityProviders.filter((p) => p.email && p.email.trim())
+    : cityProviders;
+  const providersWithEmail = cityProviders.filter((p) => p.email && p.email.trim());
+
+  const allSelected = filteredProviders.length > 0 && filteredProviders.every((p) => selectedProviders.has(p.provider_id));
+  const someSelected = filteredProviders.some((p) => selectedProviders.has(p.provider_id)) && !allSelected;
 
   return (
     <div className="border-b border-gray-100 last:border-b-0">
@@ -220,66 +249,114 @@ function CityRow({
             <p className="px-5 py-4 text-sm text-gray-400 italic">No providers in this city</p>
           ) : (
             <>
-              {/* Select All for City */}
-              <div className="px-5 py-2 border-b border-gray-100 flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  ref={(el) => {
-                    if (el) el.indeterminate = someSelected;
-                  }}
-                  onChange={() => {
-                    if (allSelected) {
-                      // Deselect all
-                      cityProviders.forEach((p) => {
-                        if (selectedProviders.has(p.provider_id)) {
-                          onToggleProvider(p.provider_id);
+              {/* Filter & Select Bar */}
+              <div className="px-5 py-2 border-b border-gray-100 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={allSelected}
+                      ref={(el) => {
+                        if (el) el.indeterminate = someSelected;
+                      }}
+                      onChange={() => {
+                        if (allSelected) {
+                          filteredProviders.forEach((p) => {
+                            if (selectedProviders.has(p.provider_id)) {
+                              onToggleProvider(p.provider_id);
+                            }
+                          });
+                        } else {
+                          onSelectAllInCity(filteredProviders.map((p) => p.provider_id));
                         }
-                      });
-                    } else {
-                      // Select all
-                      onSelectAllInCity(cityProviders.map((p) => p.provider_id));
-                    }
-                  }}
-                  className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                />
-                <span className="text-xs text-gray-500">
-                  Select all {cityProviders.length} in {city.city}
-                </span>
+                      }}
+                      className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <span className="text-xs text-gray-500">
+                      Select all {filteredProviders.length}
+                    </span>
+                  </div>
+
+                  {/* Quick select with email only */}
+                  {providersWithEmail.length > 0 && providersWithEmail.length < cityProviders.length && (
+                    <button
+                      type="button"
+                      onClick={() => onSelectAllInCity(providersWithEmail.map((p) => p.provider_id))}
+                      className="text-xs text-primary-600 hover:text-primary-700 font-medium"
+                    >
+                      Select {providersWithEmail.length} with email
+                    </button>
+                  )}
+                </div>
+
+                {/* Filter toggle */}
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showOnlyWithEmail}
+                    onChange={(e) => setShowOnlyWithEmail(e.target.checked)}
+                    className="w-3.5 h-3.5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                  />
+                  <span className="text-xs text-gray-500">Show only with email</span>
+                </label>
               </div>
 
-              {/* Provider Rows */}
+              {/* Provider Cards */}
               <div className="divide-y divide-gray-100">
-                {cityProviders.map((provider) => (
-                  <div key={provider.provider_id} className="px-5 py-3 pl-10 flex items-center gap-4">
+                {filteredProviders.map((provider) => (
+                  <div key={provider.provider_id} className="px-5 py-4 pl-10 flex items-start gap-4 hover:bg-white transition-colors">
                     <input
                       type="checkbox"
                       checked={selectedProviders.has(provider.provider_id)}
                       onChange={() => onToggleProvider(provider.provider_id)}
-                      className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      className="w-4 h-4 mt-1 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
                     />
 
-                    {/* Provider Info */}
+                    {/* Provider Card */}
                     <div className="flex-1 min-w-0">
-                      <Link
-                        href={provider.slug ? `/admin/directory/${provider.slug}` : "#"}
-                        className="font-medium text-gray-900 hover:text-primary-600 transition-colors block truncate"
-                      >
-                        {provider.provider_name}
-                      </Link>
-                      {provider.provider_category && (
-                        <p className="text-xs text-gray-500 truncate">{provider.provider_category}</p>
-                      )}
-                    </div>
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Link
+                              href={provider.slug ? `/admin/directory/${provider.slug}` : "#"}
+                              className="font-medium text-gray-900 hover:text-primary-600 transition-colors truncate"
+                            >
+                              {provider.provider_name}
+                            </Link>
+                            {provider.slug && (
+                              <Link
+                                href={`/admin/directory/${provider.slug}`}
+                                className="text-xs text-gray-400 hover:text-primary-600"
+                              >
+                                View
+                              </Link>
+                            )}
+                          </div>
+                          {provider.provider_category && (
+                            <p className="text-xs text-gray-500 mt-0.5">{provider.provider_category}</p>
+                          )}
+                        </div>
+                      </div>
 
-                    {/* Contact Badges */}
-                    <div className="flex items-center gap-2">
-                      <EmailBadge email={provider.email} />
-                      <PhoneBadge phone={provider.phone} />
+                      {/* Contact Info */}
+                      <div className="mt-2">
+                        <ProviderContactInfo
+                          email={provider.email}
+                          phone={provider.phone}
+                          slug={provider.slug}
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
+
+              {/* Show count if filtered */}
+              {showOnlyWithEmail && filteredProviders.length < cityProviders.length && (
+                <div className="px-5 py-2 text-xs text-gray-400 border-t border-gray-100">
+                  Showing {filteredProviders.length} of {cityProviders.length} providers
+                </div>
+              )}
             </>
           )}
         </div>
@@ -300,36 +377,49 @@ interface ProviderRowProps {
 
 function ProviderRow({ provider, isSelected, onToggleSelect }: ProviderRowProps) {
   return (
-    <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors">
+    <div className="flex items-start gap-4 px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors">
       <input
         type="checkbox"
         checked={isSelected}
         onChange={onToggleSelect}
-        className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+        className="w-4 h-4 mt-1 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
       />
 
       {/* Provider Info */}
-      <div className="flex-[2] min-w-0">
-        <Link
-          href={provider.slug ? `/admin/directory/${provider.slug}` : "#"}
-          className="font-medium text-gray-900 hover:text-primary-600 transition-colors block truncate"
-        >
-          {provider.provider_name}
-        </Link>
-        <p className="text-xs text-gray-500 truncate">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <Link
+            href={provider.slug ? `/admin/directory/${provider.slug}` : "#"}
+            className="font-medium text-gray-900 hover:text-primary-600 transition-colors truncate"
+          >
+            {provider.provider_name}
+          </Link>
+          {provider.slug && (
+            <Link
+              href={`/admin/directory/${provider.slug}`}
+              className="text-xs text-gray-400 hover:text-primary-600"
+            >
+              View
+            </Link>
+          )}
+        </div>
+        <p className="text-xs text-gray-500 mt-0.5">
           {[provider.city, provider.state].filter(Boolean).join(", ")}
           {provider.provider_category && ` · ${provider.provider_category}`}
         </p>
-      </div>
 
-      {/* Contact Badges */}
-      <div className="flex items-center gap-2">
-        <EmailBadge email={provider.email} />
-        <PhoneBadge phone={provider.phone} />
+        {/* Contact Info */}
+        <div className="mt-2">
+          <ProviderContactInfo
+            email={provider.email}
+            phone={provider.phone}
+            slug={provider.slug}
+          />
+        </div>
       </div>
 
       {/* Stage Changed */}
-      <div className="w-24 text-right">
+      <div className="w-24 text-right shrink-0">
         <p className="text-sm text-gray-400">{timeAgo(provider.stage_changed_at)}</p>
       </div>
     </div>
