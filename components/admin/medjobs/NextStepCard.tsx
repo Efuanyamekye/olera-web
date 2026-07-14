@@ -174,7 +174,17 @@ function StageBody({
     case "in_outreach":
       return <InOutreachBody ctx={ctx} action={action} setError={setError} activeTab={activeTab} />;
     case "call_due":
-      return <CallDueBody ctx={ctx} action={action} setError={setError} />;
+      // A due call makes the row call_due, but the Next step must still read
+      // tab-appropriately — same design/buttons as any card. In the Emails tab
+      // that's the reply-first face (InOutreachBody, which surfaces the due call
+      // as its secondary "Call" link); every other tab keeps the call-first
+      // CallDueBody. This keeps custom and activation cadences identical across
+      // tabs — the cadence's shape no longer changes how the card looks.
+      return activeTab === "replies" ? (
+        <InOutreachBody ctx={ctx} action={action} setError={setError} activeTab={activeTab} />
+      ) : (
+        <CallDueBody ctx={ctx} action={action} setError={setError} />
+      );
     case "meeting_set":
       return <MeetingSetBody ctx={ctx} action={action} setError={setError} />;
     case "follow_up":
