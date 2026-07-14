@@ -110,40 +110,113 @@ function formatPhone(phone: string): string {
   return phone;
 }
 
-// Provider Contact Display - shows actual email/phone like Questions page
-function ProviderContactInfo({
-  email,
+// Editable Provider Contact - inline email editing like Questions page
+function ProviderContactEditor({
+  providerId,
+  email: initialEmail,
   phone,
-  slug,
+  onEmailUpdate,
 }: {
+  providerId: string;
   email: string | null;
   phone: string | null;
-  slug: string | null;
+  onEmailUpdate?: (newEmail: string) => void;
 }) {
+  const [email, setEmail] = useState(initialEmail || "");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const hasChanged = email.trim() !== (initialEmail || "").trim();
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  async function handleSave() {
+    if (!email.trim() || !isValidEmail) return;
+
+    setSaving(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/admin/provider-outreach/update-email", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider_id: providerId, email: email.trim() }),
+      });
+
+      if (res.ok) {
+        setSaved(true);
+        onEmailUpdate?.(email.trim());
+        setTimeout(() => setSaved(false), 2000);
+      } else {
+        const data = await res.json();
+        setError(data.error || "Failed to save");
+      }
+    } catch {
+      setError("Network error");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
-    <div className="flex flex-col gap-1 text-sm">
-      {/* Email */}
-      {email ? (
-        <a
-          href={`mailto:${email}`}
-          className="text-primary-600 hover:text-primary-700 hover:underline truncate"
+    <div className="flex flex-col gap-1.5">
+      {/* Email row */}
+      <div className="flex items-center gap-2">
+        <input
+          type="email"
+          placeholder="email@provider.com"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setError(null);
+            setSaved(false);
+          }}
           onClick={(e) => e.stopPropagation()}
+          className="flex-1 min-w-0 px-2.5 py-1 text-sm bg-white border border-gray-200 rounded-md focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-900/10 placeholder:text-gray-300 transition"
+          disabled={saving}
+        />
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            // Placeholder for future email finder
+            alert("Email finder coming soon!");
+          }}
+          className="shrink-0 px-2 py-1 text-xs font-medium text-teal-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 transition"
         >
-          {email}
-        </a>
-      ) : (
-        <span className="text-amber-600 text-xs flex items-center gap-1">
-          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
-          </svg>
-          No email
-        </span>
-      )}
-      {/* Phone */}
+          ✦ Find
+        </button>
+        {hasChanged && isValidEmail && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSave();
+            }}
+            disabled={saving}
+            className="shrink-0 px-2.5 py-1 text-xs font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700 disabled:opacity-50 transition"
+          >
+            {saving ? "..." : "Save"}
+          </button>
+        )}
+        {saved && (
+          <span className="text-xs text-emerald-600 flex items-center gap-1">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+            </svg>
+            Saved
+          </span>
+        )}
+        {error && (
+          <span className="text-xs text-red-600">{error}</span>
+        )}
+      </div>
+
+      {/* Phone row */}
       {phone && (
         <a
           href={`tel:${phone.replace(/\D/g, "")}`}
-          className="text-primary-600 hover:text-primary-700 hover:underline"
+          className="text-sm text-primary-600 hover:text-primary-700 hover:underline w-fit"
           onClick={(e) => e.stopPropagation()}
         >
           {formatPhone(phone)}
@@ -340,10 +413,10 @@ function CityRow({
 
                       {/* Contact Info */}
                       <div className="mt-2">
-                        <ProviderContactInfo
+                        <ProviderContactEditor
+                          providerId={provider.provider_id}
                           email={provider.email}
                           phone={provider.phone}
-                          slug={provider.slug}
                         />
                       </div>
                     </div>
@@ -410,10 +483,10 @@ function ProviderRow({ provider, isSelected, onToggleSelect }: ProviderRowProps)
 
         {/* Contact Info */}
         <div className="mt-2">
-          <ProviderContactInfo
+          <ProviderContactEditor
+            providerId={provider.provider_id}
             email={provider.email}
             phone={provider.phone}
-            slug={provider.slug}
           />
         </div>
       </div>
