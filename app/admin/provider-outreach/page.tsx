@@ -110,7 +110,7 @@ function formatPhone(phone: string): string {
   return phone;
 }
 
-// Editable Provider Contact - inline email editing like Questions page
+// Editable Provider Contact - with Edit mode for existing emails
 function ProviderContactEditor({
   providerId,
   email: initialEmail,
@@ -123,11 +123,11 @@ function ProviderContactEditor({
   onEmailUpdate?: (newEmail: string) => void;
 }) {
   const [email, setEmail] = useState(initialEmail || "");
+  const [isEditing, setIsEditing] = useState(!initialEmail); // Start in edit mode if no email
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const hasChanged = email.trim() !== (initialEmail || "").trim();
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
   async function handleSave() {
@@ -145,6 +145,7 @@ function ProviderContactEditor({
 
       if (res.ok) {
         setSaved(true);
+        setIsEditing(false);
         onEmailUpdate?.(email.trim());
         setTimeout(() => setSaved(false), 2000);
       } else {
@@ -158,52 +159,95 @@ function ProviderContactEditor({
     }
   }
 
+  function handleCancel() {
+    setEmail(initialEmail || "");
+    setIsEditing(false);
+    setError(null);
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
-      {/* Email input + buttons - constrained width */}
       <div className="flex items-center gap-1.5">
-        <input
-          type="email"
-          placeholder="email@provider.com"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setError(null);
-            setSaved(false);
-          }}
-          onClick={(e) => e.stopPropagation()}
-          className="w-52 px-2.5 py-1 text-sm bg-white border border-gray-200 rounded-md focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-900/10 placeholder:text-gray-300 transition"
-          disabled={saving}
-        />
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            // Placeholder for future email finder
-            alert("Email finder coming soon!");
-          }}
-          className="shrink-0 px-2 py-1 text-xs font-medium text-teal-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 transition"
-        >
-          ✦ Find
-        </button>
-        {/* Save button - always visible, disabled when nothing to save */}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleSave();
-          }}
-          disabled={saving || !hasChanged || !isValidEmail}
-          className={`shrink-0 px-3 py-1 text-xs font-medium rounded-md transition ${
-            hasChanged && isValidEmail
-              ? "text-white bg-teal-600 hover:bg-teal-700"
-              : "text-gray-400 bg-gray-100 cursor-not-allowed"
-          } disabled:opacity-50`}
-        >
-          {saving ? "..." : saved ? "✓ Saved" : "Save"}
-        </button>
-        {error && (
-          <span className="text-xs text-red-600 shrink-0">{error}</span>
+        {isEditing ? (
+          // Edit mode: input + Find + Save + Cancel
+          <>
+            <input
+              type="email"
+              placeholder="email@provider.com"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError(null);
+                setSaved(false);
+              }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-52 px-2.5 py-1 text-sm bg-white border border-gray-200 rounded-md focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-900/10 placeholder:text-gray-300 transition"
+              disabled={saving}
+              autoFocus={!!initialEmail}
+            />
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                // Placeholder for future email finder
+                alert("Email finder coming soon!");
+              }}
+              className="shrink-0 px-2 py-1 text-xs font-medium text-teal-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 transition"
+            >
+              ✦ Find
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSave();
+              }}
+              disabled={saving || !isValidEmail}
+              className={`shrink-0 px-3 py-1 text-xs font-medium rounded-md transition ${
+                isValidEmail
+                  ? "text-white bg-teal-600 hover:bg-teal-700"
+                  : "text-gray-400 bg-gray-100 cursor-not-allowed"
+              } disabled:opacity-50`}
+            >
+              {saving ? "..." : "Save"}
+            </button>
+            {initialEmail && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCancel();
+                }}
+                disabled={saving}
+                className="shrink-0 px-2 py-1 text-xs font-medium text-gray-500 hover:text-gray-700 transition"
+              >
+                Cancel
+              </button>
+            )}
+            {error && <span className="text-xs text-red-600 shrink-0">{error}</span>}
+          </>
+        ) : (
+          // Display mode: show email + Edit button
+          <>
+            <span className="text-sm text-gray-700">{email}</span>
+            {saved && (
+              <span className="text-xs text-emerald-600 flex items-center gap-0.5">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(true);
+              }}
+              className="shrink-0 px-2 py-0.5 text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded transition"
+            >
+              Edit
+            </button>
+          </>
         )}
       </div>
 
