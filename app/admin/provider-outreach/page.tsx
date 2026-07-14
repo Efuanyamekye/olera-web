@@ -1088,10 +1088,11 @@ export default function ProviderOutreachPage() {
     }
   }, [expandedCities, stage, fetchProviders]);
 
-  // Clear selection when stage changes
+  // Clear selection and providers when stage/state changes
   useEffect(() => {
     setSelectedProviders(new Set());
     setExpandedCities(new Set());
+    setProviders([]);
   }, [stage, selectedState]);
 
   // Show toast helper
