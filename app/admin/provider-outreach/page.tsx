@@ -555,6 +555,42 @@ export default function ProviderOutreachPage() {
 
   // Action modal state
   const [actionModalProvider, setActionModalProvider] = useState<OutreachProvider | null>(null);
+  const [selectedAction, setSelectedAction] = useState<"not_interested" | "archived" | "hidden" | null>(null);
+  const [actionReason, setActionReason] = useState("");
+  const [actionNotes, setActionNotes] = useState("");
+
+  // Reason options for each action
+  const NOT_INTERESTED_REASONS = [
+    "Not a fit for our service",
+    "Provider requested no emails",
+    "Unable to reach - no response",
+    "Already has similar service",
+    "Other",
+  ];
+
+  const ARCHIVE_REASONS = [
+    "Out of business / Permanently closed",
+    "Invalid provider (fake/spam)",
+    "Duplicate profile",
+    "Wrong contact info",
+    "Provider relocated",
+    "Other",
+  ];
+
+  const HIDE_REASONS = [
+    "Test account",
+    "Duplicate entry",
+    "Data quality issue",
+    "Other",
+  ];
+
+  // Close action modal and reset state
+  const closeActionModal = () => {
+    setActionModalProvider(null);
+    setSelectedAction(null);
+    setActionReason("");
+    setActionNotes("");
+  };
 
   // Fetch cities for not_contacted stage
   const fetchCities = useCallback(async () => {
@@ -711,7 +747,7 @@ export default function ProviderOutreachPage() {
   };
 
   // Quick action for single provider (from modal)
-  const handleQuickAction = async (providerId: string, action: "not_interested" | "archived" | "hidden") => {
+  const handleQuickAction = async (providerId: string, action: "not_interested" | "archived" | "hidden", notes?: string) => {
     setActionLoading(true);
     try {
       const res = await fetch("/api/admin/provider-outreach/update-stage", {
@@ -720,6 +756,7 @@ export default function ProviderOutreachPage() {
         body: JSON.stringify({
           provider_ids: [providerId],
           stage: action,
+          notes: notes || undefined,
         }),
       });
 
@@ -962,7 +999,7 @@ export default function ProviderOutreachPage() {
       {actionModalProvider && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
-          onClick={() => setActionModalProvider(null)}
+          onClick={closeActionModal}
         >
           <div
             className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden"
@@ -976,83 +1013,167 @@ export default function ProviderOutreachPage() {
               </p>
             </div>
 
-            {/* Actions */}
-            <div className="p-4 space-y-2">
-              {/* Not Interested */}
-              <button
-                onClick={() => {
-                  handleQuickAction(actionModalProvider.provider_id, "not_interested");
-                  setActionModalProvider(null);
-                }}
-                disabled={actionLoading}
-                className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-colors disabled:opacity-50"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-orange-500 mt-0.5">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                    </svg>
-                  </span>
-                  <div>
-                    <p className="font-medium text-gray-900">Mark Not Interested</p>
-                    <p className="text-xs text-gray-500">Provider declined or not a fit</p>
+            {/* Step 1: Select Action */}
+            {!selectedAction && (
+              <div className="p-4 space-y-2">
+                {/* Not Interested */}
+                <button
+                  onClick={() => setSelectedAction("not_interested")}
+                  className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-orange-500 mt-0.5">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                      </svg>
+                    </span>
+                    <div>
+                      <p className="font-medium text-gray-900">Mark Not Interested</p>
+                      <p className="text-xs text-gray-500">Provider declined or not a fit</p>
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
 
-              {/* Archive */}
-              <button
-                onClick={() => {
-                  handleQuickAction(actionModalProvider.provider_id, "archived");
-                  setActionModalProvider(null);
-                }}
-                disabled={actionLoading}
-                className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-colors disabled:opacity-50"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-amber-500 mt-0.5">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-                    </svg>
-                  </span>
-                  <div>
-                    <p className="font-medium text-gray-900">Archive</p>
-                    <p className="text-xs text-gray-500">Remove from outreach list</p>
+                {/* Archive */}
+                <button
+                  onClick={() => setSelectedAction("archived")}
+                  className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-amber-500 mt-0.5">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                      </svg>
+                    </span>
+                    <div>
+                      <p className="font-medium text-gray-900">Archive</p>
+                      <p className="text-xs text-gray-500">Stop all outreach to this provider</p>
+                    </div>
                   </div>
-                </div>
-              </button>
+                </button>
 
-              {/* Hide (for test data cleanup - NOT terminal) */}
-              <button
-                onClick={() => {
-                  handleQuickAction(actionModalProvider.provider_id, "hidden");
-                  setActionModalProvider(null);
-                }}
-                disabled={actionLoading}
-                className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors disabled:opacity-50"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-gray-400 mt-0.5">
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                    </svg>
-                  </span>
-                  <div>
-                    <p className="font-medium text-gray-900">Hide</p>
-                    <p className="text-xs text-gray-500">Skip for this sequence (test accounts)</p>
+                {/* Hide */}
+                <button
+                  onClick={() => setSelectedAction("hidden")}
+                  className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-gray-400 mt-0.5">
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                      </svg>
+                    </span>
+                    <div>
+                      <p className="font-medium text-gray-900">Hide</p>
+                      <p className="text-xs text-gray-500">Skip for this sequence (test accounts)</p>
+                    </div>
                   </div>
+                </button>
+              </div>
+            )}
+
+            {/* Step 2: Confirm with Reason */}
+            {selectedAction && (
+              <div className="p-4 space-y-4">
+                {/* Back button */}
+                <button
+                  onClick={() => {
+                    setSelectedAction(null);
+                    setActionReason("");
+                    setActionNotes("");
+                  }}
+                  className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Back
+                </button>
+
+                {/* Action description */}
+                <div className={`p-3 rounded-lg ${
+                  selectedAction === "not_interested" ? "bg-orange-50 border border-orange-200" :
+                  selectedAction === "archived" ? "bg-amber-50 border border-amber-200" :
+                  "bg-gray-50 border border-gray-200"
+                }`}>
+                  <p className="text-sm font-medium text-gray-900">
+                    {selectedAction === "not_interested" ? "Mark as Not Interested" :
+                     selectedAction === "archived" ? "Archive Provider" :
+                     "Hide Provider"}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-0.5">
+                    {selectedAction === "not_interested" ? "Provider will be moved to Not Interested tab." :
+                     selectedAction === "archived" ? "Provider will be archived and removed from active outreach." :
+                     "Provider will be hidden from this sequence but can be unhidden later."}
+                  </p>
                 </div>
-              </button>
-            </div>
+
+                {/* Reason dropdown */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Reason
+                  </label>
+                  <select
+                    value={actionReason}
+                    onChange={(e) => setActionReason(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                  >
+                    <option value="">Select a reason...</option>
+                    {(selectedAction === "not_interested" ? NOT_INTERESTED_REASONS :
+                      selectedAction === "archived" ? ARCHIVE_REASONS :
+                      HIDE_REASONS
+                    ).map((reason) => (
+                      <option key={reason} value={reason}>{reason}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Notes textarea */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    Notes <span className="text-gray-400 font-normal">{actionReason === "Other" ? "(required)" : "(optional)"}</span>
+                  </label>
+                  <textarea
+                    value={actionNotes}
+                    onChange={(e) => setActionNotes(e.target.value)}
+                    placeholder="Add any additional context..."
+                    rows={2}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none resize-none"
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Footer */}
-            <div className="px-5 py-3 border-t border-gray-100 flex justify-end">
+            <div className="px-5 py-3 border-t border-gray-100 flex justify-end gap-2">
               <button
-                onClick={() => setActionModalProvider(null)}
+                onClick={closeActionModal}
                 className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Cancel
               </button>
+              {selectedAction && (
+                <button
+                  onClick={async () => {
+                    if (!actionReason) return;
+                    if (actionReason === "Other" && !actionNotes.trim()) return;
+                    await handleQuickAction(
+                      actionModalProvider.provider_id,
+                      selectedAction,
+                      `${actionReason}${actionNotes.trim() ? ` - ${actionNotes.trim()}` : ""}`
+                    );
+                    closeActionModal();
+                  }}
+                  disabled={actionLoading || !actionReason || (actionReason === "Other" && !actionNotes.trim())}
+                  className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                    selectedAction === "not_interested" ? "bg-orange-600 hover:bg-orange-700" :
+                    selectedAction === "archived" ? "bg-amber-600 hover:bg-amber-700" :
+                    "bg-gray-600 hover:bg-gray-700"
+                  }`}
+                >
+                  {actionLoading ? "..." : "Confirm"}
+                </button>
+              )}
             </div>
           </div>
         </div>
