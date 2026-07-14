@@ -91,36 +91,6 @@ function timeAgo(isoDate: string | undefined | null): string {
   return `${Math.floor(days / 30)}mo ago`;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Stage Badge Component
-// ─────────────────────────────────────────────────────────────────────────────
-
-function StageBadge({ stage }: { stage: OutreachStage }) {
-  const config: Record<OutreachStage, { bg: string; text: string; dot: string }> = {
-    not_contacted: { bg: "bg-gray-100", text: "text-gray-700", dot: "bg-gray-400" },
-    in_sequence: { bg: "bg-blue-50", text: "text-blue-700", dot: "bg-blue-500 animate-pulse" },
-    needs_call: { bg: "bg-amber-50", text: "text-amber-700", dot: "bg-amber-500" },
-    called: { bg: "bg-purple-50", text: "text-purple-700", dot: "bg-purple-500" },
-    claimed: { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-500" },
-    not_interested: { bg: "bg-gray-100", text: "text-gray-600", dot: "bg-gray-400" },
-    archived: { bg: "bg-gray-100", text: "text-gray-500", dot: "bg-gray-300" },
-  };
-
-  const { bg, text, dot } = config[stage];
-
-  return (
-    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-xs font-medium rounded-full ${bg} ${text}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
-      {STAGE_LABELS[stage]}
-    </span>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Contact Status Badges
-// ─────────────────────────────────────────────────────────────────────────────
-
-// Format phone number for display
 function formatPhone(phone: string): string {
   const digits = phone.replace(/\D/g, "");
   if (digits.length === 10) {
@@ -149,6 +119,12 @@ function ProviderContactEditor({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Sync internal state when prop changes (e.g., from external refresh)
+  useEffect(() => {
+    setEmail(initialEmail || "");
+    setIsEditing(!initialEmail);
+  }, [initialEmail]);
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
@@ -507,69 +483,6 @@ function CityRow({
           )}
         </div>
       )}
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Provider Row Component (for non-not_contacted stages)
-// ─────────────────────────────────────────────────────────────────────────────
-
-interface ProviderRowProps {
-  provider: OutreachProvider;
-  isSelected: boolean;
-  onToggleSelect: () => void;
-  onEmailSaved: (providerId: string, newEmail: string) => void;
-}
-
-function ProviderRow({ provider, isSelected, onToggleSelect, onEmailSaved }: ProviderRowProps) {
-  return (
-    <div className="flex items-start gap-4 px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors">
-      <input
-        type="checkbox"
-        checked={isSelected}
-        onChange={onToggleSelect}
-        className="w-4 h-4 mt-1 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-      />
-
-      {/* Provider Info */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <Link
-            href={provider.slug ? `/admin/directory/${provider.slug}` : "#"}
-            className="font-medium text-gray-900 hover:text-primary-600 transition-colors truncate"
-          >
-            {provider.provider_name}
-          </Link>
-          {provider.slug && (
-            <Link
-              href={`/admin/directory/${provider.slug}`}
-              className="text-xs text-gray-400 hover:text-primary-600"
-            >
-              View
-            </Link>
-          )}
-        </div>
-        <p className="text-xs text-gray-500 mt-0.5">
-          {[provider.city, provider.state].filter(Boolean).join(", ")}
-          {provider.provider_category && ` · ${provider.provider_category}`}
-        </p>
-
-        {/* Contact Info */}
-        <div className="mt-2">
-          <ProviderContactEditor
-            providerId={provider.provider_id}
-            email={provider.email}
-            phone={provider.phone}
-            onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
-          />
-        </div>
-      </div>
-
-      {/* Stage Changed */}
-      <div className="w-24 text-right shrink-0">
-        <p className="text-sm text-gray-400">{timeAgo(provider.stage_changed_at)}</p>
-      </div>
     </div>
   );
 }

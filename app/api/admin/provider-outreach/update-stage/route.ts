@@ -89,7 +89,10 @@ export async function POST(request: NextRequest) {
     // Perform updates
     if (toUpdate.length > 0) {
       const updateIds = toUpdate.map((t) => t.id);
-      const updateData: { stage: OutreachStage; notes?: string | null } = { stage: stage as OutreachStage };
+      const updateData: { stage: OutreachStage; stage_changed_at: string; notes?: string | null } = {
+        stage: stage as OutreachStage,
+        stage_changed_at: new Date().toISOString(),
+      };
       if (notes !== undefined) {
         updateData.notes = notes;
       }
