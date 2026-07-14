@@ -292,6 +292,14 @@ async function run(request: Request, apply: boolean): Promise<Response> {
   let capped = false;
   const errors: string[] = [];
   const sample: Array<Record<string, unknown>> = [];
+  // Per-campaign visibility: proves whether the big cold campaigns are actually
+  // being reached and whether they hold the missing replies.
+  const perCampaign = new Map<number, { leads: number; replies: number; resolved: number }>();
+  const bump = (cid: number, key: "leads" | "replies" | "resolved") => {
+    const c = perCampaign.get(cid) ?? { leads: 0, replies: 0, resolved: 0 };
+    c[key] += 1;
+    perCampaign.set(cid, c);
+  };
 
   // Process one lead: pull its thread, count/collect replies, and (in apply
   // mode) import each resolvable one with dedupe. Safe to run concurrently —
@@ -299,6 +307,7 @@ async function run(request: Request, apply: boolean): Promise<Response> {
   const processLead = async (campaignId: number, lead: SmartleadCampaignLead) => {
     const leadId = lead.lead_id ?? lead.id;
     if (typeof leadId !== "number") return;
+    bump(campaignId, "leads");
     const outreachId = lead.custom_fields?.outreach_id != null
       ? String(lead.custom_fields.outreach_id)
       : null;
@@ -313,8 +322,10 @@ async function run(request: Request, apply: boolean): Promise<Response> {
       const m = messages[i];
       if (!isReply(m)) continue;
       repliesFound += 1;
+      bump(campaignId, "replies");
       const parsed = toParsedReply(m, outreachId, lead.email ?? null, campaignId, leadId, i);
       if (!parsed) { unresolved += 1; continue; }
+      bump(campaignId, "resolved");
       if (sample.length < 8) {
         sample.push({
           campaign_id: campaignId,
@@ -372,6 +383,9 @@ async function run(request: Request, apply: boolean): Promise<Response> {
     skipped_duplicate: apply ? skippedDuplicate : 0,
     capped, // hit maxLeads — re-run to continue
     max_leads: maxLeads,
+    by_campaign: [...perCampaign.entries()]
+      .map(([campaign_id, c]) => ({ campaign_id, ...c }))
+      .sort((a, b) => b.replies - a.replies),
     sample,
     errors: errors.slice(0, 40),
   });

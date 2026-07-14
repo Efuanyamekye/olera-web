@@ -32,11 +32,21 @@ export default function IntegrationsPage() {
   );
 }
 
+type CampaignStat = { campaign_id: number; leads: number; replies: number; resolved: number };
+type PreviewData = {
+  found: number;
+  unresolved: number;
+  scanned: number;
+  campaigns: number;
+  capped: boolean;
+  errors: string[];
+  sample: Array<Record<string, unknown>>;
+  byCampaign: CampaignStat[];
+};
+
 function BackfillCard() {
   const [loading, setLoading] = useState(false);
-  const [preview, setPreview] = useState<
-    { found: number; unresolved: number; scanned: number; capped: boolean } | null
-  >(null);
+  const [preview, setPreview] = useState<PreviewData | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,7 +61,11 @@ function BackfillCard() {
         replies_found?: number;
         replies_unresolved?: number;
         leads_scanned?: number;
+        campaigns?: number;
         capped?: boolean;
+        errors?: string[];
+        sample?: Array<Record<string, unknown>>;
+        by_campaign?: CampaignStat[];
         error?: string;
       };
       if (!res.ok) throw new Error(body.error ?? `HTTP ${res.status}`);
@@ -59,7 +73,11 @@ function BackfillCard() {
         found: body.replies_found ?? 0,
         unresolved: body.replies_unresolved ?? 0,
         scanned: body.leads_scanned ?? 0,
+        campaigns: body.campaigns ?? 0,
         capped: !!body.capped,
+        errors: body.errors ?? [],
+        sample: body.sample ?? [],
+        byCampaign: body.by_campaign ?? [],
       });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");
@@ -120,11 +138,72 @@ function BackfillCard() {
       </div>
 
       {preview && (
-        <p className="mt-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
-          Found <strong>{preview.found}</strong> past reply(ies)
-          {preview.unresolved > 0 ? ` (${preview.unresolved} couldn't be matched to a lead)` : ""}. Press
-          Import to bring them into the app.
-        </p>
+        <div className="mt-3 space-y-2 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
+          <p>
+            Found <strong>{preview.found}</strong> past reply(ies)
+            {preview.unresolved > 0 ? ` (${preview.unresolved} couldn't be matched to a lead)` : ""}. Press
+            Import to bring them into the app.
+          </p>
+          <p className="text-xs text-gray-500">
+            Scanned {preview.scanned} lead(s) across {preview.campaigns} campaign(s)
+            {preview.capped ? " · hit the scan limit (some leads not reached)" : ""}.
+          </p>
+          {preview.errors.length > 0 && (
+            <details className="text-xs text-red-700">
+              <summary className="cursor-pointer font-medium">
+                {preview.errors.length} scan error(s) — click to view
+              </summary>
+              <ul className="mt-1 list-disc space-y-0.5 pl-4">
+                {preview.errors.slice(0, 12).map((e, i) => (
+                  <li key={i} className="break-all">{e}</li>
+                ))}
+              </ul>
+            </details>
+          )}
+          {preview.byCampaign.length > 0 && (
+            <details className="text-xs text-gray-500">
+              <summary className="cursor-pointer font-medium">
+                Per-campaign breakdown ({preview.byCampaign.length}) — click to view
+              </summary>
+              <table className="mt-1 w-full text-left">
+                <thead className="text-gray-400">
+                  <tr>
+                    <th className="pr-3 font-medium">Campaign</th>
+                    <th className="pr-3 font-medium">Leads</th>
+                    <th className="pr-3 font-medium">Replies</th>
+                    <th className="font-medium">Matched</th>
+                  </tr>
+                </thead>
+                <tbody className="font-mono">
+                  {preview.byCampaign.map((c) => (
+                    <tr key={c.campaign_id}>
+                      <td className="pr-3">{c.campaign_id}</td>
+                      <td className="pr-3">{c.leads}</td>
+                      <td className="pr-3">{c.replies}</td>
+                      <td>{c.resolved}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </details>
+          )}
+          {preview.sample.length > 0 && (
+            <details className="text-xs text-gray-500">
+              <summary className="cursor-pointer font-medium">
+                Sample of {preview.sample.length} parsed reply(ies) — click to view
+              </summary>
+              <ul className="mt-1 space-y-1 pl-1">
+                {preview.sample.map((s, i) => (
+                  <li key={i} className="border-l-2 border-gray-200 pl-2">
+                    <span className="font-mono">{String(s.from_email ?? "?")}</span>{" "}
+                    · {String(s.subject ?? "(no subject)")}{" "}
+                    · {String(s.occurred_at ?? "?")}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </div>
       )}
       {result && (
         <p className="mt-3 rounded-md border border-primary-200 bg-primary-50 px-3 py-2 text-sm text-primary-800">
