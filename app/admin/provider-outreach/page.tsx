@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import Link from "next/link";
 import { US_STATES } from "@/lib/us-states";
 import Select from "@/components/ui/Select";
@@ -420,12 +420,24 @@ function CityRow({
   const [lookingUpEmails, setLookingUpEmails] = useState<Set<string>>(new Set());
   const [lookupErrors, setLookupErrors] = useState<Map<string, string>>(new Map());
   const lookupAttemptedRef = useRef<Set<string>>(new Set());
+  const lookupCancelledRef = useRef(false);
 
-  const cityProviders = providers.filter((p) => (p.city || "(No City)") === city.city);
+  // Memoize cityProviders to avoid unnecessary useEffect re-runs
+  const cityProviders = useMemo(
+    () => providers.filter((p) => (p.city || "(No City)") === city.city),
+    [providers, city.city]
+  );
 
   // Auto email lookup when city is expanded
   useEffect(() => {
-    if (!isExpanded || loadingProviders) return;
+    if (!isExpanded || loadingProviders) {
+      // City collapsed or still loading - mark as cancelled to ignore pending results
+      lookupCancelledRef.current = true;
+      return;
+    }
+
+    // City expanded and providers loaded - allow lookups
+    lookupCancelledRef.current = false;
 
     // Find providers without email that we haven't tried looking up yet
     const providersToLookup = cityProviders.filter(
@@ -439,6 +451,8 @@ function CityRow({
 
     // Start lookups for each provider (limit concurrent to avoid overwhelming)
     const lookupEmail = async (provider: OutreachProvider) => {
+      if (lookupCancelledRef.current) return;
+
       setLookingUpEmails((prev) => new Set(prev).add(provider.provider_id));
 
       try {
@@ -447,6 +461,9 @@ function CityRow({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ provider_id: provider.provider_id }),
         });
+
+        // Check if cancelled before processing result
+        if (lookupCancelledRef.current) return;
 
         const data = await res.json();
 
@@ -458,38 +475,50 @@ function CityRow({
             body: JSON.stringify({ provider_id: provider.provider_id, email: data.email }),
           });
 
-          if (saveRes.ok) {
+          if (saveRes.ok && !lookupCancelledRef.current) {
             onEmailSaved(provider.provider_id, data.email);
           }
-        } else if (data.error) {
+        } else if (data.error && !lookupCancelledRef.current) {
           setLookupErrors((prev) => new Map(prev).set(provider.provider_id, data.error));
         }
       } catch {
-        setLookupErrors((prev) => new Map(prev).set(provider.provider_id, "Lookup failed"));
+        if (!lookupCancelledRef.current) {
+          setLookupErrors((prev) => new Map(prev).set(provider.provider_id, "Lookup failed"));
+        }
       } finally {
-        setLookingUpEmails((prev) => {
-          const next = new Set(prev);
-          next.delete(provider.provider_id);
-          return next;
-        });
+        if (!lookupCancelledRef.current) {
+          setLookingUpEmails((prev) => {
+            const next = new Set(prev);
+            next.delete(provider.provider_id);
+            return next;
+          });
+        }
       }
     };
 
     // Stagger lookups to avoid rate limits (max 3 concurrent)
     const queue = [...providersToLookup];
     const runNext = () => {
+      if (lookupCancelledRef.current) return;
       const provider = queue.shift();
       if (provider) {
         lookupEmail(provider).finally(() => {
-          if (queue.length > 0) runNext();
+          if (queue.length > 0 && !lookupCancelledRef.current) runNext();
         });
       }
     };
 
     // Start up to 3 concurrent lookups
-    for (let i = 0; i < Math.min(3, queue.length); i++) {
+    // Capture count before loop since queue.shift() mutates the array
+    const concurrentCount = Math.min(3, queue.length);
+    for (let i = 0; i < concurrentCount; i++) {
       runNext();
     }
+
+    // Cleanup when city is collapsed or component unmounts
+    return () => {
+      lookupCancelledRef.current = true;
+    };
   }, [isExpanded, loadingProviders, cityProviders, lookingUpEmails, onEmailSaved]);
 
   const filteredProviders = showOnlyWithEmail
@@ -665,12 +694,20 @@ function CityRow({
                           <span>Finding email...</span>
                         </div>
                       ) : (
-                        <ProviderContactEditor
-                          providerId={provider.provider_id}
-                          email={provider.email}
-                          phone={provider.phone}
-                          onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
-                        />
+                        <div className="flex items-center gap-2">
+                          <ProviderContactEditor
+                            providerId={provider.provider_id}
+                            email={provider.email}
+                            phone={provider.phone}
+                            onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
+                          />
+                          {/* Show lookup error if no email and lookup failed */}
+                          {!provider.email && lookupErrors.has(provider.provider_id) && (
+                            <span className="text-xs text-gray-400" title={lookupErrors.get(provider.provider_id)}>
+                              (auto-lookup failed)
+                            </span>
+                          )}
+                        </div>
                       )}
                     </div>
 
