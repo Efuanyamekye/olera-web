@@ -514,6 +514,12 @@ export interface TabRow extends OutreachRow {
   due_call_recipients: string[];
   /** v8 Replies tab only: which state card to render. Null otherwise. */
   replies_state: RepliesState | null;
+  /** Emails/Archive tab only: true when the row has an actual EMAIL reply to the
+   *  current cadence (an email_replied touchpoint after the cadence cutoff) — i.e.
+   *  the drawer's reply box has something to show. Drives the "They replied"
+   *  section split so non-email engagements (contact form, IG DM) don't surface
+   *  there with an empty reply box. Null on other tabs. */
+  has_email_reply?: boolean | null;
   /** v8: when the awaiting-callback state began (for "N days ago" copy). */
   awaiting_callback_at: string | null;
   /** v8: voicemail vs. they-said-they'd-call-back. */

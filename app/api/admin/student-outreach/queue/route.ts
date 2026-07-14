@@ -33,6 +33,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import {
   computeStaleDays,
+  currentSequenceStartedAt,
   deriveRepliesState,
   deriveStateFromTouchpoints,
   type DerivedState,
@@ -1196,6 +1197,22 @@ async function idsByMeetings(db: DB, opts: QueryOpts): Promise<string[]> {
   return filtered;
 }
 
+/**
+ * True when the row has an actual EMAIL reply to the CURRENT cadence — an
+ * `email_replied` touchpoint newer than the cadence cutoff. Mirrors the drawer's
+ * `latestReply` (InOutreachBody), so the "They replied" section and the drawer's
+ * reply box agree: a row shows in "They replied" iff the box has an email to
+ * show. Non-email engagements (contact_form_submitted, ig_dm_replied) count as a
+ * reply for status/engagement but NOT here — they'd otherwise sit in "They
+ * replied" with an empty reply box.
+ */
+function hasEmailReplyToCurrentCadence(tps: TouchpointRow[]): boolean {
+  const cutoff = currentSequenceStartedAt(tps);
+  return tps.some(
+    (t) => t.touchpoint_type === "email_replied" && (cutoff == null || t.created_at > cutoff),
+  );
+}
+
 async function fetchTouchpointsByRow(db: DB, ids: string[]): Promise<Map<string, TouchpointRow[]>> {
   const { data } = await db
     .from("student_outreach_touchpoints")
@@ -1595,6 +1612,10 @@ async function hydrateRows(
       followup_at: state.followup_at,
       last_activity_at: state.last_activity_at,
       replies_state: repliesState,
+      has_email_reply:
+        tab === "replies" || tab === "archive"
+          ? hasEmailReplyToCurrentCadence(tpsByOutreach.get(row.id) ?? [])
+          : null,
       awaiting_callback_at: state.awaiting_callback_at,
       awaiting_callback_kind: state.awaiting_callback_kind,
       next_step_label: deriveNextStepLabel(row.status, earliestTask),
