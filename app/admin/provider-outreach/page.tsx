@@ -279,6 +279,7 @@ interface CityRowProps {
   onSelectAllInCity: (providerIds: string[]) => void;
   onEmailSaved: (providerId: string, newEmail: string) => void;
   onQuickAction: (providerId: string, action: "not_interested" | "archived") => void;
+  actionLoading: boolean;
 }
 
 function CityRow({
@@ -293,6 +294,7 @@ function CityRow({
   onSelectAllInCity,
   onEmailSaved,
   onQuickAction,
+  actionLoading,
 }: CityRowProps) {
   const [showOnlyWithEmail, setShowOnlyWithEmail] = useState(false);
 
@@ -472,30 +474,35 @@ function CityRow({
                       />
                     </div>
 
-                    {/* Hover Actions - Archive / Not Interested */}
-                    {stage !== "archived" && stage !== "not_interested" && (
-                      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-2 shrink-0 transition-opacity">
+                    {/* Hover Actions - Not Interested / Archive (trash icon) */}
+                    {stage !== "archived" && stage !== "not_interested" && stage !== "claimed" && (
+                      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 shrink-0 transition-opacity">
                         <button
                           type="button"
+                          disabled={actionLoading}
                           onClick={(e) => {
                             e.stopPropagation();
                             onQuickAction(provider.provider_id, "not_interested");
                           }}
-                          className="px-2 py-1 text-xs text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors"
+                          className="px-2 py-1 text-xs text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Mark as Not Interested"
                         >
                           Not Interested
                         </button>
+                        {/* Trash icon = Archive (remove from list) */}
                         <button
                           type="button"
+                          disabled={actionLoading}
                           onClick={(e) => {
                             e.stopPropagation();
                             onQuickAction(provider.provider_id, "archived");
                           }}
-                          className="px-2 py-1 text-xs text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                          title="Archive (invalid/test account)"
+                          className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          title="Remove from list"
                         >
-                          Archive
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
                         </button>
                       </div>
                     )}
@@ -751,6 +758,7 @@ export default function ProviderOutreachPage() {
   };
 
   // Available actions based on current stage
+  // Note: "Mark Claimed" is NOT included because Claimed auto-syncs from business_profiles
   const getAvailableActions = (): { stage: OutreachStage; label: string; color: string }[] => {
     switch (stage) {
       case "not_contacted":
@@ -761,20 +769,17 @@ export default function ProviderOutreachPage() {
       case "in_sequence":
         return [
           { stage: "needs_call", label: "Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
-          { stage: "claimed", label: "Mark Claimed", color: "bg-emerald-600 hover:bg-emerald-700" },
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
           { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
         ];
       case "needs_call":
         return [
           { stage: "called", label: "Mark Called", color: "bg-purple-600 hover:bg-purple-700" },
-          { stage: "claimed", label: "Mark Claimed", color: "bg-emerald-600 hover:bg-emerald-700" },
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
           { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
         ];
       case "called":
         return [
-          { stage: "claimed", label: "Mark Claimed", color: "bg-emerald-600 hover:bg-emerald-700" },
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
           { stage: "needs_call", label: "Back to Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
           { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
@@ -943,6 +948,7 @@ export default function ProviderOutreachPage() {
                     }
                   }}
                   onQuickAction={handleQuickAction}
+                  actionLoading={actionLoading}
                 />
               ))}
             </div>
