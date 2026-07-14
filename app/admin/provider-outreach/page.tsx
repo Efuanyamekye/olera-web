@@ -186,27 +186,22 @@ function ProviderContactEditor({
         >
           ✦ Find
         </button>
-        {hasChanged && isValidEmail && (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSave();
-            }}
-            disabled={saving}
-            className="shrink-0 px-3 py-1 text-xs font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700 disabled:opacity-50 transition"
-          >
-            {saving ? "..." : "Save"}
-          </button>
-        )}
-        {saved && (
-          <span className="text-xs text-emerald-600 flex items-center gap-1 shrink-0">
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-            </svg>
-            Saved
-          </span>
-        )}
+        {/* Save button - always visible, disabled when nothing to save */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSave();
+          }}
+          disabled={saving || !hasChanged || !isValidEmail}
+          className={`shrink-0 px-3 py-1 text-xs font-medium rounded-md transition ${
+            hasChanged && isValidEmail
+              ? "text-white bg-teal-600 hover:bg-teal-700"
+              : "text-gray-400 bg-gray-100 cursor-not-allowed"
+          } disabled:opacity-50`}
+        >
+          {saving ? "..." : saved ? "✓ Saved" : "Save"}
+        </button>
         {error && (
           <span className="text-xs text-red-600 shrink-0">{error}</span>
         )}
