@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { US_STATES } from "@/lib/us-states";
 import Select from "@/components/ui/Select";
+import EmailVerificationBadge, { type VerificationStatus } from "@/components/admin/EmailVerificationBadge";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -122,19 +123,83 @@ function ProviderContactEditor({
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Email verification state
+  const [verificationStatus, setVerificationStatus] = useState<VerificationStatus>("idle");
+  const verifyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   // Sync internal state when prop changes (e.g., from external refresh)
   useEffect(() => {
     setEmail(initialEmail || "");
     setIsEditing(!initialEmail);
+    setVerificationStatus("idle");
   }, [initialEmail]);
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+
+  // Verify email address
+  const verifyEmail = useCallback(async (emailToVerify: string): Promise<VerificationStatus> => {
+    if (!emailToVerify || !emailToVerify.includes("@")) return "idle";
+
+    try {
+      const res = await fetch("/api/admin/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailToVerify }),
+      });
+
+      if (!res.ok) return "unknown";
+      const data = await res.json();
+      const result = data.results?.[0];
+      if (!result) return "unknown";
+
+      return result.status as VerificationStatus;
+    } catch {
+      return "unknown";
+    }
+  }, []);
+
+  // Debounced verification on blur
+  const handleBlur = useCallback(() => {
+    if (!isValidEmail) {
+      setVerificationStatus("idle");
+      return;
+    }
+
+    if (verifyDebounceRef.current) {
+      clearTimeout(verifyDebounceRef.current);
+    }
+
+    verifyDebounceRef.current = setTimeout(async () => {
+      setVerificationStatus("verifying");
+      const status = await verifyEmail(email.trim());
+      setVerificationStatus(status);
+    }, 300);
+  }, [email, isValidEmail, verifyEmail]);
 
   async function handleSave() {
     if (!email.trim() || !isValidEmail) return;
 
     setSaving(true);
     setError(null);
+
+    // Verify before save if not already verified
+    if (verificationStatus === "idle" || verificationStatus === "verifying") {
+      setVerificationStatus("verifying");
+      const status = await verifyEmail(email.trim());
+      setVerificationStatus(status);
+
+      // Warn on risky/invalid
+      if (status === "invalid") {
+        setError("This email appears invalid. Click Save again to override.");
+        setSaving(false);
+        return;
+      }
+      if (status === "risky") {
+        setError("This email may bounce (catch-all). Click Save again to override.");
+        setSaving(false);
+        return;
+      }
+    }
 
     try {
       const res = await fetch("/api/admin/provider-outreach/update-email", {
@@ -146,6 +211,7 @@ function ProviderContactEditor({
       if (res.ok) {
         setSaved(true);
         setIsEditing(false);
+        setError(null);
         onEmailUpdate?.(email.trim());
         setTimeout(() => setSaved(false), 2000);
       } else {
@@ -163,6 +229,7 @@ function ProviderContactEditor({
     setEmail(initialEmail || "");
     setIsEditing(false);
     setError(null);
+    setVerificationStatus("idle");
   }
 
   return (
@@ -179,12 +246,16 @@ function ProviderContactEditor({
                 setEmail(e.target.value);
                 setError(null);
                 setSaved(false);
+                setVerificationStatus("idle");
               }}
+              onBlur={handleBlur}
               onClick={(e) => e.stopPropagation()}
               className="w-52 px-2.5 py-1 text-sm bg-white border border-gray-200 rounded-md focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-900/10 placeholder:text-gray-300 transition"
               disabled={saving}
               autoFocus={!!initialEmail}
             />
+            {/* Verification badge */}
+            <EmailVerificationBadge status={verificationStatus} />
             <button
               type="button"
               onClick={(e) => {
@@ -227,7 +298,7 @@ function ProviderContactEditor({
             {error && <span className="text-xs text-red-600 shrink-0">{error}</span>}
           </>
         ) : (
-          // Display mode: show email + Edit button
+          // Display mode: show email + verification badge + Edit button
           <>
             <span className="text-sm text-gray-700">{email}</span>
             {saved && (
