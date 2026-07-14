@@ -286,7 +286,17 @@ function InOutreachBody({
   // due. Script + outcome set follow the cadence we're awaiting.
   const [showConfirmCall, setShowConfirmCall] = useState(false);
   const [showReply, setShowReply] = useState(false);
-  const confirmCallTask = activationRunning ? nextActivationCall : nextColdCall;
+  // Which pending call seeds the "Call" modal's script? The CURRENT cadence's
+  // call. A custom cadence's calls are tagged cadence="custom" (non-activation),
+  // and launching a custom cadence cancels the old activation calls — so when a
+  // custom cadence is current we must read nextColdCall (which matches the custom
+  // call), NOT nextActivationCall, which is now empty and would leave the modal
+  // script-less. Otherwise: activation's call while activation runs, else cold.
+  const confirmCallTask = customCadenceName
+    ? nextColdCall
+    : activationRunning
+      ? nextActivationCall
+      : nextColdCall;
   const confirmScript =
     typeof confirmCallTask?.payload?.script === "string"
       ? (confirmCallTask.payload.script as string)
