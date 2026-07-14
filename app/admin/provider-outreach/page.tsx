@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { US_STATES } from "@/lib/us-states";
+import Select from "@/components/ui/Select";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -805,17 +806,19 @@ export default function ProviderOutreachPage() {
         </div>
 
         {/* State Dropdown */}
-        <select
-          value={selectedState}
-          onChange={(e) => setSelectedState(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        >
-          {US_STATES.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label} ({s.value})
-            </option>
-          ))}
-        </select>
+        <div className="w-56">
+          <Select
+            value={selectedState}
+            onChange={setSelectedState}
+            options={US_STATES.map((s) => ({
+              value: s.value,
+              label: `${s.label} (${s.value})`,
+            }))}
+            searchable
+            searchPlaceholder="Search states..."
+            size="sm"
+          />
+        </div>
       </div>
 
       {/* Stage Tabs */}
