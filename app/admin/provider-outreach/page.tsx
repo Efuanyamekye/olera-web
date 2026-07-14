@@ -40,6 +40,27 @@ interface CityStats {
   needs_email: number;
 }
 
+// Helper to compute city stats from providers (for non-not_contacted stages)
+function computeCityStatsFromProviders(providers: OutreachProvider[]): CityStats[] {
+  const cityMap = new Map<string, { total: number; has_email: number; needs_email: number }>();
+
+  for (const p of providers) {
+    const cityName = p.city || "(No City)";
+    const existing = cityMap.get(cityName) || { total: 0, has_email: 0, needs_email: 0 };
+    existing.total++;
+    if (p.email && p.email.trim()) {
+      existing.has_email++;
+    } else {
+      existing.needs_email++;
+    }
+    cityMap.set(cityName, existing);
+  }
+
+  return Array.from(cityMap.entries())
+    .map(([city, stats]) => ({ city, ...stats }))
+    .sort((a, b) => b.total - a.total); // Sort by total descending
+}
+
 interface OutreachProvider {
   provider_id: string;
   provider_name: string;
@@ -272,6 +293,7 @@ function ProviderContactEditor({
 
 interface CityRowProps {
   city: CityStats;
+  stage: OutreachStage;
   isExpanded: boolean;
   onToggle: () => void;
   providers: OutreachProvider[];
@@ -284,6 +306,7 @@ interface CityRowProps {
 
 function CityRow({
   city,
+  stage,
   isExpanded,
   onToggle,
   providers,
@@ -336,20 +359,31 @@ function CityRow({
           <span className="font-medium text-gray-900">{city.city}</span>
         </div>
 
-        {/* Stats */}
+        {/* Stats - different display based on stage */}
         <div className="flex items-center gap-6 text-sm">
-          <div className="text-center">
-            <span className="font-semibold text-gray-900 tabular-nums">{city.total}</span>
-            <span className="text-gray-400 ml-1">total</span>
-          </div>
-          <div className="text-center">
-            <span className="font-semibold text-emerald-600 tabular-nums">{city.has_email}</span>
-            <span className="text-gray-400 ml-1">ready</span>
-          </div>
-          <div className="text-center">
-            <span className="font-semibold text-amber-600 tabular-nums">{city.needs_email}</span>
-            <span className="text-gray-400 ml-1">needs email</span>
-          </div>
+          {stage === "not_contacted" ? (
+            // Not contacted: show ready/needs email breakdown
+            <>
+              <div className="text-center">
+                <span className="font-semibold text-gray-900 tabular-nums">{city.total}</span>
+                <span className="text-gray-400 ml-1">total</span>
+              </div>
+              <div className="text-center">
+                <span className="font-semibold text-emerald-600 tabular-nums">{city.has_email}</span>
+                <span className="text-gray-400 ml-1">ready</span>
+              </div>
+              <div className="text-center">
+                <span className="font-semibold text-amber-600 tabular-nums">{city.needs_email}</span>
+                <span className="text-gray-400 ml-1">needs email</span>
+              </div>
+            </>
+          ) : (
+            // Other stages: just show count
+            <div className="text-center">
+              <span className="font-semibold text-gray-900 tabular-nums">{city.total}</span>
+              <span className="text-gray-400 ml-1">{city.total === 1 ? "provider" : "providers"}</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -878,95 +912,70 @@ export default function ProviderOutreachPage() {
         </div>
       )}
 
-      {/* Content */}
+      {/* Content - City-grouped view for ALL stages */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        {stage === "not_contacted" ? (
-          // Not Contacted: City-grouped view
-          <>
-            {/* Header */}
-            <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
-              <div className="w-5" />
-              <div className="flex-1">City</div>
-              <div className="w-48 text-right">Providers</div>
-            </div>
+        {/* Header */}
+        <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
+          <div className="w-5" />
+          <div className="flex-1">City</div>
+          <div className="w-48 text-right">Providers</div>
+        </div>
 
-            {loadingCities ? (
+        {(() => {
+          // For not_contacted, use the cities API data; for other stages, compute from providers
+          const displayCities = stage === "not_contacted" ? cities : computeCityStatsFromProviders(providers);
+          const isLoading = stage === "not_contacted" ? loadingCities : loadingProviders;
+          const emptyMessage = stage === "not_contacted"
+            ? `No unclaimed providers in ${selectedState}`
+            : `No providers in ${STAGE_LABELS[stage]}`;
+
+          if (isLoading) {
+            return (
               <div className="p-8 text-center">
                 <div className="inline-block w-5 h-5 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
               </div>
-            ) : cities.length === 0 ? (
+            );
+          }
+
+          if (displayCities.length === 0) {
+            return (
               <div className="p-12 text-center">
-                <p className="text-gray-500">No unclaimed providers in {selectedState}</p>
+                <p className="text-gray-500">{emptyMessage}</p>
               </div>
-            ) : (
-              <div>
-                {cities.map((city) => (
-                  <CityRow
-                    key={city.city}
-                    city={city}
-                    isExpanded={expandedCities.has(city.city)}
-                    onToggle={() => toggleCity(city.city)}
-                    providers={providers}
-                    loadingProviders={loadingProviders}
-                    selectedProviders={selectedProviders}
-                    onToggleProvider={toggleProvider}
-                    onSelectAllInCity={selectAllInCity}
-                    onEmailSaved={(providerId, newEmail) => {
-                      // Update local providers state immediately
-                      setProviders((prev) =>
-                        prev.map((p) =>
-                          p.provider_id === providerId ? { ...p, email: newEmail } : p
-                        )
-                      );
-                      // Refresh cities to update counts
+            );
+          }
+
+          return (
+            <div>
+              {displayCities.map((city) => (
+                <CityRow
+                  key={city.city}
+                  city={city}
+                  stage={stage}
+                  isExpanded={expandedCities.has(city.city)}
+                  onToggle={() => toggleCity(city.city)}
+                  providers={providers}
+                  loadingProviders={loadingProviders}
+                  selectedProviders={selectedProviders}
+                  onToggleProvider={toggleProvider}
+                  onSelectAllInCity={selectAllInCity}
+                  onEmailSaved={(providerId, newEmail) => {
+                    // Update local providers state immediately
+                    setProviders((prev) =>
+                      prev.map((p) =>
+                        p.provider_id === providerId ? { ...p, email: newEmail } : p
+                      )
+                    );
+                    // Refresh cities to update counts (for not_contacted)
+                    if (stage === "not_contacted") {
                       fetchCities();
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          // Other stages: Flat provider list
-          <>
-            {/* Header */}
-            <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
-              <div className="w-4" />
-              <div className="flex-[2]">Provider</div>
-              <div className="w-32 text-center">Contact</div>
-              <div className="w-24 text-right">Changed</div>
+                    }
+                  }}
+                />
+              ))}
             </div>
-
-            {loadingProviders ? (
-              <div className="p-8 text-center">
-                <div className="inline-block w-5 h-5 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
-              </div>
-            ) : providers.length === 0 ? (
-              <div className="p-12 text-center">
-                <p className="text-gray-500">No providers in {STAGE_LABELS[stage]}</p>
-              </div>
-            ) : (
-              <div>
-                {providers.map((provider) => (
-                  <ProviderRow
-                    key={provider.provider_id}
-                    provider={provider}
-                    isSelected={selectedProviders.has(provider.provider_id)}
-                    onToggleSelect={() => toggleProvider(provider.provider_id)}
-                    onEmailSaved={(providerId, newEmail) => {
-                      // Update local providers state immediately
-                      setProviders((prev) =>
-                        prev.map((p) =>
-                          p.provider_id === providerId ? { ...p, email: newEmail } : p
-                        )
-                      );
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-          </>
-        )}
+          );
+        })()}
       </div>
 
       {/* Summary */}
