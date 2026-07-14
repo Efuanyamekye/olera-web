@@ -109,15 +109,17 @@ function formatPhone(phone: string): string {
 function ProviderContactEditor({
   providerId,
   email: initialEmail,
+  suggestedEmail,
   phone,
   onEmailUpdate,
 }: {
   providerId: string;
   email: string | null;
+  suggestedEmail?: string | null;
   phone: string | null;
   onEmailUpdate?: (newEmail: string) => void;
 }) {
-  const [email, setEmail] = useState(initialEmail || "");
+  const [email, setEmail] = useState(initialEmail || suggestedEmail || "");
   const [isEditing, setIsEditing] = useState(!initialEmail); // Start in edit mode if no email
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -137,12 +139,20 @@ function ProviderContactEditor({
     };
   }, []);
 
-  // Sync internal state when prop changes (e.g., from external refresh)
+  // Sync internal state when prop changes (e.g., from external refresh or suggested email)
   useEffect(() => {
-    setEmail(initialEmail || "");
-    setIsEditing(!initialEmail);
+    if (initialEmail) {
+      setEmail(initialEmail);
+      setIsEditing(false);
+    } else if (suggestedEmail) {
+      setEmail(suggestedEmail);
+      setIsEditing(true); // Keep in edit mode so admin can review and save
+    } else {
+      setEmail("");
+      setIsEditing(true);
+    }
     setVerificationStatus("idle");
-  }, [initialEmail]);
+  }, [initialEmail, suggestedEmail]);
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
@@ -418,6 +428,7 @@ function CityRow({
 
   // Auto email lookup state
   const [lookingUpEmails, setLookingUpEmails] = useState<Set<string>>(new Set());
+  const [foundEmails, setFoundEmails] = useState<Map<string, string>>(new Map());
   const [lookupErrors, setLookupErrors] = useState<Map<string, string>>(new Map());
   const lookupAttemptedRef = useRef<Set<string>>(new Set());
   const lookupCancelledRef = useRef(false);
@@ -468,15 +479,10 @@ function CityRow({
         const data = await res.json();
 
         if (data.email && data.source !== "existing") {
-          // Found an email - save it automatically
-          const saveRes = await fetch("/api/admin/provider-outreach/update-email", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ provider_id: provider.provider_id, email: data.email }),
-          });
-
-          if (saveRes.ok && !lookupCancelledRef.current) {
-            onEmailSaved(provider.provider_id, data.email);
+          // Found an email - store it locally for admin to review and save
+          // Do NOT auto-save to database
+          if (!lookupCancelledRef.current) {
+            setFoundEmails((prev) => new Map(prev).set(provider.provider_id, data.email));
           }
         } else if (data.error && !lookupCancelledRef.current) {
           setLookupErrors((prev) => new Map(prev).set(provider.provider_id, data.error));
@@ -519,7 +525,10 @@ function CityRow({
     return () => {
       lookupCancelledRef.current = true;
     };
-  }, [isExpanded, loadingProviders, cityProviders, lookingUpEmails, onEmailSaved]);
+    // Note: lookingUpEmails is intentionally not in deps - we read it in the filter
+    // but don't want to re-trigger when it changes (that would cause loops)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExpanded, loadingProviders, cityProviders]);
 
   const filteredProviders = showOnlyWithEmail
     ? cityProviders.filter((p) => p.email && p.email.trim())
@@ -698,6 +707,7 @@ function CityRow({
                           <ProviderContactEditor
                             providerId={provider.provider_id}
                             email={provider.email}
+                            suggestedEmail={foundEmails.get(provider.provider_id)}
                             phone={provider.phone}
                             onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
                           />
