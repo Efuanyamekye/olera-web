@@ -239,6 +239,7 @@ interface CityRowProps {
   selectedProviders: Set<string>;
   onToggleProvider: (providerId: string) => void;
   onSelectAllInCity: (providerIds: string[]) => void;
+  onEmailSaved: (providerId: string, newEmail: string) => void;
 }
 
 function CityRow({
@@ -250,6 +251,7 @@ function CityRow({
   selectedProviders,
   onToggleProvider,
   onSelectAllInCity,
+  onEmailSaved,
 }: CityRowProps) {
   const [showOnlyWithEmail, setShowOnlyWithEmail] = useState(false);
 
@@ -417,6 +419,7 @@ function CityRow({
                           providerId={provider.provider_id}
                           email={provider.email}
                           phone={provider.phone}
+                          onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
                         />
                       </div>
                     </div>
@@ -446,9 +449,10 @@ interface ProviderRowProps {
   provider: OutreachProvider;
   isSelected: boolean;
   onToggleSelect: () => void;
+  onEmailSaved: (providerId: string, newEmail: string) => void;
 }
 
-function ProviderRow({ provider, isSelected, onToggleSelect }: ProviderRowProps) {
+function ProviderRow({ provider, isSelected, onToggleSelect, onEmailSaved }: ProviderRowProps) {
   return (
     <div className="flex items-start gap-4 px-5 py-4 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 transition-colors">
       <input
@@ -487,6 +491,7 @@ function ProviderRow({ provider, isSelected, onToggleSelect }: ProviderRowProps)
             providerId={provider.provider_id}
             email={provider.email}
             phone={provider.phone}
+            onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
           />
         </div>
       </div>
@@ -868,6 +873,16 @@ export default function ProviderOutreachPage() {
                     selectedProviders={selectedProviders}
                     onToggleProvider={toggleProvider}
                     onSelectAllInCity={selectAllInCity}
+                    onEmailSaved={(providerId, newEmail) => {
+                      // Update local providers state immediately
+                      setProviders((prev) =>
+                        prev.map((p) =>
+                          p.provider_id === providerId ? { ...p, email: newEmail } : p
+                        )
+                      );
+                      // Refresh cities to update counts
+                      fetchCities();
+                    }}
                   />
                 ))}
               </div>
@@ -900,6 +915,14 @@ export default function ProviderOutreachPage() {
                     provider={provider}
                     isSelected={selectedProviders.has(provider.provider_id)}
                     onToggleSelect={() => toggleProvider(provider.provider_id)}
+                    onEmailSaved={(providerId, newEmail) => {
+                      // Update local providers state immediately
+                      setProviders((prev) =>
+                        prev.map((p) =>
+                          p.provider_id === providerId ? { ...p, email: newEmail } : p
+                        )
+                      );
+                    }}
                   />
                 ))}
               </div>
