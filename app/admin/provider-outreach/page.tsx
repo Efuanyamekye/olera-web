@@ -574,8 +574,10 @@ function CityRow({
               foundUrl: data.foundUrl || null,
             }));
           }
-        } else if (data.error && !lookupCancelledRef.current) {
-          setLookupErrors((prev) => new Map(prev).set(provider.provider_id, data.error));
+        } else if (!lookupCancelledRef.current) {
+          // No email found - store the error or a default message
+          const errorMsg = data.error || "No email found";
+          setLookupErrors((prev) => new Map(prev).set(provider.provider_id, errorMsg));
         }
       } catch {
         if (!lookupCancelledRef.current) {
@@ -804,10 +806,10 @@ function CityRow({
                             phone={provider.phone}
                             onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
                           />
-                          {/* Show lookup error if no email and lookup failed */}
-                          {!provider.email && lookupErrors.has(provider.provider_id) && (
-                            <span className="text-xs text-gray-400" title={lookupErrors.get(provider.provider_id)}>
-                              (auto-lookup failed)
+                          {/* Show lookup result if no email */}
+                          {!provider.email && !foundEmails.has(provider.provider_id) && lookupErrors.has(provider.provider_id) && (
+                            <span className="text-xs text-gray-400">
+                              ({lookupErrors.get(provider.provider_id)})
                             </span>
                           )}
                         </div>
