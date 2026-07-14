@@ -121,6 +121,7 @@ function ProviderContactEditor({
   const [isEditing, setIsEditing] = useState(!initialEmail); // Start in edit mode if no email
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [finding, setFinding] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // Email verification state
@@ -247,6 +248,37 @@ function ProviderContactEditor({
     setVerificationStatus("idle");
   }
 
+  async function handleFind() {
+    setFinding(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/admin/provider-outreach/find-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider_id: providerId }),
+      });
+
+      const data = await res.json();
+
+      if (data.email) {
+        setEmail(data.email);
+        // Trigger verification for the found email
+        setVerificationStatus("verifying");
+        const status = await verifyEmail(data.email);
+        setVerificationStatus(status);
+      } else if (data.error) {
+        setError(data.error);
+      } else {
+        setError("No email found");
+      }
+    } catch {
+      setError("Lookup failed");
+    } finally {
+      setFinding(false);
+    }
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
       <div className="flex items-center gap-1.5">
@@ -275,12 +307,12 @@ function ProviderContactEditor({
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
-                // Placeholder for future email finder
-                alert("Email finder coming soon!");
+                handleFind();
               }}
-              className="shrink-0 px-2 py-1 text-xs font-medium text-teal-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 transition"
+              disabled={finding || saving}
+              className="shrink-0 px-2 py-1 text-xs font-medium text-teal-700 bg-white border border-gray-200 rounded-md hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              ✦ Find
+              {finding ? "..." : "✦ Find"}
             </button>
             <button
               type="button"
@@ -384,7 +416,82 @@ function CityRow({
 }: CityRowProps) {
   const [showOnlyWithEmail, setShowOnlyWithEmail] = useState(false);
 
+  // Auto email lookup state
+  const [lookingUpEmails, setLookingUpEmails] = useState<Set<string>>(new Set());
+  const [lookupErrors, setLookupErrors] = useState<Map<string, string>>(new Map());
+  const lookupAttemptedRef = useRef<Set<string>>(new Set());
+
   const cityProviders = providers.filter((p) => (p.city || "(No City)") === city.city);
+
+  // Auto email lookup when city is expanded
+  useEffect(() => {
+    if (!isExpanded || loadingProviders) return;
+
+    // Find providers without email that we haven't tried looking up yet
+    const providersToLookup = cityProviders.filter(
+      (p) => !p.email && !lookupAttemptedRef.current.has(p.provider_id) && !lookingUpEmails.has(p.provider_id)
+    );
+
+    if (providersToLookup.length === 0) return;
+
+    // Mark these as attempted so we don't retry on re-render
+    providersToLookup.forEach((p) => lookupAttemptedRef.current.add(p.provider_id));
+
+    // Start lookups for each provider (limit concurrent to avoid overwhelming)
+    const lookupEmail = async (provider: OutreachProvider) => {
+      setLookingUpEmails((prev) => new Set(prev).add(provider.provider_id));
+
+      try {
+        const res = await fetch("/api/admin/provider-outreach/find-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ provider_id: provider.provider_id }),
+        });
+
+        const data = await res.json();
+
+        if (data.email && data.source !== "existing") {
+          // Found an email - save it automatically
+          const saveRes = await fetch("/api/admin/provider-outreach/update-email", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ provider_id: provider.provider_id, email: data.email }),
+          });
+
+          if (saveRes.ok) {
+            onEmailSaved(provider.provider_id, data.email);
+          }
+        } else if (data.error) {
+          setLookupErrors((prev) => new Map(prev).set(provider.provider_id, data.error));
+        }
+      } catch {
+        setLookupErrors((prev) => new Map(prev).set(provider.provider_id, "Lookup failed"));
+      } finally {
+        setLookingUpEmails((prev) => {
+          const next = new Set(prev);
+          next.delete(provider.provider_id);
+          return next;
+        });
+      }
+    };
+
+    // Stagger lookups to avoid rate limits (max 3 concurrent)
+    const queue = [...providersToLookup];
+    const runNext = () => {
+      const provider = queue.shift();
+      if (provider) {
+        lookupEmail(provider).finally(() => {
+          if (queue.length > 0) runNext();
+        });
+      }
+    };
+
+    // Start up to 3 concurrent lookups
+    for (let i = 0; i < Math.min(3, queue.length); i++) {
+      runNext();
+    }
+  }, [isExpanded, loadingProviders, cityProviders, lookingUpEmails, onEmailSaved]);
+
   const filteredProviders = showOnlyWithEmail
     ? cityProviders.filter((p) => p.email && p.email.trim())
     : cityProviders;
@@ -552,12 +659,19 @@ function CityRow({
 
                     {/* Contact Info - inline */}
                     <div className="flex-1 min-w-0">
-                      <ProviderContactEditor
-                        providerId={provider.provider_id}
-                        email={provider.email}
-                        phone={provider.phone}
-                        onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
-                      />
+                      {lookingUpEmails.has(provider.provider_id) ? (
+                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                          <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-teal-500 rounded-full animate-spin" />
+                          <span>Finding email...</span>
+                        </div>
+                      ) : (
+                        <ProviderContactEditor
+                          providerId={provider.provider_id}
+                          email={provider.email}
+                          phone={provider.phone}
+                          onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
+                        />
+                      )}
                     </div>
 
                     {/* Actions button - ellipsis icon, opens modal */}
