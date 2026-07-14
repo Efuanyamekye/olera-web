@@ -111,7 +111,17 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ providers, stage_counts: stageCounts });
     }
 
-    // For other stages: query tracking table and join with providers
+    if (stage === "claimed") {
+      // Special case: "Claimed" shows ACTUAL claimed providers (from business_profiles)
+      const providers = await getClaimedProviders(db, state, city);
+      return NextResponse.json({ providers, stage_counts: stageCounts });
+    }
+
+    // For active stages (in_sequence, needs_call, called): query tracking but exclude claimed
+    // For terminal stages (not_interested, archived): query tracking as-is
+    const activeStages: OutreachStage[] = ["in_sequence", "needs_call", "called"];
+    const isActiveStage = activeStages.includes(stage);
+
     let trackingQuery = db
       .from("provider_outreach_tracking")
       .select("*")
@@ -145,12 +155,26 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Failed to fetch provider details" }, { status: 500 });
     }
 
+    // For active stages, exclude providers who have since claimed
+    let claimedProviderIds = new Set<string>();
+    if (isActiveStage && providerIds.length > 0) {
+      const { data: claimedBps } = await db
+        .from("business_profiles")
+        .select("source_provider_id")
+        .in("source_provider_id", providerIds)
+        .not("account_id", "is", null);
+
+      claimedProviderIds = new Set((claimedBps || []).map((bp) => bp.source_provider_id));
+    }
+
     // Join tracking with provider data
     const providerMap = new Map((providerRows || []).map((p) => [p.provider_id, p as ProviderRow]));
     const providers = (trackingRows as TrackingRow[])
       .map((t): OutreachProvider | null => {
         const p = providerMap.get(t.provider_id);
         if (!p) return null;
+        // Skip if provider has claimed (for active stages)
+        if (isActiveStage && claimedProviderIds.has(p.provider_id)) return null;
         return {
           provider_id: p.provider_id,
           provider_name: p.provider_name,
@@ -269,7 +293,85 @@ async function getNotContactedProviders(
 }
 
 /**
+ * Get providers who have ACTUALLY claimed their accounts (from business_profiles)
+ * This is the source of truth for "Claimed" - not the tracking table
+ */
+async function getClaimedProviders(
+  db: ReturnType<typeof getServiceClient>,
+  state: string,
+  city: string | null
+): Promise<OutreachProvider[]> {
+  // Get all providers in this state
+  let providerQuery = db
+    .from("olera-providers")
+    .select("provider_id, provider_name, provider_category, city, state, email, phone, website, slug")
+    .eq("state", state)
+    .or("deleted.is.null,deleted.eq.false");
+
+  if (city) {
+    providerQuery = providerQuery.eq("city", city);
+  }
+
+  const { data: providers, error: provError } = await providerQuery;
+
+  if (provError) {
+    console.error("[provider-outreach] Provider query error:", provError);
+    throw new Error("Failed to fetch providers");
+  }
+
+  if (!providers || providers.length === 0) {
+    return [];
+  }
+
+  const providerIds = providers.map((p) => p.provider_id);
+
+  // Get claimed providers (have business_profile with account_id)
+  const { data: claimedBps } = await db
+    .from("business_profiles")
+    .select("source_provider_id, created_at, updated_at")
+    .in("source_provider_id", providerIds)
+    .not("account_id", "is", null);
+
+  if (!claimedBps || claimedBps.length === 0) {
+    return [];
+  }
+
+  // Create a map of claimed provider_id -> claim timestamp
+  const claimedMap = new Map(
+    claimedBps.map((bp) => [bp.source_provider_id, bp.updated_at || bp.created_at])
+  );
+
+  // Filter to only claimed providers
+  const result: OutreachProvider[] = (providers as ProviderRow[])
+    .filter((p) => claimedMap.has(p.provider_id))
+    .map((p) => ({
+      provider_id: p.provider_id,
+      provider_name: p.provider_name,
+      provider_category: p.provider_category,
+      city: p.city,
+      state: p.state,
+      email: p.email,
+      phone: p.phone,
+      website: p.website,
+      slug: p.slug,
+      tracking_id: null,
+      stage: "claimed" as OutreachStage,
+      stage_changed_at: claimedMap.get(p.provider_id) || null,
+      notes: null,
+    }))
+    .sort((a, b) => a.provider_name.localeCompare(b.provider_name));
+
+  return result;
+}
+
+/**
  * Get counts for each stage in a state
+ *
+ * Key logic:
+ * - "claimed" count = actual claimed providers (from business_profiles with account_id)
+ * - Active stages (in_sequence, needs_call, called) = tracking count MINUS those who have since claimed
+ * - Terminal stages (not_interested, archived) = tracking count as-is
+ * - "not_contacted" = unclaimed providers not in tracking
  */
 async function getStageCounts(
   db: ReturnType<typeof getServiceClient>,
@@ -285,54 +387,65 @@ async function getStageCounts(
     archived: 0,
   };
 
-  // Get tracking counts for non-not_contacted stages
-  const { data: trackingCounts } = await db
-    .from("provider_outreach_tracking")
-    .select("stage")
-    .eq("state", state);
-
-  if (trackingCounts) {
-    for (const row of trackingCounts) {
-      const stage = row.stage as OutreachStage;
-      if (stage !== "not_contacted") {
-        counts[stage]++;
-      }
-    }
-  }
-
-  // Count not_contacted: unclaimed providers not in tracking (or with stage = not_contacted)
+  // Get all providers in this state
   const { data: providers } = await db
     .from("olera-providers")
     .select("provider_id")
     .eq("state", state)
     .or("deleted.is.null,deleted.eq.false");
 
-  if (providers && providers.length > 0) {
-    const providerIds = providers.map((p) => p.provider_id);
-
-    // Get claimed providers
-    const { data: claimedBps } = await db
-      .from("business_profiles")
-      .select("source_provider_id")
-      .in("source_provider_id", providerIds)
-      .not("account_id", "is", null);
-
-    const claimedProviderIds = new Set((claimedBps || []).map((bp) => bp.source_provider_id));
-
-    // Get tracked providers (non-not_contacted)
-    const { data: trackedProviders } = await db
-      .from("provider_outreach_tracking")
-      .select("provider_id")
-      .in("provider_id", providerIds)
-      .neq("stage", "not_contacted");
-
-    const trackedProviderIds = new Set((trackedProviders || []).map((t) => t.provider_id));
-
-    // Count unclaimed, not-tracked
-    counts.not_contacted = providers.filter(
-      (p) => !claimedProviderIds.has(p.provider_id) && !trackedProviderIds.has(p.provider_id)
-    ).length;
+  if (!providers || providers.length === 0) {
+    return counts;
   }
+
+  const providerIds = providers.map((p) => p.provider_id);
+
+  // Get ACTUAL claimed providers (source of truth)
+  const { data: claimedBps } = await db
+    .from("business_profiles")
+    .select("source_provider_id")
+    .in("source_provider_id", providerIds)
+    .not("account_id", "is", null);
+
+  const claimedProviderIds = new Set((claimedBps || []).map((bp) => bp.source_provider_id));
+  counts.claimed = claimedProviderIds.size;
+
+  // Get all tracking rows for this state
+  const { data: trackingRows } = await db
+    .from("provider_outreach_tracking")
+    .select("provider_id, stage")
+    .eq("state", state);
+
+  const activeStages = ["in_sequence", "needs_call", "called"];
+
+  if (trackingRows) {
+    for (const row of trackingRows) {
+      const stage = row.stage as OutreachStage;
+      if (stage === "not_contacted" || stage === "claimed") {
+        // Skip - not_contacted is calculated separately, claimed is from business_profiles
+        continue;
+      }
+
+      // For active stages, don't count if provider has since claimed
+      if (activeStages.includes(stage) && claimedProviderIds.has(row.provider_id)) {
+        continue;
+      }
+
+      counts[stage]++;
+    }
+  }
+
+  // Get tracked providers (excluding not_contacted stage)
+  const trackedProviderIds = new Set(
+    (trackingRows || [])
+      .filter((t) => t.stage !== "not_contacted")
+      .map((t) => t.provider_id)
+  );
+
+  // Count not_contacted: unclaimed providers not in tracking
+  counts.not_contacted = providers.filter(
+    (p) => !claimedProviderIds.has(p.provider_id) && !trackedProviderIds.has(p.provider_id)
+  ).length;
 
   return counts;
 }
