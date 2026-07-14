@@ -383,7 +383,7 @@ function ProviderContactEditor({
             {/* Verification and trust score badges */}
             {(verificationStatus !== "idle" || trustScoreStatus !== "idle") && (
               <div className="flex items-center gap-2">
-                <EmailVerificationBadge status={verificationStatus} />
+                <EmailVerificationBadge status={verificationStatus} showHelperText />
                 <TrustScoreBadge status={trustScoreStatus} reason={trustScoreReason} />
               </div>
             )}
@@ -426,7 +426,7 @@ function ProviderContactEditor({
                 Cancel
               </button>
             )}
-            {error && <span className="text-xs text-red-600 shrink-0">{error}</span>}
+            {error && <span className="text-xs text-amber-600 shrink-0">{error}</span>}
             {/* Source info */}
             {displaySource && (
               <span className="text-xs text-gray-500">
@@ -823,8 +823,8 @@ function CityRow({
                           />
                           {/* Show lookup result if no email */}
                           {!provider.email && !foundEmails.has(provider.provider_id) && lookupErrors.has(provider.provider_id) && (
-                            <span className="text-xs text-gray-400">
-                              ({lookupErrors.get(provider.provider_id)})
+                            <span className="text-xs text-amber-600">
+                              {lookupErrors.get(provider.provider_id)}
                             </span>
                           )}
                         </div>
