@@ -159,9 +159,9 @@ function ProviderContactEditor({
   }
 
   return (
-    <div className="flex flex-col gap-1.5">
-      {/* Email row */}
-      <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+      {/* Email input + buttons - constrained width */}
+      <div className="flex items-center gap-1.5">
         <input
           type="email"
           placeholder="email@provider.com"
@@ -172,7 +172,7 @@ function ProviderContactEditor({
             setSaved(false);
           }}
           onClick={(e) => e.stopPropagation()}
-          className="flex-1 min-w-0 px-2.5 py-1 text-sm bg-white border border-gray-200 rounded-md focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-900/10 placeholder:text-gray-300 transition"
+          className="w-52 px-2.5 py-1 text-sm bg-white border border-gray-200 rounded-md focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-900/10 placeholder:text-gray-300 transition"
           disabled={saving}
         />
         <button
@@ -194,13 +194,13 @@ function ProviderContactEditor({
               handleSave();
             }}
             disabled={saving}
-            className="shrink-0 px-2.5 py-1 text-xs font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700 disabled:opacity-50 transition"
+            className="shrink-0 px-3 py-1 text-xs font-medium text-white bg-teal-600 rounded-md hover:bg-teal-700 disabled:opacity-50 transition"
           >
             {saving ? "..." : "Save"}
           </button>
         )}
         {saved && (
-          <span className="text-xs text-emerald-600 flex items-center gap-1">
+          <span className="text-xs text-emerald-600 flex items-center gap-1 shrink-0">
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
             </svg>
@@ -208,15 +208,15 @@ function ProviderContactEditor({
           </span>
         )}
         {error && (
-          <span className="text-xs text-red-600">{error}</span>
+          <span className="text-xs text-red-600 shrink-0">{error}</span>
         )}
       </div>
 
-      {/* Phone row */}
+      {/* Phone - inline */}
       {phone && (
         <a
           href={`tel:${phone.replace(/\D/g, "")}`}
-          className="text-sm text-primary-600 hover:text-primary-700 hover:underline w-fit"
+          className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
           onClick={(e) => e.stopPropagation()}
         >
           {formatPhone(phone)}
@@ -379,49 +379,45 @@ function CityRow({
               {/* Provider Cards */}
               <div className="divide-y divide-gray-100">
                 {filteredProviders.map((provider) => (
-                  <div key={provider.provider_id} className="px-5 py-4 pl-10 flex items-start gap-4 hover:bg-white transition-colors">
+                  <div key={provider.provider_id} className="px-5 py-3 pl-10 flex items-center gap-3 hover:bg-white transition-colors">
                     <input
                       type="checkbox"
                       checked={selectedProviders.has(provider.provider_id)}
                       onChange={() => onToggleProvider(provider.provider_id)}
-                      className="w-4 h-4 mt-1 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 shrink-0"
                     />
 
-                    {/* Provider Card */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <Link
-                              href={provider.slug ? `/admin/directory/${provider.slug}` : "#"}
-                              className="font-medium text-gray-900 hover:text-primary-600 transition-colors truncate"
-                            >
-                              {provider.provider_name}
-                            </Link>
-                            {provider.slug && (
-                              <Link
-                                href={`/admin/directory/${provider.slug}`}
-                                className="text-xs text-gray-400 hover:text-primary-600"
-                              >
-                                View
-                              </Link>
-                            )}
-                          </div>
-                          {provider.provider_category && (
-                            <p className="text-xs text-gray-500 mt-0.5">{provider.provider_category}</p>
-                          )}
-                        </div>
+                    {/* Provider Name + Category */}
+                    <div className="w-56 shrink-0">
+                      <div className="flex items-center gap-1.5">
+                        <Link
+                          href={provider.slug ? `/admin/directory/${provider.slug}` : "#"}
+                          className="font-medium text-gray-900 hover:text-primary-600 transition-colors truncate text-sm"
+                        >
+                          {provider.provider_name}
+                        </Link>
+                        {provider.slug && (
+                          <Link
+                            href={`/admin/directory/${provider.slug}`}
+                            className="text-xs text-gray-400 hover:text-primary-600 shrink-0"
+                          >
+                            View
+                          </Link>
+                        )}
                       </div>
+                      {provider.provider_category && (
+                        <p className="text-xs text-gray-500 truncate">{provider.provider_category}</p>
+                      )}
+                    </div>
 
-                      {/* Contact Info */}
-                      <div className="mt-2">
-                        <ProviderContactEditor
-                          providerId={provider.provider_id}
-                          email={provider.email}
-                          phone={provider.phone}
-                          onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
-                        />
-                      </div>
+                    {/* Contact Info - inline */}
+                    <div className="flex-1 min-w-0">
+                      <ProviderContactEditor
+                        providerId={provider.provider_id}
+                        email={provider.email}
+                        phone={provider.phone}
+                        onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
+                      />
                     </div>
                   </div>
                 ))}
