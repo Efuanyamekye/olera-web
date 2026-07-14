@@ -915,6 +915,11 @@ export default function ProviderOutreachPage() {
   const [actionReason, setActionReason] = useState("");
   const [actionNotes, setActionNotes] = useState("");
 
+  // Sequence confirmation modal state
+  const [showSequenceConfirm, setShowSequenceConfirm] = useState(false);
+  const [sequenceConfirmProviders, setSequenceConfirmProviders] = useState<OutreachProvider[]>([]);
+  const [showSequencePreview, setShowSequencePreview] = useState(false);
+
   // Reason options for each action
   const NOT_INTERESTED_REASONS = [
     "Not a fit for our service",
@@ -1071,8 +1076,10 @@ export default function ProviderOutreachPage() {
   };
 
   // Update stage for selected providers
-  const updateStage = async (newStage: OutreachStage) => {
-    if (selectedProviders.size === 0) return;
+  // Optionally pass specific providerIds (for filtered actions like "only with email")
+  const updateStage = async (newStage: OutreachStage, providerIds?: string[]) => {
+    const idsToUpdate = providerIds || Array.from(selectedProviders);
+    if (idsToUpdate.length === 0) return;
 
     setActionLoading(true);
     try {
@@ -1080,7 +1087,7 @@ export default function ProviderOutreachPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          provider_ids: Array.from(selectedProviders),
+          provider_ids: idsToUpdate,
           stage: newStage,
         }),
       });
@@ -1146,39 +1153,42 @@ export default function ProviderOutreachPage() {
     }
   };
 
+  // Get selected providers with email (for "Move to In Sequence" eligibility)
+  const selectedProvidersWithEmail = providers.filter(
+    (p) => selectedProviders.has(p.provider_id) && p.email && p.email.trim()
+  );
+  const selectedWithEmailCount = selectedProvidersWithEmail.length;
+
   // Available actions based on current stage
   // Note: "Mark Claimed" is NOT included because Claimed auto-syncs from business_profiles
-  const getAvailableActions = (): { stage: OutreachStage; label: string; color: string }[] => {
+  // Note: Archive removed from bulk actions - too dangerous, use individual modal instead
+  const getAvailableActions = (): { stage: OutreachStage; label: string; color: string; requiresEmail?: boolean }[] => {
     switch (stage) {
       case "not_contacted":
+        // Only "Move to In Sequence" - requires email
+        // Archive removed from bulk - use individual provider modal instead
         return [
-          { stage: "in_sequence", label: "Move to In Sequence", color: "bg-blue-600 hover:bg-blue-700" },
-          { stage: "archived", label: "Archive", color: "bg-gray-600 hover:bg-gray-700" },
+          { stage: "in_sequence", label: "Move to In Sequence", color: "bg-primary-600 hover:bg-primary-700", requiresEmail: true },
         ];
       case "in_sequence":
         return [
           { stage: "needs_call", label: "Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
-          { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
         ];
       case "needs_call":
         return [
           { stage: "called", label: "Mark Called", color: "bg-purple-600 hover:bg-purple-700" },
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
-          { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
         ];
       case "called":
         return [
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
           { stage: "needs_call", label: "Back to Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
-          { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
         ];
       case "hidden":
-        // Hidden is NOT terminal - can unhide or move to terminal
+        // Hidden is NOT terminal - can unhide
         return [
           { stage: "not_contacted", label: "Unhide", color: "bg-blue-600 hover:bg-blue-700" },
-          { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
-          { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
         ];
       default:
         // Terminal stages - allow moving back
@@ -1264,16 +1274,40 @@ export default function ProviderOutreachPage() {
             {selectedProviders.size} provider{selectedProviders.size === 1 ? "" : "s"} selected
           </span>
           <div className="flex items-center gap-2">
-            {getAvailableActions().map((action) => (
-              <button
-                key={action.stage}
-                onClick={() => updateStage(action.stage)}
-                disabled={actionLoading}
-                className={`px-3 py-1.5 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${action.color}`}
-              >
-                {action.label}
-              </button>
-            ))}
+            {getAvailableActions().map((action) => {
+              // For actions requiring email, only count/enable for providers with email
+              const eligibleCount = action.requiresEmail ? selectedWithEmailCount : selectedProviders.size;
+              const isDisabled = actionLoading || eligibleCount === 0;
+
+              // Build label with count for email-required actions
+              let label = action.label;
+              if (action.requiresEmail && selectedWithEmailCount !== selectedProviders.size) {
+                // Show count when not all selected have email
+                label = selectedWithEmailCount > 0
+                  ? `Move ${selectedWithEmailCount} to In Sequence`
+                  : "Move to In Sequence";
+              }
+
+              return (
+                <button
+                  key={action.stage}
+                  onClick={() => {
+                    if (action.requiresEmail) {
+                      // Show confirmation modal for starting sequence
+                      setSequenceConfirmProviders(selectedProvidersWithEmail);
+                      setShowSequenceConfirm(true);
+                    } else {
+                      updateStage(action.stage);
+                    }
+                  }}
+                  disabled={isDisabled}
+                  title={action.requiresEmail && eligibleCount === 0 ? "No selected providers have email" : undefined}
+                  className={`px-3 py-1.5 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${action.color}`}
+                >
+                  {label}
+                </button>
+              );
+            })}
             <button
               onClick={() => setSelectedProviders(new Set())}
               className="px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
@@ -1567,6 +1601,133 @@ export default function ProviderOutreachPage() {
                   {actionLoading ? "..." : "Confirm"}
                 </button>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sequence Confirmation Modal */}
+      {showSequenceConfirm && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
+          onClick={actionLoading ? undefined : () => setShowSequenceConfirm(false)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden max-h-[90vh] flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="px-6 py-4 border-b border-gray-100 shrink-0">
+              <h3 className="text-lg font-semibold text-gray-900">Start Email Sequence</h3>
+              <p className="text-sm text-gray-500 mt-1">
+                {sequenceConfirmProviders.length} provider{sequenceConfirmProviders.length === 1 ? "" : "s"} will receive the outreach sequence
+              </p>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 py-4 overflow-y-auto flex-1">
+              {/* Provider list */}
+              <div className="mb-5">
+                <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                  Providers
+                </h4>
+                <div className="bg-gray-50 rounded-lg border border-gray-100 divide-y divide-gray-100 max-h-32 overflow-y-auto">
+                  {sequenceConfirmProviders.map((p) => (
+                    <div key={p.provider_id} className="px-3 py-2 flex items-center justify-between">
+                      <span className="text-sm text-gray-900 truncate">{p.provider_name}</span>
+                      <span className="text-xs text-gray-500 truncate ml-2">{p.email}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Email Preview Accordion */}
+              <div>
+                <button
+                  onClick={() => setShowSequencePreview((s) => !s)}
+                  className="flex w-full items-center justify-between rounded-lg bg-gray-50 px-4 py-3 text-left transition-colors hover:bg-gray-100 border border-gray-100"
+                >
+                  <span className="text-sm font-medium text-gray-700">Preview Email Sequence</span>
+                  <svg
+                    className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${showSequencePreview ? "rotate-180" : ""}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                {showSequencePreview && (
+                  <div className="mt-3 space-y-3">
+                    {/* Email 1 */}
+                    <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Day 0</span>
+                        <span className="text-xs text-gray-400">Immediate</span>
+                      </div>
+                      <p className="text-sm font-medium text-gray-800">Introduction Email</p>
+                      <p className="text-xs text-gray-500 mt-1 italic">Email template not configured yet</p>
+                    </div>
+
+                    {/* Email 2 */}
+                    <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Day 3</span>
+                        <span className="text-xs text-gray-400">Follow-up #1</span>
+                      </div>
+                      <p className="text-sm font-medium text-gray-800">First Follow-up</p>
+                      <p className="text-xs text-gray-500 mt-1 italic">Email template not configured yet</p>
+                    </div>
+
+                    {/* Email 3 */}
+                    <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Day 7</span>
+                        <span className="text-xs text-gray-400">Follow-up #2</span>
+                      </div>
+                      <p className="text-sm font-medium text-gray-800">Second Follow-up</p>
+                      <p className="text-xs text-gray-500 mt-1 italic">Email template not configured yet</p>
+                    </div>
+
+                    {/* Email 4 */}
+                    <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Day 14</span>
+                        <span className="text-xs text-gray-400">Final</span>
+                      </div>
+                      <p className="text-sm font-medium text-gray-800">Final Outreach</p>
+                      <p className="text-xs text-gray-500 mt-1 italic">Email template not configured yet</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 border-t border-gray-100 flex justify-end gap-3 shrink-0 bg-gray-50">
+              <button
+                onClick={() => {
+                  setShowSequenceConfirm(false);
+                  setShowSequencePreview(false);
+                }}
+                disabled={actionLoading}
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  const eligibleIds = sequenceConfirmProviders.map(p => p.provider_id);
+                  await updateStage("in_sequence", eligibleIds);
+                  setShowSequenceConfirm(false);
+                  setShowSequencePreview(false);
+                }}
+                disabled={actionLoading}
+                className="px-5 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {actionLoading ? "Starting..." : "Start Sequence"}
+              </button>
             </div>
           </div>
         </div>
