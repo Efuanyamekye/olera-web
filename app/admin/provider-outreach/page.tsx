@@ -127,6 +127,15 @@ function ProviderContactEditor({
   const [verificationStatus, setVerificationStatus] = useState<VerificationStatus>("idle");
   const verifyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Cleanup debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (verifyDebounceRef.current) {
+        clearTimeout(verifyDebounceRef.current);
+      }
+    };
+  }, []);
+
   // Sync internal state when prop changes (e.g., from external refresh)
   useEffect(() => {
     setEmail(initialEmail || "");
@@ -178,6 +187,12 @@ function ProviderContactEditor({
 
   async function handleSave() {
     if (!email.trim() || !isValidEmail) return;
+
+    // Clear any pending blur verification to prevent race condition
+    if (verifyDebounceRef.current) {
+      clearTimeout(verifyDebounceRef.current);
+      verifyDebounceRef.current = null;
+    }
 
     setSaving(true);
     setError(null);
