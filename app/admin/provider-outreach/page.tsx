@@ -564,15 +564,22 @@ function CityRow({
 
         const data = await res.json();
 
-        if (data.email && data.source !== "existing") {
-          // Found an email - store it locally for admin to review and save
-          // Do NOT auto-save to database
-          if (!lookupCancelledRef.current) {
-            setFoundEmails((prev) => new Map(prev).set(provider.provider_id, {
-              email: data.email,
-              source: data.source || null,
-              foundUrl: data.foundUrl || null,
-            }));
+        if (data.email) {
+          if (data.source === "existing") {
+            // Provider already has email in DB - sync to local state
+            if (!lookupCancelledRef.current) {
+              onEmailSaved(provider.provider_id, data.email);
+            }
+          } else {
+            // Found a NEW email - store it locally for admin to review and save
+            // Do NOT auto-save to database
+            if (!lookupCancelledRef.current) {
+              setFoundEmails((prev) => new Map(prev).set(provider.provider_id, {
+                email: data.email,
+                source: data.source || null,
+                foundUrl: data.foundUrl || null,
+              }));
+            }
           }
         } else if (!lookupCancelledRef.current) {
           // No email found - store the error or a default message
