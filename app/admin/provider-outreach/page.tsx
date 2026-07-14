@@ -5,6 +5,7 @@ import Link from "next/link";
 import { US_STATES } from "@/lib/us-states";
 import Select from "@/components/ui/Select";
 import EmailVerificationBadge, { type VerificationStatus } from "@/components/admin/EmailVerificationBadge";
+import TrustScoreBadge, { type TrustScoreStatus } from "@/components/admin/TrustScoreBadge";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -108,14 +109,20 @@ function formatPhone(phone: string): string {
 // Editable Provider Contact - with Edit mode for existing emails
 function ProviderContactEditor({
   providerId,
+  providerSlug,
   email: initialEmail,
   suggestedEmail,
+  emailSource,
+  emailFoundUrl,
   phone,
   onEmailUpdate,
 }: {
   providerId: string;
+  providerSlug?: string | null;
   email: string | null;
   suggestedEmail?: string | null;
+  emailSource?: string | null;
+  emailFoundUrl?: string | null;
   phone: string | null;
   onEmailUpdate?: (newEmail: string) => void;
 }) {
@@ -126,9 +133,21 @@ function ProviderContactEditor({
   const [finding, setFinding] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Source info from find (local state for manual find, props for auto-find)
+  const [localSource, setLocalSource] = useState<string | null>(null);
+  const [localFoundUrl, setLocalFoundUrl] = useState<string | null>(null);
+
+  // Use props if available, otherwise local state
+  const displaySource = emailSource || localSource;
+  const displayFoundUrl = emailFoundUrl || localFoundUrl;
+
   // Email verification state
   const [verificationStatus, setVerificationStatus] = useState<VerificationStatus>("idle");
   const verifyDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Trust score state
+  const [trustScoreStatus, setTrustScoreStatus] = useState<TrustScoreStatus>("idle");
+  const [trustScoreReason, setTrustScoreReason] = useState("");
 
   // Cleanup debounce timeout on unmount
   useEffect(() => {
@@ -152,6 +171,10 @@ function ProviderContactEditor({
       setIsEditing(true);
     }
     setVerificationStatus("idle");
+    setTrustScoreStatus("idle");
+    setTrustScoreReason("");
+    setLocalSource(null);
+    setLocalFoundUrl(null);
   }, [initialEmail, suggestedEmail]);
 
   const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -178,10 +201,47 @@ function ProviderContactEditor({
     }
   }, []);
 
+  // Fetch trust score for email
+  const fetchTrustScore = useCallback(async (emailToCheck: string): Promise<{ level: TrustScoreStatus; reason: string }> => {
+    if (!emailToCheck || !providerSlug) return { level: "idle", reason: "" };
+
+    try {
+      const res = await fetch("/api/admin/connections/preview-trust-score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ providerSlug, email: emailToCheck }),
+      });
+
+      if (!res.ok) return { level: "idle", reason: "" };
+      const data = await res.json();
+      return { level: data.level || "idle", reason: data.reason || "" };
+    } catch {
+      return { level: "idle", reason: "" };
+    }
+  }, [providerSlug]);
+
+  // Run verification and trust scoring in parallel
+  const verifyAndScore = useCallback(async (emailToCheck: string) => {
+    setVerificationStatus("verifying");
+    setTrustScoreStatus("scoring");
+
+    const [verifyStatus, trustResult] = await Promise.all([
+      verifyEmail(emailToCheck),
+      fetchTrustScore(emailToCheck),
+    ]);
+
+    setVerificationStatus(verifyStatus);
+    setTrustScoreStatus(trustResult.level);
+    setTrustScoreReason(trustResult.reason);
+
+    return verifyStatus;
+  }, [verifyEmail, fetchTrustScore]);
+
   // Debounced verification on blur
   const handleBlur = useCallback(() => {
     if (!isValidEmail) {
       setVerificationStatus("idle");
+      setTrustScoreStatus("idle");
       return;
     }
 
@@ -190,11 +250,9 @@ function ProviderContactEditor({
     }
 
     verifyDebounceRef.current = setTimeout(async () => {
-      setVerificationStatus("verifying");
-      const status = await verifyEmail(email.trim());
-      setVerificationStatus(status);
+      await verifyAndScore(email.trim());
     }, 300);
-  }, [email, isValidEmail, verifyEmail]);
+  }, [email, isValidEmail, verifyAndScore]);
 
   async function handleSave() {
     if (!email.trim() || !isValidEmail) return;
@@ -210,9 +268,7 @@ function ProviderContactEditor({
 
     // Verify before save if not already verified
     if (verificationStatus === "idle" || verificationStatus === "verifying") {
-      setVerificationStatus("verifying");
-      const status = await verifyEmail(email.trim());
-      setVerificationStatus(status);
+      const status = await verifyAndScore(email.trim());
 
       // Warn on risky/invalid
       if (status === "invalid") {
@@ -261,6 +317,8 @@ function ProviderContactEditor({
   async function handleFind() {
     setFinding(true);
     setError(null);
+    setLocalSource(null);
+    setLocalFoundUrl(null);
 
     try {
       const res = await fetch("/api/admin/provider-outreach/find-email", {
@@ -273,10 +331,10 @@ function ProviderContactEditor({
 
       if (data.email) {
         setEmail(data.email);
-        // Trigger verification for the found email
-        setVerificationStatus("verifying");
-        const status = await verifyEmail(data.email);
-        setVerificationStatus(status);
+        setLocalSource(data.source || null);
+        setLocalFoundUrl(data.foundUrl || null);
+        // Trigger verification and trust score for the found email
+        await verifyAndScore(data.email);
       } else if (data.error) {
         setError(data.error);
       } else {
@@ -304,6 +362,9 @@ function ProviderContactEditor({
                 setError(null);
                 setSaved(false);
                 setVerificationStatus("idle");
+                setTrustScoreStatus("idle");
+                setLocalSource(null);
+                setLocalFoundUrl(null);
               }}
               onBlur={handleBlur}
               onClick={(e) => e.stopPropagation()}
@@ -311,8 +372,13 @@ function ProviderContactEditor({
               disabled={saving}
               autoFocus={!!initialEmail}
             />
-            {/* Verification badge */}
-            <EmailVerificationBadge status={verificationStatus} />
+            {/* Verification and trust score badges */}
+            {(verificationStatus !== "idle" || trustScoreStatus !== "idle") && (
+              <div className="flex items-center gap-2">
+                <EmailVerificationBadge status={verificationStatus} />
+                <TrustScoreBadge status={trustScoreStatus} reason={trustScoreReason} />
+              </div>
+            )}
             <button
               type="button"
               onClick={(e) => {
@@ -353,6 +419,26 @@ function ProviderContactEditor({
               </button>
             )}
             {error && <span className="text-xs text-red-600 shrink-0">{error}</span>}
+            {/* Source info */}
+            {displaySource && (
+              <span className="text-xs text-gray-500">
+                Found via {displaySource === "scrape" ? "web scraping" : "AI analysis"}
+                {displayFoundUrl && (
+                  <>
+                    {" · "}
+                    <a
+                      href={displayFoundUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      View source
+                    </a>
+                  </>
+                )}
+              </span>
+            )}
           </>
         ) : (
           // Display mode: show email + verification badge + Edit button
@@ -428,7 +514,7 @@ function CityRow({
 
   // Auto email lookup state
   const [lookingUpEmails, setLookingUpEmails] = useState<Set<string>>(new Set());
-  const [foundEmails, setFoundEmails] = useState<Map<string, string>>(new Map());
+  const [foundEmails, setFoundEmails] = useState<Map<string, { email: string; source: string | null; foundUrl: string | null }>>(new Map());
   const [lookupErrors, setLookupErrors] = useState<Map<string, string>>(new Map());
   const lookupAttemptedRef = useRef<Set<string>>(new Set());
   const lookupCancelledRef = useRef(false);
@@ -482,7 +568,11 @@ function CityRow({
           // Found an email - store it locally for admin to review and save
           // Do NOT auto-save to database
           if (!lookupCancelledRef.current) {
-            setFoundEmails((prev) => new Map(prev).set(provider.provider_id, data.email));
+            setFoundEmails((prev) => new Map(prev).set(provider.provider_id, {
+              email: data.email,
+              source: data.source || null,
+              foundUrl: data.foundUrl || null,
+            }));
           }
         } else if (data.error && !lookupCancelledRef.current) {
           setLookupErrors((prev) => new Map(prev).set(provider.provider_id, data.error));
@@ -706,8 +796,11 @@ function CityRow({
                         <div className="flex items-center gap-2">
                           <ProviderContactEditor
                             providerId={provider.provider_id}
+                            providerSlug={provider.slug}
                             email={provider.email}
-                            suggestedEmail={foundEmails.get(provider.provider_id)}
+                            suggestedEmail={foundEmails.get(provider.provider_id)?.email}
+                            emailSource={foundEmails.get(provider.provider_id)?.source}
+                            emailFoundUrl={foundEmails.get(provider.provider_id)?.foundUrl}
                             phone={provider.phone}
                             onEmailUpdate={(newEmail) => onEmailSaved(provider.provider_id, newEmail)}
                           />
