@@ -237,6 +237,14 @@ function ProviderContactEditor({
     return verifyStatus;
   }, [verifyEmail, fetchTrustScore]);
 
+  // Auto-verify when suggested email is received from auto-lookup
+  useEffect(() => {
+    if (suggestedEmail && !initialEmail) {
+      // Suggested email received - trigger verification
+      verifyAndScore(suggestedEmail);
+    }
+  }, [suggestedEmail, initialEmail, verifyAndScore]);
+
   // Debounced verification on blur
   const handleBlur = useCallback(() => {
     if (!isValidEmail) {
