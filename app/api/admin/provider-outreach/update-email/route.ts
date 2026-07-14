@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient, logAuditAction } from "@/lib/admin";
+import { sendDeferredNotificationsForProvider } from "@/lib/admin/send-deferred-notifications";
 
 /**
  * PATCH /api/admin/provider-outreach/update-email
  *
  * Update a provider's email address in olera-providers table.
+ * Also triggers deferred notifications for any pending questions/leads.
  *
  * Body:
  *   - provider_id: string (required)
@@ -40,11 +42,12 @@ export async function PATCH(request: NextRequest) {
     }
 
     const db = getServiceClient();
+    const trimmedEmail = email.trim();
 
-    // Get current provider data for audit log
+    // Get current provider data
     const { data: existing } = await db
       .from("olera-providers")
-      .select("email, provider_name")
+      .select("email, provider_name, slug")
       .eq("provider_id", provider_id)
       .single();
 
@@ -55,12 +58,86 @@ export async function PATCH(request: NextRequest) {
     // Update the email
     const { error: updateError } = await db
       .from("olera-providers")
-      .update({ email: email.trim() })
+      .update({ email: trimmedEmail })
       .eq("provider_id", provider_id);
 
     if (updateError) {
       console.error("[provider-outreach/update-email] Update error:", updateError);
       return NextResponse.json({ error: "Failed to update email" }, { status: 500 });
+    }
+
+    // Check for linked business_profile
+    const { data: linkedProfile } = await db
+      .from("business_profiles")
+      .select("id, slug, metadata")
+      .eq("source_provider_id", provider_id)
+      .maybeSingle();
+
+    // Also sync email to business_profile if linked and not claimed
+    if (linkedProfile && linkedProfile.id) {
+      const profileMeta = (linkedProfile.metadata as Record<string, unknown>) || {};
+      // Only sync if not claimed (no account_id check needed - unclaimed providers won't have one)
+      await db
+        .from("business_profiles")
+        .update({ email: trimmedEmail })
+        .eq("id", linkedProfile.id);
+    }
+
+    // Build slug variants for deferred notifications
+    const providerSlug = existing.slug || linkedProfile?.slug || provider_id;
+    const additionalSlugVariants: string[] = [];
+    if (existing.slug && existing.slug !== providerSlug) {
+      additionalSlugVariants.push(existing.slug);
+    }
+    if (linkedProfile?.slug && linkedProfile.slug !== providerSlug) {
+      additionalSlugVariants.push(linkedProfile.slug);
+    }
+    if (provider_id !== providerSlug) {
+      additionalSlugVariants.push(provider_id);
+    }
+
+    // Send deferred notifications for any pending questions/leads
+    let notificationResult = { leadEmailsSent: 0, questionEmailsSent: 0, leadsSkipped: 0 };
+    try {
+      notificationResult = await sendDeferredNotificationsForProvider({
+        profileId: linkedProfile?.id || "",
+        email: trimmedEmail,
+        providerName: existing.provider_name || providerSlug,
+        providerSlug,
+        additionalSlugVariants,
+      });
+    } catch (notifErr) {
+      // Log but don't fail the request - email was saved successfully
+      console.error("[provider-outreach/update-email] Deferred notification error:", notifErr);
+    }
+
+    // Clear email_dead/needs_provider_email flags from questions
+    const allSlugVariants = [providerSlug, ...additionalSlugVariants];
+    let questionFlagsCleared = 0;
+    try {
+      const { data: flaggedQuestions } = await db
+        .from("provider_questions")
+        .select("id, metadata")
+        .in("provider_id", allSlugVariants);
+
+      if (flaggedQuestions?.length) {
+        for (const q of flaggedQuestions) {
+          const meta = (q.metadata || {}) as Record<string, unknown>;
+          if (meta.email_dead || meta.needs_provider_email) {
+            delete meta.email_dead;
+            delete meta.needs_provider_email;
+            const { error: flagUpdateErr } = await db
+              .from("provider_questions")
+              .update({ metadata: meta })
+              .eq("id", q.id);
+            if (!flagUpdateErr) {
+              questionFlagsCleared++;
+            }
+          }
+        }
+      }
+    } catch (flagErr) {
+      console.error("[provider-outreach/update-email] Flag clearing error:", flagErr);
     }
 
     // Log audit action
@@ -72,13 +149,18 @@ export async function PATCH(request: NextRequest) {
       details: {
         provider_name: existing.provider_name,
         old_email: existing.email,
-        new_email: email.trim(),
+        new_email: trimmedEmail,
+        question_emails_sent: notificationResult.questionEmailsSent,
+        lead_emails_sent: notificationResult.leadEmailsSent,
+        leads_skipped: notificationResult.leadsSkipped,
+        question_flags_cleared: questionFlagsCleared,
       },
     });
 
     return NextResponse.json({
       success: true,
-      email: email.trim(),
+      email: trimmedEmail,
+      notificationsSent: notificationResult.leadEmailsSent + notificationResult.questionEmailsSent,
     });
   } catch (err) {
     console.error("[provider-outreach/update-email] Error:", err);
