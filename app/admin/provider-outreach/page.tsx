@@ -278,8 +278,7 @@ interface CityRowProps {
   onToggleProvider: (providerId: string) => void;
   onSelectAllInCity: (providerIds: string[]) => void;
   onEmailSaved: (providerId: string, newEmail: string) => void;
-  onQuickAction: (providerId: string, action: "not_interested" | "archived") => void;
-  actionLoading: boolean;
+  onOpenActionModal: (provider: OutreachProvider) => void;
 }
 
 function CityRow({
@@ -293,8 +292,7 @@ function CityRow({
   onToggleProvider,
   onSelectAllInCity,
   onEmailSaved,
-  onQuickAction,
-  actionLoading,
+  onOpenActionModal,
 }: CityRowProps) {
   const [showOnlyWithEmail, setShowOnlyWithEmail] = useState(false);
 
@@ -474,34 +472,22 @@ function CityRow({
                       />
                     </div>
 
-                    {/* Hover Actions - Not Interested / Archive */}
+                    {/* Actions button - ellipsis icon, opens modal */}
                     {stage !== "archived" && stage !== "not_interested" && stage !== "claimed" && (
-                      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-1 shrink-0 transition-opacity">
-                        <button
-                          type="button"
-                          disabled={actionLoading}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onQuickAction(provider.provider_id, "not_interested");
-                          }}
-                          className="px-2 py-1 text-xs text-gray-500 hover:text-orange-600 hover:bg-orange-50 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          title="Mark as Not Interested"
-                        >
-                          Not Interested
-                        </button>
-                        <button
-                          type="button"
-                          disabled={actionLoading}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onQuickAction(provider.provider_id, "archived");
-                          }}
-                          className="px-2 py-1 text-xs text-gray-500 hover:text-amber-600 hover:bg-amber-50 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          title="Archive (remove from list)"
-                        >
-                          Archive
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onOpenActionModal(provider);
+                        }}
+                        className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 transition-all text-gray-300 hover:text-gray-600"
+                        title="Actions"
+                      >
+                        {/* Ellipsis vertical icon */}
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                        </svg>
+                      </button>
                     )}
                   </div>
                 ))}
@@ -563,6 +549,9 @@ export default function ProviderOutreachPage() {
 
   // Toast
   const [toast, setToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+
+  // Action modal state
+  const [actionModalProvider, setActionModalProvider] = useState<OutreachProvider | null>(null);
 
   // Fetch cities for not_contacted stage
   const fetchCities = useCallback(async () => {
@@ -944,8 +933,7 @@ export default function ProviderOutreachPage() {
                       fetchCities();
                     }
                   }}
-                  onQuickAction={handleQuickAction}
-                  actionLoading={actionLoading}
+                  onOpenActionModal={setActionModalProvider}
                 />
               ))}
             </div>
@@ -957,6 +945,106 @@ export default function ProviderOutreachPage() {
       {stage === "not_contacted" && !loadingCities && (
         <div className="mt-4 text-sm text-gray-500">
           {totalUnclaimed.toLocaleString()} unclaimed providers in {selectedState} across {cities.length} cities
+        </div>
+      )}
+
+      {/* Provider Action Modal */}
+      {actionModalProvider && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
+          onClick={() => setActionModalProvider(null)}
+        >
+          <div
+            className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="px-5 py-4 border-b border-gray-100">
+              <h3 className="text-lg font-semibold text-gray-900">Provider Actions</h3>
+              <p className="text-sm text-gray-500 mt-0.5">
+                {actionModalProvider.provider_name}
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="p-4 space-y-2">
+              {/* Not Interested */}
+              <button
+                onClick={() => {
+                  handleQuickAction(actionModalProvider.provider_id, "not_interested");
+                  setActionModalProvider(null);
+                }}
+                disabled={actionLoading}
+                className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-colors disabled:opacity-50"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-orange-500 mt-0.5">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                    </svg>
+                  </span>
+                  <div>
+                    <p className="font-medium text-gray-900">Mark Not Interested</p>
+                    <p className="text-xs text-gray-500">Provider declined or not a fit</p>
+                  </div>
+                </div>
+              </button>
+
+              {/* Archive */}
+              <button
+                onClick={() => {
+                  handleQuickAction(actionModalProvider.provider_id, "archived");
+                  setActionModalProvider(null);
+                }}
+                disabled={actionLoading}
+                className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-amber-300 hover:bg-amber-50 transition-colors disabled:opacity-50"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-amber-500 mt-0.5">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                  </span>
+                  <div>
+                    <p className="font-medium text-gray-900">Archive</p>
+                    <p className="text-xs text-gray-500">Remove from outreach list</p>
+                  </div>
+                </div>
+              </button>
+
+              {/* Hide (for test data cleanup) */}
+              <button
+                onClick={() => {
+                  handleQuickAction(actionModalProvider.provider_id, "archived");
+                  setActionModalProvider(null);
+                }}
+                disabled={actionLoading}
+                className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-colors disabled:opacity-50"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-gray-400 mt-0.5">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                    </svg>
+                  </span>
+                  <div>
+                    <p className="font-medium text-gray-900">Hide</p>
+                    <p className="text-xs text-gray-500">Remove from view (test data cleanup)</p>
+                  </div>
+                </div>
+              </button>
+            </div>
+
+            {/* Footer */}
+            <div className="px-5 py-3 border-t border-gray-100 flex justify-end">
+              <button
+                onClick={() => setActionModalProvider(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
