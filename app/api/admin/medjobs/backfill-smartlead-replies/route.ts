@@ -34,6 +34,7 @@ import {
   getLeadMessageHistory,
   isSmartleadConfigured,
   listCampaignLeads,
+  type SmartleadCampaignLead,
   type SmartleadMessage,
 } from "@/lib/smartlead";
 
@@ -72,26 +73,73 @@ interface ParsedReply {
   recipient_email: string | null;
 }
 
-/** Collect every distinct medjobs campaign id (cold + activation + welcome). */
+/**
+ * Collect every distinct medjobs campaign id, SMALL/high-value campaigns first
+ * (activation, welcome, custom) then the big cold outreach campaigns. Ordering
+ * matters: a lead cap can't finish everything in one pass, so the campaigns
+ * that carry warm replies (activation) and bespoke replies (custom) must be
+ * scanned before the large cold lists — otherwise those replies never import.
+ */
 async function collectCampaignIds(supabase: ServiceClient, only?: number): Promise<number[]> {
   if (only != null) return [only];
   const { data: rows } = await supabase
     .from("student_outreach")
     .select("research_data");
-  const ids = new Set<number>();
+  // Buckets keep the scan order: warm/bespoke first, cold last.
+  const priority = new Set<number>(); // activation + welcome + custom
+  const cold = new Set<number>(); // the cold outreach drip
   for (const r of ((rows ?? []) as unknown) as Array<{ research_data: Record<string, unknown> | null }>) {
     const rd = r.research_data ?? {};
-    for (const key of ["smartlead", "smartlead_activation", "smartlead_welcome"]) {
+    for (const key of ["smartlead_activation", "smartlead_welcome", "smartlead_custom"]) {
       const cid = (rd[key] as { campaign_id?: number } | undefined)?.campaign_id;
-      if (typeof cid === "number" && Number.isFinite(cid)) ids.add(cid);
+      if (typeof cid === "number" && Number.isFinite(cid)) priority.add(cid);
     }
+    const coldId = (rd["smartlead"] as { campaign_id?: number } | undefined)?.campaign_id;
+    if (typeof coldId === "number" && Number.isFinite(coldId)) cold.add(coldId);
   }
-  return [...ids];
+  // Dedupe across buckets (a campaign only appears once, in its highest bucket).
+  const ordered: number[] = [];
+  for (const id of priority) ordered.push(id);
+  for (const id of cold) if (!priority.has(id)) ordered.push(id);
+  return ordered;
+}
+
+/** Run `worker` over `items` with at most `concurrency` in flight at once. */
+async function mapPool<T>(
+  items: T[],
+  concurrency: number,
+  worker: (item: T) => Promise<void>,
+): Promise<void> {
+  let cursor = 0;
+  const runners = Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+    for (;;) {
+      const i = cursor++;
+      if (i >= items.length) return;
+      await worker(items[i]);
+    }
+  });
+  await Promise.all(runners);
 }
 
 function isReply(m: SmartleadMessage): boolean {
   const t = (m.type ?? "").toUpperCase();
   return t.includes("REPLY") || t.includes("REPLIED");
+}
+
+/** Strip HTML down to readable text for the stored preview — remove
+ *  script/style/head blocks ENTIRELY (they carry JSON-LD / CSS, not message
+ *  text) before dropping the remaining tags. A naive `<[^>]+>` strip would
+ *  leave the raw JSON-LD from structured-data emails behind. Mirrors the
+ *  reader-side cleanReplyText in ReplyBlock so preview and full body agree. */
+function stripHtmlToText(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<head[\s\S]*?<\/head>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 /** Build a parsed reply from a message-history entry, or null when it isn't a
@@ -116,7 +164,7 @@ function toParsedReply(
     outreach_id: outreachId,
     smartlead_event_id,
     reply_body: body,
-    preview_text: body ? body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300) : null,
+    preview_text: body ? stripHtmlToText(body).slice(0, 300) : null,
     reply_subject: m.subject ?? null,
     from_email: (m.from_email ?? leadEmail ?? null)?.toLowerCase() ?? null,
     occurred_at: occurred_at ?? new Date().toISOString(),
@@ -225,7 +273,12 @@ async function run(request: Request, apply: boolean): Promise<Response> {
   const url = new URL(request.url);
   const onlyCampaign = url.searchParams.get("campaign");
   const only = onlyCampaign && !Number.isNaN(Number(onlyCampaign)) ? Number(onlyCampaign) : undefined;
-  const maxLeads = Number(url.searchParams.get("maxLeads") ?? "300") || 300;
+  // High ceiling so a single run reaches every campaign's leads (the previous
+  // 300 cap silently dropped later campaigns — activation/custom replies and
+  // most OOOs never imported). Concurrency (below) keeps a full pass inside the
+  // 300s budget. `capped` is still reported honestly if the ceiling is hit.
+  const maxLeads = Number(url.searchParams.get("maxLeads") ?? "5000") || 5000;
+  const CONCURRENCY = 8;
 
   const supabase = makeServiceClient(supabaseUrl, serviceKey);
 
@@ -240,6 +293,49 @@ async function run(request: Request, apply: boolean): Promise<Response> {
   const errors: string[] = [];
   const sample: Array<Record<string, unknown>> = [];
 
+  // Process one lead: pull its thread, count/collect replies, and (in apply
+  // mode) import each resolvable one with dedupe. Safe to run concurrently —
+  // counter increments are synchronous, and each lead's DB writes are its own.
+  const processLead = async (campaignId: number, lead: SmartleadCampaignLead) => {
+    const leadId = lead.lead_id ?? lead.id;
+    if (typeof leadId !== "number") return;
+    const outreachId = lead.custom_fields?.outreach_id != null
+      ? String(lead.custom_fields.outreach_id)
+      : null;
+
+    const histRes = await getLeadMessageHistory(campaignId, leadId);
+    if (!histRes.ok) {
+      errors.push(`campaign ${campaignId} lead ${leadId} history: ${histRes.error}`);
+      return;
+    }
+    const messages = histRes.data ?? [];
+    for (let i = 0; i < messages.length; i++) {
+      const m = messages[i];
+      if (!isReply(m)) continue;
+      repliesFound += 1;
+      const parsed = toParsedReply(m, outreachId, lead.email ?? null, campaignId, leadId, i);
+      if (!parsed) { unresolved += 1; continue; }
+      if (sample.length < 8) {
+        sample.push({
+          campaign_id: campaignId,
+          outreach_id: parsed.outreach_id,
+          from_email: parsed.from_email,
+          subject: parsed.reply_subject,
+          occurred_at: parsed.occurred_at,
+          preview: parsed.preview_text?.slice(0, 120) ?? null,
+        });
+      }
+      if (!apply) continue;
+      try {
+        if (await alreadyRecorded(supabase, parsed)) { skippedDuplicate += 1; continue; }
+        await importReply(supabase, parsed);
+        imported += 1;
+      } catch (e) {
+        errors.push(`import ${parsed.outreach_id}: ${e instanceof Error ? e.message : String(e)}`);
+      }
+    }
+  };
+
   outer: for (const campaignId of campaignIds) {
     let offset = 0;
     // Paginate the campaign's leads.
@@ -253,54 +349,13 @@ async function run(request: Request, apply: boolean): Promise<Response> {
       const leads = leadsRes.data?.data ?? [];
       if (leads.length === 0) break;
 
-      for (const lead of leads) {
-        if (leadsScanned >= maxLeads) { capped = true; break outer; }
-        leadsScanned += 1;
-        const leadId = lead.lead_id ?? lead.id;
-        if (typeof leadId !== "number") continue;
-        const outreachId = lead.custom_fields?.outreach_id != null
-          ? String(lead.custom_fields.outreach_id)
-          : null;
-
-        const histRes = await getLeadMessageHistory(campaignId, leadId);
-        if (!histRes.ok) {
-          errors.push(`campaign ${campaignId} lead ${leadId} history: ${histRes.error}`);
-          continue;
-        }
-        const messages = histRes.data ?? [];
-        messages.forEach((m, i) => {
-          if (!isReply(m)) return;
-          repliesFound += 1;
-          const parsed = toParsedReply(m, outreachId, lead.email ?? null, campaignId, leadId, i);
-          if (!parsed) { unresolved += 1; return; }
-          if (sample.length < 8) {
-            sample.push({
-              campaign_id: campaignId,
-              outreach_id: parsed.outreach_id,
-              from_email: parsed.from_email,
-              subject: parsed.reply_subject,
-              occurred_at: parsed.occurred_at,
-              preview: parsed.preview_text?.slice(0, 120) ?? null,
-            });
-          }
-        });
-
-        if (!apply) continue;
-
-        // Apply: import each resolvable reply with dedupe.
-        for (let i = 0; i < messages.length; i++) {
-          const m = messages[i];
-          const parsed = toParsedReply(m, outreachId, lead.email ?? null, campaignId, leadId, i);
-          if (!parsed) continue;
-          try {
-            if (await alreadyRecorded(supabase, parsed)) { skippedDuplicate += 1; continue; }
-            await importReply(supabase, parsed);
-            imported += 1;
-          } catch (e) {
-            errors.push(`import ${parsed.outreach_id}: ${e instanceof Error ? e.message : String(e)}`);
-          }
-        }
-      }
+      // Honor the cap at page granularity, then fan the page out concurrently.
+      const room = maxLeads - leadsScanned;
+      const batch = leads.slice(0, Math.max(0, room));
+      leadsScanned += batch.length;
+      if (batch.length < leads.length) capped = true;
+      await mapPool(batch, CONCURRENCY, (lead) => processLead(campaignId, lead));
+      if (capped) break outer;
 
       if (leads.length < LEAD_PAGE) break;
       offset += LEAD_PAGE;

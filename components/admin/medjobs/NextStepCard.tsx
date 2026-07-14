@@ -323,7 +323,13 @@ function InOutreachBody({
   const callFirst = activeTab != null && activeTab !== "replies";
   const partner = isPartnerRow(ctx);
   const callLabel = partner ? "Call contact" : "Call provider";
-  const replyLabel = partner ? "Check for reply to contact" : "Check for reply to provider";
+  // A landed reply flips the button to "Reply now" (there's a reply to act on);
+  // an awaiting-reply row keeps "Check for reply" (still pending one).
+  const replyLabel = latestReply
+    ? "Reply now"
+    : partner
+      ? "Check for reply to contact"
+      : "Check for reply to provider";
   const callTitle = "Call this contact now and log the outcome against the call script.";
   const replyTitle = "Pull in their reply and log the outcome.";
 
