@@ -17,6 +17,7 @@ const OUTREACH_STAGES = [
   "claimed",
   "not_interested",
   "archived",
+  "hidden",
 ] as const;
 
 type OutreachStage = (typeof OUTREACH_STAGES)[number];
@@ -29,6 +30,7 @@ const STAGE_LABELS: Record<OutreachStage, string> = {
   claimed: "Claimed",
   not_interested: "Not Interested",
   archived: "Archived",
+  hidden: "Hidden",
 };
 
 const TERMINAL_STAGES: OutreachStage[] = ["claimed", "not_interested", "archived"];
@@ -536,6 +538,7 @@ export default function ProviderOutreachPage() {
     claimed: 0,
     not_interested: 0,
     archived: 0,
+    hidden: 0,
   });
 
   // Expanded cities (for not_contacted tab)
@@ -707,8 +710,8 @@ export default function ProviderOutreachPage() {
     }
   };
 
-  // Quick action for single provider (hover actions)
-  const handleQuickAction = async (providerId: string, action: "not_interested" | "archived") => {
+  // Quick action for single provider (from modal)
+  const handleQuickAction = async (providerId: string, action: "not_interested" | "archived" | "hidden") => {
     setActionLoading(true);
     try {
       const res = await fetch("/api/admin/provider-outreach/update-stage", {
@@ -721,7 +724,7 @@ export default function ProviderOutreachPage() {
       });
 
       if (res.ok) {
-        const actionLabel = action === "not_interested" ? "Not Interested" : "Archived";
+        const actionLabel = action === "not_interested" ? "Not Interested" : action === "hidden" ? "Hidden" : "Archived";
         showToast(`Marked as ${actionLabel}`, "success");
 
         // Refresh data
@@ -769,6 +772,13 @@ export default function ProviderOutreachPage() {
           { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
           { stage: "needs_call", label: "Back to Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
           { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
+        ];
+      case "hidden":
+        // Hidden is NOT terminal - can unhide or move to terminal
+        return [
+          { stage: "not_contacted", label: "Unhide", color: "bg-blue-600 hover:bg-blue-700" },
+          { stage: "archived", label: "Archive", color: "bg-gray-500 hover:bg-gray-600" },
+          { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
         ];
       default:
         // Terminal stages - allow moving back
@@ -1012,10 +1022,10 @@ export default function ProviderOutreachPage() {
                 </div>
               </button>
 
-              {/* Hide (for test data cleanup) */}
+              {/* Hide (for test data cleanup - NOT terminal) */}
               <button
                 onClick={() => {
-                  handleQuickAction(actionModalProvider.provider_id, "archived");
+                  handleQuickAction(actionModalProvider.provider_id, "hidden");
                   setActionModalProvider(null);
                 }}
                 disabled={actionLoading}
@@ -1029,7 +1039,7 @@ export default function ProviderOutreachPage() {
                   </span>
                   <div>
                     <p className="font-medium text-gray-900">Hide</p>
-                    <p className="text-xs text-gray-500">Remove from view (test data cleanup)</p>
+                    <p className="text-xs text-gray-500">Skip for this sequence (test accounts)</p>
                   </div>
                 </div>
               </button>

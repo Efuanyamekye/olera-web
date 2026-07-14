@@ -12,6 +12,7 @@ export const OUTREACH_STAGES = [
   "claimed",
   "not_interested",
   "archived",
+  "hidden",
 ] as const;
 
 export type OutreachStage = (typeof OUTREACH_STAGES)[number];
@@ -382,6 +383,7 @@ async function getStageCounts(
     claimed: 0,
     not_interested: 0,
     archived: 0,
+    hidden: 0,
   };
 
   // Get all providers in this state
