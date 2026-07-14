@@ -58,6 +58,8 @@ export interface OutreachProvider {
   stage: OutreachStage;
   stage_changed_at: string | null;
   notes: string | null;
+  // For claimed providers
+  verification_state?: "verified" | "pending" | "unverified" | "not_required" | "rejected" | null;
 }
 
 /**
@@ -324,9 +326,10 @@ async function getClaimedProviders(
   const providerIds = providers.map((p) => p.provider_id);
 
   // Get claimed providers (have business_profile with account_id)
+  // Include email from business_profiles - this is the email the provider actually receives on
   const { data: claimedBps } = await db
     .from("business_profiles")
-    .select("source_provider_id, created_at, updated_at")
+    .select("source_provider_id, created_at, updated_at, verification_state, email")
     .in("source_provider_id", providerIds)
     .not("account_id", "is", null);
 
@@ -334,29 +337,42 @@ async function getClaimedProviders(
     return [];
   }
 
-  // Create a map of claimed provider_id -> claim timestamp
+  // Create a map of claimed provider_id -> { timestamp, verification_state, email }
   const claimedMap = new Map(
-    claimedBps.map((bp) => [bp.source_provider_id, bp.updated_at || bp.created_at])
+    claimedBps.map((bp) => [
+      bp.source_provider_id,
+      {
+        timestamp: bp.updated_at || bp.created_at,
+        verification_state: bp.verification_state as OutreachProvider["verification_state"],
+        email: bp.email as string | null,
+      },
+    ])
   );
 
   // Filter to only claimed providers
+  // Use email from business_profiles (claimInfo.email) - this is the email they actually receive notifications on
+  // Fall back to olera-providers email only if business_profiles.email is not set
   const result: OutreachProvider[] = (providers as ProviderRow[])
     .filter((p) => claimedMap.has(p.provider_id))
-    .map((p) => ({
-      provider_id: p.provider_id,
-      provider_name: p.provider_name,
-      provider_category: p.provider_category,
-      city: p.city,
-      state: p.state,
-      email: p.email,
-      phone: p.phone,
-      website: p.website,
-      slug: p.slug,
-      tracking_id: null,
-      stage: "claimed" as OutreachStage,
-      stage_changed_at: claimedMap.get(p.provider_id) || null,
-      notes: null,
-    }))
+    .map((p) => {
+      const claimInfo = claimedMap.get(p.provider_id);
+      return {
+        provider_id: p.provider_id,
+        provider_name: p.provider_name,
+        provider_category: p.provider_category,
+        city: p.city,
+        state: p.state,
+        email: claimInfo?.email || p.email,
+        phone: p.phone,
+        website: p.website,
+        slug: p.slug,
+        tracking_id: null,
+        stage: "claimed" as OutreachStage,
+        stage_changed_at: claimInfo?.timestamp || null,
+        notes: null,
+        verification_state: claimInfo?.verification_state || null,
+      };
+    })
     .sort((a, b) => a.provider_name.localeCompare(b.provider_name));
 
   return result;

@@ -79,6 +79,8 @@ interface OutreachProvider {
   stage: OutreachStage;
   stage_changed_at: string | null;
   notes: string | null;
+  // For claimed providers
+  verification_state?: "verified" | "pending" | "unverified" | "not_required" | "rejected" | null;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -803,7 +805,65 @@ function CityRow({
 
                     {/* Contact Info - inline */}
                     <div className="flex-1 min-w-0">
-                      {lookingUpEmails.has(provider.provider_id) ? (
+                      {/* Claimed providers: read-only display with verification badge */}
+                      {provider.stage === "claimed" ? (
+                        <div className="flex items-center gap-3">
+                          {/* Email (read-only) */}
+                          {provider.email && (
+                            <span className="text-sm text-gray-700">{provider.email}</span>
+                          )}
+                          {/* Phone */}
+                          {provider.phone && (
+                            <a
+                              href={`tel:${provider.phone.replace(/\D/g, "")}`}
+                              className="text-sm text-primary-600 hover:text-primary-700 hover:underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              {formatPhone(provider.phone)}
+                            </a>
+                          )}
+                          {/* Verification badge */}
+                          {provider.verification_state === "verified" || provider.verification_state === "not_required" ? (
+                            <span className="inline-flex items-center gap-1 text-primary-600" title="Verified">
+                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
+                              </svg>
+                              <span className="text-xs font-medium">Verified</span>
+                            </span>
+                          ) : provider.verification_state === "pending" ? (
+                            <a
+                              href={`/admin/verification?search=${encodeURIComponent(provider.provider_name || "")}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors"
+                              title="Click to review verification"
+                            >
+                              Pending Verification
+                            </a>
+                          ) : provider.verification_state === "unverified" ? (
+                            <a
+                              href={`/admin/verification?search=${encodeURIComponent(provider.provider_name || "")}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="px-2 py-0.5 text-xs font-medium bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors"
+                              title="Click to verify this provider"
+                            >
+                              Unverified
+                            </a>
+                          ) : provider.verification_state === "rejected" ? (
+                            <span className="px-2 py-0.5 text-xs font-medium bg-red-100 text-red-700 rounded">
+                              Rejected
+                            </span>
+                          ) : (
+                            <a
+                              href={`/admin/verification?search=${encodeURIComponent(provider.provider_name || "")}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="px-2 py-0.5 text-xs font-medium bg-gray-100 text-gray-600 rounded hover:bg-gray-200 transition-colors"
+                              title="Click to verify this provider"
+                            >
+                              Needs Review
+                            </a>
+                          )}
+                        </div>
+                      ) : lookingUpEmails.has(provider.provider_id) ? (
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                           <div className="w-3.5 h-3.5 border-2 border-gray-300 border-t-teal-500 rounded-full animate-spin" />
                           <span>Finding email...</span>
