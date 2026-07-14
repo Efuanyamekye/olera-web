@@ -69,18 +69,27 @@ export async function PATCH(request: NextRequest) {
     // Check for linked business_profile
     const { data: linkedProfile } = await db
       .from("business_profiles")
-      .select("id, slug, metadata")
+      .select("id, slug, metadata, account_id, email")
       .eq("source_provider_id", provider_id)
       .maybeSingle();
 
-    // Also sync email to business_profile if linked and not claimed
+    // Sync email to business_profile if linked, but protect claimed accounts
+    // If account is claimed (has account_id) AND already has an email, don't overwrite
+    // The provider owns their email and should update it themselves
     if (linkedProfile && linkedProfile.id) {
-      const profileMeta = (linkedProfile.metadata as Record<string, unknown>) || {};
-      // Only sync if not claimed (no account_id check needed - unclaimed providers won't have one)
-      await db
-        .from("business_profiles")
-        .update({ email: trimmedEmail })
-        .eq("id", linkedProfile.id);
+      const isClaimed = !!linkedProfile.account_id;
+      const hasEmail = !!linkedProfile.email;
+
+      if (isClaimed && hasEmail) {
+        // Don't overwrite claimed account's email, but continue with other operations
+        console.log(`[provider-outreach/update-email] Skipping business_profile sync for claimed account ${linkedProfile.id}`);
+      } else {
+        // Safe to sync: either unclaimed, or claimed but no email yet (enrichment case)
+        await db
+          .from("business_profiles")
+          .update({ email: trimmedEmail })
+          .eq("id", linkedProfile.id);
+      }
     }
 
     // Build slug variants for deferred notifications
