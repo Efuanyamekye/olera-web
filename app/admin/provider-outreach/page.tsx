@@ -768,32 +768,24 @@ export default function ProviderOutreachPage() {
         </div>
       </div>
 
-      {/* Stage Tabs */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      {/* Stage Tabs - underlined style like Questions page */}
+      <div className="flex gap-1 mb-6 border-b border-gray-100">
         {tabs.map((tab) => (
           <button
             key={tab.value}
             onClick={() => setStage(tab.value)}
-            className={[
-              "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
               stage === tab.value
-                ? "bg-primary-600 text-white"
-                : tab.isTerminal
-                  ? "bg-gray-50 text-gray-500 hover:bg-gray-100"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200",
-            ].join(" ")}
+                ? "border-gray-900 text-gray-900"
+                : "border-transparent text-gray-400 hover:text-gray-600"
+            }`}
           >
             {tab.label}
-            <span
-              className={[
-                "ml-1.5 px-1.5 py-0.5 rounded text-xs tabular-nums",
-                stage === tab.value
-                  ? "bg-white/20 text-white"
-                  : "bg-gray-200 text-gray-500",
-              ].join(" ")}
-            >
-              {tab.count}
-            </span>
+            {tab.count > 0 && (
+              <span className="ml-1.5 text-xs text-gray-400 tabular-nums">
+                {tab.count}
+              </span>
+            )}
           </button>
         ))}
       </div>
