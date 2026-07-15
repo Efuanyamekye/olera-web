@@ -1066,9 +1066,10 @@ export default function ProviderOutreachPage() {
     }
   }, [selectedState, stage, fetchCities]);
 
-  // Effect: fetch providers when stage changes (for non-not_contacted tabs)
+  // Effect: fetch providers and stage counts when state/stage changes
+  // Always fetch to get stage_counts for tab badges, even on not_contacted tab
   useEffect(() => {
-    if (stage !== "not_contacted") {
+    if (selectedState) {
       fetchProviders();
     }
   }, [selectedState, stage, fetchProviders]);
