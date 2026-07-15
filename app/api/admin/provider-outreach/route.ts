@@ -35,7 +35,8 @@ interface ProviderRow {
 interface TrackingRow {
   id: string;
   provider_id: string;
-  stage: OutreachStage;
+  // Use string to allow for legacy "not_interested" values from database
+  stage: string;
   city: string | null;
   state: string | null;
   stage_changed_at: string;
