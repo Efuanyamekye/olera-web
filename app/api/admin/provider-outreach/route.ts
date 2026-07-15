@@ -96,6 +96,7 @@ export async function GET(request: NextRequest) {
     const state = searchParams.get("state");
     const stage = (searchParams.get("stage") || "not_contacted") as OutreachStage;
     const city = searchParams.get("city");
+    const search = (searchParams.get("search") || "").trim().toLowerCase();
 
     if (!state) {
       return NextResponse.json({ error: "State parameter is required" }, { status: 400 });
@@ -109,6 +110,12 @@ export async function GET(request: NextRequest) {
 
     // Get stage counts for tabs
     const stageCounts = await getStageCounts(db, state);
+
+    // If search is provided, search across ALL stages and return flat results
+    if (search) {
+      const searchResults = await searchProviders(db, state, search);
+      return NextResponse.json({ providers: searchResults, stage_counts: stageCounts, is_search: true });
+    }
 
     if (stage === "not_contacted") {
       // Special case: providers NOT in tracking OR with stage = not_contacted
@@ -386,6 +393,101 @@ async function getClaimedProviders(
     .sort((a, b) => a.provider_name.localeCompare(b.provider_name));
 
   return result;
+}
+
+/**
+ * Search providers by name across ALL stages within a state.
+ * Returns a flat list with stage info included for each provider.
+ */
+async function searchProviders(
+  db: ReturnType<typeof getServiceClient>,
+  state: string,
+  search: string
+): Promise<OutreachProvider[]> {
+  // Get all providers in this state matching the search term
+  const { data: providers, error: provError } = await db
+    .from("olera-providers")
+    .select("provider_id, provider_name, provider_category, city, state, email, phone, website, slug")
+    .eq("state", state)
+    .or("deleted.is.null,deleted.eq.false")
+    .ilike("provider_name", `%${search}%`)
+    .limit(100);
+
+  if (provError) {
+    console.error("[provider-outreach] Search query error:", provError);
+    throw new Error("Failed to search providers");
+  }
+
+  if (!providers || providers.length === 0) {
+    return [];
+  }
+
+  const providerIds = providers.map((p) => p.provider_id);
+
+  // Get claimed providers (have business_profile with account_id)
+  const { data: claimedBps } = await db
+    .from("business_profiles")
+    .select("source_provider_id, created_at, updated_at, verification_state, email")
+    .in("source_provider_id", providerIds)
+    .not("account_id", "is", null);
+
+  const claimedMap = new Map(
+    (claimedBps || []).map((bp) => [
+      bp.source_provider_id,
+      {
+        timestamp: bp.updated_at || bp.created_at,
+        verification_state: bp.verification_state as OutreachProvider["verification_state"],
+        email: bp.email as string | null,
+      },
+    ])
+  );
+
+  // Get tracking data for all matched providers
+  const { data: trackingRows } = await db
+    .from("provider_outreach_tracking")
+    .select("provider_id, id, stage, stage_changed_at, notes")
+    .in("provider_id", providerIds);
+
+  const trackingMap = new Map(
+    (trackingRows || []).map((t) => [t.provider_id, t])
+  );
+
+  // Build results with stage info
+  const result: OutreachProvider[] = (providers as ProviderRow[]).map((p) => {
+    const claimInfo = claimedMap.get(p.provider_id);
+    const tracking = trackingMap.get(p.provider_id);
+
+    // Determine stage
+    let stage: OutreachStage;
+    if (claimInfo) {
+      stage = "claimed";
+    } else if (tracking) {
+      // Normalize legacy "not_interested" to "archived"
+      stage = tracking.stage === "not_interested" ? "archived" : (tracking.stage as OutreachStage);
+    } else {
+      stage = "not_contacted";
+    }
+
+    return {
+      provider_id: p.provider_id,
+      provider_name: p.provider_name,
+      provider_category: p.provider_category,
+      city: p.city,
+      state: p.state,
+      email: claimInfo?.email || p.email,
+      phone: p.phone,
+      website: p.website,
+      slug: p.slug,
+      tracking_id: tracking?.id ?? null,
+      stage,
+      stage_changed_at: claimInfo?.timestamp || tracking?.stage_changed_at || null,
+      notes: tracking?.notes ?? null,
+      verification_state: claimInfo?.verification_state || null,
+    };
+  });
+
+  // Sort by name
+  return result.sort((a, b) => a.provider_name.localeCompare(b.provider_name));
 }
 
 /**

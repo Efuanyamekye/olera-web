@@ -936,6 +936,12 @@ export default function ProviderOutreachPage() {
   // Stage tab
   const [stage, setStage] = useState<OutreachStage>("not_contacted");
 
+  // Search
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [isSearchResult, setIsSearchResult] = useState(false);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   // Cities data (for not_contacted tab)
   const [cities, setCities] = useState<CityStats[]>([]);
   const [loadingCities, setLoadingCities] = useState(false);
@@ -1032,8 +1038,8 @@ export default function ProviderOutreachPage() {
     }
   }, [selectedState]);
 
-  // Fetch providers for current stage/state
-  const fetchProviders = useCallback(async (city?: string) => {
+  // Fetch providers for current stage/state (or search)
+  const fetchProviders = useCallback(async (city?: string, searchTerm?: string) => {
     if (!selectedState) return;
     setLoadingProviders(true);
 
@@ -1043,11 +1049,13 @@ export default function ProviderOutreachPage() {
         stage,
       });
       if (city) params.set("city", city);
+      if (searchTerm) params.set("search", searchTerm);
 
       const res = await fetch(`/api/admin/provider-outreach?${params}`);
       if (res.ok) {
         const data = await res.json();
         setProviders(data.providers || []);
+        setIsSearchResult(!!data.is_search);
         if (data.stage_counts) {
           setStageCounts(data.stage_counts);
         }
@@ -1059,28 +1067,41 @@ export default function ProviderOutreachPage() {
     }
   }, [selectedState, stage]);
 
-  // Effect: fetch cities when state changes (for not_contacted tab)
+  // Debounce search input by 300ms
   useEffect(() => {
-    if (stage === "not_contacted") {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+    searchTimeoutRef.current = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [search]);
+
+  // Effect: fetch cities when state changes (for not_contacted tab, when not searching)
+  useEffect(() => {
+    if (stage === "not_contacted" && !debouncedSearch) {
       fetchCities();
     }
-  }, [selectedState, stage, fetchCities]);
+  }, [selectedState, stage, debouncedSearch, fetchCities]);
 
-  // Effect: fetch providers and stage counts when state/stage changes
-  // Always fetch to get stage_counts for tab badges, even on not_contacted tab
+  // Effect: fetch providers and stage counts when state/stage/search changes
   useEffect(() => {
     if (selectedState) {
-      fetchProviders();
+      fetchProviders(undefined, debouncedSearch || undefined);
     }
-  }, [selectedState, stage, fetchProviders]);
+  }, [selectedState, stage, debouncedSearch, fetchProviders]);
 
-  // Effect: fetch providers when a city is expanded
+  // Effect: fetch providers when a city is expanded (only when not searching)
   useEffect(() => {
-    if (stage === "not_contacted" && expandedCities.size > 0) {
-      // Fetch all providers for the state (will filter by city in UI)
+    if (stage === "not_contacted" && expandedCities.size > 0 && !debouncedSearch) {
       fetchProviders();
     }
-  }, [expandedCities, stage, fetchProviders]);
+  }, [expandedCities, stage, debouncedSearch, fetchProviders]);
 
   // Clear selection, providers, and stage counts when stage/state changes
   useEffect(() => {
@@ -1320,6 +1341,44 @@ export default function ProviderOutreachPage() {
         </div>
       </div>
 
+      {/* Search bar */}
+      <div className="mb-6">
+        <div className="relative">
+          <svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search providers by name..."
+            className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          />
+          {search && (
+            <button
+              onClick={() => {
+                setSearch("");
+                setDebouncedSearch("");
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Stage Tabs - underlined style like Questions page */}
       <div className="flex gap-1 mb-6 border-b border-gray-100">
         {tabs.map((tab) => (
@@ -1393,75 +1452,172 @@ export default function ProviderOutreachPage() {
         </div>
       )}
 
-      {/* Content - City-grouped view for ALL stages */}
+      {/* Content - Search results (flat list) or City-grouped view */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        {/* Header */}
-        <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
-          <div className="w-5" />
-          <div className="flex-1">City</div>
-          <div className="w-48 text-right">Providers</div>
-        </div>
-
-        {(() => {
-          // For not_contacted, use the cities API data; for other stages, compute from providers
-          const displayCities = stage === "not_contacted" ? cities : computeCityStatsFromProviders(providers);
-          const isLoading = stage === "not_contacted" ? loadingCities : loadingProviders;
-          const emptyMessage = stage === "not_contacted"
-            ? `No unclaimed providers in ${selectedState}`
-            : `No providers in ${STAGE_LABELS[stage]}`;
-
-          if (isLoading) {
-            return (
+        {isSearchResult ? (
+          // Search results: flat list with stage badges
+          <>
+            <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
+              <div className="w-5" />
+              <div className="flex-1">Provider</div>
+              <div className="w-24">City</div>
+              <div className="w-28">Stage</div>
+              <div className="w-10" />
+            </div>
+            {loadingProviders ? (
               <div className="p-8 text-center">
                 <div className="inline-block w-5 h-5 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
               </div>
-            );
-          }
-
-          if (displayCities.length === 0) {
-            return (
+            ) : providers.length === 0 ? (
               <div className="p-12 text-center">
-                <p className="text-gray-500">{emptyMessage}</p>
+                <p className="text-gray-500">No providers found matching &quot;{debouncedSearch}&quot;</p>
               </div>
-            );
-          }
-
-          return (
-            <div>
-              {displayCities.map((city) => (
-                <CityRow
-                  key={city.city}
-                  city={city}
-                  stage={stage}
-                  isExpanded={expandedCities.has(city.city)}
-                  onToggle={() => toggleCity(city.city)}
-                  providers={providers}
-                  loadingProviders={loadingProviders}
-                  selectedProviders={selectedProviders}
-                  onToggleProvider={toggleProvider}
-                  onSelectAllInCity={selectAllInCity}
-                  onEmailSaved={(providerId, newEmail) => {
-                    // Update local providers state immediately
-                    setProviders((prev) =>
-                      prev.map((p) =>
-                        p.provider_id === providerId ? { ...p, email: newEmail } : p
-                      )
-                    );
-                    // Refresh cities to update counts (for not_contacted)
-                    if (stage === "not_contacted") {
-                      fetchCities();
-                    }
-                  }}
-                  onOpenActionModal={setActionModalProvider}
-                />
-              ))}
+            ) : (
+              <div className="divide-y divide-gray-100">
+                {providers.map((provider) => (
+                  <div key={provider.provider_id} className="group px-5 py-3 flex items-center gap-4 hover:bg-gray-50 transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={selectedProviders.has(provider.provider_id)}
+                      onChange={() => toggleProvider(provider.provider_id)}
+                      className="w-4 h-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500 shrink-0"
+                    />
+                    {/* Provider Name + Category */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={provider.slug ? `/admin/directory/${provider.slug}` : "#"}
+                          className="font-medium text-gray-900 hover:text-primary-600 transition-colors truncate text-sm"
+                        >
+                          {provider.provider_name}
+                        </Link>
+                        {provider.email && (
+                          <span className="text-xs text-gray-500 truncate">{provider.email}</span>
+                        )}
+                      </div>
+                      {provider.provider_category && (
+                        <p className="text-xs text-gray-500 truncate">{provider.provider_category}</p>
+                      )}
+                    </div>
+                    {/* City */}
+                    <div className="w-24 text-sm text-gray-600 truncate">
+                      {provider.city || "—"}
+                    </div>
+                    {/* Stage Badge */}
+                    <div className="w-28">
+                      <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                        provider.stage === "claimed" ? "bg-emerald-100 text-emerald-700" :
+                        provider.stage === "in_sequence" ? "bg-blue-100 text-blue-700" :
+                        provider.stage === "needs_call" ? "bg-amber-100 text-amber-700" :
+                        provider.stage === "called" ? "bg-purple-100 text-purple-700" :
+                        provider.stage === "archived" ? "bg-gray-100 text-gray-600" :
+                        provider.stage === "hidden" ? "bg-gray-100 text-gray-500" :
+                        "bg-gray-100 text-gray-600"
+                      }`}>
+                        {STAGE_LABELS[provider.stage]}
+                      </span>
+                    </div>
+                    {/* Actions */}
+                    <div className="w-10">
+                      {provider.stage !== "archived" && provider.stage !== "claimed" && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setActionModalProvider(provider);
+                          }}
+                          className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 transition-all text-gray-300 hover:text-gray-600"
+                          title="Actions"
+                        >
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* Search results summary */}
+            {!loadingProviders && providers.length > 0 && (
+              <div className="px-5 py-3 border-t border-gray-100 text-sm text-gray-500">
+                Found {providers.length} provider{providers.length === 1 ? "" : "s"} matching &quot;{debouncedSearch}&quot;
+              </div>
+            )}
+          </>
+        ) : (
+          // Normal city-grouped view
+          <>
+            {/* Header */}
+            <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
+              <div className="w-5" />
+              <div className="flex-1">City</div>
+              <div className="w-48 text-right">Providers</div>
             </div>
-          );
-        })()}
+
+            {(() => {
+              // For not_contacted, use the cities API data; for other stages, compute from providers
+              const displayCities = stage === "not_contacted" ? cities : computeCityStatsFromProviders(providers);
+              const isLoading = stage === "not_contacted" ? loadingCities : loadingProviders;
+              const emptyMessage = stage === "not_contacted"
+                ? `No unclaimed providers in ${selectedState}`
+                : `No providers in ${STAGE_LABELS[stage]}`;
+
+              if (isLoading) {
+                return (
+                  <div className="p-8 text-center">
+                    <div className="inline-block w-5 h-5 border-2 border-gray-200 border-t-gray-500 rounded-full animate-spin" />
+                  </div>
+                );
+              }
+
+              if (displayCities.length === 0) {
+                return (
+                  <div className="p-12 text-center">
+                    <p className="text-gray-500">{emptyMessage}</p>
+                  </div>
+                );
+              }
+
+              return (
+                <div>
+                  {displayCities.map((city) => (
+                    <CityRow
+                      key={city.city}
+                      city={city}
+                      stage={stage}
+                      isExpanded={expandedCities.has(city.city)}
+                      onToggle={() => toggleCity(city.city)}
+                      providers={providers}
+                      loadingProviders={loadingProviders}
+                      selectedProviders={selectedProviders}
+                      onToggleProvider={toggleProvider}
+                      onSelectAllInCity={selectAllInCity}
+                      onEmailSaved={(providerId, newEmail) => {
+                        // Update local providers state immediately
+                        setProviders((prev) =>
+                          prev.map((p) =>
+                            p.provider_id === providerId ? { ...p, email: newEmail } : p
+                          )
+                        );
+                        // Refresh cities to update counts (for not_contacted)
+                        if (stage === "not_contacted") {
+                          fetchCities();
+                        }
+                      }}
+                      onOpenActionModal={setActionModalProvider}
+                    />
+                  ))}
+                </div>
+              );
+            })()}
+          </>
+        )}
       </div>
 
       {/* Summary */}
-      {stage === "not_contacted" && !loadingCities && (
+      {stage === "not_contacted" && !loadingCities && !isSearchResult && (
         <div className="mt-4 text-sm text-gray-500">
           {totalUnclaimed.toLocaleString()} unclaimed providers in {selectedState} across {cities.length} cities
         </div>
