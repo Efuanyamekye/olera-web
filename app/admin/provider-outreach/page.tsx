@@ -17,7 +17,6 @@ const OUTREACH_STAGES = [
   "needs_call",
   "called",
   "claimed",
-  "not_interested",
   "archived",
   "hidden",
 ] as const;
@@ -30,12 +29,13 @@ const STAGE_LABELS: Record<OutreachStage, string> = {
   needs_call: "Needs Call",
   called: "Called",
   claimed: "Claimed",
-  not_interested: "Not Interested",
   archived: "Archived",
   hidden: "Hidden",
 };
 
-const TERMINAL_STAGES: OutreachStage[] = ["claimed", "not_interested", "archived"];
+// Called is terminal for our outreach effort (ball is in provider's court)
+// Claimed and Archived are also terminal
+const TERMINAL_STAGES: OutreachStage[] = ["called", "claimed", "archived"];
 
 interface CityStats {
   city: string;
@@ -891,7 +891,7 @@ function CityRow({
                     </div>
 
                     {/* Actions button - ellipsis icon, opens modal */}
-                    {stage !== "archived" && stage !== "not_interested" && stage !== "claimed" && (
+                    {stage !== "archived" && stage !== "claimed" && (
                       <button
                         type="button"
                         onClick={(e) => {
@@ -952,7 +952,6 @@ export default function ProviderOutreachPage() {
     needs_call: 0,
     called: 0,
     claimed: 0,
-    not_interested: 0,
     archived: 0,
     hidden: 0,
   });
@@ -971,7 +970,7 @@ export default function ProviderOutreachPage() {
 
   // Action modal state
   const [actionModalProvider, setActionModalProvider] = useState<OutreachProvider | null>(null);
-  const [selectedAction, setSelectedAction] = useState<"not_interested" | "archived" | "hidden" | "unhide" | null>(null);
+  const [selectedAction, setSelectedAction] = useState<"called" | "archived" | "hidden" | "unhide" | null>(null);
   const [actionReason, setActionReason] = useState("");
   const [actionNotes, setActionNotes] = useState("");
 
@@ -980,21 +979,15 @@ export default function ProviderOutreachPage() {
   const [sequenceConfirmProviders, setSequenceConfirmProviders] = useState<OutreachProvider[]>([]);
   const [showSequencePreview, setShowSequencePreview] = useState(false);
 
-  // Reason options for each action
-  const NOT_INTERESTED_REASONS = [
-    "Not a fit for our service",
-    "Provider requested no emails",
-    "Unable to reach - no response",
-    "Already has similar service",
-    "Other",
-  ];
-
+  // Reason options for archiving
+  // Archive = Stop all outreach. Provider is invalid, out of business, or explicitly declined.
   const ARCHIVE_REASONS = [
+    "Provider declined / Not interested",
+    "Provider requested no contact",
     "Out of business / Permanently closed",
-    "Invalid provider (fake/spam)",
-    "Duplicate profile",
-    "Wrong contact info",
-    "Provider relocated",
+    "Invalid listing (fake/spam)",
+    "Duplicate of another listing",
+    "Unable to verify provider exists",
     "Other",
   ];
 
@@ -1178,7 +1171,7 @@ export default function ProviderOutreachPage() {
   };
 
   // Quick action for single provider (from modal)
-  const handleQuickAction = async (providerId: string, action: "not_contacted" | "not_interested" | "archived" | "hidden", notes?: string) => {
+  const handleQuickAction = async (providerId: string, action: "not_contacted" | "called" | "archived" | "hidden", notes?: string | null) => {
     setActionLoading(true);
     try {
       const res = await fetch("/api/admin/provider-outreach/update-stage", {
@@ -1192,7 +1185,7 @@ export default function ProviderOutreachPage() {
       });
 
       if (res.ok) {
-        const actionLabel = action === "not_contacted" ? "Unhidden" : action === "not_interested" ? "Not Interested" : action === "hidden" ? "Hidden" : "Archived";
+        const actionLabel = action === "not_contacted" ? "Unhidden" : action === "called" ? "Called" : action === "hidden" ? "Hidden" : "Archived";
         showToast(`Marked as ${actionLabel}`, "success");
 
         // Refresh data
@@ -1222,32 +1215,30 @@ export default function ProviderOutreachPage() {
 
   // Available actions based on current stage
   // Note: "Mark Claimed" is NOT included because Claimed auto-syncs from business_profiles
-  // Note: Archive removed from bulk actions - too dangerous, use individual modal instead
+  // Note: Archive removed from bulk actions - use individual provider modal instead
   const getAvailableActions = (): { stage: OutreachStage; label: string; color: string; requiresEmail?: boolean }[] => {
     switch (stage) {
       case "not_contacted":
         // Only "Move to In Sequence" - requires email
-        // Archive removed from bulk - use individual provider modal instead
         return [
           { stage: "in_sequence", label: "Move to In Sequence", color: "bg-primary-600 hover:bg-primary-700", requiresEmail: true },
         ];
       case "in_sequence":
         return [
           { stage: "needs_call", label: "Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
+          { stage: "called", label: "Mark Called", color: "bg-purple-600 hover:bg-purple-700" },
           { stage: "not_contacted", label: "Reset to Not Contacted", color: "bg-gray-500 hover:bg-gray-600" },
-          { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
         ];
       case "needs_call":
         return [
           { stage: "called", label: "Mark Called", color: "bg-purple-600 hover:bg-purple-700" },
           { stage: "not_contacted", label: "Reset to Not Contacted", color: "bg-gray-500 hover:bg-gray-600" },
-          { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
         ];
       case "called":
+        // Called is terminal for outreach - we've done our part
+        // Only allow going back in case of error
         return [
           { stage: "needs_call", label: "Back to Needs Call", color: "bg-amber-600 hover:bg-amber-700" },
-          { stage: "not_contacted", label: "Reset to Not Contacted", color: "bg-gray-500 hover:bg-gray-600" },
-          { stage: "not_interested", label: "Not Interested", color: "bg-gray-600 hover:bg-gray-700" },
         ];
       case "hidden":
         // Hidden is NOT terminal - can unhide
@@ -1255,7 +1246,7 @@ export default function ProviderOutreachPage() {
           { stage: "not_contacted", label: "Unhide", color: "bg-blue-600 hover:bg-blue-700" },
         ];
       default:
-        // Terminal stages - allow moving back
+        // Terminal stages (archived, claimed) - allow moving back to not_contacted
         return [
           { stage: "not_contacted", label: "Reset to Not Contacted", color: "bg-gray-600 hover:bg-gray-700" },
         ];
@@ -1498,23 +1489,25 @@ export default function ProviderOutreachPage() {
                   </button>
                 )}
 
-                {/* Not Interested */}
-                <button
-                  onClick={() => setSelectedAction("not_interested")}
-                  className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-colors"
-                >
-                  <div className="flex items-start gap-3">
-                    <span className="text-orange-500 mt-0.5">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                      </svg>
-                    </span>
-                    <div>
-                      <p className="font-medium text-gray-900">Mark Not Interested</p>
-                      <p className="text-xs text-gray-500">Provider declined or not a fit</p>
+                {/* Mark as Called - show for active stages that haven't been called yet */}
+                {["not_contacted", "in_sequence", "needs_call"].includes(actionModalProvider.stage) && (
+                  <button
+                    onClick={() => setSelectedAction("called")}
+                    className="w-full text-left px-4 py-3 rounded-lg border border-gray-200 hover:border-purple-300 hover:bg-purple-50 transition-colors"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="text-purple-500 mt-0.5">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                        </svg>
+                      </span>
+                      <div>
+                        <p className="font-medium text-gray-900">Mark as Called</p>
+                        <p className="text-xs text-gray-500">We called them - ball is in their court</p>
+                      </div>
                     </div>
-                  </div>
-                </button>
+                  </button>
+                )}
 
                 {/* Archive */}
                 <button
@@ -1576,59 +1569,62 @@ export default function ProviderOutreachPage() {
 
                 {/* Action description */}
                 <div className={`p-3 rounded-lg ${
-                  selectedAction === "not_interested" ? "bg-orange-50 border border-orange-200" :
+                  selectedAction === "called" ? "bg-purple-50 border border-purple-200" :
                   selectedAction === "archived" ? "bg-amber-50 border border-amber-200" :
                   selectedAction === "unhide" ? "bg-blue-50 border border-blue-200" :
                   "bg-gray-50 border border-gray-200"
                 }`}>
                   <p className="text-sm font-medium text-gray-900">
-                    {selectedAction === "not_interested" ? "Mark as Not Interested" :
+                    {selectedAction === "called" ? "Mark as Called" :
                      selectedAction === "archived" ? "Archive Provider" :
                      selectedAction === "unhide" ? "Unhide Provider" :
                      "Hide Provider"}
                   </p>
                   <p className="text-xs text-gray-600 mt-0.5">
-                    {selectedAction === "not_interested" ? "Provider will be moved to Not Interested tab." :
+                    {selectedAction === "called" ? "Provider will be moved to Called tab. We've done our part - ball is in their court." :
                      selectedAction === "archived" ? "Provider will be archived and removed from active outreach." :
                      selectedAction === "unhide" ? "Provider will return to Not Contacted and be available for outreach." :
                      "Provider will be hidden from this sequence but can be unhidden later."}
                   </p>
                 </div>
 
-                {/* Reason dropdown */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Reason
-                  </label>
-                  <select
-                    value={actionReason}
-                    onChange={(e) => setActionReason(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-                  >
-                    <option value="">Select a reason...</option>
-                    {(selectedAction === "not_interested" ? NOT_INTERESTED_REASONS :
-                      selectedAction === "archived" ? ARCHIVE_REASONS :
-                      selectedAction === "unhide" ? UNHIDE_REASONS :
-                      HIDE_REASONS
-                    ).map((reason) => (
-                      <option key={reason} value={reason}>{reason}</option>
-                    ))}
-                  </select>
-                </div>
+                {/* Reason dropdown - not needed for "called" */}
+                {selectedAction !== "called" && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Reason
+                    </label>
+                    <select
+                      value={actionReason}
+                      onChange={(e) => setActionReason(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+                    >
+                      <option value="">Select a reason...</option>
+                      {(selectedAction === "archived" ? ARCHIVE_REASONS :
+                        selectedAction === "unhide" ? UNHIDE_REASONS :
+                        HIDE_REASONS
+                      ).map((reason) => (
+                        <option key={reason} value={reason}>{reason}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
-                {/* Notes textarea */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                    Notes <span className="text-gray-400 font-normal">{actionReason === "Other" ? "(required)" : "(optional)"}</span>
-                  </label>
-                  <textarea
-                    value={actionNotes}
-                    onChange={(e) => setActionNotes(e.target.value)}
-                    placeholder="Add any additional context..."
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none resize-none"
-                  />
-                </div>
+                {/* Notes textarea - not needed for "called" */}
+                {selectedAction !== "called" && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                      Notes <span className="text-gray-400 font-normal">{actionReason === "Other" ? "(required)" : "(optional)"}</span>
+                    </label>
+                    <textarea
+                      value={actionNotes}
+                      onChange={(e) => setActionNotes(e.target.value)}
+                      placeholder="Add any additional context..."
+                      rows={2}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none resize-none"
+                    />
+                  </div>
+                )}
               </div>
             )}
 
@@ -1643,20 +1639,30 @@ export default function ProviderOutreachPage() {
               {selectedAction && (
                 <button
                   onClick={async () => {
-                    if (!actionReason) return;
-                    if (actionReason === "Other" && !actionNotes.trim()) return;
+                    // "called" doesn't require a reason
+                    if (selectedAction !== "called") {
+                      if (!actionReason) return;
+                      if (actionReason === "Other" && !actionNotes.trim()) return;
+                    }
                     // Map "unhide" to "not_contacted" stage
                     const stageToSet = selectedAction === "unhide" ? "not_contacted" : selectedAction;
+                    const notes = selectedAction === "called"
+                      ? null
+                      : `${actionReason}${actionNotes.trim() ? ` - ${actionNotes.trim()}` : ""}`;
                     await handleQuickAction(
                       actionModalProvider.provider_id,
                       stageToSet,
-                      `${actionReason}${actionNotes.trim() ? ` - ${actionNotes.trim()}` : ""}`
+                      notes
                     );
                     closeActionModal();
                   }}
-                  disabled={actionLoading || !actionReason || (actionReason === "Other" && !actionNotes.trim())}
+                  disabled={
+                    actionLoading ||
+                    (selectedAction !== "called" && !actionReason) ||
+                    (selectedAction !== "called" && actionReason === "Other" && !actionNotes.trim())
+                  }
                   className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-                    selectedAction === "not_interested" ? "bg-orange-600 hover:bg-orange-700" :
+                    selectedAction === "called" ? "bg-purple-600 hover:bg-purple-700" :
                     selectedAction === "archived" ? "bg-amber-600 hover:bg-amber-700" :
                     selectedAction === "unhide" ? "bg-blue-600 hover:bg-blue-700" :
                     "bg-gray-600 hover:bg-gray-700"

@@ -10,14 +10,15 @@ export const OUTREACH_STAGES = [
   "needs_call",
   "called",
   "claimed",
-  "not_interested",
   "archived",
   "hidden",
 ] as const;
 
 export type OutreachStage = (typeof OUTREACH_STAGES)[number];
 
-export const TERMINAL_STAGES: OutreachStage[] = ["claimed", "not_interested", "archived"];
+// Called is terminal for our outreach effort (ball is in provider's court)
+// Claimed and Archived are also terminal
+export const TERMINAL_STAGES: OutreachStage[] = ["called", "claimed", "archived"];
 
 interface ProviderRow {
   provider_id: string;
@@ -125,8 +126,14 @@ export async function GET(request: NextRequest) {
     let trackingQuery = db
       .from("provider_outreach_tracking")
       .select("*")
-      .eq("state", state)
-      .eq("stage", stage);
+      .eq("state", state);
+
+    // When querying "archived", also include legacy "not_interested" records
+    if (stage === "archived") {
+      trackingQuery = trackingQuery.or("stage.eq.archived,stage.eq.not_interested");
+    } else {
+      trackingQuery = trackingQuery.eq("stage", stage);
+    }
 
     if (city) {
       trackingQuery = trackingQuery.eq("city", city);
@@ -175,6 +182,8 @@ export async function GET(request: NextRequest) {
         if (!p) return null;
         // Skip if provider has claimed - they belong in Claimed tab now
         if (claimedProviderIds.has(p.provider_id)) return null;
+        // Normalize legacy "not_interested" to "archived"
+        const normalizedStage = t.stage === "not_interested" ? "archived" : t.stage;
         return {
           provider_id: p.provider_id,
           provider_name: p.provider_name,
@@ -186,7 +195,7 @@ export async function GET(request: NextRequest) {
           website: p.website,
           slug: p.slug,
           tracking_id: t.id,
-          stage: t.stage,
+          stage: normalizedStage as OutreachStage,
           stage_changed_at: t.stage_changed_at,
           notes: t.notes,
         };
@@ -383,8 +392,9 @@ async function getClaimedProviders(
  *
  * Key logic:
  * - "claimed" count = actual claimed providers (from business_profiles with account_id)
- * - Active stages (in_sequence, needs_call, called) = tracking count MINUS those who have since claimed
- * - Terminal stages (not_interested, archived) = tracking count as-is
+ * - Active stages (in_sequence, needs_call) = tracking count MINUS those who have since claimed
+ * - "called" = terminal for our outreach (ball in provider's court), count MINUS those who claimed
+ * - "archived" = tracking count as-is
  * - "not_contacted" = unclaimed providers not in tracking
  */
 async function getStageCounts(
@@ -397,7 +407,6 @@ async function getStageCounts(
     needs_call: 0,
     called: 0,
     claimed: 0,
-    not_interested: 0,
     archived: 0,
     hidden: 0,
   };
@@ -433,7 +442,13 @@ async function getStageCounts(
 
   if (trackingRows) {
     for (const row of trackingRows) {
-      const stage = row.stage as OutreachStage;
+      let stage = row.stage as OutreachStage;
+
+      // Handle legacy "not_interested" records - treat as archived
+      if (stage === ("not_interested" as OutreachStage)) {
+        stage = "archived";
+      }
+
       if (stage === "not_contacted" || stage === "claimed") {
         // Skip - not_contacted is calculated separately, claimed is from business_profiles
         continue;
@@ -444,7 +459,10 @@ async function getStageCounts(
         continue;
       }
 
-      counts[stage]++;
+      // Only count if stage exists in our counts object
+      if (stage in counts) {
+        counts[stage]++;
+      }
     }
   }
 
