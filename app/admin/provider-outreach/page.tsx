@@ -1103,14 +1103,14 @@ export default function ProviderOutreachPage() {
     }
   }, [expandedCities, stage, debouncedSearch, fetchProviders]);
 
-  // Clear selection, providers, and stage counts when stage/state changes
+  // Clear selection, providers, and stage counts when stage/state/search changes
   useEffect(() => {
     setSelectedProviders(new Set());
     setExpandedCities(new Set());
     setProviders([]);
     // Clear stage counts when STATE changes (not stage) to avoid showing stale data
     // Stage counts are state-level, so changing stage within same state keeps counts
-  }, [stage, selectedState]);
+  }, [stage, selectedState, debouncedSearch]);
 
   // Separate effect to clear stage counts only when state changes
   const prevStateRef = useRef(selectedState);
@@ -1401,8 +1401,8 @@ export default function ProviderOutreachPage() {
         ))}
       </div>
 
-      {/* Action Bar (when items selected) */}
-      {selectedProviders.size > 0 && (
+      {/* Action Bar (when items selected) - hidden during search since providers may be from different stages */}
+      {selectedProviders.size > 0 && !isSearchResult && (
         <div className="mb-4 p-3 bg-primary-50 rounded-lg border border-primary-200 flex items-center justify-between">
           <span className="text-sm font-medium text-primary-900">
             {selectedProviders.size} provider{selectedProviders.size === 1 ? "" : "s"} selected
@@ -1517,9 +1517,9 @@ export default function ProviderOutreachPage() {
                         {STAGE_LABELS[provider.stage]}
                       </span>
                     </div>
-                    {/* Actions */}
+                    {/* Actions - hide for terminal stages (archived, claimed, called) */}
                     <div className="w-10">
-                      {provider.stage !== "archived" && provider.stage !== "claimed" && (
+                      {!["archived", "claimed", "called"].includes(provider.stage) && (
                         <button
                           type="button"
                           onClick={(e) => {
