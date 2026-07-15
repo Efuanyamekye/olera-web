@@ -1082,12 +1082,31 @@ export default function ProviderOutreachPage() {
     }
   }, [expandedCities, stage, fetchProviders]);
 
-  // Clear selection and providers when stage/state changes
+  // Clear selection, providers, and stage counts when stage/state changes
   useEffect(() => {
     setSelectedProviders(new Set());
     setExpandedCities(new Set());
     setProviders([]);
+    // Clear stage counts when STATE changes (not stage) to avoid showing stale data
+    // Stage counts are state-level, so changing stage within same state keeps counts
   }, [stage, selectedState]);
+
+  // Separate effect to clear stage counts only when state changes
+  const prevStateRef = useRef(selectedState);
+  useEffect(() => {
+    if (prevStateRef.current !== selectedState) {
+      setStageCounts({
+        not_contacted: 0,
+        in_sequence: 0,
+        needs_call: 0,
+        called: 0,
+        claimed: 0,
+        archived: 0,
+        hidden: 0,
+      });
+      prevStateRef.current = selectedState;
+    }
+  }, [selectedState]);
 
   // Show toast helper
   const showToast = (message: string, type: "success" | "error") => {
