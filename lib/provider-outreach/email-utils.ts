@@ -437,6 +437,12 @@ export function buildContextFromProvider(
     gap_list?: string;
     // City demand metric (total unique views for city+category in last 30 days)
     city_views?: number;
+    // Decision-maker data (from Apollo contact) for personalized greetings
+    decision_maker?: {
+      first_name: string | null;
+      last_name: string | null;
+      title: string | null;
+    };
   }
 ): TemplateContext {
   const baseUrl = options?.baseUrl || "https://olera.care";
@@ -480,6 +486,8 @@ export function buildContextFromProvider(
     mailing_address: options?.mailingAddress || DEFAULT_MAILING_ADDRESS,
     gap_list: options?.gap_list,
     city_views: options?.city_views,
+    // Decision-maker data for personalized greetings ("Hi John," vs "Hi Sunrise Senior Living,")
+    decision_maker: options?.decision_maker,
   };
 }
 

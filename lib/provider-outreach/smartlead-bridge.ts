@@ -69,6 +69,8 @@ export interface ProviderBridgeRow {
   manage_url: string;
   remove_url: string;
   unsubscribe_url: string;
+  /** Decision-maker first name (from Apollo) for personalized greeting */
+  decision_maker_first_name?: string | null;
 }
 
 export type ProviderSkipReason =
@@ -143,8 +145,12 @@ export function selectEligibleProviders(
  *   - city, state, category: For merge tags
  *   - gap_list: For Day 3 email
  *   - city_views: For Day 5 email
+ *   - greeting_name: For personalized greeting (first name if decision-maker, else org name)
  */
 export function providerToLead(row: ProviderBridgeRow): SmartleadLead {
+  // Use decision-maker's first name for greeting if available, else org name
+  const greetingName = row.decision_maker_first_name?.trim() || row.provider_name;
+
   return {
     email: row.email!.trim(),
     first_name: "", // Providers don't have a first name, we use company_name
@@ -162,6 +168,7 @@ export function providerToLead(row: ProviderBridgeRow): SmartleadLead {
       category: row.category ?? "care providers",
       gap_list: row.gap_list ?? "",
       city_views: String(row.city_views ?? 0),
+      greeting_name: greetingName,
     },
   };
 }
@@ -201,6 +208,7 @@ export function providersToLeads(rows: ProviderBridgeRow[]): {
  * These are filled per-lead at send time by SmartLead.
  */
 const MERGE_TAGS = {
+  greetingName: "{{greeting_name}}",  // For personalized greeting: first name if decision-maker, else org name
   providerName: "{{company_name}}",
   claimUrl: "{{claim_url}}",
   profileUrl: "{{profile_url}}",
@@ -224,6 +232,7 @@ const MAILING_ADDRESS = "340 S Lemon Ave #1439, Walnut, CA 91789";
  * Convert provider template variables to SmartLead merge tags.
  *
  * Template tokens → SmartLead merge tags:
+ *   {greeting_name} → {{greeting_name}}
  *   {provider_name} → {{company_name}}
  *   {claim_url} → {{claim_url}}
  *   {profile_url} → {{profile_url}}
@@ -234,6 +243,7 @@ const MAILING_ADDRESS = "340 S Lemon Ave #1439, Walnut, CA 91789";
  */
 function convertToSmartleadTokens(text: string): string {
   return text
+    .replace(/\{greeting_name\}/g, MERGE_TAGS.greetingName)
     .replace(/\{provider_name\}/g, MERGE_TAGS.providerName)
     .replace(/\{claim_url\}/g, MERGE_TAGS.claimUrl)
     .replace(/\{profile_url\}/g, MERGE_TAGS.profileUrl)
@@ -444,7 +454,11 @@ export function renderTemplateAsSmartleadHtml(
   let body = draft.body;
   let subject = draft.subject;
 
+  // Use decision-maker's first name for greeting if available, else org name
+  const greetingName = context.decision_maker?.first_name?.trim() || context.provider_name;
+
   const substitutions: Record<string, string> = {
+    "{greeting_name}": greetingName,
     "{provider_name}": context.provider_name,
     "{city}": context.city,
     "{state}": context.state,
@@ -473,6 +487,7 @@ export function renderTemplateAsSmartleadHtml(
   // Footer uses {{manage_url}} format which needs to be replaced with actual values
   let html = bodyHtml + footerHtml;
   const mergeTagSubstitutions: Record<string, string> = {
+    "{{greeting_name}}": greetingName,
     "{{company_name}}": context.provider_name,
     "{{city}}": context.city,
     "{{state}}": context.state,
@@ -962,9 +977,10 @@ export interface ProviderSmartleadPreview {
  */
 function substitutePreviewSample(
   text: string,
-  sample: { provider_name: string; city: string; state: string; category: string; gap_list: string; city_views: string }
+  sample: { provider_name: string; city: string; state: string; category: string; gap_list: string; city_views: string; greeting_name: string }
 ): string {
   return text
+    .replace(/\{\{greeting_name\}\}/g, sample.greeting_name)
     .replace(/\{\{company_name\}\}/g, sample.provider_name)
     .replace(/\{\{city\}\}/g, sample.city)
     .replace(/\{\{state\}\}/g, sample.state)
@@ -985,6 +1001,9 @@ export function buildProviderSmartleadPreview(input: {
   provider: ProviderBridgeRow;
   campaignName: string;
 }): ProviderSmartleadPreview {
+  // Use decision-maker's first name for greeting if available, else org name
+  const greetingName = input.provider.decision_maker_first_name?.trim() || input.provider.provider_name;
+
   const sample = {
     provider_name: input.provider.provider_name,
     city: input.provider.city ?? "Austin",
@@ -992,6 +1011,7 @@ export function buildProviderSmartleadPreview(input: {
     category: input.provider.category ?? "care providers",
     gap_list: input.provider.gap_list ?? "no pricing, no photos, and no description",
     city_views: String(input.provider.city_views ?? 42),
+    greeting_name: greetingName,
   };
 
   const sequence = buildProviderEmailSequence();

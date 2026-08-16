@@ -194,9 +194,10 @@ export async function executeProviderOutreachTask(taskId: string): Promise<Execu
 
   // 2. Validate tracking record is still in in_sequence stage
   // If provider claimed/archived since task was queued, skip sending
+  // Also fetch apollo_contact for personalized greeting
   const { data: tracking } = await db
     .from("provider_outreach_tracking")
-    .select("stage")
+    .select("stage, apollo_contact")
     .eq("id", tracking_id)
     .single();
 
@@ -206,6 +207,9 @@ export async function executeProviderOutreachTask(taskId: string): Promise<Execu
     });
     return { task_id: taskId, outcome: "skipped_stage_changed" };
   }
+
+  // Extract Apollo contact for personalized greeting
+  const apolloContact = tracking.apollo_contact as { first_name?: string } | null;
 
   // 3. Check if email is suppressed
   if (!recipientEmail) {
@@ -247,6 +251,13 @@ export async function executeProviderOutreachTask(taskId: string): Promise<Execu
     // Get city views for demand_loss email
     const cityViews = await getCityViews(provider.city, provider.provider_category, db);
 
+    // Build decision_maker for personalized greeting
+    const decisionMaker = apolloContact?.first_name ? {
+      first_name: apolloContact.first_name,
+      last_name: null,
+      title: null,
+    } : undefined;
+
     const context = buildContextFromProvider(
       {
         provider_id: provider.provider_id,
@@ -260,6 +271,7 @@ export async function executeProviderOutreachTask(taskId: string): Promise<Execu
       {
         gap_list: gapList,
         city_views: cityViews,
+        decision_maker: decisionMaker,
       }
     );
 

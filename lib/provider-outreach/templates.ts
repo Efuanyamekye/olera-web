@@ -60,6 +60,13 @@ export interface TemplateContext {
   // City demand metric (Day 5 template)
   // Total unique page views for this city+category in the last 30 days
   city_views?: number;
+  // Decision-maker data (from Apollo contact)
+  // Used for personalized greetings: "Hi John," vs "Hi Sunrise Senior Living,"
+  decision_maker?: {
+    first_name: string | null;
+    last_name: string | null;
+    title: string | null;
+  };
 }
 
 // Template keys for the cadence system
@@ -69,6 +76,7 @@ export type ProviderOutreachTemplateKey = "intro" | "followup" | "demand_loss" |
 
 // Placeholders for variable substitution
 const PLACEHOLDER = {
+  greetingName: "{greeting_name}",  // For personalized greeting: first name if decision-maker, else org name
   providerName: "{provider_name}",
   city: "{city}",
   state: "{state}",
@@ -140,7 +148,12 @@ export function substituteVars(
  * Build the variables object from context
  */
 export function buildVars(ctx: TemplateContext): Record<string, string> {
+  // Use decision-maker's first name for greeting if available,
+  // otherwise fall back to provider/organization name
+  const greetingName = ctx.decision_maker?.first_name?.trim() || ctx.provider_name;
+
   return {
+    greeting_name: greetingName,
     provider_name: ctx.provider_name,
     city: ctx.city || ctx.state || "your area",
     state: ctx.state,
@@ -175,7 +188,7 @@ function introEmail(): EmailDraft {
   return {
     subject: `Families in ${PLACEHOLDER.city} can see ${PLACEHOLDER.providerName} on Olera`,
     body: [
-      `Hi ${PLACEHOLDER.providerName},`,
+      `Hi ${PLACEHOLDER.greetingName},`,
       ``,
       `Families in ${PLACEHOLDER.city} searching for ${PLACEHOLDER.category} can already see the page we built for ${PLACEHOLDER.providerName} from public information. But if one of them reached out today, no one at ${PLACEHOLDER.providerName} would see the message.`,
       ``,
@@ -200,7 +213,7 @@ function followupEmail(): EmailDraft {
   return {
     subject: `Who updates ${PLACEHOLDER.providerName}'s page?`,
     body: [
-      `Hi ${PLACEHOLDER.providerName},`,
+      `Hi ${PLACEHOLDER.greetingName},`,
       ``,
       `${PLACEHOLDER.providerName}'s page on Olera shows what we could find publicly. But things change. Pricing, availability, staff, photos. Right now, no one at ${PLACEHOLDER.providerName} can update any of it.`,
       ``,
@@ -226,7 +239,7 @@ function demandLossEmail(_hasDemandData: boolean): EmailDraft {
   return {
     subject: `Families' questions are going to other providers`,
     body: [
-      `Hi ${PLACEHOLDER.providerName},`,
+      `Hi ${PLACEHOLDER.greetingName},`,
       ``,
       `Families on Olera sent providers questions and leads this week. If any came to ${PLACEHOLDER.providerName}, no one could answer them. No one has taken over your page yet.`,
       ``,
@@ -249,7 +262,7 @@ function finalEmail(): EmailDraft {
   return {
     subject: `We'll run ${PLACEHOLDER.providerName}'s first ad on us`,
     body: [
-      `Hi ${PLACEHOLDER.providerName},`,
+      `Hi ${PLACEHOLDER.greetingName},`,
       ``,
       `One last thing you should know. We'll set up and run ${PLACEHOLDER.providerName}'s first ad, on us, so more families in ${PLACEHOLDER.city} find you. It starts with taking over your page. Two minutes, free, no contracts or per-lead fees.`,
       ``,
@@ -275,7 +288,7 @@ function nudgeEmail(): EmailDraft {
   return {
     subject: `The link for ${PLACEHOLDER.providerName}'s page`,
     body: [
-      `Hi ${PLACEHOLDER.providerName},`,
+      `Hi ${PLACEHOLDER.greetingName},`,
       ``,
       `Here's the link to take over ${PLACEHOLDER.providerName}'s page on Olera:`,
       ``,
