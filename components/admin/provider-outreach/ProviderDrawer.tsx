@@ -273,16 +273,33 @@ function SectionDivider() {
 // Call Script Section (personalized for the provider)
 // ─────────────────────────────────────────────────────────────────────────────
 
-function CallScriptSection({ provider }: { provider: OutreachProvider }) {
+function CallScriptSection({ provider, activeTab }: { provider: OutreachProvider; activeTab: string }) {
   const city = provider.city || "your area";
   const careType = provider.provider_category || "senior care";
   const email = provider.email || "[email]";
+
+  // Different scripts per tab
+  const getScript = () => {
+    if (activeTab === "call_confirm") {
+      return (
+        <>
+          &quot;Hi, this is [your name] from Dr. DuBose&apos;s company office, calling about his Family Referral Program for <span className="text-gray-700">{city}</span> families. He&apos;d like to send your team some info on the program, and I wanted to check first on the best email to send the details to.&quot;
+        </>
+      );
+    }
+    // Default script for Follow Up and Call tabs
+    return (
+      <>
+        &quot;Hi, [Name] from Olera. Following up on emails about your listing. Free referral service for <span className="text-gray-700">{careType}</span> in <span className="text-gray-700">{city}</span>. Questions? 30 sec to activate. Is <span className="text-gray-700">{email}</span> best?&quot;
+      </>
+    );
+  };
 
   return (
     <div className="mx-4 mb-3 px-3 py-2 bg-gray-50 rounded text-[11px] text-gray-500">
       <div className="font-medium text-gray-400 mb-1">Script</div>
       <div className="leading-relaxed">
-        &quot;Hi, [Name] from Olera. Following up on emails about your listing. Free referral service for <span className="text-gray-700">{careType}</span> in <span className="text-gray-700">{city}</span>. Questions? 30 sec to activate. Is <span className="text-gray-700">{email}</span> best?&quot;
+        {getScript()}
       </div>
     </div>
   );
@@ -2322,7 +2339,7 @@ export function ProviderDrawer({
     <DrawerShell onClose={onClose} header={header} footer={actionsFooter}>
       <div className="py-2">
         {/* Call Script - show for Call & Confirm, Follow Up, and Call tabs */}
-        {showCallScript && <CallScriptSection provider={provider} />}
+        {showCallScript && <CallScriptSection provider={provider} activeTab={activeTab} />}
 
         {/* Contact Section */}
         <ContactSection
