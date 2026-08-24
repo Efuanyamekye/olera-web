@@ -273,7 +273,7 @@ function SectionDivider() {
 // Call Script Section (personalized for the provider)
 // ─────────────────────────────────────────────────────────────────────────────
 
-function CallScriptSection({ provider, activeTab }: { provider: OutreachProvider; activeTab: string }) {
+function CallScriptSection({ provider, activeTab }: { provider: OutreachProvider; activeTab?: string }) {
   const city = provider.city || "your area";
   const careType = provider.provider_category || "senior care";
   const email = provider.email || "[email]";
