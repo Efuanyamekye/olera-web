@@ -81,6 +81,7 @@ interface OutreachProvider {
   fax_status?: string | null;
   mail_address?: string | null;
   contact_form_url?: string | null;
+  contact_form_send_count?: number;
   // Call tab (call_exhausted) fields
   stage_changed_at?: string | null;
 }
@@ -114,6 +115,8 @@ interface ProviderDrawerProps {
   onOutcomeRecorded?: (providerId: string, stageChanged: boolean) => void;
   // Claim link sent callback (updates resend_count in local state)
   onClaimLinkSent?: (providerId: string, newResendCount: number) => void;
+  // Contact form sent callback (updates contact_form_send_count in local state)
+  onContactFormSent?: (providerId: string, newSendCount: number) => void;
   // Current UI context
   activeTab?: string;
 }
@@ -1094,6 +1097,7 @@ function FollowUpSection({
   const explanation = getFollowUpReasonExplanation(provider);
   const engagement = provider.engagement || { emails_sent: 0, opens: 0, clicks: 0, resends: 0 };
   const resendCount = provider.resend_count ?? 0;
+  const contactFormSendCount = provider.contact_form_send_count ?? 0;
 
   return (
     <div>
@@ -1132,6 +1136,12 @@ function FollowUpSection({
           <span className="text-gray-500">Emails Sent:</span>
           <span className="font-medium text-gray-900">{resendCount}</span>
         </div>
+        {contactFormSendCount > 0 && (
+          <div className="flex items-center gap-1.5">
+            <span className="text-gray-500">Forms Sent:</span>
+            <span className="font-medium text-gray-900">{contactFormSendCount}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1239,6 +1249,7 @@ function CallExhaustedSection({
   provider: OutreachProvider;
 }) {
   const emailsSent = provider.resend_count ?? 0;
+  const contactFormSendCount = provider.contact_form_send_count ?? 0;
   const daysSinceStageChange = provider.stage_changed_at
     ? Math.floor((Date.now() - new Date(provider.stage_changed_at).getTime()) / (1000 * 60 * 60 * 24))
     : 0;
@@ -1271,6 +1282,12 @@ function CallExhaustedSection({
           <span className="text-gray-500">Emails Sent:</span>
           <span className="font-medium text-gray-900">{emailsSent}</span>
         </div>
+        {contactFormSendCount > 0 && (
+          <div className="flex items-center gap-1.5">
+            <span className="text-gray-500">Forms Sent:</span>
+            <span className="font-medium text-gray-900">{contactFormSendCount}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -1289,6 +1306,7 @@ function ActionsSection({
   onMoveToReady,
   onOutcomeRecorded,
   onClaimLinkSent,
+  onContactFormSent,
   onClose,
   activeTab,
 }: {
@@ -1300,6 +1318,7 @@ function ActionsSection({
   onMoveToReady?: (providerId: string) => void;
   onOutcomeRecorded?: (providerId: string, stageChanged: boolean) => void;
   onClaimLinkSent?: (providerId: string, newResendCount: number) => void;
+  onContactFormSent?: (providerId: string, newSendCount: number) => void;
   onClose?: () => void;
   activeTab?: string;
 }) {
@@ -1581,21 +1600,45 @@ Questions? support@olera.care or (979) 243-9801`;
     setActionLoading(true);
     setActionError(null);
     try {
-      const res = await fetch("/api/admin/provider-outreach/record-outcome", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          provider_id: provider.provider_id,
-          outcome: "try_contact_form",
-          notes: `Contact form submitted: ${contactFormUrl}`,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to record submission");
-      setActionSuccess({ outcome: "try_contact_form" });
-      setConfirmAction(null);
-      onOutcomeRecorded?.(provider.provider_id, true);
-      setTimeout(() => onClose?.(), 1500);
+      // In Follow Up (needs_call), move to Alt Channels via record-outcome
+      // In other tabs, just record the send without stage change via send-contact-form
+      if (isFollowUp) {
+        const res = await fetch("/api/admin/provider-outreach/record-outcome", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider_id: provider.provider_id,
+            outcome: "try_contact_form",
+            notes: `Contact form submitted: ${contactFormUrl}`,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to record submission");
+        setActionSuccess({ outcome: "try_contact_form" });
+        setConfirmAction(null);
+        onOutcomeRecorded?.(provider.provider_id, true);
+        setTimeout(() => onClose?.(), 1500);
+      } else {
+        // Non-Follow-Up: Use new endpoint that doesn't change stage
+        const res = await fetch("/api/admin/provider-outreach/send-contact-form", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider_id: provider.provider_id,
+            contact_form_url: contactFormUrl.trim(),
+            notes: `Contact form submitted: ${contactFormUrl}`,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to record submission");
+        // Update local state with new send count
+        onContactFormSent?.(provider.provider_id, data.send_count);
+        setActionSuccess({ outcome: "contact_form_sent" });
+        setConfirmAction(null);
+        // Don't close drawer - provider stays in current tab
+        // Auto-clear success message after 3 seconds
+        setTimeout(() => setActionSuccess(null), 3000);
+      }
     } catch (err) {
       setActionError(err instanceof Error ? err.message : "Failed to record submission");
     } finally {
@@ -1628,6 +1671,7 @@ Questions? support@olera.care or (979) 243-9801`;
         try_contact_form: "Moved to Alt Channels (Contact Form)",
         try_direct_mail: "Moved to Alt Channels (Direct Mail)",
         direct_mail: "Postcard sent",
+        contact_form_sent: "Contact form submitted",
       };
       message = messages[actionSuccess.outcome] || "Done";
     }
@@ -2101,6 +2145,13 @@ Questions? support@olera.care or (979) 243-9801`;
           </button>
         )}
 
+        {/* Contact Form - for non-follow-up, non-terminal stages (supplementary channel, no stage change) */}
+        {!isTerminal && !isFollowUp && (
+          <button onClick={() => setConfirmAction("contact_form")} className={outlineBtn}>
+            Contact Form
+          </button>
+        )}
+
         {/* Follow Up specific actions - move to alternative channels */}
         {isFollowUp && (
           <>
@@ -2181,6 +2232,7 @@ export function ProviderDrawer({
   onContactFound,
   onOutcomeRecorded,
   onClaimLinkSent,
+  onContactFormSent,
   activeTab,
 }: ProviderDrawerProps) {
   // Determine if we should show Follow Up section
@@ -2226,6 +2278,7 @@ export function ProviderDrawer({
       onMoveToReady={onMoveToReady}
       onOutcomeRecorded={onOutcomeRecorded}
       onClaimLinkSent={onClaimLinkSent}
+      onContactFormSent={onContactFormSent}
       onClose={onClose}
       activeTab={activeTab}
     />

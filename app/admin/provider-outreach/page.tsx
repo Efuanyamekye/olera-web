@@ -295,6 +295,7 @@ interface OutreachProvider {
   mail_address: string | null;
   contact_form_url: string | null;
   contact_form_status: "found" | "not_found" | null;
+  contact_form_send_count?: number;
   // Assignment
   assigned_to: string | null;
   // Sequence progress (for in_sequence stage)
@@ -1900,6 +1901,13 @@ function CityRow({
                               {provider.emails_sent}/4
                             </span>
                           )}
+
+                          {/* Contact form indicator */}
+                          {(provider.contact_form_url || (provider.contact_form_send_count ?? 0) > 0) && (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-600" title={(provider.contact_form_send_count ?? 0) > 0 ? `${provider.contact_form_send_count} form(s) sent` : "Has contact form"}>
+                              Form{(provider.contact_form_send_count ?? 0) > 0 ? ` (${provider.contact_form_send_count})` : ""}
+                            </span>
+                          )}
                         </div>
 
                         {/* Row 2: Category · City, State · Phone · Email */}
@@ -2034,6 +2042,7 @@ function FollowUpProviderRow({
 }) {
   const dueBadge = formatDueDateBadge(provider.due_date);
   const reasonChip = getNeedsCallReasonChip(provider.needs_call_reason);
+  const formSendCount = provider.contact_form_send_count ?? 0;
 
   return (
     <div className="border-b border-gray-100 last:border-b-0">
@@ -2062,6 +2071,11 @@ function FollowUpProviderRow({
                 {provider.provider_name}
               </Link>
               <div className="flex items-center gap-2 shrink-0">
+                {(provider.contact_form_url || formSendCount > 0) && (
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-600" title={formSendCount > 0 ? `${formSendCount} form(s) sent` : "Has contact form"}>
+                    Form{formSendCount > 0 ? ` (${formSendCount})` : ""}
+                  </span>
+                )}
                 {reasonChip && (
                   <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${reasonChip.className}`}>
                     {reasonChip.label}
@@ -2286,6 +2300,7 @@ function ReEngageProviderRow({
   const waitDays = daysSince(provider.re_engage_entered_at);
   const channelInfo = getChannelLabel(provider.re_engage_channel || null);
   const isExpired = waitDays >= DIRECT_MAIL_EXPIRY_DAYS;
+  const formSendCount = provider.contact_form_send_count ?? 0;
 
   return (
     <div className="border-b border-gray-100 last:border-b-0">
@@ -2333,6 +2348,11 @@ function ReEngageProviderRow({
                 {provider.provider_name}
               </Link>
               <div className="flex items-center gap-2 shrink-0">
+                {(provider.contact_form_url || formSendCount > 0) && (
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-600" title={formSendCount > 0 ? `${formSendCount} form(s) sent` : "Has contact form"}>
+                    Form{formSendCount > 0 ? ` (${formSendCount})` : ""}
+                  </span>
+                )}
                 {channelInfo && (
                   <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${channelInfo.className}`}>
                     {channelInfo.label}
@@ -2353,7 +2373,7 @@ function ReEngageProviderRow({
               )}
               {(provider.provider_category || provider.city) && <span>·</span>}
               {provider.phone ? (
-                <a
+                <
                   href={`tel:${provider.phone.replace(/\D/g, "")}`}
                   className="text-primary-600 hover:text-primary-700 hover:underline"
                   onClick={(e) => e.stopPropagation()}
@@ -2491,6 +2511,7 @@ function CallProviderRow({
     ? daysSince(provider.stage_changed_at)
     : 0;
   const emailsSent = provider.resend_count ?? 0;
+  const formSendCount = provider.contact_form_send_count ?? 0;
 
   return (
     <div
@@ -2518,6 +2539,11 @@ function CallProviderRow({
               {provider.provider_name}
             </Link>
             <div className="flex items-center gap-2 shrink-0">
+              {(provider.contact_form_url || formSendCount > 0) && (
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-600" title={formSendCount > 0 ? `${formSendCount} form(s) sent` : "Has contact form"}>
+                  Form{formSendCount > 0 ? ` (${formSendCount})` : ""}
+                </span>
+              )}
               {emailsSent > 0 && (
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600">
                   {emailsSent} sent
@@ -7320,6 +7346,22 @@ export default function ProviderOutreachPage() {
             setDrawerProvider((prev) =>
               prev && prev.provider_id === providerId
                 ? { ...prev, resend_count: newResendCount }
+                : prev
+            );
+          }}
+          onContactFormSent={(providerId, newSendCount) => {
+            // Update contact_form_send_count in local state after form is sent
+            setProviders((prev) =>
+              prev.map((p) =>
+                p.provider_id === providerId
+                  ? { ...p, contact_form_send_count: newSendCount }
+                  : p
+              )
+            );
+            // Update drawer provider too
+            setDrawerProvider((prev) =>
+              prev && prev.provider_id === providerId
+                ? { ...prev, contact_form_send_count: newSendCount }
                 : prev
             );
           }}
