@@ -288,7 +288,7 @@ function CallScriptSection({ provider, activeTab }: { provider: OutreachProvider
         </>
       );
     }
-    if (activeTab === "follow_up") {
+    if (activeTab === "needs_call" || activeTab === "follow_up") {
       // After 4-email sequence. First human contact. Check if they got emails, offer alternative channels.
       return (
         <>
@@ -302,7 +302,7 @@ function CallScriptSection({ provider, activeTab }: { provider: OutreachProvider
         </>
       );
     }
-    if (activeTab === "call") {
+    if (activeTab === "call_exhausted" || activeTab === "call") {
       // After emails + alternative channels. Final push. Offer help to activate.
       return (
         <>
@@ -2343,10 +2343,8 @@ export function ProviderDrawer({
   // Show call script for tabs where calling is the primary action
   const showCallScript =
     activeTab === "call_confirm" ||
-    activeTab === "follow_up" ||
-    activeTab === "call_exhausted" ||
-    provider.stage === "needs_call" ||
-    provider.stage === "call_exhausted";
+    activeTab === "needs_call" ||
+    activeTab === "call_exhausted";
 
   return (
     <DrawerShell onClose={onClose} header={header} footer={actionsFooter}>
