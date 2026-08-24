@@ -2373,7 +2373,7 @@ function ReEngageProviderRow({
               )}
               {(provider.provider_category || provider.city) && <span>·</span>}
               {provider.phone ? (
-                <
+                <a
                   href={`tel:${provider.phone.replace(/\D/g, "")}`}
                   className="text-primary-600 hover:text-primary-700 hover:underline"
                   onClick={(e) => e.stopPropagation()}
