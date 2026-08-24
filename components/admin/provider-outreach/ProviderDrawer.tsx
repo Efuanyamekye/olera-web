@@ -1126,12 +1126,10 @@ function ActivitySection({ provider }: { provider: OutreachProvider }) {
           <span className="text-2xl font-semibold text-gray-900">{emailsSent}</span>
           <span className="ml-1.5 text-sm text-gray-500">Emails Sent</span>
         </div>
-        {formsSent > 0 && (
-          <div>
-            <span className="text-2xl font-semibold text-gray-900">{formsSent}</span>
-            <span className="ml-1.5 text-sm text-gray-500">Forms Sent</span>
-          </div>
-        )}
+        <div>
+          <span className="text-2xl font-semibold text-gray-900">{formsSent}</span>
+          <span className="ml-1.5 text-sm text-gray-500">Forms Sent</span>
+        </div>
         <div>
           <span className="text-2xl font-semibold text-gray-900">{questionsCount}</span>
           <span className="ml-1.5 text-sm text-gray-500">Questions</span>
@@ -1198,12 +1196,10 @@ function FollowUpSection({
           <span className="text-gray-500">Emails Sent:</span>
           <span className="font-medium text-gray-900">{resendCount}</span>
         </div>
-        {contactFormSendCount > 0 && (
-          <div className="flex items-center gap-1.5">
-            <span className="text-gray-500">Forms Sent:</span>
-            <span className="font-medium text-gray-900">{contactFormSendCount}</span>
-          </div>
-        )}
+        <div className="flex items-center gap-1.5">
+          <span className="text-gray-500">Forms Sent:</span>
+          <span className="font-medium text-gray-900">{contactFormSendCount}</span>
+        </div>
       </div>
     </div>
   );
@@ -1344,12 +1340,10 @@ function CallExhaustedSection({
           <span className="text-gray-500">Emails Sent:</span>
           <span className="font-medium text-gray-900">{emailsSent}</span>
         </div>
-        {contactFormSendCount > 0 && (
-          <div className="flex items-center gap-1.5">
-            <span className="text-gray-500">Forms Sent:</span>
-            <span className="font-medium text-gray-900">{contactFormSendCount}</span>
-          </div>
-        )}
+        <div className="flex items-center gap-1.5">
+          <span className="text-gray-500">Forms Sent:</span>
+          <span className="font-medium text-gray-900">{contactFormSendCount}</span>
+        </div>
       </div>
     </div>
   );
