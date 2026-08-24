@@ -279,8 +279,11 @@ function CallScriptSection({ provider }: { provider: OutreachProvider }) {
   const email = provider.email || "[email]";
 
   return (
-    <div className="mx-4 mb-3 px-3 py-2 bg-gray-50 rounded text-[11px] text-gray-500 leading-relaxed">
-      <span className="text-gray-400">Script:</span> &quot;Hi, [Name] from Olera. Following up on emails about your listing. Free referral service for <span className="text-gray-600">{careType}</span> in <span className="text-gray-600">{city}</span>. Questions? 30 sec to activate. Is <span className="text-gray-600">{email}</span> best?&quot;
+    <div className="mx-4 mb-3 px-3 py-2 bg-gray-50 rounded text-[11px] text-gray-500">
+      <div className="font-medium text-gray-400 mb-1">Script</div>
+      <div className="leading-relaxed">
+        &quot;Hi, [Name] from Olera. Following up on emails about your listing. Free referral service for <span className="text-gray-700">{careType}</span> in <span className="text-gray-700">{city}</span>. Questions? 30 sec to activate. Is <span className="text-gray-700">{email}</span> best?&quot;
+      </div>
     </div>
   );
 }

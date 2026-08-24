@@ -2228,30 +2228,6 @@ function FollowUpQueue({ providers, loading, onOpenDrawer }: {
 
   return (
     <div>
-      {/* Page-level Call Script - collapsible, applies to all providers */}
-      <details className="mx-5 mt-4 mb-2 bg-white border border-gray-200 rounded-lg">
-        <summary className="px-4 py-2.5 text-sm font-medium text-gray-700 cursor-pointer hover:bg-gray-50 select-none flex items-center gap-2">
-          <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
-          </svg>
-          Call Script
-        </summary>
-        <div className="px-4 py-3 border-t border-gray-100 text-sm text-gray-600 space-y-3">
-          <p>
-            &quot;Hi, this is <span className="font-medium text-gray-800">[Your Name]</span> from Olera, calling on behalf of Dr. Logan DuBose&apos;s office.&quot;
-          </p>
-          <p>
-            &quot;I&apos;m following up on the emails we sent about your listing on Olera. We run a free family referral service for <span className="font-medium text-gray-800">[care type]</span> in <span className="font-medium text-gray-800">[city]</span>.&quot;
-          </p>
-          <p>
-            &quot;I wanted to check if you had any questions or if there&apos;s anything stopping you from activating your page. It takes about 30 seconds.&quot;
-          </p>
-          <p>
-            &quot;I can resend the link right now if that helps—is <span className="font-medium text-gray-800">[email on file]</span> still the best address?&quot;
-          </p>
-        </div>
-      </details>
-
       {renderSection("Overdue", overdue, "bg-red-50 text-red-700 border-b border-red-100")}
       {renderSection("Due Today", dueToday, "bg-amber-50 text-amber-700 border-b border-amber-100")}
       {renderSection("Upcoming", upcoming, "bg-gray-50 text-gray-600 border-b border-gray-100")}
@@ -5313,23 +5289,6 @@ export default function ProviderOutreachPage() {
         ) : activeTab === "call_exhausted" ? (
           // Call tab: providers needing manual resolution
           <>
-            {/* Call Script */}
-            <details className="mx-5 mt-2 mb-4" open>
-              <summary className="py-2 text-sm font-medium text-gray-600 cursor-pointer hover:text-gray-900 select-none">
-                Call Script
-              </summary>
-              <div className="pl-4 pt-2 pb-3 text-sm text-gray-600 space-y-3 border-l-2 border-orange-200 ml-1 bg-orange-50 rounded-r-lg">
-                <p className="font-medium text-orange-800">
-                  These providers have been through all outreach channels without claiming. Call them directly:
-                </p>
-                <p>
-                  &quot;Hi, this is <span className="font-medium text-gray-800">[Your Name]</span> from Olera, following up on the referral service listing we sent over.&quot;
-                </p>
-                <p>
-                  &quot;I wanted to make sure you received our emails. Can I verify your email address and resend the activation link while we&apos;re on the phone?&quot;
-                </p>
-              </div>
-            </details>
             <CallQueue
               providers={providers}
               loading={loadingProviders}
@@ -5339,26 +5298,6 @@ export default function ProviderOutreachPage() {
         ) : (
           // Normal city-grouped view
           <>
-            {/* Call Script - show on Call & Confirm tab */}
-            {activeTab === "call_confirm" && (
-              <details className="mx-5 mt-2 mb-4">
-                <summary className="py-2 text-sm font-medium text-gray-600 cursor-pointer hover:text-gray-900 select-none">
-                  Call Script
-                </summary>
-                <div className="pl-4 pt-2 pb-3 text-sm text-gray-600 space-y-3 border-l-2 border-gray-200 ml-1">
-                  <p>
-                    &quot;Hi, this is <span className="font-medium text-gray-800">[Your Name]</span> from Olera, calling on behalf of Dr. Logan DuBose&apos;s office.&quot;
-                  </p>
-                  <p>
-                    &quot;I hope I reached the right person. Olera runs a free family referral service for <span className="font-medium text-gray-800">[care type]</span> here in <span className="font-medium text-gray-800">[city]</span>.&quot;
-                  </p>
-                  <p>
-                    &quot;I&apos;m getting ready to send over your activation link so you can manage your listing and receive direct referrals. I have <span className="font-medium text-gray-800">[email on file]</span> listed for you—is that still the best address?&quot;
-                  </p>
-                </div>
-              </details>
-            )}
-
             {/* Header */}
             <div className="flex items-center gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
               <div className="w-5" />
