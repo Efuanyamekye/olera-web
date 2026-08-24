@@ -1902,16 +1902,12 @@ function CityRow({
                             </span>
                           )}
 
-                          {/* Contact form indicator */}
-                          {(provider.contact_form_url || (provider.contact_form_send_count ?? 0) > 0) ? (
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-600" title={(provider.contact_form_send_count ?? 0) > 0 ? `${provider.contact_form_send_count} form(s) sent` : "Contact form URL found"}>
-                              Form{(provider.contact_form_send_count ?? 0) > 0 ? ` (${provider.contact_form_send_count})` : ""}
-                            </span>
-                          ) : provider.website ? (
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600" title="Has website - contact form can be found">
+                          {/* Web indicator - show if provider has website */}
+                          {provider.website && (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600" title="Has website">
                               Web
                             </span>
-                          ) : null}
+                          )}
                         </div>
 
                         {/* Row 2: Category · City, State · Phone · Email */}
@@ -2075,15 +2071,11 @@ function FollowUpProviderRow({
                 {provider.provider_name}
               </Link>
               <div className="flex items-center gap-2 shrink-0">
-                {(provider.contact_form_url || formSendCount > 0) ? (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-600" title={formSendCount > 0 ? `${formSendCount} form(s) sent` : "Contact form URL found"}>
-                    Form{formSendCount > 0 ? ` (${formSendCount})` : ""}
-                  </span>
-                ) : provider.website ? (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600" title="Has website - contact form can be found">
+                {provider.website && (
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600" title="Has website">
                     Web
                   </span>
-                ) : null}
+                )}
                 {reasonChip && (
                   <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${reasonChip.className}`}>
                     {reasonChip.label}
@@ -2332,15 +2324,11 @@ function ReEngageProviderRow({
                 {provider.provider_name}
               </Link>
               <div className="flex items-center gap-2 shrink-0">
-                {(provider.contact_form_url || formSendCount > 0) ? (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-600" title={formSendCount > 0 ? `${formSendCount} form(s) sent` : "Contact form URL found"}>
-                    Form{formSendCount > 0 ? ` (${formSendCount})` : ""}
-                  </span>
-                ) : provider.website ? (
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600" title="Has website - contact form can be found">
+                {provider.website && (
+                  <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600" title="Has website">
                     Web
                   </span>
-                ) : null}
+                )}
                 {channelInfo && (
                   <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${channelInfo.className}`}>
                     {channelInfo.label}
@@ -2527,15 +2515,11 @@ function CallProviderRow({
               {provider.provider_name}
             </Link>
             <div className="flex items-center gap-2 shrink-0">
-              {(provider.contact_form_url || formSendCount > 0) ? (
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-50 text-orange-600" title={formSendCount > 0 ? `${formSendCount} form(s) sent` : "Contact form URL found"}>
-                  Form{formSendCount > 0 ? ` (${formSendCount})` : ""}
-                </span>
-              ) : provider.website ? (
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600" title="Has website - contact form can be found">
+              {provider.website && (
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-50 text-blue-600" title="Has website">
                   Web
                 </span>
-              ) : null}
+              )}
               {emailsSent > 0 && (
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-600">
                   {emailsSent} sent
