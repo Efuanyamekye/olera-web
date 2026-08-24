@@ -289,18 +289,24 @@ function CallScriptSection({ provider, activeTab }: { provider: OutreachProvider
       );
     }
     if (activeTab === "follow_up") {
-      // After 4-email sequence (7 days). They saw all marketing emails but didn't claim. First human contact.
+      // After 4-email sequence. First human contact. Check if they got emails, offer alternative channels.
       return (
         <>
-          &quot;Hi, this is [your name] from Dr. DuBose&apos;s office. I&apos;m following up on the Family Referral Program emails we sent to <span className="text-gray-700">{email}</span>. I wanted to see if you had any questions about how it works - we connect <span className="text-gray-700">{city}</span> families with <span className="text-gray-700">{careType}</span> providers at no cost to you.&quot;
+          <div>&quot;Hi, this is [your name] from Dr. DuBose&apos;s office. Just checking - did you get the emails we sent about your Olera page? Families in <span className="text-gray-700">{city}</span> are trying to reach you but those messages aren&apos;t getting through.&quot;</div>
+          <div className="mt-2 text-gray-400 italic">
+            If no: &quot;I can send it another way - fax, mail, or through your contact form. What works best?&quot;
+          </div>
+          <div className="text-gray-400 italic">
+            If yes: &quot;Any issues with the link, or questions I can answer?&quot;
+          </div>
         </>
       );
     }
     if (activeTab === "call") {
-      // After emails + alternative channels + 7-day wait. 14+ days total. Final push before archiving.
+      // After emails + alternative channels. Final push. Offer help to activate.
       return (
         <>
-          &quot;Hi, this is [your name] from Dr. DuBose&apos;s office. We&apos;ve reached out a few times about his Family Referral Program for <span className="text-gray-700">{city}</span> families. Before I close out your file, I wanted to give you one last chance to get set up - it only takes 30 seconds and there&apos;s no cost. Would you like me to send the signup link?&quot;
+          &quot;Hi, this is [your name] from Dr. DuBose&apos;s office. We&apos;ve reached out a few times about your Olera page - <span className="text-gray-700">{city}</span> families are looking for <span className="text-gray-700">{careType}</span> and their messages aren&apos;t getting to you. Do you need help activating your page?&quot;
         </>
       );
     }
