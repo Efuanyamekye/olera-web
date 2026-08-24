@@ -6533,7 +6533,7 @@ export default function ProviderOutreachPage() {
                         <p className="font-medium">Failed to load email preview</p>
                         <p className="mt-1 text-xs text-red-500">{sequencePreviewError}</p>
                       </div>
-                    ) : sequencePreviewData?.cadence ? (
+                    ) : sequencePreviewData?.providers?.some(p => p.valid && p.emails?.length > 0) ? (
                       <>
                         {/* Provider selector for batch preview */}
                         {sequencePreviewData.providers.filter(p => p.valid).length > 1 && (
@@ -6553,33 +6553,25 @@ export default function ProviderOutreachPage() {
                           </div>
                         )}
 
-                        {/* Day selector tabs */}
-                        <div className="flex gap-2 border-b border-gray-200">
-                          {sequencePreviewData.cadence.map((step) => (
-                            <button
-                              key={step.day}
-                              onClick={() => setPreviewDay(step.day)}
-                              className={`px-3 py-2 text-sm font-medium border-b-2 transition-colors ${
-                                previewDay === step.day
-                                  ? "border-primary-600 text-primary-600"
-                                  : "border-transparent text-gray-500 hover:text-gray-700"
-                              }`}
-                            >
-                              Day {step.day}
-                            </button>
-                          ))}
-                        </div>
-
-                        {/* Email preview */}
+                        {/* Day selector tabs - use cadence from response or hardcoded days */}
                         {(() => {
+                          const cadenceDays = sequencePreviewData.cadence?.length > 0
+                            ? sequencePreviewData.cadence
+                            : [
+                                { day: 0, templateKey: "intro", description: "Introduction email" },
+                                { day: 3, templateKey: "followup", description: "Follow-up email" },
+                                { day: 5, templateKey: "demand_loss", description: "Why it's free" },
+                                { day: 7, templateKey: "final", description: "Get verified" },
+                              ];
+
                           const selectedProvider = sequencePreviewData.providers.find(
                             p => p.provider_id === previewProviderId && p.valid
                           ) || sequencePreviewData.providers.find(p => p.valid);
-                          const selectedEmail = selectedProvider?.emails.find(e => e.day === previewDay);
-                          const stepInfo = sequencePreviewData.cadence.find(c => c.day === previewDay);
+                          const selectedEmail = selectedProvider?.emails?.find(e => e.day === previewDay);
+                          const stepInfo = cadenceDays.find(c => c.day === previewDay);
 
                           // Get SmartLead preview HTML if available
-                          const smartleadStepIndex = sequencePreviewData.cadence.findIndex(c => c.day === previewDay);
+                          const smartleadStepIndex = cadenceDays.findIndex(c => c.day === previewDay);
                           const smartleadStep = selectedProvider?.smartlead_preview?.steps[smartleadStepIndex];
                           const hasSmartleadPreview = !!smartleadStep?.body_html_preview;
 
@@ -6589,105 +6581,93 @@ export default function ProviderOutreachPage() {
                             ? smartleadStep?.body_html_preview
                             : selectedEmail?.html;
 
-                          if (!selectedEmail) return (
-                            <div className="rounded-lg bg-gray-50 p-4 border border-gray-100 text-center text-sm text-gray-500">
-                              No email preview available
-                            </div>
-                          );
-
                           return (
-                            <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
-                              {/* Email header */}
-                              <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">
-                                    {stepInfo?.description || `Day ${previewDay}`}
-                                  </span>
-                                  <span className="text-xs text-gray-400">
-                                    {previewDay === 0 ? "Sent immediately" : `Sent ${previewDay} days after start`}
-                                  </span>
-                                  {/* Preview engine toggle - only show when SmartLead preview is available */}
-                                  {hasSmartleadPreview && (
-                                    <div className="ml-auto flex items-center gap-1 bg-white border border-gray-200 rounded-md p-0.5">
-                                      <button
-                                        onClick={() => setPreviewEngine("smartlead")}
-                                        className={`px-2 py-0.5 text-xs font-medium rounded transition-colors ${
-                                          previewEngine === "smartlead"
-                                            ? "bg-blue-100 text-blue-700"
-                                            : "text-gray-500 hover:text-gray-700"
-                                        }`}
-                                      >
-                                        SmartLead
-                                      </button>
-                                      <button
-                                        onClick={() => setPreviewEngine("resend")}
-                                        className={`px-2 py-0.5 text-xs font-medium rounded transition-colors ${
-                                          previewEngine === "resend"
-                                            ? "bg-gray-200 text-gray-700"
-                                            : "text-gray-500 hover:text-gray-700"
-                                        }`}
-                                      >
-                                        Resend
-                                      </button>
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="text-xs text-gray-500 space-y-0.5">
-                                  <p><span className="font-medium text-gray-600">To:</span> {selectedProvider?.email}</p>
-                                  <p><span className="font-medium text-gray-600">From:</span> {sequencePreviewData?.sender?.from ?? "Dr. Logan DuBose · Olera <noreply@oleracare.com>"}</p>
-                                  <p>
-                                    <span className="font-medium text-gray-600">Subject:</span>{" "}
-                                    {showSmartleadHtml ? smartleadStep?.subject_preview : selectedEmail.subject}
-                                  </p>
-                                </div>
+                            <>
+                              <div className="flex gap-2 border-b border-gray-200">
+                                {cadenceDays.map((step) => (
+                                  <button
+                                    key={step.day}
+                                    onClick={() => setPreviewDay(step.day)}
+                                    className={`px-3 py-2 text-sm font-medium border-b-2 transition-colors ${
+                                      previewDay === step.day
+                                        ? "border-primary-600 text-primary-600"
+                                        : "border-transparent text-gray-500 hover:text-gray-700"
+                                    }`}
+                                  >
+                                    Day {step.day}
+                                  </button>
+                                ))}
                               </div>
-                              {/* Email body - rendered HTML in iframe to isolate from Tailwind CSS */}
-                              <iframe
-                                srcDoc={previewHtmlToShow}
-                                title="Email preview"
-                                className="w-full h-[300px] bg-white border-0"
-                                sandbox=""
-                              />
-                            </div>
+
+                              {/* Email preview */}
+                              {!selectedEmail ? (
+                                <div className="rounded-lg bg-gray-50 p-4 border border-gray-100 text-center text-sm text-gray-500">
+                                  No email preview available for Day {previewDay}
+                                </div>
+                              ) : (
+                                <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
+                                  {/* Email header */}
+                                  <div className="px-4 py-3 bg-gray-50 border-b border-gray-200">
+                                    <div className="flex items-center gap-2 mb-1">
+                                      <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">
+                                        {stepInfo?.description || `Day ${previewDay}`}
+                                      </span>
+                                      <span className="text-xs text-gray-400">
+                                        {previewDay === 0 ? "Sent immediately" : `Sent ${previewDay} days after start`}
+                                      </span>
+                                      {/* Preview engine toggle - only show when SmartLead preview is available */}
+                                      {hasSmartleadPreview && (
+                                        <div className="ml-auto flex items-center gap-1 bg-white border border-gray-200 rounded-md p-0.5">
+                                          <button
+                                            onClick={() => setPreviewEngine("smartlead")}
+                                            className={`px-2 py-0.5 text-xs font-medium rounded transition-colors ${
+                                              previewEngine === "smartlead"
+                                                ? "bg-blue-100 text-blue-700"
+                                                : "text-gray-500 hover:text-gray-700"
+                                            }`}
+                                          >
+                                            SmartLead
+                                          </button>
+                                          <button
+                                            onClick={() => setPreviewEngine("resend")}
+                                            className={`px-2 py-0.5 text-xs font-medium rounded transition-colors ${
+                                              previewEngine === "resend"
+                                                ? "bg-gray-200 text-gray-700"
+                                                : "text-gray-500 hover:text-gray-700"
+                                            }`}
+                                          >
+                                            Resend
+                                          </button>
+                                        </div>
+                                      )}
+                                    </div>
+                                    <div className="text-xs text-gray-500 space-y-0.5">
+                                      <p><span className="font-medium text-gray-600">To:</span> {selectedProvider?.email}</p>
+                                      <p><span className="font-medium text-gray-600">From:</span> {sequencePreviewData?.sender?.from ?? "Dr. Logan DuBose · Olera <noreply@oleracare.com>"}</p>
+                                      <p>
+                                        <span className="font-medium text-gray-600">Subject:</span>{" "}
+                                        {showSmartleadHtml ? smartleadStep?.subject_preview : selectedEmail.subject}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  {/* Email body - rendered HTML in iframe to isolate from Tailwind CSS */}
+                                  <iframe
+                                    srcDoc={previewHtmlToShow}
+                                    title="Email preview"
+                                    className="w-full h-[300px] bg-white border-0"
+                                    sandbox=""
+                                  />
+                                </div>
+                              )}
+                            </>
                           );
                         })()}
                       </>
                     ) : (
-                      // Fallback for when preview data is not available
-                      <>
-                        <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Day 0</span>
-                            <span className="text-xs text-gray-400">Immediate</span>
-                          </div>
-                          <p className="text-sm font-medium text-gray-800">Introduction Email</p>
-                          <p className="text-xs text-gray-500 mt-1">Explains value of claiming profile on Olera</p>
-                        </div>
-                        <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Day 3</span>
-                            <span className="text-xs text-gray-400">+3 days</span>
-                          </div>
-                          <p className="text-sm font-medium text-gray-800">Follow-up Email</p>
-                          <p className="text-xs text-gray-500 mt-1">Profile gaps and value proposition</p>
-                        </div>
-                        <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Day 5</span>
-                            <span className="text-xs text-gray-400">+5 days</span>
-                          </div>
-                          <p className="text-sm font-medium text-gray-800">Why It&apos;s Free Email</p>
-                          <p className="text-xs text-gray-500 mt-1">No fees, direct family connections</p>
-                        </div>
-                        <div className="rounded-lg bg-gray-50 p-4 border border-gray-100">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-medium text-primary-600 bg-primary-50 px-2 py-0.5 rounded">Day 7</span>
-                            <span className="text-xs text-gray-400">+7 days</span>
-                          </div>
-                          <p className="text-sm font-medium text-gray-800">Get Verified Email</p>
-                          <p className="text-xs text-gray-500 mt-1">Trust badge for families</p>
-                        </div>
-                      </>
+                      // Fallback only when no valid providers with emails
+                      <div className="rounded-lg bg-gray-50 p-4 border border-gray-100 text-center text-sm text-gray-500">
+                        No providers with valid emails to preview
+                      </div>
                     )}
                   </div>
                 )}
