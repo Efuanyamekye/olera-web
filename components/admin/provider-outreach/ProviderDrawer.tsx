@@ -278,21 +278,34 @@ function CallScriptSection({ provider, activeTab }: { provider: OutreachProvider
   const careType = provider.provider_category || "senior care";
   const email = provider.email || "[email]";
 
-  // Different scripts per tab
+  // Different scripts per tab based on where provider is in the outreach lifecycle
   const getScript = () => {
     if (activeTab === "call_confirm") {
+      // First contact - no emails sent yet. Goal: confirm email, launch sequence.
       return (
         <>
           &quot;Hi, this is [your name] from Dr. DuBose&apos;s company office, calling about his Family Referral Program for <span className="text-gray-700">{city}</span> families. He&apos;d like to send your team some info on the program, and I wanted to check first on the best email to send the details to.&quot;
         </>
       );
     }
-    // Default script for Follow Up and Call tabs
-    return (
-      <>
-        &quot;Hi, [Name] from Olera. Following up on emails about your listing. Free referral service for <span className="text-gray-700">{careType}</span> in <span className="text-gray-700">{city}</span>. Questions? 30 sec to activate. Is <span className="text-gray-700">{email}</span> best?&quot;
-      </>
-    );
+    if (activeTab === "follow_up") {
+      // After 4-email sequence (7 days). They saw all marketing emails but didn't claim. First human contact.
+      return (
+        <>
+          &quot;Hi, this is [your name] from Dr. DuBose&apos;s office. I&apos;m following up on the Family Referral Program emails we sent to <span className="text-gray-700">{email}</span>. I wanted to see if you had any questions about how it works - we connect <span className="text-gray-700">{city}</span> families with <span className="text-gray-700">{careType}</span> providers at no cost to you.&quot;
+        </>
+      );
+    }
+    if (activeTab === "call") {
+      // After emails + alternative channels + 7-day wait. 14+ days total. Final push before archiving.
+      return (
+        <>
+          &quot;Hi, this is [your name] from Dr. DuBose&apos;s office. We&apos;ve reached out a few times about his Family Referral Program for <span className="text-gray-700">{city}</span> families. Before I close out your file, I wanted to give you one last chance to get set up - it only takes 30 seconds and there&apos;s no cost. Would you like me to send the signup link?&quot;
+        </>
+      );
+    }
+    // Fallback (shouldn't reach here given showCallScript logic)
+    return null;
   };
 
   return (
