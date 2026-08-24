@@ -1077,6 +1077,7 @@ function ActivitySection({ provider }: { provider: OutreachProvider }) {
   const questionsCount = provider.questions_count ?? 0;
   const leadsCount = provider.leads_count ?? 0;
   const emailsSent = provider.resend_count ?? 0;
+  const formsSent = provider.contact_form_send_count ?? 0;
 
   return (
     <div>
@@ -1086,6 +1087,12 @@ function ActivitySection({ provider }: { provider: OutreachProvider }) {
           <span className="text-2xl font-semibold text-gray-900">{emailsSent}</span>
           <span className="ml-1.5 text-sm text-gray-500">Emails Sent</span>
         </div>
+        {formsSent > 0 && (
+          <div>
+            <span className="text-2xl font-semibold text-gray-900">{formsSent}</span>
+            <span className="ml-1.5 text-sm text-gray-500">Forms Sent</span>
+          </div>
+        )}
         <div>
           <span className="text-2xl font-semibold text-gray-900">{questionsCount}</span>
           <span className="ml-1.5 text-sm text-gray-500">Questions</span>
