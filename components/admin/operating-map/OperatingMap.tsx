@@ -114,7 +114,7 @@ const NODE_HELP: Record<string, string> = {
   tb1: "Inquiries raised between a care recipient and a provider in this range.",
   tb2: "Of those inquiries, the ones a provider answered.",
   tc1: "Interviews proposed between a care worker and a provider in this range.",
-  tc2: "Of those interviews, the ones that reached confirmed. We do not record whether the interview was actually held.",
+  tc2: "Of those interviews, the ones that reached confirmed. Whether the interview was held is not recorded.",
   tc3: "Placements the care worker accepted.",
 };
 
@@ -869,7 +869,7 @@ export default function OperatingMap({
                   <Card
                     id="tc2"
                     code="TC2"
-                    label="Interviews held"
+                    label="Interviews confirmed"
                     metric={nodes.tc2}
                     loading={metricsLoading}
                     onTip={openTip}

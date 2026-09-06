@@ -217,7 +217,7 @@ const SOURCES: Record<
     summarize: (r) => `Interview · ${String(r.status ?? "")}`,
   },
   tc2: {
-    title: "Interviews held",
+    title: "Interviews confirmed",
     table: "interviews",
     select: "created_at, status",
     where: ["status is confirmed", "attendance itself is not recorded"],
