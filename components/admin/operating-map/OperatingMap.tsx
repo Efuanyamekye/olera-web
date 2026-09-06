@@ -300,7 +300,7 @@ export default function OperatingMap({
     const cp2 = box("cp2");
     seg(cp2.cx, cp2.b + G, cp2.cx, BT - 8);
     head(cp2.cx, BT, "d");
-    ["cr6a", "cr6b"].forEach((id) => toStem(id, cp2.cx));
+    ["cr6a", "cr6b", "cr6c"].forEach((id) => toStem(id, cp2.cx));
 
     /* care worker runs straight down its lane and into the milestone layer */
     vDown("cw1", "cw2");
@@ -310,20 +310,17 @@ export default function OperatingMap({
 
     /* inside the tracks */
     vDown("ta1", "ta2");
-    vDown("ta2", "ta3");
     vDown("tb1", "tb2");
-    vDown("tb2", "tb3");
     vDown("tc1", "tc2");
-    vDown("tc2", "tc3");
 
-    /* aid delivered and care delivered converge on the spending outcome */
-    const ta3 = box("ta3");
-    const tb3 = box("tb3");
+    /* aid and care established converge on the spending outcome */
+    const ta2 = box("ta2");
+    const tb2 = box("tb2");
     const o1 = box("o1");
-    const outBar = Math.max(ta3.b, tb3.b) + 24;
-    seg(ta3.cx, ta3.b + G, ta3.cx, outBar);
-    seg(tb3.cx, tb3.b + G, tb3.cx, outBar);
-    seg(ta3.cx, outBar, tb3.cx, outBar);
+    const outBar = Math.max(ta2.b, tb2.b) + 24;
+    seg(ta2.cx, ta2.b + G, ta2.cx, outBar);
+    seg(tb2.cx, tb2.b + G, tb2.cx, outBar);
+    seg(ta2.cx, outBar, tb2.cx, outBar);
     vArrow(o1.cx, outBar, o1.t - G);
   }, []);
 
@@ -778,7 +775,6 @@ export default function OperatingMap({
                 <div className={styles.stack}>
                   <Card id="ta1" code="TA1" label="Applied" />
                   <Card id="ta2" code="TA2" label="Aid established" />
-                  <Card id="ta3" code="TA3" label="Aid delivered" />
                 </div>
               </div>
 
@@ -797,7 +793,6 @@ export default function OperatingMap({
                     showNumbers={showNumbers}
                   />
                   <Card id="tb2" code="TB2" label="Care established" />
-                  <Card id="tb3" code="TB3" label="Care delivered" />
                 </div>
               </div>
 
@@ -818,6 +813,7 @@ export default function OperatingMap({
                   <Card
                     id="tc2"
                     code="TC2"
+                    money="Revenue generating"
                     label="Hires confirmed"
                     metric={nodes.tc2}
                     loading={metricsLoading}
@@ -826,7 +822,6 @@ export default function OperatingMap({
                     onInspect={onInspect}
                     showNumbers={showNumbers}
                   />
-                  <Card id="tc3" code="TC3" money="Revenue generating" label="Hours worked" />
                 </div>
               </div>
             </div>

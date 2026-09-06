@@ -3,21 +3,19 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 /**
  * TA, TB and TC — the three tracks, where a match turns into something real.
  *
- * Only three of the nine nodes have a source. The rest are dashed on purpose
- * and the gaps are worth naming, because they are the same gap: we record
- * that we introduced two people and stop recording once they take it
- * offline.
+ * Three of the six nodes have a source. The rest are dashed on purpose and
+ * the gaps are worth naming, because they are the same gap: we record that
+ * we introduced two people and stop recording once they take it offline.
  *
- *   TA1–TA3  aid establishment    nothing. A benefits screener produces
+ *   TA1–TA2  aid establishment    nothing. A benefits screener produces
  *                                 matches, but applying for aid happens on a
  *                                 government site and nobody tells us how it
  *                                 went.
  *   TB1      provider responded   connections that reached "responded"
- *   TB2–TB3  care established     nothing. Care starts in a conversation we
+ *   TB2      care established     nothing. Care starts in a conversation we
  *                                 are not part of.
  *   TC1      interview confirmed  interviews that reached "confirmed"
  *   TC2      hire confirmed       medjobs_placements accepted or confirmed
- *   TC3      hours worked         nothing.
  *
  * `inquiriesRaised` and `interviewsProposed` are not nodes on the map — the
  * matched steps were removed. They are still read, because they are what the

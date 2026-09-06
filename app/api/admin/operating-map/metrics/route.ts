@@ -240,8 +240,8 @@ export async function GET(request: NextRequest) {
       nodes.tb1 = { value: t.inquiriesResponded, caveat: STATUS_TIMING_CAVEAT };
       nodes.tc1 = { value: t.interviewsConfirmed, caveat: STATUS_TIMING_CAVEAT };
       nodes.tc2 = { value: t.hires, caveat: STATUS_TIMING_CAVEAT };
-      // TA1-TA3, TB2, TB3 and TC3 have no source. Aid, care and hours all
-      // continue off the platform, so they stay dashes rather than guesses.
+      // TA1, TA2 and TB2 have no source. Aid and care both continue off the
+      // platform, so they stay dashes rather than guesses.
     } catch (error) {
       console.error("[operating-map/metrics] tracks failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
