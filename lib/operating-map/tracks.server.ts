@@ -3,25 +3,28 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 /**
  * TA, TB and TC — the three tracks, where a match turns into something real.
  *
- * Only five of the twelve nodes have a source. The rest are dashed on purpose
+ * Only three of the nine nodes have a source. The rest are dashed on purpose
  * and the gaps are worth naming, because they are the same gap: we record
  * that we introduced two people and stop recording once they take it
  * offline.
  *
- *   TA1–TA4  aid establishment    nothing. A benefits screener produces
+ *   TA1–TA3  aid establishment    nothing. A benefits screener produces
  *                                 matches, but applying for aid happens on a
  *                                 government site and nobody tells us how it
  *                                 went.
- *   TB1      inquiry created      connections
- *   TB2      provider responded   connections that reached "responded"
- *   TB3–TB4  care established     nothing. Care starts in a conversation we
+ *   TB1      provider responded   connections that reached "responded"
+ *   TB2–TB3  care established     nothing. Care starts in a conversation we
  *                                 are not part of.
- *   TC1      interview proposed   interviews
- *   TC2      interview confirmed  interviews that reached "confirmed"
- *   TC3      hire confirmed       medjobs_placements accepted or confirmed
- *   TC4      hours worked         nothing.
+ *   TC1      interview confirmed  interviews that reached "confirmed"
+ *   TC2      hire confirmed       medjobs_placements accepted or confirmed
+ *   TC3      hours worked         nothing.
  *
- * TB2, TC2 and TC3 carry a timing caveat. Only the creation of a row is
+ * `inquiriesRaised` and `interviewsProposed` are not nodes on the map — the
+ * matched steps were removed. They are still read, because they are what the
+ * confirmed counts are a subset of, and a consistency check with nothing to
+ * compare against is no check at all.
+ *
+ * Every count here carries a timing caveat. Only the creation of a row is
  * timestamped, not the status change, so they count rows CREATED in the
  * window that have since reached that state. An inquiry raised last month
  * and answered today lands in last month.
@@ -30,15 +33,15 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 type Range = { from: string | null; to: string | null };
 
 export interface Tracks {
-  /** TB1 — inquiries raised between a care recipient and a provider. */
-  inquiries: number;
-  /** TB2 — of those, the ones a provider answered. */
+  /** Not a node — the set TB1 is drawn from, kept for the consistency check. */
+  inquiriesRaised: number;
+  /** TB1 — inquiries a provider answered. */
   inquiriesResponded: number;
-  /** TC1 — interviews proposed between a care worker and a provider. */
-  interviews: number;
-  /** TC2 — of those, the ones that reached confirmed. */
+  /** Not a node — the set TC1 is drawn from, kept for the consistency check. */
+  interviewsProposed: number;
+  /** TC1 — interviews that reached confirmed. */
   interviewsConfirmed: number;
-  /** TC3 — placements the care worker accepted. */
+  /** TC2 — placements the care worker accepted. */
   hires: number;
 }
 
@@ -59,8 +62,13 @@ export async function getTracks(
   db: SupabaseClient,
   range: Range,
 ): Promise<Tracks> {
-  const [inquiries, inquiriesResponded, interviews, interviewsConfirmed, hires] =
-    await Promise.all([
+  const [
+    inquiriesRaised,
+    inquiriesResponded,
+    interviewsProposed,
+    interviewsConfirmed,
+    hires,
+  ] = await Promise.all([
       inRange(
         db.from("connections").select("id", HEAD).eq("type", "inquiry"),
         range,
@@ -88,9 +96,9 @@ export async function getTracks(
     ]);
 
   for (const result of [
-    inquiries,
+    inquiriesRaised,
     inquiriesResponded,
-    interviews,
+    interviewsProposed,
     interviewsConfirmed,
     hires,
   ]) {
@@ -98,9 +106,9 @@ export async function getTracks(
   }
 
   return {
-    inquiries: inquiries.count ?? 0,
+    inquiriesRaised: inquiriesRaised.count ?? 0,
     inquiriesResponded: inquiriesResponded.count ?? 0,
-    interviews: interviews.count ?? 0,
+    interviewsProposed: interviewsProposed.count ?? 0,
     interviewsConfirmed: interviewsConfirmed.count ?? 0,
     hires: hires.count ?? 0,
   };

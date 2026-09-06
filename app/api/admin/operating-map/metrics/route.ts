@@ -90,6 +90,8 @@ export async function GET(request: NextRequest) {
     let cr4PartsSum: number | undefined;
     let cp1OrphanedClaims: number | undefined;
     let cp1Unclaimed: number | undefined;
+    let inquiriesRaised: number | undefined;
+    let interviewsProposed: number | undefined;
 
     // A city filter over a range that starts before visitor geo was recorded
     // returns a structural zero, not a quiet market. Every city-scoped node
@@ -151,18 +153,16 @@ export async function GET(request: NextRequest) {
 
     try {
       const c = await getConversions(db, { from, to });
-      nodes.cr5 = { value: c.questions, caveat: notCityScoped };
       // No breakdown here: CR6a/b/c render as their own chips directly
       // below, so a split on the parent would print the same three numbers
       // twice.
       nodes.cr6 = { value: c.ctasTotal, caveat: notCityScoped };
-      nodes.cr6a = { value: c.benefitsCtas, caveat: notCityScoped };
-      nodes.cr6b = { value: c.connectionCtas, caveat: notCityScoped };
-      nodes.cr6c = { value: c.profilesLive, caveat: notCityScoped };
+      nodes.cr6a = { value: c.questions, caveat: notCityScoped };
+      nodes.cr6b = { value: c.connections, caveat: notCityScoped };
+      nodes.cr6c = { value: c.benefitsAssessments, caveat: notCityScoped };
     } catch (error) {
-      console.error("[operating-map/metrics] cr5/cr6 failed:", error);
+      console.error("[operating-map/metrics] cr6 failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
-      nodes.cr5 = failed;
       nodes.cr6 = failed;
       nodes.cr6a = failed;
       nodes.cr6b = failed;
@@ -235,21 +235,19 @@ export async function GET(request: NextRequest) {
 
     try {
       const t = await getTracks(db, { from, to });
-      nodes.tb1 = { value: t.inquiries, caveat: notCityScoped };
-      nodes.tb2 = { value: t.inquiriesResponded, caveat: STATUS_TIMING_CAVEAT };
-      nodes.tc1 = { value: t.interviews, caveat: notCityScoped };
-      nodes.tc2 = { value: t.interviewsConfirmed, caveat: STATUS_TIMING_CAVEAT };
-      nodes.tc3 = { value: t.hires, caveat: STATUS_TIMING_CAVEAT };
-      // TA1-TA4, TB3, TB4 and TC4 have no source. Aid, care and hours all
+      inquiriesRaised = t.inquiriesRaised;
+      interviewsProposed = t.interviewsProposed;
+      nodes.tb1 = { value: t.inquiriesResponded, caveat: STATUS_TIMING_CAVEAT };
+      nodes.tc1 = { value: t.interviewsConfirmed, caveat: STATUS_TIMING_CAVEAT };
+      nodes.tc2 = { value: t.hires, caveat: STATUS_TIMING_CAVEAT };
+      // TA1-TA3, TB2, TB3 and TC3 have no source. Aid, care and hours all
       // continue off the platform, so they stay dashes rather than guesses.
     } catch (error) {
       console.error("[operating-map/metrics] tracks failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
       nodes.tb1 = failed;
-      nodes.tb2 = failed;
       nodes.tc1 = failed;
       nodes.tc2 = failed;
-      nodes.tc3 = failed;
     }
 
     // Relationships that must hold if the map is counting correctly. Sent
@@ -261,6 +259,8 @@ export async function GET(request: NextRequest) {
       cr4PartsSum,
       cp1OrphanedClaims,
       cp1Unclaimed,
+      inquiriesRaised,
+      interviewsProposed,
     });
 
     return NextResponse.json({ nodes, checks });

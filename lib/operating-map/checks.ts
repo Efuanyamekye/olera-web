@@ -41,6 +41,10 @@ export interface CheckInputs {
   cp1OrphanedClaims?: number;
   /** CP1's unclaimed half — the set CP2 is drawn from. */
   cp1Unclaimed?: number;
+  /** Inquiries raised — the set TB1's answered count is drawn from. */
+  inquiriesRaised?: number;
+  /** Interviews proposed — the set TC1's confirmed count is drawn from. */
+  interviewsProposed?: number;
 }
 
 export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapCheck[] {
@@ -117,21 +121,32 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  for (const [parent, child, label] of [
-    ["tb1", "tb2", "Connections confirmed do not exceed connections made"],
-    ["tc1", "tc2", "Interviews confirmed do not exceed interviews proposed"],
-    ["tc2", "tc3", "Hires do not exceed confirmed interviews"],
+  // The "matched" step was taken off the map, so these compare against the
+  // raised/proposed totals passed in rather than a node above them.
+  for (const [child, total, label] of [
+    ["tb1", inputs.inquiriesRaised, "Connections confirmed do not exceed inquiries raised"],
+    ["tc1", inputs.interviewsProposed, "Interviews confirmed do not exceed interviews proposed"],
   ] as const) {
-    const p = n(values[parent]);
     const c = n(values[child]);
-    if (p !== null && c !== null) {
+    if (c !== null && typeof total === "number") {
       checks.push({
-        id: `${child}-under-${parent}`,
+        id: `${child}-under-source`,
         label,
-        ok: c <= p,
-        detail: c <= p ? undefined : `${child.toUpperCase()} is ${c}, ${parent.toUpperCase()} is ${p}`,
+        ok: c <= total,
+        detail: c <= total ? undefined : `${child.toUpperCase()} is ${c}, the source set is ${total}`,
       });
     }
+  }
+
+  const tc1 = n(values.tc1);
+  const tc2 = n(values.tc2);
+  if (tc1 !== null && tc2 !== null) {
+    checks.push({
+      id: "tc2-under-tc1",
+      label: "Hires do not exceed confirmed interviews",
+      ok: tc2 <= tc1,
+      detail: tc2 <= tc1 ? undefined : `TC2 is ${tc2}, TC1 is ${tc1}`,
+    });
   }
 
   const cw1 = n(values.cw1);
@@ -147,13 +162,12 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  const cr5 = n(values.cr5);
-  if (cr5 !== null && cr4 !== null) {
+  if (cr6 !== null && cr4 !== null) {
     checks.push({
-      id: "cr5-under-cr4",
-      label: "Questions asked do not exceed page visits",
-      ok: cr5 <= cr4,
-      detail: cr5 <= cr4 ? undefined : `CR5 is ${cr5}, CR4 is ${cr4}`,
+      id: "cr6-under-cr4",
+      label: "CTAs completed do not exceed page visits",
+      ok: cr6 <= cr4,
+      detail: cr6 <= cr4 ? undefined : `CR6 is ${cr6}, CR4 is ${cr4}`,
     });
   }
 

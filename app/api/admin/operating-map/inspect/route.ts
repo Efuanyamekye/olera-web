@@ -68,25 +68,16 @@ const SOURCES: Record<
     cityScoped: true,
     summarize: (r) => String(r.page ?? "—"),
   },
-  cr5: {
-    title: "Questions asked",
+  cr6a: {
+    title: "Questions",
     table: "provider_question_asks",
     select: "created_at, provider_id, original_question",
     where: ["every row is one question submitted"],
     cityScoped: false,
     summarize: (r) => String(r.original_question ?? "").slice(0, 90) || "—",
   },
-  cr6a: {
-    title: "Benefits CTAs",
-    table: "seeker_activity",
-    select: "created_at, event_type, related_provider_id",
-    where: ["event_type is benefits_completed"],
-    eventType: "benefits_completed",
-    cityScoped: false,
-    summarize: () => "Benefits screener completed",
-  },
   cr6b: {
-    title: "Connection CTAs",
+    title: "Connections",
     table: "provider_activity",
     select: "created_at, event_type, provider_id",
     where: ["event_type is lead_received"],
@@ -193,14 +184,6 @@ const SOURCES: Record<
       `${String(r.name ?? "—")}${r.title ? ` · ${String(r.title)}` : ""}`,
   },
   tb1: {
-    title: "Care recipient–provider matched",
-    table: "connections",
-    select: "created_at, from_profile_id, to_profile_id, status",
-    where: ["type is inquiry"],
-    cityScoped: false,
-    summarize: (r) => `${String(r.to_profile_id ?? "—")} · ${String(r.status ?? "")}`,
-  },
-  tb2: {
     title: "Connection confirmed",
     table: "connections",
     select: "created_at, to_profile_id, status",
@@ -209,14 +192,6 @@ const SOURCES: Record<
     summarize: (r) => `${String(r.to_profile_id ?? "—")} · ${String(r.status ?? "")}`,
   },
   tc1: {
-    title: "Care worker–provider matched",
-    table: "interviews",
-    select: "created_at, status",
-    where: ["every row is one interview proposed"],
-    cityScoped: false,
-    summarize: (r) => `Interview · ${String(r.status ?? "")}`,
-  },
-  tc2: {
     title: "Interviews confirmed",
     table: "interviews",
     select: "created_at, status",
@@ -224,7 +199,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Interview · ${String(r.status ?? "")}`,
   },
-  tc3: {
+  tc2: {
     title: "Hires confirmed",
     table: "medjobs_placements",
     select: "created_at, status",
@@ -233,13 +208,13 @@ const SOURCES: Record<
     summarize: (r) => `Placement · ${String(r.status ?? "")}`,
   },
   cr6c: {
-    title: "Profiles made live",
+    title: "Benefits Assessment",
     table: "seeker_activity",
     select: "created_at, event_type, related_provider_id",
-    where: ["event_type is matches_activated"],
-    eventType: "matches_activated",
+    where: ["event_type is benefits_completed"],
+    eventType: "benefits_completed",
     cityScoped: false,
-    summarize: () => "Care post published",
+    summarize: () => "Benefits screener completed",
   },
 };
 
@@ -282,10 +257,9 @@ export async function GET(request: NextRequest) {
     if (node === "m5") query = query.eq("type", "system_activated");
     if (node === "cw1") query = query.eq("is_active", true);
     if (node === "cw2") query = query.eq("status", "active");
-    if (node === "tb1") query = query.eq("type", "inquiry");
-    if (node === "tb2") query = query.eq("type", "inquiry").eq("status", "responded");
-    if (node === "tc2") query = query.eq("status", "confirmed");
-    if (node === "tc3") query = query.in("status", ["accepted", "confirmed"]);
+    if (node === "tb1") query = query.eq("type", "inquiry").eq("status", "responded");
+    if (node === "tc1") query = query.eq("status", "confirmed");
+    if (node === "tc2") query = query.in("status", ["accepted", "confirmed"]);
     if (node === "cp2") {
       query = query.eq("recipient_type", "provider").not("provider_id", "is", null);
     }

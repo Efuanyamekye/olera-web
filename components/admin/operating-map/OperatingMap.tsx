@@ -88,19 +88,18 @@ const NODE_HELP: Record<string, string> = {
     "Unique people who arrived from a search engine, from Olera's own page events. Compare with GA4 Organic Search users, not sessions.",
   cr4:
     "Page views across the three surfaces we publish, from all traffic sources. Counts views, not people, so it runs higher than CR2.",
-  cr5:
-    "Questions submitted to providers through Q&A. Same source as the Overview's Questions Asked card, so the two always agree.",
   cr6:
     "Every care recipient action that asks us for something: the three CTA types below, added together.",
-  cr6a: "Benefits screeners completed to the end, where results are saved.",
+  cr6a:
+    "Questions submitted to providers through Q&A. Same source as the Overview's Questions Asked card, so the two always agree.",
   cr6b: "Requests to be connected to a provider, however they started.",
-  cr6c: "Care posts published, making a care recipient visible to providers.",
+  cr6c: "Benefits screeners completed to the end, where results are saved.",
   cp1:
     "Every provider in the directory that has not been deleted, split by whether anyone has claimed them. Scoped by the provider's city. A standing count — the date range does not change it.",
   cp2:
     "Unclaimed providers who heard from us in this range — any email, call or MedJobs contact. Counts providers, not messages, so twenty emails to one provider is one.",
   m1:
-    "Care recipient profiles that are complete, and how many of those are live — the published state CR6c counts reaching. Completion is not timestamped, so this counts profiles created in this range that are complete today.",
+    "Care recipient profiles that are complete, and how many of those have a published care post. Completion is not timestamped, so this counts profiles created in this range that are complete today.",
   m2:
     "Care worker profiles that are complete — a MedJobs application goes live once the intro video is in. Same timing caveat as M1.",
   m3:
@@ -111,11 +110,9 @@ const NODE_HELP: Record<string, string> = {
     "Universities we have listed and are working, scoped by the university's city. A standing count — the date range does not change it.",
   cw2:
     "Advisors we can reach at those universities, counted where the contact record is still active. A standing count.",
-  tb1: "Inquiries raised between a care recipient and a provider in this range.",
-  tb2: "Of those inquiries, the ones a provider answered.",
-  tc1: "Interviews proposed between a care worker and a provider in this range.",
-  tc2: "Of those interviews, the ones that reached confirmed. Whether the interview was held is not recorded.",
-  tc3: "Placements the care worker accepted.",
+  tb1: "Inquiries a provider answered. Counted from inquiries raised in this range.",
+  tc1: "Interviews that reached confirmed. Whether the interview was held is not recorded.",
+  tc2: "Placements the care worker accepted.",
 };
 
 /** Tooltip anchored to a node, positioned outside the scaled figure. */
@@ -255,18 +252,6 @@ export default function OperatingMap({
       head(x2, y, "r");
     };
 
-    /** Horizontal arrow that can point either way. */
-    function hTo(y: number, x1: number, x2: number) {
-      const s2 = x2 > x1 ? 1 : -1;
-      seg(x1, y, x2 - 8 * s2, y);
-      const p = document.createElementNS(SVG_NS, "polygon");
-      p.setAttribute(
-        "points",
-        [`${x2},${y}`, `${x2 - 8 * s2},${y - 4.4}`, `${x2 - 8 * s2},${y + 4.4}`].join(" "),
-      );
-      svg!.appendChild(p);
-    }
-
     const vDown = (a: string, b: string) => {
       const A = box(a);
       const B = box(b);
@@ -304,7 +289,6 @@ export default function OperatingMap({
     const stem1 = cr4.l + 14;
     seg(stem1, cr4.b + G, stem1, cr6.t - 8);
     head(stem1, cr6.t - G, "d");
-    fromStem(stem1, "cr5");
 
     const stem2 = cr6.l + 14;
     seg(stem2, cr6.b + G, stem2, BT - 8);
@@ -316,7 +300,7 @@ export default function OperatingMap({
     const cp2 = box("cp2");
     seg(cp2.cx, cp2.b + G, cp2.cx, BT - 8);
     head(cp2.cx, BT, "d");
-    ["cr5", "cr6b", "cr6c"].forEach((id) => toStem(id, cp2.cx));
+    ["cr6a", "cr6b"].forEach((id) => toStem(id, cp2.cx));
 
     /* care worker runs straight down its lane and into the milestone layer */
     vDown("cw1", "cw2");
@@ -324,38 +308,22 @@ export default function OperatingMap({
     const cw3 = box("cw3");
     vArrow(cw3.cx, cw3.b + G, BT);
 
-    /* care worker and care recipient profiles feed provider outreach */
-    const m2 = box("m2");
-    const joinY = BT - 26;
-    seg(m2.cx, m2.t - G, m2.cx, joinY);
-    hTo(joinY, m2.cx, cp2.cx);
-
-    const m1 = box("m1");
-    const joinY1 = BT - 48;
-    // Start the riser clear of the CR6 stem so the two never cross.
-    const m1x = Math.max(m1.cx, stem2 + 26);
-    seg(m1x, m1.t - G, m1x, joinY1);
-    hTo(joinY1, m1x, cp2.cx);
-
     /* inside the tracks */
     vDown("ta1", "ta2");
     vDown("ta2", "ta3");
-    vDown("ta3", "ta4");
     vDown("tb1", "tb2");
     vDown("tb2", "tb3");
-    vDown("tb3", "tb4");
     vDown("tc1", "tc2");
     vDown("tc2", "tc3");
-    vDown("tc3", "tc4");
 
     /* aid delivered and care delivered converge on the spending outcome */
-    const ta4 = box("ta4");
-    const tb4 = box("tb4");
+    const ta3 = box("ta3");
+    const tb3 = box("tb3");
     const o1 = box("o1");
-    const outBar = Math.max(ta4.b, tb4.b) + 24;
-    seg(ta4.cx, ta4.b + G, ta4.cx, outBar);
-    seg(tb4.cx, tb4.b + G, tb4.cx, outBar);
-    seg(ta4.cx, outBar, tb4.cx, outBar);
+    const outBar = Math.max(ta3.b, tb3.b) + 24;
+    seg(ta3.cx, ta3.b + G, ta3.cx, outBar);
+    seg(tb3.cx, tb3.b + G, tb3.cx, outBar);
+    seg(ta3.cx, outBar, tb3.cx, outBar);
     vArrow(o1.cx, outBar, o1.t - G);
   }, []);
 
@@ -610,24 +578,11 @@ export default function OperatingMap({
                     </>
                   }
                 />
-                <div className={styles.offshoot} style={{ marginTop: 16 }}>
-                  <Chip
-                    id="cr5"
-                    code="CR5"
-                    label="Questions asked"
-                    metric={nodes.cr5}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={() => setTip(null)}
-                    onInspect={onInspect}
-                  showNumbers={showNumbers}
-                  />
-                </div>
                 <div style={{ marginTop: 16 }}>
                   <Card
                     id="cr6"
                     code="CR6"
-                    label="CTAs submitted"
+                    label="CTAs completed"
                     metric={nodes.cr6}
                     loading={metricsLoading}
                     onTip={openTip}
@@ -640,7 +595,7 @@ export default function OperatingMap({
                   <Chip
                     id="cr6a"
                     code="CR6a"
-                    label="Benefits CTAs"
+                    label="Questions"
                     metric={nodes.cr6a}
                     loading={metricsLoading}
                     onTip={openTip}
@@ -651,7 +606,7 @@ export default function OperatingMap({
                   <Chip
                     id="cr6b"
                     code="CR6b"
-                    label="Connection CTAs"
+                    label="Connections"
                     metric={nodes.cr6b}
                     loading={metricsLoading}
                     onTip={openTip}
@@ -662,7 +617,7 @@ export default function OperatingMap({
                   <Chip
                     id="cr6c"
                     code="CR6c"
-                    label="Profiles made live"
+                    label="Benefits Assessment"
                     metric={nodes.cr6c}
                     loading={metricsLoading}
                     onTip={openTip}
@@ -821,10 +776,9 @@ export default function OperatingMap({
               <div className={styles.col} id={nodeId("ta")}>
                 <span className={styles.lab}>TA aid establishment</span>
                 <div className={styles.stack}>
-                  <Card id="ta1" code="TA1" label="Matched" />
-                  <Card id="ta2" code="TA2" label="Applied" />
-                  <Card id="ta3" code="TA3" label="Aid established" />
-                  <Card id="ta4" code="TA4" label="Aid delivered" />
+                  <Card id="ta1" code="TA1" label="Applied" />
+                  <Card id="ta2" code="TA2" label="Aid established" />
+                  <Card id="ta3" code="TA3" label="Aid delivered" />
                 </div>
               </div>
 
@@ -834,7 +788,7 @@ export default function OperatingMap({
                   <Card
                     id="tb1"
                     code="TB1"
-                    label="Care recipient–provider matched"
+                    label="Connection confirmed"
                     metric={nodes.tb1}
                     loading={metricsLoading}
                     onTip={openTip}
@@ -842,19 +796,8 @@ export default function OperatingMap({
                     onInspect={onInspect}
                     showNumbers={showNumbers}
                   />
-                  <Card
-                    id="tb2"
-                    code="TB2"
-                    label="Connection confirmed"
-                    metric={nodes.tb2}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={() => setTip(null)}
-                    onInspect={onInspect}
-                    showNumbers={showNumbers}
-                  />
-                  <Card id="tb3" code="TB3" label="Care established" />
-                  <Card id="tb4" code="TB4" label="Care delivered" />
+                  <Card id="tb2" code="TB2" label="Care established" />
+                  <Card id="tb3" code="TB3" label="Care delivered" />
                 </div>
               </div>
 
@@ -864,7 +807,7 @@ export default function OperatingMap({
                   <Card
                     id="tc1"
                     code="TC1"
-                    label="Care worker–provider matched"
+                    label="Interviews confirmed"
                     metric={nodes.tc1}
                     loading={metricsLoading}
                     onTip={openTip}
@@ -875,7 +818,7 @@ export default function OperatingMap({
                   <Card
                     id="tc2"
                     code="TC2"
-                    label="Interviews confirmed"
+                    label="Hires confirmed"
                     metric={nodes.tc2}
                     loading={metricsLoading}
                     onTip={openTip}
@@ -883,18 +826,7 @@ export default function OperatingMap({
                     onInspect={onInspect}
                     showNumbers={showNumbers}
                   />
-                  <Card
-                    id="tc3"
-                    code="TC3"
-                    label="Hires confirmed"
-                    metric={nodes.tc3}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={() => setTip(null)}
-                    onInspect={onInspect}
-                    showNumbers={showNumbers}
-                  />
-                  <Card id="tc4" code="TC4" money="Revenue generating" label="Hours worked" />
+                  <Card id="tc3" code="TC3" money="Revenue generating" label="Hours worked" />
                 </div>
               </div>
             </div>
@@ -1137,11 +1069,11 @@ function MetricValue({
 
 /** Nodes the inspect endpoint can produce rows for. */
 const INSPECTABLE = new Set([
-  "cr2", "cr4", "cr5", "cr6a", "cr6b", "cr6c",
+  "cr2", "cr4", "cr6a", "cr6b", "cr6c",
   "cp1", "cp2",
   "m1", "m2", "m3", "m4", "m5",
   "cw1", "cw2",
-  "tb1", "tb2", "tc1", "tc2", "tc3",
+  "tb1", "tc1", "tc2",
 ]);
 
 
