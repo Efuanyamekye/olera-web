@@ -199,7 +199,13 @@ export async function GET(request: NextRequest) {
 
     try {
       const m = await getMilestones(db, { from, to }, city);
-      nodes.m1 = { value: m.careRecipientProfiles, caveat: PROFILE_TIMING_CAVEAT };
+      nodes.m1 = {
+        value: m.careRecipientProfiles,
+        // Only the live half goes in the breakdown; the completed half is
+        // already the node's value, and printing it twice is noise.
+        breakdown: [{ label: "live", value: m.careRecipientProfilesLive }],
+        caveat: PROFILE_TIMING_CAVEAT,
+      };
       nodes.m2 = { value: m.careWorkerProfiles, caveat: PROFILE_TIMING_CAVEAT };
       nodes.m3 = { value: m.providersClaimed, caveat: null };
       nodes.m4 = { value: m.managedAdSignups, caveat: null };

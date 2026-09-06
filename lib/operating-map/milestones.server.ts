@@ -28,6 +28,12 @@ const MAX_ROWS = 100_000;
 
 export interface Milestones {
   careRecipientProfiles: number;
+  /**
+   * Of those, the ones whose care post is published — the same state CR6c
+   * counts the act of reaching. A completed profile that is not live is
+   * invisible to providers, so the pair is the useful reading.
+   */
+  careRecipientProfilesLive: number;
   careWorkerProfiles: number;
   providersClaimed: number;
   managedAdSignups: number;
@@ -42,12 +48,19 @@ async function countProfiles(
   type: "family" | "student",
   range: Range,
   citySlug: string | null,
+  /** Narrow to profiles whose care post is published. */
+  liveOnly = false,
 ): Promise<number> {
   let query = db
     .from("business_profiles")
     .select("id", { count: "exact", head: true })
     .eq("type", type)
     .eq("is_active", true);
+
+  // The same test the admin Care Seekers page uses for its Published view.
+  if (liveOnly) {
+    query = query.contains("metadata", { care_post: { status: "active" } });
+  }
 
   if (citySlug) {
     const filter = cityFilterFromSlug(citySlug);
@@ -176,12 +189,14 @@ export async function getMilestones(
 
   const [
     careRecipientProfiles,
+    careRecipientProfilesLive,
     careWorkerProfiles,
     providersClaimed,
     managedAdSignups,
     staffingSignups,
   ] = await Promise.all([
     countProfiles(db, "family", range, citySlug),
+    countProfiles(db, "family", range, citySlug, true),
     countProfiles(db, "student", range, citySlug),
     countProviderEvents(
       db,
@@ -209,6 +224,7 @@ export async function getMilestones(
 
   return {
     careRecipientProfiles,
+    careRecipientProfilesLive,
     careWorkerProfiles,
     providersClaimed,
     managedAdSignups,
