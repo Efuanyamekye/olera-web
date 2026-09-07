@@ -14,6 +14,13 @@ export const ONBOARDING_MESSAGES = [
     action: "Review and improve their profile",
     automation: "profile-preview-nudge",
   },
+  {
+    type: "notification_setup_nudge",
+    label: "Notifications",
+    timing: "72 hours after profile preview · business hours",
+    action: "Choose notification preferences",
+    automation: "notification-setup-nudge",
+  },
 ] as const;
 export const ONBOARDING_EMAIL_TYPES = ONBOARDING_MESSAGES.map((m) => m.type);
 export type OnboardingType = (typeof ONBOARDING_MESSAGES)[number]["type"];
@@ -115,6 +122,9 @@ export interface Recipient {
   delivered: boolean;
   opened: boolean;
   clicked: boolean;
+  settingsViewed?: boolean;
+  preferenceSaved?: boolean;
+  smsEnabled?: boolean;
 }
 export interface Performance {
   type: OnboardingType;
@@ -124,6 +134,9 @@ export interface Performance {
   delivered: number;
   opened: number;
   clicked: number;
+  settingsViewed: number;
+  preferenceSaved: number;
+  smsEnabled: number;
   suppressed: number;
   failed: number;
   pending: number;
@@ -143,6 +156,9 @@ export function summarizeRecipients(rows: Recipient[]): Performance[] {
       delivered: group.filter((row) => row.delivered).length,
       opened: group.filter((row) => row.opened).length,
       clicked: group.filter((row) => row.clicked).length,
+      settingsViewed: group.filter((row) => row.settingsViewed).length,
+      preferenceSaved: group.filter((row) => row.preferenceSaved).length,
+      smsEnabled: group.filter((row) => row.smsEnabled).length,
       suppressed: count("suppressed"),
       failed: count("failed"),
       pending: count("pending"),

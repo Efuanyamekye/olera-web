@@ -864,7 +864,7 @@ export const PROVIDER_ONBOARDING_JOURNEY: CommsJourney = {
   title: "Provider onboarding — after the claim",
   audienceLabel: "Provider journey",
   ordering: "time",
-  description: "Welcome providers into their account, then help them see and improve their profile. Both messages send on weekdays, 9am–5pm in the provider's local timezone. Performance lives in Provider Comms.",
+  description: "Welcome providers into their account, then help them see and improve their profile. Messages send on weekdays, 9am–5pm in the provider's local timezone. Performance lives in Provider Comms.",
   steps: [
     { key: "welcome", title: "Welcome", timing: "After claim · next business-hour run",
       description: "Introduce the provider experience. The message adapts to verification state.",
@@ -875,6 +875,11 @@ export const PROVIDER_ONBOARDING_JOURNEY: CommsJourney = {
       description: "Show the provider what families see and invite them to improve their profile.",
       emailType: "profile_preview_nudge", ownedBy: "profile-preview-nudge", emailSampleId: "provider_profile_preview",
       gate: "Claimed within 21 days; welcome timestamp exists; not previously processed. The weekly digest continues; its completion rung is suppressed for four days after welcome." },
+    { key: "notifications", title: "Notifications", timing: "72 hours after profile preview · business hours",
+      description: "Invite organizations to choose text alerts; track visits and successfully saved preferences.",
+      emailType: "notification_setup_nudge", ownedBy: "notification-setup-nudge", emailSampleId: "provider_notification_setup",
+      gate: "Claimed within 30 days, usable US phone, SMS not enabled, no prior attempt. Starts paused for QA.",
+      experienceUrl: "/admin/provider-comms", experienceLabel: "View onboarding performance" },
   ],
 };
 
@@ -890,6 +895,7 @@ const COMMS_JOURNEYS: Record<string, CommsJourney> = {
 const JOURNEYS_BY_CRON: Record<string, string[]> = {
   "provider-welcome": [PROVIDER_ONBOARDING_JOURNEY.key],
   "profile-preview-nudge": [PROVIDER_ONBOARDING_JOURNEY.key],
+  "notification-setup-nudge": [PROVIDER_ONBOARDING_JOURNEY.key],
   "family-comms-coordinator": [HELP_CASCADE_LADDER.key, BENEFITS_CASCADE.key],
   "benefits-navigator-scheduler": [BENEFITS_CASCADE.key],
   "benefits-results-texts": [BENEFITS_CASCADE.key],

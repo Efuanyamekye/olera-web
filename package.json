@@ -29,7 +29,8 @@
     "generate-cities": "npx tsx scripts/generate-city-data.ts",
     "backfill:trust-levels": "npx tsx scripts/backfill-trust-levels.ts",
     "enrich:outreach-emails": "npx tsx scripts/enrich-outreach-emails.ts",
-    "enrich:outreach-forms": "npx tsx scripts/enrich-outreach-contact-forms.ts"
+    "enrich:outreach-forms": "npx tsx scripts/enrich-outreach-contact-forms.ts",
+    "check:provider-notifications": "node scripts/check-provider-notifications.cjs && node scripts/check-provider-notifications-sql.cjs && node scripts/check-provider-notifications-ui.cjs && node scripts/check-provider-notifications-cron.cjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -68,6 +69,7 @@
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.1127.0",
+    "@electric-sql/pglite": "^0.5.8",
     "@types/node": "^20",
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19",

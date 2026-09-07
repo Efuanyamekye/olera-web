@@ -84,7 +84,10 @@ export default function ProviderCommsReportView({
         (row) =>
           (message === "all" || row.type === message) &&
           (status === "all" ||
-            (status === "clicked" ? row.clicked : row.state === status)),
+            (status === "clicked" ? row.clicked :
+              status === "settings" ? row.settingsViewed :
+              status === "saved" ? row.preferenceSaved :
+              status === "sms" ? row.smsEnabled : row.state === status)),
       ),
     [rows, message, status],
   );
@@ -239,6 +242,9 @@ export default function ProviderCommsReportView({
                       "Opened",
                       "Clicked",
                       "CTR",
+                      "Settings opened",
+                      "Preference saved",
+                      "SMS preference enabled",
                       "Suppressed",
                       "Failed",
                     ].map((title) => (
@@ -290,6 +296,9 @@ export default function ProviderCommsReportView({
                           row.opened,
                           row.clicked,
                           pct(row.clicked, row.delivered),
+                          row.type === "notification_setup_nudge" ? row.settingsViewed : "—",
+                          row.type === "notification_setup_nudge" ? row.preferenceSaved : "—",
+                          row.type === "notification_setup_nudge" ? row.smsEnabled : "—",
                           row.suppressed,
                           row.failed,
                         ].map((value, i) => (
@@ -310,7 +319,11 @@ export default function ProviderCommsReportView({
               Counts are messages, not unique providers. CTR = clicked messages
               ÷ delivered messages. Opens and clicks are recorded signals, not
               proof of a completed task. Attempts include suppression and
-              failure; these are excluded from delivered totals.
+              failure; these are excluded from delivered totals. Notification outcomes
+              count distinct messages with a linked action within seven days of send.
+              Recent messages have an incomplete observation window. Saved preferences
+              include disabling a channel; SMS enabled counts an off-to-on change,
+              not proof of a delivered text.
             </p>
             {rows.length === 0 && (
               <p className="mt-4 rounded-lg bg-gray-50 p-4 text-sm text-gray-600">
@@ -340,9 +353,8 @@ export default function ProviderCommsReportView({
             <section className="rounded-xl border border-gray-200 bg-white p-5">
               <h2 className="font-semibold text-gray-900">What comes next</h2>
               <p className="mt-2 text-sm text-gray-600">
-                Notifications guidance is planned. Verification messaging is
-                pending a product decision. Neither is counted as a live step
-                here.
+                Notification setup is registered; check its automation for launch or pause status.
+                Verification messaging is pending a product decision.
               </p>
               <p className="mt-2 text-xs text-gray-500">
                 Eligibility and messages waiting for a business-hour send window
@@ -394,6 +406,9 @@ export default function ProviderCommsReportView({
                 >
                   <option value="all">All delivery states</option>
                   <option value="clicked">Recorded click</option>
+                  <option value="settings">Opened notification settings</option>
+                  <option value="saved">Saved a preference</option>
+                  <option value="sms">Enabled SMS</option>
                   {Object.entries(STATE_LABELS).map(([key, label]) => (
                     <option key={key} value={key}>
                       {label}
@@ -472,6 +487,7 @@ export default function ProviderCommsReportView({
                           )}
                         </td>
                         <td className="px-4 py-3 text-xs text-gray-600">
+                          {row.smsEnabled ? "SMS enabled · " : row.preferenceSaved ? "Preference saved · " : row.settingsViewed ? "Settings opened · " : ""}
                           {row.clicked
                             ? "Clicked"
                             : row.opened
