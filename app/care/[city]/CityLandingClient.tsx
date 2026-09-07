@@ -34,8 +34,8 @@ const WHO: { v: CityRecipient; label: string }[] = [
 const WHAT: { v: CityCareType; label: string; sub: string }[] = [
   { v: "home_care", label: "Help at home", sub: "A caregiver comes to them" },
   { v: "assisted_living", label: "Assisted living or a care home", sub: "They move somewhere with support" },
-  { v: "unsure", label: "Not sure yet", sub: "We will help you work it out" },
-  { v: "medical", label: "Nursing or medical care at home", sub: "We will point you to the right place" },
+  { v: "unsure", label: "Not sure yet", sub: "That is fine" },
+  { v: "medical", label: "Nursing or medical care", sub: "We will point you the right way" },
 ];
 
 const WHEN: { v: CityUrgency; label: string }[] = [
@@ -76,6 +76,7 @@ export default function CityLandingClient({
   const [payment, setPayment] = useState<string | null>(null);
   const [note, setNote] = useState("");
   const [noteSaved, setNoteSaved] = useState(false);
+  const [finished, setFinished] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
 
   const stepIndex = useMemo(() => ({ intro: 0, who: 1, what: 2, when: 3, contact: 4, done: 5 })[step], [step]);
@@ -162,55 +163,58 @@ export default function CityLandingClient({
 
         {step === "intro" && (
           <section>
-            <h1 className="mt-8 font-display text-[2rem] leading-[1.1] text-gray-900 sm:text-[2.4rem]">
+            <h1 className="mt-10 font-display text-[2.4rem] leading-[1.05] tracking-tight text-gray-900 sm:text-[2.9rem]">
               Looking for senior care in {cfg.city}?
             </h1>
-            <p className="mt-3 text-[15px] leading-relaxed text-gray-600">
-              Tell us what you need. A licensed local provider will call you back. Free for families.
-            </p>
+            <p className="mt-4 text-lg leading-snug text-gray-600">A local provider calls you back. Free.</p>
             <button
               type="button"
               onClick={() => setStep("who")}
-              className="mt-6 block w-full rounded-xl bg-primary-700 px-4 py-3.5 text-center text-base font-semibold text-white hover:bg-primary-600 active:bg-primary-800"
+              className="mt-8 block w-full rounded-xl bg-primary-700 px-4 py-4 text-center text-[17px] font-semibold text-white hover:bg-primary-600 active:bg-primary-800"
             >
-              Start, it takes 2 minutes
+              Get started
             </button>
-            <p className="mt-4 text-xs leading-relaxed text-gray-500">
-              <b className="font-semibold text-gray-600">Home care and assisted living</b> · Serving {cfg.areaLabel} · We share
-              your request with one local provider at a time. Never sold.
-            </p>
+            <p className="mt-3 text-center text-xs text-gray-500">Four questions · One provider at a time · Never sold</p>
 
             {providers.length > 0 && (
-              <div className="mt-8">
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Local providers on Olera</p>
-                <ul className="mt-2 space-y-2">
-                  {providers.map((p) => (
-                    <li key={p.name} className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-3">
+              <div className="mt-12">
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Providers in {cfg.city}</p>
+                <ul className="mt-1 divide-y divide-gray-200">
+                  {providers.slice(0, 3).map((p) => (
+                    <li key={p.name} className="flex items-center gap-3 py-3">
                       <Avatar name={p.name} photo={p.photo} />
-                      <div className="min-w-0">
+                      <div className="min-w-0 flex-1">
                         <div className="truncate text-[15px] font-semibold">{p.name}</div>
-                        <div className="mt-0.5 text-xs text-gray-600">
+                        <div className="mt-0.5 text-xs text-gray-500">
                           {p.careLabel} · {p.town}
-                          {p.verified ? " · Verified on Olera" : ""}
                         </div>
                       </div>
+                      {p.verified && <span className="text-xs font-medium text-primary-700">✓ Verified</span>}
                     </li>
                   ))}
                 </ul>
               </div>
             )}
 
-            <div className="mt-8 text-sm leading-relaxed text-gray-600">
-              <p className="font-semibold text-gray-800">What happens next</p>
-              <ol className="mt-1 list-decimal space-y-1 pl-5">
-                <li>You answer four quick questions.</li>
-                <li>We ask a local provider to take your request. You get a text with their name.</li>
-                <li>They call you. If it is not a fit, we send the next one.</li>
+            <div className="mt-12">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">How it works</p>
+              <ol className="mt-1 divide-y divide-gray-200">
+                {[
+                  ["Answer four questions", "About two minutes"],
+                  ["We ask a local provider", "You get their name by text"],
+                  ["They call you", "Not a fit? We send the next one"],
+                ].map(([t, d], i) => (
+                  <li key={t} className="flex items-baseline gap-4 py-3">
+                    <span className="w-4 shrink-0 font-display text-lg text-primary-700">{i + 1}</span>
+                    <span className="text-[15px] font-semibold text-gray-900">{t}</span>
+                    <span className="ml-auto text-right text-xs text-gray-500">{d}</span>
+                  </li>
+                ))}
               </ol>
             </div>
 
-            <footer className="mt-10 border-t border-gray-200 pt-4 text-[11px] leading-relaxed text-gray-500">
-              Olera, Inc. · olera.care · support@olera.care ·{" "}
+            <footer className="mt-14 text-[11px] leading-relaxed text-gray-400">
+              Olera, Inc. · support@olera.care ·{" "}
               <Link className="underline" href="/privacy">
                 Privacy
               </Link>{" "}
@@ -218,14 +222,14 @@ export default function CityLandingClient({
               <Link className="underline" href="/terms">
                 Terms
               </Link>
-              . Olera is a free matching service for families. Providers are independent businesses.
+              . Providers are independent businesses.
             </footer>
           </section>
         )}
 
         {step === "who" && (
           <section>
-            <h2 className="mt-5 font-display text-2xl leading-tight">Who needs care?</h2>
+            <h2 className="mt-6 font-display text-[1.75rem] leading-tight">Who needs care?</h2>
             <div className="mt-3 space-y-2">
               {WHO.map((o) => (
                 <Option key={o.v} label={o.label} selected={who === o.v} onClick={() => pick(setWho, "what")(o.v)} />
@@ -236,7 +240,7 @@ export default function CityLandingClient({
 
         {step === "what" && (
           <section>
-            <h2 className="mt-5 font-display text-2xl leading-tight">What kind of help?</h2>
+            <h2 className="mt-6 font-display text-[1.75rem] leading-tight">What kind of help?</h2>
             <div className="mt-3 space-y-2">
               {WHAT.map((o) => (
                 <Option key={o.v} label={o.label} sub={o.sub} selected={what === o.v} onClick={() => pick(setWhat, "when")(o.v)} />
@@ -248,7 +252,7 @@ export default function CityLandingClient({
 
         {step === "when" && (
           <section>
-            <h2 className="mt-5 font-display text-2xl leading-tight">How soon?</h2>
+            <h2 className="mt-6 font-display text-[1.75rem] leading-tight">How soon?</h2>
             <div className="mt-3 space-y-2">
               {WHEN.map((o) => (
                 <Option key={o.v} label={o.label} selected={when === o.v} onClick={() => pick(setWhen, "contact")(o.v)} />
@@ -260,7 +264,7 @@ export default function CityLandingClient({
 
         {step === "contact" && (
           <section>
-            <h2 className="mt-5 font-display text-2xl leading-tight">Where should they call?</h2>
+            <h2 className="mt-6 font-display text-[1.75rem] leading-tight">Where should they call?</h2>
             <form
               className="mt-3 space-y-3"
               onSubmit={(e) => {
@@ -277,7 +281,7 @@ export default function CityLandingClient({
                   maxLength={60}
                 />
               </Field>
-              <Field label="Mobile number" hint="So the provider can call you. We never sell your number.">
+              <Field label="Mobile number" hint="So the provider can call you. Never sold.">
                 <input
                   className={inputCls}
                   type="tel"
@@ -357,62 +361,99 @@ export default function CityLandingClient({
               </>
             ) : (
               <>
-                <h2 className="mt-4 font-display text-2xl leading-tight">Thanks, {firstName.trim()}. We are finding your match.</h2>
-                <p className="mt-3 text-[15px] leading-relaxed text-gray-600">
-                  {result.staffed === false
-                    ? `It is after hours here, so a ${cfg.city} provider will confirm in the morning and call you tomorrow. We will text you their name first.`
-                    : `We are asking a ${cfg.city} provider to take your request now. Within the hour you will get a text with their name and the number they will call from.`}
-                </p>
+                {finished ? (
+                  <>
+                    <h2 className="mt-4 font-display text-[1.75rem] leading-tight">All set, {firstName.trim()}.</h2>
+                    <p className="mt-3 text-[15px] leading-relaxed text-gray-600">
+                      {result.staffed === false
+                        ? `A ${cfg.city} provider will confirm in the morning and call you. Keep your phone nearby.`
+                        : `A ${cfg.city} provider is being asked now. Keep your phone nearby.`}
+                    </p>
+                    <div className="mt-6 divide-y divide-gray-200 border-y border-gray-200 text-sm">
+                      <div className="flex justify-between gap-4 py-3">
+                        <span className="text-gray-500">Looking for</span>
+                        <span className="text-right font-medium text-gray-900">
+                          {WHAT.find((w) => w.v === what)?.label ?? "Care"}
+                          {who ? ` for ${WHO.find((w) => w.v === who)?.label.toLowerCase().replace(/^my /, "your ") ?? ""}` : ""}
+                        </span>
+                      </div>
+                      {when && (
+                        <div className="flex justify-between gap-4 py-3">
+                          <span className="text-gray-500">Starting</span>
+                          <span className="font-medium text-gray-900">{WHEN.find((w) => w.v === when)?.label}</span>
+                        </div>
+                      )}
+                      {payment && (
+                        <div className="flex justify-between gap-4 py-3">
+                          <span className="text-gray-500">Paying with</span>
+                          <span className="font-medium text-gray-900">{PAY.find((p) => p.v === payment)?.label}</span>
+                        </div>
+                      )}
+                      {note.trim() && (
+                        <div className="py-3">
+                          <span className="block text-gray-500">Your note</span>
+                          <span className="mt-1 block text-gray-900">“{note.trim()}”</span>
+                        </div>
+                      )}
+                    </div>
+                    <p className="mt-6 text-sm text-gray-500">You will get a text with the provider&rsquo;s name, then a call. Not a fit? Reply to the text and we send the next one.</p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="mt-4 font-display text-[1.75rem] leading-tight">Thanks, {firstName.trim()}. We are on it.</h2>
+                    <p className="mt-3 text-[15px] leading-relaxed text-gray-600">
+                      {result.staffed === false
+                        ? `A ${cfg.city} provider will confirm in the morning. We will text you their name.`
+                        : `Watch for a text with your ${cfg.city} provider's name within the hour.`}
+                    </p>
 
-                <div className="mt-6">
-                  <p className="text-xs font-semibold text-gray-600">How would care be paid for? (optional, helps the match)</p>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {PAY.map((p) => (
+                    <div className="mt-8">
+                      <p className="text-xs font-semibold text-gray-600">How would care be paid for? Optional.</p>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {PAY.map((p) => (
+                          <button
+                            key={p.v}
+                            type="button"
+                            onClick={() => {
+                              setPayment(p.v);
+                              void patch({ paymentType: p.v });
+                            }}
+                            className={`rounded-full border px-3 py-1 text-xs ${
+                              payment === p.v ? "border-primary-700 bg-primary-50 text-primary-800" : "border-gray-300 bg-white text-gray-700"
+                            }`}
+                          >
+                            {p.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-5">
+                      <label className="text-xs font-semibold text-gray-600">Anything they should know? Optional.</label>
+                      <textarea
+                        className={`${inputCls} mt-1 min-h-[72px]`}
+                        placeholder="Mom is 84, just home from the hospital after a fall, needs help mornings and evenings…"
+                        value={note}
+                        onChange={(e) => {
+                          setNote(e.target.value);
+                          setNoteSaved(false);
+                        }}
+                        maxLength={600}
+                      />
                       <button
-                        key={p.v}
                         type="button"
                         onClick={() => {
-                          setPayment(p.v);
-                          void patch({ paymentType: p.v });
+                          if (note.trim()) void patch({ note });
+                          setNoteSaved(true);
+                          setFinished(true);
                         }}
-                        className={`rounded-full border px-3 py-1 text-xs ${
-                          payment === p.v ? "border-primary-700 bg-primary-50 text-primary-800" : "border-gray-300 bg-white text-gray-700"
-                        }`}
+                        className="mt-3 block w-full rounded-xl bg-primary-700 px-4 py-3.5 text-center text-base font-semibold text-white hover:bg-primary-600"
                       >
-                        {p.label}
+                        {note.trim() ? "Send note and finish" : "Finish"}
                       </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-5">
-                  <label className="text-xs font-semibold text-gray-600">Anything they should know? (optional)</label>
-                  <textarea
-                    className={`${inputCls} mt-1 min-h-[72px]`}
-                    placeholder="Mom is 84, just home from the hospital after a fall, needs help mornings and evenings…"
-                    value={note}
-                    onChange={(e) => {
-                      setNote(e.target.value);
-                      setNoteSaved(false);
-                    }}
-                    maxLength={600}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      void patch({ note });
-                      setNoteSaved(true);
-                    }}
-                    className="mt-2 block w-full rounded-xl border border-primary-300 bg-white px-4 py-2.5 text-center text-[15px] font-semibold text-primary-700"
-                  >
-                    {noteSaved ? "Saved" : "Add note"}
-                  </button>
-                </div>
-
-                <p className="mt-6 text-sm leading-relaxed text-gray-600">
-                  What happens next: a provider accepts, we text you who it is, they call. If they do not, or it is not a
-                  fit, reply to our text and we offer your request to the next one. Nothing is booked or charged.
-                </p>
+                    </div>
+                  </>
+                )}
               </>
             )}
           </section>
@@ -458,8 +499,12 @@ function Avatar({ name, photo }: { name: string; photo: string | null }) {
     .map((w) => w[0]!.toUpperCase())
     .join("");
   return (
-    <span className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-100 text-sm font-semibold text-primary-800">
-      {photo ? <Image src={photo} alt="" fill sizes="44px" className="object-cover" /> : initials}
+    <span
+      className={`relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full text-sm font-semibold ${
+        photo ? "border border-gray-200 bg-white" : "bg-primary-100 text-primary-800"
+      }`}
+    >
+      {photo ? <Image src={photo} alt="" fill sizes="44px" quality={70} className="object-cover" /> : initials}
     </span>
   );
 }
