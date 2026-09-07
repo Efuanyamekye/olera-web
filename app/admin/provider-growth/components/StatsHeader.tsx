@@ -3,7 +3,10 @@
 /**
  * StatsHeader - Summary statistics for provider growth pipeline
  *
- * Shows counts for each pipeline stage and conversion status.
+ * Shows a simplified 3-box funnel: New Claims → Converted → Paying
+ * - Converted = Ads Free Trial + MedJobs Pilot
+ * - Paying = Ads Subscribed + MedJobs Subscribed
+ *
  * Note: Stats are always "all time" regardless of date filter.
  */
 
@@ -21,10 +24,10 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
         <div className="flex items-center gap-2 mb-2">
           <div className="h-4 w-16 bg-gray-200 rounded animate-pulse" />
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="rounded-xl border border-gray-200 bg-white px-3 py-2.5 animate-pulse">
-              <div className="h-6 w-12 bg-gray-200 rounded mb-1" />
+        <div className="grid grid-cols-3 gap-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="rounded-xl border border-gray-200 bg-white px-4 py-3 animate-pulse">
+              <div className="h-7 w-16 bg-gray-200 rounded mb-1" />
               <div className="h-3 w-20 bg-gray-100 rounded" />
             </div>
           ))}
@@ -35,15 +38,11 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
 
   if (!stats) return null;
 
+  // Simplified funnel: Claims → Converted (trial/pilot) → Paying
   const statItems = [
-    { label: "New Claims", value: stats.new_claim, color: "text-gray-900" },
-    { label: "Meeting Scheduled", value: stats.meeting_scheduled, color: "text-blue-600" },
-    { label: "Pitched", value: stats.pitched, color: "text-indigo-600" },
-    { label: "Not Interested", value: stats.not_interested, color: "text-gray-500" },
-    { label: "Ads Free Trial", value: stats.ads_free_intro, color: "text-amber-600", highlight: true },
-    { label: "Ads Paying", value: stats.ads_subscribed, color: "text-emerald-600", highlight: true },
-    { label: "MedJobs Pilot", value: stats.medjobs_in_pilot, color: "text-purple-600", highlight: true },
-    { label: "MedJobs Paying", value: stats.medjobs_subscribed, color: "text-emerald-600", highlight: true },
+    { label: "New Claims", value: stats.new_claim },
+    { label: "Converted", value: stats.ads_free_intro + stats.medjobs_in_pilot },
+    { label: "Paying", value: stats.ads_subscribed + stats.medjobs_subscribed },
   ];
 
   return (
@@ -53,20 +52,16 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
           All Time
         </span>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+      <div className="grid grid-cols-3 gap-3">
         {statItems.map((item) => (
           <div
             key={item.label}
-            className={`rounded-xl border px-3 py-2.5 ${
-              item.highlight
-                ? "border-emerald-200 bg-emerald-50/50"
-                : "border-gray-200 bg-white"
-            }`}
+            className="rounded-xl border border-gray-200 bg-white px-4 py-3"
           >
-            <div className={`text-xl font-semibold tabular-nums ${item.color}`}>
+            <div className="text-2xl font-semibold tabular-nums text-gray-900">
               {item.value.toLocaleString()}
             </div>
-            <div className="mt-0.5 text-xs text-gray-500 truncate" title={item.label}>
+            <div className="mt-0.5 text-xs text-gray-500">
               {item.label}
             </div>
           </div>

@@ -3,17 +3,13 @@
 /**
  * ProviderRow - Card-based provider row in the growth tracking list
  *
- * Shows provider name, contact info (phone/email), source, claim date,
+ * Shows provider name, contact info (phone/email), claim date,
  * verification status, profile completeness, and eligibility badges.
- * Follows the MedjobsCard pattern for consistency across admin pages.
  */
 
 import Link from "next/link";
 import type { ProviderGrowthWithProfile } from "@/lib/provider-growth/queries";
 import {
-  CLAIM_SOURCE_LABELS,
-  CLAIM_SOURCE_COLORS,
-  type ClaimSource,
   type AdsStatus,
   type MedjobsStatus,
 } from "@/lib/provider-growth/stages";
@@ -22,30 +18,32 @@ import { EligibilityBadges } from "./EligibilityBadges";
 interface ProviderRowProps {
   provider: ProviderGrowthWithProfile;
   onClick: () => void;
+  onDelete?: () => void;
   selected?: boolean;
 }
 
-export function ProviderRow({ provider, onClick, selected }: ProviderRowProps) {
-  // Build subtitle: city, state · email
-  const locationPart = [provider.city, provider.state].filter(Boolean).join(", ");
-  const subtitle = [locationPart, provider.email].filter(Boolean).join(" · ");
-
-  // Build category from care_types
+export function ProviderRow({ provider, onClick, onDelete, selected }: ProviderRowProps) {
+  // Line 2: Location · Category
+  const location = [provider.city, provider.state].filter(Boolean).join(", ");
   const category = provider.care_types?.slice(0, 2).join(", ") || null;
+  const locationCategory = [location, category].filter(Boolean).join(" · ");
+
+  // Line 3: Phone · Email
+  const contactParts: string[] = [];
+  if (provider.phone) contactParts.push(provider.phone);
+  if (provider.email) contactParts.push(provider.email);
 
   return (
     <div
       onClick={onClick}
-      className={`rounded-lg border bg-white px-4 py-3 cursor-pointer transition-colors hover:bg-gray-50 ${
-        selected
-          ? "border-blue-500 ring-1 ring-blue-500"
-          : "border-gray-200"
+      className={`group px-4 py-3 cursor-pointer transition-colors ${
+        selected ? "bg-primary-50" : "hover:bg-gray-50"
       }`}
     >
       <div className="flex items-start justify-between gap-4">
-        {/* Left: Provider info */}
+        {/* Left: Provider info (3 lines) */}
         <div className="min-w-0 flex-1">
-          {/* Title row: Name + verification badge */}
+          {/* Line 1: Name + verification badge */}
           <div className="flex items-center gap-2">
             <h3 className="truncate text-sm font-medium text-gray-900">
               {provider.display_name || "Unnamed Provider"}
@@ -53,59 +51,43 @@ export function ProviderRow({ provider, onClick, selected }: ProviderRowProps) {
             <VerificationBadge state={provider.verification_state} providerName={provider.display_name} />
           </div>
 
-          {/* Subtitle: Location · Email */}
-          {subtitle && (
-            <p className="mt-0.5 truncate text-xs text-gray-500">{subtitle}</p>
+          {/* Line 2: Location · Category */}
+          {locationCategory && (
+            <p className="mt-0.5 truncate text-xs text-gray-500">{locationCategory}</p>
           )}
 
-          {/* Phone (clickable) */}
-          {provider.phone && (
+          {/* Line 3: Phone · Email */}
+          {contactParts.length > 0 && (
             <p className="mt-0.5 text-xs text-gray-500">
-              <a
-                href={`tel:${provider.phone}`}
-                onClick={(e) => e.stopPropagation()}
-                className="text-blue-600 hover:text-blue-800 hover:underline"
-              >
-                {provider.phone}
-              </a>
+              {provider.phone && (
+                <a
+                  href={`tel:${provider.phone}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  {provider.phone}
+                </a>
+              )}
+              {provider.phone && provider.email && <span className="text-gray-400"> · </span>}
+              {provider.email && <span>{provider.email}</span>}
             </p>
           )}
-
-          {/* Category */}
-          {category && (
-            <p className="mt-0.5 truncate text-[11px] text-gray-400">{category}</p>
-          )}
-
-          {/* Badges row: Source + Claim date */}
-          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-            {provider.claim_source && (
-              <SourceBadge source={provider.claim_source as ClaimSource} />
-            )}
-            {provider.claimed_at && (
-              <span className="text-[10px] text-gray-400">
-                Claimed {timeAgo(provider.claimed_at)}
-              </span>
-            )}
-          </div>
         </div>
 
-        {/* Right: Status indicators + CTA */}
-        <div className="flex shrink-0 flex-col items-end justify-between gap-2">
-          {/* Top: Overflow/status */}
-          <div className="flex items-center gap-2">
-            {/* Profile completeness */}
-            <ProfileProgress value={provider.profile_completeness || 0} />
+        {/* Right: All badges on one line + trash icon */}
+        <div className="flex shrink-0 items-center gap-2">
+          {/* Profile completeness */}
+          <ProfileProgress value={provider.profile_completeness || 0} />
 
-            {/* Conversion status badges */}
-            {provider.ads_status !== "none" && (
-              <StatusBadge type="ads" status={provider.ads_status as AdsStatus} />
-            )}
-            {provider.medjobs_status !== "none" && (
-              <StatusBadge type="medjobs" status={provider.medjobs_status as MedjobsStatus} />
-            )}
-          </div>
+          {/* Conversion status badges */}
+          {provider.ads_status !== "none" && (
+            <StatusBadge type="ads" status={provider.ads_status as AdsStatus} />
+          )}
+          {provider.medjobs_status !== "none" && (
+            <StatusBadge type="medjobs" status={provider.medjobs_status as MedjobsStatus} />
+          )}
 
-          {/* Bottom: Eligibility badges */}
+          {/* Eligibility badges */}
           <EligibilityBadges
             adsEligible={provider.ads_eligible}
             medjobsEligible={provider.medjobs_eligible}
@@ -114,18 +96,30 @@ export function ProviderRow({ provider, onClick, selected }: ProviderRowProps) {
 
           {/* Meeting/pitch info */}
           {provider.pipeline_stage === "meeting_scheduled" && provider.meeting_scheduled_at && (
-            <div className="text-right">
-              <div className="text-xs font-medium text-blue-600">
-                {formatDate(provider.meeting_scheduled_at)}
-              </div>
-            </div>
+            <span className="text-xs font-medium text-blue-600">
+              {formatDate(provider.meeting_scheduled_at)}
+            </span>
           )}
           {provider.pipeline_stage === "pitched" && provider.pitched_at && (
-            <div className="text-right">
-              <div className="text-xs text-gray-400">
-                Pitched {timeAgo(provider.pitched_at)}
-              </div>
-            </div>
+            <span className="text-xs text-gray-400">
+              Pitched {timeAgo(provider.pitched_at)}
+            </span>
+          )}
+
+          {/* Trash icon - appears on hover */}
+          {onDelete && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
+              className="p-1 text-gray-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+              title="Remove from tracking"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
           )}
         </div>
       </div>
@@ -172,19 +166,6 @@ function VerificationBadge({ state, providerName }: { state: string | null; prov
 
   // Everything else (unverified, rejected, etc.): show nothing
   return null;
-}
-
-function SourceBadge({ source }: { source: ClaimSource }) {
-  const label = CLAIM_SOURCE_LABELS[source] || source;
-  const colorClass = CLAIM_SOURCE_COLORS[source] || "text-gray-600 bg-gray-50 border-gray-200";
-
-  return (
-    <span
-      className={`inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border ${colorClass}`}
-    >
-      {label}
-    </span>
-  );
 }
 
 function StatusBadge({

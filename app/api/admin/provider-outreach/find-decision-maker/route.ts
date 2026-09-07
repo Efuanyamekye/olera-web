@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { findDecisionMaker, isApolloConfigured } from "@/lib/apollo/client";
-import { sendDeferredNotificationsForProvider } from "@/lib/admin/send-deferred-notifications";
 
 /**
  * POST /api/admin/provider-outreach/find-decision-maker
@@ -148,122 +147,26 @@ export async function POST(request: NextRequest) {
       .eq("provider_id", provider_id)
       .maybeSingle();
 
-    // Check if provider already has an email on file
-    const providerHasEmail = !!provider.email?.trim();
-
-    // Determine if we should auto-confirm (set email_source and update email)
-    // Auto-confirm when provider has NO email (Needs Email tab use case)
-    // Don't auto-confirm when provider HAS email (Ready tab use case - user should confirm)
-    const autoConfirm = !providerHasEmail;
-
+    // Store Apollo contact in tracking - admin must explicitly confirm via "Use This" to copy to directory
     if (existingTracking) {
-      // Update existing tracking record
-      const updateData: Record<string, unknown> = {
-        apollo_contact: apolloContactData,
-      };
-      // Only set email_source if auto-confirming
-      if (autoConfirm) {
-        updateData.email_source = "decision_maker";
-      }
+      // Update existing tracking record with Apollo contact
       await db
         .from("provider_outreach_tracking")
-        .update(updateData)
+        .update({ apollo_contact: apolloContactData })
         .eq("id", existingTracking.id);
     } else {
       // Create new tracking record with Apollo contact
-      const insertData: Record<string, unknown> = {
+      await db.from("provider_outreach_tracking").insert({
         provider_id: provider_id,
         stage: "not_contacted",
         city: provider.city,
         state: provider.state,
         apollo_contact: apolloContactData,
-      };
-      // Only set email_source if auto-confirming
-      if (autoConfirm) {
-        insertData.email_source = "decision_maker";
-      }
-      await db.from("provider_outreach_tracking").insert(insertData);
-    }
-
-    // Only auto-update provider email if provider didn't have one (auto-confirm case)
-    // Otherwise, user should explicitly confirm via "Use This" or "Confirm"
-    const apolloEmail = result.contact.email;
-    let providerEmailError: Error | null = null;
-
-    if (autoConfirm) {
-      // Save Apollo email to directory level (olera-providers)
-      // This ensures pending questions/leads can be sent to this email
-      const { error } = await db
-        .from("olera-providers")
-        .update({ email: apolloEmail })
-        .eq("provider_id", provider_id);
-
-      if (error) {
-        console.error("[find-decision-maker] Error updating provider email:", error);
-        providerEmailError = error;
-        // Non-fatal - continue with the rest
-      }
-    }
-
-    // Only sync to business_profiles and send notifications when auto-confirming
-    // (when provider had no email and we're filling in the gap)
-    let linkedProfile: { id: string; slug: string | null } | null = null;
-    let notificationResult = { leadEmailsSent: 0, questionEmailsSent: 0, leadsSkipped: 0 };
-
-    if (autoConfirm) {
-      // Sync to business_profiles if linked (with claimed account protection)
-      const { data: profile } = await db
-        .from("business_profiles")
-        .select("id, slug, account_id, email")
-        .eq("source_provider_id", provider_id)
-        .maybeSingle();
-
-      linkedProfile = profile;
-
-      if (profile?.id) {
-        const isClaimed = !!profile.account_id;
-        const hasEmail = !!profile.email;
-
-        if (isClaimed && hasEmail) {
-          // Don't overwrite claimed account's email
-          console.log(`[find-decision-maker] Skipping business_profile sync for claimed account ${profile.id}`);
-        } else {
-          // Safe to sync: either unclaimed, or claimed but no email yet
-          await db
-            .from("business_profiles")
-            .update({ email: apolloEmail })
-            .eq("id", profile.id);
-        }
-      }
-
-      // Send deferred notifications for any pending questions/leads
-      const providerSlug = provider.slug || profile?.slug || provider_id;
-      const additionalSlugVariants: string[] = [];
-      if (provider.slug && provider.slug !== providerSlug) {
-        additionalSlugVariants.push(provider.slug);
-      }
-      if (profile?.slug && profile.slug !== providerSlug) {
-        additionalSlugVariants.push(profile.slug);
-      }
-      if (provider_id !== providerSlug) {
-        additionalSlugVariants.push(provider_id);
-      }
-
-      try {
-        notificationResult = await sendDeferredNotificationsForProvider({
-          profileId: profile?.id || "",
-          email: apolloEmail,
-          providerName: provider.provider_name || providerSlug,
-          providerSlug,
-          additionalSlugVariants,
-        });
-      } catch (notifErr) {
-        // Log but don't fail - Apollo contact was saved successfully
-        console.error("[find-decision-maker] Deferred notification error:", notifErr);
-      }
+      });
     }
 
     // Check if emails match (for frontend display logic)
+    const apolloEmail = result.contact.email;
     const emailsMatch = apolloEmail.toLowerCase() === provider.email?.toLowerCase();
 
     // Log touchpoint
@@ -276,20 +179,20 @@ export async function POST(request: NextRequest) {
         name: `${result.contact.first_name || ""} ${result.contact.last_name || ""}`.trim(),
         title: result.contact.title,
         credits_used: result.credits_used,
-        auto_confirmed: autoConfirm,
+        auto_confirmed: false, // Never auto-confirm - admin must explicitly use "Use This"
         emails_match: emailsMatch,
-        directory_synced: autoConfirm && !providerEmailError,
-        notifications_sent: notificationResult.leadEmailsSent + notificationResult.questionEmailsSent,
+        directory_synced: false,
+        notifications_sent: 0,
       },
     });
 
     return NextResponse.json({
       contact: result.contact,
       credits_used: result.credits_used,
-      auto_confirmed: autoConfirm,
+      auto_confirmed: false, // Never auto-confirm
       emails_match: emailsMatch,
-      directory_synced: autoConfirm && !providerEmailError,
-      notifications_sent: notificationResult.leadEmailsSent + notificationResult.questionEmailsSent,
+      directory_synced: false,
+      notifications_sent: 0,
     });
   } catch (error) {
     console.error("[find-decision-maker] Error:", error);

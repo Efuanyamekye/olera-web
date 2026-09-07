@@ -3040,7 +3040,8 @@ export default function ProviderOutreachPage() {
   const [showAssigneeAutocomplete, setShowAssigneeAutocomplete] = useState(false);
   const [showSequencePreview, setShowSequencePreview] = useState(false);
   // Apollo email preference: when true, use decision-maker email for providers that have one
-  const [useApolloEmail, setUseApolloEmail] = useState(true);
+  // Default to false - use provider's directory email unless admin explicitly opts into Apollo
+  const [useApolloEmail, setUseApolloEmail] = useState(false);
   const [sequencePreviewData, setSequencePreviewData] = useState<{
     providers: Array<{
       provider_id: string;
@@ -6226,6 +6227,11 @@ export default function ProviderOutreachPage() {
                               if (res.ok) {
                                 setClaimLinkSent(true);
                                 setPendingClaimLink(false);
+                                // Refresh email health to show updated delivery status
+                                fetch(`/api/admin/provider-outreach/email-health?provider_id=${actionModalProvider.provider_id}`)
+                                  .then((healthRes) => healthRes.json())
+                                  .then((data) => setEmailHealth({ ...data, loading: false }))
+                                  .catch(() => {/* silent - already sent successfully */});
                               } else {
                                 const err = await res.json();
                                 alert(err.error || "Failed to send claim link");
@@ -6995,7 +7001,7 @@ export default function ProviderOutreachPage() {
             setSequenceAssigneeId(null);
             setSequenceAssigneeName(null);
             setShowAssigneeAutocomplete(false);
-            setUseApolloEmail(true); // Reset to default
+            setUseApolloEmail(false); // Reset to default (provider directory email)
           }}
         >
           <div
@@ -7325,7 +7331,7 @@ export default function ProviderOutreachPage() {
                   setSequenceAssigneeId(null);
                   setSequenceAssigneeName(null);
                   setShowAssigneeAutocomplete(false);
-                  setUseApolloEmail(true); // Reset to default
+                  setUseApolloEmail(false); // Reset to default (provider directory email)
                 }}
                 disabled={actionLoading}
                 className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -7426,7 +7432,7 @@ export default function ProviderOutreachPage() {
                   setSequenceAssigneeId(null);
                   setSequenceAssigneeName(null);
                   setShowAssigneeAutocomplete(false);
-                  setUseApolloEmail(true); // Reset to default
+                  setUseApolloEmail(false); // Reset to default (provider directory email)
                 }}
                 disabled={actionLoading || sequencePreviewLoading || (sequencePreviewData?.summary.valid === 0)}
                 className="px-5 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"

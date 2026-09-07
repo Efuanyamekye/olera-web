@@ -190,3 +190,57 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
+
+/**
+ * DELETE /api/admin/provider-growth?tracking_id=xxx
+ *
+ * Remove a provider from growth tracking (does NOT delete from directory).
+ * Used to clean up test accounts from the tracking table.
+ */
+export async function DELETE(request: NextRequest) {
+  try {
+    const user = await getAuthUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+
+    const adminUser = await getAdminUser(user.id);
+    if (!adminUser) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const trackingId = searchParams.get("tracking_id");
+
+    if (!trackingId) {
+      return NextResponse.json(
+        { error: "tracking_id is required" },
+        { status: 400 }
+      );
+    }
+
+    const db = getServiceClient();
+
+    // Delete touchpoints first (foreign key constraint)
+    await db
+      .from("provider_growth_touchpoints")
+      .delete()
+      .eq("tracking_id", trackingId);
+
+    // Delete the tracking record
+    const { error } = await db
+      .from("provider_growth_tracking")
+      .delete()
+      .eq("id", trackingId);
+
+    if (error) {
+      console.error("[provider-growth] DELETE error:", error);
+      return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (e) {
+    console.error("[provider-growth] DELETE error:", e);
+    return NextResponse.json({ error: "Server error" }, { status: 500 });
+  }
+}

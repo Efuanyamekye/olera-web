@@ -51,19 +51,15 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Provider not found in outreach tracking" }, { status: 404 });
     }
 
-    // Get email from apollo_contact or fall back to olera-providers
-    let email: string | null = null;
-    const apolloContact = tracking.apollo_contact as { email?: string } | null;
-    if (apolloContact?.email) {
-      email = apolloContact.email;
-    } else {
-      const { data: provider } = await db
-        .from("olera-providers")
-        .select("email")
-        .eq("provider_id", providerId)
-        .single();
-      email = provider?.email || null;
-    }
+    // Get email from olera-providers (directory email) - this is the ONLY source of truth
+    // Apollo email is never used as fallback - admin must explicitly approve and copy it to directory first
+    const { data: provider } = await db
+      .from("olera-providers")
+      .select("email")
+      .eq("provider_id", providerId)
+      .single();
+
+    const email: string | null = provider?.email || null;
 
     if (!email) {
       return NextResponse.json({
