@@ -99,6 +99,7 @@ export default function ProviderOnboardPage() {
 
   // Core state
   const [step, setStep] = useState<OnboardStep>("loading");
+  const [openingNotifications, setOpeningNotifications] = useState(false);
   const [provider, setProvider] = useState<Provider | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [session, setSession] = useState<ClaimSessionData | null>(null);
@@ -432,6 +433,7 @@ export default function ProviderOnboardPage() {
               // 1. Show notification card + dashboard NOW (no auth needed)
               finalizeRef.current = true; // prevent useEffect auto-finalize race
               setPreVerifiedEmail(verifiedEmail);
+              setOpeningNotifications(actionParam === "notifications");
               setActionCardState(notificationStateMap[actionParam] || "pre-verified");
               setStep("dashboard");
 
@@ -494,6 +496,7 @@ export default function ProviderOnboardPage() {
                     attempt = await attemptSignIn();
                   }
                   if (!attempt.ok) {
+                    setOpeningNotifications(false);
                     console.warn("[OneClick] auto-sign-in failed:", attempt.error || attempt.status);
                     trackOneClickFailure(
                       slug,
@@ -573,6 +576,7 @@ export default function ProviderOnboardPage() {
                     router.replace(getActionRedirectUrl(actionParam, null, slug, searchParams.get("eid")));
                   }
                 } catch (err) {
+                  setOpeningNotifications(false);
                   console.warn("[OneClick] Background sign-in error:", err);
                   trackOneClickFailure(slug, "client_exception", String(err), actionParam, actionIdParam);
                 }
@@ -874,12 +878,21 @@ export default function ProviderOnboardPage() {
   }, [user, hasProviderProfile, openAuth, provider?.provider_id, provider?.provider_name, provider?.slug, provider?.email, provider?.city, provider?.state, refreshAccountData, switchProfile]);
 
   // Loading state
-  if (step === "loading") {
+  if (step === "loading" || openingNotifications) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F7F5F0]">
         <div className="text-center px-4">
           <div className="animate-spin w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full mx-auto" />
-          <p className="mt-4 text-gray-500">Loading...</p>
+          <div role="status" aria-live="polite">
+            <p className="mt-4 text-gray-700">
+              {actionParam === "notifications" ? "Opening notification settings…" : "Loading…"}
+            </p>
+            {actionParam === "notifications" && (
+              <p className="mt-2 text-sm text-gray-500">
+                {provider?.provider_name ? `For ${provider.provider_name}. ` : ""}Please wait while we securely open your settings.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     );
