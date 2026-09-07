@@ -719,7 +719,7 @@ export default function OperatingMap({
                   <Card
                     id="cr4"
                     code="CR4"
-                    label="Aid applied"
+                    label="Application submitted"
                     metric={nodes.cr4}
                     trend={trends.cr4}
                     loading={metricsLoading}
