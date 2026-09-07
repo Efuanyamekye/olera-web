@@ -38,7 +38,7 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     advice:
       "Work the largest channel that is falling, not the smallest one that is rising. A muted row at zero is an instrumentation job, not a dead channel.",
   },
-  traffic: {
+  cr1: {
     href: "/admin/organic-growth",
     label: "Growth drivers",
     advice:
