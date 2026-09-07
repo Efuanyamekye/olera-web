@@ -58,7 +58,7 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     const sum = cr6a + cr6b + cr6c;
     checks.push({
       id: "cr6-parts",
-      label: "CTAs submitted equals its three parts",
+      label: "CTAs completed equals its three parts",
       ok: cr6 === sum,
       detail: cr6 === sum ? undefined : `CR6 is ${cr6}, its parts add to ${sum}`,
     });

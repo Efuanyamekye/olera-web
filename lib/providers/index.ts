@@ -57,6 +57,7 @@ export {
   getProviderCities,
   countListedProviders,
   listedProviderIdsInCity,
+  providerKeysInCity,
   cityFilterFromSlug,
   claimedIdsAmong,
   claimedProviderIds,

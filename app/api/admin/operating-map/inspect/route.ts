@@ -126,6 +126,32 @@ const SOURCES: Record<
     summarize: (r) => `${String(r.display_name ?? "—")} · ${String(r.city ?? "")}`,
   },
   m2: {
+    title: "Provider profiles claimed",
+    table: "provider_activity",
+    select: "created_at, provider_id, event_type",
+    where: ["event_type is claim_completed"],
+    eventType: "claim_completed",
+    cityScoped: false,
+    summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
+  },
+  m3: {
+    title: "Managed ad signups",
+    table: "ad_campaign_requests",
+    select: "created_at, provider_id, status",
+    where: ["every row is one campaign request"],
+    cityScoped: false,
+    summarize: (r) =>
+      `${String(r.provider_id ?? "—")} · ${String(r.status ?? "")}`,
+  },
+  m4: {
+    title: "Provider staffing signups",
+    table: "staffing_touchpoints",
+    select: "created_at, outreach_id, type",
+    where: ["type is system_activated — the provider activated staffing"],
+    cityScoped: false,
+    summarize: (r) => `Outreach ${String(r.outreach_id ?? "—")}`,
+  },
+  m5: {
     title: "Care worker profiles completed",
     table: "business_profiles",
     select: "created_at, display_name, city, state",
@@ -137,32 +163,6 @@ const SOURCES: Record<
     cityScoped: false,
     providerCityScoped: true,
     summarize: (r) => `${String(r.display_name ?? "—")} · ${String(r.city ?? "")}`,
-  },
-  m3: {
-    title: "Provider profiles claimed",
-    table: "provider_activity",
-    select: "created_at, provider_id, event_type",
-    where: ["event_type is claim_completed"],
-    eventType: "claim_completed",
-    cityScoped: false,
-    summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
-  },
-  m4: {
-    title: "Managed ad signups",
-    table: "ad_campaign_requests",
-    select: "created_at, provider_id, status",
-    where: ["every row is one campaign request"],
-    cityScoped: false,
-    summarize: (r) =>
-      `${String(r.provider_id ?? "—")} · ${String(r.status ?? "")}`,
-  },
-  m5: {
-    title: "Provider staffing signups",
-    table: "staffing_touchpoints",
-    select: "created_at, outreach_id, type",
-    where: ["type is system_activated — the provider activated staffing"],
-    cityScoped: false,
-    summarize: (r) => `Outreach ${String(r.outreach_id ?? "—")}`,
   },
   cw1: {
     title: "Universities listed",
@@ -263,8 +263,8 @@ export async function GET(request: NextRequest) {
         .eq("is_active", true)
         .contains("metadata", { care_post: { status: "active" } });
     }
-    if (node === "m2") query = query.eq("type", "student").eq("is_active", true);
-    if (node === "m5") query = query.eq("type", "system_activated");
+    if (node === "m5") query = query.eq("type", "student").eq("is_active", true);
+    if (node === "m4") query = query.eq("type", "system_activated");
     if (node === "cw1") query = query.eq("is_active", true);
     if (node === "cw2") query = query.eq("status", "active");
     if (node === "tb1") query = query.eq("type", "inquiry").eq("status", "responded");

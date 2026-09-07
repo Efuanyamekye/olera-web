@@ -7,7 +7,11 @@ import DateRangePopover, {
   type DateRangeValue,
 } from "@/components/admin/DateRangePopover";
 import { useUrlDateRangeState } from "@/hooks/useUrlDateRangeState";
-import OperatingMap, { type MetricNodes, type NodeTrends } from "./OperatingMap";
+import OperatingMap, {
+  type Flows,
+  type MetricNodes,
+  type NodeTrends,
+} from "./OperatingMap";
 import NodeInspector from "./NodeInspector";
 
 /**
@@ -39,6 +43,7 @@ export default function OperatingMapView() {
 
   const [nodes, setNodes] = useState<MetricNodes>({});
   const [trends, setTrends] = useState<NodeTrends>({});
+  const [flows, setFlows] = useState<Flows | null>(null);
   const [inspecting, setInspecting] = useState<string | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(true);
 
@@ -76,12 +81,14 @@ export default function OperatingMapView() {
         // rendered — the map is for reading numbers, not auditing them. Hit
         // the endpoint directly when you want to audit.
         setNodes((d.nodes ?? {}) as MetricNodes);
+        setFlows((d.flows ?? null) as Flows | null);
         setMetricsLoading(false);
       })
       .catch((e: unknown) => {
         if ((e as Error)?.name === "AbortError") return;
         // Every instrumented node renders as unavailable rather than zero.
         setNodes({ cr2: { value: null, caveat: "This metric failed to load." } });
+        setFlows(null);
         setMetricsLoading(false);
       });
 
@@ -152,6 +159,7 @@ export default function OperatingMapView() {
         onSelectCity={onSelectCity}
         nodes={showNumbers ? nodes : {}}
         trends={showNumbers ? trends : {}}
+        flows={showNumbers ? flows : null}
         metricsLoading={showNumbers && metricsLoading}
         onInspect={showNumbers ? setInspecting : undefined}
         showNumbers={showNumbers}

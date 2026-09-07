@@ -226,6 +226,67 @@ export async function listedProviderIdsInCity(
 }
 
 /**
+ * Every string a city's providers answer to.
+ *
+ * Three different tables key the same provider three different ways, and
+ * this is not tidy-able from here — it is what the writers do:
+ *
+ *   provider_activity        the slug, falling back to the directory id
+ *   provider_question_asks   whatever the page URL said, so usually the slug
+ *   email_log                the linked business_profiles id, where there is
+ *                            one, and otherwise the directory id
+ *
+ * Matching a city against any one of those alone silently drops the rows
+ * keyed the other ways — and drops them as zeros, which read as a quiet
+ * market rather than as a missed join. So this returns all three kinds and
+ * callers test membership instead of equality.
+ */
+export async function providerKeysInCity(
+  db: SupabaseClient,
+  citySlug: string,
+): Promise<Set<string>> {
+  const keys = new Set<string>();
+  const directoryIds: string[] = [];
+  let scanned = 0;
+
+  for (;;) {
+    if (scanned >= MAX_ROWS) break;
+    let query = db
+      .from("olera-providers")
+      .select("provider_id, slug")
+      .or("deleted.is.null,deleted.eq.false");
+    query = applyCity(query, citySlug);
+
+    const { data, error } = await query.range(scanned, scanned + PAGE_SIZE - 1);
+    if (error) throw error;
+    const rows = (data ?? []) as { provider_id: string | null; slug: string | null }[];
+    if (rows.length === 0) break;
+    for (const r of rows) {
+      if (r.provider_id) {
+        keys.add(r.provider_id);
+        directoryIds.push(r.provider_id);
+      }
+      if (r.slug) keys.add(r.slug);
+    }
+    scanned += rows.length;
+    if (rows.length < PAGE_SIZE) break;
+  }
+
+  // The profile ids these providers are linked to, for the tables that key
+  // by profile. Batched because PostgREST carries filters in the URL.
+  for (let i = 0; i < directoryIds.length; i += PROVIDER_ID_CHUNK) {
+    const { data, error } = await db
+      .from("business_profiles")
+      .select("id")
+      .in("source_provider_id", directoryIds.slice(i, i + PROVIDER_ID_CHUNK));
+    if (error) throw error;
+    for (const r of (data ?? []) as { id: string }[]) keys.add(r.id);
+  }
+
+  return keys;
+}
+
+/**
  * Which of these provider ids have been claimed.
  *
  * Claimed means a business profile exists with an account behind it — the

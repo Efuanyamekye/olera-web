@@ -120,7 +120,7 @@ async function countAll(
     await Promise.allSettled([
       getOrganicVisitors(db, range, citySlug),
       getPageVisits(db, range, citySlug),
-      getConversions(db, range),
+      getConversions(db, range, citySlug),
       getProvidersInOutreach(db, range, citySlug),
       getMilestones(db, range, citySlug),
       getTracks(db, range),
@@ -137,10 +137,10 @@ async function countAll(
   if (outreach.status === "fulfilled") out.cp2 = outreach.value.value;
   if (milestones.status === "fulfilled") {
     out.m1 = milestones.value.careRecipientProfilesLive;
-    out.m2 = milestones.value.careWorkerProfiles;
-    out.m3 = milestones.value.providersClaimed;
-    out.m4 = milestones.value.managedAdSignups;
-    out.m5 = milestones.value.staffingSignups;
+    out.m2 = milestones.value.providersClaimed;
+    out.m3 = milestones.value.managedAdSignups;
+    out.m4 = milestones.value.staffingSignups;
+    out.m5 = milestones.value.careWorkerProfiles;
   }
   if (tracks.status === "fulfilled") {
     out.tb1 = tracks.value.inquiriesResponded;

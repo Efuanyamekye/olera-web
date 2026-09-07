@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import type { ReactNode } from "react";
+import type {
+  FocusEvent as ReactFocusEvent,
+  MouseEvent as ReactMouseEvent,
+  ReactNode,
+} from "react";
 import styles from "./OperatingMap.module.css";
 
 /**
@@ -93,6 +97,19 @@ export interface NodeTrend {
 
 export type NodeTrends = Record<string, NodeTrend | undefined>;
 
+/**
+ * What actually reached a provider, printed on the arrows into outreach.
+ *
+ * Separate from the CR6 counts on purpose. An ask is not a delivery: the
+ * chip says how many people asked, the arrow says how many notifications
+ * left for a provider's inbox, and the gap between them is the thing worth
+ * seeing.
+ */
+export interface Flows {
+  questionsToProviders: number | null;
+  connectionsToProviders: number | null;
+}
+
 /** The class that paints a value its trend colour. Flat keeps ordinary ink. */
 function toneClass(score: number): string | null {
   const step = Math.min(3, Math.abs(score));
@@ -133,11 +150,13 @@ const NODE_HELP: Record<string, string> = {
   cr4:
     "Page views across the three surfaces we publish, from all traffic sources. Counts views, not people, so it runs higher than CR2.",
   cr6:
-    "Every care recipient action that asks us for something: the three CTA types below, added together.",
+    "Every care recipient action that asks us for something: the three CTA types below, added together. Scoped by the city the ask is about.",
   cr6a:
-    "Questions submitted to providers through Q&A. Same source as the Overview's Questions Asked card, so the two always agree.",
-  cr6b: "Requests to be connected to a provider, however they started.",
-  cr6c: "Benefits screeners completed to the end, where results are saved.",
+    "Questions submitted to providers through Q&A. Same source as the Overview's Questions Asked card. The number on the arrow is how many reached a provider's inbox.",
+  cr6b:
+    "Requests to be connected to a provider, however they started. The number on the arrow is how many reached a provider's inbox.",
+  cr6c:
+    "Benefits screeners completed to the end, where results are saved. No provider is involved, so the city here is the care recipient's own.",
   cp1:
     "Every provider in the directory that has not been deleted, split by whether anyone has claimed them. Scoped by the provider's city. A standing count — the date range does not change it.",
   cp2:
@@ -145,11 +164,11 @@ const NODE_HELP: Record<string, string> = {
   m1:
     "Care recipient profiles with a published care post — the state that makes someone visible to providers. Publishing is not timestamped, so this counts profiles created in this range that are live today.",
   m2:
-    "Care worker profiles that are complete — a MedJobs application goes live once the intro video is in. Same timing caveat as M1.",
-  m3:
     "Providers who finished claiming their listing in this range. An event, unlike CP1's claimed total, which is a standing count.",
-  m4: "Providers who requested a managed ad campaign in this range.",
-  m5: "Providers who activated MedJobs staffing in this range.",
+  m3: "Providers who requested a managed ad campaign in this range.",
+  m4: "Providers who activated MedJobs staffing in this range.",
+  m5:
+    "Care worker profiles that are complete — a MedJobs application goes live once the intro video is in. Same timing caveat as M1.",
   cw1:
     "Universities we have listed and are working, scoped by the university's city. A standing count — the date range does not change it.",
   cw2:
@@ -174,6 +193,7 @@ export default function OperatingMap({
   onSelectCity,
   nodes,
   trends,
+  flows,
   metricsLoading,
   onInspect,
   showNumbers = true,
@@ -185,6 +205,8 @@ export default function OperatingMap({
   nodes: MetricNodes;
   /** Direction per node. Arrives after the values; missing = uncoloured. */
   trends: NodeTrends;
+  /** Counts printed on the two arrows into provider outreach. */
+  flows: Flows | null;
   metricsLoading: boolean;
   /** Open the receipts for a node. Omitted when inspection is unavailable. */
   onInspect?: (nodeKey: string) => void;
@@ -312,9 +334,19 @@ export default function OperatingMap({
       hArrow(B.cy, x + 1, B.l - G);
     };
     /** Feed a card's output into a vertical stem to its right. */
-    const toStem = (a: string, x: number) => {
+    const toStem = (a: string, x: number, count: number | null = null) => {
       const A = box(a);
       hArrow(A.cy, A.r + G, x - 1);
+      if (count === null) return;
+      // Sits on the line rather than beside it, so it reads as a property of
+      // the flow and not as another node floating in the gap.
+      const t = document.createElementNS(SVG_NS, "text");
+      t.setAttribute("x", String((A.r + G + x) / 2));
+      t.setAttribute("y", String(A.cy - 5));
+      t.setAttribute("text-anchor", "middle");
+      t.setAttribute("class", styles.wireLabel);
+      t.textContent = count.toLocaleString();
+      svg!.appendChild(t);
     };
 
     /** The line every top-section drop terminates on. */
@@ -349,7 +381,11 @@ export default function OperatingMap({
     const cp2 = box("cp2");
     seg(cp2.cx, cp2.b + G, cp2.cx, BT - 8);
     head(cp2.cx, BT, "d");
-    ["cr6a", "cr6b", "cr6c"].forEach((id) => toStem(id, cp2.cx));
+    // Benefits assessments never reach a provider, so only the two asks that
+    // do run across. Each carries what actually left for a provider's inbox.
+    const sent = flowsRef.current;
+    toStem("cr6a", cp2.cx, sent?.questionsToProviders ?? null);
+    toStem("cr6b", cp2.cx, sent?.connectionsToProviders ?? null);
 
     /* care worker runs straight down its lane and into the milestone layer */
     vDown("cw1", "cw2");
@@ -409,8 +445,11 @@ export default function OperatingMap({
   // A value or its caveat can change a card's height, and every arrow is
   // measured from those heights.
   useLayoutEffect(() => {
+    // Values change card heights, which every arrow is measured from. The
+    // flow labels change nothing about layout, so nothing else would notice
+    // them arriving — hence their own trigger here.
     draw();
-  }, [draw, nodes, metricsLoading]);
+  }, [draw, nodes, flows, metricsLoading, showNumbers]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -465,6 +504,12 @@ export default function OperatingMap({
    * the unscaled root so the tooltip renders at full size, whatever the
    * figure has been scaled to.
    */
+  // draw() has no dependencies by design — it measures the DOM rather than
+  // reading state — so the arrow labels reach it through a ref, and the
+  // effect below redraws when they land.
+  const flowsRef = useRef<Flows | null>(null);
+  flowsRef.current = showNumbers ? flows : null;
+
   const openTip = useCallback((
     el: HTMLElement,
     key: string,
@@ -504,6 +549,10 @@ export default function OperatingMap({
               onClick={() => setPickerOpen((v) => !v)}
               aria-expanded={pickerOpen}
               aria-haspopup="listbox"
+              onMouseEnter={(e) => openTip(e.currentTarget, "cities")}
+              onMouseLeave={() => setTip(null)}
+              onFocus={(e) => openTip(e.currentTarget, "cities")}
+              onBlur={() => setTip(null)}
             >
               {pillLabel}
               {!active && (
@@ -522,19 +571,6 @@ export default function OperatingMap({
               )}
               <span className={styles.pillCaret}>▼</span>
             </button>
-            <button
-              type="button"
-              className={styles.info}
-              aria-label="About this number"
-              style={{ position: "absolute", right: 10, top: 12 }}
-              onMouseEnter={(e) => openTip(e.currentTarget, "cities")}
-              onMouseLeave={() => setTip(null)}
-              onFocus={(e) => openTip(e.currentTarget, "cities")}
-              onBlur={() => setTip(null)}
-            >
-              ⓘ
-            </button>
-
             {pickerOpen && (
               <div className={styles.picker} role="listbox">
                 <button
@@ -627,8 +663,8 @@ export default function OperatingMap({
                   label={
                     <>
                       Page visits
-                      <br />
-                      <Surfaces metric={nodes.cr4} />
+                      {showNumbers && <br />}
+                      <Surfaces metric={nodes.cr4} showNumbers={showNumbers} />
                     </>
                   }
                 />
@@ -697,8 +733,12 @@ export default function OperatingMap({
                   label={
                     <>
                       Providers listed
-                      <br />
-                      <Surfaces metric={nodes.cp1} fallback="claimed · unclaimed" />
+                      {showNumbers && <br />}
+                      <Surfaces
+                        metric={nodes.cp1}
+                        fallback="claimed · unclaimed"
+                        showNumbers={showNumbers}
+                      />
                     </>
                   }
                   metric={nodes.cp1}
@@ -782,7 +822,7 @@ export default function OperatingMap({
                   hi
                   id="m2"
                   code="M2"
-                  label="Care worker profiles completed"
+                  label="Provider profiles claimed"
                   metric={nodes.m2}
                   trend={trends.m2}
                   loading={metricsLoading}
@@ -794,8 +834,8 @@ export default function OperatingMap({
                 <Card
                   hi
                   id="m3"
-                  code="M3"
-                  label="Provider profiles claimed"
+                  code="M3" money="Paid product"
+                  label="Managed ad signups"
                   metric={nodes.m3}
                   trend={trends.m3}
                   loading={metricsLoading}
@@ -807,8 +847,8 @@ export default function OperatingMap({
                 <Card
                   hi
                   id="m4"
-                  code="M4" money="Paid product"
-                  label="Managed ad signups"
+                  code="M4"
+                  label="Provider staffing signups"
                   metric={nodes.m4}
                   trend={trends.m4}
                   loading={metricsLoading}
@@ -821,7 +861,7 @@ export default function OperatingMap({
                   hi
                   id="m5"
                   code="M5"
-                  label="Provider staffing signups"
+                  label="Care worker profiles completed"
                   metric={nodes.m5}
                   trend={trends.m5}
                   loading={metricsLoading}
@@ -903,7 +943,7 @@ export default function OperatingMap({
               />
               <div className={styles.stat}>
                 <span className={styles.lab}>Revenue generated</span>
-                <span className={styles.v}>{NOT_INSTRUMENTED}</span>
+                {showNumbers && <span className={styles.v}>{NOT_INSTRUMENTED}</span>}
               </div>
             </div>
           </div>
@@ -960,12 +1000,6 @@ function Card({
             loading={loading}
             nodeKey={id}
             onInspect={onInspect}
-            showNumbers={showNumbers}
-          />
-          <InfoButton
-            nodeKey={id}
-            metric={metric}
-            trend={trend}
             onTip={onTip}
             onTipClose={onTipClose}
             showNumbers={showNumbers}
@@ -1013,12 +1047,6 @@ function Chip({
             loading={loading}
             nodeKey={id}
             onInspect={onInspect}
-            showNumbers={showNumbers}
-          />
-          <InfoButton
-            nodeKey={id}
-            metric={metric}
-            trend={trend}
             onTip={onTip}
             onTipClose={onTipClose}
             showNumbers={showNumbers}
@@ -1044,11 +1072,16 @@ export type TipOpener = (
 function Surfaces({
   metric,
   fallback,
+  showNumbers = true,
 }: {
   metric?: MetricNode;
   /** Shown before the node is instrumented. */
   fallback?: string;
+  showNumbers?: boolean;
 }) {
+  // With numbers off this line is only separators and the words between
+  // them — reporting furniture with nothing left to report.
+  if (!showNumbers) return null;
   const parts = metric?.breakdown;
   if (!parts?.length) {
     return (
@@ -1069,39 +1102,6 @@ function Surfaces({
   );
 }
 
-/** Only rendered where there is something to explain. */
-function InfoButton({
-  nodeKey,
-  metric,
-  trend,
-  onTip,
-  onTipClose,
-  showNumbers = true,
-}: {
-  nodeKey: string;
-  metric?: MetricNode;
-  trend?: NodeTrend;
-  onTip?: TipOpener;
-  onTipClose?: () => void;
-  showNumbers?: boolean;
-}) {
-  if (!showNumbers || !onTip || !NODE_HELP[nodeKey]) return null;
-  const note = trend ? trendNote(trend) : null;
-  return (
-    <button
-      type="button"
-      className={styles.info}
-      aria-label="About this number"
-      onMouseEnter={(e) => onTip(e.currentTarget, nodeKey, metric?.caveat, note)}
-      onMouseLeave={onTipClose}
-      onFocus={(e) => onTip(e.currentTarget, nodeKey, metric?.caveat, note)}
-      onBlur={onTipClose}
-    >
-      ⓘ
-    </button>
-  );
-}
-
 /** The number, or an honest placeholder. Never a zero standing in for
  *  "we don't know". */
 function MetricValue({
@@ -1110,6 +1110,8 @@ function MetricValue({
   loading,
   nodeKey,
   onInspect,
+  onTip,
+  onTipClose,
   showNumbers = true,
 }: {
   metric?: MetricNode;
@@ -1117,18 +1119,37 @@ function MetricValue({
   loading?: boolean;
   nodeKey?: string;
   onInspect?: (nodeKey: string) => void;
+  onTip?: TipOpener;
+  onTipClose?: () => void;
   showNumbers?: boolean;
 }) {
   // With numbers off there is nothing to say here, not even that we do not
   // know — a dash is still reporting.
   if (!showNumbers) return null;
 
+  // Hovering the number opens its explanation. There is no separate icon:
+  // one on every card was a field of small glyphs to look past, and the
+  // number is the thing you are already looking at.
+  const explains = Boolean(onTip && nodeKey && NODE_HELP[nodeKey]);
+  const hover = explains
+    ? {
+        onMouseEnter: (e: ReactMouseEvent<HTMLElement>) =>
+          onTip!(e.currentTarget, nodeKey!, metric?.caveat, trend ? trendNote(trend) : null),
+        onMouseLeave: onTipClose,
+        onFocus: (e: ReactFocusEvent<HTMLElement>) =>
+          onTip!(e.currentTarget, nodeKey!, metric?.caveat, trend ? trendNote(trend) : null),
+        onBlur: onTipClose,
+      }
+    : {};
+
   const placeholder = (text: string) => (
     // Wrapped like a real value so a node without a number is exactly as
     // tall as one with a number and an arrow. The arrows are measured
     // geometry; uneven card heights would move every wire on the page.
     <span className={styles.valueWrap}>
-      <span className={`${styles.value} ${styles.valueMuted}`}>{text}</span>
+      <span className={`${styles.value} ${styles.valueMuted}`} {...hover}>
+        {text}
+      </span>
       <span className={styles.trendArrow} aria-hidden="true" />
     </span>
   );
@@ -1154,11 +1175,14 @@ function MetricValue({
           className={`${styles.value} ${styles.valueButton}${tone ? ` ${tone}` : ""}`}
           onClick={() => onInspect!(nodeKey!)}
           title="Show where this number comes from"
+          {...hover}
         >
           {text}
         </button>
       ) : (
-        <span className={`${styles.value}${tone ? ` ${tone}` : ""}`}>{text}</span>
+        <span className={`${styles.value}${tone ? ` ${tone}` : ""}`} {...hover}>
+          {text}
+        </span>
       )}
       {/* Always rendered, empty when there is no direction, so the slot
           reserves the same height on every card. */}

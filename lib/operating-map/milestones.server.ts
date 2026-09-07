@@ -7,15 +7,15 @@ import { cityFilterFromSlug, listedProviderIdsInCity } from "@/lib/providers";
  *
  *   M1  care recipient profiles live        business_profiles type=family
  *                                           with a published care post
- *   M2  care worker profiles completed      business_profiles type=student
- *   M3  provider profiles claimed           provider_activity claim_completed
- *   M4  managed ad signups                  ad_campaign_requests
- *   M5  provider staffing signups           staffing_touchpoints system_activated
+ *   M2  provider profiles claimed           provider_activity claim_completed
+ *   M3  managed ad signups                  ad_campaign_requests
+ *   M4  provider staffing signups           staffing_touchpoints system_activated
+ *   M5  care worker profiles completed      business_profiles type=student
  *
  * "student" is the stored type for a care worker — MedJobs' original name for
  * them, kept because the column is what it is.
  *
- * M3, M4 and M5 are true events with their own timestamps. M1 and M2 are not,
+ * M2, M3 and M4 are true events with their own timestamps. M1 and M5 are not,
  * and that difference is real rather than cosmetic: a profile becomes
  * complete when `is_active` flips — a care worker's when their intro video
  * lands, a care recipient's again when their care post is published — and
@@ -127,7 +127,7 @@ async function countProviderEvents(
 }
 
 /**
- * M5 — providers activating staffing.
+ * M4 — providers activating staffing.
  *
  * The activation is a touchpoint; the provider it belongs to is one hop away
  * through staffing_outreach, so a city filter has to resolve that hop first.

@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
 
 /**
  * CR6 — the actions a care recipient takes, not the pages they read.
@@ -14,10 +15,25 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  * network-health counts, and two admin surfaces disagreeing about how many
  * questions were asked would be worse than the duplication.
  *
- * None of these carry visitor geo. It is recorded on page views, and these
- * are form submissions written through three different routes — so CR6 is an
- * all-cities figure and the caller has to say so when a city is selected.
+ * CITY. None of these carry visitor geo — they are form submissions written
+ * through three different routes — so the city here is the city the action
+ * is ABOUT, which is the reading that matters for a marketplace:
+ *
+ *   questions and connections   the provider's city; the ask is about them
+ *   benefits assessments        the care recipient's own city; no provider
+ *                               is involved at all
+ *
+ * Provider-keyed rows are matched against both the directory id and the slug
+ * (see `providerKeysInCity`) because a question is recorded against whatever
+ * the page URL said.
+ *
+ * The two "sent" figures are separate from the three counts and deliberately
+ * so: an ask is not a delivery. They count the notification actually leaving
+ * for the provider's inbox, which is the step that can silently fail.
  */
+
+const PAGE_SIZE = 1000;
+const MAX_ROWS = 100_000;
 
 export interface Conversions {
   questions: number;
@@ -25,34 +41,156 @@ export interface Conversions {
   benefitsAssessments: number;
   /** CR6's total: the three CTA types beneath it. */
   ctasTotal: number;
+  /** Question notifications that reached a provider's inbox. */
+  questionsSent: number;
+  /** Connection requests that reached a provider's inbox. */
+  connectionsSent: number;
 }
 
 type Range = { from: string | null; to: string | null };
+type Query = ReturnType<ReturnType<SupabaseClient["from"]>["select"]>;
 
-async function countEvents(
+function inRange(query: Query, range: Range): Query {
+  let q = query;
+  if (range.from) q = q.gte("created_at", range.from);
+  if (range.to) q = q.lt("created_at", range.to);
+  return q;
+}
+
+/** Fast path: nothing to intersect, so the database does the counting. */
+async function countAll(
   db: SupabaseClient,
   table: string,
   range: Range,
-  eventType?: string,
+  narrow: (q: Query) => Query = (q) => q,
 ): Promise<number> {
-  let query = db.from(table).select("id", { count: "exact", head: true });
-  if (eventType) query = query.eq("event_type", eventType);
-  if (range.from) query = query.gte("created_at", range.from);
-  if (range.to) query = query.lt("created_at", range.to);
-
+  const query = inRange(
+    narrow(db.from(table).select("id", { count: "exact", head: true })),
+    range,
+  );
   const { count, error } = await query;
   if (error) throw error;
   return count ?? 0;
 }
 
+/**
+ * Rows in the window whose key falls inside a set.
+ *
+ * The set is resolved once by the caller and tested here rather than pushed
+ * into the query, because PostgREST carries filters in the URL and a city
+ * can hold thousands of providers. These event tables are small next to page
+ * views, so reading the window and filtering in memory is the cheaper half
+ * of that trade.
+ */
+async function countKeyed(
+  db: SupabaseClient,
+  table: string,
+  keyField: string,
+  range: Range,
+  keys: Set<string>,
+  narrow: (q: Query) => Query = (q) => q,
+): Promise<number> {
+  let matched = 0;
+  let scanned = 0;
+
+  for (;;) {
+    if (scanned >= MAX_ROWS) break;
+    const query = inRange(narrow(db.from(table).select(`${keyField}, created_at`)), range);
+    const { data, error } = await query.range(scanned, scanned + PAGE_SIZE - 1);
+    if (error) throw error;
+    const rows = (data ?? []) as unknown as Record<string, unknown>[];
+    if (rows.length === 0) break;
+
+    for (const row of rows) {
+      const key = row[keyField];
+      // A row with no key cannot be placed in a city. It is not counted,
+      // rather than counted somewhere it might not belong.
+      if (typeof key === "string" && keys.has(key)) matched += 1;
+    }
+
+    scanned += rows.length;
+    if (rows.length < PAGE_SIZE) break;
+  }
+
+  return matched;
+}
+
+/** Care recipient profile ids in one city — what benefits events hang off. */
+async function familyProfileIdsInCity(
+  db: SupabaseClient,
+  citySlug: string,
+): Promise<Set<string>> {
+  const filter = cityFilterFromSlug(citySlug);
+  if (!filter) return new Set();
+
+  const ids = new Set<string>();
+  let scanned = 0;
+  for (;;) {
+    if (scanned >= MAX_ROWS) break;
+    const { data, error } = await db
+      .from("business_profiles")
+      .select("id")
+      .eq("type", "family")
+      .in("city", filter.names)
+      .eq("state", filter.state)
+      .range(scanned, scanned + PAGE_SIZE - 1);
+    if (error) throw error;
+    const rows = (data ?? []) as { id: string }[];
+    if (rows.length === 0) break;
+    for (const r of rows) ids.add(r.id);
+    scanned += rows.length;
+    if (rows.length < PAGE_SIZE) break;
+  }
+  return ids;
+}
+
+/** The email types that carry an ask to a provider. */
+const QUESTION_EMAIL = "question_received";
+const CONNECTION_EMAIL = "connection_request";
+
+/** Only a send that came back successful counts as having reached anyone. */
+const narrowSent = (emailType: string) => (q: Query) =>
+  q.eq("email_type", emailType).eq("recipient_type", "provider").eq("status", "sent");
+
 export async function getConversions(
   db: SupabaseClient,
   range: Range,
+  citySlug: string | null = null,
 ): Promise<Conversions> {
-  const [questions, connections, benefitsAssessments] = await Promise.all([
-    countEvents(db, "provider_question_asks", range),
-    countEvents(db, "provider_activity", range, "lead_received"),
-    countEvents(db, "seeker_activity", range, "benefits_completed"),
+  // Both key sets are resolved once, then shared by every count that needs
+  // them, rather than re-read per node.
+  const [providerKeys, familyIds] = citySlug
+    ? await Promise.all([
+        providerKeysInCity(db, citySlug),
+        familyProfileIdsInCity(db, citySlug),
+      ])
+    : [null, null];
+
+  const leadReceived = (q: Query) => q.eq("event_type", "lead_received");
+  const benefitsCompleted = (q: Query) => q.eq("event_type", "benefits_completed");
+
+  const [
+    questions,
+    connections,
+    benefitsAssessments,
+    questionsSent,
+    connectionsSent,
+  ] = await Promise.all([
+    providerKeys
+      ? countKeyed(db, "provider_question_asks", "provider_id", range, providerKeys)
+      : countAll(db, "provider_question_asks", range),
+    providerKeys
+      ? countKeyed(db, "provider_activity", "provider_id", range, providerKeys, leadReceived)
+      : countAll(db, "provider_activity", range, leadReceived),
+    familyIds
+      ? countKeyed(db, "seeker_activity", "profile_id", range, familyIds, benefitsCompleted)
+      : countAll(db, "seeker_activity", range, benefitsCompleted),
+    providerKeys
+      ? countKeyed(db, "email_log", "provider_id", range, providerKeys, narrowSent(QUESTION_EMAIL))
+      : countAll(db, "email_log", range, narrowSent(QUESTION_EMAIL)),
+    providerKeys
+      ? countKeyed(db, "email_log", "provider_id", range, providerKeys, narrowSent(CONNECTION_EMAIL))
+      : countAll(db, "email_log", range, narrowSent(CONNECTION_EMAIL)),
   ]);
 
   return {
@@ -60,5 +198,7 @@ export async function getConversions(
     connections,
     benefitsAssessments,
     ctasTotal: questions + connections + benefitsAssessments,
+    questionsSent,
+    connectionsSent,
   };
 }

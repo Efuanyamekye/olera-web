@@ -90,6 +90,8 @@ export async function GET(request: NextRequest) {
     let cr4PartsSum: number | undefined;
     let cp1OrphanedClaims: number | undefined;
     let cp1Unclaimed: number | undefined;
+    let flows: { questionsToProviders: number; connectionsToProviders: number } | null =
+      null;
     let inquiriesRaised: number | undefined;
     let interviewsProposed: number | undefined;
 
@@ -99,12 +101,16 @@ export async function GET(request: NextRequest) {
     const cityPredatesGeo =
       Boolean(city) && (!from || from < VISITOR_GEO_START);
 
-    // Visitor geo rides on page views. Form submissions are written through
-    // their own routes and carry none, so those nodes ignore the city filter
-    // and must say so rather than look like a quiet market.
+    // Some nodes cannot be placed in a city at all — an interview or a
+    // placement records neither a provider's city nor a visitor's. Those say
+    // so rather than looking like a quiet market.
     const notCityScoped = city
-      ? "Not scoped by city — city is only recorded on page views."
+      ? "Not scoped by city — an interview or a placement records neither party's city."
       : null;
+
+    /** Both caveats where a node carries both. */
+    const withCity = (note: string) =>
+      notCityScoped ? `${note} ${notCityScoped}` : note;
 
     try {
       const organic = await getOrganicVisitors(db, { from, to }, city);
@@ -152,14 +158,21 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-      const c = await getConversions(db, { from, to });
+      const c = await getConversions(db, { from, to }, city);
       // No breakdown here: CR6a/b/c render as their own chips directly
       // below, so a split on the parent would print the same three numbers
       // twice.
-      nodes.cr6 = { value: c.ctasTotal, caveat: notCityScoped };
-      nodes.cr6a = { value: c.questions, caveat: notCityScoped };
-      nodes.cr6b = { value: c.connections, caveat: notCityScoped };
-      nodes.cr6c = { value: c.benefitsAssessments, caveat: notCityScoped };
+      nodes.cr6 = { value: c.ctasTotal, caveat: null };
+      nodes.cr6a = { value: c.questions, caveat: null };
+      nodes.cr6b = { value: c.connections, caveat: null };
+      nodes.cr6c = { value: c.benefitsAssessments, caveat: null };
+      // What actually left for a provider's inbox. Rendered on the two
+      // arrows into outreach rather than as nodes: an ask is not a delivery,
+      // and the gap between the pair is the point of showing them.
+      flows = {
+        questionsToProviders: c.questionsSent,
+        connectionsToProviders: c.connectionsSent,
+      };
     } catch (error) {
       console.error("[operating-map/metrics] cr6 failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
@@ -203,10 +216,10 @@ export async function GET(request: NextRequest) {
         value: m.careRecipientProfilesLive,
         caveat: PROFILE_TIMING_CAVEAT,
       };
-      nodes.m2 = { value: m.careWorkerProfiles, caveat: PROFILE_TIMING_CAVEAT };
-      nodes.m3 = { value: m.providersClaimed, caveat: null };
-      nodes.m4 = { value: m.managedAdSignups, caveat: null };
-      nodes.m5 = { value: m.staffingSignups, caveat: null };
+      nodes.m2 = { value: m.providersClaimed, caveat: null };
+      nodes.m3 = { value: m.managedAdSignups, caveat: null };
+      nodes.m4 = { value: m.staffingSignups, caveat: null };
+      nodes.m5 = { value: m.careWorkerProfiles, caveat: PROFILE_TIMING_CAVEAT };
     } catch (error) {
       console.error("[operating-map/metrics] m1-m5 failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
@@ -234,9 +247,9 @@ export async function GET(request: NextRequest) {
       const t = await getTracks(db, { from, to });
       inquiriesRaised = t.inquiriesRaised;
       interviewsProposed = t.interviewsProposed;
-      nodes.tb1 = { value: t.inquiriesResponded, caveat: STATUS_TIMING_CAVEAT };
-      nodes.tc1 = { value: t.interviewsConfirmed, caveat: STATUS_TIMING_CAVEAT };
-      nodes.tc2 = { value: t.hires, caveat: STATUS_TIMING_CAVEAT };
+      nodes.tb1 = { value: t.inquiriesResponded, caveat: withCity(STATUS_TIMING_CAVEAT) };
+      nodes.tc1 = { value: t.interviewsConfirmed, caveat: withCity(STATUS_TIMING_CAVEAT) };
+      nodes.tc2 = { value: t.hires, caveat: withCity(STATUS_TIMING_CAVEAT) };
       // TA1, TA2 and TB2 have no source. Aid and care both continue off the
       // platform, so they stay dashes rather than guesses.
     } catch (error) {
@@ -260,7 +273,7 @@ export async function GET(request: NextRequest) {
       interviewsProposed,
     });
 
-    return NextResponse.json({ nodes, checks });
+    return NextResponse.json({ nodes, checks, flows });
   } catch (error) {
     console.error("[operating-map/metrics] Failed:", error);
     return NextResponse.json({ error: "Failed to load metrics" }, { status: 500 });
