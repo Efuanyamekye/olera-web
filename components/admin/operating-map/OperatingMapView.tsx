@@ -70,7 +70,7 @@ export default function OperatingMapView() {
       .catch((e: unknown) => {
         if ((e as Error)?.name === "AbortError") return;
         // Every instrumented node renders as unavailable rather than zero.
-        setNodes({ cr2: { value: null, caveat: "This metric failed to load." } });
+        setNodes({ cs2: { value: null, caveat: "This metric failed to load." } });
         setMetricsLoading(false);
       });
 

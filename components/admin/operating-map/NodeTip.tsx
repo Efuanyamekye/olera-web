@@ -33,25 +33,25 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
       "Coverage grows by adding providers, not cities. Run the city pipeline for a market before counting it as launched.",
   },
 
-  cr1: {
+  cs1: {
     href: "/admin/organic-growth",
     label: "Organic growth",
     advice:
       "Work the largest channel that is falling, not the smallest one that is rising. A row at zero can be an instrumentation job rather than a dead channel.",
   },
-  cr2: {
+  cs2: {
     href: "/admin/family-comms",
     label: "Family comms",
     advice:
       "This is our tempo, not the market's. It only moves when someone sends, so a flat week usually means nobody ran a batch.",
   },
-  cr3: {
+  cs3: {
     href: "/admin/care-seekers",
     label: "Care seekers",
     advice:
       "Most of these never reach a live care post. Open the rows and work the largest step down, not the smallest.",
   },
-  cr4: {
+  cs4: {
     href: "/admin/benefits",
     label: "Benefits",
     advice:
@@ -208,7 +208,7 @@ function Channels({
 
   return (
     <div className={styles.tipSection}>
-      {/* The heading carries the total. This table hangs off CR1's number
+      {/* The heading carries the total. This table hangs off CS1's number
           now, and the two count different things — visitors to the site
           against families who did something on it. */}
       <span className={styles.tipLabel}>
@@ -318,7 +318,7 @@ export default function NodeTip({
   caveat?: string | null;
   /** The node's own breakdown. */
   metric?: MetricNode;
-  /** Site traffic, whose channel table hangs off CR1. */
+  /** Site traffic, whose channel table hangs off CS1. */
   traffic?: MetricNode;
   trend?: NodeTrend | null;
   /** All node trends, so the channel rows can find their own. */
@@ -364,7 +364,7 @@ export default function NodeTip({
         </div>
       )}
 
-      {nodeKey === "cr1" && traffic?.breakdown?.length ? (
+      {nodeKey === "cs1" && traffic?.breakdown?.length ? (
         <Channels parts={traffic.breakdown} trends={trends} />
       ) : null}
 
