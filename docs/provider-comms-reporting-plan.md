@@ -20,6 +20,13 @@ Audit date: September 7, 2026. The first reporting slice is implemented on `code
 5. Check that welcome and preview share the onboarding journey and that profile preview belongs to Provider Lifecycle in Automations.
 6. Verify that the report does not display invented profile-edit conversion or eligible/missed totals. No test send is needed for this read-only feature.
 
+### Pre-test review fixes
+
+- Analytics previously included suppressed/pending/failed attempts in its newly added onboarding “Sent” total. It now uses the shared accepted-message rule before counting any provider-comms funnel row. Historical totals can decrease appropriately; same-window outcome attribution remains unchanged.
+- The existing Emails drill-down could let an older filter response overwrite the latest results, and an older email-preview response could display beneath a newly selected recipient. Reproduced both with deliberately reversed response order, then added cancellation guards and regression tests. Row/preview pairs now also have stable React keys.
+- “Inspect activity” now explicitly opens the provider feed rather than the default family feed.
+- The original preview build succeeded. Its deployment-specific hostname redirected to the public homepage without a signed-in admin session, so authenticated preview QA remains required. No production authentication was bypassed.
+
 ## Recommendation
 
 Add **Provider Comms** under Operations beside Family Comms. Start with the post-claim onboarding journey (welcome and profile preview), with a cold-outreach cohort filter. Reuse the existing sending system, email ledger, webhook events, provider activity, identity resolution, previews, and automation detail pages.

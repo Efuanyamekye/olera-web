@@ -44,6 +44,35 @@ const base = {
   bounced_at: null,
   complained_at: null,
 };
+assert.equal(reporting.isAcceptedEmail(base), true);
+assert.equal(
+  reporting.isAcceptedEmail({
+    ...base,
+    status: "failed",
+    delivered_at: null,
+    error_message: "Suppressed: verified undeliverable",
+  }),
+  false,
+);
+assert.equal(
+  reporting.isAcceptedEmail({
+    ...base,
+    status: "failed",
+    delivered_at: null,
+    error_message: "API request failed",
+    resend_id: null,
+  }),
+  false,
+);
+assert.equal(
+  reporting.isAcceptedEmail({
+    ...base,
+    status: "pending",
+    delivered_at: null,
+    resend_id: null,
+  }),
+  false,
+);
 assert.equal(
   reporting.deliveryState({
     ...base,

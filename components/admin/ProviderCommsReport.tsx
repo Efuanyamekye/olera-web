@@ -331,7 +331,7 @@ export default function ProviderCommsReportView({
                 originating message.
               </p>
               <Link
-                href="/admin/activity"
+                href="/admin/activity?actor=providers"
                 className="mt-3 inline-block text-sm text-teal-700 hover:underline"
               >
                 Inspect activity →

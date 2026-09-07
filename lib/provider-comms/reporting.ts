@@ -58,7 +58,16 @@ export function suppressionReason(error: string | null): string | null {
   if (value.includes("preference")) return "Notification preference";
   return "Other suppression";
 }
-export function deliveryState(row: EmailRecord): DeliveryState {
+type DeliveryRecord = Pick<
+  EmailRecord,
+  | "status"
+  | "error_message"
+  | "resend_id"
+  | "delivered_at"
+  | "bounced_at"
+  | "complained_at"
+>;
+export function deliveryState(row: DeliveryRecord): DeliveryState {
   if (suppressionReason(row.error_message)) return "suppressed";
   if (row.complained_at || row.status === "complained") return "complained";
   if (row.bounced_at || row.status === "bounced") return "bounced";
@@ -70,6 +79,10 @@ export function deliveryState(row: EmailRecord): DeliveryState {
   )
     return "accepted";
   return "pending";
+}
+/** A reserved/suppressed/failed attempt is not a dispatched message. */
+export function isAcceptedEmail(row: DeliveryRecord): boolean {
+  return !["suppressed", "failed", "pending"].includes(deliveryState(row));
 }
 export function isInternalRecipient(email: string): boolean {
   return email.trim().toLowerCase().endsWith("@olera.care");

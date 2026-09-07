@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   ONBOARDING_EMAIL_TYPES,
   deliveryState,
+  isAcceptedEmail,
   isInternalRecipient,
   outreachBeforeClaim,
   suppressionReason,
@@ -180,8 +181,7 @@ export async function loadProviderCommsReport(
         ? variants.get(row.provider_id)
         : undefined;
       const state = deliveryState(row);
-      const transmitted =
-        state !== "suppressed" && state !== "failed" && state !== "pending";
+      const transmitted = isAcceptedEmail(row);
       return {
         id: row.id,
         providerKey:
