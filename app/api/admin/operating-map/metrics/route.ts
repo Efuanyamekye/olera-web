@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import {
+  getAllVisitors,
   getDirectVisitors,
   getOrganicVisitors,
   getPaidVisitors,
@@ -94,6 +95,7 @@ export async function GET(request: NextRequest) {
     let cp1Unclaimed: number | undefined;
     let flows: { questionsToProviders: number; connectionsToProviders: number } | null =
       null;
+    let allVisitors: number | undefined;
     let inquiriesRaised: number | undefined;
     let interviewsProposed: number | undefined;
 
@@ -137,14 +139,18 @@ export async function GET(request: NextRequest) {
     };
 
     try {
-      const [direct, organic, paid] = await Promise.all([
+      const [direct, organic, paid, all] = await Promise.all([
         getDirectVisitors(db, { from, to }, city),
         getOrganicVisitors(db, { from, to }, city),
         getPaidVisitors(db, { from, to }, city),
+        getAllVisitors(db, { from, to }, city),
       ]);
       nodes.cr1 = { value: direct.value, caveat: visitorCaveats(direct) };
       nodes.cr2 = { value: organic.value, caveat: visitorCaveats(organic) };
       nodes.cr3 = { value: paid.value, caveat: visitorCaveats(paid) };
+      // Not a node: the whole population, so the check below can say how
+      // many visitors none of the three chips accounts for.
+      allVisitors = all.value;
     } catch (error) {
       console.error("[operating-map/metrics] cr1-cr3 failed:", error);
       // One failed node must not blank the others. Null is rendered as
@@ -304,6 +310,7 @@ export async function GET(request: NextRequest) {
       cr4PartsSum,
       cp1OrphanedClaims,
       cp1Unclaimed,
+      allVisitors,
       inquiriesRaised,
       interviewsProposed,
     });

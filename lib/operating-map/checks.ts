@@ -41,6 +41,8 @@ export interface CheckInputs {
   cp1OrphanedClaims?: number;
   /** CP1's unclaimed half — the set CP2 is drawn from. */
   cp1Unclaimed?: number;
+  /** Every visitor to the pages CR4 counts, whatever brought them. */
+  allVisitors?: number;
   /** Inquiries raised — the set TB1's answered count is drawn from. */
   inquiriesRaised?: number;
   /** Interviews proposed — the set TC1's confirmed count is drawn from. */
@@ -95,6 +97,29 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
       ok: sources <= cr4,
       detail:
         sources <= cr4 ? undefined : `The three sources add to ${sources}, CR4 is ${cr4}`,
+    });
+  }
+
+  if (
+    cr1 !== null &&
+    cr2 !== null &&
+    cr3 !== null &&
+    typeof inputs.allVisitors === "number"
+  ) {
+    // The three chips are meant to explain where the traffic came from. Any
+    // visitor none of them accounts for — social, AI chat, an unclassified
+    // referrer — is traffic the map cannot explain, and that number is worth
+    // stating rather than leaving as a silent remainder.
+    const sources = cr1 + cr2 + cr3;
+    const residual = inputs.allVisitors - sources;
+    checks.push({
+      id: "sources-account-for-visitors",
+      label: "Direct, organic and paid account for every visitor",
+      ok: residual === 0,
+      detail:
+        residual === 0
+          ? undefined
+          : `${residual} of ${inputs.allVisitors} visitors came from somewhere else — social, AI chat, or an unclassified referrer`,
     });
   }
 

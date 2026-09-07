@@ -19,8 +19,10 @@ import { CONTENT_PAGE_FILTERS } from "@/lib/analytics/content-pages";
  * right job for it.
  *
  * The three do not add up to everyone. Social, AI-chat and other referrals
- * reach CR4 without appearing in any chip, and paid traffic outside Ad Boost
- * carries no managed UTM. The tooltips say so.
+ * reach these pages without appearing in any chip, and paid traffic outside
+ * Ad Boost carries no managed UTM. `getAllVisitors` counts the whole
+ * population so the size of that residual is a number we can state rather
+ * than a gap nobody has measured.
  *
  * "Organic" is `referrer_class = 'search'`, the same bucket GA calls Organic
  * Search. AI chat referrals are classified separately by
@@ -52,7 +54,9 @@ import { CONTENT_PAGE_FILTERS } from "@/lib/analytics/content-pages";
 /** What separates the three sources, as stored on a page view. */
 type Arrival =
   | { field: "referrer_class"; value: "search" | "direct" }
-  | { field: "utm_source"; value: "olera_managed" };
+  | { field: "utm_source"; value: "olera_managed" }
+  /** No test at all — every visitor to these pages, whatever brought them. */
+  | null;
 
 const ORGANIC: Arrival = { field: "referrer_class", value: "search" };
 const DIRECT: Arrival = { field: "referrer_class", value: "direct" };
@@ -120,8 +124,11 @@ async function collectSessions(
     let query = db
       .from(table)
       .select(table === "page_events" ? "sid:session_id" : "sid:metadata->>session_id")
-      .eq("event_type", "page_view")
-      .filter(`metadata->>${arrival.field}`, "eq", arrival.value);
+      .eq("event_type", "page_view");
+
+    if (arrival) {
+      query = query.filter(`metadata->>${arrival.field}`, "eq", arrival.value);
+    }
 
     // page_events carries surfaces CR4 does not count. Narrowing to the same
     // two keeps every source a true slice of the box it feeds.
@@ -189,7 +196,7 @@ async function countVisitors(
     // Only the referrer-class sources depend on that instrumentation. A
     // managed UTM has been on the link since the campaign was built.
     partialInstrumentation:
-      arrival.field === "referrer_class" &&
+      arrival?.field === "referrer_class" &&
       (!range.from || range.from < REFERRER_INSTRUMENTATION_START),
     partialCityData:
       Boolean(citySlug) && (!range.from || range.from < VISITOR_GEO_START),
@@ -220,4 +227,17 @@ export function getPaidVisitors(
   citySlug: string | null = null,
 ): Promise<OrganicVisitors> {
   return countVisitors(db, PAID, range, citySlug);
+}
+
+/**
+ * Not a node — every visitor to these pages, so the three sources can be
+ * checked against the whole rather than only against each other. What the
+ * three miss is a real number, and this is how it gets one.
+ */
+export function getAllVisitors(
+  db: SupabaseClient,
+  range: { from: string | null; to: string | null },
+  citySlug: string | null = null,
+): Promise<OrganicVisitors> {
+  return countVisitors(db, null, range, citySlug);
 }

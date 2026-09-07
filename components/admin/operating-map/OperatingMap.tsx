@@ -137,7 +137,7 @@ const NODE_HELP: Record<string, string> = {
   cr3:
     "Unique people who landed on a provider, benefits or editorial page with an Ad Boost tag on the link. Paid traffic without that tag, or landing anywhere else, is not counted.",
   cr4:
-    "Page views on provider, benefits and editorial pages, from all traffic sources. Nothing else is tracked — not the homepage, search or city pages. Views, not people.",
+    "Page views on the same three surfaces CR1, CR2 and CR3 count visitors to. Views, not people, so the three above will always add to less than this.",
   cr6:
     "Every care recipient action that asks us for something: the three CTA types below, added together. Scoped by the city the ask is about.",
   cr6a:
