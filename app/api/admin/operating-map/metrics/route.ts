@@ -48,7 +48,7 @@ const STATUS_TIMING_CAVEAT =
   "Counts rows created in this range that have since reached this state — the status change itself is not timestamped.";
 
 const PROFILE_TIMING_CAVEAT =
-  "Counts profiles created in this range that are complete now — completion itself is not timestamped.";
+  "Counts profiles created in this range that are in this state now — reaching it is not itself timestamped.";
 
 /** A named part of a node's total, rendered on the card under its label. */
 export interface OperatingMapBreakdown {
@@ -200,10 +200,7 @@ export async function GET(request: NextRequest) {
     try {
       const m = await getMilestones(db, { from, to }, city);
       nodes.m1 = {
-        value: m.careRecipientProfiles,
-        // Only the live half goes in the breakdown; the completed half is
-        // already the node's value, and printing it twice is noise.
-        breakdown: [{ label: "live", value: m.careRecipientProfilesLive }],
+        value: m.careRecipientProfilesLive,
         caveat: PROFILE_TIMING_CAVEAT,
       };
       nodes.m2 = { value: m.careWorkerProfiles, caveat: PROFILE_TIMING_CAVEAT };

@@ -5,7 +5,8 @@ import { cityFilterFromSlug, listedProviderIdsInCity } from "@/lib/providers";
  * M1–M5 — the user milestone strip: the moments someone stops being traffic
  * and becomes a record we can act on.
  *
- *   M1  care recipient profiles completed   business_profiles type=family
+ *   M1  care recipient profiles live        business_profiles type=family
+ *                                           with a published care post
  *   M2  care worker profiles completed      business_profiles type=student
  *   M3  provider profiles claimed           provider_activity claim_completed
  *   M4  managed ad signups                  ad_campaign_requests
@@ -17,22 +18,21 @@ import { cityFilterFromSlug, listedProviderIdsInCity } from "@/lib/providers";
  * M3, M4 and M5 are true events with their own timestamps. M1 and M2 are not,
  * and that difference is real rather than cosmetic: a profile becomes
  * complete when `is_active` flips — a care worker's when their intro video
- * lands — and nothing records when that happened. So those two count
- * profiles CREATED in the window that are active NOW. A profile created just
- * before the window and finished inside it is missed; one created inside and
- * finished after is counted. The tooltip says so.
+ * lands, a care recipient's again when their care post is published — and
+ * nothing records when that happened. So those two count profiles CREATED in
+ * the window that are in that state NOW. A profile created just before the
+ * window and finished inside it is missed; one created inside and finished
+ * after is counted. The tooltip says so.
+ *
+ * M1 counts only live profiles, not merely complete ones. A profile nobody
+ * can see is not a milestone.
  */
 
 const PAGE_SIZE = 1000;
 const MAX_ROWS = 100_000;
 
 export interface Milestones {
-  careRecipientProfiles: number;
-  /**
-   * Of those, the ones whose care post is published — the same state CR6c
-   * counts the act of reaching. A completed profile that is not live is
-   * invisible to providers, so the pair is the useful reading.
-   */
+  /** M1 — profiles whose care post is published, so providers can see them. */
   careRecipientProfilesLive: number;
   careWorkerProfiles: number;
   providersClaimed: number;
@@ -188,14 +188,12 @@ export async function getMilestones(
     : null;
 
   const [
-    careRecipientProfiles,
     careRecipientProfilesLive,
     careWorkerProfiles,
     providersClaimed,
     managedAdSignups,
     staffingSignups,
   ] = await Promise.all([
-    countProfiles(db, "family", range, citySlug),
     countProfiles(db, "family", range, citySlug, true),
     countProfiles(db, "student", range, citySlug),
     countProviderEvents(
@@ -223,7 +221,6 @@ export async function getMilestones(
   ]);
 
   return {
-    careRecipientProfiles,
     careRecipientProfilesLive,
     careWorkerProfiles,
     providersClaimed,

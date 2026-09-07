@@ -112,10 +112,15 @@ const SOURCES: Record<
       `${String(r.provider_id ?? "—")} · ${String(r.email_type ?? "email")}`,
   },
   m1: {
-    title: "Care recipient profiles completed",
+    title: "Care recipient profiles live",
     table: "business_profiles",
     select: "created_at, display_name, city, state",
-    where: ["type is family", "profile is active", "created in this range"],
+    where: [
+      "type is family",
+      "profile is active",
+      "care post is published",
+      "created in this range",
+    ],
     cityScoped: false,
     providerCityScoped: true,
     summarize: (r) => `${String(r.display_name ?? "—")} · ${String(r.city ?? "")}`,
@@ -252,7 +257,12 @@ export async function GET(request: NextRequest) {
 
     const where = [...source.where];
     if (source.eventType) query = query.eq("event_type", source.eventType);
-    if (node === "m1") query = query.eq("type", "family").eq("is_active", true);
+    if (node === "m1") {
+      query = query
+        .eq("type", "family")
+        .eq("is_active", true)
+        .contains("metadata", { care_post: { status: "active" } });
+    }
     if (node === "m2") query = query.eq("type", "student").eq("is_active", true);
     if (node === "m5") query = query.eq("type", "system_activated");
     if (node === "cw1") query = query.eq("is_active", true);

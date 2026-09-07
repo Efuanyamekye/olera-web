@@ -99,7 +99,7 @@ const NODE_HELP: Record<string, string> = {
   cp2:
     "Unclaimed providers who heard from us in this range — any email, call or MedJobs contact. Counts providers, not messages, so twenty emails to one provider is one.",
   m1:
-    "Care recipient profiles that are complete, and how many of those have a published care post. Completion is not timestamped, so this counts profiles created in this range that are complete today.",
+    "Care recipient profiles with a published care post — the state that makes someone visible to providers. Publishing is not timestamped, so this counts profiles created in this range that are live today.",
   m2:
     "Care worker profiles that are complete — a MedJobs application goes live once the intro video is in. Same timing caveat as M1.",
   m3:
@@ -704,13 +704,7 @@ export default function OperatingMap({
                   hi
                   id="m1"
                   code="M1"
-                  label={
-                    <>
-                      Care recipient profiles completed
-                      <br />
-                      <Surfaces metric={nodes.m1} fallback="live" />
-                    </>
-                  }
+                  label="Care recipient profiles live"
                   metric={nodes.m1}
                   loading={metricsLoading}
                   onTip={openTip}
