@@ -36,23 +36,40 @@ Two more, statistical: at ~2.7% click-to-inquiry and ~20 clicks a flight, P(zero
 
 Service-role key is in `.env.local`; never ask TJ for it. **Every metric column on `ad_campaign_requests` is hand-typed and wrong** — on 4 Sep Edmonds read $0.00 / 4 impressions against Google's $43.52 / 394. Read them for what the operator *believed*, never for what happened. Google is the only source for spend, clicks, impressions.
 
-1. **Campaign rows** — all of them, not just live. Group by `provider_id`. Note `campaign_tag`, `status`, `flight_start_date`/`flight_end_date` (routinely null on live rows — a finding in itself), `provider_comms_paused_at`, `admin_note` (the pre-case-log narrative; read it, it often contains the setup config and a hypothesis nobody followed up).
+1. **Campaign rows** — all of them, not just live. Group by `provider_id`. Note `campaign_tag`, `status`, `flight_start_date`/`flight_end_date` (routinely null on live rows — a finding in itself), `provider_comms_paused_at`, `admin_note`.
 
-2. **The case log** — one request per provider, markdown so it reads as a story:
+   Also pull the **city campaigns**: `city_campaigns` and `city_leads`. These are Olera-owned, provider-agnostic campaigns on the same Google Ads account, and they are in scope for every audit. They are easy to miss twice over: they have no `provider_id`, and **they do not appear in the `/aw/campaigns` list under the saved view's filters** — a sweep run from the campaign table alone will skip them. Reach them by `platform_campaign_id`. Filter `city_leads` on `is_test=false`; TJ's own test rows are in there.
+
+2. **Read every note in full and score its predictions. Do this before the browser and before forming any hypothesis.**
+
+   `admin_note` is not background colour. It is the only durable record of what was decided at build time and why, and **it routinely contains the answer to the question the audit is asking.** The failure this step exists to prevent, observed 7 Sep 2026: three campaigns had served zero all day, and the cause was sitting in their own build notes — Google's own estimated CPC, recorded at build as **$3.68 / $3.61 / $2.94, every one of them above the $2.50 cap the campaign was then given**. Rosemonte's note had said it outright a month earlier: *"Google est. avg CPC $3.10 vs $2.50 cap — expect underspend."* The flag had been raised four times and scored zero times. The audit went to the browser and re-derived it as a "new discovery."
+
+   So produce this table before anything else, and put it in the readout:
+
+   | Campaign | Prediction or flag recorded in the note | Where | What actually happened | Scored |
+   |---|---|---|---|---|
+
+   Sweep every note for: Google's estimated CPC or clicks/week against the cap and budget actually set; any sentence beginning "expect", "watch", "flag for TJ", "PENDING", "decide at"; any deviation from SOP that was recorded and justified; any hypothesis stated at build. **Every one of those is a prediction nobody has scored.** Scoring them is usually cheaper and more conclusive than anything the browser will tell you.
+
+   Two rules that follow from it:
+   - **Nothing is a "new finding" until you have checked whether a prior note already recorded it.** If a note did, say so and credit it — the finding is *"this was flagged on <date> and not acted on"*, which is a different and more actionable claim than *"I discovered this."*
+   - **A pattern across three or more notes outranks anything in one campaign's browser data.** Repeated build-time flags point at a defect in `/ad-boost-setup`, not at three separate campaign mysteries. Say which it is.
+
+3. **The case log** — one request per provider, markdown so it reads as a story:
    ```
    GET /api/admin/ad-boost/case?provider=<provider_id>&format=md
    ```
    Also `?overdue=1` for tweaks past review across the book. If the case log is empty for a campaign that has run, that absence is the first finding.
 
-3. **Attributed landings** — `provider_activity` where `event_type='page_view'` and `metadata->>utm_source='olera_managed'`, grouped by `metadata->>utm_campaign`, excluding `metadata->>referrer_class='olera_internal'`. Compare to Google clicks; a gap over ~20% on a Google campaign is a tracking question (Nextdoor reconciles ~100%, Google ~84%).
+4. **Attributed landings** — `provider_activity` where `event_type='page_view'` and `metadata->>utm_source='olera_managed'`, grouped by `metadata->>utm_campaign`, excluding `metadata->>referrer_class='olera_internal'`. Compare to Google clicks; a gap over ~20% on a Google campaign is a tracking question (Nextdoor reconciles ~100%, Google ~84%).
 
-4. **Attributed inquiries** — `provider_activity` where `event_type='lead_received'` and `utm_source='olera_managed'`, plus `seeker_activity` where `event_type='benefits_completed'`. Note `attribution_backfill` in metadata: those were reconstructed, not captured live.
+5. **Attributed inquiries** — `provider_activity` where `event_type='lead_received'` and `utm_source='olera_managed'`, plus `seeker_activity` where `event_type='benefits_completed'`. Note `attribution_backfill` in metadata: those were reconstructed, not captured live.
 
-5. **What happened to each inquiry** — `connections` by `id` from the `connection_id` in step 4. Read `message` (the seeker's qualification data: urgency, care type, phone present?), `metadata.read_by` (did the provider open it, when), `metadata.thread` (did anyone reply, what did they say), `metadata.provider_outcome`, `status`. On 4 Sep this single read falsified the hypothesis that the funnel was broken: providers read every inquiry within a day and replied to three of four.
+6. **What happened to each inquiry** — `connections` by `id` from the `connection_id` in step 4. Read `message` (the seeker's qualification data: urgency, care type, phone present?), `metadata.read_by` (did the provider open it, when), `metadata.thread` (did anyone reply, what did they say), `metadata.provider_outcome`, `status`. On 4 Sep this single read falsified the hypothesis that the funnel was broken: providers read every inquiry within a day and replied to three of four.
 
-6. **What the provider was told** — `email_log` filtered on `metadata->>request_id`, all Ad Boost types. Cross-check the launch email's date against Google's first impression. On 4 Sep two providers had been told campaigns launched that had never served.
+7. **What the provider was told** — `email_log` filtered on `metadata->>request_id`, all Ad Boost types. Cross-check the launch email's date against Google's first impression. On 4 Sep two providers had been told campaigns launched that had never served.
 
-7. **The negative-keyword regime** — you cannot get this from the DB, but note here which campaigns *should* be checked: any home-care campaign built after 2 Aug 2026 probably carries the shared list.
+8. **The negative-keyword regime** — you cannot get this from the DB, but note here which campaigns *should* be checked: any home-care campaign built after 2 Aug 2026 probably carries the shared list.
 
 Present Phase 0 findings before opening the browser if TJ is mid-auth. Half the audit is here.
 

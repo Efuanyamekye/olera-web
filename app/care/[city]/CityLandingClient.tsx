@@ -6,6 +6,7 @@ import Image from "next/image";
 import type { CityConfig, CityCareType, CityRecipient, CityUrgency } from "@/lib/city-ads/config";
 import { CITY_FORM_VERSION } from "@/lib/city-ads/config";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
+import { trackGrowthEvent } from "@/lib/analytics/growth-attribution";
 
 export interface CityProviderCard {
   name: string;
@@ -69,6 +70,40 @@ export default function CityLandingClient({
   staffedNow: boolean;
 }) {
   const [step, setStep] = useState<Step>("intro");
+
+  /**
+   * Paid-traffic funnel: click (Google) -> page_landed -> cta_engaged ->
+   * lead_started -> lead row in city_leads.
+   *
+   * Without this the only observable output of a flight is "leads or no leads",
+   * and a page that half-fails (this route is force-dynamic and swallows its
+   * provider-card query error) is indistinguishable from one that simply
+   * converts badly. page_landed is the important one: reconciled against
+   * Google's click count it says whether the page was reached at all.
+   *
+   * pageCategory is declared explicitly because classifyOrganicPage rejects
+   * /care/* on purpose — this is noindex paid traffic and must never enter the
+   * organic reporting behind /metrics.
+   */
+  const fired = useRef<Set<string>>(new Set());
+  const fireOnce = (eventType: "page_landed" | "cta_engaged" | "lead_started") => {
+    if (fired.current.has(eventType)) return;
+    fired.current.add(eventType);
+    trackGrowthEvent({ eventType, pageCategory: "city_landing" });
+  };
+
+  useEffect(() => {
+    fireOnce("page_landed");
+    // Mount only; fireOnce is idempotent under StrictMode double-invocation.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (step !== "intro") fireOnce("cta_engaged");
+    if (step === "contact") fireOnce("lead_started");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step]);
+
   const [who, setWho] = useState<CityRecipient | null>(null);
   const [what, setWhat] = useState<CityCareType | null>(null);
   const [when, setWhen] = useState<CityUrgency | null>(null);
