@@ -45,6 +45,7 @@ const navSections: NavSection[] = [
       // Leads retired — Connections page now handles all lead management
       { label: "Provider Outreach", href: "/admin/provider-outreach" },
       { label: "City Broadcasts", href: "/admin/city-broadcasts" },
+      { label: "Provider Growth", href: "/admin/provider-growth" },
       { label: "Questions", href: "/admin/questions" },
     ],
   },

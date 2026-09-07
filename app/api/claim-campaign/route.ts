@@ -9,6 +9,7 @@ import {
 } from "@/lib/claim-trust";
 import { sendSlackAlert, slackProviderClaimed, slackSuspiciousClaim } from "@/lib/slack";
 import { sendDeferredNotificationsForProvider } from "@/lib/admin/send-deferred-notifications";
+import { detectMedjobsCatchment } from "@/lib/provider-growth/medjobs-eligibility";
 
 /**
  * GET /api/claim-campaign?otk=<token>
@@ -590,6 +591,38 @@ export async function GET(request: NextRequest) {
         // Non-fatal: log but don't fail the claim
         console.error("[claim-campaign] Error updating outreach tracking:", trackingErr);
       }
+    }
+
+    // Create provider_growth_tracking record for new claims
+    try {
+      // Detect MedJobs eligibility based on location
+      const medjobsEligibility = detectMedjobsCatchment(
+        providerProfile.city,
+        providerProfile.state
+      );
+
+      // Map claim source - use city_broadcast if that was the re-engage channel
+      const trackingClaimSource =
+        reEngageChannel === "city_broadcast"
+          ? "city_broadcast"
+          : claimSource === "cold_outreach"
+            ? "cold_outreach"
+            : "email";
+
+      await admin.from("provider_growth_tracking").insert({
+        business_profile_id: finalProfileId || providerProfile.id,
+        claim_source: trackingClaimSource,
+        claimed_at: new Date().toISOString(),
+        medjobs_eligible: medjobsEligibility.eligible,
+        medjobs_catchment_university: medjobsEligibility.university,
+        pipeline_stage: "new_claim",
+        pipeline_stage_changed_at: new Date().toISOString(),
+      });
+
+      console.log("[claim-campaign] Created provider_growth_tracking for:", finalProfileId || providerProfile.id);
+    } catch (growthErr) {
+      // Non-blocking - don't fail the claim if tracking fails
+      console.error("[claim-campaign] provider_growth_tracking insert failed:", growthErr);
     }
 
     // Send Slack notifications

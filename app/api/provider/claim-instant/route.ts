@@ -13,6 +13,7 @@ import { claimNotificationEmail } from "@/lib/email-templates";
 import { sendLoopsEvent } from "@/lib/loops";
 import { isBlockedEmailDomain } from "@/lib/email-validation";
 import { sendDeferredNotificationsForProvider } from "@/lib/admin/send-deferred-notifications";
+import { detectMedjobsCatchment } from "@/lib/provider-growth/medjobs-eligibility";
 
 /**
  * POST /api/provider/claim-instant
@@ -491,6 +492,27 @@ export async function POST(request: Request) {
         // Non-fatal: log but don't fail the claim
         console.error("[claim-instant] Error updating outreach tracking:", trackingErr);
       }
+    }
+
+    // 8d. Create provider_growth_tracking record
+    try {
+      // Detect MedJobs eligibility based on location
+      const medjobsEligibility = detectMedjobsCatchment(city, state);
+
+      await supabaseAdmin.from("provider_growth_tracking").insert({
+        business_profile_id: newProfile.id,
+        claim_source: isNewOrg ? "new_org_signup" : "instant_claim",
+        claimed_at: new Date().toISOString(),
+        medjobs_eligible: medjobsEligibility.eligible,
+        medjobs_catchment_university: medjobsEligibility.university,
+        pipeline_stage: "new_claim",
+        pipeline_stage_changed_at: new Date().toISOString(),
+      });
+
+      console.log("[claim-instant] Created provider_growth_tracking for:", newProfile.id);
+    } catch (growthErr) {
+      // Non-blocking - don't fail the claim if tracking fails
+      console.error("[claim-instant] provider_growth_tracking insert failed:", growthErr);
     }
 
     // ──────────────────────────────────────────────────────────

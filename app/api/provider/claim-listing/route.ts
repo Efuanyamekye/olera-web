@@ -10,6 +10,7 @@ import {
   extractDomainFromWebsite,
   type ClaimTrustResult,
 } from "@/lib/claim-trust";
+import { detectMedjobsCatchment } from "@/lib/provider-growth/medjobs-eligibility";
 
 /**
  * Creates a Supabase admin client with service role key.
@@ -661,6 +662,27 @@ export async function POST(request: Request) {
     } catch (trackingErr) {
       // Non-fatal: log but don't fail the claim
       console.error("[claim-listing] Error updating outreach tracking:", trackingErr);
+    }
+
+    // Create provider_growth_tracking record
+    try {
+      // Detect MedJobs eligibility based on location
+      const medjobsEligibility = detectMedjobsCatchment(city, state);
+
+      await db.from("provider_growth_tracking").insert({
+        business_profile_id: newProfile.id,
+        claim_source: isNewOrg ? "new_org_signup" : "page",
+        claimed_at: new Date().toISOString(),
+        medjobs_eligible: medjobsEligibility.eligible,
+        medjobs_catchment_university: medjobsEligibility.university,
+        pipeline_stage: "new_claim",
+        pipeline_stage_changed_at: new Date().toISOString(),
+      });
+
+      console.log("[claim-listing] Created provider_growth_tracking for:", newProfile.id);
+    } catch (growthErr) {
+      // Non-blocking - don't fail the claim if tracking fails
+      console.error("[claim-listing] provider_growth_tracking insert failed:", growthErr);
     }
 
     return NextResponse.json({

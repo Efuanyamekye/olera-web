@@ -15,6 +15,7 @@ import {
 } from "@/lib/claim-trust";
 import { sendDeferredNotificationsForProvider } from "@/lib/admin/send-deferred-notifications";
 import { logOneClickFailed } from "@/lib/one-click-telemetry";
+import { detectMedjobsCatchment } from "@/lib/provider-growth/medjobs-eligibility";
 
 export const maxDuration = 60; // room for the background warm-on-claim compute (~16s)
 
@@ -214,6 +215,9 @@ export async function POST(request: Request) {
     let profileId: string;
     let trustResult: ClaimTrustResult = { level: "medium", reason: "not_scored" };
     let providerDisplayName: string = providerId;
+    // For provider_growth_tracking creation
+    let providerCity: string | null = null;
+    let providerState: string | null = null;
 
     if (existingProfile) {
       if (existingProfile.claim_state === "claimed" && existingProfile.account_id) {
@@ -264,6 +268,8 @@ export async function POST(request: Request) {
       }
       profileSlug = existingProfile.slug;
       profileId = existingProfile.id;
+      providerCity = existingProfile.city;
+      providerState = existingProfile.state;
     } else {
       // Create new business_profile from olera-providers data
       const { data: provider } = await db
@@ -355,6 +361,8 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: "Failed to create listing." }, { status: 500 });
       }
       profileId = newProfile.id;
+      providerCity = provider.city;
+      providerState = provider.state;
 
       // Warm this market's diagnostic in the background so Find Families is instant when the
       // provider gets there — moves the ~16s compute off the critical path. No-ops if the city
@@ -471,6 +479,37 @@ export async function POST(request: Request) {
     } catch (trackingErr) {
       console.error("[claim/finalize] Outreach tracking check failed:", trackingErr);
       // Non-blocking - continue with claim
+    }
+
+    // 6b-ii. Create provider_growth_tracking record (only for fully claimed, not pending)
+    if (claimState === "claimed") {
+      try {
+        // Detect MedJobs eligibility based on location
+        const medjobsEligibility = detectMedjobsCatchment(providerCity, providerState);
+
+        // Map claim source to canonical values
+        const trackingClaimSource =
+          claimSource === "cold_outreach"
+            ? "cold_outreach"
+            : reEngageChannel === "city_broadcast"
+              ? "city_broadcast"
+              : "email"; // default for organic/OTP claims
+
+        await db.from("provider_growth_tracking").insert({
+          business_profile_id: profileId,
+          claim_source: trackingClaimSource,
+          claimed_at: new Date().toISOString(),
+          medjobs_eligible: medjobsEligibility.eligible,
+          medjobs_catchment_university: medjobsEligibility.university,
+          pipeline_stage: "new_claim",
+          pipeline_stage_changed_at: new Date().toISOString(),
+        });
+
+        console.log("[claim/finalize] Created provider_growth_tracking for:", profileId);
+      } catch (growthErr) {
+        // Non-blocking - don't fail the claim if tracking fails
+        console.error("[claim/finalize] provider_growth_tracking insert failed:", growthErr);
+      }
     }
 
     // 6c. Slack alert (fire-and-forget)
