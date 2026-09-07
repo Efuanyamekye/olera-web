@@ -11,8 +11,11 @@
  * clicked. Tooltip in the UI names this caveat.
  */
 
+import { ONBOARDING_EMAIL_TYPES } from "@/lib/provider-comms/reporting";
+
 export type ProviderEmailFunnelKey =
   | "all"
+  | "onboarding"
   | "question_received"
   | "weekly_digest"
   | "verification"
@@ -21,6 +24,7 @@ export type ProviderEmailFunnelKey =
 
 export const PROVIDER_EMAIL_FUNNEL_LABELS: Record<ProviderEmailFunnelKey, string> = {
   all: "All provider email",
+  onboarding: "Onboarding",
   question_received: "Q&A (question_received)",
   weekly_digest: "Weekly digest",
   verification: "Verification flow",
@@ -33,6 +37,7 @@ export const PROVIDER_EMAIL_FUNNEL_LABELS: Record<ProviderEmailFunnelKey, string
  */
 export const PROVIDER_EMAIL_FUNNEL_ORDER: ProviderEmailFunnelKey[] = [
   "all",
+  "onboarding",
   "question_received",
   "weekly_digest",
   "verification",
@@ -68,6 +73,7 @@ const CONNECTIONS = [
 ] as const;
 
 const ALL_PROVIDER_EMAIL_TYPES: readonly string[] = [
+  ...ONBOARDING_EMAIL_TYPES,
   ...QUESTION_RECEIVED,
   ...WEEKLY_DIGEST,
   ...VERIFICATION,
@@ -77,6 +83,7 @@ const ALL_PROVIDER_EMAIL_TYPES: readonly string[] = [
 
 export const PROVIDER_EMAIL_FUNNEL_TYPES: Record<ProviderEmailFunnelKey, readonly string[]> = {
   all: ALL_PROVIDER_EMAIL_TYPES,
+  onboarding: ONBOARDING_EMAIL_TYPES,
   question_received: QUESTION_RECEIVED,
   weekly_digest: WEEKLY_DIGEST,
   verification: VERIFICATION,
@@ -94,6 +101,7 @@ export const PROVIDER_EMAIL_FUNNEL_TYPES: Record<ProviderEmailFunnelKey, readonl
  * buckets, the first match wins — order it intentionally in this function.
  */
 export function bucketForEmailType(emailType: string): ProviderEmailFunnelKey | null {
+  if ((ONBOARDING_EMAIL_TYPES as readonly string[]).includes(emailType)) return "onboarding";
   if ((QUESTION_RECEIVED as readonly string[]).includes(emailType)) return "question_received";
   if ((WEEKLY_DIGEST as readonly string[]).includes(emailType)) return "weekly_digest";
   if ((VERIFICATION as readonly string[]).includes(emailType)) return "verification";

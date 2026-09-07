@@ -859,7 +859,27 @@ export const PROVIDER_OUTREACH_JOURNEY: CommsJourney = {
   ],
 };
 
+export const PROVIDER_ONBOARDING_JOURNEY: CommsJourney = {
+  key: "provider_onboarding",
+  title: "Provider onboarding — after the claim",
+  audienceLabel: "Provider journey",
+  ordering: "time",
+  description: "Welcome providers into their account, then help them see and improve their profile. Both messages send on weekdays, 9am–5pm in the provider's local timezone. Performance lives in Provider Comms.",
+  steps: [
+    { key: "welcome", title: "Welcome", timing: "After claim · next business-hour run",
+      description: "Introduce the provider experience. The message adapts to verification state.",
+      emailType: "provider_welcome", ownedBy: "provider-welcome", emailSampleId: "provider_welcome_verified",
+      gate: "Claimed within seven days; not previously processed; contact restrictions apply.",
+      experienceUrl: "/admin/provider-comms", experienceLabel: "View onboarding performance" },
+    { key: "preview", title: "Profile preview", timing: "48 hours after welcome · next business-hour run",
+      description: "Show the provider what families see and invite them to improve their profile.",
+      emailType: "profile_preview_nudge", ownedBy: "profile-preview-nudge", emailSampleId: "provider_profile_preview",
+      gate: "Claimed within 21 days; welcome timestamp exists; not previously processed. The weekly digest continues; its completion rung is suppressed for four days after welcome." },
+  ],
+};
+
 const COMMS_JOURNEYS: Record<string, CommsJourney> = {
+  [PROVIDER_ONBOARDING_JOURNEY.key]: PROVIDER_ONBOARDING_JOURNEY,
   [BENEFITS_CASCADE.key]: BENEFITS_CASCADE,
   [HELP_CASCADE_LADDER.key]: HELP_CASCADE_LADDER,
   [AD_BOOST_PROVIDER_JOURNEY.key]: AD_BOOST_PROVIDER_JOURNEY,
@@ -868,6 +888,8 @@ const COMMS_JOURNEYS: Record<string, CommsJourney> = {
 
 /** Which journeys each automation page shows, in display order. */
 const JOURNEYS_BY_CRON: Record<string, string[]> = {
+  "provider-welcome": [PROVIDER_ONBOARDING_JOURNEY.key],
+  "profile-preview-nudge": [PROVIDER_ONBOARDING_JOURNEY.key],
   "family-comms-coordinator": [HELP_CASCADE_LADDER.key, BENEFITS_CASCADE.key],
   "benefits-navigator-scheduler": [BENEFITS_CASCADE.key],
   "benefits-results-texts": [BENEFITS_CASCADE.key],

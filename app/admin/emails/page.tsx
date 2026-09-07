@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { Fragment, useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Badge from "@/components/ui/Badge";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import { ONBOARDING_MESSAGES } from "@/lib/provider-comms/reporting";
 
 type StatusFilter = "all" | "sent" | "failed";
 
 const EMAIL_TYPE_OPTIONS = [
   { value: "", label: "All types" },
+  ...ONBOARDING_MESSAGES.map(message => ({ value: message.type, label: `Provider · ${message.label}` })),
   { value: "connection_request", label: "Connection Request" },
   { value: "connection_sent", label: "Connection Sent" },
   { value: "connection_response", label: "Connection Response" },
@@ -136,25 +139,28 @@ function formatDate(dateStr: string): string {
 }
 
 export default function AdminEmailsPage() {
+  const searchParams = useSearchParams();
   const [emails, setEmails] = useState<EmailLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [emailType, setEmailType] = useState("");
+  const [emailType, setEmailType] = useState(() => searchParams.get("email_type") ?? "");
 
-  // Deep links (Text campaigns panel, automations detail) arrive as
-  // ?email_type=… — seed the filter once on mount so the link actually filters.
+  // Provider Comms deep links carry both message type and recipient search.
+  // Seed the initial request as well as subsequent navigation on this page.
   useEffect(() => {
-    const t = new URLSearchParams(window.location.search).get("email_type");
-    if (t) setEmailType(t);
-  }, []);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    setEmailType(searchParams.get("email_type") ?? "");
+    const query = searchParams.get("search") ?? "";
+    setSearch(query); setDebouncedSearch(query); setPage(0);
+  }, [searchParams]);
   const [recipientType, setRecipientType] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
   // Search
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [search, setSearch] = useState(() => searchParams.get("search") ?? "");
+  const [debouncedSearch, setDebouncedSearch] = useState(() => searchParams.get("search") ?? "");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Pagination
@@ -165,8 +171,13 @@ export default function AdminEmailsPage() {
   const [previewId, setPreviewId] = useState<string | null>(null);
   const [previewHtml, setPreviewHtml] = useState<string | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
+  const previewRequest = useRef<AbortController | null>(null);
+  useEffect(() => () => {
+    previewRequest.current?.abort();
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+  }, []);
 
-  const fetchEmails = useCallback(async () => {
+  const fetchEmails = useCallback(async (signal: AbortSignal) => {
     setLoading(true);
     setError(null);
     try {
@@ -180,18 +191,20 @@ export default function AdminEmailsPage() {
       if (fromDate) params.set("from_date", fromDate);
       if (toDate) params.set("to_date", toDate);
 
-      const res = await fetch(`/api/admin/emails?${params}`);
+      const res = await fetch(`/api/admin/emails?${params}`, { signal });
+      if (signal.aborted) return;
       if (res.ok) {
         const data = await res.json();
+        if (signal.aborted) return;
         setEmails(data.emails ?? []);
         setTotal(data.total ?? 0);
       } else {
         setError("Failed to load emails. Please try again.");
       }
     } catch {
-      setError("Failed to load emails. Please check your connection.");
+      if (!signal.aborted) setError("Failed to load emails. Please check your connection.");
     } finally {
-      setLoading(false);
+      if (!signal.aborted) setLoading(false);
     }
   }, [statusFilter, emailType, recipientType, fromDate, toDate, page, debouncedSearch]);
 
@@ -209,32 +222,41 @@ export default function AdminEmailsPage() {
   }, [statusFilter, emailType, recipientType, fromDate, toDate, debouncedSearch]);
 
   useEffect(() => {
-    fetchEmails();
+    const controller = new AbortController();
+    void fetchEmails(controller.signal);
+    return () => controller.abort();
   }, [fetchEmails]);
 
   const handlePreview = async (emailId: string) => {
+    previewRequest.current?.abort();
     if (previewId === emailId) {
       setPreviewId(null);
       setPreviewHtml(null);
+      setPreviewLoading(false);
       return;
     }
 
+    const controller = new AbortController();
+    previewRequest.current = controller;
     setPreviewId(emailId);
+    setPreviewHtml(null);
     setPreviewLoading(true);
     try {
       const res = await fetch("/api/admin/emails", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: emailId }),
+        signal: controller.signal,
       });
       if (res.ok) {
         const data = await res.json();
+        if (controller.signal.aborted) return;
         setPreviewHtml(data.email?.html_body ?? null);
       }
     } catch {
-      setPreviewHtml(null);
+      if (!controller.signal.aborted) setPreviewHtml(null);
     } finally {
-      setPreviewLoading(false);
+      if (!controller.signal.aborted) setPreviewLoading(false);
     }
   };
 
@@ -455,7 +477,7 @@ export default function AdminEmailsPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {emails.map((email) => (
-                  <>
+                  <Fragment key={email.id}>
                     <tr
                       key={email.id}
                       onClick={() => handlePreview(email.id)}
@@ -574,7 +596,7 @@ export default function AdminEmailsPage() {
                         </td>
                       </tr>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </tbody>
             </table>

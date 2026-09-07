@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
+import { isAcceptedEmail } from "@/lib/provider-comms/reporting";
 import { getBotRejectsToday } from "@/lib/analytics/bot-filter";
 import {
   REFERRER_CLASSES,
@@ -144,6 +145,7 @@ type ProviderCommsFunnelByType = {
   question_received: ProviderCommsFunnel;
   weekly_digest: ProviderCommsFunnel;
   verification: ProviderCommsFunnel;
+  onboarding: ProviderCommsFunnel;
   nudges: ProviderCommsFunnel;
   connections: ProviderCommsFunnel;
 };
@@ -328,6 +330,7 @@ const EMPTY_COMMS_FUNNEL_BY_TYPE = (): ProviderCommsFunnelByType => ({
   question_received: EMPTY_COMMS_FUNNEL(),
   weekly_digest: EMPTY_COMMS_FUNNEL(),
   verification: EMPTY_COMMS_FUNNEL(),
+  onboarding: EMPTY_COMMS_FUNNEL(),
   nudges: EMPTY_COMMS_FUNNEL(),
   connections: EMPTY_COMMS_FUNNEL(),
 });
@@ -524,7 +527,7 @@ async function fetchWindow(
   // Limit 50000 ≈ years at current provider-email volume.
   let commsFunnelQ = db
     .from("email_log")
-    .select("email_type, provider_id, delivered_at, first_opened_at, first_clicked_at")
+    .select("email_type, provider_id, status, error_message, resend_id, delivered_at, first_opened_at, first_clicked_at, bounced_at, complained_at")
     .in("email_type", [...PROVIDER_EMAIL_FUNNEL_TYPES.all])
     .eq("recipient_type", "provider")
     .order("created_at", { ascending: false })
@@ -968,7 +971,7 @@ async function fetchWindow(
   // the price of approximate attribution; tooltip in the UI names it.
   const commsFunnel = EMPTY_COMMS_FUNNEL_BY_TYPE();
   type CommsBucketKey = Exclude<ProviderEmailFunnelKey, "all">;
-  const SPECIFIC_BUCKETS: CommsBucketKey[] = ["question_received", "weekly_digest", "verification", "nudges", "connections"];
+  const SPECIFIC_BUCKETS: CommsBucketKey[] = ["onboarding", "question_received", "weekly_digest", "verification", "nudges", "connections"];
   // Per-bucket sets of provider_ids who clicked at least one email of that
   // bucket in window. The `all` set is the union, built incrementally.
   const clickedByBucket: Record<ProviderEmailFunnelKey, Set<string>> = {
@@ -976,6 +979,7 @@ async function fetchWindow(
     question_received: new Set(),
     weekly_digest: new Set(),
     verification: new Set(),
+    onboarding: new Set(),
     nudges: new Set(),
     connections: new Set(),
   };
@@ -988,6 +992,7 @@ async function fetchWindow(
     question_received: new Map(),
     weekly_digest: new Map(),
     verification: new Map(),
+    onboarding: new Map(),
     nudges: new Map(),
     connections: new Map(),
   };
@@ -997,13 +1002,18 @@ async function fetchWindow(
   for (const r of (commsFunnelRes.data ?? []) as Array<{
     email_type: string | null;
     provider_id: string | null;
+    status: string | null;
+    error_message: string | null;
+    resend_id: string | null;
+    bounced_at: string | null;
+    complained_at: string | null;
     delivered_at: string | null;
     first_opened_at: string | null;
     first_clicked_at: string | null;
   }>) {
     const et = r.email_type ?? "";
     const bucket = bucketForEmailType(et);
-    if (!bucket) continue; // not a provider-comms email type
+    if (!bucket || !isAcceptedEmail(r)) continue;
     // Increment row counters in the specific bucket AND `all`.
     for (const k of [bucket, "all" as const] as ProviderEmailFunnelKey[]) {
       const f = commsFunnel[k];
