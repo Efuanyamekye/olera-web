@@ -21,7 +21,7 @@ const noop=()=>null;
 const code=ts.transpileModule(fs.readFileSync('app/account/settings/page.tsx','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText;
 const mod={exports:{}};
 new Function('require','module','exports',code)(id=>{
- if(id==='next/navigation')return {useRouter:()=>({push:noop,back:noop,refresh:noop}),useSearchParams:()=>search};
+ if(id==='next/navigation')return {useRouter:()=>({push:noop,back:noop,refresh:noop,replace:(url)=>{search=new URL(url,'https://example.com').searchParams;}}),useSearchParams:()=>search};
  if(id==='next/link')return {__esModule:true,default:({children,...props})=>React.createElement('a',props,children)};
  if(id==='@/components/auth/AuthProvider')return {useAuth:()=>({user:{email:'test@example.com'},activeProfile:profile,profiles,refreshAccountData:refresh,switchProfile:noop})};
  if(id==='@/lib/supabase/client')return {isSupabaseConfigured:()=>true,createClient:()=>{throw Error('Direct metadata writes forbidden');}};
@@ -30,7 +30,7 @@ new Function('require','module','exports',code)(id=>{
  if(id.startsWith('@/'))return {__esModule:true,default:noop};
  return require(id);
 },mod,mod.exports);
-const target=document.createElement('div');document.body.append(target);const mounted=createRoot(target);
+const target=document.createElement('div');document.body.append(target);let mounted=createRoot(target);
 async function render(){mounted.render(React.createElement(mod.exports.default));}
 const switches=()=>[...target.querySelectorAll('[role="switch"]')];
 (async()=>{
@@ -67,6 +67,26 @@ const switches=()=>[...target.querySelectorAll('[role="switch"]')];
  assert.ok(target.textContent.includes('another provider'));
  search=new URLSearchParams('tab=invalid');await React.act(render);
  assert.ok(!target.textContent.includes('New leads'),'invalid tab uses account settings');
+ // A manually selected tab survives a fresh mount (browser refresh), while
+ // provider and email attribution parameters remain intact.
+ search=new URLSearchParams('provider=provider-a&eid=email-a');
+ await React.act(render);
+ const tabButton=label=>[...target.querySelectorAll('button')].find(button=>button.textContent.trim()===label);
+ await React.act(()=>tabButton('Notifications').click());
+ assert.equal(search.get('tab'),'notifications');
+ assert.equal(search.get('provider'),'provider-a');
+ assert.equal(search.get('eid'),'email-a');
+ await React.act(()=>mounted.unmount());
+ mounted=createRoot(target);
+ await React.act(render);
+ assert.ok(target.textContent.includes('New leads'),'selected tab survives refresh');
+ await React.act(()=>tabButton('Get Help').click());
+ await React.act(render);
+ assert.equal(search.get('tab'),'help');
+ await React.act(()=>tabButton('Account').click());
+ await React.act(render);
+ assert.equal(search.get('tab'),'account');
+ assert.ok(!target.textContent.includes('New leads'));
  await React.act(()=>mounted.unmount());await win.happyDOM.close();
  console.log('Settings UI passed: linked destination, no automatic opt-in, save serialization, failure rollback, success and multi-profile isolation.');
 })().catch(e=>{console.error(e);process.exitCode=1;win.happyDOM.close()});

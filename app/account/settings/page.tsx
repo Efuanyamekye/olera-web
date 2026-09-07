@@ -122,7 +122,17 @@ function AccountSettingsContent() {
   });
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<SettingsTab>(() => searchParams.get("tab") === "notifications" ? "notifications" : "account");
+  const [activeTab, setActiveTab] = useState<SettingsTab>(() => {
+    const tab = searchParams.get("tab");
+    return tab === "notifications" || tab === "help" ? tab : "account";
+  });
+
+  function selectTab(tab: SettingsTab) {
+    setActiveTab(tab);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", tab);
+    router.replace(`/account/settings?${params.toString()}${window.location.hash}`, { scroll: false });
+  }
 
   // Notification prefs — optimistic overrides for instant toggle response
   const meta = useMemo(() => (activeProfile?.metadata || {}) as Record<string, unknown>, [activeProfile?.metadata]);
@@ -503,7 +513,7 @@ function AccountSettingsContent() {
           <div className="flex gap-6 -mb-px">
             <button
               type="button"
-              onClick={() => setActiveTab("account")}
+              onClick={() => selectTab("account")}
               className={`relative pb-3 text-[15px] font-medium transition-colors ${
                 activeTab === "account"
                   ? "text-gray-900"
@@ -517,7 +527,7 @@ function AccountSettingsContent() {
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("notifications")}
+              onClick={() => selectTab("notifications")}
               className={`relative pb-3 text-[15px] font-medium transition-colors ${
                 activeTab === "notifications"
                   ? "text-gray-900"
@@ -531,7 +541,7 @@ function AccountSettingsContent() {
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("help")}
+              onClick={() => selectTab("help")}
               className={`relative pb-3 text-[15px] font-medium transition-colors ${
                 activeTab === "help"
                   ? "text-gray-900"
