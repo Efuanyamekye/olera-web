@@ -5,7 +5,7 @@
  * columns whose callers write either `olera-providers.provider_id` (e.g.
  * "north-lauderdale-fl-0040", "QX76ebM") OR `business_profiles.id` (UUID)
  * depending on which the call site has handy. Empirically (sampled 20 rows
- * of email_log) ~80% are BP UUIDs, ~20% are OP provider_ids. Never the slug.
+ * of email_log) ~80% are BP UUIDs, ~20% are OP provider_ids. Activity also uses BP slugs.
  *
  * Meanwhile, admin pages link to /admin/directory/[providerId] with FOUR
  * possible input shapes:
@@ -17,7 +17,7 @@
  *
  * Querying email_log/provider_activity with just the URL input silently drops
  * rows when the input shape doesn't match the storage shape. This helper does
- * up to three lookups to expand any input into the union of variants written
+ * up to four lookups to expand any input into the union of variants written
  * under that provider, so `.in("provider_id", allVariants)` matches everything.
  *
  * Usage:
@@ -28,7 +28,7 @@
  *       .select("...")
  *       .in("provider_id", allVariants);
  *
- * Cost: 3 indexed lookups per call. Cheap enough for admin endpoints; don't
+ * Cost: up to 4 indexed lookups per call. Cheap enough for admin endpoints; don't
  * bother caching unless we see it hot.
  */
 
@@ -67,15 +67,17 @@ export async function resolveProviderIdVariants(
       }
     }
 
-    // (b) If input is a business_profiles.slug, find the BP UUID and any linked OP.
+    // (b) Resolve BP slugs and UUIDs, including self-registered profiles.
     {
+      const uuidInput = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(input);
       const { data, error } = await db
         .from("business_profiles")
-        .select("id, source_provider_id")
-        .eq("slug", input)
+        .select("id, slug, source_provider_id")
+        .eq(uuidInput ? "id" : "slug", input)
         .maybeSingle();
       if (!error && data?.id) {
         variants.add(data.id);
+        if (data.slug) variants.add(data.slug);
         businessProfileId = data.id;
         if (data.source_provider_id) {
           canonical = data.source_provider_id;
@@ -90,11 +92,12 @@ export async function resolveProviderIdVariants(
     {
       const { data, error } = await db
         .from("business_profiles")
-        .select("id")
+        .select("id, slug")
         .eq("source_provider_id", canonical)
         .limit(10);
       if (!error && Array.isArray(data)) {
-        for (const row of data as Array<{ id: string | null }>) {
+        for (const row of data as Array<{ id: string | null; slug: string | null }>) {
+          if (row.slug) variants.add(row.slug);
           if (row.id && !variants.has(row.id)) {
             variants.add(row.id);
             if (businessProfileId === null) businessProfileId = row.id;
