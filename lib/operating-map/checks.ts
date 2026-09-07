@@ -35,14 +35,14 @@ const n = (v: number | null | undefined): number | null =>
   typeof v === "number" ? v : null;
 
 export interface CheckInputs {
-  /** CR4's provider + editorial + benefits, summed by the caller. */
-  cr4PartsSum?: number;
+  /** CR1's provider + editorial + benefits, summed by the caller. */
+  cr1PartsSum?: number;
   /** Claim records that point at a provider not in the directory. */
   cp1OrphanedClaims?: number;
   /** CP1's unclaimed half — the set CP2 is drawn from. */
   cp1Unclaimed?: number;
-  /** CR1's ten channels, summed by the caller. */
-  cr1ChannelSum?: number;
+  /** TRAFFIC's ten channels, summed by the caller. */
+  trafficChannelSum?: number;
   /** Inquiries raised — the set TB1's answered count is drawn from. */
   inquiriesRaised?: number;
   /** Interviews proposed — the set TC1's confirmed count is drawn from. */
@@ -66,44 +66,44 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
+  const traffic = n(values.traffic);
   const cr1 = n(values.cr1);
-  const cr4 = n(values.cr4);
-  if (cr1 !== null && cr4 !== null) {
+  if (traffic !== null && cr1 !== null) {
     // One visitor produces at least one page view, so visitors can never
     // exceed views over the same window.
     checks.push({
-      id: "cr1-under-cr4",
+      id: "traffic-under-cr1",
       label: "Visitors do not exceed page visits",
-      ok: cr1 <= cr4,
-      detail: cr1 <= cr4 ? undefined : `CR1 is ${cr1}, CR4 is ${cr4}`,
+      ok: traffic <= cr1,
+      detail: traffic <= cr1 ? undefined : `TRAFFIC is ${traffic}, CR1 is ${cr1}`,
     });
   }
 
-  if (cr1 !== null && typeof inputs.cr1ChannelSum === "number") {
+  if (traffic !== null && typeof inputs.trafficChannelSum === "number") {
     // The ten channels are meant to be exhaustive. If they do not add to the
     // total, a visitor fell through the classifier — a bug in it, not a gap
     // in the data.
     checks.push({
-      id: "cr1-channels-complete",
+      id: "traffic-channels-complete",
       label: "The ten channels account for every visitor",
-      ok: cr1 === inputs.cr1ChannelSum,
+      ok: traffic === inputs.trafficChannelSum,
       detail:
-        cr1 === inputs.cr1ChannelSum
+        traffic === inputs.trafficChannelSum
           ? undefined
-          : `CR1 is ${cr1}, its channels add to ${inputs.cr1ChannelSum}`,
+          : `TRAFFIC is ${traffic}, its channels add to ${inputs.trafficChannelSum}`,
     });
   }
 
-  if (typeof inputs.cr4PartsSum === "number" && n(values.cr4) !== null) {
-    const total = n(values.cr4) as number;
+  if (typeof inputs.cr1PartsSum === "number" && n(values.cr1) !== null) {
+    const total = n(values.cr1) as number;
     checks.push({
-      id: "cr4-parts",
+      id: "cr1-parts",
       label: "Page visits equals provider plus editorial plus benefits",
-      ok: total === inputs.cr4PartsSum,
+      ok: total === inputs.cr1PartsSum,
       detail:
-        total === inputs.cr4PartsSum
+        total === inputs.cr1PartsSum
           ? undefined
-          : `CR4 is ${total}, its parts add to ${inputs.cr4PartsSum}`,
+          : `CR1 is ${total}, its parts add to ${inputs.cr1PartsSum}`,
     });
   }
 
@@ -172,18 +172,18 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     // would mean the join is broken rather than the pipeline being empty.
     checks.push({
       id: "cw2-needs-cw1",
-      label: "Advisors only exist where a university is listed",
+      label: "Advisors only exist where a university is targeted",
       ok: cw2 === 0,
-      detail: cw2 === 0 ? undefined : `CW2 is ${cw2} with no universities listed`,
+      detail: cw2 === 0 ? undefined : `CW2 is ${cw2} with no universities targeted`,
     });
   }
 
-  if (cr6 !== null && cr4 !== null) {
+  if (cr6 !== null && cr1 !== null) {
     checks.push({
-      id: "cr6-under-cr4",
+      id: "cr6-under-cr1",
       label: "CTAs completed do not exceed page visits",
-      ok: cr6 <= cr4,
-      detail: cr6 <= cr4 ? undefined : `CR6 is ${cr6}, CR4 is ${cr4}`,
+      ok: cr6 <= cr1,
+      detail: cr6 <= cr1 ? undefined : `CR6 is ${cr6}, CR1 is ${cr1}`,
     });
   }
 

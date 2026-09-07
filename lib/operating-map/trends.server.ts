@@ -150,12 +150,12 @@ async function countAll(
     ]);
 
   if (traffic.status === "fulfilled") {
-    out.cr1 = traffic.value.total;
+    out.traffic = traffic.value.total;
     // Each channel gets its own series, keyed so the tooltip can look one up
     // by name. Free: they came out of the same pass as the total.
-    for (const c of CHANNELS) out[`cr1:${c}`] = traffic.value.byChannel[c];
+    for (const c of CHANNELS) out[`traffic:${c}`] = traffic.value.byChannel[c];
   }
-  if (visits.status === "fulfilled") out.cr4 = visits.value.total;
+  if (visits.status === "fulfilled") out.cr1 = visits.value.total;
   if (conversions.status === "fulfilled") {
     out.cr6 = conversions.value.ctasTotal;
     out.cr6a = conversions.value.questions;
@@ -167,7 +167,7 @@ async function countAll(
     out.flow_connections = conversions.value.connectionsSent;
   }
   if (milestones.status === "fulfilled") {
-    out.m1 = milestones.value.careRecipientProfilesLive;
+    out.m1 = milestones.value.careRecipientProfilesStarted;
     out.m2 = milestones.value.providersClaimed;
     out.m3 = milestones.value.managedAdSignups;
     out.m4 = milestones.value.staffingSignups;
@@ -176,7 +176,7 @@ async function countAll(
   if (tracks.status === "fulfilled") {
     out.ta1 = tracks.value.benefitsApplied;
     out.tb1 = tracks.value.inquiriesResponded;
-    out.tc1 = tracks.value.interviewsConfirmed;
+    out.tc1 = tracks.value.interviewsScheduled;
     out.tc2 = tracks.value.hires;
   }
 

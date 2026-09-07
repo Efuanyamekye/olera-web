@@ -27,10 +27,12 @@ const MAX_ROWS = 50_000;
 const ID_CHUNK = 100;
 
 export interface CampusSupply {
-  /** CW1 — active campuses, optionally in one city. */
+  /** CW1 — campuses we are working. */
   universities: number;
-  /** CW2 — advisors at those campuses. */
+  /** CW1's second number — advisors on file at those campuses. */
   advisors: number;
+  /** CW2 — advisors we have actually reached out to. */
+  advisorsInOutreach: number;
 }
 
 /** Ids of the active campuses, narrowed to a city when one is selected. */
@@ -88,29 +90,50 @@ async function outreachIdsForCampuses(
  * Advisors are counted where their contact record is active, matching how the
  * MedJobs partners view reads the same table — a contact that bounced or was
  * removed is not someone we can reach.
+ *
+ * CW2 is the subset we have actually contacted: an advisor with at least one
+ * touchpoint against them. A name on a list nobody has emailed is supply we
+ * have not tried yet, and the gap between the two is the work.
  */
 export async function getCampusSupply(
   db: SupabaseClient,
   citySlug: string | null = null,
 ): Promise<CampusSupply> {
   const campusIds = await activeCampusIds(db, citySlug);
-  if (campusIds.length === 0) return { universities: 0, advisors: 0 };
+  const empty = { universities: 0, advisors: 0, advisorsInOutreach: 0 };
+  if (campusIds.length === 0) return empty;
 
   const outreachIds = await outreachIdsForCampuses(db, campusIds);
   if (outreachIds.length === 0) {
-    return { universities: campusIds.length, advisors: 0 };
+    return { ...empty, universities: campusIds.length };
   }
 
-  let advisors = 0;
+  const advisorIds: string[] = [];
   for (let i = 0; i < outreachIds.length; i += ID_CHUNK) {
-    const { count, error } = await db
+    const { data, error } = await db
       .from("student_outreach_contacts")
-      .select("id", { count: "exact", head: true })
+      .select("id")
       .eq("status", "active")
       .in("outreach_id", outreachIds.slice(i, i + ID_CHUNK));
     if (error) throw error;
-    advisors += count ?? 0;
+    for (const r of (data ?? []) as { id: string }[]) advisorIds.push(r.id);
   }
 
-  return { universities: campusIds.length, advisors };
+  const contacted = new Set<string>();
+  for (let i = 0; i < advisorIds.length; i += ID_CHUNK) {
+    const { data, error } = await db
+      .from("student_outreach_touchpoints")
+      .select("contact_id")
+      .in("contact_id", advisorIds.slice(i, i + ID_CHUNK));
+    if (error) throw error;
+    for (const r of (data ?? []) as { contact_id: string | null }[]) {
+      if (r.contact_id) contacted.add(r.contact_id);
+    }
+  }
+
+  return {
+    universities: campusIds.length,
+    advisors: advisorIds.length,
+    advisorsInOutreach: contacted.size,
+  };
 }

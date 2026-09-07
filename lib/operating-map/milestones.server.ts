@@ -5,13 +5,14 @@ import { cityFilterFromSlug, listedProviderIdsInCity } from "@/lib/providers";
  * M1–M5 — the user milestone strip: the moments someone stops being traffic
  * and becomes a record we can act on.
  *
- *   M1  care recipient profiles live        business_profiles type=family
- *                                           with a published care post
- *   M2  provider profiles claimed           provider_activity claim_completed
- *   M3  managed ad signups                  ad_campaign_requests
- *   M4  provider staffing signups           staffing_touchpoints system_activated
- *   M5  care worker profiles                business_profiles type=student,
- *                                           started and completed
+ *   M1  care recipient profiles        business_profiles type=family,
+ *                                       started / completed / live
+ *   M2  provider profiles               provider_activity claim_completed,
+ *                                       then completed / verified among them
+ *   M3  managed ad signups              ad_campaign_requests, plus repeats
+ *   M4  provider staffing signups       staffing_touchpoints system_activated
+ *   M5  care worker profiles            business_profiles type=student,
+ *                                       started / completed
  *
  * "student" is the stored type for a care worker — MedJobs' original name for
  * them, kept because the column is what it is.
@@ -33,15 +34,28 @@ const PAGE_SIZE = 1000;
 const MAX_ROWS = 100_000;
 
 export interface Milestones {
-  /** M1 — profiles whose care post is published, so providers can see them. */
+  /** M1 — every care recipient profile begun, finished or not. */
+  careRecipientProfilesStarted: number;
+  /** Of those, the ones marked complete. */
+  careRecipientProfiles: number;
+  /** Of those, the ones whose care post is published. */
   careRecipientProfilesLive: number;
-  /** M5's total — every application begun, finished or not. */
-  careWorkerProfilesStarted: number;
-  /** Of those, the ones that went live: intro video and documents in. */
-  careWorkerProfiles: number;
+  /** M2 — providers who finished claiming in this range. */
   providersClaimed: number;
+  /** Of those, the ones whose profile is active. */
+  providersCompleted: number;
+  /** Of those, the ones verification has passed. */
+  providersVerified: number;
+  /** M3 — campaign requests in this range. */
   managedAdSignups: number;
+  /** Providers who have asked for more than one campaign, ever. */
+  managedAdRepeat: number;
+  /** M4 — providers activating staffing in this range. */
   staffingSignups: number;
+  /** M5 — every care worker application begun. */
+  careWorkerProfilesStarted: number;
+  /** Of those, the ones that went live. */
+  careWorkerProfiles: number;
 }
 
 type Range = { from: string | null; to: string | null };
@@ -191,6 +205,109 @@ async function countStaffingSignups(
   return inCity.size;
 }
 
+/**
+ * M2's second and third numbers: of the providers who claimed in this range,
+ * how many finished the profile and how many passed verification.
+ *
+ * Deliberately scoped to the same claimers rather than counted across the
+ * whole directory — read as a funnel inside the claim cohort, it says how
+ * far this range's claimers actually got. A standing directory-wide count
+ * would answer a different question and sit misleadingly under an event.
+ */
+async function countClaimOutcomes(
+  db: SupabaseClient,
+  providerIds: string[],
+): Promise<{ completed: number; verified: number }> {
+  if (providerIds.length === 0) return { completed: 0, verified: 0 };
+
+  let completed = 0;
+  let verified = 0;
+  for (let i = 0; i < providerIds.length; i += 100) {
+    const { data, error } = await db
+      .from("business_profiles")
+      .select("is_active, verification_state")
+      .eq("type", "provider")
+      .in("source_provider_id", providerIds.slice(i, i + 100));
+    if (error) throw error;
+    for (const r of (data ?? []) as {
+      is_active: boolean | null;
+      verification_state: string | null;
+    }[]) {
+      if (r.is_active) completed += 1;
+      if (r.verification_state === "verified") verified += 1;
+    }
+  }
+  return { completed, verified };
+}
+
+/**
+ * M3's second number: providers who have asked for more than one campaign.
+ *
+ * Counted over all time, not the range — a repeat is by definition something
+ * that happened across two moments, and a 30-day window would report almost
+ * none of them.
+ */
+async function countRepeatAdCustomers(
+  db: SupabaseClient,
+  cityIds: Set<string> | null,
+): Promise<number> {
+  const seen = new Map<string, number>();
+  let scanned = 0;
+
+  for (;;) {
+    if (scanned >= MAX_ROWS) break;
+    const { data, error } = await db
+      .from("ad_campaign_requests")
+      .select("provider_id")
+      .range(scanned, scanned + PAGE_SIZE - 1);
+    if (error) throw error;
+    const rows = (data ?? []) as { provider_id: string | null }[];
+    if (rows.length === 0) break;
+    for (const r of rows) {
+      if (!r.provider_id) continue;
+      if (cityIds && !cityIds.has(r.provider_id)) continue;
+      seen.set(r.provider_id, (seen.get(r.provider_id) ?? 0) + 1);
+    }
+    scanned += rows.length;
+    if (rows.length < PAGE_SIZE) break;
+  }
+
+  let repeat = 0;
+  for (const count of seen.values()) if (count > 1) repeat += 1;
+  return repeat;
+}
+
+/** The provider ids behind M2's claim events, for the outcome counts above. */
+async function claimedProviderIdsInRange(
+  db: SupabaseClient,
+  range: Range,
+  cityIds: Set<string> | null,
+): Promise<string[]> {
+  const ids = new Set<string>();
+  let scanned = 0;
+
+  for (;;) {
+    if (scanned >= MAX_ROWS) break;
+    let query = db
+      .from("provider_activity")
+      .select("provider_id")
+      .eq("event_type", "claim_completed");
+    if (range.from) query = query.gte("created_at", range.from);
+    if (range.to) query = query.lt("created_at", range.to);
+
+    const { data, error } = await query.range(scanned, scanned + PAGE_SIZE - 1);
+    if (error) throw error;
+    const rows = (data ?? []) as { provider_id: string | null }[];
+    if (rows.length === 0) break;
+    for (const r of rows) {
+      if (r.provider_id && (!cityIds || cityIds.has(r.provider_id))) ids.add(r.provider_id);
+    }
+    scanned += rows.length;
+    if (rows.length < PAGE_SIZE) break;
+  }
+  return [...ids];
+}
+
 export async function getMilestones(
   db: SupabaseClient,
   range: Range,
@@ -202,28 +319,25 @@ export async function getMilestones(
     ? new Set(await listedProviderIdsInCity(db, citySlug))
     : null;
 
+  const claimedIds = await claimedProviderIdsInRange(db, range, cityIds);
+
   const [
+    careRecipientProfilesStarted,
+    careRecipientProfiles,
     careRecipientProfilesLive,
     careWorkerProfilesStarted,
     careWorkerProfiles,
-    providersClaimed,
+    claimOutcomes,
     managedAdSignups,
+    managedAdRepeat,
     staffingSignups,
   ] = await Promise.all([
+    countProfiles(db, "family", range, citySlug, { includeIncomplete: true }),
+    countProfiles(db, "family", range, citySlug),
     countProfiles(db, "family", range, citySlug, { liveOnly: true }),
     countProfiles(db, "student", range, citySlug, { includeIncomplete: true }),
     countProfiles(db, "student", range, citySlug),
-    countProviderEvents(
-      db,
-      {
-        table: "provider_activity",
-        select: "provider_id, created_at",
-        eventType: "claim_completed",
-        idField: "provider_id",
-      },
-      range,
-      cityIds,
-    ),
+    countClaimOutcomes(db, claimedIds),
     countProviderEvents(
       db,
       {
@@ -234,15 +348,21 @@ export async function getMilestones(
       range,
       cityIds,
     ),
+    countRepeatAdCustomers(db, cityIds),
     countStaffingSignups(db, range, cityIds),
   ]);
 
   return {
+    careRecipientProfilesStarted,
+    careRecipientProfiles,
     careRecipientProfilesLive,
+    providersClaimed: claimedIds.length,
+    providersCompleted: claimOutcomes.completed,
+    providersVerified: claimOutcomes.verified,
+    managedAdSignups,
+    managedAdRepeat,
+    staffingSignups,
     careWorkerProfilesStarted,
     careWorkerProfiles,
-    providersClaimed,
-    managedAdSignups,
-    staffingSignups,
   };
 }

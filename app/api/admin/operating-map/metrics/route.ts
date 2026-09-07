@@ -55,7 +55,8 @@ const PROFILE_TIMING_CAVEAT =
 /** A named part of a node's total, rendered on the card under its label. */
 export interface OperatingMapBreakdown {
   label: string;
-  value: number;
+  /** Null renders as a dash — a part with no source yet, not a zero. */
+  value: number | null;
 }
 
 export interface OperatingMapNode {
@@ -89,8 +90,8 @@ export async function GET(request: NextRequest) {
 
     const db = getServiceClient();
     const nodes: Record<string, OperatingMapNode> = {};
-    let cr1ChannelSum: number | undefined;
-    let cr4PartsSum: number | undefined;
+    let trafficChannelSum: number | undefined;
+    let cr1PartsSum: number | undefined;
     let cp1OrphanedClaims: number | undefined;
     let cp1Unclaimed: number | undefined;
     let flows: { questionsToProviders: number; connectionsToProviders: number } | null =
@@ -137,8 +138,8 @@ export async function GET(request: NextRequest) {
       }
       if (traffic.truncated) caveats.push("Row ceiling reached — this is a floor.");
 
-      cr1ChannelSum = CHANNELS.reduce((sum, c) => sum + traffic.byChannel[c], 0);
-      nodes.cr1 = {
+      trafficChannelSum = CHANNELS.reduce((sum, c) => sum + traffic.byChannel[c], 0);
+      nodes.traffic = {
         value: traffic.total,
         // Every channel, including the empty ones. A channel reading zero
         // because nothing is instrumented looks identical to one reading
@@ -150,16 +151,16 @@ export async function GET(request: NextRequest) {
         caveat: caveats.length ? caveats.join(" ") : null,
       };
     } catch (error) {
-      console.error("[operating-map/metrics] cr1 failed:", error);
+      console.error("[operating-map/metrics] traffic failed:", error);
       // One failed node must not blank the others. Null is rendered as
       // unavailable, never as zero.
-      nodes.cr1 = { value: null, caveat: "This metric failed to load." };
+      nodes.traffic = { value: null, caveat: "This metric failed to load." };
     }
 
     try {
       const visits = await getPageVisits(db, { from, to }, city);
-      cr4PartsSum = visits.provider + visits.editorial + visits.benefit;
-      nodes.cr4 = {
+      cr1PartsSum = visits.provider + visits.editorial + visits.benefit;
+      nodes.cr1 = {
         value: visits.total,
         // Order matches the labels printed on the card.
         breakdown: [
@@ -172,8 +173,8 @@ export async function GET(request: NextRequest) {
           : null,
       };
     } catch (error) {
-      console.error("[operating-map/metrics] cr4 failed:", error);
-      nodes.cr4 = { value: null, caveat: "This metric failed to load." };
+      console.error("[operating-map/metrics] cr1 failed:", error);
+      nodes.cr1 = { value: null, caveat: "This metric failed to load." };
     }
 
     try {
@@ -232,18 +233,41 @@ export async function GET(request: NextRequest) {
     try {
       const m = await getMilestones(db, { from, to }, city);
       nodes.m1 = {
-        value: m.careRecipientProfilesLive,
+        value: m.careRecipientProfilesStarted,
+        breakdown: [
+          { label: "started", value: m.careRecipientProfilesStarted },
+          { label: "completed", value: m.careRecipientProfiles },
+          { label: "live", value: m.careRecipientProfilesLive },
+        ],
         caveat: PROFILE_TIMING_CAVEAT,
       };
-      nodes.m2 = { value: m.providersClaimed, caveat: null };
-      nodes.m3 = { value: m.managedAdSignups, caveat: null };
+      nodes.m2 = {
+        value: m.providersClaimed,
+        // Completed and verified are counted among this range's claimers, so
+        // the three read as one funnel rather than three unrelated totals.
+        breakdown: [
+          { label: "claimed", value: m.providersClaimed },
+          { label: "completed", value: m.providersCompleted },
+          { label: "verified", value: m.providersVerified },
+        ],
+        caveat: null,
+      };
+      nodes.m3 = {
+        value: m.managedAdSignups,
+        breakdown: [
+          { label: "signups", value: m.managedAdSignups },
+          { label: "repeat", value: m.managedAdRepeat },
+        ],
+        caveat:
+          "Repeat customers are counted over all time — a repeat happens across two moments, so a short range would report almost none.",
+      };
       nodes.m4 = { value: m.staffingSignups, caveat: null };
       nodes.m5 = {
-        // Started is the headline: it is the pool, and completion is the
-        // conversion inside it. Both are printed because one without the
-        // other is half the story.
         value: m.careWorkerProfilesStarted,
         breakdown: [
+          // Activating a university channel is not recorded anywhere yet, so
+          // it shows as a dash rather than a zero.
+          { label: "channels activated", value: null },
           { label: "started", value: m.careWorkerProfilesStarted },
           { label: "complete", value: m.careWorkerProfiles },
         ],
@@ -262,10 +286,15 @@ export async function GET(request: NextRequest) {
     try {
       // Standing counts, like CP1 — a university is listed or it is not.
       const supply = await getCampusSupply(db, city);
-      nodes.cw1 = { value: supply.universities, caveat: null };
-      nodes.cw2 = { value: supply.advisors, caveat: null };
-      // CW3 has no source yet: activating a channel is not recorded
-      // anywhere, so it stays a dash rather than a guess.
+      nodes.cw1 = {
+        value: supply.universities,
+        breakdown: [
+          { label: "universities", value: supply.universities },
+          { label: "advisors", value: supply.advisors },
+        ],
+        caveat: null,
+      };
+      nodes.cw2 = { value: supply.advisorsInOutreach, caveat: null };
     } catch (error) {
       console.error("[operating-map/metrics] cw1/cw2 failed:", error);
       nodes.cw1 = { value: null, caveat: "This metric failed to load." };
@@ -283,7 +312,14 @@ export async function GET(request: NextRequest) {
         ),
       };
       nodes.tb1 = { value: t.inquiriesResponded, caveat: notCityScoped };
-      nodes.tc1 = { value: t.interviewsConfirmed, caveat: withCity(STATUS_TIMING_CAVEAT) };
+      nodes.tc1 = {
+        value: t.interviewsScheduled,
+        breakdown: [
+          { label: "scheduled", value: t.interviewsScheduled },
+          { label: "completed", value: t.interviewsCompleted },
+        ],
+        caveat: withCity(STATUS_TIMING_CAVEAT),
+      };
       nodes.tc2 = { value: t.hires, caveat: withCity(STATUS_TIMING_CAVEAT) };
       // TA2 and TB2 have no source. Whether aid was granted, and whether
       // care actually started, both happen off the platform.
@@ -302,8 +338,8 @@ export async function GET(request: NextRequest) {
       Object.entries(nodes).map(([id, node]) => [id, node.value]),
     );
     const checks = runChecks(values, {
-      cr1ChannelSum,
-      cr4PartsSum,
+      trafficChannelSum,
+      cr1PartsSum,
       cp1OrphanedClaims,
       cp1Unclaimed,
       inquiriesRaised,

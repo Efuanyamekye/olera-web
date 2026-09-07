@@ -22,7 +22,7 @@ import { getEngagementLevel } from "@/lib/connection-engagement";
  *                                 counts as Connected
  *   TB2      care established     nothing. Care starts in a conversation we
  *                                 are not part of.
- *   TC1      interview confirmed  interviews that reached "confirmed"
+ *   TC1      interviews           scheduled and completed
  *   TC2      hire confirmed       medjobs_placements accepted or confirmed
  *
  * `inquiriesRaised` and `interviewsProposed` are not nodes on the map — the
@@ -54,8 +54,10 @@ export interface Tracks {
   inquiriesResponded: number;
   /** Not a node — the set TC1 is drawn from, kept for the consistency check. */
   interviewsProposed: number;
-  /** TC1 — interviews that reached confirmed. */
-  interviewsConfirmed: number;
+  /** TC1 — interviews with a time agreed. Includes the ones since held. */
+  interviewsScheduled: number;
+  /** Of those, the ones recorded as held. */
+  interviewsCompleted: number;
   /** TC2 — placements the care worker accepted. */
   hires: number;
 }
@@ -196,7 +198,8 @@ export async function getTracks(
     benefitsApplied,
     inquiriesRaised,
     interviewsProposed,
-    interviewsConfirmed,
+    interviewsScheduled,
+    interviewsCompleted,
     hires,
   ] = await Promise.all([
       inRange(
@@ -213,7 +216,13 @@ export async function getTracks(
       ),
       inRange(db.from("interviews").select("id", HEAD), range),
       inRange(
-        db.from("interviews").select("id", HEAD).eq("status", "confirmed"),
+        // Completed implies scheduled — an interview cannot be held without
+        // a time — so both statuses count toward scheduled.
+        db.from("interviews").select("id", HEAD).in("status", ["confirmed", "completed"]),
+        range,
+      ),
+      inRange(
+        db.from("interviews").select("id", HEAD).eq("status", "completed"),
         range,
       ),
       inRange(
@@ -229,7 +238,8 @@ export async function getTracks(
     benefitsApplied,
     inquiriesRaised,
     interviewsProposed,
-    interviewsConfirmed,
+    interviewsScheduled,
+    interviewsCompleted,
     hires,
   ]) {
     if (result.error) throw result.error;
@@ -240,7 +250,8 @@ export async function getTracks(
     inquiriesRaised: inquiriesRaised.count ?? 0,
     inquiriesResponded: await countConnectionsConnected(db, range),
     interviewsProposed: interviewsProposed.count ?? 0,
-    interviewsConfirmed: interviewsConfirmed.count ?? 0,
+    interviewsScheduled: interviewsScheduled.count ?? 0,
+    interviewsCompleted: interviewsCompleted.count ?? 0,
     hires: hires.count ?? 0,
   };
 }

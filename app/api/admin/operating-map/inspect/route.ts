@@ -6,7 +6,7 @@ import { CHANNEL_LABELS, classifyChannel } from "@/lib/analytics/channel";
 import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
 
 /**
- * GET /api/admin/operating-map/inspect?node=cr1&date_from&date_to&city
+ * GET /api/admin/operating-map/inspect?node=traffic&date_from&date_to&city
  *
  * The receipts behind one number on the operating map: which table it came
  * from, exactly which rows were counted, and the most recent handful with
@@ -59,7 +59,7 @@ const SOURCES: Record<
     summarize: (row: Record<string, unknown>) => string;
   }
 > = {
-  cr1: {
+  traffic: {
     title: "All traffic",
     table: "page_events",
     select: "created_at, page, session_id, metadata",
@@ -81,7 +81,7 @@ const SOURCES: Record<
       })]}`;
     },
   },
-  cr4: {
+  cr1: {
     title: "Page visits — content pages",
     table: "page_events",
     select: "created_at, page, session_id, metadata",
@@ -164,13 +164,12 @@ const SOURCES: Record<
       `${String(r.provider_id ?? "—")} · ${String(r.email_type ?? "email")}`,
   },
   m1: {
-    title: "Care recipient profiles live",
+    title: "Care recipient profiles started",
     table: "business_profiles",
     select: "created_at, display_name, city, state",
     where: [
       "type is family",
-      "profile is active",
-      "care post is published",
+      "every profile begun, finished or not",
       "created in this range",
     ],
     cityScoped: false,
@@ -218,7 +217,7 @@ const SOURCES: Record<
       `${String(r.display_name ?? "—")} · ${r.is_active ? "complete" : "started"}`,
   },
   cw1: {
-    title: "Universities listed",
+    title: "Universities targeted",
     table: "student_outreach_campuses",
     select: "created_at, name, city, state",
     where: ["campus is active", "standing count — the date range does not apply"],
@@ -228,12 +227,13 @@ const SOURCES: Record<
     summarize: (r) => `${String(r.name ?? "—")} · ${String(r.city ?? "")}`,
   },
   cw2: {
-    title: "Advisors listed",
+    title: "Advisors in outreach",
     table: "student_outreach_contacts",
     select: "created_at, name, title, outreach_id",
     where: [
       "contact record is active",
-      "at a listed university, reached through student_outreach",
+      "at a targeted university, reached through student_outreach",
+      "rows below are all active advisors; the count is those with a touchpoint",
       "standing count — the date range does not apply",
     ],
     cityScoped: false,
@@ -257,7 +257,7 @@ const SOURCES: Record<
   tb1: {
     // Sampled as inquiries; Connected is decided in code from six signals,
     // none of them a column, so the rows below are the pool it is drawn from.
-    title: "Connections confirmed",
+    title: "Family–provider connected",
     table: "connections",
     select: "created_at, to_profile_id, status, metadata",
     where: [
@@ -283,10 +283,10 @@ const SOURCES: Record<
     },
   },
   tc1: {
-    title: "Interviews confirmed",
+    title: "Interviews scheduled",
     table: "interviews",
     select: "created_at, status",
-    where: ["status is confirmed", "attendance itself is not recorded"],
+    where: ["status is confirmed or completed — a time was agreed"],
     cityScoped: false,
     summarize: (r) => `Interview · ${String(r.status ?? "")}`,
   },
@@ -354,18 +354,13 @@ export async function GET(request: NextRequest) {
 
     const where = [...source.where];
     if (source.eventType) query = query.eq("event_type", source.eventType);
-    if (node === "m1") {
-      query = query
-        .eq("type", "family")
-        .eq("is_active", true)
-        .contains("metadata", { care_post: { status: "active" } });
-    }
+    if (node === "m1") query = query.eq("type", "family");
     if (node === "m5") query = query.eq("type", "student");
     if (node === "m4") query = query.eq("type", "system_activated");
     if (node === "cw1") query = query.eq("is_active", true);
     if (node === "cw2") query = query.eq("status", "active");
     if (node === "tb1") query = query.eq("type", "inquiry");
-    if (node === "tc1") query = query.eq("status", "confirmed");
+    if (node === "tc1") query = query.in("status", ["confirmed", "completed"]);
     if (node === "tc2") query = query.in("status", ["accepted", "confirmed"]);
     if (node === "cp2") {
       query = query.eq("recipient_type", "provider").not("provider_id", "is", null);
@@ -379,7 +374,7 @@ export async function GET(request: NextRequest) {
         .eq("recipient_type", "provider")
         .eq("status", "sent");
     }
-    if (node === "cr1") {
+    if (node === "traffic") {
       // Same two surfaces the count is scoped to, so the sample cannot show
       // a page the number never counted.
       query = query.or(
@@ -387,7 +382,7 @@ export async function GET(request: NextRequest) {
       );
       where.push("benefits and editorial pages (provider pages counted separately)");
     }
-    if (node === "cr4") {
+    if (node === "cr1") {
       query = query.or(
         `${CONTENT_PAGE_FILTERS.benefit},${CONTENT_PAGE_FILTERS.guide}`,
       );

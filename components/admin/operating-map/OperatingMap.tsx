@@ -73,8 +73,8 @@ type CitiesState =
 /** One instrumented node, as /api/admin/operating-map/metrics returns it. */
 export interface MetricNode {
   value: number | null;
-  /** Named parts summing to `value`, printed under the node's label. */
-  breakdown?: { label: string; value: number }[];
+  /** Named parts printed under the node's label. Null renders as a dash. */
+  breakdown?: { label: string; value: number | null }[];
   /** Live caveat, shown in the tooltip only — never as text on the card. */
   caveat?: string | null;
 }
@@ -130,10 +130,10 @@ export function toneClass(score: number): string | null {
 const NODE_HELP: Record<string, string> = {
   cities:
     "Cities with at least one live provider. Wider than the cities we have deliberately launched.",
-  cr1:
+  traffic:
     "Every visitor to a provider, benefits or editorial page, however they arrived. The ten channels below account for all of it — GA4 is the cross-check on the total, the split is our own.",
-  cr4:
-    "Page views on the same three surfaces CR1, CR2 and CR3 count visitors to. Views, not people, so the three above will always add to less than this.",
+  cr1:
+    "Page views on provider, benefits and editorial pages. Views, not people, so this runs higher than the visitor count above it.",
   cr6:
     "Every care recipient action that asks us for something: the three CTA types below, added together. Scoped by the city the ask is about.",
   cr6a:
@@ -147,17 +147,18 @@ const NODE_HELP: Record<string, string> = {
   cp2:
     "Unclaimed providers who heard from us in this range — any email, call or MedJobs contact. Counts providers, not messages, so twenty emails to one provider is one.",
   m1:
-    "Care recipient profiles with a published care post — the state that makes someone visible to providers. Publishing is not timestamped, so this counts profiles created in this range that are live today.",
+    "Care recipient profiles begun in this range, and how far they got. Live means the care post is published, which is what makes someone visible to providers.",
   m2:
-    "Providers who finished claiming their listing in this range. An event, unlike CP1's claimed total, which is a standing count.",
-  m3: "Providers who requested a managed ad campaign in this range.",
+    "Providers who claimed their listing in this range, and how many of those went on to finish the profile and pass verification.",
+  m3:
+    "Providers who requested a managed ad campaign in this range. Repeat counts providers who have asked more than once, over all time.",
   m4: "Providers who activated MedJobs staffing in this range.",
   m5:
-    "MedJobs applications begun, and how many are finished — a profile goes live once the intro video and documents are in. The gap is the pool still to convert.",
+    "MedJobs applications begun and how many are finished — a profile goes live once the intro video and documents are in. Channels activated has no source yet.",
   cw1:
-    "Universities we have listed and are working, scoped by the university's city. A standing count — the date range does not change it.",
+    "Universities we are working and the advisors on file at them, scoped by the university's city. A standing count — the date range does not change it.",
   cw2:
-    "Advisors we can reach at those universities, counted where the contact record is still active. A standing count.",
+    "Advisors we have actually contacted — at least one touchpoint against them. The gap from CW1's advisor count is supply we have not tried yet.",
   flow_questions:
     "Question notifications successfully sent to providers in this range. Not a subset of CR6a — a backlog flush sends for questions asked earlier, so this can run higher.",
   flow_connections:
@@ -165,8 +166,8 @@ const NODE_HELP: Record<string, string> = {
   ta1:
     "Families who told us they are moving forward with a benefit. Applying happens on a government site, so this is their own report — a floor, not a count.",
   tb1:
-    "Inquiries that reached Connected, by the same rule the Connections page uses: a provider reply, a confirmation from either side, or an admin marking it.",
-  tc1: "Interviews that reached confirmed. Whether the interview was held is not recorded.",
+    "Families and providers who actually connected, by the same rule the Connections page uses: a provider reply, a confirmation from either side, or an admin marking it.",
+  tc1: "Interviews with a time agreed, and how many were recorded as held. Scheduled includes the ones since completed.",
   tc2: "Placements the care worker accepted.",
 };
 
@@ -376,15 +377,15 @@ export default function OperatingMap({
     /** The line every top-section drop terminates on. */
     const BT = box("bottom").t - G;
 
+    const traffic = box("traffic");
     const cr1 = box("cr1");
-    const cr4 = box("cr4");
     const cr6 = box("cr6");
 
     /* all traffic drops straight into page visits */
-    vArrow(cr1.cx, cr1.b + G, cr4.t - G);
+    vArrow(traffic.cx, traffic.b + G, cr1.t - G);
 
-    const stem1 = cr4.l + 14;
-    seg(stem1, cr4.b + G, stem1, cr6.t - 8);
+    const stem1 = cr1.l + 14;
+    seg(stem1, cr1.b + G, stem1, cr6.t - 8);
     head(stem1, cr6.t - G, "d");
 
     const stem2 = cr6.l + 14;
@@ -417,9 +418,8 @@ export default function OperatingMap({
 
     /* care worker runs straight down its lane and into the milestone layer */
     vDown("cw1", "cw2");
-    vDown("cw2", "cw3");
-    const cw3 = box("cw3");
-    vArrow(cw3.cx, cw3.b + G, BT);
+    const cw2 = box("cw2");
+    vArrow(cw2.cx, cw2.b + G, BT);
 
     /* inside the tracks */
     vDown("ta1", "ta2");
@@ -707,30 +707,38 @@ export default function OperatingMap({
             <div className={styles.lab}>Care worker</div>
           </div>
 
+          {/*
+            All traffic sits above the three lanes, not inside the care
+            recipient one: it is every visitor to the site, which is the
+            scope the city pill above it sets, not a step in the care
+            recipient funnel.
+          */}
+          <div className={styles.full}>
+            <Card
+              hi
+              id="traffic"
+              code=""
+              label="All traffic"
+              metric={nodes.traffic}
+              trend={trends.traffic}
+              loading={metricsLoading}
+              onTip={openTip}
+              onTipClose={closeTip}
+              onInspect={onInspect}
+              showNumbers={showNumbers}
+            />
+          </div>
+
           {/* ---------------- top ---------------- */}
           <div className={styles.lanes3}>
             {/* care recipient */}
             <div className={styles.lane}>
-              <div className={`${styles.chips} ${styles.solo}`}>
+              <div>
                 <Card
                   id="cr1"
                   code="CR1"
-                  label="All traffic"
                   metric={nodes.cr1}
                   trend={trends.cr1}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                  showNumbers={showNumbers}
-                />
-              </div>
-              <div className={styles.indent} style={{ marginTop: 22 }}>
-                <Card
-                  id="cr4"
-                  code="CR4"
-                  metric={nodes.cr4}
-                  trend={trends.cr4}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -738,7 +746,7 @@ export default function OperatingMap({
                     <>
                       Page visits
                       {showNumbers && <br />}
-                      <Surfaces metric={nodes.cr4} showNumbers={showNumbers} />
+                      <Surfaces metric={nodes.cr1} showNumbers={showNumbers} />
                     </>
                   }
                 />
@@ -828,7 +836,7 @@ export default function OperatingMap({
                 <Card
                   id="cp2"
                   code="CP2"
-                  label="In outreach"
+                  label="Providers in outreach"
                   metric={nodes.cp2}
                   trend={trends.cp2}
                   loading={metricsLoading}
@@ -845,7 +853,17 @@ export default function OperatingMap({
               <Card
                 id="cw1"
                 code="CW1"
-                label="Universities listed"
+                label={
+                  <>
+                    Universities targeted
+                    {showNumbers && <br />}
+                    <Surfaces
+                      metric={nodes.cw1}
+                      fallback="universities · advisors"
+                      showNumbers={showNumbers}
+                    />
+                  </>
+                }
                 metric={nodes.cw1}
                 trend={trends.cw1}
                 loading={metricsLoading}
@@ -858,7 +876,7 @@ export default function OperatingMap({
               <Card
                 id="cw2"
                 code="CW2"
-                label="Advisors listed"
+                label="Advisors in outreach"
                 metric={nodes.cw2}
                 trend={trends.cw2}
                 loading={metricsLoading}
@@ -868,7 +886,6 @@ export default function OperatingMap({
                   showNumbers={showNumbers}
               />
               <div className={styles.gap} />
-              <Card id="cw3" code="CW3" label="University channels activated" />
             </div>
           </div>
 
@@ -883,7 +900,17 @@ export default function OperatingMap({
                   hi
                   id="m1"
                   code="M1"
-                  label="Care recipient profiles live"
+                  label={
+                    <>
+                      Care recipient profiles
+                      {showNumbers && <br />}
+                      <Surfaces
+                        metric={nodes.m1}
+                        fallback="started · completed · live"
+                        showNumbers={showNumbers}
+                      />
+                    </>
+                  }
                   metric={nodes.m1}
                   trend={trends.m1}
                   loading={metricsLoading}
@@ -896,7 +923,17 @@ export default function OperatingMap({
                   hi
                   id="m2"
                   code="M2"
-                  label="Provider profiles claimed"
+                  label={
+                    <>
+                      Provider profiles
+                      {showNumbers && <br />}
+                      <Surfaces
+                        metric={nodes.m2}
+                        fallback="claimed · completed · verified"
+                        showNumbers={showNumbers}
+                      />
+                    </>
+                  }
                   metric={nodes.m2}
                   trend={trends.m2}
                   loading={metricsLoading}
@@ -909,7 +946,17 @@ export default function OperatingMap({
                   hi
                   id="m3"
                   code="M3" money="Paid product"
-                  label="Managed ad signups"
+                  label={
+                    <>
+                      Managed ads
+                      {showNumbers && <br />}
+                      <Surfaces
+                        metric={nodes.m3}
+                        fallback="signups · repeat"
+                        showNumbers={showNumbers}
+                      />
+                    </>
+                  }
                   metric={nodes.m3}
                   trend={trends.m3}
                   loading={metricsLoading}
@@ -941,7 +988,7 @@ export default function OperatingMap({
                       {showNumbers && <br />}
                       <Surfaces
                         metric={nodes.m5}
-                        fallback="started · complete"
+                        fallback="channels · started · complete"
                         showNumbers={showNumbers}
                       />
                     </>
@@ -973,7 +1020,7 @@ export default function OperatingMap({
                     onInspect={onInspect}
                     showNumbers={showNumbers}
                   />
-                  <Card id="ta2" code="TA2" label="Aid established" />
+                  <Card id="ta2" code="TA2" label="Aid confirmed" />
                 </div>
               </div>
 
@@ -983,7 +1030,7 @@ export default function OperatingMap({
                   <Card
                     id="tb1"
                     code="TB1"
-                    label="Connection confirmed"
+                    label="Family–provider connected"
                     metric={nodes.tb1}
                     trend={trends.tb1}
                     loading={metricsLoading}
@@ -992,7 +1039,7 @@ export default function OperatingMap({
                     onInspect={onInspect}
                     showNumbers={showNumbers}
                   />
-                  <Card id="tb2" code="TB2" label="Care established" />
+                  <Card id="tb2" code="TB2" label="Care confirmed" />
                 </div>
               </div>
 
@@ -1002,7 +1049,17 @@ export default function OperatingMap({
                   <Card
                     id="tc1"
                     code="TC1"
-                    label="Interviews confirmed"
+                    label={
+                      <>
+                        Interviews
+                        {showNumbers && <br />}
+                        <Surfaces
+                          metric={nodes.tc1}
+                          fallback="scheduled · completed"
+                          showNumbers={showNumbers}
+                        />
+                      </>
+                    }
                     metric={nodes.tc1}
                     trend={trends.tc1}
                     loading={metricsLoading}
@@ -1161,7 +1218,7 @@ export type TipOpener = (
 ) => void;
 
 /**
- * The three surfaces CR4 spans. This line already named them; instrumenting
+ * The three surfaces CR1 spans. This line already named them; instrumenting
  * the node fills in the numbers rather than adding a row of its own.
  */
 function Surfaces({
@@ -1190,7 +1247,11 @@ function Surfaces({
       {parts.map((p, i) => (
         <span key={p.label}>
           {i > 0 && " · "}
-          {p.label} <b className={styles.surfaceValue}>{p.value.toLocaleString()}</b>
+          {p.label}{" "}
+          <b className={styles.surfaceValue}>
+            {/* Null is a part with no source yet, not a zero. */}
+            {p.value === null ? NOT_INSTRUMENTED : p.value.toLocaleString()}
+          </b>
         </span>
       ))}
     </span>
@@ -1289,7 +1350,7 @@ function MetricValue({
 
 /** Nodes the inspect endpoint can produce rows for. */
 const INSPECTABLE = new Set([
-  "cr1", "cr4", "cr6a", "cr6b", "cr6c",
+  "traffic", "cr1", "cr6a", "cr6b", "cr6c",
   "cp1", "cp2",
   "m1", "m2", "m3", "m4", "m5",
   "cw1", "cw2",

@@ -32,13 +32,13 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     advice:
       "Coverage grows by adding providers, not cities. Run the city pipeline for a market before counting it as launched.",
   },
-  cr1: {
+  traffic: {
     href: "/admin/organic-growth",
     label: "Organic growth",
     advice:
       "Work the largest channel that is falling, not the smallest one that is rising. A muted row at zero is an instrumentation job, not a dead channel.",
   },
-  cr4: {
+  traffic: {
     href: "/admin/organic-growth",
     label: "Growth drivers",
     advice:
@@ -96,19 +96,19 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     href: "/admin/care-seekers",
     label: "Care seekers",
     advice:
-      "Completed profiles that never publish are the leak. Work the unpublished list before chasing new signups.",
+      "The drop from started to completed to live is where families stall. Work the largest step down, not the smallest.",
   },
   m2: {
     href: "/admin/directory",
     label: "Unclaimed providers",
     advice:
-      "Claims follow contact. If this is flat while outreach is not, the claim flow is where to look.",
+      "A claim that never completes or verifies is a provider we cannot show. Work the gap before chasing more claims.",
   },
   m3: {
     href: "/admin/ad-boost",
     label: "Ad Boost",
     advice:
-      "Requests come from providers who already see traffic. Providers with rising page views are the ones worth asking.",
+      "Repeat customers are the signal that ads work. A first campaign that never repeats is worth a conversation.",
   },
   m4: {
     href: "/admin/staffing-outreach",
@@ -126,13 +126,13 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     href: "/admin/student-outreach",
     label: "Student outreach",
     advice:
-      "A listed university is worth nothing without a named advisor. Add contacts before adding campuses.",
+      "A targeted university is worth nothing without a named advisor. Add contacts before adding campuses.",
   },
   cw2: {
     href: "/admin/student-outreach",
     label: "Advisors",
     advice:
-      "Advisors go stale. Re-verify contacts that have not replied before adding more.",
+      "The gap from CW1's advisor count is names nobody has emailed yet. Work that before sourcing more contacts.",
   },
   ta1: {
     href: "/admin/benefits",
@@ -150,7 +150,7 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     href: "/admin/medjobs",
     label: "MedJobs interviews",
     advice:
-      "Proposed interviews that never confirm mean scheduling friction. Chase the unconfirmed before sourcing more candidates.",
+      "Scheduled interviews that never complete are no-shows or cancellations. Chase those before sourcing more candidates.",
   },
   tc2: {
     href: "/admin/medjobs",
@@ -212,7 +212,7 @@ function diagnose(t: NodeTrend): string {
 }
 
 /**
- * CR1's channel split.
+ * TRAFFIC's channel split.
  *
  * Every channel is shown, including the ones reading zero. A channel at zero
  * because nothing is instrumented looks identical to one at zero because
@@ -226,39 +226,42 @@ function Channels({
   parts,
   trends,
 }: {
-  parts: { label: string; value: number }[];
-  /** Per-channel trends, keyed `cr1:<channel>` by the metrics endpoint. */
+  parts: { label: string; value: number | null }[];
+  /** Per-channel trends, keyed `traffic:<channel>` by the metrics endpoint. */
   trends?: NodeTrends;
 }) {
-  const total = parts.reduce((a, p) => a + p.value, 0) || 1;
-  const peak = Math.max(...parts.map((p) => p.value), 1);
-  const ordered = [...parts].sort((a, b) => b.value - a.value);
+  // A channel with no source at all is not a zero — it sorts last and reads
+  // as a dash, the same as anywhere else on the map.
+  const val = (p: { value: number | null }) => p.value ?? 0;
+  const total = parts.reduce((a, p) => a + val(p), 0) || 1;
+  const peak = Math.max(...parts.map(val), 1);
+  const ordered = [...parts].sort((a, b) => val(b) - val(a));
 
   return (
     <div className={styles.tipSection}>
       <span className={styles.tipLabel}>Where it came from</span>
       <div className={styles.chan}>
         {ordered.map((p) => {
-          const t = trends?.[`cr1:${slug(p.label)}`];
+          const t = trends?.[`traffic:${slug(p.label)}`];
           const tone = t ? toneClass(t.score) : null;
           const arrow =
             t && t.monthDirection !== 0 ? (t.monthDirection > 0 ? "▲" : "▼") : null;
           return (
             <div
               key={p.label}
-              className={`${styles.chanRow}${p.value === 0 ? ` ${styles.chanNone}` : ""}`}
-              title={`${p.label} · ${Math.round((p.value / total) * 100)}% of all traffic`}
+              className={`${styles.chanRow}${val(p) === 0 ? ` ${styles.chanNone}` : ""}`}
+              title={`${p.label} · ${Math.round((val(p) / total) * 100)}% of all traffic`}
             >
               {/* Share as a bar rather than a column: one graphic reads
                   faster than a second set of digits. */}
               <span
                 className={styles.chanBar}
-                style={{ width: `${(p.value / peak) * 100}%` }}
+                style={{ width: `${(val(p) / peak) * 100}%` }}
                 aria-hidden="true"
               />
               <span className={styles.chanName}>{p.label}</span>
               <span className={`${styles.chanValue}${tone ? ` ${tone}` : ""}`}>
-                {p.value.toLocaleString()}
+                {p.value === null ? "—" : p.value.toLocaleString()}
               </span>
               <span className={`${styles.chanArrow}${tone ? ` ${tone}` : ""}`} aria-hidden="true">
                 {arrow}
@@ -338,7 +341,7 @@ export default function NodeTip({
   text: string;
   nodeKey: string;
   caveat?: string | null;
-  /** Carries the breakdown CR1 renders as its channel table. */
+  /** Carries the breakdown TRAFFIC renders as its channel table. */
   metric?: MetricNode;
   trend?: NodeTrend | null;
   /** All node trends, so the channel rows can find their own. */
@@ -384,7 +387,7 @@ export default function NodeTip({
         </div>
       )}
 
-      {nodeKey === "cr1" && metric?.breakdown?.length ? (
+      {nodeKey === "traffic" && metric?.breakdown?.length ? (
         <Channels parts={metric.breakdown} trends={trends} />
       ) : null}
 
