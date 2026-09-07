@@ -8,7 +8,7 @@ import { cityFilterFromSlug, listedProviderIdsInCity } from "@/lib/providers";
  *   M1  care recipient profiles        business_profiles type=family,
  *                                       started / completed / live
  *   M2  provider profiles               provider_activity claim_completed,
- *                                       then completed / verified among them
+ *                                       then verified among them
  *   M3  managed ad signups              ad_campaign_requests, plus repeats
  *   M4  provider staffing signups       staffing_touchpoints system_activated
  *   M5  care worker profiles            business_profiles type=student,
@@ -42,8 +42,6 @@ export interface Milestones {
   careRecipientProfilesLive: number;
   /** M2 — providers who finished claiming in this range. */
   providersClaimed: number;
-  /** Of those, the ones whose profile is active. */
-  providersCompleted: number;
   /** Of those, the ones verification has passed. */
   providersVerified: number;
   /** M3 — campaign requests in this range. */
@@ -206,38 +204,33 @@ async function countStaffingSignups(
 }
 
 /**
- * M2's second and third numbers: of the providers who claimed in this range,
- * how many finished the profile and how many passed verification.
+ * M2's second number: of the providers who claimed in this range, how many
+ * passed verification.
  *
  * Deliberately scoped to the same claimers rather than counted across the
  * whole directory — read as a funnel inside the claim cohort, it says how
  * far this range's claimers actually got. A standing directory-wide count
  * would answer a different question and sit misleadingly under an event.
  */
-async function countClaimOutcomes(
+async function countClaimsVerified(
   db: SupabaseClient,
   providerIds: string[],
-): Promise<{ completed: number; verified: number }> {
-  if (providerIds.length === 0) return { completed: 0, verified: 0 };
+): Promise<number> {
+  if (providerIds.length === 0) return 0;
 
-  let completed = 0;
   let verified = 0;
   for (let i = 0; i < providerIds.length; i += 100) {
     const { data, error } = await db
       .from("business_profiles")
-      .select("is_active, verification_state")
+      .select("verification_state")
       .eq("type", "provider")
       .in("source_provider_id", providerIds.slice(i, i + 100));
     if (error) throw error;
-    for (const r of (data ?? []) as {
-      is_active: boolean | null;
-      verification_state: string | null;
-    }[]) {
-      if (r.is_active) completed += 1;
+    for (const r of (data ?? []) as { verification_state: string | null }[]) {
       if (r.verification_state === "verified") verified += 1;
     }
   }
-  return { completed, verified };
+  return verified;
 }
 
 /**
@@ -327,7 +320,7 @@ export async function getMilestones(
     careRecipientProfilesLive,
     careWorkerProfilesStarted,
     careWorkerProfiles,
-    claimOutcomes,
+    providersVerified,
     managedAdSignups,
     managedAdRepeat,
     staffingSignups,
@@ -337,7 +330,7 @@ export async function getMilestones(
     countProfiles(db, "family", range, citySlug, { liveOnly: true }),
     countProfiles(db, "student", range, citySlug, { includeIncomplete: true }),
     countProfiles(db, "student", range, citySlug),
-    countClaimOutcomes(db, claimedIds),
+    countClaimsVerified(db, claimedIds),
     countProviderEvents(
       db,
       {
@@ -357,8 +350,7 @@ export async function getMilestones(
     careRecipientProfiles,
     careRecipientProfilesLive,
     providersClaimed: claimedIds.length,
-    providersCompleted: claimOutcomes.completed,
-    providersVerified: claimOutcomes.verified,
+    providersVerified,
     managedAdSignups,
     managedAdRepeat,
     staffingSignups,

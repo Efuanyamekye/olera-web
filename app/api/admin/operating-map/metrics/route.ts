@@ -247,7 +247,6 @@ export async function GET(request: NextRequest) {
         // the three read as one funnel rather than three unrelated totals.
         breakdown: [
           { label: "claimed", value: m.providersClaimed },
-          { label: "completed", value: m.providersCompleted },
           { label: "verified", value: m.providersVerified },
         ],
         caveat: null,

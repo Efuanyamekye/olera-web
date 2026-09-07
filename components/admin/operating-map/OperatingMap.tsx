@@ -191,6 +191,7 @@ export default function OperatingMap({
   metricsLoading,
   onInspect,
   showNumbers = true,
+  controls,
 }: {
   /** Slug of the city the map is scoped to, or null for all cities. */
   selectedCity: string | null;
@@ -206,6 +207,11 @@ export default function OperatingMap({
   onInspect?: (nodeKey: string) => void;
   /** False strips every value, dash and marker, leaving the structure. */
   showNumbers?: boolean;
+  /**
+   * The view's own period and visibility controls, rendered beside the city
+   * picker so scope and period read as one row instead of two.
+   */
+  controls?: ReactNode;
 }) {
   const [cities, setCities] = useState<CitiesState>({ status: "loading" });
   const [tip, setTip] = useState<Tip | null>(null);
@@ -613,12 +619,13 @@ export default function OperatingMap({
           onLeave={closeTip}
         />
       )}
-      <div className={styles.fit} ref={fitRef}>
-        <div className={styles.stage} ref={stageRef}>
-          <section className={styles.system} ref={rootRef}>
-          <svg className={styles.wires} ref={svgRef} role="presentation" />
-
-          <div className={styles.full} ref={pickerRef} style={{ position: "relative" }}>
+      {/*
+        Scope and period on one line, above the figure rather than inside it.
+        Everything inside .fit is scaled to fit the screen, so a control
+        rendered in there would shrink along with the map.
+      */}
+      <div className={styles.controls} ref={pickerRef}>
+        <div style={{ position: "relative" }}>
             <button
               type="button"
               className={`${styles.pill} ${styles.pillButton}`}
@@ -698,35 +705,52 @@ export default function OperatingMap({
                 )}
               </div>
             )}
-          </div>
-          <div style={{ height: 14 }} />
+        </div>
+        {controls}
+      </div>
+
+      <div className={styles.fit} ref={fitRef}>
+        <div className={styles.stage} ref={stageRef}>
+          <section className={styles.system} ref={rootRef}>
+          <svg className={styles.wires} ref={svgRef} role="presentation" />
+
+          {/*
+            All traffic sits above the three lanes, not inside the care
+            recipient one: it is every visitor to the site, not a step in the
+            care recipient funnel. Same bar as the scope control above it,
+            because it is the same kind of thing — the size of the world the
+            map describes, rather than a step inside it.
+          */}
+          <button
+            type="button"
+            id={nodeId("traffic")}
+            className={`${styles.pill} ${styles.full} ${styles.trafficBar}`}
+            onMouseEnter={(e) =>
+              openTip(e.currentTarget, "traffic", nodes.traffic?.caveat, trends.traffic)
+            }
+            onMouseLeave={closeTip}
+            onFocus={(e) =>
+              openTip(e.currentTarget, "traffic", nodes.traffic?.caveat, trends.traffic)
+            }
+            onBlur={closeTip}
+            onClick={() => onInspect?.("traffic")}
+          >
+            All traffic
+            {showNumbers && (
+              <span className={styles.pillCount}>
+                {metricsLoading
+                  ? "…"
+                  : typeof nodes.traffic?.value === "number"
+                    ? nodes.traffic.value.toLocaleString()
+                    : NOT_INSTRUMENTED}
+              </span>
+            )}
+          </button>
 
           <div className={styles.lanes3} style={{ marginBottom: 8 }}>
             <div className={styles.lab}>Care recipient</div>
             <div className={styles.lab}>Care provider</div>
             <div className={styles.lab}>Care worker</div>
-          </div>
-
-          {/*
-            All traffic sits above the three lanes, not inside the care
-            recipient one: it is every visitor to the site, which is the
-            scope the city pill above it sets, not a step in the care
-            recipient funnel.
-          */}
-          <div className={styles.full}>
-            <Card
-              hi
-              id="traffic"
-              code=""
-              label="All traffic"
-              metric={nodes.traffic}
-              trend={trends.traffic}
-              loading={metricsLoading}
-              onTip={openTip}
-              onTipClose={closeTip}
-              onInspect={onInspect}
-              showNumbers={showNumbers}
-            />
           </div>
 
           {/* ---------------- top ---------------- */}
@@ -742,13 +766,8 @@ export default function OperatingMap({
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
-                  label={
-                    <>
-                      Page visits
-                      {showNumbers && <br />}
-                      <Surfaces metric={nodes.cr1} showNumbers={showNumbers} />
-                    </>
-                  }
+                  label="Page visits"
+                  parts="provider · editorial · benefits"
                 />
                 <div style={{ marginTop: 16 }}>
                   <Card
@@ -812,17 +831,8 @@ export default function OperatingMap({
                 <Card
                   id="cp1"
                   code="CP1"
-                  label={
-                    <>
-                      Providers listed
-                      {showNumbers && <br />}
-                      <Surfaces
-                        metric={nodes.cp1}
-                        fallback="claimed · unclaimed"
-                        showNumbers={showNumbers}
-                      />
-                    </>
-                  }
+                  label="Providers listed"
+                  parts="claimed · unclaimed"
                   metric={nodes.cp1}
                   trend={trends.cp1}
                   loading={metricsLoading}
@@ -853,17 +863,8 @@ export default function OperatingMap({
               <Card
                 id="cw1"
                 code="CW1"
-                label={
-                  <>
-                    Universities targeted
-                    {showNumbers && <br />}
-                    <Surfaces
-                      metric={nodes.cw1}
-                      fallback="universities · advisors"
-                      showNumbers={showNumbers}
-                    />
-                  </>
-                }
+                label="Universities targeted"
+                  parts="universities · advisors"
                 metric={nodes.cw1}
                 trend={trends.cw1}
                 loading={metricsLoading}
@@ -900,17 +901,8 @@ export default function OperatingMap({
                   hi
                   id="m1"
                   code="M1"
-                  label={
-                    <>
-                      Care recipient profiles
-                      {showNumbers && <br />}
-                      <Surfaces
-                        metric={nodes.m1}
-                        fallback="started · completed · live"
-                        showNumbers={showNumbers}
-                      />
-                    </>
-                  }
+                  label="Care recipient profiles"
+                  parts="started · completed · live"
                   metric={nodes.m1}
                   trend={trends.m1}
                   loading={metricsLoading}
@@ -923,17 +915,8 @@ export default function OperatingMap({
                   hi
                   id="m2"
                   code="M2"
-                  label={
-                    <>
-                      Provider profiles
-                      {showNumbers && <br />}
-                      <Surfaces
-                        metric={nodes.m2}
-                        fallback="claimed · completed · verified"
-                        showNumbers={showNumbers}
-                      />
-                    </>
-                  }
+                  label="Provider profiles"
+                  parts="claimed · verified"
                   metric={nodes.m2}
                   trend={trends.m2}
                   loading={metricsLoading}
@@ -946,17 +929,8 @@ export default function OperatingMap({
                   hi
                   id="m3"
                   code="M3" money="Paid product"
-                  label={
-                    <>
-                      Managed ads
-                      {showNumbers && <br />}
-                      <Surfaces
-                        metric={nodes.m3}
-                        fallback="signups · repeat"
-                        showNumbers={showNumbers}
-                      />
-                    </>
-                  }
+                  label="Managed ads"
+                  parts="signups · repeat"
                   metric={nodes.m3}
                   trend={trends.m3}
                   loading={metricsLoading}
@@ -982,17 +956,8 @@ export default function OperatingMap({
                   hi
                   id="m5"
                   code="M5"
-                  label={
-                    <>
-                      Care worker profiles
-                      {showNumbers && <br />}
-                      <Surfaces
-                        metric={nodes.m5}
-                        fallback="channels · started · complete"
-                        showNumbers={showNumbers}
-                      />
-                    </>
-                  }
+                  label="Care worker profiles"
+                  parts="channels · started · complete"
                   metric={nodes.m5}
                   trend={trends.m5}
                   loading={metricsLoading}
@@ -1049,17 +1014,8 @@ export default function OperatingMap({
                   <Card
                     id="tc1"
                     code="TC1"
-                    label={
-                      <>
-                        Interviews
-                        {showNumbers && <br />}
-                        <Surfaces
-                          metric={nodes.tc1}
-                          fallback="scheduled · completed"
-                          showNumbers={showNumbers}
-                        />
-                      </>
-                    }
+                    label="Interviews"
+                  parts="scheduled · completed"
                     metric={nodes.tc1}
                     trend={trends.tc1}
                     loading={metricsLoading}
@@ -1110,6 +1066,7 @@ function Card({
   id,
   code,
   label,
+  parts,
   hi,
   money,
   metric,
@@ -1122,7 +1079,13 @@ function Card({
 }: {
   id: string;
   code: string;
-  label: ReactNode;
+  /** Sits on the same line as the code. Two lines for a name is one too many. */
+  label: string;
+  /**
+   * Placeholder for the breakdown line, shown before the node is
+   * instrumented. Its presence is what gives the card a second line at all.
+   */
+  parts?: string;
   hi?: boolean;
   /** Tooltip shown on the $ marker. Omit for nodes that carry no money. */
   money?: string;
@@ -1144,6 +1107,7 @@ function Card({
               $
             </span>
           )}
+          <span className={styles.name}>{label}</span>
         </div>
         <span style={{ whiteSpace: "nowrap" }}>
           <MetricValue
@@ -1158,7 +1122,11 @@ function Card({
           />
         </span>
       </div>
-      <div className={styles.n}>{label}</div>
+      {parts && showNumbers && (
+        <div className={styles.n}>
+          <Surfaces metric={metric} fallback={parts} showNumbers={showNumbers} />
+        </div>
+      )}
     </div>
   );
 }
@@ -1191,6 +1159,7 @@ function Chip({
       <div className={styles.chipHead}>
         <span>
           <b>{code}</b>
+          <span className={styles.name}>{label}</span>
         </span>
         <span style={{ whiteSpace: "nowrap" }}>
           <MetricValue
@@ -1205,7 +1174,6 @@ function Chip({
           />
         </span>
       </div>
-      {label}
     </div>
   );
 }
