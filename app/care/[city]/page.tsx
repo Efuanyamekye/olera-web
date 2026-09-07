@@ -53,10 +53,13 @@ export default async function CityCarePage({
   let providers: CityProviderCard[] = [];
   try {
     const db = getServiceClient();
+    // Only providers who have said YES to taking requests. A disabled row is
+    // a prospect, and a test row is never a public card.
     const { data: pool } = await db
       .from("city_pool")
       .select("provider_id, position, care_types")
       .eq("slug", cfg.slug)
+      .eq("enabled", true)
       .order("position", { ascending: true });
     const ids = (pool ?? []).map((p) => p.provider_id as string);
     if (ids.length > 0) {

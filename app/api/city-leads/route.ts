@@ -87,12 +87,14 @@ export async function POST(req: NextRequest) {
     if ((count ?? 0) >= 5) return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
   }
 
-  // Idempotency: same phone + city in 24h returns the existing lead.
+  // Idempotency: same phone + city in 24h returns the existing lead. A stopped
+  // request does not count; the family may genuinely be asking again.
   const { data: existing } = await db
     .from("city_leads")
     .select("id, status, care_type")
     .eq("slug", slug)
     .eq("phone", phone)
+    .neq("status", "stopped")
     .gte("created_at", new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString())
     .order("created_at", { ascending: false })
     .limit(1)
