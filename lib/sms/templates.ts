@@ -194,3 +194,34 @@ export function cityFamilyMedicalSms(p: { firstName: string }): string {
 function cap(s: string): string {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
+
+// ── City campaign follow-ups ────────────────────────────────────────────────
+// Two questions on a clock: did the provider call, and did it become a client.
+// Both are one-digit replies so answering costs nothing.
+
+/** Day 2, to the family. */
+export function cityFamilyCheckSms(p: { firstName: string; providerName: string }): string {
+  return `Olera: Hi ${p.firstName}, did ${p.providerName} reach you? Reply 1 yes, 2 not yet. Reply STOP to opt out.`;
+}
+
+/** Family said not yet: the provider's one nudge. */
+export function cityProviderNudgeSms(p: { firstName: string; phone: string }): string {
+  return `Olera: ${p.firstName} says they have not heard from you yet. ${p.phone}. If you cannot take it, reply NO and we will pass it on today.`;
+}
+
+/** Family said not yet and the provider still did not call: we move on. */
+export function cityFamilyReofferSms(p: { firstName: string; city: string }): string {
+  return `Olera: Sorry about that, ${p.firstName}. We are asking another ${p.city} provider now and will text you their name.`;
+}
+
+/** Day 7 and day 21, to the provider. */
+export function cityOutcomePingSms(p: { firstName: string; city: string }): string {
+  return `Olera: did ${p.firstName} in ${p.city} become a client? Reply 1 yes, 2 still talking, 3 no. One tap tells us whether this is working.`;
+}
+
+/** Receipt for a provider's outcome reply. */
+export function cityOutcomeThanksSms(outcome: "client" | "talking" | "no"): string {
+  if (outcome === "client") return `That is the number we needed. Thank you.`;
+  if (outcome === "talking") return `Noted, we will check back. Thank you.`;
+  return `Noted, thank you. It helps us send you better ones.`;
+}

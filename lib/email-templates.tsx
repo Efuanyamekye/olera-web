@@ -6729,3 +6729,15 @@ export function cityOfferAcceptedEmail(opts: { providerName: string; city: strin
     `You took a family's request in ${opts.city}. Details on your Olera page.`,
   );
 }
+
+/** Day 7 / day 21 outcome question, for providers whose number cannot take a text. */
+export function cityOutcomePingEmail(opts: { firstName: string; city: string; careLabel: string; offerUrl: string }): string {
+  return layout(
+    `
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">${escapeHtml(opts.city)}</p>
+    <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">Did ${escapeHtml(opts.firstName)} become a client?</h1>
+    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">You took their request for ${escapeHtml(opts.careLabel)} in ${escapeHtml(opts.city)}. One tap tells us whether this is working, and it is the only number we report back to you.</p>
+    <div>${button("Answer in one tap", opts.offerUrl)}</div>`,
+    `Did ${opts.firstName} become a client?`,
+  );
+}

@@ -476,6 +476,19 @@ export async function POST(request: NextRequest) {
         } catch (err) {
           console.error("[sms-webhook] City offer reply handling failed:", err);
         }
+        // Follow-ups: the family's day-2 "did they reach you?" and the
+        // provider's day-7/21 outcome. Both are scoped to a phone with an
+        // outstanding question, so a stray digit from anyone else falls
+        // through to the benefits and family-answer handlers below.
+        try {
+          const { handleFamilyCheckReply, handleOutcomeReply } = await import("@/lib/city-ads/followups.server");
+          const familyReply = await handleFamilyCheckReply(db, normalizedFrom, messageBody);
+          if (familyReply) return twiml(familyReply);
+          const outcomeReply = await handleOutcomeReply(db, normalizedFrom, messageBody);
+          if (outcomeReply) return twiml(outcomeReply);
+        } catch (err) {
+          console.error("[sms-webhook] City follow-up reply handling failed:", err);
+        }
       }
     }
     if (OPT_OUT_KEYWORDS.has(keyword)) {
