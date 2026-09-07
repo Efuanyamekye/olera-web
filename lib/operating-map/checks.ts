@@ -41,8 +41,8 @@ export interface CheckInputs {
   cp1OrphanedClaims?: number;
   /** CP1's unclaimed half — the set CP2 is drawn from. */
   cp1Unclaimed?: number;
-  /** Every visitor to the pages CR4 counts, whatever brought them. */
-  allVisitors?: number;
+  /** CR1's ten channels, summed by the caller. */
+  cr1ChannelSum?: number;
   /** Inquiries raised — the set TB1's answered count is drawn from. */
   inquiriesRaised?: number;
   /** Interviews proposed — the set TC1's confirmed count is drawn from. */
@@ -66,60 +66,31 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  const cr4 = n(values.cr4);
-  // One visitor produces at least one page view, so no source can have more
-  // visitors than there were views over the same window — and the three
-  // together cannot either, since they are disjoint slices of the same rows.
-  for (const [id, label] of [
-    ["cr1", "Direct visitors"],
-    ["cr2", "Organic visitors"],
-    ["cr3", "Paid ad visitors"],
-  ] as const) {
-    const v = n(values[id]);
-    if (v !== null && cr4 !== null) {
-      checks.push({
-        id: `${id}-under-cr4`,
-        label: `${label} do not exceed page visits`,
-        ok: v <= cr4,
-        detail: v <= cr4 ? undefined : `${id.toUpperCase()} is ${v}, CR4 is ${cr4}`,
-      });
-    }
-  }
-
   const cr1 = n(values.cr1);
-  const cr2 = n(values.cr2);
-  const cr3 = n(values.cr3);
-  if (cr1 !== null && cr2 !== null && cr3 !== null && cr4 !== null) {
-    const sources = cr1 + cr2 + cr3;
+  const cr4 = n(values.cr4);
+  if (cr1 !== null && cr4 !== null) {
+    // One visitor produces at least one page view, so visitors can never
+    // exceed views over the same window.
     checks.push({
-      id: "sources-under-cr4",
-      label: "Direct plus organic plus paid do not exceed page visits",
-      ok: sources <= cr4,
-      detail:
-        sources <= cr4 ? undefined : `The three sources add to ${sources}, CR4 is ${cr4}`,
+      id: "cr1-under-cr4",
+      label: "Visitors do not exceed page visits",
+      ok: cr1 <= cr4,
+      detail: cr1 <= cr4 ? undefined : `CR1 is ${cr1}, CR4 is ${cr4}`,
     });
   }
 
-  if (
-    cr1 !== null &&
-    cr2 !== null &&
-    cr3 !== null &&
-    typeof inputs.allVisitors === "number"
-  ) {
-    // The three chips are meant to explain where the traffic came from. Any
-    // visitor none of them accounts for — social, AI chat, an unclassified
-    // referrer — is traffic the map cannot explain, and that number is worth
-    // stating rather than leaving as a silent remainder.
-    const sources = cr1 + cr2 + cr3;
-    const residual = inputs.allVisitors - sources;
+  if (cr1 !== null && typeof inputs.cr1ChannelSum === "number") {
+    // The ten channels are meant to be exhaustive. If they do not add to the
+    // total, a visitor fell through the classifier — a bug in it, not a gap
+    // in the data.
     checks.push({
-      id: "sources-account-for-visitors",
-      label: "Direct, organic and paid account for every visitor",
-      ok: residual === 0,
+      id: "cr1-channels-complete",
+      label: "The ten channels account for every visitor",
+      ok: cr1 === inputs.cr1ChannelSum,
       detail:
-        residual === 0
+        cr1 === inputs.cr1ChannelSum
           ? undefined
-          : `${residual} of ${inputs.allVisitors} visitors came from somewhere else — social, AI chat, or an unclassified referrer`,
+          : `CR1 is ${cr1}, its channels add to ${inputs.cr1ChannelSum}`,
     });
   }
 

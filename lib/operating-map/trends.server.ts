@@ -1,9 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import {
-  getDirectVisitors,
-  getOrganicVisitors,
-  getPaidVisitors,
-} from "./organic.server";
+import { CHANNELS } from "@/lib/analytics/channel";
+import { getTrafficByChannel } from "./traffic.server";
 import { getPageVisits } from "./page-visits.server";
 import { getConversions } from "./conversions.server";
 import { getMilestones } from "./milestones.server";
@@ -143,20 +140,21 @@ async function countAll(
 
   // One slow node must not cost the others their trend, so each group is
   // settled independently and a failure simply leaves its nodes uncoloured.
-  const [direct, organic, paid, visits, conversions, milestones, tracks] =
+  const [traffic, visits, conversions, milestones, tracks] =
     await Promise.allSettled([
-      getDirectVisitors(db, range, citySlug),
-      getOrganicVisitors(db, range, citySlug),
-      getPaidVisitors(db, range, citySlug),
+      getTrafficByChannel(db, range, citySlug),
       getPageVisits(db, range, citySlug),
       getConversions(db, range, citySlug),
       getMilestones(db, range, citySlug),
       getTracks(db, range),
     ]);
 
-  if (direct.status === "fulfilled") out.cr1 = direct.value.value;
-  if (organic.status === "fulfilled") out.cr2 = organic.value.value;
-  if (paid.status === "fulfilled") out.cr3 = paid.value.value;
+  if (traffic.status === "fulfilled") {
+    out.cr1 = traffic.value.total;
+    // Each channel gets its own series, keyed so the tooltip can look one up
+    // by name. Free: they came out of the same pass as the total.
+    for (const c of CHANNELS) out[`cr1:${c}`] = traffic.value.byChannel[c];
+  }
   if (visits.status === "fulfilled") out.cr4 = visits.value.total;
   if (conversions.status === "fulfilled") {
     out.cr6 = conversions.value.ctasTotal;

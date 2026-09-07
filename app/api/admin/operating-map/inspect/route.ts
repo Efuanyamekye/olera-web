@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import { CONTENT_PAGE_FILTERS } from "@/lib/analytics/content-pages";
 import { CP2_CHANNELS } from "@/lib/operating-map/providers.server";
+import { CHANNEL_LABELS, classifyChannel } from "@/lib/analytics/channel";
 import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
 
 /**
@@ -72,30 +73,26 @@ const SOURCES: Record<
     summarize: (r) => String(r.page ?? "—"),
   },
   cr1: {
-    title: "Direct visitors",
+    title: "All traffic",
     table: "page_events",
     select: "created_at, page, session_id, metadata",
     where: [
       "event_type is page_view",
-      "referrer_class is direct — no referring site",
       "counted once per visitor (olera_session cookie)",
+      "internal QA traffic excluded",
     ],
     eventType: "page_view",
     cityScoped: true,
-    summarize: (r) => String(r.page ?? "—"),
-  },
-  cr3: {
-    title: "Paid ad visitors",
-    table: "page_events",
-    select: "created_at, page, session_id, metadata",
-    where: [
-      "event_type is page_view",
-      "utm_source is olera_managed — an Ad Boost link",
-      "counted once per visitor (olera_session cookie)",
-    ],
-    eventType: "page_view",
-    cityScoped: true,
-    summarize: (r) => String(r.page ?? "—"),
+    summarize: (r) => {
+      const m = (r.metadata ?? {}) as Record<string, unknown>;
+      return `${String(r.page ?? "—")} · ${CHANNEL_LABELS[classifyChannel({
+        referrer_class: m.referrer_class as string | null,
+        utm_source: m.utm_source as string | null,
+        utm_medium: m.utm_medium as string | null,
+        gclid: m.gclid === true,
+        ref: m.ref as string | null,
+      })]}`;
+    },
   },
   cr4: {
     title: "Page visits — content pages",
@@ -398,19 +395,13 @@ export async function GET(request: NextRequest) {
     if (node === "cr2") {
       query = query.filter("metadata->>referrer_class", "eq", "search");
     }
-    if (node === "cr1" || node === "cr2" || node === "cr3") {
+    if (node === "cr1" || node === "cr2") {
       // Same two surfaces the count is scoped to, so the sample cannot show
       // a page the number never counted.
       query = query.or(
         `${CONTENT_PAGE_FILTERS.benefit},${CONTENT_PAGE_FILTERS.guide}`,
       );
       where.push("benefits and editorial pages (provider pages counted separately)");
-    }
-    if (node === "cr1") {
-      query = query.filter("metadata->>referrer_class", "eq", "direct");
-    }
-    if (node === "cr3") {
-      query = query.filter("metadata->>utm_source", "eq", "olera_managed");
     }
     if (node === "cr4") {
       query = query.or(

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
+import { readArrivalParams } from "@/lib/analytics/arrival-params";
 import { trackGrowthEvent } from "@/lib/analytics/growth-attribution";
 
 interface ContentViewTrackerProps {
@@ -39,13 +40,10 @@ export function ContentViewTracker({ page }: ContentViewTrackerProps) {
     const referrer = typeof document !== "undefined" ? document.referrer : "";
     trackGrowthEvent({ eventType: "page_landed", pagePath: page });
 
-    // Landing UTM, same keys the provider ViewTracker stamps — lets one query
-    // read campaign-driven traffic across provider pages and content pages.
-    const sp = new URLSearchParams(
-      typeof window !== "undefined" ? window.location.search : "",
-    );
-    const utm_source = sp.get("utm_source") || undefined;
-    const utm_campaign = sp.get("utm_campaign") || undefined;
+    // Every acquisition signal the channel classifier needs, same set the
+    // provider ViewTracker stamps. Recording a subset is how an auto-tagged
+    // Google Ads click ends up counted as organic search.
+    const arrival = readArrivalParams();
 
     fetch("/api/activity/track-page-event", {
       method: "POST",
@@ -54,11 +52,7 @@ export function ContentViewTracker({ page }: ContentViewTrackerProps) {
         page,
         event_type: "page_view",
         session_id,
-        metadata: {
-          referrer,
-          ...(utm_source ? { utm_source } : {}),
-          ...(utm_campaign ? { utm_campaign } : {}),
-        },
+        metadata: { referrer, ...arrival },
       }),
       keepalive: true,
     }).catch(() => {

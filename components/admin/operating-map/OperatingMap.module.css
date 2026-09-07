@@ -302,6 +302,52 @@
 
 /* Diagnosis and next step. Separated by space rather than by more rules. */
 .tipSection { display: block; margin-top: 9px; }
+.tipLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-bottom: 6px;
+}
+
+/*
+ * CR1's channel split.
+ *
+ * The share rides behind each row as a bar rather than in a column of its
+ * own: one graphic reads faster than a second set of digits, and the panel
+ * is already the densest thing on the page at ten rows.
+ */
+.chan { display: flex; flex-direction: column; gap: 1px; }
+.chanRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 13px;
+  align-items: center;
+  gap: 8px;
+  padding: 2.5px 5px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.chanBar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 3px;
+}
+.chanName, .chanValue, .chanArrow { position: relative; }
+.chanName { font-size: 12px; }
+.chanValue {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.chanArrow { font-size: 8px; line-height: 1; text-align: right; }
+/* A channel at zero because nothing is instrumented, kept visible on
+   purpose — see the note in NodeTip. */
+.chanNone .chanName, .chanNone .chanValue { opacity: 0.45; }
 .tipLink {
   /* Its own line. Inline it ran straight on from the sentence before it. */
   display: block;

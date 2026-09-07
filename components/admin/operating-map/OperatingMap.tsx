@@ -116,7 +116,7 @@ export interface Flows {
 }
 
 /** The class that paints a value its trend colour. Flat keeps ordinary ink. */
-function toneClass(score: number): string | null {
+export function toneClass(score: number): string | null {
   const step = Math.min(3, Math.abs(score));
   if (step === 0) return null;
   return styles[score > 0 ? `tUp${step}` : `tDown${step}`] ?? null;
@@ -131,11 +131,7 @@ const NODE_HELP: Record<string, string> = {
   cities:
     "Cities with at least one live provider. Wider than the cities we have deliberately launched.",
   cr1:
-    "Unique people who arrived with no referring site — typed in, bookmarked, or from an app that strips the referrer. Counted on the same pages CR4 counts.",
-  cr2:
-    "Unique people who arrived from a search engine, from Olera's own page events. Compare with GA4 Organic Search users, not sessions.",
-  cr3:
-    "Unique people who landed on a provider, benefits or editorial page with an Ad Boost tag on the link. Paid traffic without that tag, or landing anywhere else, is not counted.",
+    "Every visitor to a provider, benefits or editorial page, however they arrived. The ten channels below account for all of it — GA4 is the cross-check on the total, the split is our own.",
   cr4:
     "Page views on the same three surfaces CR1, CR2 and CR3 count visitors to. Views, not people, so the three above will always add to less than this.",
   cr6:
@@ -381,19 +377,11 @@ export default function OperatingMap({
     const BT = box("bottom").t - G;
 
     const cr1 = box("cr1");
-    const cr2 = box("cr2");
-    const cr3 = box("cr3");
     const cr4 = box("cr4");
     const cr6 = box("cr6");
 
-    /* care recipient sources converge on CR4, head riding the CR2 line */
-    const bar0 = cr3.b + 18;
-    [cr1, cr2, cr3].forEach((s) => seg(s.cx, s.b + G, s.cx, bar0));
-    seg(cr1.cx, bar0, cr3.cx, bar0);
-    vArrow(cr2.cx, bar0, cr4.t - G);
-
-    /* referrals also run straight past the funnel */
-    vArrow(cr1.l + 14, cr1.b + G, BT);
+    /* all traffic drops straight into page visits */
+    vArrow(cr1.cx, cr1.b + G, cr4.t - G);
 
     const stem1 = cr4.l + 14;
     seg(stem1, cr4.b + G, stem1, cr6.t - 8);
@@ -614,7 +602,9 @@ export default function OperatingMap({
           text={tip.text}
           nodeKey={tip.nodeKey}
           caveat={tip.caveat}
+          metric={nodes[tip.nodeKey]}
           trend={tip.trend}
+          trends={trends}
           tone={tip.trend ? toneClass(tip.trend.score) : null}
           inspectable={INSPECTABLE.has(tip.nodeKey) || tip.nodeKey.startsWith("flow_")}
           x={tip.x}
@@ -721,37 +711,13 @@ export default function OperatingMap({
           <div className={styles.lanes3}>
             {/* care recipient */}
             <div className={styles.lane}>
-              <div className={styles.chips}>
-                <Chip
+              <div className={`${styles.chips} ${styles.solo}`}>
+                <Card
                   id="cr1"
                   code="CR1"
-                  label="Direct visitors"
+                  label="All traffic"
                   metric={nodes.cr1}
                   trend={trends.cr1}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                  showNumbers={showNumbers}
-                />
-                <Chip
-                  id="cr2"
-                  code="CR2"
-                  label="Organic visitors"
-                  metric={nodes.cr2}
-                  trend={trends.cr2}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                  showNumbers={showNumbers}
-                />
-                <Chip
-                  id="cr3"
-                  code="CR3"
-                  label="Paid ad visitors"
-                  metric={nodes.cr3}
-                  trend={trends.cr3}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -1323,7 +1289,7 @@ function MetricValue({
 
 /** Nodes the inspect endpoint can produce rows for. */
 const INSPECTABLE = new Set([
-  "cr1", "cr2", "cr3", "cr4", "cr6a", "cr6b", "cr6c",
+  "cr1", "cr4", "cr6a", "cr6b", "cr6c",
   "cp1", "cp2",
   "m1", "m2", "m3", "m4", "m5",
   "cw1", "cw2",

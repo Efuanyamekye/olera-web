@@ -1,6 +1,6 @@
 "use client";
 
-import type { NodeTrend } from "./OperatingMap";
+import { toneClass, type MetricNode, type NodeTrend, type NodeTrends } from "./OperatingMap";
 import styles from "./OperatingMap.module.css";
 
 /**
@@ -36,19 +36,7 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     href: "/admin/organic-growth",
     label: "Organic growth",
     advice:
-      "Direct is where branded search and word of mouth land. It rises with the other two, not on its own — nothing here is directly actionable.",
-  },
-  cr3: {
-    href: "/admin/ad-boost",
-    label: "Ad Boost",
-    advice:
-      "This moves only when campaigns are live. Check which campaigns are running before reading a drop as demand.",
-  },
-  cr2: {
-    href: "/admin/organic-growth",
-    label: "Organic growth",
-    advice:
-      "Search traffic moves on published pages and indexing, both of which lag by weeks. Check which pages gained impressions before changing anything.",
+      "Work the largest channel that is falling, not the smallest one that is rising. A muted row at zero is an instrumentation job, not a dead channel.",
   },
   cr4: {
     href: "/admin/organic-growth",
@@ -223,6 +211,74 @@ function diagnose(t: NodeTrend): string {
   return `${dir} ${pct}% on last week — a real move, but a small one. Worth watching another week before acting on it.`;
 }
 
+/**
+ * CR1's channel split.
+ *
+ * Every channel is shown, including the ones reading zero. A channel at zero
+ * because nothing is instrumented looks identical to one at zero because
+ * nobody came, and only keeping the row makes that difference sayable — the
+ * muted ones are the instrumentation backlog, in place.
+ *
+ * Rows are ordered biggest first, so the channel worth working is at the top
+ * and the eye does not have to hunt for it.
+ */
+function Channels({
+  parts,
+  trends,
+}: {
+  parts: { label: string; value: number }[];
+  /** Per-channel trends, keyed `cr1:<channel>` by the metrics endpoint. */
+  trends?: NodeTrends;
+}) {
+  const total = parts.reduce((a, p) => a + p.value, 0) || 1;
+  const peak = Math.max(...parts.map((p) => p.value), 1);
+  const ordered = [...parts].sort((a, b) => b.value - a.value);
+
+  return (
+    <div className={styles.tipSection}>
+      <span className={styles.tipLabel}>Where it came from</span>
+      <div className={styles.chan}>
+        {ordered.map((p) => {
+          const t = trends?.[`cr1:${slug(p.label)}`];
+          const tone = t ? toneClass(t.score) : null;
+          const arrow =
+            t && t.monthDirection !== 0 ? (t.monthDirection > 0 ? "▲" : "▼") : null;
+          return (
+            <div
+              key={p.label}
+              className={`${styles.chanRow}${p.value === 0 ? ` ${styles.chanNone}` : ""}`}
+              title={`${p.label} · ${Math.round((p.value / total) * 100)}% of all traffic`}
+            >
+              {/* Share as a bar rather than a column: one graphic reads
+                  faster than a second set of digits. */}
+              <span
+                className={styles.chanBar}
+                style={{ width: `${(p.value / peak) * 100}%` }}
+                aria-hidden="true"
+              />
+              <span className={styles.chanName}>{p.label}</span>
+              <span className={`${styles.chanValue}${tone ? ` ${tone}` : ""}`}>
+                {p.value.toLocaleString()}
+              </span>
+              <span className={`${styles.chanArrow}${tone ? ` ${tone}` : ""}`} aria-hidden="true">
+                {arrow}
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/** "Organic search" -> "organic_search", matching the metrics endpoint's keys. */
+function slug(label: string): string {
+  return label
+    .toLowerCase()
+    .replace(/[^a-z]+/g, "_")
+    .replace(/^_|_$/g, "");
+}
+
 /** Eight weeks as one small shape. Bars, because these are counts per week. */
 function Sparkline({ series, tone }: { series: number[]; tone: string | null }) {
   const peak = Math.max(...series, 1);
@@ -268,7 +324,9 @@ export default function NodeTip({
   text,
   nodeKey,
   caveat,
+  metric,
   trend,
+  trends,
   tone,
   x,
   y,
@@ -280,7 +338,11 @@ export default function NodeTip({
   text: string;
   nodeKey: string;
   caveat?: string | null;
+  /** Carries the breakdown CR1 renders as its channel table. */
+  metric?: MetricNode;
   trend?: NodeTrend | null;
+  /** All node trends, so the channel rows can find their own. */
+  trends?: NodeTrends;
   /** The trend colour class, so the panel matches the number it opened from. */
   tone?: string | null;
   x: number;
@@ -321,6 +383,10 @@ export default function NodeTip({
           </div>
         </div>
       )}
+
+      {nodeKey === "cr1" && metric?.breakdown?.length ? (
+        <Channels parts={metric.breakdown} trends={trends} />
+      ) : null}
 
       {trend && <span className={styles.tipSection}>{diagnose(trend)}</span>}
 

@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
+import { CHANNELS, CHANNEL_LABELS } from "@/lib/analytics/channel";
 import {
-  getAllVisitors,
-  getDirectVisitors,
-  getOrganicVisitors,
-  getPaidVisitors,
+  CHANNEL_SIGNALS_START,
+  getTrafficByChannel,
   REFERRER_INSTRUMENTATION_START,
   VISITOR_GEO_START,
-} from "@/lib/operating-map/organic.server";
+} from "@/lib/operating-map/traffic.server";
 import { getPageVisits } from "@/lib/operating-map/page-visits.server";
 import { getConversions } from "@/lib/operating-map/conversions.server";
 import { runChecks } from "@/lib/operating-map/checks";
@@ -90,12 +89,12 @@ export async function GET(request: NextRequest) {
 
     const db = getServiceClient();
     const nodes: Record<string, OperatingMapNode> = {};
+    let cr1ChannelSum: number | undefined;
     let cr4PartsSum: number | undefined;
     let cp1OrphanedClaims: number | undefined;
     let cp1Unclaimed: number | undefined;
     let flows: { questionsToProviders: number; connectionsToProviders: number } | null =
       null;
-    let allVisitors: number | undefined;
     let inquiriesRaised: number | undefined;
     let interviewsProposed: number | undefined;
 
@@ -116,49 +115,45 @@ export async function GET(request: NextRequest) {
     const withCity = (note: string) =>
       notCityScoped ? `${note} ${notCityScoped}` : note;
 
-    /*
-     * CR1, CR2 and CR3 are the same count over the same rows with three
-     * different arrival tests, so they share one caveat builder rather than
-     * three copies that could drift.
-     */
-    const visitorCaveats = (v: {
-      partialCityData: boolean;
-      partialInstrumentation: boolean;
-      truncated: boolean;
-    }): string | null => {
+    try {
+      const traffic = await getTrafficByChannel(db, { from, to }, city);
+
       const caveats: string[] = [];
       // Without this a city filter over an older range reads as no demand
       // when it is really no data.
-      if (v.partialCityData) caveats.push(`City is only recorded from ${VISITOR_GEO_START}.`);
+      if (traffic.partialCityData) {
+        caveats.push(`City is only recorded from ${VISITOR_GEO_START}.`);
+      }
       // Without this the chart reads as a traffic collapse before August.
-      if (v.partialInstrumentation) {
+      if (traffic.partialInstrumentation) {
         caveats.push(`Traffic source is only identified from ${REFERRER_INSTRUMENTATION_START}.`);
       }
-      if (v.truncated) caveats.push("Row ceiling reached — this is a floor.");
-      return caveats.length ? caveats.join(" ") : null;
-    };
+      // The split, not the total, is what an older range gets wrong: paid and
+      // email have no signal to match on and fall into search or unattributed.
+      if (traffic.partialChannelSignals) {
+        caveats.push(
+          `Paid, email and SMS are only separable from ${CHANNEL_SIGNALS_START} — before that they sit inside organic search and unattributed.`,
+        );
+      }
+      if (traffic.truncated) caveats.push("Row ceiling reached — this is a floor.");
 
-    try {
-      const [direct, organic, paid, all] = await Promise.all([
-        getDirectVisitors(db, { from, to }, city),
-        getOrganicVisitors(db, { from, to }, city),
-        getPaidVisitors(db, { from, to }, city),
-        getAllVisitors(db, { from, to }, city),
-      ]);
-      nodes.cr1 = { value: direct.value, caveat: visitorCaveats(direct) };
-      nodes.cr2 = { value: organic.value, caveat: visitorCaveats(organic) };
-      nodes.cr3 = { value: paid.value, caveat: visitorCaveats(paid) };
-      // Not a node: the whole population, so the check below can say how
-      // many visitors none of the three chips accounts for.
-      allVisitors = all.value;
+      cr1ChannelSum = CHANNELS.reduce((sum, c) => sum + traffic.byChannel[c], 0);
+      nodes.cr1 = {
+        value: traffic.total,
+        // Every channel, including the empty ones. A channel reading zero
+        // because nothing is instrumented looks identical to one reading
+        // zero because nobody came, and only the row makes that sayable.
+        breakdown: CHANNELS.map((c) => ({
+          label: CHANNEL_LABELS[c],
+          value: traffic.byChannel[c],
+        })),
+        caveat: caveats.length ? caveats.join(" ") : null,
+      };
     } catch (error) {
-      console.error("[operating-map/metrics] cr1-cr3 failed:", error);
+      console.error("[operating-map/metrics] cr1 failed:", error);
       // One failed node must not blank the others. Null is rendered as
       // unavailable, never as zero.
-      const failed = { value: null, caveat: "This metric failed to load." };
-      nodes.cr1 = failed;
-      nodes.cr2 = failed;
-      nodes.cr3 = failed;
+      nodes.cr1 = { value: null, caveat: "This metric failed to load." };
     }
 
     try {
@@ -307,10 +302,10 @@ export async function GET(request: NextRequest) {
       Object.entries(nodes).map(([id, node]) => [id, node.value]),
     );
     const checks = runChecks(values, {
+      cr1ChannelSum,
       cr4PartsSum,
       cp1OrphanedClaims,
       cp1Unclaimed,
-      allVisitors,
       inquiriesRaised,
       interviewsProposed,
     });

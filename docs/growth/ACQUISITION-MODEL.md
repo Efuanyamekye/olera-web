@@ -369,7 +369,33 @@ side.
 
 ---
 
-## 10. Recommendation for the CR architecture
+## 10a. What was built
+
+CR1 now counts every visitor and splits into ten channels, classified by one
+shared function (`lib/analytics/channel.ts`) so no two surfaces can disagree
+about what "paid" means. CR2 and CR3 are retired; CR4 and everything below it
+is unchanged.
+
+The trackers now record `utm_medium`, `gclid` and `ref` alongside the
+`utm_source` and `utm_campaign` they already stamped — those three are what
+separate paid from organic and owned from direct, and dropping them was
+defect 2 above.
+
+Two things remain open and are marked in the map's own tooltip:
+
+- **SMS links are untagged.** The channel exists and reads zero until
+  outbound SMS carries `ref=sms`.
+- **Family QR collateral needs `utm_source=qr_family`.** Provider outreach
+  mail already ships `utm_source=fax` / `direct_mail` and MedJobs codes send
+  care workers to the application; neither is care recipient demand, so only
+  the family source counts in CR1.
+
+`CHANNEL_SIGNALS_START` marks the day the new signals began recording. A
+range reaching back past it gets a correct total and an incomplete split —
+paid and email fall into organic search and unattributed — and the node says
+so rather than presenting the split as fact.
+
+## 10b. Recommendation for the CR architecture
 
 **Do not add nodes until the numbers come back.** Four of the seven defects
 above change what the numbers *are*, so any architecture drawn now would be
