@@ -13,10 +13,26 @@ export type CityCareType = "home_care" | "assisted_living" | "unsure" | "medical
 export type CityRecipient = "parent" | "spouse" | "self" | "other";
 export type CityUrgency = "this_week" | "this_month" | "planning";
 
+/**
+ * How a request is routed once captured.
+ *
+ * "concierge" — no provider chain. The request is captured, Slack pages a human,
+ *   and the family is told a person from Olera will call them. Used before a city
+ *   has providers who have agreed to take texted leads, because the alternative is
+ *   promising a family a provider call that nobody is on the hook for. It is also
+ *   the honest way to run ads first and recruit providers second, with a live
+ *   request in hand: a far stronger ask than "we might send you leads".
+ *
+ * "auto" — the sequential offer chain in offers.server.ts. Switch a city over once
+ *   at least one provider is enabled in its pool.
+ */
+export type CityRoutingMode = "concierge" | "auto";
+
 export interface CityConfig {
   slug: string;
   city: string;
   state: string;
+  routingMode: CityRoutingMode;
   /** How the area is described to the family, e.g. "Concord and nearby". */
   areaLabel: string;
   zipPrefill: string;
@@ -30,6 +46,7 @@ export const CITY_CONFIGS: Record<string, CityConfig> = {
     slug: "concord-nc",
     city: "Concord",
     state: "NC",
+    routingMode: "concierge",
     areaLabel: "Concord, Harrisburg, Kannapolis and Huntersville",
     zipPrefill: "28027",
     timeZone: "America/New_York",
@@ -39,6 +56,7 @@ export const CITY_CONFIGS: Record<string, CityConfig> = {
     slug: "garland-tx",
     city: "Garland",
     state: "TX",
+    routingMode: "concierge",
     areaLabel: "Garland, Plano, Richardson and nearby",
     zipPrefill: "75040",
     timeZone: "America/Chicago",

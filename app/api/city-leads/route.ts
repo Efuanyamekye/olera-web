@@ -5,6 +5,7 @@ import { sendSlackAlert, slackCityLead } from "@/lib/slack";
 import {
   cityFamilyConfirmSms,
   cityFamilyConfirmMorningSms,
+  cityFamilyConciergeSms,
   cityFamilyMedicalSms,
 } from "@/lib/sms/templates";
 import {
@@ -163,6 +164,7 @@ export async function POST(req: NextRequest) {
   const medium = str(utm.medium);
   const paid = Boolean(utm.gclid) || String(utm.source ?? "") === "olera_city" || (medium ?? "").startsWith("paid_");
   const channel = utm.gclid || medium === "paid_search" ? "Google" : medium === "paid_social" ? "Nextdoor" : medium;
+  const concierge = cfg.routingMode === "concierge";
   const alert = slackCityLead({
     city: cfg.city,
     firstName,
@@ -174,29 +176,43 @@ export async function POST(req: NextRequest) {
     channel: channel ?? null,
     campaignTag: str(utm.campaign) ?? cfg.campaignTag,
     paid,
-    nextStep: staffed ? "Offering to the first provider now" : "Outside staffed hours — parked until 8am local",
+    concierge,
+    nextStep: concierge
+      ? staffed
+        ? "*CALL THEM* — concierge city, no provider chain will run"
+        : "*CALL THEM IN THE MORNING* — concierge city, no provider chain will run"
+      : staffed
+        ? "Offering to the first provider now"
+        : "Outside staffed hours — parked until 8am local",
     adminUrl: `${getSiteUrl()}/admin/city-ads`,
   });
   await sendSlackAlert(alert.text, alert.blocks);
   await sendSMS({
     to: phone,
-    body: staffed
-      ? cityFamilyConfirmSms({ firstName, city: cfg.city })
-      : cityFamilyConfirmMorningSms({ firstName, city: cfg.city }),
+    body: concierge
+      ? cityFamilyConciergeSms({ firstName, city: cfg.city, today: staffed })
+      : staffed
+        ? cityFamilyConfirmSms({ firstName, city: cfg.city })
+        : cityFamilyConfirmMorningSms({ firstName, city: cfg.city }),
     emailType: "city_lead_family_confirm",
     recipientType: "family",
-    metadata: { lead_id: lead.id },
+    metadata: { lead_id: lead.id, routing: cfg.routingMode },
   });
 
-  // Awaited on purpose: a serverless function may be frozen after the response
-  // (feedback_serverless_fire_and_forget).
-  try {
-    await startOrAdvance(db, lead.id);
-  } catch (err) {
-    console.error("[city-leads] chain start failed", err);
+  // A concierge city has no provider on the hook, so the chain must not run:
+  // it would text a family that a provider is coming when none is. The lead
+  // waits in Needs you until a human calls, or hands it to a provider by name.
+  if (!concierge) {
+    // Awaited on purpose: a serverless function may be frozen after the response
+    // (feedback_serverless_fire_and_forget).
+    try {
+      await startOrAdvance(db, lead.id);
+    } catch (err) {
+      console.error("[city-leads] chain start failed", err);
+    }
   }
 
-  return NextResponse.json({ ok: true, leadId: lead.id, redirected: false, staffed });
+  return NextResponse.json({ ok: true, leadId: lead.id, redirected: false, staffed, concierge });
 }
 
 export async function PATCH(req: NextRequest) {

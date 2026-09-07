@@ -1987,12 +1987,16 @@ export function slackCityLead(opts: {
   channel: string | null;
   campaignTag?: string | null;
   paid: boolean;
+  /** Concierge city: no provider chain, a human must call. */
+  concierge?: boolean;
   nextStep: string;
   adminUrl: string;
 }): { text: string; blocks: SlackBlock[] } {
-  const headline = opts.paid
-    ? `💸 Paid lead · ${opts.city}${opts.channel ? ` (${opts.channel})` : ""}`
-    : `🆕 Lead · ${opts.city}`;
+  const headline = opts.concierge
+    ? `📞 Call this family · ${opts.city}${opts.paid && opts.channel ? ` (${opts.channel})` : ""}`
+    : opts.paid
+      ? `💸 Paid lead · ${opts.city}${opts.channel ? ` (${opts.channel})` : ""}`
+      : `🆕 Lead · ${opts.city}`;
   return {
     text: `${headline} — ${opts.firstName}, ${opts.careLabel}`,
     blocks: [
