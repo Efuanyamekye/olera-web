@@ -7,7 +7,7 @@ const fs = require('fs'); const assert = require('node:assert/strict');
  CREATE TABLE email_log (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), recipient text, sender text DEFAULT 'Olera', subject text, email_type text, recipient_type text, channel text DEFAULT 'email', provider_id text, status text, resend_id text, delivered_at timestamptz, error_message text, created_at timestamptz DEFAULT now());
  CREATE TABLE provider_activity (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), provider_id text NOT NULL, event_type text CONSTRAINT provider_activity_event_type_check CHECK(event_type IN ('page_view','provider_profile_edited')), email_log_id uuid, email_type text, metadata jsonb, created_at timestamptz DEFAULT now());
  CREATE TABLE cron_config (job_id text PRIMARY KEY, enabled boolean, paused_reason text);`);
- for (let n=0;n<2;n++) for (const file of ['209_provider_notification_outcomes.sql','210_provider_notification_dispatch.sql']) await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
+ for (let n=0;n<2;n++) for (const file of ['211_provider_notification_outcomes.sql','212_provider_notification_dispatch.sql']) await db.exec(fs.readFileSync('supabase/migrations/'+file,'utf8'));
  const profile='11111111-1111-4111-8111-111111111111', account='22222222-2222-4222-8222-222222222222', email='33333333-3333-4333-8333-333333333333';
  await db.query(`INSERT INTO business_profiles VALUES ($1,$2,'organization','test-provider','directory-id','test@example.com','5125550100','{"welcome_email_sent":true}',now())`,[profile,account]);
  await db.query(`INSERT INTO email_log(id,provider_id,email_type,recipient_type,status,resend_id) VALUES ($1,$2,'notification_setup_nudge','provider','sent','resend1')`,[email,profile]);

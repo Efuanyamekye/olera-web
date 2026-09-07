@@ -39,7 +39,7 @@ Phone formatting does not establish mobile capability. Delivery counts and the c
 
 ## Deployment and QA
 
-1. Apply **209_provider_notification_outcomes.sql**, then **210_provider_notification_dispatch.sql** in the shared Supabase database before deploying this code. They have been executed against an isolated PostgreSQL runtime and rerun for idempotency; they have **not** been applied to the live database. Existing settings toggles use the new RPC after deployment, so migration 209 is a prerequisite.
+1. Apply **211_provider_notification_outcomes.sql**, then **212_provider_notification_dispatch.sql** in the shared Supabase database before deploying this code. They have been executed against an isolated PostgreSQL runtime and rerun for idempotency; they have **not** been applied to the live database. Existing settings toggles use the new RPC after deployment, so migration 209 is a prerequisite.
 2. Preview the notification email in the gallery. Check the settings link as a signed-in owner, a signed-out owner, and an owner with another active profile. Wrong-account access must not change preferences.
 3. With a dedicated test profile, open the notifications tab, save an SMS choice, then change a different channel. Confirm preferences persist together and no automatic opt-in occurs. A failed save must not create an outcome.
 4. Compare Provider Comms message totals and recipient outcome filters with the email/activity records. A repeated visit or repeated save of the same value must not inflate message counts. An unrelated or older-than-seven-day email ID must not receive attribution.
@@ -63,3 +63,7 @@ Two confirmed issues fixed on PR #1811:
 Regressions reproduce refresh failure, repeated saves, server acknowledgment, profile isolation, and both admin event allowlists. TypeScript, notification tests, Provider Comms tests and cron checks pass. Focused lint passes; the existing Activity route contains disable comments for an unavailable `@typescript-eslint/no-explicit-any` rule, so that file was checked with `--no-inline-config` instead.
 
 A GET-only live API-schema check confirmed that `save_notification_preference` and `reserve_notification_nudge` are not deployed. Apply migrations 209 and 210 before testing preference persistence. The pre-fix Vercel build passed; the new commit requires its own preview build. No database writes, live sends or merges were performed during this review.
+
+## Merge review — September 7
+
+TJ applied both notification migrations and the RPC availability and paused cron configuration were verified. During merge review, their filenames were renumbered from 209/210 to 211/212 because staging used 209/210 for city campaigns. SQL contents are unchanged; no rerun is needed. TJ confirmed SMS on/off preferences persist after refresh. The tab persistence follow-up passed UI regression checks. The notification email remains paused.
