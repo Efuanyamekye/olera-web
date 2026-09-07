@@ -21,6 +21,13 @@ export const ONBOARDING_MESSAGES = [
     action: "Choose notification preferences",
     automation: "notification-setup-nudge",
   },
+  {
+    type: "verification_reminder_21d",
+    label: "Verification reminder",
+    timing: "21 days after claim · daily run",
+    action: "Complete verification",
+    automation: "verification-reminders",
+  },
 ] as const;
 export const ONBOARDING_EMAIL_TYPES = ONBOARDING_MESSAGES.map((m) => m.type);
 export type OnboardingType = (typeof ONBOARDING_MESSAGES)[number]["type"];

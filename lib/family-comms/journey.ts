@@ -864,7 +864,7 @@ export const PROVIDER_ONBOARDING_JOURNEY: CommsJourney = {
   title: "Provider onboarding — after the claim",
   audienceLabel: "Provider journey",
   ordering: "time",
-  description: "Welcome providers into their account, then help them see and improve their profile. Messages send on weekdays, 9am–5pm in the provider's local timezone. Performance lives in Provider Comms.",
+  description: "Welcome providers into their account, then help them see and improve their profile. Welcome, preview, and notification messages use provider business hours. The independent verification reminder runs daily at 14:00 UTC. Performance lives in Provider Comms.",
   steps: [
     { key: "welcome", title: "Welcome", timing: "After claim · next business-hour run",
       description: "Introduce the provider experience. The message adapts to verification state.",
@@ -880,6 +880,11 @@ export const PROVIDER_ONBOARDING_JOURNEY: CommsJourney = {
       emailType: "notification_setup_nudge", ownedBy: "notification-setup-nudge", emailSampleId: "provider_notification_setup",
       gate: "Claimed within 30 days, usable US phone, SMS not enabled, no prior attempt. Starts paused for QA.",
       experienceUrl: "/admin/provider-comms", experienceLabel: "View onboarding performance" },
+    { key: "verification", title: "Verification reminder", timing: "21 days after claim · daily run",
+      description: "Ask unverified providers to complete verification. Independent of the earlier messages.",
+      emailType: "verification_reminder_21d", ownedBy: "verification-reminders", emailSampleId: "provider_verification_reminder",
+      gate: "Unverified account holders; no previous attempt; defers after a same-day digest. Starts paused for review.",
+      experienceUrl: "/admin/provider-comms", experienceLabel: "View onboarding performance" },
   ],
 };
 
@@ -893,6 +898,7 @@ const COMMS_JOURNEYS: Record<string, CommsJourney> = {
 
 /** Which journeys each automation page shows, in display order. */
 const JOURNEYS_BY_CRON: Record<string, string[]> = {
+  "verification-reminders": [PROVIDER_ONBOARDING_JOURNEY.key],
   "provider-welcome": [PROVIDER_ONBOARDING_JOURNEY.key],
   "profile-preview-nudge": [PROVIDER_ONBOARDING_JOURNEY.key],
   "notification-setup-nudge": [PROVIDER_ONBOARDING_JOURNEY.key],

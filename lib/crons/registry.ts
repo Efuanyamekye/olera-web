@@ -111,8 +111,8 @@ export const CRON_REGISTRY: CronJob[] = [
   {
     id: "verification-reminders",
     name: "Verification reminders",
-    description: "Nudges providers who claimed a listing but haven't finished verification: a 7-day reminder, then a 21-day final notice (claim revoked at 30 days).",
-    recipientCohort: "Claimed-but-unverified providers — at 7 days post-claim, then again at 21 days.",
+    description: "One verification reminder at least 21 days after claim. Independent of the welcome sequence; defers when a digest was sent today. Starts paused for review.",
+    recipientCohort: "Unverified organizations and caregivers with an account, a claim at least 21 days old, and no prior reminder attempt. Includes older claims.",
     audience: "Providers",
     fn: "nudge",
     schedule: "0 14 * * *",

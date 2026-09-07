@@ -4908,7 +4908,7 @@ export function verificationReminder7DayEmail(opts: {
   `, "Complete verification to connect with families");
 }
 
-/** Email sent 21 days after claim if provider still hasn't verified (final warning) */
+/** Email sent 21 days after claim if provider still hasn't verified (independent reminder) */
 export function verificationReminder21DayEmail(opts: {
   providerName: string;
   recipientName: string;
@@ -4916,24 +4916,19 @@ export function verificationReminder21DayEmail(opts: {
   providerSlug?: string;
 }): string {
   return layout(`
-    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Final reminder: Verify ${escapeHtml(opts.providerName)}</h1>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Complete verification for ${escapeHtml(opts.providerName)}</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Hi ${escapeHtml(firstName(opts.recipientName, "there"))}, this is a final reminder to complete verification for ${escapeHtml(opts.providerName)}.
+      Hi ${escapeHtml(firstName(opts.recipientName, "there"))}, please complete verification for ${escapeHtml(opts.providerName)}.
     </p>
-    <div style="background:#fef2f2;border-left:3px solid #ef4444;padding:12px 16px;margin:0 0 24px;border-radius:0 8px 8px 0;">
-      <p style="font-size:14px;color:#991b1b;margin:0;line-height:1.5;">
-        <strong>Action required:</strong> Unverified claims may be released after 30 days so others can claim the listing.
-      </p>
-    </div>
     <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
-      Complete verification now to keep your claim and unlock full access to your provider dashboard.
+      Confirm your connection to this provider profile to access features that require verification.
     </p>
     <div style="text-align:center;margin:0 0 24px;">${button("Verify Now", opts.verifyUrl)}</div>
     <p style="font-size:13px;color:#9ca3af;margin:0 0 16px;line-height:1.5;text-align:center;">
       Questions? <a href="${BASE_URL}/contact" style="color:#9ca3af;text-decoration:underline;">Contact us</a>
     </p>
     ${offRampBlock(opts.providerSlug)}
-  `, "Final reminder — verify before your claim expires");
+  `, "Complete your Olera provider verification");
 }
 
 /** Email sent when verification is rejected with reason (admin rejection) */

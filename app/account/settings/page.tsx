@@ -227,6 +227,14 @@ function AccountSettingsContent() {
     const target = profiles.find(profile => profile.slug === linkedProvider);
     if (target) switchProfile(target.id);
   }, [notificationProfileMismatch, profiles, linkedProvider, switchProfile]);
+  const openedVerification = useRef<string | null>(null);
+  useEffect(() => {
+    if (searchParams.get("verify") !== "1" || !linkedProvider || notificationProfileMismatch ||
+        !activeProfile || !isProvider || verificationState !== "unverified") return;
+    if (openedVerification.current === activeProfile.id) return;
+    openedVerification.current = activeProfile.id;
+    openVerificationModal();
+  }, [searchParams, linkedProvider, notificationProfileMismatch, activeProfile, isProvider, verificationState, openVerificationModal]);
   // Never attribute an action made on another profile in a multi-profile account.
   const emailLogId = linkedProvider === activeProfile?.slug ? linkedEmail : null;
 
