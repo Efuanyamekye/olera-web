@@ -33,6 +33,12 @@ export function getActionRedirectUrl(
         if (slug) query.set("provider", slug);
         return `/account/settings?${query}`;
       }
+      case "verify": {
+        const query = new URLSearchParams({ tab: "account", verify: "1" });
+        if (slug) query.set("provider", slug);
+        if (emailLogId) query.set("eid", emailLogId);
+        return `/account/settings?${query}`;
+      }
       case "settings":
         return "/account/settings";
       case "market":
@@ -59,5 +65,5 @@ export function getActionRedirectUrl(
 
 /** These destinations need no notification card after authentication. */
 export function isPortalRedirectAction(action: string | null): boolean {
-  return ["manage", "settings", "market", "ads", "leads", "profile", "notifications", "matches"].includes(action ?? "");
+  return ["manage", "verify", "settings", "market", "ads", "leads", "profile", "notifications", "matches"].includes(action ?? "");
 }

@@ -65,6 +65,7 @@ import {
   providerWelcomeEmail,
   onboardingProfilePreviewEmail,
   onboardingNotificationsEmail,
+  verificationReminder21DayEmail,
   coldProviderRankEmail,
   providerLeadDigestEmail,
   providerManagedAdsEmail,
@@ -768,6 +769,15 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     who: "Claimed organizations with a usable US phone and SMS not enabled.",
     why: "Help providers choose text alerts for new family inquiries.",
     render: () => onboardingNotificationsEmail({ providerName: "Evergreen Home Care", providerSlug: "evergreen-home-care", notificationsUrl: `${SAMPLE_LINK}?action=notifications` }),
+  },
+  {
+    id: "provider_verification_reminder", audience: "provider", group: "Provider · Onboarding",
+    label: "21-day verification reminder", subject: "Complete verification for Evergreen Home Care",
+    emailType: "verification_reminder_21d", cron: "verification-reminders",
+    timing: "At least 21 days after claim · daily at 14:00 UTC",
+    who: "Unverified organizations and caregivers with an account and no previous reminder attempt.",
+    why: "Complete verification independently of the welcome sequence. Defers after a same-day digest.",
+    render: () => verificationReminder21DayEmail({ providerName: "Evergreen Home Care", recipientName: "Alex", providerSlug: "evergreen-home-care", verifyUrl: `${SAMPLE_LINK}?action=verify` }),
   },
   {
     id: "provider_completion", audience: "provider", group: "Provider · Lifecycle",

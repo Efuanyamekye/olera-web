@@ -52,7 +52,7 @@ export default function ProviderOnboardPage() {
   const providerIdParam = searchParams.get("provider_id");
   const stateParam = searchParams.get("state") as ActionCardState | null;
   // Action params for email notifications (lead/message/review/question) or campaign
-  const actionParam = searchParams.get("action") as NotificationType | "campaign" | "claim" | "signup" | "manage" | "settings" | "market" | "ads" | "leads" | "matches" | "profile" | "notifications" | null;
+  const actionParam = searchParams.get("action") as NotificationType | "campaign" | "claim" | "signup" | "manage" | "settings" | "market" | "ads" | "leads" | "matches" | "profile" | "notifications" | "verify" | null;
   const actionIdParam = searchParams.get("actionId");
   // Token param for marketing campaign emails (pre-verified flow)
   // Named "otk" (one-time key) instead of "token" to avoid Apple Mail's
@@ -81,6 +81,7 @@ export default function ProviderOnboardPage() {
         // "profile_preview_nudge", so the two never line up when grouped by type.
         profile: "profile_preview_nudge",
         notifications: "notification_setup_nudge",
+        verify: "verification_reminder_21d",
       };
       fetch("/api/activity/track", {
         method: "POST",
