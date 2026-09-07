@@ -30,6 +30,15 @@ import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
  * The two "sent" figures are separate from the three counts and deliberately
  * so: an ask is not a delivery. They count the notification actually leaving
  * for the provider's inbox, which is the step that can silently fail.
+ *
+ * They are NOT a subset of the asks above them, and can exceed them. A
+ * provider whose email address we only discover later gets their whole
+ * backlog flushed at once (see lib/admin/send-deferred-notifications.ts), so
+ * sends land in a window whose asks belong to earlier ones. There is no
+ * reliable join back the other way — the immediate send path does not stamp
+ * the question, only the deferred one does — so this is counted as what it
+ * is, a flow of sends, and the tooltip says so rather than implying a
+ * funnel step that the data cannot support.
  */
 
 const PAGE_SIZE = 1000;

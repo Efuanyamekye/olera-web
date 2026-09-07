@@ -72,13 +72,13 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     href: "/admin/deliverability",
     label: "Deliverability",
     advice:
-      "The gap from the chip is questions that never landed — usually a provider with no email on file, or a send that bounced.",
+      "Watch failed sends, not the gap to the chip. A provider with no email on file is the usual reason a question never lands.",
   },
   flow_connections: {
     href: "/admin/deliverability",
     label: "Deliverability",
     advice:
-      "The gap from the chip is requests that never landed. A lead nobody received still counts as an ask, and is the cheapest one to recover.",
+      "Watch failed sends, not the gap to the chip. A lead nobody received still counts as an ask, and is the cheapest one to recover.",
   },
   cp1: {
     href: "/admin/directory",
@@ -186,11 +186,21 @@ function diagnose(t: NodeTrend): string {
       : `Flat this week but ${t.monthDirection > 0 ? "up" : "down"} over the month. The month is the more reliable read.`;
   }
   const dir = t.score > 0 ? "Up" : "Down";
+  const agrees = Math.sign(t.score) === t.monthDirection;
+
   if (Math.abs(t.score) >= 2 && t.monthDirection === 0) {
     return `${dir} ${pct}% on last week, but flat across the month. One strong week is not yet a trend.`;
   }
-  if (Math.abs(t.score) >= 2) {
+  if (Math.abs(t.score) >= 2 && agrees) {
     return `${dir} ${pct}% on last week and ${t.monthDirection > 0 ? "rising" : "falling"} over the month. The week and the month agree, which is what makes it a trend.`;
+  }
+  if (Math.abs(t.score) >= 2) {
+    // The two readings point opposite ways. Saying so is the finding — the
+    // month is the steadier one, and one week against it is not yet news.
+    return `${dir} ${pct}% on last week, against a month that is ${t.monthDirection > 0 ? "rising" : "falling"}. One week does not overturn four; watch whether it holds.`;
+  }
+  if (!agrees && t.monthDirection !== 0) {
+    return `${dir} ${pct}% on last week, against a month that is ${t.monthDirection > 0 ? "rising" : "falling"}. A small move in the other direction — noise until it repeats.`;
   }
   return `${dir} ${pct}% on last week — a real move, but a small one. Worth watching another week before acting on it.`;
 }

@@ -98,13 +98,14 @@ const SOURCES: Record<
     summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
   },
   flow_questions: {
-    title: "Questions that reached a provider",
+    title: "Question notifications sent to providers",
     table: "email_log",
     select: "created_at, recipient, provider_id, email_type, status",
     where: [
       "email_type is question_received",
       "recipient is a provider",
       "status is sent — the send came back successful",
+      "counts sends in this range, not deliveries of this range's asks",
     ],
     cityScoped: false,
     providerKeyScoped: "provider_id",
@@ -112,13 +113,14 @@ const SOURCES: Record<
       `${String(r.recipient ?? "—")} · ${String(r.provider_id ?? "")}`,
   },
   flow_connections: {
-    title: "Connection requests that reached a provider",
+    title: "Connection requests sent to providers",
     table: "email_log",
     select: "created_at, recipient, provider_id, email_type, status",
     where: [
       "email_type is connection_request",
       "recipient is a provider",
       "status is sent — the send came back successful",
+      "counts sends in this range, not deliveries of this range's asks",
     ],
     cityScoped: false,
     providerKeyScoped: "provider_id",

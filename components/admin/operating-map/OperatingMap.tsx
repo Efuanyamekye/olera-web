@@ -159,9 +159,9 @@ const NODE_HELP: Record<string, string> = {
   cw2:
     "Advisors we can reach at those universities, counted where the contact record is still active. A standing count.",
   flow_questions:
-    "Question notifications that reached a provider's inbox — a send that came back successful. The gap from CR6a is questions nobody received.",
+    "Question notifications successfully sent to providers in this range. Not a subset of CR6a — a backlog flush sends for questions asked earlier, so this can run higher.",
   flow_connections:
-    "Connection requests that reached a provider's inbox — a send that came back successful. The gap from CR6b is requests nobody received.",
+    "Connection requests successfully sent to providers in this range. Not a subset of CR6b — a send can happen later than the ask, so this can run higher.",
   tb1: "Inquiries a provider answered. Counted from inquiries raised in this range.",
   tc1: "Interviews that reached confirmed. Whether the interview was held is not recorded.",
   tc2: "Placements the care worker accepted.",
