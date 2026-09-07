@@ -163,7 +163,7 @@ async function countAll(
     out.cr6c = conversions.value.benefitsAssessments;
   }
   if (milestones.status === "fulfilled") {
-    out.m1 = milestones.value.careRecipientProfilesStarted;
+    out.m1 = milestones.value.careSeekerProfilesPartial;
     out.m2 = milestones.value.providersClaimed;
     out.m3 = milestones.value.managedAdSignups;
     out.m4 = milestones.value.staffingSignups;

@@ -178,13 +178,12 @@ export async function GET(request: NextRequest) {
     try {
       const c = await getConversions(db, { from, to }, city);
       nodes.cr1 = {
-        // Counts actions, not distinct families: a question can be asked
-        // without an account, so there is no family identity behind it to
-        // de-duplicate on. The tooltip says so.
-        value: c.ctasTotal,
+        // Questions are deliberately not here. They are the cheapest ask a
+        // family makes and swamp the two that produce a record, which is
+        // what this node is about. Still counted; see cr6a.
+        value: c.connections + c.benefitsAssessments,
         breakdown: [
-          { label: "questions", value: c.questions },
-          { label: "connections", value: c.connections },
+          { label: "connect requests", value: c.connections },
           { label: "benefits assessments", value: c.benefitsAssessments },
         ],
         caveat: null,
@@ -214,14 +213,9 @@ export async function GET(request: NextRequest) {
       ]);
       cp1Unclaimed = listed.unclaimed;
       cp1OrphanedClaims = listed.orphanedClaims;
-      nodes.cp1 = {
-        value: listed.total,
-        breakdown: [
-          { label: "claimed", value: listed.claimed },
-          { label: "unclaimed", value: listed.unclaimed },
-        ],
-        caveat: null,
-      };
+      // The unclaimed half is the whole point of the node: it is the supply
+      // outreach has to work through. The directory total is not a target.
+      nodes.cp1 = { value: listed.unclaimed, caveat: null };
       nodes.cp2 = {
         value: inOutreach.value,
         caveat: inOutreach.truncated ? "Row ceiling reached — this is a floor." : null,
@@ -235,11 +229,11 @@ export async function GET(request: NextRequest) {
     try {
       const m = await getMilestones(db, { from, to }, city);
       nodes.m1 = {
-        value: m.careRecipientProfilesStarted,
+        value: m.careSeekerProfilesPartial,
         breakdown: [
-          { label: "started", value: m.careRecipientProfilesStarted },
-          { label: "completed", value: m.careRecipientProfiles },
-          { label: "live", value: m.careRecipientProfilesLive },
+          { label: "partial", value: m.careSeekerProfilesPartial },
+          { label: "completed", value: m.careSeekerProfilesCompleted },
+          { label: "live", value: m.careSeekerProfilesLive },
         ],
         caveat: PROFILE_TIMING_CAVEAT,
       };
@@ -268,7 +262,7 @@ export async function GET(request: NextRequest) {
         breakdown: [
           // Activating a university channel is not recorded anywhere yet, so
           // it shows as a dash rather than a zero.
-          { label: "channels activated", value: null },
+          { label: "channels", value: null },
           { label: "started", value: m.careWorkerProfilesStarted },
           { label: "complete", value: m.careWorkerProfiles },
         ],

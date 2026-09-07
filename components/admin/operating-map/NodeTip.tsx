@@ -42,7 +42,7 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     href: "/admin/analytics",
     label: "Analytics",
     advice:
-      "Read the three parts against each other. A question is the cheapest ask a family makes; a connection is the one that produces a lead.",
+      "Both parts produce a record you can work. A connect request needs a provider to answer; a benefits assessment does not.",
   },
   cr2: {
     href: "/admin/family-comms",
@@ -72,7 +72,7 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     href: "/admin/directory",
     label: "Directory",
     advice:
-      "The split is what matters. A large unclaimed half is the supply of providers outreach has to work through.",
+      "This is the pool outreach exists to shrink. It only falls when a provider claims, so read it against M2.",
   },
   cp2: {
     href: "/admin/provider-outreach",

@@ -105,18 +105,20 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  height: 36px;
   border: 1px solid #e5e7eb;
   background: #ffffff;
-  color: #4b5563;
-  border-radius: 8px;
-  padding: 6px 12px;
+  color: #111827;
+  border-radius: 999px;
+  padding: 0 14px;
   font: inherit;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
+  transition: border-color 0.15s;
 }
-.filterPill:hover { color: #111827; }
+.filterPill:hover { border-color: #d1d5db; }
 .filterPill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .filterCount { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
 .filterCaret { font-size: 9px; opacity: 0.5; }
@@ -468,10 +470,21 @@
   margin-top: 30px;
   align-items: center;
 }
-.outrow > .card { grid-column: 1 / span 2; justify-self: center; width: 238px; }
+.outrow > .card:first-child { grid-column: 1 / span 2; justify-self: center; width: 238px; }
+.outrow > .card:last-child { grid-column: 3; justify-self: center; width: 238px; }
 .stack { display: flex; flex-direction: column; gap: 14px; }
 
 .stat { text-align: right; }
+/* Revenue generated sits at the top right — an outcome of the whole map
+   rather than of any one track, so it hangs off the figure, not a lane. */
+.topStat {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.topStat .v { font-size: 22px; font-weight: 700; color: var(--accent); }
 .stat .lab { display: block; margin-bottom: 6px; }
 .stat .v {
   font-size: 31px;

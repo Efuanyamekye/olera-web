@@ -120,17 +120,17 @@ const NODE_HELP: Record<string, string> = {
   traffic:
     "Every visitor to a provider, benefits or editorial page, however they arrived. The ten channels below account for all of it — GA4 is the cross-check on the total, the split is our own.",
   cr1:
-    "Every care recipient action that asks us for something. Counts actions, not people — a question can be asked without an account, so there is no identity behind it to de-duplicate on.",
+    "The two care seeker actions that produce a record we can work. Questions are counted elsewhere and left out here — they are the cheapest ask and would swamp the other two.",
   cr2:
     "Families we emailed in this range, counted once each however many times we wrote. The mirror of providers in outreach and advisors in outreach.",
   cp1:
-    "Every provider in the directory that has not been deleted, split by whether anyone has claimed them. Scoped by the provider's city. A standing count — the date range does not change it.",
+    "Providers in the directory nobody has claimed — the supply outreach works through. Scoped by the provider's city. A standing count, so the date range does not change it.",
   cp2:
     "Unclaimed providers who heard from us in this range — any email, call or MedJobs contact. Counts providers, not messages, so twenty emails to one provider is one.",
   m1:
-    "Care recipient profiles begun in this range, and how far they got. Live means the care post is published, which is what makes someone visible to providers.",
+    "Care seeker profiles begun in this range and how far they got. The parts nest: every profile is at least partial, completed means finished, live means the care post is published.",
   m2:
-    "Providers who claimed their listing in this range, and how many of those went on to pass verification.",
+    "Providers who became active in this range — claiming the listing is all it takes — and how many of those went on to pass verification.",
   m3:
     "Providers who requested a managed ad campaign in this range. Repeat counts providers who have asked more than once, over all time.",
   m4: "Providers who activated MedJobs staffing in this range.",
@@ -333,15 +333,38 @@ export default function OperatingMap({
     vDown("tb1", "tb2");
     vDown("tc1", "tc2");
 
-    /* aid and care established converge on the spending outcome */
+    /*
+     * Aid and care converge on the spending outcome, care workers on their
+     * own. The bar is stretched to cover the outcome's centre as well as the
+     * two tracks feeding it — otherwise the drop comes off the end of the
+     * bar and reads as a line crossing rather than a join.
+     */
     const ta2 = box("ta2");
     const tb2 = box("tb2");
+    const tc2 = box("tc2");
     const o1 = box("o1");
+    const o2 = box("o2");
+
     const outBar = Math.max(ta2.b, tb2.b) + 24;
     seg(ta2.cx, ta2.b + G, ta2.cx, outBar);
     seg(tb2.cx, tb2.b + G, tb2.cx, outBar);
-    seg(ta2.cx, outBar, tb2.cx, outBar);
+    seg(
+      Math.min(ta2.cx, tb2.cx, o1.cx),
+      outBar,
+      Math.max(ta2.cx, tb2.cx, o1.cx),
+      outBar,
+    );
     vArrow(o1.cx, outBar, o1.t - G);
+
+    /* the care worker track has one outcome of its own */
+    if (Math.abs(tc2.cx - o2.cx) < 1) {
+      vArrow(tc2.cx, tc2.b + G, o2.t - G);
+    } else {
+      const bar2 = tc2.b + 24;
+      seg(tc2.cx, tc2.b + G, tc2.cx, bar2);
+      seg(tc2.cx, bar2, o2.cx, bar2);
+      vArrow(o2.cx, bar2, o2.t - G);
+    }
   }, []);
 
   useLayoutEffect(() => {
@@ -641,8 +664,13 @@ export default function OperatingMap({
           <section className={styles.system} ref={rootRef}>
           <svg className={styles.wires} ref={svgRef} role="presentation" />
 
+          <div className={styles.topStat}>
+            <span className={styles.lab}>Revenue generated</span>
+            {showNumbers && <span className={styles.v}>{NOT_INSTRUMENTED}</span>}
+          </div>
+
           <div className={styles.lanes3} style={{ marginBottom: 8 }}>
-            <div className={styles.lab}>Care recipient</div>
+            <div className={styles.lab}>Care seeker</div>
             <div className={styles.lab}>Care provider</div>
             <div className={styles.lab}>Care worker</div>
           </div>
@@ -656,7 +684,7 @@ export default function OperatingMap({
                   id="cr1"
                   code="CR1"
                   label="Families engaged"
-                  parts="questions · connections · benefits assessments"
+                  parts="connect requests · benefits assessments"
                   metric={nodes.cr1}
                   trend={trends.cr1}
                   loading={metricsLoading}
@@ -688,8 +716,7 @@ export default function OperatingMap({
                 <Card
                   id="cp1"
                   code="CP1"
-                  label="Providers listed"
-                  parts="claimed · unclaimed"
+                  label="Unclaimed providers"
                   metric={nodes.cp1}
                   trend={trends.cp1}
                   loading={metricsLoading}
@@ -758,8 +785,8 @@ export default function OperatingMap({
                   hi
                   id="m1"
                   code="M1"
-                  label="Care recipient profiles"
-                  parts="started · completed · live"
+                  label="Care seeker profiles"
+                  parts="partial · completed · live"
                   metric={nodes.m1}
                   trend={trends.m1}
                   loading={metricsLoading}
@@ -772,7 +799,7 @@ export default function OperatingMap({
                   hi
                   id="m2"
                   code="M2"
-                  label="Provider profiles"
+                  label="Active providers"
                   parts="claimed · verified"
                   metric={nodes.m2}
                   trend={trends.m2}
@@ -906,10 +933,13 @@ export default function OperatingMap({
                 money="Value created"
                 label="Est. healthcare utilization reduction"
               />
-              <div className={styles.stat}>
-                <span className={styles.lab}>Revenue generated</span>
-                {showNumbers && <span className={styles.v}>{NOT_INSTRUMENTED}</span>}
-              </div>
+              <Card
+                hi
+                id="o2"
+                code="O2"
+                money="Value created"
+                label="Est. new care workers"
+              />
             </div>
           </div>
           </section>

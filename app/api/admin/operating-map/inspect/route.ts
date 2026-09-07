@@ -108,10 +108,14 @@ const SOURCES: Record<
     summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
   },
   cp1: {
-    title: "Providers listed",
+    title: "Unclaimed providers",
     table: "olera-providers",
     select: "created_at, provider_name, city, state",
-    where: ["not deleted", "standing count — the date range does not apply"],
+    where: [
+      "not deleted",
+      "rows below are the whole directory; the count is the unclaimed half",
+      "standing count — the date range does not apply",
+    ],
     cityScoped: false,
     providerCityScoped: true,
     standing: true,
@@ -134,7 +138,7 @@ const SOURCES: Record<
       `${String(r.provider_id ?? "—")} · ${String(r.email_type ?? "email")}`,
   },
   m1: {
-    title: "Care recipient profiles started",
+    title: "Care seeker profiles",
     table: "business_profiles",
     select: "created_at, display_name, city, state",
     where: [

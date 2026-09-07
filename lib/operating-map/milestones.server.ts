@@ -5,7 +5,7 @@ import { cityFilterFromSlug, listedProviderIdsInCity } from "@/lib/providers";
  * M1–M5 — the user milestone strip: the moments someone stops being traffic
  * and becomes a record we can act on.
  *
- *   M1  care recipient profiles        business_profiles type=family,
+ *   M1  care seeker profiles        business_profiles type=family,
  *                                       started / completed / live
  *   M2  provider profiles               provider_activity claim_completed,
  *                                       then verified among them
@@ -20,7 +20,7 @@ import { cityFilterFromSlug, listedProviderIdsInCity } from "@/lib/providers";
  * M2, M3 and M4 are true events with their own timestamps. M1 and M5 are not,
  * and that difference is real rather than cosmetic: a profile becomes
  * complete when `is_active` flips — a care worker's when their intro video
- * lands, a care recipient's again when their care post is published — and
+ * lands, a care seeker's again when their care post is published — and
  * nothing records when that happened. So those two count profiles CREATED in
  * the window that are in that state NOW. A profile created just before the
  * window and finished inside it is missed; one created inside and finished
@@ -34,12 +34,12 @@ const PAGE_SIZE = 1000;
 const MAX_ROWS = 100_000;
 
 export interface Milestones {
-  /** M1 — every care recipient profile begun, finished or not. */
-  careRecipientProfilesStarted: number;
+  /** M1 — every care seeker profile begun, finished or not. */
+  careSeekerProfilesPartial: number;
   /** Of those, the ones marked complete. */
-  careRecipientProfiles: number;
+  careSeekerProfilesCompleted: number;
   /** Of those, the ones whose care post is published. */
-  careRecipientProfilesLive: number;
+  careSeekerProfilesLive: number;
   /** M2 — providers who finished claiming in this range. */
   providersClaimed: number;
   /** Of those, the ones verification has passed. */
@@ -315,9 +315,9 @@ export async function getMilestones(
   const claimedIds = await claimedProviderIdsInRange(db, range, cityIds);
 
   const [
-    careRecipientProfilesStarted,
-    careRecipientProfiles,
-    careRecipientProfilesLive,
+    careSeekerProfilesPartial,
+    careSeekerProfilesCompleted,
+    careSeekerProfilesLive,
     careWorkerProfilesStarted,
     careWorkerProfiles,
     providersVerified,
@@ -346,9 +346,9 @@ export async function getMilestones(
   ]);
 
   return {
-    careRecipientProfilesStarted,
-    careRecipientProfiles,
-    careRecipientProfilesLive,
+    careSeekerProfilesPartial,
+    careSeekerProfilesCompleted,
+    careSeekerProfilesLive,
     providersClaimed: claimedIds.length,
     providersVerified,
     managedAdSignups,
