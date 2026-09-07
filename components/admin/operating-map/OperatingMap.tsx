@@ -247,7 +247,11 @@ export default function OperatingMap({
     if (stage.style.width !== stageWidth) stage.style.width = stageWidth;
     if (stage.style.height !== stageHeight) stage.style.height = stageHeight;
 
-    const SVG_NS = "http://www.cw3.org/2000/svg";
+    // Taken from the <svg> React already put in the tree rather than written
+    // out as a literal. A namespace typo creates elements that are not SVG,
+    // which renders nothing at all and reports no error — and a URL in a
+    // string is the one thing in this file a rename can silently corrupt.
+    const SVG_NS = svg.namespaceURI;
     /** Gap left between a card's edge and the arrow that touches it. */
     const G = 5;
 
