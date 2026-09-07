@@ -110,7 +110,15 @@ export async function POST(req: NextRequest) {
         const f = (body.fields ?? {}) as Record<string, unknown>;
         const patch: Record<string, unknown> = {};
         if ("position" in f) patch.position = Number(f.position) || 100;
-        if ("phone_override" in f) patch.phone_override = f.phone_override ? String(f.phone_override) : null;
+        if ("phone_override" in f) {
+          const raw = f.phone_override ? String(f.phone_override) : "";
+          const digits = raw.replace(/\D/g, "").slice(-10);
+          const ours = (process.env.TWILIO_FROM_NUMBER ?? "").replace(/\D/g, "").slice(-10);
+          if (digits && ours && digits === ours) {
+            return NextResponse.json({ error: "That is Olera's own texting number. Offers sent to it would go nowhere. Use a mobile you hold." }, { status: 400 });
+          }
+          patch.phone_override = raw || null;
+        }
         if ("notes" in f) patch.notes = f.notes ? String(f.notes) : null;
         if (Array.isArray(f.care_types)) patch.care_types = (f.care_types as unknown[]).map(String).filter((c) => ["home_care", "assisted_living"].includes(c));
         const { error } = await db.from("city_pool").update(patch).eq("id", String(body.poolId ?? ""));
