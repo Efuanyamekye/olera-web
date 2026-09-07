@@ -6,7 +6,7 @@ import { CHANNEL_LABELS, classifyChannel } from "@/lib/analytics/channel";
 import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
 
 /**
- * GET /api/admin/operating-map/inspect?node=cr2&date_from&date_to&city
+ * GET /api/admin/operating-map/inspect?node=cr1&date_from&date_to&city
  *
  * The receipts behind one number on the operating map: which table it came
  * from, exactly which rows were counted, and the most recent handful with
@@ -59,19 +59,6 @@ const SOURCES: Record<
     summarize: (row: Record<string, unknown>) => string;
   }
 > = {
-  cr2: {
-    title: "Organic visitors",
-    table: "page_events",
-    select: "created_at, page, session_id, metadata",
-    where: [
-      "event_type is page_view",
-      "referrer_class is search",
-      "counted once per visitor (olera_session cookie)",
-    ],
-    eventType: "page_view",
-    cityScoped: true,
-    summarize: (r) => String(r.page ?? "—"),
-  },
   cr1: {
     title: "All traffic",
     table: "page_events",
@@ -392,10 +379,7 @@ export async function GET(request: NextRequest) {
         .eq("recipient_type", "provider")
         .eq("status", "sent");
     }
-    if (node === "cr2") {
-      query = query.filter("metadata->>referrer_class", "eq", "search");
-    }
-    if (node === "cr1" || node === "cr2") {
+    if (node === "cr1") {
       // Same two surfaces the count is scoped to, so the sample cannot show
       // a page the number never counted.
       query = query.or(
