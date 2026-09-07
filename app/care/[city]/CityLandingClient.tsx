@@ -56,10 +56,17 @@ export default function CityLandingClient({
   cfg,
   providers,
   utm,
+  staffedNow,
 }: {
   cfg: CityConfig;
   providers: CityProviderCard[];
   utm: Utm;
+  /**
+   * Whether a request made right now gets a same-day call. Computed on the
+   * server so the hero promises only what the staffed window can keep; the
+   * page is force-dynamic, so this is fresh per request rather than cached.
+   */
+  staffedNow: boolean;
 }) {
   const [step, setStep] = useState<Step>("intro");
   const [who, setWho] = useState<CityRecipient | null>(null);
@@ -168,7 +175,11 @@ export default function CityLandingClient({
               Looking for senior care in {cfg.city}?
             </h1>
             <p className="mt-4 text-lg leading-snug text-gray-600">
-              {concierge ? "Tell us what you need. We call you back today. Free." : "A local provider calls you back. Free."}
+              {concierge
+                ? staffedNow
+                  ? "Tell us what you need. We call you back today. Free."
+                  : "Tell us what you need. We call you back in the morning. Free."
+                : "A local provider calls you back. Free."}
             </p>
             <button
               type="button"

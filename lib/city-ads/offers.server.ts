@@ -521,11 +521,20 @@ export async function runOfferMaintenance(db: SupabaseClient): Promise<{
   }
 
   // 2. Parked leads whose morning has come, plus stragglers never started.
+  //
+  // "offered" belongs here as much as "new". Parking sets next_offer_at but
+  // deliberately does not rewind status, so a chain that ran out of staffed
+  // hours mid-way is left sitting at "offered" — and a query for "new" alone
+  // never picks it up again. That strands the family silently. It matters more
+  // since the staffed window narrowed to four hours: three 30-minute offers
+  // need ninety minutes, so any chain starting after 10:30am can cross the
+  // boundary. startOrAdvance still refuses a lead with a live offer, so
+  // including "offered" cannot double-send.
   const twoMinAgo = new Date(Date.now() - 2 * 60 * 1000).toISOString();
   const { data: waiting } = await db
     .from("city_leads")
     .select("id, next_offer_at, created_at")
-    .eq("status", "new")
+    .in("status", ["new", "offered"])
     .is("accepted_offer_id", null)
     .or(`next_offer_at.lte.${now},and(next_offer_at.is.null,created_at.lte.${twoMinAgo})`)
     .limit(50);

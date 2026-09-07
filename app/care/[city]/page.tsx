@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getServiceClient } from "@/lib/admin";
-import { getCityConfig } from "@/lib/city-ads/config";
+import { getCityConfig, isStaffedNow } from "@/lib/city-ads/config";
 import { parseProviderImages } from "@/lib/types/provider";
 import CityLandingClient, { type CityProviderCard } from "./CityLandingClient";
 
@@ -107,6 +107,7 @@ export default async function CityCarePage({
     <CityLandingClient
       cfg={cfg}
       providers={providers}
+      staffedNow={isStaffedNow(cfg.timeZone)}
       utm={{
         source: first(sp.utm_source),
         medium: first(sp.utm_medium),

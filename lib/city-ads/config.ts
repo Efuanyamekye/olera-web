@@ -76,7 +76,20 @@ export function getCityConfig(slug: string): CityConfig | null {
 
 export const CITY_FORM_VERSION = "v1-2026-09-06";
 
-export const STAFFED_HOURS = { start: 8, end: 20 } as const;
+/**
+ * The window, in the CITY's timezone, where we will tell a family we are
+ * calling them today. Outside it they are told "in the morning" instead.
+ *
+ * 8am to noon local is deliberately narrow. Concierge routing means a human
+ * makes every one of these calls, and that human is on UTC+7. Noon Eastern is
+ * 11pm for them and noon Central is midnight, so this is the last hour we can
+ * promise a same-day call and still keep it. The old 8am-8pm window promised a
+ * call at 4pm Eastern, which is 3am for the person who has to make it.
+ *
+ * Widen this the day someone covers US afternoons. It is the only thing
+ * standing between the promise and the person keeping it.
+ */
+export const STAFFED_HOURS = { start: 8, end: 12 } as const;
 export const OFFER_WINDOW_MINUTES = 30;
 export const MAX_OFFERS_PER_LEAD = 3;
 

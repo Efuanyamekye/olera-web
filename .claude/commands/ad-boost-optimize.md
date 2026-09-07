@@ -124,6 +124,15 @@ Prioritize the list:
 | Launched <3 days ago | Skip, no data yet |
 | `status='scheduled'` but not actually serving | Not an optimization problem — check the launch, then hand to `/ad-boost-setup` |
 
+**The sweep is not only provider campaigns.** Olera runs two of its own, and they are the only campaigns in the account where Olera pays the bill, so an unread number there costs us directly rather than a provider. They live in `city_campaigns`, not `ad_campaign_requests`, so a query against the provider table will silently miss them:
+
+| Campaign | Google ID | Row |
+|---|---|---|
+| Olera City – Charlotte NC – Sep 2026 | `24223751948` | `city_campaigns` where `slug='charlotte-nc'`, `channel='google'` |
+| Olera City – Dallas TX – Sep 2026 | `24223844624` | `city_campaigns` where `slug='dallas-tx'`, `channel='google'` |
+
+Read them exactly like a provider campaign in Phase 2. `GET /api/admin/city-ads` returns both rows with their `id`, which Phase 5 needs.
+
 **Note which campaigns still carry the shared list** — `Level` column reads `List` on their Negative keywords page. As of 4 Sep that is 9 campaigns; Franchil Aug had it detached. Assisted-living providers (Rosemonte, Edmonds) never had it, because it negates `"assisted living"` — and that same reasoning, that a list can negate a campaign's actual intent, is what the 4 Sep audit found had happened to the home-care campaigns too. Treat the list as a suspect on every campaign carrying it, not as protection.
 
 ## Phase 2 — Per-campaign read (gather before judging)
@@ -220,6 +229,18 @@ Body rules the route enforces, all of which 400 if you get them wrong:
 **Authentication:** the route needs an admin session, and the automation browser profile is usually signed into Google but *not* into olera.care. Check with `fetch('/api/admin/ad-boost')` from the page early — a `401 {"error":"Not authenticated"}` means TJ has to sign in in that window before any of this works. Do that check at Phase 0, not after the whole read is done.
 
 **Backfill `flight_start_date` whenever it is null** while you are already writing. As of the 2026-08-14 sweep every live row had it null, forcing dates to be reconstructed from `admin_note` prose.
+
+**The two Olera City campaigns write somewhere else.** They are not rows in `ad_campaign_requests` and `POST /api/admin/ad-boost` will not find them. Use:
+
+```
+POST /api/admin/city-ads
+{ action: "update_campaign", id: "<city_campaigns.id>",
+  fields: { ad_spend_cents, ad_clicks, ad_impressions } }
+```
+
+Cents, not dollars, same as above. The route stamps `metrics_updated_at` itself, rejects a negative number, and also accepts `status`, `platform_campaign_id`, `flight_start`, `flight_end`, `budget_cents`, `max_cpc_cents` if any of those drifted.
+
+This matters more than the provider write-backs, not less. Olera funds these two, and **cost per family a provider actually reached is the one number the city pilot exists to produce**. Its numerator is spend, and spend has exactly one source: this read. Nothing else in the system will ever fill that column, so a sweep that skips it means the pilot cannot be evaluated at all. If you read Google and write nothing, say so plainly in the readout rather than leaving it implied.
 
 Then write the narrative to **`ad_campaign_log`**, not `admin_note`:
 
