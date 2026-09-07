@@ -33,95 +33,95 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
       "Coverage grows by adding providers, not cities. Run the city pipeline for a market before counting it as launched.",
   },
 
-  s1: {
+  cr1: {
     href: "/admin/organic-growth",
     label: "Organic growth",
     advice:
       "Work the largest channel that is falling, not the smallest one that is rising. A row at zero can be an instrumentation job rather than a dead channel.",
   },
-  s2: {
+  cr2: {
     href: "/admin/family-comms",
     label: "Family comms",
     advice:
       "This is our tempo, not the market's. It only moves when someone sends, so a flat week usually means nobody ran a batch.",
   },
-  s3: {
+  cr3: {
     href: "/admin/care-seekers",
     label: "Care seekers",
     advice:
       "Most of these never reach a live care post. Open the rows and work the largest step down, not the smallest.",
   },
-  s4: {
+  cr4: {
     href: "/admin/benefits",
     label: "Benefits",
     advice:
       "This only moves when families answer the check-in. Low numbers here usually mean the email is not landing, not that nobody applied.",
   },
 
-  p1: {
+  cp1: {
     href: "/admin/directory",
     label: "Directory",
     advice:
-      "This is the pool outreach exists to shrink. It only falls when a provider claims, so read it against P3.",
+      "This is the pool outreach exists to shrink. It only falls when a provider claims, so read it against CP3.",
   },
-  p2: {
+  cp2: {
     href: "/admin/provider-outreach",
     label: "Provider outreach",
     advice:
       "This is our tempo, not the market's. It only rises when someone sends — a flat week usually means nobody ran a batch.",
   },
-  p3: {
+  cp3: {
     href: "/admin/directory",
     label: "Unclaimed providers",
     advice:
       "A claim that never completes or verifies is a provider we cannot show. Work the gap before chasing more claims.",
   },
-  p4: {
+  cp4: {
     href: "/admin/ad-boost",
     label: "Ad Boost",
     advice:
       "A first campaign that never repeats is worth a conversation. Repeat customers are the signal that ads actually work.",
   },
-  p5: {
+  cp5: {
     href: "/admin/staffing-outreach",
     label: "Staffing outreach",
     advice:
       "Activation follows a conversation, not an email. Check which outreach reached a call this week.",
   },
 
-  w1: {
+  cw1: {
     href: "/admin/student-outreach",
     label: "Student outreach",
     advice:
       "A targeted university is worth nothing without a named advisor. Add contacts before adding campuses.",
   },
-  w2: {
+  cw2: {
     href: "/admin/student-outreach",
     label: "Advisors",
     advice:
       "The gap from the advisors on file is names nobody has emailed yet. Work that before sourcing more contacts.",
   },
-  w3: {
+  cw3: {
     href: "/admin/medjobs",
     label: "MedJobs",
     advice:
       "The gap between started and complete is your fastest supply. Applicants stall at the intro video — chase those before sourcing new ones.",
   },
 
-  sp1: {
+  o1: {
     href: "/admin/connections",
     label: "Connections",
     advice:
       "Providers who never answer are the constraint. Work the Awaiting list — one response is worth more than one more inquiry.",
   },
 
-  pw1: {
+  o4: {
     href: "/admin/medjobs",
     label: "MedJobs interviews",
     advice:
       "Scheduled interviews that never complete are no-shows or cancellations. Chase those before sourcing more candidates.",
   },
-  pw2: {
+  o5: {
     href: "/admin/medjobs",
     label: "MedJobs placements",
     advice:
@@ -208,7 +208,7 @@ function Channels({
 
   return (
     <div className={styles.tipSection}>
-      {/* The heading carries the total. This table hangs off S1's number
+      {/* The heading carries the total. This table hangs off CR1's number
           now, and the two count different things — visitors to the site
           against families who did something on it. */}
       <span className={styles.tipLabel}>
@@ -318,7 +318,7 @@ export default function NodeTip({
   caveat?: string | null;
   /** The node's own breakdown. */
   metric?: MetricNode;
-  /** Site traffic, whose channel table hangs off S1. */
+  /** Site traffic, whose channel table hangs off CR1. */
   traffic?: MetricNode;
   trend?: NodeTrend | null;
   /** All node trends, so the channel rows can find their own. */
@@ -364,7 +364,7 @@ export default function NodeTip({
         </div>
       )}
 
-      {nodeKey === "s1" && traffic?.breakdown?.length ? (
+      {nodeKey === "cr1" && traffic?.breakdown?.length ? (
         <Channels parts={traffic.breakdown} trends={trends} />
       ) : null}
 

@@ -166,7 +166,15 @@
 }
 .card .k { font-size: 16px; font-weight: 700; color: var(--ink); }
 .cardHead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.card .n { font-size: 15.5px; color: var(--ink-2); margin-top: 2px; line-height: 1.35; }
+/* The breakdown line. Holds one line's height whether or not it has
+   anything in it, which is what keeps every card the same size. */
+.card .n {
+  font-size: 15.5px;
+  color: var(--ink-2);
+  margin-top: 2px;
+  line-height: 1.35;
+  min-height: 1.35em;
+}
 /* The node's name, on the same line as its code. Two lines for a name is
    one line too many, and the second was mostly whitespace. */
 .name {
@@ -193,25 +201,27 @@
 .valueMuted { color: var(--ink-2); font-weight: 600; }
 
 /*
- * The month arrow. Sized to be noticed only once you are looking at the
- * number it belongs to, and always the same colour as that number, so it
- * reads as one reading rather than a second competing signal.
+ * The month arrow, sitting on the number's own line just in front of it.
+ * Sized to be noticed only once you are looking at the number it belongs
+ * to, and always the same colour as that number, so it reads as one
+ * reading rather than a second competing signal.
  *
- * The slot is rendered whether or not there is an arrow in it, so a card
- * with a trend and a card without are exactly the same height and the wire
- * overlay measures one consistent geometry.
+ * Both children share a baseline, so the pair still aligns with the card's
+ * label across the head. The slot is rendered whether or not there is an
+ * arrow in it, which keeps every number in one column down the lane and
+ * keeps card heights identical — the wire overlay measures those heights.
  */
 .valueWrap {
   display: inline-flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: baseline;
+  gap: 5px;
   vertical-align: baseline;
 }
 .trendArrow {
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1;
-  height: 8px;
-  margin-top: 2px;
+  width: 10px;
+  text-align: right;
   letter-spacing: 0;
 }
 

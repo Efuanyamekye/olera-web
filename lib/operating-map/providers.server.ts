@@ -229,4 +229,4 @@ export async function getProvidersInOutreach(
 }
 
 /** The channels CP2 reads, for the inspector to describe without restating. */
-export const P2_CHANNELS = CONTACT_CHANNELS;
+export const CP2_CHANNELS = CONTACT_CHANNELS;

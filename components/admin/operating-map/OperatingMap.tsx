@@ -19,7 +19,7 @@ import styles from "./OperatingMap.module.css";
  * and every arrow still lands on it.
  *
  * The one contract that matters: a node's `id` is its identity. `nodeId()`
- * namespaces them so short keys like "s3" cannot collide with anything else
+ * namespaces them so short keys like "cr3" cannot collide with anything else
  * rendered on an admin page. Rename a label freely; renaming an id breaks
  * the wire that references it.
  *
@@ -110,17 +110,17 @@ export function toneClass(score: number): string | null {
 }
 
 /**
- * The index system, and what it is claiming.
+ * The index system.
  *
- * A one-letter code is a lane and the number is how far down it: S for the
- * care seeker, P for the care provider, W for the care worker. A two-letter
- * code is a join — it names the two lanes that feed it, and sits between
- * them in the figure. O is an outcome: an estimate of value created, not a
- * count of anything that happened.
+ * The prefix is the lane and the number runs straight down it: CR for the
+ * care seeker, CP for the care provider, CW for the care worker. Everything
+ * below the lanes is an O, numbered across both stacks — O1 to O3 is what a
+ * family and a provider make together, O4 to O6 what a provider and a care
+ * worker make.
  *
  * The code is also the node's key, end to end — DOM id, metric, trend,
  * drill-down source, consistency check. Renaming a label is free; renaming
- * a code means renaming it in all five places or the map starts answering
+ * a code means renaming it in all five places, or the map starts answering
  * a different question than the one you clicked.
  */
 
@@ -133,36 +133,36 @@ const NODE_HELP: Record<string, string> = {
   cities:
     "Cities with at least one live provider. Wider than the cities we have deliberately launched.",
 
-  s1:
+  cr1:
     "The two care seeker actions that produce a record we can work. Questions are the cheapest ask and would swamp the other two, so they are counted elsewhere. Below it, the traffic all of this comes out of.",
-  s2:
+  cr2:
     "Families we emailed in this range, counted once each however many times we wrote. The mirror of providers in outreach and advisors in outreach.",
-  s3: "Care seeker profiles begun in this range, at any stage of completion.",
-  s4:
+  cr3: "Care seeker profiles begun in this range, at any stage of completion.",
+  cr4:
     "Families who told us they are moving forward with a benefit. Applying happens on a government site, so this is their own report — a floor, not a count.",
 
-  p1:
+  cp1:
     "Providers in the directory nobody has claimed — the supply outreach works through. Scoped by the provider's city. A standing count, so the date range does not change it.",
-  p2:
+  cp2:
     "Unclaimed providers who heard from us in this range — any email, call or MedJobs contact. Counts providers, not messages, so twenty emails to one provider is one.",
-  p3:
+  cp3:
     "Providers who became active in this range. Claiming the listing is all it takes — verification is a further step, counted separately.",
-  p4: "Providers who requested a managed ad campaign in this range.",
-  p5: "Providers who activated MedJobs staffing in this range.",
+  cp4: "Providers who requested a managed ad campaign in this range.",
+  cp5: "Providers who activated MedJobs staffing in this range.",
 
-  w1:
+  cw1:
     "Universities we are working, scoped by the university's city. A standing count — the date range does not change it.",
-  w2:
+  cw2:
     "Advisors we have actually contacted — at least one touchpoint against them. The gap from the advisors on file is supply we have not tried yet.",
-  w3:
+  cw3:
     "MedJobs applications begun and how many are finished — a profile goes live once the intro video and documents are in. Channels activated has no source yet.",
 
-  sp1:
+  o1:
     "Families and providers who actually connected, by the same rule the Connections page uses: a provider reply, a confirmation from either side, or an admin marking it.",
 
-  pw1:
+  o4:
     "Interviews with a time agreed — the point a provider and a care worker are actually in contact. Counts scheduled, including the ones since held.",
-  pw2: "Placements the care worker accepted.",
+  o5: "Placements the care worker accepted.",
 };
 
 /** Tooltip anchored to a node, positioned outside the scaled figure. */
@@ -247,7 +247,7 @@ export default function OperatingMap({
     if (stage.style.width !== stageWidth) stage.style.width = stageWidth;
     if (stage.style.height !== stageHeight) stage.style.height = stageHeight;
 
-    const SVG_NS = "http://www.w3.org/2000/svg";
+    const SVG_NS = "http://www.cw3.org/2000/svg";
     /** Gap left between a card's edge and the arrow that touches it. */
     const G = 5;
 
@@ -333,56 +333,56 @@ export default function OperatingMap({
     const IN = 22;
 
     /* care seeker: demand, then the profile it produces */
-    vDown("s1", "s2");
-    vDown("s2", "s3");
+    vDown("cr1", "cr2");
+    vDown("cr2", "cr3");
 
-    const s3 = box("s3");
-    const s4 = box("s4");
-    const s5 = box("s5");
-    const sp1 = box("sp1");
+    const cr3 = box("cr3");
+    const cr4 = box("cr4");
+    const cr5 = box("cr5");
+    const o1 = box("o1");
 
     /*
-     * One stem off S3's left carries both of the things a profile becomes.
+     * One stem off CR3's left carries both of the things a profile becomes.
      * It puts a head into the aid track on the way past and then keeps
      * going, turning once into the connection — so the profile reaches the
      * connection directly, not through the aid track it passes.
      */
-    const seekStem = s3.l + IN;
-    seg(seekStem, s3.b + G, seekStem, sp1.cy);
-    hArrow(s4.cy, seekStem, s4.l - G);
-    hArrow(sp1.cy, seekStem, sp1.l - G);
-    vArrow(s4.l + IN, s4.b + G, s5.t - G);
+    const seekStem = cr3.l + IN;
+    seg(seekStem, cr3.b + G, seekStem, o1.cy);
+    hArrow(cr4.cy, seekStem, cr4.l - G);
+    hArrow(o1.cy, seekStem, o1.l - G);
+    vArrow(cr4.l + IN, cr4.b + G, cr5.t - G);
 
     /* care provider: supply, then the products, then the connection */
-    vDown("p1", "p2");
-    vDown("p2", "p3");
+    vDown("cp1", "cp2");
+    vDown("cp2", "cp3");
 
-    const p3 = box("p3");
-    const p5 = box("p5");
-    const pw1 = box("pw1");
+    const cp3 = box("cp3");
+    const cp5 = box("cp5");
+    const o4 = box("o4");
 
-    /* one stem down P3's left: a head into each paid product, then on into
+    /* one stem down CP3's left: a head into each paid product, then on into
        the connection the active provider is the other half of */
-    const provStem = p3.l + IN;
-    vArrow(provStem, p3.b + G, sp1.t - G);
-    fromStem(provStem, "p4");
-    fromStem(provStem, "p5");
+    const provStem = cp3.l + IN;
+    vArrow(provStem, cp3.b + G, o1.t - G);
+    fromStem(provStem, "cp4");
+    fromStem(provStem, "cp5");
 
-    /* staffing is what makes a hire possible; the line lands over PW1's
+    /* staffing is what makes a hire possible; the line lands over O4's
        own label so it reads as belonging to that card */
-    vArrow(pw1.l + IN, p5.b + G, pw1.t - G);
+    vArrow(o4.l + IN, cp5.b + G, o4.t - G);
 
     /* care worker: campuses, then advisors, then applicants */
-    vDown("w1", "w2");
-    vDown("w2", "w3");
-    const w3 = box("w3");
-    vArrow(w3.l + IN, w3.b + G, pw1.t - G);
+    vDown("cw1", "cw2");
+    vDown("cw2", "cw3");
+    const cw3 = box("cw3");
+    vArrow(cw3.l + IN, cw3.b + G, o4.t - G);
 
     /* each join runs on down between the lanes that fed it */
-    vDown("sp1", "sp2");
-    vDown("sp2", "o1");
-    vDown("pw1", "pw2");
-    vDown("pw2", "o2");
+    vDown("o1", "o2");
+    vDown("o2", "o3");
+    vDown("o4", "o5");
+    vDown("o5", "o6");
   }, []);
 
   useLayoutEffect(() => {
@@ -677,12 +677,12 @@ export default function OperatingMap({
             {/* care seeker */}
             <div className={styles.lane}>
                 <Card
-                  id="s1"
-                  code="S1"
+                  id="cr1"
+                  code="CR1"
                   label="Families engaged"
                   parts="connect requests · benefits assessments"
-                  metric={nodes.s1}
-                  trend={trends.s1}
+                  metric={nodes.cr1}
+                  trend={trends.cr1}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -690,11 +690,11 @@ export default function OperatingMap({
                 />
               <div className={styles.gap} />
                 <Card
-                  id="s2"
-                  code="S2"
+                  id="cr2"
+                  code="CR2"
                   label="Families in outreach"
-                  metric={nodes.s2}
-                  trend={trends.s2}
+                  metric={nodes.cr2}
+                  trend={trends.cr2}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -703,11 +703,11 @@ export default function OperatingMap({
               <div className={styles.gap} />
                 <Card
                   hi
-                  id="s3"
-                  code="S3"
+                  id="cr3"
+                  code="CR3"
                   label="Care seeker profiles"
-                  metric={nodes.s3}
-                  trend={trends.s3}
+                  metric={nodes.cr3}
+                  trend={trends.cr3}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -717,11 +717,11 @@ export default function OperatingMap({
               {/* the aid track hangs off the profile, indented to say so */}
               <div className={styles.branch}>
                   <Card
-                    id="s4"
-                    code="S4"
+                    id="cr4"
+                    code="CR4"
                     label="Aid applied"
-                    metric={nodes.s4}
-                    trend={trends.s4}
+                    metric={nodes.cr4}
+                    trend={trends.cr4}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={closeTip}
@@ -729,11 +729,11 @@ export default function OperatingMap({
                   />
                 <div className={styles.gapSm} />
                   <Card
-                    id="s5"
-                    code="S5"
+                    id="cr5"
+                    code="CR5"
                     label="Aid confirmed"
-                    metric={nodes.s5}
-                    trend={trends.s5}
+                    metric={nodes.cr5}
+                    trend={trends.cr5}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={closeTip}
@@ -745,11 +745,11 @@ export default function OperatingMap({
             {/* care provider */}
             <div className={styles.lane}>
                 <Card
-                  id="p1"
-                  code="P1"
+                  id="cp1"
+                  code="CP1"
                   label="Unclaimed providers"
-                  metric={nodes.p1}
-                  trend={trends.p1}
+                  metric={nodes.cp1}
+                  trend={trends.cp1}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -757,11 +757,11 @@ export default function OperatingMap({
                 />
               <div className={styles.gap} />
                 <Card
-                  id="p2"
-                  code="P2"
+                  id="cp2"
+                  code="CP2"
                   label="Providers in outreach"
-                  metric={nodes.p2}
-                  trend={trends.p2}
+                  metric={nodes.cp2}
+                  trend={trends.cp2}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -770,11 +770,11 @@ export default function OperatingMap({
               <div className={styles.gap} />
                 <Card
                   hi
-                  id="p3"
-                  code="P3"
+                  id="cp3"
+                  code="CP3"
                   label="Active providers"
-                  metric={nodes.p3}
-                  trend={trends.p3}
+                  metric={nodes.cp3}
+                  trend={trends.cp3}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -785,12 +785,12 @@ export default function OperatingMap({
               <div className={styles.branchR}>
                   <Card
                     hi
-                    id="p4"
-                    code="P4"
+                    id="cp4"
+                    code="CP4"
                     label="Managed ads"
                     money="Paid product"
-                    metric={nodes.p4}
-                    trend={trends.p4}
+                    metric={nodes.cp4}
+                    trend={trends.cp4}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={closeTip}
@@ -799,12 +799,11 @@ export default function OperatingMap({
                 <div className={styles.gap} />
                   <Card
                     hi
-                    id="p5"
-                    code="P5"
+                    id="cp5"
+                    code="CP5"
                     label="Provider staffing signups"
-                    money="Paid product"
-                    metric={nodes.p5}
-                    trend={trends.p5}
+                    metric={nodes.cp5}
+                    trend={trends.cp5}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={closeTip}
@@ -816,11 +815,11 @@ export default function OperatingMap({
             {/* care worker */}
             <div className={styles.lane}>
                 <Card
-                  id="w1"
-                  code="W1"
+                  id="cw1"
+                  code="CW1"
                   label="Universities targeted"
-                  metric={nodes.w1}
-                  trend={trends.w1}
+                  metric={nodes.cw1}
+                  trend={trends.cw1}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -828,11 +827,11 @@ export default function OperatingMap({
                 />
               <div className={styles.gap} />
                 <Card
-                  id="w2"
-                  code="W2"
+                  id="cw2"
+                  code="CW2"
                   label="Advisors in outreach"
-                  metric={nodes.w2}
-                  trend={trends.w2}
+                  metric={nodes.cw2}
+                  trend={trends.cw2}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -841,12 +840,12 @@ export default function OperatingMap({
               <div className={styles.gap} />
                 <Card
                   hi
-                  id="w3"
-                  code="W3"
+                  id="cw3"
+                  code="CW3"
                   label="Care worker profiles"
                   parts="channels · started · complete"
-                  metric={nodes.w3}
-                  trend={trends.w3}
+                  metric={nodes.cw3}
+                  trend={trends.cw3}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -865,11 +864,11 @@ export default function OperatingMap({
 
             <div className={`${styles.lane} ${styles.join12}`}>
                 <Card
-                  id="sp1"
-                  code="SP1"
+                  id="o1"
+                  code="O1"
                   label="Family–provider connected"
-                  metric={nodes.sp1}
-                  trend={trends.sp1}
+                  metric={nodes.o1}
+                  trend={trends.o1}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -877,11 +876,11 @@ export default function OperatingMap({
                 />
               <div className={styles.gap} />
                 <Card
-                  id="sp2"
-                  code="SP2"
+                  id="o2"
+                  code="O2"
                   label="Care confirmed"
-                  metric={nodes.sp2}
-                  trend={trends.sp2}
+                  metric={nodes.o2}
+                  trend={trends.o2}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -890,12 +889,12 @@ export default function OperatingMap({
               <div className={styles.gap} />
                 <Card
                   hi
-                  id="o1"
-                  code="O1"
+                  id="o3"
+                  code="O3"
                   label="Est. healthcare utilization reduction"
                   money="Value created"
-                  metric={nodes.o1}
-                  trend={trends.o1}
+                  metric={nodes.o3}
+                  trend={trends.o3}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -905,11 +904,11 @@ export default function OperatingMap({
 
             <div className={`${styles.lane} ${styles.join23}`}>
                 <Card
-                  id="pw1"
-                  code="PW1"
+                  id="o4"
+                  code="O4"
                   label="Provider–care worker connected"
-                  metric={nodes.pw1}
-                  trend={trends.pw1}
+                  metric={nodes.o4}
+                  trend={trends.o4}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -917,11 +916,11 @@ export default function OperatingMap({
                 />
               <div className={styles.gap} />
                 <Card
-                  id="pw2"
-                  code="PW2"
+                  id="o5"
+                  code="O5"
                   label="Hires confirmed"
-                  metric={nodes.pw2}
-                  trend={trends.pw2}
+                  metric={nodes.o5}
+                  trend={trends.o5}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -930,12 +929,12 @@ export default function OperatingMap({
               <div className={styles.gap} />
                 <Card
                   hi
-                  id="o2"
-                  code="O2"
+                  id="o6"
+                  code="O6"
                   label="Est. new care workers"
                   money="Value created"
-                  metric={nodes.o2}
-                  trend={trends.o2}
+                  metric={nodes.o6}
+                  trend={trends.o6}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -1008,11 +1007,12 @@ function Card({
           />
         </span>
       </div>
-      {parts && (
-        <div className={styles.n}>
-          <Surfaces metric={metric} fallback={parts} />
-        </div>
-      )}
+      {/* Rendered on every card, empty where the node has no breakdown, so
+          every box in the figure is exactly the same height. A row of boxes
+          that jump between one line and two reads as an accident. */}
+      <div className={styles.n}>
+        <Surfaces metric={metric} fallback={parts} />
+      </div>
     </div>
   );
 }
@@ -1090,14 +1090,14 @@ function MetricValue({
     : {};
 
   const placeholder = (text: string) => (
-    // Wrapped like a real value so a node without a number is exactly as
-    // tall as one with a number and an arrow. The arrows are measured
-    // geometry; uneven card heights would move every wire on the page.
+    // Wrapped like a real value, empty arrow slot and all, so a node without
+    // a number sits exactly where one with a number sits. The wires are
+    // measured geometry; a card that lays out differently moves them.
     <span className={styles.valueWrap}>
+      <span className={styles.trendArrow} aria-hidden="true" />
       <span className={`${styles.value} ${styles.valueMuted}`} {...hover}>
         {text}
       </span>
-      <span className={styles.trendArrow} aria-hidden="true" />
     </span>
   );
 
@@ -1116,6 +1116,12 @@ function MetricValue({
 
   return (
     <span className={styles.valueWrap}>
+      {/* Always rendered, empty when there is no direction, so the slot
+          reserves the same width on every card and the numbers stay in one
+          column down the lane. */}
+      <span className={`${styles.trendArrow}${tone ? ` ${tone}` : ""}`} aria-hidden="true">
+        {arrow}
+      </span>
       {inspectable ? (
         <button
           type="button"
@@ -1130,21 +1136,16 @@ function MetricValue({
           {text}
         </span>
       )}
-      {/* Always rendered, empty when there is no direction, so the slot
-          reserves the same height on every card. */}
-      <span className={`${styles.trendArrow}${tone ? ` ${tone}` : ""}`} aria-hidden="true">
-        {arrow}
-      </span>
     </span>
   );
 }
 
 /** Nodes the inspect endpoint can produce rows for. */
 const INSPECTABLE = new Set([
-  "s2", "s3", "s4",
-  "p1", "p2", "p3", "p4", "p5",
-  "w1", "w2", "w3",
-  "sp1", "pw1", "pw2",
+  "cr2", "cr3", "cr4",
+  "cp1", "cp2", "cp3", "cp4", "cp5",
+  "cw1", "cw2", "cw3",
+  "o1", "o4", "o5",
 ]);
 
 
