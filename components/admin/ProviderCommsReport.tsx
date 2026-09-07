@@ -322,7 +322,7 @@ export default function ProviderCommsReportView({
               failure; these are excluded from delivered totals. Notification outcomes
               count distinct messages with a linked action within seven days of send.
               Recent messages have an incomplete observation window. Saved preferences
-              include disabling a channel; SMS enabled counts an off-to-on change,
+              include disabling a channel; SMS enabled counts an explicit choice of on from off or unset,
               not proof of a delivered text.
             </p>
             {rows.length === 0 && (

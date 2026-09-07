@@ -250,13 +250,16 @@ function AccountSettingsContent() {
   // Serialize toggles in this tab. The server also protects against concurrent
   // metadata writes from other tabs and onboarding crons.
   const handleNotifToggle = useCallback(
-    async (key: NotificationKey, channel: "email" | "sms" | "whatsapp") => {
+    async (key: NotificationKey, channel: "email" | "sms" | "whatsapp", choice?: boolean) => {
       if (!activeProfile || savingNotification.current || notificationProfileMismatch) return;
       savingNotification.current = true;
       setNotificationSaving(true);
       setNotifError(null);
       const oKey = `${activeProfile?.id}:${key}_${channel}`;
-      const enabled = !getNotifOn(key, channel);
+      const previousValue = getNotifOn(key, channel);
+      const previousOverride = optimisticNotifs[oKey];
+      const wasUnset = channel === "sms" && typeof notifPrefs[key]?.sms !== "boolean" && previousOverride === undefined;
+      const enabled = choice ?? !previousValue;
       setOptimisticNotifs((prev) => ({ ...prev, [oKey]: enabled }));
       try {
         const response = await fetch("/api/profile/notification-preferences", {
@@ -266,13 +269,18 @@ function AccountSettingsContent() {
         if (!response.ok) throw new Error("Save failed");
         await refreshAccountData();
       } catch {
-        setOptimisticNotifs(previous => ({ ...previous, [oKey]: !enabled }));
+        setOptimisticNotifs(previous => {
+          const next = { ...previous };
+          if (wasUnset) delete next[oKey];
+          else next[oKey] = previousValue;
+          return next;
+        });
         setNotifError("Couldn't update notification settings. Please try again.");
       } finally {
         savingNotification.current = false;
         setNotificationSaving(false);
       }
-    }, [activeProfile, getNotifOn, refreshAccountData, emailLogId, notificationProfileMismatch]
+    }, [activeProfile, getNotifOn, refreshAccountData, emailLogId, notificationProfileMismatch, optimisticNotifs, notifPrefs]
   );
 
   // ── Send verification email ──
@@ -931,6 +939,8 @@ function AccountSettingsContent() {
                       channels={notif.channels}
                       emailOn={getNotifOn(notif.key, "email")}
                       smsOn={getNotifOn(notif.key, "sms")}
+                      smsUnset={isOrganization && typeof notifPrefs[notif.key]?.sms !== "boolean" && optimisticNotifs[`${activeProfile?.id}:${notif.key}_sms`] === undefined}
+                      onSmsChoice={(enabled) => handleNotifToggle(notif.key, "sms", enabled)}
                       whatsappOn={whatsappOptedIn && activeProfile?.phone ? getNotifOn(notif.key, "whatsapp") : undefined}
                       onToggle={(channel) => handleNotifToggle(notif.key, channel)}
                     />
@@ -1075,6 +1085,8 @@ function NotificationRow({
   channels,
   emailOn,
   smsOn,
+  smsUnset = false,
+  onSmsChoice,
   whatsappOn,
   onToggle,
 }: {
@@ -1083,6 +1095,8 @@ function NotificationRow({
   channels: readonly ("email" | "sms" | "whatsapp")[];
   emailOn: boolean;
   smsOn: boolean;
+  smsUnset?: boolean;
+  onSmsChoice?: (enabled: boolean) => void;
   whatsappOn?: boolean;
   onToggle: (channel: "email" | "sms" | "whatsapp") => void;
 }) {
@@ -1106,7 +1120,16 @@ function NotificationRow({
         {showSms && (
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-gray-500">SMS</span>
-            <Toggle on={smsOn} onToggle={() => onToggle("sms")} />
+            {smsUnset ? (
+              <div className="max-w-[240px]">
+                <p className="text-sm text-gray-700">Using existing notification settings</p>
+                <p className="mt-1 text-xs text-gray-500">You haven’t chosen an SMS preference. Text alerts may still be sent. Choose whether to receive them.</p>
+                <div className="mt-2 flex gap-2">
+                  <button type="button" className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm" onClick={() => onSmsChoice?.(true)}>Turn SMS on</button>
+                  <button type="button" className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm" onClick={() => onSmsChoice?.(false)}>Turn SMS off</button>
+                </div>
+              </div>
+            ) : <Toggle on={smsOn} onToggle={() => onToggle("sms")} />}
           </div>
         )}
         {showWhatsapp && (

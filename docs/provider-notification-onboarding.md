@@ -1,6 +1,6 @@
 # Provider notifications — implementation and launch handoff
 
-September 7, 2026. Built on `codex/provider-notification-onboarding`; not merged or deployed.
+September 7, 2026. Notification implementation and timeline fixes merged to staging in PRs #1811 and #1815. See the latest SMS decision below for follow-up work.
 
 ## What this adds
 
@@ -67,3 +67,14 @@ A GET-only live API-schema check confirmed that `save_notification_preference` a
 ## Merge review — September 7
 
 TJ applied both notification migrations and the RPC availability and paused cron configuration were verified. During merge review, their filenames were renumbered from 209/210 to 211/212 because staging used 209/210 for city campaigns. SQL contents are unchanged; no rerun is needed. TJ confirmed SMS on/off preferences persist after refresh. The tab persistence follow-up passed UI regression checks. The notification email remains paused.
+
+
+## SMS preference decision — September 7 follow-up
+
+TJ approved preserving delivery for missing preferences and showing an unset state. The settings UI now explains “Using existing notification settings” and offers explicit On and Off choices. No existing preference is backfilled and the sender default is unchanged.
+
+Apply **213_provider_sms_unset_preference.sql** before testing this follow-up. It fixes first-choice Off being discarded as a no-op. An unset provider SMS preference produces `previous: null`; an explicit On from unset counts as a confirmed SMS preference in reporting. Repeating the same saved choice creates no new event. This migration replaces only the preference RPC and does not unpause the email.
+
+The email now asks providers to review preferences instead of assuming text alerts are off. All scheduled sends remain paused until a controlled signed-link test passes. The controlled test provider/inbox is awaiting TJ's confirmation.
+
+QA: use a dedicated organization with no SMS preference saved; opening settings must not save a choice. Choose Off, refresh, and verify explicit false was stored. Test On on another unset test profile. A failed first save must return to the unset prompt. Existing explicit preferences retain their toggles. Verify the signed email action is attributed once within the seven-day window before rollout.
