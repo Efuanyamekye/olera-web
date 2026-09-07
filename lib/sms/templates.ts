@@ -225,3 +225,11 @@ export function cityOutcomeThanksSms(outcome: "client" | "talking" | "no"): stri
   if (outcome === "talking") return `Noted, we will check back. Thank you.`;
   return `Noted, thank you. It helps us send you better ones.`;
 }
+
+/** Concierge cities: a person from Olera calls, not a provider. Never promise a
+ *  provider call in a city where no provider has agreed to take the request. */
+export function cityFamilyConciergeSms(p: { firstName: string; city: string; today: boolean }): string {
+  return p.today
+    ? `Olera: Thanks ${p.firstName}. Someone from Olera will call you today about care in ${p.city}. Reply STOP to opt out.`
+    : `Olera: Thanks ${p.firstName}. Someone from Olera will call you in the morning about care in ${p.city}. Reply STOP to opt out.`;
+}

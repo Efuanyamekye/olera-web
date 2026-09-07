@@ -99,6 +99,7 @@ const acceptedOffer = (l: Lead) => l.offers.find((o) => o.accepted_at);
 
 /** Why a lead is in "Needs you", or null. */
 function needsReason(l: Lead): string | null {
+  if (l.status === "new" && !l.accepted_offer_id && l.offers.length === 0) return "call them — concierge city, no chain runs";
   if (l.status === "unfilled") return "no one on call took it";
   if (l.family_check_reply === "not_yet" && !l.reached_at) return "family says the provider has not called";
   const o = openOffer(l);
@@ -122,6 +123,7 @@ function stateLine(l: Lead): { text: string; tone: "ok" | "wait" | "warn" | "qui
   const o = openOffer(l);
   if (o) return { text: `offered to ${o.provider?.display_name ?? "a provider"} · ${minsLeft(o.expires_at)} min left`, tone: "wait" };
   if (l.status === "new" && l.next_offer_at) return { text: `waiting for 8am · ${fmtTime(l.next_offer_at)}`, tone: "wait" };
+  if (l.status === "new") return { text: "waiting for you to call", tone: "warn" };
   return { text: l.status, tone: "quiet" };
 }
 
@@ -321,6 +323,11 @@ export default function CityAdsAdminPage() {
                   <div className="mt-0.5 text-xs text-gray-600">
                     {cs.map((c) => `${cap(c.channel)} ${c.status}`).join(" · ")} · {enabled} on call · {latestTyped ? `spend typed ${ago(latestTyped)}` : "spend not typed yet"}
                   </div>
+                  {enabled === 0 && (
+                    <div className="mt-1 text-xs text-warm-700">
+                      Concierge: requests are captured and you call the family. No provider is texted until one is switched on here.
+                    </div>
+                  )}
                 </div>
                 <button className={btn} onClick={() => setOpenCity(open ? null : slug)}>
                   {open ? "close" : "edit"}

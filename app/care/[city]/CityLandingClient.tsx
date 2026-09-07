@@ -79,6 +79,7 @@ export default function CityLandingClient({
   const [finished, setFinished] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
 
+  const concierge = cfg.routingMode === "concierge";
   const stepIndex = useMemo(() => ({ intro: 0, who: 1, what: 2, when: 3, contact: 4, done: 5 })[step], [step]);
 
   useEffect(() => {
@@ -166,7 +167,9 @@ export default function CityLandingClient({
             <h1 className="mt-10 font-display text-[2.4rem] leading-[1.05] tracking-tight text-gray-900 sm:text-[2.9rem]">
               Looking for senior care in {cfg.city}?
             </h1>
-            <p className="mt-4 text-lg leading-snug text-gray-600">A local provider calls you back. Free.</p>
+            <p className="mt-4 text-lg leading-snug text-gray-600">
+              {concierge ? "Tell us what you need. We call you back today. Free." : "A local provider calls you back. Free."}
+            </p>
             <button
               type="button"
               onClick={() => setStep("who")}
@@ -174,11 +177,15 @@ export default function CityLandingClient({
             >
               Get started
             </button>
-            <p className="mt-3 text-center text-xs text-gray-500">Four questions · One provider at a time · Never sold</p>
+            <p className="mt-3 text-center text-xs text-gray-500">
+              {concierge ? "Four questions · We call you back · Never sold" : "Four questions · One provider at a time · Never sold"}
+            </p>
 
             {providers.length > 0 && (
               <div className="mt-12">
-                <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Providers in {cfg.city}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  {concierge ? `Providers near ${cfg.city}` : `Providers in ${cfg.city}`}
+                </p>
                 <ul className="mt-1 divide-y divide-gray-200">
                   {providers.slice(0, 3).map((p) => (
                     <li key={p.name} className="flex items-center gap-3 py-3">
@@ -199,11 +206,18 @@ export default function CityLandingClient({
             <div className="mt-12">
               <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">How it works</p>
               <ol className="mt-1 divide-y divide-gray-200">
-                {[
-                  ["Answer four questions", "About two minutes"],
-                  ["We ask a local provider", "You get their name by text"],
-                  ["They call you", "Not a fit? We send the next one"],
-                ].map(([t, d], i) => (
+                {(concierge
+                  ? ([
+                      ["Answer four questions", "About two minutes"],
+                      ["We call you", "To understand what you need"],
+                      ["We find your provider", "Local, and right for the care"],
+                    ] as [string, string][])
+                  : ([
+                      ["Answer four questions", "About two minutes"],
+                      ["We ask a local provider", "You get their name by text"],
+                      ["They call you", "Not a fit? We send the next one"],
+                    ] as [string, string][])
+                ).map(([t, d], i) => (
                   <li key={t} className="flex items-baseline gap-4 py-3">
                     <span className="w-4 shrink-0 font-display text-lg text-primary-700">{i + 1}</span>
                     <span className="text-[15px] font-semibold text-gray-900">{t}</span>
@@ -320,9 +334,9 @@ export default function CityLandingClient({
                   onChange={(e) => setConsent(e.target.checked)}
                 />
                 <span>
-                  I agree that Olera and the {cfg.city} area care provider it matches me with (one at a time, up to three)
-                  may call or text me at this number about my request, including with automated technology. Consent is
-                  not a condition of service. Msg and data rates may apply. Reply STOP to opt out.
+                  I agree that Olera{concierge ? "" : ` and the ${cfg.city} area care provider it matches me with (one at a time, up to three)`} may
+                  call or text me at this number about my request, including with automated technology. Consent is not a
+                  condition of service. Msg and data rates may apply. Reply STOP to opt out.
                 </span>
               </label>
 
@@ -365,9 +379,13 @@ export default function CityLandingClient({
                   <>
                     <h2 className="mt-4 font-display text-[1.75rem] leading-tight">All set, {firstName.trim()}.</h2>
                     <p className="mt-3 text-[15px] leading-relaxed text-gray-600">
-                      {result.staffed === false
-                        ? `A ${cfg.city} provider will confirm in the morning and call you. Keep your phone nearby.`
-                        : `A ${cfg.city} provider is being asked now. Keep your phone nearby.`}
+                      {concierge
+                        ? result.staffed === false
+                          ? "Someone from Olera will call you in the morning. Keep your phone nearby."
+                          : "Someone from Olera will call you today. Keep your phone nearby."
+                        : result.staffed === false
+                          ? `A ${cfg.city} provider will confirm in the morning and call you. Keep your phone nearby.`
+                          : `A ${cfg.city} provider is being asked now. Keep your phone nearby.`}
                     </p>
                     <div className="mt-6 divide-y divide-gray-200 border-y border-gray-200 text-sm">
                       <div className="flex justify-between gap-4 py-3">
@@ -396,15 +414,23 @@ export default function CityLandingClient({
                         </div>
                       )}
                     </div>
-                    <p className="mt-6 text-sm text-gray-500">You will get a text with the provider&rsquo;s name, then a call. Not a fit? Reply to the text and we send the next one.</p>
+                    <p className="mt-6 text-sm text-gray-500">
+                      {concierge
+                        ? "We will talk through what you need and introduce you to the right local provider. Nothing is booked or charged."
+                        : "You will get a text with the provider\u2019s name, then a call. Not a fit? Reply to the text and we send the next one."}
+                    </p>
                   </>
                 ) : (
                   <>
                     <h2 className="mt-4 font-display text-[1.75rem] leading-tight">Thanks, {firstName.trim()}. We are on it.</h2>
                     <p className="mt-3 text-[15px] leading-relaxed text-gray-600">
-                      {result.staffed === false
-                        ? `A ${cfg.city} provider will confirm in the morning. We will text you their name.`
-                        : `Watch for a text with your ${cfg.city} provider's name within the hour.`}
+                      {concierge
+                        ? result.staffed === false
+                          ? "Someone from Olera will call you in the morning."
+                          : "Someone from Olera will call you today."
+                        : result.staffed === false
+                          ? `A ${cfg.city} provider will confirm in the morning. We will text you their name.`
+                          : `Watch for a text with your ${cfg.city} provider's name within the hour.`}
                     </p>
 
                     <div className="mt-8">

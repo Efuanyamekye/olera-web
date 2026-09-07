@@ -25,7 +25,10 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!cfg) return { title: "Senior care near you | Olera" };
   return {
     title: `Senior care in ${cfg.city} | Olera`,
-    description: `Tell us what you need. A licensed local provider in ${cfg.city} will call you back. Free for families.`,
+    description:
+      cfg.routingMode === "concierge"
+        ? `Tell us what you need and someone from Olera will call you back today. Free for families.`
+        : `Tell us what you need. A licensed local provider in ${cfg.city} will call you back. Free for families.`,
     robots: { index: false, follow: false },
   };
 }
