@@ -231,13 +231,46 @@ const SOURCES: Record<
     summarize: (r) =>
       `${String(r.name ?? "—")}${r.title ? ` · ${String(r.title)}` : ""}`,
   },
-  tb1: {
-    title: "Connection confirmed",
-    table: "connections",
-    select: "created_at, to_profile_id, status",
-    where: ["type is inquiry", "status is responded"],
+  ta1: {
+    title: "Families moving forward with a benefit",
+    table: "seeker_activity",
+    select: "created_at, event_type, metadata",
+    where: [
+      "event_type is benefits_outcome_reported",
+      "the family answered the check-in with \"moving forward\"",
+      "self-reported, so this is a floor",
+    ],
+    eventType: "benefits_outcome_reported",
     cityScoped: false,
-    summarize: (r) => `${String(r.to_profile_id ?? "—")} · ${String(r.status ?? "")}`,
+    summarize: () => "Reported moving forward",
+  },
+  tb1: {
+    // Sampled as inquiries; Connected is decided in code from six signals,
+    // none of them a column, so the rows below are the pool it is drawn from.
+    title: "Connections confirmed",
+    table: "connections",
+    select: "created_at, to_profile_id, status, metadata",
+    where: [
+      "type is inquiry",
+      "counted as Connected by the same rule the Connections page uses",
+      "rows below are the inquiries that rule is applied to",
+    ],
+    cityScoped: false,
+    summarize: (r) => {
+      const meta = (r.metadata ?? {}) as Record<string, unknown>;
+      const override = meta.admin_override as { status?: string } | undefined;
+      const signal =
+        override?.status === "connected"
+          ? "admin marked connected"
+          : meta.family_confirmed === true
+            ? "family confirmed"
+            : meta.provider_confirmed === true
+              ? "provider confirmed"
+              : Array.isArray(meta.thread) && meta.thread.length > 0
+                ? "has a thread"
+                : "no reply yet";
+      return `${String(r.to_profile_id ?? "—")} · ${signal}`;
+    },
   },
   tc1: {
     title: "Interviews confirmed",
@@ -321,7 +354,7 @@ export async function GET(request: NextRequest) {
     if (node === "m4") query = query.eq("type", "system_activated");
     if (node === "cw1") query = query.eq("is_active", true);
     if (node === "cw2") query = query.eq("status", "active");
-    if (node === "tb1") query = query.eq("type", "inquiry").eq("status", "responded");
+    if (node === "tb1") query = query.eq("type", "inquiry");
     if (node === "tc1") query = query.eq("status", "confirmed");
     if (node === "tc2") query = query.in("status", ["accepted", "confirmed"]);
     if (node === "cp2") {

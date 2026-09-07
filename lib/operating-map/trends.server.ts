@@ -168,6 +168,7 @@ async function countAll(
     out.m5 = milestones.value.careWorkerProfilesStarted;
   }
   if (tracks.status === "fulfilled") {
+    out.ta1 = tracks.value.benefitsApplied;
     out.tb1 = tracks.value.inquiriesResponded;
     out.tc1 = tracks.value.interviewsConfirmed;
     out.tc2 = tracks.value.hires;

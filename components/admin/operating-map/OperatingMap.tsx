@@ -162,7 +162,10 @@ const NODE_HELP: Record<string, string> = {
     "Question notifications successfully sent to providers in this range. Not a subset of CR6a — a backlog flush sends for questions asked earlier, so this can run higher.",
   flow_connections:
     "Connection requests successfully sent to providers in this range. Not a subset of CR6b — a send can happen later than the ask, so this can run higher.",
-  tb1: "Inquiries a provider answered. Counted from inquiries raised in this range.",
+  ta1:
+    "Families who told us they are moving forward with a benefit. Applying happens on a government site, so this is their own report — a floor, not a count.",
+  tb1:
+    "Inquiries that reached Connected, by the same rule the Connections page uses: a provider reply, a confirmation from either side, or an admin marking it.",
   tc1: "Interviews that reached confirmed. Whether the interview was held is not recorded.",
   tc2: "Placements the care worker accepted.",
 };
@@ -966,7 +969,18 @@ export default function OperatingMap({
               <div className={styles.col} id={nodeId("ta")}>
                 <span className={styles.lab}>TA aid establishment</span>
                 <div className={styles.stack}>
-                  <Card id="ta1" code="TA1" label="Applied" />
+                  <Card
+                    id="ta1"
+                    code="TA1"
+                    label="Applied"
+                    metric={nodes.ta1}
+                    trend={trends.ta1}
+                    loading={metricsLoading}
+                    onTip={openTip}
+                    onTipClose={closeTip}
+                    onInspect={onInspect}
+                    showNumbers={showNumbers}
+                  />
                   <Card id="ta2" code="TA2" label="Aid established" />
                 </div>
               </div>
@@ -1287,7 +1301,7 @@ const INSPECTABLE = new Set([
   "cp1", "cp2",
   "m1", "m2", "m3", "m4", "m5",
   "cw1", "cw2",
-  "tb1", "tc1", "tc2",
+  "ta1", "tb1", "tc1", "tc2",
 ]);
 
 

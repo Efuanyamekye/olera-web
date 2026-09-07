@@ -257,14 +257,21 @@ export async function GET(request: NextRequest) {
       const t = await getTracks(db, { from, to });
       inquiriesRaised = t.inquiriesRaised;
       interviewsProposed = t.interviewsProposed;
-      nodes.tb1 = { value: t.inquiriesResponded, caveat: withCity(STATUS_TIMING_CAVEAT) };
+      nodes.ta1 = {
+        value: t.benefitsApplied,
+        caveat: withCity(
+          "Self-reported by the family in the benefits check-in, so this is a floor — anyone who applied without answering is missing.",
+        ),
+      };
+      nodes.tb1 = { value: t.inquiriesResponded, caveat: notCityScoped };
       nodes.tc1 = { value: t.interviewsConfirmed, caveat: withCity(STATUS_TIMING_CAVEAT) };
       nodes.tc2 = { value: t.hires, caveat: withCity(STATUS_TIMING_CAVEAT) };
-      // TA1, TA2 and TB2 have no source. Aid and care both continue off the
-      // platform, so they stay dashes rather than guesses.
+      // TA2 and TB2 have no source. Whether aid was granted, and whether
+      // care actually started, both happen off the platform.
     } catch (error) {
       console.error("[operating-map/metrics] tracks failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
+      nodes.ta1 = failed;
       nodes.tb1 = failed;
       nodes.tc1 = failed;
       nodes.tc2 = failed;

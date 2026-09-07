@@ -134,11 +134,17 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     advice:
       "Advisors go stale. Re-verify contacts that have not replied before adding more.",
   },
+  ta1: {
+    href: "/admin/benefits",
+    label: "Benefits",
+    advice:
+      "This only moves when families answer the check-in. Low numbers here usually mean the email is not landing, not that nobody applied.",
+  },
   tb1: {
     href: "/admin/connections",
     label: "Connections",
     advice:
-      "Providers who never answer are the constraint. Work the silent list — one response is worth more than one more inquiry.",
+      "Providers who never answer are the constraint. Work the Awaiting list — one response is worth more than one more inquiry.",
   },
   tc1: {
     href: "/admin/medjobs",
