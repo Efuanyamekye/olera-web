@@ -416,6 +416,17 @@
   /* One lane wide: the span is two lanes plus the gutter between them. */
   width: calc((100% - 26px) / 2);
 }
+/*
+ * Each join stack gets its own heading, the same rule the three lanes get.
+ * It sits inside the stack rather than in a row of its own, because a stack
+ * that straddles two lanes has no column of its own to be labelled from.
+ *
+ * Indented clear of the spine: the lines feeding this stack come down from
+ * the lanes above and enter its cards 22px in from the left, which is
+ * exactly where a flush heading would be. Text with a wire through it is
+ * worse than a heading that does not line up with the card below it.
+ */
+.joinLab { margin-bottom: 8px; padding-left: 40px; }
 .join12 { grid-column: 1 / span 2; }
 .join23 { grid-column: 2 / span 2; }
 

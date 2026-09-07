@@ -90,7 +90,7 @@ const SOURCES: Record<
     cityScoped: true,
     summarize: (r) => String(r.page ?? "—"),
   },
-  cr1a: {
+  cs1a: {
     title: "Questions",
     table: "provider_question_asks",
     select: "created_at, provider_id, original_question",
@@ -98,7 +98,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => String(r.original_question ?? "").slice(0, 90) || "—",
   },
-  cr1b: {
+  cs1b: {
     title: "Connections",
     table: "provider_activity",
     select: "created_at, event_type, provider_id",
@@ -107,7 +107,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
   },
-  cr2: {
+  cs2: {
     title: "Families in outreach",
     table: "email_log",
     select: "created_at, recipient, email_type",
@@ -149,7 +149,7 @@ const SOURCES: Record<
     summarize: (r) =>
       `${String(r.provider_id ?? "—")} · ${String(r.email_type ?? "email")}`,
   },
-  cr3: {
+  cs3: {
     title: "Care seeker profiles",
     table: "business_profiles",
     select: "created_at, display_name, city, state",
@@ -227,7 +227,7 @@ const SOURCES: Record<
     summarize: (r) =>
       `${String(r.name ?? "—")}${r.title ? ` · ${String(r.title)}` : ""}`,
   },
-  cr4: {
+  cs4: {
     title: "Families moving forward with a benefit",
     table: "seeker_activity",
     select: "created_at, event_type, metadata",
@@ -284,7 +284,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Placement · ${String(r.status ?? "")}`,
   },
-  cr1c: {
+  cs1c: {
     title: "Benefits Assessment",
     table: "seeker_activity",
     select: "created_at, event_type, related_provider_id",
@@ -340,7 +340,7 @@ export async function GET(request: NextRequest) {
 
     const where = [...source.where];
     if (source.eventType) query = query.eq("event_type", source.eventType);
-    if (node === "cr3") query = query.eq("type", "family");
+    if (node === "cs3") query = query.eq("type", "family");
     if (node === "cw3") query = query.eq("type", "student");
     if (node === "cp5") query = query.eq("type", "system_activated");
     if (node === "cw1") query = query.eq("is_active", true);
@@ -348,7 +348,7 @@ export async function GET(request: NextRequest) {
     if (node === "o1") query = query.eq("type", "inquiry");
     if (node === "o4") query = query.in("status", ["confirmed", "completed"]);
     if (node === "o5") query = query.in("status", ["accepted", "confirmed"]);
-    if (node === "cr2") {
+    if (node === "cs2") {
       query = query.in("recipient_type", ["family", "seeker"]);
     }
     if (node === "cp2") {

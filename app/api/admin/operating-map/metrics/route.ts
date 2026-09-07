@@ -38,7 +38,7 @@ import { getTracks } from "@/lib/operating-map/tracks.server";
 export const dynamic = "force-dynamic";
 
 /**
- * Completing a profile is not recorded with a timestamp, so CR3 and CP3 count
+ * Completing a profile is not recorded with a timestamp, so CS3 and CP3 count
  * profiles created in the window that are complete now. Stated on the node
  * rather than left for someone to discover.
  */
@@ -177,10 +177,10 @@ export async function GET(request: NextRequest) {
 
     try {
       const c = await getConversions(db, { from, to }, city);
-      nodes.cr1 = {
+      nodes.cs1 = {
         // Questions are deliberately not here. They are the cheapest ask a
         // family makes and swamp the two that produce a record, which is
-        // what this node is about. Still counted; see cr1a.
+        // what this node is about. Still counted; see cs1a.
         value: c.connections + c.benefitsAssessments,
         breakdown: [
           { label: "connect requests", value: c.connections },
@@ -188,19 +188,19 @@ export async function GET(request: NextRequest) {
         ],
         caveat: null,
       };
-      nodes.cr2 = { value: c.familiesInOutreach, caveat: null };
+      nodes.cs2 = { value: c.familiesInOutreach, caveat: null };
       // Kept for the drill-downs and the consistency check, not drawn.
-      nodes.cr1a = { value: c.questions, caveat: null };
-      nodes.cr1b = { value: c.connections, caveat: null };
-      nodes.cr1c = { value: c.benefitsAssessments, caveat: null };
+      nodes.cs1a = { value: c.questions, caveat: null };
+      nodes.cs1b = { value: c.connections, caveat: null };
+      nodes.cs1c = { value: c.benefitsAssessments, caveat: null };
     } catch (error) {
       console.error("[operating-map/metrics] conversions failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
-      nodes.cr1 = failed;
-      nodes.cr2 = failed;
-      nodes.cr1a = failed;
-      nodes.cr1b = failed;
-      nodes.cr1c = failed;
+      nodes.cs1 = failed;
+      nodes.cs2 = failed;
+      nodes.cs1a = failed;
+      nodes.cs1b = failed;
+      nodes.cs1c = failed;
     }
 
     try {
@@ -228,7 +228,7 @@ export async function GET(request: NextRequest) {
 
     try {
       const m = await getMilestones(db, { from, to }, city);
-      nodes.cr3 = {
+      nodes.cs3 = {
         value: m.careSeekerProfilesPartial,
         breakdown: [
           { label: "partial", value: m.careSeekerProfilesPartial },
@@ -271,7 +271,7 @@ export async function GET(request: NextRequest) {
     } catch (error) {
       console.error("[operating-map/metrics] milestones failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
-      nodes.cr3 = failed;
+      nodes.cs3 = failed;
       nodes.cp3 = failed;
       nodes.cp4 = failed;
       nodes.cp5 = failed;
@@ -300,7 +300,7 @@ export async function GET(request: NextRequest) {
       const t = await getTracks(db, { from, to });
       inquiriesRaised = t.inquiriesRaised;
       interviewsProposed = t.interviewsProposed;
-      nodes.cr4 = {
+      nodes.cs4 = {
         value: t.benefitsApplied,
         caveat: withCity(
           "Self-reported by the family in the benefits check-in, so this is a floor — anyone who applied without answering is missing.",
@@ -316,12 +316,12 @@ export async function GET(request: NextRequest) {
         caveat: withCity(STATUS_TIMING_CAVEAT),
       };
       nodes.o5 = { value: t.hires, caveat: withCity(STATUS_TIMING_CAVEAT) };
-      // CR5 and O2 have no source. Whether aid was granted, and whether
+      // CS5 and O2 have no source. Whether aid was granted, and whether
       // care actually started, both happen off the platform.
     } catch (error) {
       console.error("[operating-map/metrics] tracks failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
-      nodes.cr4 = failed;
+      nodes.cs4 = failed;
       nodes.o1 = failed;
       nodes.o4 = failed;
       nodes.o5 = failed;

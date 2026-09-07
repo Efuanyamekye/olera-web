@@ -19,7 +19,7 @@ import styles from "./OperatingMap.module.css";
  * and every arrow still lands on it.
  *
  * The one contract that matters: a node's `id` is its identity. `nodeId()`
- * namespaces them so short keys like "cr3" cannot collide with anything else
+ * namespaces them so short keys like "cs3" cannot collide with anything else
  * rendered on an admin page. Rename a label freely; renaming an id breaks
  * the wire that references it.
  *
@@ -133,12 +133,12 @@ const NODE_HELP: Record<string, string> = {
   cities:
     "Cities with at least one live provider. Wider than the cities we have deliberately launched.",
 
-  cr1:
+  cs1:
     "The two care seeker actions that produce a record we can work. Questions are the cheapest ask and would swamp the other two, so they are counted elsewhere. Below it, the traffic all of this comes out of.",
-  cr2:
+  cs2:
     "Families we emailed in this range, counted once each however many times we wrote. The mirror of providers in outreach and advisors in outreach.",
-  cr3: "Care seeker profiles begun in this range, at any stage of completion.",
-  cr4:
+  cs3: "Care seeker profiles begun in this range, at any stage of completion.",
+  cs4:
     "Families who told us they are moving forward with a benefit. Applying happens on a government site, so this is their own report — a floor, not a count.",
 
   cp1:
@@ -254,6 +254,14 @@ export default function OperatingMap({
     const SVG_NS = svg.namespaceURI;
     /** Gap left between a card's edge and the arrow that touches it. */
     const G = 5;
+    /**
+     * How far in from a card's left edge every vertical line sits.
+     *
+     * One inset for the whole figure, stems and lane steps alike, so the
+     * arrows read as a single spine down each lane rather than a centre line
+     * that jumps sideways wherever something branches off it.
+     */
+    const IN = 22;
 
     // Unscaled layout dimensions: getBoundingClientRect below is divided by
     // the same scale, so the SVG and the measurements share one coordinate
@@ -318,7 +326,7 @@ export default function OperatingMap({
     const vDown = (a: string, b: string) => {
       const A = box(a);
       const B = box(b);
-      vArrow(A.cx, A.b + G, B.t - G);
+      vArrow(A.l + IN, A.b + G, B.t - G);
     };
     /** Branch off a vertical stem into a card sitting to its right. */
     const fromStem = (x: number, b: string) => {
@@ -333,29 +341,26 @@ export default function OperatingMap({
      * meeting over the card that sits between them.
      */
 
-    /** How far a side stem sits in from the edge of the card it leaves. */
-    const IN = 22;
-
     /* care seeker: demand, then the profile it produces */
-    vDown("cr1", "cr2");
-    vDown("cr2", "cr3");
+    vDown("cs1", "cs2");
+    vDown("cs2", "cs3");
 
-    const cr3 = box("cr3");
-    const cr4 = box("cr4");
-    const cr5 = box("cr5");
+    const cs3 = box("cs3");
+    const cs4 = box("cs4");
+    const cs5 = box("cs5");
     const o1 = box("o1");
 
     /*
-     * One stem off CR3's left carries both of the things a profile becomes.
+     * One stem off CS3's left carries both of the things a profile becomes.
      * It puts a head into the aid track on the way past and then keeps
      * going, turning once into the connection — so the profile reaches the
      * connection directly, not through the aid track it passes.
      */
-    const seekStem = cr3.l + IN;
-    seg(seekStem, cr3.b + G, seekStem, o1.cy);
-    hArrow(cr4.cy, seekStem, cr4.l - G);
+    const seekStem = cs3.l + IN;
+    seg(seekStem, cs3.b + G, seekStem, o1.cy);
+    hArrow(cs4.cy, seekStem, cs4.l - G);
     hArrow(o1.cy, seekStem, o1.l - G);
-    vArrow(cr4.l + IN, cr4.b + G, cr5.t - G);
+    vArrow(cs4.l + IN, cs4.b + G, cs5.t - G);
 
     /* care provider: supply, then the products, then the connection */
     vDown("cp1", "cp2");
@@ -681,12 +686,12 @@ export default function OperatingMap({
             {/* care seeker */}
             <div className={styles.lane}>
                 <Card
-                  id="cr1"
-                  code="CR1"
+                  id="cs1"
+                  code="CS1"
                   label="Families engaged"
                   parts="connect requests · benefits assessments"
-                  metric={nodes.cr1}
-                  trend={trends.cr1}
+                  metric={nodes.cs1}
+                  trend={trends.cs1}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -694,11 +699,11 @@ export default function OperatingMap({
                 />
               <div className={styles.gap} />
                 <Card
-                  id="cr2"
-                  code="CR2"
+                  id="cs2"
+                  code="CS2"
                   label="Families in outreach"
-                  metric={nodes.cr2}
-                  trend={trends.cr2}
+                  metric={nodes.cs2}
+                  trend={trends.cs2}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -707,11 +712,11 @@ export default function OperatingMap({
               <div className={styles.gap} />
                 <Card
                   hi
-                  id="cr3"
-                  code="CR3"
+                  id="cs3"
+                  code="CS3"
                   label="Care seeker profiles"
-                  metric={nodes.cr3}
-                  trend={trends.cr3}
+                  metric={nodes.cs3}
+                  trend={trends.cs3}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
@@ -721,11 +726,11 @@ export default function OperatingMap({
               {/* the aid track hangs off the profile, indented to say so */}
               <div className={styles.branch}>
                   <Card
-                    id="cr4"
-                    code="CR4"
+                    id="cs4"
+                    code="CS4"
                     label="Application submitted"
-                    metric={nodes.cr4}
-                    trend={trends.cr4}
+                    metric={nodes.cs4}
+                    trend={trends.cs4}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={closeTip}
@@ -733,11 +738,11 @@ export default function OperatingMap({
                   />
                 <div className={styles.gapSm} />
                   <Card
-                    id="cr5"
-                    code="CR5"
+                    id="cs5"
+                    code="CS5"
                     label="Aid confirmed"
-                    metric={nodes.cr5}
-                    trend={trends.cr5}
+                    metric={nodes.cs5}
+                    trend={trends.cs5}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={closeTip}
@@ -847,7 +852,6 @@ export default function OperatingMap({
                   id="cw3"
                   code="CW3"
                   label="Care worker profiles"
-                  parts="channels · started · complete"
                   metric={nodes.cw3}
                   trend={trends.cw3}
                   loading={metricsLoading}
@@ -867,6 +871,7 @@ export default function OperatingMap({
           <div className={styles.lanesJoin}>
 
             <div className={`${styles.lane} ${styles.join12}`}>
+              <div className={`${styles.lab} ${styles.joinLab}`}>Care navigation outcomes</div>
                 <Card
                   id="o1"
                   code="O1"
@@ -907,6 +912,7 @@ export default function OperatingMap({
             </div>
 
             <div className={`${styles.lane} ${styles.join23}`}>
+              <div className={`${styles.lab} ${styles.joinLab}`}>Caregiver workforce outcomes</div>
                 <Card
                   id="o4"
                   code="O4"
@@ -973,8 +979,9 @@ function Card({
   /** Sits on the same line as the code. Two lines for a name is one too many. */
   label: string;
   /**
-   * Placeholder for the breakdown line, shown before the node is
-   * instrumented. Its presence is what gives the card a second line at all.
+   * Opts this node into a breakdown line, and gives the placeholder to show
+   * until it is instrumented. Omit it and the node prints its total only,
+   * however many parts its metric carries.
    */
   parts?: string;
   hi?: boolean;
@@ -1011,11 +1018,13 @@ function Card({
           />
         </span>
       </div>
-      {/* Rendered on every card, empty where the node has no breakdown, so
-          every box in the figure is exactly the same height. A row of boxes
-          that jump between one line and two reads as an accident. */}
+      {/* The slot is rendered on every card so every box in the figure is
+          exactly the same height — a row of boxes that jumps between one
+          line and two reads as an accident. It only carries a breakdown
+          where the node asked for one: the numbers exist on every node, and
+          printing all of them turns the map into a table. */}
       <div className={styles.n}>
-        <Surfaces metric={metric} fallback={parts} />
+        {parts !== undefined && <Surfaces metric={metric} fallback={parts} />}
       </div>
     </div>
   );
@@ -1146,7 +1155,7 @@ function MetricValue({
 
 /** Nodes the inspect endpoint can produce rows for. */
 const INSPECTABLE = new Set([
-  "cr2", "cr3", "cr4",
+  "cs2", "cs3", "cs4",
   "cp1", "cp2", "cp3", "cp4", "cp5",
   "cw1", "cw2", "cw3",
   "o1", "o4", "o5",

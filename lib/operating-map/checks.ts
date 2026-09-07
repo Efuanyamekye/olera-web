@@ -52,19 +52,19 @@ export interface CheckInputs {
 export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapCheck[] {
   const checks: MapCheck[] = [];
 
-  const cr1 = n(values.cr1);
-  const cr1b = n(values.cr1b);
-  const cr1c = n(values.cr1c);
-  if (cr1 !== null && cr1b !== null && cr1c !== null) {
-    // Questions (S1a) are deliberately not in this sum. CR1 counts the two
+  const cs1 = n(values.cs1);
+  const cs1b = n(values.cs1b);
+  const cs1c = n(values.cs1c);
+  if (cs1 !== null && cs1b !== null && cs1c !== null) {
+    // Questions (S1a) are deliberately not in this sum. CS1 counts the two
     // actions that leave a record to work, and asserting against all three
     // would fail every week a family asked a question.
-    const sum = cr1b + cr1c;
+    const sum = cs1b + cs1c;
     checks.push({
-      id: "cr1-parts",
+      id: "cs1-parts",
       label: "Families engaged equals connect requests plus benefits assessments",
-      ok: cr1 === sum,
-      detail: cr1 === sum ? undefined : `CR1 is ${cr1}, its parts add to ${sum}`,
+      ok: cs1 === sum,
+      detail: cs1 === sum ? undefined : `CS1 is ${cs1}, its parts add to ${sum}`,
     });
   }
 
@@ -181,12 +181,12 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  if (cr1 !== null && visits !== null) {
+  if (cs1 !== null && visits !== null) {
     checks.push({
       id: "engaged-under-visits",
       label: "Families engaged do not exceed page visits",
-      ok: cr1 <= visits,
-      detail: cr1 <= visits ? undefined : `CR1 is ${cr1}, page visits is ${visits}`,
+      ok: cs1 <= visits,
+      detail: cs1 <= visits ? undefined : `CS1 is ${cs1}, page visits is ${visits}`,
     });
   }
 

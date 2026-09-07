@@ -157,21 +157,21 @@ async function countAll(
   }
   if (visits.status === "fulfilled") out.visits = visits.value.total;
   if (conversions.status === "fulfilled") {
-    out.cr1 = conversions.value.connections + conversions.value.benefitsAssessments;
-    out.cr2 = conversions.value.familiesInOutreach;
-    out.cr1a = conversions.value.questions;
-    out.cr1b = conversions.value.connections;
-    out.cr1c = conversions.value.benefitsAssessments;
+    out.cs1 = conversions.value.connections + conversions.value.benefitsAssessments;
+    out.cs2 = conversions.value.familiesInOutreach;
+    out.cs1a = conversions.value.questions;
+    out.cs1b = conversions.value.connections;
+    out.cs1c = conversions.value.benefitsAssessments;
   }
   if (milestones.status === "fulfilled") {
-    out.cr3 = milestones.value.careSeekerProfilesPartial;
+    out.cs3 = milestones.value.careSeekerProfilesPartial;
     out.cp3 = milestones.value.providersClaimed;
     out.cp4 = milestones.value.managedAdSignups;
     out.cp5 = milestones.value.staffingSignups;
     out.cw3 = milestones.value.careWorkerProfilesStarted;
   }
   if (tracks.status === "fulfilled") {
-    out.cr4 = tracks.value.benefitsApplied;
+    out.cs4 = tracks.value.benefitsApplied;
     out.o1 = tracks.value.inquiriesResponded;
     out.o4 = tracks.value.interviewsScheduled;
     out.o5 = tracks.value.hires;
