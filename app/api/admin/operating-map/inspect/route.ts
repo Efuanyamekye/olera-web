@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import { CONTENT_PAGE_FILTERS } from "@/lib/analytics/content-pages";
-import { CP2_CHANNELS } from "@/lib/operating-map/providers.server";
+import { P2_CHANNELS } from "@/lib/operating-map/providers.server";
 import { CHANNEL_LABELS, classifyChannel } from "@/lib/analytics/channel";
 import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
 
@@ -90,7 +90,7 @@ const SOURCES: Record<
     cityScoped: true,
     summarize: (r) => String(r.page ?? "—"),
   },
-  cr6a: {
+  s1a: {
     title: "Questions",
     table: "provider_question_asks",
     select: "created_at, provider_id, original_question",
@@ -98,7 +98,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => String(r.original_question ?? "").slice(0, 90) || "—",
   },
-  cr6b: {
+  s1b: {
     title: "Connections",
     table: "provider_activity",
     select: "created_at, event_type, provider_id",
@@ -107,7 +107,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
   },
-  cr2: {
+  s2: {
     title: "Families in outreach",
     table: "email_log",
     select: "created_at, recipient, email_type",
@@ -119,7 +119,7 @@ const SOURCES: Record<
     summarize: (r) =>
       `${String(r.recipient ?? "—")} · ${String(r.email_type ?? "email")}`,
   },
-  cp1: {
+  p1: {
     title: "Unclaimed providers",
     table: "olera-providers",
     select: "created_at, provider_name, city, state",
@@ -133,14 +133,14 @@ const SOURCES: Record<
     standing: true,
     summarize: (r) => `${String(r.provider_name ?? "—")} · ${String(r.city ?? "")}`,
   },
-  cp2: {
+  p2: {
     // Sampled from email_log, the largest of the three channels. The others
     // are named in `where` so the sample never implies it is the whole story.
     title: "Providers in outreach",
     table: "email_log",
     select: "created_at, provider_id, email_type",
     where: [
-      `counted across ${CP2_CHANNELS.join(", ")}`,
+      `counted across ${P2_CHANNELS.join(", ")}`,
       "recipient is a provider",
       "claimed providers excluded",
       "rows below are from email_log only",
@@ -149,7 +149,7 @@ const SOURCES: Record<
     summarize: (r) =>
       `${String(r.provider_id ?? "—")} · ${String(r.email_type ?? "email")}`,
   },
-  m1: {
+  s3: {
     title: "Care seeker profiles",
     table: "business_profiles",
     select: "created_at, display_name, city, state",
@@ -162,7 +162,7 @@ const SOURCES: Record<
     providerCityScoped: true,
     summarize: (r) => `${String(r.display_name ?? "—")} · ${String(r.city ?? "")}`,
   },
-  m2: {
+  p3: {
     title: "Provider profiles claimed",
     table: "provider_activity",
     select: "created_at, provider_id, event_type",
@@ -171,7 +171,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
   },
-  m3: {
+  p4: {
     title: "Managed ad signups",
     table: "ad_campaign_requests",
     select: "created_at, provider_id, status",
@@ -180,7 +180,7 @@ const SOURCES: Record<
     summarize: (r) =>
       `${String(r.provider_id ?? "—")} · ${String(r.status ?? "")}`,
   },
-  m4: {
+  p5: {
     title: "Provider staffing signups",
     table: "staffing_touchpoints",
     select: "created_at, outreach_id, type",
@@ -188,7 +188,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Outreach ${String(r.outreach_id ?? "—")}`,
   },
-  m5: {
+  w3: {
     title: "Care worker applications started",
     table: "business_profiles",
     select: "created_at, display_name, city, state, is_active",
@@ -202,7 +202,7 @@ const SOURCES: Record<
     summarize: (r) =>
       `${String(r.display_name ?? "—")} · ${r.is_active ? "complete" : "started"}`,
   },
-  cw1: {
+  w1: {
     title: "Universities targeted",
     table: "student_outreach_campuses",
     select: "created_at, name, city, state",
@@ -212,7 +212,7 @@ const SOURCES: Record<
     standing: true,
     summarize: (r) => `${String(r.name ?? "—")} · ${String(r.city ?? "")}`,
   },
-  cw2: {
+  w2: {
     title: "Advisors in outreach",
     table: "student_outreach_contacts",
     select: "created_at, name, title, outreach_id",
@@ -227,7 +227,7 @@ const SOURCES: Record<
     summarize: (r) =>
       `${String(r.name ?? "—")}${r.title ? ` · ${String(r.title)}` : ""}`,
   },
-  ta1: {
+  s4: {
     title: "Families moving forward with a benefit",
     table: "seeker_activity",
     select: "created_at, event_type, metadata",
@@ -240,7 +240,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: () => "Reported moving forward",
   },
-  tb1: {
+  sp1: {
     // Sampled as inquiries; Connected is decided in code from six signals,
     // none of them a column, so the rows below are the pool it is drawn from.
     title: "Family–provider connected",
@@ -268,7 +268,7 @@ const SOURCES: Record<
       return `${String(r.to_profile_id ?? "—")} · ${signal}`;
     },
   },
-  tc1: {
+  pw1: {
     title: "Interviews scheduled",
     table: "interviews",
     select: "created_at, status",
@@ -276,7 +276,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Interview · ${String(r.status ?? "")}`,
   },
-  tc2: {
+  pw2: {
     title: "Hires confirmed",
     table: "medjobs_placements",
     select: "created_at, status",
@@ -284,7 +284,7 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Placement · ${String(r.status ?? "")}`,
   },
-  cr6c: {
+  s1c: {
     title: "Benefits Assessment",
     table: "seeker_activity",
     select: "created_at, event_type, related_provider_id",
@@ -340,18 +340,18 @@ export async function GET(request: NextRequest) {
 
     const where = [...source.where];
     if (source.eventType) query = query.eq("event_type", source.eventType);
-    if (node === "m1") query = query.eq("type", "family");
-    if (node === "m5") query = query.eq("type", "student");
-    if (node === "m4") query = query.eq("type", "system_activated");
-    if (node === "cw1") query = query.eq("is_active", true);
-    if (node === "cw2") query = query.eq("status", "active");
-    if (node === "tb1") query = query.eq("type", "inquiry");
-    if (node === "tc1") query = query.in("status", ["confirmed", "completed"]);
-    if (node === "tc2") query = query.in("status", ["accepted", "confirmed"]);
-    if (node === "cr2") {
+    if (node === "s3") query = query.eq("type", "family");
+    if (node === "w3") query = query.eq("type", "student");
+    if (node === "p5") query = query.eq("type", "system_activated");
+    if (node === "w1") query = query.eq("is_active", true);
+    if (node === "w2") query = query.eq("status", "active");
+    if (node === "sp1") query = query.eq("type", "inquiry");
+    if (node === "pw1") query = query.in("status", ["confirmed", "completed"]);
+    if (node === "pw2") query = query.in("status", ["accepted", "confirmed"]);
+    if (node === "s2") {
       query = query.in("recipient_type", ["family", "seeker"]);
     }
-    if (node === "cp2") {
+    if (node === "p2") {
       query = query.eq("recipient_type", "provider").not("provider_id", "is", null);
     }
     if (node === "traffic") {

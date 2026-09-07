@@ -35,34 +35,36 @@ const n = (v: number | null | undefined): number | null =>
   typeof v === "number" ? v : null;
 
 export interface CheckInputs {
-  /** CR1's provider + editorial + benefits, summed by the caller. */
+  /** Page visits' provider + editorial + benefits, summed by the caller. */
   visitsPartsSum?: number;
   /** Claim records that point at a provider not in the directory. */
-  cp1OrphanedClaims?: number;
-  /** CP1's unclaimed half — the set CP2 is drawn from. */
-  cp1Unclaimed?: number;
+  p1OrphanedClaims?: number;
+  /** P1's unclaimed half — the set P2 is drawn from. */
+  p1Unclaimed?: number;
   /** TRAFFIC's ten channels, summed by the caller. */
   trafficChannelSum?: number;
-  /** Inquiries raised — the set TB1's answered count is drawn from. */
+  /** Inquiries raised — the set SP1's answered count is drawn from. */
   inquiriesRaised?: number;
-  /** Interviews proposed — the set TC1's confirmed count is drawn from. */
+  /** Interviews proposed — the set PW1's confirmed count is drawn from. */
   interviewsProposed?: number;
 }
 
 export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapCheck[] {
   const checks: MapCheck[] = [];
 
-  const cr6 = n(values.cr1);
-  const cr6a = n(values.cr6a);
-  const cr6b = n(values.cr6b);
-  const cr6c = n(values.cr6c);
-  if (cr6 !== null && cr6a !== null && cr6b !== null && cr6c !== null) {
-    const sum = cr6a + cr6b + cr6c;
+  const s1 = n(values.s1);
+  const s1b = n(values.s1b);
+  const s1c = n(values.s1c);
+  if (s1 !== null && s1b !== null && s1c !== null) {
+    // Questions (S1a) are deliberately not in this sum. S1 counts the two
+    // actions that leave a record to work, and asserting against all three
+    // would fail every week a family asked a question.
+    const sum = s1b + s1c;
     checks.push({
-      id: "cr6-parts",
-      label: "CTAs completed equals its three parts",
-      ok: cr6 === sum,
-      detail: cr6 === sum ? undefined : `CR6 is ${cr6}, its parts add to ${sum}`,
+      id: "s1-parts",
+      label: "Families engaged equals connect requests plus benefits assessments",
+      ok: s1 === sum,
+      detail: s1 === sum ? undefined : `S1 is ${s1}, its parts add to ${sum}`,
     });
   }
 
@@ -108,41 +110,41 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  const cp2 = n(values.cp2);
+  const p2 = n(values.p2);
 
-  if (typeof inputs.cp1OrphanedClaims === "number") {
-    // CP1's split is a subtraction, so "parts add to the total" would be
+  if (typeof inputs.p1OrphanedClaims === "number") {
+    // P1's split is a subtraction, so "parts add to the total" would be
     // true by construction and prove nothing. This asks the question that
     // can actually be false: does every claim point at a listed provider?
     checks.push({
-      id: "cp1-claims-resolve",
+      id: "p1-claims-resolve",
       label: "Every claimed profile matches a listed provider",
-      ok: inputs.cp1OrphanedClaims === 0,
+      ok: inputs.p1OrphanedClaims === 0,
       detail:
-        inputs.cp1OrphanedClaims === 0
+        inputs.p1OrphanedClaims === 0
           ? undefined
-          : `${inputs.cp1OrphanedClaims} claim${inputs.cp1OrphanedClaims === 1 ? "" : "s"} point at a provider not in the directory`,
+          : `${inputs.p1OrphanedClaims} claim${inputs.p1OrphanedClaims === 1 ? "" : "s"} point at a provider not in the directory`,
     });
   }
 
-  if (cp2 !== null && typeof inputs.cp1Unclaimed === "number") {
-    // CP2 counts unclaimed providers, so it cannot exceed how many there are.
+  if (p2 !== null && typeof inputs.p1Unclaimed === "number") {
+    // P2 counts unclaimed providers, so it cannot exceed how many there are.
     checks.push({
-      id: "cp2-under-unclaimed",
+      id: "p2-under-unclaimed",
       label: "Providers in outreach do not exceed unclaimed providers",
-      ok: cp2 <= inputs.cp1Unclaimed,
+      ok: p2 <= inputs.p1Unclaimed,
       detail:
-        cp2 <= inputs.cp1Unclaimed
+        p2 <= inputs.p1Unclaimed
           ? undefined
-          : `CP2 is ${cp2}, unclaimed is ${inputs.cp1Unclaimed}`,
+          : `P2 is ${p2}, unclaimed is ${inputs.p1Unclaimed}`,
     });
   }
 
   // The "matched" step was taken off the map, so these compare against the
   // raised/proposed totals passed in rather than a node above them.
   for (const [child, total, label] of [
-    ["tb1", inputs.inquiriesRaised, "Connections confirmed do not exceed inquiries raised"],
-    ["tc1", inputs.interviewsProposed, "Interviews confirmed do not exceed interviews proposed"],
+    ["sp1", inputs.inquiriesRaised, "Connections confirmed do not exceed inquiries raised"],
+    ["pw1", inputs.interviewsProposed, "Interviews confirmed do not exceed interviews proposed"],
   ] as const) {
     const c = n(values[child]);
     if (c !== null && typeof total === "number") {
@@ -155,37 +157,36 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     }
   }
 
-  const tc1 = n(values.tc1);
-  const tc2 = n(values.tc2);
-  if (tc1 !== null && tc2 !== null) {
+  const pw1 = n(values.pw1);
+  const pw2 = n(values.pw2);
+  if (pw1 !== null && pw2 !== null) {
     checks.push({
-      id: "tc2-under-tc1",
+      id: "pw2-under-pw1",
       label: "Hires do not exceed confirmed interviews",
-      ok: tc2 <= tc1,
-      detail: tc2 <= tc1 ? undefined : `TC2 is ${tc2}, TC1 is ${tc1}`,
+      ok: pw2 <= pw1,
+      detail: pw2 <= pw1 ? undefined : `PW2 is ${pw2}, PW1 is ${pw1}`,
     });
   }
 
-  const cw1 = n(values.cw1);
-  const cw2 = n(values.cw2);
-  if (cw1 !== null && cw2 !== null && cw1 === 0) {
+  const w1 = n(values.w1);
+  const w2 = n(values.w2);
+  if (w1 !== null && w2 !== null && w1 === 0) {
     // Advisors hang off campuses, so contacts with no campus behind them
     // would mean the join is broken rather than the pipeline being empty.
     checks.push({
-      id: "cw2-needs-cw1",
+      id: "w2-needs-w1",
       label: "Advisors only exist where a university is targeted",
-      ok: cw2 === 0,
-      detail: cw2 === 0 ? undefined : `CW2 is ${cw2} with no universities targeted`,
+      ok: w2 === 0,
+      detail: w2 === 0 ? undefined : `W2 is ${w2} with no universities targeted`,
     });
   }
 
-  if (cr6 !== null && visits !== null) {
+  if (s1 !== null && visits !== null) {
     checks.push({
       id: "engaged-under-visits",
       label: "Families engaged do not exceed page visits",
-      ok: cr6 <= visits,
-      detail:
-        cr6 <= visits ? undefined : `Engaged is ${cr6}, page visits is ${visits}`,
+      ok: s1 <= visits,
+      detail: s1 <= visits ? undefined : `S1 is ${s1}, page visits is ${visits}`,
     });
   }
 

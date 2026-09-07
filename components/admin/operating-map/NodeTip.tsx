@@ -32,109 +32,96 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     advice:
       "Coverage grows by adding providers, not cities. Run the city pipeline for a market before counting it as launched.",
   },
-  cr1: {
+
+  s1: {
     href: "/admin/organic-growth",
     label: "Organic growth",
     advice:
       "Work the largest channel that is falling, not the smallest one that is rising. A row at zero can be an instrumentation job rather than a dead channel.",
   },
-  cr2: {
+  s2: {
     href: "/admin/family-comms",
     label: "Family comms",
     advice:
       "This is our tempo, not the market's. It only moves when someone sends, so a flat week usually means nobody ran a batch.",
   },
-  cr6a: {
-    href: "/admin/questions",
-    label: "Questions queue",
-    advice:
-      "Answer the oldest unanswered questions first. A published answer is what makes the page worth asking on again.",
-  },
-  cr6b: {
-    href: "/admin/connections",
-    label: "Connections",
-    advice:
-      "Watch the gap between asks and what reached a provider. A request nobody received is a lost lead that still counts here.",
-  },
-  cr6c: {
-    href: "/admin/benefits",
-    label: "Benefits",
-    advice:
-      "Completions fall when the screener gets longer or a step breaks. Check the drop-off before assuming demand changed.",
-  },
-  cp1: {
-    href: "/admin/directory",
-    label: "Directory",
-    advice:
-      "This is the pool outreach exists to shrink. It only falls when a provider claims, so read it against M2.",
-  },
-  cp2: {
-    href: "/admin/provider-outreach",
-    label: "Provider outreach",
-    advice:
-      "This is our tempo, not the market's. It only rises when someone sends — a flat week usually means nobody ran a batch.",
-  },
-  m1: {
+  s3: {
     href: "/admin/care-seekers",
     label: "Care seekers",
     advice:
-      "The drop from started to completed to live is where families stall. Work the largest step down, not the smallest.",
+      "Most of these never reach a live care post. Open the rows and work the largest step down, not the smallest.",
   },
-  m2: {
-    href: "/admin/directory",
-    label: "Unclaimed providers",
-    advice:
-      "A claim that never completes or verifies is a provider we cannot show. Work the gap before chasing more claims.",
-  },
-  m3: {
-    href: "/admin/ad-boost",
-    label: "Ad Boost",
-    advice:
-      "Repeat customers are the signal that ads work. A first campaign that never repeats is worth a conversation.",
-  },
-  m4: {
-    href: "/admin/staffing-outreach",
-    label: "Staffing outreach",
-    advice:
-      "Activation follows a conversation, not an email. Check which outreach reached a call this week.",
-  },
-  m5: {
-    href: "/admin/medjobs",
-    label: "MedJobs",
-    advice:
-      "The gap between started and complete is your fastest supply. Applicants stall at the intro video — chase those before sourcing new ones.",
-  },
-  cw1: {
-    href: "/admin/student-outreach",
-    label: "Student outreach",
-    advice:
-      "A targeted university is worth nothing without a named advisor. Add contacts before adding campuses.",
-  },
-  cw2: {
-    href: "/admin/student-outreach",
-    label: "Advisors",
-    advice:
-      "The gap from CW1's advisor count is names nobody has emailed yet. Work that before sourcing more contacts.",
-  },
-  ta1: {
+  s4: {
     href: "/admin/benefits",
     label: "Benefits",
     advice:
       "This only moves when families answer the check-in. Low numbers here usually mean the email is not landing, not that nobody applied.",
   },
-  tb1: {
+
+  p1: {
+    href: "/admin/directory",
+    label: "Directory",
+    advice:
+      "This is the pool outreach exists to shrink. It only falls when a provider claims, so read it against P3.",
+  },
+  p2: {
+    href: "/admin/provider-outreach",
+    label: "Provider outreach",
+    advice:
+      "This is our tempo, not the market's. It only rises when someone sends — a flat week usually means nobody ran a batch.",
+  },
+  p3: {
+    href: "/admin/directory",
+    label: "Unclaimed providers",
+    advice:
+      "A claim that never completes or verifies is a provider we cannot show. Work the gap before chasing more claims.",
+  },
+  p4: {
+    href: "/admin/ad-boost",
+    label: "Ad Boost",
+    advice:
+      "A first campaign that never repeats is worth a conversation. Repeat customers are the signal that ads actually work.",
+  },
+  p5: {
+    href: "/admin/staffing-outreach",
+    label: "Staffing outreach",
+    advice:
+      "Activation follows a conversation, not an email. Check which outreach reached a call this week.",
+  },
+
+  w1: {
+    href: "/admin/student-outreach",
+    label: "Student outreach",
+    advice:
+      "A targeted university is worth nothing without a named advisor. Add contacts before adding campuses.",
+  },
+  w2: {
+    href: "/admin/student-outreach",
+    label: "Advisors",
+    advice:
+      "The gap from the advisors on file is names nobody has emailed yet. Work that before sourcing more contacts.",
+  },
+  w3: {
+    href: "/admin/medjobs",
+    label: "MedJobs",
+    advice:
+      "The gap between started and complete is your fastest supply. Applicants stall at the intro video — chase those before sourcing new ones.",
+  },
+
+  sp1: {
     href: "/admin/connections",
     label: "Connections",
     advice:
       "Providers who never answer are the constraint. Work the Awaiting list — one response is worth more than one more inquiry.",
   },
-  tc1: {
+
+  pw1: {
     href: "/admin/medjobs",
     label: "MedJobs interviews",
     advice:
       "Scheduled interviews that never complete are no-shows or cancellations. Chase those before sourcing more candidates.",
   },
-  tc2: {
+  pw2: {
     href: "/admin/medjobs",
     label: "MedJobs placements",
     advice:
@@ -221,7 +208,7 @@ function Channels({
 
   return (
     <div className={styles.tipSection}>
-      {/* The heading carries the total. This table hangs off CR1's number
+      {/* The heading carries the total. This table hangs off S1's number
           now, and the two count different things — visitors to the site
           against families who did something on it. */}
       <span className={styles.tipLabel}>
@@ -331,7 +318,7 @@ export default function NodeTip({
   caveat?: string | null;
   /** The node's own breakdown. */
   metric?: MetricNode;
-  /** Site traffic, whose channel table hangs off CR1. */
+  /** Site traffic, whose channel table hangs off S1. */
   traffic?: MetricNode;
   trend?: NodeTrend | null;
   /** All node trends, so the channel rows can find their own. */
@@ -377,7 +364,7 @@ export default function NodeTip({
         </div>
       )}
 
-      {nodeKey === "cr1" && traffic?.breakdown?.length ? (
+      {nodeKey === "s1" && traffic?.breakdown?.length ? (
         <Channels parts={traffic.breakdown} trends={trends} />
       ) : null}
 

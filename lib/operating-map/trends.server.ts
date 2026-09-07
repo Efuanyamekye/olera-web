@@ -38,7 +38,7 @@ import { getTracks } from "./tracks.server";
  * keep no history of what it was, so any "change" we printed would be
  * invented.
  *
- * CP2 is left out for a different reason. It counts providers WE contacted,
+ * P2 is left out for a different reason. It counts providers WE contacted,
  * so it moves when somebody runs a batch and sits flat when nobody does — a
  * trend line on it would describe our calendar rather than the market, and
  * be read as the second thing. It is also by some distance the most
@@ -157,23 +157,24 @@ async function countAll(
   }
   if (visits.status === "fulfilled") out.visits = visits.value.total;
   if (conversions.status === "fulfilled") {
-    out.cr6 = conversions.value.ctasTotal;
-    out.cr6a = conversions.value.questions;
-    out.cr6b = conversions.value.connections;
-    out.cr6c = conversions.value.benefitsAssessments;
+    out.s1 = conversions.value.connections + conversions.value.benefitsAssessments;
+    out.s2 = conversions.value.familiesInOutreach;
+    out.s1a = conversions.value.questions;
+    out.s1b = conversions.value.connections;
+    out.s1c = conversions.value.benefitsAssessments;
   }
   if (milestones.status === "fulfilled") {
-    out.m1 = milestones.value.careSeekerProfilesPartial;
-    out.m2 = milestones.value.providersClaimed;
-    out.m3 = milestones.value.managedAdSignups;
-    out.m4 = milestones.value.staffingSignups;
-    out.m5 = milestones.value.careWorkerProfilesStarted;
+    out.s3 = milestones.value.careSeekerProfilesPartial;
+    out.p3 = milestones.value.providersClaimed;
+    out.p4 = milestones.value.managedAdSignups;
+    out.p5 = milestones.value.staffingSignups;
+    out.w3 = milestones.value.careWorkerProfilesStarted;
   }
   if (tracks.status === "fulfilled") {
-    out.ta1 = tracks.value.benefitsApplied;
-    out.tb1 = tracks.value.inquiriesResponded;
-    out.tc1 = tracks.value.interviewsScheduled;
-    out.tc2 = tracks.value.hires;
+    out.s4 = tracks.value.benefitsApplied;
+    out.sp1 = tracks.value.inquiriesResponded;
+    out.pw1 = tracks.value.interviewsScheduled;
+    out.pw2 = tracks.value.hires;
   }
 
   return out;
