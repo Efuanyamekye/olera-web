@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef, Suspense } from "react";
+import { useState, useCallback, useEffect, useRef, Suspense, useMemo } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -125,9 +125,32 @@ function AccountSettingsContent() {
   const [activeTab, setActiveTab] = useState<SettingsTab>(() => searchParams.get("tab") === "notifications" ? "notifications" : "account");
 
   // Notification prefs — optimistic overrides for instant toggle response
-  const meta = (activeProfile?.metadata || {}) as Record<string, unknown>;
-  const notifPrefs = (meta.notification_prefs || {}) as Record<string, Record<string, boolean>>;
+  const meta = useMemo(() => (activeProfile?.metadata || {}) as Record<string, unknown>, [activeProfile?.metadata]);
+  const notifPrefs = useMemo(() => (meta.notification_prefs || {}) as Record<string, Record<string, boolean>>, [meta]);
   const [optimisticNotifs, setOptimisticNotifs] = useState<Record<string, boolean>>({});
+  const whatsappKey = `${activeProfile?.id}:whatsapp_opted_in`;
+  const whatsappOptedIn = optimisticNotifs[whatsappKey] ?? !!meta.whatsapp_opted_in;
+
+  // Keep confirmed writes visible if AuthProvider's refresh fails silently.
+  // Retire each override only once the server snapshot acknowledges it.
+  useEffect(() => {
+    if (!activeProfile) return;
+    const prefix = `${activeProfile.id}:`;
+    setOptimisticNotifs(previous => {
+      const next = { ...previous };
+      let changed = false;
+      for (const [entry, value] of Object.entries(previous)) {
+        if (!entry.startsWith(prefix)) continue;
+        const field = entry.slice(prefix.length);
+        const separator = field.lastIndexOf("_");
+        const stored = field === "whatsapp_opted_in"
+          ? !!meta.whatsapp_opted_in
+          : notifPrefs[field.slice(0, separator)]?.[field.slice(separator + 1)];
+        if (stored === value) { delete next[entry]; changed = true; }
+      }
+      return changed ? next : previous;
+    });
+  }, [activeProfile, meta, notifPrefs]);
   const [notifError, setNotifError] = useState<string | null>(null);
 
   // Auto-dismiss notification error after 4 seconds
@@ -140,12 +163,12 @@ function AccountSettingsContent() {
   /** Returns the display value for a notification toggle (optimistic → server → default) */
   const getNotifOn = useCallback(
     (key: string, channel: "email" | "sms" | "whatsapp"): boolean => {
-      const oKey = `${key}_${channel}`;
+      const oKey = `${activeProfile?.id}:${key}_${channel}`;
       if (oKey in optimisticNotifs) return optimisticNotifs[oKey];
-      if (channel === "whatsapp") return notifPrefs[key]?.[channel] ?? ((meta.whatsapp_opted_in as boolean) ?? false);
+      if (channel === "whatsapp") return notifPrefs[key]?.[channel] ?? whatsappOptedIn;
       return notifPrefs[key]?.[channel] ?? (channel === "email");
     },
-    [optimisticNotifs, notifPrefs, meta.whatsapp_opted_in]
+    [optimisticNotifs, notifPrefs, whatsappOptedIn, activeProfile?.id]
   );
 
   // Account editing
@@ -221,7 +244,8 @@ function AccountSettingsContent() {
       if (!activeProfile || savingNotification.current || notificationProfileMismatch) return;
       savingNotification.current = true;
       setNotificationSaving(true);
-      const oKey = `${key}_${channel}`;
+      setNotifError(null);
+      const oKey = `${activeProfile?.id}:${key}_${channel}`;
       const enabled = !getNotifOn(key, channel);
       setOptimisticNotifs((prev) => ({ ...prev, [oKey]: enabled }));
       try {
@@ -232,9 +256,9 @@ function AccountSettingsContent() {
         if (!response.ok) throw new Error("Save failed");
         await refreshAccountData();
       } catch {
+        setOptimisticNotifs(previous => ({ ...previous, [oKey]: !enabled }));
         setNotifError("Couldn't update notification settings. Please try again.");
       } finally {
-        setOptimisticNotifs({});
         savingNotification.current = false;
         setNotificationSaving(false);
       }
@@ -853,7 +877,7 @@ function AccountSettingsContent() {
                   </div>
                 )}
                 {/* WhatsApp opt-in prompt (if not yet opted in and has phone) */}
-                {!meta.whatsapp_opted_in && activeProfile?.phone && (
+                {!whatsappOptedIn && activeProfile?.phone && (
                   <div className="mb-4 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-emerald-900">Enable WhatsApp notifications</p>
@@ -872,6 +896,7 @@ function AccountSettingsContent() {
                             body: JSON.stringify({ profileId: activeProfile.id, kind: "whatsapp", emailLogId }),
                           });
                           if (!response.ok) throw new Error("Save failed");
+                          setOptimisticNotifs(previous => ({ ...previous, [whatsappKey]: true }));
                           await refreshAccountData();
                         } catch {
                           setNotifError("Couldn't enable WhatsApp. Please try again.");
@@ -896,7 +921,7 @@ function AccountSettingsContent() {
                       channels={notif.channels}
                       emailOn={getNotifOn(notif.key, "email")}
                       smsOn={getNotifOn(notif.key, "sms")}
-                      whatsappOn={meta.whatsapp_opted_in && activeProfile?.phone ? getNotifOn(notif.key, "whatsapp") : undefined}
+                      whatsappOn={whatsappOptedIn && activeProfile?.phone ? getNotifOn(notif.key, "whatsapp") : undefined}
                       onToggle={(channel) => handleNotifToggle(notif.key, channel)}
                     />
                   ))}

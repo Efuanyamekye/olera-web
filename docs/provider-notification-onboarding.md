@@ -52,3 +52,14 @@ Automated validation: TypeScript; focused ESLint (one existing settings dependen
 - [Latest onboarding handoff and end-session addendum](https://www.notion.so/3ce5903a0ffe81d780aee8d9048ddeda).
 - [Original implementation commit](https://github.com/olera-care/olera-web/commit/331ff504c): `notification-setup-nudge/route.ts` supplies 72h-after-preview timing; the template supplies Chantel's copy. The detailed Notion child remains unshared to the integration, so this is the implemented specification rather than a claim to have read that page directly.
 - [Reporting plan](./provider-comms-reporting-plan.md).
+
+## Pre-test review — September 7
+
+Two confirmed issues fixed on PR #1811:
+
+- **Saved preference looked reverted after a failed refresh.** `refreshAccountData` catches errors and retains the old profile snapshot. Clearing all optimistic state after awaiting it exposed that stale snapshot even when the save succeeded. Confirmed values now stay visible per profile until the server snapshot acknowledges them. Failed subsequent writes restore the last displayed value; overrides do not leak between profiles. The same fix covers the global WhatsApp enable button.
+- **Notification outcomes disappeared from activity drilldowns.** Both the Activity feed and directory comms timeline filtered out the two new server-written event types. They now admit and label settings visits and saved preferences under setup. The public tracking endpoint still cannot submit these trusted outcome events.
+
+Regressions reproduce refresh failure, repeated saves, server acknowledgment, profile isolation, and both admin event allowlists. TypeScript, notification tests, Provider Comms tests and cron checks pass. Focused lint passes; the existing Activity route contains disable comments for an unavailable `@typescript-eslint/no-explicit-any` rule, so that file was checked with `--no-inline-config` instead.
+
+A GET-only live API-schema check confirmed that `save_notification_preference` and `reserve_notification_nudge` are not deployed. Apply migrations 209 and 210 before testing preference persistence. The pre-fix Vercel build passed; the new commit requires its own preview build. No database writes, live sends or merges were performed during this review.

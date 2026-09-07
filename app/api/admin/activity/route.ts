@@ -44,6 +44,8 @@ const PROVIDER_ACTION_EVENT_TYPES = [
   "reviews_cta_clicked",
   // Profile / claim lifecycle
   "provider_profile_edited",
+  "notification_settings_viewed",
+  "notification_preference_saved",
   "provider_saved",
   "claim_completed",
   "suspicious_claim",

@@ -79,6 +79,8 @@ export const PROVIDER_CATEGORIES: ProviderCategoryMeta[] = [
       "provider_picker_impression",
       "provider_picker_clicked",
       "provider_profile_edited",
+      "notification_settings_viewed",
+      "notification_preference_saved",
       "provider_saved",
     ],
     tileActive: "border-emerald-300 bg-emerald-50",
@@ -203,6 +205,8 @@ export const PROVIDER_EVENT_LABELS: Record<string, string> = {
   dashboard_arrival: "Arrived at the dashboard",
   provider_picker_impression: "Saw a dashboard prompt",
   provider_picker_clicked: "Tapped a dashboard prompt",
+  notification_settings_viewed: "Opened notification settings",
+  notification_preference_saved: "Saved notification preferences",
   provider_profile_edited: "Edited their profile",
   provider_saved: "Saved profile changes",
   // Reviews

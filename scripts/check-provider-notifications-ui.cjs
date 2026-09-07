@@ -42,8 +42,24 @@ const switches=()=>[...target.querySelectorAll('[role="switch"]')];
  await React.act(()=>switches()[2].click());assert.equal(calls.length,2,'concurrent toggle blocked');
  await React.act(async()=>pendingSave.resolve({ok:false}));
  assert.equal(switches()[1].getAttribute('aria-checked'),'false');assert.ok(target.textContent.includes("Couldn't update"));
+ // AuthProvider deliberately swallows refresh errors and preserves old state.
+ refresh=async()=>{};
+ await React.act(render);
  await React.act(()=>switches()[1].click());await React.act(async()=>pendingSave.resolve({ok:true}));
  assert.equal(switches()[1].getAttribute('aria-checked'),'true');
+ // A second failed write must retain the first confirmed value even though
+ // the account snapshot is still stale.
+ await React.act(()=>switches()[1].click());await React.act(async()=>pendingSave.resolve({ok:false}));
+ assert.equal(switches()[1].getAttribute('aria-checked'),'true');
+ // Once a snapshot acknowledges the save, later server changes are visible.
+ profile={...profile,metadata:{notification_prefs:{new_leads:{sms:true}}}};
+ await React.act(render);
+ profile={...profile,metadata:{notification_prefs:{new_leads:{sms:false}}}};
+ await React.act(render);assert.equal(switches()[1].getAttribute('aria-checked'),'false');
+ // The global WhatsApp button uses the same confirmed-state fallback.
+ const enable=[...target.querySelectorAll('button')].find(button=>button.textContent.trim()==='Enable');
+ await React.act(()=>enable.click());await React.act(async()=>pendingSave.resolve({ok:true}));
+ assert.ok(!target.textContent.includes('Enable WhatsApp notifications'));
  const before=calls.length;
  search=new URLSearchParams('tab=notifications&provider=provider-b&eid=email-b');
  await React.act(render);await React.act(()=>switches()[1].click());

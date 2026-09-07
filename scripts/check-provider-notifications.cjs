@@ -26,3 +26,19 @@ assert.equal(destination('settings',null),'/account/settings');assert.equal(dest
 for(const action of ['notifications','matches','profile','manage','settings']) assert.equal(isPortalRedirectAction(action),true);
 assert.equal(isPortalRedirectAction('question'),false);
 console.log('Notification eligibility, exact timing/business-hour boundaries and shared auth destinations passed.');
+
+const categories=load('lib/activity/provider-categories.ts');
+for(const event of ['notification_settings_viewed','notification_preference_saved']) {
+ assert.ok(categories.eventTypesForCategory('setup').includes(event));
+ assert.notEqual(categories.PROVIDER_EVENT_LABELS[event],undefined);
+ for(const file of ['app/api/admin/activity/route.ts','app/api/admin/directory/[providerId]/comms-timeline/route.ts']) {
+   const source=ts.createSourceFile(file,fs.readFileSync(file,'utf8'),ts.ScriptTarget.Latest,true);
+   let allowed=false;
+   function visit(node){if(ts.isVariableDeclaration(node)&&['PROVIDER_ACTION_EVENT_TYPES','TIMELINE_ACTIVITY_EVENTS'].includes(node.name.getText(source))){allowed=node.initializer.getText(source).includes('"'+event+'"');}ts.forEachChild(node,visit);}
+   visit(source);assert.ok(allowed,event+' must be visible in '+file);
+ }
+}
+// Outcome writes stay server-only; the public tracking endpoint cannot spoof them.
+const tracker=fs.readFileSync('app/api/activity/track/route.ts','utf8');
+assert.ok(!tracker.includes('"notification_preference_saved"'));
+console.log('Notification outcomes are visible in both admin feeds and stay server-only.');

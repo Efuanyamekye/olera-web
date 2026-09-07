@@ -37,6 +37,8 @@ const TIMELINE_ACTIVITY_EVENTS = [
   "one_click_access",
   "question_responded",
   "provider_profile_edited",
+  "notification_settings_viewed",
+  "notification_preference_saved",
   "provider_picker_clicked",
   "analytics_teaser_cta_clicked",
   "claim_completed",
@@ -97,6 +99,10 @@ function summarizeActivity(eventType: string, metadata: Record<string, unknown> 
     }
     case "question_responded":
       return "Answered a question";
+    case "notification_settings_viewed":
+      return "Opened notification settings";
+    case "notification_preference_saved":
+      return "Saved notification preferences";
     case "provider_profile_edited": {
       const section = typeof m.section_id === "string" ? m.section_id : null;
       return section ? `Edited profile section: ${section}` : "Edited profile";
