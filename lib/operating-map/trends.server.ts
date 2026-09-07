@@ -2,7 +2,6 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { getOrganicVisitors } from "./organic.server";
 import { getPageVisits } from "./page-visits.server";
 import { getConversions } from "./conversions.server";
-import { getProvidersInOutreach } from "./providers.server";
 import { getMilestones } from "./milestones.server";
 import { getTracks } from "./tracks.server";
 
@@ -11,8 +10,17 @@ import { getTracks } from "./tracks.server";
  *
  * The map answers "how much" over whatever window you selected. It could not
  * answer "is that good", because a total says nothing about direction. This
- * adds the direction: every node is recounted over the last 7 days against
- * the 7 before, and over the last 30 against the 30 before.
+ * adds the direction: every node is recounted over eight consecutive weeks,
+ * which is enough to draw the shape and to read the two comparisons that
+ * matter off it.
+ *
+ *   week over week   the last full week against the one before  -> the colour
+ *   month over month weeks 5-8 against weeks 1-4                -> the arrow
+ *   the eight weeks  the sparkline in the tooltip
+ *
+ * Eight buckets rather than four windows because everything above derives
+ * from them. Counting the comparisons separately would have cost the same
+ * and produced no shape.
  *
  * Those windows are FIXED. They do not follow the date picker, because a
  * trend that changes shape every time you widen the range is not a trend —
@@ -28,9 +36,18 @@ import { getTracks } from "./tracks.server";
  * list — get no trend at all. They describe the world as it is now and we
  * keep no history of what it was, so any "change" we printed would be
  * invented.
+ *
+ * CP2 is left out for a different reason. It counts providers WE contacted,
+ * so it moves when somebody runs a batch and sits flat when nobody does — a
+ * trend line on it would describe our calendar rather than the market, and
+ * be read as the second thing. It is also by some distance the most
+ * expensive node to recount eight times over.
  */
 
 const DAY = 86_400_000;
+
+/** How many weeks of history the sparkline and both comparisons read. */
+const WEEKS = 8;
 
 /** One node's movement. */
 export interface NodeTrend {
@@ -43,10 +60,12 @@ export interface NodeTrend {
   weekChange: number | null;
   /** The month arrow: -1 down, 0 flat, +1 up. */
   monthDirection: -1 | 0 | 1;
-  /** The two weekly counts behind the score, for the tooltip. */
+  /** The two weekly counts behind the score. */
   week: { now: number; prior: number };
-  /** The two monthly counts behind the arrow. */
+  /** The two four-week counts behind the arrow. */
   month: { now: number; prior: number };
+  /** Eight consecutive weeks, oldest first. The sparkline. */
+  series: number[];
 }
 
 export type Trends = Record<string, NodeTrend>;
@@ -90,21 +109,25 @@ function monthDirection(now: number, prior: number): -1 | 0 | 1 {
   return change > 0 ? 1 : -1;
 }
 
-/** The four windows, anchored on today and ending at tonight's midnight. */
-function windows(): { weekNow: Range; weekPrior: Range; monthNow: Range; monthPrior: Range } {
+/**
+ * Eight consecutive week-long windows, oldest first, ending tonight.
+ *
+ * Every window is [from, to) — the same way the metrics endpoint reads its
+ * date params — so no row is counted in two buckets or missed between them.
+ */
+function weekWindows(): Range[] {
   const now = new Date();
-  // Exclusive end, so today's rows are included — every range here is
-  // [from, to) the same way the metrics endpoint reads its date params.
   const end = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1);
   const at = (daysBack: number) => new Date(end - daysBack * DAY).toISOString().slice(0, 10);
-  const to = at(0);
-  return {
-    weekNow: { from: at(7), to },
-    weekPrior: { from: at(14), to: at(7) },
-    monthNow: { from: at(30), to },
-    monthPrior: { from: at(60), to: at(30) },
-  };
+  const out: Range[] = [];
+  for (let i = WEEKS; i >= 1; i -= 1) {
+    out.push({ from: at(i * 7), to: at((i - 1) * 7) });
+  }
+  return out;
 }
+
+/** Sum a slice of the weekly series. */
+const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
 
 /** Every node's count over one window, keyed the way the map keys its nodes. */
 async function countAll(
@@ -116,12 +139,11 @@ async function countAll(
 
   // One slow node must not cost the others their trend, so each group is
   // settled independently and a failure simply leaves its nodes uncoloured.
-  const [organic, visits, conversions, outreach, milestones, tracks] =
+  const [organic, visits, conversions, milestones, tracks] =
     await Promise.allSettled([
       getOrganicVisitors(db, range, citySlug),
       getPageVisits(db, range, citySlug),
       getConversions(db, range, citySlug),
-      getProvidersInOutreach(db, range, citySlug),
       getMilestones(db, range, citySlug),
       getTracks(db, range),
     ]);
@@ -134,7 +156,6 @@ async function countAll(
     out.cr6b = conversions.value.connections;
     out.cr6c = conversions.value.benefitsAssessments;
   }
-  if (outreach.status === "fulfilled") out.cp2 = outreach.value.value;
   if (milestones.status === "fulfilled") {
     out.m1 = milestones.value.careRecipientProfilesLive;
     out.m2 = milestones.value.providersClaimed;
@@ -155,32 +176,42 @@ export async function getTrends(
   db: SupabaseClient,
   citySlug: string | null = null,
 ): Promise<Trends> {
-  const w = windows();
-  const [weekNow, weekPrior, monthNow, monthPrior] = await Promise.all([
-    countAll(db, w.weekNow, citySlug),
-    countAll(db, w.weekPrior, citySlug),
-    countAll(db, w.monthNow, citySlug),
-    countAll(db, w.monthPrior, citySlug),
-  ]);
+  const windows = weekWindows();
+
+  // Eight windows times six modules is a lot of concurrent paging, so they
+  // go in batches rather than all at once. The endpoint is loaded after the
+  // numbers and blocks nothing, so a second or two here costs nothing on
+  // screen and keeps us from opening fifty connections at a time.
+  const weeks: Record<string, number>[] = [];
+  for (let i = 0; i < windows.length; i += 4) {
+    const batch = await Promise.all(
+      windows.slice(i, i + 4).map((range) => countAll(db, range, citySlug)),
+    );
+    weeks.push(...batch);
+  }
+
+  // A node only gets a trend if every week produced a count for it. Half a
+  // history is worse than none: it would draw a dip that never happened.
+  const complete = Object.keys(weeks[weeks.length - 1] ?? {}).filter((node) =>
+    weeks.every((w) => node in w),
+  );
 
   const trends: Trends = {};
-  for (const node of Object.keys(weekNow)) {
-    // A node missing from any window failed somewhere. Half a comparison is
-    // worse than none, so it goes uncoloured.
-    if (
-      !(node in weekPrior) ||
-      !(node in monthNow) ||
-      !(node in monthPrior)
-    ) {
-      continue;
-    }
-    const { score, change } = scoreWeek(weekNow[node], weekPrior[node]);
+  for (const node of complete) {
+    const series = weeks.map((w) => w[node]);
+    const weekNow = series[series.length - 1];
+    const weekPrior = series[series.length - 2];
+    const monthNow = sum(series.slice(WEEKS / 2));
+    const monthPrior = sum(series.slice(0, WEEKS / 2));
+
+    const { score, change } = scoreWeek(weekNow, weekPrior);
     trends[node] = {
       score,
       weekChange: change,
-      monthDirection: monthDirection(monthNow[node], monthPrior[node]),
-      week: { now: weekNow[node], prior: weekPrior[node] },
-      month: { now: monthNow[node], prior: monthPrior[node] },
+      monthDirection: monthDirection(monthNow, monthPrior),
+      week: { now: weekNow, prior: weekPrior },
+      month: { now: monthNow, prior: monthPrior },
+      series,
     };
   }
   return trends;

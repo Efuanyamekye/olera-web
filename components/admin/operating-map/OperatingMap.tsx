@@ -6,13 +6,14 @@ import type {
   MouseEvent as ReactMouseEvent,
   ReactNode,
 } from "react";
+import NodeTip from "./NodeTip";
 import styles from "./OperatingMap.module.css";
 
 /**
  * The Olera operating map — every step of the marketplace, in one figure.
  *
- * Nothing here is instrumented yet. Each node renders a placeholder value so
- * that wiring a metric later is a one-line change at the node, not a layout
+ * Most nodes carry a live number; the rest render a dash rather than a
+ * guess. Wiring a metric is a one-line change at the node, never a layout
  * change: the connectors are computed from measured DOM geometry at draw
  * time, so a card can grow a number, change its label, or change its width
  * and every arrow still lands on it.
@@ -82,8 +83,10 @@ export type MetricNodes = Record<string, MetricNode | undefined>;
 
 /**
  * One node's direction, as /api/admin/operating-map/trends returns it.
- * Fixed windows — the last 7 and 30 days — regardless of the range on
- * screen, so the colour means the same thing whatever period is selected.
+ *
+ * Eight fixed weeks, regardless of the range on screen, so the colour means
+ * the same thing whatever period is selected. The colour reads the last week
+ * against the one before; the arrow reads four weeks against the four before.
  */
 export interface NodeTrend {
   /** -3 to +3. Zero is flat. */
@@ -93,6 +96,8 @@ export interface NodeTrend {
   monthDirection: -1 | 0 | 1;
   week: { now: number; prior: number };
   month: { now: number; prior: number };
+  /** Eight consecutive weeks, oldest first. The sparkline in the panel. */
+  series: number[];
 }
 
 export type NodeTrends = Record<string, NodeTrend | undefined>;
@@ -115,26 +120,6 @@ function toneClass(score: number): string | null {
   const step = Math.min(3, Math.abs(score));
   if (step === 0) return null;
   return styles[score > 0 ? `tUp${step}` : `tDown${step}`] ?? null;
-}
-
-/**
- * The trend in words, for the tooltip. Percentages are only quoted where
- * there was something to compare against; the rest says what happened
- * instead of inventing a denominator.
- */
-function trendNote(t: NodeTrend): string {
-  const pct = (v: number) => `${v > 0 ? "+" : "−"}${Math.abs(Math.round(v * 100))}%`;
-  const week =
-    t.weekChange === null
-      ? t.week.now > 0
-        ? `${t.week.now} this week, none the week before`
-        : "nothing in either of the last two weeks"
-      : `${pct(t.weekChange)} this week (${t.week.now} vs ${t.week.prior})`;
-  const month =
-    t.monthDirection === 0
-      ? "flat over the month"
-      : `${t.monthDirection > 0 ? "up" : "down"} over the month (${t.month.now} vs ${t.month.prior})`;
-  return `${week}; ${month}. Colour and arrow always read the last 7 and 30 days, not the selected range.`;
 }
 
 /**
@@ -181,9 +166,10 @@ const NODE_HELP: Record<string, string> = {
 /** Tooltip anchored to a node, positioned outside the scaled figure. */
 interface Tip {
   text: string;
+  /** Which node opened it — the panel derives everything else from this. */
+  nodeKey: string;
   caveat?: string | null;
-  /** How the number is moving. Rendered under the caveat, in the same voice. */
-  trend?: string | null;
+  trend?: NodeTrend | null;
   x: number;
   y: number;
 }
@@ -334,18 +320,39 @@ export default function OperatingMap({
       hArrow(B.cy, x + 1, B.l - G);
     };
     /** Feed a card's output into a vertical stem to its right. */
-    const toStem = (a: string, x: number, count: number | null = null) => {
+    const toStem = (
+      a: string,
+      x: number,
+      flow: { count: number; node: string } | null = null,
+    ) => {
       const A = box(a);
       hArrow(A.cy, A.r + G, x - 1);
-      if (count === null) return;
+      if (!flow) return;
       // Sits on the line rather than beside it, so it reads as a property of
-      // the flow and not as another node floating in the gap.
+      // the flow and not as another node floating in the gap. Clickable for
+      // the same reason the card values are: a number you cannot check is a
+      // number you have to take on faith.
       const t = document.createElementNS(SVG_NS, "text");
       t.setAttribute("x", String((A.r + G + x) / 2));
       t.setAttribute("y", String(A.cy - 5));
       t.setAttribute("text-anchor", "middle");
       t.setAttribute("class", styles.wireLabel);
-      t.textContent = count.toLocaleString();
+      t.textContent = flow.count.toLocaleString();
+      const title = document.createElementNS(SVG_NS, "title");
+      title.textContent = "Show where this number comes from";
+      t.appendChild(title);
+      t.setAttribute("role", "button");
+      t.setAttribute("tabindex", "0");
+      t.setAttribute("aria-label", `${flow.count} — show where this number comes from`);
+      const open = () => inspectRef.current?.(flow.node);
+      t.addEventListener("click", open);
+      t.addEventListener("keydown", (e) => {
+        const key = (e as KeyboardEvent).key;
+        if (key === "Enter" || key === " ") {
+          e.preventDefault();
+          open();
+        }
+      });
       svg!.appendChild(t);
     };
 
@@ -384,8 +391,20 @@ export default function OperatingMap({
     // Benefits assessments never reach a provider, so only the two asks that
     // do run across. Each carries what actually left for a provider's inbox.
     const sent = flowsRef.current;
-    toStem("cr6a", cp2.cx, sent?.questionsToProviders ?? null);
-    toStem("cr6b", cp2.cx, sent?.connectionsToProviders ?? null);
+    toStem(
+      "cr6a",
+      cp2.cx,
+      typeof sent?.questionsToProviders === "number"
+        ? { count: sent.questionsToProviders, node: "flow_questions" }
+        : null,
+    );
+    toStem(
+      "cr6b",
+      cp2.cx,
+      typeof sent?.connectionsToProviders === "number"
+        ? { count: sent.connectionsToProviders, node: "flow_connections" }
+        : null,
+    );
 
     /* care worker runs straight down its lane and into the milestone layer */
     vDown("cw1", "cw2");
@@ -509,38 +528,72 @@ export default function OperatingMap({
   // effect below redraws when they land.
   const flowsRef = useRef<Flows | null>(null);
   flowsRef.current = showNumbers ? flows : null;
+  const inspectRef = useRef<((nodeKey: string) => void) | undefined>(undefined);
+  inspectRef.current = onInspect;
+
+  /*
+   * The panel carries links, so it has to survive the pointer travelling
+   * from the number into it. A short grace period on leave, cancelled when
+   * the pointer lands inside, is the whole mechanism.
+   */
+  const closeTimer = useRef<number | null>(null);
+  const cancelClose = useCallback(() => {
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  }, []);
+  const closeTip = useCallback(() => {
+    cancelClose();
+    closeTimer.current = window.setTimeout(() => setTip(null), 140);
+  }, [cancelClose]);
 
   const openTip = useCallback((
     el: HTMLElement,
     key: string,
     caveat?: string | null,
-    trend?: string | null,
+    trend?: NodeTrend | null,
   ) => {
     const text = NODE_HELP[key];
     if (!text) return;
     const root = rootWrapRef.current;
     if (!root) return;
+    cancelClose();
     const r = el.getBoundingClientRect();
     const c = root.getBoundingClientRect();
     const TIP_WIDTH = 320;
+    // Roughly what the panel occupies with a sparkline, a diagnosis and a
+    // link. Only used to decide which side of the number to open on, so an
+    // approximation is enough.
+    const TIP_HEIGHT = 250;
     // Keep it inside the wrapper rather than letting it hang off the edge.
     const x = Math.min(Math.max(r.left - c.left - 8, 8), Math.max(c.width - TIP_WIDTH - 8, 8));
-    setTip({ text, caveat, trend, x, y: r.bottom - c.top + 8 });
-  }, []);
+    const below = r.bottom - c.top + 8;
+    // Nodes low in the figure open upwards, so the panel is never mostly
+    // off the bottom of the page.
+    const y = below + TIP_HEIGHT > c.height ? Math.max(8, r.top - c.top - TIP_HEIGHT) : below;
+    setTip({ text, nodeKey: key, caveat, trend, x, y });
+  }, [cancelClose]);
 
   return (
     <div className={styles.root} ref={rootWrapRef} style={{ position: "relative" }}>
       {tip && (
-        <div className={styles.tip} style={{ left: tip.x, top: tip.y }} role="tooltip">
-          {tip.text}
-          {tip.caveat && <span className={styles.tipCaveat}>{tip.caveat}</span>}
-          {tip.trend && <span className={styles.tipCaveat}>{tip.trend}</span>}
-        </div>
+        <NodeTip
+          text={tip.text}
+          nodeKey={tip.nodeKey}
+          caveat={tip.caveat}
+          trend={tip.trend}
+          tone={tip.trend ? toneClass(tip.trend.score) : null}
+          x={tip.x}
+          y={tip.y}
+          onEnter={cancelClose}
+          onLeave={closeTip}
+        />
       )}
       <div className={styles.fit} ref={fitRef}>
         <div className={styles.stage} ref={stageRef}>
           <section className={styles.system} ref={rootRef}>
-          <svg className={styles.wires} ref={svgRef} aria-hidden="true" />
+          <svg className={styles.wires} ref={svgRef} role="presentation" />
 
           <div className={styles.full} ref={pickerRef} style={{ position: "relative" }}>
             <button
@@ -550,9 +603,9 @@ export default function OperatingMap({
               aria-expanded={pickerOpen}
               aria-haspopup="listbox"
               onMouseEnter={(e) => openTip(e.currentTarget, "cities")}
-              onMouseLeave={() => setTip(null)}
+              onMouseLeave={closeTip}
               onFocus={(e) => openTip(e.currentTarget, "cities")}
-              onBlur={() => setTip(null)}
+              onBlur={closeTip}
             >
               {pillLabel}
               {!active && (
@@ -645,7 +698,7 @@ export default function OperatingMap({
                   trend={trends.cr2}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
@@ -659,7 +712,7 @@ export default function OperatingMap({
                   trend={trends.cr4}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   label={
                     <>
                       Page visits
@@ -677,7 +730,7 @@ export default function OperatingMap({
                     trend={trends.cr6}
                     loading={metricsLoading}
                     onTip={openTip}
-                    onTipClose={() => setTip(null)}
+                    onTipClose={closeTip}
                     onInspect={onInspect}
                   showNumbers={showNumbers}
                   />
@@ -691,7 +744,7 @@ export default function OperatingMap({
                     trend={trends.cr6a}
                     loading={metricsLoading}
                     onTip={openTip}
-                    onTipClose={() => setTip(null)}
+                    onTipClose={closeTip}
                     onInspect={onInspect}
                   showNumbers={showNumbers}
                   />
@@ -703,7 +756,7 @@ export default function OperatingMap({
                     trend={trends.cr6b}
                     loading={metricsLoading}
                     onTip={openTip}
-                    onTipClose={() => setTip(null)}
+                    onTipClose={closeTip}
                     onInspect={onInspect}
                   showNumbers={showNumbers}
                   />
@@ -715,7 +768,7 @@ export default function OperatingMap({
                     trend={trends.cr6c}
                     loading={metricsLoading}
                     onTip={openTip}
-                    onTipClose={() => setTip(null)}
+                    onTipClose={closeTip}
                     onInspect={onInspect}
                   showNumbers={showNumbers}
                   />
@@ -745,7 +798,7 @@ export default function OperatingMap({
                   trend={trends.cp1}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
@@ -759,7 +812,7 @@ export default function OperatingMap({
                   trend={trends.cp2}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
@@ -776,7 +829,7 @@ export default function OperatingMap({
                 trend={trends.cw1}
                 loading={metricsLoading}
                 onTip={openTip}
-                onTipClose={() => setTip(null)}
+                onTipClose={closeTip}
                 onInspect={onInspect}
                   showNumbers={showNumbers}
               />
@@ -789,7 +842,7 @@ export default function OperatingMap({
                 trend={trends.cw2}
                 loading={metricsLoading}
                 onTip={openTip}
-                onTipClose={() => setTip(null)}
+                onTipClose={closeTip}
                 onInspect={onInspect}
                   showNumbers={showNumbers}
               />
@@ -814,7 +867,7 @@ export default function OperatingMap({
                   trend={trends.m1}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
@@ -827,7 +880,7 @@ export default function OperatingMap({
                   trend={trends.m2}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
@@ -840,7 +893,7 @@ export default function OperatingMap({
                   trend={trends.m3}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
@@ -853,7 +906,7 @@ export default function OperatingMap({
                   trend={trends.m4}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
@@ -866,7 +919,7 @@ export default function OperatingMap({
                   trend={trends.m5}
                   loading={metricsLoading}
                   onTip={openTip}
-                  onTipClose={() => setTip(null)}
+                  onTipClose={closeTip}
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
@@ -893,7 +946,7 @@ export default function OperatingMap({
                     trend={trends.tb1}
                     loading={metricsLoading}
                     onTip={openTip}
-                    onTipClose={() => setTip(null)}
+                    onTipClose={closeTip}
                     onInspect={onInspect}
                     showNumbers={showNumbers}
                   />
@@ -912,7 +965,7 @@ export default function OperatingMap({
                     trend={trends.tc1}
                     loading={metricsLoading}
                     onTip={openTip}
-                    onTipClose={() => setTip(null)}
+                    onTipClose={closeTip}
                     onInspect={onInspect}
                     showNumbers={showNumbers}
                   />
@@ -925,7 +978,7 @@ export default function OperatingMap({
                     trend={trends.tc2}
                     loading={metricsLoading}
                     onTip={openTip}
-                    onTipClose={() => setTip(null)}
+                    onTipClose={closeTip}
                     onInspect={onInspect}
                     showNumbers={showNumbers}
                   />
@@ -1062,7 +1115,7 @@ export type TipOpener = (
   el: HTMLElement,
   key: string,
   caveat?: string | null,
-  trend?: string | null,
+  trend?: NodeTrend | null,
 ) => void;
 
 /**
@@ -1134,10 +1187,10 @@ function MetricValue({
   const hover = explains
     ? {
         onMouseEnter: (e: ReactMouseEvent<HTMLElement>) =>
-          onTip!(e.currentTarget, nodeKey!, metric?.caveat, trend ? trendNote(trend) : null),
+          onTip!(e.currentTarget, nodeKey!, metric?.caveat, trend ?? null),
         onMouseLeave: onTipClose,
         onFocus: (e: ReactFocusEvent<HTMLElement>) =>
-          onTip!(e.currentTarget, nodeKey!, metric?.caveat, trend ? trendNote(trend) : null),
+          onTip!(e.currentTarget, nodeKey!, metric?.caveat, trend ?? null),
         onBlur: onTipClose,
       }
     : {};

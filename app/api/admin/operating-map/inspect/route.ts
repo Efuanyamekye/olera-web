@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import { CONTENT_PAGE_FILTERS } from "@/lib/analytics/content-pages";
 import { CP2_CHANNELS } from "@/lib/operating-map/providers.server";
-import { cityFilterFromSlug } from "@/lib/providers";
+import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
 
 /**
  * GET /api/admin/operating-map/inspect?node=cr2&date_from&date_to&city
@@ -20,6 +20,13 @@ import { cityFilterFromSlug } from "@/lib/providers";
 export const dynamic = "force-dynamic";
 
 const SAMPLE_SIZE = 8;
+
+/**
+ * How many recent rows a city-narrowed sample reads before filtering. Enough
+ * that a city with real activity still fills the sample, small enough that
+ * the page stays a page.
+ */
+const KEY_SCOPED_SCAN = 500;
 
 /**
  * One descriptor per instrumented node. Adding a node to the map means
@@ -43,6 +50,11 @@ const SOURCES: Record<
     orderColumn?: string;
     /** Describes the world as it is now, so a date range would mislead. */
     standing?: boolean;
+    /**
+     * Keyed by a provider that has no city column of its own, so a city
+     * filter has to be applied to the rows after they come back.
+     */
+    providerKeyScoped?: string;
     summarize: (row: Record<string, unknown>) => string;
   }
 > = {
@@ -84,6 +96,34 @@ const SOURCES: Record<
     eventType: "lead_received",
     cityScoped: false,
     summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
+  },
+  flow_questions: {
+    title: "Questions that reached a provider",
+    table: "email_log",
+    select: "created_at, recipient, provider_id, email_type, status",
+    where: [
+      "email_type is question_received",
+      "recipient is a provider",
+      "status is sent — the send came back successful",
+    ],
+    cityScoped: false,
+    providerKeyScoped: "provider_id",
+    summarize: (r) =>
+      `${String(r.recipient ?? "—")} · ${String(r.provider_id ?? "")}`,
+  },
+  flow_connections: {
+    title: "Connection requests that reached a provider",
+    table: "email_log",
+    select: "created_at, recipient, provider_id, email_type, status",
+    where: [
+      "email_type is connection_request",
+      "recipient is a provider",
+      "status is sent — the send came back successful",
+    ],
+    cityScoped: false,
+    providerKeyScoped: "provider_id",
+    summarize: (r) =>
+      `${String(r.recipient ?? "—")} · ${String(r.provider_id ?? "")}`,
   },
   cp1: {
     title: "Providers listed",
@@ -249,11 +289,22 @@ export async function GET(request: NextRequest) {
     }
 
     const db = getServiceClient();
+
+    /*
+     * Rows keyed by a provider carry no city of their own, so narrowing them
+     * means holding the city's provider keys and testing each row. That
+     * cannot be done in the query — a city can hold thousands of keys and
+     * PostgREST carries filters in the URL — so those nodes read a wider
+     * slice and cut it down here.
+     */
+    const keyScoped = Boolean(city && source.providerKeyScoped);
+    const keys = keyScoped ? await providerKeysInCity(db, city!) : null;
+
     let query = db
       .from(source.table)
       .select(source.select)
       .order(source.orderColumn ?? "created_at", { ascending: false })
-      .limit(SAMPLE_SIZE);
+      .limit(keyScoped ? KEY_SCOPED_SCAN : SAMPLE_SIZE);
 
     const where = [...source.where];
     if (source.eventType) query = query.eq("event_type", source.eventType);
@@ -273,6 +324,15 @@ export async function GET(request: NextRequest) {
     if (node === "cp2") {
       query = query.eq("recipient_type", "provider").not("provider_id", "is", null);
     }
+    if (node === "flow_questions" || node === "flow_connections") {
+      query = query
+        .eq(
+          "email_type",
+          node === "flow_questions" ? "question_received" : "connection_request",
+        )
+        .eq("recipient_type", "provider")
+        .eq("status", "sent");
+    }
     if (node === "cr2") {
       query = query.filter("metadata->>referrer_class", "eq", "search");
     }
@@ -282,7 +342,10 @@ export async function GET(request: NextRequest) {
       );
       where.push("benefits and editorial pages (provider pages counted separately)");
     }
-    if (city && source.providerCityScoped) {
+    if (keyScoped) {
+      // Named here so the sample never claims a scope it did not apply.
+      where.push(`narrowed to providers in ${city}`);
+    } else if (city && source.providerCityScoped) {
       const f = cityFilterFromSlug(city);
       if (f) {
         query = query.in("city", f.names).eq("state", f.state);
@@ -305,7 +368,16 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
     if (error) throw error;
 
-    const rows = ((data ?? []) as unknown as Record<string, unknown>[]).map((r) => ({
+    let raw = (data ?? []) as unknown as Record<string, unknown>[];
+    if (keys) {
+      const field = source.providerKeyScoped!;
+      raw = raw.filter((r) => {
+        const key = r[field];
+        return typeof key === "string" && keys.has(key);
+      });
+    }
+
+    const rows = raw.slice(0, SAMPLE_SIZE).map((r) => ({
       when: String(r.created_at ?? r.stage_changed_at ?? ""),
       summary: source.summarize(r),
     }));

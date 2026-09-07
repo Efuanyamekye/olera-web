@@ -197,8 +197,46 @@ export async function countListedProviders(
   return count ?? 0;
 }
 
+/**
+ * A few seconds of memory for the two city scans below.
+ *
+ * The operating map's trend endpoint asks the same question eight times in
+ * one request — once per week of history — and the answer cannot change
+ * between them. Without this each week re-reads the whole city. The window
+ * is short enough that a provider added or removed shows up on the next
+ * page load, which is the same freshness the rest of the console has.
+ */
+const CITY_SCAN_TTL_MS = 30_000;
+const cityScanMemo = new Map<string, { at: number; value: Promise<unknown> }>();
+
+function memoizeCityScan<T>(key: string, run: () => Promise<T>): Promise<T> {
+  const hit = cityScanMemo.get(key);
+  const now = Date.now();
+  if (hit && now - hit.at < CITY_SCAN_TTL_MS) return hit.value as Promise<T>;
+
+  const value = run().catch((error) => {
+    // A failed read must not be remembered, or one blip poisons the window.
+    cityScanMemo.delete(key);
+    throw error;
+  });
+  cityScanMemo.set(key, { at: now, value });
+
+  // Drop anything already stale so the map cannot grow without bound.
+  for (const [k, v] of cityScanMemo) {
+    if (now - v.at >= CITY_SCAN_TTL_MS) cityScanMemo.delete(k);
+  }
+  return value;
+}
+
 /** Every non-deleted provider id in one city. Bounded, like every scan here. */
-export async function listedProviderIdsInCity(
+export function listedProviderIdsInCity(
+  db: SupabaseClient,
+  citySlug: string,
+): Promise<string[]> {
+  return memoizeCityScan(`ids:${citySlug}`, () => scanListedProviderIdsInCity(db, citySlug));
+}
+
+async function scanListedProviderIdsInCity(
   db: SupabaseClient,
   citySlug: string,
 ): Promise<string[]> {
@@ -241,7 +279,14 @@ export async function listedProviderIdsInCity(
  * market rather than as a missed join. So this returns all three kinds and
  * callers test membership instead of equality.
  */
-export async function providerKeysInCity(
+export function providerKeysInCity(
+  db: SupabaseClient,
+  citySlug: string,
+): Promise<Set<string>> {
+  return memoizeCityScan(`keys:${citySlug}`, () => scanProviderKeysInCity(db, citySlug));
+}
+
+async function scanProviderKeysInCity(
   db: SupabaseClient,
   citySlug: string,
 ): Promise<Set<string>> {
