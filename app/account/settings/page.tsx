@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -80,6 +80,12 @@ type NotificationKey =
   | (typeof CAREGIVER_NOTIFICATIONS)[number]["key"];
 
 export default function AccountSettingsPage() {
+  return <Suspense fallback={<div className="p-8 text-sm text-gray-500" role="status">Loading settings…</div>}>
+    <AccountSettingsContent />
+  </Suspense>;
+}
+
+function AccountSettingsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, activeProfile, profiles, refreshAccountData, switchProfile } = useAuth();
