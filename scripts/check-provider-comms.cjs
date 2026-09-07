@@ -196,6 +196,14 @@ async function main() {
       { ...base, id: "e5", provider_id: "missing-id" },
       { ...base, id: "e6", created_at: "2026-09-07T00:00:00Z" },
     ],
+    provider_activity: [
+      { id: "a1", email_log_id: "e1", event_type: "notification_settings_viewed", created_at: "2026-09-03T12:00:00Z", metadata: {} },
+      { id: "a2", email_log_id: "e1", event_type: "notification_settings_viewed", created_at: "2026-09-03T13:00:00Z", metadata: {} },
+      { id: "a3", email_log_id: "e1", event_type: "notification_preference_saved", created_at: "2026-09-03T14:00:00Z", metadata: {key:"new_leads",channel:"sms",enabled:true,previous:false} },
+      { id: "a4", email_log_id: "e2", event_type: "notification_preference_saved", created_at: "2026-09-01T00:00:00Z", metadata: {key:"new_leads",channel:"sms",enabled:true,previous:false} },
+      { id: "a5", email_log_id: "e2", event_type: "notification_settings_viewed", created_at: "2026-09-20T00:00:00Z", metadata: {} },
+      { id: "a6", email_log_id: "e3", event_type: "notification_settings_viewed", created_at: "2026-09-03T00:00:00Z", metadata: {} },
+    ],
     business_profiles: [profile],
     "olera-providers": [{ slug: "public-slug", provider_id: "directory-id" }],
     provider_outreach_touchpoints: [
@@ -220,6 +228,9 @@ async function main() {
     3,
   );
   const stats = reporting.summarizeRecipients(report.recipients)[0];
+  assert.equal(stats.settingsViewed, 1);
+  assert.equal(stats.preferenceSaved, 1);
+  assert.equal(stats.smsEnabled, 1);
   assert.equal(stats.providers, 2); // UUID, public slug and claimed slug collapse
   assert.equal(stats.attempts, 4);
   assert.equal(stats.delivered, 3);

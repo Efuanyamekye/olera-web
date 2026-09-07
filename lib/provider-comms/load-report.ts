@@ -70,6 +70,29 @@ export async function loadProviderCommsReport(
   const selected = emails.filter(
     (row) => includeInternal || !isInternalRecipient(row.recipient),
   );
+  const selectedById = new Map(selected.map(row => [row.id, row]));
+  const outcomes = new Map<string, { settingsViewed: boolean; preferenceSaved: boolean; smsEnabled: boolean }>();
+  // Read by message ID, including outcomes after the selected send window.
+  // Each message gets at most one count per outcome, regardless of repeat visits.
+  for (let i = 0; i < selected.length; i += 80) {
+    const activities = await readAll<{ email_log_id: string; event_type: string; created_at: string; metadata: Record<string, unknown> }>((a, b) =>
+      db.from("provider_activity").select("email_log_id,event_type,created_at,metadata")
+        .in("email_log_id", selected.slice(i, i + 80).map(row => row.id))
+        .in("event_type", ["notification_settings_viewed", "notification_preference_saved"])
+        .order("id").range(a, b));
+    for (const event of activities) {
+      const email = selectedById.get(event.email_log_id);
+      const age = Date.parse(event.created_at) - Date.parse(email?.created_at ?? "");
+      if (!email || !isAcceptedEmail(email) || !Number.isFinite(age) || age < 0 || age > 7 * 86_400_000) continue;
+      const outcome = outcomes.get(email.id) ?? { settingsViewed: false, preferenceSaved: false, smsEnabled: false };
+      if (event.event_type === "notification_settings_viewed") outcome.settingsViewed = true;
+      if (event.event_type === "notification_preference_saved") {
+        outcome.preferenceSaved = true;
+        if (event.metadata?.key === "new_leads" && event.metadata?.channel === "sms" && event.metadata?.enabled === true && event.metadata?.previous === false) outcome.smsEnabled = true;
+      }
+      outcomes.set(email.id, outcome);
+    }
+  }
   const rawIds = [
     ...new Set(
       selected.map((row) => row.provider_id).filter((id): id is string => !!id),
@@ -210,6 +233,7 @@ export async function loadProviderCommsReport(
         delivered: transmitted && !!row.delivered_at,
         opened: transmitted && !!row.first_opened_at,
         clicked: transmitted && !!row.first_clicked_at,
+        ...outcomes.get(row.id),
       };
     })
     .sort(

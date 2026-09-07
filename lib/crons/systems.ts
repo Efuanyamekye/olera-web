@@ -20,6 +20,7 @@ export const AUTOMATION_SYSTEMS: AutomationSystem[] = [
       "verification-reminders",
       "provider-welcome",
       "profile-preview-nudge",
+      "notification-setup-nudge",
       "provider-dormant",
       "provider-anniversary",
     ],

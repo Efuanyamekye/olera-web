@@ -6071,6 +6071,26 @@ export function familyNudgeEmail(opts: {
  * Welcome email sent 24h after provider verification approved.
  * Warm onboarding, sets expectations for getting leads.
  */
+/** Chantel's notification setup email, 72 hours after profile preview. */
+export function onboardingNotificationsEmail(opts: {
+  providerName: string;
+  notificationsUrl: string;
+  providerSlug?: string;
+}): string {
+  const name = escapeHtml(opts.providerName);
+  return layout(`
+    <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.65;">Hi there,</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">
+      Families are discovering ${name} on Olera. Turn on notifications so you never miss a family inquiry.
+    </p>
+    <div style="margin:0 0 24px;">${button("Turn on notifications", opts.notificationsUrl)}</div>
+    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">
+      Set up text alerts so no family is left waiting for a response.
+    </p>
+    ${offRampBlock(opts.providerSlug)}
+  `, "Most families go with the first provider who responds");
+}
+
 /**
  * Onboarding Email 1: profile preview. Sent ~48h after the welcome email.
  *

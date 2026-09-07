@@ -98,6 +98,17 @@ export const CRON_REGISTRY: CronJob[] = [
     relatedAdminPath: "/admin/verification",
   },
   {
+    id: "notification-setup-nudge",
+    name: "Onboarding: Notification setup",
+    description: "Chantel's Email 3. Invites organizations to choose text alerts, 72 hours after profile preview. Does not enable preferences automatically. Failed or pending attempts require review before retry.",
+    recipientCohort: "Organizations claimed within 30 days, with an email and usable US phone, previewed 72+ hours ago, without SMS enabled or a prior attempt.",
+    audience: "Providers", fn: "nudge", schedule: "0 * * * *",
+    humanSchedule: "Hourly (Mon–Fri, 9am–5pm provider local)",
+    path: "/api/cron/notification-setup-nudge", emailTypes: ["notification_setup_nudge"],
+    successSignal: "Provider opens notification settings and explicitly enables SMS. Saved preferences are tracked separately.",
+    relatedAdminPath: "/admin/provider-comms",
+  },
+  {
     id: "verification-reminders",
     name: "Verification reminders",
     description: "Nudges providers who claimed a listing but haven't finished verification: a 7-day reminder, then a 21-day final notice (claim revoked at 30 days).",

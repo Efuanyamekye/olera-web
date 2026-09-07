@@ -23,57 +23,7 @@ type OnboardStep =
   | "success"
   | "error";
 
-/** Shared action→destination mapping for email notification routing */
-function getActionRedirectUrl(
-  action: string | null,
-  actionId: string | null,
-  slug?: string
-): string {
-  // Actions that require an actionId
-  if (action && actionId) {
-    switch (action) {
-      case "lead":
-        return `/provider/connections?id=${actionId}`;
-      case "message":
-        return `/provider/inbox?id=${actionId}`;
-      case "question":
-        return `/provider/qna?id=${actionId}`;
-      case "review":
-        return `/provider/reviews?id=${actionId}`;
-    }
-  }
-  // Actions that don't require an actionId
-  if (action) {
-    switch (action) {
-      case "interview":
-        return "/provider/caregivers";
-      case "manage":
-      case "claim":
-      case "signup":
-        return "/provider";
-      case "settings":
-        return "/account/settings";
-      case "market":
-        // Cold/quiet rank email ("See where you rank") → the Growth diagnostic.
-        return "/provider/growth";
-      case "ads":
-        // Managed-ads digest email ("We'll run the ads") → the boost pitch + setup.
-        return "/provider/boost";
-      case "leads":
-        // Weekly lead-recap email → the Find Families connections inbox.
-        return "/provider/connections";
-      case "matches":
-        // Find Families digest email ("a family near you") → the nearby-seeker leads view.
-        return "/provider/matches";
-      case "profile":
-        // Onboarding profile-preview email ("how does your page look to families?")
-        // → the provider's own PUBLIC page. They arrive signed in, so the owner
-        // affordances show, but the page itself is the one families see.
-        return slug ? `/provider/${slug}` : "/provider";
-    }
-  }
-  return "/provider";
-}
+import { getActionRedirectUrl, isPortalRedirectAction } from "@/lib/provider-comms/destinations";
 
 // Fire-and-forget client-side failure telemetry for the one-click pipeline.
 // Server-side stages log themselves; these cover the hops that only exist in
@@ -102,7 +52,7 @@ export default function ProviderOnboardPage() {
   const providerIdParam = searchParams.get("provider_id");
   const stateParam = searchParams.get("state") as ActionCardState | null;
   // Action params for email notifications (lead/message/review/question) or campaign
-  const actionParam = searchParams.get("action") as NotificationType | "campaign" | "claim" | "signup" | "manage" | "settings" | "market" | "ads" | "leads" | "matches" | "profile" | null;
+  const actionParam = searchParams.get("action") as NotificationType | "campaign" | "claim" | "signup" | "manage" | "settings" | "market" | "ads" | "leads" | "matches" | "profile" | "notifications" | null;
   const actionIdParam = searchParams.get("actionId");
   // Token param for marketing campaign emails (pre-verified flow)
   // Named "otk" (one-time key) instead of "token" to avoid Apple Mail's
@@ -130,6 +80,7 @@ export default function ProviderOnboardPage() {
         // itself under "profile" while the send is logged as
         // "profile_preview_nudge", so the two never line up when grouped by type.
         profile: "profile_preview_nudge",
+        notifications: "notification_setup_nudge",
       };
       fetch("/api/activity/track", {
         method: "POST",
@@ -223,7 +174,7 @@ export default function ProviderOnboardPage() {
         if (bp) {
           // For claimed providers, check if user owns it and redirect appropriately
           if (bp.claim_state === "claimed" && account && bp.account_id === account.id) {
-            router.replace(getActionRedirectUrl(actionParam, actionIdParam, slug));
+            router.replace(getActionRedirectUrl(actionParam, actionIdParam, slug, searchParams.get("eid")));
             return;
           }
 
@@ -499,8 +450,8 @@ export default function ProviderOnboardPage() {
                       switchProfile(ownedProfile.id);
                       console.log("[OneClick] Already signed in as owner");
                       // Auto-redirect for manage/settings (already signed in)
-                      if (actionParam === "manage" || actionParam === "settings" || actionParam === "market" || actionParam === "ads" || actionParam === "leads" || actionParam === "profile") {
-                        router.replace(getActionRedirectUrl(actionParam, null, slug));
+                      if (isPortalRedirectAction(actionParam)) {
+                        router.replace(getActionRedirectUrl(actionParam, null, slug, searchParams.get("eid")));
                       }
                       return;
                     }
@@ -617,8 +568,8 @@ export default function ProviderOnboardPage() {
 
                   // Auto-redirect for manage/settings actions (no notification card)
                   // These footer links should take the user directly to their destination
-                  if (actionParam === "manage" || actionParam === "settings" || actionParam === "market" || actionParam === "ads" || actionParam === "leads" || actionParam === "profile") {
-                    router.replace(getActionRedirectUrl(actionParam, null, slug));
+                  if (isPortalRedirectAction(actionParam)) {
+                    router.replace(getActionRedirectUrl(actionParam, null, slug, searchParams.get("eid")));
                   }
                 } catch (err) {
                   console.warn("[OneClick] Background sign-in error:", err);
@@ -694,7 +645,7 @@ export default function ProviderOnboardPage() {
       if (bp?.claim_state === "claimed") {
         // If the signed-in user owns this listing, redirect to the appropriate section
         if (account && bp.account_id && account.id === bp.account_id) {
-          router.replace(getActionRedirectUrl(actionParam, actionIdParam, slug));
+          router.replace(getActionRedirectUrl(actionParam, actionIdParam, slug, searchParams.get("eid")));
           return;
         }
         // If they arrived from a notification email (lead/question/review),
@@ -718,7 +669,7 @@ export default function ProviderOnboardPage() {
           // This prevents showing "This listing is claimed" error when it's just a missing lead
           if (actionIdParam) {
             console.log("[ProviderOnboard] Notification fetch failed, redirecting to destination");
-            router.replace(getActionRedirectUrl(actionParam, actionIdParam, slug));
+            router.replace(getActionRedirectUrl(actionParam, actionIdParam, slug, searchParams.get("eid")));
             return;
           }
         }
@@ -978,7 +929,7 @@ export default function ProviderOnboardPage() {
       sessionStorage.removeItem("olera_post_claim_redirect");
       return storedRedirect;
     }
-    return getActionRedirectUrl(actionParam, actionIdParam, slug);
+    return getActionRedirectUrl(actionParam, actionIdParam, slug, searchParams.get("eid"));
   };
 
   // Get button text based on action type

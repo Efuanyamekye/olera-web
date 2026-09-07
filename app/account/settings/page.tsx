@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import Modal from "@/components/ui/Modal";
@@ -81,7 +81,8 @@ type NotificationKey =
 
 export default function AccountSettingsPage() {
   const router = useRouter();
-  const { user, activeProfile, profiles, refreshAccountData } = useAuth();
+  const searchParams = useSearchParams();
+  const { user, activeProfile, profiles, refreshAccountData, switchProfile } = useAuth();
 
   // Determine account type for notifications
   const profileType = activeProfile?.type;
@@ -115,7 +116,7 @@ export default function AccountSettingsPage() {
   });
 
   // Tab state
-  const [activeTab, setActiveTab] = useState<SettingsTab>("account");
+  const [activeTab, setActiveTab] = useState<SettingsTab>(() => searchParams.get("tab") === "notifications" ? "notifications" : "account");
 
   // Notification prefs — optimistic overrides for instant toggle response
   const meta = (activeProfile?.metadata || {}) as Record<string, unknown>;
@@ -176,52 +177,62 @@ export default function AccountSettingsPage() {
   const [googleChanging, setGoogleChanging] = useState(false);
 
 
-  // ── Notification toggle (optimistic — flips instantly, persists in background) ──
+  const savingNotification = useRef(false);
+  const [notificationSaving, setNotificationSaving] = useState(false);
+  const viewedNotification = useRef("");
+  const linkedProvider = searchParams.get("provider");
+  const linkedEmail = searchParams.get("eid");
+  const notificationProfileMismatch = !!linkedProvider && linkedProvider !== activeProfile?.slug;
+  useEffect(() => {
+    if (!notificationProfileMismatch) return;
+    const target = profiles.find(profile => profile.slug === linkedProvider);
+    if (target) switchProfile(target.id);
+  }, [notificationProfileMismatch, profiles, linkedProvider, switchProfile]);
+  // Never attribute an action made on another profile in a multi-profile account.
+  const emailLogId = linkedProvider === activeProfile?.slug ? linkedEmail : null;
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    setActiveTab(tab === "notifications" || tab === "help" ? tab : "account");
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (activeTab !== "notifications" || !isOrganization || !activeProfile || notificationProfileMismatch) return;
+    const visitKey = `${activeProfile.id}:${emailLogId || "direct"}`;
+    if (viewedNotification.current === visitKey) return;
+    viewedNotification.current = visitKey;
+    fetch("/api/profile/notification-preferences", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ profileId: activeProfile.id, kind: "view", emailLogId }),
+    }).then(response => { if (!response.ok) viewedNotification.current = ""; })
+      .catch(() => { viewedNotification.current = ""; });
+  }, [activeTab, activeProfile, isOrganization, emailLogId, notificationProfileMismatch]);
+
+  // Serialize toggles in this tab. The server also protects against concurrent
+  // metadata writes from other tabs and onboarding crons.
   const handleNotifToggle = useCallback(
-    (key: NotificationKey, channel: "email" | "sms" | "whatsapp") => {
-      if (!activeProfile || !isSupabaseConfigured()) return;
-
+    async (key: NotificationKey, channel: "email" | "sms" | "whatsapp") => {
+      if (!activeProfile || savingNotification.current || notificationProfileMismatch) return;
+      savingNotification.current = true;
+      setNotificationSaving(true);
       const oKey = `${key}_${channel}`;
-      const currentValue = getNotifOn(key, channel);
-      const newValue = !currentValue;
-
-      // Flip immediately in the UI
-      setOptimisticNotifs((prev) => ({ ...prev, [oKey]: newValue }));
-
-      // Persist in background — use local metadata as base (skip extra SELECT)
-      (async () => {
-        try {
-          const supabase = createClient();
-          const currentMeta = (activeProfile.metadata || {}) as Record<string, unknown>;
-          const currentPrefs = (currentMeta.notification_prefs || {}) as Record<string, Record<string, boolean>>;
-
-          const updatedPrefs = {
-            ...currentPrefs,
-            [key]: { ...(currentPrefs[key] || {}), [channel]: newValue },
-          };
-
-          const { error } = await supabase
-            .from("business_profiles")
-            .update({
-              metadata: { ...currentMeta, notification_prefs: updatedPrefs },
-            })
-            .eq("id", activeProfile.id);
-
-          if (error) throw error;
-          await refreshAccountData();
-        } catch {
-          setNotifError("Couldn't update notification settings. Please try again.");
-        } finally {
-          // Clear optimistic override — server data is now canonical
-          setOptimisticNotifs((prev) => {
-            const next = { ...prev };
-            delete next[oKey];
-            return next;
-          });
-        }
-      })();
-    },
-    [activeProfile, getNotifOn, refreshAccountData]
+      const enabled = !getNotifOn(key, channel);
+      setOptimisticNotifs((prev) => ({ ...prev, [oKey]: enabled }));
+      try {
+        const response = await fetch("/api/profile/notification-preferences", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ profileId: activeProfile.id, kind: "save", key, channel, enabled, emailLogId }),
+        });
+        if (!response.ok) throw new Error("Save failed");
+        await refreshAccountData();
+      } catch {
+        setNotifError("Couldn't update notification settings. Please try again.");
+      } finally {
+        setOptimisticNotifs({});
+        savingNotification.current = false;
+        setNotificationSaving(false);
+      }
+    }, [activeProfile, getNotifOn, refreshAccountData, emailLogId, notificationProfileMismatch]
   );
 
   // ── Send verification email ──
@@ -840,28 +851,27 @@ export default function AccountSettingsPage() {
                   <div className="mb-4 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-emerald-900">Enable WhatsApp notifications</p>
-                      <p className="text-xs text-emerald-700 mt-0.5">Get instant alerts when providers respond — right on WhatsApp.</p>
+                      <p className="text-xs text-emerald-700 mt-0.5">{isOrganization ? "Get instant alerts when families reach out — right on WhatsApp." : "Get instant alerts when providers respond — right on WhatsApp."}</p>
                     </div>
                     <button
                       type="button"
+                      disabled={notificationSaving || notificationProfileMismatch}
                       onClick={async () => {
-                        if (!activeProfile || !isSupabaseConfigured()) return;
+                        if (!activeProfile || savingNotification.current || notificationProfileMismatch) return;
+                        savingNotification.current = true;
+                        setNotificationSaving(true);
                         try {
-                          const supabase = createClient();
-                          const currentMeta = (activeProfile.metadata || {}) as Record<string, unknown>;
-                          await supabase
-                            .from("business_profiles")
-                            .update({
-                              metadata: {
-                                ...currentMeta,
-                                whatsapp_opted_in: true,
-                                whatsapp_opted_in_at: new Date().toISOString(),
-                              },
-                            })
-                            .eq("id", activeProfile.id);
+                          const response = await fetch("/api/profile/notification-preferences", {
+                            method: "POST", headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ profileId: activeProfile.id, kind: "whatsapp", emailLogId }),
+                          });
+                          if (!response.ok) throw new Error("Save failed");
                           await refreshAccountData();
                         } catch {
                           setNotifError("Couldn't enable WhatsApp. Please try again.");
+                        } finally {
+                          savingNotification.current = false;
+                          setNotificationSaving(false);
                         }
                       }}
                       className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg transition-colors shrink-0"
@@ -870,7 +880,8 @@ export default function AccountSettingsPage() {
                     </button>
                   </div>
                 )}
-                <div className="divide-y divide-gray-50">
+                {notificationProfileMismatch && <p role="status" className="mb-4 text-sm text-amber-800">This link is for another provider. Sign in to that provider account to change its notifications.</p>}
+                <fieldset disabled={notificationSaving || notificationProfileMismatch} className="divide-y divide-gray-50 disabled:opacity-70">
                   {notifications.map((notif) => (
                     <NotificationRow
                       key={notif.key}
@@ -883,7 +894,7 @@ export default function AccountSettingsPage() {
                       onToggle={(channel) => handleNotifToggle(notif.key, channel)}
                     />
                   ))}
-                </div>
+                </fieldset>
               </div>
             ) : activeTab === "help" ? (
               /* ── Get Help Tab ── */

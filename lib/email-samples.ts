@@ -64,6 +64,7 @@ import {
   providerProfileCompletionEmail,
   providerWelcomeEmail,
   onboardingProfilePreviewEmail,
+  onboardingNotificationsEmail,
   coldProviderRankEmail,
   providerLeadDigestEmail,
   providerManagedAdsEmail,
@@ -758,6 +759,15 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
       city: "Austin",
       profileUrl: `${SAMPLE_LINK}?action=profile`,
     }),
+  },
+  {
+    id: "provider_notification_setup", audience: "provider", group: "Provider · Onboarding",
+    label: "Notification setup", subject: "Never miss a family inquiry",
+    emailType: "notification_setup_nudge", cron: "notification-setup-nudge",
+    timing: "72h after profile preview · next business-hour run",
+    who: "Claimed organizations with a usable US phone and SMS not enabled.",
+    why: "Help providers choose text alerts for new family inquiries.",
+    render: () => onboardingNotificationsEmail({ providerName: "Evergreen Home Care", providerSlug: "evergreen-home-care", notificationsUrl: `${SAMPLE_LINK}?action=notifications` }),
   },
   {
     id: "provider_completion", audience: "provider", group: "Provider · Lifecycle",
