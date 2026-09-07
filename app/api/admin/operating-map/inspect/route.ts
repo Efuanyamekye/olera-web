@@ -81,7 +81,7 @@ const SOURCES: Record<
       })]}`;
     },
   },
-  cr1: {
+  visits: {
     title: "Page visits — content pages",
     table: "page_events",
     select: "created_at, page, session_id, metadata",
@@ -106,6 +106,18 @@ const SOURCES: Record<
     eventType: "lead_received",
     cityScoped: false,
     summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
+  },
+  cr2: {
+    title: "Families in outreach",
+    table: "email_log",
+    select: "created_at, recipient, email_type",
+    where: [
+      "recipient is a family or seeker",
+      "counted once per address, however many times we wrote",
+    ],
+    cityScoped: false,
+    summarize: (r) =>
+      `${String(r.recipient ?? "—")} · ${String(r.email_type ?? "email")}`,
   },
   cp1: {
     title: "Unclaimed providers",
@@ -336,6 +348,9 @@ export async function GET(request: NextRequest) {
     if (node === "tb1") query = query.eq("type", "inquiry");
     if (node === "tc1") query = query.in("status", ["confirmed", "completed"]);
     if (node === "tc2") query = query.in("status", ["accepted", "confirmed"]);
+    if (node === "cr2") {
+      query = query.in("recipient_type", ["family", "seeker"]);
+    }
     if (node === "cp2") {
       query = query.eq("recipient_type", "provider").not("provider_id", "is", null);
     }
@@ -347,7 +362,7 @@ export async function GET(request: NextRequest) {
       );
       where.push("benefits and editorial pages (provider pages counted separately)");
     }
-    if (node === "cr1") {
+    if (node === "visits") {
       query = query.or(
         `${CONTENT_PAGE_FILTERS.benefit},${CONTENT_PAGE_FILTERS.guide}`,
       );

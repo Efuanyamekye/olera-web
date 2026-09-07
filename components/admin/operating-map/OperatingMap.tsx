@@ -166,7 +166,6 @@ export default function OperatingMap({
   trends,
   metricsLoading,
   onInspect,
-  showNumbers = true,
   controls,
 }: {
   /** Slug of the city the map is scoped to, or null for all cities. */
@@ -179,8 +178,6 @@ export default function OperatingMap({
   metricsLoading: boolean;
   /** Open the receipts for a node. Omitted when inspection is unavailable. */
   onInspect?: (nodeKey: string) => void;
-  /** False strips every value, dash and marker, leaving the structure. */
-  showNumbers?: boolean;
   /**
    * The view's own period and visibility controls, rendered beside the city
    * picker so scope and period read as one row instead of two.
@@ -292,6 +289,17 @@ export default function OperatingMap({
       seg(x, y1, x, y2 - 8);
       head(x, y2, "d");
     };
+    /** Horizontal arrow that can point either way. */
+    const hTo = (y: number, x1: number, x2: number) => {
+      const dir = x2 > x1 ? 1 : -1;
+      seg(x1, y, x2 - 8 * dir, y);
+      const p = document.createElementNS(SVG_NS, "polygon");
+      p.setAttribute(
+        "points",
+        [`${x2},${y}`, `${x2 - 8 * dir},${y - 4.4}`, `${x2 - 8 * dir},${y + 4.4}`].join(" "),
+      );
+      svg!.appendChild(p);
+    };
     const hArrow = (y: number, x1: number, x2: number) => {
       seg(x1, y, x2 - 8, y);
       head(x2, y, "r");
@@ -307,64 +315,81 @@ export default function OperatingMap({
       const B = box(b);
       hArrow(B.cy, x + 1, B.l - G);
     };
-    /** The line every top-section drop terminates on. */
-    const BT = box("bottom").t - G;
-
-    const traffic = box("traffic");
-    const cp2 = box("cp2");
-
-    /* families engaged, then the ones we contact */
-    vDown("cr1", "cr2");
-    const cr2 = box("cr2");
-    vArrow(cr2.cx, cr2.b + G, BT);
-
-    /* care provider */
-    vDown("cp1", "cp2");
-    seg(cp2.cx, cp2.b + G, cp2.cx, BT - 8);
-    head(cp2.cx, BT, "d");
-
-    /* care worker runs straight down its lane and into the milestone layer */
-    vDown("cw1", "cw2");
-    const cw2 = box("cw2");
-    vArrow(cw2.cx, cw2.b + G, BT);
-
-    /* inside the tracks */
-    vDown("ta1", "ta2");
-    vDown("tb1", "tb2");
-    vDown("tc1", "tc2");
-
-    /*
-     * Aid and care converge on the spending outcome, care workers on their
-     * own. The bar is stretched to cover the outcome's centre as well as the
-     * two tracks feeding it — otherwise the drop comes off the end of the
-     * bar and reads as a line crossing rather than a join.
+    /**
+     * Down the lane, then across where the lanes meet.
+     *
+     * Two crossings carry the whole argument of the map: the provider's paid
+     * products feed both the family connection and the hire, so M4 reaches
+     * into the seeker lane and the worker lane alike. Each crossing leaves
+     * its box from the side, drops clear of the rows between, and enters its
+     * target from the side — never through a card.
      */
+
+    /* care seeker: demand, then the profile, then what it turns into */
+    vDown("cr1", "cr2");
+    vDown("cr2", "m1");
+
+    const m1 = box("m1");
+    const ta1 = box("ta1");
+    const tb1 = box("tb1");
+
+    /* the aid branch leaves the profile on the left and drops into TA1 */
+    const branchX = m1.l + 16;
+    seg(branchX, m1.b + G, branchX, ta1.cy);
+    hArrow(ta1.cy, branchX, ta1.l - G);
+    vDown("ta1", "ta2");
+
+    /* the same profile continues down the lane into the connection */
+    seg(m1.cx, m1.b + G, m1.cx, tb1.t - 8);
+    head(m1.cx, tb1.t - G, "d");
+
+    vDown("tb1", "tb2");
+
+    /* aid confirmed and care confirmed both land on the same outcome */
     const ta2 = box("ta2");
     const tb2 = box("tb2");
-    const tc2 = box("tc2");
     const o1 = box("o1");
-    const o2 = box("o2");
-
-    const outBar = Math.max(ta2.b, tb2.b) + 24;
-    seg(ta2.cx, ta2.b + G, ta2.cx, outBar);
-    seg(tb2.cx, tb2.b + G, tb2.cx, outBar);
+    const o1Bar = Math.max(ta2.b, tb2.b) + 18;
+    seg(ta2.cx, ta2.b + G, ta2.cx, o1Bar);
+    seg(tb2.cx, tb2.b + G, tb2.cx, o1Bar);
     seg(
       Math.min(ta2.cx, tb2.cx, o1.cx),
-      outBar,
+      o1Bar,
       Math.max(ta2.cx, tb2.cx, o1.cx),
-      outBar,
+      o1Bar,
     );
-    vArrow(o1.cx, outBar, o1.t - G);
+    vArrow(o1.cx, o1Bar, o1.t - G);
 
-    /* the care worker track has one outcome of its own */
-    if (Math.abs(tc2.cx - o2.cx) < 1) {
-      vArrow(tc2.cx, tc2.b + G, o2.t - G);
-    } else {
-      const bar2 = tc2.b + 24;
-      seg(tc2.cx, tc2.b + G, tc2.cx, bar2);
-      seg(tc2.cx, bar2, o2.cx, bar2);
-      vArrow(o2.cx, bar2, o2.t - G);
-    }
+    /* care provider: supply, then outreach, then the two paid products */
+    vDown("cp1", "cp2");
+    vDown("cp2", "m2");
+    vDown("m2", "m3");
+    vDown("m3", "m4");
+
+    /* care worker: campuses, then advisors, then applicants */
+    vDown("cw1", "cw2");
+    vDown("cw2", "m5");
+    vDown("m5", "tc1");
+    vDown("tc1", "tc2");
+    vDown("tc2", "o2");
+
+    /*
+     * The two crossings. Both leave M4 sideways at a height below every card
+     * in its own lane, so the run across never passes through one.
+     */
+    const m4 = box("m4");
+    const tc1 = box("tc1");
+    const crossY = m4.b + 20;
+
+    seg(m4.cx, m4.b + G, m4.cx, crossY);
+    /* left, into the family connection */
+    seg(m4.l - 18, crossY, m4.cx, crossY);
+    seg(m4.l - 18, crossY, m4.l - 18, tb1.cy);
+    hTo(tb1.cy, m4.l - 18, tb1.r + G);
+    /* right, into the interview */
+    seg(m4.cx, crossY, m4.r + 18, crossY);
+    seg(m4.r + 18, crossY, m4.r + 18, tc1.cy);
+    hTo(tc1.cy, m4.r + 18, tc1.l - G);
   }, []);
 
   useLayoutEffect(() => {
@@ -405,7 +430,7 @@ export default function OperatingMap({
   useLayoutEffect(() => {
     // Values change card heights, and every arrow is measured from those.
     draw();
-  }, [draw, nodes, metricsLoading, showNumbers]);
+  }, [draw, nodes, metricsLoading]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -646,17 +671,21 @@ export default function OperatingMap({
           onClick={() => onInspect?.("traffic")}
         >
           All traffic
-          {showNumbers && (
-            <span className={styles.filterCount}>
+          <span className={styles.filterCount}>
               {metricsLoading
                 ? "…"
                 : typeof nodes.traffic?.value === "number"
                   ? nodes.traffic.value.toLocaleString()
                   : NOT_INSTRUMENTED}
-            </span>
-          )}
+          </span>
         </button>
         {controls}
+        {/* An outcome of the whole map rather than of one lane, so it sits
+            with the scope controls rather than inside the figure. */}
+        <div className={styles.topStat}>
+          <span className={styles.lab}>Revenue generated</span>
+          <span className={styles.v}>{NOT_INSTRUMENTED}</span>
+        </div>
       </div>
 
       <div className={styles.fit} ref={fitRef}>
@@ -664,22 +693,22 @@ export default function OperatingMap({
           <section className={styles.system} ref={rootRef}>
           <svg className={styles.wires} ref={svgRef} role="presentation" />
 
-          <div className={styles.topStat}>
-            <span className={styles.lab}>Revenue generated</span>
-            {showNumbers && <span className={styles.v}>{NOT_INSTRUMENTED}</span>}
-          </div>
-
           <div className={styles.lanes3} style={{ marginBottom: 8 }}>
             <div className={styles.lab}>Care seeker</div>
             <div className={styles.lab}>Care provider</div>
             <div className={styles.lab}>Care worker</div>
           </div>
 
-          {/* ---------------- top ---------------- */}
+          {/*
+            Three lanes, each running top to bottom from demand or supply
+            down to the outcome it produces. Everything that used to sit in
+            a milestone strip or a track block now lives in the lane it
+            belongs to; the arrows carry the crossings.
+          */}
           <div className={styles.lanes3}>
-            {/* care recipient */}
+
+            {/* care seeker */}
             <div className={styles.lane}>
-              <div className={`${styles.chips} ${styles.solo}`}>
                 <Card
                   id="cr1"
                   code="CR1"
@@ -691,10 +720,8 @@ export default function OperatingMap({
                   onTip={openTip}
                   onTipClose={closeTip}
                   onInspect={onInspect}
-                  showNumbers={showNumbers}
                 />
-              </div>
-              <div style={{ marginTop: 22 }}>
+              <div className={styles.gap} />
                 <Card
                   id="cr2"
                   code="CR2"
@@ -705,82 +732,8 @@ export default function OperatingMap({
                   onTip={openTip}
                   onTipClose={closeTip}
                   onInspect={onInspect}
-                  showNumbers={showNumbers}
                 />
-              </div>
-            </div>
-
-            {/* care provider */}
-            <div className={styles.lane}>
-              <div className={`${styles.chips} ${styles.solo}`}>
-                <Card
-                  id="cp1"
-                  code="CP1"
-                  label="Unclaimed providers"
-                  metric={nodes.cp1}
-                  trend={trends.cp1}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                  showNumbers={showNumbers}
-                />
-              </div>
-              <div className={styles.soloWrap}>
-                <Card
-                  id="cp2"
-                  code="CP2"
-                  label="Providers in outreach"
-                  metric={nodes.cp2}
-                  trend={trends.cp2}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                  showNumbers={showNumbers}
-                />
-              </div>
-            </div>
-
-            {/* care worker */}
-            <div className={styles.lane}>
-              <Card
-                id="cw1"
-                code="CW1"
-                label="Universities targeted"
-                  parts="universities · advisors"
-                metric={nodes.cw1}
-                trend={trends.cw1}
-                loading={metricsLoading}
-                onTip={openTip}
-                onTipClose={closeTip}
-                onInspect={onInspect}
-                  showNumbers={showNumbers}
-              />
               <div className={styles.gap} />
-              <Card
-                id="cw2"
-                code="CW2"
-                label="Advisors in outreach"
-                metric={nodes.cw2}
-                trend={trends.cw2}
-                loading={metricsLoading}
-                onTip={openTip}
-                onTipClose={closeTip}
-                onInspect={onInspect}
-                  showNumbers={showNumbers}
-              />
-              <div className={styles.gap} />
-            </div>
-          </div>
-
-          <div style={{ height: 30 }} />
-
-          {/* ---------------- bottom ---------------- */}
-          <div id={nodeId("bottom")}>
-            <div className={`${styles.col} ${styles.strip}`}>
-              <span className={styles.lab}>User milestone</span>
-              <div className={styles.stripRow}>
                 <Card
                   hi
                   id="m1"
@@ -793,8 +746,101 @@ export default function OperatingMap({
                   onTip={openTip}
                   onTipClose={closeTip}
                   onInspect={onInspect}
-                  showNumbers={showNumbers}
                 />
+
+              {/* the aid branch hangs off the profile, indented to say so */}
+              <div className={styles.branch}>
+                  <Card
+                    id="ta1"
+                    code="TA1"
+                    label="Aid applied"
+                    metric={nodes.ta1}
+                    trend={trends.ta1}
+                    loading={metricsLoading}
+                    onTip={openTip}
+                    onTipClose={closeTip}
+                    onInspect={onInspect}
+                  />
+                <div className={styles.gapSm} />
+                  <Card
+                    id="ta2"
+                    code="TA2"
+                    label="Aid confirmed"
+                    metric={nodes.ta2}
+                    trend={trends.ta2}
+                    loading={metricsLoading}
+                    onTip={openTip}
+                    onTipClose={closeTip}
+                    onInspect={onInspect}
+                  />
+              </div>
+
+              <div className={styles.gap} />
+                <Card
+                  id="tb1"
+                  code="TB1"
+                  label="Family–provider connected"
+                  metric={nodes.tb1}
+                  trend={trends.tb1}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
+                <Card
+                  id="tb2"
+                  code="TB2"
+                  label="Care confirmed"
+                  metric={nodes.tb2}
+                  trend={trends.tb2}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
+                <Card
+                  hi
+                  id="o1"
+                  code="O1"
+                  label="Est. healthcare utilization reduction"
+                  money="Value created"
+                  metric={nodes.o1}
+                  trend={trends.o1}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+            </div>
+
+            {/* care provider */}
+            <div className={styles.lane}>
+                <Card
+                  id="cp1"
+                  code="CP1"
+                  label="Unclaimed providers"
+                  metric={nodes.cp1}
+                  trend={trends.cp1}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
+                <Card
+                  id="cp2"
+                  code="CP2"
+                  label="Providers in outreach"
+                  metric={nodes.cp2}
+                  trend={trends.cp2}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
                 <Card
                   hi
                   id="m2"
@@ -807,35 +853,65 @@ export default function OperatingMap({
                   onTip={openTip}
                   onTipClose={closeTip}
                   onInspect={onInspect}
-                  showNumbers={showNumbers}
                 />
+              <div className={styles.gap} />
                 <Card
                   hi
                   id="m3"
-                  code="M3" money="Paid product"
+                  code="M3"
                   label="Managed ads"
                   parts="signups · repeat"
+                  money="Paid product"
                   metric={nodes.m3}
                   trend={trends.m3}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
                   onInspect={onInspect}
-                  showNumbers={showNumbers}
                 />
+              <div className={styles.gap} />
                 <Card
                   hi
                   id="m4"
                   code="M4"
                   label="Provider staffing signups"
+                  money="Paid product"
                   metric={nodes.m4}
                   trend={trends.m4}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
                   onInspect={onInspect}
-                  showNumbers={showNumbers}
                 />
+            </div>
+
+            {/* care worker */}
+            <div className={styles.lane}>
+                <Card
+                  id="cw1"
+                  code="CW1"
+                  label="Universities targeted"
+                  parts="universities · advisors"
+                  metric={nodes.cw1}
+                  trend={trends.cw1}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
+                <Card
+                  id="cw2"
+                  code="CW2"
+                  label="Advisors in outreach"
+                  metric={nodes.cw2}
+                  trend={trends.cw2}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
                 <Card
                   hi
                   id="m5"
@@ -848,99 +924,48 @@ export default function OperatingMap({
                   onTip={openTip}
                   onTipClose={closeTip}
                   onInspect={onInspect}
-                  showNumbers={showNumbers}
                 />
-              </div>
-            </div>
-
-            <div className={styles.tracks}>
-              <div className={styles.col} id={nodeId("ta")}>
-                <span className={styles.lab}>TA aid establishment</span>
-                <div className={styles.stack}>
-                  <Card
-                    id="ta1"
-                    code="TA1"
-                    label="Applied"
-                    metric={nodes.ta1}
-                    trend={trends.ta1}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={closeTip}
-                    onInspect={onInspect}
-                    showNumbers={showNumbers}
-                  />
-                  <Card id="ta2" code="TA2" label="Aid confirmed" />
-                </div>
-              </div>
-
-              <div className={styles.col} id={nodeId("tb")}>
-                <span className={styles.lab}>TB care establishment</span>
-                <div className={styles.stack}>
-                  <Card
-                    id="tb1"
-                    code="TB1"
-                    label="Family–provider connected"
-                    metric={nodes.tb1}
-                    trend={trends.tb1}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={closeTip}
-                    onInspect={onInspect}
-                    showNumbers={showNumbers}
-                  />
-                  <Card id="tb2" code="TB2" label="Care confirmed" />
-                </div>
-              </div>
-
-              <div className={styles.col} id={nodeId("tc")}>
-                <span className={styles.lab}>TC care worker hiring</span>
-                <div className={styles.stack}>
-                  <Card
-                    id="tc1"
-                    code="TC1"
-                    label="Interviews"
+              <div className={styles.gap} />
+                <Card
+                  id="tc1"
+                  code="TC1"
+                  label="Interviews"
                   parts="scheduled · completed"
-                    metric={nodes.tc1}
-                    trend={trends.tc1}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={closeTip}
-                    onInspect={onInspect}
-                    showNumbers={showNumbers}
-                  />
-                  <Card
-                    id="tc2"
-                    code="TC2"
-                    money="Revenue generating"
-                    label="Hires confirmed"
-                    metric={nodes.tc2}
-                    trend={trends.tc2}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={closeTip}
-                    onInspect={onInspect}
-                    showNumbers={showNumbers}
-                  />
-                </div>
-              </div>
+                  metric={nodes.tc1}
+                  trend={trends.tc1}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
+                <Card
+                  id="tc2"
+                  code="TC2"
+                  label="Hires confirmed"
+                  metric={nodes.tc2}
+                  trend={trends.tc2}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
+                <Card
+                  hi
+                  id="o2"
+                  code="O2"
+                  label="Est. new care workers"
+                  money="Value created"
+                  metric={nodes.o2}
+                  trend={trends.o2}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
             </div>
 
-            <div className={styles.outrow}>
-              <Card
-                hi
-                id="o1"
-                code="O1"
-                money="Value created"
-                label="Est. healthcare utilization reduction"
-              />
-              <Card
-                hi
-                id="o2"
-                code="O2"
-                money="Value created"
-                label="Est. new care workers"
-              />
-            </div>
           </div>
           </section>
         </div>
@@ -962,7 +987,6 @@ function Card({
   onTip,
   onTipClose,
   onInspect,
-  showNumbers,
 }: {
   id: string;
   code: string;
@@ -982,7 +1006,6 @@ function Card({
   onTip?: TipOpener;
   onTipClose?: () => void;
   onInspect?: (nodeKey: string) => void;
-  showNumbers?: boolean;
 }) {
   return (
     <div className={`${styles.card}${hi ? ` ${styles.hi}` : ""}`} id={nodeId(id)}>
@@ -1005,62 +1028,14 @@ function Card({
             onInspect={onInspect}
             onTip={onTip}
             onTipClose={onTipClose}
-            showNumbers={showNumbers}
           />
         </span>
       </div>
-      {parts && showNumbers && (
+      {parts && (
         <div className={styles.n}>
-          <Surfaces metric={metric} fallback={parts} showNumbers={showNumbers} />
+          <Surfaces metric={metric} fallback={parts} />
         </div>
       )}
-    </div>
-  );
-}
-
-function Chip({
-  id,
-  code,
-  label,
-  metric,
-  trend,
-  loading,
-  onTip,
-  onTipClose,
-  onInspect,
-  showNumbers,
-}: {
-  id: string;
-  code: string;
-  label: string;
-  metric?: MetricNode;
-  trend?: NodeTrend;
-  loading?: boolean;
-  onTip?: TipOpener;
-  onTipClose?: () => void;
-  onInspect?: (nodeKey: string) => void;
-  showNumbers?: boolean;
-}) {
-  return (
-    <div className={styles.chip} id={nodeId(id)}>
-      <div className={styles.chipHead}>
-        <span>
-          <b>{code}</b>
-          <span className={styles.name}>{label}</span>
-        </span>
-        <span style={{ whiteSpace: "nowrap" }}>
-          <MetricValue
-            metric={metric}
-            trend={trend}
-            loading={loading}
-            nodeKey={id}
-            onInspect={onInspect}
-            onTip={onTip}
-            onTipClose={onTipClose}
-            showNumbers={showNumbers}
-          />
-        </span>
-      </div>
     </div>
   );
 }
@@ -1079,16 +1054,11 @@ export type TipOpener = (
 function Surfaces({
   metric,
   fallback,
-  showNumbers = true,
 }: {
   metric?: MetricNode;
   /** Shown before the node is instrumented. */
   fallback?: string;
-  showNumbers?: boolean;
 }) {
-  // With numbers off this line is only separators and the words between
-  // them — reporting furniture with nothing left to report.
-  if (!showNumbers) return null;
   const parts = metric?.breakdown;
   if (!parts?.length) {
     return (
@@ -1123,7 +1093,6 @@ function MetricValue({
   onInspect,
   onTip,
   onTipClose,
-  showNumbers = true,
 }: {
   metric?: MetricNode;
   trend?: NodeTrend;
@@ -1132,12 +1101,7 @@ function MetricValue({
   onInspect?: (nodeKey: string) => void;
   onTip?: TipOpener;
   onTipClose?: () => void;
-  showNumbers?: boolean;
 }) {
-  // With numbers off there is nothing to say here, not even that we do not
-  // know — a dash is still reporting.
-  if (!showNumbers) return null;
-
   // Hovering the number opens its explanation. There is no separate icon:
   // one on every card was a field of small glyphs to look past, and the
   // number is the thing you are already looking at.

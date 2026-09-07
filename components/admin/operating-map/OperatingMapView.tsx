@@ -31,9 +31,6 @@ export default function OperatingMapView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const selectedCity = searchParams.get("city");
-  // Numbers off gives the plain structure — the funnel without the reporting.
-  const showNumbers = searchParams.get("numbers") !== "off";
-
   const [range, setRange] = useUrlDateRangeState(DEFAULT_RANGE);
   const resolved = useMemo(() => resolveRange(range), [range]);
 
@@ -41,14 +38,6 @@ export default function OperatingMapView() {
   const [trends, setTrends] = useState<NodeTrends>({});
   const [inspecting, setInspecting] = useState<string | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(true);
-
-  const toggleNumbers = useCallback(() => {
-    const next = new URLSearchParams(searchParams.toString());
-    if (showNumbers) next.set("numbers", "off");
-    else next.delete("numbers");
-    const query = next.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
-  }, [pathname, router, searchParams, showNumbers]);
 
   const onSelectCity = useCallback(
     (slug: string | null) => {
@@ -131,28 +120,11 @@ export default function OperatingMapView() {
       <OperatingMap
         selectedCity={selectedCity}
         onSelectCity={onSelectCity}
-        nodes={showNumbers ? nodes : {}}
-        trends={showNumbers ? trends : {}}
-        metricsLoading={showNumbers && metricsLoading}
-        onInspect={showNumbers ? setInspecting : undefined}
-        showNumbers={showNumbers}
-        controls={
-          <>
-            <button
-              type="button"
-              onClick={toggleNumbers}
-              aria-pressed={!showNumbers}
-              className={`inline-flex h-9 items-center rounded-full border px-3.5 text-sm font-medium transition-colors ${
-                showNumbers
-                  ? "border-gray-200 bg-white text-gray-900 hover:border-gray-300"
-                  : "border-gray-900 bg-gray-900 text-white"
-              }`}
-            >
-              {showNumbers ? "Hide numbers" : "Numbers hidden"}
-            </button>
-            <DateRangePopover value={range} onChange={setRange} />
-          </>
-        }
+        nodes={nodes}
+        trends={trends}
+        metricsLoading={metricsLoading}
+        onInspect={setInspecting}
+        controls={<DateRangePopover value={range} onChange={setRange} />}
       />
 
       {inspecting && (

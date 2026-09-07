@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
 
 /**
- * CR6 — the actions a care recipient takes, not the pages they read.
+ * CR1 — the actions a care seeker takes, not the pages they read.
  *
  * Three ways of asking us for something, and their sum:
  *
@@ -20,7 +20,7 @@ import { cityFilterFromSlug, providerKeysInCity } from "@/lib/providers";
  * is ABOUT, which is the reading that matters for a marketplace:
  *
  *   questions and connections   the provider's city; the ask is about them
- *   benefits assessments        the care recipient's own city; no provider
+ *   benefits assessments        the care seeker's own city; no provider
  *                               is involved at all
  *
  * Provider-keyed rows are matched against both the directory id and the slug
@@ -122,7 +122,7 @@ async function countKeyed(
   return matched;
 }
 
-/** Care recipient profile ids in one city — what benefits events hang off. */
+/** Care seeker profile ids in one city — what benefits events hang off. */
 async function familyProfileIdsInCity(
   db: SupabaseClient,
   citySlug: string,
