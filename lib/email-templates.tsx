@@ -6692,20 +6692,31 @@ export function cityOfferEmail(opts: {
   minutes: number;
   offerUrl: string;
 }): string {
-  const pay = opts.paymentLabel ? `, ${escapeHtml(opts.paymentLabel)}` : "";
+  const bits = [
+    `${cap(opts.careLabel)} for ${opts.recipientLabel}`,
+    cap(opts.urgencyLabel),
+    opts.paymentLabel ? cap(opts.paymentLabel) : null,
+    opts.city,
+  ]
+    .filter(Boolean)
+    .map((b) => escapeHtml(String(b)))
+    .join(" &middot; ");
   return layout(
     `
-    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">Olera · ${escapeHtml(opts.city)}</p>
+    <p style="font-size:12px;font-weight:600;color:${BRAND_COLOR};text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">${escapeHtml(opts.city)}</p>
     <h1 style="font-size:24px;font-weight:700;color:#111827;margin:0 0 16px;line-height:1.3;">A family near you needs ${escapeHtml(opts.careLabel)}</h1>
-    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 20px;">
-      <p style="font-size:15px;color:#111827;margin:0;line-height:1.6;">A family in <b>${escapeHtml(opts.city)}</b> is looking for <b>${escapeHtml(opts.careLabel)}</b> for ${escapeHtml(opts.recipientLabel)}, ${escapeHtml(opts.urgencyLabel)}${pay}.</p>
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;margin:0 0 16px;">
+      <p style="font-size:15px;color:#111827;margin:0;line-height:1.6;">${bits}</p>
     </div>
-    <p style="font-size:15px;color:#374151;margin:0 0 8px;line-height:1.65;">It is offered to <b>${escapeHtml(opts.providerName)}</b> first. You have <b>${opts.minutes} minutes</b> before we also offer it to the next provider. Take it and their name and number are on the next screen; you call them today.</p>
-    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">Free during the pilot. Olera does not sell this request to anyone else.</p>
-    <div>${button("See the request and take it", opts.offerUrl)}</div>
-    <p style="font-size:13px;color:#6b7280;margin:20px 0 0;line-height:1.6;">Cannot take it? <a href="${opts.offerUrl}" style="color:#6b7280;text-decoration:underline;">Pass</a> on the same page so it moves on faster. If you also got a text from us, replying YES there works too. Replies to this email are not read.</p>`,
+    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">You have <b>${opts.minutes} minutes</b>. After that we ask the next provider too.</p>
+    <div>${button("Take this family", opts.offerUrl)}</div>
+    <p style="font-size:13px;color:#6b7280;margin:16px 0 0;line-height:1.6;">Can&rsquo;t take it? <a href="${opts.offerUrl}" style="color:#6b7280;text-decoration:underline;">Pass</a></p>`,
     `A family in ${opts.city} needs ${opts.careLabel}. ${opts.minutes} minutes to take it.`,
   );
+}
+
+function cap(s: string): string {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
 }
 
 export function cityOfferAcceptedEmail(opts: { providerName: string; city: string; careLabel: string; callBy: string; offerUrl: string }): string {
