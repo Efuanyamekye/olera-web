@@ -173,6 +173,29 @@
 }
 .valueMuted { color: var(--ink-2); font-weight: 600; }
 
+/*
+ * The month arrow. Sized to be noticed only once you are looking at the
+ * number it belongs to, and always the same colour as that number, so it
+ * reads as one reading rather than a second competing signal.
+ *
+ * The slot is rendered whether or not there is an arrow in it, so a card
+ * with a trend and a card without are exactly the same height and the wire
+ * overlay measures one consistent geometry.
+ */
+.valueWrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  vertical-align: baseline;
+}
+.trendArrow {
+  font-size: 8px;
+  line-height: 1;
+  height: 8px;
+  margin-top: 2px;
+  letter-spacing: 0;
+}
+
 /* A value you can open. Underlined on hover so it reads as inspectable. */
 .valueButton {
   border: 0;
@@ -187,6 +210,25 @@
 }
 .valueButton:hover { color: var(--accent); text-decoration: underline; }
 .valueButton:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+/*
+ * Trend colouring — red through neutral to green, seven steps.
+ *
+ * The ramp is deliberately asymmetric in saturation, not in lightness: every
+ * shade clears 3:1 against the card behind it, which is what the value's
+ * size and weight need to stay legible once the figure is scaled down. A
+ * flat number keeps the ordinary ink colour, so colour on this page always
+ * means movement and never decoration.
+ *
+ * The greens lean away from the teal accent on purpose. On a teal card a
+ * teal number reads as branding rather than as growth.
+ */
+.tUp1 { color: #4f8a48; }
+.tUp2 { color: #2b7d36; }
+.tUp3 { color: #146b2b; }
+.tDown1 { color: #b3634b; }
+.tDown2 { color: #ad392a; }
+.tDown3 { color: #8a1c14; }
 
 /*
  * The info affordance and its tooltip.

@@ -77,6 +77,50 @@ export interface MetricNode {
 export type MetricNodes = Record<string, MetricNode | undefined>;
 
 /**
+ * One node's direction, as /api/admin/operating-map/trends returns it.
+ * Fixed windows — the last 7 and 30 days — regardless of the range on
+ * screen, so the colour means the same thing whatever period is selected.
+ */
+export interface NodeTrend {
+  /** -3 to +3. Zero is flat. */
+  score: number;
+  /** Week-over-week change as a fraction, or null when there was no baseline. */
+  weekChange: number | null;
+  monthDirection: -1 | 0 | 1;
+  week: { now: number; prior: number };
+  month: { now: number; prior: number };
+}
+
+export type NodeTrends = Record<string, NodeTrend | undefined>;
+
+/** The class that paints a value its trend colour. Flat keeps ordinary ink. */
+function toneClass(score: number): string | null {
+  const step = Math.min(3, Math.abs(score));
+  if (step === 0) return null;
+  return styles[score > 0 ? `tUp${step}` : `tDown${step}`] ?? null;
+}
+
+/**
+ * The trend in words, for the tooltip. Percentages are only quoted where
+ * there was something to compare against; the rest says what happened
+ * instead of inventing a denominator.
+ */
+function trendNote(t: NodeTrend): string {
+  const pct = (v: number) => `${v > 0 ? "+" : "−"}${Math.abs(Math.round(v * 100))}%`;
+  const week =
+    t.weekChange === null
+      ? t.week.now > 0
+        ? `${t.week.now} this week, none the week before`
+        : "nothing in either of the last two weeks"
+      : `${pct(t.weekChange)} this week (${t.week.now} vs ${t.week.prior})`;
+  const month =
+    t.monthDirection === 0
+      ? "flat over the month"
+      : `${t.monthDirection > 0 ? "up" : "down"} over the month (${t.month.now} vs ${t.month.prior})`;
+  return `${week}; ${month}. Colour and arrow always read the last 7 and 30 days, not the selected range.`;
+}
+
+/**
  * What a node's number means, in the fewest words that still let someone act
  * on it: what is counted, where it comes from, how to read it. Only nodes
  * that show a number get one — a dash needs no explanation.
@@ -119,6 +163,8 @@ const NODE_HELP: Record<string, string> = {
 interface Tip {
   text: string;
   caveat?: string | null;
+  /** How the number is moving. Rendered under the caveat, in the same voice. */
+  trend?: string | null;
   x: number;
   y: number;
 }
@@ -127,6 +173,7 @@ export default function OperatingMap({
   selectedCity,
   onSelectCity,
   nodes,
+  trends,
   metricsLoading,
   onInspect,
   showNumbers = true,
@@ -136,6 +183,8 @@ export default function OperatingMap({
   onSelectCity: (slug: string | null) => void;
   /** Instrumented node values, keyed by node id. Missing = not instrumented. */
   nodes: MetricNodes;
+  /** Direction per node. Arrives after the values; missing = uncoloured. */
+  trends: NodeTrends;
   metricsLoading: boolean;
   /** Open the receipts for a node. Omitted when inspection is unavailable. */
   onInspect?: (nodeKey: string) => void;
@@ -416,7 +465,12 @@ export default function OperatingMap({
    * the unscaled root so the tooltip renders at full size, whatever the
    * figure has been scaled to.
    */
-  const openTip = useCallback((el: HTMLElement, key: string, caveat?: string | null) => {
+  const openTip = useCallback((
+    el: HTMLElement,
+    key: string,
+    caveat?: string | null,
+    trend?: string | null,
+  ) => {
     const text = NODE_HELP[key];
     if (!text) return;
     const root = rootWrapRef.current;
@@ -426,7 +480,7 @@ export default function OperatingMap({
     const TIP_WIDTH = 320;
     // Keep it inside the wrapper rather than letting it hang off the edge.
     const x = Math.min(Math.max(r.left - c.left - 8, 8), Math.max(c.width - TIP_WIDTH - 8, 8));
-    setTip({ text, caveat, x, y: r.bottom - c.top + 8 });
+    setTip({ text, caveat, trend, x, y: r.bottom - c.top + 8 });
   }, []);
 
   return (
@@ -435,6 +489,7 @@ export default function OperatingMap({
         <div className={styles.tip} style={{ left: tip.x, top: tip.y }} role="tooltip">
           {tip.text}
           {tip.caveat && <span className={styles.tipCaveat}>{tip.caveat}</span>}
+          {tip.trend && <span className={styles.tipCaveat}>{tip.trend}</span>}
         </div>
       )}
       <div className={styles.fit} ref={fitRef}>
@@ -551,6 +606,7 @@ export default function OperatingMap({
                   code="CR2"
                   label="Organic visitors"
                   metric={nodes.cr2}
+                  trend={trends.cr2}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -564,6 +620,7 @@ export default function OperatingMap({
                   id="cr4"
                   code="CR4"
                   metric={nodes.cr4}
+                  trend={trends.cr4}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -581,6 +638,7 @@ export default function OperatingMap({
                     code="CR6"
                     label="CTAs completed"
                     metric={nodes.cr6}
+                    trend={trends.cr6}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={() => setTip(null)}
@@ -594,6 +652,7 @@ export default function OperatingMap({
                     code="CR6a"
                     label="Questions"
                     metric={nodes.cr6a}
+                    trend={trends.cr6a}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={() => setTip(null)}
@@ -605,6 +664,7 @@ export default function OperatingMap({
                     code="CR6b"
                     label="Connections"
                     metric={nodes.cr6b}
+                    trend={trends.cr6b}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={() => setTip(null)}
@@ -616,6 +676,7 @@ export default function OperatingMap({
                     code="CR6c"
                     label="Benefits Assessment"
                     metric={nodes.cr6c}
+                    trend={trends.cr6c}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={() => setTip(null)}
@@ -641,6 +702,7 @@ export default function OperatingMap({
                     </>
                   }
                   metric={nodes.cp1}
+                  trend={trends.cp1}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -654,6 +716,7 @@ export default function OperatingMap({
                   code="CP2"
                   label="In outreach"
                   metric={nodes.cp2}
+                  trend={trends.cp2}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -670,6 +733,7 @@ export default function OperatingMap({
                 code="CW1"
                 label="Universities listed"
                 metric={nodes.cw1}
+                trend={trends.cw1}
                 loading={metricsLoading}
                 onTip={openTip}
                 onTipClose={() => setTip(null)}
@@ -682,6 +746,7 @@ export default function OperatingMap({
                 code="CW2"
                 label="Advisors listed"
                 metric={nodes.cw2}
+                trend={trends.cw2}
                 loading={metricsLoading}
                 onTip={openTip}
                 onTipClose={() => setTip(null)}
@@ -706,6 +771,7 @@ export default function OperatingMap({
                   code="M1"
                   label="Care recipient profiles live"
                   metric={nodes.m1}
+                  trend={trends.m1}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -718,6 +784,7 @@ export default function OperatingMap({
                   code="M2"
                   label="Care worker profiles completed"
                   metric={nodes.m2}
+                  trend={trends.m2}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -730,6 +797,7 @@ export default function OperatingMap({
                   code="M3"
                   label="Provider profiles claimed"
                   metric={nodes.m3}
+                  trend={trends.m3}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -742,6 +810,7 @@ export default function OperatingMap({
                   code="M4" money="Paid product"
                   label="Managed ad signups"
                   metric={nodes.m4}
+                  trend={trends.m4}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -754,6 +823,7 @@ export default function OperatingMap({
                   code="M5"
                   label="Provider staffing signups"
                   metric={nodes.m5}
+                  trend={trends.m5}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={() => setTip(null)}
@@ -780,6 +850,7 @@ export default function OperatingMap({
                     code="TB1"
                     label="Connection confirmed"
                     metric={nodes.tb1}
+                    trend={trends.tb1}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={() => setTip(null)}
@@ -798,6 +869,7 @@ export default function OperatingMap({
                     code="TC1"
                     label="Interviews confirmed"
                     metric={nodes.tc1}
+                    trend={trends.tc1}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={() => setTip(null)}
@@ -810,6 +882,7 @@ export default function OperatingMap({
                     money="Revenue generating"
                     label="Hires confirmed"
                     metric={nodes.tc2}
+                    trend={trends.tc2}
                     loading={metricsLoading}
                     onTip={openTip}
                     onTipClose={() => setTip(null)}
@@ -848,6 +921,7 @@ function Card({
   hi,
   money,
   metric,
+  trend,
   loading,
   onTip,
   onTipClose,
@@ -861,6 +935,7 @@ function Card({
   /** Tooltip shown on the $ marker. Omit for nodes that carry no money. */
   money?: string;
   metric?: MetricNode;
+  trend?: NodeTrend;
   loading?: boolean;
   onTip?: TipOpener;
   onTipClose?: () => void;
@@ -881,6 +956,7 @@ function Card({
         <span style={{ whiteSpace: "nowrap" }}>
           <MetricValue
             metric={metric}
+            trend={trend}
             loading={loading}
             nodeKey={id}
             onInspect={onInspect}
@@ -889,6 +965,7 @@ function Card({
           <InfoButton
             nodeKey={id}
             metric={metric}
+            trend={trend}
             onTip={onTip}
             onTipClose={onTipClose}
             showNumbers={showNumbers}
@@ -905,6 +982,7 @@ function Chip({
   code,
   label,
   metric,
+  trend,
   loading,
   onTip,
   onTipClose,
@@ -915,6 +993,7 @@ function Chip({
   code: string;
   label: string;
   metric?: MetricNode;
+  trend?: NodeTrend;
   loading?: boolean;
   onTip?: TipOpener;
   onTipClose?: () => void;
@@ -930,6 +1009,7 @@ function Chip({
         <span style={{ whiteSpace: "nowrap" }}>
           <MetricValue
             metric={metric}
+            trend={trend}
             loading={loading}
             nodeKey={id}
             onInspect={onInspect}
@@ -938,6 +1018,7 @@ function Chip({
           <InfoButton
             nodeKey={id}
             metric={metric}
+            trend={trend}
             onTip={onTip}
             onTipClose={onTipClose}
             showNumbers={showNumbers}
@@ -949,7 +1030,12 @@ function Chip({
   );
 }
 
-export type TipOpener = (el: HTMLElement, key: string, caveat?: string | null) => void;
+export type TipOpener = (
+  el: HTMLElement,
+  key: string,
+  caveat?: string | null,
+  trend?: string | null,
+) => void;
 
 /**
  * The three surfaces CR4 spans. This line already named them; instrumenting
@@ -987,25 +1073,28 @@ function Surfaces({
 function InfoButton({
   nodeKey,
   metric,
+  trend,
   onTip,
   onTipClose,
   showNumbers = true,
 }: {
   nodeKey: string;
   metric?: MetricNode;
+  trend?: NodeTrend;
   onTip?: TipOpener;
   onTipClose?: () => void;
   showNumbers?: boolean;
 }) {
   if (!showNumbers || !onTip || !NODE_HELP[nodeKey]) return null;
+  const note = trend ? trendNote(trend) : null;
   return (
     <button
       type="button"
       className={styles.info}
       aria-label="About this number"
-      onMouseEnter={(e) => onTip(e.currentTarget, nodeKey, metric?.caveat)}
+      onMouseEnter={(e) => onTip(e.currentTarget, nodeKey, metric?.caveat, note)}
       onMouseLeave={onTipClose}
-      onFocus={(e) => onTip(e.currentTarget, nodeKey, metric?.caveat)}
+      onFocus={(e) => onTip(e.currentTarget, nodeKey, metric?.caveat, note)}
       onBlur={onTipClose}
     >
       ⓘ
@@ -1017,12 +1106,14 @@ function InfoButton({
  *  "we don't know". */
 function MetricValue({
   metric,
+  trend,
   loading,
   nodeKey,
   onInspect,
   showNumbers = true,
 }: {
   metric?: MetricNode;
+  trend?: NodeTrend;
   loading?: boolean;
   nodeKey?: string;
   onInspect?: (nodeKey: string) => void;
@@ -1031,28 +1122,50 @@ function MetricValue({
   // With numbers off there is nothing to say here, not even that we do not
   // know — a dash is still reporting.
   if (!showNumbers) return null;
-  if (!metric) {
-    return <span className={`${styles.value} ${styles.valueMuted}`}>{NOT_INSTRUMENTED}</span>;
-  }
-  if (loading) return <span className={`${styles.value} ${styles.valueMuted}`}>…</span>;
-  if (metric.value === null) {
-    return <span className={`${styles.value} ${styles.valueMuted}`}>{NOT_INSTRUMENTED}</span>;
-  }
+
+  const placeholder = (text: string) => (
+    // Wrapped like a real value so a node without a number is exactly as
+    // tall as one with a number and an arrow. The arrows are measured
+    // geometry; uneven card heights would move every wire on the page.
+    <span className={styles.valueWrap}>
+      <span className={`${styles.value} ${styles.valueMuted}`}>{text}</span>
+      <span className={styles.trendArrow} aria-hidden="true" />
+    </span>
+  );
+
+  if (!metric) return placeholder(NOT_INSTRUMENTED);
+  if (loading) return placeholder("…");
+  if (metric.value === null) return placeholder(NOT_INSTRUMENTED);
+
   const text = metric.value.toLocaleString();
+  const tone = trend ? toneClass(trend.score) : null;
+  const arrow =
+    trend && trend.monthDirection !== 0 ? (trend.monthDirection > 0 ? "▲" : "▼") : null;
+
   // A number you can open is a number you can check. Nodes without a source
   // descriptor stay plain text rather than offering a dead click.
-  if (!onInspect || !nodeKey || !INSPECTABLE.has(nodeKey)) {
-    return <span className={styles.value}>{text}</span>;
-  }
+  const inspectable = Boolean(onInspect && nodeKey && INSPECTABLE.has(nodeKey));
+
   return (
-    <button
-      type="button"
-      className={`${styles.value} ${styles.valueButton}`}
-      onClick={() => onInspect(nodeKey)}
-      title="Show where this number comes from"
-    >
-      {text}
-    </button>
+    <span className={styles.valueWrap}>
+      {inspectable ? (
+        <button
+          type="button"
+          className={`${styles.value} ${styles.valueButton}${tone ? ` ${tone}` : ""}`}
+          onClick={() => onInspect!(nodeKey!)}
+          title="Show where this number comes from"
+        >
+          {text}
+        </button>
+      ) : (
+        <span className={`${styles.value}${tone ? ` ${tone}` : ""}`}>{text}</span>
+      )}
+      {/* Always rendered, empty when there is no direction, so the slot
+          reserves the same height on every card. */}
+      <span className={`${styles.trendArrow}${tone ? ` ${tone}` : ""}`} aria-hidden="true">
+        {arrow}
+      </span>
+    </span>
   );
 }
 

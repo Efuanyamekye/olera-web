@@ -7,7 +7,7 @@ import DateRangePopover, {
   type DateRangeValue,
 } from "@/components/admin/DateRangePopover";
 import { useUrlDateRangeState } from "@/hooks/useUrlDateRangeState";
-import OperatingMap, { type MetricNodes } from "./OperatingMap";
+import OperatingMap, { type MetricNodes, type NodeTrends } from "./OperatingMap";
 import NodeInspector from "./NodeInspector";
 
 /**
@@ -38,6 +38,7 @@ export default function OperatingMapView() {
   const resolved = useMemo(() => resolveRange(range), [range]);
 
   const [nodes, setNodes] = useState<MetricNodes>({});
+  const [trends, setTrends] = useState<NodeTrends>({});
   const [inspecting, setInspecting] = useState<string | null>(null);
   const [metricsLoading, setMetricsLoading] = useState(true);
 
@@ -87,6 +88,34 @@ export default function OperatingMapView() {
     return () => controller.abort();
   }, [resolved.from, resolved.to, selectedCity]);
 
+  /*
+   * Trends load separately and never block the numbers.
+   *
+   * They recount every node over four fixed windows, so folding them into
+   * the metrics request would make the whole map wait on the slowest of five
+   * passes. The map paints, then the colours arrive. They also ignore the
+   * date range by design — see trends.server.ts — so this only re-runs when
+   * the city changes.
+   */
+  useEffect(() => {
+    const controller = new AbortController();
+    const params = new URLSearchParams();
+    if (selectedCity) params.set("city", selectedCity);
+
+    setTrends({});
+    fetch(`/api/admin/operating-map/trends?${params}`, { signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("trends failed"))))
+      .then((d) => setTrends((d.trends ?? {}) as NodeTrends))
+      .catch((e: unknown) => {
+        if ((e as Error)?.name === "AbortError") return;
+        // No colour is the correct failure. A number in plain ink reads as
+        // "no direction shown", which is exactly what happened.
+        setTrends({});
+      });
+
+    return () => controller.abort();
+  }, [selectedCity]);
+
   // The inspector reads the same window and city the numbers were counted
   // over, so its rows can never describe a different query than the value.
   const inspectParams = useMemo(() => {
@@ -122,6 +151,7 @@ export default function OperatingMapView() {
         selectedCity={selectedCity}
         onSelectCity={onSelectCity}
         nodes={showNumbers ? nodes : {}}
+        trends={showNumbers ? trends : {}}
         metricsLoading={showNumbers && metricsLoading}
         onInspect={showNumbers ? setInspecting : undefined}
         showNumbers={showNumbers}
