@@ -435,6 +435,10 @@
   align-items: baseline;
   gap: 9px;
   margin-left: auto;
+  /* Pinned to the top of the row rather than centred in it. It is the
+     headline figure for the whole map, so it sits at the very top of the
+     page, above the controls it shares a line with. */
+  align-self: flex-start;
 }
 .topStat .v {
   font-size: 22px;

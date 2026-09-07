@@ -117,34 +117,31 @@ export function toneClass(score: number): string | null {
 const NODE_HELP: Record<string, string> = {
   cities:
     "Cities with at least one live provider. Wider than the cities we have deliberately launched.",
-  traffic:
-    "Every visitor to a provider, benefits or editorial page, however they arrived. The ten channels below account for all of it — GA4 is the cross-check on the total, the split is our own.",
   cr1:
-    "The two care seeker actions that produce a record we can work. Questions are counted elsewhere and left out here — they are the cheapest ask and would swamp the other two.",
+    "The two care seeker actions that produce a record we can work. Questions are the cheapest ask and would swamp the other two, so they are counted elsewhere. Below it, the traffic all of this comes out of.",
   cr2:
     "Families we emailed in this range, counted once each however many times we wrote. The mirror of providers in outreach and advisors in outreach.",
   cp1:
     "Providers in the directory nobody has claimed — the supply outreach works through. Scoped by the provider's city. A standing count, so the date range does not change it.",
   cp2:
     "Unclaimed providers who heard from us in this range — any email, call or MedJobs contact. Counts providers, not messages, so twenty emails to one provider is one.",
-  m1:
-    "Care seeker profiles begun in this range and how far they got. The parts nest: every profile is at least partial, completed means finished, live means the care post is published.",
+  m1: "Care seeker profiles begun in this range, at any stage of completion.",
   m2:
-    "Providers who became active in this range — claiming the listing is all it takes — and how many of those went on to pass verification.",
-  m3:
-    "Providers who requested a managed ad campaign in this range. Repeat counts providers who have asked more than once, over all time.",
+    "Providers who became active in this range. Claiming the listing is all it takes — verification is a further step, counted separately.",
+  m3: "Providers who requested a managed ad campaign in this range.",
   m4: "Providers who activated MedJobs staffing in this range.",
   m5:
     "MedJobs applications begun and how many are finished — a profile goes live once the intro video and documents are in. Channels activated has no source yet.",
   cw1:
-    "Universities we are working and the advisors on file at them, scoped by the university's city. A standing count — the date range does not change it.",
+    "Universities we are working, scoped by the university's city. A standing count — the date range does not change it.",
   cw2:
     "Advisors we have actually contacted — at least one touchpoint against them. The gap from CW1's advisor count is supply we have not tried yet.",
   ta1:
     "Families who told us they are moving forward with a benefit. Applying happens on a government site, so this is their own report — a floor, not a count.",
   tb1:
     "Families and providers who actually connected, by the same rule the Connections page uses: a provider reply, a confirmation from either side, or an admin marking it.",
-  tc1: "Interviews with a time agreed, and how many were recorded as held. Scheduled includes the ones since completed.",
+  tc1:
+    "Interviews with a time agreed — the point a provider and a care worker are actually in contact. Counts scheduled, including the ones since held.",
   tc2: "Placements the care worker accepted.",
 };
 
@@ -323,25 +320,18 @@ export default function OperatingMap({
     const ta1 = box("ta1");
     const ta2 = box("ta2");
     const tb1 = box("tb1");
-    const o1 = box("o1");
 
-    /* the aid track hangs off the profile's left */
-    const aidStem = m1.l + IN;
-    seg(aidStem, m1.b + G, aidStem, ta1.cy);
-    hArrow(ta1.cy, aidStem, ta1.l - G);
+    /*
+     * One stem off M1's left carries both of the things a profile becomes.
+     * It puts a head into the aid track on the way past and then keeps
+     * going, turning once into the connection — so the profile reaches the
+     * connection directly, not through the aid track it passes.
+     */
+    const seekStem = m1.l + IN;
+    seg(seekStem, m1.b + G, seekStem, tb1.cy);
+    hArrow(ta1.cy, seekStem, ta1.l - G);
+    hArrow(tb1.cy, seekStem, tb1.l - G);
     vArrow(ta1.l + IN, ta1.b + G, ta2.t - G);
-
-    /* aid confirmed reaches the outcome from the side, below the branch and
-       clear of everything the connection line does */
-    const aidOut = ta2.l + IN;
-    seg(aidOut, ta2.b + G, aidOut, o1.cy);
-    hArrow(o1.cy, aidOut, o1.l - G);
-
-    /* The profile goes straight to the connection — one line, no bends. It
-       runs down the right of the lane, which is both the shortest way to a
-       card sitting to the right and the only way it cannot be misread as
-       passing through the aid track. */
-    vArrow(m1.r - IN, m1.b + G, tb1.t - G);
 
     /* care provider: supply, then the products, then the connection */
     vDown("cp1", "cp2");
@@ -358,8 +348,9 @@ export default function OperatingMap({
     fromStem(provStem, "m3");
     fromStem(provStem, "m4");
 
-    /* staffing is what makes an interview possible */
-    vArrow(m4.r - IN, m4.b + G, tc1.t - G);
+    /* staffing is what makes a hire possible; the line lands over TC1's
+       own label so it reads as belonging to that card */
+    vArrow(tc1.l + IN, m4.b + G, tc1.t - G);
 
     /* care worker: campuses, then advisors, then applicants */
     vDown("cw1", "cw2");
@@ -536,6 +527,7 @@ export default function OperatingMap({
           nodeKey={tip.nodeKey}
           caveat={tip.caveat}
           metric={nodes[tip.nodeKey]}
+          traffic={nodes.traffic}
           trend={tip.trend}
           trends={trends}
           tone={tip.trend ? toneClass(tip.trend.score) : null}
@@ -633,40 +625,14 @@ export default function OperatingMap({
               </div>
             )}
         </div>
-        {/*
-          All traffic is a filter's twin, not a step: it states the size of
-          the world the map covers, the same way the city picker states its
-          boundary. Both read as controls, so both look like controls.
-        */}
-        <button
-          type="button"
-          id={nodeId("traffic")}
-          className={styles.filterPill}
-          onMouseEnter={(e) =>
-            openTip(e.currentTarget, "traffic", nodes.traffic?.caveat, trends.traffic)
-          }
-          onMouseLeave={closeTip}
-          onFocus={(e) =>
-            openTip(e.currentTarget, "traffic", nodes.traffic?.caveat, trends.traffic)
-          }
-          onBlur={closeTip}
-          onClick={() => onInspect?.("traffic")}
-        >
-          All traffic
-          <span className={styles.filterCount}>
-              {metricsLoading
-                ? "…"
-                : typeof nodes.traffic?.value === "number"
-                  ? nodes.traffic.value.toLocaleString()
-                  : NOT_INSTRUMENTED}
-          </span>
-        </button>
         {controls}
         {/* An outcome of the whole map rather than of one lane, so it sits
             with the scope controls rather than inside the figure. */}
         <div className={styles.topStat}>
           <span className={styles.lab}>Revenue generated</span>
-          <span className={styles.v}>{NOT_INSTRUMENTED}</span>
+          {/* Stated, not queried. Nothing has been collected yet, and a dash
+              here would read as "we do not know" rather than "none". */}
+          <span className={styles.v}>$0</span>
         </div>
       </div>
 
@@ -720,7 +686,6 @@ export default function OperatingMap({
                   id="m1"
                   code="M1"
                   label="Care seeker profiles"
-                  parts="partial · completed · live"
                   metric={nodes.m1}
                   trend={trends.m1}
                   loading={metricsLoading}
@@ -788,7 +753,6 @@ export default function OperatingMap({
                   id="m2"
                   code="M2"
                   label="Active providers"
-                  parts="claimed · verified"
                   metric={nodes.m2}
                   trend={trends.m2}
                   loading={metricsLoading}
@@ -804,7 +768,6 @@ export default function OperatingMap({
                     id="m3"
                     code="M3"
                     label="Managed ads"
-                    parts="signups · repeat"
                     money="Paid product"
                     metric={nodes.m3}
                     trend={trends.m3}
@@ -836,7 +799,6 @@ export default function OperatingMap({
                   id="cw1"
                   code="CW1"
                   label="Universities targeted"
-                  parts="universities · advisors"
                   metric={nodes.cw1}
                   trend={trends.cw1}
                   loading={metricsLoading}
@@ -925,8 +887,7 @@ export default function OperatingMap({
                 <Card
                   id="tc1"
                   code="TC1"
-                  label="Interviews"
-                  parts="scheduled · completed"
+                  label="Provider–care worker connected"
                   metric={nodes.tc1}
                   trend={trends.tc1}
                   loading={metricsLoading}
@@ -1165,7 +1126,7 @@ function MetricValue({
 
 /** Nodes the inspect endpoint can produce rows for. */
 const INSPECTABLE = new Set([
-  "traffic", "cr2",
+  "cr2",
   "cp1", "cp2",
   "m1", "m2", "m3", "m4", "m5",
   "cw1", "cw2",

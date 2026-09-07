@@ -32,17 +32,11 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     advice:
       "Coverage grows by adding providers, not cities. Run the city pipeline for a market before counting it as launched.",
   },
-  traffic: {
+  cr1: {
     href: "/admin/organic-growth",
     label: "Organic growth",
     advice:
-      "Work the largest channel that is falling, not the smallest one that is rising. A muted row at zero is an instrumentation job, not a dead channel.",
-  },
-  cr1: {
-    href: "/admin/analytics",
-    label: "Analytics",
-    advice:
-      "Both parts produce a record you can work. A connect request needs a provider to answer; a benefits assessment does not.",
+      "Work the largest channel that is falling, not the smallest one that is rising. A row at zero can be an instrumentation job rather than a dead channel.",
   },
   cr2: {
     href: "/admin/family-comms",
@@ -227,7 +221,12 @@ function Channels({
 
   return (
     <div className={styles.tipSection}>
-      <span className={styles.tipLabel}>Where it came from</span>
+      {/* The heading carries the total. This table hangs off CR1's number
+          now, and the two count different things — visitors to the site
+          against families who did something on it. */}
+      <span className={styles.tipLabel}>
+        Site traffic · {parts.reduce((a, p) => a + val(p), 0).toLocaleString()}
+      </span>
       <div className={styles.chan}>
         {ordered.map((p) => {
           const t = trends?.[`traffic:${slug(p.label)}`];
@@ -316,6 +315,7 @@ export default function NodeTip({
   nodeKey,
   caveat,
   metric,
+  traffic,
   trend,
   trends,
   tone,
@@ -329,8 +329,10 @@ export default function NodeTip({
   text: string;
   nodeKey: string;
   caveat?: string | null;
-  /** Carries the breakdown TRAFFIC renders as its channel table. */
+  /** The node's own breakdown. */
   metric?: MetricNode;
+  /** Site traffic, whose channel table hangs off CR1. */
+  traffic?: MetricNode;
   trend?: NodeTrend | null;
   /** All node trends, so the channel rows can find their own. */
   trends?: NodeTrends;
@@ -375,8 +377,8 @@ export default function NodeTip({
         </div>
       )}
 
-      {nodeKey === "traffic" && metric?.breakdown?.length ? (
-        <Channels parts={metric.breakdown} trends={trends} />
+      {nodeKey === "cr1" && traffic?.breakdown?.length ? (
+        <Channels parts={traffic.breakdown} trends={trends} />
       ) : null}
 
       {trend && <span className={styles.tipSection}>{diagnose(trend)}</span>}
