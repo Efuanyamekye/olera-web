@@ -67,7 +67,13 @@ feature branch → PR to staging → QA → PR to main → production
 
 ## MedJobs Strategic Context
 
-For MedJobs / student-outreach work, **read `docs/medjobs/OPERATIONAL_BRIEF.md` first.** It is the canonical engineering reference covering the funnel architecture, conversion routing, state machine, discipline rules (G1–G10), the deferred items registry (D1–D25), the outcomes map, and the canonical vocabulary. Do not invent new backend enum values or actions in `route.ts` without checking the discipline rules first.
+MedJobs documentation has two layers. Pick by the kind of work:
+
+**Engineering work** — **read `docs/medjobs/OPERATIONAL_BRIEF.md` first.** It is the canonical engineering reference covering the funnel architecture, conversion routing, state machine, discipline rules (G1–G10), the deferred items registry (D1–D25), the outcomes map, and the canonical vocabulary. Do not invent new backend enum values or actions in `route.ts` without checking the discipline rules first.
+
+**Operating / commercialization work** — **read `docs/medjobs/operating/` first.** It is the source of truth for how MedJobs is run as a business: the executive operating plan, execution playbook, pod roles, protocols P1–P7, metrics, experiments, decisions, scale gates, and iteration history. Start at `docs/medjobs/operating/README.md`.
+
+Before treating anything as settled, check `docs/medjobs/operating/07-OPEN-DECISIONS-AND-CONFLICTS.md`. Several facts differ between the founder discussion, the admin protocol, and the shipped code — notably the price, what makes a provider a "Client", and archiving rules. Those conflicts are documented deliberately, not resolved.
 
 The companion `docs/medjobs/EXECUTIVE_SUMMARY.md` is the human-readable team brief — useful for orientation but the engineering reference is authoritative.
 

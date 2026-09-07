@@ -1,0 +1,459 @@
+/*
+ * Olera operating map — the marketplace funnel as one figure.
+ *
+ * Ported verbatim from the design artifact, with two deliberate changes:
+ *  1. Scoped as a CSS module so none of these short class names (.card,
+ *     .chip, .lane) can collide with the rest of the admin console.
+ *  2. The artifact's dark-mode palette is dropped. The admin console is
+ *     light-only (no `darkMode` in tailwind.config.ts), so a map that
+ *     flipped to dark while every surrounding page stayed white would be
+ *     the bug, not the feature.
+ *
+ * Element IDs are NOT hashed by CSS modules, which is what the wire
+ * overlay in OperatingMap.tsx depends on: it measures each node by id and
+ * draws every connector from live geometry. Renaming a card's label can
+ * never break an arrow; renaming its id will.
+ */
+
+.root {
+  --ground: #ffffff;
+  --page: #fbfcfc;
+  --panel: #f4f6f7;
+  --panel-line: #e3eaea;
+  --card: #e9f3f1;
+  --card-line: #cbe0da;
+  --card-hi: #d5eae4;
+  --card-hi-line: #a2ccc2;
+  --ink: #14282c;
+  --ink-2: #475d62;
+  --label: #6d8188;
+  --rule: #b9c7ca;
+  --dark: #1b2b2f;
+  --dark-ink: #ffffff;
+  --accent: #2f7f72;
+  --shadow: 0 1px 2px rgba(20, 40, 44, 0.05);
+
+  color: var(--ink);
+  /* Pin the stack the figure's geometry was tuned against. The app already
+     serves Inter, but the arrows are measured from rendered card heights, so
+     this must not drift with whatever a parent happens to set. */
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.root *,
+.root *::before,
+.root *::after { box-sizing: border-box; }
+
+/*
+ * .fit is the space available; .stage is the figure's painted size, written
+ * by OperatingMap.tsx. A transform paints smaller without shrinking the
+ * layout box, so the stage clips that box to what you actually see —
+ * otherwise the scaling would not remove the scrollbar it exists to remove.
+ * Horizontal scroll survives only as the escape hatch for windows too
+ * narrow to scale into (MIN_SCALE).
+ */
+.fit { overflow-x: auto; overflow-y: hidden; padding-bottom: 6px; }
+.stage {
+  overflow: hidden;
+  /* Anchored top-left. The figure is the page's whole content, so it starts
+     where reading starts rather than floating in the middle of the column. */
+  margin-inline: 0;
+}
+
+.system {
+  position: relative;
+  /* Keep in sync with FIGURE_WIDTH in OperatingMap.tsx. */
+  width: 1900px;
+  transform-origin: top left;
+  background: var(--ground);
+  /* No frame. The figure is the page's whole content, so a border around it
+     only draws a box around a box. */
+  padding: 2px 2px 4px;
+}
+
+.wires { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
+.wires line { stroke: var(--rule); stroke-width: 1.3; }
+.wires polygon { fill: var(--rule); }
+
+.lab {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--label);
+}
+
+/*
+ * Scope, size and period, on one line above the figure.
+ *
+ * All of these are filters or statements of scope rather than steps in the
+ * funnel, so they share one look and sit outside the drawing. Everything
+ * inside .fit is scaled to fit the screen; a control in there would shrink
+ * with the map.
+ */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+
+.filterPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #111827;
+  border-radius: 999px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s;
+}
+.filterPill:hover { border-color: #d1d5db; }
+.filterPill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filterCount { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
+.filterCaret { font-size: 9px; opacity: 0.5; }
+
+.picker {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 6px;
+  width: 320px;
+  max-height: 340px;
+  overflow-y: auto;
+  background: var(--ground);
+  border: 1px solid var(--panel-line);
+  border-radius: 9px;
+  box-shadow: 0 8px 24px rgba(20, 40, 44, 0.14);
+  padding: 6px;
+}
+.pickerItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--ink);
+  text-align: left;
+  padding: 7px 9px;
+  border-radius: 6px;
+}
+.pickerItem:hover { background: var(--card); }
+.pickerItem[aria-current="true"] { background: var(--card-hi); font-weight: 600; }
+.pickerCount { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.pickerNote { padding: 8px 9px; font-size: 12px; color: var(--ink-2); }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-line);
+  border-radius: 7px;
+  padding: 9px 14px;
+}
+.card .k { font-size: 16px; font-weight: 700; color: var(--ink); }
+.cardHead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+/* The breakdown line. Holds one line's height whether or not it has
+   anything in it, which is what keeps every card the same size. */
+.card .n {
+  font-size: 15.5px;
+  color: var(--ink-2);
+  margin-top: 2px;
+  line-height: 1.35;
+  min-height: 1.35em;
+}
+/* The node's name, on the same line as its code. Two lines for a name is
+   one line too many, and the second was mostly whitespace. */
+.name {
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-left: 9px;
+  font-size: 15.5px;
+}
+.hi { background: var(--card-hi); border-color: var(--card-hi-line); }
+.dim { color: var(--ink-2); opacity: 0.72; }
+/* Numbers inside the surface line — readable without shouting over the total. */
+.surfaceValue { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.paid { color: var(--accent); font-weight: 700; margin-left: 4px; }
+
+/* A live value. Tabular so digits do not jitter as the range changes. */
+.value {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+.valueMuted { color: var(--ink-2); font-weight: 600; }
+
+/*
+ * The month arrow, sitting on the number's own line just in front of it.
+ * Sized to be noticed only once you are looking at the number it belongs
+ * to, and always the same colour as that number, so it reads as one
+ * reading rather than a second competing signal.
+ *
+ * Both children share a baseline, so the pair still aligns with the card's
+ * label across the head. The slot is rendered whether or not there is an
+ * arrow in it, which keeps every number in one column down the lane and
+ * keeps card heights identical — the wire overlay measures those heights.
+ */
+.valueWrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  vertical-align: baseline;
+}
+.trendArrow {
+  font-size: 10px;
+  line-height: 1;
+  width: 10px;
+  text-align: right;
+  letter-spacing: 0;
+}
+
+/* A value you can open. Underlined on hover so it reads as inspectable. */
+.valueButton {
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.valueButton:hover { color: var(--accent); text-decoration: underline; }
+.valueButton:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+/*
+ * Trend colouring — red through neutral to green, seven steps.
+ *
+ * The ramp is deliberately asymmetric in saturation, not in lightness: every
+ * shade clears 3:1 against the card behind it, which is what the value's
+ * size and weight need to stay legible once the figure is scaled down. A
+ * flat number keeps the ordinary ink colour, so colour on this page always
+ * means movement and never decoration.
+ *
+ * The greens lean away from the teal accent on purpose. On a teal card a
+ * teal number reads as branding rather than as growth.
+ */
+.tUp1 { color: #4f8a48; }
+.tUp2 { color: #2b7d36; }
+.tUp3 { color: #146b2b; }
+.tDown1 { color: #b3634b; }
+.tDown2 { color: #ad392a; }
+.tDown3 { color: #8a1c14; }
+
+/*
+ * The tooltip.
+ *
+ * Opened by hovering a number rather than by a separate icon — one small
+ * glyph per card was a field of things to look past on a figure whose whole
+ * job is to be read at a glance.
+ *
+ * It is rendered outside the scaled figure, at full size, because everything
+ * inside the figure is painted at roughly 60% and explanatory prose is the
+ * one thing on this page that has to stay readable.
+ */
+
+.tip {
+  position: absolute;
+  z-index: 20;
+  width: 320px;
+  background: var(--dark);
+  color: var(--dark-ink);
+  border-radius: 8px;
+  padding: 11px 13px;
+  font-size: 12px;
+  line-height: 1.5;
+  box-shadow: 0 8px 24px rgba(20, 40, 44, 0.22);
+}
+.tipCaveat { display: block; margin-top: 6px; opacity: 0.72; }
+
+/*
+ * The reading: eight weeks as a shape, next to the two numbers that shape
+ * is usually asked for. The last bar carries the trend colour so the panel
+ * and the number that opened it agree at a glance.
+ */
+.tipTrend {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+/* The default the last bar inherits when a node has no trend colour. */
+.spark { flex: none; color: rgba(255, 255, 255, 0.85); }
+.spark rect { fill: rgba(255, 255, 255, 0.32); }
+/* This week, picked out. Its colour is inherited or set by a tone class. */
+.spark rect.sparkLast { fill: currentColor; }
+.tipTrendRead { display: flex; flex-direction: column; line-height: 1.3; }
+.tipTrendRead > span:first-child { font-weight: 700; font-variant-numeric: tabular-nums; }
+.tipTrendSub { font-size: 11px; opacity: 0.66; font-variant-numeric: tabular-nums; }
+
+/* Diagnosis and next step. Separated by space rather than by more rules. */
+.tipSection { display: block; margin-top: 9px; }
+.tipLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-bottom: 6px;
+}
+
+/*
+ * CR1's channel split.
+ *
+ * The share rides behind each row as a bar rather than in a column of its
+ * own: one graphic reads faster than a second set of digits, and the panel
+ * is already the densest thing on the page at ten rows.
+ */
+.chan { display: flex; flex-direction: column; gap: 1px; }
+.chanRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 13px;
+  align-items: center;
+  gap: 8px;
+  padding: 2.5px 5px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.chanBar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: rgba(255, 255, 255, 0.09);
+  border-radius: 3px;
+}
+.chanName, .chanValue, .chanArrow { position: relative; }
+.chanName { font-size: 12px; }
+.chanValue {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.chanArrow { font-size: 8px; line-height: 1; text-align: right; }
+/* A channel at zero because nothing is instrumented, kept visible on
+   purpose — see the note in NodeTip. */
+.chanNone .chanName, .chanNone .chanValue { opacity: 0.45; }
+.tipLink {
+  /* Its own line. Inline it ran straight on from the sentence before it. */
+  display: block;
+  margin-top: 6px;
+  color: var(--dark-ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.tipLink:hover { opacity: 0.75; }
+
+/* The one affordance the panel has to state, since nothing else does. */
+.tipFoot {
+  display: block;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/*
+ * On the dark panel the trend ramp needs its light-background twins
+ * replaced — the same seven steps, lifted so they read on near-black.
+ */
+.tip .tUp1 { color: #92d39a; }
+.tip .tUp2 { color: #6cc47c; }
+.tip .tUp3 { color: #46b563; }
+.tip .tDown1 { color: #e6a897; }
+.tip .tDown2 { color: #e58a74; }
+.tip .tDown3 { color: #e4705a; }
+
+.lanes3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.lane { display: flex; flex-direction: column; }
+/* Vertical breathing room between lane steps, sized so an arrow reads as a
+   join rather than a gap. */
+.gap { height: 16px; }
+.gapSm { height: 16px; }
+
+/*
+ * The two joins sit between the lanes that feed them rather than inside
+ * either one. A connection is a family and a provider; a hire is a provider
+ * and a worker. The figure should say that before the arrows do.
+ *
+ * Same three columns as the lanes above, so a stack that spans two of them
+ * and is centred in that span lands exactly halfway between the two lane
+ * centres — over the gutter, with one lane's width to itself.
+ */
+.lanesJoin {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  margin-top: 26px;
+}
+.join12,
+.join23 {
+  grid-row: 1;
+  justify-self: center;
+  /* One lane wide: the span is two lanes plus the gutter between them. */
+  width: calc((100% - 26px) / 2);
+}
+.join12 { grid-column: 1 / span 2; }
+.join23 { grid-column: 2 / span 2; }
+
+/*
+ * A branch hangs off the card above it and says so by indenting. Narrower
+ * than the lane as well as indented, so the stem that carries on past it
+ * has clear room down the other side.
+ */
+.branch {
+  margin: 22px 0 0 64px;
+  width: 74%;
+  display: flex;
+  flex-direction: column;
+}
+/* The paid products, indented but full width — nothing runs down their right. */
+.branchR {
+  margin: 22px 0 0 72px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Revenue generated rides in the control row: an outcome of the whole map
+   rather than of any one lane, so it belongs beside the scope, not inside
+   the figure. */
+.topStat {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  margin-left: auto;
+  /* Pinned to the top of the row rather than centred in it. It is the
+     headline figure for the whole map, so it sits at the very top of the
+     page, above the controls it shares a line with. */
+  align-self: flex-start;
+}
+.topStat .v {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+

@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { isBotRequest, incrementBotReject } from "@/lib/analytics/bot-filter";
 import { classifyReferrer, sanitizeReferrer } from "@/lib/analytics/referrer";
 import { classifyUserAgent } from "@/lib/analytics/user-agent";
+import { readVisitorGeo } from "@/lib/analytics/visitor-geo";
 
 const VALID_EVENT_TYPES = [
   "page_view",
@@ -67,6 +68,10 @@ export async function POST(request: NextRequest) {
       ua_class: classifyUserAgent(userAgent),
       referrer: sanitizeReferrer(metadata?.referrer),
       referrer_class: classifyReferrer(metadata?.referrer),
+      // Visitor city/state from Vercel's edge headers. No IP is stored — the
+      // same granularity /api/geo already hands the browser. Lets reporting
+      // answer "how many people in this city came to us".
+      ...readVisitorGeo(request.headers),
     };
 
     const { error } = await db.from("page_events").insert({

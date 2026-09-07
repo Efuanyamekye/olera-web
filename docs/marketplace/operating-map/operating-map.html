@@ -1,0 +1,401 @@
+<title>CareNavigator and Caregiver Staffing</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#ffffff;
+  --page:#fbfcfc;
+  --panel:#f4f6f7;
+  --panel-line:#e3eaea;
+  --card:#e9f3f1;
+  --card-line:#cbe0da;
+  --card-hi:#d5eae4;
+  --card-hi-line:#a2ccc2;
+  --ink:#14282c;
+  --ink-2:#475d62;
+  --label:#6d8188;
+  --rule:#b9c7ca;
+  --dark:#1b2b2f;
+  --dark-ink:#ffffff;
+  --accent:#2f7f72;
+  --shadow:0 1px 2px rgba(20,40,44,.05);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111819; --page:#0c1213; --panel:#18201f; --panel-line:#27302f;
+    --card:#1b2e2b; --card-line:#2f463f; --card-hi:#234139; --card-hi-line:#3d675a;
+    --ink:#e7f0ee; --ink-2:#a6bab8; --label:#7e9498; --rule:#3c4a4c;
+    --dark:#05090a; --dark-ink:#eef6f4; --accent:#63c2b0; --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111819; --page:#0c1213; --panel:#18201f; --panel-line:#27302f;
+  --card:#1b2e2b; --card-line:#2f463f; --card-hi:#234139; --card-hi-line:#3d675a;
+  --ink:#e7f0ee; --ink-2:#a6bab8; --label:#7e9498; --rule:#3c4a4c;
+  --dark:#05090a; --dark-ink:#eef6f4; --accent:#63c2b0; --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--page); color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+.scroll{overflow-x:auto; padding:34px 32px 40px;}
+.system{position:relative; width:1660px; background:var(--ground);
+        border:1px solid var(--panel-line); border-radius:14px; padding:26px 26px 24px;
+        box-shadow:var(--shadow);}
+#wires{position:absolute; inset:0; pointer-events:none; overflow:visible;}
+#wires line{stroke:var(--rule); stroke-width:1.3;}
+#wires polygon{fill:var(--rule);}
+
+.lab{font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--label);}
+
+.pill{background:var(--dark); color:var(--dark-ink); font-weight:700; font-size:14px;
+      text-align:center; padding:12px 18px; border-radius:7px;}
+
+.card{background:var(--card); border:1px solid var(--card-line); border-radius:7px; padding:11px 14px;
+      position:relative;}
+.card .k{font-size:13px; font-weight:700; color:var(--ink);}
+.card .n{font-size:12.5px; color:var(--ink-2); margin-top:3px; line-height:1.45;}
+.card.hi{background:var(--card-hi); border-color:var(--card-hi-line);}
+.paid{color:var(--accent); font-weight:700; margin-left:4px;}
+
+.chip{background:var(--card); border:1px solid var(--card-line); border-radius:6px;
+      padding:8px 10px; font-size:11.5px; color:var(--ink-2); line-height:1.35;}
+.chip b{display:block; font-size:11.5px; font-weight:700; color:var(--ink);}
+.chip.hi{background:var(--card-hi); border-color:var(--card-hi-line);}
+.chips{display:grid; gap:7px;}
+.chips.c3{grid-template-columns:repeat(3,1fr);}
+.chips.c5{grid-template-columns:repeat(5,1fr);}
+
+.group{background:var(--panel); border:1px solid var(--panel-line); border-radius:11px;
+       padding:16px 18px 20px;}
+.group > .lab{display:block; margin-bottom:14px; color:var(--ink); letter-spacing:.09em;}
+
+.pill.full{margin-bottom:12px;}
+.tops{display:grid; grid-template-columns:1fr 1fr; gap:26px;}
+.stem{position:relative;}
+.stem::after{content:""; position:absolute; left:50%; top:0; bottom:0; width:1px;
+             background:var(--rule);}
+.forks{display:grid; grid-template-columns:1fr 1fr; gap:26px;}
+.fork{position:relative; height:34px;}
+.fork i{position:absolute; top:0; height:1px; background:var(--rule); left:25%; right:25%;}
+.fork b{position:absolute; top:0; width:1px; height:25px; background:var(--rule);}
+.fork b.l{left:25%} .fork b.r{right:25%}
+.fork b::after{content:""; position:absolute; left:-3.5px; bottom:-7px;
+  border-left:4px solid transparent; border-right:4px solid transparent; border-top:7px solid var(--rule);}
+
+.lanes4{display:grid; grid-template-columns:repeat(4,1fr); gap:26px;}
+.lane{display:flex; flex-direction:column;}
+
+.handoff{margin:12px 0 12px;}
+.handoff .lab{display:block; margin-bottom:5px;}
+.handoff em{display:block; height:0; border-top:1px dashed var(--rule);}
+
+/* family funnel */
+.fam{margin-left:30px;}
+.offshoot{margin-left:34px; width:74%;}
+.offshoots{margin-left:34px; width:74%; display:flex; flex-direction:column; gap:11px;}
+.p2-wrap{margin-top:28px; width:calc((100% - 14px) / 3);}
+
+/* bottom funnel */
+.col{background:var(--ground); border:1px solid var(--panel-line); border-radius:9px; padding:13px 13px 15px;}
+.col > .lab{display:block; margin-bottom:11px; color:var(--ink);}
+.strip{margin-bottom:58px;}
+.strip .sub{font-size:12px; color:var(--ink-2); margin:-4px 0 13px;}
+.strip-row{display:grid; grid-template-columns:repeat(6,1fr); gap:13px;}
+.bf-cols{display:grid; grid-template-columns:373px 386px 1fr; gap:20px; align-items:stretch;}
+.stack{display:flex; flex-direction:column; gap:24px;}
+.cs-top{display:grid; grid-template-columns:minmax(0,1fr) 1fr; gap:20px;}
+.cs-top .stack{gap:22px}
+.match{margin-top:46px;}
+.match > .lab{display:block; margin-bottom:11px;}
+
+.footer{display:grid; grid-template-columns:1.6fr .82fr .55fr .42fr; gap:24px; margin-top:26px;
+        padding-top:20px; border-top:1px solid var(--panel-line); align-items:end;}
+.footer .lab{display:block; margin-bottom:8px;}
+.footer .items{display:flex; gap:8px;}
+.footer .items .chip{flex:1}
+.stat{text-align:right}
+.stat .v{font-size:26px; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums;}
+
+.legend{max-width:64rem; padding:4px 32px 56px; display:grid; gap:10px;}
+.legend h2{font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+           color:var(--label); margin:0 0 2px;}
+.legend p{margin:0; font-size:13.5px; line-height:1.6; color:var(--ink-2); max-width:76ch;}
+.legend b{color:var(--ink); font-weight:600;}
+</style>
+
+<div class="scroll">
+<section class="system" id="sys">
+  <svg id="wires" aria-hidden="true"></svg>
+
+  <div class="pill full">One city</div>
+  <div class="tops">
+    <div class="stem"></div>
+    <div class="pill">University site</div>
+  </div>
+  <div class="forks">
+    <div class="fork"><i></i><b class="l"></b><b class="r"></b></div>
+    <div class="fork"><i></i><b class="l"></b><b class="r"></b></div>
+  </div>
+
+  <div class="lanes4" style="margin-bottom:8px">
+    <div class="lab">Care seeker</div>
+    <div class="lab">Care provider</div>
+    <div class="lab">Employer</div>
+    <div class="lab">Care worker</div>
+  </div>
+
+  <!-- ============ TOP FUNNEL ============ -->
+  <div class="group" id="top">
+    <span class="lab">Top funnel</span>
+    <div class="lanes4">
+
+      <div class="lane">
+        <div class="chips c3">
+          <div class="chip" id="fs1"><b>CSS1</b>Referral</div>
+          <div class="chip" id="fs2"><b>CSS2</b>Organic</div>
+          <div class="chip" id="fs3"><b>CSS3</b>Paid ads</div>
+        </div>
+        <div class="fam" style="margin-top:32px">
+          <div class="card" id="f1">
+            <div class="k">CS1</div>
+            <div class="n">Entry surface &middot; provider page &middot; editorial &middot; benefits page</div>
+          </div>
+          <div class="offshoot" style="margin-top:24px">
+            <div class="chip" id="fq"><b>CSQ</b>Question</div>
+          </div>
+          <div class="card" id="f2" style="margin-top:24px"><div class="k">CS2</div><div class="n">CTA</div></div>
+          <div class="offshoots" style="margin-top:20px">
+            <div class="chip" id="f2a"><b>CS2a</b>Benefits CTA</div>
+            <div class="chip" id="f2b"><b>CS2b</b>Connection card</div>
+            <div class="chip" id="f2c"><b>CS2c</b>Live profile</div>
+          </div>
+          <div style="height:30px"></div>
+        </div>
+      </div>
+
+      <div class="lane">
+        <div class="chips c3">
+          <div class="chip" id="p1"><b>P1</b>Listed</div>
+          <div class="chip" id="ps1"><b>PS1</b>Organic</div>
+          <div class="chip" id="ps2"><b>PS2</b>Referral</div>
+        </div>
+        <div class="p2-wrap">
+          <div class="card" id="p2"><div class="k">P2</div><div class="n">Outreach</div></div>
+        </div>
+      </div>
+
+      <div class="lane">
+        <div class="card" id="pr1"><div class="k">PR1</div><div class="n">Target list built</div></div>
+        <div style="height:24px"></div>
+        <div class="card" id="prout"><div class="k">PR-OUT</div><div class="n">Outbound work</div></div>
+        <div class="handoff"><span class="lab">Handoff &middot; Admin team &rarr; Sales lead</span><em></em></div>
+        <div class="card" id="pr2"><div class="k">PR2</div><div class="n">Provider meeting held</div></div>
+      </div>
+
+      <div class="lane">
+        <div class="card" id="st1"><div class="k">ST1</div><div class="n">Target advisors</div></div>
+        <div style="height:24px"></div>
+        <div class="card" id="stout"><div class="k">ST-OUT</div><div class="n">University outbound</div></div>
+        <div class="handoff"><span class="lab">Handoff &middot; Admin team &rarr; Sales lead</span><em></em></div>
+        <div class="card" id="st2"><div class="k">ST2</div><div class="n">Advisor meeting held</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="height:54px"></div>
+
+  <!-- ============ BOTTOM FUNNEL ============ -->
+  <div class="group" id="bottom">
+    <span class="lab">Bottom funnel</span>
+
+    <div class="col strip" id="crm">
+      <span class="lab">Consumer relations management</span>
+      <div class="sub">Care seeker &middot; Care provider &middot; Employer &middot; Care worker &middot; University partner</div>
+      <div class="strip-row">
+        <div class="card hi" id="p3"><div class="k">P3</div><div class="n">Provider profile &mdash; claim or create</div></div>
+        <div class="card hi" id="f3"><div class="k">CS3</div><div class="n">Care seeker profile enrich</div></div>
+        <div class="card hi" id="cw1"><div class="k">CW1</div><div class="n">Care worker profile completion</div></div>
+        <div class="card hi" id="st37"><div class="k">ST3&ndash;ST7</div><div class="n">University activation</div></div>
+        <div class="card hi" id="pg1"><div class="k">PG1<span class="paid" title="Paid product">$</span></div><div class="n">Managed ad product</div></div>
+        <div class="card hi" id="pg2"><div class="k">PG2</div><div class="n">Caregiver staffing product</div></div>
+      </div>
+    </div>
+
+    <div class="bf-cols">
+
+      <div class="col" id="ta">
+        <span class="lab">TA aid establishment</span>
+        <div class="stack">
+          <div class="card" id="a1"><div class="k">A1</div><div class="n">Matched</div></div>
+          <div class="card" id="a2"><div class="k">A2</div><div class="n">Application</div></div>
+          <div class="card" id="a3"><div class="k">A3</div><div class="n">Aid established</div></div>
+        </div>
+      </div>
+
+      <div class="col" id="tb">
+        <span class="lab">TB care establishment</span>
+        <div class="stack">
+          <div class="card" id="b1"><div class="k">B1</div><div class="n">Care seeker&ndash;provider matched</div></div>
+          <div class="card" id="b2"><div class="k">B2</div><div class="n">Connection confirmed</div></div>
+          <div class="card" id="b3"><div class="k">B3</div><div class="n">Care established</div></div>
+        </div>
+      </div>
+
+      <div class="col" id="tc">
+        <span class="lab">TC care worker hiring</span>
+        <div class="cs-top">
+          <div class="stack">
+            <div class="card" id="st8"><div class="k">ST8</div><div class="n">Student application submitted</div></div>
+            <div class="card" id="qual"><div class="k">QUAL</div><div class="n">Portal vets the application</div></div>
+          </div>
+        </div>
+
+        <div class="match">
+          <span class="lab">Match</span>
+          <div class="chips c5" id="marow">
+            <div class="chip" id="ma1"><b>MA1</b>Candidate intro</div>
+            <div class="chip"><b>MA2</b>Interview held</div>
+            <div class="chip hi"><b>MA3</b>Hire confirmed</div>
+            <div class="chip hi"><b>MA4</b>6+ shifts confirmed</div>
+            <div class="chip hi"><b>MA5<span class="paid" title="Revenue lands here">$</span></b>Bill issued and paid</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>
+      <span class="lab">Care seeker success</span>
+      <div class="items">
+        <div class="chip"><b>CSO1</b>Aid established</div>
+        <div class="chip"><b>CSO2</b>Care established</div>
+        <div class="chip"><b>CSO3<span class="paid">$</span></b>Healthcare spending reduction</div>
+      </div>
+    </div>
+    <div>
+      <span class="lab">Provider success</span>
+      <div class="items">
+        <div class="chip"><b>PO1</b>New clients</div>
+        <div class="chip"><b>PO2</b>New staff</div>
+      </div>
+    </div>
+    <div>
+      <span class="lab">Care worker success</span>
+      <div class="items"><div class="chip"><b>CO</b>Hours worked</div></div>
+    </div>
+    <div class="stat"><span class="lab">Revenue generated</span><span class="v">$0</span></div>
+  </div>
+</section>
+</div>
+
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  var sys = document.getElementById("sys");
+  var svg = document.getElementById("wires");
+  var el = function (id) { return document.getElementById(id); };
+  var G = 5;
+
+  function box(id) {
+    var r = el(id).getBoundingClientRect(), c = sys.getBoundingClientRect();
+    return { l: r.left - c.left, r: r.right - c.left, t: r.top - c.top, b: r.bottom - c.top,
+             cx: (r.left + r.right) / 2 - c.left, cy: (r.top + r.bottom) / 2 - c.top };
+  }
+  function seg(x1, y1, x2, y2) {
+    var ln = document.createElementNS(NS, "line");
+    ln.setAttribute("x1", x1); ln.setAttribute("y1", y1);
+    ln.setAttribute("x2", x2); ln.setAttribute("y2", y2);
+    svg.appendChild(ln);
+  }
+  function head(x, y, dir) {                     /* dir: "d" down, "r" right */
+    var p = document.createElementNS(NS, "polygon");
+    p.setAttribute("points", dir === "d"
+      ? [x + "," + y, (x - 4.4) + "," + (y - 8), (x + 4.4) + "," + (y - 8)].join(" ")
+      : [x + "," + y, (x - 8) + "," + (y - 4.4), (x - 8) + "," + (y + 4.4)].join(" "));
+    svg.appendChild(p);
+  }
+  function vArrow(x, y1, y2) { seg(x, y1, x, y2 - 8); head(x, y2, "d"); }
+  function hArrow(y, x1, x2) { seg(x1, y, x2 - 8, y); head(x2, y, "r"); }
+
+  function vDown(a, b) { var A = box(a), B = box(b); vArrow(A.cx, A.b + G, B.t - G); }
+  function vInto(a, b) { var A = box(a), B = box(b); vArrow(A.cx, A.b + G, B.t - G); }
+  function fromStem(x, b) { var B = box(b); hArrow(B.cy, x + 1, B.l - G); }
+  function toStem(a, x) { var A = box(a); hArrow(A.cy, A.r + G, x - 1); }
+
+  function draw() {
+    var w = sys.scrollWidth, h = sys.scrollHeight;
+    svg.setAttribute("viewBox", "0 0 " + w + " " + h);
+    svg.setAttribute("width", w); svg.setAttribute("height", h);
+    svg.innerHTML = "";
+
+    var top = box("top"), bottom = box("bottom");
+    var f1 = box("f1"), f2 = box("f2"), fs1 = box("fs1");
+    var BT = bottom.t - G;
+
+    /* family funnel — sources converge on F1 with square corners */
+    var fs2 = box("fs2"), fs3 = box("fs3"), bar0 = fs3.b + 18;
+    [fs1, fs2, fs3].forEach(function (s) { seg(s.cx, s.b + G, s.cx, bar0); });
+    seg(fs1.cx, bar0, fs3.cx, bar0);
+    vArrow(fs2.cx, bar0, f1.t - G);
+    var fs1x = fs1.l + 14;                       /* referral also runs straight down */
+    vArrow(fs1x, fs1.b + G, BT);
+
+    var stem1 = f1.l + 14;
+    seg(stem1, f1.b + G, stem1, f2.t - 8);
+    head(stem1, f2.t - G, "d");
+    fromStem(stem1, "fq");
+
+    var stem2 = f2.l + 14;
+    seg(stem2, f2.b + G, stem2, BT - 8);
+    head(stem2, BT, "d");
+    ["f2a", "f2b", "f2c"].forEach(function (id) { fromStem(stem2, id); });
+
+    /* provider lane */
+    vDown("p1", "p2");
+    var p2 = box("p2");
+    seg(p2.cx, p2.b + G, p2.cx, BT - 8);
+    head(p2.cx, BT, "d");
+    ["fq", "f2b", "f2c"].forEach(function (id) { toStem(id, p2.cx); });
+
+    /* every other feed drops straight into the bottom funnel */
+    [["ps1"], ["ps2"], ["pr2"], ["st2"]].forEach(function (p) {
+      var A = box(p[0]); vArrow(A.cx, A.b + G, BT);
+    });
+
+    /* provider side + caregiver side inside the top funnel */
+    vDown("pr1", "prout");
+    vDown("st1", "stout");
+
+    /* inside the bottom funnel */
+    vDown("a1", "a2"); vDown("a2", "a3");
+    vDown("b1", "b2"); vDown("b2", "b3");
+    vDown("st8", "qual");
+
+    /* one line out of consumer relations management, diverging into the three tracks */
+    var crm = box("crm"), colTop = box("ta").t - G, fanBar = crm.b + 26;
+    var tx = [box("ta").cx, box("tb").cx, box("tc").cx];
+    seg(crm.cx, crm.b + G, crm.cx, fanBar);
+    seg(Math.min(Math.min.apply(null, tx), crm.cx), fanBar,
+        Math.max(Math.max.apply(null, tx), crm.cx), fanBar);
+    tx.forEach(function (x) { vArrow(x, fanBar, colTop); });
+
+    var q = box("qual"), ma1 = box("ma1"), marow = box("marow"), barY = marow.t - 30;
+    seg(q.cx, q.b + G, q.cx, barY);
+    seg(Math.min(q.cx, ma1.cx), barY, Math.max(q.cx, ma1.cx), barY);
+    vArrow(ma1.cx, barY, ma1.t - G);
+  }
+
+  var run = function () { requestAnimationFrame(draw); };
+  window.addEventListener("resize", run);
+  window.addEventListener("load", run);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+  run();
+})();
+</script>

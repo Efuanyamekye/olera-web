@@ -10,12 +10,16 @@ import { usePathname } from "next/navigation";
 
 const SIDEBAR_VISIBILITY_KEY = "admin-sidebar-hidden";
 const WORKSPACE_ROUTES = new Set(["/admin/inbox", "/admin/support-email"]);
+// Pages whose content is one wide figure rather than a column of cards.
+// The 6xl reading column would force them to shrink or scroll sideways.
+const WIDE_ROUTES = new Set(["/admin/operating-map"]);
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { adminUser, isLoading: adminLoading, error, retry } = useAdminAuth();
   const [sidebarHidden, setSidebarHidden] = useState(false);
   const isWorkspaceRoute = WORKSPACE_ROUTES.has(pathname);
+  const isWideRoute = WIDE_ROUTES.has(pathname);
 
   useEffect(() => {
     try {
@@ -123,9 +127,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               sidebarHidden ? "md:pl-10" : "",
             ].join(" ")}
           >
-            <div className={isWorkspaceRoute
-              ? "h-full min-h-0 w-full overflow-hidden"
-              : "mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8"
+            <div className={
+              isWorkspaceRoute
+                ? "h-full min-h-0 w-full overflow-hidden"
+                : isWideRoute
+                  ? "w-full px-4 py-8 sm:px-6 lg:px-8"
+                  : "mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8"
             }>
               {children}
             </div>

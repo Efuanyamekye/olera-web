@@ -35,6 +35,17 @@ export function expandCityAliases(city: string): string[] {
 }
 
 /**
+ * Every city that has aliases, as the search term it rolls up to.
+ *
+ * Exported so consumers that need the reverse mapping — collapsing the
+ * stored names back into one city, as the operating map does when counting
+ * distinct cities — can derive it here instead of restating the list.
+ */
+export function citiesWithAliases(): string[] {
+  return Object.keys(CITY_ALIAS_MAP);
+}
+
+/**
  * Check whether a city name has aliases (i.e. the search term differs
  * from what's stored in the database).
  */

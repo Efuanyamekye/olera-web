@@ -100,6 +100,10 @@ const navSections: NavSection[] = [
       // bookmarks during transition.
       { label: "Team", href: "/admin/team" },
       { label: "War Room", href: "/admin/war-room" },
+      // Last on purpose. Not a queue to work — the whole marketplace as one
+      // figure, read when you want to see where a number comes from or
+      // which steps nobody measures yet.
+      { label: "Operating Map", href: "/admin/operating-map" },
     ],
   },
 ];

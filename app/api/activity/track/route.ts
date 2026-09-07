@@ -6,6 +6,7 @@ import {
   sanitizeReferrer,
 } from "@/lib/analytics/referrer";
 import { classifyUserAgent } from "@/lib/analytics/user-agent";
+import { readVisitorGeo } from "@/lib/analytics/visitor-geo";
 
 const PROVIDER_EVENT_TYPES = [
   "email_click",
@@ -228,6 +229,8 @@ export async function POST(request: NextRequest) {
         ...(metadata || {}),
         session_id,
         ua_class: classifyUserAgent(userAgent),
+        // Visitor city/state from Vercel's edge headers. No IP is stored.
+        ...readVisitorGeo(request.headers),
         referrer: sanitizeReferrer(metadata?.referrer),
         // referrer_class buckets traffic source into a small enum
         // (ai_chat / search / social / olera_internal / direct / other)
@@ -410,6 +413,7 @@ export async function POST(request: NextRequest) {
     const enrichedProviderMetadata = {
       ...(metadata || {}),
       ua_class: classifyUserAgent(userAgent),
+      ...readVisitorGeo(request.headers),
     };
 
     const { error } = await db.from("provider_activity").insert({

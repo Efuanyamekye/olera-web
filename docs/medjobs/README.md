@@ -1,8 +1,30 @@
 # MedJobs Documentation
 
-Two complementary documents covering the MedJobs CRM system.
+Two layers: an **operating layer** (how the business is run) and an **engineering layer** (how the system
+is built). They are peers and must stay consistent — same vocabulary, same states, same funnel.
 
-## Documents
+## Start here
+
+| You are… | Read |
+|---|---|
+| Running MedJobs day to day | **[`operating/`](operating/)** — the operating workspace |
+| Changing MedJobs code | **[`OPERATIONAL_BRIEF.md`](OPERATIONAL_BRIEF.md)** — the engineering reference |
+| New to MedJobs entirely | [`operating/00-OPERATING-SYSTEM.md`](operating/00-OPERATING-SYSTEM.md), then [`EXECUTIVE_SUMMARY.md`](EXECUTIVE_SUMMARY.md) |
+
+## Operating layer
+
+### [`operating/`](operating/)
+**Audience:** the execution pod (Chantel, Esther, Grazy, Sess) + founders.
+
+The single source of truth for commercializing MedJobs: the executive operating plan, the execution
+playbook, roles and ownership, protocols P1–P7, metrics, experiments, decisions, scale gates, and iteration
+history. Start at [`operating/README.md`](operating/README.md).
+
+Open conflicts between the meeting, the admin protocol, and the shipped system are named explicitly in
+[`operating/07-OPEN-DECISIONS-AND-CONFLICTS.md`](operating/07-OPEN-DECISIONS-AND-CONFLICTS.md) — read that
+before assuming any of the three is authoritative on price, on what a "Client" is, or on archiving rules.
+
+## Engineering layer
 
 ### `EXECUTIVE_SUMMARY.md`
 **Audience:** Engineering + outreach/admin team, on first read.
@@ -47,7 +69,10 @@ build in `matrix-src/`; run `matrix-src/build.sh` to rebuild.
 
 ## Source of truth
 
-The markdown files in this directory are the **source of truth**. When the system evolves, update these documents.
+The markdown files in this directory are the **source of truth**. When the system evolves, update these
+documents. Operating changes land in [`operating/`](operating/); engineering changes land here. An operating
+decision that needs a code change goes to TJ with a note in `operating/08-ITERATION-LOG.md`; an engineering
+change that alters the funnel is reflected in `operating/` the same week.
 
 ## Converting to Word (for Slack / email distribution)
 
