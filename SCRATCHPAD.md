@@ -7,6 +7,26 @@
 
 ## Current Focus
 
+### 2026-09-07 — Olera City Ads went live: two metro campaigns spending, relay proven end to end in production (`hopeful-joliot`, PRs #1814 · #1819 · promotions #1816 · #1821 → main `3e8635c76`)
+
+**The rings were wrong and Keyword Planner said so.** Pulled the Olera Ads account against the two seeded rings: **Concord ~330** core-term searches a month, **Garland ~450**, against a ~1,500 gate. At the $2.25 CPC Google forecasts, $300 buys ~133 clicks and neither city can supply that in a fortnight — both arms would have underspent and returned an anecdote. Google's own forecast also put CPC at **$2.23/$2.28**, less than half the $5–6.30 the plan assumed, so the $6 cap is right and generous. Account history agrees: **$2.10 avg across 255 clicks / $535** on every provider campaign ever run. Migration **209** re-slugged `concord-nc → charlotte-nc` and `garland-tx → dallas-tx`; every pooled provider already sat inside the new metro. Concierge routing is what makes the wider net safe — a human calls every family, so a lead outside one agency's radius costs nothing. Full pull at `~/Desktop/city-ads-keyword-planner-2026-09-07.md`.
+
+**Pre-test caught a live-fire bug before TJ tested.** `app/care/[city]/page.tsx` built its provider cards from `city_pool WHERE enabled = true`. Its own comment claimed "a test row is never a public card" and **nothing implemented it**, and the loop-test row carries `verification_state = 'verified'`. Enabling it to run a test would have printed *Ad Boost Promotion Test · Killeen · Verified on Olera* to a Charlotte family on a page we pay for clicks to. Migration **210** adds `city_pool.is_test`; flagged rows are excluded from public cards and from automatic selection, but can still be handed a lead by name, which is how the loop test is driven. Also stopped a failed pool read being read as an empty pool — the chain took a null result as "no provider left", marked the lead unfilled and texted the family we were still looking, having never looked.
+
+**The relay works, proven against production.** Full loop, TJ's own mobile as the family and `tj@findmedjobs.co` as the provider: request filed 06:59Z under concierge (chain correctly did **not** start), confirmation text sent, offer handed over by name at 07:01, **Take** pressed 07:11, provider and family both notified. Before Take the page showed care type and ZIP only; name and number appeared **only on the claim**. That sequencing was the bug ChatGPT's review caught in the original design, and it is now demonstrably right in a live system. The two failures were the fake 555 provider number, which is the number that is supposed to be unreachable.
+
+**Both campaigns built and live.** `Olera City – Charlotte NC – Sep 2026` **24223751948** and `Olera City – Dallas TX – Sep 2026` **24223844624**. $300 campaign-total each, 7–20 Sep, **Charlotte NC** and **Dallas-Ft. Worth TX** Nielsen DMAs (city targeting would have excluded Concord, Huntersville, Garland, Plano — where the pooled providers are), Presence-only, Search only with Partners and Display off, **AI Max off and Final URL expansion off verified at the switches**, Maximize clicks at a **$6 cap**, EN+ES, 15/16 phrase-match home-care keywords, 13 headlines and 4 descriptions each, and the curated **82-term shared negative list** from the July audit applied to both. One ad group, home care only — deliberate: tight message match, most pool rows are home care, and assisted living is the most expensive term in the market.
+
+**Every documented Google Ads trap reappeared and none cost real time.** The re-auth fired as `type=AD_FINAL_URL`, not the budget, and opened in a **second tab**. "Changes failed to save" persisted after the challenge and cleared by re-submitting the failed step, not by redoing work. The review summary claimed **"Ads: None"** and **"Final URL expansion turned on"** while the in-app editor held 13 headlines and all three switches read false — verified at source, changed nothing. Google prefills the RSA with its own copy including a **memory care** description, which is a health-policy risk; every prefilled asset was replaced.
+
+**Then the promise problem, which TJ named the real risk.** The concierge SMS said *"someone from Olera will call you today"* whenever a request landed inside `STAFFED_HOURS`, which was 8am–8pm in the **city's** timezone. Concierge means a human makes every one of those calls and that human is on **UTC+7**: a request at 4pm Eastern promised a same-day call at 3am. Narrowed to **8am–noon local** — Charlotte 7–11pm Bangkok, Dallas 8–11pm. TJ's call: narrow the hours rather than change the promise.
+
+**Pre-test on that change found two more.** The landing page hero said *"We call you back today"* as **static copy** with no hour awareness; the two confirmation messages were already guarded by `result.staffed` but the hero was not, so narrowing took it from wrong half the day to wrong 20 hours out of 24 — a promise retracted inside one visit. Now server-computed. And leads parked **mid-chain** sat at status `offered` while the cron's resume query filtered `.eq("status","new")`, so they were never picked up again; pre-existing, but a 3×30-minute chain against a 4-hour window took the exposure from ~4% to ~37%. Both inert under concierge, both would have bitten on day one of auto.
+
+**Measurement is wired into a routine that already runs.** TJ's answer to the metrics gap: fetch the numbers during the daily browser sweep rather than build a sync. `/ad-boost-optimize` now names both city campaigns in Phase 1 (they live in `city_campaigns`, not `ad_campaign_requests`, so a sweep built from the provider table missed them silently) and points Phase 5 write-back at `POST /api/admin/city-ads`. **`ad_spend_cents` has exactly one source and it is that sweep** — cost per family reached has no numerator without it.
+
+**State at stop.** Both campaigns Enabled and spending, `city_campaigns` rows `live` with Google IDs recorded, **0 of 13 providers enabled** (concierge by design), **0 real families**. Production verified at the live ad URL: at 4:30am Charlotte the hero reads *"We call you back in the morning."*
+
 ### 2026-09-06 (evening) — Olera city ads: plan, mocks, and the whole v0 built and merged to staging in one session (`hopeful-joliot`, branch `city-ads`, PR #1797 → staging `9acfa142f`; production promotion pending TJ's "ship")
 
 **What TJ asked for.** A first-principles alternative to per-provider Ad Boost: Olera buys the ad for a whole city, lands the family on a page built only to capture a care request, routes it to a provider who calls back. Deep web research (not memory) on converting pages, converting ads, and which city; mocks via `/visualize` before build; a tracker that reuses Manage without pretending a city is a provider; provider messaging. Then he said launch tomorrow, and it got built.
@@ -4873,6 +4893,17 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 
 ## Next Up
 
+**Olera City Ads — live 2026-09-07 (`hopeful-joliot`, campaigns `24223751948` Charlotte / `24223844624` Dallas, flight 7–20 Sep)**
+- 🔴 **Day 3 (~10 Sep): read the search terms.** The one number that decides the fortnight — is real CPC nearer **$2.10** (account history) or **$5.72** (Google's estimate at our cap)? At $2.10 the $600 buys ~280 clicks and a 4% conversion read is possible; at $5.72 it buys ~100 and the flight cannot conclude regardless of how good the page is.
+- 🔴 **Send the eight provider pre-commit texts on the FIRST real lead, not the fifth.** Drafted and held at `~/Desktop/city-ads-provider-precommit.md`. 0 of 13 providers are enabled, so TJ personally calls every family, and the calling window is now 4 hours a day. Provider commitment takes days to come back; by the time volume justifies the ask he is already the bottleneck. One lead makes the ask honest.
+- 🟡 **Day 5: harvest negatives.** Both campaigns start on the curated 82-term shared list, but the July audit's lesson was that competitor-brand and wrong-category junk appears fresh in every campaign.
+- 🟡 **Day 14 (20 Sep): the read.** Cost per family a provider actually reached. Under **$95** beats what Ad Boost does today; under **$60** it is the plan for every city. Flight auto-ends; Google stops itself.
+- 🟢 **Nextdoor $50 line on Charlotte** — row seeded and `draft`. Parked by TJ until Google produces a conversion rate worth spending against.
+- 🟢 **Assisted-living ad group** — deliberately omitted for message-match. Add if the home-care read is thin on volume rather than on conversion.
+- 🟢 **Day-5 / day-14 Slack reads** still unbuilt; conversion rate and $/family were kept off `/admin/city-ads` on purpose and currently arrive nowhere. Spend now lands via the `/ad-boost-optimize` sweep, so the arithmetic can be done by hand at the two gates.
+- ⚪ **The page has never converted a real visitor.** Every number downstream of that, including the 4% bar, is an assumption. The first genuine submission is the most informative event in the project.
+
+
 **Provider touch log / Relationships — updated 2026-09-05 evening (`wonderful-williams`, PR #1791 merged, PR #1793 open)**
 - 🔴 **Merge #1793** (support threads + inbound texts on the timeline, `awaiting_reply` flag, Ad Boost ↔ Relationships links) after TJ tests on staging.
 - 🟡 **Deep links into the inboxes**: `?thread=` on `/admin/support-email`, `?phone=` on `/admin/inbox`, so a timeline row opens the actual conversation.
@@ -5225,6 +5256,19 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 ---
 
 ## Session Log
+
+### 2026-09-07 — Measured the rings, found they were too small, and shipped the city ads pilot to production
+
+Three things worth keeping.
+
+**The Keyword Planner pull changed the plan, and the account's own history confirmed it.** Concord carried ~330 core-term searches a month and Garland ~450 against a ~1,500 gate, so both seeded rings would have underspent $300 over a fortnight. The same pull priced CPC at **$2.23–$2.28**, less than half the $5–6.30 the plan had assumed from published benchmarks — and the account's real history across 17 provider campaigns is **$2.10 on 255 clicks**. Two consequences: the $6 cap is generous rather than tight, and the landing page's conversion bar drops from ~10% to ~4% to beat the $95-per-reached-family benchmark. Moved both arms to metro DMAs; concierge routing is what made the wider net safe.
+
+**Two bugs caught before TJ tested, both in the same shape: a comment that described behaviour nobody implemented.** `app/care/[city]/page.tsx` said "a test row is never a public card" and had no filter, so switching on the loop-test provider would have advertised *Ad Boost Promotion Test · Killeen · Verified on Olera* to a Charlotte family on a paid page. And after the staffed window narrowed, the landing hero still promised *"We call you back today"* as static copy while the SMS said otherwise — a promise retracted inside a single visit, wrong 20 hours out of 24. The second pre-test also surfaced a latent one: leads parked mid-chain sat at status `offered` while the resume query looked only for `new`, so they were silently never resumed. Inert under concierge; would have bitten on day one of auto routing.
+
+**The diagnostic lesson repeated twice and was caught both times.** Probing whether migrations 211/212 were applied, PostgREST's *"Could not find the function … without parameters"* was read as "function absent" when it actually means "signature mismatch" — the functions existed all along, and TJ was told to apply migrations that were already live. The same error appeared again on migration 214 with a one-arg probe against a three-arg function; this time the `cron_config` row from the same transaction contradicted it and forced a re-check. Separately, a `pgrep` for the MCP server matched Chrome's own `--user-data-dir` path and appeared to prove the server was alive when it was not — the same false-positive class as the `pkill -f` trap in the CDP incident. **Rule that held: verify at source with the real signature, and treat any single grep or pattern match as a hypothesis.**
+
+Also: the Google Ads review summary lied twice more (*"Ads: None"*, *"Final URL expansion turned on"*) while the in-app editors proved otherwise, which is now the third session it has done that. Trusting it would have meant rebuilding a finished ad.
+
 
 ### 2026-08-21 — Pruned the allowlist, connected the second sender, and found the shipped fix was the small half
 
