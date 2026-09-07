@@ -398,6 +398,14 @@ export async function GET(request: NextRequest) {
     if (node === "cr2") {
       query = query.filter("metadata->>referrer_class", "eq", "search");
     }
+    if (node === "cr1" || node === "cr2" || node === "cr3") {
+      // Same two surfaces the count is scoped to, so the sample cannot show
+      // a page the number never counted.
+      query = query.or(
+        `${CONTENT_PAGE_FILTERS.benefit},${CONTENT_PAGE_FILTERS.guide}`,
+      );
+      where.push("benefits and editorial pages (provider pages counted separately)");
+    }
     if (node === "cr1") {
       query = query.filter("metadata->>referrer_class", "eq", "direct");
     }

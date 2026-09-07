@@ -131,13 +131,13 @@ const NODE_HELP: Record<string, string> = {
   cities:
     "Cities with at least one live provider. Wider than the cities we have deliberately launched.",
   cr1:
-    "Unique people who arrived with no referring site — typed in, bookmarked, or from an app that strips the referrer. Counted from Olera's own page events, like CR2 and CR3.",
+    "Unique people who arrived with no referring site — typed in, bookmarked, or from an app that strips the referrer. Counted on the same pages CR4 counts.",
   cr2:
     "Unique people who arrived from a search engine, from Olera's own page events. Compare with GA4 Organic Search users, not sessions.",
   cr3:
-    "Unique people who arrived on an Ad Boost link. Paid traffic bought outside Ad Boost carries no managed tag and is not counted here.",
+    "Unique people who landed on a provider, benefits or editorial page with an Ad Boost tag on the link. Paid traffic without that tag, or landing anywhere else, is not counted.",
   cr4:
-    "Page views across the three surfaces we publish, from all traffic sources. Counts views, not people, so it runs higher than CR2.",
+    "Page views on provider, benefits and editorial pages, from all traffic sources. Nothing else is tracked — not the homepage, search or city pages. Views, not people.",
   cr6:
     "Every care recipient action that asks us for something: the three CTA types below, added together. Scoped by the city the ask is about.",
   cr6a:

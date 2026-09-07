@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { CONTENT_PAGE_FILTERS } from "@/lib/analytics/content-pages";
 
 /**
  * CR1, CR2, CR3 — where the care recipient traffic came from.
@@ -32,8 +33,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  * Organic Search *users*; comparing it to GA sessions will always read low,
  * because one person visiting twice in a day is two sessions and one visitor.
  *
- * The population is the same one CR4 covers — provider pages plus the
- * editorial and benefits content pages — which the platform splits across two
+ * The population is exactly the one CR4 covers — provider pages plus the
+ * benefits and editorial content pages — which the platform splits across two
  * tables with two different shapes:
  *
  *   provider_activity  visitor id in metadata->>session_id
@@ -41,6 +42,11 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  *
  * Ids are unioned across both, so someone who read a benefits guide and then
  * a provider page counts once.
+ *
+ * The page_events half is narrowed by the same CONTENT_PAGE_FILTERS that CR4
+ * uses. Without that these would count visitors to pages CR4 never counts —
+ * a visitor with no views, which is not a thing — and the sources would
+ * legitimately exceed the box they point at.
  */
 
 /** What separates the three sources, as stored on a page view. */
@@ -116,6 +122,12 @@ async function collectSessions(
       .select(table === "page_events" ? "sid:session_id" : "sid:metadata->>session_id")
       .eq("event_type", "page_view")
       .filter(`metadata->>${arrival.field}`, "eq", arrival.value);
+
+    // page_events carries surfaces CR4 does not count. Narrowing to the same
+    // two keeps every source a true slice of the box it feeds.
+    if (table === "page_events") {
+      query = query.or(`${CONTENT_PAGE_FILTERS.benefit},${CONTENT_PAGE_FILTERS.guide}`);
+    }
 
     // Visitor city, recorded from Vercel's edge headers since VISITOR_GEO_START.
     if (citySlug) query = query.filter("metadata->>geo_city", "eq", citySlug);
