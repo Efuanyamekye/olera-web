@@ -153,7 +153,7 @@ const NODE_HELP: Record<string, string> = {
   m3: "Providers who requested a managed ad campaign in this range.",
   m4: "Providers who activated MedJobs staffing in this range.",
   m5:
-    "Care worker profiles that are complete — a MedJobs application goes live once the intro video is in. Same timing caveat as M1.",
+    "MedJobs applications begun, and how many are finished — a profile goes live once the intro video and documents are in. The gap is the pool still to convert.",
   cw1:
     "Universities we have listed and are working, scoped by the university's city. A standing count — the date range does not change it.",
   cw2:
@@ -940,7 +940,17 @@ export default function OperatingMap({
                   hi
                   id="m5"
                   code="M5"
-                  label="Care worker profiles completed"
+                  label={
+                    <>
+                      Care worker profiles
+                      {showNumbers && <br />}
+                      <Surfaces
+                        metric={nodes.m5}
+                        fallback="started · complete"
+                        showNumbers={showNumbers}
+                      />
+                    </>
+                  }
                   metric={nodes.m5}
                   trend={trends.m5}
                   loading={metricsLoading}

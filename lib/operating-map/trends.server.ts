@@ -165,7 +165,7 @@ async function countAll(
     out.m2 = milestones.value.providersClaimed;
     out.m3 = milestones.value.managedAdSignups;
     out.m4 = milestones.value.staffingSignups;
-    out.m5 = milestones.value.careWorkerProfiles;
+    out.m5 = milestones.value.careWorkerProfilesStarted;
   }
   if (tracks.status === "fulfilled") {
     out.tb1 = tracks.value.inquiriesResponded;

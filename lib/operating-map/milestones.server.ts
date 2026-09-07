@@ -10,7 +10,8 @@ import { cityFilterFromSlug, listedProviderIdsInCity } from "@/lib/providers";
  *   M2  provider profiles claimed           provider_activity claim_completed
  *   M3  managed ad signups                  ad_campaign_requests
  *   M4  provider staffing signups           staffing_touchpoints system_activated
- *   M5  care worker profiles completed      business_profiles type=student
+ *   M5  care worker profiles                business_profiles type=student,
+ *                                           started and completed
  *
  * "student" is the stored type for a care worker — MedJobs' original name for
  * them, kept because the column is what it is.
@@ -34,6 +35,9 @@ const MAX_ROWS = 100_000;
 export interface Milestones {
   /** M1 — profiles whose care post is published, so providers can see them. */
   careRecipientProfilesLive: number;
+  /** M5's total — every application begun, finished or not. */
+  careWorkerProfilesStarted: number;
+  /** Of those, the ones that went live: intro video and documents in. */
   careWorkerProfiles: number;
   providersClaimed: number;
   managedAdSignups: number;
@@ -48,14 +52,25 @@ async function countProfiles(
   type: "family" | "student",
   range: Range,
   citySlug: string | null,
-  /** Narrow to profiles whose care post is published. */
-  liveOnly = false,
+  options: {
+    /** Narrow to profiles whose care post is published. */
+    liveOnly?: boolean;
+    /**
+     * Count applications that were only begun too. `is_active` flips when a
+     * care worker's intro video and documents land, so without this the
+     * count is finished profiles and the pool behind them is invisible.
+     */
+    includeIncomplete?: boolean;
+  } = {},
 ): Promise<number> {
+  const { liveOnly = false, includeIncomplete = false } = options;
+
   let query = db
     .from("business_profiles")
     .select("id", { count: "exact", head: true })
-    .eq("type", type)
-    .eq("is_active", true);
+    .eq("type", type);
+
+  if (!includeIncomplete) query = query.eq("is_active", true);
 
   // The same test the admin Care Seekers page uses for its Published view.
   if (liveOnly) {
@@ -189,12 +204,14 @@ export async function getMilestones(
 
   const [
     careRecipientProfilesLive,
+    careWorkerProfilesStarted,
     careWorkerProfiles,
     providersClaimed,
     managedAdSignups,
     staffingSignups,
   ] = await Promise.all([
-    countProfiles(db, "family", range, citySlug, true),
+    countProfiles(db, "family", range, citySlug, { liveOnly: true }),
+    countProfiles(db, "student", range, citySlug, { includeIncomplete: true }),
     countProfiles(db, "student", range, citySlug),
     countProviderEvents(
       db,
@@ -222,6 +239,7 @@ export async function getMilestones(
 
   return {
     careRecipientProfilesLive,
+    careWorkerProfilesStarted,
     careWorkerProfiles,
     providersClaimed,
     managedAdSignups,

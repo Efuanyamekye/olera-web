@@ -120,7 +120,7 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     href: "/admin/medjobs",
     label: "MedJobs",
     advice:
-      "A profile completes when the intro video lands. Applicants stuck before that step are the fastest supply you have.",
+      "The gap between started and complete is your fastest supply. Applicants stall at the intro video — chase those before sourcing new ones.",
   },
   cw1: {
     href: "/admin/student-outreach",

@@ -219,7 +219,17 @@ export async function GET(request: NextRequest) {
       nodes.m2 = { value: m.providersClaimed, caveat: null };
       nodes.m3 = { value: m.managedAdSignups, caveat: null };
       nodes.m4 = { value: m.staffingSignups, caveat: null };
-      nodes.m5 = { value: m.careWorkerProfiles, caveat: PROFILE_TIMING_CAVEAT };
+      nodes.m5 = {
+        // Started is the headline: it is the pool, and completion is the
+        // conversion inside it. Both are printed because one without the
+        // other is half the story.
+        value: m.careWorkerProfilesStarted,
+        breakdown: [
+          { label: "started", value: m.careWorkerProfilesStarted },
+          { label: "complete", value: m.careWorkerProfiles },
+        ],
+        caveat: PROFILE_TIMING_CAVEAT,
+      };
     } catch (error) {
       console.error("[operating-map/metrics] m1-m5 failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };

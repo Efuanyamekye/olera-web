@@ -192,17 +192,18 @@ const SOURCES: Record<
     summarize: (r) => `Outreach ${String(r.outreach_id ?? "—")}`,
   },
   m5: {
-    title: "Care worker profiles completed",
+    title: "Care worker applications started",
     table: "business_profiles",
-    select: "created_at, display_name, city, state",
+    select: "created_at, display_name, city, state, is_active",
     where: [
       "type is student — the stored name for a care worker",
-      "profile is active, which happens when the intro video lands",
+      "every application begun, finished or not",
       "created in this range",
     ],
     cityScoped: false,
     providerCityScoped: true,
-    summarize: (r) => `${String(r.display_name ?? "—")} · ${String(r.city ?? "")}`,
+    summarize: (r) =>
+      `${String(r.display_name ?? "—")} · ${r.is_active ? "complete" : "started"}`,
   },
   cw1: {
     title: "Universities listed",
@@ -314,7 +315,7 @@ export async function GET(request: NextRequest) {
         .eq("is_active", true)
         .contains("metadata", { care_post: { status: "active" } });
     }
-    if (node === "m5") query = query.eq("type", "student").eq("is_active", true);
+    if (node === "m5") query = query.eq("type", "student");
     if (node === "m4") query = query.eq("type", "system_activated");
     if (node === "cw1") query = query.eq("is_active", true);
     if (node === "cw2") query = query.eq("status", "active");
