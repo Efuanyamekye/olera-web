@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * The receipts behind one number: the table it came from, the filters in
@@ -31,6 +31,21 @@ export default function NodeInspector({
 }) {
   const [data, setData] = useState<InspectResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  /*
+   * Bring the panel to the reader.
+   *
+   * The map is scaled to fill the viewport, so anything rendered beneath it
+   * begins below the fold. Without this, clicking a number looks like
+   * nothing happened — the answer arrives somewhere you cannot see.
+   */
+  useEffect(() => {
+    // Twice: once on open so the motion starts with the click, once when the
+    // rows land and the panel is taller. "nearest" makes the second a no-op
+    // if it is already fully in view.
+    panelRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [node, data, error]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -53,7 +68,7 @@ export default function NodeInspector({
   }, [node, params]);
 
   return (
-    <div className="mt-4 rounded-xl border border-gray-200 bg-white p-4">
+    <div ref={panelRef} className="mt-4 rounded-xl border border-gray-200 bg-white p-4">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-400">
