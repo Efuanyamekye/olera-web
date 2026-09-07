@@ -42,25 +42,31 @@ export interface CityConfig {
 }
 
 export const CITY_CONFIGS: Record<string, CityConfig> = {
-  "concord-nc": {
-    slug: "concord-nc",
-    city: "Concord",
+  // Metro, not city. Measured 2026-09-07: Concord city carried ~330 core-term
+  // searches a month and Garland ~450, against a ~1,500 gate. Neither could
+  // supply the planned $300 in two weeks at the ~$2.25 CPC Google forecasts.
+  // Concierge routing makes the wider net safe: a human calls every family, so
+  // a lead outside one agency's radius costs nothing. Narrow back to the rings
+  // when providers are on call. Every pooled provider sits inside these metros.
+  "charlotte-nc": {
+    slug: "charlotte-nc",
+    city: "Charlotte",
     state: "NC",
     routingMode: "concierge",
-    areaLabel: "Concord, Harrisburg, Kannapolis and Huntersville",
-    zipPrefill: "28027",
+    areaLabel: "Charlotte, Concord, Huntersville and nearby",
+    zipPrefill: "28202",
     timeZone: "America/New_York",
-    campaignTag: "olera-concord-sep26",
+    campaignTag: "olera-charlotte-sep26",
   },
-  "garland-tx": {
-    slug: "garland-tx",
-    city: "Garland",
+  "dallas-tx": {
+    slug: "dallas-tx",
+    city: "Dallas",
     state: "TX",
     routingMode: "concierge",
-    areaLabel: "Garland, Plano, Richardson and nearby",
-    zipPrefill: "75040",
+    areaLabel: "Dallas, Garland, Plano and nearby",
+    zipPrefill: "75201",
     timeZone: "America/Chicago",
-    campaignTag: "olera-garland-sep26",
+    campaignTag: "olera-dallas-sep26",
   },
 };
 

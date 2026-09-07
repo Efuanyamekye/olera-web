@@ -40,7 +40,7 @@ type Campaign = {
 };
 
 type Provider = { id: string; display_name: string | null; city: string | null; phone: string | null; email: string | null } | null;
-type PoolRow = { id: string; slug: string; provider_id: string; position: number; care_types: string[]; enabled: boolean; phone_override: string | null; provider: Provider };
+type PoolRow = { id: string; slug: string; provider_id: string; position: number; care_types: string[]; enabled: boolean; is_test: boolean; phone_override: string | null; provider: Provider };
 type Offer = { id: string; provider_id: string; position: number; offered_at: string; expires_at: string; accepted_at: string | null; declined_at: string | null; decline_reason: string | null; expired_at: string | null; provider: Provider };
 type Lead = {
   id: string;
@@ -374,6 +374,7 @@ function OfferTo({ lead, pool, busy, primary, onPick }: { lead: Lead; pool: Pool
         .map((p) => (
           <option key={p.id} value={p.provider_id}>
             {p.provider?.display_name ?? p.provider_id.slice(0, 8)}
+            {p.is_test ? " (test)" : ""}
             {seen.has(p.provider_id) ? " (already offered)" : p.enabled ? "" : " (not on call)"}
           </option>
         ))}
@@ -623,6 +624,7 @@ function PoolLine({ p, busy, act }: { p: PoolRow; busy: boolean; act: (label: st
       <label className="flex items-center gap-2.5">
         <input type="checkbox" className="h-4 w-4 accent-primary-700" checked={p.enabled} disabled={busy} onChange={(e) => void act("On call", { action: "pool_toggle", poolId: p.id, enabled: e.target.checked })} />
         <span className={`font-medium ${p.enabled ? "text-gray-900" : "text-gray-500"}`}>{p.provider?.display_name ?? p.provider_id.slice(0, 8)}</span>
+        {p.is_test && <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-gray-500">test</span>}
         <span className="text-xs text-gray-500">
           {p.provider?.city} · {p.care_types.map((t) => CARE[t] ?? t).join(", ")}
         </span>

@@ -63,6 +63,7 @@ export default async function CityCarePage({
       .select("provider_id, position, care_types")
       .eq("slug", cfg.slug)
       .eq("enabled", true)
+      .eq("is_test", false)
       .order("position", { ascending: true });
     const ids = (pool ?? []).map((p) => p.provider_id as string);
     if (ids.length > 0) {

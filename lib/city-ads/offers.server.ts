@@ -194,12 +194,23 @@ export async function startOrAdvance(
     if (nextPosition > MAX_OFFERS_PER_LEAD && !opts.force) {
       return markUnfilled(db, lead, city);
     }
-    const { data: pool } = await db
+    const { data: pool, error: poolErr } = await db
       .from("city_pool")
       .select("id, provider_id, position, care_types, enabled, phone_override")
       .eq("slug", lead.slug)
       .eq("enabled", true)
+      .eq("is_test", false)
       .order("position", { ascending: true });
+    // A failed read is not the same as an empty pool. Marking the lead unfilled
+    // here would text the family that we are still looking when we never
+    // actually looked, and would burn the lead's place in the queue.
+    if (poolErr) {
+      console.error("[city-ads] pool read failed", poolErr);
+      await sendSlackAlert(
+        `⚠️ City lead ${lead.id.slice(0, 8)} (${city}): could not read the provider pool (${poolErr.message}). Nothing sent, nothing marked. Retry from /admin/city-ads.`,
+      );
+      return { action: "noop" };
+    }
     const entries = ((pool ?? []) as PoolEntry[]).filter((e) => !seen.has(e.provider_id));
     // "unsure" goes to home care first (most families prefer in-home), then AL.
     const wants: string[] =
