@@ -289,17 +289,6 @@ export default function OperatingMap({
       seg(x, y1, x, y2 - 8);
       head(x, y2, "d");
     };
-    /** Horizontal arrow that can point either way. */
-    const hTo = (y: number, x1: number, x2: number) => {
-      const dir = x2 > x1 ? 1 : -1;
-      seg(x1, y, x2 - 8 * dir, y);
-      const p = document.createElementNS(SVG_NS, "polygon");
-      p.setAttribute(
-        "points",
-        [`${x2},${y}`, `${x2 - 8 * dir},${y - 4.4}`, `${x2 - 8 * dir},${y + 4.4}`].join(" "),
-      );
-      svg!.appendChild(p);
-    };
     const hArrow = (y: number, x1: number, x2: number) => {
       seg(x1, y, x2 - 8, y);
       head(x2, y, "r");
@@ -315,81 +304,74 @@ export default function OperatingMap({
       const B = box(b);
       hArrow(B.cy, x + 1, B.l - G);
     };
-    /**
-     * Down the lane, then across where the lanes meet.
-     *
-     * Two crossings carry the whole argument of the map: the provider's paid
-     * products feed both the family connection and the hire, so M4 reaches
-     * into the seeker lane and the worker lane alike. Each crossing leaves
-     * its box from the side, drops clear of the rows between, and enters its
-     * target from the side — never through a card.
+    /*
+     * Every arrow is a claim about what causes what, so the geometry makes
+     * the same claim: a lane's own steps run down its middle, a branch hangs
+     * off a stem to one side, and each join below is fed by both lanes above
+     * it — the left lane down its right edge, the right lane down its left,
+     * meeting over the card that sits between them.
      */
 
-    /* care seeker: demand, then the profile, then what it turns into */
+    /** How far a side stem sits in from the edge of the card it leaves. */
+    const IN = 22;
+
+    /* care seeker: demand, then the profile it produces */
     vDown("cr1", "cr2");
     vDown("cr2", "m1");
 
     const m1 = box("m1");
     const ta1 = box("ta1");
-    const tb1 = box("tb1");
-
-    /* the aid branch leaves the profile on the left and drops into TA1 */
-    const branchX = m1.l + 16;
-    seg(branchX, m1.b + G, branchX, ta1.cy);
-    hArrow(ta1.cy, branchX, ta1.l - G);
-    vDown("ta1", "ta2");
-
-    /* the same profile continues down the lane into the connection */
-    seg(m1.cx, m1.b + G, m1.cx, tb1.t - 8);
-    head(m1.cx, tb1.t - G, "d");
-
-    vDown("tb1", "tb2");
-
-    /* aid confirmed and care confirmed both land on the same outcome */
     const ta2 = box("ta2");
-    const tb2 = box("tb2");
+    const tb1 = box("tb1");
     const o1 = box("o1");
-    const o1Bar = Math.max(ta2.b, tb2.b) + 18;
-    seg(ta2.cx, ta2.b + G, ta2.cx, o1Bar);
-    seg(tb2.cx, tb2.b + G, tb2.cx, o1Bar);
-    seg(
-      Math.min(ta2.cx, tb2.cx, o1.cx),
-      o1Bar,
-      Math.max(ta2.cx, tb2.cx, o1.cx),
-      o1Bar,
-    );
-    vArrow(o1.cx, o1Bar, o1.t - G);
 
-    /* care provider: supply, then outreach, then the two paid products */
+    /* the aid track hangs off the profile's left */
+    const aidStem = m1.l + IN;
+    seg(aidStem, m1.b + G, aidStem, ta1.cy);
+    hArrow(ta1.cy, aidStem, ta1.l - G);
+    vArrow(ta1.l + IN, ta1.b + G, ta2.t - G);
+
+    /* aid confirmed reaches the outcome from the side, below the branch and
+       clear of everything the connection line does */
+    const aidOut = ta2.l + IN;
+    seg(aidOut, ta2.b + G, aidOut, o1.cy);
+    hArrow(o1.cy, aidOut, o1.l - G);
+
+    /* The profile goes straight to the connection — one line, no bends. It
+       runs down the right of the lane, which is both the shortest way to a
+       card sitting to the right and the only way it cannot be misread as
+       passing through the aid track. */
+    vArrow(m1.r - IN, m1.b + G, tb1.t - G);
+
+    /* care provider: supply, then the products, then the connection */
     vDown("cp1", "cp2");
     vDown("cp2", "m2");
-    vDown("m2", "m3");
-    vDown("m3", "m4");
+
+    const m2 = box("m2");
+    const m4 = box("m4");
+    const tc1 = box("tc1");
+
+    /* one stem down M2's left: a head into each paid product, then on into
+       the connection the active provider is the other half of */
+    const provStem = m2.l + IN;
+    vArrow(provStem, m2.b + G, tb1.t - G);
+    fromStem(provStem, "m3");
+    fromStem(provStem, "m4");
+
+    /* staffing is what makes an interview possible */
+    vArrow(m4.r - IN, m4.b + G, tc1.t - G);
 
     /* care worker: campuses, then advisors, then applicants */
     vDown("cw1", "cw2");
     vDown("cw2", "m5");
-    vDown("m5", "tc1");
+    const m5 = box("m5");
+    vArrow(m5.l + IN, m5.b + G, tc1.t - G);
+
+    /* each join runs on down between the lanes that fed it */
+    vDown("tb1", "tb2");
+    vDown("tb2", "o1");
     vDown("tc1", "tc2");
     vDown("tc2", "o2");
-
-    /*
-     * The two crossings. Both leave M4 sideways at a height below every card
-     * in its own lane, so the run across never passes through one.
-     */
-    const m4 = box("m4");
-    const tc1 = box("tc1");
-    const crossY = m4.b + 20;
-
-    seg(m4.cx, m4.b + G, m4.cx, crossY);
-    /* left, into the family connection */
-    seg(m4.l - 18, crossY, m4.cx, crossY);
-    seg(m4.l - 18, crossY, m4.l - 18, tb1.cy);
-    hTo(tb1.cy, m4.l - 18, tb1.r + G);
-    /* right, into the interview */
-    seg(m4.cx, crossY, m4.r + 18, crossY);
-    seg(m4.r + 18, crossY, m4.r + 18, tc1.cy);
-    hTo(tc1.cy, m4.r + 18, tc1.l - G);
   }, []);
 
   useLayoutEffect(() => {
@@ -701,9 +683,8 @@ export default function OperatingMap({
 
           {/*
             Three lanes, each running top to bottom from demand or supply
-            down to the outcome it produces. Everything that used to sit in
-            a milestone strip or a track block now lives in the lane it
-            belongs to; the arrows carry the crossings.
+            down to the milestone it produces. What two lanes produce
+            together lives below them, between them.
           */}
           <div className={styles.lanes3}>
 
@@ -748,7 +729,7 @@ export default function OperatingMap({
                   onInspect={onInspect}
                 />
 
-              {/* the aid branch hangs off the profile, indented to say so */}
+              {/* the aid track hangs off the profile, indented to say so */}
               <div className={styles.branch}>
                   <Card
                     id="ta1"
@@ -774,45 +755,6 @@ export default function OperatingMap({
                     onInspect={onInspect}
                   />
               </div>
-
-              <div className={styles.gap} />
-                <Card
-                  id="tb1"
-                  code="TB1"
-                  label="Family–provider connected"
-                  metric={nodes.tb1}
-                  trend={trends.tb1}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                />
-              <div className={styles.gap} />
-                <Card
-                  id="tb2"
-                  code="TB2"
-                  label="Care confirmed"
-                  metric={nodes.tb2}
-                  trend={trends.tb2}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                />
-              <div className={styles.gap} />
-                <Card
-                  hi
-                  id="o1"
-                  code="O1"
-                  label="Est. healthcare utilization reduction"
-                  money="Value created"
-                  metric={nodes.o1}
-                  trend={trends.o1}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                />
             </div>
 
             {/* care provider */}
@@ -854,35 +796,38 @@ export default function OperatingMap({
                   onTipClose={closeTip}
                   onInspect={onInspect}
                 />
-              <div className={styles.gap} />
-                <Card
-                  hi
-                  id="m3"
-                  code="M3"
-                  label="Managed ads"
-                  parts="signups · repeat"
-                  money="Paid product"
-                  metric={nodes.m3}
-                  trend={trends.m3}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                />
-              <div className={styles.gap} />
-                <Card
-                  hi
-                  id="m4"
-                  code="M4"
-                  label="Provider staffing signups"
-                  money="Paid product"
-                  metric={nodes.m4}
-                  trend={trends.m4}
-                  loading={metricsLoading}
-                  onTip={openTip}
-                  onTipClose={closeTip}
-                  onInspect={onInspect}
-                />
+
+              {/* the two paid products hang off the active provider */}
+              <div className={styles.branchR}>
+                  <Card
+                    hi
+                    id="m3"
+                    code="M3"
+                    label="Managed ads"
+                    parts="signups · repeat"
+                    money="Paid product"
+                    metric={nodes.m3}
+                    trend={trends.m3}
+                    loading={metricsLoading}
+                    onTip={openTip}
+                    onTipClose={closeTip}
+                    onInspect={onInspect}
+                  />
+                <div className={styles.gap} />
+                  <Card
+                    hi
+                    id="m4"
+                    code="M4"
+                    label="Provider staffing signups"
+                    money="Paid product"
+                    metric={nodes.m4}
+                    trend={trends.m4}
+                    loading={metricsLoading}
+                    onTip={openTip}
+                    onTipClose={closeTip}
+                    onInspect={onInspect}
+                  />
+              </div>
             </div>
 
             {/* care worker */}
@@ -925,7 +870,58 @@ export default function OperatingMap({
                   onTipClose={closeTip}
                   onInspect={onInspect}
                 />
+            </div>
+
+          </div>
+
+          {/*
+            What two lanes make together. The connection sits between the
+            seeker and the provider, the hire between the provider and the
+            worker — each centred on the gutter of the two lanes feeding it.
+          */}
+          <div className={styles.lanesJoin}>
+
+            <div className={`${styles.lane} ${styles.join12}`}>
+                <Card
+                  id="tb1"
+                  code="TB1"
+                  label="Family–provider connected"
+                  metric={nodes.tb1}
+                  trend={trends.tb1}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
               <div className={styles.gap} />
+                <Card
+                  id="tb2"
+                  code="TB2"
+                  label="Care confirmed"
+                  metric={nodes.tb2}
+                  trend={trends.tb2}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+              <div className={styles.gap} />
+                <Card
+                  hi
+                  id="o1"
+                  code="O1"
+                  label="Est. healthcare utilization reduction"
+                  money="Value created"
+                  metric={nodes.o1}
+                  trend={trends.o1}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                />
+            </div>
+
+            <div className={`${styles.lane} ${styles.join23}`}>
                 <Card
                   id="tc1"
                   code="TC1"
