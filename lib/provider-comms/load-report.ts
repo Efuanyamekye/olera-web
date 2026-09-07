@@ -88,7 +88,7 @@ export async function loadProviderCommsReport(
       if (event.event_type === "notification_settings_viewed") outcome.settingsViewed = true;
       if (event.event_type === "notification_preference_saved") {
         outcome.preferenceSaved = true;
-        if (event.metadata?.key === "new_leads" && event.metadata?.channel === "sms" && event.metadata?.enabled === true && event.metadata?.previous === false) outcome.smsEnabled = true;
+        if (event.metadata?.key === "new_leads" && event.metadata?.channel === "sms" && event.metadata?.enabled === true && (event.metadata?.previous === false || event.metadata?.previous === null)) outcome.smsEnabled = true;
       }
       outcomes.set(email.id, outcome);
     }

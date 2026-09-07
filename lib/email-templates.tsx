@@ -6081,11 +6081,11 @@ export function onboardingNotificationsEmail(opts: {
   return layout(`
     <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.65;">Hi there,</p>
     <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">
-      Families are discovering ${name} on Olera. Turn on notifications so you never miss a family inquiry.
+      Families are discovering ${name} on Olera. Review your notification preferences and choose how you want to hear from them.
     </p>
-    <div style="margin:0 0 24px;">${button("Turn on notifications", opts.notificationsUrl)}</div>
+    <div style="margin:0 0 24px;">${button("Review notification settings", opts.notificationsUrl)}</div>
     <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">
-      Set up text alerts so no family is left waiting for a response.
+      Choose whether to receive text alerts for new family inquiries.
     </p>
     ${offRampBlock(opts.providerSlug)}
   `, "Most families go with the first provider who responds");
