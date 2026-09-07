@@ -158,6 +158,10 @@ const NODE_HELP: Record<string, string> = {
     "Universities we have listed and are working, scoped by the university's city. A standing count — the date range does not change it.",
   cw2:
     "Advisors we can reach at those universities, counted where the contact record is still active. A standing count.",
+  flow_questions:
+    "Question notifications that reached a provider's inbox — a send that came back successful. The gap from CR6a is questions nobody received.",
+  flow_connections:
+    "Connection requests that reached a provider's inbox — a send that came back successful. The gap from CR6b is requests nobody received.",
   tb1: "Inquiries a provider answered. Counted from inquiries raised in this range.",
   tc1: "Interviews that reached confirmed. Whether the interview was held is not recorded.",
   tc2: "Placements the care worker accepted.",
@@ -338,14 +342,24 @@ export default function OperatingMap({
       t.setAttribute("text-anchor", "middle");
       t.setAttribute("class", styles.wireLabel);
       t.textContent = flow.count.toLocaleString();
-      const title = document.createElementNS(SVG_NS, "title");
-      title.textContent = "Show where this number comes from";
-      t.appendChild(title);
       t.setAttribute("role", "button");
       t.setAttribute("tabindex", "0");
       t.setAttribute("aria-label", `${flow.count} — show where this number comes from`);
       const open = () => inspectRef.current?.(flow.node);
       t.addEventListener("click", open);
+      // Same contract as every card value: hover explains it, click opens
+      // the rows behind it.
+      const tip = () =>
+        tipRef.current?.open(
+          t as unknown as HTMLElement,
+          flow.node,
+          null,
+          tipRef.current.trends[flow.node] ?? null,
+        );
+      t.addEventListener("mouseenter", tip);
+      t.addEventListener("focus", tip);
+      t.addEventListener("mouseleave", () => tipRef.current?.close());
+      t.addEventListener("blur", () => tipRef.current?.close());
       t.addEventListener("keydown", (e) => {
         const key = (e as KeyboardEvent).key;
         if (key === "Enter" || key === " ") {
@@ -530,6 +544,13 @@ export default function OperatingMap({
   flowsRef.current = showNumbers ? flows : null;
   const inspectRef = useRef<((nodeKey: string) => void) | undefined>(undefined);
   inspectRef.current = onInspect;
+  // draw() is deliberately dependency-free, so the tooltip it opens for the
+  // wire counts arrives the same way their values do.
+  const tipRef = useRef<{
+    open: TipOpener;
+    close: () => void;
+    trends: NodeTrends;
+  } | null>(null);
 
   /*
    * The panel carries links, so it has to survive the pointer travelling
@@ -575,6 +596,10 @@ export default function OperatingMap({
     setTip({ text, nodeKey: key, caveat, trend, x, y });
   }, [cancelClose]);
 
+  // Read at hover time rather than at draw time, so the wire counts pick up
+  // trends that arrive after the figure was last drawn.
+  tipRef.current = { open: openTip, close: closeTip, trends };
+
   return (
     <div className={styles.root} ref={rootWrapRef} style={{ position: "relative" }}>
       {tip && (
@@ -584,6 +609,7 @@ export default function OperatingMap({
           caveat={tip.caveat}
           trend={tip.trend}
           tone={tip.trend ? toneClass(tip.trend.score) : null}
+          inspectable={INSPECTABLE.has(tip.nodeKey) || tip.nodeKey.startsWith("flow_")}
           x={tip.x}
           y={tip.y}
           onEnter={cancelClose}
@@ -1227,7 +1253,6 @@ function MetricValue({
           type="button"
           className={`${styles.value} ${styles.valueButton}${tone ? ` ${tone}` : ""}`}
           onClick={() => onInspect!(nodeKey!)}
-          title="Show where this number comes from"
           {...hover}
         >
           {text}

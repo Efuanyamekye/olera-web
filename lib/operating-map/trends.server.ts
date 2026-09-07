@@ -155,6 +155,10 @@ async function countAll(
     out.cr6a = conversions.value.questions;
     out.cr6b = conversions.value.connections;
     out.cr6c = conversions.value.benefitsAssessments;
+    // The two counts printed on the arrows. Already computed by the call
+    // above, so their history costs nothing extra.
+    out.flow_questions = conversions.value.questionsSent;
+    out.flow_connections = conversions.value.connectionsSent;
   }
   if (milestones.status === "fulfilled") {
     out.m1 = milestones.value.careRecipientProfilesLive;

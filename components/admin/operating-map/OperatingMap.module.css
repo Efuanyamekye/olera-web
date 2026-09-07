@@ -303,14 +303,25 @@
 /* Diagnosis and next step. Separated by space rather than by more rules. */
 .tipSection { display: block; margin-top: 9px; }
 .tipLink {
-  display: inline-block;
-  margin-top: 5px;
+  /* Its own line. Inline it ran straight on from the sentence before it. */
+  display: block;
+  margin-top: 6px;
   color: var(--dark-ink);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .tipLink:hover { opacity: 0.75; }
+
+/* The one affordance the panel has to state, since nothing else does. */
+.tipFoot {
+  display: block;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 11px;
+  opacity: 0.6;
+}
 
 /*
  * On the dark panel the trend ramp needs its light-background twins

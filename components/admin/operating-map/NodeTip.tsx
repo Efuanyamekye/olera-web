@@ -68,6 +68,18 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     advice:
       "Completions fall when the screener gets longer or a step breaks. Check the drop-off before assuming demand changed.",
   },
+  flow_questions: {
+    href: "/admin/deliverability",
+    label: "Deliverability",
+    advice:
+      "The gap from the chip is questions that never landed — usually a provider with no email on file, or a send that bounced.",
+  },
+  flow_connections: {
+    href: "/admin/deliverability",
+    label: "Deliverability",
+    advice:
+      "The gap from the chip is requests that never landed. A lead nobody received still counts as an ask, and is the cheapest one to recover.",
+  },
   cp1: {
     href: "/admin/directory",
     label: "Directory",
@@ -232,6 +244,7 @@ export default function NodeTip({
   tone,
   x,
   y,
+  inspectable,
   onEnter,
   onLeave,
 }: {
@@ -244,6 +257,8 @@ export default function NodeTip({
   tone?: string | null;
   x: number;
   y: number;
+  /** Whether clicking the number opens the rows behind it. */
+  inspectable?: boolean;
   /** Keeps the panel open while the pointer is inside it, so links work. */
   onEnter: () => void;
   onLeave: () => void;
@@ -288,6 +303,10 @@ export default function NodeTip({
             {play.label} →
           </a>
         </span>
+      )}
+
+      {inspectable && (
+        <span className={styles.tipFoot}>Click the number for the rows behind it.</span>
       )}
     </div>
   );
