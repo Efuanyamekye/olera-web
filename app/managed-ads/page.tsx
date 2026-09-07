@@ -72,18 +72,9 @@ export default async function ManagedAdsPage() {
       (stats.familiesDelivered ?? 0) > 0 ||
       stats.cityRequests > 0);
 
-  const asOf = stats?.economicsAsOf
-    ? new Date(stats.economicsAsOf).toLocaleDateString("en-US", {
-        timeZone: "America/New_York",
-        month: "long",
-        day: "numeric",
-        year: "numeric",
-      })
-    : null;
-
   return (
     <main>
-      <ManagedAdsHero costPerInquiry={dollars(stats?.costPerInquiryCents)} asOf={asOf} />
+      <ManagedAdsHero costPerInquiry={dollars(stats?.costPerInquiryCents)} hasResults={hasSignal} />
       <TwoEngines />
       <WhatItLooksLike />
       {hasSignal && stats ? (

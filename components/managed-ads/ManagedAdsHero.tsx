@@ -1,3 +1,5 @@
+import Link from "next/link";
+import PlatformMarquee from "@/components/provider/PlatformMarquee";
 import StartCampaignLink from "@/components/managed-ads/StartCampaignLink";
 
 /**
@@ -16,10 +18,10 @@ import StartCampaignLink from "@/components/managed-ads/StartCampaignLink";
  */
 export default function ManagedAdsHero({
   costPerInquiry,
-  asOf,
+  hasResults,
 }: {
   costPerInquiry: string | null;
-  asOf: string | null;
+  hasResults: boolean;
 }) {
   return (
     <section className="bg-vanilla-100">
@@ -38,34 +40,51 @@ export default function ManagedAdsHero({
           us: about $50 of advertising, no card, no contract.
         </p>
 
-        <div className="mt-8">
+        {/* Two buttons, not one. A single button leaves the row lopsided under
+            a full-width headline, and the pair is what made the first draft's
+            hero sit properly. The second is gated on the strip existing, since
+            it anchors to it. */}
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
           <StartCampaignLink>Start your first campaign</StartCampaignLink>
+          {hasResults && (
+            <Link
+              href="#results"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-lg border border-gray-300 bg-white px-7 py-3 text-text-md font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+            >
+              See our real numbers
+            </Link>
+          )}
         </div>
 
+        {/* One line. The proof belongs in the hero, the argument for it does
+            not — the full comparison and its date are in the results strip. */}
         {costPerInquiry && (
-          <div className="mt-10 max-w-2xl rounded-xl border border-primary-200 bg-white p-5 sm:p-6">
-            <p className="text-text-md leading-relaxed text-gray-700">
-              Across every provider campaign we have run, a family inquiry has cost{" "}
-              <span className="font-semibold text-gray-900">{costPerInquiry}</span>. The published
-              benchmark for home care lead generation is $80 to $150, and those leads are usually
-              sold to several agencies at once. Ours are yours alone.
-            </p>
-            <p className="mt-2 text-text-sm text-gray-500">
-              Measured on our own spend{asOf ? `, as of ${asOf}` : ""}. It is a small sample and we
-              say exactly how small further down.
-            </p>
-          </div>
+          <p className="mt-4 text-text-sm text-gray-500">
+            A family inquiry has cost us{" "}
+            <span className="font-semibold text-gray-900">{costPerInquiry}</span>. The published
+            home care benchmark is $80 to $150.
+          </p>
         )}
 
-        {/* Deliberately NOT the shared PlatformMarquee. That strip scrolls
-            Facebook, Instagram, YouTube and X, we have never run a campaign on
-            any of them, and this page says so out loud a few screens later. */}
-        <p className="mt-8 max-w-2xl text-text-sm text-gray-600">
-          <span className="font-semibold text-gray-900">Google Search</span> for families actively
-          looking, <span className="font-semibold text-gray-900">Nextdoor</span> for the
-          neighborhood feed. Facebook and Instagram are next, and we will publish what they do when
-          we have run them.
-        </p>
+        {/* Only the platforms we have actually bought media on. The shared strip
+            defaults to six; the four omitted here have never served an
+            impression for us, and the limits section says so outright.
+
+            TO ADD ONE: append { name, slug } below — slug matches a file in
+            public/images/platform-logos. Add it the day that campaign serves
+            its first impression, NOT the day it is built. We have built and
+            paused a whole batch before: five Nextdoor campaigns went up on
+            26 Aug 2026 and were paused two days later having spent nothing.
+            Built is not running, and this strip is a claim about running. */
+        }
+        <div className="mt-12">
+          <PlatformMarquee
+            platforms={[
+              { name: "Google", slug: "google" },
+              { name: "Nextdoor", slug: "nextdoor" },
+            ]}
+          />
+        </div>
       </div>
     </section>
   );

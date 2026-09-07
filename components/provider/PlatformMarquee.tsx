@@ -5,6 +5,10 @@
  * look" visual. Shared by the boost-page pitch (`default`: logo + name pills)
  * and the dashboard Managed Ads card (`compact`: logo-only chips).
  *
+ * Callers may pass their own `platforms` list. /managed-ads passes only the two
+ * we have actually bought media on, because that page states which channels we
+ * have and have not run and the strip must not contradict it.
+ *
  * Uses the real full-color brand marks (local SVGs in
  * /public/images/platform-logos, sourced from vectorlogo.zone) rather than
  * monochrome icon-font glyphs — the genuine logos are far more recognizable
@@ -13,7 +17,9 @@
  * there's no runtime CDN dependency on a provider-facing surface.
  */
 
-const PLATFORMS: { name: string; slug: string }[] = [
+export type MarqueePlatform = { name: string; slug: string };
+
+const PLATFORMS: MarqueePlatform[] = [
   { name: "Google", slug: "google" },
   { name: "Facebook", slug: "facebook" },
   { name: "Instagram", slug: "instagram" },
@@ -47,10 +53,25 @@ function Logo({ slug, name, size }: { slug: string; name: string; size: number }
   );
 }
 
-export default function PlatformMarquee({ compact = false }: { compact?: boolean }) {
-  // Duplicated once so the translateX(-50%) loop is seamless (each item carries
-  // its own trailing margin rather than a flex gap, so two copies = exactly 2×).
-  const items = [...PLATFORMS, ...PLATFORMS];
+export default function PlatformMarquee({
+  compact = false,
+  platforms,
+}: {
+  compact?: boolean;
+  /**
+   * Override the strip's contents. Omit it and every caller keeps the full
+   * default set. /managed-ads passes a narrowed list because that page states
+   * outright which platforms we have and have not run, and a strip claiming
+   * otherwise two screens above would contradict it.
+   */
+  platforms?: MarqueePlatform[];
+}) {
+  const source = platforms ?? PLATFORMS;
+  // Duplicated so the translateX(-50%) loop is seamless (each item carries its
+  // own trailing margin rather than a flex gap, so two copies = exactly 2×).
+  // A short list is repeated more so the strip still fills a wide viewport.
+  const reps = source.length >= 6 ? 2 : 4;
+  const items = Array.from({ length: reps }, () => source).flat();
   return (
     <div
       className={compact ? "mt-4 overflow-hidden" : "mt-10 overflow-hidden"}
