@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import {
+  getDirectVisitors,
   getOrganicVisitors,
+  getPaidVisitors,
   REFERRER_INSTRUMENTATION_START,
   VISITOR_GEO_START,
 } from "@/lib/operating-map/organic.server";
@@ -112,29 +114,45 @@ export async function GET(request: NextRequest) {
     const withCity = (note: string) =>
       notCityScoped ? `${note} ${notCityScoped}` : note;
 
-    try {
-      const organic = await getOrganicVisitors(db, { from, to }, city);
+    /*
+     * CR1, CR2 and CR3 are the same count over the same rows with three
+     * different arrival tests, so they share one caveat builder rather than
+     * three copies that could drift.
+     */
+    const visitorCaveats = (v: {
+      partialCityData: boolean;
+      partialInstrumentation: boolean;
+      truncated: boolean;
+    }): string | null => {
       const caveats: string[] = [];
-      if (organic.partialCityData) {
-        // Without this a city filter over an older range reads as no demand
-        // when it is really no data.
-        caveats.push(`City is only recorded from ${VISITOR_GEO_START}.`);
+      // Without this a city filter over an older range reads as no demand
+      // when it is really no data.
+      if (v.partialCityData) caveats.push(`City is only recorded from ${VISITOR_GEO_START}.`);
+      // Without this the chart reads as a traffic collapse before August.
+      if (v.partialInstrumentation) {
+        caveats.push(`Traffic source is only identified from ${REFERRER_INSTRUMENTATION_START}.`);
       }
-      if (organic.partialInstrumentation) {
-        // Without this the chart reads as a traffic collapse before August.
-        caveats.push(`Search traffic is only identified from ${REFERRER_INSTRUMENTATION_START}.`);
-      }
-      if (organic.truncated) caveats.push("Row ceiling reached — this is a floor.");
+      if (v.truncated) caveats.push("Row ceiling reached — this is a floor.");
+      return caveats.length ? caveats.join(" ") : null;
+    };
 
-      nodes.cr2 = {
-        value: organic.value,
-        caveat: caveats.length ? caveats.join(" ") : null,
-      };
+    try {
+      const [direct, organic, paid] = await Promise.all([
+        getDirectVisitors(db, { from, to }, city),
+        getOrganicVisitors(db, { from, to }, city),
+        getPaidVisitors(db, { from, to }, city),
+      ]);
+      nodes.cr1 = { value: direct.value, caveat: visitorCaveats(direct) };
+      nodes.cr2 = { value: organic.value, caveat: visitorCaveats(organic) };
+      nodes.cr3 = { value: paid.value, caveat: visitorCaveats(paid) };
     } catch (error) {
-      console.error("[operating-map/metrics] cr2 failed:", error);
+      console.error("[operating-map/metrics] cr1-cr3 failed:", error);
       // One failed node must not blank the others. Null is rendered as
       // unavailable, never as zero.
-      nodes.cr2 = { value: null, caveat: "This metric failed to load." };
+      const failed = { value: null, caveat: "This metric failed to load." };
+      nodes.cr1 = failed;
+      nodes.cr2 = failed;
+      nodes.cr3 = failed;
     }
 
     try {

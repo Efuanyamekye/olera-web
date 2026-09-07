@@ -130,8 +130,12 @@ function toneClass(score: number): string | null {
 const NODE_HELP: Record<string, string> = {
   cities:
     "Cities with at least one live provider. Wider than the cities we have deliberately launched.",
+  cr1:
+    "Unique people who arrived with no referring site — typed in, bookmarked, or from an app that strips the referrer. Counted from Olera's own page events, like CR2 and CR3.",
   cr2:
     "Unique people who arrived from a search engine, from Olera's own page events. Compare with GA4 Organic Search users, not sessions.",
+  cr3:
+    "Unique people who arrived on an Ad Boost link. Paid traffic bought outside Ad Boost carries no managed tag and is not counted here.",
   cr4:
     "Page views across the three surfaces we publish, from all traffic sources. Counts views, not people, so it runs higher than CR2.",
   cr6:
@@ -718,7 +722,18 @@ export default function OperatingMap({
             {/* care recipient */}
             <div className={styles.lane}>
               <div className={styles.chips}>
-                <Chip id="cr1" code="CR1" label="Referrals" />
+                <Chip
+                  id="cr1"
+                  code="CR1"
+                  label="Direct visitors"
+                  metric={nodes.cr1}
+                  trend={trends.cr1}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                  showNumbers={showNumbers}
+                />
                 <Chip
                   id="cr2"
                   code="CR2"
@@ -731,7 +746,18 @@ export default function OperatingMap({
                   onInspect={onInspect}
                   showNumbers={showNumbers}
                 />
-                <Chip id="cr3" code="CR3" label="Paid ad visitors" />
+                <Chip
+                  id="cr3"
+                  code="CR3"
+                  label="Paid ad visitors"
+                  metric={nodes.cr3}
+                  trend={trends.cr3}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
+                  showNumbers={showNumbers}
+                />
               </div>
               <div className={styles.indent} style={{ marginTop: 22 }}>
                 <Card
@@ -1297,7 +1323,7 @@ function MetricValue({
 
 /** Nodes the inspect endpoint can produce rows for. */
 const INSPECTABLE = new Set([
-  "cr2", "cr4", "cr6a", "cr6b", "cr6c",
+  "cr1", "cr2", "cr3", "cr4", "cr6a", "cr6b", "cr6c",
   "cp1", "cp2",
   "m1", "m2", "m3", "m4", "m5",
   "cw1", "cw2",

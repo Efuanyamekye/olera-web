@@ -32,6 +32,18 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     advice:
       "Coverage grows by adding providers, not cities. Run the city pipeline for a market before counting it as launched.",
   },
+  cr1: {
+    href: "/admin/organic-growth",
+    label: "Organic growth",
+    advice:
+      "Direct is where branded search and word of mouth land. It rises with the other two, not on its own — nothing here is directly actionable.",
+  },
+  cr3: {
+    href: "/admin/ad-boost",
+    label: "Ad Boost",
+    advice:
+      "This moves only when campaigns are live. Check which campaigns are running before reading a drop as demand.",
+  },
   cr2: {
     href: "/admin/organic-growth",
     label: "Organic growth",

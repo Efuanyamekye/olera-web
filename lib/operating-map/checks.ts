@@ -64,16 +64,37 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  const cr2 = n(values.cr2);
   const cr4 = n(values.cr4);
-  if (cr2 !== null && cr4 !== null) {
-    // One visitor produces at least one page view, so visitors can never
-    // exceed views over the same window.
+  // One visitor produces at least one page view, so no source can have more
+  // visitors than there were views over the same window — and the three
+  // together cannot either, since they are disjoint slices of the same rows.
+  for (const [id, label] of [
+    ["cr1", "Direct visitors"],
+    ["cr2", "Organic visitors"],
+    ["cr3", "Paid ad visitors"],
+  ] as const) {
+    const v = n(values[id]);
+    if (v !== null && cr4 !== null) {
+      checks.push({
+        id: `${id}-under-cr4`,
+        label: `${label} do not exceed page visits`,
+        ok: v <= cr4,
+        detail: v <= cr4 ? undefined : `${id.toUpperCase()} is ${v}, CR4 is ${cr4}`,
+      });
+    }
+  }
+
+  const cr1 = n(values.cr1);
+  const cr2 = n(values.cr2);
+  const cr3 = n(values.cr3);
+  if (cr1 !== null && cr2 !== null && cr3 !== null && cr4 !== null) {
+    const sources = cr1 + cr2 + cr3;
     checks.push({
-      id: "cr2-under-cr4",
-      label: "Organic visitors do not exceed page visits",
-      ok: cr2 <= cr4,
-      detail: cr2 <= cr4 ? undefined : `CR2 is ${cr2}, CR4 is ${cr4}`,
+      id: "sources-under-cr4",
+      label: "Direct plus organic plus paid do not exceed page visits",
+      ok: sources <= cr4,
+      detail:
+        sources <= cr4 ? undefined : `The three sources add to ${sources}, CR4 is ${cr4}`,
     });
   }
 
@@ -90,7 +111,6 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  const cp1 = n(values.cp1);
   const cp2 = n(values.cp2);
 
   if (typeof inputs.cp1OrphanedClaims === "number") {

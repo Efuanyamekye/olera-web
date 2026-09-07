@@ -71,6 +71,32 @@ const SOURCES: Record<
     cityScoped: true,
     summarize: (r) => String(r.page ?? "—"),
   },
+  cr1: {
+    title: "Direct visitors",
+    table: "page_events",
+    select: "created_at, page, session_id, metadata",
+    where: [
+      "event_type is page_view",
+      "referrer_class is direct — no referring site",
+      "counted once per visitor (olera_session cookie)",
+    ],
+    eventType: "page_view",
+    cityScoped: true,
+    summarize: (r) => String(r.page ?? "—"),
+  },
+  cr3: {
+    title: "Paid ad visitors",
+    table: "page_events",
+    select: "created_at, page, session_id, metadata",
+    where: [
+      "event_type is page_view",
+      "utm_source is olera_managed — an Ad Boost link",
+      "counted once per visitor (olera_session cookie)",
+    ],
+    eventType: "page_view",
+    cityScoped: true,
+    summarize: (r) => String(r.page ?? "—"),
+  },
   cr4: {
     title: "Page visits — content pages",
     table: "page_events",
@@ -371,6 +397,12 @@ export async function GET(request: NextRequest) {
     }
     if (node === "cr2") {
       query = query.filter("metadata->>referrer_class", "eq", "search");
+    }
+    if (node === "cr1") {
+      query = query.filter("metadata->>referrer_class", "eq", "direct");
+    }
+    if (node === "cr3") {
+      query = query.filter("metadata->>utm_source", "eq", "olera_managed");
     }
     if (node === "cr4") {
       query = query.or(

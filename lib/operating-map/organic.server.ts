@@ -1,7 +1,25 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 /**
- * CR2 — organic visitors.
+ * CR1, CR2, CR3 — where the care recipient traffic came from.
+ *
+ * All three are counted the same way from the same rows, differing only in
+ * which arrivals they keep:
+ *
+ *   CR1  direct    referrer_class = "direct"        no referring site
+ *   CR2  organic   referrer_class = "search"        a search engine
+ *   CR3  paid      utm_source     = "olera_managed" an Ad Boost link
+ *
+ * Counting all three from Olera's own page events rather than from GA is
+ * deliberate. They feed CR4, and CR4 is these same rows; a chip pulled from
+ * GA would use GA's identity model, GA's bot filtering and GA's week
+ * boundaries, and could never be reconciled against the box it points at.
+ * GA stays the external cross-check on /admin/organic-growth, which is the
+ * right job for it.
+ *
+ * The three do not add up to everyone. Social, AI-chat and other referrals
+ * reach CR4 without appearing in any chip, and paid traffic outside Ad Boost
+ * carries no managed UTM. The tooltips say so.
  *
  * "Organic" is `referrer_class = 'search'`, the same bucket GA calls Organic
  * Search. AI chat referrals are classified separately by
@@ -25,8 +43,20 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  * a provider page counts once.
  */
 
-/** Traffic class that counts as organic. Kept explicit — see the note above. */
-const ORGANIC_REFERRER_CLASS = "search";
+/** What separates the three sources, as stored on a page view. */
+type Arrival =
+  | { field: "referrer_class"; value: "search" | "direct" }
+  | { field: "utm_source"; value: "olera_managed" };
+
+const ORGANIC: Arrival = { field: "referrer_class", value: "search" };
+const DIRECT: Arrival = { field: "referrer_class", value: "direct" };
+/**
+ * Paid is identified by the Ad Boost UTM, not by a referrer class — there is
+ * no paid class, and page views carry no utm_medium or gclid to infer one
+ * from. So this counts the paid traffic WE ran, which is what the node means
+ * today; paid traffic bought outside Ad Boost would not appear.
+ */
+const PAID: Arrival = { field: "utm_source", value: "olera_managed" };
 
 const PAGE_SIZE = 1000;
 
@@ -54,7 +84,7 @@ export const REFERRER_INSTRUMENTATION_START = "2026-08-12";
 export const VISITOR_GEO_START = "2026-09-06";
 
 export interface OrganicVisitors {
-  /** Distinct visitors with at least one organic page view. */
+  /** Distinct visitors with at least one matching page view. */
   value: number;
   /** A row ceiling was hit, so `value` is a floor. */
   truncated: boolean;
@@ -67,6 +97,7 @@ export interface OrganicVisitors {
 async function collectSessions(
   db: SupabaseClient,
   table: "provider_activity" | "page_events",
+  arrival: Arrival,
   sessions: Set<string>,
   from: string | null,
   to: string | null,
@@ -84,7 +115,7 @@ async function collectSessions(
       .from(table)
       .select(table === "page_events" ? "sid:session_id" : "sid:metadata->>session_id")
       .eq("event_type", "page_view")
-      .filter("metadata->>referrer_class", "eq", ORGANIC_REFERRER_CLASS);
+      .filter(`metadata->>${arrival.field}`, "eq", arrival.value);
 
     // Visitor city, recorded from Vercel's edge headers since VISITOR_GEO_START.
     if (citySlug) query = query.filter("metadata->>geo_city", "eq", citySlug);
@@ -113,16 +144,18 @@ async function collectSessions(
  * market a page is about. Someone in Chicago reading about Houston providers
  * counts as Chicago.
  */
-export async function getOrganicVisitors(
+async function countVisitors(
   db: SupabaseClient,
+  arrival: Arrival,
   range: { from: string | null; to: string | null },
-  citySlug: string | null = null,
+  citySlug: string | null,
 ): Promise<OrganicVisitors> {
   const sessions = new Set<string>();
 
   const truncatedProvider = await collectSessions(
     db,
     "provider_activity",
+    arrival,
     sessions,
     range.from,
     range.to,
@@ -131,6 +164,7 @@ export async function getOrganicVisitors(
   const truncatedContent = await collectSessions(
     db,
     "page_events",
+    arrival,
     sessions,
     range.from,
     range.to,
@@ -140,9 +174,38 @@ export async function getOrganicVisitors(
   return {
     value: sessions.size,
     truncated: truncatedProvider || truncatedContent,
+    // Only the referrer-class sources depend on that instrumentation. A
+    // managed UTM has been on the link since the campaign was built.
     partialInstrumentation:
-      !range.from || range.from < REFERRER_INSTRUMENTATION_START,
+      arrival.field === "referrer_class" &&
+      (!range.from || range.from < REFERRER_INSTRUMENTATION_START),
     partialCityData:
       Boolean(citySlug) && (!range.from || range.from < VISITOR_GEO_START),
   };
+}
+
+export function getOrganicVisitors(
+  db: SupabaseClient,
+  range: { from: string | null; to: string | null },
+  citySlug: string | null = null,
+): Promise<OrganicVisitors> {
+  return countVisitors(db, ORGANIC, range, citySlug);
+}
+
+/** CR1 — arrivals with no referring site: typed in, bookmarked, or untracked. */
+export function getDirectVisitors(
+  db: SupabaseClient,
+  range: { from: string | null; to: string | null },
+  citySlug: string | null = null,
+): Promise<OrganicVisitors> {
+  return countVisitors(db, DIRECT, range, citySlug);
+}
+
+/** CR3 — arrivals on an Ad Boost link. */
+export function getPaidVisitors(
+  db: SupabaseClient,
+  range: { from: string | null; to: string | null },
+  citySlug: string | null = null,
+): Promise<OrganicVisitors> {
+  return countVisitors(db, PAID, range, citySlug);
 }
