@@ -59,6 +59,12 @@ type Lead = {
   accepted_offer_id: string | null;
   next_offer_at: string | null;
   reached_at: string | null;
+  family_check_sent_at: string | null;
+  family_check_reply: string | null;
+  provider_nudged_at: string | null;
+  outcome_ping_1_at: string | null;
+  outcome_ping_2_at: string | null;
+  outcome: string | null;
   admin_note: string | null;
   created_at: string;
   offers: Offer[];
@@ -94,6 +100,7 @@ const acceptedOffer = (l: Lead) => l.offers.find((o) => o.accepted_at);
 /** Why a lead is in "Needs you", or null. */
 function needsReason(l: Lead): string | null {
   if (l.status === "unfilled") return "no one on call took it";
+  if (l.family_check_reply === "not_yet" && !l.reached_at) return "family says the provider has not called";
   const o = openOffer(l);
   if (o && minsLeft(o.expires_at) < 0) return `offer to ${o.provider?.display_name ?? "a provider"} is past its 30 minutes`;
   if (l.status === "new" && l.next_offer_at && new Date(l.next_offer_at) < new Date()) return "parked past its morning and not offered";
@@ -110,6 +117,7 @@ function stateLine(l: Lead): { text: string; tone: "ok" | "wait" | "warn" | "qui
   if (needsReason(l)) return { text: "needs you", tone: "warn" };
   const a = acceptedOffer(l);
   if (l.status === "contacted") return { text: `${a?.provider?.display_name ?? "provider"} reached them`, tone: "ok" };
+  if (a && l.family_check_sent_at && !l.family_check_reply) return { text: "asked if they were called", tone: "wait" };
   if (a) return { text: `${a.provider?.display_name ?? "a provider"} has it`, tone: "ok" };
   const o = openOffer(l);
   if (o) return { text: `offered to ${o.provider?.display_name ?? "a provider"} · ${minsLeft(o.expires_at)} min left`, tone: "wait" };
@@ -450,6 +458,26 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
         </div>
       )}
 
+      {(l.family_check_sent_at || l.outcome_ping_1_at) && (
+        <ul className="mt-3 space-y-1 border-t border-gray-200 pt-3 text-xs text-gray-600">
+          {l.family_check_sent_at && (
+            <li>
+              Asked {l.first_name} if they were called · {fmtTime(l.family_check_sent_at)}
+              {l.family_check_reply === "reached" && <span className="ml-2 text-success-700">they said yes</span>}
+              {l.family_check_reply === "not_yet" && <span className="ml-2 text-warm-700">they said not yet</span>}
+              {!l.family_check_reply && <span className="ml-2 text-gray-400">no reply yet</span>}
+            </li>
+          )}
+          {l.provider_nudged_at && <li>Nudged the provider · {fmtTime(l.provider_nudged_at)}</li>}
+          {l.outcome_ping_1_at && (
+            <li>
+              Asked if they became a client · {fmtTime(l.outcome_ping_1_at)}
+              {l.outcome_ping_2_at && <> and {fmtTime(l.outcome_ping_2_at)}</>}
+              {l.outcome && <span className="ml-2 font-medium text-gray-800">answered: {l.outcome}</span>}
+            </li>
+          )}
+        </ul>
+      )}
       <div className="mt-3 flex items-center gap-2">
         <input className={`${input} w-full`} placeholder="a note for you" value={note} onChange={(e) => setNote(e.target.value)} />
         {note !== (l.admin_note ?? "") && (

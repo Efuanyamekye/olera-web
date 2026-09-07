@@ -1967,3 +1967,57 @@ export function slackLegacyConnectConverted(opts: {
     ],
   };
 }
+
+/**
+ * A family submitted a request on an Olera city landing page.
+ *
+ * The headline distinguishes a lead the ads PAID for from one that arrived any
+ * other way, because those are different events: the first says the campaign is
+ * working and money is converting, the second is a bonus. A paid lead is the
+ * moment the whole city pilot exists to produce, so it gets the loud treatment.
+ */
+export function slackCityLead(opts: {
+  city: string;
+  firstName: string;
+  phone: string;
+  careLabel: string;
+  recipientLabel: string;
+  urgencyLabel: string;
+  zip?: string | null;
+  channel: string | null;
+  campaignTag?: string | null;
+  paid: boolean;
+  nextStep: string;
+  adminUrl: string;
+}): { text: string; blocks: SlackBlock[] } {
+  const headline = opts.paid
+    ? `💸 Paid lead · ${opts.city}${opts.channel ? ` (${opts.channel})` : ""}`
+    : `🆕 Lead · ${opts.city}`;
+  return {
+    text: `${headline} — ${opts.firstName}, ${opts.careLabel}`,
+    blocks: [
+      { type: "header", text: { type: "plain_text", text: headline, emoji: true } },
+      {
+        type: "section",
+        fields: [
+          { type: "mrkdwn", text: `*Family:*\n${opts.firstName} · ${opts.phone}` },
+          { type: "mrkdwn", text: `*Needs:*\n${opts.careLabel} for ${opts.recipientLabel}` },
+          { type: "mrkdwn", text: `*Starting:*\n${opts.urgencyLabel}` },
+          {
+            type: "mrkdwn",
+            text: `*Source:*\n${opts.paid ? opts.channel ?? "paid" : "direct, no campaign"}${opts.zip ? ` · ZIP ${opts.zip}` : ""}`,
+          },
+        ],
+      },
+      {
+        type: "context",
+        elements: [
+          {
+            type: "mrkdwn",
+            text: `${opts.nextStep}${opts.campaignTag ? ` · \`${opts.campaignTag}\`` : ""} · <${opts.adminUrl}|Open the queue>`,
+          },
+        ],
+      },
+    ],
+  };
+}

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
 import { normalizeUSPhone, sendSMS } from "@/lib/twilio";
-import { sendSlackAlert } from "@/lib/slack";
+import { sendSlackAlert, slackCityLead } from "@/lib/slack";
 import {
   cityFamilyConfirmSms,
   cityFamilyConfirmMorningSms,
@@ -17,6 +17,7 @@ import {
   isStaffedNow,
 } from "@/lib/city-ads/config";
 import { startOrAdvance } from "@/lib/city-ads/offers.server";
+import { getSiteUrl } from "@/lib/site-url";
 
 /**
  * POST /api/city-leads — the /care/{city} form.
@@ -156,11 +157,27 @@ export async function POST(req: NextRequest) {
   }
 
   const staffed = isStaffedNow(cfg.timeZone);
-  await sendSlackAlert(
-    `🆕 City lead (${cfg.city}): ${firstName}, ${formatUSPhone(phone)}. ${careLabel} for ${who}, ${when}${zip ? `, ZIP ${zip}` : ""}. ${
-      utm.medium ? `via ${utm.medium}` : "no utm"
-    }. ${staffed ? "Offer chain starting." : "Outside staffed hours, chain parked until 8am local."} /admin/city-ads`,
-  );
+  // Paid means the ads produced this, which is the event the pilot exists to
+  // produce. A gclid is proof of a Google click; our own utm_source covers
+  // Nextdoor and anything else we tag.
+  const medium = str(utm.medium);
+  const paid = Boolean(utm.gclid) || String(utm.source ?? "") === "olera_city" || (medium ?? "").startsWith("paid_");
+  const channel = utm.gclid || medium === "paid_search" ? "Google" : medium === "paid_social" ? "Nextdoor" : medium;
+  const alert = slackCityLead({
+    city: cfg.city,
+    firstName,
+    phone: formatUSPhone(phone),
+    careLabel,
+    recipientLabel: who,
+    urgencyLabel: when || "not stated",
+    zip,
+    channel: channel ?? null,
+    campaignTag: str(utm.campaign) ?? cfg.campaignTag,
+    paid,
+    nextStep: staffed ? "Offering to the first provider now" : "Outside staffed hours — parked until 8am local",
+    adminUrl: `${getSiteUrl()}/admin/city-ads`,
+  });
+  await sendSlackAlert(alert.text, alert.blocks);
   await sendSMS({
     to: phone,
     body: staffed

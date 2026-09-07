@@ -492,19 +492,29 @@ function Option({ label, sub, selected, onClick }: { label: string; sub?: string
 }
 
 function Avatar({ name, photo }: { name: string; photo: string | null }) {
+  // A stored image URL is not proof of a live image: provider photos rot (dead
+  // Unsplash links, expired Places photoUris, retired CDN hosts). A broken glyph
+  // on a page whose whole job is trust is worse than no photo, so a failed load
+  // falls back to initials.
+  const [broken, setBroken] = useState(false);
   const initials = name
     .split(/\s+/)
     .filter((w) => /^[A-Za-z]/.test(w))
     .slice(0, 2)
     .map((w) => w[0]!.toUpperCase())
     .join("");
+  const showPhoto = Boolean(photo) && !broken;
   return (
     <span
       className={`relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full text-sm font-semibold ${
-        photo ? "border border-gray-200 bg-white" : "bg-primary-100 text-primary-800"
+        showPhoto ? "border border-gray-200 bg-white" : "bg-primary-100 text-primary-800"
       }`}
     >
-      {photo ? <Image src={photo} alt="" fill sizes="44px" quality={70} className="object-cover" /> : initials}
+      {showPhoto ? (
+        <Image src={photo!} alt="" fill sizes="44px" quality={70} className="object-cover" onError={() => setBroken(true)} />
+      ) : (
+        initials
+      )}
     </span>
   );
 }

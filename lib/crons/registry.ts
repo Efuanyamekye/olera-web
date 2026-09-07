@@ -180,6 +180,23 @@ export const CRON_REGISTRY: CronJob[] = [
     relatedAdminPath: "/admin/city-ads",
   },
   {
+    id: "city-lead-followups",
+    name: "City ads — follow-ups",
+    description:
+      "The measurement layer for Olera-owned city campaigns. Hourly, inside 9am-7pm in the city's timezone: asks the family ~20h after a provider took their request whether they were actually reached; on a \"not yet\" nudges that provider once; if the provider still has not called 24h later, releases the claim and offers the request to the next provider; and asks the provider at day 7 and day 21 whether the family became a client. Replies are one digit and land through the SMS webhook. Markers are stamped before each send and cleared on failure, so a crash can neither double-text nor silently skip.",
+    recipientCohort:
+      "Families with an accepted city lead (day-2 check), and the providers who took those leads (nudge + day-7/21 outcome).",
+    audience: "Care seekers",
+    fn: "nudge",
+    schedule: "20 * * * *",
+    humanSchedule: "Hourly, at :20",
+    path: "/api/cron/city-lead-followups",
+    emailTypes: ["city_lead_family_check", "city_lead_provider_nudge", "city_lead_family_reoffer", "city_lead_outcome_ping"],
+    successSignal:
+      "Every accepted lead gets asked whether the provider called, and every provider gets asked whether it became a client. Cost per accepted family and clients-per-city both become answerable.",
+    relatedAdminPath: "/admin/city-ads",
+  },
+  {
     id: "ad-boost-emails",
     name: "Ad Boost lifecycle events",
     description:
