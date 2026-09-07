@@ -68,18 +68,6 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
     advice:
       "Completions fall when the screener gets longer or a step breaks. Check the drop-off before assuming demand changed.",
   },
-  flow_questions: {
-    href: "/admin/deliverability",
-    label: "Deliverability",
-    advice:
-      "Watch failed sends, not the gap to the chip. A provider with no email on file is the usual reason a question never lands.",
-  },
-  flow_connections: {
-    href: "/admin/deliverability",
-    label: "Deliverability",
-    advice:
-      "Watch failed sends, not the gap to the chip. A lead nobody received still counts as an ask, and is the cheapest one to recover.",
-  },
   cp1: {
     href: "/admin/directory",
     label: "Directory",

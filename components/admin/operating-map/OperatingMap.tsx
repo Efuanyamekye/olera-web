@@ -102,19 +102,6 @@ export interface NodeTrend {
 
 export type NodeTrends = Record<string, NodeTrend | undefined>;
 
-/**
- * What actually reached a provider, printed on the arrows into outreach.
- *
- * Separate from the CR6 counts on purpose. An ask is not a delivery: the
- * chip says how many people asked, the arrow says how many notifications
- * left for a provider's inbox, and the gap between them is the thing worth
- * seeing.
- */
-export interface Flows {
-  questionsToProviders: number | null;
-  connectionsToProviders: number | null;
-}
-
 /** The class that paints a value its trend colour. Flat keeps ordinary ink. */
 export function toneClass(score: number): string | null {
   const step = Math.min(3, Math.abs(score));
@@ -143,7 +130,7 @@ const NODE_HELP: Record<string, string> = {
   m1:
     "Care recipient profiles begun in this range, and how far they got. Live means the care post is published, which is what makes someone visible to providers.",
   m2:
-    "Providers who claimed their listing in this range, and how many of those went on to finish the profile and pass verification.",
+    "Providers who claimed their listing in this range, and how many of those went on to pass verification.",
   m3:
     "Providers who requested a managed ad campaign in this range. Repeat counts providers who have asked more than once, over all time.",
   m4: "Providers who activated MedJobs staffing in this range.",
@@ -153,10 +140,6 @@ const NODE_HELP: Record<string, string> = {
     "Universities we are working and the advisors on file at them, scoped by the university's city. A standing count — the date range does not change it.",
   cw2:
     "Advisors we have actually contacted — at least one touchpoint against them. The gap from CW1's advisor count is supply we have not tried yet.",
-  flow_questions:
-    "Question notifications successfully sent to providers in this range. Not a subset of CR6a — a backlog flush sends for questions asked earlier, so this can run higher.",
-  flow_connections:
-    "Connection requests successfully sent to providers in this range. Not a subset of CR6b — a send can happen later than the ask, so this can run higher.",
   ta1:
     "Families who told us they are moving forward with a benefit. Applying happens on a government site, so this is their own report — a floor, not a count.",
   tb1:
@@ -181,7 +164,6 @@ export default function OperatingMap({
   onSelectCity,
   nodes,
   trends,
-  flows,
   metricsLoading,
   onInspect,
   showNumbers = true,
@@ -194,8 +176,6 @@ export default function OperatingMap({
   nodes: MetricNodes;
   /** Direction per node. Arrives after the values; missing = uncoloured. */
   trends: NodeTrends;
-  /** Counts printed on the two arrows into provider outreach. */
-  flows: Flows | null;
   metricsLoading: boolean;
   /** Open the receipts for a node. Omitted when inspection is unavailable. */
   onInspect?: (nodeKey: string) => void;
@@ -327,53 +307,6 @@ export default function OperatingMap({
       const B = box(b);
       hArrow(B.cy, x + 1, B.l - G);
     };
-    /** Feed a card's output into a vertical stem to its right. */
-    const toStem = (
-      a: string,
-      x: number,
-      flow: { count: number; node: string } | null = null,
-    ) => {
-      const A = box(a);
-      hArrow(A.cy, A.r + G, x - 1);
-      if (!flow) return;
-      // Sits on the line rather than beside it, so it reads as a property of
-      // the flow and not as another node floating in the gap. Clickable for
-      // the same reason the card values are: a number you cannot check is a
-      // number you have to take on faith.
-      const t = document.createElementNS(SVG_NS, "text");
-      t.setAttribute("x", String((A.r + G + x) / 2));
-      t.setAttribute("y", String(A.cy - 5));
-      t.setAttribute("text-anchor", "middle");
-      t.setAttribute("class", styles.wireLabel);
-      t.textContent = flow.count.toLocaleString();
-      t.setAttribute("role", "button");
-      t.setAttribute("tabindex", "0");
-      t.setAttribute("aria-label", `${flow.count} — show where this number comes from`);
-      const open = () => inspectRef.current?.(flow.node);
-      t.addEventListener("click", open);
-      // Same contract as every card value: hover explains it, click opens
-      // the rows behind it.
-      const tip = () =>
-        tipRef.current?.open(
-          t as unknown as HTMLElement,
-          flow.node,
-          null,
-          tipRef.current.trends[flow.node] ?? null,
-        );
-      t.addEventListener("mouseenter", tip);
-      t.addEventListener("focus", tip);
-      t.addEventListener("mouseleave", () => tipRef.current?.close());
-      t.addEventListener("blur", () => tipRef.current?.close());
-      t.addEventListener("keydown", (e) => {
-        const key = (e as KeyboardEvent).key;
-        if (key === "Enter" || key === " ") {
-          e.preventDefault();
-          open();
-        }
-      });
-      svg!.appendChild(t);
-    };
-
     /** The line every top-section drop terminates on. */
     const BT = box("bottom").t - G;
 
@@ -385,21 +318,10 @@ export default function OperatingMap({
     const cr2 = box("cr2");
     vArrow(cr2.cx, cr2.b + G, BT);
 
-    /* asks that reach a provider run across into the outreach spine */
+    /* care provider */
     vDown("cp1", "cp2");
     seg(cp2.cx, cp2.b + G, cp2.cx, BT - 8);
     head(cp2.cx, BT, "d");
-    const sent = flowsRef.current;
-    const totalSent =
-      typeof sent?.questionsToProviders === "number" &&
-      typeof sent?.connectionsToProviders === "number"
-        ? sent.questionsToProviders + sent.connectionsToProviders
-        : null;
-    toStem(
-      "cr1",
-      cp2.cx,
-      totalSent === null ? null : { count: totalSent, node: "flow_questions" },
-    );
 
     /* care worker runs straight down its lane and into the milestone layer */
     vDown("cw1", "cw2");
@@ -458,11 +380,9 @@ export default function OperatingMap({
   // A value or its caveat can change a card's height, and every arrow is
   // measured from those heights.
   useLayoutEffect(() => {
-    // Values change card heights, which every arrow is measured from. The
-    // flow labels change nothing about layout, so nothing else would notice
-    // them arriving — hence their own trigger here.
+    // Values change card heights, and every arrow is measured from those.
     draw();
-  }, [draw, nodes, flows, metricsLoading, showNumbers]);
+  }, [draw, nodes, metricsLoading, showNumbers]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -520,8 +440,6 @@ export default function OperatingMap({
   // draw() has no dependencies by design — it measures the DOM rather than
   // reading state — so the arrow labels reach it through a ref, and the
   // effect below redraws when they land.
-  const flowsRef = useRef<Flows | null>(null);
-  flowsRef.current = showNumbers ? flows : null;
   const inspectRef = useRef<((nodeKey: string) => void) | undefined>(undefined);
   inspectRef.current = onInspect;
   // draw() is deliberately dependency-free, so the tooltip it opens for the
@@ -591,7 +509,7 @@ export default function OperatingMap({
           trend={tip.trend}
           trends={trends}
           tone={tip.trend ? toneClass(tip.trend.score) : null}
-          inspectable={INSPECTABLE.has(tip.nodeKey) || tip.nodeKey.startsWith("flow_")}
+          inspectable={INSPECTABLE.has(tip.nodeKey)}
           x={tip.x}
           y={tip.y}
           onEnter={cancelClose}

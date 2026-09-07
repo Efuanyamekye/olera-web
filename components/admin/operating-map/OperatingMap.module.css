@@ -250,28 +250,6 @@
   align-items: flex-end;
   vertical-align: baseline;
 }
-/*
- * A count printed on a wire. Small and quiet: it annotates the flow rather
- * than competing with the numbers on the cards at either end.
- *
- * The overlay is pointer-transparent so it never swallows a click meant for
- * a card, so these opt themselves back in — they are the only thing on it
- * you can interact with.
- */
-.wireLabel {
-  fill: var(--ink-2);
-  font-size: 12px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  pointer-events: auto;
-  cursor: pointer;
-  /* It is a control, not prose. Without this a click selects the digits and
-     the highlight reads as the only thing that happened. */
-  user-select: none;
-}
-.wireLabel:hover { fill: var(--accent); text-decoration: underline; }
-.wireLabel:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
 .trendArrow {
   font-size: 8px;
   line-height: 1;

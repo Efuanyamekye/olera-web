@@ -94,8 +94,6 @@ export async function GET(request: NextRequest) {
     let visitsPartsSum: number | undefined;
     let cp1OrphanedClaims: number | undefined;
     let cp1Unclaimed: number | undefined;
-    let flows: { questionsToProviders: number; connectionsToProviders: number } | null =
-      null;
     let inquiriesRaised: number | undefined;
     let interviewsProposed: number | undefined;
 
@@ -196,10 +194,6 @@ export async function GET(request: NextRequest) {
       nodes.cr6a = { value: c.questions, caveat: null };
       nodes.cr6b = { value: c.connections, caveat: null };
       nodes.cr6c = { value: c.benefitsAssessments, caveat: null };
-      flows = {
-        questionsToProviders: c.questionsSent,
-        connectionsToProviders: c.connectionsSent,
-      };
     } catch (error) {
       console.error("[operating-map/metrics] cr6 failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
@@ -353,7 +347,7 @@ export async function GET(request: NextRequest) {
       interviewsProposed,
     });
 
-    return NextResponse.json({ nodes, checks, flows });
+    return NextResponse.json({ nodes, checks });
   } catch (error) {
     console.error("[operating-map/metrics] Failed:", error);
     return NextResponse.json({ error: "Failed to load metrics" }, { status: 500 });

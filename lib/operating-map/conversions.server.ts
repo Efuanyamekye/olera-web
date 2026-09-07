@@ -52,10 +52,6 @@ export interface Conversions {
   benefitsAssessments: number;
   /** CR6's total: the three CTA types beneath it. */
   ctasTotal: number;
-  /** Question notifications that reached a provider's inbox. */
-  questionsSent: number;
-  /** Connection requests that reached a provider's inbox. */
-  connectionsSent: number;
 }
 
 type Range = { from: string | null; to: string | null };
@@ -155,14 +151,6 @@ async function familyProfileIdsInCity(
   return ids;
 }
 
-/** The email types that carry an ask to a provider. */
-const QUESTION_EMAIL = "question_received";
-const CONNECTION_EMAIL = "connection_request";
-
-/** Only a send that came back successful counts as having reached anyone. */
-const narrowSent = (emailType: string) => (q: Query) =>
-  q.eq("email_type", emailType).eq("recipient_type", "provider").eq("status", "sent");
-
 /**
  * CR2 — families in outreach, the mirror of CP2 and CW2.
  *
@@ -224,8 +212,6 @@ export async function getConversions(
     questions,
     connections,
     benefitsAssessments,
-    questionsSent,
-    connectionsSent,
     familiesInOutreach,
   ] = await Promise.all([
     providerKeys
@@ -237,12 +223,6 @@ export async function getConversions(
     familyIds
       ? countKeyed(db, "seeker_activity", "profile_id", range, familyIds, benefitsCompleted)
       : countAll(db, "seeker_activity", range, benefitsCompleted),
-    providerKeys
-      ? countKeyed(db, "email_log", "provider_id", range, providerKeys, narrowSent(QUESTION_EMAIL))
-      : countAll(db, "email_log", range, narrowSent(QUESTION_EMAIL)),
-    providerKeys
-      ? countKeyed(db, "email_log", "provider_id", range, providerKeys, narrowSent(CONNECTION_EMAIL))
-      : countAll(db, "email_log", range, narrowSent(CONNECTION_EMAIL)),
     countFamiliesInOutreach(db, range),
   ]);
 
@@ -252,7 +232,5 @@ export async function getConversions(
     connections,
     benefitsAssessments,
     ctasTotal: questions + connections + benefitsAssessments,
-    questionsSent,
-    connectionsSent,
   };
 }

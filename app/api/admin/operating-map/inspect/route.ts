@@ -107,36 +107,6 @@ const SOURCES: Record<
     cityScoped: false,
     summarize: (r) => `Provider ${String(r.provider_id ?? "—")}`,
   },
-  flow_questions: {
-    title: "Question notifications sent to providers",
-    table: "email_log",
-    select: "created_at, recipient, provider_id, email_type, status",
-    where: [
-      "email_type is question_received",
-      "recipient is a provider",
-      "status is sent — the send came back successful",
-      "counts sends in this range, not deliveries of this range's asks",
-    ],
-    cityScoped: false,
-    providerKeyScoped: "provider_id",
-    summarize: (r) =>
-      `${String(r.recipient ?? "—")} · ${String(r.provider_id ?? "")}`,
-  },
-  flow_connections: {
-    title: "Connection requests sent to providers",
-    table: "email_log",
-    select: "created_at, recipient, provider_id, email_type, status",
-    where: [
-      "email_type is connection_request",
-      "recipient is a provider",
-      "status is sent — the send came back successful",
-      "counts sends in this range, not deliveries of this range's asks",
-    ],
-    cityScoped: false,
-    providerKeyScoped: "provider_id",
-    summarize: (r) =>
-      `${String(r.recipient ?? "—")} · ${String(r.provider_id ?? "")}`,
-  },
   cp1: {
     title: "Providers listed",
     table: "olera-providers",
@@ -364,15 +334,6 @@ export async function GET(request: NextRequest) {
     if (node === "tc2") query = query.in("status", ["accepted", "confirmed"]);
     if (node === "cp2") {
       query = query.eq("recipient_type", "provider").not("provider_id", "is", null);
-    }
-    if (node === "flow_questions" || node === "flow_connections") {
-      query = query
-        .eq(
-          "email_type",
-          node === "flow_questions" ? "question_received" : "connection_request",
-        )
-        .eq("recipient_type", "provider")
-        .eq("status", "sent");
     }
     if (node === "traffic") {
       // Same two surfaces the count is scoped to, so the sample cannot show
