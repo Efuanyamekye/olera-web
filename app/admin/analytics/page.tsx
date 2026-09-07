@@ -148,6 +148,7 @@ interface ProviderCommsFunnelByType {
   question_received: ProviderCommsFunnel;
   weekly_digest: ProviderCommsFunnel;
   verification: ProviderCommsFunnel;
+  onboarding: ProviderCommsFunnel;
   nudges: ProviderCommsFunnel;
   connections: ProviderCommsFunnel;
 }
@@ -448,6 +449,7 @@ export default function AdminAnalyticsPage() {
         loading={loading && !!summary}
       >
         <ProviderCommsFunnelCard summary={summary} loading={loading} range={range} />
+        <p className="mt-3 text-sm text-gray-500">For onboarding delivery exceptions, outreach cohorts and recipient details, <Link href="/admin/provider-comms" className="text-teal-700 underline">open Provider Comms</Link>. Outcomes in this legacy funnel are same-window associations.</p>
       </CollapsibleSection>
 
       {/* WindowedCard's section title is the date range itself, matching the

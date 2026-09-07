@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "check:crons": "node scripts/check-cron-registry.js",
+    "check:provider-comms": "node scripts/check-provider-comms.cjs",
     "check:war-room": "npx tsx scripts/check-war-room-reasoning.ts",
     "check:war-room:replay": "npx tsx scripts/check-war-room-replay.ts",
     "check:war-room:contract": "npx tsx scripts/check-war-room-tool-contract.ts",

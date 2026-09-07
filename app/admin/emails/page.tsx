@@ -2,13 +2,16 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import Badge from "@/components/ui/Badge";
 import AdminPageHeader from "@/components/admin/AdminPageHeader";
+import { ONBOARDING_MESSAGES } from "@/lib/provider-comms/reporting";
 
 type StatusFilter = "all" | "sent" | "failed";
 
 const EMAIL_TYPE_OPTIONS = [
   { value: "", label: "All types" },
+  ...ONBOARDING_MESSAGES.map(message => ({ value: message.type, label: `Provider · ${message.label}` })),
   { value: "connection_request", label: "Connection Request" },
   { value: "connection_sent", label: "Connection Sent" },
   { value: "connection_response", label: "Connection Response" },
@@ -136,25 +139,27 @@ function formatDate(dateStr: string): string {
 }
 
 export default function AdminEmailsPage() {
+  const searchParams = useSearchParams();
   const [emails, setEmails] = useState<EmailLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [emailType, setEmailType] = useState("");
+  const [emailType, setEmailType] = useState(() => searchParams.get("email_type") ?? "");
 
-  // Deep links (Text campaigns panel, automations detail) arrive as
-  // ?email_type=… — seed the filter once on mount so the link actually filters.
+  // Provider Comms deep links carry both message type and recipient search.
+  // Seed the initial request as well as subsequent navigation on this page.
   useEffect(() => {
-    const t = new URLSearchParams(window.location.search).get("email_type");
-    if (t) setEmailType(t);
-  }, []);
+    setEmailType(searchParams.get("email_type") ?? "");
+    const query = searchParams.get("search") ?? "";
+    setSearch(query); setDebouncedSearch(query); setPage(0);
+  }, [searchParams]);
   const [recipientType, setRecipientType] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
 
   // Search
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [search, setSearch] = useState(() => searchParams.get("search") ?? "");
+  const [debouncedSearch, setDebouncedSearch] = useState(() => searchParams.get("search") ?? "");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Pagination

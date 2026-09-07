@@ -144,6 +144,7 @@ type ProviderCommsFunnelByType = {
   question_received: ProviderCommsFunnel;
   weekly_digest: ProviderCommsFunnel;
   verification: ProviderCommsFunnel;
+  onboarding: ProviderCommsFunnel;
   nudges: ProviderCommsFunnel;
   connections: ProviderCommsFunnel;
 };
@@ -328,6 +329,7 @@ const EMPTY_COMMS_FUNNEL_BY_TYPE = (): ProviderCommsFunnelByType => ({
   question_received: EMPTY_COMMS_FUNNEL(),
   weekly_digest: EMPTY_COMMS_FUNNEL(),
   verification: EMPTY_COMMS_FUNNEL(),
+  onboarding: EMPTY_COMMS_FUNNEL(),
   nudges: EMPTY_COMMS_FUNNEL(),
   connections: EMPTY_COMMS_FUNNEL(),
 });
@@ -968,7 +970,7 @@ async function fetchWindow(
   // the price of approximate attribution; tooltip in the UI names it.
   const commsFunnel = EMPTY_COMMS_FUNNEL_BY_TYPE();
   type CommsBucketKey = Exclude<ProviderEmailFunnelKey, "all">;
-  const SPECIFIC_BUCKETS: CommsBucketKey[] = ["question_received", "weekly_digest", "verification", "nudges", "connections"];
+  const SPECIFIC_BUCKETS: CommsBucketKey[] = ["onboarding", "question_received", "weekly_digest", "verification", "nudges", "connections"];
   // Per-bucket sets of provider_ids who clicked at least one email of that
   // bucket in window. The `all` set is the union, built incrementally.
   const clickedByBucket: Record<ProviderEmailFunnelKey, Set<string>> = {
@@ -976,6 +978,7 @@ async function fetchWindow(
     question_received: new Set(),
     weekly_digest: new Set(),
     verification: new Set(),
+    onboarding: new Set(),
     nudges: new Set(),
     connections: new Set(),
   };
@@ -988,6 +991,7 @@ async function fetchWindow(
     question_received: new Map(),
     weekly_digest: new Map(),
     verification: new Map(),
+    onboarding: new Map(),
     nudges: new Map(),
     connections: new Map(),
   };

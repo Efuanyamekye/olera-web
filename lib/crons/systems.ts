@@ -19,6 +19,7 @@ export const AUTOMATION_SYSTEMS: AutomationSystem[] = [
       "weekly-provider-digest",
       "verification-reminders",
       "provider-welcome",
+      "profile-preview-nudge",
       "provider-dormant",
       "provider-anniversary",
     ],
@@ -58,6 +59,7 @@ export const AUTOMATION_SYSTEMS: AutomationSystem[] = [
       "staffing-sequence-check",
       "provider-outreach-send",
       "provider-outreach-sequence-check",
+      "provider-outreach-channel-lifecycle",
     ],
   },
   {

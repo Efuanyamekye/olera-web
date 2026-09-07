@@ -87,6 +87,7 @@ const navSections: NavSection[] = [
       // send risk, this one carries who stopped hearing from us. Two halves.
       { label: "Deliverability", href: "/admin/deliverability" },
       { label: "Family Comms", href: "/admin/family-comms" },
+      { label: "Provider Comms", href: "/admin/provider-comms" },
       { label: "Benefits", href: "/admin/benefits" },
       // "Articles" — next to Benefits (also content), "Content" was ambiguous
       { label: "Articles", href: "/admin/content" },
