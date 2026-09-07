@@ -45,6 +45,8 @@ const PAGE_SIZE = 1000;
 const MAX_ROWS = 100_000;
 
 export interface Conversions {
+  /** CR2 — distinct families we contacted in this range. */
+  familiesInOutreach: number;
   questions: number;
   connections: number;
   benefitsAssessments: number;
@@ -161,6 +163,46 @@ const CONNECTION_EMAIL = "connection_request";
 const narrowSent = (emailType: string) => (q: Query) =>
   q.eq("email_type", emailType).eq("recipient_type", "provider").eq("status", "sent");
 
+/**
+ * CR2 — families in outreach, the mirror of CP2 and CW2.
+ *
+ * Counted as distinct recipient addresses rather than rows: twenty emails to
+ * one family is one family. Family mail is keyed by address, not by a profile
+ * id — plenty of it goes to people who never made a profile — so the address
+ * is the only identity available and is the right one anyway.
+ */
+async function countFamiliesInOutreach(
+  db: SupabaseClient,
+  range: Range,
+): Promise<number> {
+  const recipients = new Set<string>();
+  let scanned = 0;
+
+  for (;;) {
+    if (scanned >= MAX_ROWS) break;
+    let query = db
+      .from("email_log")
+      .select("recipient")
+      // Both names are in use for the same audience; the newer routes write
+      // "family", older ones "seeker".
+      .in("recipient_type", ["family", "seeker"]);
+    if (range.from) query = query.gte("created_at", range.from);
+    if (range.to) query = query.lt("created_at", range.to);
+
+    const { data, error } = await query.range(scanned, scanned + PAGE_SIZE - 1);
+    if (error) throw error;
+    const rows = (data ?? []) as { recipient: string | null }[];
+    if (rows.length === 0) break;
+    for (const r of rows) {
+      if (r.recipient) recipients.add(r.recipient.trim().toLowerCase());
+    }
+    scanned += rows.length;
+    if (rows.length < PAGE_SIZE) break;
+  }
+
+  return recipients.size;
+}
+
 export async function getConversions(
   db: SupabaseClient,
   range: Range,
@@ -184,6 +226,7 @@ export async function getConversions(
     benefitsAssessments,
     questionsSent,
     connectionsSent,
+    familiesInOutreach,
   ] = await Promise.all([
     providerKeys
       ? countKeyed(db, "provider_question_asks", "provider_id", range, providerKeys)
@@ -200,9 +243,11 @@ export async function getConversions(
     providerKeys
       ? countKeyed(db, "email_log", "provider_id", range, providerKeys, narrowSent(CONNECTION_EMAIL))
       : countAll(db, "email_log", range, narrowSent(CONNECTION_EMAIL)),
+    countFamiliesInOutreach(db, range),
   ]);
 
   return {
+    familiesInOutreach,
     questions,
     connections,
     benefitsAssessments,

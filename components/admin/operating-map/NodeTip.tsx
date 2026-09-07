@@ -39,16 +39,16 @@ const PLAYBOOK: Record<string, { href: string; label: string; advice: string }> 
       "Work the largest channel that is falling, not the smallest one that is rising. A muted row at zero is an instrumentation job, not a dead channel.",
   },
   cr1: {
-    href: "/admin/organic-growth",
-    label: "Growth drivers",
-    advice:
-      "Look at which of the three surfaces moved. Provider pages rise with directory coverage; benefits and editorial rise with publishing.",
-  },
-  cr6: {
     href: "/admin/analytics",
     label: "Analytics",
     advice:
-      "Read this against page visits above it. If visits rose and this did not, the call to action is the problem, not the traffic.",
+      "Read the three parts against each other. A question is the cheapest ask a family makes; a connection is the one that produces a lead.",
+  },
+  cr2: {
+    href: "/admin/family-comms",
+    label: "Family comms",
+    advice:
+      "This is our tempo, not the market's. It only moves when someone sends, so a flat week usually means nobody ran a batch.",
   },
   cr6a: {
     href: "/admin/questions",

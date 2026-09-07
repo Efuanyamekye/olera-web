@@ -155,7 +155,7 @@ async function countAll(
     // by name. Free: they came out of the same pass as the total.
     for (const c of CHANNELS) out[`traffic:${c}`] = traffic.value.byChannel[c];
   }
-  if (visits.status === "fulfilled") out.cr1 = visits.value.total;
+  if (visits.status === "fulfilled") out.visits = visits.value.total;
   if (conversions.status === "fulfilled") {
     out.cr6 = conversions.value.ctasTotal;
     out.cr6a = conversions.value.questions;

@@ -36,7 +36,7 @@ const n = (v: number | null | undefined): number | null =>
 
 export interface CheckInputs {
   /** CR1's provider + editorial + benefits, summed by the caller. */
-  cr1PartsSum?: number;
+  visitsPartsSum?: number;
   /** Claim records that point at a provider not in the directory. */
   cp1OrphanedClaims?: number;
   /** CP1's unclaimed half — the set CP2 is drawn from. */
@@ -52,7 +52,7 @@ export interface CheckInputs {
 export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapCheck[] {
   const checks: MapCheck[] = [];
 
-  const cr6 = n(values.cr6);
+  const cr6 = n(values.cr1);
   const cr6a = n(values.cr6a);
   const cr6b = n(values.cr6b);
   const cr6c = n(values.cr6c);
@@ -67,15 +67,16 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
   }
 
   const traffic = n(values.traffic);
-  const cr1 = n(values.cr1);
-  if (traffic !== null && cr1 !== null) {
+  const visits = n(values.visits);
+  if (traffic !== null && visits !== null) {
     // One visitor produces at least one page view, so visitors can never
     // exceed views over the same window.
     checks.push({
-      id: "traffic-under-cr1",
+      id: "traffic-under-visits",
       label: "Visitors do not exceed page visits",
-      ok: traffic <= cr1,
-      detail: traffic <= cr1 ? undefined : `TRAFFIC is ${traffic}, CR1 is ${cr1}`,
+      ok: traffic <= visits,
+      detail:
+        traffic <= visits ? undefined : `Traffic is ${traffic}, page visits is ${visits}`,
     });
   }
 
@@ -94,16 +95,16 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  if (typeof inputs.cr1PartsSum === "number" && n(values.cr1) !== null) {
-    const total = n(values.cr1) as number;
+  if (typeof inputs.visitsPartsSum === "number" && n(values.visits) !== null) {
+    const total = n(values.visits) as number;
     checks.push({
-      id: "cr1-parts",
+      id: "visits-parts",
       label: "Page visits equals provider plus editorial plus benefits",
-      ok: total === inputs.cr1PartsSum,
+      ok: total === inputs.visitsPartsSum,
       detail:
-        total === inputs.cr1PartsSum
+        total === inputs.visitsPartsSum
           ? undefined
-          : `CR1 is ${total}, its parts add to ${inputs.cr1PartsSum}`,
+          : `Page visits is ${total}, its parts add to ${inputs.visitsPartsSum}`,
     });
   }
 
@@ -178,12 +179,13 @@ export function runChecks(values: NodeValues, inputs: CheckInputs = {}): MapChec
     });
   }
 
-  if (cr6 !== null && cr1 !== null) {
+  if (cr6 !== null && visits !== null) {
     checks.push({
-      id: "cr6-under-cr1",
-      label: "CTAs completed do not exceed page visits",
-      ok: cr6 <= cr1,
-      detail: cr6 <= cr1 ? undefined : `CR6 is ${cr6}, CR1 is ${cr1}`,
+      id: "engaged-under-visits",
+      label: "Families engaged do not exceed page visits",
+      ok: cr6 <= visits,
+      detail:
+        cr6 <= visits ? undefined : `Engaged is ${cr6}, page visits is ${visits}`,
     });
   }
 

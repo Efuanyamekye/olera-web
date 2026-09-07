@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
     const db = getServiceClient();
     const nodes: Record<string, OperatingMapNode> = {};
     let trafficChannelSum: number | undefined;
-    let cr1PartsSum: number | undefined;
+    let visitsPartsSum: number | undefined;
     let cp1OrphanedClaims: number | undefined;
     let cp1Unclaimed: number | undefined;
     let flows: { questionsToProviders: number; connectionsToProviders: number } | null =
@@ -159,8 +159,8 @@ export async function GET(request: NextRequest) {
 
     try {
       const visits = await getPageVisits(db, { from, to }, city);
-      cr1PartsSum = visits.provider + visits.editorial + visits.benefit;
-      nodes.cr1 = {
+      visitsPartsSum = visits.provider + visits.editorial + visits.benefit;
+      nodes.visits = {
         value: visits.total,
         // Order matches the labels printed on the card.
         breakdown: [
@@ -173,22 +173,29 @@ export async function GET(request: NextRequest) {
           : null,
       };
     } catch (error) {
-      console.error("[operating-map/metrics] cr1 failed:", error);
-      nodes.cr1 = { value: null, caveat: "This metric failed to load." };
+      console.error("[operating-map/metrics] visits failed:", error);
+      nodes.visits = { value: null, caveat: "This metric failed to load." };
     }
 
     try {
       const c = await getConversions(db, { from, to }, city);
-      // No breakdown here: CR6a/b/c render as their own chips directly
-      // below, so a split on the parent would print the same three numbers
-      // twice.
-      nodes.cr6 = { value: c.ctasTotal, caveat: null };
+      nodes.cr1 = {
+        // Counts actions, not distinct families: a question can be asked
+        // without an account, so there is no family identity behind it to
+        // de-duplicate on. The tooltip says so.
+        value: c.ctasTotal,
+        breakdown: [
+          { label: "questions", value: c.questions },
+          { label: "connections", value: c.connections },
+          { label: "benefits assessments", value: c.benefitsAssessments },
+        ],
+        caveat: null,
+      };
+      nodes.cr2 = { value: c.familiesInOutreach, caveat: null };
+      // Kept for the drill-downs and the consistency check, not drawn.
       nodes.cr6a = { value: c.questions, caveat: null };
       nodes.cr6b = { value: c.connections, caveat: null };
       nodes.cr6c = { value: c.benefitsAssessments, caveat: null };
-      // What actually left for a provider's inbox. Rendered on the two
-      // arrows into outreach rather than as nodes: an ask is not a delivery,
-      // and the gap between the pair is the point of showing them.
       flows = {
         questionsToProviders: c.questionsSent,
         connectionsToProviders: c.connectionsSent,
@@ -196,7 +203,8 @@ export async function GET(request: NextRequest) {
     } catch (error) {
       console.error("[operating-map/metrics] cr6 failed:", error);
       const failed = { value: null, caveat: "This metric failed to load." };
-      nodes.cr6 = failed;
+      nodes.cr1 = failed;
+      nodes.cr2 = failed;
       nodes.cr6a = failed;
       nodes.cr6b = failed;
       nodes.cr6c = failed;
@@ -338,7 +346,7 @@ export async function GET(request: NextRequest) {
     );
     const checks = runChecks(values, {
       trafficChannelSum,
-      cr1PartsSum,
+      visitsPartsSum,
       cp1OrphanedClaims,
       cp1Unclaimed,
       inquiriesRaised,

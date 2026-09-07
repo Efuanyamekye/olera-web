@@ -133,15 +133,9 @@ const NODE_HELP: Record<string, string> = {
   traffic:
     "Every visitor to a provider, benefits or editorial page, however they arrived. The ten channels below account for all of it — GA4 is the cross-check on the total, the split is our own.",
   cr1:
-    "Page views on provider, benefits and editorial pages. Views, not people, so this runs higher than the visitor count above it.",
-  cr6:
-    "Every care recipient action that asks us for something: the three CTA types below, added together. Scoped by the city the ask is about.",
-  cr6a:
-    "Questions submitted to providers through Q&A. Same source as the Overview's Questions Asked card. The number on the arrow is how many reached a provider's inbox.",
-  cr6b:
-    "Requests to be connected to a provider, however they started. The number on the arrow is how many reached a provider's inbox.",
-  cr6c:
-    "Benefits screeners completed to the end, where results are saved. No provider is involved, so the city here is the care recipient's own.",
+    "Every care recipient action that asks us for something. Counts actions, not people — a question can be asked without an account, so there is no identity behind it to de-duplicate on.",
+  cr2:
+    "Families we emailed in this range, counted once each however many times we wrote. The mirror of providers in outreach and advisors in outreach.",
   cp1:
     "Every provider in the directory that has not been deleted, split by whether anyone has claimed them. Scoped by the provider's city. A standing count — the date range does not change it.",
   cp2:
@@ -384,42 +378,27 @@ export default function OperatingMap({
     const BT = box("bottom").t - G;
 
     const traffic = box("traffic");
-    const cr1 = box("cr1");
-    const cr6 = box("cr6");
-
-    /* all traffic drops straight into page visits */
-    vArrow(traffic.cx, traffic.b + G, cr1.t - G);
-
-    const stem1 = cr1.l + 14;
-    seg(stem1, cr1.b + G, stem1, cr6.t - 8);
-    head(stem1, cr6.t - G, "d");
-
-    const stem2 = cr6.l + 14;
-    seg(stem2, cr6.b + G, stem2, BT - 8);
-    head(stem2, BT, "d");
-    ["cr6a", "cr6b", "cr6c"].forEach((id) => fromStem(stem2, id));
-
-    /* care provider */
-    vDown("cp1", "cp2");
     const cp2 = box("cp2");
+
+    /* families engaged, then the ones we contact */
+    vDown("cr1", "cr2");
+    const cr2 = box("cr2");
+    vArrow(cr2.cx, cr2.b + G, BT);
+
+    /* asks that reach a provider run across into the outreach spine */
+    vDown("cp1", "cp2");
     seg(cp2.cx, cp2.b + G, cp2.cx, BT - 8);
     head(cp2.cx, BT, "d");
-    // Benefits assessments never reach a provider, so only the two asks that
-    // do run across. Each carries what actually left for a provider's inbox.
     const sent = flowsRef.current;
-    toStem(
-      "cr6a",
-      cp2.cx,
-      typeof sent?.questionsToProviders === "number"
-        ? { count: sent.questionsToProviders, node: "flow_questions" }
-        : null,
-    );
-    toStem(
-      "cr6b",
-      cp2.cx,
+    const totalSent =
+      typeof sent?.questionsToProviders === "number" &&
       typeof sent?.connectionsToProviders === "number"
-        ? { count: sent.connectionsToProviders, node: "flow_connections" }
-        : null,
+        ? sent.questionsToProviders + sent.connectionsToProviders
+        : null;
+    toStem(
+      "cr1",
+      cp2.cx,
+      totalSent === null ? null : { count: totalSent, node: "flow_questions" },
     );
 
     /* care worker runs straight down its lane and into the milestone layer */
@@ -628,7 +607,7 @@ export default function OperatingMap({
         <div style={{ position: "relative" }}>
             <button
               type="button"
-              className={`${styles.pill} ${styles.pillButton}`}
+              className={styles.filterPill}
               onClick={() => setPickerOpen((v) => !v)}
               aria-expanded={pickerOpen}
               aria-haspopup="listbox"
@@ -639,7 +618,7 @@ export default function OperatingMap({
             >
               {pillLabel}
               {!active && (
-                <span className={styles.pillCount}>
+                <span className={styles.filterCount}>
                   {cities.status === "ready"
                     ? `${cities.truncated ? "≥" : ""}${cities.cities.length.toLocaleString()}`
                     : cities.status === "loading"
@@ -648,11 +627,11 @@ export default function OperatingMap({
                 </span>
               )}
               {active && (
-                <span className={styles.pillCount}>
+                <span className={styles.filterCount}>
                   {active.providers.toLocaleString()} providers
                 </span>
               )}
-              <span className={styles.pillCaret}>▼</span>
+              <span className={styles.filterCaret}>▼</span>
             </button>
             {pickerOpen && (
               <div className={styles.picker} role="listbox">
@@ -706,6 +685,36 @@ export default function OperatingMap({
               </div>
             )}
         </div>
+        {/*
+          All traffic is a filter's twin, not a step: it states the size of
+          the world the map covers, the same way the city picker states its
+          boundary. Both read as controls, so both look like controls.
+        */}
+        <button
+          type="button"
+          id={nodeId("traffic")}
+          className={styles.filterPill}
+          onMouseEnter={(e) =>
+            openTip(e.currentTarget, "traffic", nodes.traffic?.caveat, trends.traffic)
+          }
+          onMouseLeave={closeTip}
+          onFocus={(e) =>
+            openTip(e.currentTarget, "traffic", nodes.traffic?.caveat, trends.traffic)
+          }
+          onBlur={closeTip}
+          onClick={() => onInspect?.("traffic")}
+        >
+          All traffic
+          {showNumbers && (
+            <span className={styles.filterCount}>
+              {metricsLoading
+                ? "…"
+                : typeof nodes.traffic?.value === "number"
+                  ? nodes.traffic.value.toLocaleString()
+                  : NOT_INSTRUMENTED}
+            </span>
+          )}
+        </button>
         {controls}
       </div>
 
@@ -713,39 +722,6 @@ export default function OperatingMap({
         <div className={styles.stage} ref={stageRef}>
           <section className={styles.system} ref={rootRef}>
           <svg className={styles.wires} ref={svgRef} role="presentation" />
-
-          {/*
-            All traffic sits above the three lanes, not inside the care
-            recipient one: it is every visitor to the site, not a step in the
-            care recipient funnel. Same bar as the scope control above it,
-            because it is the same kind of thing — the size of the world the
-            map describes, rather than a step inside it.
-          */}
-          <button
-            type="button"
-            id={nodeId("traffic")}
-            className={`${styles.pill} ${styles.full} ${styles.trafficBar}`}
-            onMouseEnter={(e) =>
-              openTip(e.currentTarget, "traffic", nodes.traffic?.caveat, trends.traffic)
-            }
-            onMouseLeave={closeTip}
-            onFocus={(e) =>
-              openTip(e.currentTarget, "traffic", nodes.traffic?.caveat, trends.traffic)
-            }
-            onBlur={closeTip}
-            onClick={() => onInspect?.("traffic")}
-          >
-            All traffic
-            {showNumbers && (
-              <span className={styles.pillCount}>
-                {metricsLoading
-                  ? "…"
-                  : typeof nodes.traffic?.value === "number"
-                    ? nodes.traffic.value.toLocaleString()
-                    : NOT_INSTRUMENTED}
-              </span>
-            )}
-          </button>
 
           <div className={styles.lanes3} style={{ marginBottom: 8 }}>
             <div className={styles.lab}>Care recipient</div>
@@ -757,71 +733,34 @@ export default function OperatingMap({
           <div className={styles.lanes3}>
             {/* care recipient */}
             <div className={styles.lane}>
-              <div>
+              <div className={`${styles.chips} ${styles.solo}`}>
                 <Card
                   id="cr1"
                   code="CR1"
+                  label="Families engaged"
+                  parts="questions · connections · benefits assessments"
                   metric={nodes.cr1}
                   trend={trends.cr1}
                   loading={metricsLoading}
                   onTip={openTip}
                   onTipClose={closeTip}
-                  label="Page visits"
-                  parts="provider · editorial · benefits"
+                  onInspect={onInspect}
+                  showNumbers={showNumbers}
                 />
-                <div style={{ marginTop: 16 }}>
-                  <Card
-                    id="cr6"
-                    code="CR6"
-                    label="CTAs completed"
-                    metric={nodes.cr6}
-                    trend={trends.cr6}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={closeTip}
-                    onInspect={onInspect}
+              </div>
+              <div style={{ marginTop: 22 }}>
+                <Card
+                  id="cr2"
+                  code="CR2"
+                  label="Families in outreach"
+                  metric={nodes.cr2}
+                  trend={trends.cr2}
+                  loading={metricsLoading}
+                  onTip={openTip}
+                  onTipClose={closeTip}
+                  onInspect={onInspect}
                   showNumbers={showNumbers}
-                  />
-                </div>
-                <div className={styles.offshoots} style={{ marginTop: 14 }}>
-                  <Chip
-                    id="cr6a"
-                    code="CR6a"
-                    label="Questions"
-                    metric={nodes.cr6a}
-                    trend={trends.cr6a}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={closeTip}
-                    onInspect={onInspect}
-                  showNumbers={showNumbers}
-                  />
-                  <Chip
-                    id="cr6b"
-                    code="CR6b"
-                    label="Connections"
-                    metric={nodes.cr6b}
-                    trend={trends.cr6b}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={closeTip}
-                    onInspect={onInspect}
-                  showNumbers={showNumbers}
-                  />
-                  <Chip
-                    id="cr6c"
-                    code="CR6c"
-                    label="Benefits Assessment"
-                    metric={nodes.cr6c}
-                    trend={trends.cr6c}
-                    loading={metricsLoading}
-                    onTip={openTip}
-                    onTipClose={closeTip}
-                    onInspect={onInspect}
-                  showNumbers={showNumbers}
-                  />
-                </div>
-                <div style={{ height: 14 }} />
+                />
               </div>
             </div>
 
@@ -1318,7 +1257,7 @@ function MetricValue({
 
 /** Nodes the inspect endpoint can produce rows for. */
 const INSPECTABLE = new Set([
-  "traffic", "cr1", "cr6a", "cr6b", "cr6c",
+  "traffic", "cr2",
   "cp1", "cp2",
   "m1", "m2", "m3", "m4", "m5",
   "cw1", "cw2",
