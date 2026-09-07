@@ -90,6 +90,7 @@ export default async function sitemap({
         { path: "/browse/caregivers", priority: 0.8, changeFrequency: "daily" as const },
         { path: "/browse/families", priority: 0.8, changeFrequency: "daily" as const },
         { path: "/for-providers", priority: 0.8, changeFrequency: "weekly" as const },
+        { path: "/managed-ads", priority: 0.8, changeFrequency: "weekly" as const },
         { path: "/benefits", priority: 0.7, changeFrequency: "weekly" as const },
         { path: "/benefits/finder", priority: 0.7, changeFrequency: "weekly" as const },
         { path: "/community", priority: 0.6, changeFrequency: "weekly" as const },

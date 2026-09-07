@@ -59,11 +59,15 @@ export default function ConditionalFooter() {
     return <SimpleFooter />;
   }
 
-  // MedJobs, senior-benefits, and /welcome — skip the senior care discovery zone pre-footer
-  // (welcome users are mid-flow; the generic city browser is noise)
+  // MedJobs, senior-benefits, /welcome and /managed-ads — skip the senior care
+  // discovery zone pre-footer (welcome users are mid-flow; the generic city
+  // browser is noise). /managed-ads is a provider sales page: closing it with a
+  // family-facing "find senior care by city" grid resets the reader's mental
+  // model one screen after asking them to start a campaign.
   const hidePrefooter =
     pathname.startsWith("/medjobs") ||
     pathname.startsWith("/senior-benefits") ||
+    pathname === "/managed-ads" ||
     pathname === "/welcome";
 
   return <Footer hideDiscoveryZone={hidePrefooter} />;
