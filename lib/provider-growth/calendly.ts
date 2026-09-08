@@ -5,13 +5,14 @@
  * webhook event processing for meeting scheduled/completed events.
  */
 
-// Default Calendly URL - this should match your Calendly event type
-// TODO: Make this configurable via env var or admin settings
-const CALENDLY_BASE_URL = "https://calendly.com/olera-partnerships/provider-growth-call";
+// Calendly event URL - configurable via environment variable
+// Falls back to the existing olera-demo event type used for other calls
+const CALENDLY_BASE_URL =
+  process.env.NEXT_PUBLIC_CALENDLY_PROVIDER_GROWTH_URL ||
+  "https://calendly.com/caregivers979/olera-demo";
 
 export interface CalendlyBookingParams {
   trackingId: string;  // provider_growth_tracking.id for callback
-  providerName?: string;
   contactName?: string;
   contactEmail?: string;
 }

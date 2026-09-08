@@ -73,6 +73,7 @@ export interface ProviderGrowthWithProfile extends ProviderGrowthTracking {
   question_count?: number;
   // Call tracking
   call_count?: number;
+  last_call_at?: string | null;
 }
 
 export interface GrowthStats {
@@ -80,10 +81,14 @@ export interface GrowthStats {
   meeting_scheduled: number;
   pitched: number;
   not_interested: number;
+  upgrade_meeting: number;
   ads_free_intro: number;
   ads_subscribed: number;
   medjobs_in_pilot: number;
   medjobs_subscribed: number;
+  // Providers with BOTH products active
+  both_converted: number;  // ads_free_intro AND medjobs_in_pilot
+  both_paying: number;     // ads_subscribed AND medjobs_subscribed
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -108,6 +113,8 @@ export async function getGrowthStats(): Promise<GrowthStats> {
   const stageCounts: Record<string, number> = {};
   const adsCounts: Record<string, number> = {};
   const medjobsCounts: Record<string, number> = {};
+  let bothConverted = 0;
+  let bothPaying = 0;
 
   for (const row of allRecords ?? []) {
     // Pipeline stage
@@ -122,6 +129,14 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     if (row.medjobs_status && row.medjobs_status !== "none") {
       medjobsCounts[row.medjobs_status] = (medjobsCounts[row.medjobs_status] || 0) + 1;
     }
+
+    // Count providers with BOTH products active
+    if (row.ads_status === "free_intro" && row.medjobs_status === "in_pilot") {
+      bothConverted++;
+    }
+    if (row.ads_status === "subscribed" && row.medjobs_status === "subscribed") {
+      bothPaying++;
+    }
   }
 
   return {
@@ -129,10 +144,13 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     meeting_scheduled: stageCounts.meeting_scheduled || 0,
     pitched: stageCounts.pitched || 0,
     not_interested: stageCounts.not_interested || 0,
+    upgrade_meeting: stageCounts.upgrade_meeting || 0,
     ads_free_intro: adsCounts.free_intro || 0,
     ads_subscribed: adsCounts.subscribed || 0,
     medjobs_in_pilot: medjobsCounts.in_pilot || 0,
     medjobs_subscribed: medjobsCounts.subscribed || 0,
+    both_converted: bothConverted,
+    both_paying: bothPaying,
   };
 }
 
@@ -140,13 +158,18 @@ export async function getGrowthStats(): Promise<GrowthStats> {
 // Call Count Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
+export interface CallStats {
+  count: number;
+  lastCallAt: string | null;
+}
+
 /**
- * Get call counts for a list of tracking IDs.
- * Returns a Map of tracking_id -> call_count.
+ * Get call stats for a list of tracking IDs.
+ * Returns a Map of tracking_id -> { count, lastCallAt }.
  */
-export async function getCallCountsForTrackingIds(
+export async function getCallStatsForTrackingIds(
   trackingIds: string[]
-): Promise<Map<string, number>> {
+): Promise<Map<string, CallStats>> {
   if (trackingIds.length === 0) {
     return new Map();
   }
@@ -155,7 +178,7 @@ export async function getCallCountsForTrackingIds(
 
   // Fetch call_attempted touchpoints grouped by tracking_id
   // We have to do this in batches to avoid URL length limits
-  const counts = new Map<string, number>();
+  const stats = new Map<string, CallStats>();
   const BATCH_SIZE = 100;
 
   for (let i = 0; i < trackingIds.length; i += BATCH_SIZE) {
@@ -163,23 +186,32 @@ export async function getCallCountsForTrackingIds(
 
     const { data, error } = await db
       .from("provider_growth_touchpoints")
-      .select("tracking_id")
+      .select("tracking_id, created_at")
       .in("tracking_id", batchIds)
       .eq("touchpoint_type", "call_attempted");
 
     if (error) {
-      console.error("[provider-growth] Call count query error:", error);
+      console.error("[provider-growth] Call stats query error:", error);
       continue;
     }
 
-    // Count occurrences per tracking_id
+    // Count occurrences and track most recent call per tracking_id
     for (const row of data ?? []) {
       const id = row.tracking_id;
-      counts.set(id, (counts.get(id) || 0) + 1);
+      const existing = stats.get(id);
+      if (existing) {
+        existing.count++;
+        // Update lastCallAt if this call is more recent
+        if (row.created_at > (existing.lastCallAt || "")) {
+          existing.lastCallAt = row.created_at;
+        }
+      } else {
+        stats.set(id, { count: 1, lastCallAt: row.created_at });
+      }
     }
   }
 
-  return counts;
+  return stats;
 }
 
 /**
@@ -208,13 +240,13 @@ export async function getNewClaimSubtabCounts(): Promise<{
     return { notContacted: 0, inProgress: 0 };
   }
 
-  // Get call counts
-  const callCounts = await getCallCountsForTrackingIds(trackingIds);
+  // Get call stats
+  const callStats = await getCallStatsForTrackingIds(trackingIds);
 
   // Count providers with/without calls
   let inProgress = 0;
   for (const id of trackingIds) {
-    if ((callCounts.get(id) || 0) > 0) {
+    if ((callStats.get(id)?.count || 0) > 0) {
       inProgress++;
     }
   }
@@ -379,15 +411,19 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     );
   }
 
-  // Fetch call counts for all providers
+  // Fetch call stats for all providers
   const trackingIds = providers.map((p) => p.id);
-  const callCounts = await getCallCountsForTrackingIds(trackingIds);
+  const callStats = await getCallStatsForTrackingIds(trackingIds);
 
-  // Add call_count to each provider
-  providers = providers.map((p) => ({
-    ...p,
-    call_count: callCounts.get(p.id) || 0,
-  }));
+  // Add call_count and last_call_at to each provider
+  providers = providers.map((p) => {
+    const stats = callStats.get(p.id);
+    return {
+      ...p,
+      call_count: stats?.count || 0,
+      last_call_at: stats?.lastCallAt || null,
+    };
+  });
 
   // Filter by hasCallAttempts if specified
   if (hasCallAttempts !== undefined) {

@@ -24,17 +24,17 @@ export function EligibilityBadges({
   const padding = size === "sm" ? "px-1.5 py-0.5" : "px-2 py-1";
 
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-1.5">
       {adsEligible && (
         <span
-          className={`inline-flex items-center ${padding} ${textSize} font-medium rounded border text-blue-700 bg-blue-50 border-blue-200`}
+          className={`inline-flex items-center ${padding} ${textSize} font-medium rounded text-gray-600 bg-gray-100`}
         >
           Ads
         </span>
       )}
       {medjobsEligible && (
         <span
-          className={`inline-flex items-center ${padding} ${textSize} font-medium rounded border text-purple-700 bg-purple-50 border-purple-200`}
+          className={`inline-flex items-center ${padding} ${textSize} font-medium rounded text-gray-600 bg-gray-100`}
           title={medjobsUniversity || "MedJobs eligible"}
         >
           MedJobs{medjobsUniversity ? `: ${abbreviateUniversity(medjobsUniversity)}` : ""}

@@ -22,7 +22,7 @@ import {
  * GET /api/admin/provider-growth
  *
  * List providers with growth tracking. Supports filtering by:
- * - pipelineStage: new_claim | meeting_scheduled | pitched | not_interested
+ * - pipelineStage: new_claim | meeting_scheduled | pitched | not_interested | upgrade_meeting
  * - adsStatus: none | free_intro | subscribed
  * - medjobsStatus: none | in_pilot | pilot_expired | subscribed
  * - claimSource: cold_outreach | city_broadcast | email | page | ...

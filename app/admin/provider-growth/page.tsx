@@ -45,9 +45,16 @@ export default function ProviderGrowthPage() {
       return { type: "pipeline", stage: "new_claim", subTab };
     }
 
-    // Check for other pipeline stage tabs
+    // Check for other pipeline stage tabs (without subtabs)
     if (tab && ["meeting_scheduled", "pitched", "not_interested"].includes(tab)) {
       return { type: "pipeline", stage: tab as PipelineStage };
+    }
+
+    // Check for upgrade_meeting (has Ads/MedJobs/Both subtabs)
+    if (tab === "upgrade_meeting") {
+      const validSubTabs = ["ads", "medjobs", "both"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "ads" | "medjobs" | "both") : "ads";
+      return { type: "pipeline", stage: "upgrade_meeting", subTab };
     }
 
     // Check for conversion tabs (converted/paying with subtab)
@@ -151,6 +158,18 @@ export default function ProviderGrowthPage() {
         if (activeTab.stage === "new_claim" && activeTab.subTab) {
           params.set("hasCallAttempts", activeTab.subTab === "in_progress" ? "true" : "false");
         }
+
+        // For upgrade_meeting, apply Ads/MedJobs/Both filter based on subtab
+        if (activeTab.stage === "upgrade_meeting" && activeTab.subTab) {
+          if (activeTab.subTab === "ads") {
+            params.set("adsStatus", "free_intro");
+          } else if (activeTab.subTab === "medjobs") {
+            params.set("medjobsStatus", "in_pilot");
+          } else if (activeTab.subTab === "both") {
+            params.set("adsStatus", "free_intro");
+            params.set("medjobsStatus", "in_pilot");
+          }
+        }
       } else {
         // Conversion tabs
         if (activeTab.tab === "converted") {
@@ -221,8 +240,8 @@ export default function ProviderGrowthPage() {
 
     // Update URL
     if (tab.type === "pipeline") {
-      // Include subtab for new_claim
-      if (tab.stage === "new_claim" && tab.subTab) {
+      // Include subtab for new_claim and upgrade_meeting
+      if ((tab.stage === "new_claim" || tab.stage === "upgrade_meeting") && tab.subTab) {
         router.push(`/admin/provider-growth?tab=${tab.stage}&sub=${tab.subTab}`, { scroll: false });
       } else {
         router.push(`/admin/provider-growth?tab=${tab.stage}`, { scroll: false });

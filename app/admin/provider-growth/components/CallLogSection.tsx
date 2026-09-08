@@ -218,7 +218,7 @@ export function CallLogSection({ trackingId, businessProfileId, onCallLogged }: 
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as CallStatus)}
-            className="flex-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className="flex-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
             disabled={submitting}
           >
             {CALL_STATUSES.map((status) => (
@@ -230,7 +230,7 @@ export function CallLogSection({ trackingId, businessProfileId, onCallLogged }: 
           <button
             onClick={handleSubmit}
             disabled={submitting}
-            className="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-1.5 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50"
           >
             {submitting ? "..." : "Log Call"}
           </button>
@@ -240,7 +240,7 @@ export function CallLogSection({ trackingId, businessProfileId, onCallLogged }: 
           value={callNotes}
           onChange={(e) => setCallNotes(e.target.value)}
           placeholder="Optional notes..."
-          className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
           disabled={submitting}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -259,7 +259,7 @@ export function CallLogSection({ trackingId, businessProfileId, onCallLogged }: 
       {/* Call history */}
       {loading ? (
         <div className="flex items-center justify-center py-4">
-          <span className="w-4 h-4 border-2 border-gray-200 border-t-blue-600 rounded-full animate-spin" />
+          <span className="w-4 h-4 border-2 border-gray-200 border-t-primary-600 rounded-full animate-spin" />
         </div>
       ) : logs.length === 0 ? (
         <p className="text-sm text-gray-400 italic">No calls logged yet</p>
@@ -276,7 +276,7 @@ export function CallLogSection({ trackingId, businessProfileId, onCallLogged }: 
                     <select
                       value={editStatus}
                       onChange={(e) => setEditStatus(e.target.value as CallStatus)}
-                      className="flex-1 px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                      className="flex-1 px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 bg-white"
                       disabled={editSubmitting}
                     >
                       {CALL_STATUSES.map((status) => (
@@ -288,7 +288,7 @@ export function CallLogSection({ trackingId, businessProfileId, onCallLogged }: 
                     <button
                       onClick={handleSaveEdit}
                       disabled={editSubmitting}
-                      className="px-2 py-1 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 disabled:opacity-50"
+                      className="px-2 py-1 text-xs font-medium text-white bg-primary-600 rounded hover:bg-primary-700 disabled:opacity-50"
                     >
                       {editSubmitting ? "..." : "Save"}
                     </button>
@@ -305,7 +305,7 @@ export function CallLogSection({ trackingId, businessProfileId, onCallLogged }: 
                     value={editNotes}
                     onChange={(e) => setEditNotes(e.target.value)}
                     placeholder="Notes..."
-                    className="w-full px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 py-1 text-sm border border-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-primary-500"
                     disabled={editSubmitting}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -340,7 +340,7 @@ export function CallLogSection({ trackingId, businessProfileId, onCallLogged }: 
                     <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => startEdit(log)}
-                        className="text-xs text-gray-400 hover:text-blue-600"
+                        className="text-xs text-gray-400 hover:text-primary-600"
                         title="Edit"
                       >
                         Edit

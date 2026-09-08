@@ -62,8 +62,8 @@ function CallScriptSection({ provider }: { provider: ProviderGrowthWithProfile }
     : "recently";
 
   return (
-    <div className="mb-4 px-3 py-2.5 bg-blue-50 border border-blue-100 rounded-lg">
-      <div className="text-[10px] font-semibold text-blue-500 uppercase tracking-wide mb-1.5">
+    <div className="mb-4 px-3 py-2.5 bg-gray-50 rounded-lg">
+      <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1.5">
         Script
       </div>
       <p className="text-[12px] leading-relaxed text-gray-600">
@@ -159,6 +159,86 @@ function formatPhone(phone: string): string {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Meeting Info Section (when meeting is scheduled)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function MeetingInfoSection({
+  provider,
+  onMarkComplete,
+  onMarkUpgradeComplete,
+}: {
+  provider: ProviderGrowthWithProfile;
+  onMarkComplete: () => void;
+  onMarkUpgradeComplete: () => void;
+}) {
+  const isUpgradeMeeting = provider.pipeline_stage === "upgrade_meeting";
+  const isMeetingScheduled = provider.pipeline_stage === "meeting_scheduled";
+
+  if ((!isMeetingScheduled && !isUpgradeMeeting) || !provider.meeting_scheduled_at) {
+    return null;
+  }
+
+  const meetingDate = new Date(provider.meeting_scheduled_at);
+  const isPast = meetingDate < new Date();
+  const formattedDate = meetingDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+  const formattedTime = meetingDate.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  // Different styling for upgrade meetings
+  const bgColor = isUpgradeMeeting ? "bg-amber-50" : "bg-primary-50";
+  const borderColor = isUpgradeMeeting ? "border-amber-100" : "border-primary-100";
+  const textColor = isUpgradeMeeting ? "text-amber-600" : "text-primary-600";
+  const btnBg = isUpgradeMeeting ? "bg-amber-600 hover:bg-amber-700" : "bg-primary-600 hover:bg-primary-700";
+  const linkColor = isUpgradeMeeting ? "text-amber-600 hover:text-amber-700" : "text-primary-600 hover:text-primary-700";
+
+  const label = isUpgradeMeeting
+    ? isPast ? "Upgrade Meeting Was Scheduled" : "Upgrade Meeting Scheduled"
+    : isPast ? "Meeting Was Scheduled" : "Meeting Scheduled";
+
+  return (
+    <div className={`p-4 ${bgColor} border ${borderColor} rounded-lg`}>
+      <div className="flex items-start justify-between">
+        <div>
+          <div className={`text-[10px] font-semibold ${textColor} uppercase tracking-wide mb-1`}>
+            {label}
+          </div>
+          <div className="text-sm font-medium text-gray-900">{formattedDate}</div>
+          <div className="text-sm text-gray-600">{formattedTime}</div>
+        </div>
+        {isPast && (
+          <button
+            onClick={isUpgradeMeeting ? onMarkUpgradeComplete : onMarkComplete}
+            className={`px-3 py-1.5 text-sm font-medium text-white ${btnBg} rounded-lg`}
+          >
+            Mark Complete
+          </button>
+        )}
+      </div>
+      {provider.calendly_event_id && (
+        <a
+          href={`https://calendly.com/app/scheduled_events/${provider.calendly_event_id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`inline-flex items-center gap-1 mt-2 text-xs ${linkColor} hover:underline`}
+        >
+          View in Calendly
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Actions Section (sticky footer)
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -166,6 +246,7 @@ function ActionsSection({
   provider,
   onScheduleMeeting,
   onLogPitch,
+  onLogUpgradeOutcome,
   onAddNote,
   onMarkNotInterested,
   onReEngage,
@@ -173,6 +254,7 @@ function ActionsSection({
   provider: ProviderGrowthWithProfile;
   onScheduleMeeting: () => void;
   onLogPitch: () => void;
+  onLogUpgradeOutcome: () => void;
   onAddNote: () => void;
   onMarkNotInterested: () => void;
   onReEngage: () => void;
@@ -184,23 +266,47 @@ function ActionsSection({
         {provider.pipeline_stage === "new_claim" && (
           <button
             onClick={onScheduleMeeting}
-            className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700"
           >
             Schedule Meeting
           </button>
         )}
         {provider.pipeline_stage === "meeting_scheduled" && (
-          <button
-            onClick={onLogPitch}
-            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
-          >
-            Log Pitch
-          </button>
+          <>
+            <button
+              onClick={onLogPitch}
+              className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700"
+            >
+              Log Pitch
+            </button>
+            <button
+              onClick={onScheduleMeeting}
+              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            >
+              Reschedule
+            </button>
+          </>
+        )}
+        {provider.pipeline_stage === "upgrade_meeting" && (
+          <>
+            <button
+              onClick={onLogUpgradeOutcome}
+              className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+            >
+              Log Upgrade Outcome
+            </button>
+            <button
+              onClick={onScheduleMeeting}
+              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            >
+              Reschedule
+            </button>
+          </>
         )}
         {provider.pipeline_stage === "pitched" && (
           <button
             onClick={onScheduleMeeting}
-            className="px-4 py-2 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 border border-blue-200"
+            className="px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 border border-primary-200"
           >
             Schedule Follow-up
           </button>
@@ -208,7 +314,7 @@ function ActionsSection({
         {provider.pipeline_stage === "not_interested" && (
           <button
             onClick={onReEngage}
-            className="px-4 py-2 text-sm font-medium text-emerald-600 bg-emerald-50 rounded-lg hover:bg-emerald-100 border border-emerald-200"
+            className="px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 border border-primary-200"
           >
             Re-engage
           </button>
@@ -233,33 +339,243 @@ function ActionsSection({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Conversion Actions Section
+// ─────────────────────────────────────────────────────────────────────────────
+
+function ConversionActionsSection({
+  provider,
+  onUpdateStatus,
+}: {
+  provider: ProviderGrowthWithProfile;
+  onUpdateStatus: (updates: { ads_status?: string; medjobs_status?: string }) => void;
+}) {
+  // Only show conversion actions for providers who have been pitched
+  const canShowConversion = ["pitched", "upgrade_meeting"].includes(provider.pipeline_stage);
+
+  if (!canShowConversion) return null;
+
+  const showAdsFreeTrial = provider.ads_status === "none";
+  const showAdsPaying = provider.ads_status === "free_intro";
+  const showMedjobsPilot = provider.medjobs_status === "none" && provider.medjobs_eligible;
+  const showMedjobsPaying = provider.medjobs_status === "in_pilot";
+
+  if (!showAdsFreeTrial && !showAdsPaying && !showMedjobsPilot && !showMedjobsPaying) {
+    return null;
+  }
+
+  return (
+    <>
+      <SectionDivider />
+      <div>
+        <SectionHeader>Conversion Actions</SectionHeader>
+        <div className="flex flex-wrap gap-2">
+          {showAdsFreeTrial && (
+            <button
+              onClick={() => onUpdateStatus({ ads_status: "free_intro" })}
+              className="px-3 py-1.5 text-sm font-medium text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 border border-emerald-200"
+            >
+              Start Ads Free Trial
+            </button>
+          )}
+          {showAdsPaying && (
+            <button
+              onClick={() => onUpdateStatus({ ads_status: "subscribed" })}
+              className="px-3 py-1.5 text-sm font-medium text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 border border-emerald-200"
+            >
+              Mark Ads Paying
+            </button>
+          )}
+          {showMedjobsPilot && (
+            <button
+              onClick={() => onUpdateStatus({ medjobs_status: "in_pilot" })}
+              className="px-3 py-1.5 text-sm font-medium text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 border border-purple-200"
+            >
+              Start MedJobs Pilot
+            </button>
+          )}
+          {showMedjobsPaying && (
+            <button
+              onClick={() => onUpdateStatus({ medjobs_status: "subscribed" })}
+              className="px-3 py-1.5 text-sm font-medium text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 border border-purple-200"
+            >
+              Mark MedJobs Paying
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Upgrade Outcome Logger
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface UpgradeOutcome {
+  pipeline_stage: "pitched" | "not_interested";
+  ads_status?: "subscribed";
+  medjobs_status?: "subscribed";
+  meeting_completed_at?: string;
+}
+
+function UpgradeOutcomeLogger({
+  provider,
+  onSubmit,
+  onCancel,
+}: {
+  provider: ProviderGrowthWithProfile;
+  onSubmit: (outcome: UpgradeOutcome) => void;
+  onCancel: () => void;
+}) {
+  const [adsUpgraded, setAdsUpgraded] = useState(false);
+  const [medjobsUpgraded, setMedjobsUpgraded] = useState(false);
+  const [notInterested, setNotInterested] = useState(false);
+
+  const hasAds = provider.ads_status === "free_intro";
+  const hasMedjobs = provider.medjobs_status === "in_pilot";
+
+  const handleSubmit = () => {
+    const outcome: UpgradeOutcome = {
+      pipeline_stage: notInterested ? "not_interested" : "pitched",
+      meeting_completed_at: new Date().toISOString(),
+    };
+
+    if (adsUpgraded) {
+      outcome.ads_status = "subscribed";
+    }
+    if (medjobsUpgraded) {
+      outcome.medjobs_status = "subscribed";
+    }
+
+    onSubmit(outcome);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="text-sm font-medium text-amber-800">
+        Log Upgrade Meeting Outcome
+      </div>
+
+      {/* Upgrade checkboxes */}
+      <div className="space-y-2">
+        {hasAds && (
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={adsUpgraded}
+              onChange={(e) => {
+                setAdsUpgraded(e.target.checked);
+                if (e.target.checked) setNotInterested(false);
+              }}
+              className="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+            />
+            <span className="text-sm text-gray-700">
+              Upgraded to Ads Subscription
+            </span>
+          </label>
+        )}
+        {hasMedjobs && (
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={medjobsUpgraded}
+              onChange={(e) => {
+                setMedjobsUpgraded(e.target.checked);
+                if (e.target.checked) setNotInterested(false);
+              }}
+              className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+            />
+            <span className="text-sm text-gray-700">
+              Upgraded to MedJobs Subscription
+            </span>
+          </label>
+        )}
+        <div className="border-t border-amber-200 pt-2 mt-2">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={notInterested}
+              onChange={(e) => {
+                setNotInterested(e.target.checked);
+                if (e.target.checked) {
+                  setAdsUpgraded(false);
+                  setMedjobsUpgraded(false);
+                }
+              }}
+              className="w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500"
+            />
+            <span className="text-sm text-gray-700">
+              Not interested in upgrading
+            </span>
+          </label>
+        </div>
+      </div>
+
+      {/* Info text */}
+      <p className="text-xs text-amber-700">
+        {adsUpgraded || medjobsUpgraded
+          ? "Provider will be marked as Paying and moved to Pitched stage."
+          : notInterested
+          ? "Provider will be marked as Not Interested."
+          : "If no upgrade, provider returns to Pitched for future follow-up."}
+      </p>
+
+      {/* Buttons */}
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={onCancel}
+          className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          className="px-4 py-1.5 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+        >
+          Save Outcome
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Main Drawer Component
 // ─────────────────────────────────────────────────────────────────────────────
 
+// Engagement data from API
+interface EngagementData {
+  questions_count: number;
+  leads_count: number;
+  provider_slug: string | null;
+}
+
 export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: ProviderDrawerProps) {
   const [touchpoints, setTouchpoints] = useState<ProviderGrowthTouchpoint[]>([]);
-  const [loadingTouchpoints, setLoadingTouchpoints] = useState(true);
-  const [activeAction, setActiveAction] = useState<"schedule" | "pitch" | "notes" | null>(null);
+  const [engagement, setEngagement] = useState<EngagementData | null>(null);
+  const [loadingData, setLoadingData] = useState(true);
+  const [activeAction, setActiveAction] = useState<"schedule" | "pitch" | "upgrade" | "notes" | null>(null);
   const [notes, setNotes] = useState(provider.notes || "");
   const [savingNotes, setSavingNotes] = useState(false);
 
-  const fetchTouchpoints = useCallback(async () => {
+  const fetchProviderData = useCallback(async () => {
     try {
       const res = await fetch(`/api/admin/provider-growth/${provider.id}`);
       if (res.ok) {
         const data = await res.json();
         setTouchpoints(data.touchpoints || []);
+        setEngagement(data.engagement || null);
       }
     } catch (e) {
-      console.error("Failed to fetch touchpoints:", e);
+      console.error("Failed to fetch provider data:", e);
     } finally {
-      setLoadingTouchpoints(false);
+      setLoadingData(false);
     }
   }, [provider.id]);
 
   useEffect(() => {
-    fetchTouchpoints();
-  }, [fetchTouchpoints]);
+    fetchProviderData();
+  }, [fetchProviderData]);
 
   // Reset notes when provider changes
   useEffect(() => {
@@ -312,6 +628,34 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
     }
   };
 
+  const handleMarkMeetingComplete = async () => {
+    // When meeting is complete, move to "pitched" stage and open the pitch logger
+    try {
+      const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pipeline_stage: "pitched",
+          meeting_completed_at: new Date().toISOString(),
+        }),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to mark meeting complete");
+      }
+      // Open the pitch logger to capture pitch details
+      setActiveAction("pitch");
+      onUpdate();
+    } catch (e) {
+      console.error("Failed to mark meeting complete:", e);
+    }
+  };
+
+  const handleMarkUpgradeComplete = async () => {
+    // When upgrade meeting is complete, open the upgrade outcome logger
+    // The user will then choose whether they upgraded or not
+    setActiveAction("upgrade");
+  };
+
   const handleMarkNotInterested = async () => {
     if (!confirm("Mark this provider as not interested?")) return;
 
@@ -346,6 +690,22 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
       onUpdate();
     } catch (e) {
       console.error("Failed to re-engage:", e);
+    }
+  };
+
+  const handleUpdateConversionStatus = async (updates: { ads_status?: string; medjobs_status?: string }) => {
+    try {
+      const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to update conversion status");
+      }
+      onUpdate();
+    } catch (e) {
+      console.error("Failed to update conversion status:", e);
     }
   };
 
@@ -389,6 +749,7 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
       provider={provider}
       onScheduleMeeting={() => setActiveAction("schedule")}
       onLogPitch={() => setActiveAction("pitch")}
+      onLogUpgradeOutcome={() => setActiveAction("upgrade")}
       onAddNote={() => setActiveAction("notes")}
       onMarkNotInterested={handleMarkNotInterested}
       onReEngage={handleReEngage}
@@ -424,6 +785,29 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
           </div>
         )}
 
+        {activeAction === "upgrade" && (
+          <div className="mb-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <UpgradeOutcomeLogger
+              provider={provider}
+              onSubmit={async (outcome) => {
+                try {
+                  const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(outcome),
+                  });
+                  if (!res.ok) throw new Error("Failed to log outcome");
+                  setActiveAction(null);
+                  onUpdate();
+                } catch (e) {
+                  console.error("Failed to log upgrade outcome:", e);
+                }
+              }}
+              onCancel={() => setActiveAction(null)}
+            />
+          </div>
+        )}
+
         {activeAction === "notes" && (
           <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
             <label className="block text-sm font-medium text-gray-700 mb-2">Notes</label>
@@ -431,7 +815,7 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={4}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
               placeholder="Add notes about this provider..."
               autoFocus
             />
@@ -445,7 +829,7 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
               <button
                 onClick={handleSaveNotes}
                 disabled={savingNotes}
-                className="px-4 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                className="px-4 py-1.5 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50"
               >
                 {savingNotes ? "Saving..." : "Save"}
               </button>
@@ -458,38 +842,31 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
 
         {(provider.phone || provider.email) && <SectionDivider />}
 
-        {/* Status Cards */}
-        <div className="grid grid-cols-2 gap-3">
-          {/* Eligibility */}
-          <div className="p-3 bg-gray-50 rounded-lg">
-            <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-2">
-              Eligibility
-            </div>
+        {/* Meeting Info - when meeting is scheduled */}
+        <MeetingInfoSection
+          provider={provider}
+          onMarkComplete={handleMarkMeetingComplete}
+          onMarkUpgradeComplete={handleMarkUpgradeComplete}
+        />
+
+        {(provider.pipeline_stage === "meeting_scheduled" || provider.pipeline_stage === "upgrade_meeting") &&
+          provider.meeting_scheduled_at && (
+          <SectionDivider />
+        )}
+
+        {/* Eligibility & Profile - inline row */}
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center gap-2">
             <EligibilityBadges
               adsEligible={provider.ads_eligible}
               medjobsEligible={provider.medjobs_eligible}
               medjobsUniversity={provider.medjobs_catchment_university}
-              size="md"
+              size="sm"
             />
           </div>
-
-          {/* Profile completeness */}
-          <div className="p-3 bg-gray-50 rounded-lg">
-            <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-2">
-              Profile
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-emerald-500 rounded-full transition-all"
-                  style={{ width: `${provider.profile_completeness || 0}%` }}
-                />
-              </div>
-              <span className="text-sm font-medium text-gray-700">
-                {provider.profile_completeness || 0}%
-              </span>
-            </div>
-          </div>
+          <span className="text-gray-500">
+            Profile {provider.profile_completeness || 0}%
+          </span>
         </div>
 
         {/* Conversion status */}
@@ -561,6 +938,12 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
           </>
         )}
 
+        {/* Conversion Actions - for pitched/upgrade_meeting providers */}
+        <ConversionActionsSection
+          provider={provider}
+          onUpdateStatus={handleUpdateConversionStatus}
+        />
+
         {/* Notes */}
         {provider.notes && !activeAction && (
           <>
@@ -576,6 +959,43 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
 
         <SectionDivider />
 
+        {/* Engagement - Questions and Leads from families */}
+        <div>
+          <SectionHeader>Platform Engagement</SectionHeader>
+          {loadingData ? (
+            <div className="flex items-center justify-center py-4">
+              <span className="w-4 h-4 border-2 border-gray-200 border-t-primary-600 rounded-full animate-spin" />
+            </div>
+          ) : engagement ? (
+            <div className="space-y-2">
+              {/* Questions */}
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Questions from families</span>
+                <span className={`text-sm font-medium ${engagement.questions_count > 0 ? "text-gray-900" : "text-gray-400"}`}>
+                  {engagement.questions_count}
+                </span>
+              </div>
+              {/* Leads */}
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Leads received</span>
+                <span className={`text-sm font-medium ${engagement.leads_count > 0 ? "text-gray-900" : "text-gray-400"}`}>
+                  {engagement.leads_count}
+                </span>
+              </div>
+              {/* Helpful context for sales */}
+              {(engagement.questions_count > 0 || engagement.leads_count > 0) && (
+                <p className="text-xs text-gray-400 mt-2 italic">
+                  Use this to show the provider they&apos;re getting value from the platform.
+                </p>
+              )}
+            </div>
+          ) : (
+            <p className="text-sm text-gray-400 italic">No engagement data</p>
+          )}
+        </div>
+
+        <SectionDivider />
+
         {/* Call Log */}
         <CallLogSection
           trackingId={provider.id}
@@ -585,12 +1005,12 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
 
         <SectionDivider />
 
-        {/* Activity timeline */}
+        {/* Admin Activity - touchpoints log */}
         <div>
-          <SectionHeader>Activity</SectionHeader>
-          {loadingTouchpoints ? (
+          <SectionHeader>Admin Activity</SectionHeader>
+          {loadingData ? (
             <div className="flex items-center justify-center py-4">
-              <span className="w-4 h-4 border-2 border-gray-200 border-t-blue-600 rounded-full animate-spin" />
+              <span className="w-4 h-4 border-2 border-gray-200 border-t-primary-600 rounded-full animate-spin" />
             </div>
           ) : touchpoints.length === 0 ? (
             <p className="text-sm text-gray-400 italic">No activity yet</p>

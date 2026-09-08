@@ -13,6 +13,10 @@ import { canTransitionTo } from "@/lib/provider-growth/stages";
  *
  * Generate a Calendly booking URL for a provider and optionally
  * mark them as having a meeting scheduled (when webhook confirms).
+ *
+ * When manually scheduling (with meeting_scheduled_at):
+ * - Converted providers (free_intro or in_pilot) → upgrade_meeting stage
+ * - Non-converted providers → meeting_scheduled stage
  */
 export async function POST(request: NextRequest) {
   try {
@@ -49,8 +53,15 @@ export async function POST(request: NextRequest) {
 
     // If manually scheduling (without Calendly)
     if (meeting_scheduled_at) {
+      // Determine target stage based on conversion status:
+      // - Converted providers (free trial) → upgrade_meeting
+      // - Non-converted providers → meeting_scheduled
+      const isConverted =
+        current.ads_status === "free_intro" || current.medjobs_status === "in_pilot";
+      const targetStage = isConverted ? "upgrade_meeting" : "meeting_scheduled";
+
       // Validate stage transition
-      if (!canTransitionTo(current.pipeline_stage, "meeting_scheduled")) {
+      if (!canTransitionTo(current.pipeline_stage, targetStage)) {
         return NextResponse.json(
           { error: `Cannot schedule meeting from stage: ${current.pipeline_stage}` },
           { status: 400 }
@@ -60,7 +71,7 @@ export async function POST(request: NextRequest) {
       const updated = await updateTracking(
         tracking_id,
         {
-          pipeline_stage: "meeting_scheduled",
+          pipeline_stage: targetStage,
           meeting_scheduled_at,
           calendly_event_id: calendly_event_id || null,
         },
@@ -75,6 +86,7 @@ export async function POST(request: NextRequest) {
           meeting_scheduled_at,
           calendly_event_id,
           method: "manual",
+          target_stage: targetStage,
         },
         admin_user_id: adminUser.id,
       });
@@ -83,10 +95,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate Calendly booking URL
+    // Use contact_name if available, otherwise fall back to provider_name
     const bookingUrl = generateBookingUrl({
       trackingId: tracking_id,
-      providerName: provider_name,
-      contactName: contact_name,
+      contactName: contact_name || provider_name,
       contactEmail: contact_email,
     });
 
