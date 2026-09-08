@@ -9,12 +9,25 @@ export type GrowthClientEvent =
   | "lead_started"
   | "contact_intent";
 
+/**
+ * Categories that are NOT organic pages and so are never returned by
+ * classifyOrganicPage(). A caller passes one explicitly to opt a page into
+ * growth tracking without it entering the organic reporting path.
+ */
+export type NonOrganicPageCategory = "city_landing";
+
 interface TrackGrowthEventInput {
   eventType: GrowthClientEvent;
   pagePath?: string;
   ctaId?: string;
   ctaSurface?: string;
   metadata?: Record<string, unknown>;
+  /**
+   * Explicit category for pages the organic classifier deliberately rejects —
+   * today only the paid /care/{city} landings. Leave unset for organic pages so
+   * classifyOrganicPage stays the single source of truth for those.
+   */
+  pageCategory?: NonOrganicPageCategory;
 }
 
 /**
@@ -24,7 +37,7 @@ interface TrackGrowthEventInput {
 export function trackGrowthEvent(input: TrackGrowthEventInput): void {
   if (typeof window === "undefined" || isPreviewMode()) return;
   const pagePath = input.pagePath || window.location.pathname;
-  const pageCategory = classifyOrganicPage(pagePath);
+  const pageCategory = input.pageCategory ?? classifyOrganicPage(pagePath);
   if (!pageCategory) return;
 
   const sp = new URLSearchParams(window.location.search);

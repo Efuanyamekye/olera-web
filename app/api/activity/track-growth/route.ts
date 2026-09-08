@@ -13,6 +13,14 @@ const CLIENT_EVENTS = new Set([
   "contact_intent",
 ]);
 
+/**
+ * Page categories a client may declare for itself, used only when the organic
+ * classifier returns null. Keeps paid landing pages out of the organic
+ * reporting path while still giving them a funnel. Must stay in sync with the
+ * page_category CHECK on growth_attribution_events (migration 216).
+ */
+const NON_ORGANIC_CATEGORIES = new Set(["city_landing"]);
+
 function getServiceDb() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -69,7 +77,15 @@ export async function POST(request: NextRequest) {
     const anonymousId = typeof body.anonymous_id === "string" ? body.anonymous_id : "";
     const visitId = typeof body.visit_id === "string" ? body.visit_id : "";
     const pagePath = normalizeOrganicPagePath(typeof body.page_path === "string" ? body.page_path : "");
-    const category = pagePath ? classifyOrganicPage(pagePath) : null;
+    // Organic pages are classified server-side so the client cannot invent a
+    // category. Paid pages that the organic classifier deliberately rejects
+    // (/care/{city}) may declare one, but only from a closed allowlist — they
+    // must never be able to claim 'provider', 'benefit' or 'editorial' and so
+    // leak paid traffic into the organic reporting path.
+    const declared = typeof body.page_category === "string" ? body.page_category : "";
+    const category = pagePath
+      ? (classifyOrganicPage(pagePath) ?? (NON_ORGANIC_CATEGORIES.has(declared) ? declared : null))
+      : null;
     if (
       !CLIENT_EVENTS.has(eventType) || !anonymousId || !visitId || !pagePath || !category
       || anonymousId.length > 128 || visitId.length > 128 || pagePath.length > 1_000

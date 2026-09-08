@@ -37,6 +37,14 @@ type Campaign = {
   ad_clicks: number | null;
   ad_impressions: number | null;
   metrics_updated_at: string | null;
+  /**
+   * The campaign's running narrative: what was built and why, what we are
+   * seeing, and what has already been ruled out. Same role as `admin_note` on
+   * an Ad Boost row. It exists to stop a later session re-deriving a diagnosis
+   * that was reached and discarded once already, so it is shown here rather
+   * than only living in the database.
+   */
+  admin_note: string | null;
 };
 
 type Provider = { id: string; display_name: string | null; city: string | null; phone: string | null; email: string | null } | null;
@@ -532,7 +540,19 @@ function CampaignRow({ c, busy, act }: { c: Campaign; busy: boolean; act: (label
   const [impr, setImpr] = useState("");
   const [pid, setPid] = useState<string | null>(null);
   const [menu, setMenu] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteDraft, setNoteDraft] = useState<string | null>(null); // null = reading, not editing
   const typed = c.ad_spend_cents !== null || c.ad_clicks !== null || c.ad_impressions !== null;
+  const note = c.admin_note ?? "";
+
+  const saveNote = async () => {
+    const ok = await act("Note", {
+      action: "update_campaign",
+      id: c.id,
+      fields: { admin_note: noteDraft ?? "" },
+    });
+    if (ok) setNoteDraft(null);
+  };
 
   const begin = () => {
     setSpend(c.ad_spend_cents === null ? "" : (c.ad_spend_cents / 100).toFixed(2));
@@ -555,7 +575,8 @@ function CampaignRow({ c, busy, act }: { c: Campaign; busy: boolean; act: (label
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 py-2.5">
+    <div className="py-2.5">
+    <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
       <span className="w-40 font-medium text-gray-900">
         {cap(c.channel)} · {money(c.budget_cents)}
         {c.max_cpc_cents ? ` · ${money(c.max_cpc_cents)} cap` : ""}
@@ -611,7 +632,48 @@ function CampaignRow({ c, busy, act }: { c: Campaign; busy: boolean; act: (label
             enter spend and clicks
           </button>
         )}
+        {" · "}
+        <button className="font-medium text-primary-700" onClick={() => setNoteOpen((o) => !o)}>
+          {noteOpen ? "hide notes" : note ? "notes" : "add notes"}
+        </button>
       </span>
+    </div>
+
+    {noteOpen && (
+      <div className="mt-2 border-l-2 border-gray-200 pl-3">
+        {noteDraft === null ? (
+          <>
+            {note ? (
+              <p className="whitespace-pre-wrap text-xs leading-relaxed text-gray-700">{note}</p>
+            ) : (
+              <p className="text-xs italic text-gray-500">
+                No notes yet. Record what was built and why, what you are seeing, and what has already been ruled out.
+              </p>
+            )}
+            <button className="mt-1.5 text-xs font-medium text-primary-700" onClick={() => setNoteDraft(note)}>
+              {note ? "edit" : "write one"}
+            </button>
+          </>
+        ) : (
+          <>
+            <textarea
+              className={`${input} h-64 w-full font-mono text-xs leading-relaxed`}
+              value={noteDraft}
+              onChange={(e) => setNoteDraft(e.target.value)}
+              disabled={busy}
+            />
+            <div className="mt-1.5 flex gap-1.5">
+              <button className={btnPri} disabled={busy} onClick={() => void saveNote()}>
+                Save
+              </button>
+              <button className={btn} disabled={busy} onClick={() => setNoteDraft(null)}>
+                Cancel
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    )}
     </div>
   );
 }
