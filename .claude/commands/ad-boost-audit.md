@@ -10,7 +10,7 @@ It was written the day after a two-month program failure was reconstructed by ha
 
 | | **Full book** (no arguments) | **Targeted** (`/ad-boost-audit Franchil`, `/ad-boost-audit 24166094865`) |
 |---|---|---|
-| Scope | Every campaign that has ever run, grouped by provider | One provider, **every flight they have run** — never just the current one |
+| Scope | Every campaign that has ever run — provider campaigns grouped by provider, **plus the Olera-owned city campaigns** | One provider, **every flight they have run** — never just the current one. A city slug (`/ad-boost-audit charlotte`) audits that city arm across channels |
 | Depth | Case file per campaign, cross-case patterns table | Everything below, plus whatever the specific question needs |
 | Output | State-of-play document + one `observation` per campaign in `ad_campaign_log` | One case file, written to the log, and the answer stated plainly |
 | Use when | Monthly, or whenever the program's premise is in question | A sweep flagged a campaign it could not explain; a provider asks why; two flights disagree |
@@ -95,7 +95,11 @@ Then `list_pages` twice (the first reports the reconnect), confirm `outerWidth >
 
 Set the date range to **All time** once (date picker → "All time"); it carries across pages. The default 30-day window renders ended campaigns as zeros and looks like "no data."
 
-For every campaign object the provider has ever had:
+For every campaign object the provider has ever had — **and for both Olera City campaigns, every time, in full-book mode**:
+
+> **The city campaigns do not appear in the `/aw/campaigns` list under the saved view's filters.** A sweep driven off that table will silently skip them, which is how they went unaudited until 7 Sep 2026. Reach them by `campaignId`: Charlotte `24223751948`, Dallas `24223844624`. Everything below applies to them unchanged — keywords, search terms, negatives, change history, settings.
+>
+> **They are also the only campaigns in the account where Olera pays the bill**, so an unread number there costs us directly rather than a provider. They are the first campaigns to read, not the last.
 
 1. **Campaign row** — `/aw/campaigns?ocid=984737409`, all 14 on one page at Show rows 50. Read impressions, interactions, cost, avg CPC, **Search lost IS (rank)**, **Search lost IS (budget)**, conversions. The last two are diagnostic: every home-care campaign that has ever served loses 72–89% to rank and 3–35% to budget. A campaign at >90% rank / 0.00% budget with zero impressions is not budget-limited — lost-IS-budget is degenerate at zero impressions and proves nothing.
 
@@ -139,6 +143,12 @@ POST /api/admin/ad-boost/case
   metrics_snapshot: { impressions, clicks, cost, avg_cpc, lost_is_rank, lost_is_budget, inquiries },
   occurred_at: <now> }
 ```
+
+**City campaigns log to the same table, keyed differently.** `ad_campaign_log` has a nullable `city_campaign_id`; a city entry sets that and `google_campaign_id` and leaves `request_id` null. The `/api/admin/ad-boost/case` route is provider-keyed, so write city entries straight to `ad_campaign_log` with the service-role key rather than through it.
+
+**Their running narrative lives in `city_campaigns.admin_note`, not `ad_campaign_requests`.** Update it with `POST /api/admin/ad-boost` → no; use `POST /api/admin/city-ads` `{ action: "update_campaign", id: "<city_campaigns.id>", fields: { admin_note: "..." } }`, or PATCH the row directly. That field is rendered on `/admin/city-ads` per campaign row, so it is read, not just stored.
+
+**Append to a note, never overwrite it.** The note is the only durable record of what was decided at build time and why, and Phase 0 step 2 depends on it surviving.
 
 One `observation` per campaign. If the audit proposes a change, that is a **separate `tweak`** with `before_state`, `after_state`, `expected_signal`, `review_after` — and it is **TJ-gated**: present it, get his go, then make the change in Google, then log it. Never make a live change from inside an audit without that gate; the audit's job is to explain, and a change made mid-explanation muddies the next read.
 
