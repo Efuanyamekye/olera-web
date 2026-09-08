@@ -231,8 +231,11 @@ export async function POST(req: NextRequest) {
         if (!sent.success) {
           return NextResponse.json({ error: sent.error ?? "Twilio would not take the message" }, { status: 502 });
         }
+        // A suppressed number is NOT a success. Returning ok here would let the
+        // client clear the compose box on a message that never went anywhere,
+        // and the sender would have to retype it to find that out.
         if (sent.skipped) {
-          return NextResponse.json({ ok: true, message: "Not sent — that number is on the do-not-contact list." });
+          return NextResponse.json({ error: "Not sent — that number is on the do-not-contact list." }, { status: 409 });
         }
         return NextResponse.json({ ok: true, message: `Texted ${String(lead.first_name ?? "them").split(/\s+/)[0]}` });
       }

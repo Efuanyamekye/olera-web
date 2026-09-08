@@ -408,14 +408,17 @@ function OfferTo({ lead, pool, busy, primary, onPick }: { lead: Lead; pool: Pool
   );
 }
 
+/** Keys are the real `email_type` values written by lib/city-ads/offers.server.ts
+ *  and app/api/city-leads/route.ts — note `city_lead_accepted_family`, which does
+ *  NOT follow the `city_lead_family_*` shape the others use. */
 const TEXT_LABEL: Record<string, string> = {
   city_lead_family_confirm: "Confirmation",
   city_lead_family_still_working: "Still working on it",
-  city_lead_family_accepted: "Provider named",
+  city_lead_accepted_family: "Provider named",
   city_lead_family_check: "Did they call you?",
-  city_lead_family_manual: "From you",
+  city_lead_family_reoffer: "Looking again",
   city_lead_family_medical: "Medical redirect",
-  city_lead_family_concierge: "Concierge confirmation",
+  city_lead_family_manual: "From you",
 };
 
 /** "Ann McDade" -> "Ann". first_name holds whatever they typed into one box. */
@@ -446,7 +449,7 @@ function FamilyTexts({ lead: l, busy, act }: { lead: Lead; busy: boolean; act: (
         {sent.map((t) => (
           <li key={t.id} className="text-xs">
             <span className="text-gray-400">{fmtTime(t.created_at)}</span>{" "}
-            <span className="font-medium text-gray-700">{TEXT_LABEL[t.email_type] ?? t.email_type.replace(/^city_lead_family_/, "").replace(/_/g, " ")}</span>
+            <span className="font-medium text-gray-700">{TEXT_LABEL[t.email_type] ?? t.email_type.replace(/^city_lead_/, "").replace(/_/g, " ")}</span>
             {t.status !== "sent" && <span className="ml-1.5 text-error-700">{t.status}</span>}
             {t.html_body && <span className="mt-0.5 block text-gray-600">&ldquo;{t.html_body}&rdquo;</span>}
           </li>
