@@ -28,4 +28,10 @@ jobs = json.dumps([{'html': os.path.abspath('activation.html'),
                     'pdf': os.path.abspath('activation.pdf'),
                     'footer': 'University Activation'}])
 subprocess.run(['node', 'html2pdf.mjs', jobs], check=True)
-subprocess.run(['cp', 'activation.pdf', '../MedJobs_University_Activation_Guide.pdf'], check=True)
+
+# Deliberately no copy to ../MedJobs_University_Activation_Guide.pdf.
+# The served copy is a hand-polished version of this build, so copying over
+# it on every run would throw that work away silently. Compare the two, then
+# copy on purpose when the source has genuinely moved ahead:
+#     cp activation.pdf ../MedJobs_University_Activation_Guide.pdf
+print('built activation.pdf. The served guide is NOT overwritten; see README.')

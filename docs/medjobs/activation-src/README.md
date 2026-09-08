@@ -1,8 +1,20 @@
 # University Activation guide, source
 
-`ACTIVATION.md` is the source. `python3 build.py` produces
-`../MedJobs_University_Activation_Guide.pdf`, which
-`/api/admin/medjobs/sop?doc=activation` serves behind the admin guard.
+`ACTIVATION.md` is the source. `python3 build.py` produces `activation.pdf`
+here.
+
+**The served copy is hand-polished and is not overwritten by the build.**
+`../MedJobs_University_Activation_Guide.pdf` is what
+`/api/admin/medjobs/sop?doc=activation` serves, and what the CRM tab links
+to. It started as this build and was then edited by hand, so `build.py`
+deliberately does not copy over it. When the source moves genuinely ahead,
+compare the two and copy on purpose:
+
+    cp activation.pdf ../MedJobs_University_Activation_Guide.pdf
+
+Keeping both means the markdown can drift from what the Consumer Relations
+Manager actually reads. Check them against each other whenever the workflow
+changes.
 
 Same renderer and house style as `matrix-src` and `roles-src`, so the five
 documents read as one set. `build.py` adds only figure sizing, because this
