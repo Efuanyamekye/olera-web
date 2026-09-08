@@ -183,8 +183,8 @@ meeting is logged.
 | Where | What the master says |
 |---|---|
 | **ST3 to ST7 ownership** | The stage is owned by the *"Consumer Relations Manager, with the Sales Lead where a physician in the room changes the answer"* |
-| **ST5 campus events** | Who acts: *"USM and Sales Lead attend"* |
-| **ST7 professors and class visits** | Who acts: *"USM and Sales Lead, once permitted"* |
+| **ST5 campus events** | Who acts: *"Consumer Relations Manager and Sales Lead attend"* |
+| **ST7 professors and class visits** | Who acts: *"Consumer Relations Manager and Sales Lead, once permitted"* |
 
 Read the second and third together with the first: the Consumer Relations Manager works the
 plan, and you are in the room where a physician's presence is what makes the ask land.
