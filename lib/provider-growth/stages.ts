@@ -164,6 +164,7 @@ export const TOUCHPOINT_TYPES = [
   "meeting_cancelled",
   "pitch_logged",
   "note_added",
+  "call_attempted",
   "ads_converted",
   "medjobs_converted",
   "ads_upgraded",
@@ -175,6 +176,42 @@ export const TOUCHPOINT_TYPES = [
 
 export type TouchpointType = (typeof TOUCHPOINT_TYPES)[number];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Call Statuses (for call_attempted touchpoints)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const CALL_STATUSES = [
+  "voicemail",
+  "no_answer",
+  "hung_up",
+  "callback",
+  "spoke_with",
+  "scheduled",
+  "note",
+] as const;
+
+export type CallStatus = (typeof CALL_STATUSES)[number];
+
+export const CALL_STATUS_LABELS: Record<CallStatus, string> = {
+  voicemail: "Voicemail",
+  no_answer: "No Answer",
+  hung_up: "Hung Up",
+  callback: "Callback Requested",
+  spoke_with: "Spoke With",
+  scheduled: "Meeting Scheduled",
+  note: "Note",
+};
+
+export const CALL_STATUS_COLORS: Record<CallStatus, string> = {
+  voicemail: "bg-amber-100 text-amber-800",
+  no_answer: "bg-gray-100 text-gray-800",
+  hung_up: "bg-red-100 text-red-800",
+  callback: "bg-blue-100 text-blue-800",
+  spoke_with: "bg-purple-100 text-purple-800",
+  scheduled: "bg-emerald-100 text-emerald-800",
+  note: "bg-slate-100 text-slate-800",
+};
+
 export const TOUCHPOINT_TYPE_LABELS: Record<TouchpointType, string> = {
   stage_changed: "Stage Changed",
   meeting_scheduled: "Meeting Scheduled",
@@ -182,6 +219,7 @@ export const TOUCHPOINT_TYPE_LABELS: Record<TouchpointType, string> = {
   meeting_cancelled: "Meeting Cancelled",
   pitch_logged: "Pitch Logged",
   note_added: "Note Added",
+  call_attempted: "Call Attempted",
   ads_converted: "Started Ads Free Trial",
   medjobs_converted: "Started MedJobs Pilot",
   ads_upgraded: "Upgraded to Ads Subscription",

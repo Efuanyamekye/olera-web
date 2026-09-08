@@ -5,22 +5,31 @@
  *
  * Pipeline tabs: New Claims | Meeting Scheduled | Pitched | Not Interested
  * Conversion tabs: Converted (with Ads/MedJobs subtabs) | Paying (with subtabs)
+ *
+ * New Claims has subtabs: Not Contacted | In Progress
  */
 
 import type { GrowthStats } from "@/lib/provider-growth/queries";
 
 export type PipelineTab = "new_claim" | "meeting_scheduled" | "pitched" | "not_interested";
+export type NewClaimSubTab = "not_contacted" | "in_progress";
 export type ConversionTab = "converted" | "paying";
 export type ConversionSubTab = "ads" | "medjobs" | "both";
 export type ActiveTab =
-  | { type: "pipeline"; stage: PipelineTab }
+  | { type: "pipeline"; stage: PipelineTab; subTab?: NewClaimSubTab }
   | { type: "conversion"; tab: ConversionTab; subTab: ConversionSubTab };
 
 interface GrowthTabsProps {
   activeTab: ActiveTab;
   onTabChange: (tab: ActiveTab) => void;
   stats: GrowthStats | null;
+  newClaimSubtabCounts?: { notContacted: number; inProgress: number };
 }
+
+const NEW_CLAIM_SUB_TABS: Array<{ id: NewClaimSubTab; label: string }> = [
+  { id: "not_contacted", label: "Not Contacted" },
+  { id: "in_progress", label: "In Progress" },
+];
 
 const PIPELINE_TABS: Array<{ id: PipelineTab; label: string }> = [
   { id: "new_claim", label: "New Claims" },
@@ -40,7 +49,7 @@ const CONVERSION_SUB_TABS: Array<{ id: ConversionSubTab; label: string }> = [
   { id: "both", label: "Both" },
 ];
 
-export function GrowthTabs({ activeTab, onTabChange, stats }: GrowthTabsProps) {
+export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts }: GrowthTabsProps) {
   const getCount = (tab: PipelineTab | ConversionTab | ConversionSubTab): number => {
     if (!stats) return 0;
 
@@ -85,6 +94,14 @@ export function GrowthTabs({ activeTab, onTabChange, stats }: GrowthTabsProps) {
   const isSubTabActive = (id: ConversionSubTab) =>
     activeTab.type === "conversion" && activeTab.subTab === id;
 
+  const isNewClaimSubTabActive = (id: NewClaimSubTab) =>
+    activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === id;
+
+  const getNewClaimSubTabCount = (id: NewClaimSubTab): number => {
+    if (!newClaimSubtabCounts) return 0;
+    return id === "not_contacted" ? newClaimSubtabCounts.notContacted : newClaimSubtabCounts.inProgress;
+  };
+
   return (
     <div className="mb-6">
       {/* Main tabs */}
@@ -94,7 +111,12 @@ export function GrowthTabs({ activeTab, onTabChange, stats }: GrowthTabsProps) {
           <button
             key={tab.id}
             onClick={() => {
-              onTabChange({ type: "pipeline", stage: tab.id });
+              // For new_claim, default to "not_contacted" subtab
+              if (tab.id === "new_claim") {
+                onTabChange({ type: "pipeline", stage: tab.id, subTab: "not_contacted" });
+              } else {
+                onTabChange({ type: "pipeline", stage: tab.id });
+              }
             }}
             className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
               isPipelineActive(tab.id)
@@ -144,6 +166,34 @@ export function GrowthTabs({ activeTab, onTabChange, stats }: GrowthTabsProps) {
           </button>
         ))}
       </div>
+
+      {/* New Claims sub-tabs */}
+      {activeTab.type === "pipeline" && activeTab.stage === "new_claim" && (
+        <div className="flex gap-1 mt-2 pl-4">
+          {NEW_CLAIM_SUB_TABS.map((subTab) => (
+            <button
+              key={subTab.id}
+              onClick={() =>
+                onTabChange({
+                  type: "pipeline",
+                  stage: "new_claim",
+                  subTab: subTab.id,
+                })
+              }
+              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
+                isNewClaimSubTabActive(subTab.id)
+                  ? "bg-blue-100 text-blue-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {subTab.label}
+              <span className="ml-1 text-[10px] opacity-70">
+                ({getNewClaimSubTabCount(subTab.id)})
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Conversion sub-tabs */}
       {activeTab.type === "conversion" && (

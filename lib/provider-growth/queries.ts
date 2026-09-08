@@ -71,6 +71,8 @@ export interface ProviderGrowthWithProfile extends ProviderGrowthTracking {
   // Engagement metrics (joined)
   lead_count?: number;
   question_count?: number;
+  // Call tracking
+  call_count?: number;
 }
 
 export interface GrowthStats {
@@ -135,6 +137,95 @@ export async function getGrowthStats(): Promise<GrowthStats> {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Call Count Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Get call counts for a list of tracking IDs.
+ * Returns a Map of tracking_id -> call_count.
+ */
+export async function getCallCountsForTrackingIds(
+  trackingIds: string[]
+): Promise<Map<string, number>> {
+  if (trackingIds.length === 0) {
+    return new Map();
+  }
+
+  const db = getServiceClient();
+
+  // Fetch call_attempted touchpoints grouped by tracking_id
+  // We have to do this in batches to avoid URL length limits
+  const counts = new Map<string, number>();
+  const BATCH_SIZE = 100;
+
+  for (let i = 0; i < trackingIds.length; i += BATCH_SIZE) {
+    const batchIds = trackingIds.slice(i, i + BATCH_SIZE);
+
+    const { data, error } = await db
+      .from("provider_growth_touchpoints")
+      .select("tracking_id")
+      .in("tracking_id", batchIds)
+      .eq("touchpoint_type", "call_attempted");
+
+    if (error) {
+      console.error("[provider-growth] Call count query error:", error);
+      continue;
+    }
+
+    // Count occurrences per tracking_id
+    for (const row of data ?? []) {
+      const id = row.tracking_id;
+      counts.set(id, (counts.get(id) || 0) + 1);
+    }
+  }
+
+  return counts;
+}
+
+/**
+ * Get counts for New Claims subtabs (Not Contacted vs In Progress).
+ * Returns { notContacted, inProgress } where inProgress means has call attempts.
+ */
+export async function getNewClaimSubtabCounts(): Promise<{
+  notContacted: number;
+  inProgress: number;
+}> {
+  const db = getServiceClient();
+
+  // Get all new_claim tracking IDs
+  const { data: newClaims, error: claimsError } = await db
+    .from("provider_growth_tracking")
+    .select("id")
+    .eq("pipeline_stage", "new_claim");
+
+  if (claimsError || !newClaims) {
+    console.error("[provider-growth] New claims query error:", claimsError);
+    return { notContacted: 0, inProgress: 0 };
+  }
+
+  const trackingIds = newClaims.map((c) => c.id);
+  if (trackingIds.length === 0) {
+    return { notContacted: 0, inProgress: 0 };
+  }
+
+  // Get call counts
+  const callCounts = await getCallCountsForTrackingIds(trackingIds);
+
+  // Count providers with/without calls
+  let inProgress = 0;
+  for (const id of trackingIds) {
+    if ((callCounts.get(id) || 0) > 0) {
+      inProgress++;
+    }
+  }
+
+  return {
+    notContacted: trackingIds.length - inProgress,
+    inProgress,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // List Queries
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -152,6 +243,8 @@ export interface ListProvidersOptions {
   offset?: number;
   orderBy?: "claimed_at" | "meeting_scheduled_at" | "pipeline_stage_changed_at" | "last_activity_at";
   orderDirection?: "asc" | "desc";
+  // Filter by call status for new_claim subtabs
+  hasCallAttempts?: boolean;
 }
 
 export async function listProviders(options: ListProvidersOptions = {}): Promise<{
@@ -172,6 +265,7 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     offset = 0,
     orderBy = "claimed_at",
     orderDirection = "desc",
+    hasCallAttempts,
   } = options;
 
   // Build the query
@@ -283,7 +377,27 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     providers = providers.filter(
       (p) => p.display_name?.toLowerCase().includes(searchLower)
     );
-    // Paginate in memory after filtering
+  }
+
+  // Fetch call counts for all providers
+  const trackingIds = providers.map((p) => p.id);
+  const callCounts = await getCallCountsForTrackingIds(trackingIds);
+
+  // Add call_count to each provider
+  providers = providers.map((p) => ({
+    ...p,
+    call_count: callCounts.get(p.id) || 0,
+  }));
+
+  // Filter by hasCallAttempts if specified
+  if (hasCallAttempts !== undefined) {
+    providers = providers.filter((p) =>
+      hasCallAttempts ? (p.call_count || 0) > 0 : (p.call_count || 0) === 0
+    );
+  }
+
+  // Apply pagination in memory if we did search or hasCallAttempts filtering
+  if (search || hasCallAttempts !== undefined) {
     const filteredTotal = providers.length;
     providers = providers.slice(offset, offset + limit);
     return { providers, total: filteredTotal };

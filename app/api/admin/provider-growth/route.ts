@@ -88,6 +88,14 @@ export async function GET(request: NextRequest) {
       options.claimedTo = claimedTo;
     }
 
+    // Call attempts filter (for new_claim subtabs)
+    const hasCallAttempts = searchParams.get("hasCallAttempts");
+    if (hasCallAttempts === "true") {
+      options.hasCallAttempts = true;
+    } else if (hasCallAttempts === "false") {
+      options.hasCallAttempts = false;
+    }
+
     const limit = parseInt(searchParams.get("limit") || "50", 10);
     const offset = parseInt(searchParams.get("offset") || "0", 10);
     options.limit = Math.min(limit, 100);
