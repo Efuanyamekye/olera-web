@@ -137,12 +137,12 @@ their campus reaches them, and the output is the ST3 to ST7 plan.
 | | Channel | Ask | The answer the Consumer Relations Manager needs |
 |---|---|---|---|
 | **ST3** | University job board | Is there a board pre-health students actually check? Who posts, and does it need approval? | The board, the posting route, and who approves |
-| **ST4** | Student organisations | Which orgs reach these students, pre-med, pre-nursing, AMSA chapters? Who runs them this term? | Org names and current officers, with a warm introduction where they will make one |
-| **ST5** | Campus events | Which fairs or events are worth attending, and what are the deadlines and costs? | Event, date, registration deadline, who books the table |
-| **ST6** | Advisor listservs | Do you email these students directly? Would you send something for us? | Which list, who sends it, how often they are willing, and the copy they want |
+| **ST4** | Advisor listservs | Do you email these students directly? Would you send something for us? | Which list, who sends it, how often they are willing, and the copy they want |
+| **ST5** | Student organisations | Which orgs reach these students, pre-med, pre-nursing, AMSA chapters? Who runs them this term? | Org names and current officers, with a warm introduction where they will make one |
+| **ST6** | Campus events | Which fairs or events are worth attending, and what are the deadlines and costs? | Event, date, registration deadline, who books the table |
 | **ST7** | Professors and class visits | Which professors teach the courses these students take? Would an introduction be welcome? | Named professors, and explicitly whether we may approach them |
 
-**Permission is the deliverable on ST6 and ST7.** A listserv send and a class visit
+**Permission is the deliverable on ST4 and ST7.** A listserv send and a class visit
 both happen on someone else's authority. Write down who granted it and what exactly
 they agreed to, because the Consumer Relations Manager will be acting on it weeks later
 without having been in the room.
@@ -183,8 +183,8 @@ meeting is logged.
 | Where | What the master says |
 |---|---|
 | **ST3 to ST7 ownership** | The stage is owned by the *"Consumer Relations Manager, with the Sales Lead where a physician in the room changes the answer"* |
-| **ST5 campus events** | Who acts: *"USM and Sales Lead attend"* |
-| **ST7 professors and class visits** | Who acts: *"USM and Sales Lead, once permitted"* |
+| **ST6 campus events** | Who acts: *"Consumer Relations Manager and Sales Lead attend"* |
+| **ST7 professors and class visits** | Who acts: *"Consumer Relations Manager and Sales Lead, once permitted"* |
 
 Read the second and third together with the first: the Consumer Relations Manager works the
 plan, and you are in the room where a physician's presence is what makes the ask land.

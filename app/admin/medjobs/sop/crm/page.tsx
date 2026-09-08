@@ -31,6 +31,7 @@ export default function MedJobsSopCrmPage() {
       readerLabel="Standard Operating Procedure"
       jumps={JUMPS}
       openAt={JUMPS[0]}
+      alsoOpen={{ label: "University Activation guide", doc: "activation" }}
       above={(jump) => <RoleOrientation role="crm" onJump={jump} />}
     />
   );

@@ -126,27 +126,48 @@ give us ten minutes of a class. Work the plan per row, not per channel.
 3. **Supply ready-to-send copy for anything a partner sends.** The advisor should have
    to forward, not write. This is the single largest determinant of whether ST6
    actually happens.
-4. **Mark a channel *not available here* out loud.** A dead job board recorded as dead
-   is useful; a dead job board left blank looks like work nobody did.
-5. **Record the distribution when it happens**, being the channel, the date, the asset
+4. **Record the distribution when it happens**, being the channel, the date, the asset
    used, and a rough reach estimate, on the partner row.
-6. **Report results back to the partner.** *Your listserv produced eleven
+5. **Report results back to the partner.** *Your listserv produced eleven
    applications.* It is the reason they send the second one, and it is the natural
    moment to ask for the next thing.
-7. **Never let a secured channel go unwatched.** Every live channel carries a next
-   check date; working that date is the job.
-8. **Re-check the whole row each term.** A row fully activated in September is not
+6. **Re-check the whole row each term.** A row fully activated in September is not
    necessarily activated in January.
+
+### Decision rules
+
+These are the judgement calls that come up every week. They are settled in the master
+so you do not settle them differently at each campus.
+
+| Situation | Do this |
+|---|---|
+| The advisor says the board is dead | Mark ST3 *not available here* with the reason. Do not post anyway to have something recorded |
+| A send is agreed but no date is named | It is not secured. Secured means a date on the row |
+| Two weeks pass with no reply to your activation email | Send one follow-up. After that, ask the advisor for the introduction rather than chasing |
+| An officer graduates and nobody replaces them | The channel is **lapsed**, not secured. Re-secure with the new officer or move it back to *not yet* |
+| A professor has not answered twice | Stop. A third email costs advisor goodwill, which is worth more than one class visit |
+| A channel produced nothing after two distributions | Keep it and say so to the partner. Report the number; do not quietly drop the channel |
+| Anything clinical, or a physician in the room | Bring the Sales Lead in. Do not answer scope-of-practice questions yourself |
+
+### The asks, ready to send
+
+Each is short on purpose: a partner who has to edit is a partner who does not send.
+
+- **ST3 posting.** Title, one paragraph on the work, pay range, the apply link, and a named contact. Nothing that reads like an advertisement.
+- **ST4 officer.** *We work with your career office. Would you share one post with your members about paid caregiving shifts that fit around class? I will send it written and ready.*
+- **ST6 forward copy.** Subject line, three sentences, and the link, written so the advisor forwards it unedited under their own name. Never a PDF only.
+- **ST7 professor.** *[Advisor] suggested I write. Would ten minutes at the start or end of a class be welcome, or would you rather I send something for your course page?* Always name the advisor, and always offer the smaller option.
+- **ST5 table.** Registration deadline, cost, who staffs it, the flyer with the QR code, and who logs the scans afterwards. Booked is not the same as staffed.
 
 ### The five channels: who acts, secured, maintained
 
 | | Channel | Who acts | Secured means | Maintaining means | Rhythm |
 |---|---|---|---|---|---|
 | **ST3** | University job board | You post; the advisor or the board's owner approves | The listing is live and visible to students | Check the listing is still up and has not expired or been archived; repost or renew it when it has | Every few months |
-| **ST4** | Student organisations | You build the relationship; an officer shares it | An officer has shared it once | Refresh the relationship before it goes cold, and re-establish it with the new officers when leadership turns over | Ongoing, and every term |
-| **ST5** | Campus events | You and the Sales Lead attend | We are registered for a specific event on a specific date | Confirm the event is still scheduled and still on our date; rebook when it moves, and get on the next one after it passes | Before each event, then re-book |
-| **ST6** | Advisor listservs | You supply the copy; the advisor sends it | The advisor has agreed to send, and has our copy | Remind the advisor to send it, with fresh copy ready each time. The send happens because we asked | Each agreed send |
-| **ST7** | Professors and class visits | You and the Sales Lead, once permitted | A professor has agreed to an introduction or a visit | Follow up and email professors, its own kind of work, with its own record of who was contacted, who agreed, and which class was visited | Per professor, then per term |
+| **ST4** | Advisor listservs | You supply the copy; the advisor sends it | The advisor has agreed to send, and has our copy, **and a date is set** | Remind the advisor to send it, with fresh copy ready each time. The send happens because we asked | Each agreed send |
+| **ST5** | Student organisations | You build the relationship; an officer shares it | An officer has shared it once | Refresh the relationship before it goes cold, and re-establish it with the new officers when leadership turns over | Ongoing, and every term |
+| **ST6** | Campus events | You and the Sales Lead attend | We are registered for a named event on a named date | Confirm the event is still scheduled and still on our date; rebook when it moves, and get on the next one after it passes | Before each event, then re-book |
+| **ST7** | Professors and class visits | You and the Sales Lead, once permitted | A named professor has agreed to an introduction or a visit | Follow up per professor, with a record of who was contacted, who agreed, and which class was visited | Per professor, then per term |
 
 Each of these carries specifics the table cannot hold: which board, which officer,
 which fair and its registration deadline, which list and when it goes out, which
@@ -166,7 +187,23 @@ reach estimate.
 
 Your working state is the set of partner rows with live channels and the date each is
 next due. That is why the advisor follow-up tab and its queued tasks (**B9**, **B10**)
-are the difference between five universities and fifty.
+are the difference between five universities and fifty. ST7 has no record of its own
+until **B11** ships, and until **B12** does, a campus that activated all five channels
+and a campus that activated one look identical in the numbers. Say so when you report.
+
+### A worked row: Ohio State
+
+ST2 agreed the advisor would send to the pre-health listserv, that the job board is
+worth posting to, and that two orgs are worth approaching. After activation the row
+reads: **ST3 secured**, posted 14 September, next check 15 December. **ST6 secured**,
+advisor Dana Whitfield, first send 21 September, reach about 900, second send agreed
+for January. **ST4 partial**, AMSA chapter shared it on 2 October, pre-nursing society
+*not yet*, officer elections in November. **ST5 not yet**, spring health careers fair,
+registration opens 1 November, that date on the row now. **ST7 not available here**,
+the advisor asked us not to approach faculty this term, recorded with the reason so
+nobody tries again in March.
+
+Four of five moving, one closed with a reason, and every one of them carrying a date.
 
 [Back to top](#top)
 {: .totop }
@@ -493,7 +530,7 @@ sequence, handoffs and completion criteria are carried over unchanged.
 |---|---|
 | What client success is | PR3, *What client success is*, and the not-built note above it |
 | PR3, all of it | PR3 objective, journey table with its Built? column, procedure steps 2 to 7, system and handoff row, communications |
-| ST3 to ST7, all of it | ST3 to ST7 objective, the does-not-close and no-generic-version notes, the who-acts table, procedure steps 1 to 8, the secured and maintaining table, the ST7 workstream note, system and handoff row |
+| ST3 to ST7, all of it | ST3 to ST7 objective, the does-not-close and no-generic-version notes, the who-acts table, procedure steps 1 to 6, the decision rules, the ready-to-send asks, the secured and maintaining table, the ST7 workstream note, the worked example, system and handoff row |
 | Portal exceptions, ST8 | ST8 owner line and procedure steps 1 to 4; the nudge ladder |
 | Portal exceptions, QUAL | QUAL owner line and procedure steps 1 to 3 |
 | Portal exceptions, MA1 | MA1 owner line and procedure steps 1 to 4 |
