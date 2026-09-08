@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
+import { activationError } from "@/lib/medjobs/activation-errors";
 import {
   CHANNELS,
   CHANNEL_ORDER,
@@ -112,7 +113,7 @@ export async function GET(req: NextRequest) {
   if (wanted.length === 0) return NextResponse.json({ universities: [] });
   const ids = wanted.map((c) => c.id);
 
-  const [{ data: channels }, { data: tasks }] = await Promise.all([
+  const [chanRes, taskRes] = await Promise.all([
     db.from("campus_channels").select("*").in("campus_id", ids),
     db
       .from("site_tasks")
@@ -120,16 +121,37 @@ export async function GET(req: NextRequest) {
       .in("campus_id", ids)
       .eq("status", "pending"),
   ]);
+  // A read that fails must not render as a campus where nothing has been
+  // done. An empty workspace and an unreadable one look identical on screen
+  // and mean opposite things.
+  for (const [what, res] of [["channels", chanRes], ["tasks", taskRes]] as const) {
+    if (res.error) {
+      console.error(`[activation] read ${what}:`, res.error);
+      return NextResponse.json(
+        { error: activationError(res.error, `read the activation ${what}`) },
+        { status: 500 },
+      );
+    }
+  }
+  const channels = chanRes.data;
+  const tasks = taskRes.data;
 
   const chans = (channels ?? []) as ChannelRow[];
   let records: RecordRow[] = [];
   if (slug && chans.length > 0) {
-    const { data: recs } = await db
+    const recRes = await db
       .from("campus_channel_records")
       .select("*")
       .in("channel_id", chans.map((c) => c.id))
       .order("created_at");
-    records = (recs ?? []) as RecordRow[];
+    if (recRes.error) {
+      console.error("[activation] read records:", recRes.error);
+      return NextResponse.json(
+        { error: activationError(recRes.error, "read the activation records") },
+        { status: 500 },
+      );
+    }
+    records = (recRes.data ?? []) as RecordRow[];
   }
 
   const openTask = (campusId: string, channel: Channel, recordId?: string) =>
@@ -245,7 +267,7 @@ export async function PATCH(req: NextRequest) {
     row = await ensureChannel(db, campusId, channel, user.id);
   } catch (e) {
     console.error("[activation] create channel:", e);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: activationError(e, "open that channel") }, { status: 500 });
   }
 
   const patch: Record<string, unknown> = { updated_at: new Date().toISOString() };
@@ -275,7 +297,7 @@ export async function PATCH(req: NextRequest) {
   const { error } = await db.from("campus_channels").update(patch).eq("id", row.id);
   if (error) {
     console.error("[activation] patch channel:", error);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: activationError(error, "save that change") }, { status: 500 });
   }
   return NextResponse.json({ ok: true });
 }

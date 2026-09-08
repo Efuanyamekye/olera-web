@@ -19,14 +19,17 @@ const HEADINGS = ["Job board", "Listserv", "Student orgs", "Events", "Professors
 
 export default function ActivationTab({ onOpenTask }: { onOpenTask: (taskId: string) => void }) {
   const [rows, setRows] = useState<ActivationUniversity[] | null>(null);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
       const res = await fetch("/api/admin/medjobs/activation");
-      if (!res.ok) throw new Error(String(res.status));
-      const d = (await res.json()) as { universities: ActivationUniversity[] };
+      const d = (await res.json()) as {
+        universities: ActivationUniversity[];
+        error?: string;
+      };
+      if (!res.ok) throw new Error(d.error ?? `Request failed (${res.status}).`);
       // Anything needing attention first, then alphabetical. The manager
       // works top down and stops when the dots run out.
       setRows(
@@ -34,9 +37,9 @@ export default function ActivationTab({ onOpenTask }: { onOpenTask: (taskId: str
           (a, b) => Number(b.due) - Number(a.due) || a.name.localeCompare(b.name),
         ),
       );
-      setFailed(false);
-    } catch {
-      setFailed(true);
+      setFailed(null);
+    } catch (e) {
+      setFailed(e instanceof Error ? e.message : "University activation could not be loaded.");
     }
   }, []);
 
@@ -45,7 +48,9 @@ export default function ActivationTab({ onOpenTask }: { onOpenTask: (taskId: str
   }, [load]);
 
   if (failed) {
-    return <p className="px-1 py-8 text-sm text-gray-500">University activation could not be loaded.</p>;
+    return (
+      <p className="rounded-md bg-error-50 px-3 py-2.5 text-sm text-error-700">{failed}</p>
+    );
   }
   if (!rows) {
     return <p className="px-1 py-8 text-sm text-gray-500">Loading universities…</p>;

@@ -24,7 +24,7 @@ export default function UniversityDrawer({
   onChanged: () => void;
 }) {
   const [uni, setUni] = useState<ActivationUniversity | null>(null);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
   // Writes that have no control of their own to report into. The checklist
   // shows its own errors; everything else surfaces here.
   const [error, setError] = useState<string | null>(null);
@@ -32,12 +32,15 @@ export default function UniversityDrawer({
   const load = useCallback(async () => {
     try {
       const res = await fetch(`/api/admin/medjobs/activation?university=${encodeURIComponent(slug)}`);
-      if (!res.ok) throw new Error(String(res.status));
-      const d = (await res.json()) as { universities: ActivationUniversity[] };
+      const d = (await res.json()) as {
+        universities: ActivationUniversity[];
+        error?: string;
+      };
+      if (!res.ok) throw new Error(d.error ?? `Request failed (${res.status}).`);
       setUni(d.universities[0] ?? null);
-      setFailed(false);
-    } catch {
-      setFailed(true);
+      setFailed(null);
+    } catch (e) {
+      setFailed(e instanceof Error ? e.message : "This university could not be loaded.");
     }
   }, [slug]);
 
@@ -54,12 +57,8 @@ export default function UniversityDrawer({
     const data = (await res.json().catch(() => ({}))) as { wentLive?: boolean; error?: string };
     if (!res.ok) {
       // Surfaced by whichever control was clicked, rather than swallowed.
-      throw new Error(
-        data.error ??
-          (res.status === 500
-            ? "The server could not save that. The activation tables may not have been migrated yet."
-            : `Could not save that (${res.status}).`),
-      );
+      // The server now says what actually went wrong, migration included.
+      throw new Error(data.error ?? `Could not save that (${res.status}).`);
     }
     await load();
     onChanged();
@@ -107,7 +106,7 @@ export default function UniversityDrawer({
       }
     >
       {failed ? (
-        <p className="px-4 py-6 text-sm text-gray-500">This university could not be loaded.</p>
+        <p className="m-4 rounded-md bg-error-50 px-3 py-2.5 text-sm text-error-700">{failed}</p>
       ) : !uni ? (
         <p className="px-4 py-6 text-sm text-gray-500">Loading…</p>
       ) : (

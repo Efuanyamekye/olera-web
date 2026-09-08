@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
+import { activationError } from "@/lib/medjobs/activation-errors";
 import {
   CHANNELS,
   RECORDS,
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
     channelRow = await ensureChannel(db, campusId, channel, user.id);
   } catch (e) {
     console.error("[activation] create channel:", e);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: activationError(e, "record that step") }, { status: 500 });
   }
 
   const def = recordId ? null : CHANNELS[channel];

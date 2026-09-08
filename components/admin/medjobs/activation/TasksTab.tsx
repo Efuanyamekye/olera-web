@@ -48,19 +48,19 @@ export default function TasksTab({
   onOpenUniversity: (slug: string) => void;
 }) {
   const [tasks, setTasks] = useState<ActivationTask[] | null>(null);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
   const [openId, setOpenId] = useState<string | null>(openTaskId ?? null);
   const [creating, setCreating] = useState(false);
 
   const load = useCallback(async () => {
     try {
       const res = await fetch("/api/admin/medjobs/activation/tasks");
-      if (!res.ok) throw new Error(String(res.status));
-      const d = (await res.json()) as { tasks: ActivationTask[] };
+      const d = (await res.json()) as { tasks: ActivationTask[]; error?: string };
+      if (!res.ok) throw new Error(d.error ?? `Request failed (${res.status}).`);
       setTasks(d.tasks);
-      setFailed(false);
-    } catch {
-      setFailed(true);
+      setFailed(null);
+    } catch (e) {
+      setFailed(e instanceof Error ? e.message : "Tasks could not be loaded.");
     }
   }, []);
 
@@ -86,7 +86,9 @@ export default function TasksTab({
     if (action !== "checklist") setOpenId(null);
   };
 
-  if (failed) return <p className="px-1 py-8 text-sm text-gray-500">Tasks could not be loaded.</p>;
+  if (failed) {
+    return <p className="rounded-md bg-error-50 px-3 py-2.5 text-sm text-error-700">{failed}</p>;
+  }
   if (!tasks) return <p className="px-1 py-8 text-sm text-gray-500">Loading tasks…</p>;
 
   const now = Date.now();

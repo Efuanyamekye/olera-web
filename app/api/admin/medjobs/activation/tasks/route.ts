@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
+import { activationError } from "@/lib/medjobs/activation-errors";
 import { onTaskComplete, type Channel, type TaskType } from "@/lib/medjobs/activation";
 
 /**
@@ -39,7 +40,10 @@ export async function GET() {
     .limit(500);
   if (error) {
     console.error("[activation tasks] load:", error);
-    return NextResponse.json({ error: "Failed to load" }, { status: 500 });
+    return NextResponse.json(
+      { error: activationError(error, "load the tasks") },
+      { status: 500 },
+    );
   }
 
   const campusIds = [...new Set((tasks ?? []).map((t) => t.campus_id))];
@@ -114,7 +118,7 @@ export async function POST(req: NextRequest) {
     .single();
   if (error) {
     console.error("[activation tasks] create:", error);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: activationError(error, "create that task") }, { status: 500 });
   }
   return NextResponse.json({ id: data.id });
 }

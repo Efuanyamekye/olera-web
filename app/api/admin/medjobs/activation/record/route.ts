@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
+import { activationError } from "@/lib/medjobs/activation-errors";
 import type { Channel, RecordKind } from "@/lib/medjobs/activation";
 import { onChannelFirstTouch } from "@/lib/medjobs/activation";
 
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
     channelId = (await ensureChannel(db, campusId, channel, g.user!.id)).id;
   } catch (e) {
     console.error("[activation] create channel:", e);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: activationError(e, "open that channel") }, { status: 500 });
   }
 
   // Professors cannot exist before the approval gate is open. Enforced here
@@ -118,7 +119,7 @@ export async function POST(req: NextRequest) {
     .single();
   if (error) {
     console.error("[activation] create record:", error);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: activationError(error, "add that") }, { status: 500 });
   }
   return NextResponse.json({ record: data });
 }
@@ -169,7 +170,7 @@ export async function PATCH(req: NextRequest) {
   const { error } = await db.from("campus_channel_records").update(patch).eq("id", recordId);
   if (error) {
     console.error("[activation] patch record:", error);
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    return NextResponse.json({ error: activationError(error, "save that change") }, { status: 500 });
   }
   return NextResponse.json({ ok: true });
 }
