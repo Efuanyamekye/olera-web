@@ -28,9 +28,9 @@ PR2  MEETING HELD                               ST2  ADVISOR MEETING HELD
 PR3  CLIENT SUCCESS                                  UNIVERSITY ACTIVATION
      Consumer Relations Manager                         │  Consumer Relations Manager
   │  Profile, terms, account setup                ├── ST3  UNIVERSITY JOB BOARD
-  │  Through to the first hire                    ├── ST4  STUDENT ORG RELATIONSHIPS
-  │                                               ├── ST5  CAMPUS EVENTS
-  │                                               ├── ST6  ADVISOR LISTSERVS
+  │  Through to the first hire                    ├── ST4  ADVISOR LISTSERVS
+  │                                               ├── ST5  STUDENT ORG RELATIONSHIPS
+  │                                               ├── ST6  CAMPUS EVENTS
   │                                               ├── ST7  PROFESSOR OUTREACH + CLASS VISITS
   │                                               │
   │                                               │   Each is secured once, then maintained.
@@ -668,12 +668,12 @@ slug in the URL does not. See the deferred list.
 | | Channel | Ask | The answer the Consumer Relations Manager needs |
 |---|---|---|---|
 | **ST3** | University job board | Is there a board pre-health students actually check? Who posts, and does it need approval? | The board, the posting route, and who approves |
-| **ST4** | Student organisations | Which orgs reach these students: pre-med, pre-nursing, AMSA chapters? Who runs them this term? | Org names and current officers, with a warm introduction where they will make one |
-| **ST5** | Campus events | Which fairs or events are worth attending, and what are the deadlines and costs? | Event, date, registration deadline, who books the table |
-| **ST6** | Advisor listservs | Do you email these students directly? Would you send something for us? | Which list, who sends it, how often they are willing, and the copy they want |
+| **ST4** | Advisor listservs | Do you email these students directly? Would you send something for us? | Which list, who sends it, how often they are willing, and the copy they want |
+| **ST5** | Student organisations | Which orgs reach these students: pre-med, pre-nursing, AMSA chapters? Who runs them this term? | Org names and current officers, with a warm introduction where they will make one |
+| **ST6** | Campus events | Which fairs or events are worth attending, and what are the deadlines and costs? | Event, date, registration deadline, who books the table |
 | **ST7** | Professors and class visits | Which professors teach the courses these students take? Would an introduction be welcome? | Named professors, and explicitly whether we may approach them |
 
-> **Permission is the deliverable on ST6 and ST7.** A listserv send and a class visit both happen on
+> **Permission is the deliverable on ST4 and ST7.** A listserv send and a class visit both happen on
 > someone else's authority. Write down who granted it and what exactly they agreed to, because the User
 > Success Manager will be acting on it weeks later without having been in the room.
 
@@ -735,16 +735,16 @@ possible.
 | Channel | Who acts | What the student sees |
 |---|---|---|
 | **ST3** University job board | Consumer Relations Manager posts; the advisor or the board's owner approves | A posting on a board they already check |
-| **ST4** Student organisations | Consumer Relations Manager builds it; an officer shares it | A post in their group chat, or a mention at a meeting |
-| **ST5** Campus events | Consumer Relations Manager and Sales Lead attend | A table, a talk, a QR code |
-| **ST6** Advisor listservs | Consumer Relations Manager supplies the copy; the advisor sends it | An email from a sender they already trust |
+| **ST4** Advisor listservs | Consumer Relations Manager supplies the copy; the advisor sends it | An email from a sender they already trust |
+| **ST5** Student organisations | Consumer Relations Manager builds it; an officer shares it | A post in their group chat, or a mention at a meeting |
+| **ST6** Campus events | Consumer Relations Manager and Sales Lead attend | A table, a talk, a QR code |
 | **ST7** Professors and class visits | Consumer Relations Manager and Sales Lead, once permitted | An introduction in a class they are sitting in |
 
 ### ② Procedure
 
 1. **Work the plan from ST2, not a template.** The row says which channels are open here and who agreed to each. A channel nobody agreed to is not on your list.
 2. **Activate every agreed channel within two weeks of the meeting.** The advisor is warmest immediately after; a month later you are re-introducing yourself.
-3. **Supply ready-to-send copy for anything a partner sends.** The advisor should have to forward, not write. This is the single largest determinant of whether ST6 actually happens.
+3. **Supply ready-to-send copy for anything a partner sends.** The advisor should have to forward, not write. This is the single largest determinant of whether ST4 actually happens.
 4. **Record the distribution when it happens:** the channel, the date, the asset used, and a rough reach estimate, on the partner row.
 5. **Report results back to the partner.** *Your listserv produced eleven applications.* It is the reason they send the second one, and the natural moment to ask for the next thing.
 6. **Re-check the whole row each term.** A row fully activated in September is not necessarily activated in January.
@@ -754,9 +754,9 @@ possible.
 | | Channel | Secured means | Maintaining means | Rhythm |
 |---|---|---|---|---|
 | **ST3** | University job board | The listing is live and visible to students | Check it has not expired or been archived; repost or renew when it has | Every few months |
-| **ST4** | Student organisations | An officer has shared it once | Refresh before it goes cold; re-establish with new officers when leadership turns over | Ongoing, and every term |
-| **ST5** | Campus events | We are registered for a named event on a named date | Confirm it is still scheduled and still our date; rebook when it moves | Before each event, then re-book |
-| **ST6** | Advisor listservs | The advisor has agreed to send, and has our copy, **and a date is set** | Remind the advisor, with fresh copy ready each time. The send happens because we asked | Each agreed send |
+| **ST4** | Advisor listservs | The advisor has agreed to send, and has our copy, **and a date is set** | Remind the advisor, with fresh copy ready each time. The send happens because we asked | Each agreed send |
+| **ST5** | Student organisations | An officer has shared it once | Refresh before it goes cold; re-establish with new officers when leadership turns over | Ongoing, and every term |
+| **ST6** | Campus events | We are registered for a named event on a named date | Confirm it is still scheduled and still our date; rebook when it moves | Before each event, then re-book |
 | **ST7** | Professors and class visits | A named professor has agreed to an introduction or a visit | Follow up per professor, with a record of who was contacted, who agreed, and which class was visited | Per professor, then per term |
 
 **Decision rules.** These are the judgement calls that come up every week. They are settled here so they are not settled differently at each campus.

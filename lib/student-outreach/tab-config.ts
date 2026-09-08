@@ -30,6 +30,9 @@ export type TabKey =
   // queue endpoint, dedicated pages, card slots, and deep links.)
   | "clients"
   | "candidates"
+  // University Activation (ST3-ST7) and the tasks it generates.
+  | "activation"
+  | "tasks"
   | "prospects"
   | "partners"
   | "meetings"
@@ -113,6 +116,8 @@ export const TABS: TabDef[] = [
   { key: "replies",      label: "Emails",     tooltip: "Email activity — replies, opens, clicks, bounces. Triage and pick the next step." },
   { key: "meetings",     label: "Meetings",   tooltip: "Stakeholders coordinating a time, or with a meeting on the calendar." },
   { key: "followup",     label: "Follow-up",  tooltip: "No-response rows ready for bulk re-engagement. Select multiple and launch a new outreach cadence." },
+  { key: "activation",   label: "Universities", tooltip: "University Activation: the five ST3-ST7 channels at each campus, and what is due." },
+  { key: "tasks",        label: "Tasks",      tooltip: "Every recurring check the activation workflow generated, plus custom tasks." },
 ];
 
 // Ellipsis menu items — same shape as TABS, surfaced via a ⋯ button at
@@ -148,6 +153,8 @@ export const TAB_STATS: Record<TabKey, { metric: string; label: string }> = {
   undone:      { metric: "activity",         label: "operational events"   },
   // Per-entity metrics powering the per-tab PulseHeader in In Basket.
   clients:     { metric: "clients",          label: "new clients"          },
+  activation:  { metric: "campuses",         label: "sites added"          },
+  tasks:       { metric: "activity",         label: "operational events"   },
   // Sites uses the same time-series metric as the legacy 'campuses' key.
   sites:       { metric: "campuses",         label: "sites added"          },
   campuses:    { metric: "campuses",         label: "sites added"          },

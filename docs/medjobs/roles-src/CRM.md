@@ -164,9 +164,9 @@ Each is short on purpose: a partner who has to edit is a partner who does not se
 | | Channel | Who acts | Secured means | Maintaining means | Rhythm |
 |---|---|---|---|---|---|
 | **ST3** | University job board | You post; the advisor or the board's owner approves | The listing is live and visible to students | Check the listing is still up and has not expired or been archived; repost or renew it when it has | Every few months |
-| **ST4** | Student organisations | You build the relationship; an officer shares it | An officer has shared it once | Refresh the relationship before it goes cold, and re-establish it with the new officers when leadership turns over | Ongoing, and every term |
-| **ST5** | Campus events | You and the Sales Lead attend | We are registered for a named event on a named date | Confirm the event is still scheduled and still on our date; rebook when it moves, and get on the next one after it passes | Before each event, then re-book |
-| **ST6** | Advisor listservs | You supply the copy; the advisor sends it | The advisor has agreed to send, and has our copy, **and a date is set** | Remind the advisor to send it, with fresh copy ready each time. The send happens because we asked | Each agreed send |
+| **ST4** | Advisor listservs | You supply the copy; the advisor sends it | The advisor has agreed to send, and has our copy, **and a date is set** | Remind the advisor to send it, with fresh copy ready each time. The send happens because we asked | Each agreed send |
+| **ST5** | Student organisations | You build the relationship; an officer shares it | An officer has shared it once | Refresh the relationship before it goes cold, and re-establish it with the new officers when leadership turns over | Ongoing, and every term |
+| **ST6** | Campus events | You and the Sales Lead attend | We are registered for a named event on a named date | Confirm the event is still scheduled and still on our date; rebook when it moves, and get on the next one after it passes | Before each event, then re-book |
 | **ST7** | Professors and class visits | You and the Sales Lead, once permitted | A named professor has agreed to an introduction or a visit | Follow up per professor, with a record of who was contacted, who agreed, and which class was visited | Per professor, then per term |
 
 Each of these carries specifics the table cannot hold: which board, which officer,
