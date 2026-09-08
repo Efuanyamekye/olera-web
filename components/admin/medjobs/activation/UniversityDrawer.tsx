@@ -25,6 +25,9 @@ export default function UniversityDrawer({
 }) {
   const [uni, setUni] = useState<ActivationUniversity | null>(null);
   const [failed, setFailed] = useState(false);
+  // Writes that have no control of their own to report into. The checklist
+  // shows its own errors; everything else surfaces here.
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -48,10 +51,29 @@ export default function UniversityDrawer({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    const data = await res.json().catch(() => ({}));
+    const data = (await res.json().catch(() => ({}))) as { wentLive?: boolean; error?: string };
+    if (!res.ok) {
+      // Surfaced by whichever control was clicked, rather than swallowed.
+      throw new Error(
+        data.error ??
+          (res.status === 500
+            ? "The server could not save that. The activation tables may not have been migrated yet."
+            : `Could not save that (${res.status}).`),
+      );
+    }
     await load();
     onChanged();
-    return data as { wentLive?: boolean; error?: string };
+    setError(null);
+    return data;
+  };
+
+  /** For actions with nowhere of their own to show a failure. */
+  const postSafe = async (path: string, body: unknown, method: "POST" | "PATCH" = "POST") => {
+    try {
+      await post(path, body, method);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not save that.");
+    }
   };
 
   const counts = uni
@@ -90,6 +112,9 @@ export default function UniversityDrawer({
         <p className="px-4 py-6 text-sm text-gray-500">Loading…</p>
       ) : (
         <div className="space-y-2 px-4 py-4">
+          {error ? (
+            <p className="rounded-md bg-error-50 px-3 py-2 text-[13px] text-error-700">{error}</p>
+          ) : null}
           {uni.channels.map((ch) => (
             <ChannelCard
               key={ch.channel}
@@ -105,26 +130,26 @@ export default function UniversityDrawer({
                 }).then((d) => ({ wentLive: Boolean(d.wentLive) }))
               }
               onNote={(text) =>
-                post("", { campusId: uni.id, channel: ch.channel, note: text }, "PATCH").then(() => {})
+                postSafe("", { campusId: uni.id, channel: ch.channel, note: text }, "PATCH")
               }
               onDetail={(detail) =>
-                post("", { campusId: uni.id, channel: ch.channel, detail }, "PATCH").then(() => {})
+                postSafe("", { campusId: uni.id, channel: ch.channel, detail }, "PATCH")
               }
               onNotAvailable={(reason) =>
-                post(
+                postSafe(
                   "",
                   { campusId: uni.id, channel: ch.channel, notAvailable: true, reason },
                   "PATCH",
-                ).then(() => {})
+                )
               }
               onAddRecord={(name) =>
-                post("/record", {
+                postSafe("/record", {
                   campusId: uni.id,
                   channel: ch.channel,
                   kind:
                     ch.channel === "st5" ? "organization" : ch.channel === "st6" ? "event" : "professor",
                   name,
-                }).then(() => {})
+                })
               }
               onRecordToggle={(recordId, key, checked) =>
                 post("/criterion", {
@@ -136,10 +161,10 @@ export default function UniversityDrawer({
                 }).then((d) => ({ wentLive: Boolean(d.wentLive) }))
               }
               onRecordNote={(recordId, text) =>
-                post("/record", { recordId, note: text }, "PATCH").then(() => {})
+                postSafe("/record", { recordId, note: text }, "PATCH")
               }
               onRecordDecline={(recordId, reason) =>
-                post("/record", { recordId, decline: true, reason }, "PATCH").then(() => {})
+                postSafe("/record", { recordId, decline: true, reason }, "PATCH")
               }
             />
           ))}

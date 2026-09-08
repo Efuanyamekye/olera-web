@@ -10,6 +10,11 @@ import { shortDate } from "./types";
  * selects a status: the parent sends the tick to the engine and re-reads
  * whatever it decided. That is why there is no status picker anywhere in
  * this feature except the deliberate not-available escape.
+ *
+ * A tick is a network write, so the box moves immediately and the write
+ * follows. If the write fails the box goes back and says why, because a
+ * checkbox that silently springs back is indistinguishable from a dead
+ * one.
  */
 
 export interface ChecklistItem {
@@ -19,6 +24,7 @@ export interface ChecklistItem {
 }
 
 export default function LiveWinChecklist({
+  scope,
   liveWhen,
   rule,
   items,
@@ -26,6 +32,10 @@ export default function LiveWinChecklist({
   disabled,
   onToggle,
 }: {
+  /** Unique per rendered checklist. Two channels can share a criterion
+   *  key (ST3 and ST7 both have `approved`), and duplicate DOM ids would
+   *  point a label at the wrong box. */
+  scope: string;
   liveWhen: string;
   rule: "all" | "any";
   items: ChecklistItem[];
@@ -34,11 +44,28 @@ export default function LiveWinChecklist({
   onToggle: (key: string, checked: boolean) => Promise<void>;
 }) {
   const [busy, setBusy] = useState<string | null>(null);
+  const [pending, setPending] = useState<Record<string, boolean>>({});
+  const [error, setError] = useState<string | null>(null);
 
   const toggle = async (key: string, checked: boolean) => {
     setBusy(key);
+    setError(null);
+    setPending((p) => ({ ...p, [key]: checked }));
     try {
       await onToggle(key, checked);
+      // The parent has re-read the record, so the prop is the truth again.
+      setPending((p) => {
+        const next = { ...p };
+        delete next[key];
+        return next;
+      });
+    } catch (e) {
+      setPending((p) => {
+        const next = { ...p };
+        delete next[key];
+        return next;
+      });
+      setError(e instanceof Error ? e.message : "Could not save that. Try again.");
     } finally {
       setBusy(null);
     }
@@ -59,17 +86,19 @@ export default function LiveWinChecklist({
       <ul className="mt-2 space-y-1.5">
         {items.map((i) => {
           const at = criteria[i.key];
+          const checked = i.key in pending ? pending[i.key] : Boolean(at);
+          const id = `crit-${scope}-${i.key}`;
           return (
             <li key={i.key} className="flex items-start gap-2">
               <input
                 type="checkbox"
-                checked={Boolean(at)}
+                checked={checked}
                 disabled={disabled || busy === i.key}
                 onChange={(e) => void toggle(i.key, e.target.checked)}
                 className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-primary-600 focus:ring-primary-500 disabled:opacity-50"
-                id={`crit-${i.key}`}
+                id={id}
               />
-              <label htmlFor={`crit-${i.key}`} className="min-w-0 flex-1 cursor-pointer">
+              <label htmlFor={id} className="min-w-0 flex-1 cursor-pointer">
                 <span className="text-[13px] text-gray-800">{i.label}</span>
                 {i.progress ? (
                   <span className="ml-1.5 text-[11px] text-gray-400">progress only</span>
@@ -84,6 +113,10 @@ export default function LiveWinChecklist({
           );
         })}
       </ul>
+
+      {error ? (
+        <p className="mt-2 rounded-md bg-error-50 px-2 py-1.5 text-[12px] text-error-700">{error}</p>
+      ) : null}
     </div>
   );
 }

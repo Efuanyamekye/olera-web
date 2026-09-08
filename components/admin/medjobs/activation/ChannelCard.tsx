@@ -147,6 +147,7 @@ export default function ChannelCard({
               </p>
               <div className="mt-2">
                 <LiveWinChecklist
+                  scope={channel.channel}
                   liveWhen="Approval to use the directory and contact professors directly."
                   rule="all"
                   items={def.criteria}
@@ -163,6 +164,7 @@ export default function ChannelCard({
             </div>
           ) : def.criteria.length > 0 ? (
             <LiveWinChecklist
+              scope={channel.channel}
               liveWhen={def.liveWhen}
               rule={def.rule}
               items={def.criteria}

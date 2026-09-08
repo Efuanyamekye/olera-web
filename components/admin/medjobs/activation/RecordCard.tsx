@@ -89,6 +89,7 @@ export default function RecordCard({
             </p>
           ) : (
             <LiveWinChecklist
+              scope={record.id}
               liveWhen={def.liveWhen}
               rule={def.rule}
               items={def.criteria}
