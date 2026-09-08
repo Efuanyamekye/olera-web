@@ -50,6 +50,7 @@ type Campaign = {
 type Provider = { id: string; display_name: string | null; city: string | null; phone: string | null; email: string | null } | null;
 type PoolRow = { id: string; slug: string; provider_id: string; position: number; care_types: string[]; enabled: boolean; is_test: boolean; phone_override: string | null; provider: Provider };
 type Offer = { id: string; provider_id: string; position: number; offered_at: string; expires_at: string; accepted_at: string | null; declined_at: string | null; decline_reason: string | null; expired_at: string | null; provider: Provider };
+type FamilyText = { id: string; created_at: string; email_type: string; status: string; html_body: string | null };
 type Lead = {
   id: string;
   slug: string;
@@ -84,6 +85,7 @@ type Lead = {
    */
   care_seeker_id: string | null;
   offers: Offer[];
+  texts: FamilyText[];
 };
 
 const CARE: Record<string, string> = { home_care: "help at home", assisted_living: "assisted living", unsure: "not sure yet", medical: "medical (redirected)" };
@@ -198,7 +200,9 @@ export default function CityAdsAdminPage() {
       const res = await fetch("/api/admin/city-ads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const d = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(d.error || `HTTP ${res.status}`);
-      flash(d.result?.providerName ? `${label}: ${d.result.providerName}` : `${label}: done`);
+      // An action that has something specific to report says so itself (a
+      // suppressed number, who was texted). Falling back to "done" would hide it.
+      flash(d.message ?? (d.result?.providerName ? `${label}: ${d.result.providerName}` : `${label}: done`), d.message ? 5000 : undefined);
       await load();
       return true;
     } catch (e) {
@@ -404,6 +408,81 @@ function OfferTo({ lead, pool, busy, primary, onPick }: { lead: Lead; pool: Pool
   );
 }
 
+/** Keys are the real `email_type` values written by lib/city-ads/offers.server.ts
+ *  and app/api/city-leads/route.ts — note `city_lead_accepted_family`, which does
+ *  NOT follow the `city_lead_family_*` shape the others use. */
+const TEXT_LABEL: Record<string, string> = {
+  city_lead_family_confirm: "Confirmation",
+  city_lead_family_still_working: "Still working on it",
+  city_lead_accepted_family: "Provider named",
+  city_lead_family_check: "Did they call you?",
+  city_lead_family_reoffer: "Looking again",
+  city_lead_family_medical: "Medical redirect",
+  city_lead_family_manual: "From you",
+};
+
+/** "Ann McDade" -> "Ann". first_name holds whatever they typed into one box. */
+function firstWord(name: string | null): string {
+  return (name ?? "").trim().split(/\s+/)[0] || "there";
+}
+
+/**
+ * Every text this family has had, and a box to send another.
+ *
+ * The reason this exists: in a concierge city nothing texts the family except
+ * the chain, and the chain only knows four sentences. When a call goes
+ * unanswered there was no way to follow up in the one channel the family
+ * actually recognises — their phone shows our Twilio number, not whatever
+ * number the call came from.
+ */
+function FamilyTexts({ lead: l, busy, act }: { lead: Lead; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
+  const sent = l.texts ?? [];
+  const [draft, setDraft] = useState(
+    `Hi ${firstWord(l.first_name)}, this is TJ with Olera. I tried calling about the help at home you asked for. Is there a good time to reach you, or would you rather I text you what I find?`,
+  );
+  const tooLong = draft.trim().length > 480;
+  return (
+    <div className="mt-3 border-t border-gray-200 pt-3">
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Texts to {firstWord(l.first_name)}</p>
+      <ul className="mt-2 space-y-1.5">
+        {sent.length === 0 && <li className="text-xs text-gray-500">Nothing sent yet.</li>}
+        {sent.map((t) => (
+          <li key={t.id} className="text-xs">
+            <span className="text-gray-400">{fmtTime(t.created_at)}</span>{" "}
+            <span className="font-medium text-gray-700">{TEXT_LABEL[t.email_type] ?? t.email_type.replace(/^city_lead_/, "").replace(/_/g, " ")}</span>
+            {t.status !== "sent" && <span className="ml-1.5 text-error-700">{t.status}</span>}
+            {t.html_body && <span className="mt-0.5 block text-gray-600">&ldquo;{t.html_body}&rdquo;</span>}
+          </li>
+        ))}
+      </ul>
+      <div className="mt-2 flex flex-col gap-1.5">
+        <textarea
+          className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs text-gray-900"
+          rows={3}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          placeholder={`a text to ${firstWord(l.first_name)}`}
+        />
+        <div className="flex items-center gap-2">
+          <button
+            className={btnPri}
+            disabled={busy || !draft.trim() || tooLong}
+            onClick={async () => {
+              if (await act("Text", { action: "text_family", leadId: l.id, message: draft.trim() })) setDraft("");
+            }}
+          >
+            Send text
+          </button>
+          <span className={`text-[11px] tabular-nums ${tooLong ? "text-error-700" : "text-gray-400"}`}>
+            {draft.trim().length}/480
+          </span>
+          <span className="text-[11px] text-gray-400">sends from the number their other texts came from</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[]; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
   const [note, setNote] = useState(l.admin_note ?? "");
   const closed = ["client", "no_fit", "stopped", "redirected"].includes(l.status);
@@ -520,6 +599,8 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
           )}
         </ul>
       )}
+      <FamilyTexts lead={l} busy={busy} act={act} />
+
       <div className="mt-3 flex items-center gap-2">
         <input className={`${input} w-full`} placeholder="a note for you" value={note} onChange={(e) => setNote(e.target.value)} />
         {note !== (l.admin_note ?? "") && (
