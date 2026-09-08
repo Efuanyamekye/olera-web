@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { acceptOffer, declineOffer, startOrAdvance, type CityOfferRow } from "@/lib/city-ads/offers.server";
+import { sendSMS } from "@/lib/twilio";
 
 /**
  * /api/admin/city-ads — the tracker behind /admin/city-ads.
@@ -10,7 +11,7 @@ import { acceptOffer, declineOffer, startOrAdvance, type CityOfferRow } from "@/
  *      last 200 leads with their offers.
  * POST one action per call:
  *      update_campaign, pool_toggle, pool_update, pool_add,
- *      offer_next, offer_to, accept, decline, set_status, note
+ *      offer_next, offer_to, accept, decline, set_status, note, text_family
  *
  * Auth: admin only. GET works from a browser (feedback_admin_endpoints_get).
  */
@@ -43,6 +44,20 @@ export async function GET() {
     ? await db.from("city_lead_offers").select("*").in("lead_id", leadIds).order("position")
     : { data: [] as Record<string, unknown>[] };
 
+  // Every text this family has had from us, automated or hand-sent. Without it
+  // the concierge caller is composing blind: the chain sends confirmations and
+  // status texts on its own, so "what have they already been told" is not
+  // something the admin can infer from the lead row.
+  const leadPhones = Array.from(new Set((leads ?? []).map((l) => l.phone as string).filter(Boolean)));
+  const { data: texts } = leadPhones.length
+    ? await db
+        .from("email_log")
+        .select("id, created_at, recipient, email_type, status, html_body")
+        .eq("channel", "sms")
+        .in("recipient", leadPhones)
+        .order("created_at")
+    : { data: [] as Record<string, unknown>[] };
+
   const providerIds = Array.from(
     new Set([...(pool ?? []).map((p) => p.provider_id as string), ...(offers ?? []).map((o) => o.provider_id as string)]),
   );
@@ -60,6 +75,7 @@ export async function GET() {
       offers: (offers ?? [])
         .filter((o) => o.lead_id === l.id)
         .map((o) => ({ ...o, provider: byId.get(o.provider_id as string) ?? null })),
+      texts: (texts ?? []).filter((t) => t.recipient === l.phone),
     })),
   });
 }
@@ -176,6 +192,49 @@ export async function POST(req: NextRequest) {
           .eq("id", String(body.leadId ?? ""));
         if (error) throw error;
         return NextResponse.json({ ok: true });
+      }
+      /**
+       * Send one hand-written SMS to the family, from the same Twilio number
+       * every automated city text comes from.
+       *
+       * Concierge cities have no offer chain, so a human does the reaching —
+       * and until now every family-facing text was generated inside that chain,
+       * which meant the human had no way to say anything at all. A call from an
+       * unknown number is the worst channel available: the only number these
+       * families recognise is TWILIO_FROM_NUMBER, because that is where their
+       * confirmation came from.
+       *
+       * Deliberately not a template. The whole point is the sentence the
+       * automated set cannot produce. sendSMS already enforces do-not-contact,
+       * so a suppressed number returns skipped rather than sending.
+       */
+      case "text_family": {
+        const leadId = String(body.leadId ?? "");
+        const message = String(body.message ?? "").trim();
+        if (!leadId || !message) return NextResponse.json({ error: "Pick a lead and write a message first" }, { status: 400 });
+        // Twilio bills per 160-char segment; 480 is three and is plenty for a
+        // "can I reach you" text. The cap is here to catch a paste, not to nag.
+        if (message.length > 480) {
+          return NextResponse.json({ error: `That is ${message.length} characters. Keep it under 480.` }, { status: 400 });
+        }
+        const { data: lead } = await db.from("city_leads").select("id, phone, first_name").eq("id", leadId).maybeSingle();
+        if (!lead) return NextResponse.json({ error: "Lead not found" }, { status: 404 });
+        if (!lead.phone) return NextResponse.json({ error: "This lead has no phone number" }, { status: 400 });
+
+        const sent = await sendSMS({
+          to: lead.phone as string,
+          body: message,
+          emailType: "city_lead_family_manual",
+          recipientType: "family",
+          metadata: { lead_id: leadId, sent_by: auth.user.email ?? auth.user.id },
+        });
+        if (!sent.success) {
+          return NextResponse.json({ error: sent.error ?? "Twilio would not take the message" }, { status: 502 });
+        }
+        if (sent.skipped) {
+          return NextResponse.json({ ok: true, message: "Not sent — that number is on the do-not-contact list." });
+        }
+        return NextResponse.json({ ok: true, message: `Texted ${String(lead.first_name ?? "them").split(/\s+/)[0]}` });
       }
       default:
         return NextResponse.json({ error: `Unknown action ${action}` }, { status: 400 });
