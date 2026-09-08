@@ -7,28 +7,6 @@
 
 ## Current Focus
 
-### 2026-09-08 — First Dallas city lead: the pool cannot serve her, and the cron is about to say providers declined (`easy-kalam`, investigation only, NO code changed)
-
-**Read-only session.** Ann McDade, DeSoto TX 75115, home care, this week, submitted 5:44pm CT 7 Sep off the paid Dallas campaign (`city_leads 1c4d430b`, gclid confirmed, consent captured, `is_test=false`). At stop she was still `status=new`, 0 offers, one SMS sent, no admin note. Nothing was written to the database and no code was touched.
-
-**Two artifacts:** the memo https://claude.ai/code/artifact/cdb76c91-6ac4-4a3b-a37d-887087ff5cda and the call sheet https://claude.ai/code/artifact/2d978dd7-2cc2-4b16-8954-2d41cd788191.
-
-**A correction worth keeping.** First read was that the all-disabled Dallas pool was the bug and a provider should be enabled before the 8:05am cron. Wrong: Dallas is `routingMode: "concierge"`, so the pool is disabled *by design*. Enabling one would have hidden the real defect by letting a chain fire in a city that is not supposed to have one.
-
-**The real defect (unfixed).** `app/api/city-leads/route.ts` correctly skips the chain for a concierge city and says why in a comment. `runOfferMaintenance` in `lib/city-ads/offers.server.ts` then sweeps every due `new`/`offered` lead and calls `startOrAdvance` with **no concierge check**, and `startOrAdvance` has none either. So the submit path refuses and the cron does it anyway four hours later: pool reads empty (correctly), `markUnfilled` fires, Slack pages *"no enabled provider left"* when nobody was ever asked, the family gets a second SMS renewing the promise, and the admin reason degrades from *"call them — concierge city, no chain runs"* to *"no one on call took it."* Fix is one guard in `startOrAdvance`: concierge + no `opts.providerId` → park or no-op.
-
-**Second gap, compliance.** The consent checkbox in `app/care/[city]/CityLandingClient.tsx` is conditional — the clause naming *"the {city} area care provider it matches me with"* is **stripped when concierge is true**. In Charlotte and Dallas the family has agreed only that **Olera** may contact them. Passing their number to an agency needs a verbal yes on the call, recorded in `admin_note`.
-
-**The pool is the wrong list, and not because of distance.** All four Dallas home-care rows are north-side franchises 23–37 mi from 75115. **Franchise territories are exclusive**, so the question was never whether they would drive. Tells: the same Assisting Hands brand runs a separate *Greater Ellis County* franchise 6 mi from her; Visiting Angels Cedar Hill's own URL is `/desoto/`; and Assisting Hands' Managed Ads campaign targets **ZIP 75240 + 20 mi Presence**, which excludes her at ~24 mi. Three independent sources, same answer.
-
-**Assisting Hands is the Managed Ads provider.** Only Dallas pool member in `ad_campaign_requests` — signed up 26 Aug the same day they claimed, Google Search only, $4/day, flight 7 Sep–31 Dec, campaign `24218215574`, no Stripe subscription (~$464 Olera exposure). Their campaign took 0 impressions on day one while Olera City – Dallas (`24223844624`, $6 cap, same account, overlapping keywords) took 73 and 3 clicks at $4.60. Per the existing build note that is H5 and only a *partial* cause; leading hypothesis is still H1 ramp, and **the row is a controlled test subject — change nothing before the day-3 read Wed 10 Sep.**
-
-**Shortlist, quality-and-distance weighted, built from Google Places not the directory:** Visiting Angels Cedar Hill 5.0★/64rv/5.1mi · Home Instead Cedar Hill 4.9★/52rv/5.6mi · Assisting Hands Greater Ellis County 5.0★/16rv/6.2mi · All Is Well 5.0★/13rv/8.1mi · Fidelis Midlothian 4.9★/65rv/12mi. None are in `city_pool` or have a `business_profiles` row, so `offer_to` cannot reach them — for this lead TJ is the relay.
-
-**Two method traps, both hit.** `olera-providers.city`/`lat`/`lon` are wrong at scale in south Dallas (FirstLight "of Kyle" filed under Glenn Heights with a 512 number; LifeLong Home Care in *Lancaster PA*; AccentCare rows in IL and CA returned by a TX query; same agency across three city fields) — **`zipcode` is the only trustworthy geo column**. And a Bayesian prior hands a 0-review agency the prior so it outranks a 4.9★/52-review one; use credibility `rc/(rc+8)` instead, which correctly makes the nearest agencies lose.
-
-**Minor, unfixed:** `lib/crons/registry.ts` still says staffed hours are "8am to 8pm local" (code is 8am–noon); `city_leads.first_name` holds the full name so templated SMS greet families with it; Cambridge Caregivers' stored coordinates are in Houston, ~240 mi from its own Coit Rd address.
-
 ### 2026-09-07 — Olera City Ads went live: two metro campaigns spending, relay proven end to end in production (`hopeful-joliot`, PRs #1814 · #1819 · promotions #1816 · #1821 → main `3e8635c76`)
 
 **The rings were wrong and Keyword Planner said so.** Pulled the Olera Ads account against the two seeded rings: **Concord ~330** core-term searches a month, **Garland ~450**, against a ~1,500 gate. At the $2.25 CPC Google forecasts, $300 buys ~133 clicks and neither city can supply that in a fortnight — both arms would have underspent and returned an anecdote. Google's own forecast also put CPC at **$2.23/$2.28**, less than half the $5–6.30 the plan assumed, so the $6 cap is right and generous. Account history agrees: **$2.10 avg across 255 clicks / $535** on every provider campaign ever run. Migration **209** re-slugged `concord-nc → charlotte-nc` and `garland-tx → dallas-tx`; every pooled provider already sat inside the new metro. Concierge routing is what makes the wider net safe — a human calls every family, so a lead outside one agency's radius costs nothing. Full pull at `~/Desktop/city-ads-keyword-planner-2026-09-07.md`.
@@ -4923,13 +4901,7 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 - 🟢 **Nextdoor $50 line on Charlotte** — row seeded and `draft`. Parked by TJ until Google produces a conversion rate worth spending against.
 - 🟢 **Assisted-living ad group** — deliberately omitted for message-match. Add if the home-care read is thin on volume rather than on conversion.
 - 🟢 **Day-5 / day-14 Slack reads** still unbuilt; conversion rate and $/family were kept off `/admin/city-ads` on purpose and currently arrive nowhere. Spend now lands via the `/ad-boost-optimize` sweep, so the arithmetic can be done by hand at the two gates.
-- ✅ **The page HAS now converted a real visitor** (7 Sep 17:44 CT, DeSoto TX). Best-qualified inquiry the program has produced: phone + email + consent + in-geo ZIP + `this_week`. The four-step form works.
-- 🔴 **Call Ann McDade, 214-293-2795** — concierge lead `1c4d430b`, still `status=new` and untouched. Call sheet: https://claude.ai/code/artifact/2d978dd7-2cc2-4b16-8954-2d41cd788191
-- 🔴 **Guard concierge cities in `startOrAdvance`.** The cron runs the offer chain on concierge leads the submit route deliberately skipped, marking them `unfilled` and texting the family a second time. One `if`. See [[concierge_chain_gap]].
-- 🔴 **Get verbal consent before handing any concierge lead to a provider.** The consent checkbox drops the provider clause when `concierge` is true — the family agreed only that Olera may contact them.
-- 🔴 **Rebuild the Dallas pool from the south.** All four home-care rows are north-side franchises and territory-barred from DeSoto, not merely far. Shortlist (Google Places, not the directory): Visiting Angels Cedar Hill 469-356-2680 · Home Instead Cedar Hill 972-637-8828 · Assisting Hands Greater Ellis County 972-640-4263. Warm path: ask the pooled Assisting Hands contact for the intro to Ellis County.
-- 🟡 **Do not touch Assisting Hands' campaign `24218215574` before the day-3 read (10 Sep)** — it is one of two controlled test subjects in the delivery experiment.
-- 🟢 **South Dallas directory cleanup.** `olera-providers.city`/`lat`/`lon` are wrong at scale there; `zipcode` is the only trustworthy geo column. Cambridge Caregivers' coordinates are in Houston.
+- ⚪ **The page has never converted a real visitor.** Every number downstream of that, including the 4% bar, is an assumption. The first genuine submission is the most informative event in the project.
 
 
 **Provider touch log / Relationships — updated 2026-09-05 evening (`wonderful-williams`, PR #1791 merged, PR #1793 open)**
