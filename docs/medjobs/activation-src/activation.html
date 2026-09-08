@@ -87,6 +87,14 @@ figcaption strong:first-child { color:var(--teal); }
 .exhibit-missing b { display:block; color:var(--teal); font-size:9.5pt;
       margin-bottom:3pt; }
 @page { size: Letter; }
+
+/* Screenshots of a dense admin UI. Sized for legibility rather than for
+   page count: a walkthrough figure nobody can read is worse than a longer
+   document. page-break-inside keeps a figure with its own caption. */
+figure { margin: 6pt 0 10pt; page-break-inside: avoid; }
+figure img { max-width: 6.1in; max-height: 5.4in; border: 0.5pt solid var(--rule); border-radius: 2pt; }
+figcaption { font-size: 8.5pt; }
+h1 { page-break-before: auto; }
 </style></head><body>
 <div class="doc-title">University Activation</div>
 <div class="doc-sub">A guide for the Consumer Relations Manager &#183; ST3 to ST7</div>
@@ -95,10 +103,15 @@ figcaption strong:first-child { color:var(--teal); }
 <li><a href="#the-five-channels">The five channels</a></li>
 <li><a href="#not-yet-in-progress-live">Not yet, in progress, live</a></li>
 <li><a href="#running-the-list">Running the list</a></li>
+<li><a href="#the-university-drawer">The university drawer</a></li>
 <li><a href="#working-a-channel">Working a channel</a></li>
+<li><a href="#the-three-list-channels">The three list channels</a></li>
 <li><a href="#tasks">Tasks</a></li>
 <li><a href="#moving-between-the-two">Moving between the two</a></li>
 <li><a href="#what-this-deliberately-does-not-do">What this deliberately does not do</a></li>
+<li><a href="#example-one-turning-on-the-advisor-listserv">Example one: turning on the advisor listserv</a></li>
+<li><a href="#example-two-adding-your-first-student-organization">Example two: adding your first student organization</a></li>
+<li><a href="#example-three-getting-permission-then-activating-a-professor">Example three: getting permission, then activating a professor</a></li>
 <li><a href="#what-good-looks-like">What good looks like</a></li>
 </ul></div>
 <p><strong>A guide for the Consumer Relations Manager.</strong> What was built, why it works the way it does, and how to use it to run ST3 through ST7.</p>
@@ -151,7 +164,7 @@ figcaption strong:first-child { color:var(--teal); }
 </tbody>
 </table>
 <p><strong>ST3 and ST4 are single switches.</strong> They are either arranged at this university or they are not.</p>
-<p><strong>ST5, ST6 and ST7 are lists.</strong> A campus can have four student organizations, two events and nine professors, each activating on its own schedule. Adding one is a button; each one keeps its own contacts, its own history and its own next check.</p>
+<p><strong>ST5, ST6 and ST7 are lists.</strong> A campus can have four student organizations, two events and nine professors, each activating on its own schedule. Adding one is a button; each keeps its own contacts, its own history and its own next check.</p>
 <hr />
 <h2 id="not-yet-in-progress-live">Not yet, in progress, live</h2>
 <p>Every channel and every record moves through the same three states, and you never choose them.</p>
@@ -164,24 +177,33 @@ figcaption strong:first-child { color:var(--teal); }
 <hr />
 <h2 id="running-the-list">Running the list</h2>
 <p>Open <strong>Universities</strong>. Every campus is a row, and the five channels read left to right in the same order every time. A <strong>red dot</strong> beside a university name means something there is due or overdue.</p>
-<p>Work top down. Universities with a red dot sort first, so when the dots run out, you are done for the day.</p>
-<p>Click a university to open it. You will see its five channels, each collapsed to one line: the status, how far along it is, and the date it is next due. Click a channel to open its workflow. Click a date to jump straight to the task that explains what to do.</p>
+<figure><img alt="Universities list" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/list.png" /><figcaption><strong>Exhibit 1. The Universities tab. Work top down; when the red dots run out, you are done for the day.</strong></figcaption></figure>
+<p>Universities with a red dot sort first. Click any row to open that university.</p>
+<hr />
+<h2 id="the-university-drawer">The university drawer</h2>
+<figure><img alt="University drawer" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/drawer.png" /><figcaption><strong>Exhibit 2. One university, its five channels, and nothing else.</strong></figcaption></figure>
+<p>The line under the name is the whole summary. Each channel shows its status, how far along it is, and the date it is next due.</p>
+<p><strong>There are two things to click on a channel row.</strong> The row itself opens the workflow. The <strong>date</strong> on the right leaves the drawer and takes you to the task that explains what to do.</p>
 <hr />
 <h2 id="working-a-channel">Working a channel</h2>
-<p>Inside a channel you will find the same six things every time, in the same order.</p>
+<p>Inside a channel you find the same things every time, in the same order.</p>
+<figure><img alt="ST4 expanded" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st4.png" /><figcaption><strong>Exhibit 3. ST4 expanded. Live win at the top, then contacts, the copy you can send, and history.</strong></figcaption></figure>
 <p><strong>Live win</strong> is the checklist. Tick what has actually happened. Each tick records the date automatically, so you never type one.</p>
-<p><strong>Contacts</strong> default to the university advisor, because they are usually the right person. Where the real contact is someone else, a career services officer for the job board, an events office for a fair, add them.</p>
-<p><strong>Suggested email and call script</strong> are there where the step involves asking someone for something. They are short on purpose. A partner who has to edit is a partner who does not send. Edit them freely and copy them out; the workspace does not send mail.</p>
-<p><strong>Next check</strong> is the one open follow-up. Click it and you land on the task.</p>
-<p><strong>History</strong> is collapsed until you want it, with the count on the toggle. Add a note whenever something happens that the checkboxes do not capture.</p>
-<p><strong>Mark not available here</strong> sits at the bottom, and asks for a reason.</p>
-<h3 id="the-three-list-channels">The three list channels</h3>
-<p><strong>ST5, student organizations.</strong> Add each organization by name. Each one is live as soon as its leadership agrees to any one meaningful way of reaching members: sharing the flyer in a group chat, emailing it out, or arranging a presentation. One is enough. Each live organization gets its own monthly reconnect.</p>
-<p><strong>ST6, campus events.</strong> Add both kinds: webinars we host and university events we join. An event is live when five things are true, a leader identified, host approval obtained, a date scheduled, a presenter assigned, and collateral ready. The same five work for a webinar and for a career fair. This channel also carries a <strong>semester review</strong>, which arrives on its own so that nothing sits unlooked-at for a term.</p>
-<p><strong>ST7, professors.</strong> This one is gated. <strong>You cannot add a professor until approval is recorded</strong>, because we do not prospect faculty until a university has told us we may. Record who can give that permission, then record it when it arrives. The list unlocks then, and not before. Once a professor agrees, either to pass the opportunity on or to let us join a class, they are live and come back to you seasonally.</p>
+<p><strong>Contacts</strong> default to the university advisor. Where the real contact is someone else, a career services officer for the job board or an events office for a fair, add them.</p>
+<p><strong>Suggested email and call script</strong> appear where the step involves asking someone for something. They are short on purpose. A partner who has to edit is a partner who does not send. Edit them freely and copy them out; the workspace does not send mail.</p>
+<p><strong>History</strong> is collapsed until you want it, with the count on the toggle.</p>
+<p><strong>Mark not available here</strong> sits at the bottom and asks for a reason.</p>
+<hr />
+<h2 id="the-three-list-channels">The three list channels</h2>
+<figure><img alt="ST5 expanded" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st5.png" /><figcaption><strong>Exhibit 4. ST5. Each organization is its own record with its own live win and its own next check.</strong></figcaption></figure>
+<p><strong>Student organizations.</strong> An organization is live as soon as its leadership agrees to any one meaningful way of reaching members: sharing the flyer in a group chat, emailing it out, or arranging a presentation. One is enough. Each live organization gets its own monthly reconnect.</p>
+<p><strong>Campus events.</strong> Add both kinds, webinars we host and university events we join. An event is live when five things are true: a leader identified, host approval obtained, a date scheduled, a presenter assigned, and collateral ready. The same five work for a webinar and for a career fair. This channel also carries a <strong>semester review</strong>, which arrives on its own so nothing sits unlooked-at for a term.</p>
+<figure><img alt="ST7 expanded" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st7.png" /><figcaption><strong>Exhibit 5. ST7. The approval block sits above the list, and the list does not exist until it is cleared.</strong></figcaption></figure>
+<p><strong>Professors.</strong> This channel is gated. <strong>You cannot add a professor until approval is recorded</strong>, because we do not prospect faculty until a university has told us we may. Record who can give that permission, then record it when it arrives. Once a professor agrees, either to pass the opportunity on or to let us join a class, they are live and come back to you seasonally.</p>
 <hr />
 <h2 id="tasks">Tasks</h2>
 <p>Everything recurring is created for you. You never pick a task type from a menu.</p>
+<figure><img alt="Tasks tab" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/tasks.png" /><figcaption><strong>Exhibit 6. The Tasks tab, grouped by urgency. Every row names its university and channel.</strong></figcaption></figure>
 <table>
 <thead>
 <tr>
@@ -228,19 +250,67 @@ figcaption strong:first-child { color:var(--teal); }
 </tr>
 </tbody>
 </table>
-<p>Open a task and it tells you what it is, why it matters, who to contact, the steps, and what done means. Where the task is a message, the draft is there to copy.</p>
-<p>Two kinds of button appear at the bottom, and the difference matters.</p>
+<figure><img alt="Task opened" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/task.png" /><figcaption><strong>Exhibit 7. A task opened. What it is, why it matters, the steps, the copy, and what done means.</strong></figcaption></figure>
 <p><strong>Mark done</strong> closes a routine check and schedules the next one at the right interval. If you could not do it this cycle, <strong>Skip this cycle</strong> moves it on without claiming you did.</p>
-<p><strong>Yes, they agreed</strong> appears on the one task that asks a question rather than setting a chore. Answering it ticks the box back in the university record. The task and the checklist are the same fact, so they cannot end up disagreeing. <strong>Not yet, ask again</strong> pushes it out a week and leaves the box alone.</p>
 <p><strong>Custom tasks</strong> are for work the five channels do not describe. Give it a name, a date, and your own checklist of what needs doing.</p>
+<figure><img alt="New task" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/newtask.png" /><figcaption><strong>Exhibit 8. A custom task, with your own checklist items.</strong></figcaption></figure>
 <hr />
 <h2 id="moving-between-the-two">Moving between the two</h2>
-<p>Every path goes both ways.</p>
-<p>A next-check date in a university opens that task. A task names its university and channel as a link back. A red dot anywhere leads to the item that caused it. You can start from either tab and never reach a dead end.</p>
+<p>Every path goes both ways. A next-check date in a university opens that task. A task names its university and channel as a link back. A red dot anywhere leads to the item that caused it. You can start from either tab and never reach a dead end.</p>
 <hr />
 <h2 id="what-this-deliberately-does-not-do">What this deliberately does not do</h2>
 <p>It does not send email. It does not assign work to anyone, because one person runs this today. It does not report on which channel produced a student, because we cannot yet measure that honestly and a plausible number would be worse than none. It does not detect a channel that has quietly gone stale.</p>
 <p>Those are choices, not omissions. Say so if any of them starts costing you real time.</p>
+<hr />
+<h1 id="three-worked-examples">Three worked examples</h1>
+<p>The three things you will do most often, start to finish.</p>
+<hr />
+<h2 id="example-one-turning-on-the-advisor-listserv">Example one: turning on the advisor listserv</h2>
+<p>The most common activation, and the one that shows how the system chases a step for you.</p>
+<h3 id="step-1-open-the-channel">Step 1. Open the channel</h3>
+<p>The advisor meeting agreed she would send to the pre-health list. Open Ohio State, then ST4.</p>
+<figure><img alt="ST4 before any work" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st4start.png" /><figcaption><strong>Exhibit 9. Nothing done yet. Three steps, none ticked, so the channel reads Not yet.</strong></figcaption></figure>
+<p>Copy the suggested email, edit it if you want, and send her the flyer.</p>
+<h3 id="step-2-record-that-you-sent-it">Step 2. Record that you sent it</h3>
+<p>Tick <strong>Advisor sent the current flyer</strong>.</p>
+<figure><img alt="ST4 after the first step" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st4mid.png" /><figcaption><strong>Exhibit 10. One tick. The channel is now In progress, and a follow-up appeared for 26 September.</strong></figcaption></figure>
+<p>Two things happened without you asking. The status moved to <strong>In progress</strong>, and the system created a task due in seven days to find out whether she agreed. You do not have to remember to chase this.</p>
+<h3 id="step-3-answer-the-follow-up-when-it-comes-due">Step 3. Answer the follow-up when it comes due</h3>
+<p>Seven days later the task is in your Tasks tab.</p>
+<figure><img alt="The confirm task" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/hook.png" /><figcaption><strong>Exhibit 11. This task asks a question rather than setting a chore, so it offers an answer instead of Mark done.</strong></figcaption></figure>
+<p>If she agreed, click <strong>Yes, they agreed</strong>. That ticks the second box back in the university record. The task and the checklist are the same fact, so they cannot end up disagreeing. If she has not replied, <strong>Not yet, ask again</strong> pushes the task out a week and leaves the box alone.</p>
+<h3 id="step-4-confirm-the-send-and-the-channel-goes-live">Step 4. Confirm the send, and the channel goes live</h3>
+<p>Tick <strong>Distribution confirmed</strong> once the email has actually gone out.</p>
+<figure><img alt="ST4 live" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st4.png" /><figcaption><strong>Exhibit 12. All three ticked. The channel is Live, dated, and the monthly reminder is already scheduled.</strong></figcaption></figure>
+<p>You will see a brief acknowledgement, and the next check appears on the card. From here the workspace asks you once a month to send her fresh copy, which is the only reason the listserv keeps going out.</p>
+<hr />
+<h2 id="example-two-adding-your-first-student-organization">Example two: adding your first student organization</h2>
+<h3 id="step-1-open-st5">Step 1. Open ST5</h3>
+<figure><img alt="ST5 empty" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st5empty.png" /><figcaption><strong>Exhibit 13. An empty channel. There is one button, and it is the right one.</strong></figcaption></figure>
+<h3 id="step-2-add-the-organization-by-name">Step 2. Add the organization by name</h3>
+<p>Click <strong>Add organization</strong>, type the chapter name, and press Enter.</p>
+<figure><img alt="ST5 with one organization" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st5one.png" /><figcaption><strong>Exhibit 14. Added, with its officer recorded. Nothing is agreed yet, so it sits at Not yet.</strong></figcaption></figure>
+<p>Each organization has its own live win, its own contacts, up to two, and its own history. Reach out to the officer.</p>
+<h3 id="step-3-tick-whichever-mechanism-they-agreed-to">Step 3. Tick whichever mechanism they agreed to</h3>
+<p>The chapter president says she will post it in the group chat. Tick that one box.</p>
+<figure><img alt="ST5 with a live organization" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st5.png" /><figcaption><strong>Exhibit 15. One tick is enough. The organization is Live, and its monthly reconnect is scheduled.</strong></figcaption></figure>
+<p><strong>Any one of the three is enough</strong>, because a group-chat post and an all-members email are both real distribution. You do not need all three, and the system will not ask for them.</p>
+<p>Notice the channel now reads <strong>2 of 4 live</strong>. Adding a fifth organization tomorrow will not undo that. The channel goes live on its first live record and stays there, so adding more work is never punished.</p>
+<hr />
+<h2 id="example-three-getting-permission-then-activating-a-professor">Example three: getting permission, then activating a professor</h2>
+<p>The one channel with a rule the system enforces rather than trusting you to remember.</p>
+<h3 id="step-1-find-the-channel-locked">Step 1. Find the channel locked</h3>
+<figure><img alt="ST7 locked" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st7lock.png" /><figcaption><strong>Exhibit 16. No professor can be added yet. The list is not hidden, it is closed, with the reason on it.</strong></figcaption></figure>
+<p>We do not prospect faculty until a university has told us we may. Ask the advisor first: who can tell us whether we may use the directory and email professors directly?</p>
+<h3 id="step-2-record-the-pathway-then-the-approval">Step 2. Record the pathway, then the approval</h3>
+<p>Tick <strong>Approval pathway identified</strong> once you know who decides, and record their name and how the decision gets made. Getting an answer often takes a few conversations; use the history to note where you are.</p>
+<h3 id="step-3-the-list-unlocks">Step 3. The list unlocks</h3>
+<figure><img alt="ST7 unlocked" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st7.png" /><figcaption><strong>Exhibit 17. Approval recorded. The professor list is now open, and the outreach email cites the person who cleared it.</strong></figcaption></figure>
+<p>Add professors one at a time with their department and course. The suggested email names the advisor who gave permission, because that is what makes a cold email to a professor land.</p>
+<h3 id="step-4-send-then-record-what-they-agreed-to">Step 4. Send, then record what they agreed to</h3>
+<p>Tick <strong>Outreach sent</strong> when you write to them. That moves the professor to In progress but does not make them live, which is correct: contacting someone is not the same as their agreeing.</p>
+<p>When a professor agrees, tick either <strong>Distribute the opportunity to students</strong> or <strong>Allow a brief class visit</strong>. Either one makes them live. If it is a class visit, record whether it is virtual or in person, when, and which team member is presenting.</p>
+<p>Each live professor then comes back to you seasonally, roughly four times a year, which is the rhythm that matches how terms actually turn over.</p>
 <hr />
 <h2 id="what-good-looks-like">What good looks like</h2>
 <p>A university that is working properly has channels that are live and dates that are in the future. Not five live channels: a campus with a dead job board and no faculty access, honestly recorded, is in better shape than one with five blanks.</p>
