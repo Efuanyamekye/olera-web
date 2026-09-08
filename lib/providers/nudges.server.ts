@@ -1,5 +1,6 @@
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import type { FamilyMetadata } from "@/lib/types";
+import { CITY_LEAD_SOURCE } from "@/lib/city-ads/care-seeker.server";
 
 /**
  * family-nudges data access — behind the front door.
@@ -45,6 +46,14 @@ const FAMILY_COLUMNS =
  * One page of eligible FAMILY profiles (created on/before the cutoff), newest
  * first. Returns the raw supabase `{ data, error }` — the cron owns the
  * pagination loop and its error-logging.
+ *
+ * City-lead profiles are excluded. Those families filled in an ad landing page
+ * and were told, by SMS, that a person from Olera would call them; a human is
+ * working the request by hand. Dropping them into the publish sequence would
+ * email "Let providers come to you" to someone we are in the middle of
+ * phoning, which reads as though nobody at Olera is talking to anybody else.
+ * They are re-eligible the moment the profile is claimed and its source stops
+ * being the city form. See lib/city-ads/care-seeker.server.ts.
  */
 export async function fetchFamilyProfilesPage(
   db: SupabaseClient,
@@ -56,6 +65,7 @@ export async function fetchFamilyProfilesPage(
     .from("business_profiles")
     .select(FAMILY_COLUMNS)
     .eq("type", "family")
+    .or(`source.is.null,source.neq.${CITY_LEAD_SOURCE}`)
     .lte("created_at", cutoffTime)
     .order("created_at", { ascending: false })
     .range(offset, offset + pageSize - 1);
