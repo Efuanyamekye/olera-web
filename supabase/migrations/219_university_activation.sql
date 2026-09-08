@@ -9,6 +9,20 @@
 -- into a corner before the auto-fire ruleset is designed". This is that
 -- ruleset, so the constraint widens here.
 
+BEGIN;
+
+-- Fail fast and legibly if an earlier migration is missing, rather than
+-- part-applying and leaving the constraint swap below half done.
+DO $$
+BEGIN
+  IF to_regclass('public.site_tasks') IS NULL THEN
+    RAISE EXCEPTION 'site_tasks is missing. Apply 075_medjobs_polymorphic_tasks.sql first.';
+  END IF;
+  IF to_regclass('public.student_outreach_campuses') IS NULL THEN
+    RAISE EXCEPTION 'student_outreach_campuses is missing. Apply 064_student_outreach.sql first.';
+  END IF;
+END $$;
+
 -- ── campus_channels ──────────────────────────────────────────────────
 -- One row per (campus, channel). Created lazily on first write; a campus
 -- with no row for a channel reads as 'not_yet'.
@@ -71,6 +85,26 @@ CREATE INDEX IF NOT EXISTS idx_campus_channel_records_channel
 
 -- ── site_tasks: the seven generated types plus custom ─────────────────
 
+-- The new constraint below is a strict superset of the old one, so every
+-- existing row passes. Checked here rather than assumed: if this campus ever
+-- carried a task_type we are about to disallow, the migration stops instead
+-- of failing halfway through the ADD.
+DO $$
+DECLARE bad TEXT;
+BEGIN
+  SELECT string_agg(DISTINCT task_type, ', ') INTO bad
+  FROM site_tasks
+  WHERE task_type NOT IN (
+    'manual_followup',
+    'activation_job_board_check','activation_listserv_confirm',
+    'activation_listserv_remind','activation_org_reconnect',
+    'activation_event_review','activation_event_day',
+    'activation_professor_reengage');
+  IF bad IS NOT NULL THEN
+    RAISE EXCEPTION 'site_tasks holds task_type values the new constraint would reject: %', bad;
+  END IF;
+END $$;
+
 ALTER TABLE site_tasks DROP CONSTRAINT IF EXISTS site_tasks_task_type_check;
 ALTER TABLE site_tasks
   ADD CONSTRAINT site_tasks_task_type_check
@@ -112,3 +146,5 @@ CREATE POLICY "Service role full access on campus_channels"
 DROP POLICY IF EXISTS "Service role full access on campus_channel_records" ON campus_channel_records;
 CREATE POLICY "Service role full access on campus_channel_records"
   ON campus_channel_records FOR ALL TO service_role USING (true) WITH CHECK (true);
+
+COMMIT;
