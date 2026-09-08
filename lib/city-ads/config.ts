@@ -122,6 +122,31 @@ export const PAYMENT_LABEL: Record<string, string> = {
 };
 
 /** Hour of day (0-23) in the given IANA zone. */
+/**
+ * Was this visit produced by an ad, and by which channel?
+ *
+ * Shared by the lead route and the quiz-start ping so the two can never
+ * disagree about whether a family came from paid. A gclid is proof of a Google
+ * click; our own utm_source covers Nextdoor and anything else we tag.
+ */
+export function classifyCityTraffic(utm: {
+  source?: string | null;
+  medium?: string | null;
+  gclid?: string | null;
+}): { paid: boolean; channel: string | null } {
+  const medium = utm.medium ?? null;
+  const paid =
+    Boolean(utm.gclid) ||
+    String(utm.source ?? "") === "olera_city" ||
+    (medium ?? "").startsWith("paid_");
+  const channel = utm.gclid || medium === "paid_search"
+    ? "Google"
+    : medium === "paid_social"
+      ? "Nextdoor"
+      : medium;
+  return { paid, channel };
+}
+
 export function hourIn(timeZone: string, at: Date = new Date()): number {
   const s = new Intl.DateTimeFormat("en-US", { timeZone, hour: "numeric", hour12: false }).format(at);
   const h = parseInt(s, 10);
