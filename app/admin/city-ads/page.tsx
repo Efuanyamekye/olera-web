@@ -75,6 +75,14 @@ type Lead = {
   outcome: string | null;
   admin_note: string | null;
   created_at: string;
+  /**
+   * The family's care seeker profile. Every lead gets one at submit, so this is
+   * null only for rows captured before migration 217. It is the lead's way out
+   * of this queue: the profile page carries the comms timeline, the enrichment
+   * fields worth filling on a concierge call, and the delete — and the FK
+   * cascades, so deleting there clears the lead too.
+   */
+  care_seeker_id: string | null;
   offers: Offer[];
 };
 
@@ -254,7 +262,13 @@ export default function CityAdsAdminPage() {
               <div key={l.id} className="flex flex-wrap items-start justify-between gap-3 border-t border-warm-100 py-3 first:border-t-0">
                 <div className="min-w-0">
                   <div>
-                    <span className="font-semibold text-gray-900">{l.first_name}</span>{" "}
+                    {l.care_seeker_id ? (
+                      <a className="font-semibold text-gray-900 underline-offset-2 hover:underline" href={`/admin/care-seekers/${l.care_seeker_id}`}>
+                        {l.first_name}
+                      </a>
+                    ) : (
+                      <span className="font-semibold text-gray-900">{l.first_name}</span>
+                    )}{" "}
                     <a className="text-sm text-primary-700" href={`tel:${l.phone}`}>
                       {phoneFmt(l.phone)}
                     </a>
@@ -471,6 +485,18 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
           <button className={`${btn} text-gray-500`} disabled={busy} onClick={() => void act("Stop", { action: "set_status", leadId: l.id, status: "stopped" })}>
             Stop
           </button>
+        </div>
+      )}
+
+      {/* Outside the !closed gate on purpose. A stopped or finished lead is
+          exactly the one you want to open and clear, so the way out of this
+          queue must not disappear the moment the lead stops being active. */}
+      {l.care_seeker_id && (
+        <div className="mt-3 text-xs text-gray-600">
+          <a className="text-primary-700 underline-offset-2 hover:underline" href={`/admin/care-seekers/${l.care_seeker_id}`}>
+            Open {l.first_name}&rsquo;s profile
+          </a>{" "}
+          <span className="text-gray-400">· notes, comms history, and delete</span>
         </div>
       )}
 
