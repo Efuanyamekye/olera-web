@@ -14,6 +14,7 @@ import {
   CITY_FORM_VERSION,
   RECIPIENT_LABEL,
   URGENCY_LABEL,
+  classifyCityTraffic,
   formatUSPhone,
   getCityConfig,
   isStaffedNow,
@@ -162,9 +163,11 @@ export async function POST(req: NextRequest) {
   // Paid means the ads produced this, which is the event the pilot exists to
   // produce. A gclid is proof of a Google click; our own utm_source covers
   // Nextdoor and anything else we tag.
-  const medium = str(utm.medium);
-  const paid = Boolean(utm.gclid) || String(utm.source ?? "") === "olera_city" || (medium ?? "").startsWith("paid_");
-  const channel = utm.gclid || medium === "paid_search" ? "Google" : medium === "paid_social" ? "Nextdoor" : medium;
+  const { paid, channel } = classifyCityTraffic({
+    source: str(utm.source),
+    medium: str(utm.medium),
+    gclid: str(utm.gclid),
+  });
   const concierge = cfg.routingMode === "concierge";
   const alert = slackCityLead({
     city: cfg.city,

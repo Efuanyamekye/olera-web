@@ -2025,3 +2025,46 @@ export function slackCityLead(opts: {
     ],
   };
 }
+
+/**
+ * Someone began the /care/{city} form but has not submitted it.
+ *
+ * There are no contact details at this point and there never will be unless
+ * they finish, so this alert exists to say "a real person is in the form right
+ * now" — not to be acted on directly. In a concierge city TJ calls every family
+ * himself, so knowing a start happened (and, when they drop, that it happened
+ * at all) is the difference between a silent flight and a readable one.
+ *
+ * Deliberately quieter than slackCityLead: no header block, one context line.
+ * A start is not a lead and must not look like one in the channel.
+ */
+export function slackCityQuizStarted(opts: {
+  city: string;
+  recipientLabel: string | null;
+  channel: string | null;
+  campaignTag?: string | null;
+  paid: boolean;
+  adminUrl: string;
+}): { text: string; blocks: SlackBlock[] } {
+  const source = opts.paid ? opts.channel ?? "paid" : "direct, no campaign";
+  const caring = opts.recipientLabel ? ` · caring for ${opts.recipientLabel}` : "";
+  const text = `✍️ Started the form · ${opts.city} (${source})${caring}`;
+  return {
+    text,
+    blocks: [
+      {
+        type: "section",
+        text: { type: "mrkdwn", text: `*${text}*` },
+      },
+      {
+        type: "context",
+        elements: [
+          {
+            type: "mrkdwn",
+            text: `No contact details yet — nothing to act on unless they finish.${opts.campaignTag ? ` · \`${opts.campaignTag}\`` : ""} · <${opts.adminUrl}|Open the queue>`,
+          },
+        ],
+      },
+    ],
+  };
+}

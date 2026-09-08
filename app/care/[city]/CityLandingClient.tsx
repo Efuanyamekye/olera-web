@@ -121,6 +121,27 @@ export default function CityLandingClient({
   const [finished, setFinished] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * Slack ping the moment someone answers the first question. Fired on the
+   * first real answer rather than the intro CTA so the alert can say who they
+   * are caring for, and once per mount because back-navigation would otherwise
+   * re-announce the same person. Writes nothing: a start is not a lead. Never
+   * blocks and never surfaces an error — a family mid-form must not see our
+   * notification plumbing fail.
+   */
+  const pinged = useRef(false);
+  useEffect(() => {
+    if (pinged.current || !who || step === "intro" || step === "who") return;
+    pinged.current = true;
+    fetch("/api/city-leads/start", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: cfg.slug, recipient: who, utm }),
+      keepalive: true,
+    }).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, who]);
+
   const concierge = cfg.routingMode === "concierge";
   const stepIndex = useMemo(() => ({ intro: 0, who: 1, what: 2, when: 3, contact: 4, done: 5 })[step], [step]);
 
