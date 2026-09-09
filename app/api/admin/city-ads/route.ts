@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { buildChannelRollup, type RollupCampaign, type RollupLead } from "@/lib/city-ads/channel-rollup";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { acceptOffer, declineOffer, startOrAdvance, type CityOfferRow } from "@/lib/city-ads/offers.server";
 import { sendSMS } from "@/lib/twilio";
@@ -58,6 +59,14 @@ export async function GET() {
         .order("created_at")
     : { data: [] as Record<string, unknown>[] };
 
+  // Counted separately from the 200-row lead list above. The rollup is the
+  // number that decides which platform we keep, so it must count every lead
+  // ever, not the most recent page of them — a truncated denominator would
+  // quietly understate whichever channel ran earliest.
+  const { data: rollupLeads } = await db
+    .from("city_leads")
+    .select("slug, utm_source, utm_medium, gclid, fbclid, is_test, created_at");
+
   const providerIds = Array.from(
     new Set([...(pool ?? []).map((p) => p.provider_id as string), ...(offers ?? []).map((o) => o.provider_id as string)]),
   );
@@ -69,6 +78,10 @@ export async function GET() {
   return NextResponse.json({
     lastClockRun: lastRun?.started_at ?? null,
     campaigns: campaigns ?? [],
+    channelRollup: buildChannelRollup(
+      (campaigns ?? []) as unknown as RollupCampaign[],
+      (rollupLeads ?? []) as unknown as RollupLead[],
+    ),
     pool: (pool ?? []).map((p) => ({ ...p, provider: byId.get(p.provider_id as string) ?? null })),
     leads: (leads ?? []).map((l) => ({
       ...l,

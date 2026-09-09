@@ -13,9 +13,18 @@ import Link from "next/link";
  *                and the outcome buttons.
  *   Setup      — one line per city. Everything editable lives behind "edit".
  *
- * Nothing is an input at rest. Conversion rate and cost per accepted family
- * are deliberately not here; they arrive in Slack on the day-5 and day-14
- * reads. Design pass: https://claude.ai/code/artifact/8faff70d-8262-4ad1-be62-748c0eb13493
+ * Nothing is an input at rest.
+ *
+ * Cost per ACCEPTED FAMILY and the family-side conversion rate are still not
+ * here by design. Cost per LEAD PER CHANNEL now is, in the Setup block: the
+ * city arms are a platform experiment before they are a lead source, Charlotte
+ * runs Google, Nextdoor and Meta at once, and that number is what decides which
+ * platform we keep. It sits next to the spend fields because it is computed
+ * from them the moment they are typed. (The day-5/day-14 Slack reads this page
+ * originally deferred those numbers to were never built, so until they are,
+ * deferring here means no read at all.)
+ *
+ * Design pass: https://claude.ai/code/artifact/8faff70d-8262-4ad1-be62-748c0eb13493
  */
 
 type Campaign = {
@@ -45,6 +54,18 @@ type Campaign = {
    * than only living in the database.
    */
   admin_note: string | null;
+};
+
+type ChannelRow = {
+  slug: string;
+  channel: string;
+  status: string;
+  budgetCents: number | null;
+  spendCents: number | null;
+  clicks: number | null;
+  leads: number;
+  costPerLeadCents: number | null;
+  clickToLead: number | null;
 };
 
 type Provider = { id: string; display_name: string | null; city: string | null; phone: string | null; email: string | null } | null;
@@ -154,6 +175,7 @@ const TONE: Record<string, string> = {
 
 export default function CityAdsAdminPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [rollup, setRollup] = useState<ChannelRow[]>([]);
   const [pool, setPool] = useState<PoolRow[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [lastClockRun, setLastClockRun] = useState<string | null>(null);
@@ -170,6 +192,7 @@ export default function CityAdsAdminPage() {
       if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `HTTP ${res.status}`);
       const d = await res.json();
       setCampaigns(d.campaigns);
+      setRollup(d.channelRollup ?? []);
       setPool(d.pool);
       setLeads(d.leads);
       setLastClockRun(d.lastClockRun ?? null);
@@ -359,7 +382,7 @@ export default function CityAdsAdminPage() {
                   {open ? "close" : "edit"}
                 </button>
               </div>
-              {open && <CityEditor slug={slug} campaigns={cs} pool={ps} busy={busy} act={act} />}
+              {open && <CityEditor slug={slug} campaigns={cs} rollup={rollup.filter((r) => r.slug === slug)} pool={ps} busy={busy} act={act} />}
             </div>
           );
         })}
@@ -613,16 +636,32 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
   );
 }
 
-function CityEditor({ slug, campaigns, pool, busy, act }: { slug: string; campaigns: Campaign[]; pool: PoolRow[]; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
+function CityEditor({ slug, campaigns, rollup, pool, busy, act }: { slug: string; campaigns: Campaign[]; rollup: ChannelRow[]; pool: PoolRow[]; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
   const tag = campaigns[0]?.campaign_tag;
   return (
     <div className="mb-3 rounded-lg bg-gray-50 px-4 py-3 text-sm">
-      <div className="mb-3 flex items-baseline justify-between gap-3 text-xs text-gray-600">
+      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-xs text-gray-600">
         <span>{campaigns[0]?.ring_label}</span>
-        <a className="text-primary-700" href={`/care/${slug}?utm_source=olera_city&utm_medium=paid_search&utm_campaign=${tag}`} target="_blank" rel="noreferrer">
-          /care/{slug} ↗
-        </a>
+        {/* One preview link per channel, each carrying that channel's own
+            utm_medium. A single hardcoded paid_search link was fine when Google
+            was the only arm; with three it would test the page under the wrong
+            attribution and quietly file the visit against Google. */}
+        <span className="flex flex-wrap gap-x-3">
+          {campaigns.map((c) => (
+            <a
+              key={c.id}
+              className="text-primary-700"
+              href={`/care/${slug}?utm_source=olera_city&utm_medium=${c.utm_medium}&utm_campaign=${tag}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              /care/{slug} as {cap(c.channel)} ↗
+            </a>
+          ))}
+        </span>
       </div>
+
+      <ChannelCompare rows={rollup} />
 
       <div className="divide-y divide-gray-200">
         {campaigns.map((c) => (
@@ -636,6 +675,63 @@ function CityEditor({ slug, campaigns, pool, busy, act }: { slug: string; campai
           <PoolLine key={p.id} p={p} busy={busy} act={act} />
         ))}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Cost per lead per channel — the number that decides which platform survives.
+ *
+ * Spend and clicks are hand-typed from the ad manager, leads are computed, so
+ * the two halves fill in at different times. Where a number cannot be computed
+ * honestly it says so rather than printing a confident zero: a channel showing
+ * "$0.00 per lead" because nobody typed the spend yet is worse than a channel
+ * showing nothing, because it reads as a result.
+ */
+function ChannelCompare({ rows }: { rows: ChannelRow[] }) {
+  if (rows.length === 0) return null;
+  const anyLeads = rows.some((r) => r.leads > 0);
+  return (
+    <div className="mb-3 overflow-x-auto">
+      <table className="w-full text-left text-xs">
+        <thead className="text-[11px] uppercase tracking-wider text-gray-500">
+          <tr>
+            <th className="py-1 pr-3 font-semibold">Channel</th>
+            <th className="py-1 pr-3 text-right font-semibold">Spend</th>
+            <th className="py-1 pr-3 text-right font-semibold">Clicks</th>
+            <th className="py-1 pr-3 text-right font-semibold">Leads</th>
+            <th className="py-1 pr-3 text-right font-semibold">Per lead</th>
+            <th className="py-1 text-right font-semibold">Click → lead</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 text-gray-800">
+          {rows.map((r) => (
+            <tr key={`${r.slug}-${r.channel}`}>
+              <td className="py-1.5 pr-3 font-medium text-gray-900">
+                {cap(r.channel)} <span className="font-normal text-gray-500">{r.status}</span>
+              </td>
+              <td className="py-1.5 pr-3 text-right tabular-nums">
+                {r.spendCents === null ? <span className="text-gray-400">not typed</span> : money(r.spendCents)}
+              </td>
+              <td className="py-1.5 pr-3 text-right tabular-nums">
+                {r.clicks === null ? <span className="text-gray-400">—</span> : r.clicks}
+              </td>
+              <td className="py-1.5 pr-3 text-right font-medium tabular-nums">{r.leads}</td>
+              <td className="py-1.5 pr-3 text-right tabular-nums">
+                {r.costPerLeadCents === null ? <span className="text-gray-400">—</span> : money(r.costPerLeadCents)}
+              </td>
+              <td className="py-1.5 text-right tabular-nums">
+                {r.clickToLead === null ? <span className="text-gray-400">—</span> : `${(r.clickToLead * 100).toFixed(1)}%`}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {!anyLeads && (
+        <p className="mt-1.5 text-[11px] text-gray-500">
+          No leads attributed yet. Type spend and clicks on a channel below and cost per lead fills in here.
+        </p>
+      )}
     </div>
   );
 }

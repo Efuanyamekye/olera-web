@@ -22,6 +22,7 @@ import {
 import { startOrAdvance } from "@/lib/city-ads/offers.server";
 import { ensureCareSeekerForCityLead, syncCityLeadDetails } from "@/lib/city-ads/care-seeker.server";
 import { getSiteUrl } from "@/lib/site-url";
+import { sendMetaLeadEvent } from "@/lib/city-ads/meta-capi.server";
 
 /**
  * POST /api/city-leads — the /care/{city} form.
@@ -121,6 +122,7 @@ export async function POST(req: NextRequest) {
       utm_medium: str(utm.medium),
       utm_campaign: str(utm.campaign),
       gclid: str(utm.gclid, 200),
+      fbclid: str(utm.fbclid, 200),
       session_id: str(body.sessionId),
       care_recipient: recipient,
       care_type: careType,
@@ -192,6 +194,7 @@ export async function POST(req: NextRequest) {
     source: str(utm.source),
     medium: str(utm.medium),
     gclid: str(utm.gclid),
+    fbclid: str(utm.fbclid),
   });
   const concierge = cfg.routingMode === "concierge";
   const alert = slackCityLead({
@@ -254,6 +257,27 @@ export async function POST(req: NextRequest) {
   //
   // Awaited: the cookie rides on the response headers (feedback_serverless_fire_and_forget).
   await markAdsLeadConversion();
+
+  // Meta conversion, server half. Fired unconditionally rather than only for
+  // fbclid traffic: Meta joins the event to a click itself, and a lead it does
+  // not recognise is discarded on their side. Same gate as the Google
+  // conversion above — routable leads only, medical and duplicates returned
+  // earlier. Deduplicated against the browser pixel by metaEventId.
+  await sendMetaLeadEvent({
+    eventId: str(body.metaEventId, 100) ?? lead.id,
+    eventSourceUrl: `${getSiteUrl()}/care/${cfg.slug}`,
+    clientIp: (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || null,
+    userAgent: req.headers.get("user-agent"),
+    fbp: req.cookies.get("_fbp")?.value ?? null,
+    fbc: req.cookies.get("_fbc")?.value ?? null,
+    fbclid: str(utm.fbclid),
+    firstName,
+    phone,
+    email,
+    zip,
+    city: cfg.city,
+    state: cfg.state,
+  });
 
   return NextResponse.json({ ok: true, leadId: lead.id, redirected: false, staffed, concierge });
 }

@@ -7,6 +7,8 @@ import type { CityConfig, CityCareType, CityRecipient, CityUrgency } from "@/lib
 import { CITY_FORM_VERSION } from "@/lib/city-ads/config";
 import { getOrCreateSessionId } from "@/lib/analytics/session";
 import { trackGrowthEvent } from "@/lib/analytics/growth-attribution";
+import { trackMetaLead } from "@/components/analytics/MetaPixel";
+import { newMetaEventId } from "@/lib/city-ads/meta";
 
 export interface CityProviderCard {
   name: string;
@@ -21,6 +23,7 @@ interface Utm {
   medium: string | null;
   campaign: string | null;
   gclid: string | null;
+  fbclid: string | null;
 }
 
 type Step = "intro" | "who" | "what" | "when" | "contact" | "done";
@@ -155,6 +158,10 @@ export default function CityLandingClient({
     if (phone.replace(/\D/g, "").length < 10) return setError("Add a mobile number so the provider can call you.");
     if (!consent) return setError("Tick the box so a provider can contact you.");
     setBusy(true);
+    // Minted here and sent to the route so the browser pixel and the server's
+    // Conversions API call carry the SAME id. Meta collapses the pair into one
+    // conversion; without it a single submission is counted twice.
+    const metaEventId = newMetaEventId();
     try {
       const res = await fetch("/api/city-leads", {
         method: "POST",
@@ -172,6 +179,7 @@ export default function CityLandingClient({
           utm,
           sessionId: safeSession(),
           formVersion: CITY_FORM_VERSION,
+          metaEventId,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -179,6 +187,12 @@ export default function CityLandingClient({
         setError(data.error || "Something went wrong. Please try again.");
         return;
       }
+      // Exactly the gate the route uses for its own conversion calls: routable
+      // leads only. A medical request is redirected and never offered to a
+      // provider, and a duplicate is the same family submitting twice — the
+      // route returns before firing either conversion for both, so the pixel
+      // must too or the browser half counts leads the server half does not.
+      if (!data.redirected && !data.duplicate) trackMetaLead(metaEventId);
       setResult({ leadId: data.leadId, redirected: Boolean(data.redirected), staffed: data.staffed });
       setStep("done");
     } catch {
