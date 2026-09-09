@@ -44,7 +44,7 @@ export const VALID_STAGE_TRANSITIONS: Record<PipelineStage, PipelineStage[]> = {
   new_claim: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for self-converted providers
   meeting_scheduled: ["pitched", "no_show", "not_interested"],  // meeting outcomes
   pitched: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers
-  not_interested: ["new_claim", "pitched"],  // can re-engage to new_claim or pitched
+  not_interested: ["meeting_scheduled", "pitched"],  // can schedule follow-up or mark interested
   no_show: ["meeting_scheduled", "not_interested"],  // can reschedule or mark not interested
   upgrade_meeting: ["upgrade_meeting", "pitched", "not_interested"],  // can reschedule, complete, or decline
 };
@@ -284,7 +284,7 @@ export const STAGE_OUTCOMES: Record<PipelineStage, ActivityOutcome[]> = {
   new_claim: ["voicemail", "hung_up", "callback_requested", "left_message", "note"],
   meeting_scheduled: ["note", "interested", "not_interested", "no_show"],
   pitched: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
-  not_interested: ["note", "re_engage"],
+  not_interested: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "interested"],
   no_show: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
   upgrade_meeting: ["note", "interested", "not_interested", "no_show"],
 };
@@ -311,6 +311,7 @@ export const OUTCOME_STAGE_TRANSITIONS: Record<ActivityOutcome, Partial<Record<P
   interested: {
     meeting_scheduled: "pitched",
     upgrade_meeting: "pitched",
+    not_interested: "pitched",
   },
   not_interested: {
     meeting_scheduled: "not_interested",
