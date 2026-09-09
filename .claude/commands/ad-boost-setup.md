@@ -1,6 +1,16 @@
-# Ad Boost Campaign Setup — Google + Nextdoor (Browser-Driven)
+# Ad Boost Campaign Setup — Provider + City, Google + Nextdoor
 
-Input: $ARGUMENTS — provider name(s), optionally followed by channel, budget allocation, and flight dates; OR nothing if TJ attached a screenshot of the `/admin/ad-boost` Requested queue. A screenshot identifies WHICH providers to set up; the `ad_campaign_requests` table in prod is always the source of truth for their data.
+Input: $ARGUMENTS — provider name(s) OR Olera city name(s)/quiz URL(s), optionally followed by channel, budget allocation, and flight dates; OR a screenshot of the relevant admin queue. Infer the campaign type and subjects from explicit text or a clear screenshot, then verify against the correct records below.
+
+## Entry — determine what is being promoted
+
+If the input and conversation do not identify the type, ask: **"What are we promoting—a specific provider or an Olera city care page?"** Ask only for missing information; a clear provider queue screenshot means provider, and `/care/{city}` or an explicit city quiz request means city. A city mentioned as a provider's address alone does not imply a city campaign.
+
+- **Provider:** continue with the provider workflow below. Source of truth: `ad_campaign_requests`; destination `/provider/{slug}`; admin `/admin/ad-boost`.
+- **City:** read and execute `.claude/commands/ad-boost-setup-city.md` instead of the provider phases below. Source of truth: `CITY_CONFIGS` plus `city_campaigns`; destination the existing `/care/{slug}` quiz; admin `/admin/city-ads`. Do not rebuild the quiz or create a fake provider request.
+- **Mixed batch:** make one packet listing type, subject, channel, exact allocation, dates, and goal per row. Execute each type's workflow and keep the whole-batch budget explicit.
+
+Existing session authorization persists. Do not ask TJ to repeat a type, channel, budget, or goal already agreed. Resolve routine choices within that agreement and present exact dates and platform settings at the final review. Publishing still requires the applicable final publish gate.
 
 ## Purpose
 
@@ -38,7 +48,7 @@ Do not touch either ad account or change the request status until this gate is r
 
 - Canonical final URL: `https://olera.care/provider/{slug}?utm_source=olera_managed&utm_medium={medium}&utm_campaign={tag}` where `medium=paid_search` for Google and `medium=paid_social` for Nextdoor. Tag = `{stub}-{city}-{mon}{yy}` and must match `ad_campaign_requests.campaign_tag` **character-for-character before launch**. Never let the ad URL use a friendly tag while Olera stores the request UUID again.
 - One selected channel → `channel='google'` or `channel='nextdoor'`; both → `channel='both'`.
-- Budget fields must describe a real control, not a wish: one lifetime-capped platform (or two lifetime caps whose sum is the whole-flight envelope) → store the total with `ad_budget_type='lifetime'`; Google-only daily fallback → store the actual daily amount with `ad_budget_type='daily'` and put the planned total/end-date envelope in `admin_note`; mixed daily + lifetime controls → leave the aggregate budget pair blank rather than lie, and record both exact controls plus the total authorization in `admin_note`.
+- Budget fields must describe a real control, not a wish: one lifetime-capped platform (or two lifetime caps whose sum is the whole-flight envelope) → store the total with `ad_budget_type='lifetime'`; Single-platform daily budgeting (Google or explicitly authorized Nextdoor) → store the actual daily amount with `ad_budget_type='daily'` and put the planned total/end-date envelope in `admin_note`; Multiple platforms with any daily control → leave the aggregate budget pair blank rather than imply one platform control, and record each exact daily/lifetime control, end date, and total authorization in `admin_note`.
 - Store the real platform start/end dates in `flight_start_date` and `flight_end_date`. Re-read them from each ad manager before launch and again during handoff; the Olera end date must not drift beyond the paid flight.
 - Use the same provider page, core value proposition, geography, and dates when the goal is an apples-to-apples channel comparison. Adapt only the format constraints native to each platform.
 - Never install a third-party pixel/tag during setup. Olera attribution is the managed UTM → first-party page/event trail.
@@ -71,7 +81,7 @@ Do not touch either ad account or change the request status until this gate is r
 ### Nextdoor-specific (Graceful pilot baseline)
 
 - Objective = **Increase website visits**; optimization = **Clicks**. Do not choose Promote your business or a Nextdoor lead form for the apples-to-apples provider-page test.
-- Use the confirmed Nextdoor allocation as an **exact lifetime cap**. Re-read the cap on the final review; do not infer it from a daily suggestion.
+- Prefer the confirmed Nextdoor allocation as an **exact lifetime cap** when available. If the current UI requires daily budgeting, use only the explicitly authorized daily amount with a scheduled end. Re-read the real control on review; daily × duration is planned spend, not a hard lifetime cap. Never silently raise spend to meet a platform minimum.
 - Target the provider’s actual service city/ZIP and only the area they can serve. For a comparison, align it as closely as Nextdoor permits with Google’s presence-only service area and document unavoidable geo differences.
 - The Special ad category box stays unchecked for senior/home-care services; it is for regulated housing listings, job postings, and credit offers—not ordinary care-service advertising.
 - Use the verified provider logo and provider-owned/approved imagery only. If website-image import is enabled, inspect every imported image before review.
@@ -231,7 +241,7 @@ Use the same visible browser requirement as Phase 2G Step A. Open `https://ads.n
 1. **Location:** target the confirmed city/ZIP/service area. Read the final location label back verbatim; do not assume a radius was accepted merely because it was typed.
 2. **Creative:** use the approved provider logo/image and the packet copy. Inspect auto-imported website imagery before accepting it. Avoid medical-condition targeting/claims, guarantees, unverifiable rankings, URLs/phone numbers in ad text, or wording that implies Nextdoor endorses the provider.
 3. **CTA/destination:** website visits to the tagged provider page—not a generic Olera page and not the provider’s own website.
-4. **Budget control:** exact **Lifetime cap** equal to the confirmed Nextdoor allocation.
+4. **Budget control:** the confirmed lifetime cap, or an explicitly authorized daily amount with a scheduled end. If platform minimums conflict, resolve the actual cost before publication.
 5. **Flight:** exact confirmed dates. For a two-channel comparison, these must match Google.
 6. Leave automatic placements on for the first flight unless the confirmed packet says otherwise.
 
@@ -245,12 +255,14 @@ Before the final action, read back and present:
 - target geography;
 - full tagged URL and exact campaign tag;
 - flight start/end;
-- exact lifetime cap;
+- actual budget control, daily amount/end time or lifetime cap, and planned flight total;
 - logo/image + final headline/body;
 - Special ad category unchecked;
 - payment saved/available (never display card details).
 
 ### Nextdoor known gotchas
+
+For the verified September 2026 Advanced editor recovery, duplication, budget-display and publication-state checks, also read **Advanced-mode execution and recovery** in `.claude/commands/ad-boost-setup-city.md`. Those browser mechanics apply to provider campaigns too; retain the provider-specific destination and records.
 
 - Quick Create may preselect **Promote your business**. Explicitly select Increase website visits.
 - The final button may say **Create**, then immediately submit the campaign for review. Treat it as the publish/spend gate even if the word “Publish” never appears.
@@ -330,7 +342,7 @@ Then run Phase 3G checks (AI Max off, auto-apply 0/7 + 0/14) as normal.
 Immediately after creation:
 
 1. Verify the campaign exists once and is `under review` or `active`—not duplicated.
-2. Re-open the campaign/ad-group settings and read back the exact lifetime cap, geography, flight, objective, and final URL.
+2. Re-open the campaign/ad-group settings and read back the actual budget control, geography, flight, objective, and final URL.
 3. Confirm `utm_campaign` exactly matches the Ad Boost row. Fix either side before traffic begins if it does not.
 4. Record Nextdoor account ID, campaign/ad-group/creative names or IDs, allocation, and review state in `admin_note`.
 
