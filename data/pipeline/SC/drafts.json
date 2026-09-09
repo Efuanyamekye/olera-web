@@ -28,7 +28,12 @@
           "Apply even if the income looks too high. The two doors have different limits and a Social Security check often clears one but not the other."
         ],
         "ageRequirement": "65+ or blind or disabled",
-        "incomeTable": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2982
+          }
+        ],
         "assetLimits": {
           "individual": 9950,
           "couple": 14910,

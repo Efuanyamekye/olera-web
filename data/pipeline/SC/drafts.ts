@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T11:27:34.577Z
+ * Last updated: 2026-09-09T15:30:23.880Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -33,7 +33,12 @@ export const drafts: PipelineStateDrafts = {
           "Apply even if the income looks too high. The two doors have different limits and a Social Security check often clears one but not the other."
         ],
         "ageRequirement": "65+ or blind or disabled",
-        "incomeTable": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2982
+          }
+        ],
         "assetLimits": {
           "individual": 9950,
           "couple": 14910,

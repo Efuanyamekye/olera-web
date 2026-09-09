@@ -28,7 +28,16 @@
           "Over the income limit? Georgia's Medically Needy spend-down has no income limit, so apply anyway"
         ],
         "ageRequirement": "65+ or blind or disabled",
-        "incomeTable": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2982
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 5964
+          }
+        ],
         "assetLimits": {
           "individual": 2000,
           "couple": 3000,
