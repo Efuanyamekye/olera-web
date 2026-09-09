@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/GA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T11:27:34.549Z
+ * Last updated: 2026-09-09T15:30:23.842Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -33,7 +33,16 @@ export const drafts: PipelineStateDrafts = {
           "Over the income limit? Georgia's Medically Needy spend-down has no income limit, so apply anyway"
         ],
         "ageRequirement": "65+ or blind or disabled",
-        "incomeTable": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2982
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 5964
+          }
+        ],
         "assetLimits": {
           "individual": 2000,
           "couple": 3000,
