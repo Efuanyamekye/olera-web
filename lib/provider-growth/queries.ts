@@ -98,6 +98,8 @@ export interface GrowthStats {
   // Providers with BOTH products active
   both_converted: number;  // ads_free_intro AND (medjobs_in_pilot OR medjobs_pilot_expired)
   both_paying: number;     // ads_subscribed AND medjobs_subscribed
+  // Daily actionable metrics
+  meetings_today: number;  // Providers with meetings scheduled for today
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -107,11 +109,16 @@ export interface GrowthStats {
 export async function getGrowthStats(): Promise<GrowthStats> {
   const db = getServiceClient();
 
+  // Get today's date range (in UTC)
+  const now = new Date();
+  const todayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+  const todayEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+
   // Fetch all tracking records and compute counts in memory
   // This is more reliable than chaining .then() on Supabase queries
   const { data: allRecords, error } = await db
     .from("provider_growth_tracking")
-    .select("pipeline_stage, ads_status, medjobs_status");
+    .select("pipeline_stage, ads_status, medjobs_status, meeting_scheduled_at");
 
   if (error) {
     console.error("[provider-growth] Stats query error:", error);
@@ -124,6 +131,7 @@ export async function getGrowthStats(): Promise<GrowthStats> {
   const medjobsCounts: Record<string, number> = {};
   let bothConverted = 0;
   let bothPaying = 0;
+  let meetingsToday = 0;
 
   for (const row of allRecords ?? []) {
     // Pipeline stage
@@ -148,6 +156,14 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     if (row.ads_status === "subscribed" && row.medjobs_status === "subscribed") {
       bothPaying++;
     }
+
+    // Count meetings for today
+    if (row.meeting_scheduled_at) {
+      const meetingDate = new Date(row.meeting_scheduled_at);
+      if (meetingDate >= todayStart && meetingDate <= todayEnd) {
+        meetingsToday++;
+      }
+    }
   }
 
   return {
@@ -164,6 +180,7 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     medjobs_subscribed: medjobsCounts.subscribed || 0,
     both_converted: bothConverted,
     both_paying: bothPaying,
+    meetings_today: meetingsToday,
   };
 }
 
