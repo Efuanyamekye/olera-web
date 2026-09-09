@@ -76,8 +76,8 @@ export default function ManagedAdsHero({
             outright that no *provider* campaign has ever run on Meta. Keep that
             section in step with this strip: if the strip ever implies a channel
             the limits section does not account for, the page contradicts
-            itself. That is not hypothetical — it happened on 9 Sep 2026 when
-            WhatWeKnow began showing Olera's own Meta spend while the limits
+            itself. That is not hypothetical: it happened on 9 Sep 2026 when
+            TrackRecord began showing Olera's own Meta spend while the limits
             section still read "we have never run a Meta campaign".
 
             TO CHANGE THE LIST: pass `platforms={[...]}` to override, where each

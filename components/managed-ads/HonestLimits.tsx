@@ -14,9 +14,9 @@
  *
  * THE META LIMIT IS SCOPED ON PURPOSE — DO NOT SHORTEN IT
  * It used to read "we have never run a Meta campaign", which was true of
- * provider campaigns and false of Olera, and it broke the day WhatWeKnow
- * started showing $40,703 of our own Meta spend one section below. The claim
- * that matters to a provider is that no Meta campaign has ever run *for a
+ * provider campaigns and false of Olera, and it broke the day TrackRecord
+ * started showing $40,703 of our own Meta spend near the top of the page. The
+ * claim that matters to a provider is that no Meta campaign has ever run *for a
  * provider*, and that is the sentence. Every channel this page names anywhere
  * must be accounted for here; that is this section's whole job.
  */
@@ -45,7 +45,7 @@ export default function HonestLimits({ spend, inquiries }: { spend: string | nul
     },
     {
       title: "No provider campaign has ever run on Meta",
-      body: "Everything above was learned buying Google Search for providers, with one Nextdoor pilot alongside it. Olera's own advertising is a separate thing and a much longer history. That is where the caregiver figures further down come from, and not one dollar of it was spent on a provider's behalf. The first Meta campaigns pointed at our own city pages went live this week. We will publish what they do, including if they do nothing.",
+      body: "Everything above was learned buying Google Search for providers, with one Nextdoor pilot alongside it. Olera's own advertising is a separate thing and a much longer history. That is where the caregiver figures at the top of this page come from, and not one dollar of it was spent on a provider's behalf. The first Meta campaigns pointed at our own city pages went live this week. We will publish what they do, including if they do nothing.",
     },
   ];
 
