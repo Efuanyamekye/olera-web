@@ -159,6 +159,12 @@
           "hours": "Line 24/7; state benefits queue Mon-Fri 8am-6pm CT, excluding state holidays"
         },
         {
+          "label": "Texas 2-1-1",
+          "phone": "2-1-1",
+          "description": "The same service as (877) 541-7905, dialable as 2-1-1 from a Texas phone. Choose your language, then option 2 for state benefits.",
+          "hours": "Line 24/7; state benefits queue Mon-Fri 8am-6pm CT"
+        },
+        {
           "label": "Texas Aging and Disability Resource Centers (ADRC)",
           "phone": "(855) 937-2372",
           "description": "No Wrong Door access point covering all 254 counties. Good for a broad \"help paying for care\" question. Information and referral, not an application line.",

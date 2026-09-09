@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TX/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.623Z
+ * Last updated: 2026-09-09T05:58:11.799Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -162,6 +162,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(877) 541-7905",
           "description": "Dial this or 2-1-1, choose your language, then Option 2 for state benefits. Option 1 is local resource referral. The line answers 24/7; the state benefits staff work Mon-Fri 8am-6pm CT. You can also apply at YourTexasBenefits.com.",
           "hours": "Line 24/7; state benefits queue Mon-Fri 8am-6pm CT, excluding state holidays"
+        },
+        {
+          "label": "Texas 2-1-1",
+          "phone": "2-1-1",
+          "description": "The same service as (877) 541-7905, dialable as 2-1-1 from a Texas phone. Choose your language, then option 2 for state benefits.",
+          "hours": "Line 24/7; state benefits queue Mon-Fri 8am-6pm CT"
         },
         {
           "label": "Texas Aging and Disability Resource Centers (ADRC)",
