@@ -21,9 +21,10 @@
  * has to spend three bullets on and a picture lands before you read a word.
  *
  * WHAT THEY DRAW, AND WHY IT IS NOT A DIAGRAM OF NOUNS
- * Both frames are the same size, so the contrast is density: the provider page
- * carries about sixteen elements and the request page carries six. That is not
- * a metaphor for the difference, it IS the difference — one page is a
+ * Both frames are the same size, so the contrast is density: twenty-four shapes
+ * on the provider page against ten on the request page (counted in the DOM, not
+ * estimated). That is not a metaphor for the difference, it IS the difference:
+ * one page is a
  * storefront a family browses, the other shows one question at a time and is
  * built to be finished. Every shape corresponds to something really on those
  * pages: the nav bar the request page deliberately does not have, the photo
@@ -51,7 +52,7 @@ function ProviderPageDiagram() {
       viewBox="0 0 480 150"
       className="h-auto w-full"
       role="img"
-      aria-label="A provider profile page: a navigation bar, photo grid, name, badges, review rows and body text, with a small contact button among them."
+      aria-label="A provider profile page: a navigation bar, photo grid, business name, badges, three review rows and body text, with a small contact button among them. Twenty-four elements in total, against ten on the request page."
     >
       <rect x="0.5" y="0.5" width="479" height="149" rx="7" fill="#fff" stroke={FILL_EDGE} />
       {/* nav bar — the request page pointedly does not have one */}
@@ -94,7 +95,7 @@ function RequestPageDiagram() {
       viewBox="0 0 480 150"
       className="h-auto w-full"
       role="img"
-      aria-label="A request page: no navigation, one question, four answer options, a four-step progress indicator, and one wide button filling most of the page."
+      aria-label="A request page: no navigation bar, a four-step progress indicator with the first step filled, one question, four answer options, and a single button. Ten elements in total, against twenty-four on the provider page."
     >
       <rect x="0.5" y="0.5" width="479" height="149" rx="7" fill="#fff" stroke={FILL_EDGE} />
       {/* progress: one question per screen, four in total */}
