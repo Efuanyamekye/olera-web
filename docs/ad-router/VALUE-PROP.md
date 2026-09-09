@@ -38,6 +38,12 @@ no API ingestion — these are point-in-time reads.
 | **$40,703 · 223 campaigns** | Meta ad account `739297033485646` | Sustained spend over four years | Nothing about outcomes. Account is on TJ's *personal* profile. |
 | **$19,643.03 · 28 campaigns** | Google Ads `419-933-1442`, all time (Aug 2022→) | Sustained Google spend | Completeness — see open item below |
 | **1,001,793 impr · 29,044 interactions · $1.15 CPC** | Same Google all-time row | Real reach at a click price we control | That any of it converted |
+
+The **2.5M impressions** on the page is Google's 1,001,793 plus ~1.48M summed
+from the handful of Meta campaigns visible on the first page of 225. It is a
+floor twice over — most Meta campaigns were not summed, and anything before
+9 Aug 2023 reports blank.
+
 | **~21,000 clicks @ $0.33–0.36** | Meta, two 2023 traffic campaigns (TX, Houston) | Cheap traffic at volume | Anything downstream of the click |
 | ~~81 conversions @ $242.51~~ | Google all-time row | **Nothing. Do not use.** | 8 account-level goals, 1 real; inflated by duplicates and Android installs |
 
@@ -107,5 +113,8 @@ survive that list, and would never learn which part of their money was wasted.
   campaigns exist, $60,300 is low. **Owner: TJ — needs his sign-in.**
 - [ ] **Nextdoor lifetime spend** — read it out of the dashboard and decide
   whether it folds into the headline figure.
+- [ ] **`page.tsx` metadata description** still says we run ads "on Google and
+  Nextdoor". Correct today — no provider Meta campaign has run — but it needs
+  changing the day one does.
 - [ ] **Hero and `TwoEngines` rewrite** around the router framing. Deferred
   until after the 20 Sep city-ads read, which may change what we can claim.

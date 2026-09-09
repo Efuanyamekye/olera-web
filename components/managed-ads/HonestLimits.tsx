@@ -11,6 +11,14 @@
  *
  * The Nextdoor figures stay literal: that pilot is closed, its numbers were
  * read at source on 2026-08-26, and they cannot drift.
+ *
+ * THE META LIMIT IS SCOPED ON PURPOSE — DO NOT SHORTEN IT
+ * It used to read "we have never run a Meta campaign", which was true of
+ * provider campaigns and false of Olera, and it broke the day WhatWeKnow
+ * started showing $40,703 of our own Meta spend one section below. The claim
+ * that matters to a provider is that no Meta campaign has ever run *for a
+ * provider*, and that is the sentence. Every channel this page names anywhere
+ * must be accounted for here; that is this section's whole job.
  */
 export default function HonestLimits({ spend, inquiries }: { spend: string | null; inquiries: number | null }) {
   const sample =
@@ -36,8 +44,8 @@ export default function HonestLimits({ spend, inquiries }: { spend: string | nul
       body: "Our one completed Nextdoor flight spent $50 for 8,318 impressions and 134 clicks at 37 cents each, a fifth of what a search click costs, and produced no contactable leads at all. Cheap attention is not demand, and we would rather tell you that than sell you the click price.",
     },
     {
-      title: "We have never run a Meta campaign",
-      body: "Everything here was learned on Google Search with one Nextdoor pilot alongside it. Facebook and Instagram are next, and we will publish what they do including if they do nothing.",
+      title: "No provider campaign has ever run on Meta",
+      body: "Everything above was learned buying Google Search for providers, with one Nextdoor pilot alongside it. Olera's own advertising is a separate thing and a much longer history — that is where the caregiver figures further down come from — but not one dollar of it was spent on a provider's behalf. The first Meta campaigns pointed at our own city pages went live this week. We will publish what they do, including if they do nothing.",
     },
   ];
 

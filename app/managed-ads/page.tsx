@@ -33,7 +33,17 @@ import { getManagedAdsStats } from "@/lib/managed-ads/stats.server";
  * because an earlier version hardcoded $535 in prose two screens under a strip
  * reading $298 and the page contradicted itself. The other guardrails live in
  * the section files: the provider relay is built but dormant, no Meta campaign
- * has ever run, and recorded spend is a floor.
+ * has ever run *for a provider*, and recorded spend is a floor.
+ *
+ * TWO SCOPES LIVE ON THIS PAGE. KEEP THEM APART.
+ * ResultsTicker and HonestLimits answer "what has Olera done for providers" —
+ * a few hundred dollars, one confirmed client, scoped to Google provider
+ * campaigns in stats.server.ts. The track-record band inside WhatWeKnow answers
+ * "can Olera run ads at all" — Olera's own acquisition history, two orders of
+ * magnitude larger. A visitor who reads the second as money spent on their
+ * behalf has been misled, so each set carries its own scope line and neither
+ * may be quoted without one. When you add a channel to any part of this page,
+ * add it to HonestLimits in the same commit.
  */
 
 export const revalidate = 900;
