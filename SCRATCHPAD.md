@@ -8,6 +8,32 @@
 ## Current Focus
 
 
+### 2026-09-09 (later) — The ad-router positioning shipped: $60,346 of our own spend verified at source and put on /managed-ads (`lively-carson`, PRs #1849 · #1850 → staging `4e1f4329a`)
+
+**What TJ asked for, in his own frame.** *"Jupiter in the Solana ecosystem is a DEX aggregator. You go to Jupiter and Jupiter will find you the best route. Similarly, Olera is an ad router. We find you the best, cheapest ad in any and all of the top platforms that you may or may not be aware of."* This supersedes the overhead thesis parked earlier the same day and is strictly better: routing is an outcome a provider buys, overhead is an invoice they do not.
+
+**The numbers, read at source rather than remembered.** **Meta $40,703** across 223 campaigns (account `739297033485646`). **Google $19,643.03** across 28 campaigns, all time from Aug 2022 (account `419-933-1442`), with 1,001,793 impressions, 29,044 interactions and a **$1.15 avg CPC**. The second Google account under `tj@olera.care`, `223-248-2447`, was cancelled 22 Oct 2023 with **$0 lifetime** and does not need mentioning. Combined **≈$60,350 across ~250 campaigns**.
+
+**The number that actually sells it is the cheapest one.** Meta campaign `[Chantel]-(CARE-NAV)-Leads`: **990 leads on $542.25 — 55 cents each.** Plus ~21,000 link clicks at $0.33–0.36 across the two 2023 traffic campaigns. TJ clarified these were caregivers acquired for the NIH care study rather than provider clients, and was right that the distinction does not belong in the copy — but the verb does. **The page says "captured", never "signed up" and never "clients"**, because a provider reading `/managed-ads` will hear the second as clients delivered to them.
+
+**Two totals are floors, not ceilings.** Meta's Ads Manager retains only **37 months** of insights: "Maximum" reaches back to 9 Aug 2023 and no further, so the 2022 and early-2023 campaigns report blank even though they ran and were paid for. The impressions figure also sums only the Meta campaigns visible on the first page of 225.
+
+**Do not quote the Google conversions.** The same all-time row says 81 conversions at $242.51. Eight account-level goals are configured and **one** records real conversions; the rest are duplicates plus Android installs. Spend, impressions, clicks and CPC are sound.
+
+**Where it went, and the argument for the placement.** A `TrackRecord` section at **position two, directly under the hero**. It was built inside `WhatWeKnow` at section six and TJ moved it: the question that follows the hero is *"who are you, and why is this not another marketing firm"*, and the evidence sat behind three sections of product mechanics and ~4,500px of scroll. This does **not** reverse the page's documented ordering rule — what must not open the page is the *ledger*, the small client figures that need their caveats attached. A credential is not a ledger.
+
+**Two scopes now live on one page and they must not blur.** `ResultsTicker` and `HonestLimits` answer *what has Olera done for providers* — a few hundred dollars, one confirmed client, deliberately scoped to Google provider campaigns in `stats.server.ts`. `TrackRecord` answers *can Olera run ads at all*. Two orders of magnitude apart. The scope line under the tiles is load-bearing copy, not a disclaimer: without it a visitor reads $60,300 as money spent on their behalf.
+
+**`/pre-test` caught the page contradicting itself.** `HonestLimits` said **"We have never run a Meta campaign"** one section above a band reporting $40,703 of Meta spend. The claim was written scoped to provider campaigns and phrased unscoped, and `ManagedAdsHero` already carried the instruction I broke — keep the limits section in step with every channel the page names. Now reads **"No provider campaign has ever run on Meta."**
+
+**The diagrams (#1850).** Hand-drawn SVG in each `TwoEngines` card, no library and no image asset. Both frames the same size so the contrast is density: **24 shapes on the provider page against 10 on the request page**. The single filled element in each is the conversion action, small and buried on the left, wide and dominant on the right. `WhatItLooksLike` stays literal one section below — abstract first for the difference, concrete second for the proof. Geometry verified with `getBBox()` pairwise rather than by eye.
+
+**THE TRAP THAT COST A BROKEN BUILD.** `npx tsc` in a worktree **does not run TypeScript**. There is no `node_modules`, so npx fetches a placeholder package that prints *"This is not the tsc command you are looking for"* and **exits 0**; `| grep -c "error TS"` then returns 0 for a file that does not parse. A JSX comment ending `*/` instead of `*/}` shipped this way and Turbopack failed on the preview. Every type check reported earlier in the session was fake. Fix: `ln -s ../<sibling>/node_modules node_modules` and run `./node_modules/.bin/tsc`. Saved as `reference_worktree_npx_tsc_is_fake`.
+
+**Also corrected on the record.** I said Nextdoor had not spent — wrong, five campaigns went live 1–7 Sep and the pilot before them spent real money, so "every major platform" is fair. And `resize_page` bottoms out near 500px, so two "verified at 360px" claims were actually 500px; measuring text width against the real font stack is what found the genuine issue, that `$60,300` at 30px is 116px in New York but **131px in Georgia**, the Windows fallback, against 128px of column.
+
+**Merged and closed out.** Four PRs to staging: **#1849** track record + `docs/ad-router/VALUE-PROP.md`, **#1850** diagrams, **#1848** the Meta arm session log, **#1836** the Ad Boost audit delta. #1836 was 43 commits stale and conflicted on SCRATCHPAD; **merged rather than rebased** because its branch was checked out in a live worktree and a rebase would have needed a force-push to rewrite it. Handoff records written to Branch Handoff Reports.
+
 ### 2026-09-09 — Meta arm of the city campaigns: pixel + CAPI shipped, and the ad-account/pixel ownership split that would have silently wasted the flight (`lively-carson`, PR #1844 → staging `674a94615`)
 
 **What TJ asked for.** Step back and think before building: Meta ads for the two cities already running on Google. Then, mid-session, he reframed it — *"we're in learning phase and infrastructure building phase... I'm not sure which platforms we'll end up using but setting up this infrastructure is really important."* That changed the success criterion from "does this flight produce leads" to "does the instrument work and can we re-run it cheaply." Cost arguments were the right frame before that message and the wrong one after.
@@ -4962,7 +4988,13 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 
 ## Next Up
 
-**Ad router positioning — named by TJ 2026-09-09, NOT yet started**
+**Ad router positioning — SHIPPED to staging 2026-09-09 (#1849, #1850)**
+- ✅ **The page carries it now.** `TrackRecord` at position two: 990 caregiver leads at $0.55, $60,300, 250+ campaigns, 2.5M impressions, with the scope line. `docs/ad-router/VALUE-PROP.md` holds the full ledger, the per-channel setup cost that is the actual moat, and the claims agreed not to make.
+- ⚪ **This page is for internal alignment, not marketing** (TJ, 9 Sep). Do not spend further passes tightening claims for a hostile reader it does not have.
+- 🟡 **Nextdoor lifetime spend is not in the $60,300** — never read out of the dashboard. The copy names the platform without folding in a number.
+- 🟡 **Does `tfalohun@gmail.com` hold Google Ads accounts?** Meta's spend is on the personal profile so Google may be too; only `tj@olera.care` was enumerated. If personal campaigns exist the total is low. Needs TJ's sign-in.
+- 🟢 **`page.tsx` metadata description** still says ads run "on Google and Nextdoor". Correct today, needs changing the day a provider Meta campaign runs.
+- 🟢 **Hero and `TwoEngines` rewrite** around the router framing — deferred until after the 20 Sep city-ads read, which may change what can be claimed.
 - 🔴 **The thesis, in TJ's own analogy.** Jupiter on Solana is a DEX aggregator: you go to Jupiter and it finds you the best route across exchanges. **Olera is an ad router** — we find a provider the cheapest effective ad across any and all of the top platforms, including ones they have never heard of. The product is not "we run Facebook ads"; it is the routing, the cross-channel setup overhead, and the accumulated collateral. This supersedes and absorbs the positioning thesis parked earlier in the day.
 - 🔴 **Why this session is the evidence.** Building one $150 Meta campaign by hand surfaced: two same-named pixels where the wrong one was pre-selected, an ad-account/portfolio ownership split, eight defaults that each degrade or waste the flight, a security lockout only the account owner can clear, a CTA menu that differs between old and new ads, and a UI that silently discards typed values while reporting them saved. **A small agency without a marketing division does not survive that list**, and would never know which of their $150 was wasted.
 - 🟡 **Numbers to gather before any copy is written.** TJ's claim: **>$40,000 spent on Meta** (partially corroborated — the ad account shows **$40,703 lifetime across 223 campaigns**, personally scoped) and **"hundreds of clients."** Pull (a) **total Google Ads lifetime spend** across all Olera accounts, (b) leads/results from the historical Meta campaigns via Ads Reporting, (c) the count that actually stands up as "clients."
