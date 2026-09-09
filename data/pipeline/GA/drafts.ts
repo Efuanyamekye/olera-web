@@ -3,13 +3,191 @@
  * Do not edit manually. Regenerated from data/pipeline/GA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T06:27:16.053Z
+ * Last updated: 2026-09-09T11:27:34.549Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
 export const drafts: PipelineStateDrafts = {
   "draftedAt": "2026-04-13",
   "programs": [
+    {
+      "id": "medicaid-aged-blind-disabled",
+      "name": "Georgia Medicaid for the Aged, Blind and Disabled (ABD)",
+      "shortName": "Georgia ABD Medicaid",
+      "tagline": "If your loved one is 65 or older with limited income and savings, this is the Medicaid application that opens the door to home care and nursing home coverage.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state"
+      },
+      "intro": "Georgia Medicaid for the Aged, Blind and Disabled is the base Medicaid program for people 65 and older. It matters because most of Georgia's help with care costs sits on top of it: the Elderly and Disabled Waiver Program, which pays for care at home, requires Medicaid first. If your loved one is not on Medicaid yet, this application is the step that unlocks the rest.\n\nGeorgia calls this \"Medical Assistance\" on its application forms and in Georgia Gateway, so do not be thrown when the words change.\n\nThere is no waiting list. Georgia has to give you a decision.",
+      "savingsRange": "",
+      "savingsSource": "Free to apply. Medicaid pays providers directly rather than paying the family.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, legally blind, or totally disabled",
+          "Georgia resident, and a US citizen or lawful permanent resident admitted before August 22, 1996",
+          "Countable resources under $2,000 for one person, $3,000 for a couple",
+          "For nursing home or home-care coverage, income under $2,982/month for one person (2026)",
+          "Over the income limit? Georgia's Medically Needy spend-down has no income limit, so apply anyway"
+        ],
+        "ageRequirement": "65+ or blind or disabled",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": 3000,
+          "countedAssets": [
+            "Bank accounts",
+            "Investment accounts, stocks and bonds",
+            "Cash",
+            "Additional vehicles beyond the first",
+            "Land and property other than the home"
+          ],
+          "exemptAssets": [
+            "The primary home",
+            "One vehicle per household",
+            "Household furnishings and personal belongings",
+            "Burial exclusions up to $10,000"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "No functional test for base Medicaid. A nursing-facility level-of-care assessment is needed only for the waiver programs that sit on top of it.",
+        "otherRequirements": [
+          "Assign health insurance benefits to the Georgia Department of Community Health",
+          "Apply for any other benefits you may be owed. Applicants with little income are usually referred to Social Security to apply for SSI.",
+          "Assets given away in the 60 months before you apply can create a penalty period"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply by phone on (877) 423-4746, online at gateway.ga.gov, or at a county DFCS office. Georgia decides in 10, 45 or 90 days depending on the type of Medicaid.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call to apply by phone",
+            "description": "Call the DFCS Customer Contact Center at (877) 423-4746, Monday to Friday, 8am to 5pm Eastern. Press 1 for English, 2 for Division of Family and Children Services, then 2 to submit your application over the phone. A live agent takes the application and gives you a transaction number on the call. Interpreters are free; for TTY dial 711 for Georgia Relay."
+          },
+          {
+            "step": 2,
+            "title": "Or apply online or in person",
+            "description": "Online at gateway.ga.gov: choose Apply for Benefits, then select Medical Assistance as the program. In person at your county DFCS office; appointments are available any day of the week on request. You can also ask for paper forms to be mailed by calling the same number."
+          },
+          {
+            "step": 3,
+            "title": "Report any unpaid medical bills from the last three months",
+            "description": "Do this on the application itself. If your loved one is approved, Medicaid may pay bills from up to three months before they applied, but only if those bills are reported when applying."
+          },
+          {
+            "step": 4,
+            "title": "Send your documents in one go",
+            "description": "Income letters, bank statements and property information are what actually decide an ABD case. Sending everything at once avoids a second round of requests."
+          }
+        ],
+        "processingTime": "Georgia's rights notice says a Medicaid application is approved or denied within 10, 45 or 90 days, depending on the type of Medicaid. Cases needing a disability determination take the longest.",
+        "waitlist": "There is no waiting list for Medicaid itself. The Elderly and Disabled Waiver Program that pays for home care does have one, which is a reason to get the Medicaid application in now.",
+        "tip": "Apply even if you think the income is too high. Georgia's Medically Needy pathway lets unpaid medical bills spend down the difference, and it has no income limit.",
+        "urls": [
+          {
+            "label": "Apply online (Georgia Gateway)",
+            "url": "https://gateway.ga.gov"
+          },
+          {
+            "label": "How to apply for Medicaid",
+            "url": "https://medicaid.georgia.gov/how-apply"
+          },
+          {
+            "label": "Find your county DFCS office",
+            "url": "https://dfcs.georgia.gov/locations"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security number and date of birth for the person applying",
+        "Current contact information: home address, phone number, and email if there is one",
+        "Proof of income: Social Security or SSI award letters, pension statements, and any other money coming in",
+        "Recent bank statements for every account",
+        "Information about anything else owned, such as land, stocks, or bonds",
+        "Life insurance policies",
+        "Proof of identity and citizenship: birth certificate or passport",
+        "Photo ID issued by a government agency",
+        "Current health insurance cards and policy information",
+        "Most recent tax return",
+        "Any unpaid medical bills from the last three months"
+      ],
+      "contacts": [
+        {
+          "label": "DFCS Customer Contact Center (start here)",
+          "phone": "(877) 423-4746",
+          "description": "Takes Medicaid applications over the phone and gives you a transaction number on the call. Also handles SNAP and TANF. Free interpreters; TTY dial 711.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Georgia Division of Aging Services",
+          "phone": "(866) 552-4464",
+          "description": "Connects you to your Area Agency on Aging for help with care services once Medicaid is in place.",
+          "hours": "Hours not published (Eastern time)"
+        },
+        {
+          "label": "Georgia 2-1-1",
+          "phone": "2-1-1",
+          "description": "Regional referral network. Not a Medicaid application door.",
+          "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
+        }
+      ],
+      "applicationNotes": [
+        "Georgia calls this Medical Assistance on Form 297 and inside Georgia Gateway. It is the same thing as Medicaid.",
+        "Report unpaid medical bills from the last three months on the application. Medicaid can cover them retroactively, but only if you report them when you apply.",
+        "Being over the income limit is not the end of it. The Medically Needy pathway has no income limit and uses unpaid medical bills to spend down the difference. A Qualified Income Trust is another route for nursing home coverage.",
+        "If your loved one is married and needs nursing home care, the spouse at home can keep up to $4,066.50 a month in income under Georgia's 2026 spousal impoverishment rules.",
+        "Signing the application means agreeing to estate recovery if the person is 55 or older and receives home and community-based or waiver services, or lives in a nursing home.",
+        "Eligibility is renewed once every 12 months."
+      ],
+      "relatedPrograms": [
+        "Elderly and Disabled Waiver Program (EDWP)",
+        "Georgia Medicare Savings Programs (QMB, SLMB, QI)",
+        "Senior Supplemental Nutrition Assistance Program (Senior SNAP)",
+        "Georgia State Health Insurance Assistance Program (Georgia SHIP)"
+      ],
+      "contentSections": [],
+      "faqs": [
+        {
+          "question": "My loved one's income is over $2,982 a month. Is that the end of it?",
+          "answer": "No. Georgia has a Medically Needy pathway with no income limit, where unpaid medical bills are used to spend down the difference between income and the limit. There are still resource limits. For nursing home coverage specifically, a Qualified Income Trust may be an option. Apply and let the agency decide."
+        },
+        {
+          "question": "Can my loved one keep their home?",
+          "answer": "Yes. The home is not a countable asset, and neither is one vehicle, household furnishings, or burial funds up to $10,000. Countable resources are things like bank accounts, investments, and land other than the home, and the limit is $2,000 for one person."
+        },
+        {
+          "question": "Is this the same as the Elderly and Disabled Waiver?",
+          "answer": "No, and the order matters. This Medicaid application comes first. The Elderly and Disabled Waiver Program pays for care at home and sits on top of Medicaid, so you have to be eligible for Medicaid before you can join it. The waiver also has a waiting list; Medicaid itself does not."
+        },
+        {
+          "question": "What if we gave money or property to family recently?",
+          "answer": "Anything given away for less than its value in the 60 months before applying can create a penalty period where Medicaid will not pay. Tell the caseworker about it rather than leaving it out. It affects timing, not whether you can apply."
+        },
+        {
+          "question": "Will Medicaid pay bills we already owe?",
+          "answer": "It can, for up to three months before the application, but only if you report those unpaid bills on the application itself. Georgia asks about this directly on Form 297."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Bed",
+      "phone": "(877) 423-4746",
+      "sourceUrl": "https://medicaid.georgia.gov/how-apply/basic-eligibility",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-09-09",
+      "lastVerifiedDate": "2026-09-09"
+    },
     {
       "id": "ccsp-home-care",
       "name": "Elderly and Disabled Waiver Program (EDWP)",

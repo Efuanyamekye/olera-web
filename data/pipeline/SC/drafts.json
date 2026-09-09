@@ -6,6 +6,186 @@
   "successful": 14,
   "programs": [
     {
+      "id": "medicaid-aged-blind-disabled",
+      "name": "South Carolina Healthy Connections Medicaid (Aged, Blind or Disabled)",
+      "shortName": "Healthy Connections Medicaid",
+      "tagline": "If your loved one is 65 or older with limited income and savings, this is the Medicaid application that opens the door to home care and nursing home coverage.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state"
+      },
+      "intro": "Healthy Connections is South Carolina's Medicaid program. This is the base application for people 65 and older, and it matters because most of South Carolina's help with care costs sits on top of it: the Community Choices Waiver, which pays for care at home, requires Medicaid first. If your loved one is not on Medicaid yet, this application is the step that unlocks the rest.\n\nSouth Carolina says it plainly on its own eligibility page: apply if you are unsure about eligibility. There is no waiting list, and the state has to give you a decision.",
+      "savingsRange": "",
+      "savingsSource": "Free to apply. Medicaid pays providers directly rather than paying the family.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, blind, or living with a disability",
+          "South Carolina resident",
+          "For regular ABD coverage: income under $1,330/month for one person, with countable resources under $9,950",
+          "For nursing home or in-home care coverage: income under $2,982/month, with countable resources under $2,000",
+          "Apply even if the income looks too high. The two doors have different limits and a Social Security check often clears one but not the other."
+        ],
+        "ageRequirement": "65+ or blind or disabled",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Bank accounts",
+            "Investment accounts, stocks and bonds",
+            "Cash",
+            "Additional vehicles beyond the first",
+            "Land and property other than the home"
+          ],
+          "exemptAssets": [
+            "The primary home",
+            "One vehicle",
+            "Household furnishings and personal belongings",
+            "Burial plots and prepaid burial arrangements"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "No functional test for regular ABD coverage. Nursing home and in-home care coverage require a nursing-facility level of care.",
+        "otherRequirements": [
+          "If Social Security has not already established a disability, that determination has to happen first, which lengthens the decision",
+          "You can apply up to three months before turning 65",
+          "Coverage is renewed every year, and changes must be reported within 10 days"
+        ],
+        "povertyLevelReference": "ABD income limits are set at 100% of the federal poverty level; nursing home and in-home care use 300% of the SSI federal benefit rate"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at apply.scdhhs.gov, in person at a county eligibility office, or by paper form. Call (888) 549-0820 to have an application mailed to you or for help filling one in. Decisions take up to 45 days, or 90 if a disability has to be determined.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "If care at home is the goal, call about CLTC first",
+            "description": "South Carolina asks you to contact Healthy Connections at (888) 549-0820 for a Community Long Term Care determination BEFORE completing the application, if the care will be at home. Doing this in the wrong order is the most common avoidable delay."
+          },
+          {
+            "step": 2,
+            "title": "Get the application",
+            "description": "Apply online at apply.scdhhs.gov, or call (888) 549-0820, Monday to Friday 8am to 6pm, and ask for a paper application to be mailed. You can also walk into a county eligibility office, open Monday to Friday 8:30am to 5pm. The phone line cannot take the application itself; it mails you one or helps you complete it."
+          },
+          {
+            "step": 3,
+            "title": "Use the right form for the situation",
+            "description": "Form 3400 is the main application, and ABD applicants must also file Form 3400-A. If the care will be in a nursing home or through a waiver, use Form 3401 instead."
+          },
+          {
+            "step": 4,
+            "title": "Ask for the last three months of bills to be covered",
+            "description": "Question 16 on the application asks whether you want help paying medical bills from the last three months. It is opt-in. Leaving it blank gives up coverage your loved one may be owed."
+          },
+          {
+            "step": 5,
+            "title": "Send it back",
+            "description": "Email 8888201204@fax.scdhhs.gov, fax (888) 820-1204, mail SCDHHS Central Mail, PO Box 100101, Columbia SC 29202-3101, or hand it in at a county office. Free help with the form is available from SC Thrive at (800) 726-8774."
+          }
+        ],
+        "processingTime": "Up to 45 days for a decision, or 90 days when a disability has to be determined. The Medicaid card usually arrives within a week of approval.",
+        "waitlist": "There is no waiting list for Medicaid itself. The Community Choices Waiver that pays for home care has limited slots, which is a reason to get the Medicaid application in now.",
+        "tip": "South Carolina leads its own eligibility page with \"Please apply if you are unsure about eligibility!\" The income limits differ by pathway, so a check that is too high for one may still clear another.",
+        "urls": [
+          {
+            "label": "Apply online",
+            "url": "https://apply.scdhhs.gov/"
+          },
+          {
+            "label": "Eligibility and income limits",
+            "url": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits"
+          },
+          {
+            "label": "Find your county eligibility office",
+            "url": "https://www.scdhhs.gov/members/where-go-help"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security number for the person applying",
+        "Amounts of any benefits coming in now: Social Security, SSI, veteran's benefits, or child support",
+        "How much is in checking, savings, and any other accounts",
+        "Date of birth",
+        "Income from any job or training, if there is any",
+        "Monthly rent or mortgage payment and utility bills",
+        "Any health coverage or medical benefits already in place",
+        "Any unpaid medical bills from the last three months"
+      ],
+      "contacts": [
+        {
+          "label": "Healthy Connections Member Contact Center (start here)",
+          "phone": "(888) 549-0820",
+          "description": "Ask for a paper application to be mailed, or for help filling one in. This line cannot file the application for you. If care will be at home, ask about a Community Long Term Care determination first. TTY (888) 842-3620.",
+          "hours": "Mon-Fri 8am-6pm ET; hours can vary on state holidays or in bad weather"
+        },
+        {
+          "label": "SC Thrive",
+          "phone": "(800) 726-8774",
+          "description": "Free help completing the application.",
+          "hours": "Hours not published"
+        },
+        {
+          "label": "Healthy Connections local eligibility offices",
+          "phone": null,
+          "description": "Walk in to apply in person. Find your county office at scdhhs.gov/members/where-go-help",
+          "hours": "Mon-Fri 8:30am-5pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "The phone line will mail you an application or help you complete one, but South Carolina files applications in person or by mail, not over the phone. Plan for a form either way.",
+        "South Carolina's resource limit for regular ABD coverage is $9,950 for one person, which is far more generous than the $2,000 most states use. Nursing home coverage does use the $2,000 limit.",
+        "There is no medically needy spend-down in South Carolina. If income is over the limit for nursing home coverage, the route is an income trust, which has no upper income limit.",
+        "If resources are over the limit, the state allows up to 45 days from the application date to spend them down, and 90 days for a nursing home case.",
+        "Signing the application means agreeing to estate recovery for anyone 55 or older who received nursing facility or home and community-based services.",
+        "SCDHHS never calls beneficiaries asking for a Social Security number. Anyone who does is not the state."
+      ],
+      "relatedPrograms": [
+        "Community Choices Waiver",
+        "Medicare Savings Programs (QMB, SLMB, QI)",
+        "Elderly Simplified Application Project (ESAP)",
+        "SHIP / I-Care"
+      ],
+      "contentSections": [],
+      "faqs": [
+        {
+          "question": "Our Social Security check is more than $1,330 a month. Are we out?",
+          "answer": "Probably not. That figure is the limit for regular ABD coverage. If your loved one needs nursing home level care, at home or in a facility, the limit is $2,982 a month. A typical Social Security check clears the second even when it fails the first, which is why South Carolina asks people to apply rather than self-screen."
+        },
+        {
+          "question": "How much can they have in the bank?",
+          "answer": "For regular ABD coverage, $9,950 for one person and $14,910 for a couple. South Carolina is more generous here than most states. For nursing home coverage the limit drops to $2,000. The home and one vehicle do not count either way."
+        },
+        {
+          "question": "Is this the same as the Community Choices Waiver?",
+          "answer": "No, and the order matters. This Medicaid application comes first. Community Choices pays for care at home and sits on top of Medicaid, so eligibility here has to be settled before joining it. If care at home is the goal, call and ask about a Community Long Term Care determination before you finish the application."
+        },
+        {
+          "question": "Can Medicaid pay bills we already owe?",
+          "answer": "Yes, for up to three months before the application, but only if you ask. Question 16 on the form asks whether you want help with medical bills from the last three months. It is easy to skip and it is worth money."
+        },
+        {
+          "question": "Can they apply before turning 65?",
+          "answer": "Yes. South Carolina lets people apply up to three months before turning 65 or becoming eligible for Medicare, so the coverage is ready when they are."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Bed",
+      "phone": "(888) 549-0820",
+      "sourceUrl": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-09-09",
+      "lastVerifiedDate": "2026-09-09"
+    },
+    {
       "id": "community-choices-waiver",
       "name": "Community Choices Waiver",
       "shortName": "Community Choices",
