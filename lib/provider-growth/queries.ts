@@ -265,6 +265,50 @@ export async function getNewClaimSubtabCounts(): Promise<{
   };
 }
 
+/**
+ * Get counts for Converted subtabs (Not Contacted vs In Progress).
+ * Converted = ads_status = "free_intro" OR medjobs_status IN ("in_pilot", "pilot_expired")
+ * Returns { notContacted, inProgress } where inProgress means has call attempts.
+ */
+export async function getConvertedSubtabCounts(): Promise<{
+  notContacted: number;
+  inProgress: number;
+}> {
+  const db = getServiceClient();
+
+  // Get all converted tracking IDs (free_intro OR in_pilot/pilot_expired)
+  const { data: converted, error: convertedError } = await db
+    .from("provider_growth_tracking")
+    .select("id")
+    .or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
+
+  if (convertedError || !converted) {
+    console.error("[provider-growth] Converted query error:", convertedError);
+    return { notContacted: 0, inProgress: 0 };
+  }
+
+  const trackingIds = converted.map((c) => c.id);
+  if (trackingIds.length === 0) {
+    return { notContacted: 0, inProgress: 0 };
+  }
+
+  // Get call stats
+  const callStats = await getCallStatsForTrackingIds(trackingIds);
+
+  // Count providers with/without calls
+  let inProgress = 0;
+  for (const id of trackingIds) {
+    if ((callStats.get(id)?.count || 0) > 0) {
+      inProgress++;
+    }
+  }
+
+  return {
+    notContacted: trackingIds.length - inProgress,
+    inProgress,
+  };
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // List Queries
 // ─────────────────────────────────────────────────────────────────────────────
@@ -283,8 +327,10 @@ export interface ListProvidersOptions {
   offset?: number;
   orderBy?: "claimed_at" | "meeting_scheduled_at" | "pipeline_stage_changed_at" | "last_activity_at";
   orderDirection?: "asc" | "desc";
-  // Filter by call status for new_claim subtabs
+  // Filter by call status for new_claim and converted subtabs
   hasCallAttempts?: boolean;
+  // Filter for converted providers (ads free_intro OR medjobs in_pilot/pilot_expired)
+  converted?: boolean;
 }
 
 export async function listProviders(options: ListProvidersOptions = {}): Promise<{
@@ -306,6 +352,7 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     orderBy = "claimed_at",
     orderDirection = "desc",
     hasCallAttempts,
+    converted,
   } = options;
 
   // Build the query
@@ -357,6 +404,10 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   }
   if (medjobsEligible !== undefined) {
     query = query.eq("medjobs_eligible", medjobsEligible);
+  }
+  // Converted filter: ads free_intro OR medjobs in_pilot/pilot_expired
+  if (converted) {
+    query = query.or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
   }
   // Date range filtering
   if (claimedFrom) {

@@ -44,8 +44,8 @@ export const VALID_STAGE_TRANSITIONS: Record<PipelineStage, PipelineStage[]> = {
   new_claim: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for self-converted providers
   meeting_scheduled: ["pitched", "no_show", "not_interested"],  // meeting outcomes
   pitched: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers
-  not_interested: ["meeting_scheduled", "pitched"],  // can schedule follow-up or mark interested
-  no_show: ["meeting_scheduled", "not_interested"],  // can reschedule or mark not interested
+  not_interested: ["meeting_scheduled", "upgrade_meeting", "pitched"],  // upgrade_meeting for Converted providers re-engaging
+  no_show: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers rescheduling
   upgrade_meeting: ["upgrade_meeting", "pitched", "not_interested"],  // can reschedule, complete, or decline
 };
 
@@ -286,7 +286,7 @@ export const STAGE_OUTCOMES: Record<PipelineStage, ActivityOutcome[]> = {
   pitched: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
   not_interested: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "interested"],
   no_show: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
-  upgrade_meeting: ["note", "interested", "not_interested", "no_show"],
+  upgrade_meeting: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "interested", "not_interested", "no_show"],
 };
 
 // Outcomes that trigger a confirmation modal (because they change stage)

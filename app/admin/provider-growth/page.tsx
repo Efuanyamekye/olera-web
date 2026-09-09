@@ -64,9 +64,11 @@ export default function ProviderGrowthPage() {
       return { type: "pipeline", stage: "upgrade_meeting", subTab };
     }
 
-    // Check for conversion tabs (converted/paying with subtab)
-    if (tab === "converted" && sub && ["ads", "medjobs", "both"].includes(sub)) {
-      return { type: "conversion", tab: "converted", subTab: sub as "ads" | "medjobs" | "both" };
+    // Check for conversion tabs
+    if (tab === "converted") {
+      const validSubTabs = ["not_contacted", "in_progress"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "in_progress") : "not_contacted";
+      return { type: "conversion", tab: "converted", subTab };
     }
     if (tab === "paying" && sub && ["ads", "medjobs", "both"].includes(sub)) {
       return { type: "conversion", tab: "paying", subTab: sub as "ads" | "medjobs" | "both" };
@@ -80,6 +82,10 @@ export default function ProviderGrowthPage() {
   const [providers, setProviders] = useState<ProviderGrowthWithProfile[]>([]);
   const [stats, setStats] = useState<GrowthStats | null>(null);
   const [newClaimSubtabCounts, setNewClaimSubtabCounts] = useState<{
+    notContacted: number;
+    inProgress: number;
+  } | null>(null);
+  const [convertedSubtabCounts, setConvertedSubtabCounts] = useState<{
     notContacted: number;
     inProgress: number;
   } | null>(null);
@@ -126,13 +132,14 @@ export default function ProviderGrowthPage() {
     setPage(0);
   }, [dateRange]);
 
-  // Fetch stats (including new claim subtab counts)
+  // Fetch stats (including subtab counts)
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
-      const [statsRes, subtabRes] = await Promise.all([
+      const [statsRes, newClaimSubtabRes, convertedSubtabRes] = await Promise.all([
         fetch("/api/admin/provider-growth/stats"),
         fetch("/api/admin/provider-growth/new-claim-subtabs"),
+        fetch("/api/admin/provider-growth/converted-subtabs"),
       ]);
 
       if (statsRes.ok) {
@@ -140,9 +147,14 @@ export default function ProviderGrowthPage() {
         setStats(data.stats);
       }
 
-      if (subtabRes.ok) {
-        const data = await subtabRes.json();
+      if (newClaimSubtabRes.ok) {
+        const data = await newClaimSubtabRes.json();
         setNewClaimSubtabCounts(data);
+      }
+
+      if (convertedSubtabRes.ok) {
+        const data = await convertedSubtabRes.json();
+        setConvertedSubtabCounts(data);
       }
     } catch (e) {
       console.error("Failed to fetch stats:", e);
@@ -193,15 +205,14 @@ export default function ProviderGrowthPage() {
         }
       } else {
         // Conversion tabs
-        // For MedJobs, include both in_pilot and pilot_expired (they still need to convert to paying)
         if (activeTab.tab === "converted") {
-          if (activeTab.subTab === "ads") {
-            params.set("adsStatus", "free_intro");
-          } else if (activeTab.subTab === "medjobs") {
-            params.set("medjobsStatus", "in_pilot,pilot_expired");
-          } else if (activeTab.subTab === "both") {
-            params.set("adsStatus", "free_intro");
-            params.set("medjobsStatus", "in_pilot,pilot_expired");
+          // Filter by converted status (any product)
+          params.set("converted", "true");
+          // Apply hasCallAttempts filter based on subtab
+          if (activeTab.subTab === "in_progress") {
+            params.set("hasCallAttempts", "true");
+          } else {
+            params.set("hasCallAttempts", "false");
           }
         } else if (activeTab.tab === "paying") {
           if (activeTab.subTab === "ads") {
@@ -377,6 +388,7 @@ export default function ProviderGrowthPage() {
         onTabChange={handleTabChange}
         stats={stats}
         newClaimSubtabCounts={newClaimSubtabCounts ?? undefined}
+        convertedSubtabCounts={convertedSubtabCounts ?? undefined}
         followUpSubtabCounts={stats ? { active: stats.pitched, noShow: stats.no_show ?? 0, notInterested: stats.not_interested } : undefined}
       />
 

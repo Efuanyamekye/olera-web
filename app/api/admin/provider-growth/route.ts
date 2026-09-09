@@ -94,12 +94,18 @@ export async function GET(request: NextRequest) {
       options.claimedTo = claimedTo;
     }
 
-    // Call attempts filter (for new_claim subtabs)
+    // Call attempts filter (for new_claim and converted subtabs)
     const hasCallAttempts = searchParams.get("hasCallAttempts");
     if (hasCallAttempts === "true") {
       options.hasCallAttempts = true;
     } else if (hasCallAttempts === "false") {
       options.hasCallAttempts = false;
+    }
+
+    // Converted filter (ads free_intro OR medjobs in_pilot/pilot_expired)
+    const converted = searchParams.get("converted");
+    if (converted === "true") {
+      options.converted = true;
     }
 
     const limit = parseInt(searchParams.get("limit") || "50", 10);

@@ -4,28 +4,32 @@
  * GrowthTabs - Tab navigation for provider growth pipeline
  *
  * Pipeline tabs: New Claims | Meeting Scheduled | Follow-up
- * Conversion tabs: Converted | Upgrade Meeting | Paying (all with Ads/MedJobs subtabs)
+ * Conversion tabs: Converted | Upgrade Meeting | Paying
  *
  * New Claims has subtabs: Not Contacted | In Progress
  * Follow-up has subtabs: Active (pitched) | No-show (no_show) | Not Interested (not_interested)
- * Upgrade Meeting is a pipeline stage but rendered in the conversion section
+ * Converted has subtabs: Not Contacted | In Progress
+ * Upgrade Meeting has subtabs: Ads | MedJobs | Both
+ * Paying has subtabs: Ads | MedJobs | Both
  */
 
 import type { GrowthStats } from "@/lib/provider-growth/queries";
 import type { PipelineStage } from "@/lib/provider-growth/stages";
 export type NewClaimSubTab = "not_contacted" | "in_progress";
+export type ConvertedSubTab = "not_contacted" | "in_progress";
 export type FollowUpSubTab = "active" | "no_show" | "not_interested";
-export type ConversionTab = "converted" | "paying";
-export type ConversionSubTab = "ads" | "medjobs" | "both";
+export type PayingSubTab = "ads" | "medjobs" | "both";
 export type ActiveTab =
-  | { type: "pipeline"; stage: PipelineStage; subTab?: NewClaimSubTab | FollowUpSubTab | ConversionSubTab }
-  | { type: "conversion"; tab: ConversionTab; subTab: ConversionSubTab };
+  | { type: "pipeline"; stage: PipelineStage; subTab?: NewClaimSubTab | FollowUpSubTab | PayingSubTab }
+  | { type: "conversion"; tab: "converted"; subTab: ConvertedSubTab }
+  | { type: "conversion"; tab: "paying"; subTab: PayingSubTab };
 
 interface GrowthTabsProps {
   activeTab: ActiveTab;
   onTabChange: (tab: ActiveTab) => void;
   stats: GrowthStats | null;
   newClaimSubtabCounts?: { notContacted: number; inProgress: number };
+  convertedSubtabCounts?: { notContacted: number; inProgress: number };
   followUpSubtabCounts?: { active: number; noShow: number; notInterested: number };
 }
 
@@ -48,14 +52,19 @@ const PIPELINE_TABS: Array<{ id: PipelineStage; label: string }> = [
   { id: "pitched", label: "Follow-up" },
 ];
 
-const CONVERSION_SUB_TABS: Array<{ id: ConversionSubTab; label: string }> = [
+const CONVERTED_SUB_TABS: Array<{ id: ConvertedSubTab; label: string }> = [
+  { id: "not_contacted", label: "Not Contacted" },
+  { id: "in_progress", label: "In Progress" },
+];
+
+const PAYING_SUB_TABS: Array<{ id: PayingSubTab; label: string }> = [
   { id: "ads", label: "Ads" },
   { id: "medjobs", label: "MedJobs" },
   { id: "both", label: "Both" },
 ];
 
-export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts, followUpSubtabCounts }: GrowthTabsProps) {
-  const getCount = (tab: PipelineStage | ConversionTab | ConversionSubTab): number => {
+export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts, convertedSubtabCounts, followUpSubtabCounts }: GrowthTabsProps) {
+  const getCount = (tab: PipelineStage | "converted" | "paying" | PayingSubTab): number => {
     if (!stats) return 0;
 
     switch (tab) {
@@ -113,14 +122,22 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
     return stats.not_interested;
   };
 
+  const getConvertedSubTabCount = (id: ConvertedSubTab): number => {
+    if (!convertedSubtabCounts) return 0;
+    return id === "not_contacted" ? convertedSubtabCounts.notContacted : convertedSubtabCounts.inProgress;
+  };
+
   const isPipelineActive = (id: PipelineStage) =>
     activeTab.type === "pipeline" && activeTab.stage === id;
 
-  const isConversionActive = (id: ConversionTab) =>
+  const isConversionActive = (id: "converted" | "paying") =>
     activeTab.type === "conversion" && activeTab.tab === id;
 
-  const isSubTabActive = (id: ConversionSubTab) =>
-    activeTab.type === "conversion" && activeTab.subTab === id;
+  const isConvertedSubTabActive = (id: ConvertedSubTab) =>
+    activeTab.type === "conversion" && activeTab.tab === "converted" && activeTab.subTab === id;
+
+  const isPayingSubTabActive = (id: PayingSubTab) =>
+    activeTab.type === "conversion" && activeTab.tab === "paying" && activeTab.subTab === id;
 
   const isNewClaimSubTabActive = (id: NewClaimSubTab) =>
     activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === id;
@@ -179,7 +196,7 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
         {/* Converted tab */}
         <button
           onClick={() => {
-            onTabChange({ type: "conversion", tab: "converted", subTab: "ads" });
+            onTabChange({ type: "conversion", tab: "converted", subTab: "not_contacted" });
           }}
           className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             isConversionActive("converted")
@@ -302,21 +319,49 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
         </div>
       )}
 
-      {/* Conversion sub-tabs */}
-      {activeTab.type === "conversion" && (
+      {/* Converted sub-tabs (Not Contacted / In Progress) */}
+      {activeTab.type === "conversion" && activeTab.tab === "converted" && (
         <div className="flex gap-1 mt-2 pl-4">
-          {CONVERSION_SUB_TABS.map((subTab) => (
+          {CONVERTED_SUB_TABS.map((subTab) => (
             <button
               key={subTab.id}
               onClick={() =>
                 onTabChange({
                   type: "conversion",
-                  tab: activeTab.tab,
+                  tab: "converted",
                   subTab: subTab.id,
                 })
               }
               className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
-                isSubTabActive(subTab.id)
+                isConvertedSubTabActive(subTab.id)
+                  ? "bg-emerald-100 text-emerald-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {subTab.label}
+              <span className="ml-1 text-[10px] opacity-70">
+                ({getConvertedSubTabCount(subTab.id)})
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Paying sub-tabs (Ads/MedJobs/Both) */}
+      {activeTab.type === "conversion" && activeTab.tab === "paying" && (
+        <div className="flex gap-1 mt-2 pl-4">
+          {PAYING_SUB_TABS.map((subTab) => (
+            <button
+              key={subTab.id}
+              onClick={() =>
+                onTabChange({
+                  type: "conversion",
+                  tab: "paying",
+                  subTab: subTab.id,
+                })
+              }
+              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
+                isPayingSubTabActive(subTab.id)
                   ? "bg-emerald-100 text-emerald-700"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
@@ -334,7 +379,7 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
       {/* Note: No counts shown because we'd need intersection stats (upgrade_meeting + ads_status) */}
       {activeTab.type === "pipeline" && activeTab.stage === "upgrade_meeting" && (
         <div className="flex gap-1 mt-2 pl-4">
-          {CONVERSION_SUB_TABS.map((subTab) => (
+          {PAYING_SUB_TABS.map((subTab) => (
             <button
               key={subTab.id}
               onClick={() =>
