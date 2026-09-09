@@ -20,6 +20,8 @@ import {
   INTEREST_LEVEL_LABELS,
   type AdsStatus,
   type MedjobsStatus,
+  type MeetingType,
+  type MeetingFocus,
 } from "@/lib/provider-growth/stages";
 import { MeetingScheduler } from "./MeetingScheduler";
 import { ActivityLog } from "./ActivityLog";
@@ -249,9 +251,17 @@ function ActionsSection({
           </button>
         )}
         {provider.pipeline_stage === "meeting_scheduled" && (
-          <p className="text-sm text-gray-500 py-1">
-            Use Activity Log to record the meeting outcome
-          </p>
+          <>
+            <button
+              onClick={onScheduleMeeting}
+              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            >
+              Change Meeting Time
+            </button>
+            <p className="text-sm text-gray-500 py-1">
+              Use Activity Log to record the meeting outcome
+            </p>
+          </>
         )}
         {provider.pipeline_stage === "upgrade_meeting" && (
           <>
@@ -606,6 +616,8 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
               providerName={provider.display_name || "Provider"}
               contactEmail={provider.email || undefined}
               isConverted={isConverted}
+              initialMeetingType={provider.meeting_type as MeetingType | undefined}
+              initialMeetingFocus={provider.meeting_focus as MeetingFocus | undefined}
               onScheduled={handleScheduleMeeting}
               onCancel={() => setActiveAction(null)}
             />

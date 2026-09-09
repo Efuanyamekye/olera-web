@@ -20,6 +20,10 @@ interface MeetingSchedulerProps {
   contactEmail?: string;
   /** Whether provider is already converted (has free trial) - used to default meeting type */
   isConverted?: boolean;
+  /** Initial meeting type (for rescheduling - preserves existing selection) */
+  initialMeetingType?: MeetingType;
+  /** Initial meeting focus (for rescheduling - preserves existing selection) */
+  initialMeetingFocus?: MeetingFocus;
   onScheduled: (meetingInfo: {
     scheduled_at: string;
     calendly_event_id?: string;
@@ -35,13 +39,20 @@ export function MeetingScheduler({
   contactName,
   contactEmail,
   isConverted = false,
+  initialMeetingType,
+  initialMeetingFocus,
   onScheduled,
   onCancel,
 }: MeetingSchedulerProps) {
   const [manualDate, setManualDate] = useState("");
   const [manualTime, setManualTime] = useState("");
-  const [meetingType, setMeetingType] = useState<MeetingType>(isConverted ? "upgrade" : "new");
-  const [meetingFocus, setMeetingFocus] = useState<MeetingFocus>("both");
+  // Use initial values if provided (for rescheduling), otherwise use defaults
+  const [meetingType, setMeetingType] = useState<MeetingType>(
+    initialMeetingType ?? (isConverted ? "upgrade" : "new")
+  );
+  const [meetingFocus, setMeetingFocus] = useState<MeetingFocus>(
+    initialMeetingFocus ?? "both"
+  );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
