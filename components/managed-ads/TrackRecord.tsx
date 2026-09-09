@@ -84,7 +84,7 @@ export default function TrackRecord() {
                     fallback in this stack. It fits on a Mac and wraps
                     mid-number on Windows, so checking it locally will not show
                     you the failure. At display-xs Georgia measures 105px and
-                    clears even a 320px phone, with 3px to spare. */
+                    clears even a 320px phone, with 3px to spare. */}
                 <dt className="font-serif text-display-xs font-bold tabular-nums text-gray-900 sm:text-display-sm md:text-display-md">
                   {t.value}
                 </dt>
