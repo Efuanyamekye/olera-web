@@ -22,7 +22,7 @@ import {
  * GET /api/admin/provider-growth
  *
  * List providers with growth tracking. Supports filtering by:
- * - pipelineStage: new_claim | meeting_scheduled | pitched | not_interested | upgrade_meeting
+ * - pipelineStage: new_claim | meeting_scheduled | pitched | not_interested | no_show | upgrade_meeting
  * - adsStatus: none | free_intro | subscribed
  * - medjobsStatus: none | in_pilot | pilot_expired | subscribed
  * - claimSource: cold_outreach | city_broadcast | email | page | ...
@@ -56,9 +56,15 @@ export async function GET(request: NextRequest) {
       options.adsStatus = adsStatus as AdsStatus;
     }
 
+    // medjobsStatus can be comma-separated for multiple values (e.g., "in_pilot,pilot_expired")
     const medjobsStatus = searchParams.get("medjobsStatus");
-    if (medjobsStatus && MEDJOBS_STATUSES.includes(medjobsStatus as MedjobsStatus)) {
-      options.medjobsStatus = medjobsStatus as MedjobsStatus;
+    if (medjobsStatus) {
+      const statuses = medjobsStatus.split(",").filter((s) => MEDJOBS_STATUSES.includes(s as MedjobsStatus));
+      if (statuses.length === 1) {
+        options.medjobsStatus = statuses[0] as MedjobsStatus;
+      } else if (statuses.length > 1) {
+        options.medjobsStatus = statuses as MedjobsStatus[];
+      }
     }
 
     const claimSource = searchParams.get("claimSource");

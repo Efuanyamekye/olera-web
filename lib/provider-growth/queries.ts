@@ -38,6 +38,8 @@ export interface ProviderGrowthTracking {
   medjobs_subscribed_at: string | null;
   not_interested_at: string | null;
   not_interested_reason: string | null;
+  no_show_count: number | null;
+  last_no_show_at: string | null;
   assigned_to: string | null;
   notes: string | null;
   last_activity_at: string | null;
@@ -81,13 +83,15 @@ export interface GrowthStats {
   meeting_scheduled: number;
   pitched: number;
   not_interested: number;
+  no_show: number;
   upgrade_meeting: number;
   ads_free_intro: number;
   ads_subscribed: number;
   medjobs_in_pilot: number;
+  medjobs_pilot_expired: number;
   medjobs_subscribed: number;
   // Providers with BOTH products active
-  both_converted: number;  // ads_free_intro AND medjobs_in_pilot
+  both_converted: number;  // ads_free_intro AND (medjobs_in_pilot OR medjobs_pilot_expired)
   both_paying: number;     // ads_subscribed AND medjobs_subscribed
 }
 
@@ -131,7 +135,9 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     }
 
     // Count providers with BOTH products active
-    if (row.ads_status === "free_intro" && row.medjobs_status === "in_pilot") {
+    // "Converted" means on free trial - includes pilot_expired since they still need to convert to paying
+    const medjobsConverted = row.medjobs_status === "in_pilot" || row.medjobs_status === "pilot_expired";
+    if (row.ads_status === "free_intro" && medjobsConverted) {
       bothConverted++;
     }
     if (row.ads_status === "subscribed" && row.medjobs_status === "subscribed") {
@@ -144,10 +150,12 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     meeting_scheduled: stageCounts.meeting_scheduled || 0,
     pitched: stageCounts.pitched || 0,
     not_interested: stageCounts.not_interested || 0,
+    no_show: stageCounts.no_show || 0,
     upgrade_meeting: stageCounts.upgrade_meeting || 0,
     ads_free_intro: adsCounts.free_intro || 0,
     ads_subscribed: adsCounts.subscribed || 0,
     medjobs_in_pilot: medjobsCounts.in_pilot || 0,
+    medjobs_pilot_expired: medjobsCounts.pilot_expired || 0,
     medjobs_subscribed: medjobsCounts.subscribed || 0,
     both_converted: bothConverted,
     both_paying: bothPaying,
@@ -264,7 +272,7 @@ export async function getNewClaimSubtabCounts(): Promise<{
 export interface ListProvidersOptions {
   pipelineStage?: PipelineStage;
   adsStatus?: AdsStatus;
-  medjobsStatus?: MedjobsStatus;
+  medjobsStatus?: MedjobsStatus | MedjobsStatus[];  // Can be single or array (e.g., for in_pilot OR pilot_expired)
   claimSource?: ClaimSource;
   medjobsEligible?: boolean;
   search?: string;
@@ -333,8 +341,16 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   if (adsStatus && adsStatus !== "none") {
     query = query.eq("ads_status", adsStatus);
   }
-  if (medjobsStatus && medjobsStatus !== "none") {
-    query = query.eq("medjobs_status", medjobsStatus);
+  // medjobsStatus can be a single value or array (e.g., ["in_pilot", "pilot_expired"] for Converted tab)
+  if (medjobsStatus) {
+    if (Array.isArray(medjobsStatus)) {
+      const filtered = medjobsStatus.filter((s) => s !== "none");
+      if (filtered.length > 0) {
+        query = query.in("medjobs_status", filtered);
+      }
+    } else if (medjobsStatus !== "none") {
+      query = query.eq("medjobs_status", medjobsStatus);
+    }
   }
   if (claimSource) {
     query = query.eq("claim_source", claimSource);
@@ -353,10 +369,12 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   // Apply ordering
   query = query.order(orderBy, { ascending: orderDirection === "asc" });
 
-  // When searching, fetch all matching rows then filter + paginate in memory
-  // because PostgREST doesn't support ilike on joined columns.
-  // Without search, apply pagination at DB level for efficiency.
-  if (!search) {
+  // When searching or filtering by hasCallAttempts, fetch all matching rows
+  // then filter + paginate in memory because:
+  // - PostgREST doesn't support ilike on joined columns (search)
+  // - hasCallAttempts requires joining with touchpoints (in memory)
+  // Without these filters, apply pagination at DB level for efficiency.
+  if (!search && hasCallAttempts === undefined) {
     query = query.range(offset, offset + limit - 1);
   }
 
@@ -582,7 +600,7 @@ export async function createTracking(
 
 export interface UpdateTrackingInput {
   pipeline_stage?: PipelineStage;
-  calendly_event_id?: string;
+  calendly_event_id?: string | null;
   meeting_scheduled_at?: string;
   meeting_completed_at?: string;
   pitched_at?: string;
@@ -598,8 +616,13 @@ export interface UpdateTrackingInput {
   medjobs_subscribed_at?: string;
   not_interested_at?: string;
   not_interested_reason?: string;
+  no_show_count?: number;
+  last_no_show_at?: string;
   assigned_to?: string;
   notes?: string;
+  // Meeting reminder tracking - cleared when meeting is rescheduled
+  reminder_2d_sent_at?: string | null;
+  reminder_1d_sent_at?: string | null;
 }
 
 export async function updateTracking(

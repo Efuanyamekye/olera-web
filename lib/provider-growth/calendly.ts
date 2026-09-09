@@ -5,11 +5,10 @@
  * webhook event processing for meeting scheduled/completed events.
  */
 
-// Calendly event URL - configurable via environment variable
-// Falls back to the existing olera-demo event type used for other calls
-const CALENDLY_BASE_URL =
-  process.env.NEXT_PUBLIC_CALENDLY_PROVIDER_GROWTH_URL ||
-  "https://calendly.com/caregivers979/olera-demo";
+// Calendly event URL - same as MedJobs (same team handles both)
+import { CALENDLY_URL } from "@/lib/student-outreach/templates";
+
+const CALENDLY_BASE_URL = CALENDLY_URL;
 
 export interface CalendlyBookingParams {
   trackingId: string;  // provider_growth_tracking.id for callback

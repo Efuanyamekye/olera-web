@@ -436,6 +436,11 @@ async function insertProviderGrowthTouchpoint(
   });
 }
 
+// Stages that should advance to meeting_scheduled when a meeting is booked.
+// Stages NOT in this list are "past" meeting_scheduled and should not regress.
+// Exception: no_show can transition back to meeting_scheduled (rescheduling).
+const STAGES_BEFORE_MEETING = ["new_claim", "no_show"];
+
 async function handleProviderGrowthCreated(
   row: ResolvedProviderGrowthRow,
   extract: InviteeExtract,
@@ -447,21 +452,38 @@ async function handleProviderGrowthCreated(
   // Determine the target stage based on conversion status:
   // - Converted providers (free trial) → upgrade_meeting
   // - Non-converted providers → meeting_scheduled
+  // BUT: Never regress providers who are already past meeting_scheduled
+  // (e.g., pitched, not_interested). For those, just update the meeting time.
   const isConverted =
     row.ads_status === "free_intro" || row.medjobs_status === "in_pilot";
+
+  // Only change stage if provider is in an early stage or needs upgrade_meeting
+  const shouldUpdateStage =
+    STAGES_BEFORE_MEETING.includes(row.pipeline_stage) || // new_claim → meeting_scheduled
+    (isConverted && row.pipeline_stage !== "upgrade_meeting"); // converted but not yet in upgrade_meeting
+
   const targetStage = isConverted ? "upgrade_meeting" : "meeting_scheduled";
 
-  // Update tracking to the appropriate stage
+  // Build update payload - only include pipeline_stage if we should update it
+  const updatePayload: Record<string, unknown> = {
+    meeting_scheduled_at: extract.start_time,
+    calendly_event_id: extract.event_uri?.split("/").pop() ?? null,
+    last_activity_at: now,
+    updated_at: now,
+    // Reset reminder flags for rescheduled meetings
+    reminder_2d_sent_at: null,
+    reminder_1d_sent_at: null,
+  };
+
+  if (shouldUpdateStage) {
+    updatePayload.pipeline_stage = targetStage;
+    updatePayload.pipeline_stage_changed_at = now;
+  }
+
+  // Update tracking
   await supabase
     .from("provider_growth_tracking")
-    .update({
-      pipeline_stage: targetStage,
-      pipeline_stage_changed_at: now,
-      meeting_scheduled_at: extract.start_time,
-      calendly_event_id: extract.event_uri?.split("/").pop() ?? null,
-      last_activity_at: now,
-      updated_at: now,
-    })
+    .update(updatePayload)
     .eq("id", row.id);
 
   // Create touchpoint
@@ -473,11 +495,16 @@ async function handleProviderGrowthCreated(
     invitee_email: extract.invitee_email,
     scheduled_at: extract.start_time,
     method: "calendly_webhook",
-    target_stage: targetStage,
+    target_stage: shouldUpdateStage ? targetStage : null,
+    stage_changed: shouldUpdateStage,
+    previous_stage: row.pipeline_stage,
   });
 
-  console.log(`[calendly-webhook] Provider Growth ${targetStage}:`, row.id, {
+  console.log(`[calendly-webhook] Provider Growth meeting scheduled:`, row.id, {
     isConverted,
+    shouldUpdateStage,
+    previousStage: row.pipeline_stage,
+    targetStage: shouldUpdateStage ? targetStage : "(unchanged)",
     ads_status: row.ads_status,
     medjobs_status: row.medjobs_status,
   });

@@ -36,7 +36,7 @@ export default function ProviderGrowthPage() {
   // Tab state
   const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
     const tab = searchParams.get("tab");
-    const sub = searchParams.get("sub") as "ads" | "medjobs" | "both" | "not_contacted" | "in_progress" | null;
+    const sub = searchParams.get("sub") as "ads" | "medjobs" | "both" | "not_contacted" | "in_progress" | "active" | "no_show" | "not_interested" | null;
 
     // Check for new_claim with subtab
     if (tab === "new_claim") {
@@ -45,8 +45,15 @@ export default function ProviderGrowthPage() {
       return { type: "pipeline", stage: "new_claim", subTab };
     }
 
+    // Check for pitched (Follow-up) with subtab
+    if (tab === "pitched") {
+      const validSubTabs = ["active", "no_show", "not_interested"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "active" | "no_show" | "not_interested") : "active";
+      return { type: "pipeline", stage: "pitched", subTab };
+    }
+
     // Check for other pipeline stage tabs (without subtabs)
-    if (tab && ["meeting_scheduled", "pitched", "not_interested"].includes(tab)) {
+    if (tab && ["meeting_scheduled"].includes(tab)) {
       return { type: "pipeline", stage: tab as PipelineStage };
     }
 
@@ -152,7 +159,20 @@ export default function ProviderGrowthPage() {
 
       // Set filters based on active tab
       if (activeTab.type === "pipeline") {
-        params.set("pipelineStage", activeTab.stage);
+        // For Follow-up tab (pitched), filter based on subtab
+        if (activeTab.stage === "pitched") {
+          // Each subtab maps to a different pipeline stage
+          if (activeTab.subTab === "no_show") {
+            params.set("pipelineStage", "no_show");
+          } else if (activeTab.subTab === "not_interested") {
+            params.set("pipelineStage", "not_interested");
+          } else {
+            // "active" subtab (or no subtab) shows pitched stage
+            params.set("pipelineStage", "pitched");
+          }
+        } else {
+          params.set("pipelineStage", activeTab.stage);
+        }
 
         // For new_claim, apply hasCallAttempts filter based on subtab
         if (activeTab.stage === "new_claim" && activeTab.subTab) {
@@ -160,26 +180,28 @@ export default function ProviderGrowthPage() {
         }
 
         // For upgrade_meeting, apply Ads/MedJobs/Both filter based on subtab
+        // Include pilot_expired for MedJobs since they still need to convert to paying
         if (activeTab.stage === "upgrade_meeting" && activeTab.subTab) {
           if (activeTab.subTab === "ads") {
             params.set("adsStatus", "free_intro");
           } else if (activeTab.subTab === "medjobs") {
-            params.set("medjobsStatus", "in_pilot");
+            params.set("medjobsStatus", "in_pilot,pilot_expired");
           } else if (activeTab.subTab === "both") {
             params.set("adsStatus", "free_intro");
-            params.set("medjobsStatus", "in_pilot");
+            params.set("medjobsStatus", "in_pilot,pilot_expired");
           }
         }
       } else {
         // Conversion tabs
+        // For MedJobs, include both in_pilot and pilot_expired (they still need to convert to paying)
         if (activeTab.tab === "converted") {
           if (activeTab.subTab === "ads") {
             params.set("adsStatus", "free_intro");
           } else if (activeTab.subTab === "medjobs") {
-            params.set("medjobsStatus", "in_pilot");
+            params.set("medjobsStatus", "in_pilot,pilot_expired");
           } else if (activeTab.subTab === "both") {
             params.set("adsStatus", "free_intro");
-            params.set("medjobsStatus", "in_pilot");
+            params.set("medjobsStatus", "in_pilot,pilot_expired");
           }
         } else if (activeTab.tab === "paying") {
           if (activeTab.subTab === "ads") {
@@ -240,8 +262,8 @@ export default function ProviderGrowthPage() {
 
     // Update URL
     if (tab.type === "pipeline") {
-      // Include subtab for new_claim and upgrade_meeting
-      if ((tab.stage === "new_claim" || tab.stage === "upgrade_meeting") && tab.subTab) {
+      // Include subtab for new_claim, pitched (Follow-up), and upgrade_meeting
+      if ((tab.stage === "new_claim" || tab.stage === "pitched" || tab.stage === "upgrade_meeting") && tab.subTab) {
         router.push(`/admin/provider-growth?tab=${tab.stage}&sub=${tab.subTab}`, { scroll: false });
       } else {
         router.push(`/admin/provider-growth?tab=${tab.stage}`, { scroll: false });
@@ -355,6 +377,7 @@ export default function ProviderGrowthPage() {
         onTabChange={handleTabChange}
         stats={stats}
         newClaimSubtabCounts={newClaimSubtabCounts ?? undefined}
+        followUpSubtabCounts={stats ? { active: stats.pitched, noShow: stats.no_show ?? 0, notInterested: stats.not_interested } : undefined}
       />
 
       {/* Provider list */}

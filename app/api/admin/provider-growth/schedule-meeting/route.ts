@@ -68,12 +68,15 @@ export async function POST(request: NextRequest) {
         );
       }
 
+      // Clear reminder flags when (re)scheduling - ensures fresh reminders for new time
       const updated = await updateTracking(
         tracking_id,
         {
           pipeline_stage: targetStage,
           meeting_scheduled_at,
           calendly_event_id: calendly_event_id || null,
+          reminder_2d_sent_at: null,
+          reminder_1d_sent_at: null,
         },
         adminUser.id
       );

@@ -13,21 +13,16 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { DrawerShell } from "@/components/admin/medjobs/DrawerShell";
-import type { ProviderGrowthWithProfile, ProviderGrowthTouchpoint } from "@/lib/provider-growth/queries";
+import type { ProviderGrowthWithProfile } from "@/lib/provider-growth/queries";
 import {
-  PIPELINE_STAGE_LABELS,
   ADS_STATUS_LABELS,
   MEDJOBS_STATUS_LABELS,
-  TOUCHPOINT_TYPE_LABELS,
   INTEREST_LEVEL_LABELS,
-  type PipelineStage,
   type AdsStatus,
   type MedjobsStatus,
 } from "@/lib/provider-growth/stages";
-import { EligibilityBadges } from "./EligibilityBadges";
 import { MeetingScheduler } from "./MeetingScheduler";
-import { PitchLogger, type PitchLogData } from "./PitchLogger";
-import { CallLogSection } from "./CallLogSection";
+import { ActivityLog } from "./ActivityLog";
 
 interface ProviderDrawerProps {
   provider: ProviderGrowthWithProfile;
@@ -164,12 +159,8 @@ function formatPhone(phone: string): string {
 
 function MeetingInfoSection({
   provider,
-  onMarkComplete,
-  onMarkUpgradeComplete,
 }: {
   provider: ProviderGrowthWithProfile;
-  onMarkComplete: () => void;
-  onMarkUpgradeComplete: () => void;
 }) {
   const isUpgradeMeeting = provider.pipeline_stage === "upgrade_meeting";
   const isMeetingScheduled = provider.pipeline_stage === "meeting_scheduled";
@@ -195,7 +186,6 @@ function MeetingInfoSection({
   const bgColor = isUpgradeMeeting ? "bg-amber-50" : "bg-primary-50";
   const borderColor = isUpgradeMeeting ? "border-amber-100" : "border-primary-100";
   const textColor = isUpgradeMeeting ? "text-amber-600" : "text-primary-600";
-  const btnBg = isUpgradeMeeting ? "bg-amber-600 hover:bg-amber-700" : "bg-primary-600 hover:bg-primary-700";
   const linkColor = isUpgradeMeeting ? "text-amber-600 hover:text-amber-700" : "text-primary-600 hover:text-primary-700";
 
   const label = isUpgradeMeeting
@@ -204,21 +194,16 @@ function MeetingInfoSection({
 
   return (
     <div className={`p-4 ${bgColor} border ${borderColor} rounded-lg`}>
-      <div className="flex items-start justify-between">
-        <div>
-          <div className={`text-[10px] font-semibold ${textColor} uppercase tracking-wide mb-1`}>
-            {label}
-          </div>
-          <div className="text-sm font-medium text-gray-900">{formattedDate}</div>
-          <div className="text-sm text-gray-600">{formattedTime}</div>
+      <div>
+        <div className={`text-[10px] font-semibold ${textColor} uppercase tracking-wide mb-1`}>
+          {label}
         </div>
+        <div className="text-sm font-medium text-gray-900">{formattedDate}</div>
+        <div className="text-sm text-gray-600">{formattedTime}</div>
         {isPast && (
-          <button
-            onClick={isUpgradeMeeting ? onMarkUpgradeComplete : onMarkComplete}
-            className={`px-3 py-1.5 text-sm font-medium text-white ${btnBg} rounded-lg`}
-          >
-            Mark Complete
-          </button>
+          <p className="mt-2 text-xs text-gray-500">
+            Use the Activity Log below to record the outcome.
+          </p>
         )}
       </div>
       {provider.calendly_event_id && (
@@ -245,18 +230,14 @@ function MeetingInfoSection({
 function ActionsSection({
   provider,
   onScheduleMeeting,
-  onLogPitch,
   onLogUpgradeOutcome,
-  onAddNote,
-  onMarkNotInterested,
+  onSendReschedule,
   onReEngage,
 }: {
   provider: ProviderGrowthWithProfile;
   onScheduleMeeting: () => void;
-  onLogPitch: () => void;
   onLogUpgradeOutcome: () => void;
-  onAddNote: () => void;
-  onMarkNotInterested: () => void;
+  onSendReschedule: () => void;
   onReEngage: () => void;
 }) {
   return (
@@ -272,20 +253,9 @@ function ActionsSection({
           </button>
         )}
         {provider.pipeline_stage === "meeting_scheduled" && (
-          <>
-            <button
-              onClick={onLogPitch}
-              className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700"
-            >
-              Log Pitch
-            </button>
-            <button
-              onClick={onScheduleMeeting}
-              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
-            >
-              Reschedule
-            </button>
-          </>
+          <p className="text-sm text-gray-500 py-1">
+            Use Activity Log to record the meeting outcome
+          </p>
         )}
         {provider.pipeline_stage === "upgrade_meeting" && (
           <>
@@ -311,26 +281,20 @@ function ActionsSection({
             Schedule Follow-up
           </button>
         )}
+        {provider.pipeline_stage === "no_show" && (
+          <button
+            onClick={onSendReschedule}
+            className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+          >
+            Send Reschedule Email
+          </button>
+        )}
         {provider.pipeline_stage === "not_interested" && (
           <button
             onClick={onReEngage}
             className="px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 border border-primary-200"
           >
             Re-engage
-          </button>
-        )}
-        <button
-          onClick={onAddNote}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200"
-        >
-          Add Note
-        </button>
-        {provider.pipeline_stage !== "not_interested" && (
-          <button
-            onClick={onMarkNotInterested}
-            className="px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg"
-          >
-            Not Interested
           </button>
         )}
       </div>
@@ -551,19 +515,16 @@ interface EngagementData {
 }
 
 export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: ProviderDrawerProps) {
-  const [touchpoints, setTouchpoints] = useState<ProviderGrowthTouchpoint[]>([]);
   const [engagement, setEngagement] = useState<EngagementData | null>(null);
   const [loadingData, setLoadingData] = useState(true);
-  const [activeAction, setActiveAction] = useState<"schedule" | "pitch" | "upgrade" | "notes" | null>(null);
-  const [notes, setNotes] = useState(provider.notes || "");
-  const [savingNotes, setSavingNotes] = useState(false);
+  const [activeAction, setActiveAction] = useState<"schedule" | "upgrade" | "send_reschedule" | null>(null);
+  const [sendingReschedule, setSendingReschedule] = useState(false);
 
   const fetchProviderData = useCallback(async () => {
     try {
       const res = await fetch(`/api/admin/provider-growth/${provider.id}`);
       if (res.ok) {
         const data = await res.json();
-        setTouchpoints(data.touchpoints || []);
         setEngagement(data.engagement || null);
       }
     } catch (e) {
@@ -577,103 +538,35 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
     fetchProviderData();
   }, [fetchProviderData]);
 
-  // Reset notes when provider changes
+  // Reset action when provider changes
   useEffect(() => {
-    setNotes(provider.notes || "");
     setActiveAction(null);
-  }, [provider.id, provider.notes]);
+  }, [provider.id]);
 
   const handleScheduleMeeting = async (_meetingInfo: { scheduled_at: string }) => {
     setActiveAction(null);
     onUpdate();
   };
 
-  const handleLogPitch = async (data: PitchLogData) => {
+  const handleSendRescheduleEmail = async () => {
+    setSendingReschedule(true);
     try {
-      const res = await fetch("/api/admin/provider-growth/log-pitch", {
+      const res = await fetch("/api/admin/provider-growth/send-booking-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tracking_id: provider.id,
-          ...data,
-        }),
+        body: JSON.stringify({ tracking_id: provider.id }),
       });
       if (!res.ok) {
-        throw new Error("Failed to log pitch");
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to send email");
       }
       setActiveAction(null);
       onUpdate();
     } catch (e) {
-      console.error("Failed to log pitch:", e);
-    }
-  };
-
-  const handleSaveNotes = async () => {
-    setSavingNotes(true);
-    try {
-      const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes }),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to save notes");
-      }
-      setActiveAction(null);
-      onUpdate();
-    } catch (e) {
-      console.error("Failed to save notes:", e);
+      console.error("Failed to send reschedule email:", e);
+      alert(e instanceof Error ? e.message : "Failed to send email. Please try again.");
     } finally {
-      setSavingNotes(false);
-    }
-  };
-
-  const handleMarkMeetingComplete = async () => {
-    // When meeting is complete, move to "pitched" stage and open the pitch logger
-    try {
-      const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pipeline_stage: "pitched",
-          meeting_completed_at: new Date().toISOString(),
-        }),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to mark meeting complete");
-      }
-      // Open the pitch logger to capture pitch details
-      setActiveAction("pitch");
-      onUpdate();
-    } catch (e) {
-      console.error("Failed to mark meeting complete:", e);
-    }
-  };
-
-  const handleMarkUpgradeComplete = async () => {
-    // When upgrade meeting is complete, open the upgrade outcome logger
-    // The user will then choose whether they upgraded or not
-    setActiveAction("upgrade");
-  };
-
-  const handleMarkNotInterested = async () => {
-    if (!confirm("Mark this provider as not interested?")) return;
-
-    try {
-      const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pipeline_stage: "not_interested",
-          not_interested_at: new Date().toISOString(),
-        }),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to mark not interested");
-      }
-      onUpdate();
-    } catch (e) {
-      console.error("Failed to mark not interested:", e);
+      setSendingReschedule(false);
     }
   };
 
@@ -748,10 +641,8 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
     <ActionsSection
       provider={provider}
       onScheduleMeeting={() => setActiveAction("schedule")}
-      onLogPitch={() => setActiveAction("pitch")}
       onLogUpgradeOutcome={() => setActiveAction("upgrade")}
-      onAddNote={() => setActiveAction("notes")}
-      onMarkNotInterested={handleMarkNotInterested}
+      onSendReschedule={() => setActiveAction("send_reschedule")}
       onReEngage={handleReEngage}
     />
   );
@@ -768,20 +659,65 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
             <MeetingScheduler
               trackingId={provider.id}
               providerName={provider.display_name || "Provider"}
+              contactEmail={provider.email || undefined}
               onScheduled={handleScheduleMeeting}
               onCancel={() => setActiveAction(null)}
             />
           </div>
         )}
 
-        {activeAction === "pitch" && (
-          <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <PitchLogger
-              providerName={provider.display_name || "Provider"}
-              medjobsEligible={provider.medjobs_eligible}
-              onSubmit={handleLogPitch}
-              onCancel={() => setActiveAction(null)}
-            />
+        {activeAction === "send_reschedule" && (
+          <div className="mb-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-sm font-medium text-gray-900">
+                  Send Reschedule Email
+                </h3>
+              </div>
+
+              {provider.email ? (
+                <>
+                  <p className="text-sm text-gray-600">
+                    Send a booking link to <span className="font-medium">{provider.email}</span> so they can pick a new meeting time.
+                  </p>
+                  <div className="flex justify-end gap-3">
+                    <button
+                      onClick={() => setActiveAction(null)}
+                      disabled={sendingReschedule}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSendRescheduleEmail}
+                      disabled={sendingReschedule}
+                      className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 disabled:opacity-50"
+                    >
+                      {sendingReschedule ? "Sending..." : "Send Email"}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm text-amber-700">
+                    No email on file for this provider. You can call them to reschedule.
+                  </p>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => setActiveAction(null)}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         )}
 
@@ -808,65 +744,62 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
           </div>
         )}
 
-        {activeAction === "notes" && (
-          <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Notes</label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={4}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
-              placeholder="Add notes about this provider..."
-              autoFocus
-            />
-            <div className="flex justify-end gap-2 mt-3">
-              <button
-                onClick={() => setActiveAction(null)}
-                className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveNotes}
-                disabled={savingNotes}
-                className="px-4 py-1.5 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50"
-              >
-                {savingNotes ? "Saving..." : "Save"}
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Contact Section */}
         <ContactSection provider={provider} />
 
         {(provider.phone || provider.email) && <SectionDivider />}
 
         {/* Meeting Info - when meeting is scheduled */}
-        <MeetingInfoSection
-          provider={provider}
-          onMarkComplete={handleMarkMeetingComplete}
-          onMarkUpgradeComplete={handleMarkUpgradeComplete}
-        />
+        <MeetingInfoSection provider={provider} />
 
         {(provider.pipeline_stage === "meeting_scheduled" || provider.pipeline_stage === "upgrade_meeting") &&
           provider.meeting_scheduled_at && (
           <SectionDivider />
         )}
 
-        {/* Eligibility & Profile - inline row */}
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-2">
-            <EligibilityBadges
-              adsEligible={provider.ads_eligible}
-              medjobsEligible={provider.medjobs_eligible}
-              medjobsUniversity={provider.medjobs_catchment_university}
-              size="sm"
-            />
+        {/* Provider Stats - unified row matching Provider Outreach pattern */}
+        <div>
+          <SectionHeader>Provider Stats</SectionHeader>
+          <div className="flex items-center gap-6">
+            <div>
+              <span className="text-2xl font-semibold text-gray-900">
+                {provider.profile_completeness || 0}%
+              </span>
+              <span className="ml-1.5 text-sm text-gray-500">Profile</span>
+            </div>
+            <div>
+              <span className={`text-2xl font-semibold ${
+                loadingData ? "text-gray-400" :
+                (engagement?.questions_count ?? 0) > 0 ? "text-gray-900" : "text-gray-400"
+              }`}>
+                {loadingData ? "·" : (engagement?.questions_count ?? 0)}
+              </span>
+              <span className="ml-1.5 text-sm text-gray-500">Questions</span>
+            </div>
+            <div>
+              <span className={`text-2xl font-semibold ${
+                loadingData ? "text-gray-400" :
+                (engagement?.leads_count ?? 0) > 0 ? "text-gray-900" : "text-gray-400"
+              }`}>
+                {loadingData ? "·" : (engagement?.leads_count ?? 0)}
+              </span>
+              <span className="ml-1.5 text-sm text-gray-500">Leads</span>
+            </div>
+            <div>
+              <span className={`text-2xl font-semibold ${provider.ads_eligible ? "text-gray-900" : "text-gray-400"}`}>
+                {provider.ads_eligible ? "✓" : "—"}
+              </span>
+              <span className="ml-1.5 text-sm text-gray-500">Ads</span>
+            </div>
+            {provider.medjobs_eligible && (
+              <div>
+                <span className="text-2xl font-semibold text-gray-900">✓</span>
+                <span className="ml-1.5 text-sm text-gray-500">
+                  MJ{provider.medjobs_catchment_university ? `: ${provider.medjobs_catchment_university}` : ""}
+                </span>
+              </div>
+            )}
           </div>
-          <span className="text-gray-500">
-            Profile {provider.profile_completeness || 0}%
-          </span>
         </div>
 
         {/* Conversion status */}
@@ -944,8 +877,8 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
           onUpdateStatus={handleUpdateConversionStatus}
         />
 
-        {/* Notes */}
-        {provider.notes && !activeAction && (
+        {/* Notes (legacy - displayed if any exist from previous entries) */}
+        {provider.notes && (
           <>
             <SectionDivider />
             <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
@@ -959,77 +892,16 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
 
         <SectionDivider />
 
-        {/* Engagement - Questions and Leads from families */}
-        <div>
-          <SectionHeader>Platform Engagement</SectionHeader>
-          {loadingData ? (
-            <div className="flex items-center justify-center py-4">
-              <span className="w-4 h-4 border-2 border-gray-200 border-t-primary-600 rounded-full animate-spin" />
-            </div>
-          ) : engagement ? (
-            <div className="space-y-2">
-              {/* Questions */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Questions from families</span>
-                <span className={`text-sm font-medium ${engagement.questions_count > 0 ? "text-gray-900" : "text-gray-400"}`}>
-                  {engagement.questions_count}
-                </span>
-              </div>
-              {/* Leads */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Leads received</span>
-                <span className={`text-sm font-medium ${engagement.leads_count > 0 ? "text-gray-900" : "text-gray-400"}`}>
-                  {engagement.leads_count}
-                </span>
-              </div>
-              {/* Helpful context for sales */}
-              {(engagement.questions_count > 0 || engagement.leads_count > 0) && (
-                <p className="text-xs text-gray-400 mt-2 italic">
-                  Use this to show the provider they&apos;re getting value from the platform.
-                </p>
-              )}
-            </div>
-          ) : (
-            <p className="text-sm text-gray-400 italic">No engagement data</p>
-          )}
-        </div>
-
-        <SectionDivider />
-
-        {/* Call Log */}
-        <CallLogSection
+        {/* Unified Activity Log - replaces separate Call Log and Admin Activity */}
+        <ActivityLog
           trackingId={provider.id}
           businessProfileId={provider.business_profile_id}
-          onCallLogged={onCallLogged}
+          pipelineStage={provider.pipeline_stage}
+          onActivityLogged={() => {
+            onCallLogged?.();
+            onUpdate();
+          }}
         />
-
-        <SectionDivider />
-
-        {/* Admin Activity - touchpoints log */}
-        <div>
-          <SectionHeader>Admin Activity</SectionHeader>
-          {loadingData ? (
-            <div className="flex items-center justify-center py-4">
-              <span className="w-4 h-4 border-2 border-gray-200 border-t-primary-600 rounded-full animate-spin" />
-            </div>
-          ) : touchpoints.length === 0 ? (
-            <p className="text-sm text-gray-400 italic">No activity yet</p>
-          ) : (
-            <div className="space-y-3">
-              {touchpoints.map((tp) => (
-                <div key={tp.id} className="flex gap-3">
-                  <div className="w-2 h-2 mt-1.5 rounded-full bg-gray-300 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm text-gray-900">
-                      {TOUCHPOINT_TYPE_LABELS[tp.touchpoint_type] || tp.touchpoint_type}
-                    </div>
-                    <div className="text-xs text-gray-500">{timeAgo(tp.created_at)}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
       </div>
     </DrawerShell>
   );

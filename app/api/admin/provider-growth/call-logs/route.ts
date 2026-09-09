@@ -42,19 +42,10 @@ export async function GET(request: NextRequest) {
 
     const db = getServiceClient();
 
-    // Query touchpoints with type = 'call_attempted', join admin_users for names
+    // Query touchpoints with type = 'call_attempted'
     const { data: touchpoints, error } = await db
       .from("provider_growth_touchpoints")
-      .select(`
-        id,
-        tracking_id,
-        details,
-        admin_user_id,
-        created_at,
-        admin_users (
-          display_name
-        )
-      `)
+      .select("id, tracking_id, details, admin_user_id, created_at")
       .eq("tracking_id", trackingId)
       .eq("touchpoint_type", "call_attempted")
       .order("created_at", { ascending: false });
@@ -64,17 +55,33 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Failed to fetch call logs" }, { status: 500 });
     }
 
+    // Get admin names for the touchpoints
+    const adminIds = [...new Set((touchpoints || []).map(tp => tp.admin_user_id).filter(Boolean))];
+    const adminNames = new Map<string, string>();
+
+    if (adminIds.length > 0) {
+      const { data: admins } = await db
+        .from("admin_users")
+        .select("id, display_name")
+        .in("id", adminIds);
+
+      for (const admin of admins || []) {
+        if (admin.display_name) {
+          adminNames.set(admin.id, admin.display_name);
+        }
+      }
+    }
+
     // Transform to CallLogEntry format
     const logs: CallLogEntry[] = (touchpoints || []).map((tp) => {
       const details = tp.details as { status?: string; notes?: string } | null;
-      const adminData = tp.admin_users as { display_name?: string } | null;
       return {
         id: tp.id,
         tracking_id: tp.tracking_id,
         status: (details?.status as CallStatus) || "no_answer",
         notes: details?.notes || null,
         admin_id: tp.admin_user_id,
-        admin_name: adminData?.display_name || null,
+        admin_name: adminNames.get(tp.admin_user_id) || null,
         created_at: tp.created_at,
       };
     });
