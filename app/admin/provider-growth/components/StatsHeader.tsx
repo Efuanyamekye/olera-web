@@ -36,7 +36,13 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
 
   if (!stats) return null;
 
-  // Key metrics: Claims → Converted → Paying + Meetings Today
+  // Build sublabel for pending outcomes
+  const pendingTodayCount = stats.pending_outcomes - stats.pending_outcomes_past;
+  const pendingSublabel = stats.pending_outcomes_past > 0
+    ? `${pendingTodayCount} today, ${stats.pending_outcomes_past} past`
+    : `${stats.meetings_today} today`;
+
+  // Key metrics: Claims → Converted → Paying + Pending Outcomes
   const statItems = [
     {
       label: "New Claims",
@@ -54,40 +60,51 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
       sublabel: "All time",
     },
     {
-      label: "Meetings Today",
-      value: stats.meetings_today,
-      sublabel: "Pending",
-      highlight: stats.meetings_today > 0,
+      label: "Pending Outcomes",
+      value: stats.pending_outcomes,
+      sublabel: pendingSublabel,
+      highlight: stats.pending_outcomes > 0,
+      warning: stats.pending_outcomes_past > 0, // Warning color if past meetings need logging
     },
   ];
 
   return (
     <div className="mb-6">
       <div className="grid grid-cols-4 gap-3">
-        {statItems.map((item) => (
-          <div
-            key={item.label}
-            className={`rounded-xl border px-4 py-3 ${
-              item.highlight
-                ? "border-primary-200 bg-primary-50"
-                : "border-gray-200 bg-white"
-            }`}
-          >
-            <div className={`text-2xl font-semibold tabular-nums ${
-              item.highlight ? "text-primary-700" : "text-gray-900"
-            }`}>
-              {item.value.toLocaleString()}
+        {statItems.map((item) => {
+          // Determine card styling based on state
+          let cardClass = "border-gray-200 bg-white";
+          let valueClass = "text-gray-900";
+          let labelClass = "text-gray-500";
+
+          if (item.warning) {
+            // Warning state: past meetings need logging
+            cardClass = "border-amber-200 bg-amber-50";
+            valueClass = "text-amber-700";
+            labelClass = "text-amber-600";
+          } else if (item.highlight) {
+            // Highlight state: has pending items
+            cardClass = "border-primary-200 bg-primary-50";
+            valueClass = "text-primary-700";
+            labelClass = "text-primary-600";
+          }
+
+          return (
+            <div key={item.label} className={`rounded-xl border px-4 py-3 ${cardClass}`}>
+              <div className={`text-2xl font-semibold tabular-nums ${valueClass}`}>
+                {item.value.toLocaleString()}
+              </div>
+              <div className="mt-0.5 flex items-center gap-1.5">
+                <span className={`text-xs ${labelClass}`}>
+                  {item.label}
+                </span>
+                <span className="text-[10px] text-gray-400">
+                  {item.sublabel}
+                </span>
+              </div>
             </div>
-            <div className="mt-0.5 flex items-center gap-1.5">
-              <span className={`text-xs ${item.highlight ? "text-primary-600" : "text-gray-500"}`}>
-                {item.label}
-              </span>
-              <span className="text-[10px] text-gray-400">
-                {item.sublabel}
-              </span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

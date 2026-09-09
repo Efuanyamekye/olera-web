@@ -99,7 +99,9 @@ export interface GrowthStats {
   both_converted: number;  // ads_free_intro AND (medjobs_in_pilot OR medjobs_pilot_expired)
   both_paying: number;     // ads_subscribed AND medjobs_subscribed
   // Daily actionable metrics
-  meetings_today: number;  // Providers with meetings scheduled for today
+  meetings_today: number;        // Meetings scheduled for today (regardless of logged status)
+  pending_outcomes: number;      // All meetings needing outcome logged (past + today + future)
+  pending_outcomes_past: number; // Subset: past meetings not yet logged
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -132,6 +134,8 @@ export async function getGrowthStats(): Promise<GrowthStats> {
   let bothConverted = 0;
   let bothPaying = 0;
   let meetingsToday = 0;
+  let pendingOutcomes = 0;
+  let pendingOutcomesPast = 0;
 
   for (const row of allRecords ?? []) {
     // Pipeline stage
@@ -157,13 +161,27 @@ export async function getGrowthStats(): Promise<GrowthStats> {
       bothPaying++;
     }
 
-    // Count meetings for today (only if outcome not yet logged)
-    // Once outcome is logged, pipeline_stage changes from meeting_scheduled/upgrade_meeting
+    // Meeting metrics
+    const awaitingOutcome = row.pipeline_stage === "meeting_scheduled" || row.pipeline_stage === "upgrade_meeting";
+
+    // Count all pending outcomes (providers still in meeting stage)
+    if (awaitingOutcome) {
+      pendingOutcomes++;
+
+      // Check if this is a past meeting (before today)
+      if (row.meeting_scheduled_at) {
+        const meetingDate = new Date(row.meeting_scheduled_at);
+        if (meetingDate < todayStart) {
+          pendingOutcomesPast++;
+        }
+      }
+    }
+
+    // Count meetings scheduled for today (informational - shows calendar for the day)
     if (row.meeting_scheduled_at) {
       const meetingDate = new Date(row.meeting_scheduled_at);
       const isToday = meetingDate >= todayStart && meetingDate <= todayEnd;
-      const awaitingOutcome = row.pipeline_stage === "meeting_scheduled" || row.pipeline_stage === "upgrade_meeting";
-      if (isToday && awaitingOutcome) {
+      if (isToday) {
         meetingsToday++;
       }
     }
@@ -184,6 +202,8 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     both_converted: bothConverted,
     both_paying: bothPaying,
     meetings_today: meetingsToday,
+    pending_outcomes: pendingOutcomes,
+    pending_outcomes_past: pendingOutcomesPast,
   };
 }
 
