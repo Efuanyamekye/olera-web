@@ -5471,3 +5471,12 @@ Built the "Both, conversion first" task off the #982 digest dashboard. Planned t
 - `.claude/commands/data-sweep.md` — slash command for sweep #2+
 - `docs/data-sweep-runbook.md` — operational details (regex, prompts, cost, change log)
 - `docs/provider-category-definitions.md` — source of truth for the 6 categories
+
+
+## 2026-09-09 — Nextdoor city campaign publication and reconciliation
+
+Charlotte `1023274174694557629` and Dallas `1023340399281833119` published after TJ confirmed Terms. Both groups/ads Pending review, campaign switches on; not serving yet. $10/day each, Sep10 noon–Sep24 noon Central, $280 combined planned. Exact cities/copy/URLs/IDs and editor caveats are in `plans/nextdoor-city-pilot-sep2026.md`.
+
+Updated production city_campaigns: reused Charlotte Nextdoor row `6a3dad58-e9cb-44f4-92d5-13fdb9bafe9f`, inserted Dallas `6e31d8d4-bd89-4fda-8cdf-a8e87f40ef12`. Both scheduled, budget_cents=14000 planned flight allocation, max_cpc_cents=null (Autobid), paid_social unchanged, Sep10–24 dates and full notes. Re-read exact rows; Google/Meta rows unchanged. No provider pool or lead changes. Dia admin HTTP429 prevented fresh UI verification; database readback passed.
+
+Beefed up shared ad-boost-setup entry and city track: infer subject from context; ask provider vs city only when missing; preserve authorization; Advanced mode/date/minimum checks; saved geography chips; clone creative on campaign duplication; distinguish ad-only publish from full campaign publish; payment mismatch recovery; explicit city-record mapping and idempotent reconciliation. No new migration or application code; migration220 reserved for Meta. Docs diff check passed. Changes local, not merged/deployed.
