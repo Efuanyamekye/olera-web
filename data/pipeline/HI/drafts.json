@@ -755,14 +755,14 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling to afford groceries in Hawaii, SNAP provides monthly benefits loaded onto an EBT card that works like a debit card at grocery stores. Hawaii has more generous income limits than many states, a single person can earn up to $2,998/month and still qualify, and there's no asset limit for most applicants.\n\nBecause Hawaii recognizes the state's high cost of living, your loved one may qualify even if they wouldn't in other states. The program covers groceries, produce, and basic food items but cannot be used for prepared foods, alcohol, or tobacco. Monthly benefit amounts depend on household size and income after deductions, with special deductions available for seniors including medical expenses over $35/month.\n\nMany eligible seniors don't apply because they assume their Social Security or pension income is too high. Hawaii's Broad-Based Categorical Eligibility means traditional federal limits don't apply, it's worth checking even if your loved one's income seems borderline.",
-      "savingsRange": "$100 – $300/month in 2026",
-      "savingsSource": "Monthly EBT benefits based on household size and income after deductions",
+      "intro": "If your loved one is 60+ and struggling to afford groceries in Hawaii, SNAP provides monthly benefits loaded onto an EBT card that works like a debit card at grocery stores. Hawaii has more generous income limits than many states, a single person can earn up to $3,000/month and still qualify, and there's no asset limit for most applicants.\n\nBecause Hawaii recognizes the state's high cost of living, your loved one may qualify even if they wouldn't in other states. The program covers groceries, produce, and basic food items but cannot be used for prepared foods, alcohol, or tobacco. Monthly benefit amounts depend on household size and income after deductions, with special deductions available for seniors including medical expenses over $35/month.\n\nMany eligible seniors don't apply because they assume their Social Security or pension income is too high. Hawaii's Broad-Based Categorical Eligibility means traditional federal limits don't apply, it's worth checking even if your loved one's income seems borderline.",
+      "savingsRange": "$41 - $506/month for one person (FY2026 maximum), through September 30, 2026",
+      "savingsSource": "USDA FY2026 cost-of-living adjustment: Hawaii's maximum monthly SNAP allotment is $506 for a one-person household and the minimum for eligible one- and two-person households is $41, effective October 1, 2025 through September 30, 2026. Hawaii has its own allotment table, separate from the 48 contiguous states. $506 is a maximum, not a typical amount. For context, Hawaii DHS reported an average of $352 per month in May 2026 for SNAP households that also receive SSI (average household size 1.06).",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
-          "Income below $2,998/month (single)",
+          "Income below $3,000/month (single)",
           "Hawaii resident",
           "U.S. citizen or qualified non-citizen"
         ],
@@ -854,7 +854,7 @@
       },
       "documentsNeeded": [
         "Valid photo ID (driver's license or state ID)",
-        "Social Security cards for all household members",
+        "Social Security numbers for the household members who are applying (people in the home who do not want benefits do not have to give one). If you cannot find a document, DHS can contact an employer or agency to verify it.",
         "Proof of Hawaii residency (utility bill, lease agreement, or mail)",
         "Social Security award letters or benefit statements",
         "Pay stubs from the last 30 days (if working)",
@@ -870,21 +870,15 @@
       ],
       "contacts": [
         {
-          "label": "Hawaii Benefits Helpline",
+          "label": "Public Assistance Information Line (start here)",
           "phone": "(855) 643-1643",
-          "description": "General assistance with benefit applications and questions",
-          "hours": "Monday-Friday 7:45am-4:30pm HST"
-        },
-        {
-          "label": "DHS Local Offices",
-          "phone": null,
-          "description": "Find your local Department of Human Services office at humanservices.hawaii.gov",
-          "hours": "Varies by location"
+          "description": "Hawaii DHS SNAP line. The automated system answers any time; a person answers Monday to Friday, 8:00am to 4:15pm Hawaii time, except holidays. Scheduled phone interviews run 8:30am to 3:30pm.",
+          "hours": "Live agents Mon-Fri 8am-4:15pm HST, except holidays; automated line 24/7"
         },
         {
           "label": "2-1-1 Hawaii",
           "phone": "2-1-1",
-          "description": "24/7 helpline connecting to all social services including SNAP",
+          "description": "General referral line.",
           "hours": "24 hours, 7 days a week"
         }
       ],
@@ -908,7 +902,7 @@
         },
         {
           "question": "What if my loved one's Social Security puts them over the income limit?",
-          "answer": "Hawaii's income limit is higher than most states, $2,998/month for a single person (200% of federal poverty level). Even if gross income is higher, seniors can qualify through net income after deductions like medical expenses over $35/month, housing costs, and a 20% deduction on earned income."
+          "answer": "Hawaii's income limit is higher than most states, $3,000/month for a single person (200% of federal poverty level). Even if gross income is higher, seniors can qualify through net income after deductions like medical expenses over $35/month, housing costs, and a 20% deduction on earned income."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
@@ -948,7 +942,7 @@
       "sourceUrl": "https://humanservices.hawaii.gov/bessd/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "liheap-energy-assistance",

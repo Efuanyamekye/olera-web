@@ -599,6 +599,9 @@ export interface TabCounts {
   followup?: number;
   clients?: number;
   campuses?: number;
+  /** University Activation: universities with something due, and open tasks. */
+  activation?: number;
+  tasks?: number;
   // Audience queues — server-composed totals for the In Basket primary bar.
   // providers   = virtual provider prospects + clients-with-task
   // partner_book = partner prospects + research cards + active-partners-with-task
@@ -638,6 +641,9 @@ export interface TabUnreadCounts {
   followup?: number;
   clients?: number;
   campuses?: number;
+  /** University Activation: universities with something due, and open tasks. */
+  activation?: number;
+  tasks?: number;
   providers?: number;
   partner_book?: number;
   outbound?: number;

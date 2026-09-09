@@ -1,12 +1,15 @@
 "use client";
 
 /**
- * MeetingScheduler - Calendly integration for scheduling meetings
+ * MeetingScheduler - Simple meeting booking flow (matches MedJobs pattern)
  *
- * Generates a Calendly booking link and optionally allows manual scheduling.
+ * 1. Opens Calendly in a new tab immediately when shown
+ * 2. Shows a simple form to confirm the meeting date/time
+ * 3. On confirm, moves provider to meeting_scheduled stage
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { generateBookingUrl } from "@/lib/provider-growth/calendly";
 
 interface MeetingSchedulerProps {
   trackingId: string;
@@ -25,52 +28,31 @@ export function MeetingScheduler({
   onScheduled,
   onCancel,
 }: MeetingSchedulerProps) {
-  const [mode, setMode] = useState<"calendly" | "manual">("calendly");
-  const [bookingUrl, setBookingUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // Manual scheduling fields
   const [manualDate, setManualDate] = useState("");
   const [manualTime, setManualTime] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const generateBookingUrl = async () => {
-    setLoading(true);
-    setError(null);
+  // Open Calendly immediately when this component mounts
+  useEffect(() => {
+    const bookingUrl = generateBookingUrl({
+      trackingId,
+      contactName: contactName || providerName,
+      contactEmail,
+    });
+    window.open(bookingUrl, "_blank", "noopener,noreferrer");
+  }, [trackingId, providerName, contactName, contactEmail]);
 
-    try {
-      const res = await fetch("/api/admin/provider-growth/schedule-meeting", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tracking_id: trackingId,
-          provider_name: providerName,
-          contact_name: contactName,
-          contact_email: contactEmail,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to generate booking URL");
-      }
-
-      const data = await res.json();
-      setBookingUrl(data.booking_url);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleManualSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!manualDate || !manualTime) return;
 
     setSubmitting(true);
+    setError(null);
+
     try {
-      const scheduledAt = new Date(`${manualDate}T${manualTime}`).toISOString();
+      // Treat input as UTC (matching Calendly's timezone)
+      const scheduledAt = new Date(`${manualDate}T${manualTime}:00Z`).toISOString();
 
       const res = await fetch("/api/admin/provider-growth/schedule-meeting", {
         method: "POST",
@@ -96,46 +78,12 @@ export function MeetingScheduler({
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-sm font-medium text-gray-900 mb-1">
-          Schedule meeting with {providerName}
+        <h3 className="text-sm font-medium text-gray-900">
+          Confirm meeting with {providerName}
         </h3>
-        {contactName && (
-          <p className="text-sm text-gray-500">
-            Contact: {contactName} {contactEmail && `(${contactEmail})`}
-          </p>
-        )}
-      </div>
-
-      {/* Mode selector */}
-      <div className="flex gap-2">
-        <button
-          type="button"
-          onClick={() => {
-            setMode("calendly");
-            setError(null);
-          }}
-          className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-            mode === "calendly"
-              ? "bg-blue-50 text-blue-700 border-blue-200"
-              : "border-gray-200 text-gray-600 hover:border-gray-300"
-          }`}
-        >
-          Use Calendly
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setMode("manual");
-            setError(null);
-          }}
-          className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-            mode === "manual"
-              ? "bg-blue-50 text-blue-700 border-blue-200"
-              : "border-gray-200 text-gray-600 hover:border-gray-300"
-          }`}
-        >
-          Manual Entry
-        </button>
+        <p className="mt-1 text-xs text-gray-500">
+          Calendly opened in a new tab. Enter the meeting time you booked (in UTC):
+        </p>
       </div>
 
       {error && (
@@ -144,106 +92,52 @@ export function MeetingScheduler({
         </div>
       )}
 
-      {mode === "calendly" && (
-        <div className="space-y-3">
-          {!bookingUrl ? (
-            <button
-              type="button"
-              onClick={generateBookingUrl}
-              disabled={loading}
-              className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? "Generating..." : "Generate Booking Link"}
-            </button>
-          ) : (
-            <div className="space-y-3">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500 mb-1">Booking URL:</p>
-                <a
-                  href={bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:text-blue-800 break-all"
-                >
-                  {bookingUrl}
-                </a>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    navigator.clipboard.writeText(bookingUrl);
-                  }}
-                  className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
-                >
-                  Copy Link
-                </button>
-                <a
-                  href={bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 text-center"
-                >
-                  Open Calendly
-                </a>
-              </div>
-              <p className="text-xs text-gray-500">
-                After the provider books, return here to manually enter the meeting time.
-              </p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {mode === "manual" && (
-        <form onSubmit={handleManualSubmit} className="space-y-3">
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Date
-              </label>
-              <input
-                type="date"
-                value={manualDate}
-                onChange={(e) => setManualDate(e.target.value)}
-                min={new Date().toISOString().split("T")[0]}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Time
-              </label>
-              <input
-                type="time"
-                value={manualTime}
-                onChange={(e) => setManualTime(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                required
-              />
-            </div>
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Date
+            </label>
+            <input
+              type="date"
+              value={manualDate}
+              onChange={(e) => setManualDate(e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+              required
+            />
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Time <span className="text-gray-400 font-normal">(UTC)</span>
+            </label>
+            <input
+              type="time"
+              value={manualTime}
+              onChange={(e) => setManualTime(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end gap-2 pt-2">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+          >
+            Cancel
+          </button>
           <button
             type="submit"
             disabled={submitting || !manualDate || !manualTime}
-            className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 disabled:opacity-50"
           >
-            {submitting ? "Scheduling..." : "Schedule Meeting"}
+            {submitting ? "Scheduling..." : "Confirm Meeting"}
           </button>
-        </form>
-      )}
-
-      {/* Cancel button */}
-      <div className="flex justify-end pt-2 border-t border-gray-200">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
-        >
-          Cancel
-        </button>
-      </div>
+        </div>
+      </form>
     </div>
   );
 }

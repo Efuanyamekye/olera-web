@@ -20,7 +20,9 @@ import {
   isStaffedNow,
 } from "@/lib/city-ads/config";
 import { startOrAdvance } from "@/lib/city-ads/offers.server";
+import { ensureCareSeekerForCityLead, syncCityLeadDetails } from "@/lib/city-ads/care-seeker.server";
 import { getSiteUrl } from "@/lib/site-url";
+import { sendMetaLeadEvent } from "@/lib/city-ads/meta-capi.server";
 
 /**
  * POST /api/city-leads — the /care/{city} form.
@@ -120,6 +122,7 @@ export async function POST(req: NextRequest) {
       utm_medium: str(utm.medium),
       utm_campaign: str(utm.campaign),
       gclid: str(utm.gclid, 200),
+      fbclid: str(utm.fbclid, 200),
       session_id: str(body.sessionId),
       care_recipient: recipient,
       care_type: careType,
@@ -139,6 +142,30 @@ export async function POST(req: NextRequest) {
   if (error || !lead) {
     console.error("[city-leads] insert failed", error);
     return NextResponse.json({ error: "Could not save your request. Please try again." }, { status: 500 });
+  }
+
+  // Give the family a care seeker profile, and link it. This is what makes the
+  // lead openable in the admin queue and, because the FK cascades, deletable
+  // from there. Done for medical requests too — they are redirected rather than
+  // routed, but they are still a real family and still need a record that can
+  // be opened and cleared.
+  //
+  // Awaited, not fired off: a serverless function may be frozen the moment the
+  // response is returned (feedback_serverless_fire_and_forget). Never throws;
+  // an unlinked lead is recoverable, a failed submission is not.
+  const careSeekerId = await ensureCareSeekerForCityLead(db, {
+    firstName,
+    phone,
+    email,
+    city: cfg.city,
+    state: cfg.state,
+    careType,
+    careRecipient: recipient,
+    urgency,
+    note: null,
+  });
+  if (careSeekerId) {
+    await db.from("city_leads").update({ care_seeker_id: careSeekerId }).eq("id", lead.id);
   }
 
   const careLabel = CARE_LABEL[careType as keyof typeof CARE_LABEL];
@@ -167,6 +194,7 @@ export async function POST(req: NextRequest) {
     source: str(utm.source),
     medium: str(utm.medium),
     gclid: str(utm.gclid),
+    fbclid: str(utm.fbclid),
   });
   const concierge = cfg.routingMode === "concierge";
   const alert = slackCityLead({
@@ -230,6 +258,27 @@ export async function POST(req: NextRequest) {
   // Awaited: the cookie rides on the response headers (feedback_serverless_fire_and_forget).
   await markAdsLeadConversion();
 
+  // Meta conversion, server half. Fired unconditionally rather than only for
+  // fbclid traffic: Meta joins the event to a click itself, and a lead it does
+  // not recognise is discarded on their side. Same gate as the Google
+  // conversion above — routable leads only, medical and duplicates returned
+  // earlier. Deduplicated against the browser pixel by metaEventId.
+  await sendMetaLeadEvent({
+    eventId: str(body.metaEventId, 100) ?? lead.id,
+    eventSourceUrl: `${getSiteUrl()}/care/${cfg.slug}`,
+    clientIp: (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || null,
+    userAgent: req.headers.get("user-agent"),
+    fbp: req.cookies.get("_fbp")?.value ?? null,
+    fbc: req.cookies.get("_fbc")?.value ?? null,
+    fbclid: str(utm.fbclid),
+    firstName,
+    phone,
+    email,
+    zip,
+    city: cfg.city,
+    state: cfg.state,
+  });
+
   return NextResponse.json({ ok: true, leadId: lead.id, redirected: false, staffed, concierge });
 }
 
@@ -248,7 +297,21 @@ export async function PATCH(req: NextRequest) {
   if (typeof body.note === "string") patch.note = body.note.trim().slice(0, 600) || null;
   if (Object.keys(patch).length === 1) return NextResponse.json({ ok: true });
   const db = getServiceClient();
-  const { error } = await db.from("city_leads").update(patch).eq("id", leadId).eq("phone", phone);
+  const { data: updated, error } = await db
+    .from("city_leads")
+    .update(patch)
+    .eq("id", leadId)
+    .eq("phone", phone)
+    .select("care_seeker_id")
+    .maybeSingle();
   if (error) return NextResponse.json({ error: "Could not save." }, { status: 500 });
+  // Carry the same two answers onto the profile, so the record an admin opens
+  // during the concierge call has the situation on it and not just a name.
+  if (updated?.care_seeker_id) {
+    await syncCityLeadDetails(db, updated.care_seeker_id as string, {
+      paymentType: patch.payment_type as string | undefined,
+      note: patch.note as string | undefined,
+    });
+  }
   return NextResponse.json({ ok: true });
 }

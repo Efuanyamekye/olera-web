@@ -6,6 +6,186 @@
   "successful": 14,
   "programs": [
     {
+      "id": "medicaid-aged-blind-disabled",
+      "name": "South Carolina Healthy Connections Medicaid (Aged, Blind or Disabled)",
+      "shortName": "Healthy Connections Medicaid",
+      "tagline": "If your loved one is 65 or older with limited income and savings, this is the Medicaid application that opens the door to home care and nursing home coverage.",
+      "programType": "benefit",
+      "complexity": "medium",
+      "geographicScope": {
+        "type": "state"
+      },
+      "intro": "Healthy Connections is South Carolina's Medicaid program. This is the base application for people 65 and older, and it matters because most of South Carolina's help with care costs sits on top of it: the Community Choices Waiver, which pays for care at home, requires Medicaid first. If your loved one is not on Medicaid yet, this application is the step that unlocks the rest.\n\nSouth Carolina says it plainly on its own eligibility page: apply if you are unsure about eligibility. There is no waiting list, and the state has to give you a decision.",
+      "savingsRange": "",
+      "savingsSource": "Free to apply. Medicaid pays providers directly rather than paying the family.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 65 or older, blind, or living with a disability",
+          "South Carolina resident",
+          "For regular ABD coverage: income under $1,330/month for one person, with countable resources under $9,950",
+          "For nursing home or in-home care coverage: income under $2,982/month, with countable resources under $2,000",
+          "Apply even if the income looks too high. The two doors have different limits and a Social Security check often clears one but not the other."
+        ],
+        "ageRequirement": "65+ or blind or disabled",
+        "incomeTable": null,
+        "assetLimits": {
+          "individual": 9950,
+          "couple": 14910,
+          "countedAssets": [
+            "Bank accounts",
+            "Investment accounts, stocks and bonds",
+            "Cash",
+            "Additional vehicles beyond the first",
+            "Land and property other than the home"
+          ],
+          "exemptAssets": [
+            "The primary home",
+            "One vehicle",
+            "Household furnishings and personal belongings",
+            "Burial plots and prepaid burial arrangements"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "No functional test for regular ABD coverage. Nursing home and in-home care coverage require a nursing-facility level of care.",
+        "otherRequirements": [
+          "If Social Security has not already established a disability, that determination has to happen first, which lengthens the decision",
+          "You can apply up to three months before turning 65",
+          "Coverage is renewed every year, and changes must be reported within 10 days"
+        ],
+        "povertyLevelReference": "ABD income limits are set at 100% of the federal poverty level; nursing home and in-home care use 300% of the SSI federal benefit rate"
+      },
+      "applicationGuide": {
+        "method": "multiple",
+        "summary": "Apply online at apply.scdhhs.gov, in person at a county eligibility office, or by paper form. Call (888) 549-0820 to have an application mailed to you or for help filling one in. Decisions take up to 45 days, or 90 if a disability has to be determined.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "If care at home is the goal, call about CLTC first",
+            "description": "South Carolina asks you to contact Healthy Connections at (888) 549-0820 for a Community Long Term Care determination BEFORE completing the application, if the care will be at home. Doing this in the wrong order is the most common avoidable delay."
+          },
+          {
+            "step": 2,
+            "title": "Get the application",
+            "description": "Apply online at apply.scdhhs.gov, or call (888) 549-0820, Monday to Friday 8am to 6pm, and ask for a paper application to be mailed. You can also walk into a county eligibility office, open Monday to Friday 8:30am to 5pm. The phone line cannot take the application itself; it mails you one or helps you complete it."
+          },
+          {
+            "step": 3,
+            "title": "Use the right form for the situation",
+            "description": "Form 3400 is the main application, and ABD applicants must also file Form 3400-A. If the care will be in a nursing home or through a waiver, use Form 3401 instead."
+          },
+          {
+            "step": 4,
+            "title": "Ask for the last three months of bills to be covered",
+            "description": "Question 16 on the application asks whether you want help paying medical bills from the last three months. It is opt-in. Leaving it blank gives up coverage your loved one may be owed."
+          },
+          {
+            "step": 5,
+            "title": "Send it back",
+            "description": "Email 8888201204@fax.scdhhs.gov, fax (888) 820-1204, mail SCDHHS Central Mail, PO Box 100101, Columbia SC 29202-3101, or hand it in at a county office. Free help with the form is available from SC Thrive at (800) 726-8774."
+          }
+        ],
+        "processingTime": "Up to 45 days for a decision, or 90 days when a disability has to be determined. The Medicaid card usually arrives within a week of approval.",
+        "waitlist": "There is no waiting list for Medicaid itself. The Community Choices Waiver that pays for home care has limited slots, which is a reason to get the Medicaid application in now.",
+        "tip": "South Carolina leads its own eligibility page with \"Please apply if you are unsure about eligibility!\" The income limits differ by pathway, so a check that is too high for one may still clear another.",
+        "urls": [
+          {
+            "label": "Apply online",
+            "url": "https://apply.scdhhs.gov/"
+          },
+          {
+            "label": "Eligibility and income limits",
+            "url": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits"
+          },
+          {
+            "label": "Find your county eligibility office",
+            "url": "https://www.scdhhs.gov/members/where-go-help"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Social Security number for the person applying",
+        "Amounts of any benefits coming in now: Social Security, SSI, veteran's benefits, or child support",
+        "How much is in checking, savings, and any other accounts",
+        "Date of birth",
+        "Income from any job or training, if there is any",
+        "Monthly rent or mortgage payment and utility bills",
+        "Any health coverage or medical benefits already in place",
+        "Any unpaid medical bills from the last three months"
+      ],
+      "contacts": [
+        {
+          "label": "Healthy Connections Member Contact Center (start here)",
+          "phone": "(888) 549-0820",
+          "description": "Ask for a paper application to be mailed, or for help filling one in. This line cannot file the application for you. If care will be at home, ask about a Community Long Term Care determination first. TTY (888) 842-3620.",
+          "hours": "Mon-Fri 8am-6pm ET; hours can vary on state holidays or in bad weather"
+        },
+        {
+          "label": "SC Thrive",
+          "phone": "(800) 726-8774",
+          "description": "Free help completing the application.",
+          "hours": "Hours not published"
+        },
+        {
+          "label": "Healthy Connections local eligibility offices",
+          "phone": null,
+          "description": "Walk in to apply in person. Find your county office at scdhhs.gov/members/where-go-help",
+          "hours": "Mon-Fri 8:30am-5pm ET"
+        }
+      ],
+      "applicationNotes": [
+        "The phone line will mail you an application or help you complete one, but South Carolina files applications in person or by mail, not over the phone. Plan for a form either way.",
+        "South Carolina's resource limit for regular ABD coverage is $9,950 for one person, which is far more generous than the $2,000 most states use. Nursing home coverage does use the $2,000 limit.",
+        "There is no medically needy spend-down in South Carolina. If income is over the limit for nursing home coverage, the route is an income trust, which has no upper income limit.",
+        "If resources are over the limit, the state allows up to 45 days from the application date to spend them down, and 90 days for a nursing home case.",
+        "Signing the application means agreeing to estate recovery for anyone 55 or older who received nursing facility or home and community-based services.",
+        "SCDHHS never calls beneficiaries asking for a Social Security number. Anyone who does is not the state."
+      ],
+      "relatedPrograms": [
+        "Community Choices Waiver",
+        "Medicare Savings Programs (QMB, SLMB, QI)",
+        "Elderly Simplified Application Project (ESAP)",
+        "SHIP / I-Care"
+      ],
+      "contentSections": [],
+      "faqs": [
+        {
+          "question": "Our Social Security check is more than $1,330 a month. Are we out?",
+          "answer": "Probably not. That figure is the limit for regular ABD coverage. If your loved one needs nursing home level care, at home or in a facility, the limit is $2,982 a month. A typical Social Security check clears the second even when it fails the first, which is why South Carolina asks people to apply rather than self-screen."
+        },
+        {
+          "question": "How much can they have in the bank?",
+          "answer": "For regular ABD coverage, $9,950 for one person and $14,910 for a couple. South Carolina is more generous here than most states. For nursing home coverage the limit drops to $2,000. The home and one vehicle do not count either way."
+        },
+        {
+          "question": "Is this the same as the Community Choices Waiver?",
+          "answer": "No, and the order matters. This Medicaid application comes first. Community Choices pays for care at home and sits on top of Medicaid, so eligibility here has to be settled before joining it. If care at home is the goal, call and ask about a Community Long Term Care determination before you finish the application."
+        },
+        {
+          "question": "Can Medicaid pay bills we already owe?",
+          "answer": "Yes, for up to three months before the application, but only if you ask. Question 16 on the form asks whether you want help with medical bills from the last three months. It is easy to skip and it is worth money."
+        },
+        {
+          "question": "Can they apply before turning 65?",
+          "answer": "Yes. South Carolina lets people apply up to three months before turning 65 or becoming eligible for Medicare, so the coverage is ready when they are."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      },
+      "icon": "Bed",
+      "phone": "(888) 549-0820",
+      "sourceUrl": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-09-09",
+      "lastVerifiedDate": "2026-09-09"
+    },
+    {
       "id": "community-choices-waiver",
       "name": "Community Choices Waiver",
       "shortName": "Community Choices",
@@ -1848,8 +2028,8 @@
         ]
       },
       "intro": "If your loved one is 60 or older and lives on Social Security or retirement income only, South Carolina's Elderly Simplified Application Project (ESAP) provides monthly SNAP food assistance with far less paperwork than standard food assistance programs. Because ESAP is designed specifically for elderly households with no earned income, your loved one won't need to attend recertification interviews or submit monthly reports, once approved, benefits continue for 36 months.\n\nESAP has achieved a 93% approval rate since 2015, meaning virtually all eligible seniors who apply receive benefits. The program requires all household members to be 60 or older with zero earned income from work. Your loved one can receive Social Security, pensions, or other retirement income and still qualify, the key restriction is no wages or self-employment income.",
-      "savingsRange": "",
-      "savingsSource": "SNAP food assistance benefits vary by household circumstances",
+      "savingsRange": "Up to $298/month for one person (FY2026 federal maximum), minimum $24/month",
+      "savingsSource": "USDA FY2026 allotments for the 48 contiguous states, effective October 1, 2025 through September 30, 2026. $298 is the maximum for a one-person household and is paid only when countable net income is at or near zero; most households receive less.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
@@ -1895,8 +2075,8 @@
             "description": "DSS will notify you in writing of their decision. If approved, benefits are certified for 36 months with no periodic reporting required."
           }
         ],
-        "processingTime": "Processing time not specified, you'll be notified in writing of the decision",
-        "waitlist": null,
+        "processingTime": "SNAP applications are decided within 30 days, or 7 days if the household qualifies for expedited service. Mail the form, then wait for the interview notice. Once approved, ESAP certifies you for three years instead of the usual annual renewal.",
+        "waitlist": "There is no waiting list. Benefits run from the date you file, so file first and send anything missing later.",
         "tip": "Submit all verification documents with your initial application to avoid delays, ESAP requires limited verification but what you do submit should be complete.",
         "urls": [
           {
@@ -1906,34 +2086,26 @@
         ]
       },
       "documentsNeeded": [
-        "Social Security cards for all household members",
-        "Proof of age (birth certificate, driver's license, or state ID)",
-        "Most recent Social Security award letter",
-        "Pension or retirement income statements",
-        "Bank statements for all accounts (amount not specified)",
-        "Proof of residence in South Carolina",
-        "Medicare card if applicable",
-        "Any other income documentation (interest, dividends, rental income)"
+        "Nothing is required to start. The application can be filed with just your name, address, and a signature, and that locks in your start date.",
+        "Proof of out-of-pocket medical expenses, if you want that deduction counted. This is the one thing the form asks you to enclose.",
+        "Your household's income information",
+        "Social Security numbers for the people applying",
+        "Proof of residence in South Carolina"
       ],
       "contacts": [
         {
-          "label": "SC DSS ESAP line",
+          "label": "SC DSS ESAP application request line (start here)",
           "phone": "1-888-898-0055",
-          "description": "Request an ESAP application by mail or get application help",
-          "hours": "Mon-Fri business hours"
-        },
-        {
-          "label": "South Carolina DSS",
-          "phone": null,
-          "description": "Contact your local DSS office for ESAP applications and interviews",
-          "hours": "Varies by office"
+          "description": "Call to have an ESAP application mailed to you, or for help filling one in. This line cannot take your application. Completed applications go to ESAP, SC Department of Social Services, P.O. Box 100203, Columbia, SC 29202-3229.",
+          "hours": "Hours not published"
         }
       ],
       "applicationNotes": [
-        "ESAP has a dedicated caseworker unit statewide that specializes in serving seniors, so your case will be handled by staff trained in elderly-specific needs",
-        "The 36-month certification period means once you're approved, you won't need to reapply for three years, just complete a simple one-page mail-in form annually",
-        "If any household member is under 60 or has any earned income from work, the household cannot use ESAP and must apply through regular SNAP instead",
-        "You cannot receive both ESAP and regular SNAP (SCCAP) at the same time, households must choose one program"
+        "South Carolina publishes two different age rules for ESAP. The public DSS webpage says 65 or older; the SNAP manual (Volume 69, section 19.11) and the ESAP application form itself both say 60 or older. Ask on the call which applies to your household rather than assuming you do not qualify.",
+        "ESAP also requires that no one in the household has earned income, and that no one is already getting SNAP through SCCAP.",
+        "An interview is required at initial application. A notice comes after you mail the form.",
+        "Most eligibility information is confirmed through state and federal computer matches, so you will usually not be asked to verify anything extra unless something looks questionable.",
+        "ESAP has a dedicated caseworker unit statewide that specializes in serving seniors, so your case will be handled by staff trained in elderly-specific needs"
       ],
       "relatedPrograms": [
         "South Carolina LIHEAP (energy assistance)",
@@ -1984,11 +2156,11 @@
         "visualTone": "editorial"
       },
       "icon": "BowlFood",
-      "phone": null,
+      "phone": "1-888-898-0055",
       "sourceUrl": "https://dss.sc.gov/assistance-programs/snap/how-do-i-apply/help-for-the-elderly/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-31"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "senior-farmers-market-nutrition",
@@ -2002,8 +2174,8 @@
         "stateVariation": false
       },
       "intro": "If your loved one is 60 or older and has limited income, South Carolina's Senior Farmers Market Nutrition Program provides $50 in vouchers each year to buy fresh fruits, vegetables, honey, and herbs at farmers' markets. The program gives five $10 vouchers that work at authorized farmers' markets, roadside stands, and community-supported agriculture programs from May through October.\n\nYour loved one must have a household income below 185% of federal poverty guidelines (approximately $2,769/month for a single person in 2024) and live in one of the 46 participating South Carolina counties. Because benefits are distributed first-come, first-served, eligible seniors should apply early when the season opens in May. Applications must be completed in person at approved distribution sites in your loved one's county of residence.",
-      "savingsRange": "$50/year in 2026",
-      "savingsSource": "Five $10 vouchers per participant per year from SC Department of Social Services",
+      "savingsRange": "$50 per eligible person per year (five $10 checks)",
+      "savingsSource": "USDA seasonal grant program administered by SC DSS. Each eligible participant receives five $10 checks, a fixed $50 benefit. Two eligible seniors in one household each receive $50. Issued first-come, first-served.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -2060,8 +2232,8 @@
             "description": "If approved, receive five $10 vouchers immediately. If program is full, you may be placed on a waiting list or asked to return when more vouchers become available."
           }
         ],
-        "processingTime": "Immediate processing at distribution sites, but benefits issued first-come, first-served",
-        "waitlist": "Possible waitlist placement if county allocation is exhausted, specific timelines vary by county",
+        "processingTime": "The 2026 distribution events all ran in June and have ended. Vouchers already issued must be redeemed by October 15, 2026. Call the coordinator to ask about the waiting list and 2027 dates.",
+        "waitlist": "Benefits are first-come, first-served. An application can be approved, waitlisted, or denied at the event.",
         "tip": "Apply early in the season (May) because vouchers are limited and distributed first-come, first-served.",
         "urls": [
           {
@@ -2072,28 +2244,29 @@
       },
       "documentsNeeded": [
         "Valid South Carolina driver's license or state-issued identification card",
-        "Knowledge of annual gross household income amount",
-        "Knowledge of total household size (number of people living in the home)"
+        "Your annual gross household income. You self-declare it, no proof required. The limit is 185% of the federal poverty level.",
+        "Total household size (number of people living in the home)",
+        "If someone is applying on your behalf: their own photo ID, a copy of your ID, and your written signed permission. One person can represent at most two others."
       ],
       "contacts": [
         {
-          "label": "SFMNP Program Coordinator",
+          "label": "SFMNP Program Coordinator, SC DSS (start here)",
           "phone": "(803) 898-1760",
-          "description": "Willie Nixon, main program contact for location information and general questions",
-          "hours": "Business hours"
+          "description": "Information only. Applications are taken in person at county distribution events. SC DSS asks the public not to call the DSS Connect Call Center about this program. Written questions: SFMNP-Applications@dss.sc.gov",
+          "hours": "Mon-Fri 8:30am-5pm ET"
         },
         {
           "label": "SC 2-1-1",
           "phone": "2-1-1",
-          "description": "Free helpline for all South Carolina social services and benefit programs",
+          "description": "General referral line.",
           "hours": "24 hours, 7 days a week"
         }
       ],
       "applicationNotes": [
+        "This program runs on a season. Applications are taken in person at a distribution event in your county of residence, there is no online application, and every published 2026 event ended June 30. Calling now gets you information and possibly a waiting-list place, not vouchers.",
+        "Eligibility is age 60+ on the date of application, residence in one of the 46 participating counties, and household income at or under 185% of the federal poverty level, self-declared.",
         "The program only runs May 1 through October 15 each year, the 2025 season has ended, next applications open Summer 2026",
-        "Even if your loved one qualifies, vouchers may not be available due to first-come, first-served distribution",
-        "Vouchers can only be used at authorized vendors, not all farmers' markets participate in the program",
-        "Income limits change annually based on federal poverty guidelines, so verify current thresholds when applying"
+        "Even if your loved one qualifies, vouchers may not be available due to first-come, first-served distribution"
       ],
       "relatedPrograms": [
         "SNAP (Supplemental Nutrition Assistance Program)",
@@ -2147,7 +2320,8 @@
       "phone": "(803) 898-1760",
       "sourceUrl": "https://dss.sc.gov/assistance-programs/food-and-nutrition-programs/senior-farmers-market/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "vantage-point",

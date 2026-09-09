@@ -5,13 +5,13 @@
  * webhook event processing for meeting scheduled/completed events.
  */
 
-// Default Calendly URL - this should match your Calendly event type
-// TODO: Make this configurable via env var or admin settings
-const CALENDLY_BASE_URL = "https://calendly.com/olera-partnerships/provider-growth-call";
+// Calendly event URL - same as MedJobs (same team handles both)
+import { CALENDLY_URL } from "@/lib/student-outreach/templates";
+
+const CALENDLY_BASE_URL = CALENDLY_URL;
 
 export interface CalendlyBookingParams {
   trackingId: string;  // provider_growth_tracking.id for callback
-  providerName?: string;
   contactName?: string;
   contactEmail?: string;
 }

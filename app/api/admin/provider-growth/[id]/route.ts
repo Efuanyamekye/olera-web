@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAuthUser, getAdminUser } from "@/lib/admin";
+import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import {
   getTrackingById,
   updateTracking,
@@ -20,6 +20,64 @@ import {
   type InterestLevel,
   type TouchpointType,
 } from "@/lib/provider-growth/stages";
+
+/**
+ * Fetch engagement metrics for a provider (questions and leads counts).
+ * This gives admins talking points for sales conversations.
+ */
+async function getEngagementMetrics(businessProfileId: string): Promise<{
+  questions_count: number;
+  leads_count: number;
+  provider_slug: string | null;
+}> {
+  const db = getServiceClient();
+
+  try {
+    // First get the provider slug from business_profiles (needed for questions query)
+    const { data: profile } = await db
+      .from("business_profiles")
+      .select("slug, source_provider_id")
+      .eq("id", businessProfileId)
+      .single();
+
+    const slug = profile?.slug || null;
+    const sourceProviderId = profile?.source_provider_id || null;
+
+    // Query questions count - check both slug and source_provider_id since either could be used
+    let questionsCount = 0;
+    const providerIds = [slug, sourceProviderId].filter(Boolean) as string[];
+
+    if (providerIds.length > 0) {
+      const { count } = await db
+        .from("provider_questions")
+        .select("id", { count: "exact", head: true })
+        .in("provider_id", providerIds)
+        .is("canonical_question_id", null); // Only count original questions, not duplicates
+      questionsCount = count || 0;
+    }
+
+    // Query leads count (connections where type='inquiry' and to_profile_id = this provider)
+    const { count: leadsCount } = await db
+      .from("connections")
+      .select("id", { count: "exact", head: true })
+      .eq("to_profile_id", businessProfileId)
+      .eq("type", "inquiry");
+
+    return {
+      questions_count: questionsCount,
+      leads_count: leadsCount || 0,
+      provider_slug: slug || sourceProviderId,
+    };
+  } catch (e) {
+    // Degrade gracefully - don't fail the whole drawer if engagement queries fail
+    console.error("[provider-growth] Failed to fetch engagement metrics:", e);
+    return {
+      questions_count: 0,
+      leads_count: 0,
+      provider_slug: null,
+    };
+  }
+}
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -49,10 +107,13 @@ export async function GET(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: "Tracking record not found" }, { status: 404 });
     }
 
-    // Also fetch touchpoints
-    const touchpoints = await getTouchpoints(id);
+    // Fetch touchpoints and engagement metrics in parallel
+    const [touchpoints, engagement] = await Promise.all([
+      getTouchpoints(id),
+      getEngagementMetrics(tracking.business_profile_id),
+    ]);
 
-    return NextResponse.json({ tracking, touchpoints });
+    return NextResponse.json({ tracking, touchpoints, engagement });
   } catch (e) {
     console.error("[provider-growth] GET [id] error:", e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

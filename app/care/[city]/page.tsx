@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getServiceClient } from "@/lib/admin";
 import { getCityConfig, isStaffedNow } from "@/lib/city-ads/config";
 import { parseProviderImages } from "@/lib/types/provider";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 import CityLandingClient, { type CityProviderCard } from "./CityLandingClient";
 
 /**
@@ -104,16 +105,21 @@ export default async function CityCarePage({
   }
 
   return (
-    <CityLandingClient
-      cfg={cfg}
-      providers={providers}
-      staffedNow={isStaffedNow(cfg.timeZone)}
-      utm={{
-        source: first(sp.utm_source),
-        medium: first(sp.utm_medium),
-        campaign: first(sp.utm_campaign),
-        gclid: first(sp.gclid),
-      }}
-    />
+    <>
+      {/* Only this page. See the scope note in lib/city-ads/meta.ts. */}
+      <MetaPixel />
+      <CityLandingClient
+        cfg={cfg}
+        providers={providers}
+        staffedNow={isStaffedNow(cfg.timeZone)}
+        utm={{
+          source: first(sp.utm_source),
+          medium: first(sp.utm_medium),
+          campaign: first(sp.utm_campaign),
+          gclid: first(sp.gclid),
+          fbclid: first(sp.fbclid),
+        }}
+      />
+    </>
   );
 }

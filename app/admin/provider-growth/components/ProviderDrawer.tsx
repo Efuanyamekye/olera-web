@@ -3,124 +3,570 @@
 /**
  * ProviderDrawer - Detail panel for provider growth tracking
  *
- * Shows full provider context, touchpoint history, and actions
- * for managing the provider through the growth pipeline.
+ * Redesigned to match the Provider Outreach drawer UX:
+ * - Call script at top for new_claim providers
+ * - Read-only contact section (provider owns their data)
+ * - Sticky action footer
+ * - Clean section organization
  */
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { DrawerShell } from "@/components/admin/medjobs/DrawerShell";
-import type { ProviderGrowthWithProfile, ProviderGrowthTouchpoint } from "@/lib/provider-growth/queries";
+import type { ProviderGrowthWithProfile } from "@/lib/provider-growth/queries";
 import {
-  PIPELINE_STAGE_LABELS,
   ADS_STATUS_LABELS,
   MEDJOBS_STATUS_LABELS,
-  TOUCHPOINT_TYPE_LABELS,
   INTEREST_LEVEL_LABELS,
-  type PipelineStage,
   type AdsStatus,
   type MedjobsStatus,
 } from "@/lib/provider-growth/stages";
-import { EligibilityBadges } from "./EligibilityBadges";
 import { MeetingScheduler } from "./MeetingScheduler";
-import { PitchLogger, type PitchLogData } from "./PitchLogger";
+import { ActivityLog } from "./ActivityLog";
 
 interface ProviderDrawerProps {
   provider: ProviderGrowthWithProfile;
   onClose: () => void;
   onUpdate: () => void;
+  onCallLogged?: () => void;
 }
 
-export function ProviderDrawer({ provider, onClose, onUpdate }: ProviderDrawerProps) {
-  const [touchpoints, setTouchpoints] = useState<ProviderGrowthTouchpoint[]>([]);
-  const [loadingTouchpoints, setLoadingTouchpoints] = useState(true);
-  const [activeAction, setActiveAction] = useState<"schedule" | "pitch" | "notes" | null>(null);
-  const [notes, setNotes] = useState(provider.notes || "");
-  const [savingNotes, setSavingNotes] = useState(false);
+// ─────────────────────────────────────────────────────────────────────────────
+// Section Components
+// ─────────────────────────────────────────────────────────────────────────────
 
-  const fetchTouchpoints = useCallback(async () => {
+function SectionHeader({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2">
+      {children}
+    </div>
+  );
+}
+
+function SectionDivider() {
+  return <div className="border-t border-gray-100 my-5" />;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Call Script Section
+// ─────────────────────────────────────────────────────────────────────────────
+
+function CallScriptSection({ provider }: { provider: ProviderGrowthWithProfile }) {
+  const claimDate = provider.claimed_at
+    ? formatClaimDateForScript(provider.claimed_at)
+    : "recently";
+
+  return (
+    <div className="mb-4 px-3 py-2.5 bg-gray-50 rounded-lg">
+      <div className="text-[10px] font-semibold text-gray-400 uppercase tracking-wide mb-1.5">
+        Script
+      </div>
+      <p className="text-[12px] leading-relaxed text-gray-600">
+        &quot;Hi, this is <span className="text-gray-800">[your name]</span> from Olera.
+        You claimed your profile <span className="text-gray-800">{claimDate}</span>.
+        I&apos;m calling to check in on how things are going and see if I can help you
+        get the most out of your page — like optimizing your profile to connect with
+        more families looking for{" "}
+        <span className="text-gray-800">
+          {provider.care_types?.[0] || "care services"}
+        </span>
+        .&quot;
+      </p>
+    </div>
+  );
+}
+
+function formatClaimDateForScript(isoDate: string): string {
+  const date = new Date(isoDate);
+  if (isNaN(date.getTime())) return "recently";
+
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 0) return "today";
+  if (diffDays === 1) return "yesterday";
+  if (diffDays < 7) return `${diffDays} days ago`;
+  if (diffDays < 14) return "about a week ago";
+  if (diffDays < 21) return "about two weeks ago";
+  if (diffDays < 30) return "a few weeks ago";
+
+  return date.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Contact Section (Read-only - provider owns their data)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function ContactSection({ provider }: { provider: ProviderGrowthWithProfile }) {
+  const hasContact = provider.phone || provider.email;
+
+  if (!hasContact) return null;
+
+  return (
+    <div>
+      <SectionHeader>Contact</SectionHeader>
+      <div className="space-y-2">
+        {provider.phone && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-500">Phone</span>
+            <a
+              href={`tel:${provider.phone}`}
+              className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+            >
+              {formatPhone(provider.phone)}
+            </a>
+          </div>
+        )}
+        {provider.email && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-500">Email</span>
+            <span className="text-sm text-gray-900">{provider.email}</span>
+          </div>
+        )}
+        {provider.website && (
+          <div className="flex items-center justify-between">
+            <span className="text-sm text-gray-500">Website</span>
+            <a
+              href={provider.website.startsWith("http") ? provider.website : `https://${provider.website}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-blue-600 hover:text-blue-800 hover:underline truncate max-w-[200px]"
+            >
+              {provider.website.replace(/^https?:\/\//, "")}
+            </a>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function formatPhone(phone: string): string {
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length === 10) {
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  }
+  if (digits.length === 11 && digits[0] === "1") {
+    return `(${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`;
+  }
+  return phone;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Meeting Info Section (when meeting is scheduled)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function MeetingInfoSection({
+  provider,
+}: {
+  provider: ProviderGrowthWithProfile;
+}) {
+  const isUpgradeMeeting = provider.pipeline_stage === "upgrade_meeting";
+  const isMeetingScheduled = provider.pipeline_stage === "meeting_scheduled";
+
+  if ((!isMeetingScheduled && !isUpgradeMeeting) || !provider.meeting_scheduled_at) {
+    return null;
+  }
+
+  const meetingDate = new Date(provider.meeting_scheduled_at);
+  const isPast = meetingDate < new Date();
+  const formattedDate = meetingDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+  const formattedTime = meetingDate.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  // Different styling for upgrade meetings
+  const bgColor = isUpgradeMeeting ? "bg-amber-50" : "bg-primary-50";
+  const borderColor = isUpgradeMeeting ? "border-amber-100" : "border-primary-100";
+  const textColor = isUpgradeMeeting ? "text-amber-600" : "text-primary-600";
+  const linkColor = isUpgradeMeeting ? "text-amber-600 hover:text-amber-700" : "text-primary-600 hover:text-primary-700";
+
+  const label = isUpgradeMeeting
+    ? isPast ? "Upgrade Meeting Was Scheduled" : "Upgrade Meeting Scheduled"
+    : isPast ? "Meeting Was Scheduled" : "Meeting Scheduled";
+
+  return (
+    <div className={`p-4 ${bgColor} border ${borderColor} rounded-lg`}>
+      <div>
+        <div className={`text-[10px] font-semibold ${textColor} uppercase tracking-wide mb-1`}>
+          {label}
+        </div>
+        <div className="text-sm font-medium text-gray-900">{formattedDate}</div>
+        <div className="text-sm text-gray-600">{formattedTime}</div>
+        {isPast && (
+          <p className="mt-2 text-xs text-gray-500">
+            Use the Activity Log below to record the outcome.
+          </p>
+        )}
+      </div>
+      {provider.calendly_event_id && (
+        <a
+          href={`https://calendly.com/app/scheduled_events/${provider.calendly_event_id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`inline-flex items-center gap-1 mt-2 text-xs ${linkColor} hover:underline`}
+        >
+          View in Calendly
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Actions Section (sticky footer)
+// ─────────────────────────────────────────────────────────────────────────────
+
+function ActionsSection({
+  provider,
+  onScheduleMeeting,
+  onLogUpgradeOutcome,
+  onSendReschedule,
+  onReEngage,
+}: {
+  provider: ProviderGrowthWithProfile;
+  onScheduleMeeting: () => void;
+  onLogUpgradeOutcome: () => void;
+  onSendReschedule: () => void;
+  onReEngage: () => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <SectionHeader>Actions</SectionHeader>
+      <div className="flex flex-wrap gap-2">
+        {provider.pipeline_stage === "new_claim" && (
+          <button
+            onClick={onScheduleMeeting}
+            className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700"
+          >
+            Schedule Meeting
+          </button>
+        )}
+        {provider.pipeline_stage === "meeting_scheduled" && (
+          <p className="text-sm text-gray-500 py-1">
+            Use Activity Log to record the meeting outcome
+          </p>
+        )}
+        {provider.pipeline_stage === "upgrade_meeting" && (
+          <>
+            <button
+              onClick={onLogUpgradeOutcome}
+              className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+            >
+              Log Upgrade Outcome
+            </button>
+            <button
+              onClick={onScheduleMeeting}
+              className="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
+            >
+              Reschedule
+            </button>
+          </>
+        )}
+        {provider.pipeline_stage === "pitched" && (
+          <button
+            onClick={onScheduleMeeting}
+            className="px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 border border-primary-200"
+          >
+            Schedule Follow-up
+          </button>
+        )}
+        {provider.pipeline_stage === "no_show" && (
+          <button
+            onClick={onSendReschedule}
+            className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+          >
+            Send Reschedule Email
+          </button>
+        )}
+        {provider.pipeline_stage === "not_interested" && (
+          <button
+            onClick={onReEngage}
+            className="px-4 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 border border-primary-200"
+          >
+            Re-engage
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Conversion Actions Section
+// ─────────────────────────────────────────────────────────────────────────────
+
+function ConversionActionsSection({
+  provider,
+  onUpdateStatus,
+}: {
+  provider: ProviderGrowthWithProfile;
+  onUpdateStatus: (updates: { ads_status?: string; medjobs_status?: string }) => void;
+}) {
+  // Only show conversion actions for providers who have been pitched
+  const canShowConversion = ["pitched", "upgrade_meeting"].includes(provider.pipeline_stage);
+
+  if (!canShowConversion) return null;
+
+  const showAdsFreeTrial = provider.ads_status === "none";
+  const showAdsPaying = provider.ads_status === "free_intro";
+  const showMedjobsPilot = provider.medjobs_status === "none" && provider.medjobs_eligible;
+  const showMedjobsPaying = provider.medjobs_status === "in_pilot";
+
+  if (!showAdsFreeTrial && !showAdsPaying && !showMedjobsPilot && !showMedjobsPaying) {
+    return null;
+  }
+
+  return (
+    <>
+      <SectionDivider />
+      <div>
+        <SectionHeader>Conversion Actions</SectionHeader>
+        <div className="flex flex-wrap gap-2">
+          {showAdsFreeTrial && (
+            <button
+              onClick={() => onUpdateStatus({ ads_status: "free_intro" })}
+              className="px-3 py-1.5 text-sm font-medium text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 border border-emerald-200"
+            >
+              Start Ads Free Trial
+            </button>
+          )}
+          {showAdsPaying && (
+            <button
+              onClick={() => onUpdateStatus({ ads_status: "subscribed" })}
+              className="px-3 py-1.5 text-sm font-medium text-emerald-700 bg-emerald-50 rounded-lg hover:bg-emerald-100 border border-emerald-200"
+            >
+              Mark Ads Paying
+            </button>
+          )}
+          {showMedjobsPilot && (
+            <button
+              onClick={() => onUpdateStatus({ medjobs_status: "in_pilot" })}
+              className="px-3 py-1.5 text-sm font-medium text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 border border-purple-200"
+            >
+              Start MedJobs Pilot
+            </button>
+          )}
+          {showMedjobsPaying && (
+            <button
+              onClick={() => onUpdateStatus({ medjobs_status: "subscribed" })}
+              className="px-3 py-1.5 text-sm font-medium text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 border border-purple-200"
+            >
+              Mark MedJobs Paying
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Upgrade Outcome Logger
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface UpgradeOutcome {
+  pipeline_stage: "pitched" | "not_interested";
+  ads_status?: "subscribed";
+  medjobs_status?: "subscribed";
+  meeting_completed_at?: string;
+}
+
+function UpgradeOutcomeLogger({
+  provider,
+  onSubmit,
+  onCancel,
+}: {
+  provider: ProviderGrowthWithProfile;
+  onSubmit: (outcome: UpgradeOutcome) => void;
+  onCancel: () => void;
+}) {
+  const [adsUpgraded, setAdsUpgraded] = useState(false);
+  const [medjobsUpgraded, setMedjobsUpgraded] = useState(false);
+  const [notInterested, setNotInterested] = useState(false);
+
+  const hasAds = provider.ads_status === "free_intro";
+  const hasMedjobs = provider.medjobs_status === "in_pilot";
+
+  const handleSubmit = () => {
+    const outcome: UpgradeOutcome = {
+      pipeline_stage: notInterested ? "not_interested" : "pitched",
+      meeting_completed_at: new Date().toISOString(),
+    };
+
+    if (adsUpgraded) {
+      outcome.ads_status = "subscribed";
+    }
+    if (medjobsUpgraded) {
+      outcome.medjobs_status = "subscribed";
+    }
+
+    onSubmit(outcome);
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="text-sm font-medium text-amber-800">
+        Log Upgrade Meeting Outcome
+      </div>
+
+      {/* Upgrade checkboxes */}
+      <div className="space-y-2">
+        {hasAds && (
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={adsUpgraded}
+              onChange={(e) => {
+                setAdsUpgraded(e.target.checked);
+                if (e.target.checked) setNotInterested(false);
+              }}
+              className="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+            />
+            <span className="text-sm text-gray-700">
+              Upgraded to Ads Subscription
+            </span>
+          </label>
+        )}
+        {hasMedjobs && (
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={medjobsUpgraded}
+              onChange={(e) => {
+                setMedjobsUpgraded(e.target.checked);
+                if (e.target.checked) setNotInterested(false);
+              }}
+              className="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+            />
+            <span className="text-sm text-gray-700">
+              Upgraded to MedJobs Subscription
+            </span>
+          </label>
+        )}
+        <div className="border-t border-amber-200 pt-2 mt-2">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={notInterested}
+              onChange={(e) => {
+                setNotInterested(e.target.checked);
+                if (e.target.checked) {
+                  setAdsUpgraded(false);
+                  setMedjobsUpgraded(false);
+                }
+              }}
+              className="w-4 h-4 text-gray-600 border-gray-300 rounded focus:ring-gray-500"
+            />
+            <span className="text-sm text-gray-700">
+              Not interested in upgrading
+            </span>
+          </label>
+        </div>
+      </div>
+
+      {/* Info text */}
+      <p className="text-xs text-amber-700">
+        {adsUpgraded || medjobsUpgraded
+          ? "Provider will be marked as Paying and moved to Pitched stage."
+          : notInterested
+          ? "Provider will be marked as Not Interested."
+          : "If no upgrade, provider returns to Pitched for future follow-up."}
+      </p>
+
+      {/* Buttons */}
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={onCancel}
+          className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleSubmit}
+          className="px-4 py-1.5 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700"
+        >
+          Save Outcome
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main Drawer Component
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Engagement data from API
+interface EngagementData {
+  questions_count: number;
+  leads_count: number;
+  provider_slug: string | null;
+}
+
+export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: ProviderDrawerProps) {
+  const [engagement, setEngagement] = useState<EngagementData | null>(null);
+  const [loadingData, setLoadingData] = useState(true);
+  const [activeAction, setActiveAction] = useState<"schedule" | "upgrade" | "send_reschedule" | null>(null);
+  const [sendingReschedule, setSendingReschedule] = useState(false);
+
+  const fetchProviderData = useCallback(async () => {
     try {
       const res = await fetch(`/api/admin/provider-growth/${provider.id}`);
       if (res.ok) {
         const data = await res.json();
-        setTouchpoints(data.touchpoints || []);
+        setEngagement(data.engagement || null);
       }
     } catch (e) {
-      console.error("Failed to fetch touchpoints:", e);
+      console.error("Failed to fetch provider data:", e);
     } finally {
-      setLoadingTouchpoints(false);
+      setLoadingData(false);
     }
   }, [provider.id]);
 
   useEffect(() => {
-    fetchTouchpoints();
-  }, [fetchTouchpoints]);
+    fetchProviderData();
+  }, [fetchProviderData]);
 
-  // Called by MeetingScheduler after it successfully schedules via API
-  // The schedule-meeting route already updated the tracking, so we just refresh
+  // Reset action when provider changes
+  useEffect(() => {
+    setActiveAction(null);
+  }, [provider.id]);
+
   const handleScheduleMeeting = async (_meetingInfo: { scheduled_at: string }) => {
     setActiveAction(null);
     onUpdate();
   };
 
-  const handleLogPitch = async (data: PitchLogData) => {
+  const handleSendRescheduleEmail = async () => {
+    setSendingReschedule(true);
     try {
-      const res = await fetch("/api/admin/provider-growth/log-pitch", {
+      const res = await fetch("/api/admin/provider-growth/send-booking-link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tracking_id: provider.id,
-          ...data,
-        }),
+        body: JSON.stringify({ tracking_id: provider.id }),
       });
       if (!res.ok) {
-        throw new Error("Failed to log pitch");
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to send email");
       }
       setActiveAction(null);
       onUpdate();
     } catch (e) {
-      console.error("Failed to log pitch:", e);
-    }
-  };
-
-  const handleSaveNotes = async () => {
-    setSavingNotes(true);
-    try {
-      const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes }),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to save notes");
-      }
-      setActiveAction(null);
-      onUpdate();
-    } catch (e) {
-      console.error("Failed to save notes:", e);
+      console.error("Failed to send reschedule email:", e);
+      alert(e instanceof Error ? e.message : "Failed to send email. Please try again.");
     } finally {
-      setSavingNotes(false);
-    }
-  };
-
-  const handleMarkNotInterested = async () => {
-    if (!confirm("Mark this provider as not interested?")) return;
-
-    try {
-      const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pipeline_stage: "not_interested",
-          not_interested_at: new Date().toISOString(),
-        }),
-      });
-      if (!res.ok) {
-        throw new Error("Failed to mark not interested");
-      }
-      onUpdate();
-    } catch (e) {
-      console.error("Failed to mark not interested:", e);
+      setSendingReschedule(false);
     }
   };
 
@@ -140,298 +586,345 @@ export function ProviderDrawer({ provider, onClose, onUpdate }: ProviderDrawerPr
     }
   };
 
+  const handleUpdateConversionStatus = async (updates: { ads_status?: string; medjobs_status?: string }) => {
+    try {
+      const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to update conversion status");
+      }
+      onUpdate();
+    } catch (e) {
+      console.error("Failed to update conversion status:", e);
+    }
+  };
+
+  // Show call script only for new_claim providers
+  const showCallScript = provider.pipeline_stage === "new_claim";
+
+  // Header
+  const header = (
+    <div>
+      <div className="flex items-center gap-2">
+        <h2 className="text-lg font-semibold text-gray-900">
+          {provider.display_name || "Unnamed Provider"}
+        </h2>
+        {provider.slug && (
+          <Link
+            href={`/provider/${provider.slug}`}
+            target="_blank"
+            className="text-gray-400 hover:text-blue-600 transition-colors"
+            title="View public profile"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+          </Link>
+        )}
+      </div>
+      <p className="text-sm text-gray-500 mt-0.5">
+        {[
+          provider.care_types?.[0],
+          [provider.city, provider.state].filter(Boolean).join(", "),
+        ]
+          .filter(Boolean)
+          .join(" · ")}
+      </p>
+    </div>
+  );
+
+  // Footer with actions
+  const footer = (
+    <ActionsSection
+      provider={provider}
+      onScheduleMeeting={() => setActiveAction("schedule")}
+      onLogUpgradeOutcome={() => setActiveAction("upgrade")}
+      onSendReschedule={() => setActiveAction("send_reschedule")}
+      onReEngage={handleReEngage}
+    />
+  );
+
   return (
-    <DrawerShell
-      onClose={onClose}
-      header={
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900">
-            {provider.display_name || "Unnamed Provider"}
-          </h2>
-          <div className="flex items-center gap-2 mt-1">
-            {(provider.city || provider.state) && (
-              <span className="text-sm text-gray-500">
-                {[provider.city, provider.state].filter(Boolean).join(", ")}
-              </span>
-            )}
-            <span className="text-gray-300">·</span>
-            <span className={`text-sm font-medium ${getStageColor(provider.pipeline_stage)}`}>
-              {PIPELINE_STAGE_LABELS[provider.pipeline_stage]}
-            </span>
-          </div>
-        </div>
-      }
-      footer={
-        <div className="flex justify-between items-center">
-          <div className="flex gap-2">
-            {provider.slug && (
-              <Link
-                href={`/provider/${provider.slug}`}
-                target="_blank"
-                className="text-sm text-blue-600 hover:text-blue-800"
-              >
-                View Profile →
-              </Link>
-            )}
-          </div>
-          <div className="text-xs text-gray-400">
-            Claimed {timeAgo(provider.claimed_at)}
-          </div>
-        </div>
-      }
-    >
-      <div className="space-y-6">
+    <DrawerShell onClose={onClose} header={header} footer={footer}>
+      <div className="py-2">
+        {/* Call Script - for new_claim providers */}
+        {showCallScript && <CallScriptSection provider={provider} />}
+
         {/* Active action panel */}
         {activeAction === "schedule" && (
-          <div className="p-4 bg-gray-50 rounded-lg">
+          <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
             <MeetingScheduler
               trackingId={provider.id}
               providerName={provider.display_name || "Provider"}
+              contactEmail={provider.email || undefined}
               onScheduled={handleScheduleMeeting}
               onCancel={() => setActiveAction(null)}
             />
           </div>
         )}
 
-        {activeAction === "pitch" && (
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <PitchLogger
-              providerName={provider.display_name || "Provider"}
-              medjobsEligible={provider.medjobs_eligible}
-              onSubmit={handleLogPitch}
+        {activeAction === "send_reschedule" && (
+          <div className="mb-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h3 className="text-sm font-medium text-gray-900">
+                  Send Reschedule Email
+                </h3>
+              </div>
+
+              {provider.email ? (
+                <>
+                  <p className="text-sm text-gray-600">
+                    Send a booking link to <span className="font-medium">{provider.email}</span> so they can pick a new meeting time.
+                  </p>
+                  <div className="flex justify-end gap-3">
+                    <button
+                      onClick={() => setActiveAction(null)}
+                      disabled={sendingReschedule}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 disabled:opacity-50"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSendRescheduleEmail}
+                      disabled={sendingReschedule}
+                      className="px-4 py-2 text-sm font-medium text-white bg-amber-600 rounded-lg hover:bg-amber-700 disabled:opacity-50"
+                    >
+                      {sendingReschedule ? "Sending..." : "Send Email"}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm text-amber-700">
+                    No email on file for this provider. You can call them to reschedule.
+                  </p>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => setActiveAction(null)}
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeAction === "upgrade" && (
+          <div className="mb-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+            <UpgradeOutcomeLogger
+              provider={provider}
+              onSubmit={async (outcome) => {
+                try {
+                  const res = await fetch(`/api/admin/provider-growth/${provider.id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(outcome),
+                  });
+                  if (!res.ok) throw new Error("Failed to log outcome");
+                  setActiveAction(null);
+                  onUpdate();
+                } catch (e) {
+                  console.error("Failed to log upgrade outcome:", e);
+                }
+              }}
               onCancel={() => setActiveAction(null)}
             />
           </div>
         )}
 
-        {activeAction === "notes" && (
-          <div className="p-4 bg-gray-50 rounded-lg space-y-3">
-            <label className="block text-sm font-medium text-gray-700">Notes</label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={4}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
-              placeholder="Add notes about this provider..."
-            />
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setActiveAction(null)}
-                className="px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveNotes}
-                disabled={savingNotes}
-                className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-              >
-                {savingNotes ? "Saving..." : "Save"}
-              </button>
-            </div>
-          </div>
+        {/* Contact Section */}
+        <ContactSection provider={provider} />
+
+        {(provider.phone || provider.email) && <SectionDivider />}
+
+        {/* Meeting Info - when meeting is scheduled */}
+        <MeetingInfoSection provider={provider} />
+
+        {(provider.pipeline_stage === "meeting_scheduled" || provider.pipeline_stage === "upgrade_meeting") &&
+          provider.meeting_scheduled_at && (
+          <SectionDivider />
         )}
 
-        {/* Quick actions */}
-        {!activeAction && (
-          <div className="flex flex-wrap gap-2">
-            {provider.pipeline_stage === "new_claim" && (
-              <button
-                onClick={() => setActiveAction("schedule")}
-                className="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
-              >
-                Schedule Meeting
-              </button>
-            )}
-            {provider.pipeline_stage === "meeting_scheduled" && (
-              <button
-                onClick={() => setActiveAction("pitch")}
-                className="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
-              >
-                Log Pitch
-              </button>
-            )}
-            {provider.pipeline_stage === "pitched" && (
-              <button
-                onClick={() => setActiveAction("schedule")}
-                className="px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100"
-              >
-                Schedule Follow-up
-              </button>
-            )}
-            {provider.pipeline_stage === "not_interested" && (
-              <button
-                onClick={handleReEngage}
-                className="px-3 py-1.5 text-sm font-medium text-emerald-600 bg-emerald-50 rounded-lg hover:bg-emerald-100"
-              >
-                Re-engage
-              </button>
-            )}
-            <button
-              onClick={() => setActiveAction("notes")}
-              className="px-3 py-1.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200"
-            >
-              Add Note
-            </button>
-            {provider.pipeline_stage !== "not_interested" && (
-              <button
-                onClick={handleMarkNotInterested}
-                className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700"
-              >
-                Not Interested
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Status cards */}
-        <div className="grid grid-cols-2 gap-4">
-          {/* Eligibility */}
-          <div className="p-3 bg-gray-50 rounded-lg">
-            <div className="text-xs font-medium text-gray-500 mb-2">Eligibility</div>
-            <EligibilityBadges
-              adsEligible={provider.ads_eligible}
-              medjobsEligible={provider.medjobs_eligible}
-              medjobsUniversity={provider.medjobs_catchment_university}
-              size="md"
-            />
-          </div>
-
-          {/* Profile completeness */}
-          <div className="p-3 bg-gray-50 rounded-lg">
-            <div className="text-xs font-medium text-gray-500 mb-2">Profile</div>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-emerald-500 rounded-full"
-                  style={{ width: `${provider.profile_completeness || 0}%` }}
-                />
-              </div>
-              <span className="text-sm font-medium text-gray-700">
+        {/* Provider Stats - unified row matching Provider Outreach pattern */}
+        <div>
+          <SectionHeader>Provider Stats</SectionHeader>
+          <div className="flex items-center gap-6">
+            <div>
+              <span className="text-2xl font-semibold text-gray-900">
                 {provider.profile_completeness || 0}%
               </span>
+              <span className="ml-1.5 text-sm text-gray-500">Profile</span>
             </div>
+            <div>
+              <span className={`text-2xl font-semibold ${
+                loadingData ? "text-gray-400" :
+                (engagement?.questions_count ?? 0) > 0 ? "text-gray-900" : "text-gray-400"
+              }`}>
+                {loadingData ? "·" : (engagement?.questions_count ?? 0)}
+              </span>
+              <span className="ml-1.5 text-sm text-gray-500">Questions</span>
+            </div>
+            <div>
+              <span className={`text-2xl font-semibold ${
+                loadingData ? "text-gray-400" :
+                (engagement?.leads_count ?? 0) > 0 ? "text-gray-900" : "text-gray-400"
+              }`}>
+                {loadingData ? "·" : (engagement?.leads_count ?? 0)}
+              </span>
+              <span className="ml-1.5 text-sm text-gray-500">Leads</span>
+            </div>
+            <div>
+              <span className={`text-2xl font-semibold ${provider.ads_eligible ? "text-gray-900" : "text-gray-400"}`}>
+                {provider.ads_eligible ? "✓" : "—"}
+              </span>
+              <span className="ml-1.5 text-sm text-gray-500">Ads</span>
+            </div>
+            {provider.medjobs_eligible && (
+              <div>
+                <span className="text-2xl font-semibold text-gray-900">✓</span>
+                <span className="ml-1.5 text-sm text-gray-500">
+                  MJ{provider.medjobs_catchment_university ? `: ${provider.medjobs_catchment_university}` : ""}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Conversion status */}
         {(provider.ads_status !== "none" || provider.medjobs_status !== "none") && (
-          <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
-            <div className="text-xs font-medium text-emerald-700 mb-2">Conversion Status</div>
-            <div className="space-y-2">
-              {provider.ads_status !== "none" && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-700">Ads</span>
-                  <span className="font-medium text-emerald-700">
-                    {ADS_STATUS_LABELS[provider.ads_status as AdsStatus]}
-                  </span>
-                </div>
-              )}
-              {provider.medjobs_status !== "none" && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-700">MedJobs</span>
-                  <span className="font-medium text-purple-700">
-                    {MEDJOBS_STATUS_LABELS[provider.medjobs_status as MedjobsStatus]}
-                  </span>
-                </div>
-              )}
+          <>
+            <SectionDivider />
+            <div className="p-4 bg-emerald-50 rounded-lg border border-emerald-100">
+              <div className="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-2">
+                Conversion Status
+              </div>
+              <div className="space-y-2">
+                {provider.ads_status !== "none" && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Ads</span>
+                    <span className="font-medium text-emerald-700">
+                      {ADS_STATUS_LABELS[provider.ads_status as AdsStatus]}
+                    </span>
+                  </div>
+                )}
+                {provider.medjobs_status !== "none" && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">MedJobs</span>
+                    <span className="font-medium text-purple-700">
+                      {MEDJOBS_STATUS_LABELS[provider.medjobs_status as MedjobsStatus]}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          </>
         )}
 
         {/* Pitch info */}
         {provider.pitched_at && (
-          <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-100">
-            <div className="text-xs font-medium text-indigo-700 mb-2">Pitch Details</div>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Pitched</span>
-                <span className="text-gray-900">{formatDate(provider.pitched_at)}</span>
+          <>
+            <SectionDivider />
+            <div className="p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+              <div className="text-[10px] font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+                Pitch Details
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Products</span>
-                <span className="text-gray-900">
-                  {[provider.pitched_ads && "Ads", provider.pitched_medjobs && "MedJobs"]
-                    .filter(Boolean)
-                    .join(", ") || "—"}
-                </span>
-              </div>
-              {provider.pitch_interest_level && (
+              <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Interest</span>
+                  <span className="text-gray-600">Pitched</span>
+                  <span className="text-gray-900">{formatDate(provider.pitched_at)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Products</span>
                   <span className="text-gray-900">
-                    {INTEREST_LEVEL_LABELS[provider.pitch_interest_level as keyof typeof INTEREST_LEVEL_LABELS]}
+                    {[provider.pitched_ads && "Ads", provider.pitched_medjobs && "MedJobs"]
+                      .filter(Boolean)
+                      .join(", ") || "—"}
                   </span>
                 </div>
-              )}
-              {provider.pitch_notes && (
-                <div className="mt-2 pt-2 border-t border-indigo-100">
-                  <p className="text-gray-700">{provider.pitch_notes}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Notes */}
-        {provider.notes && !activeAction && (
-          <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
-            <div className="text-xs font-medium text-amber-700 mb-2">Notes</div>
-            <p className="text-sm text-gray-700">{provider.notes}</p>
-          </div>
-        )}
-
-        {/* Activity timeline */}
-        <div>
-          <div className="text-sm font-medium text-gray-900 mb-3">Activity</div>
-          {loadingTouchpoints ? (
-            <div className="text-sm text-gray-500">Loading...</div>
-          ) : touchpoints.length === 0 ? (
-            <div className="text-sm text-gray-500">No activity yet</div>
-          ) : (
-            <div className="space-y-3">
-              {touchpoints.map((tp) => (
-                <div key={tp.id} className="flex gap-3">
-                  <div className="w-2 h-2 mt-1.5 rounded-full bg-gray-300" />
-                  <div className="flex-1">
-                    <div className="text-sm text-gray-900">
-                      {TOUCHPOINT_TYPE_LABELS[tp.touchpoint_type] || tp.touchpoint_type}
-                    </div>
-                    <div className="text-xs text-gray-500">{timeAgo(tp.created_at)}</div>
+                {provider.pitch_interest_level && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Interest</span>
+                    <span className="text-gray-900">
+                      {INTEREST_LEVEL_LABELS[provider.pitch_interest_level as keyof typeof INTEREST_LEVEL_LABELS]}
+                    </span>
                   </div>
-                </div>
-              ))}
+                )}
+                {provider.pitch_notes && (
+                  <div className="mt-2 pt-2 border-t border-indigo-100">
+                    <p className="text-gray-700">{provider.pitch_notes}</p>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </div>
+          </>
+        )}
+
+        {/* Conversion Actions - for pitched/upgrade_meeting providers */}
+        <ConversionActionsSection
+          provider={provider}
+          onUpdateStatus={handleUpdateConversionStatus}
+        />
+
+        {/* Notes (legacy - displayed if any exist from previous entries) */}
+        {provider.notes && (
+          <>
+            <SectionDivider />
+            <div className="p-4 bg-amber-50 rounded-lg border border-amber-100">
+              <div className="text-[10px] font-semibold text-amber-600 uppercase tracking-wide mb-2">
+                Notes
+              </div>
+              <p className="text-sm text-gray-700 whitespace-pre-wrap">{provider.notes}</p>
+            </div>
+          </>
+        )}
+
+        <SectionDivider />
+
+        {/* Unified Activity Log - replaces separate Call Log and Admin Activity */}
+        <ActivityLog
+          trackingId={provider.id}
+          businessProfileId={provider.business_profile_id}
+          pipelineStage={provider.pipeline_stage}
+          onActivityLogged={() => {
+            onCallLogged?.();
+            onUpdate();
+          }}
+        />
       </div>
     </DrawerShell>
   );
 }
 
-function getStageColor(stage: PipelineStage): string {
-  switch (stage) {
-    case "new_claim":
-      return "text-gray-600";
-    case "meeting_scheduled":
-      return "text-blue-600";
-    case "pitched":
-      return "text-indigo-600";
-    case "not_interested":
-      return "text-gray-400";
-    default:
-      return "text-gray-600";
-  }
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper Functions
+// ─────────────────────────────────────────────────────────────────────────────
 
 function timeAgo(isoDate: string | undefined | null): string {
   if (!isoDate) return "—";
-  const days = Math.floor((Date.now() - new Date(isoDate).getTime()) / (1000 * 60 * 60 * 24));
-  if (days === 0) return "Today";
-  if (days === 1) return "1d ago";
-  if (days < 7) return `${days}d ago`;
-  if (days < 30) return `${Math.floor(days / 7)}w ago`;
-  return `${Math.floor(days / 30)}mo ago`;
+  const date = new Date(isoDate);
+  if (isNaN(date.getTime())) return "—";
+
+  const diffMs = Date.now() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays < 0) return "—";
+  if (diffDays === 0) return "Today";
+  if (diffDays === 1) return "1d ago";
+  if (diffDays < 7) return `${diffDays}d ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
+  return `${Math.floor(diffDays / 30)}mo ago`;
 }
 
 function formatDate(isoDate: string): string {

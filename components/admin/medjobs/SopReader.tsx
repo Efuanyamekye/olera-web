@@ -61,6 +61,7 @@ export default function SopReader({
   jumps,
   openAt,
   above,
+  alsoOpen,
 }: {
   /** The `doc` key served by /api/admin/medjobs/sop. */
   doc: string;
@@ -73,6 +74,9 @@ export default function SopReader({
   /** Rendered between the header and the jump bar, given the jump function so
    *  a diagram above the reader can drive it. */
   above?: (jump: (dest: string) => void) => React.ReactNode;
+  /** A second document worth reaching from this tab, shown beside the title
+   *  in the same way as the walkthrough. */
+  alsoOpen?: { label: string; doc: string };
 }) {
   const url = `/api/admin/medjobs/sop?doc=${doc}`;
   const [hash, setHash] = useState(() => sopHash(openAt));
@@ -108,6 +112,17 @@ export default function SopReader({
             <LinkIcon />
             Walkthrough
           </a>
+          {alsoOpen ? (
+            <a
+              href={`/api/admin/medjobs/sop?doc=${alsoOpen.doc}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:text-primary-800"
+            >
+              <LinkIcon />
+              {alsoOpen.label}
+            </a>
+          ) : null}
         </div>
         <div className="mb-3 flex flex-wrap items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2">
           {jumps.map((j) => {

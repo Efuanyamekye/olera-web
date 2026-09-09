@@ -36,27 +36,53 @@ export default function ProviderGrowthPage() {
   // Tab state
   const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
     const tab = searchParams.get("tab");
-    const sub = searchParams.get("sub") as "ads" | "medjobs" | "both" | null;
+    const sub = searchParams.get("sub") as "ads" | "medjobs" | "both" | "not_contacted" | "in_progress" | "active" | "no_show" | "not_interested" | null;
 
-    // Check for pipeline stage tabs
-    if (tab && ["new_claim", "meeting_scheduled", "pitched", "not_interested"].includes(tab)) {
+    // Check for new_claim with subtab
+    if (tab === "new_claim") {
+      const validSubTabs = ["not_contacted", "in_progress"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "in_progress") : "not_contacted";
+      return { type: "pipeline", stage: "new_claim", subTab };
+    }
+
+    // Check for pitched (Follow-up) with subtab
+    if (tab === "pitched") {
+      const validSubTabs = ["active", "no_show", "not_interested"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "active" | "no_show" | "not_interested") : "active";
+      return { type: "pipeline", stage: "pitched", subTab };
+    }
+
+    // Check for other pipeline stage tabs (without subtabs)
+    if (tab && ["meeting_scheduled"].includes(tab)) {
       return { type: "pipeline", stage: tab as PipelineStage };
+    }
+
+    // Check for upgrade_meeting (has Ads/MedJobs/Both subtabs)
+    if (tab === "upgrade_meeting") {
+      const validSubTabs = ["ads", "medjobs", "both"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "ads" | "medjobs" | "both") : "ads";
+      return { type: "pipeline", stage: "upgrade_meeting", subTab };
     }
 
     // Check for conversion tabs (converted/paying with subtab)
     if (tab === "converted" && sub && ["ads", "medjobs", "both"].includes(sub)) {
-      return { type: "conversion", tab: "converted", subTab: sub };
+      return { type: "conversion", tab: "converted", subTab: sub as "ads" | "medjobs" | "both" };
     }
     if (tab === "paying" && sub && ["ads", "medjobs", "both"].includes(sub)) {
-      return { type: "conversion", tab: "paying", subTab: sub };
+      return { type: "conversion", tab: "paying", subTab: sub as "ads" | "medjobs" | "both" };
     }
 
-    return { type: "pipeline", stage: "new_claim" };
+    // Default to new_claim with not_contacted subtab
+    return { type: "pipeline", stage: "new_claim", subTab: "not_contacted" };
   });
 
   // Data state
   const [providers, setProviders] = useState<ProviderGrowthWithProfile[]>([]);
   const [stats, setStats] = useState<GrowthStats | null>(null);
+  const [newClaimSubtabCounts, setNewClaimSubtabCounts] = useState<{
+    notContacted: number;
+    inProgress: number;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingStats, setLoadingStats] = useState(true);
   const [total, setTotal] = useState(0);
@@ -100,14 +126,23 @@ export default function ProviderGrowthPage() {
     setPage(0);
   }, [dateRange]);
 
-  // Fetch stats
+  // Fetch stats (including new claim subtab counts)
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
-      const res = await fetch("/api/admin/provider-growth/stats");
-      if (res.ok) {
-        const data = await res.json();
+      const [statsRes, subtabRes] = await Promise.all([
+        fetch("/api/admin/provider-growth/stats"),
+        fetch("/api/admin/provider-growth/new-claim-subtabs"),
+      ]);
+
+      if (statsRes.ok) {
+        const data = await statsRes.json();
         setStats(data.stats);
+      }
+
+      if (subtabRes.ok) {
+        const data = await subtabRes.json();
+        setNewClaimSubtabCounts(data);
       }
     } catch (e) {
       console.error("Failed to fetch stats:", e);
@@ -124,17 +159,49 @@ export default function ProviderGrowthPage() {
 
       // Set filters based on active tab
       if (activeTab.type === "pipeline") {
-        params.set("pipelineStage", activeTab.stage);
+        // For Follow-up tab (pitched), filter based on subtab
+        if (activeTab.stage === "pitched") {
+          // Each subtab maps to a different pipeline stage
+          if (activeTab.subTab === "no_show") {
+            params.set("pipelineStage", "no_show");
+          } else if (activeTab.subTab === "not_interested") {
+            params.set("pipelineStage", "not_interested");
+          } else {
+            // "active" subtab (or no subtab) shows pitched stage
+            params.set("pipelineStage", "pitched");
+          }
+        } else {
+          params.set("pipelineStage", activeTab.stage);
+        }
+
+        // For new_claim, apply hasCallAttempts filter based on subtab
+        if (activeTab.stage === "new_claim" && activeTab.subTab) {
+          params.set("hasCallAttempts", activeTab.subTab === "in_progress" ? "true" : "false");
+        }
+
+        // For upgrade_meeting, apply Ads/MedJobs/Both filter based on subtab
+        // Include pilot_expired for MedJobs since they still need to convert to paying
+        if (activeTab.stage === "upgrade_meeting" && activeTab.subTab) {
+          if (activeTab.subTab === "ads") {
+            params.set("adsStatus", "free_intro");
+          } else if (activeTab.subTab === "medjobs") {
+            params.set("medjobsStatus", "in_pilot,pilot_expired");
+          } else if (activeTab.subTab === "both") {
+            params.set("adsStatus", "free_intro");
+            params.set("medjobsStatus", "in_pilot,pilot_expired");
+          }
+        }
       } else {
         // Conversion tabs
+        // For MedJobs, include both in_pilot and pilot_expired (they still need to convert to paying)
         if (activeTab.tab === "converted") {
           if (activeTab.subTab === "ads") {
             params.set("adsStatus", "free_intro");
           } else if (activeTab.subTab === "medjobs") {
-            params.set("medjobsStatus", "in_pilot");
+            params.set("medjobsStatus", "in_pilot,pilot_expired");
           } else if (activeTab.subTab === "both") {
             params.set("adsStatus", "free_intro");
-            params.set("medjobsStatus", "in_pilot");
+            params.set("medjobsStatus", "in_pilot,pilot_expired");
           }
         } else if (activeTab.tab === "paying") {
           if (activeTab.subTab === "ads") {
@@ -195,7 +262,12 @@ export default function ProviderGrowthPage() {
 
     // Update URL
     if (tab.type === "pipeline") {
-      router.push(`/admin/provider-growth?tab=${tab.stage}`, { scroll: false });
+      // Include subtab for new_claim, pitched (Follow-up), and upgrade_meeting
+      if ((tab.stage === "new_claim" || tab.stage === "pitched" || tab.stage === "upgrade_meeting") && tab.subTab) {
+        router.push(`/admin/provider-growth?tab=${tab.stage}&sub=${tab.subTab}`, { scroll: false });
+      } else {
+        router.push(`/admin/provider-growth?tab=${tab.stage}`, { scroll: false });
+      }
     } else {
       router.push(`/admin/provider-growth?tab=${tab.tab}&sub=${tab.subTab}`, { scroll: false });
     }
@@ -300,7 +372,13 @@ export default function ProviderGrowthPage() {
       <StatsHeader stats={stats} loading={loadingStats} />
 
       {/* Tabs */}
-      <GrowthTabs activeTab={activeTab} onTabChange={handleTabChange} stats={stats} />
+      <GrowthTabs
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        stats={stats}
+        newClaimSubtabCounts={newClaimSubtabCounts ?? undefined}
+        followUpSubtabCounts={stats ? { active: stats.pitched, noShow: stats.no_show ?? 0, notInterested: stats.not_interested } : undefined}
+      />
 
       {/* Provider list */}
       <div className="bg-white rounded-xl border border-gray-200">
@@ -368,6 +446,11 @@ export default function ProviderGrowthPage() {
           provider={selectedProvider}
           onClose={() => setSelectedProvider(null)}
           onUpdate={handleProviderUpdate}
+          onCallLogged={() => {
+            // Refresh stats and providers when a call is logged
+            fetchStats();
+            fetchProviders();
+          }}
         />
       )}
 

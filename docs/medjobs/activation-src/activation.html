@@ -1,0 +1,319 @@
+<!doctype html><html><head><meta charset="utf-8">
+<title>University Activation</title>
+<style>
+:root { --ink:#000; --muted:#5f6b64; --rule:#b9c4bd; --teal:#14453f; --soft:#f4f7f6; }
+* { box-sizing: border-box; }
+body { margin:0; color:var(--ink); font-family:Arial,Helvetica,sans-serif;
+       font-size:11pt; line-height:1.2; }
+.doc-title { font-size:15pt; font-weight:700; margin:0 0 2pt; color:var(--teal);
+       letter-spacing:0.2pt; }
+.doc-sub { font-size:10pt; color:var(--muted); margin:0 0 9pt; }
+h1,h2,h3,h4 { break-after:avoid; page-break-after:avoid; }
+h1 { font-size:13pt; font-weight:700; text-transform:uppercase; letter-spacing:0.4pt;
+       margin:16pt 0 5pt; color:var(--teal); border-bottom:1.6pt solid var(--teal);
+       padding-bottom:3pt; break-before:page; page-break-before:always; }
+h2 { font-size:11pt; font-weight:700; text-transform:uppercase; letter-spacing:0.4pt;
+       margin:13pt 0 4pt; padding-bottom:2pt; border-bottom:1.2pt solid #000; }
+h3 { font-size:10pt; font-weight:700; text-transform:uppercase; letter-spacing:0.4pt;
+       margin:9pt 0 3pt; color:var(--teal); }
+h4 { font-size:9.5pt; font-weight:700; margin:7pt 0 2pt; color:var(--muted);
+       text-transform:uppercase; letter-spacing:0.4pt; }
+p { margin:0 0 3pt; text-align:justify; orphans:2; widows:2; }
+ul,ol { margin:3pt 0 4pt; padding-left:17pt; }
+li { margin:0 0 3pt; text-align:left; }
+li::marker { color:var(--teal); }
+li > ul, li > ol { margin-top:3pt; }
+p.obj { break-after:avoid; page-break-after:avoid; }
+ul.facts { break-inside:avoid; page-break-inside:avoid; }
+strong { font-weight:700; }
+hr { border:0; border-top:0.6pt solid var(--rule); margin:9pt 0; }
+a { color:var(--teal); text-decoration:none; }
+code { font-family:"DejaVu Sans Mono","Liberation Mono",monospace; font-size:8.6pt;
+       background:var(--soft); border:0.5pt solid var(--rule); border-radius:2px;
+       padding:0 2px; }
+/* The flow diagram is 69 lines of box drawing. The size has to be set on the
+   pre itself, not on the code inside it, or the line boxes take the 11pt body
+   size and the block runs off the page. Overflow is left visible so that a
+   future edit which no longer fits is obvious rather than silently cropped. */
+pre { background:var(--soft); border:0.5pt solid var(--rule);
+      border-left:2.4pt solid var(--teal); padding:7pt 9pt;
+      font-family:"DejaVu Sans Mono","Liberation Mono",monospace;
+      font-size:7.2pt; line-height:1.05;
+      break-inside:avoid; page-break-inside:avoid; margin:0 0 6pt; }
+pre code { background:none; border:0; padding:0; font-size:inherit;
+           line-height:inherit; white-space:pre; }
+blockquote { margin:0 0 5pt; padding:0 0 0 8pt; border-left:2.4pt solid var(--rule);
+      color:var(--muted); font-size:9.5pt; break-inside:avoid; }
+blockquote p { margin:0 0 2pt; text-align:left; }
+blockquote p:last-child { margin-bottom:0; }
+blockquote strong { color:var(--teal); }
+table { width:100%; border-collapse:collapse; margin:5pt 0 2pt; font-size:9pt;
+      line-height:1.16; break-inside:auto; }
+thead { display:table-header-group; }
+tr { break-inside:avoid; page-break-inside:avoid; }
+th { text-align:left; color:var(--teal); border-bottom:1pt solid var(--teal);
+      padding:0 6pt 2.5pt 0; font-weight:700; vertical-align:bottom; }
+td { border-bottom:0.4pt solid var(--rule); padding:2.8pt 6pt 2.8pt 0;
+      vertical-align:top; }
+td strong { color:var(--teal); }
+tbody tr:last-child td { border-bottom:1pt solid var(--teal); }
+.toc { border-top:1.2pt solid #000; border-bottom:1.2pt solid #000; padding:6pt 0;
+      margin:0 0 10pt; font-size:9.5pt; break-inside:avoid; column-count:2;
+      column-gap:20pt; }
+.toc-h { font-size:9pt; text-transform:uppercase; letter-spacing:0.4pt;
+      color:var(--teal); font-weight:700; margin:0 0 4pt; column-span:all; }
+.toc ul { list-style:none; margin:0; padding:0; }
+.toc ul ul { display:none; }
+.toc li { margin:0 0 2pt; }
+.toc a { color:var(--ink); }
+figure { margin:5pt 0 6pt; break-inside:avoid; page-break-inside:avoid; }
+/* Process figures float into the text so a run of tables is broken up rather
+   than merely interrupted. Headings clear them so a float cannot escape into
+   the next stage. */
+figure.fw { float:right; width:2.5in; margin:2pt 0 6pt 14pt; }
+figure.fw svg { display:block; width:100%; height:auto; }
+figure.fw figcaption { font-size:8.5pt; line-height:1.14; }
+h1,h2,h3 { clear:both; }
+table { clear:both; }
+/* The screenshots are 640px wide. Capping the plate at 6.6in keeps them
+   near 97 dpi rather than the 85 dpi a full 7.5in column would give. */
+figure img { display:block; max-width:6.6in; max-height:8.2in; margin:0 auto; }
+figcaption { font-size:9pt; line-height:1.16; text-align:left; margin:3pt 0 0;
+      break-before:avoid; }
+figcaption strong:first-child { color:var(--teal); }
+.exhibit-missing { border:0.6pt dashed var(--rule); background:var(--soft);
+      padding:14pt 10pt; margin:5pt 0 6pt; text-align:center; color:var(--muted);
+      font-size:9pt; }
+.exhibit-missing b { display:block; color:var(--teal); font-size:9.5pt;
+      margin-bottom:3pt; }
+@page { size: Letter; }
+
+/* Screenshots of a dense admin UI. Sized for legibility rather than for
+   page count: a walkthrough figure nobody can read is worse than a longer
+   document. page-break-inside keeps a figure with its own caption. */
+figure { margin: 6pt 0 10pt; page-break-inside: avoid; }
+figure img { max-width: 6.1in; max-height: 5.4in; border: 0.5pt solid var(--rule); border-radius: 2pt; }
+figcaption { font-size: 8.5pt; }
+h1 { page-break-before: auto; }
+</style></head><body>
+<div class="doc-title">University Activation</div>
+<div class="doc-sub">A guide for the Consumer Relations Manager &#183; ST3 to ST7</div>
+<div class="toc"><div class="toc-h">Contents</div><ul>
+<li><a href="#what-this-is">What this is</a></li>
+<li><a href="#the-five-channels">The five channels</a></li>
+<li><a href="#not-yet-in-progress-live">Not yet, in progress, live</a></li>
+<li><a href="#running-the-list">Running the list</a></li>
+<li><a href="#the-university-drawer">The university drawer</a></li>
+<li><a href="#working-a-channel">Working a channel</a></li>
+<li><a href="#the-three-list-channels">The three list channels</a></li>
+<li><a href="#tasks">Tasks</a></li>
+<li><a href="#moving-between-the-two">Moving between the two</a></li>
+<li><a href="#what-this-deliberately-does-not-do">What this deliberately does not do</a></li>
+<li><a href="#example-one-turning-on-the-advisor-listserv">Example one: turning on the advisor listserv</a></li>
+<li><a href="#example-two-adding-your-first-student-organization">Example two: adding your first student organization</a></li>
+<li><a href="#example-three-getting-permission-then-activating-a-professor">Example three: getting permission, then activating a professor</a></li>
+<li><a href="#what-good-looks-like">What good looks like</a></li>
+</ul></div>
+<p><strong>A guide for the Consumer Relations Manager.</strong> What was built, why it works the way it does, and how to use it to run ST3 through ST7.</p>
+<hr />
+<h2 id="what-this-is">What this is</h2>
+<p>University activation was, until now, kept in meeting notes and in your head. Which advisor agreed to send the flyer, which chapter shared it, when the job posting was last checked, whether anyone had asked about professors yet. That worked at four universities. It does not work at forty.</p>
+<p>The workspace turns that into a record. Two new tabs sit in the MedJobs In Basket:</p>
+<ul>
+<li><strong>Universities</strong> shows every campus and the state of its five channels.</li>
+<li><strong>Tasks</strong> holds the follow-up work the system generated for you.</li>
+</ul>
+<p>The design principle behind it is worth stating plainly, because it explains almost every decision below: <strong>you record what actually happened, and the system works out what it means.</strong> You will not find a status dropdown anywhere. You tick off real steps, and the status follows.</p>
+<hr />
+<h2 id="the-five-channels">The five channels</h2>
+<p>The channels are unchanged from the operating model. What is new is that each one now has a written definition of what makes it live, and the system holds you to it.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Channel</th>
+<th>Live when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ST3</strong></td>
+<td>University job board</td>
+<td>The posting is submitted, approved, and confirmed visible to students</td>
+</tr>
+<tr>
+<td><strong>ST4</strong></td>
+<td>Advisor listserv</td>
+<td>The advisor has agreed to send the flyer to their listserv</td>
+</tr>
+<tr>
+<td><strong>ST5</strong></td>
+<td>Student organizations</td>
+<td>At least one organization is activated</td>
+</tr>
+<tr>
+<td><strong>ST6</strong></td>
+<td>Campus events</td>
+<td>At least one event or webinar is activated</td>
+</tr>
+<tr>
+<td><strong>ST7</strong></td>
+<td>Professors and class outreach</td>
+<td>Approval obtained, and at least one professor has agreed</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ST3 and ST4 are single switches.</strong> They are either arranged at this university or they are not.</p>
+<p><strong>ST5, ST6 and ST7 are lists.</strong> A campus can have four student organizations, two events and nine professors, each activating on its own schedule. Adding one is a button; each keeps its own contacts, its own history and its own next check.</p>
+<hr />
+<h2 id="not-yet-in-progress-live">Not yet, in progress, live</h2>
+<p>Every channel and every record moves through the same three states, and you never choose them.</p>
+<p><strong>Not yet</strong> is where everything starts. Nobody has done anything.</p>
+<p><strong>In progress</strong> happens automatically the moment you tick the first step.</p>
+<p><strong>Live</strong> happens automatically when the last required step is ticked. The system stamps the date, shows a brief acknowledgement, and creates your next follow-up.</p>
+<p>There is one state you do choose: <strong>not available here</strong>. Use it when a channel genuinely cannot work at this university, and say why. A dead job board recorded as dead is useful. A dead job board left blank looks like work nobody did.</p>
+<p>Records inside the list channels can be <strong>declined</strong> in the same way, for the organization that says no or the professor who is not interested. A declined record stops appearing as unfinished work.</p>
+<p><strong>Activation is recorded once and never removed.</strong> If a channel later goes quiet, the date it first went live stays on the record. It did happen, and that fact does not expire.</p>
+<hr />
+<h2 id="running-the-list">Running the list</h2>
+<p>Open <strong>Universities</strong>. Every campus is a row, and the five channels read left to right in the same order every time. A <strong>red dot</strong> beside a university name means something there is due or overdue.</p>
+<figure><img alt="Universities list" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/list.png" /><figcaption><strong>Exhibit 1. The Universities tab. Work top down; when the red dots run out, you are done for the day.</strong></figcaption></figure>
+<p>Universities with a red dot sort first. Click any row to open that university.</p>
+<hr />
+<h2 id="the-university-drawer">The university drawer</h2>
+<figure><img alt="University drawer" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/drawer.png" /><figcaption><strong>Exhibit 2. One university, its five channels, and nothing else.</strong></figcaption></figure>
+<p>The line under the name is the whole summary. Each channel shows its status, how far along it is, and the date it is next due.</p>
+<p><strong>There are two things to click on a channel row.</strong> The row itself opens the workflow. The <strong>date</strong> on the right leaves the drawer and takes you to the task that explains what to do.</p>
+<hr />
+<h2 id="working-a-channel">Working a channel</h2>
+<p>Inside a channel you find the same things every time, in the same order.</p>
+<figure><img alt="ST4 expanded" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st4.png" /><figcaption><strong>Exhibit 3. ST4 expanded. Live win at the top, then contacts, the copy you can send, and history.</strong></figcaption></figure>
+<p><strong>Live win</strong> is the checklist. Tick what has actually happened. Each tick records the date automatically, so you never type one.</p>
+<p><strong>Contacts</strong> default to the university advisor. Where the real contact is someone else, a career services officer for the job board or an events office for a fair, add them.</p>
+<p><strong>Suggested email and call script</strong> appear where the step involves asking someone for something. They are short on purpose. A partner who has to edit is a partner who does not send. Edit them freely and copy them out; the workspace does not send mail.</p>
+<p><strong>History</strong> is collapsed until you want it, with the count on the toggle.</p>
+<p><strong>Mark not available here</strong> sits at the bottom and asks for a reason.</p>
+<hr />
+<h2 id="the-three-list-channels">The three list channels</h2>
+<figure><img alt="ST5 expanded" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st5.png" /><figcaption><strong>Exhibit 4. ST5. Each organization is its own record with its own live win and its own next check.</strong></figcaption></figure>
+<p><strong>Student organizations.</strong> An organization is live as soon as its leadership agrees to any one meaningful way of reaching members: sharing the flyer in a group chat, emailing it out, or arranging a presentation. One is enough. Each live organization gets its own monthly reconnect.</p>
+<p><strong>Campus events.</strong> Add both kinds, webinars we host and university events we join. An event is live when five things are true: a leader identified, host approval obtained, a date scheduled, a presenter assigned, and collateral ready. The same five work for a webinar and for a career fair. This channel also carries a <strong>semester review</strong>, which arrives on its own so nothing sits unlooked-at for a term.</p>
+<figure><img alt="ST7 expanded" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st7.png" /><figcaption><strong>Exhibit 5. ST7. The approval block sits above the list, and the list does not exist until it is cleared.</strong></figcaption></figure>
+<p><strong>Professors.</strong> This channel is gated. <strong>You cannot add a professor until approval is recorded</strong>, because we do not prospect faculty until a university has told us we may. Record who can give that permission, then record it when it arrives. Once a professor agrees, either to pass the opportunity on or to let us join a class, they are live and come back to you seasonally.</p>
+<hr />
+<h2 id="tasks">Tasks</h2>
+<p>Everything recurring is created for you. You never pick a task type from a menu.</p>
+<figure><img alt="Tasks tab" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/tasks.png" /><figcaption><strong>Exhibit 6. The Tasks tab, grouped by urgency. Every row names its university and channel.</strong></figcaption></figure>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Appears when</th>
+<th>Comes back</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Confirm posting still live</td>
+<td>ST3 goes live</td>
+<td>Monthly</td>
+</tr>
+<tr>
+<td>Confirm advisor agreed to distribute the flyer</td>
+<td>You record sending the advisor the flyer</td>
+<td>Once, after 7 days</td>
+</tr>
+<tr>
+<td>Remind to send copy to listserv again</td>
+<td>ST4 goes live</td>
+<td>Monthly</td>
+</tr>
+<tr>
+<td>Reconnect to maintain distribution</td>
+<td>An organization goes live</td>
+<td>Monthly, per organization</td>
+</tr>
+<tr>
+<td>Semester review of event opportunities</td>
+<td>ST6 is first opened</td>
+<td>Each semester</td>
+</tr>
+<tr>
+<td>Event day</td>
+<td>An event date is scheduled</td>
+<td>Once</td>
+</tr>
+<tr>
+<td>Re-engage professor</td>
+<td>A professor goes live</td>
+<td>Seasonally, per professor</td>
+</tr>
+</tbody>
+</table>
+<figure><img alt="Task opened" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/task.png" /><figcaption><strong>Exhibit 7. A task opened. What it is, why it matters, the steps, the copy, and what done means.</strong></figcaption></figure>
+<p><strong>Mark done</strong> closes a routine check and schedules the next one at the right interval. If you could not do it this cycle, <strong>Skip this cycle</strong> moves it on without claiming you did.</p>
+<p><strong>Custom tasks</strong> are for work the five channels do not describe. Give it a name, a date, and your own checklist of what needs doing.</p>
+<figure><img alt="New task" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/newtask.png" /><figcaption><strong>Exhibit 8. A custom task, with your own checklist items.</strong></figcaption></figure>
+<hr />
+<h2 id="moving-between-the-two">Moving between the two</h2>
+<p>Every path goes both ways. A next-check date in a university opens that task. A task names its university and channel as a link back. A red dot anywhere leads to the item that caused it. You can start from either tab and never reach a dead end.</p>
+<hr />
+<h2 id="what-this-deliberately-does-not-do">What this deliberately does not do</h2>
+<p>It does not send email. It does not assign work to anyone, because one person runs this today. It does not report on which channel produced a student, because we cannot yet measure that honestly and a plausible number would be worse than none. It does not detect a channel that has quietly gone stale.</p>
+<p>Those are choices, not omissions. Say so if any of them starts costing you real time.</p>
+<hr />
+<h1 id="three-worked-examples">Three worked examples</h1>
+<p>The three things you will do most often, start to finish.</p>
+<hr />
+<h2 id="example-one-turning-on-the-advisor-listserv">Example one: turning on the advisor listserv</h2>
+<p>The most common activation, and the one that shows how the system chases a step for you.</p>
+<h3 id="step-1-open-the-channel">Step 1. Open the channel</h3>
+<p>The advisor meeting agreed she would send to the pre-health list. Open Ohio State, then ST4.</p>
+<figure><img alt="ST4 before any work" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st4start.png" /><figcaption><strong>Exhibit 9. Nothing done yet. Three steps, none ticked, so the channel reads Not yet.</strong></figcaption></figure>
+<p>Copy the suggested email, edit it if you want, and send her the flyer.</p>
+<h3 id="step-2-record-that-you-sent-it">Step 2. Record that you sent it</h3>
+<p>Tick <strong>Advisor sent the current flyer</strong>.</p>
+<figure><img alt="ST4 after the first step" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st4mid.png" /><figcaption><strong>Exhibit 10. One tick. The channel is now In progress, and a follow-up appeared for 26 September.</strong></figcaption></figure>
+<p>Two things happened without you asking. The status moved to <strong>In progress</strong>, and the system created a task due in seven days to find out whether she agreed. You do not have to remember to chase this.</p>
+<h3 id="step-3-answer-the-follow-up-when-it-comes-due">Step 3. Answer the follow-up when it comes due</h3>
+<p>Seven days later the task is in your Tasks tab.</p>
+<figure><img alt="The confirm task" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/hook.png" /><figcaption><strong>Exhibit 11. This task asks a question rather than setting a chore, so it offers an answer instead of Mark done.</strong></figcaption></figure>
+<p>If she agreed, click <strong>Yes, they agreed</strong>. That ticks the second box back in the university record. The task and the checklist are the same fact, so they cannot end up disagreeing. If she has not replied, <strong>Not yet, ask again</strong> pushes the task out a week and leaves the box alone.</p>
+<h3 id="step-4-confirm-the-send-and-the-channel-goes-live">Step 4. Confirm the send, and the channel goes live</h3>
+<p>Tick <strong>Distribution confirmed</strong> once the email has actually gone out.</p>
+<figure><img alt="ST4 live" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st4.png" /><figcaption><strong>Exhibit 12. All three ticked. The channel is Live, dated, and the monthly reminder is already scheduled.</strong></figcaption></figure>
+<p>You will see a brief acknowledgement, and the next check appears on the card. From here the workspace asks you once a month to send her fresh copy, which is the only reason the listserv keeps going out.</p>
+<hr />
+<h2 id="example-two-adding-your-first-student-organization">Example two: adding your first student organization</h2>
+<h3 id="step-1-open-st5">Step 1. Open ST5</h3>
+<figure><img alt="ST5 empty" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st5empty.png" /><figcaption><strong>Exhibit 13. An empty channel. There is one button, and it is the right one.</strong></figcaption></figure>
+<h3 id="step-2-add-the-organization-by-name">Step 2. Add the organization by name</h3>
+<p>Click <strong>Add organization</strong>, type the chapter name, and press Enter.</p>
+<figure><img alt="ST5 with one organization" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st5one.png" /><figcaption><strong>Exhibit 14. Added, with its officer recorded. Nothing is agreed yet, so it sits at Not yet.</strong></figcaption></figure>
+<p>Each organization has its own live win, its own contacts, up to two, and its own history. Reach out to the officer.</p>
+<h3 id="step-3-tick-whichever-mechanism-they-agreed-to">Step 3. Tick whichever mechanism they agreed to</h3>
+<p>The chapter president says she will post it in the group chat. Tick that one box.</p>
+<figure><img alt="ST5 with a live organization" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st5.png" /><figcaption><strong>Exhibit 15. One tick is enough. The organization is Live, and its monthly reconnect is scheduled.</strong></figcaption></figure>
+<p><strong>Any one of the three is enough</strong>, because a group-chat post and an all-members email are both real distribution. You do not need all three, and the system will not ask for them.</p>
+<p>Notice the channel now reads <strong>2 of 4 live</strong>. Adding a fifth organization tomorrow will not undo that. The channel goes live on its first live record and stays there, so adding more work is never punished.</p>
+<hr />
+<h2 id="example-three-getting-permission-then-activating-a-professor">Example three: getting permission, then activating a professor</h2>
+<p>The one channel with a rule the system enforces rather than trusting you to remember.</p>
+<h3 id="step-1-find-the-channel-locked">Step 1. Find the channel locked</h3>
+<figure><img alt="ST7 locked" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st7lock.png" /><figcaption><strong>Exhibit 16. No professor can be added yet. The list is not hidden, it is closed, with the reason on it.</strong></figcaption></figure>
+<p>We do not prospect faculty until a university has told us we may. Ask the advisor first: who can tell us whether we may use the directory and email professors directly?</p>
+<h3 id="step-2-record-the-pathway-then-the-approval">Step 2. Record the pathway, then the approval</h3>
+<p>Tick <strong>Approval pathway identified</strong> once you know who decides, and record their name and how the decision gets made. Getting an answer often takes a few conversations; use the history to note where you are.</p>
+<h3 id="step-3-the-list-unlocks">Step 3. The list unlocks</h3>
+<figure><img alt="ST7 unlocked" src="file:///home/user/olera-web/docs/medjobs/activation-src/exhibits/st7.png" /><figcaption><strong>Exhibit 17. Approval recorded. The professor list is now open, and the outreach email cites the person who cleared it.</strong></figcaption></figure>
+<p>Add professors one at a time with their department and course. The suggested email names the advisor who gave permission, because that is what makes a cold email to a professor land.</p>
+<h3 id="step-4-send-then-record-what-they-agreed-to">Step 4. Send, then record what they agreed to</h3>
+<p>Tick <strong>Outreach sent</strong> when you write to them. That moves the professor to In progress but does not make them live, which is correct: contacting someone is not the same as their agreeing.</p>
+<p>When a professor agrees, tick either <strong>Distribute the opportunity to students</strong> or <strong>Allow a brief class visit</strong>. Either one makes them live. If it is a class visit, record whether it is virtual or in person, when, and which team member is presenting.</p>
+<p>Each live professor then comes back to you seasonally, roughly four times a year, which is the rhythm that matches how terms actually turn over.</p>
+<hr />
+<h2 id="what-good-looks-like">What good looks like</h2>
+<p>A university that is working properly has channels that are live and dates that are in the future. Not five live channels: a campus with a dead job board and no faculty access, honestly recorded, is in better shape than one with five blanks.</p>
+<p><strong>The stage does not close.</strong> Every other stage in the funnel ends in an outcome. This one ends in a standing commitment: postings expire, officers graduate, a fair moves, a listserv only sends when someone asks. Each channel is two motions, secure it once and then keep it alive, and the second is what decides whether a university produces students in the spring as well as the autumn.</p>
+<p>The workspace exists to make the second motion ordinary daily work rather than something to remember.</p>
+</body></html>

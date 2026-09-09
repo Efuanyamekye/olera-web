@@ -51,6 +51,11 @@ const DOCS: Record<string, Doc> = {
     download: "MedJobs-Consumer-Relations-Manager-Operations.pdf",
     type: "application/pdf",
   },
+  activation: {
+    file: "docs/medjobs/MedJobs_University_Activation_Guide.pdf",
+    download: "MedJobs-University-Activation-Guide.pdf",
+    type: "application/pdf",
+  },
   walkthrough: {
     file: "docs/medjobs/MedJobs_Operating_System_Walkthrough_Summary.pdf",
     download: "MedJobs-Operating-System-Walkthrough-Summary.pdf",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T11:25:55.895Z
+ * Last updated: 2026-09-09T05:48:18.626Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -244,8 +244,8 @@ export const drafts: PipelineStateDrafts = {
         "steps": [
           {
             "step": 1,
-            "title": "Apply for Washington Apple Health",
-            "description": "Complete the Medicaid application online at wahealthplanfinder.org, call 1-855-923-4633, or visit your local DSHS Community Service Office."
+            "title": "Find your county's Home and Community Services office",
+            "description": "Look yours up at dshs.wa.gov/ALTSA/resources, or call Community Living Connections at 1-855-567-0252 and ask. HCS is the office that arranges the in-home assessment. If your loved one is 65 or older or on Medicare, the financial application goes through Washington Connection, not Healthplanfinder."
           },
           {
             "step": 2,
@@ -268,7 +268,7 @@ export const drafts: PipelineStateDrafts = {
             "description": "If approved, DSHS will authorize specific personal care services and help connect you with approved providers."
           }
         ],
-        "processingTime": "45 days for standard Medicaid applications, up to 90 days if disability determination is needed",
+        "processingTime": "About 45 days for the financial decision and about 45 days from intake for the in-home CARE assessment. Up to 60 days if a disability determination is needed.",
         "waitlist": null,
         "tip": "Apply for Medicaid even if you're unsure about eligibility - the functional assessment for personal care services happens after Medicaid approval.",
         "urls": [
@@ -283,48 +283,46 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "documentsNeeded": [
-        "Valid government-issued photo ID or driver's license",
-        "Birth certificate or passport for proof of age and citizenship",
-        "Social Security card",
-        "Proof of Washington state residency (utility bill, lease, or bank statement)",
-        "Social Security award letter or disability determination",
-        "Pay stubs from the last 30 days (if working)",
-        "Pension or retirement income statements",
-        "Bank account details for every account: the bank name, account type, and current balance. A recent statement is the easiest proof.",
-        "Investment account statements (stocks, bonds, retirement accounts)",
-        "Property deeds or tax statements",
-        "Vehicle titles and registration",
-        "Life insurance policies with cash values",
+        "A Social Security number (the number itself, not the card)",
+        "Proof of identity (driver's license or other government-issued ID)",
+        "Proof of income: Social Security award letter, pension statements, or pay stubs",
+        "Documentation of resources: bank statements, property tax statements, life insurance",
+        "Proof of citizenship ONLY if your loved one does not receive Medicare or SSI",
         "Medical records documenting functional limitations",
         "Physician statement about need for personal care assistance",
-        "Medicare card"
+        "Immigration or alien documents if applicable"
       ],
       "contacts": [
         {
-          "label": "Washington Apple Health Customer Service",
+          "label": "Community Living Connections (start here)",
+          "phone": "1-855-567-0252",
+          "description": "Washington's ADRC referral line. Helps you find your local Home and Community Services office, which is the office that does the assessment. It is a referral line, not an application line.",
+          "hours": "Hours not published"
+        },
+        {
+          "label": "DSHS Community Services Contact Center",
+          "phone": "(877) 501-2233",
+          "description": "Food, cash and Classic Medical. Cannot order a care assessment. Applications and interviews are taken 8am-2pm; general questions until 5pm.",
+          "hours": "Mon-Fri 8am-5pm PT, except holidays (applications and interviews 8am-2pm)"
+        },
+        {
+          "label": "Washington Healthplanfinder Customer Support",
           "phone": "(855) 923-4633",
-          "description": "Medicaid application help and eligibility questions",
-          "hours": "Mon-Fri 7am-6pm PT"
+          "description": "The financial half of the application, for people under 65 who are not on Medicare. People 65+ or on Medicare use Washington Connection instead.",
+          "hours": "Mon-Fri 7:30am-5:30pm PT"
         },
         {
           "label": "Washington 2-1-1",
           "phone": "2-1-1",
-          "description": "24/7 helpline for all social services and local resources",
+          "description": "General referral line.",
           "hours": "Mon-Fri 9am-5pm PT"
-        },
-        {
-          "label": "DSHS Community Services",
-          "phone": "(877) 501-2233",
-          "description": "Local office locations and general assistance",
-          "hours": "Mon-Fri 8am-5pm PT"
         }
       ],
       "applicationNotes": [
+        "You do not choose between Medicaid Personal Care, Community First Choice and COPES. The in-home CARE assessment decides which one fits. MPC is the tier for people who need help but do not need nursing-facility level care, and it covers personal care only.",
+        "You do not have to wait for the financial decision before asking for the care assessment. The two run in parallel.",
         "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
-        "Personal care services are only available to those who don't need nursing facility level of care - if your loved one needs more intensive medical supervision, they'll be referred to waiver programs instead",
-        "Home ownership doesn't disqualify your loved one as long as they live there or intend to return - the home is an exempt asset",
-        "Dementia or Alzheimer's diagnosis alone doesn't automatically qualify - your loved one must still demonstrate specific functional limitations through the CARE assessment",
-        "Most of your loved one's income will go toward room and board costs in adult family homes or assisted living, but they'll retain a small personal needs allowance"
+        "Personal care services are only available to those who don't need nursing facility level of care - if your loved one needs more intensive medical supervision, they'll be referred to waiver programs instead"
       ],
       "relatedPrograms": [
         "Community First Choice Option (CFCO) waiver",
@@ -376,11 +374,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "HandHeart",
-      "phone": "(855) 923-4633",
-      "sourceUrl": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-need-medical-dental-or-vision-help/apple-health-medicaid-washington",
+      "phone": "1-855-567-0252",
+      "sourceUrl": "https://www.dshs.wa.gov/altsa/home-and-community-services/how-apply-medicaid",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "mac-waiver",

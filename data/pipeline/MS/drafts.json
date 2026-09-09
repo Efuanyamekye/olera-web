@@ -946,7 +946,7 @@
       "id": "weatherization-assistance-program",
       "name": "Weatherization Assistance Program (WAP)",
       "shortName": "Weatherization Assistance",
-      "tagline": "Free home energy improvements that can save your loved one $372+ per year on heating and cooling bills",
+      "tagline": "Free home energy improvements. Nationally, weatherized homes save an average of $372 or more a year",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -955,7 +955,7 @@
       },
       "intro": "If your loved one struggles with high heating and cooling bills, Mississippi's Weatherization Assistance Program provides free home improvements that reduce energy costs by an average of $372 or more per year. The program serves homeowners, renters, and mobile home owners with household income at or below 200% of the Federal Poverty Guidelines, a higher threshold than many other programs.\n\nServices include professional energy audits, insulation installation, air sealing, heating and cooling system improvements, and safety upgrades like carbon monoxide detectors. Because the program focuses on permanent home improvements rather than bill payment assistance, these savings continue year after year. Priority goes to households with seniors 60+, people with disabilities, families with children under 5, and high energy users, but all income-eligible households can apply.\n\nThe program operates through regional Community Action Agencies across Mississippi. After submitting an online pre-application, you'll work directly with your local agency to complete the process and schedule the home energy audit that determines which improvements your loved one's home needs.",
       "savingsRange": "$372+ per year",
-      "savingsSource": "National average household savings from weatherization improvements",
+      "savingsSource": "The US Department of Energy publishes a national average of $372 or more per year, measured across households that have already been weatherized. It is a national retrospective average, not a Mississippi figure and not a guarantee.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -1000,7 +1000,7 @@
             "description": "If approved, the CAA will arrange for a professional energy audit to determine what improvements your loved one's home needs."
           }
         ],
-        "processingTime": "Processing times vary by regional Community Action Agency, contact your local CAA for current timelines",
+        "processingTime": "If you are elderly, disabled, or have a child age five or under, expect your appointment within 30 business days of the pre-application. Everyone else, within 45 days. That is the appointment date, not when the work is finished.",
         "waitlist": "Applicants on waiting lists must update eligibility documentation annually",
         "tip": "Have all documentation ready before your in-person appointment to avoid delays.",
         "urls": [
@@ -1023,27 +1023,27 @@
       ],
       "contacts": [
         {
-          "label": "MDHS Weatherization Program",
-          "phone": "(601) 359-4500",
-          "description": "Main program information and regional CAA referrals",
-          "hours": "Mon-Fri 8am-5pm CT"
+          "label": "MDHS Division of Community Services (start here)",
+          "phone": "1-800-421-0762",
+          "description": "Handles LIHEAP, Weatherization and CSBG. Ask questions or get help applying. The application itself starts online through Access MS.",
+          "hours": "Hours not published"
         },
         {
           "label": "Southwest Mississippi Opportunity, Inc.",
           "phone": "(601) 684-1777",
-          "description": "Example regional CAA serving 10-county area (Adams, Amite, Claiborne, Copiah, Franklin, Jefferson, Lincoln, Pike, Walthall, Wilkinson)",
-          "hours": "Mon-Fri business hours"
+          "description": "Local community action agency.",
+          "hours": "Hours not published"
         },
         {
           "label": "Southwest Mississippi Opportunity Toll-Free",
           "phone": "(877) 891-1271",
-          "description": "Toll-free line for Southwest Mississippi region",
-          "hours": "Mon-Fri business hours"
+          "description": "Local community action agency, toll-free.",
+          "hours": "Hours not published"
         },
         {
           "label": "Mississippi 2-1-1",
           "phone": "2-1-1",
-          "description": "Free helpline to find your local Community Action Agency",
+          "description": "General referral line. Utility and rent help is its most common request.",
           "hours": "24 hours, 7 days a week"
         }
       ],
@@ -1102,10 +1102,11 @@
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": "(601) 359-4500",
+      "phone": "1-800-421-0762",
       "sourceUrl": "https://www.mdhs.ms.gov/wap/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "ship-medicare-counseling",
@@ -1260,14 +1261,14 @@
             "type": "service-area"
           },
           {
-            "name": "Examples: Union Nutrition Site (age 60+)[7]",
+            "name": "Ten Area Agencies on Aging cover all 82 counties. Call Mississippi Access to Care at (844) 822-4622 to reach yours.",
             "type": "service-area"
           }
         ]
       },
       "intro": "If your loved one is 60 or older and homebound, unable to leave the house to shop for groceries or safely prepare meals, they may qualify for free daily meal delivery through Home Delivered Meals (Meals on Wheels). Because this program has no income limits, your loved one can qualify even if they have savings or receive Social Security benefits.\n\nEach meal provides at least one-third of daily nutritional requirements and meets federal dietary standards. Because the program prioritizes homebound seniors, your loved one must demonstrate they cannot safely leave home or prepare meals due to age, disability, or health conditions. The service area is limited to specific delivery zones, your loved one must live within the local provider's coverage area.",
       "savingsRange": "",
-      "savingsSource": "Free service",
+      "savingsSource": "Older Americans Act nutrition services invite a voluntary contribution and cannot deny anyone for not paying.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -1311,8 +1312,8 @@
             "description": "If approved and no waitlist exists, meals typically begin within a week. If there's a waitlist, you'll be contacted when delivery slots become available."
           }
         ],
-        "processingTime": "Varies by region, some areas within one week, others have waitlists of several months",
-        "waitlist": "Yes, many areas maintain waitlists. Priority given to those already on congregate meals waiting lists.",
+        "processingTime": "Varies by Area Agency on Aging. Ask about the local wait and about interim food help while you wait.",
+        "waitlist": "MDHS reported 1,696 people on the statewide senior nutrition waiting list in July 2026 (congregate and home-delivered combined). Being eligible does not mean meals start right away.",
         "tip": "Ask specifically about emergency or shelf-stable meal options if your loved one needs immediate food assistance while waiting for regular delivery to begin.",
         "urls": []
       },
@@ -1326,16 +1327,16 @@
       ],
       "contacts": [
         {
-          "label": "Mississippi 2-1-1 (finds your local Area Agency on Aging)",
-          "phone": "2-1-1",
-          "description": "Your local Area Agency on Aging handles home-delivered meals intake and assessment; 2-1-1 connects you to the right one",
-          "hours": "24 hours, 7 days a week"
+          "label": "Mississippi Access to Care (MAC) Helpline (start here)",
+          "phone": "(844) 822-4622",
+          "description": "MDHS's designated \"No Wrong Door\" line. Connects you to your Area Agency on Aging, which does the assessment. Available regardless of income.",
+          "hours": "Hours not published"
         },
         {
-          "label": "Union Nutrition Site (Example)",
-          "phone": "Contact local Area Agency",
-          "description": "Local provider example, call 2-1-1 to find your specific county provider",
-          "hours": "Varies by provider"
+          "label": "Mississippi 2-1-1",
+          "phone": "2-1-1",
+          "description": "General referral line.",
+          "hours": "24 hours, 7 days a week"
         }
       ],
       "applicationNotes": [
@@ -1386,11 +1387,11 @@
         "visualTone": "warm"
       },
       "icon": "BowlFood",
-      "phone": "2-1-1",
+      "phone": "(844) 822-4622",
       "sourceUrl": "https://www.law.cornell.edu/regulations/mississippi/18-Miss-Code-R-SS-2-2-10",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "family-caregiver-support",

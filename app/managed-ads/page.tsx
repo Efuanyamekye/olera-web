@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ManagedAdsHero from "@/components/managed-ads/ManagedAdsHero";
+import TrackRecord from "@/components/managed-ads/TrackRecord";
 import TwoEngines from "@/components/managed-ads/TwoEngines";
 import WhatItLooksLike from "@/components/managed-ads/WhatItLooksLike";
 import ResultsTicker from "@/components/managed-ads/ResultsTicker";
@@ -22,10 +23,19 @@ import { getManagedAdsStats } from "@/lib/managed-ads/stats.server";
  * optimization routine, none of it written anywhere a provider could read it.
  *
  * ORDER, AND WHY IT IS THIS ORDER
- * offer → what you are buying → see it → the numbers → what they do not prove →
- * why our campaigns are different → how we run them → price → close. The first
- * draft opened with the ledger and closed on the caveats, which is the order an
- * operator writes in and the reverse of the order a buyer reads in.
+ * offer → who we are → what you are buying → see it → the numbers → what they
+ * do not prove → why our campaigns are different → how we run them → price →
+ * close. The first draft opened with the ledger and closed on the caveats,
+ * which is the order an operator writes in and the reverse of the order a buyer
+ * reads in.
+ *
+ * TrackRecord sits at position two because the question that follows the hero
+ * is "who are you, and why is this not another marketing firm". It was inside
+ * WhatWeKnow until 9 Sep 2026, behind three sections of product mechanics and
+ * ~4,500px of scroll, which is past the point a skeptical reader leaves. Note
+ * this does NOT reverse the rule above: the thing that must not open the page
+ * is the *ledger* — the small client figures that need their caveats attached.
+ * A credential is not a ledger.
  *
  * THE RULE FOR EDITING IT
  * Every claim is traceable to code or to a measured campaign, and no number is
@@ -33,7 +43,17 @@ import { getManagedAdsStats } from "@/lib/managed-ads/stats.server";
  * because an earlier version hardcoded $535 in prose two screens under a strip
  * reading $298 and the page contradicted itself. The other guardrails live in
  * the section files: the provider relay is built but dormant, no Meta campaign
- * has ever run, and recorded spend is a floor.
+ * has ever run *for a provider*, and recorded spend is a floor.
+ *
+ * TWO SCOPES LIVE ON THIS PAGE. KEEP THEM APART.
+ * ResultsTicker and HonestLimits answer "what has Olera done for providers":
+ * a few hundred dollars, one confirmed client, scoped to Google provider
+ * campaigns in stats.server.ts. TrackRecord answers "can Olera run ads at
+ * all": Olera's own acquisition history, two orders of magnitude larger. A
+ * visitor who reads the second as money spent on their behalf has been misled,
+ * so each set carries its own scope line and neither may be quoted, moved or
+ * excerpted without one. When you add a channel to any part of this page, add
+ * it to HonestLimits in the same commit.
  */
 
 export const revalidate = 900;
@@ -75,6 +95,7 @@ export default async function ManagedAdsPage() {
   return (
     <main>
       <ManagedAdsHero costPerInquiry={dollars(stats?.costPerInquiryCents)} hasResults={hasSignal} />
+      <TrackRecord />
       <TwoEngines />
       <WhatItLooksLike />
       {hasSignal && stats ? (

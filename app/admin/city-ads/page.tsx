@@ -13,9 +13,18 @@ import Link from "next/link";
  *                and the outcome buttons.
  *   Setup      — one line per city. Everything editable lives behind "edit".
  *
- * Nothing is an input at rest. Conversion rate and cost per accepted family
- * are deliberately not here; they arrive in Slack on the day-5 and day-14
- * reads. Design pass: https://claude.ai/code/artifact/8faff70d-8262-4ad1-be62-748c0eb13493
+ * Nothing is an input at rest.
+ *
+ * Cost per ACCEPTED FAMILY and the family-side conversion rate are still not
+ * here by design. Cost per LEAD PER CHANNEL now is, in the Setup block: the
+ * city arms are a platform experiment before they are a lead source, Charlotte
+ * runs Google, Nextdoor and Meta at once, and that number is what decides which
+ * platform we keep. It sits next to the spend fields because it is computed
+ * from them the moment they are typed. (The day-5/day-14 Slack reads this page
+ * originally deferred those numbers to were never built, so until they are,
+ * deferring here means no read at all.)
+ *
+ * Design pass: https://claude.ai/code/artifact/8faff70d-8262-4ad1-be62-748c0eb13493
  */
 
 type Campaign = {
@@ -47,9 +56,22 @@ type Campaign = {
   admin_note: string | null;
 };
 
+type ChannelRow = {
+  slug: string;
+  channel: string;
+  status: string;
+  budgetCents: number | null;
+  spendCents: number | null;
+  clicks: number | null;
+  leads: number;
+  costPerLeadCents: number | null;
+  clickToLead: number | null;
+};
+
 type Provider = { id: string; display_name: string | null; city: string | null; phone: string | null; email: string | null } | null;
 type PoolRow = { id: string; slug: string; provider_id: string; position: number; care_types: string[]; enabled: boolean; is_test: boolean; phone_override: string | null; provider: Provider };
 type Offer = { id: string; provider_id: string; position: number; offered_at: string; expires_at: string; accepted_at: string | null; declined_at: string | null; decline_reason: string | null; expired_at: string | null; provider: Provider };
+type FamilyText = { id: string; created_at: string; email_type: string; status: string; html_body: string | null };
 type Lead = {
   id: string;
   slug: string;
@@ -75,7 +97,16 @@ type Lead = {
   outcome: string | null;
   admin_note: string | null;
   created_at: string;
+  /**
+   * The family's care seeker profile. Every lead gets one at submit, so this is
+   * null only for rows captured before migration 217. It is the lead's way out
+   * of this queue: the profile page carries the comms timeline, the enrichment
+   * fields worth filling on a concierge call, and the delete — and the FK
+   * cascades, so deleting there clears the lead too.
+   */
+  care_seeker_id: string | null;
   offers: Offer[];
+  texts: FamilyText[];
 };
 
 const CARE: Record<string, string> = { home_care: "help at home", assisted_living: "assisted living", unsure: "not sure yet", medical: "medical (redirected)" };
@@ -144,6 +175,7 @@ const TONE: Record<string, string> = {
 
 export default function CityAdsAdminPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [rollup, setRollup] = useState<ChannelRow[]>([]);
   const [pool, setPool] = useState<PoolRow[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [lastClockRun, setLastClockRun] = useState<string | null>(null);
@@ -160,6 +192,7 @@ export default function CityAdsAdminPage() {
       if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error || `HTTP ${res.status}`);
       const d = await res.json();
       setCampaigns(d.campaigns);
+      setRollup(d.channelRollup ?? []);
       setPool(d.pool);
       setLeads(d.leads);
       setLastClockRun(d.lastClockRun ?? null);
@@ -190,7 +223,9 @@ export default function CityAdsAdminPage() {
       const res = await fetch("/api/admin/city-ads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const d = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(d.error || `HTTP ${res.status}`);
-      flash(d.result?.providerName ? `${label}: ${d.result.providerName}` : `${label}: done`);
+      // An action that has something specific to report says so itself (a
+      // suppressed number, who was texted). Falling back to "done" would hide it.
+      flash(d.message ?? (d.result?.providerName ? `${label}: ${d.result.providerName}` : `${label}: done`), d.message ? 5000 : undefined);
       await load();
       return true;
     } catch (e) {
@@ -254,7 +289,13 @@ export default function CityAdsAdminPage() {
               <div key={l.id} className="flex flex-wrap items-start justify-between gap-3 border-t border-warm-100 py-3 first:border-t-0">
                 <div className="min-w-0">
                   <div>
-                    <span className="font-semibold text-gray-900">{l.first_name}</span>{" "}
+                    {l.care_seeker_id ? (
+                      <a className="font-semibold text-gray-900 underline-offset-2 hover:underline" href={`/admin/care-seekers/${l.care_seeker_id}`}>
+                        {l.first_name}
+                      </a>
+                    ) : (
+                      <span className="font-semibold text-gray-900">{l.first_name}</span>
+                    )}{" "}
                     <a className="text-sm text-primary-700" href={`tel:${l.phone}`}>
                       {phoneFmt(l.phone)}
                     </a>
@@ -341,7 +382,7 @@ export default function CityAdsAdminPage() {
                   {open ? "close" : "edit"}
                 </button>
               </div>
-              {open && <CityEditor slug={slug} campaigns={cs} pool={ps} busy={busy} act={act} />}
+              {open && <CityEditor slug={slug} campaigns={cs} rollup={rollup.filter((r) => r.slug === slug)} pool={ps} busy={busy} act={act} />}
             </div>
           );
         })}
@@ -387,6 +428,81 @@ function OfferTo({ lead, pool, busy, primary, onPick }: { lead: Lead; pool: Pool
           </option>
         ))}
     </select>
+  );
+}
+
+/** Keys are the real `email_type` values written by lib/city-ads/offers.server.ts
+ *  and app/api/city-leads/route.ts — note `city_lead_accepted_family`, which does
+ *  NOT follow the `city_lead_family_*` shape the others use. */
+const TEXT_LABEL: Record<string, string> = {
+  city_lead_family_confirm: "Confirmation",
+  city_lead_family_still_working: "Still working on it",
+  city_lead_accepted_family: "Provider named",
+  city_lead_family_check: "Did they call you?",
+  city_lead_family_reoffer: "Looking again",
+  city_lead_family_medical: "Medical redirect",
+  city_lead_family_manual: "From you",
+};
+
+/** "Ann McDade" -> "Ann". first_name holds whatever they typed into one box. */
+function firstWord(name: string | null): string {
+  return (name ?? "").trim().split(/\s+/)[0] || "there";
+}
+
+/**
+ * Every text this family has had, and a box to send another.
+ *
+ * The reason this exists: in a concierge city nothing texts the family except
+ * the chain, and the chain only knows four sentences. When a call goes
+ * unanswered there was no way to follow up in the one channel the family
+ * actually recognises — their phone shows our Twilio number, not whatever
+ * number the call came from.
+ */
+function FamilyTexts({ lead: l, busy, act }: { lead: Lead; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
+  const sent = l.texts ?? [];
+  const [draft, setDraft] = useState(
+    `Hi ${firstWord(l.first_name)}, this is TJ with Olera. I tried calling about the help at home you asked for. Is there a good time to reach you, or would you rather I text you what I find?`,
+  );
+  const tooLong = draft.trim().length > 480;
+  return (
+    <div className="mt-3 border-t border-gray-200 pt-3">
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Texts to {firstWord(l.first_name)}</p>
+      <ul className="mt-2 space-y-1.5">
+        {sent.length === 0 && <li className="text-xs text-gray-500">Nothing sent yet.</li>}
+        {sent.map((t) => (
+          <li key={t.id} className="text-xs">
+            <span className="text-gray-400">{fmtTime(t.created_at)}</span>{" "}
+            <span className="font-medium text-gray-700">{TEXT_LABEL[t.email_type] ?? t.email_type.replace(/^city_lead_/, "").replace(/_/g, " ")}</span>
+            {t.status !== "sent" && <span className="ml-1.5 text-error-700">{t.status}</span>}
+            {t.html_body && <span className="mt-0.5 block text-gray-600">&ldquo;{t.html_body}&rdquo;</span>}
+          </li>
+        ))}
+      </ul>
+      <div className="mt-2 flex flex-col gap-1.5">
+        <textarea
+          className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs text-gray-900"
+          rows={3}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          placeholder={`a text to ${firstWord(l.first_name)}`}
+        />
+        <div className="flex items-center gap-2">
+          <button
+            className={btnPri}
+            disabled={busy || !draft.trim() || tooLong}
+            onClick={async () => {
+              if (await act("Text", { action: "text_family", leadId: l.id, message: draft.trim() })) setDraft("");
+            }}
+          >
+            Send text
+          </button>
+          <span className={`text-[11px] tabular-nums ${tooLong ? "text-error-700" : "text-gray-400"}`}>
+            {draft.trim().length}/480
+          </span>
+          <span className="text-[11px] text-gray-400">sends from the number their other texts came from</span>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -474,6 +590,18 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
         </div>
       )}
 
+      {/* Outside the !closed gate on purpose. A stopped or finished lead is
+          exactly the one you want to open and clear, so the way out of this
+          queue must not disappear the moment the lead stops being active. */}
+      {l.care_seeker_id && (
+        <div className="mt-3 text-xs text-gray-600">
+          <a className="text-primary-700 underline-offset-2 hover:underline" href={`/admin/care-seekers/${l.care_seeker_id}`}>
+            Open {l.first_name}&rsquo;s profile
+          </a>{" "}
+          <span className="text-gray-400">· notes, comms history, and delete</span>
+        </div>
+      )}
+
       {(l.family_check_sent_at || l.outcome_ping_1_at) && (
         <ul className="mt-3 space-y-1 border-t border-gray-200 pt-3 text-xs text-gray-600">
           {l.family_check_sent_at && (
@@ -494,6 +622,8 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
           )}
         </ul>
       )}
+      <FamilyTexts lead={l} busy={busy} act={act} />
+
       <div className="mt-3 flex items-center gap-2">
         <input className={`${input} w-full`} placeholder="a note for you" value={note} onChange={(e) => setNote(e.target.value)} />
         {note !== (l.admin_note ?? "") && (
@@ -506,16 +636,32 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
   );
 }
 
-function CityEditor({ slug, campaigns, pool, busy, act }: { slug: string; campaigns: Campaign[]; pool: PoolRow[]; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
+function CityEditor({ slug, campaigns, rollup, pool, busy, act }: { slug: string; campaigns: Campaign[]; rollup: ChannelRow[]; pool: PoolRow[]; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
   const tag = campaigns[0]?.campaign_tag;
   return (
     <div className="mb-3 rounded-lg bg-gray-50 px-4 py-3 text-sm">
-      <div className="mb-3 flex items-baseline justify-between gap-3 text-xs text-gray-600">
+      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 text-xs text-gray-600">
         <span>{campaigns[0]?.ring_label}</span>
-        <a className="text-primary-700" href={`/care/${slug}?utm_source=olera_city&utm_medium=paid_search&utm_campaign=${tag}`} target="_blank" rel="noreferrer">
-          /care/{slug} ↗
-        </a>
+        {/* One preview link per channel, each carrying that channel's own
+            utm_medium. A single hardcoded paid_search link was fine when Google
+            was the only arm; with three it would test the page under the wrong
+            attribution and quietly file the visit against Google. */}
+        <span className="flex flex-wrap gap-x-3">
+          {campaigns.map((c) => (
+            <a
+              key={c.id}
+              className="text-primary-700"
+              href={`/care/${slug}?utm_source=olera_city&utm_medium=${c.utm_medium}&utm_campaign=${tag}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              /care/{slug} as {cap(c.channel)} ↗
+            </a>
+          ))}
+        </span>
       </div>
+
+      <ChannelCompare rows={rollup} />
 
       <div className="divide-y divide-gray-200">
         {campaigns.map((c) => (
@@ -529,6 +675,63 @@ function CityEditor({ slug, campaigns, pool, busy, act }: { slug: string; campai
           <PoolLine key={p.id} p={p} busy={busy} act={act} />
         ))}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Cost per lead per channel — the number that decides which platform survives.
+ *
+ * Spend and clicks are hand-typed from the ad manager, leads are computed, so
+ * the two halves fill in at different times. Where a number cannot be computed
+ * honestly it says so rather than printing a confident zero: a channel showing
+ * "$0.00 per lead" because nobody typed the spend yet is worse than a channel
+ * showing nothing, because it reads as a result.
+ */
+function ChannelCompare({ rows }: { rows: ChannelRow[] }) {
+  if (rows.length === 0) return null;
+  const anyLeads = rows.some((r) => r.leads > 0);
+  return (
+    <div className="mb-3 overflow-x-auto">
+      <table className="w-full text-left text-xs">
+        <thead className="text-[11px] uppercase tracking-wider text-gray-500">
+          <tr>
+            <th className="py-1 pr-3 font-semibold">Channel</th>
+            <th className="py-1 pr-3 text-right font-semibold">Spend</th>
+            <th className="py-1 pr-3 text-right font-semibold">Clicks</th>
+            <th className="py-1 pr-3 text-right font-semibold">Leads</th>
+            <th className="py-1 pr-3 text-right font-semibold">Per lead</th>
+            <th className="py-1 text-right font-semibold">Click → lead</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 text-gray-800">
+          {rows.map((r) => (
+            <tr key={`${r.slug}-${r.channel}`}>
+              <td className="py-1.5 pr-3 font-medium text-gray-900">
+                {cap(r.channel)} <span className="font-normal text-gray-500">{r.status}</span>
+              </td>
+              <td className="py-1.5 pr-3 text-right tabular-nums">
+                {r.spendCents === null ? <span className="text-gray-400">not typed</span> : money(r.spendCents)}
+              </td>
+              <td className="py-1.5 pr-3 text-right tabular-nums">
+                {r.clicks === null ? <span className="text-gray-400">—</span> : r.clicks}
+              </td>
+              <td className="py-1.5 pr-3 text-right font-medium tabular-nums">{r.leads}</td>
+              <td className="py-1.5 pr-3 text-right tabular-nums">
+                {r.costPerLeadCents === null ? <span className="text-gray-400">—</span> : money(r.costPerLeadCents)}
+              </td>
+              <td className="py-1.5 text-right tabular-nums">
+                {r.clickToLead === null ? <span className="text-gray-400">—</span> : `${(r.clickToLead * 100).toFixed(1)}%`}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {!anyLeads && (
+        <p className="mt-1.5 text-[11px] text-gray-500">
+          No leads attributed yet. Type spend and clicks on a channel below and cost per lead fills in here.
+        </p>
+      )}
     </div>
   );
 }

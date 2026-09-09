@@ -66,24 +66,26 @@ export default function ManagedAdsHero({
           </p>
         )}
 
-        {/* Only the platforms we have actually bought media on. The shared strip
-            defaults to six; the four omitted here have never served an
-            impression for us, and the limits section says so outright.
+        {/* The platform set we sell, not the set that has served an impression.
+            An earlier version narrowed this to Google and Nextdoor — the only
+            two we had bought media on — but two pills read as a broken carousel
+            rather than a considered claim, so it now takes the shared strip's
+            full default (TJ, 8 Sep 2026).
 
-            TO ADD ONE: append { name, slug } below — slug matches a file in
-            public/images/platform-logos. Add it the day that campaign serves
-            its first impression, NOT the day it is built. We have built and
-            paused a whole batch before: five Nextdoor campaigns went up on
-            26 Aug 2026 and were paused two days later having spent nothing.
-            Built is not running, and this strip is a claim about running. */
+            The honesty work is done by HonestLimits instead, which says
+            outright that no *provider* campaign has ever run on Meta. Keep that
+            section in step with this strip: if the strip ever implies a channel
+            the limits section does not account for, the page contradicts
+            itself. That is not hypothetical: it happened on 9 Sep 2026 when
+            TrackRecord began showing Olera's own Meta spend while the limits
+            section still read "we have never run a Meta campaign".
+
+            TO CHANGE THE LIST: pass `platforms={[...]}` to override, where each
+            slug matches a file in public/images/platform-logos. There is no
+            meta.svg — Facebook and Instagram stand in for Meta. */
         }
         <div className="mt-12">
-          <PlatformMarquee
-            platforms={[
-              { name: "Google", slug: "google" },
-              { name: "Nextdoor", slug: "nextdoor" },
-            ]}
-          />
+          <PlatformMarquee />
         </div>
       </div>
     </section>

@@ -28,9 +28,9 @@ PR2  MEETING HELD                               ST2  ADVISOR MEETING HELD
 PR3  CLIENT SUCCESS                                  UNIVERSITY ACTIVATION
      Consumer Relations Manager                         │  Consumer Relations Manager
   │  Profile, terms, account setup                ├── ST3  UNIVERSITY JOB BOARD
-  │  Through to the first hire                    ├── ST4  STUDENT ORG RELATIONSHIPS
-  │                                               ├── ST5  CAMPUS EVENTS
-  │                                               ├── ST6  ADVISOR LISTSERVS
+  │  Through to the first hire                    ├── ST4  ADVISOR LISTSERVS
+  │                                               ├── ST5  STUDENT ORG RELATIONSHIPS
+  │                                               ├── ST6  CAMPUS EVENTS
   │                                               ├── ST7  PROFESSOR OUTREACH + CLASS VISITS
   │                                               │
   │                                               │   Each is secured once, then maintained.
@@ -668,12 +668,12 @@ slug in the URL does not. See the deferred list.
 | | Channel | Ask | The answer the Consumer Relations Manager needs |
 |---|---|---|---|
 | **ST3** | University job board | Is there a board pre-health students actually check? Who posts, and does it need approval? | The board, the posting route, and who approves |
-| **ST4** | Student organisations | Which orgs reach these students: pre-med, pre-nursing, AMSA chapters? Who runs them this term? | Org names and current officers, with a warm introduction where they will make one |
-| **ST5** | Campus events | Which fairs or events are worth attending, and what are the deadlines and costs? | Event, date, registration deadline, who books the table |
-| **ST6** | Advisor listservs | Do you email these students directly? Would you send something for us? | Which list, who sends it, how often they are willing, and the copy they want |
+| **ST4** | Advisor listservs | Do you email these students directly? Would you send something for us? | Which list, who sends it, how often they are willing, and the copy they want |
+| **ST5** | Student organisations | Which orgs reach these students: pre-med, pre-nursing, AMSA chapters? Who runs them this term? | Org names and current officers, with a warm introduction where they will make one |
+| **ST6** | Campus events | Which fairs or events are worth attending, and what are the deadlines and costs? | Event, date, registration deadline, who books the table |
 | **ST7** | Professors and class visits | Which professors teach the courses these students take? Would an introduction be welcome? | Named professors, and explicitly whether we may approach them |
 
-> **Permission is the deliverable on ST6 and ST7.** A listserv send and a class visit both happen on
+> **Permission is the deliverable on ST4 and ST7.** A listserv send and a class visit both happen on
 > someone else's authority. Write down who granted it and what exactly they agreed to, because the User
 > Success Manager will be acting on it weeks later without having been in the room.
 
@@ -734,55 +734,55 @@ possible.
 
 | Channel | Who acts | What the student sees |
 |---|---|---|
-| **ST3** University job board | USM posts; the advisor or the board's owner approves | A posting on a board they already check |
-| **ST4** Student organisations | USM builds the relationship; an officer shares it | A post in their group chat, or a mention at a meeting |
-| **ST5** Campus events | USM and Sales Lead attend | A table, a talk, a QR code |
-| **ST6** Advisor listservs | USM supplies the copy; the advisor sends it | An email from a sender they already trust |
-| **ST7** Professors and class visits | USM and Sales Lead, once permitted | An introduction in a class they are sitting in |
-
-**The advisor follow-up tab**: the surface this stage needs and does not have. On the partner row: the five
-channels as a checklist, each **secured**, **not yet**, or **not available here**, with its named contact and
-go-live date. A university's whole activation state in one glance, and answerable across universities: *which
-campuses have a live listserv?*
-
-A channel checked off **queues its own maintenance task**, into the same daily queues the Admin Team already
-works, so keeping a channel alive is ordinary daily work rather than something to remember. None of this is
-built; see the deferred list.
+| **ST3** University job board | Consumer Relations Manager posts; the advisor or the board's owner approves | A posting on a board they already check |
+| **ST4** Advisor listservs | Consumer Relations Manager supplies the copy; the advisor sends it | An email from a sender they already trust |
+| **ST5** Student organisations | Consumer Relations Manager builds it; an officer shares it | A post in their group chat, or a mention at a meeting |
+| **ST6** Campus events | Consumer Relations Manager and Sales Lead attend | A table, a talk, a QR code |
+| **ST7** Professors and class visits | Consumer Relations Manager and Sales Lead, once permitted | An introduction in a class they are sitting in |
 
 ### ② Procedure
 
-1. **Work the plan from ST2, not a template.** The row tells you which channels are open at this
-   university and who agreed to each. A channel nobody agreed to is not on your list.
-2. **Activate every agreed channel within two weeks of the meeting.** The advisor is warmest immediately
-   after; a month later you are re-introducing yourself.
-3. **Supply ready-to-send copy for anything a partner sends.** The advisor should have to forward, not
-   write. This is the single largest determinant of whether ST6 actually happens.
-4. **Mark a channel *not available here* out loud.** A dead job board recorded as dead is useful; a dead
-   job board left blank looks like work nobody did.
-5. **Record the distribution when it happens**: the channel, the date, the asset used, and a rough reach
-   estimate, on the partner row.
-6. **Report results back to the partner.** *Your listserv produced eleven applications.* It is the reason
-   they send the second one, and it is the natural moment to ask for the next thing.
-7. **Never let a secured channel go unwatched.** Every live channel carries a next check date; working
-   that date is the job.
-8. **Re-check the whole row each term.** A row fully activated in September is not necessarily activated
-   in January.
+1. **Work the plan from ST2, not a template.** The row says which channels are open here and who agreed to each. A channel nobody agreed to is not on your list.
+2. **Activate every agreed channel within two weeks of the meeting.** The advisor is warmest immediately after; a month later you are re-introducing yourself.
+3. **Supply ready-to-send copy for anything a partner sends.** The advisor should have to forward, not write. This is the single largest determinant of whether ST4 actually happens.
+4. **Record the distribution when it happens:** the channel, the date, the asset used, and a rough reach estimate, on the partner row.
+5. **Report results back to the partner.** *Your listserv produced eleven applications.* It is the reason they send the second one, and the natural moment to ask for the next thing.
+6. **Re-check the whole row each term.** A row fully activated in September is not necessarily activated in January.
 
-**What securing and maintaining each channel actually means**
+**What securing and maintaining each channel means**
 
 | | Channel | Secured means | Maintaining means | Rhythm |
 |---|---|---|---|---|
-| **ST3** | University job board | The listing is live and visible to students | Check the listing is still up and has not expired or been archived; repost or renew it when it has | Every few months |
-| **ST4** | Student organisations | An officer has shared it once | Refresh the relationship before it goes cold, and re-establish it with the new officers when leadership turns over | Ongoing, and every term |
-| **ST5** | Campus events | We are registered for a specific event on a specific date | Confirm the event is still scheduled and still on our date; rebook when it moves, and get on the next one after it passes | Before each event, then re-book |
-| **ST6** | Advisor listservs | The advisor has agreed to send, and has our copy | Remind the advisor to send it, with fresh copy ready each time. The send happens because we asked | Each agreed send |
-| **ST7** | Professors and class visits | A professor has agreed to an introduction or a visit | Follow up and email professors, its own kind of work, with its own record of who was contacted, who agreed, and which class was visited | Per professor, then per term |
+| **ST3** | University job board | The listing is live and visible to students | Check it has not expired or been archived; repost or renew when it has | Every few months |
+| **ST4** | Advisor listservs | The advisor has agreed to send, and has our copy, **and a date is set** | Remind the advisor, with fresh copy ready each time. The send happens because we asked | Each agreed send |
+| **ST5** | Student organisations | An officer has shared it once | Refresh before it goes cold; re-establish with new officers when leadership turns over | Ongoing, and every term |
+| **ST6** | Campus events | We are registered for a named event on a named date | Confirm it is still scheduled and still our date; rebook when it moves | Before each event, then re-book |
+| **ST7** | Professors and class visits | A named professor has agreed to an introduction or a visit | Follow up per professor, with a record of who was contacted, who agreed, and which class was visited | Per professor, then per term |
 
-> **Each of these carries specifics the table cannot hold**: which board, which officer, which fair and
-> its registration deadline, which list and when it goes out, which professor and which course. That
-> detail belongs on the row against the channel, which is what the follow-up tab is for.
+**Decision rules.** These are the judgement calls that come up every week. They are settled here so they are not settled differently at each campus.
 
-**ST7 is its own workstream.** Professor outreach behaves less like a channel than like a second, smaller outreach funnel: named professors, a permission state on each, an email to follow up, and a class visit to schedule once someone says yes. Scoped and named separately when we get to it; noted here so it is not mistaken for a checkbox.
+| Situation | Do this |
+|---|---|
+| The advisor says the board is dead | Mark ST3 *not available here* with the reason. Do not post anyway to have something recorded |
+| A send is agreed but no date is named | It is not secured. Secured means a date on the row |
+| Two weeks pass with no reply to your activation email | Send one follow-up. After that, ask the advisor for the introduction rather than chasing |
+| An officer graduates and nobody replaces them | The channel is **lapsed**, not secured. Re-secure with the new officer or move it back to *not yet* |
+| A professor has not answered twice | Stop. A third email costs advisor goodwill, which is worth more than one class visit |
+| A channel produced nothing after two distributions | Keep it and say so to the partner. Report the number; do not quietly drop the channel |
+| Anything clinical, or a physician in the room | Bring the Sales Lead in. Do not answer scope-of-practice questions yourself |
+
+**The asks, ready to send.** Each is short on purpose: a partner who has to edit is a partner who does not send.
+
+- **ST3 posting.** Title, one paragraph on the work, pay range, the apply link, and a named contact. Nothing that reads like an advertisement.
+- **ST4 officer.** *We work with your career office. Would you share one post with your members about paid caregiving shifts that fit around class? I will send it written and ready.*
+- **ST6 forward copy.** Subject line, three sentences, and the link, written so the advisor forwards it unedited under their own name. Never a PDF only.
+- **ST7 professor.** *[Advisor] suggested I write. Would ten minutes at the start or end of a class be welcome, or would you rather I send something for your course page?* Always name the advisor, and always offer the smaller option.
+- **ST5 table.** Registration deadline, cost, who staffs it, the flyer with the QR code, and who logs the scans afterwards. Booked is not the same as staffed.
+
+> **ST7 is its own workstream.** Professor outreach behaves less like a channel than like a second, smaller
+> outreach funnel: named professors, a permission state on each, an email to follow up, a class visit to
+> schedule once someone says yes. Scoped separately when we get to it; named here so it is not mistaken
+> for a checkbox.
 
 ### ③ System / handoff
 
@@ -790,13 +790,26 @@ built; see the deferred list.
 |---|---|---|---|---|
 | Per channel: secured / not yet / not available · named contact · date live · next check date · distribution date, asset used and reach estimate | partner active → distributing → maintained | channel activated · distribution recorded · maintenance task completed · channel lapsed | A student follows the link | **→ Portal (ST8).** The partner row stays open and keeps producing |
 
+**What the system has to do.** None of this is built. It is specified here so it can be built rather than re-argued, and it is four things, not one.
+
+| | Build | What it is | Why this stage needs it |
+|---|---|---|---|
+| **B9** | The advisor follow-up tab | The five channels as a checklist on the partner row: *secured*, *not yet*, *not available here*, each with named contact and go-live date | A university's whole activation state in one glance, and answerable across universities: *which campuses have a live listserv?* |
+| **B10** | Self-queueing maintenance | Checking a channel off writes its next check date into the same daily queues the Admin Team already works | A channel stays alive only as long as someone remembers it. This is what stops remembering being the system |
+| **B11** | The professor record | Named professors under a campus, a permission state on each, the follow-up and the class visit it produced | ST7 has no home today. Without it, professor outreach is invisible and unrepeatable |
+| **B12** | Channel attribution | Which of the five produced a student, carried on the application | Until it exists, the five channels cannot be told apart by results, only by effort |
+
+> **Everything above B12 is effort, not outcome.** Until attribution ships, a campus that activated all five
+> channels and a campus that activated one look identical in the numbers. Say so when reporting rather than
+> implying the ranking means more than it does.
+
+**Worked example: Ohio State.** ST2 agreed the advisor would send to the pre-health listserv, that the job board is worth posting to, and that two orgs are worth approaching. The row after activation reads: **ST3 secured**, posted 14 September, next check 15 December. **ST6 secured**, advisor Dana Whitfield, first send 21 September, reach about 900, second send agreed for January. **ST4 partial**, AMSA chapter shared it on 2 October, pre-nursing society *not yet*, officer elections in November. **ST5 not yet**, spring health careers fair, registration opens 1 November, that date on the row now. **ST7 not available here**, the advisor asked us not to approach faculty this term, recorded with the reason so nobody tries again in March. Four of five moving, one closed with a reason, and every one of them carrying a date.
+
 Every other stage hands a row on and lets it go. This one keeps it. The Consumer Relations Manager's working
 state is the set of partner rows with live channels and the date each is next due, which is why the follow-up
 tab and its queued tasks are the difference between five universities and fifty.
 
 **Communications** Ready-to-send copy per channel · the flyer as the shared asset · the listserv reminder to the advisor · the results-back note · the professor email sequence.
-
----
 
 ## ST8: Student application submitted
 
@@ -1270,7 +1283,7 @@ Things this document describes as they **should** work, which do not work that w
 | **B8** | ST2 | **A partner-facing booking event** | Advisors book the provider's event; the slug `home-care-agency-manager-interview` shows in the URL they click |
 | **B9** | ST3–ST7 | **The advisor follow-up tab.** The five channels as a checklist on the partner row (secured, not yet, or not available here) each with its contact and go-live date | Not built. Activation state lives in meeting notes and in the Consumer Relations Manager's head |
 | **B10** | ST3–ST7 | **Maintenance tasks that queue themselves**: the board re-check, the listserv reminder, the event date, the officer refresh each term | Not built. A channel stays alive only as long as someone remembers it |
-| **B11** | ST3–ST7 | **A professor record for ST7**: named professors, a permission state on each, the follow-up and the class visit it produced | Not built, and not yet scoped. Named so it is not mistaken for one more channel |
+| **B11** | ST3–ST7 | **A professor record for ST7**: named professors, a permission state on each, the follow-up and the class visit it produced | Not built. Scoped in ST3–ST7, and named separately so it is not mistaken for one more channel |
 | **B12** | ST3–ST7 | **Channel attribution.** Which of the five produced a student | Channels are not modelled as distinct entities |
 | **B13** | ST8 | **A content pass over every student-facing asset**, with real empty states, and a check that the portal asks for what we want | All five ship and work end to end. None has had a content pass |
 | **B14** | ST8 | **Entry-path QA, from the QR code and from email.** Each must carry a student to a submitted application with no dead end, on a phone as well as a laptop | Untested as a journey. The pieces work individually |
