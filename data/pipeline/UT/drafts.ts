@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/UT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.624Z
+ * Last updated: 2026-09-09T06:27:16.094Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -615,7 +615,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs in Utah, they may qualify for monthly SNAP benefits loaded onto an EBT card. Because Utah has simplified rules for seniors, your loved one doesn't need to pass the gross income test, only net income after deductions for medical expenses over $35/month and high shelter costs.\n\nBecause households with seniors get higher asset limits ($4,500 instead of $3,000), your loved one can keep their home, car, and retirement savings and still qualify. A typical 2-person elderly household might receive $415/month after calculations, though the exact amount depends on net income and allowable deductions.\n\nUtah offers ESAP (Elderly Simplified Application Project) for seniors, which means one interview and approval for 3 years instead of frequent recertifications. Despite these benefits, only about half of eligible seniors currently apply for SNAP in Utah.",
+      "intro": "If your loved one is 60+ and struggling with grocery costs in Utah, they may qualify for monthly SNAP benefits loaded onto an EBT card. Because Utah has simplified rules for seniors, your loved one doesn't need to pass the gross income test, only net income after deductions for medical expenses over $35/month and high shelter costs.\n\nBecause households with seniors get higher asset limits ($4,500 instead of $3,000), your loved one can keep their home, car, and retirement savings and still qualify. A two-person household can receive up to $546/month, and a one-person household up to $298, though the exact amount depends on net income and allowable deductions.\n\nUtah offers ESAP (Elderly Simplified Application Project) for seniors, which means one interview and approval for 3 years instead of frequent recertifications. Despite these benefits, only about half of eligible seniors currently apply for SNAP in Utah.",
       "savingsRange": "$24 - $298/month for one person (up to $3,576/year), through September 30, 2026",
       "savingsSource": "USDA FY2026 maximum and minimum SNAP allotments for the 48 contiguous states and DC, effective October 1, 2025 through September 30, 2026. $298/month is the maximum for a one-person household and is paid only when countable net income is at or near zero; most households receive less. The minimum is $24/month. A two-person household maximum is $546/month.",
       "savingsVerified": true,
@@ -667,7 +667,7 @@ export const drafts: PipelineStateDrafts = {
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at mycase.utah.gov or call 1-866-526-3663, seniors get simplified processing with approval for 3 years.",
+        "summary": "Apply online at mycase.utah.gov or call 1-866-435-7414, seniors get simplified processing with approval for 3 years.",
         "steps": [
           {
             "step": 1,
@@ -758,7 +758,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
-          "answer": "Yes, you can apply as an authorized representative if your loved one cannot apply themselves due to age or disability. You'll need to complete the application and attend the interview on their behalf. Call 1-866-526-3663 to discuss representative arrangements."
+          "answer": "Yes, you can apply as an authorized representative if your loved one cannot apply themselves due to age or disability. You'll need to complete the application and attend the interview on their behalf. Call 1-866-435-7414 to discuss representative arrangements."
         },
         {
           "question": "Do both spouses need to be 60+ to get the senior benefits?",
@@ -766,11 +766,11 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "What happens if my loved one's income changes after approval?",
-          "answer": "Report changes within 10 days by calling 1-866-526-3663 or logging into mycase.utah.gov. Because seniors get 3-year certifications through ESAP, minor changes won't require a full reapplication, just updated documentation and possibly adjusted benefit amounts."
+          "answer": "Report changes within 10 days by calling 1-866-435-7414 or logging into mycase.utah.gov. Because seniors get 3-year certifications through ESAP, minor changes won't require a full reapplication, just updated documentation and possibly adjusted benefit amounts."
         },
         {
           "question": "Can my loved one get SNAP if they're not a U.S. citizen?",
-          "answer": "Many non-citizens qualify for SNAP in Utah. Legal residents who have lived in the U.S. for 5+ years, people receiving disability benefits, and certain other categories are eligible. Citizenship is not required, call 1-866-526-3663 to discuss specific immigration status."
+          "answer": "Many non-citizens qualify for SNAP in Utah. Legal residents who have lived in the U.S. for 5+ years, people receiving disability benefits, and certain other categories are eligible. Citizenship is not required, call 1-866-435-7414 to discuss specific immigration status."
         },
         {
           "question": "How long does the ESAP approval really last?",
@@ -778,7 +778,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "What if my loved one lives in assisted living, do they still qualify?",
-          "answer": "It depends on the living arrangement. If your loved one buys and prepares their own food, they can qualify. If the facility provides all meals as part of the fee, they typically cannot get SNAP. Each situation is different, call 1-866-526-3663 to discuss the specific living arrangement."
+          "answer": "It depends on the living arrangement. If your loved one buys and prepares their own food, they can qualify. If the facility provides all meals as part of the fee, they typically cannot get SNAP. Each situation is different, call 1-866-435-7414 to discuss the specific living arrangement."
         }
       ],
       "layoutIntent": {

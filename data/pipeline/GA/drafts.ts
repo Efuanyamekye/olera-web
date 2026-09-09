@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/GA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.589Z
+ * Last updated: 2026-09-09T06:27:16.053Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -133,7 +133,7 @@ export const drafts: PipelineStateDrafts = {
           "label": "Georgia 2-1-1",
           "phone": "2-1-1",
           "description": "General social services helpline for referrals",
-          "hours": "24 hours, 7 days a week"
+          "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
         }
       ],
       "applicationNotes": [
@@ -197,7 +197,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.georgia.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "home-community-based-services",
@@ -322,7 +322,7 @@ export const drafts: PipelineStateDrafts = {
           "label": "Georgia 2-1-1",
           "phone": "2-1-1",
           "description": "Free helpline to connect with local Area Agency on Aging",
-          "hours": "24 hours, 7 days a week"
+          "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
         }
       ],
       "applicationNotes": [
@@ -386,7 +386,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dch.georgia.gov/programs/hcbs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "medicare-savings-programs",
@@ -549,7 +549,7 @@ export const drafts: PipelineStateDrafts = {
           "label": "Georgia 2-1-1",
           "phone": "2-1-1",
           "description": "General assistance finding local DFCS offices and social services",
-          "hours": "24 hours, 7 days a week"
+          "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
         }
       ],
       "applicationNotes": [
@@ -637,7 +637,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-03"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "senior-snap",
@@ -793,7 +793,7 @@ export const drafts: PipelineStateDrafts = {
           "label": "Georgia 2-1-1",
           "phone": "2-1-1",
           "description": "Free helpline for all social services and benefits",
-          "hours": "24 hours, 7 days a week"
+          "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
         }
       ],
       "applicationNotes": [
@@ -844,7 +844,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dfcs.georgia.gov/services/snap/senior-snap",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-03"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "liheap-energy-assistance",
@@ -1816,7 +1816,7 @@ export const drafts: PipelineStateDrafts = {
           "label": "WorkSource Georgia",
           "phone": "2-1-1",
           "description": "General employment services and SCSEP provider referrals",
-          "hours": "24 hours, 7 days a week"
+          "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
         }
       ],
       "applicationNotes": [
@@ -1870,7 +1870,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.georgia.gov/programs-and-services/senior-community-service-employment-program-scsep",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-03"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "elderly-legal-assistance-elap",
