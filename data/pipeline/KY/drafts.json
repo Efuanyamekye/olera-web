@@ -716,9 +716,9 @@
       "geographicScope": {
         "type": "state"
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs, Kentucky SNAP provides monthly assistance loaded onto an EBT card. Your loved one could receive $100-400+ per month for groceries, depending on household income and size. The average single senior gets around $188 monthly.\n\nKentucky has simplified rules for seniors and disabled adults, your loved one can qualify even with higher income if they have significant medical or housing expenses. Because Kentucky waives the standard asset test for most households, your loved one can keep their home, car, and retirement savings while still receiving food assistance.",
-      "savingsRange": "$2,256/year on average ($188/month), more for larger households",
-      "savingsSource": "Average monthly SNAP benefit for Kentucky seniors is $188 ($2,256/year); maximum allotments rise with household size",
+      "intro": "If your loved one is 60+ and struggling with grocery costs, Kentucky SNAP provides monthly assistance loaded onto an EBT card. Your loved one could receive up to $298 a month for groceries if they live alone, and more in a larger household. The actual amount depends on income and expenses. Across Kentucky, SNAP households average about $370 a month.\n\nKentucky has simplified rules for seniors and disabled adults, your loved one can qualify even with higher income if they have significant medical or housing expenses. Because Kentucky waives the standard asset test for most households, your loved one can keep their home, car, and retirement savings while still receiving food assistance.",
+      "savingsRange": "Up to $298/month for one person (FY2026 maximum); Kentucky households average $370/month",
+      "savingsSource": "USDA FY2026 cost-of-living adjustment: $298 is the maximum monthly allotment for a one-person household in the 48 contiguous states, effective October 1, 2025 through September 30, 2026. The $370 figure is the average monthly benefit across all Kentucky SNAP households (average household size 2.1) from USDA Characteristics of SNAP Households FY2024, Appendix Table B.2. USDA does not publish a Kentucky average for older adults specifically; nationally, households with an elderly member averaged $192/month in FY2024.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -825,7 +825,7 @@
       },
       "documentsNeeded": [
         "Valid photo ID for applicant",
-        "Social Security cards for all household members",
+        "Social Security numbers for the household members who are applying (not needed for people in the home who are not applying). Proof of identity can be a driver's license, Social Security card, or immigration document.",
         "Social Security award letter or benefit statement",
         "Pension or retirement income statements",
         "The current balance of any checking or savings accounts. Every state asks about this. Your savings will not count against you in this state, but you still need the numbers.",
@@ -839,9 +839,9 @@
       ],
       "contacts": [
         {
-          "label": "Kentucky SNAP Hotline",
+          "label": "DCBS Family Support call line (start here)",
           "phone": "1-855-306-8959",
-          "description": "SNAP applications and questions",
+          "description": "Takes SNAP applications by phone, and answers questions about Medicaid and other benefits. You can also apply online at kynect or at any county DCBS office.",
           "hours": "Mon-Fri 8am-4:30pm ET"
         },
         {
@@ -875,7 +875,7 @@
         },
         {
           "question": "How much will my loved one actually receive each month?",
-          "answer": "Benefits depend on net income after deductions for medical expenses and housing costs. A typical single senior receives around $188/month, but this can be much higher if they have significant medical or housing expenses that reduce their countable income."
+          "answer": "Benefits depend on net income after deductions for medical expenses and housing costs. A one-person household can receive up to $298/month, and Kentucky households average about $370/month. The amount depends on income after deductions for medical and housing expenses."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
@@ -903,7 +903,7 @@
       "sourceUrl": "https://chfs.ky.gov/agencies/dcbs/dfs/nab/Pages/snap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "energy-assistance-liheap",

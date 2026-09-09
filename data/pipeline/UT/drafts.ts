@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/UT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T11:25:55.893Z
+ * Last updated: 2026-09-09T05:48:18.624Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -602,7 +602,7 @@ export const drafts: PipelineStateDrafts = {
       "id": "snap-food-benefits",
       "name": "Utah SNAP (Supplemental Nutrition Assistance Program)",
       "shortName": "Utah SNAP",
-      "tagline": "Monthly grocery money for Utah seniors 60+ on fixed incomes, up to $415/month loaded on an EBT card.",
+      "tagline": "Monthly grocery money for Utah seniors 60+ on fixed incomes, loaded on a Horizon EBT card. A one-person household can receive up to $298 a month.",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -616,8 +616,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60+ and struggling with grocery costs in Utah, they may qualify for monthly SNAP benefits loaded onto an EBT card. Because Utah has simplified rules for seniors, your loved one doesn't need to pass the gross income test, only net income after deductions for medical expenses over $35/month and high shelter costs.\n\nBecause households with seniors get higher asset limits ($4,500 instead of $3,000), your loved one can keep their home, car, and retirement savings and still qualify. A typical 2-person elderly household might receive $415/month after calculations, though the exact amount depends on net income and allowable deductions.\n\nUtah offers ESAP (Elderly Simplified Application Project) for seniors, which means one interview and approval for 3 years instead of frequent recertifications. Despite these benefits, only about half of eligible seniors currently apply for SNAP in Utah.",
-      "savingsRange": "$1,200 – $4,980/year in 2026",
-      "savingsSource": "Based on monthly EBT benefits calculated from net income and household size",
+      "savingsRange": "$24 - $298/month for one person (up to $3,576/year), through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum and minimum SNAP allotments for the 48 contiguous states and DC, effective October 1, 2025 through September 30, 2026. $298/month is the maximum for a one-person household and is paid only when countable net income is at or near zero; most households receive less. The minimum is $24/month. A two-person household maximum is $546/month.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -672,7 +672,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Choose application method",
-            "description": "Apply online at mycase.utah.gov (fastest) or call Utah SNAP hotline at 1-866-526-3663. You can also visit your local Utah Workforce Services office or mail a paper application."
+            "description": "Apply online at jobs.utah.gov/mycase (fastest), or call Utah DWS Eligibility Services at 1-866-435-7414 to have an application mailed to you. You can also visit a local Utah Workforce Services office. Ask about ESAP: it approves benefits for three years and requires only one interview."
           },
           {
             "step": 2,
@@ -707,10 +707,10 @@ export const drafts: PipelineStateDrafts = {
       },
       "documentsNeeded": [
         "Valid photo ID for applicant",
-        "Social Security cards for all household members",
+        "Social Security numbers for the people applying for benefits (not for household members who are not applying). A driver's license, passport or state ID also works for identity. You can turn in an application with just your name, address and signature to lock in your start date.",
         "Social Security award letters or benefit statements",
         "Pension or retirement income documentation",
-        "The current balance of any checking or savings accounts. Every state asks about this. In Utah your savings do count. For a household with someone 60 or older or disabled the limit is $4,500, and it rises to $4,750 on October 1, 2026.",
+        "The current balance of any checking or savings accounts. Every state asks about this. In Utah your savings do count. For a household with someone 60 or older or disabled, the countable resource limit is $4,500 through September 30, 2026.",
         "Proof of medical expenses over $35/month (receipts, bills, insurance statements)",
         "Rent receipt or mortgage statement",
         "Utility bills (electric, gas, water, phone)",
@@ -722,15 +722,15 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Utah SNAP Hotline",
-          "phone": "1-866-526-3663",
-          "description": "SNAP applications and questions",
+          "label": "Utah DWS Eligibility Services (start here)",
+          "phone": "1-866-435-7414",
+          "description": "Answers case questions, schedules the SNAP interview you have to complete, and can mail you an application. Salt Lake area: 801-526-0950. Apply online at jobs.utah.gov/mycase.",
           "hours": "Mon-Fri 8am-5pm MT"
         },
         {
           "label": "Utah 2-1-1",
           "phone": "2-1-1",
-          "description": "Free helpline for all social services and benefit programs",
+          "description": "General referral line.",
           "hours": "24 hours, 7 days a week"
         }
       ],
@@ -790,11 +790,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "BowlFood",
-      "phone": "1-866-526-3663",
+      "phone": "1-866-435-7414",
       "sourceUrl": "https://jobs.utah.gov/customereducation/services/foodstamps/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "liheap-heat-energy-assistance",
@@ -2394,7 +2394,7 @@ export const drafts: PipelineStateDrafts = {
     }
   ],
   "stateOverview": {
-    "intro": "Utah offers 8 financial benefit programs and 2 free resource programs to help your aging loved one. Financial help ranges from $190-$850 toward utility bills (LIHEAP) to up to $1,500/year in caregiver support services, plus monthly grocery assistance up to $415 and comprehensive Medicaid coverage for medical and long-term care costs. Free resources include one-on-one Medicare counseling and legal help for seniors facing benefit issues or elder abuse.\n\nMost financial programs require income verification, but free resources like Medicare counseling through Utah SHIP are available regardless of income. Start by checking if your loved one qualifies for Medicaid, it's Utah's most comprehensive program covering both medical costs and home-based care services.",
+    "intro": "Utah offers 8 financial benefit programs and 2 free resource programs to help your aging loved one. Financial help ranges from $190-$850 toward utility bills (LIHEAP) to up to $1,500/year in caregiver support services, plus monthly grocery assistance up to $298 and comprehensive Medicaid coverage for medical and long-term care costs. Free resources include one-on-one Medicare counseling and legal help for seniors facing benefit issues or elder abuse.\n\nMost financial programs require income verification, but free resources like Medicare counseling through Utah SHIP are available regardless of income. Start by checking if your loved one qualifies for Medicaid, it's Utah's most comprehensive program covering both medical costs and home-based care services.",
     "startHere": [
       {
         "name": "Utah Medicaid Program",
@@ -2404,7 +2404,7 @@ export const drafts: PipelineStateDrafts = {
       {
         "name": "Utah SNAP",
         "programId": "snap-food-benefits",
-        "why": "Quick financial relief with up to $415/month for groceries loaded directly onto an EBT card."
+        "why": "Quick financial relief with up to $298/month for groceries loaded directly onto an EBT card."
       },
       {
         "name": "Utah SHIP",

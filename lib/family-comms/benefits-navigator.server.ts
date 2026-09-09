@@ -32,6 +32,7 @@ import {
   type FirstStepPick,
 } from "./benefits-cascade.server";
 import { findPipelineDraftFor, getStateAbbrev } from "@/lib/program-data";
+import { stateToTimezone } from "@/lib/sms/quiet-hours";
 import { familyBenefitsFacts, hasCoResidentSpouse } from "./benefits-guidance.server";
 import { countProvidersInArea } from "./provider-recs.server";
 
@@ -197,8 +198,14 @@ TEXT: <the companion text message on a single line>
 export function intakeReference(
   intakeAt: string,
   now: number = Date.now(),
+  state?: string | null,
 ): { phrase: string; stale: boolean } {
   const at = new Date(intakeAt);
+  // Render the weekday in the FAMILY's timezone, not the server's. Without an
+  // explicit timeZone, toLocaleDateString uses the process zone: an intake at
+  // 02:30 UTC is Wednesday on a UTC serverless box and Tuesday in ET, so the
+  // same letter named a different day depending on where it was composed.
+  const tz = stateToTimezone(state) ?? "America/New_York";
   const ageDays = (now - at.getTime()) / (24 * 60 * 60 * 1000);
   if (!Number.isFinite(ageDays) || ageDays < 0) {
     // Unparseable or future-dated: say nothing specific rather than guess.
@@ -206,7 +213,7 @@ export function intakeReference(
   }
   if (ageDays <= 14) {
     return {
-      phrase: `on ${at.toLocaleDateString("en-US", { weekday: "long" })}`,
+      phrase: `on ${at.toLocaleDateString("en-US", { weekday: "long", timeZone: tz })}`,
       stale: false,
     };
   }
@@ -219,6 +226,7 @@ export function intakeReference(
   }
   const month = at.toLocaleDateString("en-US", {
     month: "long",
+    timeZone: tz,
     ...(sameYear ? {} : { year: "numeric" }),
   });
   return { phrase: `back in ${month}`, stale: true };
@@ -338,7 +346,7 @@ export async function composeNavigatorDraft(
   }
   const offerProviders = providerOfferAllowed(input.careTypes, providerCount);
 
-  const intakeRef = intakeReference(input.intakeAt);
+  const intakeRef = intakeReference(input.intakeAt, Date.now(), input.state);
   const callScript = buildCallScript(pick.shortName, relationship);
 
   // What they SAID they need, and what they CAME for. Two different facts,

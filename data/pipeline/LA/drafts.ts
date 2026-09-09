@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/LA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T11:25:55.876Z
+ * Last updated: 2026-09-09T05:48:18.599Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1456,8 +1456,8 @@ export const drafts: PipelineStateDrafts = {
         "steps": [
           {
             "step": 1,
-            "title": "Pre-screen Medicaid eligibility",
-            "description": "Use the eligibility test at medicaidplanningassistance.org to verify your loved one meets income and asset limits before requesting services."
+            "title": "Ask to be added to the registry",
+            "description": "Call Louisiana Options in Long-Term Care at 1-877-456-1146, or submit the request form at ldh.la.gov/form/15. Ask about Community Choices Waiver and LTPCS on the same call, since the line covers all of them."
           },
           {
             "step": 2,
@@ -1480,8 +1480,8 @@ export const drafts: PipelineStateDrafts = {
             "description": "Once approved, select from available adult day health care centers in your area based on location, services, and availability."
           }
         ],
-        "processingTime": "Varies by priority level and regional demand",
-        "waitlist": "Yes, priority given to abuse/neglect referrals, hospital discharge within 30 days, and current nursing home residents; others wait months to years by request date",
+        "processingTime": "Louisiana publishes no wait time for the ADHC registry. For the Medicaid eligibility decision itself, LDH says most cases are decided within 45 days, or up to 90 days if a disability decision is needed.",
+        "waitlist": "LDH keeps a Request for Services Registry. Three priority groups come first, then everyone else in order of the date they asked. No wait time is published, so ask where you sit when you call.",
         "tip": "Hospital discharge patients get priority placement, if your loved one is hospitalized, have the discharge planner initiate the waiver request before they come home.",
         "urls": [
           {
@@ -1508,9 +1508,9 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Louisiana Options in Long-Term Care",
+          "label": "Louisiana Options in Long-Term Care (start here)",
           "phone": "(877) 456-1146",
-          "description": "OAAS single point of entry for the Adult Day Health Care Waiver. Ask to be added to the Request for Services Registry. You can also submit the request online at ldh.la.gov/form/15 and staff will call you back.",
+          "description": "Adds your loved one to the ADHC Request for Services Registry. Handles ADHC, Community Choices Waiver, PACE and LTPCS. The online equivalent is the request form at ldh.la.gov/form/15. Email oaas.inquiries@la.gov",
           "hours": "Mon-Fri 8am-5pm CT"
         },
         {
@@ -1527,11 +1527,10 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
+        "ADHC is for adults 22 and older. There is no age-60 requirement.",
+        "Not already being on Medicaid does not stop you from asking to be added to the registry. Financial and clinical approval come later.",
         "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
-        "Hospital discharge within 30 days gets priority placement, work with discharge planners to initiate the waiver request before your loved one leaves the hospital",
-        "Income over $2,163/month doesn't disqualify your loved one if medical expenses exceed the excess amount, keep detailed records of Medicare premiums, prescription costs, and other healthcare spending",
-        "The waiver is approved through June 30, 2027, renewals are expected but not guaranteed, so have backup care plans",
-        "Centers only operate Monday-Friday during daytime hours, you'll need separate arrangements for evenings, weekends, and holidays"
+        "Hospital discharge within 30 days gets priority placement, work with discharge planners to initiate the waiver request before your loved one leaves the hospital"
       ],
       "relatedPrograms": [
         "Louisiana Long-Term Personal Care Services Program",
@@ -1586,7 +1585,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://ldh.la.gov/office-of-aging-and-adult-services",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "caregiver-voucher-program",

@@ -1051,7 +1051,7 @@
           {
             "step": 1,
             "title": "Find your county's community action agency",
-            "description": "Look up your county's agency at wvcad.org or call examples like CASEWV (casewv.org), MountainHeart (304-682-8271 ext. 101 or 117 for Wyoming/Fayette Counties), or Southwestern Community Action Council (scacwv.org)."
+            "description": "Apply at mylitt.com, or call the West Virginia Community Action Partnership at (800) 982-3386 to be pointed to the agency serving your county. MountainHeart covers Wyoming and Fayette Counties only."
           },
           {
             "step": 2,
@@ -1079,8 +1079,8 @@
             "description": "When your turn comes, the agency will conduct an energy audit and perform weatherization services based on your home's specific needs."
           }
         ],
-        "processingTime": "Eligibility determination after application (time-consuming due to income verification); then placed on waitlist for energy audit and services. No specific timeline given.",
-        "waitlist": "Yes, all eligible applicants placed on waitlist; prioritized by points for high energy burden/use, elderly (60+), disabled, children.",
+        "processingTime": "West Virginia does not publish a processing time. Work follows an energy audit and is scheduled against a waiting list.",
+        "waitlist": "There is a waiting list and it varies by county. Households with someone 60 or older, people with disabilities, children, or high energy burden earn priority points and move faster. No timeframes are published.",
         "tip": "If your loved one is 60+, has a disability, or you have children in the household, make sure the agency knows, you'll get priority points on the waitlist.",
         "urls": [
           {
@@ -1099,40 +1099,39 @@
       },
       "documentsNeeded": [
         "Valid government-issued photo ID for applicant",
-        "Written proof of all gross income from prior year (tax returns, Social Security award letters, pension statements)",
-        "Recent pay stubs if still working",
+        "Proof of income. West Virginia can annualize from as little as one recent month, so recent pay stubs, a Social Security award letter, or pension statements are usually enough. You do not need a full prior year.",
         "Names and dates of birth for all household members",
-        "Home construction date and property details",
-        "Utility provider names and account numbers for all services",
         "Recent utility bills showing energy usage",
+        "Utility provider names and account numbers for all services",
+        "Home construction date and property details",
         "For renters: signed landlord permission form",
         "Proof of West Virginia residency (utility bill, lease, or state-issued document)"
       ],
       "contacts": [
         {
-          "label": "West Virginia Community Action Directory",
-          "phone": null,
-          "description": "Find your county's weatherization agency",
-          "hours": "Visit wvcad.org"
+          "label": "West Virginia Community Action Partnership (start here)",
+          "phone": "(800) 982-3386",
+          "description": "Statewide referral line. Helps you find the community action agency for your county. It is a locator, not an application line. Applications are taken at mylitt.com.",
+          "hours": "Hours not published"
         },
         {
-          "label": "MountainHeart (Wyoming/Fayette Counties)",
+          "label": "MountainHeart (Wyoming and Fayette Counties only)",
           "phone": "(304) 682-8271",
-          "description": "Weatherization services for Wyoming and Fayette Counties (ext. 101 or 117)",
-          "hours": "Business hours"
+          "description": "General line: ask for extension 117 for weatherization. Extension 101 is the separate heating and cooling repair program. Serves Wyoming and Fayette Counties only, so confirm your county first.",
+          "hours": "Hours not published"
         },
         {
           "label": "West Virginia 2-1-1",
           "phone": "2-1-1",
-          "description": "Free helpline to find your local community action agency",
+          "description": "General referral line.",
           "hours": "24 hours, 7 days a week"
         }
       ],
       "applicationNotes": [
+        "Income can be annualized from a recent month, so do not delay applying because you cannot find last year's paperwork.",
+        "The income limits published by the state ($31,300 for one person, $42,300 for two) come from the federal notice in effect since April 2025. Some local agencies post slightly higher 2026 figures. If you are close to the line, apply anyway and let the agency decide.",
         "Priority households (elderly 60+, disabled, children, high energy burden) move faster through the waitlist than general applicants",
-        "Renters must get landlord permission before applying, the landlord form is required at application",
-        "Income verification is detailed and includes all sources, gathering complete documentation upfront speeds the process",
-        "Not all homes qualify, your dwelling must be structurally suitable for weatherization improvements"
+        "Renters must get landlord permission before applying, the landlord form is required at application"
       ],
       "relatedPrograms": [
         "Low Income Home Energy Assistance Program (LIHEAP)",
@@ -1176,10 +1175,11 @@
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": "(304) 682-8271",
+      "phone": "(800) 982-3386",
       "sourceUrl": "https://wvcad.org/sustainability/weatherization-assistance-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "ship-medicare-counseling",

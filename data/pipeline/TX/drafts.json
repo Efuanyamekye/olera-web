@@ -9,7 +9,7 @@
       "id": "medicaid-buy-in-qmb-slmb-qi",
       "name": "Medicare Savings Programs (QMB, SLMB, QI)",
       "shortName": "Medicare Savings Programs",
-      "tagline": "Estimated 2026 savings: $2,434–$5,000+/year. Based on the 2026 Medicare Part B premium of $202.90/month plus potential cost-sharing savings for QMB; MBIC comprehensive coverage value varies by child's needs.",
+      "tagline": "Medicare Savings Programs pay your loved one's Part B premium, worth $2,434.80 a year in 2026, and QMB can also cover the deductible and coinsurance.",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -22,15 +22,15 @@
           }
         ]
       },
-      "intro": "If you have a disabled child whose family earns too much for regular Medicaid, or an elderly loved one struggling with Medicare premiums and co-pays, these Texas programs can provide critical health coverage. MBIC (Medicaid Buy-In for Children) offers full Medicaid benefits for disabled children in families earning up to $8,250 monthly for a family of four. You'll pay a sliding-scale premium based on your income and existing insurance, but your child gets comprehensive coverage including doctor visits, hospital care, therapies, and prescriptions.\n\nFor elderly loved ones on Medicare, three related programs help with costs. QMB (Qualified Medicare Beneficiary) pays all Medicare premiums and cost-sharing for individuals with monthly income under $1,350. SLMB (Specified Low-Income Medicare Beneficiary) covers Medicare Part B premiums ($202.90/month in 2026) for those earning up to $1,616 monthly. QI (Qualifying Individual) also covers Part B premiums for those earning up to $1,816 but operates on a first-come, first-served basis.\n\nAll programs require Texas residency and have specific asset limits of $9,950 for individuals or $14,910 for couples (Medicare Savings Programs only — MBIC has no asset test), though your home and one car are typically excluded. Because these programs have strict disability requirements and precise income thresholds, gather documentation carefully before applying at YourTexasBenefits.com.",
-      "savingsRange": "$2,435+/year in 2026",
-      "savingsSource": "Standard 2026 Part B premium is $202.90/month ($2,434.80/year); QMB can also cover deductibles and cost sharing",
+      "intro": "If you have a disabled child whose family earns too much for regular Medicaid, or an elderly loved one struggling with Medicare premiums and co-pays, these Texas programs can provide critical health coverage. MBIC (Medicaid Buy-In for Children) offers full Medicaid benefits for disabled children in families earning up to $8,250 monthly for a family of four. You'll pay a sliding-scale premium based on your income and existing insurance, but your child gets comprehensive coverage including doctor visits, hospital care, therapies, and prescriptions.\n\nFor elderly loved ones on Medicare, three related programs help with costs. QMB (Qualified Medicare Beneficiary) pays all Medicare premiums and cost-sharing for individuals with monthly income under $1,330. SLMB (Specified Low-Income Medicare Beneficiary) covers Medicare Part B premiums ($202.90/month in 2026) for those earning under $1,596 monthly before the $20 disregard. QI (Qualifying Individual) also covers Part B premiums for those earning under $1,796 before the $20 disregard but operates on a first-come, first-served basis.\n\nAll programs require Texas residency and have specific asset limits of $9,950 for individuals or $14,910 for couples (Medicare Savings Programs only — MBIC has no asset test), though your home and one car are typically excluded. Because these programs have strict disability requirements and precise income thresholds, gather documentation carefully before applying at YourTexasBenefits.com.",
+      "savingsRange": "$2,434.80/year in Medicare Part B premiums (2026)",
+      "savingsSource": "The standard 2026 Medicare Part B premium is $202.90/month, which is $2,434.80 over twelve months (CMS 2026 premiums fact sheet). Every QMB, SLMB and QI enrollee gets this premium paid. QMB additionally covers the $283 Part B deductible and Medicare coinsurance, so the total value depends on services used. For people enrolled in Part B immunosuppressive-drug coverage only, the 2026 premium is $121.60/month, or $1,459.20 a year.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Disabled children 0-18 with family income up to 300% FPL",
           "Elderly Medicare beneficiaries 65+",
-          "Medicare Savings income limits (individual): QMB under $1,350, SLMB up to $1,616, QI up to $1,816/month",
+          "Medicare Savings income limits (individual): QMB under $1,330, SLMB $1,330-$1,596, QI $1,596-$1,796/month (before the $20 disregard)",
           "Assets under $9,950 individual/$14,910 couple (Medicare Savings Programs; MBIC has no asset test)",
           "Texas residents with citizenship/legal status"
         ],
@@ -136,7 +136,7 @@
         ]
       },
       "documentsNeeded": [
-        "Social Security cards for all household members",
+        "Social Security numbers for your loved one and their spouse. These programs are budgeted on the individual or couple, not the whole household.",
         "Medicare card (you need Medicare Part A, or Part B immunosuppressive-drug coverage)",
         "Proof of Texas residency (utility bill, lease agreement, or state-issued document)",
         "Citizenship or immigration documents for all household members",
@@ -153,30 +153,36 @@
       ],
       "contacts": [
         {
-          "label": "HHSC Benefits Hotline",
+          "label": "2-1-1 Texas (start here)",
           "phone": "(877) 541-7905",
-          "description": "Medicaid and health benefits questions",
-          "hours": "Mon-Fri 8am-6pm CT"
+          "description": "Dial this or 2-1-1, choose your language, then Option 2 for state benefits. Option 1 is local resource referral. The line answers 24/7; the state benefits staff work Mon-Fri 8am-6pm CT. You can also apply at YourTexasBenefits.com.",
+          "hours": "Line 24/7; state benefits queue Mon-Fri 8am-6pm CT, excluding state holidays"
         },
         {
           "label": "Texas 2-1-1",
           "phone": "2-1-1",
-          "description": "Free 24/7 helpline for application help and benefits information",
-          "hours": "24 hours, 7 days a week"
+          "description": "The same service as (877) 541-7905, dialable as 2-1-1 from a Texas phone. Choose your language, then option 2 for state benefits.",
+          "hours": "Line 24/7; state benefits queue Mon-Fri 8am-6pm CT"
+        },
+        {
+          "label": "Texas Aging and Disability Resource Centers (ADRC)",
+          "phone": "(855) 937-2372",
+          "description": "No Wrong Door access point covering all 254 counties. Good for a broad \"help paying for care\" question. Information and referral, not an application line.",
+          "hours": "Hours not published"
         },
         {
           "label": "Medicare Rights Center",
           "phone": "(800) 333-4114",
-          "description": "Free counseling on Medicare cost-sharing programs",
+          "description": "Free national Medicare counselling.",
           "hours": "Mon-Fri 9am-5pm ET"
         }
       ],
       "applicationNotes": [
+        "The 2026 resource limits for QMB, SLMB and QI are $9,950 for an individual and $14,910 for a couple.",
+        "Your loved one needs Medicare Part A, or Medicare Part B immunosuppressive-drug coverage, to qualify.",
         "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "MBIC applications require proof of SSI-level disability, having a diagnosis alone isn't sufficient, the child must meet functional limitation criteria",
-        "QI program funding is limited and allocated first-come, first-served each year, apply early in the calendar year for best chances",
-        "If your elderly loved one has QMB coverage, healthcare providers cannot bill them for Medicare co-pays or deductibles, keep your approval letter handy",
-        "Premium amounts for MBIC vary based on family income and employer insurance availability, HHSC calculates this during approval process"
+        "QI program funding is limited and allocated first-come, first-served each year, apply early in the calendar year for best chances"
       ],
       "relatedPrograms": [
         "Texas CHIP (Children's Health Insurance Program)",
@@ -197,19 +203,19 @@
             "tiers": [
               {
                 "name": "QMB (Qualified Medicare Beneficiary)",
-                "incomeLimit": "Up to $1,350/month (individual)",
+                "incomeLimit": "Up to $1,330/month (individual)",
                 "benefits": "Pays Medicare Part A and B premiums, deductibles, co-insurance, and co-payments",
                 "note": "Most comprehensive coverage"
               },
               {
                 "name": "SLMB (Specified Low-Income Medicare Beneficiary)",
-                "incomeLimit": "Up to $1,616/month (individual)",
+                "incomeLimit": "Under $1,596/month (individual), before the $20 disregard",
                 "benefits": "Pays Medicare Part B premium only ($202.90/month in 2026)",
                 "note": "You pay co-pays and deductibles"
               },
               {
                 "name": "QI (Qualifying Individual)",
-                "incomeLimit": "Up to $1,816/month (individual)",
+                "incomeLimit": "Under $1,796/month (individual), before the $20 disregard",
                 "benefits": "Pays Medicare Part B premium only ($202.90/month in 2026)",
                 "note": "Limited funding - may have waitlist"
               }
@@ -224,7 +230,7 @@
         },
         {
           "question": "What happens if my loved one's income is just over the QMB limit but they can't afford Medicare costs?",
-          "answer": "Check if they qualify for SLMB (income up to $1,616/month) or QI (up to $1,816/month). They may also qualify for Extra Help with prescriptions, which has an even higher individual limit of approximately $2,015/month."
+          "answer": "Check if they qualify for SLMB (income under $1,596/month before the $20 disregard) or QI (under $1,796/month before the $20 disregard). They may also qualify for Extra Help with prescriptions, which has an even higher individual limit of approximately $2,015/month."
         },
         {
           "question": "Does my loved one's home count toward the $9,950 asset limit?",
@@ -259,12 +265,12 @@
         "hasDocumentChecklist": true,
         "visualTone": "editorial"
       },
-      "phone": "2-1-1",
+      "phone": "(877) 541-7905",
       "sourceUrl": "https://www.hhs.texas.gov/services/health/medicaid-chip/medicaid-chip-programs-services/programs-children-adults-disabilities/medicaid-buy-children",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "star-plus-medicaid-hcbs",

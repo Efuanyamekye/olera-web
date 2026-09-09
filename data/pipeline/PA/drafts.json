@@ -1218,7 +1218,7 @@
           }
         ]
       },
-      "intro": "If you're caring for a loved one 60+ with functional deficits or Alzheimer's in Pennsylvania, this program reimburses you for respite care, supplies, and other caregiving expenses. The reimbursement percentage depends on your loved one's household income, up to 100% for lower incomes, scaled down to 0% above 380% of the Federal Poverty Level ($58,320 for a single person in 2026).\n\nYou pay upfront for approved services and submit receipts for reimbursement. Beyond financial help, the program provides care management, caregiver education, and training at no cost regardless of income. An in-home assessment determines what services you're authorized to receive.\n\nThe program also covers caregivers 55+ raising grandchildren or caring for disabled adult children (18-59) with different co-residence requirements. Each of Pennsylvania's 52 counties administers the program through their Area Agency on Aging, so services and wait times may vary by location.",
+      "intro": "If you're caring for a loved one 60+ with functional deficits or Alzheimer's in Pennsylvania, this program reimburses you for respite care, supplies, and other caregiving expenses. The reimbursement percentage depends on your loved one's household income, up to 100% for lower incomes, scaled down to 0% above 380% of the Federal Poverty Level ($60,648 for a household of one in 2026).\n\nYou pay upfront for approved services and submit receipts for reimbursement. Beyond financial help, the program provides care management, caregiver education, and training at no cost regardless of income. An in-home assessment determines what services you're authorized to receive.\n\nThe program also covers caregivers 55+ raising grandchildren or caring for disabled adult children (18-59) with different co-residence requirements. Each of Pennsylvania's 52 counties administers the program through their Area Agency on Aging, so services and wait times may vary by location.",
       "savingsRange": "",
       "savingsSource": "Reimbursement service based on sliding scale",
       "savingsVerified": false,
@@ -1271,8 +1271,8 @@
             "description": "You pay providers upfront, then submit receipts to your care manager for reimbursement according to your income-based percentage."
           }
         ],
-        "processingTime": "Requires in-home assessment; timeline varies by county",
-        "waitlist": "May vary by region",
+        "processingTime": "A care manager visits to do an assessment first. Pennsylvania publishes no processing time, and it varies by county Area Agency on Aging.",
+        "waitlist": "Pennsylvania publishes no statewide waiting list. Ask your county Area Agency on Aging whether it has one.",
         "tip": "Gather income documentation for your care receiver before calling, this determines your reimbursement percentage.",
         "urls": [
           {
@@ -1292,23 +1292,24 @@
       ],
       "contacts": [
         {
-          "label": "Pennsylvania Aging Services",
+          "label": "Pennsylvania Department of Aging (start here)",
           "phone": "(717) 783-1550",
-          "description": "General program information",
-          "hours": "Mon-Fri 8am-5pm ET"
+          "description": "Call to be connected with your local Area Agency on Aging, which is the office that takes the application. This line connects you; it does not take the application itself.",
+          "hours": "Hours not published by PA. The CMS directory lists 8:30am-5pm ET, Mon-Fri."
         },
         {
-          "label": "Local Area Agency on Aging",
-          "phone": "Varies by county",
-          "description": "Your Local Area Agency on Aging (AAA)\nFor help with specific services, application forms, or to schedule an in-home assessment.\nVisit the official PA Department of Aging Local Resources page (https://www.google.com/search?q=https://www.pa.gov/agencies/aging/local-resources/area-agencies-on-aging)to look up the contact information for your specific county.",
-          "hours": "Contact your county AAA for specific hours"
+          "label": "PA Link to Aging and Disability Resource Center",
+          "phone": "1-800-753-8827",
+          "description": "Statewide toll-free helpline. Can help you fill out forms and find local services.",
+          "hours": "Hours not published"
         }
       ],
       "applicationNotes": [
+        "Neither the caregiver nor the person they care for can be enrolled in Medicaid Long-Term Services and Supports (Community HealthChoices or LIFE). That rules the program out, so check it before anything else.",
+        "There is no income limit to take part. Income only sets how much of your spending gets reimbursed. Above 380% of the federal poverty level you get no reimbursement but can still get care management, benefits counselling, education and training at no cost.",
+        "The program also covers grandparents and older relatives aged 55+ raising a child under 18, and relatives 55+ caring for an adult aged 18 to 59 with a disability. Both require living together.",
         "Family members cannot be hired or paid to provide care to relatives through this program",
-        "Above 380% Federal Poverty Level, you can still access non-financial services like care management and education",
-        "Each county's Area Agency on Aging has different procedures and wait times",
-        "You must pay for services upfront and seek reimbursement, no direct payment to providers"
+        "Above 380% Federal Poverty Level, you can still access non-financial services like care management and education"
       ],
       "relatedPrograms": [
         "PA OPTIONS Program",
@@ -1319,7 +1320,7 @@
       "faqs": [
         {
           "question": "Can I get reimbursed if my loved one's income is too high?",
-          "answer": "If your loved one's household income is above 380% of the Federal Poverty Level ($58,320 for a single person in 2026), you won't get financial reimbursement. However, you can still access non-financial services like care management, caregiver education, and training at no cost."
+          "answer": "If your loved one's household income is above 380% of the Federal Poverty Level ($60,648 for a household of one in 2026), you won't get financial reimbursement. However, you can still access non-financial services like care management, caregiver education, and training at no cost."
         },
         {
           "question": "What expenses can I actually get reimbursed for?",
@@ -1364,7 +1365,8 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
-      "reviewedAt": "2026-06-17"
+      "reviewedAt": "2026-06-17",
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "oplap-legal-assistance",
