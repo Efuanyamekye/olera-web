@@ -46,7 +46,7 @@ export const VALID_STAGE_TRANSITIONS: Record<PipelineStage, PipelineStage[]> = {
   pitched: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers
   not_interested: ["meeting_scheduled", "upgrade_meeting", "pitched"],  // upgrade_meeting for Converted providers re-engaging
   no_show: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers rescheduling
-  upgrade_meeting: ["upgrade_meeting", "pitched", "not_interested"],  // can reschedule, complete, or decline
+  upgrade_meeting: ["meeting_scheduled", "upgrade_meeting", "pitched", "not_interested"],  // can reschedule (to unified meeting_scheduled), complete, or decline
 };
 
 export function canTransitionTo(from: PipelineStage, to: PipelineStage): boolean {
@@ -80,6 +80,33 @@ export const MEDJOBS_STATUS_LABELS: Record<MedjobsStatus, string> = {
   in_pilot: "In 90-Day Pilot",
   pilot_expired: "Pilot Expired",
   subscribed: "Subscribed",
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Meeting Type (for scheduled meetings)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const MEETING_TYPES = ["new", "upgrade"] as const;
+
+export type MeetingType = (typeof MEETING_TYPES)[number];
+
+export const MEETING_TYPE_LABELS: Record<MeetingType, string> = {
+  new: "New Meeting",
+  upgrade: "Upgrade Meeting",
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Meeting Focus (product being discussed)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const MEETING_FOCUS_OPTIONS = ["ads", "medjobs", "both"] as const;
+
+export type MeetingFocus = (typeof MEETING_FOCUS_OPTIONS)[number];
+
+export const MEETING_FOCUS_LABELS: Record<MeetingFocus, string> = {
+  ads: "Ads",
+  medjobs: "MedJobs",
+  both: "Both",
 };
 
 // ─────────────────────────────────────────────────────────────────────────────

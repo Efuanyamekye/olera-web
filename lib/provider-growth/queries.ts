@@ -6,7 +6,7 @@
  */
 
 import { getServiceClient } from "@/lib/admin";
-import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource } from "./stages";
+import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource, MeetingType, MeetingFocus } from "./stages";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -22,6 +22,8 @@ export interface ProviderGrowthTracking {
   calendly_event_id: string | null;
   meeting_scheduled_at: string | null;
   meeting_completed_at: string | null;
+  meeting_type: MeetingType | null;
+  meeting_focus: MeetingFocus | null;
   pitched_at: string | null;
   pitched_ads: boolean;
   pitched_medjobs: boolean;
@@ -223,88 +225,63 @@ export async function getCallStatsForTrackingIds(
 }
 
 /**
- * Get counts for New Claims subtabs (Not Contacted vs In Progress).
- * Returns { notContacted, inProgress } where inProgress means has call attempts.
+ * Get counts for New Claims subtabs (Not Contacted | Converted | In Progress).
+ * - notContacted: no calls AND not converted
+ * - converted: has free trial (any call status)
+ * - inProgress: has calls AND not converted
  */
 export async function getNewClaimSubtabCounts(): Promise<{
   notContacted: number;
+  converted: number;
   inProgress: number;
 }> {
   const db = getServiceClient();
 
-  // Get all new_claim tracking IDs
+  // Get all new_claim tracking records with conversion status
   const { data: newClaims, error: claimsError } = await db
     .from("provider_growth_tracking")
-    .select("id")
+    .select("id, ads_status, medjobs_status")
     .eq("pipeline_stage", "new_claim");
 
   if (claimsError || !newClaims) {
     console.error("[provider-growth] New claims query error:", claimsError);
-    return { notContacted: 0, inProgress: 0 };
+    return { notContacted: 0, converted: 0, inProgress: 0 };
   }
 
-  const trackingIds = newClaims.map((c) => c.id);
-  if (trackingIds.length === 0) {
-    return { notContacted: 0, inProgress: 0 };
+  if (newClaims.length === 0) {
+    return { notContacted: 0, converted: 0, inProgress: 0 };
   }
 
-  // Get call stats
-  const callStats = await getCallStatsForTrackingIds(trackingIds);
+  // Separate converted vs non-converted providers
+  const convertedProviders: string[] = [];
+  const nonConvertedProviders: string[] = [];
 
-  // Count providers with/without calls
+  for (const claim of newClaims) {
+    const isConverted =
+      claim.ads_status === "free_intro" ||
+      claim.medjobs_status === "in_pilot" ||
+      claim.medjobs_status === "pilot_expired";
+    if (isConverted) {
+      convertedProviders.push(claim.id);
+    } else {
+      nonConvertedProviders.push(claim.id);
+    }
+  }
+
+  // Get call stats for non-converted providers only
+  const callStats = await getCallStatsForTrackingIds(nonConvertedProviders);
+
+  // Count non-converted providers with/without calls
   let inProgress = 0;
-  for (const id of trackingIds) {
+  for (const id of nonConvertedProviders) {
     if ((callStats.get(id)?.count || 0) > 0) {
       inProgress++;
     }
   }
 
   return {
-    notContacted: trackingIds.length - inProgress,
-    inProgress,
-  };
-}
-
-/**
- * Get counts for Converted subtabs (Not Contacted vs In Progress).
- * Converted = ads_status = "free_intro" OR medjobs_status IN ("in_pilot", "pilot_expired")
- * Returns { notContacted, inProgress } where inProgress means has call attempts.
- */
-export async function getConvertedSubtabCounts(): Promise<{
-  notContacted: number;
-  inProgress: number;
-}> {
-  const db = getServiceClient();
-
-  // Get all converted tracking IDs (free_intro OR in_pilot/pilot_expired)
-  const { data: converted, error: convertedError } = await db
-    .from("provider_growth_tracking")
-    .select("id")
-    .or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
-
-  if (convertedError || !converted) {
-    console.error("[provider-growth] Converted query error:", convertedError);
-    return { notContacted: 0, inProgress: 0 };
-  }
-
-  const trackingIds = converted.map((c) => c.id);
-  if (trackingIds.length === 0) {
-    return { notContacted: 0, inProgress: 0 };
-  }
-
-  // Get call stats
-  const callStats = await getCallStatsForTrackingIds(trackingIds);
-
-  // Count providers with/without calls
-  let inProgress = 0;
-  for (const id of trackingIds) {
-    if ((callStats.get(id)?.count || 0) > 0) {
-      inProgress++;
-    }
-  }
-
-  return {
-    notContacted: trackingIds.length - inProgress,
+    notContacted: nonConvertedProviders.length - inProgress,
+    converted: convertedProviders.length,
     inProgress,
   };
 }
@@ -315,6 +292,7 @@ export async function getConvertedSubtabCounts(): Promise<{
 
 export interface ListProvidersOptions {
   pipelineStage?: PipelineStage;
+  pipelineStages?: PipelineStage[];  // Multiple stages (e.g., meeting_scheduled + upgrade_meeting)
   adsStatus?: AdsStatus;
   medjobsStatus?: MedjobsStatus | MedjobsStatus[];  // Can be single or array (e.g., for in_pilot OR pilot_expired)
   claimSource?: ClaimSource;
@@ -331,6 +309,10 @@ export interface ListProvidersOptions {
   hasCallAttempts?: boolean;
   // Filter for converted providers (ads free_intro OR medjobs in_pilot/pilot_expired)
   converted?: boolean;
+  // Filter for NOT converted providers (ads_status = none AND medjobs_status = none)
+  notConverted?: boolean;
+  // Filter by meeting focus (for Meeting Scheduled subtabs)
+  meetingFocus?: MeetingFocus;
 }
 
 export async function listProviders(options: ListProvidersOptions = {}): Promise<{
@@ -340,6 +322,7 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   const db = getServiceClient();
   const {
     pipelineStage,
+    pipelineStages,
     adsStatus,
     medjobsStatus,
     claimSource,
@@ -353,6 +336,8 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     orderDirection = "desc",
     hasCallAttempts,
     converted,
+    notConverted,
+    meetingFocus,
   } = options;
 
   // Build the query
@@ -382,7 +367,9 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     );
 
   // Apply filters
-  if (pipelineStage) {
+  if (pipelineStages && pipelineStages.length > 0) {
+    query = query.in("pipeline_stage", pipelineStages);
+  } else if (pipelineStage) {
     query = query.eq("pipeline_stage", pipelineStage);
   }
   if (adsStatus && adsStatus !== "none") {
@@ -408,6 +395,19 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   // Converted filter: ads free_intro OR medjobs in_pilot/pilot_expired
   if (converted) {
     query = query.or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
+  }
+  // Not converted filter: no free trial active
+  // Must have ads_status = none AND medjobs_status not in (in_pilot, pilot_expired)
+  if (notConverted) {
+    query = query.eq("ads_status", "none");
+    // Exclude providers with active MedJobs trial (in_pilot or pilot_expired)
+    query = query.neq("medjobs_status", "in_pilot");
+    query = query.neq("medjobs_status", "pilot_expired");
+  }
+  // Meeting focus filter (for Meeting Scheduled subtabs)
+  // Include null meeting_focus for legacy providers who were scheduled before this field existed
+  if (meetingFocus) {
+    query = query.or(`meeting_focus.eq.${meetingFocus},meeting_focus.is.null`);
   }
   // Date range filtering
   if (claimedFrom) {
@@ -654,6 +654,8 @@ export interface UpdateTrackingInput {
   calendly_event_id?: string | null;
   meeting_scheduled_at?: string;
   meeting_completed_at?: string;
+  meeting_type?: MeetingType | null;
+  meeting_focus?: MeetingFocus | null;
   pitched_at?: string;
   pitched_ads?: boolean;
   pitched_medjobs?: boolean;

@@ -522,7 +522,7 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
     setActiveAction(null);
   }, [provider.id]);
 
-  const handleScheduleMeeting = async (_meetingInfo: { scheduled_at: string }) => {
+  const handleScheduleMeeting = async () => {
     setActiveAction(null);
     onUpdate();
   };
@@ -545,6 +545,12 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
 
   // Show call script only for new_claim providers
   const showCallScript = provider.pipeline_stage === "new_claim";
+
+  // Check if provider is converted (has free trial)
+  const isConverted =
+    provider.ads_status === "free_intro" ||
+    provider.medjobs_status === "in_pilot" ||
+    provider.medjobs_status === "pilot_expired";
 
   // Header
   const header = (
@@ -599,6 +605,7 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
               trackingId={provider.id}
               providerName={provider.display_name || "Provider"}
               contactEmail={provider.email || undefined}
+              isConverted={isConverted}
               onScheduled={handleScheduleMeeting}
               onCancel={() => setActiveAction(null)}
             />

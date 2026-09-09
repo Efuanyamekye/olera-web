@@ -12,10 +12,12 @@ import {
   ADS_STATUSES,
   MEDJOBS_STATUSES,
   CLAIM_SOURCES,
+  MEETING_FOCUS_OPTIONS,
   type PipelineStage,
   type AdsStatus,
   type MedjobsStatus,
   type ClaimSource,
+  type MeetingFocus,
 } from "@/lib/provider-growth/stages";
 
 /**
@@ -46,9 +48,15 @@ export async function GET(request: NextRequest) {
     // Parse filter parameters
     const options: ListProvidersOptions = {};
 
+    // pipelineStage can be comma-separated for multiple values (e.g., "meeting_scheduled,upgrade_meeting")
     const pipelineStage = searchParams.get("pipelineStage");
-    if (pipelineStage && PIPELINE_STAGES.includes(pipelineStage as PipelineStage)) {
-      options.pipelineStage = pipelineStage as PipelineStage;
+    if (pipelineStage) {
+      const stages = pipelineStage.split(",").filter((s) => PIPELINE_STAGES.includes(s as PipelineStage));
+      if (stages.length === 1) {
+        options.pipelineStage = stages[0] as PipelineStage;
+      } else if (stages.length > 1) {
+        options.pipelineStages = stages as PipelineStage[];
+      }
     }
 
     const adsStatus = searchParams.get("adsStatus");
@@ -106,6 +114,18 @@ export async function GET(request: NextRequest) {
     const converted = searchParams.get("converted");
     if (converted === "true") {
       options.converted = true;
+    }
+
+    // Not converted filter (ads_status = none AND medjobs_status = none)
+    const notConverted = searchParams.get("notConverted");
+    if (notConverted === "true") {
+      options.notConverted = true;
+    }
+
+    // Meeting focus filter (for Meeting Scheduled subtabs)
+    const meetingFocus = searchParams.get("meetingFocus");
+    if (meetingFocus && MEETING_FOCUS_OPTIONS.includes(meetingFocus as MeetingFocus)) {
+      options.meetingFocus = meetingFocus as MeetingFocus;
     }
 
     const limit = parseInt(searchParams.get("limit") || "50", 10);

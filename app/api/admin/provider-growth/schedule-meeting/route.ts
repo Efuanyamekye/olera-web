@@ -6,7 +6,7 @@ import {
   createTouchpoint,
 } from "@/lib/provider-growth/queries";
 import { generateBookingUrl } from "@/lib/provider-growth/calendly";
-import { canTransitionTo } from "@/lib/provider-growth/stages";
+import { canTransitionTo, MEETING_TYPES, MEETING_FOCUS_OPTIONS, type MeetingType, type MeetingFocus } from "@/lib/provider-growth/stages";
 
 /**
  * POST /api/admin/provider-growth/schedule-meeting
@@ -39,6 +39,9 @@ export async function POST(request: NextRequest) {
       // If manually marking as scheduled (without Calendly webhook)
       meeting_scheduled_at,
       calendly_event_id,
+      // Meeting tags
+      meeting_type,
+      meeting_focus,
     } = body;
 
     if (!tracking_id) {
@@ -53,12 +56,23 @@ export async function POST(request: NextRequest) {
 
     // If manually scheduling (without Calendly)
     if (meeting_scheduled_at) {
-      // Determine target stage based on conversion status:
-      // - Converted providers (free trial) → upgrade_meeting
-      // - Non-converted providers → meeting_scheduled
-      const isConverted =
-        current.ads_status === "free_intro" || current.medjobs_status === "in_pilot";
-      const targetStage = isConverted ? "upgrade_meeting" : "meeting_scheduled";
+      // Validate meeting_type and meeting_focus
+      const validMeetingType: MeetingType | undefined = meeting_type && MEETING_TYPES.includes(meeting_type)
+        ? meeting_type
+        : undefined;
+      const validMeetingFocus: MeetingFocus | undefined = meeting_focus && MEETING_FOCUS_OPTIONS.includes(meeting_focus)
+        ? meeting_focus
+        : undefined;
+
+      if (!validMeetingType || !validMeetingFocus) {
+        return NextResponse.json(
+          { error: "meeting_type and meeting_focus are required" },
+          { status: 400 }
+        );
+      }
+
+      // All meetings now go to meeting_scheduled stage (unified)
+      const targetStage = "meeting_scheduled";
 
       // Validate stage transition
       if (!canTransitionTo(current.pipeline_stage, targetStage)) {
@@ -75,6 +89,8 @@ export async function POST(request: NextRequest) {
           pipeline_stage: targetStage,
           meeting_scheduled_at,
           calendly_event_id: calendly_event_id || null,
+          meeting_type: validMeetingType,
+          meeting_focus: validMeetingFocus,
           reminder_2d_sent_at: null,
           reminder_1d_sent_at: null,
         },
@@ -89,7 +105,8 @@ export async function POST(request: NextRequest) {
           meeting_scheduled_at,
           calendly_event_id,
           method: "manual",
-          target_stage: targetStage,
+          meeting_type: validMeetingType,
+          meeting_focus: validMeetingFocus,
         },
         admin_user_id: adminUser.id,
       });
