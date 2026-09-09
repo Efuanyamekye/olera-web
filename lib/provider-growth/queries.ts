@@ -99,9 +99,9 @@ export interface GrowthStats {
   both_converted: number;  // ads_free_intro AND (medjobs_in_pilot OR medjobs_pilot_expired)
   both_paying: number;     // ads_subscribed AND medjobs_subscribed
   // Daily actionable metrics
-  meetings_today: number;        // Meetings scheduled for today (regardless of logged status)
-  pending_outcomes: number;      // All meetings needing outcome logged (past + today + future)
-  pending_outcomes_past: number; // Subset: past meetings not yet logged
+  pending_outcomes: number;       // Meetings needing outcome logged (past + today, excludes future)
+  pending_outcomes_today: number; // Subset: today's meetings not yet logged
+  pending_outcomes_past: number;  // Subset: past meetings not yet logged
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -133,8 +133,8 @@ export async function getGrowthStats(): Promise<GrowthStats> {
   const medjobsCounts: Record<string, number> = {};
   let bothConverted = 0;
   let bothPaying = 0;
-  let meetingsToday = 0;
   let pendingOutcomes = 0;
+  let pendingOutcomesToday = 0;
   let pendingOutcomesPast = 0;
 
   for (const row of allRecords ?? []) {
@@ -161,29 +161,28 @@ export async function getGrowthStats(): Promise<GrowthStats> {
       bothPaying++;
     }
 
-    // Meeting metrics
+    // Meeting metrics - only count meetings that can have outcomes logged (past + today, not future)
     const awaitingOutcome = row.pipeline_stage === "meeting_scheduled" || row.pipeline_stage === "upgrade_meeting";
 
-    // Count all pending outcomes (providers still in meeting stage)
-    if (awaitingOutcome) {
-      pendingOutcomes++;
+    if (awaitingOutcome && row.meeting_scheduled_at) {
+      const meetingDate = new Date(row.meeting_scheduled_at);
+      const isPast = meetingDate < todayStart;
+      const isToday = meetingDate >= todayStart && meetingDate <= todayEnd;
+      const isFuture = meetingDate > todayEnd;
 
-      // Check if this is a past meeting (before today)
-      if (row.meeting_scheduled_at) {
-        const meetingDate = new Date(row.meeting_scheduled_at);
-        if (meetingDate < todayStart) {
+      // Only count past and today (can log outcome), exclude future (can't log yet)
+      if (!isFuture) {
+        pendingOutcomes++;
+
+        if (isToday) {
+          pendingOutcomesToday++;
+        } else if (isPast) {
           pendingOutcomesPast++;
         }
       }
-    }
-
-    // Count meetings scheduled for today (informational - shows calendar for the day)
-    if (row.meeting_scheduled_at) {
-      const meetingDate = new Date(row.meeting_scheduled_at);
-      const isToday = meetingDate >= todayStart && meetingDate <= todayEnd;
-      if (isToday) {
-        meetingsToday++;
-      }
+    } else if (awaitingOutcome && !row.meeting_scheduled_at) {
+      // Provider in meeting stage but no date set - count as pending (edge case)
+      pendingOutcomes++;
     }
   }
 
@@ -201,8 +200,8 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     medjobs_subscribed: medjobsCounts.subscribed || 0,
     both_converted: bothConverted,
     both_paying: bothPaying,
-    meetings_today: meetingsToday,
     pending_outcomes: pendingOutcomes,
+    pending_outcomes_today: pendingOutcomesToday,
     pending_outcomes_past: pendingOutcomesPast,
   };
 }

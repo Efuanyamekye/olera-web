@@ -37,10 +37,12 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
   if (!stats) return null;
 
   // Build sublabel for pending outcomes
-  const pendingTodayCount = stats.pending_outcomes - stats.pending_outcomes_past;
-  const pendingSublabel = stats.pending_outcomes_past > 0
-    ? `${pendingTodayCount} today, ${stats.pending_outcomes_past} past`
-    : `${stats.meetings_today} today`;
+  // Shows breakdown: "X today, Y past" or just "X today" if no past
+  const pendingSublabel = stats.pending_outcomes === 0
+    ? "All done"
+    : stats.pending_outcomes_past > 0
+      ? `${stats.pending_outcomes_today} today, ${stats.pending_outcomes_past} past`
+      : `${stats.pending_outcomes_today} today`;
 
   // Key metrics: Claims → Converted → Paying + Pending Outcomes
   const statItems = [
