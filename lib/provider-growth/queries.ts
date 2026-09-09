@@ -360,6 +360,8 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
         description,
         image_url,
         care_types,
+        category,
+        address,
         metadata
       )
     `,
@@ -451,6 +453,8 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
       description: string | null;
       image_url: string | null;
       care_types: string[] | null;
+      category: string | null;
+      address: string | null;
       metadata: Record<string, unknown> | null;
     };
 
@@ -515,6 +519,11 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
 }
 
 interface ProfileFields {
+  display_name: string | null;
+  category: string | null;
+  city: string | null;
+  state: string | null;
+  address: string | null;
   phone: string | null;
   email: string | null;
   website: string | null;
@@ -524,51 +533,95 @@ interface ProfileFields {
   metadata: Record<string, unknown> | null;
 }
 
+/**
+ * Compute profile completeness using the same algorithm as the provider portal.
+ * Matches lib/profile-completeness.ts exactly for consistency.
+ *
+ * 7-section weighted system:
+ * - Overview (12 pts): display_name, category, address/city+state, image_url
+ * - Pricing (12 pts): contact_for_pricing OR lower_price/price_range/pricing_details
+ * - Staff Screening (8 pts): staff_screening (3+ = 100%, 1-2 = 50%)
+ * - Care Services (10 pts): care_types (3+ = 100%, 1-2 = 50%)
+ * - Gallery (15 pts): metadata.images (3+ = 100%, 2 = 70%, 1 = 40%)
+ * - About (10 pts): description (100+ chars = 100%, any = 50%)
+ * - Payment (6 pts): accepted_payments (3+ = 100%, 1-2 = 50%)
+ */
 function computeProfileCompleteness(profile: ProfileFields): number {
-  // Profile completeness based on key fields that providers should fill out
-  let filled = 0;
-  let total = 0;
+  const meta = (profile.metadata || {}) as Record<string, unknown>;
 
-  // Direct profile fields (weighted)
-  const directFields: Array<{ field: keyof ProfileFields; weight: number }> = [
-    { field: "phone", weight: 1 },
-    { field: "email", weight: 1 },
-    { field: "website", weight: 1 },
-    { field: "description", weight: 2 },  // Description is important
-    { field: "image_url", weight: 1 },
-    { field: "care_types", weight: 1 },
-  ];
+  // Section weights (matching lib/profile-completeness.ts)
+  const WEIGHT_OVERVIEW = 12;
+  const WEIGHT_PRICING = 12;
+  const WEIGHT_STAFF_SCREENING = 8;
+  const WEIGHT_CARE_SERVICES = 10;
+  const WEIGHT_GALLERY = 15;
+  const WEIGHT_ABOUT = 10;
+  const WEIGHT_PAYMENT = 6;
 
-  for (const { field, weight } of directFields) {
-    total += weight;
-    const value = profile[field];
-    if (value) {
-      if (Array.isArray(value)) {
-        if (value.length > 0) filled += weight;
-      } else if (typeof value === "string" && value.trim()) {
-        filled += weight;
-      }
-    }
+  // Score each section (0-100)
+  const sections: Array<{ percent: number; weight: number }> = [];
+
+  // 1. Overview: display_name, category, address/city+state, image_url (25% each)
+  let overviewScore = 0;
+  if (profile.display_name?.trim()) overviewScore += 25;
+  if (profile.category) overviewScore += 25;
+  if (profile.address?.trim() || (profile.city?.trim() && profile.state?.trim())) overviewScore += 25;
+  if (profile.image_url?.trim()) overviewScore += 25;
+  sections.push({ percent: Math.min(100, overviewScore), weight: WEIGHT_OVERVIEW });
+
+  // 2. Pricing: contact_for_pricing OR any price info = 100%
+  let pricingScore = 0;
+  if (meta.contact_for_pricing) {
+    pricingScore = 100;
+  } else if (
+    meta.lower_price ||
+    (typeof meta.price_range === "string" && meta.price_range.trim()) ||
+    (Array.isArray(meta.pricing_details) && meta.pricing_details.length > 0)
+  ) {
+    pricingScore = 100;
   }
+  sections.push({ percent: pricingScore, weight: WEIGHT_PRICING });
 
-  // Check metadata for additional fields
-  const metadata = profile.metadata;
-  if (metadata) {
-    // Photos in metadata
-    total += 1;
-    const photos = metadata.photos;
-    if (photos && Array.isArray(photos) && photos.length > 0) {
-      filled += 1;
-    }
+  // 3. Staff Screening: 3+ = 100%, 1-2 = 50%
+  const staffScreening = Array.isArray(meta.staff_screening) ? meta.staff_screening : [];
+  let screeningScore = 0;
+  if (staffScreening.length >= 3) screeningScore = 100;
+  else if (staffScreening.length >= 1) screeningScore = 50;
+  sections.push({ percent: screeningScore, weight: WEIGHT_STAFF_SCREENING });
 
-    // Hours/availability in metadata
-    total += 1;
-    if (metadata.hours || metadata.availability) {
-      filled += 1;
-    }
-  }
+  // 4. Care Services: 3+ = 100%, 1-2 = 50%
+  const careTypes = profile.care_types ?? [];
+  let servicesScore = 0;
+  if (careTypes.length >= 3) servicesScore = 100;
+  else if (careTypes.length >= 1) servicesScore = 50;
+  sections.push({ percent: servicesScore, weight: WEIGHT_CARE_SERVICES });
 
-  return total > 0 ? Math.round((filled / total) * 100) : 0;
+  // 5. Gallery: metadata.images (3+ = 100%, 2 = 70%, 1 = 40%)
+  const images = Array.isArray(meta.images) ? meta.images : [];
+  let galleryScore = 0;
+  if (images.length >= 3) galleryScore = 100;
+  else if (images.length >= 2) galleryScore = 70;
+  else if (images.length >= 1) galleryScore = 40;
+  sections.push({ percent: galleryScore, weight: WEIGHT_GALLERY });
+
+  // 6. About: description (100+ chars = 100%, any = 50%)
+  const desc = profile.description?.trim() ?? "";
+  let aboutScore = 0;
+  if (desc.length >= 100) aboutScore = 100;
+  else if (desc.length > 0) aboutScore = 50;
+  sections.push({ percent: aboutScore, weight: WEIGHT_ABOUT });
+
+  // 7. Payment: accepted_payments (3+ = 100%, 1-2 = 50%)
+  const acceptedPayments = Array.isArray(meta.accepted_payments) ? meta.accepted_payments : [];
+  let paymentScore = 0;
+  if (acceptedPayments.length >= 3) paymentScore = 100;
+  else if (acceptedPayments.length >= 1) paymentScore = 50;
+  sections.push({ percent: paymentScore, weight: WEIGHT_PAYMENT });
+
+  // Calculate weighted average
+  const totalWeight = sections.reduce((sum, s) => sum + s.weight, 0);
+  const weightedSum = sections.reduce((sum, s) => sum + s.percent * s.weight, 0);
+  return totalWeight > 0 ? Math.round(weightedSum / totalWeight) : 0;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
