@@ -22,7 +22,7 @@ export const PIPELINE_STAGES = [
 export type PipelineStage = (typeof PIPELINE_STAGES)[number];
 
 export const PIPELINE_STAGE_LABELS: Record<PipelineStage, string> = {
-  new_claim: "New Claims",
+  new_claim: "Claimed",
   meeting_scheduled: "Meeting Scheduled",
   pitched: "Pitched",
   not_interested: "Not Interested",
@@ -31,7 +31,7 @@ export const PIPELINE_STAGE_LABELS: Record<PipelineStage, string> = {
 };
 
 export const PIPELINE_STAGE_DESCRIPTIONS: Record<PipelineStage, string> = {
-  new_claim: "Providers who claimed but haven't had a pitch meeting yet",
+  new_claim: "Providers who claimed their profile but haven't had a meeting yet",
   meeting_scheduled: "Providers with upcoming Calendly meetings",
   pitched: "Providers who've had their pitch meeting",
   not_interested: "Providers who declined after being pitched",

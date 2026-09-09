@@ -50,7 +50,7 @@ const FOLLOW_UP_SUB_TABS: Array<{ id: FollowUpSubTab; label: string }> = [
 // Note: "pitched" stage is displayed as "Follow-up" tab with subtabs
 // "not_interested" is now a subtab under Follow-up, not a standalone tab
 const PIPELINE_TABS: Array<{ id: PipelineStage; label: string }> = [
-  { id: "new_claim", label: "New Claims" },
+  { id: "new_claim", label: "Claimed" },
   { id: "meeting_scheduled", label: "Meeting Scheduled" },
   { id: "pitched", label: "Follow-up" },
 ];
