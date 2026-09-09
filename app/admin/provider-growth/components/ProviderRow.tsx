@@ -12,6 +12,8 @@ import type { ProviderGrowthWithProfile } from "@/lib/provider-growth/queries";
 import {
   type AdsStatus,
   type MedjobsStatus,
+  type MeetingType,
+  MEETING_TYPE_LABELS,
 } from "@/lib/provider-growth/stages";
 import { EligibilityBadges } from "./EligibilityBadges";
 
@@ -98,7 +100,11 @@ export function ProviderRow({ provider, onClick, onDelete, selected }: ProviderR
 
             {/* Conversion status badges */}
             {provider.ads_status !== "none" && (
-              <StatusBadge type="ads" status={provider.ads_status as AdsStatus} />
+              <StatusBadge
+                type="ads"
+                status={provider.ads_status as AdsStatus}
+                campaignStatus={provider.ads_campaign_status}
+              />
             )}
             {provider.medjobs_status !== "none" && (
               <StatusBadge type="medjobs" status={provider.medjobs_status as MedjobsStatus} />
@@ -128,10 +134,15 @@ export function ProviderRow({ provider, onClick, onDelete, selected }: ProviderR
             />
 
             {/* Meeting/pitch info */}
-            {provider.pipeline_stage === "meeting_scheduled" && provider.meeting_scheduled_at && (
-              <span className="text-xs font-medium text-blue-600">
-                {formatDate(provider.meeting_scheduled_at)}
-              </span>
+            {(provider.pipeline_stage === "meeting_scheduled" || provider.pipeline_stage === "upgrade_meeting") && provider.meeting_scheduled_at && (
+              <>
+                {provider.meeting_type && (
+                  <MeetingTypeBadge type={provider.meeting_type as MeetingType} />
+                )}
+                <span className="text-xs font-medium text-blue-600">
+                  {formatDate(provider.meeting_scheduled_at)}
+                </span>
+              </>
             )}
             {provider.pipeline_stage === "pitched" && (
               <>
@@ -246,10 +257,43 @@ function VerificationBadge({ state, providerName }: { state: string | null; prov
 function StatusBadge({
   type,
   status,
+  campaignStatus,
 }: {
   type: "ads" | "medjobs";
   status: AdsStatus | MedjobsStatus;
+  campaignStatus?: "pending_profile" | "requested" | "scheduled" | "live" | "ended" | null;
 }) {
+  // For ads with free_intro status, show granular campaign status
+  if (type === "ads" && status === "free_intro" && campaignStatus) {
+    const campaignLabels: Record<string, string> = {
+      pending_profile: "Pending",
+      requested: "Requested",
+      scheduled: "Scheduled",
+      live: "Live",
+      ended: "Ended",
+    };
+
+    const campaignColors: Record<string, string> = {
+      pending_profile: "bg-gray-50 text-gray-600 border-gray-200",
+      requested: "bg-amber-50 text-amber-700 border-amber-200",
+      scheduled: "bg-blue-50 text-blue-700 border-blue-200",
+      live: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      ended: "bg-gray-50 text-gray-500 border-gray-200",
+    };
+
+    const label = campaignLabels[campaignStatus] || campaignStatus;
+    const colorClass = campaignColors[campaignStatus] || "bg-amber-50 text-amber-700 border-amber-200";
+
+    return (
+      <span
+        className={`inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border ${colorClass}`}
+      >
+        Ads: {label}
+      </span>
+    );
+  }
+
+  // Default labels for other statuses
   const labels: Record<string, string> = {
     free_intro: "Free Trial",
     in_pilot: "Pilot",
@@ -303,6 +347,24 @@ function InterestBadge({ level }: { level: string }) {
     <span
       className={`inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border ${className}`}
       title={`Interest level: ${label}`}
+    >
+      {label}
+    </span>
+  );
+}
+
+function MeetingTypeBadge({ type }: { type: MeetingType }) {
+  const config: Record<MeetingType, { label: string; className: string }> = {
+    new: { label: "New", className: "bg-blue-50 text-blue-700 border-blue-200" },
+    upgrade: { label: "Upgrade", className: "bg-amber-50 text-amber-700 border-amber-200" },
+  };
+
+  const { label, className } = config[type];
+
+  return (
+    <span
+      className={`inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border ${className}`}
+      title={MEETING_TYPE_LABELS[type]}
     >
       {label}
     </span>

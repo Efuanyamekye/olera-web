@@ -6,7 +6,7 @@
  */
 
 import { getServiceClient } from "@/lib/admin";
-import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource } from "./stages";
+import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource, MeetingType, MeetingFocus } from "./stages";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -22,6 +22,8 @@ export interface ProviderGrowthTracking {
   calendly_event_id: string | null;
   meeting_scheduled_at: string | null;
   meeting_completed_at: string | null;
+  meeting_type: MeetingType | null;
+  meeting_focus: MeetingFocus | null;
   pitched_at: string | null;
   pitched_ads: boolean;
   pitched_medjobs: boolean;
@@ -76,6 +78,9 @@ export interface ProviderGrowthWithProfile extends ProviderGrowthTracking {
   // Call tracking
   call_count?: number;
   last_call_at?: string | null;
+  // Ad campaign details (from ad_campaign_requests)
+  ads_campaign_status?: "pending_profile" | "requested" | "scheduled" | "live" | "ended" | null;
+  ads_campaign_count?: number;
 }
 
 export interface GrowthStats {
@@ -93,6 +98,10 @@ export interface GrowthStats {
   // Providers with BOTH products active
   both_converted: number;  // ads_free_intro AND (medjobs_in_pilot OR medjobs_pilot_expired)
   both_paying: number;     // ads_subscribed AND medjobs_subscribed
+  // Daily actionable metrics
+  pending_outcomes: number;       // Meetings needing outcome logged (past + today, excludes future)
+  pending_outcomes_today: number; // Subset: today's meetings not yet logged
+  pending_outcomes_past: number;  // Subset: past meetings not yet logged
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -102,11 +111,16 @@ export interface GrowthStats {
 export async function getGrowthStats(): Promise<GrowthStats> {
   const db = getServiceClient();
 
+  // Get today's date range (in UTC)
+  const now = new Date();
+  const todayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+  const todayEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
+
   // Fetch all tracking records and compute counts in memory
   // This is more reliable than chaining .then() on Supabase queries
   const { data: allRecords, error } = await db
     .from("provider_growth_tracking")
-    .select("pipeline_stage, ads_status, medjobs_status");
+    .select("pipeline_stage, ads_status, medjobs_status, meeting_scheduled_at");
 
   if (error) {
     console.error("[provider-growth] Stats query error:", error);
@@ -119,6 +133,9 @@ export async function getGrowthStats(): Promise<GrowthStats> {
   const medjobsCounts: Record<string, number> = {};
   let bothConverted = 0;
   let bothPaying = 0;
+  let pendingOutcomes = 0;
+  let pendingOutcomesToday = 0;
+  let pendingOutcomesPast = 0;
 
   for (const row of allRecords ?? []) {
     // Pipeline stage
@@ -143,6 +160,30 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     if (row.ads_status === "subscribed" && row.medjobs_status === "subscribed") {
       bothPaying++;
     }
+
+    // Meeting metrics - only count meetings that can have outcomes logged (past + today, not future)
+    const awaitingOutcome = row.pipeline_stage === "meeting_scheduled" || row.pipeline_stage === "upgrade_meeting";
+
+    if (awaitingOutcome && row.meeting_scheduled_at) {
+      const meetingDate = new Date(row.meeting_scheduled_at);
+      const isPast = meetingDate < todayStart;
+      const isToday = meetingDate >= todayStart && meetingDate <= todayEnd;
+      const isFuture = meetingDate > todayEnd;
+
+      // Only count past and today (can log outcome), exclude future (can't log yet)
+      if (!isFuture) {
+        pendingOutcomes++;
+
+        if (isToday) {
+          pendingOutcomesToday++;
+        } else if (isPast) {
+          pendingOutcomesPast++;
+        }
+      }
+    } else if (awaitingOutcome && !row.meeting_scheduled_at) {
+      // Provider in meeting stage but no date set - count as pending (edge case)
+      pendingOutcomes++;
+    }
   }
 
   return {
@@ -159,6 +200,9 @@ export async function getGrowthStats(): Promise<GrowthStats> {
     medjobs_subscribed: medjobsCounts.subscribed || 0,
     both_converted: bothConverted,
     both_paying: bothPaying,
+    pending_outcomes: pendingOutcomes,
+    pending_outcomes_today: pendingOutcomesToday,
+    pending_outcomes_past: pendingOutcomesPast,
   };
 }
 
@@ -172,7 +216,8 @@ export interface CallStats {
 }
 
 /**
- * Get call stats for a list of tracking IDs.
+ * Get activity stats for a list of tracking IDs.
+ * Counts both legacy "call_attempted" and new "activity_logged" touchpoints.
  * Returns a Map of tracking_id -> { count, lastCallAt }.
  */
 export async function getCallStatsForTrackingIds(
@@ -184,8 +229,8 @@ export async function getCallStatsForTrackingIds(
 
   const db = getServiceClient();
 
-  // Fetch call_attempted touchpoints grouped by tracking_id
-  // We have to do this in batches to avoid URL length limits
+  // Fetch both call_attempted (legacy) and activity_logged (new) touchpoints
+  // Any activity logged means we're actively working on this provider
   const stats = new Map<string, CallStats>();
   const BATCH_SIZE = 100;
 
@@ -194,22 +239,22 @@ export async function getCallStatsForTrackingIds(
 
     const { data, error } = await db
       .from("provider_growth_touchpoints")
-      .select("tracking_id, created_at")
+      .select("tracking_id, created_at, touchpoint_type")
       .in("tracking_id", batchIds)
-      .eq("touchpoint_type", "call_attempted");
+      .in("touchpoint_type", ["call_attempted", "activity_logged"]);
 
     if (error) {
-      console.error("[provider-growth] Call stats query error:", error);
+      console.error("[provider-growth] Activity stats query error:", error);
       continue;
     }
 
-    // Count occurrences and track most recent call per tracking_id
+    // Count occurrences and track most recent activity per tracking_id
     for (const row of data ?? []) {
       const id = row.tracking_id;
       const existing = stats.get(id);
       if (existing) {
         existing.count++;
-        // Update lastCallAt if this call is more recent
+        // Update lastCallAt if this activity is more recent
         if (row.created_at > (existing.lastCallAt || "")) {
           existing.lastCallAt = row.created_at;
         }
@@ -222,47 +267,145 @@ export async function getCallStatsForTrackingIds(
   return stats;
 }
 
+// Ad campaign status priority: live > scheduled > requested > pending_profile > ended
+const CAMPAIGN_STATUS_PRIORITY: Record<string, number> = {
+  live: 5,
+  scheduled: 4,
+  requested: 3,
+  pending_profile: 2,
+  ended: 1,
+};
+
+type CampaignStatusType = "pending_profile" | "requested" | "scheduled" | "live" | "ended";
+
+interface CampaignInfo {
+  status: CampaignStatusType;
+  count: number;
+}
+
 /**
- * Get counts for New Claims subtabs (Not Contacted vs In Progress).
- * Returns { notContacted, inProgress } where inProgress means has call attempts.
+ * Get ad campaign status for a list of provider IDs.
+ * Returns a Map of business_profile_id -> { status, count }.
+ *
+ * For providers with multiple campaigns, returns the "most active" status:
+ * live > scheduled > requested > pending_profile > ended
+ */
+async function getAdCampaignStatusForProviders(
+  providerIds: string[]
+): Promise<Map<string, CampaignInfo>> {
+  if (providerIds.length === 0) {
+    return new Map();
+  }
+
+  const db = getServiceClient();
+  const results = new Map<string, CampaignInfo>();
+  const BATCH_SIZE = 100;
+
+  for (let i = 0; i < providerIds.length; i += BATCH_SIZE) {
+    const batchIds = providerIds.slice(i, i + BATCH_SIZE);
+
+    const { data, error } = await db
+      .from("ad_campaign_requests")
+      .select("provider_id, status")
+      .in("provider_id", batchIds)
+      .is("deleted_at", null)
+      .neq("status", "cancelled");
+
+    if (error) {
+      console.error("[provider-growth] Ad campaign query error:", error);
+      continue;
+    }
+
+    // Group by provider_id and find the "most active" status
+    for (const row of data ?? []) {
+      const existing = results.get(row.provider_id);
+      const currentPriority = CAMPAIGN_STATUS_PRIORITY[row.status] || 0;
+
+      if (existing) {
+        existing.count++;
+        // Update status if this campaign has higher priority
+        const existingPriority = CAMPAIGN_STATUS_PRIORITY[existing.status] || 0;
+        if (currentPriority > existingPriority) {
+          existing.status = row.status as CampaignStatusType;
+        }
+      } else {
+        results.set(row.provider_id, {
+          status: row.status as CampaignStatusType,
+          count: 1,
+        });
+      }
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Get counts for New Claims subtabs (Not Contacted | Converted | In Progress).
+ * - notContacted: no calls AND not converted
+ * - converted: has free trial AND no calls (self-converted, not yet contacted)
+ * - inProgress: has calls (regardless of conversion status - we're actively working on them)
  */
 export async function getNewClaimSubtabCounts(): Promise<{
   notContacted: number;
+  converted: number;
   inProgress: number;
 }> {
   const db = getServiceClient();
 
-  // Get all new_claim tracking IDs
+  // Get all new_claim tracking records with conversion status
   const { data: newClaims, error: claimsError } = await db
     .from("provider_growth_tracking")
-    .select("id")
+    .select("id, ads_status, medjobs_status")
     .eq("pipeline_stage", "new_claim");
 
   if (claimsError || !newClaims) {
     console.error("[provider-growth] New claims query error:", claimsError);
-    return { notContacted: 0, inProgress: 0 };
+    return { notContacted: 0, converted: 0, inProgress: 0 };
   }
 
-  const trackingIds = newClaims.map((c) => c.id);
-  if (trackingIds.length === 0) {
-    return { notContacted: 0, inProgress: 0 };
+  if (newClaims.length === 0) {
+    return { notContacted: 0, converted: 0, inProgress: 0 };
   }
 
-  // Get call stats
-  const callStats = await getCallStatsForTrackingIds(trackingIds);
+  // Get call stats for ALL new_claim providers
+  const allIds = newClaims.map((c) => c.id);
+  const callStats = await getCallStatsForTrackingIds(allIds);
 
-  // Count providers with/without calls
+  // Categorize each provider
+  let notContacted = 0;
+  let converted = 0;
   let inProgress = 0;
-  for (const id of trackingIds) {
-    if ((callStats.get(id)?.count || 0) > 0) {
+
+  for (const claim of newClaims) {
+    const hasCalls = (callStats.get(claim.id)?.count || 0) > 0;
+    // "Converted" = started free trial (not yet paying)
+    const isConverted =
+      claim.ads_status === "free_intro" ||
+      claim.medjobs_status === "in_pilot" ||
+      claim.medjobs_status === "pilot_expired";
+    // "Not converted" = no free trial started (ads_status=none, medjobs not in trial)
+    // This matches the notConverted filter in listProviders
+    const isNotConverted =
+      claim.ads_status === "none" &&
+      claim.medjobs_status !== "in_pilot" &&
+      claim.medjobs_status !== "pilot_expired";
+
+    if (hasCalls) {
+      // Any provider with call attempts goes to In Progress
       inProgress++;
+    } else if (isConverted) {
+      // Converted but no calls yet - self-converted, waiting for outreach
+      converted++;
+    } else if (isNotConverted) {
+      // Not converted and no calls - fresh claim
+      notContacted++;
     }
+    // Note: Providers with ads_status="subscribed" or medjobs_status="subscribed"
+    // but no calls are not counted in any subtab (they should be in Paying tab)
   }
 
-  return {
-    notContacted: trackingIds.length - inProgress,
-    inProgress,
-  };
+  return { notContacted, converted, inProgress };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -271,6 +414,7 @@ export async function getNewClaimSubtabCounts(): Promise<{
 
 export interface ListProvidersOptions {
   pipelineStage?: PipelineStage;
+  pipelineStages?: PipelineStage[];  // Multiple stages (e.g., meeting_scheduled + upgrade_meeting)
   adsStatus?: AdsStatus;
   medjobsStatus?: MedjobsStatus | MedjobsStatus[];  // Can be single or array (e.g., for in_pilot OR pilot_expired)
   claimSource?: ClaimSource;
@@ -283,8 +427,14 @@ export interface ListProvidersOptions {
   offset?: number;
   orderBy?: "claimed_at" | "meeting_scheduled_at" | "pipeline_stage_changed_at" | "last_activity_at";
   orderDirection?: "asc" | "desc";
-  // Filter by call status for new_claim subtabs
+  // Filter by call status for new_claim and converted subtabs
   hasCallAttempts?: boolean;
+  // Filter for converted providers (ads free_intro OR medjobs in_pilot/pilot_expired)
+  converted?: boolean;
+  // Filter for NOT converted providers (ads_status = none AND medjobs_status = none)
+  notConverted?: boolean;
+  // Filter by meeting focus (for Meeting Scheduled subtabs)
+  meetingFocus?: MeetingFocus;
 }
 
 export async function listProviders(options: ListProvidersOptions = {}): Promise<{
@@ -294,6 +444,7 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   const db = getServiceClient();
   const {
     pipelineStage,
+    pipelineStages,
     adsStatus,
     medjobsStatus,
     claimSource,
@@ -306,6 +457,9 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     orderBy = "claimed_at",
     orderDirection = "desc",
     hasCallAttempts,
+    converted,
+    notConverted,
+    meetingFocus,
   } = options;
 
   // Build the query
@@ -328,6 +482,8 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
         description,
         image_url,
         care_types,
+        category,
+        address,
         metadata
       )
     `,
@@ -335,7 +491,9 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     );
 
   // Apply filters
-  if (pipelineStage) {
+  if (pipelineStages && pipelineStages.length > 0) {
+    query = query.in("pipeline_stage", pipelineStages);
+  } else if (pipelineStage) {
     query = query.eq("pipeline_stage", pipelineStage);
   }
   if (adsStatus && adsStatus !== "none") {
@@ -357,6 +515,23 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   }
   if (medjobsEligible !== undefined) {
     query = query.eq("medjobs_eligible", medjobsEligible);
+  }
+  // Converted filter: ads free_intro OR medjobs in_pilot/pilot_expired
+  if (converted) {
+    query = query.or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
+  }
+  // Not converted filter: no free trial active
+  // Must have ads_status = none AND medjobs_status not in (in_pilot, pilot_expired)
+  if (notConverted) {
+    query = query.eq("ads_status", "none");
+    // Exclude providers with active MedJobs trial (in_pilot or pilot_expired)
+    query = query.neq("medjobs_status", "in_pilot");
+    query = query.neq("medjobs_status", "pilot_expired");
+  }
+  // Meeting focus filter (for Meeting Scheduled subtabs)
+  // Include null meeting_focus for legacy providers who were scheduled before this field existed
+  if (meetingFocus) {
+    query = query.or(`meeting_focus.eq.${meetingFocus},meeting_focus.is.null`);
   }
   // Date range filtering
   if (claimedFrom) {
@@ -400,6 +575,8 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
       description: string | null;
       image_url: string | null;
       care_types: string[] | null;
+      category: string | null;
+      address: string | null;
       metadata: Record<string, unknown> | null;
     };
 
@@ -443,6 +620,26 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     };
   });
 
+  // Fetch ad campaign status for providers with ads_status !== 'none'
+  const providersWithAds = providers.filter(p => p.ads_status !== "none");
+  if (providersWithAds.length > 0) {
+    const profileIdsWithAds = providersWithAds.map(p => p.business_profile_id);
+    const campaignData = await getAdCampaignStatusForProviders(profileIdsWithAds);
+
+    // Merge campaign data into providers
+    providers = providers.map(p => {
+      const campaign = campaignData.get(p.business_profile_id);
+      if (campaign) {
+        return {
+          ...p,
+          ads_campaign_status: campaign.status,
+          ads_campaign_count: campaign.count,
+        };
+      }
+      return p;
+    });
+  }
+
   // Filter by hasCallAttempts if specified
   if (hasCallAttempts !== undefined) {
     providers = providers.filter((p) =>
@@ -464,6 +661,11 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
 }
 
 interface ProfileFields {
+  display_name: string | null;
+  category: string | null;
+  city: string | null;
+  state: string | null;
+  address: string | null;
   phone: string | null;
   email: string | null;
   website: string | null;
@@ -473,51 +675,95 @@ interface ProfileFields {
   metadata: Record<string, unknown> | null;
 }
 
+/**
+ * Compute profile completeness using the same algorithm as the provider portal.
+ * Matches lib/profile-completeness.ts exactly for consistency.
+ *
+ * 7-section weighted system:
+ * - Overview (12 pts): display_name, category, address/city+state, image_url
+ * - Pricing (12 pts): contact_for_pricing OR lower_price/price_range/pricing_details
+ * - Staff Screening (8 pts): staff_screening (3+ = 100%, 1-2 = 50%)
+ * - Care Services (10 pts): care_types (3+ = 100%, 1-2 = 50%)
+ * - Gallery (15 pts): metadata.images (3+ = 100%, 2 = 70%, 1 = 40%)
+ * - About (10 pts): description (100+ chars = 100%, any = 50%)
+ * - Payment (6 pts): accepted_payments (3+ = 100%, 1-2 = 50%)
+ */
 function computeProfileCompleteness(profile: ProfileFields): number {
-  // Profile completeness based on key fields that providers should fill out
-  let filled = 0;
-  let total = 0;
+  const meta = (profile.metadata || {}) as Record<string, unknown>;
 
-  // Direct profile fields (weighted)
-  const directFields: Array<{ field: keyof ProfileFields; weight: number }> = [
-    { field: "phone", weight: 1 },
-    { field: "email", weight: 1 },
-    { field: "website", weight: 1 },
-    { field: "description", weight: 2 },  // Description is important
-    { field: "image_url", weight: 1 },
-    { field: "care_types", weight: 1 },
-  ];
+  // Section weights (matching lib/profile-completeness.ts)
+  const WEIGHT_OVERVIEW = 12;
+  const WEIGHT_PRICING = 12;
+  const WEIGHT_STAFF_SCREENING = 8;
+  const WEIGHT_CARE_SERVICES = 10;
+  const WEIGHT_GALLERY = 15;
+  const WEIGHT_ABOUT = 10;
+  const WEIGHT_PAYMENT = 6;
 
-  for (const { field, weight } of directFields) {
-    total += weight;
-    const value = profile[field];
-    if (value) {
-      if (Array.isArray(value)) {
-        if (value.length > 0) filled += weight;
-      } else if (typeof value === "string" && value.trim()) {
-        filled += weight;
-      }
-    }
+  // Score each section (0-100)
+  const sections: Array<{ percent: number; weight: number }> = [];
+
+  // 1. Overview: display_name, category, address/city+state, image_url (25% each)
+  let overviewScore = 0;
+  if (profile.display_name?.trim()) overviewScore += 25;
+  if (profile.category) overviewScore += 25;
+  if (profile.address?.trim() || (profile.city?.trim() && profile.state?.trim())) overviewScore += 25;
+  if (profile.image_url?.trim()) overviewScore += 25;
+  sections.push({ percent: Math.min(100, overviewScore), weight: WEIGHT_OVERVIEW });
+
+  // 2. Pricing: contact_for_pricing OR any price info = 100%
+  let pricingScore = 0;
+  if (meta.contact_for_pricing) {
+    pricingScore = 100;
+  } else if (
+    meta.lower_price ||
+    (typeof meta.price_range === "string" && meta.price_range.trim()) ||
+    (Array.isArray(meta.pricing_details) && meta.pricing_details.length > 0)
+  ) {
+    pricingScore = 100;
   }
+  sections.push({ percent: pricingScore, weight: WEIGHT_PRICING });
 
-  // Check metadata for additional fields
-  const metadata = profile.metadata;
-  if (metadata) {
-    // Photos in metadata
-    total += 1;
-    const photos = metadata.photos;
-    if (photos && Array.isArray(photos) && photos.length > 0) {
-      filled += 1;
-    }
+  // 3. Staff Screening: 3+ = 100%, 1-2 = 50%
+  const staffScreening = Array.isArray(meta.staff_screening) ? meta.staff_screening : [];
+  let screeningScore = 0;
+  if (staffScreening.length >= 3) screeningScore = 100;
+  else if (staffScreening.length >= 1) screeningScore = 50;
+  sections.push({ percent: screeningScore, weight: WEIGHT_STAFF_SCREENING });
 
-    // Hours/availability in metadata
-    total += 1;
-    if (metadata.hours || metadata.availability) {
-      filled += 1;
-    }
-  }
+  // 4. Care Services: 3+ = 100%, 1-2 = 50%
+  const careTypes = profile.care_types ?? [];
+  let servicesScore = 0;
+  if (careTypes.length >= 3) servicesScore = 100;
+  else if (careTypes.length >= 1) servicesScore = 50;
+  sections.push({ percent: servicesScore, weight: WEIGHT_CARE_SERVICES });
 
-  return total > 0 ? Math.round((filled / total) * 100) : 0;
+  // 5. Gallery: metadata.images (3+ = 100%, 2 = 70%, 1 = 40%)
+  const images = Array.isArray(meta.images) ? meta.images : [];
+  let galleryScore = 0;
+  if (images.length >= 3) galleryScore = 100;
+  else if (images.length >= 2) galleryScore = 70;
+  else if (images.length >= 1) galleryScore = 40;
+  sections.push({ percent: galleryScore, weight: WEIGHT_GALLERY });
+
+  // 6. About: description (100+ chars = 100%, any = 50%)
+  const desc = profile.description?.trim() ?? "";
+  let aboutScore = 0;
+  if (desc.length >= 100) aboutScore = 100;
+  else if (desc.length > 0) aboutScore = 50;
+  sections.push({ percent: aboutScore, weight: WEIGHT_ABOUT });
+
+  // 7. Payment: accepted_payments (3+ = 100%, 1-2 = 50%)
+  const acceptedPayments = Array.isArray(meta.accepted_payments) ? meta.accepted_payments : [];
+  let paymentScore = 0;
+  if (acceptedPayments.length >= 3) paymentScore = 100;
+  else if (acceptedPayments.length >= 1) paymentScore = 50;
+  sections.push({ percent: paymentScore, weight: WEIGHT_PAYMENT });
+
+  // Calculate weighted average
+  const totalWeight = sections.reduce((sum, s) => sum + s.weight, 0);
+  const weightedSum = sections.reduce((sum, s) => sum + s.percent * s.weight, 0);
+  return totalWeight > 0 ? Math.round(weightedSum / totalWeight) : 0;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -603,6 +849,8 @@ export interface UpdateTrackingInput {
   calendly_event_id?: string | null;
   meeting_scheduled_at?: string;
   meeting_completed_at?: string;
+  meeting_type?: MeetingType | null;
+  meeting_focus?: MeetingFocus | null;
   pitched_at?: string;
   pitched_ads?: boolean;
   pitched_medjobs?: boolean;

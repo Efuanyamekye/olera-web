@@ -22,7 +22,7 @@ export const PIPELINE_STAGES = [
 export type PipelineStage = (typeof PIPELINE_STAGES)[number];
 
 export const PIPELINE_STAGE_LABELS: Record<PipelineStage, string> = {
-  new_claim: "New Claims",
+  new_claim: "Claimed",
   meeting_scheduled: "Meeting Scheduled",
   pitched: "Pitched",
   not_interested: "Not Interested",
@@ -31,7 +31,7 @@ export const PIPELINE_STAGE_LABELS: Record<PipelineStage, string> = {
 };
 
 export const PIPELINE_STAGE_DESCRIPTIONS: Record<PipelineStage, string> = {
-  new_claim: "Providers who claimed but haven't had a pitch meeting yet",
+  new_claim: "Providers who claimed their profile but haven't had a meeting yet",
   meeting_scheduled: "Providers with upcoming Calendly meetings",
   pitched: "Providers who've had their pitch meeting",
   not_interested: "Providers who declined after being pitched",
@@ -42,11 +42,11 @@ export const PIPELINE_STAGE_DESCRIPTIONS: Record<PipelineStage, string> = {
 // Valid stage transitions
 export const VALID_STAGE_TRANSITIONS: Record<PipelineStage, PipelineStage[]> = {
   new_claim: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for self-converted providers
-  meeting_scheduled: ["pitched", "no_show", "not_interested"],  // meeting outcomes
+  meeting_scheduled: ["meeting_scheduled", "pitched", "no_show", "not_interested"],  // can reschedule, or log meeting outcomes
   pitched: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers
-  not_interested: ["new_claim", "pitched"],  // can re-engage to new_claim or pitched
-  no_show: ["meeting_scheduled", "not_interested"],  // can reschedule or mark not interested
-  upgrade_meeting: ["upgrade_meeting", "pitched", "not_interested"],  // can reschedule, complete, or decline
+  not_interested: ["meeting_scheduled", "upgrade_meeting", "pitched"],  // upgrade_meeting for Converted providers re-engaging
+  no_show: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers rescheduling
+  upgrade_meeting: ["meeting_scheduled", "upgrade_meeting", "pitched", "not_interested"],  // can reschedule (to unified meeting_scheduled), complete, or decline
 };
 
 export function canTransitionTo(from: PipelineStage, to: PipelineStage): boolean {
@@ -80,6 +80,33 @@ export const MEDJOBS_STATUS_LABELS: Record<MedjobsStatus, string> = {
   in_pilot: "In 90-Day Pilot",
   pilot_expired: "Pilot Expired",
   subscribed: "Subscribed",
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Meeting Type (for scheduled meetings)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const MEETING_TYPES = ["new", "upgrade"] as const;
+
+export type MeetingType = (typeof MEETING_TYPES)[number];
+
+export const MEETING_TYPE_LABELS: Record<MeetingType, string> = {
+  new: "New Meeting",
+  upgrade: "Upgrade Meeting",
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Meeting Focus (product being discussed)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const MEETING_FOCUS_OPTIONS = ["ads", "medjobs", "both"] as const;
+
+export type MeetingFocus = (typeof MEETING_FOCUS_OPTIONS)[number];
+
+export const MEETING_FOCUS_LABELS: Record<MeetingFocus, string> = {
+  ads: "Ads",
+  medjobs: "MedJobs",
+  both: "Both",
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -258,7 +285,6 @@ export const ACTIVITY_OUTCOMES = [
   "not_interested",
   "no_show",
   "meeting_rescheduled",
-  "re_engage",
 ] as const;
 
 export type ActivityOutcome = (typeof ACTIVITY_OUTCOMES)[number];
@@ -274,7 +300,6 @@ export const ACTIVITY_OUTCOME_LABELS: Record<ActivityOutcome, string> = {
   not_interested: "Not Interested",
   no_show: "No-show",
   meeting_rescheduled: "Meeting Rescheduled",
-  re_engage: "Re-engage",
 };
 
 // Which outcomes are available for each stage
@@ -284,9 +309,9 @@ export const STAGE_OUTCOMES: Record<PipelineStage, ActivityOutcome[]> = {
   new_claim: ["voicemail", "hung_up", "callback_requested", "left_message", "note"],
   meeting_scheduled: ["note", "interested", "not_interested", "no_show"],
   pitched: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
-  not_interested: ["note", "re_engage"],
+  not_interested: ["note"],  // Stop calling them - only log notes. Self-conversion is automatic
   no_show: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
-  upgrade_meeting: ["note", "interested", "not_interested", "no_show"],
+  upgrade_meeting: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "interested", "not_interested", "no_show"],
 };
 
 // Outcomes that trigger a confirmation modal (because they change stage)
@@ -295,7 +320,6 @@ export const STAGE_CHANGING_OUTCOMES: ActivityOutcome[] = [
   "interested",
   "not_interested",
   "no_show",
-  "re_engage",
 ];
 
 // What stage does each outcome transition to (from current stage)
@@ -311,6 +335,7 @@ export const OUTCOME_STAGE_TRANSITIONS: Record<ActivityOutcome, Partial<Record<P
   interested: {
     meeting_scheduled: "pitched",
     upgrade_meeting: "pitched",
+    // not_interested removed - we don't call them, self-conversion is automatic
   },
   not_interested: {
     meeting_scheduled: "not_interested",
@@ -324,9 +349,6 @@ export const OUTCOME_STAGE_TRANSITIONS: Record<ActivityOutcome, Partial<Record<P
   },
   meeting_rescheduled: {
     no_show: "meeting_scheduled",
-  },
-  re_engage: {
-    not_interested: "new_claim",
   },
 };
 
@@ -342,5 +364,4 @@ export const OUTCOME_DESCRIPTIONS: Record<ActivityOutcome, string> = {
   not_interested: "Provider not interested",
   no_show: "Provider missed the meeting",
   meeting_rescheduled: "Provider rescheduled the meeting",
-  re_engage: "Try again, move back to New Claims",
 };

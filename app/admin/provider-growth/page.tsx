@@ -36,13 +36,20 @@ export default function ProviderGrowthPage() {
   // Tab state
   const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
     const tab = searchParams.get("tab");
-    const sub = searchParams.get("sub") as "ads" | "medjobs" | "both" | "not_contacted" | "in_progress" | "active" | "no_show" | "not_interested" | null;
+    const sub = searchParams.get("sub") as "ads" | "medjobs" | "both" | "not_contacted" | "converted" | "in_progress" | "active" | "no_show" | "not_interested" | null;
 
-    // Check for new_claim with subtab
+    // Check for new_claim with subtab (now includes "converted")
     if (tab === "new_claim") {
-      const validSubTabs = ["not_contacted", "in_progress"];
-      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "in_progress") : "not_contacted";
+      const validSubTabs = ["not_contacted", "converted", "in_progress"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "converted" | "in_progress") : "not_contacted";
       return { type: "pipeline", stage: "new_claim", subTab };
+    }
+
+    // Check for meeting_scheduled with subtab (Ads/MedJobs/Both)
+    if (tab === "meeting_scheduled") {
+      const validSubTabs = ["ads", "medjobs", "both"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "ads" | "medjobs" | "both") : "ads";
+      return { type: "pipeline", stage: "meeting_scheduled", subTab };
     }
 
     // Check for pitched (Follow-up) with subtab
@@ -52,22 +59,7 @@ export default function ProviderGrowthPage() {
       return { type: "pipeline", stage: "pitched", subTab };
     }
 
-    // Check for other pipeline stage tabs (without subtabs)
-    if (tab && ["meeting_scheduled"].includes(tab)) {
-      return { type: "pipeline", stage: tab as PipelineStage };
-    }
-
-    // Check for upgrade_meeting (has Ads/MedJobs/Both subtabs)
-    if (tab === "upgrade_meeting") {
-      const validSubTabs = ["ads", "medjobs", "both"];
-      const subTab = sub && validSubTabs.includes(sub) ? (sub as "ads" | "medjobs" | "both") : "ads";
-      return { type: "pipeline", stage: "upgrade_meeting", subTab };
-    }
-
-    // Check for conversion tabs (converted/paying with subtab)
-    if (tab === "converted" && sub && ["ads", "medjobs", "both"].includes(sub)) {
-      return { type: "conversion", tab: "converted", subTab: sub as "ads" | "medjobs" | "both" };
-    }
+    // Check for paying tab
     if (tab === "paying" && sub && ["ads", "medjobs", "both"].includes(sub)) {
       return { type: "conversion", tab: "paying", subTab: sub as "ads" | "medjobs" | "both" };
     }
@@ -81,6 +73,7 @@ export default function ProviderGrowthPage() {
   const [stats, setStats] = useState<GrowthStats | null>(null);
   const [newClaimSubtabCounts, setNewClaimSubtabCounts] = useState<{
     notContacted: number;
+    converted: number;
     inProgress: number;
   } | null>(null);
   const [loading, setLoading] = useState(true);
@@ -126,11 +119,11 @@ export default function ProviderGrowthPage() {
     setPage(0);
   }, [dateRange]);
 
-  // Fetch stats (including new claim subtab counts)
+  // Fetch stats (including subtab counts)
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
-      const [statsRes, subtabRes] = await Promise.all([
+      const [statsRes, newClaimSubtabRes] = await Promise.all([
         fetch("/api/admin/provider-growth/stats"),
         fetch("/api/admin/provider-growth/new-claim-subtabs"),
       ]);
@@ -140,8 +133,8 @@ export default function ProviderGrowthPage() {
         setStats(data.stats);
       }
 
-      if (subtabRes.ok) {
-        const data = await subtabRes.json();
+      if (newClaimSubtabRes.ok) {
+        const data = await newClaimSubtabRes.json();
         setNewClaimSubtabCounts(data);
       }
     } catch (e) {
@@ -170,40 +163,35 @@ export default function ProviderGrowthPage() {
             // "active" subtab (or no subtab) shows pitched stage
             params.set("pipelineStage", "pitched");
           }
+        } else if (activeTab.stage === "meeting_scheduled") {
+          // Meeting Scheduled now includes both meeting_scheduled and upgrade_meeting stages
+          // The API will filter by meetingFocus if provided
+          params.set("pipelineStage", "meeting_scheduled,upgrade_meeting");
+          if (activeTab.subTab) {
+            params.set("meetingFocus", activeTab.subTab);
+          }
         } else {
           params.set("pipelineStage", activeTab.stage);
         }
 
-        // For new_claim, apply hasCallAttempts filter based on subtab
+        // For new_claim, apply filters based on subtab
         if (activeTab.stage === "new_claim" && activeTab.subTab) {
-          params.set("hasCallAttempts", activeTab.subTab === "in_progress" ? "true" : "false");
-        }
-
-        // For upgrade_meeting, apply Ads/MedJobs/Both filter based on subtab
-        // Include pilot_expired for MedJobs since they still need to convert to paying
-        if (activeTab.stage === "upgrade_meeting" && activeTab.subTab) {
-          if (activeTab.subTab === "ads") {
-            params.set("adsStatus", "free_intro");
-          } else if (activeTab.subTab === "medjobs") {
-            params.set("medjobsStatus", "in_pilot,pilot_expired");
-          } else if (activeTab.subTab === "both") {
-            params.set("adsStatus", "free_intro");
-            params.set("medjobsStatus", "in_pilot,pilot_expired");
+          if (activeTab.subTab === "not_contacted") {
+            // Not contacted: no calls AND not converted
+            params.set("hasCallAttempts", "false");
+            params.set("notConverted", "true");
+          } else if (activeTab.subTab === "converted") {
+            // Converted: has free trial AND no calls (self-converted, not yet contacted)
+            params.set("converted", "true");
+            params.set("hasCallAttempts", "false");
+          } else if (activeTab.subTab === "in_progress") {
+            // In progress: has calls (regardless of conversion - we're actively working on them)
+            params.set("hasCallAttempts", "true");
           }
         }
       } else {
-        // Conversion tabs
-        // For MedJobs, include both in_pilot and pilot_expired (they still need to convert to paying)
-        if (activeTab.tab === "converted") {
-          if (activeTab.subTab === "ads") {
-            params.set("adsStatus", "free_intro");
-          } else if (activeTab.subTab === "medjobs") {
-            params.set("medjobsStatus", "in_pilot,pilot_expired");
-          } else if (activeTab.subTab === "both") {
-            params.set("adsStatus", "free_intro");
-            params.set("medjobsStatus", "in_pilot,pilot_expired");
-          }
-        } else if (activeTab.tab === "paying") {
+        // Conversion tabs (only Paying now)
+        if (activeTab.tab === "paying") {
           if (activeTab.subTab === "ads") {
             params.set("adsStatus", "subscribed");
           } else if (activeTab.subTab === "medjobs") {
@@ -262,8 +250,8 @@ export default function ProviderGrowthPage() {
 
     // Update URL
     if (tab.type === "pipeline") {
-      // Include subtab for new_claim, pitched (Follow-up), and upgrade_meeting
-      if ((tab.stage === "new_claim" || tab.stage === "pitched" || tab.stage === "upgrade_meeting") && tab.subTab) {
+      // Include subtab for tabs that have them
+      if ((tab.stage === "new_claim" || tab.stage === "meeting_scheduled" || tab.stage === "pitched") && tab.subTab) {
         router.push(`/admin/provider-growth?tab=${tab.stage}&sub=${tab.subTab}`, { scroll: false });
       } else {
         router.push(`/admin/provider-growth?tab=${tab.stage}`, { scroll: false });

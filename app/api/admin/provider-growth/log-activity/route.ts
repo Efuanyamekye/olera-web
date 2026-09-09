@@ -133,7 +133,10 @@ export async function POST(request: NextRequest) {
         trackingUpdates.calendly_event_id = null;
       }
       if (outcome === "interested") {
-        trackingUpdates.meeting_completed_at = now;
+        // Only set meeting_completed_at when coming from a meeting stage
+        if (currentStage === "meeting_scheduled" || currentStage === "upgrade_meeting") {
+          trackingUpdates.meeting_completed_at = now;
+        }
       }
     }
 

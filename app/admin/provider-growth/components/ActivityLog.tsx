@@ -296,7 +296,7 @@ function getOutcomeColor(outcome: ActivityOutcome | null, touchpointType: string
     if (STAGE_CHANGING_OUTCOMES.includes(outcome)) {
       if (outcome === "not_interested") return "bg-red-100 text-red-800";
       if (outcome === "no_show") return "bg-amber-100 text-amber-800";
-      return "bg-blue-100 text-blue-800"; // meeting_scheduled, interested, re_engage, meeting_rescheduled
+      return "bg-blue-100 text-blue-800"; // meeting_scheduled, interested, meeting_rescheduled
     }
     // Call outcomes
     if (["voicemail", "hung_up", "callback_requested", "left_message"].includes(outcome)) {
