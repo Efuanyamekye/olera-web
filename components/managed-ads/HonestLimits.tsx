@@ -45,7 +45,7 @@ export default function HonestLimits({ spend, inquiries }: { spend: string | nul
     },
     {
       title: "No provider campaign has ever run on Meta",
-      body: "Everything above was learned buying Google Search for providers, with one Nextdoor pilot alongside it. Olera's own advertising is a separate thing and a much longer history — that is where the caregiver figures further down come from — but not one dollar of it was spent on a provider's behalf. The first Meta campaigns pointed at our own city pages went live this week. We will publish what they do, including if they do nothing.",
+      body: "Everything above was learned buying Google Search for providers, with one Nextdoor pilot alongside it. Olera's own advertising is a separate thing and a much longer history. That is where the caregiver figures further down come from, and not one dollar of it was spent on a provider's behalf. The first Meta campaigns pointed at our own city pages went live this week. We will publish what they do, including if they do nothing.",
     },
   ];
 
