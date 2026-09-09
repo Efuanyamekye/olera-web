@@ -285,7 +285,6 @@ export const ACTIVITY_OUTCOMES = [
   "not_interested",
   "no_show",
   "meeting_rescheduled",
-  "re_engage",
 ] as const;
 
 export type ActivityOutcome = (typeof ACTIVITY_OUTCOMES)[number];
@@ -301,7 +300,6 @@ export const ACTIVITY_OUTCOME_LABELS: Record<ActivityOutcome, string> = {
   not_interested: "Not Interested",
   no_show: "No-show",
   meeting_rescheduled: "Meeting Rescheduled",
-  re_engage: "Re-engage",
 };
 
 // Which outcomes are available for each stage
@@ -311,7 +309,7 @@ export const STAGE_OUTCOMES: Record<PipelineStage, ActivityOutcome[]> = {
   new_claim: ["voicemail", "hung_up", "callback_requested", "left_message", "note"],
   meeting_scheduled: ["note", "interested", "not_interested", "no_show"],
   pitched: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
-  not_interested: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "interested"],
+  not_interested: ["note"],  // Stop calling them - only log notes. Self-conversion is automatic
   no_show: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
   upgrade_meeting: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "interested", "not_interested", "no_show"],
 };
@@ -322,7 +320,6 @@ export const STAGE_CHANGING_OUTCOMES: ActivityOutcome[] = [
   "interested",
   "not_interested",
   "no_show",
-  "re_engage",
 ];
 
 // What stage does each outcome transition to (from current stage)
@@ -338,7 +335,7 @@ export const OUTCOME_STAGE_TRANSITIONS: Record<ActivityOutcome, Partial<Record<P
   interested: {
     meeting_scheduled: "pitched",
     upgrade_meeting: "pitched",
-    not_interested: "pitched",
+    // not_interested removed - we don't call them, self-conversion is automatic
   },
   not_interested: {
     meeting_scheduled: "not_interested",
@@ -352,9 +349,6 @@ export const OUTCOME_STAGE_TRANSITIONS: Record<ActivityOutcome, Partial<Record<P
   },
   meeting_rescheduled: {
     no_show: "meeting_scheduled",
-  },
-  re_engage: {
-    not_interested: "new_claim",
   },
 };
 
@@ -370,5 +364,4 @@ export const OUTCOME_DESCRIPTIONS: Record<ActivityOutcome, string> = {
   not_interested: "Provider not interested",
   no_show: "Provider missed the meeting",
   meeting_rescheduled: "Provider rescheduled the meeting",
-  re_engage: "Try again, move back to New Claims",
 };
