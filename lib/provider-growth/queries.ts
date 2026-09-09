@@ -216,7 +216,8 @@ export interface CallStats {
 }
 
 /**
- * Get call stats for a list of tracking IDs.
+ * Get activity stats for a list of tracking IDs.
+ * Counts both legacy "call_attempted" and new "activity_logged" touchpoints.
  * Returns a Map of tracking_id -> { count, lastCallAt }.
  */
 export async function getCallStatsForTrackingIds(
@@ -228,8 +229,8 @@ export async function getCallStatsForTrackingIds(
 
   const db = getServiceClient();
 
-  // Fetch call_attempted touchpoints grouped by tracking_id
-  // We have to do this in batches to avoid URL length limits
+  // Fetch both call_attempted (legacy) and activity_logged (new) touchpoints
+  // Any activity logged means we're actively working on this provider
   const stats = new Map<string, CallStats>();
   const BATCH_SIZE = 100;
 
@@ -238,22 +239,22 @@ export async function getCallStatsForTrackingIds(
 
     const { data, error } = await db
       .from("provider_growth_touchpoints")
-      .select("tracking_id, created_at")
+      .select("tracking_id, created_at, touchpoint_type")
       .in("tracking_id", batchIds)
-      .eq("touchpoint_type", "call_attempted");
+      .in("touchpoint_type", ["call_attempted", "activity_logged"]);
 
     if (error) {
-      console.error("[provider-growth] Call stats query error:", error);
+      console.error("[provider-growth] Activity stats query error:", error);
       continue;
     }
 
-    // Count occurrences and track most recent call per tracking_id
+    // Count occurrences and track most recent activity per tracking_id
     for (const row of data ?? []) {
       const id = row.tracking_id;
       const existing = stats.get(id);
       if (existing) {
         existing.count++;
-        // Update lastCallAt if this call is more recent
+        // Update lastCallAt if this activity is more recent
         if (row.created_at > (existing.lastCallAt || "")) {
           existing.lastCallAt = row.created_at;
         }
