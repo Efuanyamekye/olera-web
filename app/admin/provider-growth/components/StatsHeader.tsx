@@ -56,7 +56,7 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
     {
       label: "Meetings Today",
       value: stats.meetings_today,
-      sublabel: "Scheduled",
+      sublabel: "Pending",
       highlight: stats.meetings_today > 0,
     },
   ];

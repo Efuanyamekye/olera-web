@@ -157,10 +157,13 @@ export async function getGrowthStats(): Promise<GrowthStats> {
       bothPaying++;
     }
 
-    // Count meetings for today
+    // Count meetings for today (only if outcome not yet logged)
+    // Once outcome is logged, pipeline_stage changes from meeting_scheduled/upgrade_meeting
     if (row.meeting_scheduled_at) {
       const meetingDate = new Date(row.meeting_scheduled_at);
-      if (meetingDate >= todayStart && meetingDate <= todayEnd) {
+      const isToday = meetingDate >= todayStart && meetingDate <= todayEnd;
+      const awaitingOutcome = row.pipeline_stage === "meeting_scheduled" || row.pipeline_stage === "upgrade_meeting";
+      if (isToday && awaitingOutcome) {
         meetingsToday++;
       }
     }
