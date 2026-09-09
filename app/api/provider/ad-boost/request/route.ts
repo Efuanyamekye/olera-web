@@ -6,6 +6,7 @@ import { getCampaignReceipt } from "@/lib/ad-boost/receipts.server";
 import { sendAdBoostRequestEmail } from "@/lib/ad-boost/notifications.server";
 import { sendSlackAlert, slackAdBoostRequested } from "@/lib/slack";
 import { BUDGET_VALUES } from "@/lib/ad-boost/estimate";
+import { detectMedjobsCatchment } from "@/lib/provider-growth/medjobs-eligibility";
 
 /**
  * Provider Paid Ad Boost (Managed Lead-Gen, concierge v1) — campaign request.
@@ -328,6 +329,94 @@ export async function POST(request: NextRequest) {
   if (insertError || !inserted) {
     console.error("[ad-boost/request] insert failed:", insertError);
     return NextResponse.json({ error: "Failed to save request" }, { status: 500 });
+  }
+
+  // ── Instant sync to provider_growth_tracking ──
+  // This ensures the provider appears in Provider Growth immediately, not after the hourly cron.
+  try {
+    const nowIso = new Date().toISOString();
+
+    // Check if tracking record exists
+    const { data: existingTracking } = await db
+      .from("provider_growth_tracking")
+      .select("id, ads_status")
+      .eq("business_profile_id", elig.profileId)
+      .maybeSingle();
+
+    if (existingTracking) {
+      // Update existing tracking record if ads_status is 'none'
+      if (existingTracking.ads_status === "none") {
+        await db
+          .from("provider_growth_tracking")
+          .update({
+            ads_status: "free_intro",
+            ads_free_intro_at: nowIso,
+            updated_at: nowIso,
+          })
+          .eq("id", existingTracking.id);
+
+        // Create touchpoint for audit trail
+        await db.from("provider_growth_touchpoints").insert({
+          tracking_id: existingTracking.id,
+          business_profile_id: elig.profileId,
+          touchpoint_type: "ads_converted",
+          details: {
+            ads_status: "free_intro",
+            campaign_id: inserted.id,
+            source: "ad_boost_request",
+            instant_sync: true,
+          },
+        });
+      }
+    } else {
+      // Create new tracking record for this provider
+      const medjobsEligibility = detectMedjobsCatchment(elig.city, elig.state);
+
+      // Fetch the actual claim date from business_profiles
+      const { data: profile } = await db
+        .from("business_profiles")
+        .select("created_at, source")
+        .eq("id", elig.profileId)
+        .single();
+
+      const claimedAt = profile?.created_at || nowIso;
+      const claimSource = profile?.source === "new_org_signup" ? "new_org_signup" : "email";
+
+      const { data: newTracking } = await db
+        .from("provider_growth_tracking")
+        .insert({
+          business_profile_id: elig.profileId,
+          claim_source: claimSource,
+          claimed_at: claimedAt,
+          pipeline_stage: "new_claim",
+          pipeline_stage_changed_at: claimedAt,
+          ads_status: "free_intro",
+          ads_free_intro_at: nowIso,
+          medjobs_eligible: medjobsEligibility.eligible,
+          medjobs_catchment_university: medjobsEligibility.university,
+        })
+        .select("id")
+        .single();
+
+      if (newTracking) {
+        // Create touchpoint for audit trail
+        await db.from("provider_growth_touchpoints").insert({
+          tracking_id: newTracking.id,
+          business_profile_id: elig.profileId,
+          touchpoint_type: "ads_converted",
+          details: {
+            ads_status: "free_intro",
+            campaign_id: inserted.id,
+            source: "ad_boost_request",
+            instant_sync: true,
+            tracking_created: true,
+          },
+        });
+      }
+    }
+  } catch (syncErr) {
+    // Non-blocking - don't fail the Ad Boost request if sync fails
+    console.error("[ad-boost/request] provider_growth_tracking sync failed:", syncErr);
   }
 
   // ── Notify the concierge team — only for actionable (eligible) requests. ──
