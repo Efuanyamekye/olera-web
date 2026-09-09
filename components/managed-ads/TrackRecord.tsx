@@ -77,10 +77,14 @@ export default function TrackRecord() {
           <dl className="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-4">
             {TILES.map((t) => (
               <div key={t.label}>
-                {/* Steps up from display-xs on the narrowest phones. At
-                    display-sm a 2-column tile leaves ~128px for "$60,300" in
-                    tabular figures, which is under 8px of slack before the
-                    number wraps mid-value. */}
+                {/* Do not raise the small-screen size back to display-sm.
+                    A 2-column tile at a 360px viewport gives each figure 128px,
+                    and "$60,300" in bold tabular figures measures 116px in
+                    New York but 131px in Georgia, which is the Windows
+                    fallback in this stack. It fits on a Mac and wraps
+                    mid-number on Windows, so checking it locally will not show
+                    you the failure. At display-xs Georgia measures 105px and
+                    clears even a 320px phone, with 3px to spare. */
                 <dt className="font-serif text-display-xs font-bold tabular-nums text-gray-900 sm:text-display-sm md:text-display-md">
                   {t.value}
                 </dt>
