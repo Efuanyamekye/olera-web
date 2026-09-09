@@ -73,10 +73,12 @@ export default function ManagedAdsHero({
             full default (TJ, 8 Sep 2026).
 
             The honesty work is done by HonestLimits instead, which says
-            outright that we have never run a Meta campaign and that Facebook
-            and Instagram are next. Keep that section in step with this strip:
-            if the strip ever implies a channel the limits section does not
-            account for, the page contradicts itself.
+            outright that no *provider* campaign has ever run on Meta. Keep that
+            section in step with this strip: if the strip ever implies a channel
+            the limits section does not account for, the page contradicts
+            itself. That is not hypothetical: it happened on 9 Sep 2026 when
+            TrackRecord began showing Olera's own Meta spend while the limits
+            section still read "we have never run a Meta campaign".
 
             TO CHANGE THE LIST: pass `platforms={[...]}` to override, where each
             slug matches a file in public/images/platform-logos. There is no
