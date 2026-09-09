@@ -15,6 +15,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
 import { withCronRun } from "@/lib/crons/run";
+import { detectMedjobsCatchment } from "@/lib/provider-growth/medjobs-eligibility";
 
 const CRON_SECRET = process.env.CRON_SECRET;
 const PILOT_DAYS = 90;
@@ -58,8 +59,87 @@ export async function GET(request: NextRequest) {
       checked: 0,
       ads_updated: 0,
       medjobs_updated: 0,
+      tracking_created: 0,
       errors: [] as string[],
     };
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // STEP 1: Create tracking records for providers with ad campaigns who
+    // aren't yet in provider_growth_tracking (fills the sync gap)
+    // ─────────────────────────────────────────────────────────────────────────
+    try {
+      // Get all unique provider_ids from ad_campaign_requests
+      const { data: adProviders, error: adProvidersError } = await db
+        .from("ad_campaign_requests")
+        .select("provider_id")
+        .is("deleted_at", null)
+        .neq("status", "cancelled");
+
+      if (adProvidersError) {
+        console.error("[cron/provider-growth-conversion-sync] Ad providers query error:", adProvidersError);
+      } else if (adProviders && adProviders.length > 0) {
+        // Get unique provider IDs
+        const adProviderIds = [...new Set(adProviders.map(p => p.provider_id))];
+
+        // Find which ones are missing from tracking
+        const { data: existingTracking } = await db
+          .from("provider_growth_tracking")
+          .select("business_profile_id")
+          .in("business_profile_id", adProviderIds);
+
+        const existingIds = new Set((existingTracking || []).map(t => t.business_profile_id));
+        const missingIds = adProviderIds.filter(id => !existingIds.has(id));
+
+        if (missingIds.length > 0) {
+          console.log(`[cron/provider-growth-conversion-sync] Found ${missingIds.length} ad providers without tracking records`);
+
+          // Get business profile info for these providers (for claim source detection)
+          const { data: profiles } = await db
+            .from("business_profiles")
+            .select("id, city, state, source, claim_state, created_at")
+            .in("id", missingIds.slice(0, 50)); // Limit to avoid timeout
+
+          // Create tracking records for missing providers
+          for (const profile of (profiles || [])) {
+            // Only create tracking for claimed providers
+            if (profile.claim_state !== "claimed") continue;
+
+            // Detect MedJobs eligibility using proper catchment detection
+            const medjobsEligibility = detectMedjobsCatchment(profile.city, profile.state);
+
+            const { error: insertError } = await db
+              .from("provider_growth_tracking")
+              .insert({
+                business_profile_id: profile.id,
+                claim_source: profile.source === "new_org_signup" ? "new_org_signup" : "email",
+                claimed_at: profile.created_at,
+                medjobs_eligible: medjobsEligibility.eligible,
+                medjobs_catchment_university: medjobsEligibility.university,
+                pipeline_stage: "new_claim",
+                pipeline_stage_changed_at: profile.created_at,
+                // ads_status will be synced in STEP 2 below
+              });
+
+            if (insertError) {
+              // Ignore duplicate key errors (race condition with other processes)
+              if (insertError.code !== "23505") {
+                console.error(`[cron/provider-growth-conversion-sync] Failed to create tracking for ${profile.id}:`, insertError);
+              }
+            } else {
+              results.tracking_created++;
+              console.log(`[cron/provider-growth-conversion-sync] Created tracking record for ad provider: ${profile.id}`);
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error("[cron/provider-growth-conversion-sync] Step 1 (create missing) error:", err);
+      // Continue with step 2 even if step 1 fails
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // STEP 2: Sync conversion status for existing tracking records
+    // ─────────────────────────────────────────────────────────────────────────
 
     // Get tracking records that might need updates (with limit to avoid timeout)
     // Check for:

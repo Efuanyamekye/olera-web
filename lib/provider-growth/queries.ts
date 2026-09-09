@@ -78,6 +78,9 @@ export interface ProviderGrowthWithProfile extends ProviderGrowthTracking {
   // Call tracking
   call_count?: number;
   last_call_at?: string | null;
+  // Ad campaign details (from ad_campaign_requests)
+  ads_campaign_status?: "pending_profile" | "requested" | "scheduled" | "live" | "ended" | null;
+  ads_campaign_count?: number;
 }
 
 export interface GrowthStats {
@@ -222,6 +225,79 @@ export async function getCallStatsForTrackingIds(
   }
 
   return stats;
+}
+
+// Ad campaign status priority: live > scheduled > requested > pending_profile > ended
+const CAMPAIGN_STATUS_PRIORITY: Record<string, number> = {
+  live: 5,
+  scheduled: 4,
+  requested: 3,
+  pending_profile: 2,
+  ended: 1,
+};
+
+type CampaignStatusType = "pending_profile" | "requested" | "scheduled" | "live" | "ended";
+
+interface CampaignInfo {
+  status: CampaignStatusType;
+  count: number;
+}
+
+/**
+ * Get ad campaign status for a list of provider IDs.
+ * Returns a Map of business_profile_id -> { status, count }.
+ *
+ * For providers with multiple campaigns, returns the "most active" status:
+ * live > scheduled > requested > pending_profile > ended
+ */
+async function getAdCampaignStatusForProviders(
+  providerIds: string[]
+): Promise<Map<string, CampaignInfo>> {
+  if (providerIds.length === 0) {
+    return new Map();
+  }
+
+  const db = getServiceClient();
+  const results = new Map<string, CampaignInfo>();
+  const BATCH_SIZE = 100;
+
+  for (let i = 0; i < providerIds.length; i += BATCH_SIZE) {
+    const batchIds = providerIds.slice(i, i + BATCH_SIZE);
+
+    const { data, error } = await db
+      .from("ad_campaign_requests")
+      .select("provider_id, status")
+      .in("provider_id", batchIds)
+      .is("deleted_at", null)
+      .neq("status", "cancelled");
+
+    if (error) {
+      console.error("[provider-growth] Ad campaign query error:", error);
+      continue;
+    }
+
+    // Group by provider_id and find the "most active" status
+    for (const row of data ?? []) {
+      const existing = results.get(row.provider_id);
+      const currentPriority = CAMPAIGN_STATUS_PRIORITY[row.status] || 0;
+
+      if (existing) {
+        existing.count++;
+        // Update status if this campaign has higher priority
+        const existingPriority = CAMPAIGN_STATUS_PRIORITY[existing.status] || 0;
+        if (currentPriority > existingPriority) {
+          existing.status = row.status as CampaignStatusType;
+        }
+      } else {
+        results.set(row.provider_id, {
+          status: row.status as CampaignStatusType,
+          count: 1,
+        });
+      }
+    }
+  }
+
+  return results;
 }
 
 /**
@@ -503,6 +579,26 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
       last_call_at: stats?.lastCallAt || null,
     };
   });
+
+  // Fetch ad campaign status for providers with ads_status !== 'none'
+  const providersWithAds = providers.filter(p => p.ads_status !== "none");
+  if (providersWithAds.length > 0) {
+    const profileIdsWithAds = providersWithAds.map(p => p.business_profile_id);
+    const campaignData = await getAdCampaignStatusForProviders(profileIdsWithAds);
+
+    // Merge campaign data into providers
+    providers = providers.map(p => {
+      const campaign = campaignData.get(p.business_profile_id);
+      if (campaign) {
+        return {
+          ...p,
+          ads_campaign_status: campaign.status,
+          ads_campaign_count: campaign.count,
+        };
+      }
+      return p;
+    });
+  }
 
   // Filter by hasCallAttempts if specified
   if (hasCallAttempts !== undefined) {
