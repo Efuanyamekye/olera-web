@@ -227,8 +227,8 @@ export async function getCallStatsForTrackingIds(
 /**
  * Get counts for New Claims subtabs (Not Contacted | Converted | In Progress).
  * - notContacted: no calls AND not converted
- * - converted: has free trial (any call status)
- * - inProgress: has calls AND not converted
+ * - converted: has free trial AND no calls (self-converted, not yet contacted)
+ * - inProgress: has calls (regardless of conversion status - we're actively working on them)
  */
 export async function getNewClaimSubtabCounts(): Promise<{
   notContacted: number;
@@ -252,38 +252,44 @@ export async function getNewClaimSubtabCounts(): Promise<{
     return { notContacted: 0, converted: 0, inProgress: 0 };
   }
 
-  // Separate converted vs non-converted providers
-  const convertedProviders: string[] = [];
-  const nonConvertedProviders: string[] = [];
+  // Get call stats for ALL new_claim providers
+  const allIds = newClaims.map((c) => c.id);
+  const callStats = await getCallStatsForTrackingIds(allIds);
+
+  // Categorize each provider
+  let notContacted = 0;
+  let converted = 0;
+  let inProgress = 0;
 
   for (const claim of newClaims) {
+    const hasCalls = (callStats.get(claim.id)?.count || 0) > 0;
+    // "Converted" = started free trial (not yet paying)
     const isConverted =
       claim.ads_status === "free_intro" ||
       claim.medjobs_status === "in_pilot" ||
       claim.medjobs_status === "pilot_expired";
-    if (isConverted) {
-      convertedProviders.push(claim.id);
-    } else {
-      nonConvertedProviders.push(claim.id);
-    }
-  }
+    // "Not converted" = no free trial started (ads_status=none, medjobs not in trial)
+    // This matches the notConverted filter in listProviders
+    const isNotConverted =
+      claim.ads_status === "none" &&
+      claim.medjobs_status !== "in_pilot" &&
+      claim.medjobs_status !== "pilot_expired";
 
-  // Get call stats for non-converted providers only
-  const callStats = await getCallStatsForTrackingIds(nonConvertedProviders);
-
-  // Count non-converted providers with/without calls
-  let inProgress = 0;
-  for (const id of nonConvertedProviders) {
-    if ((callStats.get(id)?.count || 0) > 0) {
+    if (hasCalls) {
+      // Any provider with call attempts goes to In Progress
       inProgress++;
+    } else if (isConverted) {
+      // Converted but no calls yet - self-converted, waiting for outreach
+      converted++;
+    } else if (isNotConverted) {
+      // Not converted and no calls - fresh claim
+      notContacted++;
     }
+    // Note: Providers with ads_status="subscribed" or medjobs_status="subscribed"
+    // but no calls are not counted in any subtab (they should be in Paying tab)
   }
 
-  return {
-    notContacted: nonConvertedProviders.length - inProgress,
-    converted: convertedProviders.length,
-    inProgress,
-  };
+  return { notContacted, converted, inProgress };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -181,12 +181,12 @@ export default function ProviderGrowthPage() {
             params.set("hasCallAttempts", "false");
             params.set("notConverted", "true");
           } else if (activeTab.subTab === "converted") {
-            // Converted: has free trial (any call status)
+            // Converted: has free trial AND no calls (self-converted, not yet contacted)
             params.set("converted", "true");
+            params.set("hasCallAttempts", "false");
           } else if (activeTab.subTab === "in_progress") {
-            // In progress: has calls AND not converted
+            // In progress: has calls (regardless of conversion - we're actively working on them)
             params.set("hasCallAttempts", "true");
-            params.set("notConverted", "true");
           }
         }
       } else {
