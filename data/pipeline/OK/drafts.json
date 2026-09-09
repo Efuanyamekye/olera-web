@@ -1805,7 +1805,7 @@
           {
             "step": 1,
             "title": "Choose your application method",
-            "description": "For seniors: call OK-SPLASH helpline at 1-855-488-6814. Or apply online at https://bit.ly/46fSE13. General intake: 1-888-534-5243 or 918-428-4357 (Monday-Thursday 9am-4pm only, no voicemails)."
+            "description": "For seniors: call the OK-SPLASH helpline at 1-855-488-6814, Monday to Thursday, 9-11:30am and 1-4pm. In Tulsa, 918-308-5295. You can also email oksplash@laok.org with just your name and phone number. There is no income test for the senior program."
           },
           {
             "step": 2,
@@ -1821,40 +1821,37 @@
         "processingTime": null,
         "waitlist": null,
         "tip": "Call Monday-Thursday 9am-4pm only, they don't take voicemails, so you must reach them during these hours.",
-        "urls": [
-          {
-            "label": "Online Application",
-            "url": "https://bit.ly/46fSE13"
-          }
-        ]
+        "urls": []
       },
       "documentsNeeded": [
-        "Proof of income for all household members",
-        "Details about household size",
-        "Documentation of your legal issue",
-        "Information about any assets you own"
+        "Your name, phone number, and county",
+        "Your age. You must be 60 or older, and there is no income test for the senior program.",
+        "A description of the legal problem, and any paperwork about it (a court notice, a letter, a lease, or a notice from Social Security, Medicare, or a creditor)"
       ],
       "contacts": [
         {
-          "label": "OK-SPLASH Seniors Helpline",
+          "label": "OK-SPLASH Seniors Helpline (start here)",
           "phone": "1-855-488-6814",
-          "description": "Legal aid helpline specifically for seniors 60+",
-          "hours": null
+          "description": "Oklahoma Sixty-Plus Legal Aid Services. Free for anyone 60 or older, with no income test. Takes applications by phone. Tulsa direct: 918-308-5295. Email oksplash@laok.org with only your name and phone number.",
+          "hours": "Mon-Thu 9-11:30am and 1-4pm CT. No Friday hours published."
         },
         {
-          "label": "General Legal Aid Intake",
+          "label": "Oklahoma Aging and Disability Info-line",
+          "phone": "1-800-211-2116",
+          "description": "Routes you to your Area Agency on Aging. Information and referral only, not an application line. Better first call for a general care-funding question.",
+          "hours": "Hours not published"
+        },
+        {
+          "label": "Legal Aid Services of Oklahoma general intake",
           "phone": "1-888-534-5243",
-          "description": "Main intake line for all legal aid services",
-          "hours": "Monday-Thursday 9am-4pm (no voicemails)"
-        },
-        {
-          "label": "Alternative Intake Line",
-          "phone": "918-428-4357",
-          "description": "Secondary intake number",
-          "hours": "Monday-Thursday 9am-4pm (no voicemails)"
+          "description": "The general low-income program, which does apply an income test. Use the OK-SPLASH line above if you are 60 or older.",
+          "hours": "Mon-Thu 9am-4pm CT"
         }
       ],
-      "applicationNotes": null,
+      "applicationNotes": [
+        "The senior program is not income-tested. Do not gather income or asset papers before calling.",
+        "If there is a hearing or an appeal, the deadline on the notice matters more than anything else. Say so at the start of the call."
+      ],
       "relatedPrograms": [
         "SNAP Food Benefits",
         "Low Income Home Energy Assistance Program (LIHEAP)",
@@ -1887,7 +1884,8 @@
       "phone": "1-855-488-6814",
       "sourceUrl": "https://legalaidok.org/apply/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "advantage-waiver-program",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-31T10:40:13.377Z
+ * Last updated: 2026-09-09T05:48:18.620Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1847,8 +1847,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60 or older and lives on Social Security or retirement income only, South Carolina's Elderly Simplified Application Project (ESAP) provides monthly SNAP food assistance with far less paperwork than standard food assistance programs. Because ESAP is designed specifically for elderly households with no earned income, your loved one won't need to attend recertification interviews or submit monthly reports, once approved, benefits continue for 36 months.\n\nESAP has achieved a 93% approval rate since 2015, meaning virtually all eligible seniors who apply receive benefits. The program requires all household members to be 60 or older with zero earned income from work. Your loved one can receive Social Security, pensions, or other retirement income and still qualify, the key restriction is no wages or self-employment income.",
-      "savingsRange": "",
-      "savingsSource": "SNAP food assistance benefits vary by household circumstances",
+      "savingsRange": "Up to $298/month for one person (FY2026 federal maximum), minimum $24/month",
+      "savingsSource": "USDA FY2026 allotments for the 48 contiguous states, effective October 1, 2025 through September 30, 2026. $298 is the maximum for a one-person household and is paid only when countable net income is at or near zero; most households receive less.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
@@ -1894,8 +1894,8 @@ export const drafts: PipelineStateDrafts = {
             "description": "DSS will notify you in writing of their decision. If approved, benefits are certified for 36 months with no periodic reporting required."
           }
         ],
-        "processingTime": "Processing time not specified, you'll be notified in writing of the decision",
-        "waitlist": null,
+        "processingTime": "SNAP applications are decided within 30 days, or 7 days if the household qualifies for expedited service. Mail the form, then wait for the interview notice. Once approved, ESAP certifies you for three years instead of the usual annual renewal.",
+        "waitlist": "There is no waiting list. Benefits run from the date you file, so file first and send anything missing later.",
         "tip": "Submit all verification documents with your initial application to avoid delays, ESAP requires limited verification but what you do submit should be complete.",
         "urls": [
           {
@@ -1905,34 +1905,26 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "documentsNeeded": [
-        "Social Security cards for all household members",
-        "Proof of age (birth certificate, driver's license, or state ID)",
-        "Most recent Social Security award letter",
-        "Pension or retirement income statements",
-        "Bank statements for all accounts (amount not specified)",
-        "Proof of residence in South Carolina",
-        "Medicare card if applicable",
-        "Any other income documentation (interest, dividends, rental income)"
+        "Nothing is required to start. The application can be filed with just your name, address, and a signature, and that locks in your start date.",
+        "Proof of out-of-pocket medical expenses, if you want that deduction counted. This is the one thing the form asks you to enclose.",
+        "Your household's income information",
+        "Social Security numbers for the people applying",
+        "Proof of residence in South Carolina"
       ],
       "contacts": [
         {
-          "label": "SC DSS ESAP line",
+          "label": "SC DSS ESAP application request line (start here)",
           "phone": "1-888-898-0055",
-          "description": "Request an ESAP application by mail or get application help",
-          "hours": "Mon-Fri business hours"
-        },
-        {
-          "label": "South Carolina DSS",
-          "phone": null,
-          "description": "Contact your local DSS office for ESAP applications and interviews",
-          "hours": "Varies by office"
+          "description": "Call to have an ESAP application mailed to you, or for help filling one in. This line cannot take your application. Completed applications go to ESAP, SC Department of Social Services, P.O. Box 100203, Columbia, SC 29202-3229.",
+          "hours": "Hours not published"
         }
       ],
       "applicationNotes": [
-        "ESAP has a dedicated caseworker unit statewide that specializes in serving seniors, so your case will be handled by staff trained in elderly-specific needs",
-        "The 36-month certification period means once you're approved, you won't need to reapply for three years, just complete a simple one-page mail-in form annually",
-        "If any household member is under 60 or has any earned income from work, the household cannot use ESAP and must apply through regular SNAP instead",
-        "You cannot receive both ESAP and regular SNAP (SCCAP) at the same time, households must choose one program"
+        "South Carolina publishes two different age rules for ESAP. The public DSS webpage says 65 or older; the SNAP manual (Volume 69, section 19.11) and the ESAP application form itself both say 60 or older. Ask on the call which applies to your household rather than assuming you do not qualify.",
+        "ESAP also requires that no one in the household has earned income, and that no one is already getting SNAP through SCCAP.",
+        "An interview is required at initial application. A notice comes after you mail the form.",
+        "Most eligibility information is confirmed through state and federal computer matches, so you will usually not be asked to verify anything extra unless something looks questionable.",
+        "ESAP has a dedicated caseworker unit statewide that specializes in serving seniors, so your case will be handled by staff trained in elderly-specific needs"
       ],
       "relatedPrograms": [
         "South Carolina LIHEAP (energy assistance)",
@@ -1983,11 +1975,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "BowlFood",
-      "phone": null,
+      "phone": "1-888-898-0055",
       "sourceUrl": "https://dss.sc.gov/assistance-programs/snap/how-do-i-apply/help-for-the-elderly/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-31"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "senior-farmers-market-nutrition",
@@ -2001,8 +1993,8 @@ export const drafts: PipelineStateDrafts = {
         "stateVariation": false
       },
       "intro": "If your loved one is 60 or older and has limited income, South Carolina's Senior Farmers Market Nutrition Program provides $50 in vouchers each year to buy fresh fruits, vegetables, honey, and herbs at farmers' markets. The program gives five $10 vouchers that work at authorized farmers' markets, roadside stands, and community-supported agriculture programs from May through October.\n\nYour loved one must have a household income below 185% of federal poverty guidelines (approximately $2,769/month for a single person in 2024) and live in one of the 46 participating South Carolina counties. Because benefits are distributed first-come, first-served, eligible seniors should apply early when the season opens in May. Applications must be completed in person at approved distribution sites in your loved one's county of residence.",
-      "savingsRange": "$50/year in 2026",
-      "savingsSource": "Five $10 vouchers per participant per year from SC Department of Social Services",
+      "savingsRange": "$50 per eligible person per year (five $10 checks)",
+      "savingsSource": "USDA seasonal grant program administered by SC DSS. Each eligible participant receives five $10 checks, a fixed $50 benefit. Two eligible seniors in one household each receive $50. Issued first-come, first-served.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -2059,8 +2051,8 @@ export const drafts: PipelineStateDrafts = {
             "description": "If approved, receive five $10 vouchers immediately. If program is full, you may be placed on a waiting list or asked to return when more vouchers become available."
           }
         ],
-        "processingTime": "Immediate processing at distribution sites, but benefits issued first-come, first-served",
-        "waitlist": "Possible waitlist placement if county allocation is exhausted, specific timelines vary by county",
+        "processingTime": "The 2026 distribution events all ran in June and have ended. Vouchers already issued must be redeemed by October 15, 2026. Call the coordinator to ask about the waiting list and 2027 dates.",
+        "waitlist": "Benefits are first-come, first-served. An application can be approved, waitlisted, or denied at the event.",
         "tip": "Apply early in the season (May) because vouchers are limited and distributed first-come, first-served.",
         "urls": [
           {
@@ -2071,28 +2063,29 @@ export const drafts: PipelineStateDrafts = {
       },
       "documentsNeeded": [
         "Valid South Carolina driver's license or state-issued identification card",
-        "Knowledge of annual gross household income amount",
-        "Knowledge of total household size (number of people living in the home)"
+        "Your annual gross household income. You self-declare it, no proof required. The limit is 185% of the federal poverty level.",
+        "Total household size (number of people living in the home)",
+        "If someone is applying on your behalf: their own photo ID, a copy of your ID, and your written signed permission. One person can represent at most two others."
       ],
       "contacts": [
         {
-          "label": "SFMNP Program Coordinator",
+          "label": "SFMNP Program Coordinator, SC DSS (start here)",
           "phone": "(803) 898-1760",
-          "description": "Willie Nixon, main program contact for location information and general questions",
-          "hours": "Business hours"
+          "description": "Information only. Applications are taken in person at county distribution events. SC DSS asks the public not to call the DSS Connect Call Center about this program. Written questions: SFMNP-Applications@dss.sc.gov",
+          "hours": "Mon-Fri 8:30am-5pm ET"
         },
         {
           "label": "SC 2-1-1",
           "phone": "2-1-1",
-          "description": "Free helpline for all South Carolina social services and benefit programs",
+          "description": "General referral line.",
           "hours": "24 hours, 7 days a week"
         }
       ],
       "applicationNotes": [
+        "This program runs on a season. Applications are taken in person at a distribution event in your county of residence, there is no online application, and every published 2026 event ended June 30. Calling now gets you information and possibly a waiting-list place, not vouchers.",
+        "Eligibility is age 60+ on the date of application, residence in one of the 46 participating counties, and household income at or under 185% of the federal poverty level, self-declared.",
         "The program only runs May 1 through October 15 each year, the 2025 season has ended, next applications open Summer 2026",
-        "Even if your loved one qualifies, vouchers may not be available due to first-come, first-served distribution",
-        "Vouchers can only be used at authorized vendors, not all farmers' markets participate in the program",
-        "Income limits change annually based on federal poverty guidelines, so verify current thresholds when applying"
+        "Even if your loved one qualifies, vouchers may not be available due to first-come, first-served distribution"
       ],
       "relatedPrograms": [
         "SNAP (Supplemental Nutrition Assistance Program)",
@@ -2146,7 +2139,8 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(803) 898-1760",
       "sourceUrl": "https://dss.sc.gov/assistance-programs/food-and-nutrition-programs/senior-farmers-market/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "vantage-point",

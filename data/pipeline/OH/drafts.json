@@ -255,7 +255,7 @@
           {
             "step": 1,
             "title": "Call for initial screening",
-            "description": "Contact Central Ohio Area Agency on Aging at (614) 645-7250 (select Screening option) or statewide Ohio Department of Aging at 1-800-266-4346. They'll assess basic Medicaid eligibility and care needs over the phone."
+            "description": "Call 1-866-243-5678 to be connected to the Area Agency on Aging serving your community, or contact your local agency directly. They assess basic Medicaid eligibility and care needs over the phone."
           },
           {
             "step": 2,
@@ -273,8 +273,8 @@
             "description": "Once approved, your care coordinator develops a customized service plan with local providers. Services begin after plan approval and provider assignments."
           }
         ],
-        "processingTime": "Varies by assessment complexity and Medicaid eligibility determination",
-        "waitlist": null,
+        "processingTime": "Ohio does not publish a processing time. A nursing-facility level-of-care assessment and a long-term-care Medicaid financial determination both have to finish before services start.",
+        "waitlist": "Ohio publishes a unified waiting list mechanism (rule 173-44-04) but no waiting time. Ask your Area Agency on Aging what the wait looks like locally.",
         "tip": "Have your loved one's primary care physician ready to confirm they need home care services, medical approval is required for program entry.",
         "urls": [
           {
@@ -284,12 +284,12 @@
         ]
       },
       "documentsNeeded": [
-        "Social Security cards for your loved one and spouse",
-        "Medicare card",
-        "Medicaid card if already enrolled",
-        "Most recent Social Security award letter",
+        "Proof of age (driver's license, state ID, or birth certificate) showing your loved one is 60 or older",
+        "Most recent Social Security award letter and any pension or retirement income statements",
         "Bank account details for every account: the bank name, account type, and current balance. A recent statement is the easiest proof.",
-        "Pension or retirement income statements",
+        "Medicaid card if already enrolled",
+        "Medicare card if they have one (Medicare is not required for this program)",
+        "Social Security cards for your loved one and spouse",
         "Property tax statements or deed if homeowner",
         "Life insurance policies with cash values",
         "Vehicle titles and registration",
@@ -302,28 +302,28 @@
       ],
       "contacts": [
         {
-          "label": "Ohio Department of Aging",
-          "phone": "1-800-266-4346",
-          "description": "Statewide PASSPORT screening and information",
-          "hours": "Mon-Fri 8am-5pm ET"
+          "label": "Ohio Area Agency on Aging locator (start here)",
+          "phone": "1-866-243-5678",
+          "description": "Connects you to the Area Agency on Aging serving your community, which is the agency that does the PASSPORT screening and enrollment.",
+          "hours": "Hours not published; local agency hours vary"
         },
         {
           "label": "Central Ohio Area Agency on Aging",
           "phone": "(614) 645-7250",
-          "description": "Franklin County PASSPORT screening (select Screening option)",
+          "description": "PASSPORT Intake. Select the Screening option.",
           "hours": "Mon-Fri 8am-5pm ET"
         },
         {
-          "label": "Ohio 2-1-1",
-          "phone": "2-1-1",
-          "description": "Find your local Area Agency on Aging",
+          "label": "Ohio Department of Aging",
+          "phone": "1-800-266-4346",
+          "description": "General state aging information. Not PASSPORT intake.",
+          "hours": "Mon-Fri 8am-5pm ET"
+        },
+        {
+          "label": "Relay Ohio (TTY)",
+          "phone": "711",
+          "description": "Dial 711 and use 614-466-5500.",
           "hours": "24 hours, 7 days a week"
-        },
-        {
-          "label": "TTY Line",
-          "phone": "1-614-466-6190",
-          "description": "TTY access for hearing impaired",
-          "hours": "Mon-Fri 8am-5pm ET"
         }
       ],
       "applicationNotes": [
@@ -383,11 +383,11 @@
         "visualTone": "editorial"
       },
       "icon": "House",
-      "phone": "1-800-266-4346",
+      "phone": "1-866-243-5678",
       "sourceUrl": "https://aging.ohio.gov/passport",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "pace-all-inclusive-care",
@@ -1522,14 +1522,14 @@
       },
       "intro": "If your loved one is 60+ and homebound or unable to prepare meals due to health issues, Ohio's Aging Network coordinates home-delivered meal services. These programs are organized locally, so service details such as delivery schedules (often Monday to Friday) and specific meal types (like diabetic or renal-friendly) will vary by the provider in your county.\n\nOhio is served by 12 regional Area Agencies on Aging (AAAs) that oversee services for all 88 counties. Because these programs are locally managed, there is no single statewide office or application. You must contact the Area Agency on Aging that serves your loved one's specific county to request a functional assessment.\n\nFunding models vary significantly by location. Many programs receive public funding and request a voluntary contribution rather than a set fee, and no one is denied service solely based on an inability to contribute. Other programs may operate on a private-pay basis or be covered by specific insurance plans such as Medicaid waivers or Medicare Advantage. Always ask your local agency about their specific cost structure during your intake interview.",
       "savingsRange": "",
-      "savingsSource": "Free or low-cost service",
+      "savingsSource": "Federal law prohibits charging for Older Americans Act home-delivered meals. A voluntary contribution may be invited, and no one can be denied meals for not contributing.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
           "Homebound or unable to prepare meals",
           "Ohio resident",
-          "May have sliding fee co-pay"
+          "No charge. A voluntary donation may be invited, and it cannot be required."
         ],
         "ageRequirement": "60+",
         "incomeTable": null,
@@ -1571,8 +1571,8 @@
             "description": "Special diets like diabetic or renal require an order from a licensed prescriber (doctor, dietitian)."
           }
         ],
-        "processingTime": null,
-        "waitlist": "Possible regional waitlists depending on local provider capacity",
+        "processingTime": "Varies by Area Agency on Aging. An assessment comes first.",
+        "waitlist": "Ask your Area Agency on Aging whether there is a local waiting list.",
         "tip": "Have your loved one's medical information ready, providers need to understand their functional limitations and any dietary restrictions.",
         "urls": [
           {
@@ -1584,35 +1584,40 @@
       "documentsNeeded": [
         "Proof of age (birth certificate, driver's license, or state ID)",
         "Proof of Ohio residency (utility bill, lease agreement, or mail)",
-        "Income documentation for sliding fee determination (Social Security award letter, pension statements)",
-        "Medical information documenting functional limitations or homebound status",
-        "Diet order from licensed prescriber for therapeutic meals (diabetic, renal, etc.)",
+        "A description of what makes shopping or cooking hard right now, and any diet restrictions",
+        "Diet order from a licensed prescriber for therapeutic meals (diabetic, renal, etc.)",
         "Medicaid or PASSPORT enrollment information if applicable",
         "Emergency contact information",
         "List of current medications and food allergies"
       ],
       "contacts": [
         {
-          "label": "Ohio Department of Aging",
-          "phone": "1-800-266-4346",
-          "description": "Statewide aging services information and local AAA referrals",
-          "hours": "Business hours weekdays"
+          "label": "Ohio Area Agency on Aging locator (start here)",
+          "phone": "1-866-243-5678",
+          "description": "The line Ohio's own help centre gives for \"How can I get help with meals?\" Connects you to the Area Agency on Aging serving your community.",
+          "hours": "Hours not published; local agency hours vary"
         },
         {
           "label": "Franklin County Senior Options",
           "phone": "(614) 525-6200",
-          "description": "Meal delivery enrollment for Franklin County residents",
-          "hours": "Monday-Friday 9AM-4:30PM"
+          "description": "Local provider.",
+          "hours": "Mon-Fri 9am-4:30pm ET"
         },
         {
           "label": "Vantage Aging (Northeast Ohio)",
           "phone": "(330) 253-4597",
-          "description": "Serves multiple Northeast Ohio counties. Main office (330) 253-4597 or toll-free 1-800-554-5335",
-          "hours": "Business hours weekdays"
+          "description": "Local provider.",
+          "hours": "Hours not published"
+        },
+        {
+          "label": "Ohio Department of Aging",
+          "phone": "1-800-266-4346",
+          "description": "General state aging information.",
+          "hours": "Mon-Fri 8am-5pm ET"
         }
       ],
       "applicationNotes": [
-        "Each county has different providers and fee structures, Franklin County has sliding fee co-pays while Geauga County requests donations only",
+        "Each county has different providers. Federal law bars charging for Older Americans Act home-delivered meals, so providers invite a voluntary donation instead. No one can be denied meals for not donating.",
         "Therapeutic diets like diabetic or renal meals require a doctor's order and may have limited availability",
         "If your loved one has PASSPORT Medicaid waiver, meal delivery may be covered as part of their waiver services",
         "Some providers offer both hot daily meals and weekly frozen meal deliveries, ask about options when you call"
@@ -1667,11 +1672,11 @@
         "visualTone": "editorial"
       },
       "icon": "BowlFood",
-      "phone": "1-800-266-4346",
+      "phone": "1-866-243-5678",
       "sourceUrl": "https://aging.ohio.gov/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "nfcsp-caregiver-support",

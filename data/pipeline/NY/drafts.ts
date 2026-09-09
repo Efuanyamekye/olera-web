@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-06T12:14:31.528Z
+ * Last updated: 2026-09-09T05:48:18.612Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -392,15 +392,47 @@ export const drafts: PipelineStateDrafts = {
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
-        "type": "local",
+        "type": "state",
         "stateVariation": false,
         "localEntities": [
           {
-            "name": "ElderONE (Rochester Regional Health): Monroe, Ontario, Wayne Counties",
+            "name": "ArchCare Senior Life: Westchester, Bronx, New York, Richmond, Rockland (partial) — (866) 263-9083",
             "type": "service-area"
           },
           {
-            "name": "ArchCare Senior Life PACE: Bronx (900 Intervale Avenue, Bronx, NY 10459), Westchester",
+            "name": "Catholic Health-LIFE: Erie — (888) 845-0247",
+            "type": "service-area"
+          },
+          {
+            "name": "CenterLight Healthcare PACE: Bronx, Kings, Nassau, New York, Queens, Richmond, Suffolk (partial), Westchester — (833) 252-2737",
+            "type": "service-area"
+          },
+          {
+            "name": "Complete Senior Care: Niagara — (888) 303-4333",
+            "type": "service-area"
+          },
+          {
+            "name": "Eddy SeniorCare: Albany, Rensselaer, Schenectady (all partial) — (855) 376-7888",
+            "type": "service-area"
+          },
+          {
+            "name": "Fallon Health Weinberg PACE: Erie, Niagara — (855) 665-1113",
+            "type": "service-area"
+          },
+          {
+            "name": "ElderONE: Monroe, Ontario, Wayne — (855) 457-4636",
+            "type": "service-area"
+          },
+          {
+            "name": "PACE CNY: Onondaga — (888) 728-7223",
+            "type": "service-area"
+          },
+          {
+            "name": "Total Senior Care: Allegany, Cattaraugus, Chautauqua — (866) 939-8613",
+            "type": "service-area"
+          },
+          {
+            "name": "PACE at Hudson Headwaters: Saratoga, Warren, Washington — (833) 499-7223",
             "type": "service-area"
           }
         ]
@@ -452,8 +484,8 @@ export const drafts: PipelineStateDrafts = {
             "description": "If approved, your loved one's Medicare and Medicaid benefits will be managed through the PACE plan. Once enrolled, the PACE organization becomes the sole provider for all covered medical, social, and long-term care services."
           }
         ],
-        "processingTime": null,
-        "waitlist": null,
+        "processingTime": "New York does not publish a processing time. New York Medicaid Choice can explain the steps and connect you to the plan; the plan itself handles enrollment.",
+        "waitlist": "New York publishes no waiting list for PACE. Whether a plan can enrol your loved one depends on the county they live in, so confirm coverage on the first call.",
         "tip": "PACE becomes your loved one's sole Medicare and Medicaid provider, they can't use other plans while enrolled, but can disenroll anytime.",
         "urls": [
           {
@@ -468,7 +500,7 @@ export const drafts: PipelineStateDrafts = {
       },
       "documentsNeeded": [
         "Valid government-issued photo ID or birth certificate to verify age 55+",
-        "Proof of residency in PACE service area (utility bill, lease, or mail within last 30 days)",
+        "Proof that your loved one lives in a PACE plan's service area (utility bill, lease, or mail)",
         "Medicaid card (if applicable) or proof of Medicaid eligibility",
         "Medicare card if they have one (Medicare is not required for this program)",
         "Social Security award letter or other proof of income",
@@ -482,22 +514,28 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "ElderONE (Rochester Region)",
-          "phone": "(585) 922-2831",
-          "description": "PACE services for Monroe, Ontario, Wayne Counties through Rochester Regional Health",
-          "hours": "Monday–Friday, 8:30 a.m. – 5:00 p.m. (care services operate 24/7)"
-        },
-        {
-          "label": "ArchCare Senior Life PACE",
-          "phone": "(855) 951-8873",
-          "description": "PACE services for Bronx, Westchester, and other NYC-area locations at 900 Intervale Avenue, Bronx, NY 10459",
-          "hours": "Monday–Friday, 8:30 a.m. – 5:00 p.m."
-        },
-        {
-          "label": "NY Medicaid Choice",
+          "label": "New York Medicaid Choice (start here)",
           "phone": "1-888-401-6582",
-          "description": "General PACE program guidance, eligibility counseling, and provider referrals across New York State (nymedicaidchoice.com/pace)",
-          "hours": "Contact for current hours"
+          "description": "The state's free enrollment counselling line. Counsellors explain how to join a PACE plan and connect you by phone to the plan you choose. TTY 1-888-329-1541.",
+          "hours": "Mon-Fri 8:30am-8pm ET, Sat 10am-6pm ET"
+        },
+        {
+          "label": "ElderONE (Monroe, Ontario, Wayne)",
+          "phone": "(855) 457-4636",
+          "description": "PACE operator intake, Rochester region.",
+          "hours": "Hours not published"
+        },
+        {
+          "label": "ArchCare Senior Life (Westchester, Bronx, Manhattan, Staten Island, part of Rockland)",
+          "phone": "(866) 263-9083",
+          "description": "PACE operator intake.",
+          "hours": "Hours not published"
+        },
+        {
+          "label": "CenterLight Healthcare PACE (NYC, Nassau, Westchester, part of Suffolk)",
+          "phone": "(833) 252-2737",
+          "description": "PACE operator intake.",
+          "hours": "Hours not published"
         }
       ],
       "applicationNotes": [
@@ -520,7 +558,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "What if my loved one lives outside the PACE service areas?",
-          "answer": "PACE is currently only available in Monroe, Ontario, Wayne Counties (through ElderONE) and Bronx/Westchester (through ArchCare). If your loved one lives elsewhere in New York, they're not eligible. Consider Medicaid Managed Long Term Care (MLTC) or CDPAP as alternatives."
+          "answer": "New York has ten PACE organizations covering roughly 25 counties, including New York City, Long Island, Westchester, Rochester, Syracuse, Buffalo, Niagara, the Capital Region and the Southern Tier. Call New York Medicaid Choice at 1-888-401-6582 and they will tell you which plan, if any, covers your county. PACE is not available everywhere in the state, so this is worth one call before anything else."
         },
         {
           "question": "How much does PACE cost if my loved one has Medicare but not Medicaid?",
@@ -549,10 +587,10 @@ export const drafts: PipelineStateDrafts = {
       },
       "icon": "Stethoscope",
       "phone": "1-888-401-6582",
-      "sourceUrl": "https://www.cms.gov/medicare/medicaid-coordination/about/pace",
+      "sourceUrl": "https://www.health.ny.gov/health_care/managed_care/mltc/mltcplans.htm",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "medicare-savings-program-qmb-slmb-qi",

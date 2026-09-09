@@ -851,7 +851,7 @@
       "id": "liheap-energy-assistance",
       "name": "Low Income Home Energy Assistance Program (LIHEAP)",
       "shortName": "LIHEAP",
-      "tagline": "Get direct financial relief to help your loved one manage and pay their monthly utility bills",
+      "tagline": "A once-a-season payment toward your loved one's heating and cooling bills, paid straight to the utility company",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -865,8 +865,8 @@
         ]
       },
       "intro": "The Low-Income Home Energy Assistance Program (LIHEAP) in Georgia is a state-administered program designed to help lower-income households, seniors, and individuals with disabilities manage their home energy costs and prevent service disconnections. Operating through distinct seasonal components, including winter heating assistance, summer cooling assistance, and year-round crisis support, the program provides direct financial relief by paying funds straight to the participant's utility company or energy vendor.\n\nEligibility is primarily determined by household size and income, with limits set at or below 60% of Georgia's State Median Income, while assets such as savings or homeownership do not disqualify applicants. To protect vulnerable populations, the program grants early priority application windows specifically for residents age 65 and older and the medically homebound before opening applications to the general public.\n\nBecause LIHEAP is locally administered through a network of independent Community Action Agencies, application procedures, scheduling requirements, and local funding capacities vary by county. Families and caregivers must coordinate directly with their local regional agency or use community resources like Georgia 2-1-1 to secure appointment slots and navigate the application process before county funds are exhausted.",
-      "savingsRange": "$400-$810 heating and $400-$500 cooling per year (FY2026)",
-      "savingsSource": "LIHEAP Clearinghouse Georgia FY2026: heating $400-$810, cooling $400-$500, crisis up to $810/$500",
+      "savingsRange": "One heating payment of $400-$810 and one cooling payment of $400-$500 per program year (FFY2026)",
+      "savingsSource": "Georgia FFY2026 LIHEAP state plan pp.9 and 11: heating minimum $400 / maximum $810, cooling minimum $400 / maximum $500. These are the minimum-to-maximum amounts of a single seasonal payment made to the utility, not typical savings and not monthly relief. Crisis assistance is a separate component.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -894,7 +894,7 @@
           {
             "step": 1,
             "title": "Find your county's Community Action Agency",
-            "description": "Visit dhs.georgia.gov to locate your county's specific provider. Each county has its own agency, budget, and phone number."
+            "description": "Look yours up at georgiacaa.org. Each county has its own agency, budget and phone number, and you must apply with the one for the county where you live."
           },
           {
             "step": 2,
@@ -917,8 +917,8 @@
             "description": "If approved, LIHEAP pays your energy company directly, and you'll see the credit on your next bill."
           }
         ],
-        "processingTime": "First-come, first-served basis with no specific timeline provided",
-        "waitlist": "Yes, if appointment slots are full, you can join a waitlist or check back periodically. Wait times vary significantly by county funding.",
+        "processingTime": "Applications are closed as of September 2026. Heating opens the first workday of December for residents 65+ or medically homebound, and the first workday of January for everyone else. Cooling opens the first workday of April.",
+        "waitlist": "Funding is limited and benefits are first-come, first-served once a season opens.",
         "tip": "Call early in the program year to ask about these priority dates before general enrollment opens.",
         "urls": [
           {
@@ -940,23 +940,29 @@
       ],
       "contacts": [
         {
-          "label": "Georgia 2-1-1",
-          "phone": "2-1-1",
-          "description": "Statewide helpline for all social services and local CAA contact information",
-          "hours": "24 hours, 7 days a week"
+          "label": "Georgia DFCS Customer Contact Center (start here)",
+          "phone": "(877) 423-4746",
+          "description": "General DFCS help. They can point you to your county Community Action Agency, which is the only place that takes LIHEAP applications.",
+          "hours": "Hours not published (Eastern time)"
         },
         {
-          "label": "Georgia DFCS",
+          "label": "Your county Community Action Agency",
           "phone": null,
-          "description": "Visit dfcs.georgia.gov for complete list of county Community Action Agencies",
-          "hours": "Online resource"
+          "description": "The actual application door. Find yours at georgiacaa.org. Georgia DFCS: you must apply with the agency for the county where you live, and you cannot apply in another county.",
+          "hours": "Varies by agency"
+        },
+        {
+          "label": "Georgia 2-1-1 (Greater Atlanta)",
+          "phone": "2-1-1",
+          "description": "Regional referral network, not a statewide line and not a LIHEAP application door.",
+          "hours": "Mon-Fri 8am-5pm ET for live help; a chatbot answers outside those hours"
         }
       ],
       "applicationNotes": [
+        "Georgia LIHEAP is seasonal and is not accepting applications in September. Heating assistance opens the first workday of December for people 65 and older or medically homebound, and the first workday of January for everyone else. Cooling opens the first workday of April. Call your county agency now to ask what to have ready.",
+        "One heating payment and one cooling payment per program year. The money goes to the utility company, not to you.",
         "Seniors aged 65 and older and the medically homebound receive early priority application scheduling, beginning in December for heating and April for cooling assistance. While this priority grants first access to appointment slots, final benefit amounts vary depending on household size, income, and energy type rather than a fixed maximum payout",
-        "You must apply through the Community Action Agency in your specific county of residence, as you cannot switch counties if local funds are exhausted",
-        "Energy suppliers must be registered LIHEAP vendors with the state for your household to qualify",
-        "Bring copies of all required documents to your scheduled appointment, though local agencies may request to see originals for verification"
+        "You must apply through the Community Action Agency in your specific county of residence, as you cannot switch counties if local funds are exhausted"
       ],
       "relatedPrograms": [
         "Weatherization Assistance Program (WAP)",
@@ -1007,11 +1013,11 @@
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": "2-1-1",
+      "phone": "(877) 423-4746",
       "sourceUrl": "https://dfcs.georgia.gov/regular-home-energy-assistance/energy-assistance-eligibility-requirements",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-03"
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "weatherization-assistance-program",

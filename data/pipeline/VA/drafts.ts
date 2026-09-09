@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-22T10:37:49.051Z
+ * Last updated: 2026-09-09T05:48:18.624Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -432,40 +432,31 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "documentsNeeded": [
-        "Current Medicare card",
-        "Current Medicare plan information and premium statements",
-        "List of all current medications with dosages",
+        "Current Medicare card, with the Medicare number and the Part A and Part B effective dates",
+        "The name of their current Medicare plan",
+        "A list of all current medications with dosages and how often each is taken",
         "Preferred pharmacy name and location",
         "Information about Medicaid status (if applicable)",
         "Information about Supplemental Security Income (SSI) status (if applicable)"
       ],
       "contacts": [
         {
-          "label": "VICAP Statewide Line",
+          "label": "Virginia DARS, Division for Aging Services (start here)",
           "phone": "(800) 552-3402",
-          "description": "Main number for Medicare counseling appointments statewide",
-          "hours": "Business hours, Mon-Fri"
+          "description": "Nationwide voice/TTY. Routes you to your local Area Agency on Aging, where the VICAP counsellor actually works. Written questions: dars@dars.virginia.gov",
+          "hours": "Hours not published"
         },
         {
-          "label": "VICAP Fairfax County",
-          "phone": "(703) 324-5851",
-          "description": "Direct line for Fairfax County area residents",
-          "hours": "Business hours, Mon-Fri"
-        },
-        {
-          "label": "VICAP Other Regions",
+          "label": "Seniors First, Shenandoah Area Agency on Aging",
           "phone": "(540) 635-7141",
-          "description": "Direct line for regions outside Fairfax County",
-          "hours": "Business hours, Mon-Fri"
-        },
-        {
-          "label": "VICAP Email",
-          "phone": "Pamela.smith@dars.virginia.gov",
-          "description": "Email contact for VICAP program questions",
-          "hours": "Email response within 1-2 business days"
+          "description": "One regional AAA (Clarke, Frederick, Page, Shenandoah, Warren and Winchester). Not a statewide line.",
+          "hours": "Hours not published"
         }
       ],
-      "applicationNotes": null,
+      "applicationNotes": [
+        "VICAP counselling happens through your local Area Agency on Aging, not from a state office. The 800 number routes you there.",
+        "Ask the counsellor to screen you for cost help (Extra Help and the Medicare Savings Programs), not just to compare plans. That is where the money is."
+      ],
       "relatedPrograms": [
         "Medicare Savings Programs (QMB, SLMB, QI)",
         "Virginia Medicaid",
@@ -503,7 +494,8 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 552-3402",
       "sourceUrl": "https://dars.virginia.gov/aging/home-community/medicare-counseling/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-09"
     },
     {
       "id": "seniornavigator",
