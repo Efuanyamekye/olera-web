@@ -7,6 +7,14 @@
 
 ## Current Focus
 
+### 2026-09-10 — Quiz dashboard preview refinements (PR #1864)
+
+- Branch `codex/correct-city-audit-funnel`, PR #1864 targets staging; nothing merged. Latest product commit `0c40b709b`.
+- `app/admin/city-ads/page.tsx`: moved Quiz progression below Leads and Setup. `components/admin/CityQuizFunnel.tsx`: rolling Last 7 days default, collapsed details with live filtered totals, accessible toggle, and localStorage open/closed preference. Other date presets and custom UTC dates remain available. Group totals can count a visitor in multiple city/channel groups; summary explains this.
+- `scripts/check-city-quiz-ui.tsx`: verifies seven-day query, collapsed default, opening and preference restoration, rates, filters and error handling. UI checks, targeted ESLint, focused TypeScript and diff check pass. Full-project TypeScript remains blocked by missing checkout dependencies documented in the PR.
+- Vercel passed for the latest product commit. Next: preview QA at `/admin/city-ads`; expand Details, check filters and reload persistence on desktop/mobile. TJ's screenshot was production, where this PR is not deployed. Private `reports/` audit artifacts remain local and untracked.
+
+
 
 ### 2026-09-10 (later) — The Codex ad-boost pin was already stale when it was written; skill rewritten to resolve from the repo (`hardy-hopper`, PRs #1862 → staging · #1863 → main `73ba89cd7`)
 
