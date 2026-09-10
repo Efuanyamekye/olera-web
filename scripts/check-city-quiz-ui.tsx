@@ -6,7 +6,7 @@ import CityQuizFunnel from "../components/admin/CityQuizFunnel";
 
 async function main() {
   const window = new Window();
-  Object.assign(globalThis, { window, document: window.document, HTMLElement: window.HTMLElement, IS_REACT_ACT_ENVIRONMENT: true });
+  Object.assign(globalThis, { window, document: window.document, HTMLElement: window.HTMLElement, localStorage: window.localStorage, IS_REACT_ACT_ENVIRONMENT: true });
   const calls: string[] = [];
   let fail = false;
   globalThis.fetch = async (input) => {
@@ -21,6 +21,13 @@ async function main() {
   const container = document.createElement("div"); document.body.append(container);
   const root = createRoot(container);
   await act(async () => { root.render(<CityQuizFunnel />); });
+  const toggle = container.querySelector<HTMLButtonElement>("button[aria-expanded]")!;
+  assert.equal(toggle.getAttribute("aria-expanded"), "false");
+  assert.equal(container.querySelector<HTMLElement>("#quiz-funnel-details")!.hidden, true);
+  assert.match(container.textContent!, /10 paid visitors → 3 started → 4 reached contact/);
+  await act(async () => toggle.click());
+  assert.equal(container.querySelector<HTMLElement>("#quiz-funnel-details")!.hidden, false);
+  assert.equal(localStorage.getItem("city-quiz-expanded"), "true");
   const initialRange = new URL(calls[0], "https://olera.com").searchParams;
   assert.equal(Date.parse(initialRange.get("to")!) - Date.parse(initialRange.get("from")!), 7 * 86400000);
   assert.equal(container.querySelector("select")!.value, "7");
@@ -33,11 +40,17 @@ async function main() {
   assert.match(container.textContent!, /No qualifying paid visitors/);
   assert.equal(container.querySelectorAll("tbody tr").length, 1);
   fail = true;
-  await act(async () => { container.querySelector("button")!.click(); });
+  await act(async () => { Array.from(container.querySelectorAll("button")).find(b => b.textContent === "Refresh")!.click(); });
   assert.match(container.textContent!, /Results are unavailable, not zero/);
   assert.equal(container.querySelector("table"), null);
   assert.equal(container.querySelectorAll("select")[1].value, "charlotte-nc", "City filter remains visible after a failed fetch");
   await act(async () => root.unmount());
+  const restored = createRoot(container);
+  await act(async () => restored.render(<CityQuizFunnel />));
+  assert.equal(container.querySelector("button[aria-expanded]")!.getAttribute("aria-expanded"), "true");
+  await act(async () => container.querySelector<HTMLButtonElement>("button[aria-expanded]")!.click());
+  assert.equal(localStorage.getItem("city-quiz-expanded"), "false");
+  await act(async () => restored.unmount());
   window.happyDOM.abort();
   console.log("PASS: rolling seven-day request, rates, city filter, empty view and unavailable-data state");
 }

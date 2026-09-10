@@ -9,6 +9,15 @@ const rate = (n: number, d: number) => d ? `${Math.round(n / d * 100)}%` : "—"
 const stamp = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: "UTC", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
 export default function CityQuizFunnel() {
+  const [expanded, setExpanded] = useState(false);
+  useEffect(() => {
+    try { setExpanded(localStorage.getItem("city-quiz-expanded") === "true"); } catch { /* Storage is optional. */ }
+  }, []);
+  function toggleExpanded() {
+    const next = !expanded;
+    setExpanded(next);
+    try { localStorage.setItem("city-quiz-expanded", String(next)); } catch { /* Storage is optional. */ }
+  }
   const [range, setRange] = useState("7");
   const [custom, setCustom] = useState({ from: "", to: "" });
   const [applied, setApplied] = useState({ from: "", to: "" });
@@ -45,12 +54,24 @@ export default function CityQuizFunnel() {
     return () => { active = false; controller.abort(); clearInterval(timer); };
   }, [range, applied, retry]);
   const rows = data?.rows.filter(r => (city === "all" || r.slug === city) && (channel === "all" || r.channel === channel)) ?? [];
+  const totals = rows.reduce((sum, row) => ({ visitors: sum.visitors + row.visitors, starts: sum.starts + row.starts, contacts: sum.contacts + row.contacts }), { visitors: 0, starts: 0, contacts: 0 });
+  const rangeLabel = range === "7" ? "Last 7 days" : range === "clean" ? "Since page fix · Sep 10" : range === "all" ? "Since launch" : applied.from ? `${applied.from} – ${applied.to} UTC` : "Choose custom dates";
   const control = "rounded-lg border border-gray-300 bg-white px-2.5 py-2 text-sm text-gray-800";
   return (
     <section aria-labelledby="quiz-funnel-heading" className="mb-8 rounded-xl border border-gray-200 bg-white p-4 sm:p-5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div><h2 id="quiz-funnel-heading" className="text-lg font-semibold text-gray-900">Quiz progression</h2>
-          <p className="mt-1 text-sm text-gray-600">See where paid visitors stop before requesting care.</p></div>
+      <h2 id="quiz-funnel-heading">
+        <button type="button" aria-expanded={expanded} aria-controls="quiz-funnel-details" onClick={toggleExpanded} className="flex w-full items-center justify-between gap-4 rounded-lg text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-600">
+          <span><span className="text-lg font-semibold text-gray-900">Quiz progression</span>
+            <span className="mt-1 block text-xs text-gray-500">{rangeLabel} · {city === "all" ? "All cities" : cityName(city)} · {channel === "all" ? "All channels" : channel}</span>
+          </span>
+          <span className="shrink-0 text-sm text-gray-600">{expanded ? "Hide" : "Details"} <span aria-hidden="true">{expanded ? "▴" : "▾"}</span></span>
+        </button>
+      </h2>
+      <p className="mt-3 text-sm text-gray-700" aria-live="polite">{error ? "Results unavailable. Expand for details and retry." : loading ? "Loading quiz activity…" : data ? `${totals.visitors} paid visitors → ${totals.starts} started → ${totals.contacts} reached contact` : "Choose dates to view quiz activity."}</p>
+      {data && !error && !loading && <p className="mt-1 text-xs text-gray-500">Totals across selected city/channel groups; a visitor can appear in more than one group.</p>}
+      <div id="quiz-funnel-details" hidden={!expanded}>
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-gray-600">See where paid visitors stop before requesting care.</p>
         <button type="button" onClick={() => setRetry(v => v + 1)} disabled={loading} className={`${control} disabled:opacity-50`}>Refresh</button>
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
@@ -98,6 +119,7 @@ export default function CityQuizFunnel() {
           <p className="mt-2">Across all cities/channels in this date range: {data.excludedLandings} internal, direct, test or unclassifiable landing events excluded; {data.ambiguousVisits} visits with conflicting channels excluded; {data.unmatchedEvents} quiz events without a qualifying paid visit. Tagged previews with external referrers can still be counted. Individual question completion is not tracked yet.</p>
         </details>
       </>}
+      </div>
     </section>
   );
 }
