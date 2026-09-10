@@ -50,7 +50,7 @@ function layout(body: string, preheader?: string): string {
 }
 
 function button(label: string, href: string): string {
-  return `<a href="${href}" style="display:inline-block;padding:12px 24px;background:${BRAND_COLOR};color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;border-radius:8px;">${label}</a>`;
+  return `<a href="${escapeHtml(href)}" style="display:inline-block;padding:12px 24px;background:${BRAND_COLOR};color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;border-radius:8px;">${label}</a>`;
 }
 
 /**
@@ -277,25 +277,29 @@ export function studentActivationEmail({
   studentName,
   city,
   profileUrl,
+  magicLink,
 }: {
   studentName: string;
   city?: string;
   profileUrl: string;
+  magicLink?: string;
 }): string {
-  const firstName = studentName.split(" ")[0];
-  const locationLine = city ? ` in ${city}` : "";
+  const safeName = escapeHtml(firstName(studentName, "there"));
+  const locationLine = city ? ` in ${escapeHtml(city)}` : "";
+  const dashboardUrl = magicLink || `${BASE_URL}/medjobs/providers`;
+  const safeProfileUrl = escapeHtml(profileUrl);
 
   return layout(`
-    <h2 style="font-size:20px;font-weight:700;color:#111827;margin:0 0 8px;">Your profile is live, ${firstName}!</h2>
+    <h2 style="font-size:20px;font-weight:700;color:#111827;margin:0 0 8px;">Your profile is live, ${safeName}!</h2>
     <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.6;">
-      Congratulations — your MedJobs profile is 100% complete and verified. Families${locationLine} can now find you and reach out via the platform, email, or phone.
+      Congratulations — your MedJobs profile is 100% complete and verified. Providers${locationLine} can now find you and reach out via the platform, email, or phone.
     </p>
     <table cellpadding="0" cellspacing="0" style="background:#f0fdf4;border-radius:8px;padding:16px;width:100%;margin:0 0 16px;">
       <tr><td>
         <p style="font-size:13px;font-weight:600;color:#166534;margin:0 0 8px;">What happens now?</p>
         <ol style="font-size:13px;color:#166534;margin:0;padding-left:16px;line-height:1.8;">
-          <li>Families and care teams can view your profile and reach out to you</li>
-          <li>You can browse families hiring near you and ask to be introduced</li>
+          <li>Providers can view your profile and reach out to you</li>
+          <li>You can browse providers hiring near you and ask to be introduced</li>
           <li>Reaching out directly often leads to conversations faster</li>
         </ol>
       </td></tr>
@@ -304,13 +308,13 @@ export function studentActivationEmail({
       <strong>Your profile link:</strong>
     </p>
     <p style="font-size:13px;margin:0 0 20px;">
-      <a href="${profileUrl}" style="color:${BRAND_COLOR};">${profileUrl}</a>
+      <a href="${safeProfileUrl}" style="color:${BRAND_COLOR};">${safeProfileUrl}</a>
     </p>
     <p style="font-size:14px;color:#6b7280;margin:0 0 20px;line-height:1.6;">
       Share this link when reaching out — it shows your video, availability, and background at a glance.
     </p>
     <p style="margin:0 0 16px;">
-      ${button("See families hiring near you", `${BASE_URL}/medjobs/families`)}
+      ${button("See providers hiring near you", dashboardUrl)}
     </p>
   `);
 }
@@ -455,7 +459,7 @@ export function newCandidateAlertEmail({
         <p style="font-size:13px;color:#6b7280;margin:4px 0 0;">${escapeHtml(c.university)} &middot; ${escapeHtml(c.programTrack)}</p>
       </td>
       <td style="padding:12px 0;border-bottom:1px solid #f3f4f6;text-align:right;">
-        <a href="${BASE_URL}/medjobs/candidates/${c.slug}" style="font-size:13px;color:${BRAND_COLOR};text-decoration:none;font-weight:600;">View</a>
+        <a href="${escapeHtml(`${BASE_URL}/medjobs/candidates/${c.slug}`)}" style="font-size:13px;color:${BRAND_COLOR};text-decoration:none;font-weight:600;">View</a>
       </td>
     </tr>`
     )
@@ -482,19 +486,23 @@ export function profileIncompleteNudgeEmail({
   studentName,
   completeness,
   missingItems,
+  magicLink,
 }: {
   studentName: string;
   completeness: number;
   missingItems: string[];
+  magicLink?: string;
 }): string {
+  const completeProfileUrl = magicLink || `${BASE_URL}/portal/medjobs/profile`;
+  const safeName = escapeHtml(firstName(studentName, "there"));
   const itemsList = missingItems
-    .map((item) => `<li>${item}</li>`)
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
     .join("");
 
   return layout(`
     <h2 style="font-size:20px;font-weight:700;color:#111827;margin:0 0 8px;">Complete Your Profile</h2>
     <p style="font-size:14px;color:#6b7280;margin:0 0 16px;line-height:1.6;">
-      Hi ${studentName}, your MedJobs profile is ${completeness}% complete.
+      Hi ${safeName}, your MedJobs profile is ${completeness}% complete.
       Students with complete profiles get significantly more responses from providers.
     </p>
     <p style="font-size:14px;color:#6b7280;margin:0 0 8px;font-weight:600;">
@@ -504,7 +512,7 @@ export function profileIncompleteNudgeEmail({
       ${itemsList}
     </ul>
     <p style="margin:0;">
-      ${button("Complete Your Profile", `${BASE_URL}/portal/medjobs/profile`)}
+      ${button("Complete Your Profile", completeProfileUrl)}
     </p>
   `);
 }

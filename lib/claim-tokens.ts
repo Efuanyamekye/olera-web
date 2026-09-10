@@ -278,6 +278,30 @@ export function generateMedJobsStudentInterviewUrl(
 }
 
 /**
+ * Generate a student portal one-click URL for nudge/activation emails.
+ * Routes to /api/medjobs/claim-student which authenticates the student
+ * server-side and redirects to the destination path.
+ *
+ * Uses the same 15-day (TOKEN_EXPIRY_HOURS) TTL as provider claim tokens,
+ * so students opening emails days later still get one-click sign-in.
+ *
+ * @param email - Student's email for token generation
+ * @param destination - Path to redirect to after auth (e.g., "/portal/medjobs/profile")
+ * @param baseUrl - Base URL (defaults to NEXT_PUBLIC_SITE_URL)
+ */
+export function generateStudentPortalUrl(
+  email: string,
+  destination: string,
+  baseUrl: string = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"
+): string {
+  const token = generateClaimToken("student", email);
+  const url = new URL(`${baseUrl}/api/medjobs/claim-student`);
+  url.searchParams.set("otk", token);
+  url.searchParams.set("next", destination);
+  return url.toString();
+}
+
+/**
  * Generate a lead claim URL with embedded claim token.
  * Routes to /api/claim-lead which handles server-side authentication
  * and redirects directly to /provider/connections.

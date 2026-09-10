@@ -3,6 +3,7 @@ import { getServiceClient } from "@/lib/admin";
 import { sendEmail } from "@/lib/email";
 import { profileIncompleteNudgeEmail, studentActivationEmail } from "@/lib/medjobs-email-templates";
 import { calculateCompleteness, getIncompleteItems } from "@/lib/medjobs-completeness";
+import { generateStudentPortalUrl } from "@/lib/claim-tokens";
 import type { StudentMetadata } from "@/lib/types";
 import { withCronRun } from "@/lib/crons/run";
 
@@ -24,6 +25,7 @@ import { withCronRun } from "@/lib/crons/run";
 
 const NUDGE_CADENCE_DAYS = [1, 3, 5, 7, 21, 35, 49, 63]; // Day thresholds for nudges 1-8
 const MAX_NUDGES = 8;
+const PAGE_SIZE = 500; // Fetch students in batches to handle >1000 students
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
@@ -35,23 +37,43 @@ export async function GET(request: NextRequest) {
   try {
     const db = getServiceClient();
 
-    // Fetch all student profiles (we recalculate completeness fresh)
-    const { data: students, error } = await db
-      .from("business_profiles")
-      .select("id, slug, display_name, email, city, image_url, metadata, created_at")
-      .eq("type", "student")
-      .not("email", "is", null);
-
-    if (error) {
-      console.error("[medjobs-nudge] query error:", error);
-      return NextResponse.json({ error: "Query failed" }, { status: 500 });
-    }
-
     let nudged = 0;
+    let activated = 0;
     let skipped = 0;
+    let totalProcessed = 0;
     const now = Date.now();
 
-    for (const student of (students || [])) {
+    // Paginate through all students (Supabase defaults to 1000 row limit)
+    let offset = 0;
+    let hasMore = true;
+
+    while (hasMore) {
+      const { data: students, error } = await db
+        .from("business_profiles")
+        .select("id, slug, display_name, email, city, image_url, metadata, created_at")
+        .eq("type", "student")
+        .not("email", "is", null)
+        .not("display_name", "is", null)
+        .range(offset, offset + PAGE_SIZE - 1)
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error("[medjobs-nudge] query error:", error);
+        return NextResponse.json({ error: "Query failed" }, { status: 500 });
+      }
+
+      const batch = students || [];
+      hasMore = batch.length === PAGE_SIZE;
+      offset += PAGE_SIZE;
+      totalProcessed += batch.length;
+
+    for (const student of batch) {
+      // Skip if display_name is empty (belt and suspenders)
+      if (!student.display_name?.trim()) {
+        skipped++;
+        continue;
+      }
+
       const meta = (student.metadata || {}) as StudentMetadata;
       const hasPhoto = !!student.image_url;
 
@@ -63,7 +85,16 @@ export async function GET(request: NextRequest) {
         const activationSent = (meta as Record<string, unknown>).activation_email_sent as boolean;
         if (!activationSent) {
           try {
-            const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care"}/medjobs/candidates/${student.slug}`;
+            const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+            const profileUrl = `${siteUrl}/medjobs/candidates/${student.slug}`;
+
+            // Generate one-click sign-in URL with 15-day HMAC token
+            const magicLink = generateStudentPortalUrl(
+              student.email!,
+              "/medjobs/providers",
+              siteUrl
+            );
+
             await sendEmail({
               to: student.email!,
               subject: "Your MedJobs profile is live!",
@@ -71,18 +102,31 @@ export async function GET(request: NextRequest) {
                 studentName: student.display_name,
                 city: student.city || undefined,
                 profileUrl,
+                magicLink,
               }),
               emailType: "student_activation",
               recipientType: "student",
             });
+
+            // Re-fetch metadata to reduce race condition risk
+            const { data: freshProfile } = await db
+              .from("business_profiles")
+              .select("metadata")
+              .eq("id", student.id)
+              .single();
+            const freshMeta = (freshProfile?.metadata || meta) as Record<string, unknown>;
+
             await db.from("business_profiles").update({
-              metadata: { ...(meta as Record<string, unknown>), activation_email_sent: true },
+              metadata: { ...freshMeta, activation_email_sent: true },
             }).eq("id", student.id);
+
+            activated++;
           } catch (err) {
             console.error(`[medjobs-nudge] activation email error for ${student.email}:`, err);
           }
+        } else {
+          skipped++;
         }
-        skipped++;
         continue;
       }
 
@@ -107,6 +151,15 @@ export async function GET(request: NextRequest) {
       if (incompleteItems.length === 0) { skipped++; continue; }
 
       try {
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+
+        // Generate one-click sign-in URL with 15-day HMAC token
+        const magicLink = generateStudentPortalUrl(
+          student.email!,
+          "/portal/medjobs/profile",
+          siteUrl
+        );
+
         await sendEmail({
           to: student.email!,
           subject: `Your MedJobs profile is ${completeness}% complete`,
@@ -114,17 +167,26 @@ export async function GET(request: NextRequest) {
             studentName: student.display_name,
             completeness,
             missingItems: incompleteItems.slice(0, 5),
+            magicLink,
           }),
           emailType: "profile_incomplete_nudge",
           recipientType: "student",
         });
+
+        // Re-fetch metadata to reduce race condition risk
+        const { data: freshProfile } = await db
+          .from("business_profiles")
+          .select("metadata")
+          .eq("id", student.id)
+          .single();
+        const freshMeta = (freshProfile?.metadata || meta) as Record<string, unknown>;
 
         // Update nudge tracking
         await db
           .from("business_profiles")
           .update({
             metadata: {
-              ...(meta as Record<string, unknown>),
+              ...freshMeta,
               last_nudge_sent_at: new Date().toISOString(),
               nudge_count: nudgeCount + 1,
             },
@@ -136,8 +198,9 @@ export async function GET(request: NextRequest) {
         console.error(`[medjobs-nudge] error for ${student.email}:`, err);
       }
     }
+    } // end while (hasMore)
 
-    return NextResponse.json({ nudged, skipped });
+    return NextResponse.json({ nudged, activated, skipped, totalProcessed });
   } catch (err) {
     console.error("[medjobs-nudge] unexpected error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
