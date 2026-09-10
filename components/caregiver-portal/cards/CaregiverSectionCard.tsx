@@ -25,7 +25,7 @@ export default function CaregiverSectionCard({
   return (
     <section
       id={id}
-      className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300"
+      className="bg-white rounded-2xl border border-gray-200/80 p-6"
     >
       {/* Header row */}
       <div className="flex items-center justify-between mb-5">
@@ -54,15 +54,20 @@ export default function CaregiverSectionCard({
               </svg>
             </button>
           )}
-          {/* Completion percentage badge */}
+          {/* Completion status badge - "Done" for complete, % for incomplete */}
           {percent !== undefined && (
-            <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-              percent >= 100
-                ? "bg-success-50 text-success-700"
-                : "bg-primary-50 text-primary-700"
-            }`}>
-              {percent}%
-            </span>
+            percent >= 100 ? (
+              <span className="inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-success-50 text-success-700">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+                Done
+              </span>
+            ) : (
+              <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary-50 text-primary-700">
+                {percent}%
+              </span>
+            )
           )}
         </div>
       </div>

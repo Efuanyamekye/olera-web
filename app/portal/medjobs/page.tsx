@@ -1122,13 +1122,49 @@ function StudentPortalContent({
   const [showCelebration, setShowCelebration] = useState(false);
   const [pendingCelebration, setPendingCelebration] = useState(false);
   const [showGoLiveReview, setShowGoLiveReview] = useState(false);
+  const [togglingVisibility, setTogglingVisibility] = useState(false);
   // Track if profile was live when verification modal opened (to detect first-time going live)
   const wasLiveOnModalOpen = useRef(profile.is_active);
+
+  // Toggle profile visibility (pause/unpause)
+  const handleToggleVisibility = async (visible: boolean) => {
+    setTogglingVisibility(true);
+    try {
+      const res = await fetch("/api/medjobs/toggle-visibility", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ visible }),
+      });
+      if (res.ok) {
+        refresh();
+      }
+    } catch (err) {
+      console.error("Failed to toggle visibility:", err);
+    } finally {
+      setTogglingVisibility(false);
+    }
+  };
+
+  // Collapsible completeness card state - start compact by default
+  const [isCompletenessExpanded, setIsCompletenessExpanded] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const saved = localStorage.getItem("olera-student-completeness-expanded");
+    return saved === null ? false : saved === "true";
+  });
+  const toggleCompleteness = () => {
+    const newValue = !isCompletenessExpanded;
+    setIsCompletenessExpanded(newValue);
+    localStorage.setItem("olera-student-completeness-expanded", String(newValue));
+  };
 
   const meta = profile.metadata || {} as StudentMetadata;
   const hasPhoto = !!profile.image_url;
   const verificationItems = getVerificationItems(meta);
   const verificationDone = verificationItems.every((v) => v.done);
+
+  // Check if profile has ever gone live (application_completed = true means they went through Go Live at least once)
+  const hasCompletedApplication = !!meta.application_completed;
+  const isPaused = !profile.is_active && hasCompletedApplication;
 
   // Video verification
   const videoAvailable = hasVideo(meta);
@@ -1260,7 +1296,7 @@ function StudentPortalContent({
           {/* ── Main Column (2/3) ── */}
           <div className="lg:col-span-2 space-y-6">
             {/* Profile Header Card — with photo upload */}
-            <div id="overview" className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300">
+            <div id="overview" className="bg-white rounded-2xl border border-gray-200/80 p-6">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 relative">
                   {profile.image_url ? (
@@ -1301,12 +1337,24 @@ function StudentPortalContent({
                   <div className="flex items-center gap-3 flex-wrap">
                     <h1 className="text-xl font-display font-bold text-gray-900 truncate">{profile.display_name}</h1>
                     <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                      profile.is_active ? "bg-primary-50 text-primary-700" : verificationDone ? "bg-amber-50 text-amber-700" : "bg-gray-100 text-gray-500"
+                      profile.is_active
+                        ? "bg-primary-50 text-primary-700"
+                        : isPaused
+                        ? "bg-gray-100 text-gray-600"
+                        : verificationDone
+                        ? "bg-amber-50 text-amber-700"
+                        : "bg-gray-100 text-gray-500"
                     }`}>
                       <div className={`w-1.5 h-1.5 rounded-full ${
-                        profile.is_active ? "bg-primary-500 animate-pulse" : verificationDone ? "bg-amber-500" : "bg-gray-300"
+                        profile.is_active
+                          ? "bg-primary-500 animate-pulse"
+                          : isPaused
+                          ? "bg-gray-400"
+                          : verificationDone
+                          ? "bg-amber-500"
+                          : "bg-gray-300"
                       }`} />
-                      {profile.is_active ? "Live" : verificationDone ? "Under review" : "Not verified"}
+                      {profile.is_active ? "Live" : isPaused ? "Paused" : verificationDone ? "Under review" : "Not verified"}
                     </div>
                   </div>
                   <div className="mt-1 flex flex-wrap items-center gap-x-2 text-[15px] text-gray-500">
@@ -1353,7 +1401,7 @@ function StudentPortalContent({
             <ResumeCard meta={meta} onEdit={() => setEditingSection("resume")} />
 
             {/* Verification Card — Final step to go live */}
-            <div id="verification" className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300">
+            <div id="verification" className="bg-white rounded-2xl border border-gray-200/80 p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -1523,89 +1571,246 @@ function StudentPortalContent({
 
           {/* ── Sidebar (1/3) ── */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Go Live CTA - only shows when profile is inactive */}
-            {!profile.is_active && (
-              <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  <span className="text-sm font-medium text-gray-900">Not live yet</span>
+            {/* Profile Visibility Card */}
+            {hasCompletedApplication ? (
+              /* Toggle for users who've gone live before */
+              <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden">
+                {/* Header */}
+                <div className={`px-5 py-4 border-b transition-colors ${
+                  profile.is_active
+                    ? "bg-gradient-to-r from-success-50 to-white border-success-100"
+                    : "bg-gradient-to-r from-gray-50 to-white border-gray-100"
+                }`}>
+                  <div className="flex items-center gap-3">
+                    {/* Icon */}
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                      profile.is_active ? "bg-success-100" : "bg-gray-100"
+                    }`}>
+                      {profile.is_active ? (
+                        <svg className="w-5 h-5 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                        </svg>
+                      )}
+                    </div>
+
+                    {/* Title + Toggle */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-[15px] font-semibold text-gray-900">
+                            {profile.is_active ? "Profile is live" : "Profile hidden"}
+                          </h3>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            {profile.is_active ? "Visible to providers" : "Not visible to providers"}
+                          </p>
+                        </div>
+
+                        {/* Toggle switch */}
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={profile.is_active}
+                          onClick={() => handleToggleVisibility(!profile.is_active)}
+                          disabled={togglingVisibility}
+                          className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                            profile.is_active ? "bg-success-500" : "bg-gray-300"
+                          }`}
+                        >
+                          <span className="sr-only">Toggle profile visibility</span>
+                          <span
+                            className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                              profile.is_active ? "translate-x-5" : "translate-x-0"
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  Make your profile visible to providers and start getting matched with jobs.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setShowGoLiveReview(true)}
-                  className="w-full px-4 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-lg"
-                >
-                  Go Live
-                </button>
+
+                {/* Content */}
+                <div className="px-5 py-4">
+                  {profile.is_active ? (
+                    <>
+                      <p className="text-sm text-gray-500 leading-relaxed">
+                        Providers can discover your profile and reach out about caregiving opportunities.
+                      </p>
+                      <a
+                        href={`/medjobs/candidates/${profile.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-1.5 text-sm text-success-600 hover:text-success-700 font-medium transition-colors"
+                      >
+                        <span>View your public profile</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    </>
+                  ) : (
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      Your profile is hidden from providers. Toggle visibility when you&apos;re ready to be discovered.
+                    </p>
+                  )}
+                </div>
+              </div>
+            ) : (
+              /* First-time Go Live CTA */
+              <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden">
+                {/* Header */}
+                <div className="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50/50 to-white">
+                  <div className="flex items-center gap-3">
+                    {/* Icon */}
+                    <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                      <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-[15px] font-semibold text-gray-900">Go Live</h3>
+                      <p className="text-xs text-gray-500 mt-0.5">Get discovered by providers</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="px-5 py-4">
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Make your profile visible to healthcare providers and start getting matched with caregiving jobs.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowGoLiveReview(true)}
+                    className="w-full py-3 text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 rounded-xl transition-colors"
+                  >
+                    Go Live
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* Completeness */}
-            <div className="bg-gradient-to-b from-white to-vanilla-50 rounded-2xl border border-gray-200/80 shadow-sm p-6">
-              <h3 className="text-lg font-display font-bold text-gray-900 mb-5">Profile completeness</h3>
+            {/* Completeness - Collapsible */}
+            <div className="bg-gradient-to-b from-white to-vanilla-50 rounded-2xl border border-gray-200/80 overflow-hidden">
+              {/* Header - always visible, clickable to toggle */}
+              <button
+                type="button"
+                onClick={toggleCompleteness}
+                className="w-full flex items-center justify-between p-5 hover:bg-vanilla-50/50 transition-colors text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <h3 className="text-base font-display font-bold text-gray-900">
+                    Profile completeness
+                  </h3>
+                  {!isCompletenessExpanded && (
+                    <span className="text-sm font-semibold text-primary-600">
+                      {completenessPercent}%
+                    </span>
+                  )}
+                </div>
+                <svg
+                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                    isCompletenessExpanded ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
 
-              {/* Circular progress */}
-              <div className="flex justify-center mb-2">
-                <div className="relative w-[100px] h-[100px]">
-                  <svg className="w-[100px] h-[100px] -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="#f3f4f6" strokeWidth="8" />
-                    <circle cx="50" cy="50" r="42" fill="none"
-                      stroke="#199087"
-                      strokeWidth="8" strokeDasharray={`${completenessPercent * 2.64} 264`} strokeLinecap="round" />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-gray-900">{completenessPercent}%</span>
+              {/* Collapsed state - compact progress bar */}
+              {!isCompletenessExpanded && (
+                <div className="px-5 pb-4 -mt-2">
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-primary-500 rounded-full transition-all duration-500"
+                      style={{ width: `${completenessPercent}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2">
+                    {completeSections.filter((s) => s.done).length} of {completeSections.length} sections complete
+                  </p>
+                </div>
+              )}
+
+              {/* Expanded state - full donut + checklist */}
+              {isCompletenessExpanded && (
+                <div className="px-5 pb-5 -mt-2">
+                  {/* Circular progress */}
+                  <div className="flex justify-center mb-2">
+                    <div className="relative w-[90px] h-[90px]">
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#f3f4f6" strokeWidth="8" />
+                        <circle
+                          cx="50" cy="50" r="42" fill="none"
+                          stroke="#199087"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray={`${completenessPercent * 2.64} 264`}
+                          className="transition-all duration-500"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-xl font-bold text-gray-900">{completenessPercent}%</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Status message */}
+                  <p className="text-center text-xs font-semibold tracking-wide uppercase text-gray-900 font-display mb-0.5">
+                    {completenessPercent >= 100 ? "ALL DONE!" :
+                     completenessPercent >= 76 ? "NEARLY COMPLETE!" :
+                     completenessPercent >= 51 ? "LOOKING GOOD!" :
+                     completenessPercent >= 26 ? "ALMOST THERE!" :
+                     "JUST GETTING STARTED"}
+                  </p>
+                  <p className="text-center text-[11px] text-gray-400 mb-4">
+                    Complete your application to get matched
+                  </p>
+
+                  {/* Section checklist - only highlight incomplete items */}
+                  <div className="space-y-0.5">
+                    {completeSections.map((section) => (
+                      <a
+                        key={section.id}
+                        href={`#${section.id}`}
+                        className="flex items-center justify-between py-2 px-2 -mx-2 rounded-lg hover:bg-vanilla-100 transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2">
+                          {section.done ? (
+                            <div className="w-4 h-4 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+                              <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                          ) : section.percent > 0 ? (
+                            <div className="w-4 h-4 rounded-full border-2 border-primary-300 bg-primary-50 shrink-0 flex items-center justify-center">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+                            </div>
+                          ) : (
+                            <div className="w-4 h-4 rounded-full border-2 border-gray-200 shrink-0" />
+                          )}
+                          <span className={`text-sm ${section.done ? "text-gray-500" : "text-gray-700"}`}>
+                            {section.label}
+                          </span>
+                        </div>
+                        {/* Only show percentage for incomplete items - draws eye to what's left */}
+                        {!section.done && (
+                          <span className={`text-xs font-medium ${section.percent > 0 ? "text-primary-600" : "text-gray-400"}`}>
+                            {section.percent}%
+                          </span>
+                        )}
+                      </a>
+                    ))}
                   </div>
                 </div>
-              </div>
-
-              {/* Status message */}
-              <p className="text-center text-sm font-semibold tracking-wide uppercase text-gray-900 font-display mb-0.5">
-                {completenessPercent >= 100 ? "ALL DONE!" :
-                 completenessPercent >= 76 ? "NEARLY COMPLETE!" :
-                 completenessPercent >= 51 ? "LOOKING GOOD!" :
-                 completenessPercent >= 26 ? "ALMOST THERE!" :
-                 "JUST GETTING STARTED"}
-              </p>
-              <p className="text-center text-xs text-gray-400 mb-5">
-                Complete your application to get matched
-              </p>
-
-              {/* Section checklist - 8 logical sections */}
-              <div className="space-y-0.5">
-                {completeSections.map((section) => (
-                  <a
-                    key={section.id}
-                    href={`#${section.id}`}
-                    className="flex items-center justify-between py-2.5 px-2.5 -mx-2.5 rounded-lg hover:bg-vanilla-100 transition-colors cursor-pointer"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      {section.done ? (
-                        <div className="w-5 h-5 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
-                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                      ) : section.percent > 0 ? (
-                        <div className="w-5 h-5 rounded-full border-2 border-primary-300 bg-primary-50 shrink-0 flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-primary-400" />
-                        </div>
-                      ) : (
-                        <div className="w-5 h-5 rounded-full border-2 border-gray-200 shrink-0" />
-                      )}
-                      <span className={`text-[15px] ${section.done ? "text-primary-600 font-medium" : "text-gray-700"}`}>
-                        {section.label}
-                      </span>
-                    </div>
-                    <span className={`text-sm font-medium ${section.done ? "text-primary-600" : section.percent > 0 ? "text-primary-500" : "text-gray-400"}`}>
-                      {section.percent}%
-                    </span>
-                  </a>
-                ))}
-              </div>
+              )}
             </div>
           </div>
         </div>
