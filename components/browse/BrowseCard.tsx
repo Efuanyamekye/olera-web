@@ -467,9 +467,9 @@ export default function BrowseCard({
 
         {/* Student action: request interview */}
         {isStudent && !isDemo && (
-          <div className="mt-3 flex items-center justify-end">
+          <div className="mt-3">
             {isRequested ? (
-              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600">
+              <span className="inline-flex w-full items-center justify-center gap-1.5 py-2 text-sm font-medium text-primary-600">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" /></svg>
                 Requested
               </span>
@@ -477,7 +477,7 @@ export default function BrowseCard({
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRequestInterview?.(); }}
-                className="px-4 py-2 text-sm font-semibold text-primary-600 rounded-lg ring-1 ring-primary-200 hover:ring-primary-300 hover:bg-primary-50 transition-all"
+                className="w-full px-4 py-2 text-sm font-semibold text-primary-600 rounded-lg ring-1 ring-primary-200 hover:ring-primary-300 hover:bg-primary-50 transition-all"
               >
                 {requestLabel}
               </button>
@@ -486,7 +486,7 @@ export default function BrowseCard({
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRequestInterview?.(); }}
-                className="px-4 py-2 text-sm font-semibold text-primary-600 rounded-lg ring-1 ring-primary-200 hover:ring-primary-300 hover:bg-primary-50 transition-all"
+                className="w-full px-4 py-2 text-sm font-semibold text-primary-600 rounded-lg ring-1 ring-primary-200 hover:ring-primary-300 hover:bg-primary-50 transition-all"
               >
                 Apply Now →
               </button>
