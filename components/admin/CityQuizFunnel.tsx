@@ -9,7 +9,7 @@ const rate = (n: number, d: number) => d ? `${Math.round(n / d * 100)}%` : "—"
 const stamp = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone: "UTC", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
 
 export default function CityQuizFunnel() {
-  const [range, setRange] = useState("clean");
+  const [range, setRange] = useState("7");
   const [custom, setCustom] = useState({ from: "", to: "" });
   const [applied, setApplied] = useState({ from: "", to: "" });
   const [city, setCity] = useState("all");

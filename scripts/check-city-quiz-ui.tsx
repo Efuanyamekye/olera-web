@@ -21,7 +21,9 @@ async function main() {
   const container = document.createElement("div"); document.body.append(container);
   const root = createRoot(container);
   await act(async () => { root.render(<CityQuizFunnel />); });
-  assert.match(calls[0], /07%3A22/);
+  const initialRange = new URL(calls[0], "https://olera.com").searchParams;
+  assert.equal(Date.parse(initialRange.get("to")!) - Date.parse(initialRange.get("from")!), 7 * 86400000);
+  assert.equal(container.querySelector("select")!.value, "7");
   assert.match(container.textContent!, /30% of visitors/);
   assert.match(container.textContent!, /40% of visitors/);
   assert.doesNotMatch(container.textContent!, /133%/);
@@ -37,6 +39,6 @@ async function main() {
   assert.equal(container.querySelectorAll("select")[1].value, "charlotte-nc", "City filter remains visible after a failed fetch");
   await act(async () => root.unmount());
   window.happyDOM.abort();
-  console.log("PASS: clean-window request, rates, city filter, empty view and unavailable-data state");
+  console.log("PASS: rolling seven-day request, rates, city filter, empty view and unavailable-data state");
 }
 main().catch(e => { console.error(e); process.exitCode = 1; });
