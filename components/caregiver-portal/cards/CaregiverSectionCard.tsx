@@ -25,7 +25,7 @@ export default function CaregiverSectionCard({
   return (
     <section
       id={id}
-      className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300"
+      className="bg-white rounded-2xl border border-gray-200/80 p-6"
     >
       {/* Header row */}
       <div className="flex items-center justify-between mb-5">

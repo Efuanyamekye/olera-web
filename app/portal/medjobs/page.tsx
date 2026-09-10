@@ -1260,7 +1260,7 @@ function StudentPortalContent({
           {/* ── Main Column (2/3) ── */}
           <div className="lg:col-span-2 space-y-6">
             {/* Profile Header Card — with photo upload */}
-            <div id="overview" className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300">
+            <div id="overview" className="bg-white rounded-2xl border border-gray-200/80 p-6">
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0 relative">
                   {profile.image_url ? (
@@ -1353,7 +1353,7 @@ function StudentPortalContent({
             <ResumeCard meta={meta} onEdit={() => setEditingSection("resume")} />
 
             {/* Verification Card — Final step to go live */}
-            <div id="verification" className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300">
+            <div id="verification" className="bg-white rounded-2xl border border-gray-200/80 p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
@@ -1525,7 +1525,7 @@ function StudentPortalContent({
           <div className="lg:col-span-1 space-y-6">
             {/* Go Live CTA - only shows when profile is inactive */}
             {!profile.is_active && (
-              <div className="bg-white rounded-2xl border border-gray-200/80 shadow-sm p-5">
+              <div className="bg-white rounded-2xl border border-gray-200/80 p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                   <span className="text-sm font-medium text-gray-900">Not live yet</span>
@@ -1544,7 +1544,7 @@ function StudentPortalContent({
             )}
 
             {/* Completeness */}
-            <div className="bg-gradient-to-b from-white to-vanilla-50 rounded-2xl border border-gray-200/80 shadow-sm p-6">
+            <div className="bg-gradient-to-b from-white to-vanilla-50 rounded-2xl border border-gray-200/80 p-6">
               <h3 className="text-lg font-display font-bold text-gray-900 mb-5">Profile completeness</h3>
 
               {/* Circular progress */}
