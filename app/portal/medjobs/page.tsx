@@ -1125,6 +1125,18 @@ function StudentPortalContent({
   // Track if profile was live when verification modal opened (to detect first-time going live)
   const wasLiveOnModalOpen = useRef(profile.is_active);
 
+  // Collapsible completeness card state - start expanded for new profiles
+  const [isCompletenessExpanded, setIsCompletenessExpanded] = useState(() => {
+    if (typeof window === "undefined") return true;
+    const saved = localStorage.getItem("olera-student-completeness-expanded");
+    return saved === null ? true : saved === "true";
+  });
+  const toggleCompleteness = () => {
+    const newValue = !isCompletenessExpanded;
+    setIsCompletenessExpanded(newValue);
+    localStorage.setItem("olera-student-completeness-expanded", String(newValue));
+  };
+
   const meta = profile.metadata || {} as StudentMetadata;
   const hasPhoto = !!profile.image_url;
   const verificationItems = getVerificationItems(meta);
@@ -1543,69 +1555,120 @@ function StudentPortalContent({
               </div>
             )}
 
-            {/* Completeness */}
-            <div className="bg-gradient-to-b from-white to-vanilla-50 rounded-2xl border border-gray-200/80 p-6">
-              <h3 className="text-lg font-display font-bold text-gray-900 mb-5">Profile completeness</h3>
+            {/* Completeness - Collapsible */}
+            <div className="bg-gradient-to-b from-white to-vanilla-50 rounded-2xl border border-gray-200/80 overflow-hidden">
+              {/* Header - always visible, clickable to toggle */}
+              <button
+                type="button"
+                onClick={toggleCompleteness}
+                className="w-full flex items-center justify-between p-5 hover:bg-vanilla-50/50 transition-colors text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <h3 className="text-base font-display font-bold text-gray-900">
+                    Profile completeness
+                  </h3>
+                  {!isCompletenessExpanded && (
+                    <span className="text-sm font-semibold text-primary-600">
+                      {completenessPercent}%
+                    </span>
+                  )}
+                </div>
+                <svg
+                  className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${
+                    isCompletenessExpanded ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
 
-              {/* Circular progress */}
-              <div className="flex justify-center mb-2">
-                <div className="relative w-[100px] h-[100px]">
-                  <svg className="w-[100px] h-[100px] -rotate-90" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="42" fill="none" stroke="#f3f4f6" strokeWidth="8" />
-                    <circle cx="50" cy="50" r="42" fill="none"
-                      stroke="#199087"
-                      strokeWidth="8" strokeDasharray={`${completenessPercent * 2.64} 264`} strokeLinecap="round" />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-gray-900">{completenessPercent}%</span>
+              {/* Collapsed state - compact progress bar */}
+              {!isCompletenessExpanded && (
+                <div className="px-5 pb-4 -mt-2">
+                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-primary-500 rounded-full transition-all duration-500"
+                      style={{ width: `${completenessPercent}%` }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-400 mt-2">
+                    {completeSections.filter((s) => s.done).length} of {completeSections.length} sections complete
+                  </p>
+                </div>
+              )}
+
+              {/* Expanded state - full donut + checklist */}
+              {isCompletenessExpanded && (
+                <div className="px-5 pb-5 -mt-2">
+                  {/* Circular progress */}
+                  <div className="flex justify-center mb-2">
+                    <div className="relative w-[90px] h-[90px]">
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#f3f4f6" strokeWidth="8" />
+                        <circle
+                          cx="50" cy="50" r="42" fill="none"
+                          stroke="#199087"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray={`${completenessPercent * 2.64} 264`}
+                          className="transition-all duration-500"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-xl font-bold text-gray-900">{completenessPercent}%</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Status message */}
+                  <p className="text-center text-xs font-semibold tracking-wide uppercase text-gray-900 font-display mb-0.5">
+                    {completenessPercent >= 100 ? "ALL DONE!" :
+                     completenessPercent >= 76 ? "NEARLY COMPLETE!" :
+                     completenessPercent >= 51 ? "LOOKING GOOD!" :
+                     completenessPercent >= 26 ? "ALMOST THERE!" :
+                     "JUST GETTING STARTED"}
+                  </p>
+                  <p className="text-center text-[11px] text-gray-400 mb-4">
+                    Complete your application to get matched
+                  </p>
+
+                  {/* Section checklist */}
+                  <div className="space-y-0.5">
+                    {completeSections.map((section) => (
+                      <a
+                        key={section.id}
+                        href={`#${section.id}`}
+                        className="flex items-center justify-between py-2 px-2 -mx-2 rounded-lg hover:bg-vanilla-100 transition-colors cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2">
+                          {section.done ? (
+                            <div className="w-4 h-4 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
+                              <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                          ) : section.percent > 0 ? (
+                            <div className="w-4 h-4 rounded-full border-2 border-primary-300 bg-primary-50 shrink-0 flex items-center justify-center">
+                              <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
+                            </div>
+                          ) : (
+                            <div className="w-4 h-4 rounded-full border-2 border-gray-200 shrink-0" />
+                          )}
+                          <span className={`text-sm ${section.done ? "text-primary-600 font-medium" : "text-gray-700"}`}>
+                            {section.label}
+                          </span>
+                        </div>
+                        <span className={`text-xs font-medium ${section.done ? "text-primary-600" : section.percent > 0 ? "text-primary-500" : "text-gray-400"}`}>
+                          {section.percent}%
+                        </span>
+                      </a>
+                    ))}
                   </div>
                 </div>
-              </div>
-
-              {/* Status message */}
-              <p className="text-center text-sm font-semibold tracking-wide uppercase text-gray-900 font-display mb-0.5">
-                {completenessPercent >= 100 ? "ALL DONE!" :
-                 completenessPercent >= 76 ? "NEARLY COMPLETE!" :
-                 completenessPercent >= 51 ? "LOOKING GOOD!" :
-                 completenessPercent >= 26 ? "ALMOST THERE!" :
-                 "JUST GETTING STARTED"}
-              </p>
-              <p className="text-center text-xs text-gray-400 mb-5">
-                Complete your application to get matched
-              </p>
-
-              {/* Section checklist - 8 logical sections */}
-              <div className="space-y-0.5">
-                {completeSections.map((section) => (
-                  <a
-                    key={section.id}
-                    href={`#${section.id}`}
-                    className="flex items-center justify-between py-2.5 px-2.5 -mx-2.5 rounded-lg hover:bg-vanilla-100 transition-colors cursor-pointer"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      {section.done ? (
-                        <div className="w-5 h-5 rounded-full bg-primary-600 flex items-center justify-center shrink-0">
-                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
-                        </div>
-                      ) : section.percent > 0 ? (
-                        <div className="w-5 h-5 rounded-full border-2 border-primary-300 bg-primary-50 shrink-0 flex items-center justify-center">
-                          <div className="w-2 h-2 rounded-full bg-primary-400" />
-                        </div>
-                      ) : (
-                        <div className="w-5 h-5 rounded-full border-2 border-gray-200 shrink-0" />
-                      )}
-                      <span className={`text-[15px] ${section.done ? "text-primary-600 font-medium" : "text-gray-700"}`}>
-                        {section.label}
-                      </span>
-                    </div>
-                    <span className={`text-sm font-medium ${section.done ? "text-primary-600" : section.percent > 0 ? "text-primary-500" : "text-gray-400"}`}>
-                      {section.percent}%
-                    </span>
-                  </a>
-                ))}
-              </div>
+              )}
             </div>
           </div>
         </div>
