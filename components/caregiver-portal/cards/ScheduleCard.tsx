@@ -59,7 +59,7 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
       ) : (
         <div>
           {/* Vertical column calendar */}
-          <div className="grid grid-cols-7 gap-0 rounded-xl border border-gray-200 overflow-hidden bg-white">
+          <div className="grid grid-cols-7 gap-0 overflow-hidden">
             {DAYS.map((day, dayIdx) => {
               const slots = (schedule[day] || []) as Array<{ start: string; end: string }>;
               const dayHours = slots.reduce((sum, s) => sum + slotHours(s), 0);
