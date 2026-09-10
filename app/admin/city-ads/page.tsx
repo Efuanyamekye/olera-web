@@ -2,13 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import CityQuizFunnel from "@/components/admin/CityQuizFunnel";
 
 /**
  * /admin/city-ads — Olera-owned city campaigns.
  *
- * Three blocks, one column, one question each:
+ * Four blocks, one column, one question each:
  *   Needs you  — leads waiting on a human (unfilled, offer past due, parked past
  *                its morning). Empty most days; when not, first on the page.
+ *   Quiz       — paid entry cohorts, quiz starts and contact-step reach.
  *   Leads      — one line each: who, what, who has it. Tap to open the chain
  *                and the outcome buttons.
  *   Setup      — one line per city. Everything editable lives behind "edit".
@@ -322,6 +324,8 @@ export default function CityAdsAdminPage() {
         </div>
       )}
 
+      <CityQuizFunnel />
+
       {/* Leads */}
       <Eyebrow>Leads</Eyebrow>
       <div className="mb-8 rounded-xl border border-gray-200 bg-white px-4">
@@ -387,7 +391,7 @@ export default function CityAdsAdminPage() {
           );
         })}
       </div>
-      <p className="mt-4 text-xs text-gray-400">Page conversion and cost per accepted family arrive in Slack on the day-5 and day-14 reads, not here.</p>
+      <p className="mt-4 text-xs text-gray-400">Quiz progression appears above. Campaign spend and clicks are entered manually in Setup.</p>
     </div>
   );
 }
