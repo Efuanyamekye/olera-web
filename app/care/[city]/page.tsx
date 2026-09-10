@@ -57,21 +57,49 @@ export default async function CityCarePage({
   let providers: CityProviderCard[] = [];
   try {
     const db = getServiceClient();
-    // Only providers who have said YES to taking requests. A disabled row is
-    // a prospect, and a test row is never a public card.
-    const { data: pool } = await db
+    // Which pool rows may appear as cards.
+    //
+    // `city_pool.enabled` is the ON CALL flag: it decides whether a provider
+    // gets TEXTED when a lead lands (see offers.server.ts, and /admin/city-ads
+    // renders it as "N on call"). Under concierge routing it is deliberately
+    // false for everyone, because Olera calls the family and no provider is
+    // contacted at all. Gating the cards on it therefore shipped both city
+    // landing pages with no provider proof on them for the whole first flight.
+    // Display now has its own rule:
+    //
+    //   concierge      -> any claimed, active account in this city's pool.
+    //                     Nobody is texted either way, and the card only
+    //                     claims the provider is local and on Olera.
+    //   provider chain -> still `enabled`, because there the page promises the
+    //                     request goes to one of them, and a provider who is
+    //                     not on call cannot receive it.
+    //
+    // A test row is never a public card under either rule.
+    const conciergeRouting = cfg.routingMode === "concierge";
+    let poolQuery = db
       .from("city_pool")
       .select("provider_id, position, care_types")
       .eq("slug", cfg.slug)
-      .eq("enabled", true)
       .eq("is_test", false)
       .order("position", { ascending: true });
+    if (!conciergeRouting) poolQuery = poolQuery.eq("enabled", true);
+    const { data: pool, error: poolError } = await poolQuery;
+    // This page swallowed its errors, which is how a page rendering no cards
+    // stayed indistinguishable from a page that simply converted badly for
+    // four days. Say which failure it was.
+    if (poolError) console.error("[care/city] pool query failed", cfg.slug, poolError);
     const ids = (pool ?? []).map((p) => p.provider_id as string);
     if (ids.length > 0) {
-      const { data: rows } = await db
+      // "Has said yes" is the account being claimed, not the on-call flag.
+      // An unclaimed row is a prospect we scraped and must never be shown as
+      // social proof; an inactive one has gone away.
+      const { data: rows, error: rowsError } = await db
         .from("business_profiles")
         .select("id, display_name, city, verification_state, image_url, slug")
-        .in("id", ids);
+        .in("id", ids)
+        .eq("claim_state", "claimed")
+        .eq("is_active", true);
+      if (rowsError) console.error("[care/city] business_profiles query failed", cfg.slug, rowsError);
       const byId = new Map((rows ?? []).map((r) => [r.id as string, r]));
       // Photos: the account's own image first, then the directory listing's
       // photos or logo, then initials on the client.
