@@ -1571,50 +1571,72 @@ function StudentPortalContent({
 
           {/* ── Sidebar (1/3) ── */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Profile Status Card - shows different states based on visibility */}
-            {profile.is_active ? (
-              /* Profile is live */
-              <div className="bg-white rounded-2xl border border-gray-200/80 p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse" />
-                  <span className="text-sm font-medium text-gray-900">Profile is live</span>
+            {/* Profile Visibility Card */}
+            {hasCompletedApplication ? (
+              /* Toggle for users who've gone live before */
+              <div className={`rounded-2xl border p-5 transition-colors ${
+                profile.is_active
+                  ? "bg-success-50/50 border-success-200"
+                  : "bg-white border-gray-200/80"
+              }`}>
+                {/* Toggle row */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    {profile.is_active ? (
+                      <div className="relative">
+                        <div className="w-3 h-3 rounded-full bg-success-500" />
+                        <div className="absolute inset-0 w-3 h-3 rounded-full bg-success-500 animate-ping opacity-75" />
+                      </div>
+                    ) : (
+                      <div className="w-3 h-3 rounded-full bg-gray-300" />
+                    )}
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {profile.is_active ? "Profile is live" : "Profile hidden"}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {profile.is_active ? "Visible to providers" : "Not visible to providers"}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Toggle switch */}
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={profile.is_active}
+                    onClick={() => handleToggleVisibility(!profile.is_active)}
+                    disabled={togglingVisibility}
+                    className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                      profile.is_active ? "bg-success-500" : "bg-gray-200"
+                    }`}
+                  >
+                    <span className="sr-only">Toggle profile visibility</span>
+                    <span
+                      className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                        profile.is_active ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    />
+                  </button>
                 </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  Providers can see your profile and reach out about opportunities.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => handleToggleVisibility(false)}
-                  disabled={togglingVisibility}
-                  className="w-full px-4 py-2.5 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded-xl transition-all disabled:opacity-50"
-                >
-                  {togglingVisibility ? "Updating..." : "Pause profile"}
-                </button>
-                <p className="text-xs text-gray-400 mt-2 text-center">
-                  Pausing hides your profile from providers temporarily
-                </p>
-              </div>
-            ) : isPaused ? (
-              /* Profile was live but is now paused */
-              <div className="bg-white rounded-2xl border border-gray-200/80 p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-gray-400" />
-                  <span className="text-sm font-medium text-gray-900">Profile paused</span>
-                </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  Your profile is hidden from providers. Unpause to become visible again.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => handleToggleVisibility(true)}
-                  disabled={togglingVisibility}
-                  className="w-full px-4 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-lg disabled:opacity-50"
-                >
-                  {togglingVisibility ? "Updating..." : "Unpause profile"}
-                </button>
+
+                {/* View profile link when live */}
+                {profile.is_active && (
+                  <a
+                    href={`/medjobs/candidates/${profile.slug}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 flex items-center justify-center gap-2 text-sm text-success-700 hover:text-success-800 font-medium transition-colors"
+                  >
+                    <span>View your public profile</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                )}
               </div>
             ) : (
-              /* Never went live */
+              /* First-time Go Live CTA */
               <div className="bg-white rounded-2xl border border-gray-200/80 p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
