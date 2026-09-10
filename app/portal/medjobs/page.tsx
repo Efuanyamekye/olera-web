@@ -1574,84 +1574,123 @@ function StudentPortalContent({
             {/* Profile Visibility Card */}
             {hasCompletedApplication ? (
               /* Toggle for users who've gone live before */
-              <div className={`rounded-2xl border p-5 transition-colors ${
-                profile.is_active
-                  ? "bg-success-50/50 border-success-200"
-                  : "bg-white border-gray-200/80"
-              }`}>
-                {/* Toggle row */}
-                <div className="flex items-center justify-between">
+              <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden">
+                {/* Header */}
+                <div className={`px-5 py-4 border-b transition-colors ${
+                  profile.is_active
+                    ? "bg-gradient-to-r from-success-50 to-white border-success-100"
+                    : "bg-gradient-to-r from-gray-50 to-white border-gray-100"
+                }`}>
                   <div className="flex items-center gap-3">
-                    {profile.is_active ? (
-                      <div className="relative">
-                        <div className="w-3 h-3 rounded-full bg-success-500" />
-                        <div className="absolute inset-0 w-3 h-3 rounded-full bg-success-500 animate-ping opacity-75" />
+                    {/* Icon */}
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+                      profile.is_active ? "bg-success-100" : "bg-gray-100"
+                    }`}>
+                      {profile.is_active ? (
+                        <svg className="w-5 h-5 text-success-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                      ) : (
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                        </svg>
+                      )}
+                    </div>
+
+                    {/* Title + Toggle */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-[15px] font-semibold text-gray-900">
+                            {profile.is_active ? "Profile is live" : "Profile hidden"}
+                          </h3>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            {profile.is_active ? "Visible to providers" : "Not visible to providers"}
+                          </p>
+                        </div>
+
+                        {/* Toggle switch */}
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={profile.is_active}
+                          onClick={() => handleToggleVisibility(!profile.is_active)}
+                          disabled={togglingVisibility}
+                          className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
+                            profile.is_active ? "bg-success-500" : "bg-gray-300"
+                          }`}
+                        >
+                          <span className="sr-only">Toggle profile visibility</span>
+                          <span
+                            className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                              profile.is_active ? "translate-x-5" : "translate-x-0"
+                            }`}
+                          />
+                        </button>
                       </div>
-                    ) : (
-                      <div className="w-3 h-3 rounded-full bg-gray-300" />
-                    )}
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">
-                        {profile.is_active ? "Profile is live" : "Profile hidden"}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {profile.is_active ? "Visible to providers" : "Not visible to providers"}
-                      </p>
                     </div>
                   </div>
-
-                  {/* Toggle switch */}
-                  <button
-                    type="button"
-                    role="switch"
-                    aria-checked={profile.is_active}
-                    onClick={() => handleToggleVisibility(!profile.is_active)}
-                    disabled={togglingVisibility}
-                    className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed ${
-                      profile.is_active ? "bg-success-500" : "bg-gray-200"
-                    }`}
-                  >
-                    <span className="sr-only">Toggle profile visibility</span>
-                    <span
-                      className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
-                        profile.is_active ? "translate-x-5" : "translate-x-0"
-                      }`}
-                    />
-                  </button>
                 </div>
 
-                {/* View profile link when live */}
-                {profile.is_active && (
-                  <a
-                    href={`/medjobs/candidates/${profile.slug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 flex items-center justify-center gap-2 text-sm text-success-700 hover:text-success-800 font-medium transition-colors"
-                  >
-                    <span>View your public profile</span>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                )}
+                {/* Content */}
+                <div className="px-5 py-4">
+                  {profile.is_active ? (
+                    <>
+                      <p className="text-sm text-gray-500 leading-relaxed">
+                        Providers can discover your profile and reach out about caregiving opportunities.
+                      </p>
+                      <a
+                        href={`/medjobs/candidates/${profile.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-1.5 text-sm text-success-600 hover:text-success-700 font-medium transition-colors"
+                      >
+                        <span>View your public profile</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    </>
+                  ) : (
+                    <p className="text-sm text-gray-500 leading-relaxed">
+                      Your profile is hidden from providers. Toggle visibility when you&apos;re ready to be discovered.
+                    </p>
+                  )}
+                </div>
               </div>
             ) : (
               /* First-time Go Live CTA */
-              <div className="bg-white rounded-2xl border border-gray-200/80 p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  <span className="text-sm font-medium text-gray-900">Not live yet</span>
+              <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden">
+                {/* Header */}
+                <div className="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50/50 to-white">
+                  <div className="flex items-center gap-3">
+                    {/* Icon */}
+                    <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                      <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-[15px] font-semibold text-gray-900">Go Live</h3>
+                      <p className="text-xs text-gray-500 mt-0.5">Get discovered by providers</p>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-sm text-gray-600 mb-4">
-                  Make your profile visible to providers and start getting matched with jobs.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setShowGoLiveReview(true)}
-                  className="w-full px-4 py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-xl transition-all hover:shadow-lg"
-                >
-                  Go Live
-                </button>
+
+                {/* Content */}
+                <div className="px-5 py-4">
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">
+                    Make your profile visible to healthcare providers and start getting matched with caregiving jobs.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowGoLiveReview(true)}
+                    className="w-full py-3 text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 rounded-xl transition-colors"
+                  >
+                    Go Live
+                  </button>
+                </div>
               </div>
             )}
 
