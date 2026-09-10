@@ -1145,11 +1145,11 @@ function StudentPortalContent({
     }
   };
 
-  // Collapsible completeness card state - start expanded for new profiles
+  // Collapsible completeness card state - start compact by default
   const [isCompletenessExpanded, setIsCompletenessExpanded] = useState(() => {
-    if (typeof window === "undefined") return true;
+    if (typeof window === "undefined") return false;
     const saved = localStorage.getItem("olera-student-completeness-expanded");
-    return saved === null ? true : saved === "true";
+    return saved === null ? false : saved === "true";
   });
   const toggleCompleteness = () => {
     const newValue = !isCompletenessExpanded;

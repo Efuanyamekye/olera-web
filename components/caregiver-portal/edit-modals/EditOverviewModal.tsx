@@ -68,9 +68,24 @@ export default function EditOverviewModal({
   const [displayName, setDisplayName] = useState(profile.display_name || "");
   const [university, setUniversity] = useState(meta.university || "");
   const [major, setMajor] = useState(meta.major || "");
-  const [city, setCity] = useState(profile.city || "");
-  const [state, setState] = useState(profile.state || "");
   const [photoUrl, setPhotoUrl] = useState(profile.image_url || "");
+
+  // Auto-populate city/state from university if missing
+  const initialCityState = (() => {
+    if (profile.city && profile.state) {
+      return { city: profile.city, state: profile.state };
+    }
+    // Try to match existing university to our list
+    const match = UNIVERSITIES.find(
+      (u) => u.name.toLowerCase().trim() === (meta.university || "").toLowerCase().trim()
+    );
+    if (match?.city && match?.state) {
+      return { city: match.city, state: match.state };
+    }
+    return { city: "", state: "" };
+  })();
+  const [city, setCity] = useState(initialCityState.city);
+  const [state, setState] = useState(initialCityState.state);
 
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
