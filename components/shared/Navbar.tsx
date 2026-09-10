@@ -689,7 +689,46 @@ export default function Navbar() {
             {/* ── CENTER — Primary navigation (page-centered, hidden on mobile + inbox) ── */}
             {!isMinimalNav && (
               <div className="hidden lg:flex items-center gap-1">
-                {hasStudentProfile ? null : (isProviderPortal || activeProfile?.type === "organization") ? (
+                {hasStudentProfile ? (
+                  /* Student Portal nav links */
+                  <>
+                    {/* Find Jobs */}
+                    <Link
+                      href="/portal/medjobs/jobs"
+                      className={`relative px-4 py-2 text-[15px] font-medium transition-colors ${
+                        pathname.startsWith("/portal/medjobs/jobs")
+                          ? "text-primary-600"
+                          : "text-gray-700 hover:text-gray-900"
+                      }`}
+                    >
+                      Find Jobs
+                    </Link>
+
+                    {/* Profile */}
+                    <Link
+                      href="/portal/medjobs"
+                      className={`relative px-4 py-2 text-[15px] font-medium transition-colors ${
+                        pathname === "/portal/medjobs"
+                          ? "text-primary-600"
+                          : "text-gray-700 hover:text-gray-900"
+                      }`}
+                    >
+                      Profile
+                    </Link>
+
+                    {/* Interviews */}
+                    <Link
+                      href="/portal/medjobs/interviews"
+                      className={`relative px-4 py-2 text-[15px] font-medium transition-colors ${
+                        pathname.startsWith("/portal/medjobs/interviews")
+                          ? "text-primary-600"
+                          : "text-gray-700 hover:text-gray-900"
+                      }`}
+                    >
+                      Interviews
+                    </Link>
+                  </>
+                ) : (isProviderPortal || activeProfile?.type === "organization") ? (
                   /* Provider Hub nav links - shown on /provider/* URLs or for organization users (e.g., in inbox) */
                   <>
                     {/* Profile */}
