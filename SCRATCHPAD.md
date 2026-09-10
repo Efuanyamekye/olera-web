@@ -8,6 +8,24 @@
 ## Current Focus
 
 
+### 2026-09-10 (later) — The Codex ad-boost pin was already stale when it was written; skill rewritten to resolve from the repo (`hardy-hopper`, PRs #1862 → staging · #1863 → main `73ba89cd7`)
+
+**Supersedes the entry immediately below.** That entry records pinning the Codex skill to `~/.codex/worktrees/a738/Olera Web/.claude/commands/ad-boost-audit.md` as the fix. It was not. The pin was stale within a day and the entry's claim that the pinned path "includes city campaigns, prior-note prediction scoring, and city-specific audit logging" is true only as of 8 Sep.
+
+**The defect.** The pinned copy was **19,590 bytes, frozen Sep 8 09:36**. The repo command was **38,066 bytes** — `5c32442b2`, *"Add Meta and Nextdoor to the ad-boost audit"*, Sep 10 03:58, on staging and main. The delta is Phase 2M and Phase 2N, the two channels the city experiment had just launched. **It would not have errored.** Codex would have produced a confident audit silently missing Meta and Nextdoor. Worse, the skill instructed Codex to prefer the pin *"even when the current Olera checkout contains another copy"* and to *"not silently fall back to an older checkout copy"* — so by 10 Sep it was ordering Codex to prefer the stale copy over a fresher one it might be sitting in.
+
+**Why a pin can never work here.** `a738` is one of 16 disposable Codex worktrees. Any path pin decays the moment the repo moves on, and silently. There is no stable local backstop either: `~/Desktop/olera-web` is on a June branch (`chore/rename-compact-skill`, 2026-06-16) and does not contain the command at all.
+
+**The rewrite.** `~/.codex/skills/ad-boost-audit/SKILL.md` now names no directory. It resolves `$(git rev-parse --show-toplevel)/.claude/commands/ad-boost-audit.md` from whatever checkout Codex is running in, then gates on a **content floor** — `grep -c '^## Phase 2M'` and `'^## Phase 2N'` — rather than a date or a prose claim, which is the thing that went stale last time. Three-tier fallback: working tree if it passes the floor (a checkout may legitimately be editing the command), else `git fetch origin staging && git show origin/staging:…`, else `gh api` straight from GitHub. Backup at `SKILL.md.bak-2026-09-10`. `agents/openai.yaml` was clean.
+
+**The fallback is the normal path, not the edge case.** Scanned all 16 Codex worktrees: 8 hold the command, at 15,443b or 19,590b, and **not one** has Phase 2M or 2N. Zero are current. So every run will fall through to fetch. The `gh api` tier was added for that reason and verified byte-identical to `origin/staging` (md5 `f042d65f`) — **quote the URL**, or zsh globs the `?` and fails with `no matches found`, which reads like an API error and is not one.
+
+**A false alarm I nearly reported as a finding.** Every Codex worktree looked orphaned — `git` inside them returns `fatal: not a git repository: /Users/tfalohun/Documents/Olera Web/.git/worktrees/…`. They are fine. **macOS TCC denies this shell access to `~/Documents`**, where Codex's clone lives. `ls -d` on an explicit path still succeeds (stat is allowed, enumeration is not), which is how to tell the two apart. Saved as `reference_codex_repo_documents_tcc`; the rule as `feedback_codex_skills_resolve_dont_pin`.
+
+**Nothing shipped and nothing needed to.** The repo's own command was correct the whole time — the bug was that Codex was not reading it. The skill lives outside the repository, so the fix delivers by restarting Codex, not by deploying. #1862 was a 50-commit-stale docs PR that conflicted on this file; rebased, both entries kept, +7/−0 against staging. #1863 promoted it to main on TJ's call knowing it shipped no product change; staging and main are now identical, delta 0.
+
+**Open.** Whether Codex's clone at `~/Documents/Olera Web` can reach its remote is **unverified** — same permission wall. If `git fetch` is dead there, the `gh` tier covers it, and that tier is tested. First real Codex run confirms. **Next: TJ restarts Codex** (a running session holds the old pinned SKILL.md) and runs the audit; if the readout is missing Meta or Nextdoor, the fallback chain failed.
+
 ### 2026-09-10 — Codex Ad Boost audit source reference
 
 - Updated the installed local skill `/Users/tfalohun/.codex/skills/ad-boost-audit/SKILL.md` to read `/Users/tfalohun/.codex/worktrees/a738/Olera Web/.claude/commands/ad-boost-audit.md` explicitly, even in checkouts carrying the older September 4 command.
