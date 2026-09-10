@@ -484,32 +484,48 @@ export default function EditOverviewModal({
           </div>
 
           {/* City / State */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                City
-              </label>
-              <input
-                type="text"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="e.g. Austin"
-                className="w-full bg-white border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all"
-              />
+          <div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  City
+                </label>
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="e.g. Austin"
+                  className="w-full bg-white border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  State
+                </label>
+                <input
+                  type="text"
+                  value={state}
+                  onChange={(e) => {
+                    // Only allow letters, uppercase, max 2 chars
+                    const letters = e.target.value.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 2);
+                    setState(letters);
+                  }}
+                  placeholder="TX"
+                  maxLength={2}
+                  className="w-full bg-white border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all uppercase"
+                />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                State
-              </label>
-              <input
-                type="text"
-                value={state}
-                onChange={(e) => setState(e.target.value.toUpperCase().slice(0, 2))}
-                placeholder="TX"
-                maxLength={2}
-                className="w-full bg-white border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all uppercase"
-              />
-            </div>
+            {/* Hint: both needed for completeness */}
+            {(city || state) && !(city && state) ? (
+              <p className="mt-2 text-xs text-amber-600">
+                Both city and state are needed for profile completeness
+              </p>
+            ) : !city && !state ? (
+              <p className="mt-2 text-xs text-gray-400">
+                Location helps providers find you
+              </p>
+            ) : null}
           </div>
 
           {/* Major / Program of Study */}
