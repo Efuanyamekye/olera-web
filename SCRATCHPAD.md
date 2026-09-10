@@ -8,6 +8,13 @@
 ## Current Focus
 
 
+### 2026-09-10 — Codex Ad Boost audit source reference
+
+- Updated the installed local skill `/Users/tfalohun/.codex/skills/ad-boost-audit/SKILL.md` to read `/Users/tfalohun/.codex/worktrees/a738/Olera Web/.claude/commands/ad-boost-audit.md` explicitly, even in checkouts carrying the older September 4 command.
+- The newer command includes city campaigns, prior-note prediction scoring, and city-specific audit logging. Missing source paths must resolve to a copy containing those updates, never silently fall back to the older workflow.
+- Verified the skill edit and compared the shared command copies. The installed skill is outside this repository; this PR records the local configuration change only. No campaigns, spend, or application code changed.
+- Quicksave branch: `codex/ad-boost-audit-skill-reference`, based on `origin/staging`. Validation: source reference and required workflow sections checked; documentation diff check. Next: future audits use the newer source; relocate the reference if that worktree is removed.
+
 ### 2026-09-09 (later) — The ad-router positioning shipped: $60,346 of our own spend verified at source and put on /managed-ads (`lively-carson`, PRs #1849 · #1850 → staging `4e1f4329a`)
 
 **What TJ asked for, in his own frame.** *"Jupiter in the Solana ecosystem is a DEX aggregator. You go to Jupiter and Jupiter will find you the best route. Similarly, Olera is an ad router. We find you the best, cheapest ad in any and all of the top platforms that you may or may not be aware of."* This supersedes the overhead thesis parked earlier the same day and is strictly better: routing is an outcome a provider buys, overhead is an invoice they do not.
