@@ -58,7 +58,7 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
         />
       ) : (
         <div>
-          {/* Vertical column calendar */}
+          {/* Vertical column calendar - neutral colors, minimal accents */}
           <div className="grid grid-cols-7 gap-0 overflow-hidden">
             {DAYS.map((day, dayIdx) => {
               const slots = (schedule[day] || []) as Array<{ start: string; end: string }>;
@@ -71,16 +71,16 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
                   className={`flex flex-col ${!isLast ? "border-r border-gray-100" : ""}`}
                 >
                   {/* Day header */}
-                  <div className={`px-1.5 py-2 text-center border-b ${
-                    slots.length > 0 ? "border-primary-100 bg-primary-50/40" : "border-gray-100 bg-gray-50"
+                  <div className={`px-1.5 py-2 text-center border-b border-gray-100 ${
+                    slots.length > 0 ? "bg-gray-50" : "bg-gray-50/50"
                   }`}>
                     <span className={`text-xs font-semibold ${
-                      slots.length > 0 ? "text-primary-700" : "text-gray-500"
+                      slots.length > 0 ? "text-gray-900" : "text-gray-400"
                     }`}>
                       {day}
                     </span>
                     {dayHours > 0 && (
-                      <p className="text-[10px] text-primary-500 mt-0.5">{dayHours}h</p>
+                      <p className="text-[10px] text-gray-500 mt-0.5">{dayHours}h</p>
                     )}
                   </div>
 
@@ -90,13 +90,13 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
                       slots.map((slot, i) => (
                         <div
                           key={i}
-                          className="bg-primary-50 border border-primary-100 rounded-lg px-1.5 py-1.5 text-center"
+                          className="bg-gray-50 border border-gray-200 rounded-lg px-1.5 py-1.5 text-center"
                         >
-                          <p className="text-[11px] font-medium text-primary-700 leading-tight">
+                          <p className="text-[11px] font-medium text-gray-700 leading-tight">
                             {formatTime(slot.start)}
                           </p>
-                          <p className="text-[9px] text-primary-400 leading-tight">to</p>
-                          <p className="text-[11px] font-medium text-primary-700 leading-tight">
+                          <p className="text-[9px] text-gray-400 leading-tight">to</p>
+                          <p className="text-[11px] font-medium text-gray-700 leading-tight">
                             {formatTime(slot.end)}
                           </p>
                         </div>
@@ -114,7 +114,7 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
 
           {/* Total hours */}
           <div className="mt-3 flex items-center justify-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-primary-500" />
+            <div className="w-2 h-2 rounded-full bg-gray-400" />
             <span className="text-sm font-semibold text-gray-900">{totalHours} hours/week</span>
             <span className="text-xs text-gray-400">available</span>
           </div>
