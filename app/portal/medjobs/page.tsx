@@ -1635,7 +1635,7 @@ function StudentPortalContent({
                     Complete your application to get matched
                   </p>
 
-                  {/* Section checklist */}
+                  {/* Section checklist - only highlight incomplete items */}
                   <div className="space-y-0.5">
                     {completeSections.map((section) => (
                       <a
@@ -1657,13 +1657,16 @@ function StudentPortalContent({
                           ) : (
                             <div className="w-4 h-4 rounded-full border-2 border-gray-200 shrink-0" />
                           )}
-                          <span className={`text-sm ${section.done ? "text-primary-600 font-medium" : "text-gray-700"}`}>
+                          <span className={`text-sm ${section.done ? "text-gray-500" : "text-gray-700"}`}>
                             {section.label}
                           </span>
                         </div>
-                        <span className={`text-xs font-medium ${section.done ? "text-primary-600" : section.percent > 0 ? "text-primary-500" : "text-gray-400"}`}>
-                          {section.percent}%
-                        </span>
+                        {/* Only show percentage for incomplete items - draws eye to what's left */}
+                        {!section.done && (
+                          <span className={`text-xs font-medium ${section.percent > 0 ? "text-primary-600" : "text-gray-400"}`}>
+                            {section.percent}%
+                          </span>
+                        )}
                       </a>
                     ))}
                   </div>
