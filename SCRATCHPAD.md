@@ -7,6 +7,14 @@
 
 ## Current Focus
 
+### 2026-09-10 — Quiz dashboard preview refinements (PR #1864)
+
+- Branch `codex/correct-city-audit-funnel`, PR #1864 targets staging; nothing merged. Latest product commit `0c40b709b`.
+- `app/admin/city-ads/page.tsx`: moved Quiz progression below Leads and Setup. `components/admin/CityQuizFunnel.tsx`: rolling Last 7 days default, collapsed details with live filtered totals, accessible toggle, and localStorage open/closed preference. Other date presets and custom UTC dates remain available. Group totals can count a visitor in multiple city/channel groups; summary explains this.
+- `scripts/check-city-quiz-ui.tsx`: verifies seven-day query, collapsed default, opening and preference restoration, rates, filters and error handling. UI checks, targeted ESLint, focused TypeScript and diff check pass. Full-project TypeScript remains blocked by missing checkout dependencies documented in the PR.
+- Vercel passed for the latest product commit. Next: preview QA at `/admin/city-ads`; expand Details, check filters and reload persistence on desktop/mobile. TJ's screenshot was production, where this PR is not deployed. Private `reports/` audit artifacts remain local and untracked.
+
+
 
 ### 2026-09-10 (later) — The Codex ad-boost pin was already stale when it was written; skill rewritten to resolve from the repo (`hardy-hopper`, PRs #1862 → staging · #1863 → main `73ba89cd7`)
 
@@ -5403,6 +5411,14 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 ---
 
 ## Session Log
+
+### 2026-09-10 — City quiz funnel and audit attribution correction (Codex)
+
+**Branch:** `codex/correct-city-audit-funnel`, based on staging. Added `components/admin/CityQuizFunnel.tsx` to `/admin/city-ads`, backed by the admin-only paginated `/api/admin/city-ads/funnel` endpoint and `lib/city-ads/quiz-funnel.ts`. City/channel filters, UTC custom dates, since-launch and since-fix (Sep 10 07:22 UTC) views; existing telemetry only. Submitted leads remain a separate real-submission total, not a falsely matched fourth stage. No individual-question tracking, migration, ad changes or extra budget.
+
+**Correction:** Prior paid-engagement zeros were a bad audit grouping: only landing events have UTMs. Same visitor + visit + page joins recovered 4/28 paid starts (three already present before the earlier audit). Corrected `.claude/commands/ad-boost-audit.md` and appended observations to all six campaign case logs/notes. The detailed audit report stays local in `reports/ad-boost/`.
+
+**Pre-test fixes:** Nextdoor referrers use `other`, not `external`; contact reach percentages use visitors rather than potentially missing start events; future-only ranges rejected; selected city survives fetch errors. Three `scripts/check-city-quiz-*` checks pass (attribution, UI and real route with mocked auth/DB including pagination). Targeted ESLint and focused TypeScript pass. Full `npx --no-install tsc --noEmit` blocked by missing checkout dependencies (`workflow`, `lucide-react`, `@vercel/functions`, `qrcode`, `@react-pdf/renderer`), with no errors in changed files. **Next:** staging PR preview QA for date filters, city/channel rows, Nextdoor and mobile table scrolling; merge only on TJ's instruction.
 
 ### 2026-09-08 — Audited the delta, found the lead the morning audit missed, and closed the conversion gap
 
