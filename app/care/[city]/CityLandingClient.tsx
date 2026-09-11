@@ -351,6 +351,20 @@ export default function CityLandingClient({
 
   const submit = async () => {
     setError(null);
+    // Care type is REQUIRED by the route (/api/city-leads:74 rejects anything
+    // outside home_care / assisted_living / unsure / medical) and the client
+    // never checked it.
+    //
+    // On the stepped arms that was harmless: you cannot reach the contact screen
+    // without answering the question. one_screen puts the chips and the contact
+    // fields on ONE screen, so nothing stopped someone filling in their name,
+    // their number and the consent box, pressing the button, and getting back
+    // "Pick the kind of help." — an error about a control they had scrolled past,
+    // raised only after the round trip.
+    //
+    // Checked first so the error names the first thing on the form rather than
+    // the last, matching the order the visitor reads.
+    if (!what) return setError("Choose the kind of help you need.");
     if (!firstName.trim()) return setError("Add your first name.");
     if (phone.replace(/\D/g, "").length < 10) return setError("Add a mobile number so the provider can call you.");
     if (!consent) return setError("Tick the box so a provider can contact you.");
