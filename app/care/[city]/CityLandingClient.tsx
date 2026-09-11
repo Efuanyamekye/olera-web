@@ -432,10 +432,13 @@ export default function CityLandingClient({
         */}
         {oneScreen && step === "intro" && (
           <section className="pb-28">
-            <h1 className="mt-8 font-display text-[2.15rem] leading-[1.08] tracking-tight text-gray-900">
+            <h1
+              className="mt-8 text-[2.05rem] font-semibold leading-[1.12] tracking-tight"
+              style={{ color: V3.ink }}
+            >
               {fill(copy.headline)}
             </h1>
-            <p className="mt-3 text-[17px] leading-snug text-gray-600">
+            <p className="mt-3 text-[17px] leading-snug" style={{ color: V3.muted }}>
               {fill(staffedNow ? copy.staffed : copy.unstaffed)}
             </p>
 
@@ -521,6 +524,19 @@ export default function CityLandingClient({
                   {error}
                 </p>
               )}
+
+              {/* The form's own submit. The sticky bar is a FALLBACK for when
+                  this has scrolled out of view, never the only way to submit —
+                  an earlier build had no inline button, so once the bar learned
+                  to hide itself the page had no way to send anything. */}
+              <button
+                type="submit"
+                disabled={busy}
+                className="block min-h-[54px] w-full rounded-full px-5 text-[17px] font-semibold disabled:opacity-60"
+                style={{ background: V3.action, color: V3.actionInk }}
+              >
+                {busy ? "Sending…" : copy.cta}
+              </button>
             </form>
             <div ref={formEndRef} aria-hidden className="h-px" />
 
