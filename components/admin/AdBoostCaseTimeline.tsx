@@ -215,7 +215,16 @@ export default function AdBoostCaseTimeline({
       >
         <button
           type="button"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => {
+            // Collapsing also closes the form. Otherwise the action button keeps
+            // reading "Cancel" while the form it would cancel is hidden, and it
+            // takes two clicks to get a visible form back. Typed text survives in
+            // state, so reopening restores the draft.
+            setOpen((v) => {
+              if (v) setShowForm(false);
+              return !v;
+            });
+          }}
           aria-expanded={open}
           aria-controls="case-history-body"
           className="-m-1 flex min-w-0 items-start gap-2 rounded p-1 text-left hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
@@ -232,10 +241,14 @@ export default function AdBoostCaseTimeline({
           <span className="min-w-0">
             <span className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-semibold text-gray-900">Case history</span>
+              {/* A failed load sets entries to [], so the count would assert "0
+                  entries" when the truth is that we do not know. Show a dash. */}
               <span className="text-xs text-gray-400">
-                {entries === null
-                  ? "loading…"
-                  : `${entries.length} ${entries.length === 1 ? "entry" : "entries"}`}
+                {error
+                  ? "—"
+                  : entries === null
+                    ? "loading…"
+                    : `${entries.length} ${entries.length === 1 ? "entry" : "entries"}`}
               </span>
             </span>
             <span className="mt-1 block text-xs leading-relaxed text-gray-500">

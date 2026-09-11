@@ -1171,7 +1171,6 @@ function Detail({
         )}
       </section>
 
-      {/* Danger zone */}
       {/* What actually happened to this campaign, in order. Collapsed and last:
           the operator comes to this page to change something, and a case with
           thirty audit entries pushed every control several screens down. The
@@ -1181,6 +1180,7 @@ function Detail({
         campaignTag={request.campaign_tag}
       />
 
+      {/* Danger zone */}
       <section className="rounded-xl border border-gray-200 p-5">
         <h2 className="text-sm font-semibold text-gray-900 mb-3">Manage</h2>
         <div className="flex items-center gap-2">
