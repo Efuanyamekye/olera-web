@@ -91,13 +91,21 @@ export async function GET() {
   // because two of its three numbers — landings and engagement — exist only as
   // events; the third comes from city_leads.landing_arm, which is why that
   // column exists.
-  const { data: armEvents } = await db
+  //
+  // BOUNDED BY THE WINDOW, NOT JUST BY A ROW CAP. Ordered ascending with a cap,
+  // the rows dropped on overflow would be the NEWEST ones — the table would
+  // quietly stop moving while looking fine. Filtering on the window keeps the
+  // set small enough that the cap never binds, and descending order means that
+  // if it ever did, it sheds the oldest instead.
+  let armQuery = db
     .from("growth_attribution_events")
     .select("event_type, anonymous_id, visit_id, occurred_at, metadata")
     .eq("page_category", "city_landing")
-    .in("event_type", ["page_landed", "cta_engaged", "provider_expanded"])
-    .order("occurred_at", { ascending: true })
-    .limit(5000);
+    .in("event_type", ["page_landed", "cta_engaged", "provider_expanded"]);
+  if (ARM_WINDOW_START) armQuery = armQuery.gte("occurred_at", ARM_WINDOW_START);
+  const { data: armEvents } = await armQuery
+    .order("occurred_at", { ascending: false })
+    .limit(20000);
 
   return NextResponse.json({
     lastClockRun: lastRun?.started_at ?? null,

@@ -134,11 +134,17 @@ export async function POST(req: NextRequest) {
 
   // Idempotency: same phone + city in 24h returns the existing lead. A stopped
   // request does not count; the family may genuinely be asking again.
+  //
+  // Test rows are excluded for the same reason the abuse cap excludes them: a
+  // verification row carrying a phone number would otherwise block a real
+  // family using that number for 24 hours and hand them back a "duplicate"
+  // pointing at a lead nobody will ever call.
   const { data: existing } = await db
     .from("city_leads")
     .select("id, status, care_type")
     .eq("slug", slug)
     .eq("phone", phone)
+    .eq("is_test", false)
     .neq("status", "stopped")
     .gte("created_at", new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString())
     .order("created_at", { ascending: false })

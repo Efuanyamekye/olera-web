@@ -6,6 +6,12 @@ import CityQuizFunnel from "@/components/admin/CityQuizFunnel";
 import type { ArmRow } from "@/lib/city-ads/arm-rollup";
 import type { CityLandingArm } from "@/lib/city-ads/landing-variant";
 
+/** Opening the page is the fastest way to know what a number means. */
+const CITY_PREVIEWS = [
+  { slug: "dallas-tx", label: "Dallas" },
+  { slug: "charlotte-nc", label: "Charlotte" },
+] as const;
+
 /** What each arm is, in the words used to describe it everywhere else. */
 const ARM_LABEL: Partial<Record<CityLandingArm, string>> = {
   providers_first: "Providers first",
@@ -739,14 +745,19 @@ function LandingArms({ rows }: { rows: ArmRow[] }) {
               <tr key={r.arm}>
                 <td className="py-1.5 pr-3 font-medium text-gray-900">
                   {ARM_LABEL[r.arm] ?? r.arm}{" "}
-                  <a
-                    className="font-normal text-primary-700 underline-offset-2 hover:underline"
-                    href={`/care/dallas-tx?v=${r.arm}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    open
-                  </a>
+                  {/* Both cities run all three arms, and the numbers in this row
+                      pool them. A single unlabelled "open" implied one city. */}
+                  {CITY_PREVIEWS.map((c) => (
+                    <a
+                      key={c.slug}
+                      className="ml-1.5 font-normal text-primary-700 underline-offset-2 hover:underline"
+                      href={`/care/${c.slug}?v=${r.arm}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {c.label}
+                    </a>
+                  ))}
                 </td>
                 <td className="py-1.5 pr-3 text-right tabular-nums">{r.landings}</td>
                 <td className="py-1.5 pr-3 text-right tabular-nums">
