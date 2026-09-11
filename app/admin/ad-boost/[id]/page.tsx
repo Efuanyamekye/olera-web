@@ -540,13 +540,6 @@ function Detail({
         </Link>
       </div>
 
-      {/* What actually happened to this campaign, in order. Sits above the
-          provider's other flights: the case first, then the wider history. */}
-      <AdBoostCaseTimeline
-        requestId={request.id}
-        campaignTag={request.campaign_tag}
-      />
-
       {providerCampaigns.length > 1 && (
         <CampaignHistory
           campaigns={providerCampaigns}
@@ -1177,6 +1170,15 @@ function Detail({
           </div>
         )}
       </section>
+
+      {/* What actually happened to this campaign, in order. Collapsed and last:
+          the operator comes to this page to change something, and a case with
+          thirty audit entries pushed every control several screens down. The
+          overdue-review banner inside it still renders while it is shut. */}
+      <AdBoostCaseTimeline
+        requestId={request.id}
+        campaignTag={request.campaign_tag}
+      />
 
       {/* Danger zone */}
       <section className="rounded-xl border border-gray-200 p-5">
