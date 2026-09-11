@@ -112,11 +112,22 @@ export async function POST(req: NextRequest) {
   const now = new Date();
 
   // Abuse cap: 5 leads per IP per hour.
-  if (ip) {
+  //
+  // Skipped for verification, which carries CRON_SECRET and therefore cannot be
+  // the anonymous flood this cap exists to stop. Checking the matrix of three
+  // landing arms against four care types needs twelve submissions and the cap
+  // refused seven of them.
+  //
+  // TEST ROWS ARE EXCLUDED FROM THE COUNT. They were not, which meant a
+  // verification run could push a REAL family on the same egress IP over the
+  // limit and hand them "Too many requests" on a form they had filled in
+  // correctly. Rare, but the failure lands on the visitor rather than on us.
+  if (ip && !isVerification) {
     const { count } = await db
       .from("city_leads")
       .select("id", { count: "exact", head: true })
       .eq("consent_ip", ip)
+      .eq("is_test", false)
       .gte("created_at", new Date(now.getTime() - 60 * 60 * 1000).toISOString());
     if ((count ?? 0) >= 5) return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
   }
