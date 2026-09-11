@@ -43,17 +43,23 @@ export interface CityLandingCopy {
   footnoteUnstaffed: string;
   /** First row of "How it works", as [title, aside]. */
   firstStep: [string, string];
+  /**
+   * Commitment reassurance, shown next to the action.
+   *
+   * The three frictions a visitor feels are relevance ("is there care for me
+   * here"), effort ("how much work is this") and COMMITMENT ("what happens if I
+   * give you my number"). Proof and short forms attack the first two. Nothing
+   * on the page attacked the third until this line existed. Empty on control,
+   * which is reference only.
+   */
+  reassure: string;
 }
 
 /**
  * `{city}` and `{count}` are the only tokens. Anything else is literal.
  */
 export const CITY_LANDING_COPY: Record<CityLandingArm, CityLandingCopy> = {
-  /**
-   * The page exactly as it ran through the first flight. Do not improve this
-   * one. It is the baseline every other arm is measured against, and a control
-   * that quietly gets better measures nothing.
-   */
+  /** Reference only. Not assigned to traffic. Do not improve it. */
   control: {
     headline: "Looking for senior care in {city}?",
     staffed: "Tell us what you need. We call you back today. Free.",
@@ -62,39 +68,47 @@ export const CITY_LANDING_COPY: Record<CityLandingArm, CityLandingCopy> = {
     footnoteStaffed: "Four questions · We call you back · Never sold",
     footnoteUnstaffed: "Four questions · We call you back · Never sold",
     firstStep: ["Answer four questions", "About two minutes"],
+    reassure: "",
   },
 
-  /**
-   * Proof before the ask. The provider cards render above the button and open
-   * in place, so a visitor can take the proof without taking the ask.
-   */
+  /** PROOF, THEN ASK. */
   providers_first: {
     headline: "Senior care in {city}, from people who work here.",
     staffed: "{count} near {city} on Olera. Tap any of them to see what they do.",
     unstaffed: "{count} near {city} on Olera. Tap any of them to see what they do.",
-    cta: "Find care near me",
-    footnoteStaffed: "Four questions · We call you back today · Never sold",
-    footnoteUnstaffed: "Four questions · We call you back in the morning · Never sold",
-    firstStep: ["Answer four questions", "About two minutes"],
+    cta: "Request a call",
+    footnoteStaffed: "Free for families · Never sold",
+    footnoteUnstaffed: "Free for families · Never sold",
+    firstStep: ["Tell us what you need", "About a minute"],
+    // The single best line either review produced. It removes a fear neither
+    // analysis had named: not effort, not relevance, but being committed to
+    // something. Airbnb puts "Free cancellation" under the price for the same
+    // reason.
+    reassure: "Requesting a call does not book care. You do not have to choose a provider yet.",
   },
 
-  /**
-   * A smaller ask. One question instead of four before the contact step.
-   */
-  /**
-   * The whole request on one screen. No intro, no quiz, nothing to advance
-   * through. The copy's only job is to say what happens and get out of the way.
-   */
+  /** ASK, THEN PROOF. */
   one_screen: {
     headline: "Find senior care in {city}.",
-    // No timing claim: 84% of paid landings arrive outside the callback window.
-    // "A real person" is the thing worth promising and it is true at any hour.
     staffed: "Answer three things and a real person from Olera calls to talk it through. Free for families.",
     unstaffed: "Answer three things and a real person from Olera calls to talk it through. Free for families.",
     cta: "Request a call",
     footnoteStaffed: "Takes about thirty seconds · Never sold",
     footnoteUnstaffed: "Takes about thirty seconds · Never sold",
     firstStep: ["Answer three things", "About thirty seconds"],
+    reassure: "Requesting a call does not book care. You do not have to choose a provider yet.",
+  },
+
+  /** DIAGNOSE, THEN ASK. */
+  guidance: {
+    headline: "Not sure where to start in {city}?",
+    staffed: "Two questions and we will point you at a sensible first step. Then we can talk it through if you want.",
+    unstaffed: "Two questions and we will point you at a sensible first step. Then we can talk it through if you want.",
+    cta: "Show me where to start",
+    footnoteStaffed: "Two questions · No contact details needed yet",
+    footnoteUnstaffed: "Two questions · No contact details needed yet",
+    firstStep: ["Answer two questions", "About twenty seconds"],
+    reassure: "Requesting a call does not book care. You do not have to choose a provider yet.",
   },
 };
 

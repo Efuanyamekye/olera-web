@@ -7,23 +7,30 @@
  * zero first clicks. That is the only thing the first flight measured that it
  * did not set out to measure, and it is the thing worth testing.
  *
- * THE ARMS TEST TWO DIFFERENT THEORIES OF WHY A STRANGER LEAVES:
+ * THE THREE ASSIGNED ARMS ARE THREE ORDERINGS OF THE SAME TWO INGREDIENTS —
+ * proof that we can help, and the request. Same content, same design language,
+ * three sequences. That is what makes them comparable: a difference between
+ * them is a difference in ORDER, not in how much effort went into the page.
  *
- *   control          The page as it ran. Headline, one line of promise, a
- *                    button, then providers and How it works below.
+ *   guidance         DIAGNOSE, THEN ASK. Two questions return a starting point
+ *                    before contact details are asked for, and both answers
+ *                    carry into the request rather than being asked twice.
  *
- *   providers_first  Proof before ask. The three real local providers move
- *                    ABOVE the button, so the first thing on screen is
- *                    something the visitor came for rather than a form.
+ *
+ *   control          The page as it ran. Kept reachable at ?v=control for
+ *                    reference; no longer assigned to traffic.
+ *
+ *   providers_first  PROOF, THEN ASK. The three real local providers move above
+ *                    the button, so the first thing on screen is something the
+ *                    visitor came for rather than a form.
  *                    Theory: they will not commit before seeing anything real.
  *                    Note this arm only became possible on 10 Sep — the cards
  *                    never rendered for anyone during the whole first flight,
  *                    because the page gated them on the ON CALL texting flag.
  *
- *   one_screen       The whole request on a single screen: care type as chips,
- *                    first name, mobile, consent, submit. No intro screen, no
- *                    quiz, nothing to advance through. A sticky action bar
- *                    keeps Submit reachable while the fields scroll under it.
+ *   one_screen       ASK, THEN PROOF. The whole request on a single screen —
+ *                    care type as chips, first name, mobile, consent — with the
+ *                    real provider cards BELOW it. Nothing to advance through.
  *                    Theory: the thing we are optimising is COMPLETED
  *                    SUBMISSIONS per paid landing, and every other concept on
  *                    the table changes what happens BEFORE the form while
@@ -55,7 +62,29 @@
  * be worth that risk. Content changes here; Google is not touched.
  */
 
-export const CITY_LANDING_ARMS = ["control", "providers_first", "one_screen"] as const;
+export const CITY_LANDING_ARMS = [
+  "control",
+  "providers_first",
+  "one_screen",
+  "guidance",
+] as const;
+
+/**
+ * The arms that actually receive traffic.
+ *
+ * `control` stays in the union so a stale cookie and ?v=control still resolve,
+ * but it is NOT assigned. Two independent reviews dropped it: at 10% of ~450
+ * landings it is ~45 visits, and a 1%-converting control shows zero about 74%
+ * of the time at that n, so it could never have estimated lift against
+ * baseline. THE COST, RECORDED SO NOBODY CLAIMS OTHERWISE LATER: with no
+ * concurrent baseline this experiment says which new page is best, never that
+ * the redesign beat the old one.
+ */
+export const CITY_LANDING_ASSIGNED = [
+  "providers_first",
+  "one_screen",
+  "guidance",
+] as const satisfies readonly CityLandingArm[];
 
 export type CityLandingArm = (typeof CITY_LANDING_ARMS)[number];
 
@@ -97,9 +126,7 @@ export function isCityLandingArm(v: unknown): v is CityLandingArm {
  * baseline at all, which is accepted rather than overlooked.
  */
 export function pickCityLandingArm(): CityLandingArm {
-  const r = Math.random();
-  if (r < 0.1) return "control";
-  return r < 0.4 ? "providers_first" : "one_screen";
+  return CITY_LANDING_ASSIGNED[Math.floor(Math.random() * CITY_LANDING_ASSIGNED.length)];
 }
 
 /**
