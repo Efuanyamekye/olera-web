@@ -1,7 +1,0 @@
-Attached is Codex’s updated V3 design package. Please read HANDOFF.md and open OPEN-FIRST-design-comparison.html. The HTML is self-contained and interactive; editable source and assets are also included.
-
-Put these alongside our existing designs in ONE comparison artifact, clearly labeled as prototypes. A replaces the old browse introduction; B gives useful guidance before contact; C offers a direct three-field callback request. All use the same new typography, spacing, palette and mobile sticky-action treatment.
-
-Use completed submissions per paid landing as the primary outcome. Preserve one experiment implementation at the existing URL. Check production API mappings and preview-event exclusion rather than copying the prototype submission code. The package explains what is simulated and what still requires integration.
-
-Give me your comparison and recommended combined version for review before merging. Do not merge or launch from this handoff alone.

@@ -231,7 +231,11 @@ export default function CityLandingClient({
     // if it wins we would not know which of the three dropped questions was
     // the barrier, and if it loses we would not know whether the remaining
     // question was the problem. Keyed per step so it fires once each.
-    if (step !== "intro" && step !== "done") {
+    // `guide` is excluded: it is the guidance arm's PAYOFF, not a question.
+    // Counting it would report guidance as having four questions when it has
+    // two, and the per-question drop-off this event exists to expose would be
+    // measuring a screen nobody fills in.
+    if (step !== "intro" && step !== "done" && step !== "guide") {
       fireOnce("question_viewed", { step }, `question_viewed:${step}`);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -277,7 +281,12 @@ export default function CityLandingClient({
    * while that is true and not a moment longer.
    */
   const formEndRef = useRef<HTMLDivElement>(null);
-  const [formEndVisible, setFormEndVisible] = useState(false);
+  // Starts TRUE so the bar begins hidden. IntersectionObserver callbacks run
+  // after first paint, so starting false rendered the bar for a frame and then
+  // removed it on every load where the form already fits — which on a 390x844
+  // screen is every load. Better to reveal the bar a frame late than to flash
+  // it on the one arm whose first impression is the whole experiment.
+  const [formEndVisible, setFormEndVisible] = useState(true);
   useEffect(() => {
     const el = formEndRef.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
@@ -444,11 +453,16 @@ export default function CityLandingClient({
         <header className="flex items-center justify-between text-sm">
           <span className="font-semibold tracking-wide text-primary-700">Olera</span>
           <span className="text-gray-500">
-            {step === "intro" || step === "done" ? `${cfg.city}, ${cfg.state}` : `Step ${stepIndex} of ${totalSteps}`}
+            {step === "intro" || step === "done" || step === "guide"
+              ? `${cfg.city}, ${cfg.state}`
+              : `Step ${stepIndex} of ${totalSteps}`}
           </span>
         </header>
 
-        {step !== "intro" && step !== "done" && (
+        {/* No step bar on `guide`: it is a result, not a step the visitor
+            fills. Leaving it there read "Step 3 of 3" on the guide screen and
+            "Step 3 of 3" again on the contact screen after it. */}
+        {step !== "intro" && step !== "done" && step !== "guide" && (
           <div className="mt-4 flex gap-1.5" aria-hidden>
             {Array.from({ length: totalSteps }, (_, n) => n + 1).map((i) => (
               <i key={i} className={`h-1 w-7 rounded-full ${i <= stepIndex ? "bg-primary-700" : "bg-primary-100"}`} />
