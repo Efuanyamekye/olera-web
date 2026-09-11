@@ -731,12 +731,16 @@ export default function CityLandingClient({
                 unmissable. Airbnb puts an entire listing's value and its risk
                 reversal in six words: "From $65 / guest" over "Free
                 cancellation". */}
-            <p
-              className="mt-2.5 text-center text-xs"
-              style={v3 ? { color: V3.muted } : undefined}
-            >
-              {concierge ? copy.micro : "Four questions · One provider at a time · Never sold"}
-            </p>
+            {/* Guidance renders its own micro line under the question block,
+                so the shared one would be a second copy above the questions. */}
+            {!guided && (
+              <p
+                className="mt-2.5 text-center text-xs"
+                style={v3 ? { color: V3.muted } : undefined}
+              >
+                {concierge ? copy.micro : "Four questions · One provider at a time · Never sold"}
+              </p>
+            )}
 
             {/* The control and fewer_questions arms keep the cards below, where
                 they have sat since the 10 Sep fix. providers_first has already
