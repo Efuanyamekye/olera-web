@@ -14,6 +14,7 @@ import {
   CITY_ARM_TTL_SECONDS,
   type CityLandingArm,
 } from "@/lib/city-ads/landing-variant";
+import { CITY_LANDING_COPY, fillCopy, providerCountLabel } from "@/lib/city-ads/landing-copy";
 
 export interface CityProviderCard {
   name: string;
@@ -113,6 +114,11 @@ export default function CityLandingClient({
   const questionCount = shortFlow ? 1 : 4;
   /** Which provider card is open on the providers_first arm. */
   const [expanded, setExpanded] = useState<string | null>(null);
+
+  /** Every word on this page comes from lib/city-ads/landing-copy.ts. */
+  const copy = CITY_LANDING_COPY[arm];
+  const fill = (t: string) =>
+    fillCopy(t, { city: cfg.city, count: providerCountLabel(providers.length) });
 
   /**
    * Paid-traffic funnel: click (Google) -> page_landed -> cta_engaged ->
@@ -323,18 +329,12 @@ export default function CityLandingClient({
         {step === "intro" && (
           <section>
             <h1 className="mt-10 font-display text-[2.4rem] leading-[1.05] tracking-tight text-gray-900 sm:text-[2.9rem]">
-              {arm === "providers_first" && providers.length > 0
-                ? `Home care in ${cfg.city}, from people who work here.`
-                : `Looking for senior care in ${cfg.city}?`}
+              {fill(copy.headline)}
             </h1>
             <p className="mt-4 text-lg leading-snug text-gray-600">
-              {arm === "providers_first" && providers.length > 0
-                ? `${providers.length === 1 ? "One provider" : `${providers.length} providers`} on Olera near ${cfg.city}. Tell us what you need and we will find the right one.`
-                : concierge
-                  ? staffedNow
-                    ? "Tell us what you need. We call you back today. Free."
-                    : "Tell us what you need. We call you back in the morning. Free."
-                  : "A local provider calls you back. Free."}
+              {concierge
+                ? fill(staffedNow ? copy.staffed : copy.unstaffed)
+                : "A local provider calls you back. Free."}
             </p>
 
             {/* providers_first: proof moves ABOVE the ask, and the proof is
@@ -407,20 +407,14 @@ export default function CityLandingClient({
               onClick={() => setStep("who")}
               className="mt-8 block w-full rounded-xl bg-primary-700 px-4 py-4 text-center text-[17px] font-semibold text-white hover:bg-primary-600 active:bg-primary-800"
             >
-              {arm === "fewer_questions"
-                ? "Start — one question"
-                : arm === "providers_first" && providers.length > 0
-                  ? "Find the right one for me"
-                  : "Get started"}
+              {copy.cta}
             </button>
             <p className="mt-3 text-center text-xs text-gray-500">
-              {shortFlow
+              {concierge
                 ? staffedNow
-                  ? "One question · We call you back today · Never sold"
-                  : "One question · We call you back in the morning · Never sold"
-                : concierge
-                  ? "Four questions · We call you back · Never sold"
-                  : "Four questions · One provider at a time · Never sold"}
+                  ? copy.footnoteStaffed
+                  : copy.footnoteUnstaffed
+                : "Four questions · One provider at a time · Never sold"}
             </p>
 
             {/* The control and fewer_questions arms keep the cards below, where
@@ -453,9 +447,7 @@ export default function CityLandingClient({
               <ol className="mt-1 divide-y divide-gray-200">
                 {(concierge
                   ? ([
-                      shortFlow
-                        ? ["Answer one question", "About twenty seconds"]
-                        : ["Answer four questions", "About two minutes"],
+                      copy.firstStep,
                       ["We call you", "To understand what you need"],
                       ["We find your provider", "Local, and right for the care"],
                     ] as [string, string][])
