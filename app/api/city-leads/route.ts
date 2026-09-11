@@ -185,6 +185,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Could not save your request. Please try again." }, { status: 500 });
   }
 
+  // A verification request has proved what it came to prove the moment the row
+  // is in: validation passed, the CHECK accepted the care type, the arm was
+  // stored, and `isMedical` below already reports which way this care type
+  // routes — the reason `medical` needed checking separately.
+  //
+  // RETURNED BEFORE THE CARE-SEEKER PROFILE, not after. It sat after on the
+  // first pass, on the assumption that deleting the lead would cascade the
+  // profile away. It does not: a run of twelve left seventeen unclaimed
+  // "Verify101" rows sitting in business_profiles, which is the same table the
+  // provider accounts live in. Everything past this line either writes
+  // somewhere else or sends something outbound, and a row nobody will ever
+  // call needs none of it.
+  if (isVerification) {
+    return NextResponse.json({
+      ok: true,
+      leadId: lead.id,
+      verification: true,
+      redirected: isMedical,
+      landingArm: str(body.landingArm),
+      careType,
+    });
+  }
+
   // Give the family a care seeker profile, and link it. This is what makes the
   // lead openable in the admin queue and, because the FK cascades, deletable
   // from there. Done for medical requests too — they are redirected rather than
@@ -212,26 +235,6 @@ export async function POST(req: NextRequest) {
   const careLabel = CARE_LABEL[careType as keyof typeof CARE_LABEL];
   const who = RECIPIENT_LABEL[(recipient ?? "other") as keyof typeof RECIPIENT_LABEL];
   const when = urgency ? URGENCY_LABEL[urgency as keyof typeof URGENCY_LABEL] : "";
-
-  // A verification request has proved what it came to prove the moment the row
-  // is in: validation passed, the CHECK accepted the care type, and the arm was
-  // stored. Everything past this point is outbound — a text to a family, a
-  // ping to Slack, a provider chain, two ad-platform conversions — and none of
-  // it should happen for a row nobody is going to call.
-  //
-  // Returned AFTER the medical branch is computed so the response still tells
-  // the caller which way this care type routed, which is the whole reason
-  // `medical` needed verifying separately.
-  if (isVerification) {
-    return NextResponse.json({
-      ok: true,
-      leadId: lead.id,
-      verification: true,
-      redirected: isMedical,
-      landingArm: str(body.landingArm),
-      careType,
-    });
-  }
 
   if (isMedical) {
     await sendSlackAlert(
