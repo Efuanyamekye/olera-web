@@ -3,7 +3,11 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { getServiceClient } from "@/lib/admin";
 import { getCityConfig, isStaffedNow } from "@/lib/city-ads/config";
-import { CITY_ARM_COOKIE, resolveCityLandingArm } from "@/lib/city-ads/landing-variant";
+import {
+  CITY_ARM_COOKIE,
+  isCityLandingArm,
+  resolveCityLandingArm,
+} from "@/lib/city-ads/landing-variant";
 import { parseProviderImages } from "@/lib/types/provider";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import CityLandingClient, { type CityProviderCard } from "./CityLandingClient";
@@ -57,10 +61,16 @@ export default async function CityCarePage({
   // first paint is already the right one — swapping after hydration would show
   // every visitor the control for a frame, which is exactly the moment the
   // page is being judged. The page is force-dynamic, so this is per request.
-  const { arm } = resolveCityLandingArm({
+  const { arm, assigned } = resolveCityLandingArm({
     override: first(sp.v),
     cookie: (await cookies()).get(CITY_ARM_COOKIE)?.value ?? null,
   });
+  // A ?v= preview is a review tool, not a visitor. It must neither persist a
+  // cookie (which would pin a reviewer to one arm for 30 days) nor write
+  // events (which would put our own QA into the experiment's numerator).
+  // The first version of this shipped with the flag resolved and then
+  // discarded, so every preview load polluted the data it was previewing.
+  const previewing = !assigned && isCityLandingArm(first(sp.v));
 
   // Local provider cards: the city pool, joined to the account row. Only
   // things we can stand behind: name, town, care type, and whether the account
@@ -155,6 +165,7 @@ export default async function CityCarePage({
         cfg={cfg}
         providers={providers}
         arm={arm}
+        previewing={previewing}
         staffedNow={isStaffedNow(cfg.timeZone)}
         utm={{
           source: first(sp.utm_source),

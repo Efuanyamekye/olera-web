@@ -69,9 +69,9 @@ export const CITY_LANDING_COPY: Record<CityLandingArm, CityLandingCopy> = {
    * in place, so a visitor can take the proof without taking the ask.
    */
   providers_first: {
-    headline: "Home care in {city}, from people who work here.",
-    staffed: "{count} on Olera near {city}. Tap any of them to see what they do.",
-    unstaffed: "{count} on Olera near {city}. Tap any of them to see what they do.",
+    headline: "Senior care in {city}, from people who work here.",
+    staffed: "{count} near {city} on Olera. Tap any of them to see what they do.",
+    unstaffed: "{count} near {city} on Olera. Tap any of them to see what they do.",
     cta: "Find care near me",
     footnoteStaffed: "Four questions · We call you back today · Never sold",
     footnoteUnstaffed: "Four questions · We call you back in the morning · Never sold",
@@ -83,11 +83,14 @@ export const CITY_LANDING_COPY: Record<CityLandingArm, CityLandingCopy> = {
    */
   fewer_questions: {
     headline: "Looking for senior care in {city}?",
-    staffed: "One question, then your number. We call you back today. Free.",
-    unstaffed: "One question, then your number. We call you back in the morning. Free.",
+    // No timing claim on either line. 84% of paid landings arrive outside the
+    // 8am-noon callback window, so any same-day promise is a walk-back for most
+    // visitors, and response speed is not what earns the press anyway.
+    staffed: "Tell us what kind of help you need. Someone from Olera calls to talk it through. Free.",
+    unstaffed: "Tell us what kind of help you need. Someone from Olera calls to talk it through. Free.",
     cta: "Get started",
-    footnoteStaffed: "One question · We call you back today · Never sold",
-    footnoteUnstaffed: "One question · We call you back in the morning · Never sold",
+    footnoteStaffed: "One question, then your number · Never sold",
+    footnoteUnstaffed: "One question, then your number · Never sold",
     firstStep: ["Answer one question", "About twenty seconds"],
   },
 };

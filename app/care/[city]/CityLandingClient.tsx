@@ -27,6 +27,10 @@ export interface CityProviderCard {
 }
 
 /** Pool care_types values rendered for a family rather than a database. */
+/** How many provider rows the page ever renders. The count in the copy reads
+ *  from this, so the two cannot drift apart again. */
+const PROVIDER_CARD_LIMIT = 3;
+
 const CARE_TYPE_LABEL: Record<string, string> = {
   home_care: "Help at home",
   assisted_living: "Assisted living",
@@ -79,6 +83,7 @@ export default function CityLandingClient({
   utm,
   staffedNow,
   arm,
+  previewing = false,
 }: {
   cfg: CityConfig;
   providers: CityProviderCard[];
@@ -91,6 +96,8 @@ export default function CityLandingClient({
   staffedNow: boolean;
   /** Which A/B arm the server picked. See lib/city-ads/landing-variant.ts. */
   arm: CityLandingArm;
+  /** True when ?v= forced the arm. Suppresses the cookie and all events. */
+  previewing?: boolean;
 }) {
   const [step, setStep] = useState<Step>("intro");
 
@@ -98,27 +105,47 @@ export default function CityLandingClient({
   // assigns but cannot set cookies from a Server Component, so the client
   // writes it back on first paint.
   useEffect(() => {
+    if (previewing) return;
     const secure = window.location.protocol === "https:" ? "; Secure" : "";
     document.cookie = `${CITY_ARM_COOKIE}=${arm}; Max-Age=${CITY_ARM_TTL_SECONDS}; Path=/; SameSite=Lax${secure}`;
-  }, [arm]);
+  }, [arm, previewing]);
 
   /**
    * The four-question flow, and the short one.
    *
-   * fewer_questions skips `what` and `when` entirely: intro -> who -> contact.
-   * Both skipped answers post as null, which /api/city-leads already accepts —
-   * the concierge call establishes care type and urgency anyway, and this arm
-   * exists to find out whether asking for them up front is what loses people.
+   * fewer_questions asks ONE question and it is care type: intro -> what ->
+   * contact.
+   *
+   * It originally asked `who` and skipped `what`, which could never submit.
+   * /api/city-leads:74 rejects any request whose careType is not one of
+   * home_care / assisted_living / unsure / medical, and a skipped question
+   * posts null, which stringifies to "" and fails that check. The arm would
+   * have taken a third of the traffic to a form that 400s at the end.
+   *
+   * Care type is also the right question to keep if you only keep one: the API
+   * requires it, `medical` routes the request somewhere different, and the
+   * concierge call can establish who it is for in ten seconds. Recipient
+   * cannot be recovered from the API's point of view; care scope cannot be
+   * recovered from operations' point of view.
    */
   const shortFlow = arm === "fewer_questions";
-  const questionCount = shortFlow ? 1 : 4;
+  // The progress bar counts SCREENS the visitor passes through, and contact is
+  // the last of them. The four-question flow is four screens: who, what, when,
+  // contact. Deriving the total from a question count produced "Step 4 of 5" in
+  // the control, which had read "Step 4 of 4" for the whole first flight.
+  const totalSteps = shortFlow ? 2 : 4;
   /** Which provider card is open on the providers_first arm. */
   const [expanded, setExpanded] = useState<string | null>(null);
 
   /** Every word on this page comes from lib/city-ads/landing-copy.ts. */
   const copy = CITY_LANDING_COPY[arm];
   const fill = (t: string) =>
-    fillCopy(t, { city: cfg.city, count: providerCountLabel(providers.length) });
+    fillCopy(t, {
+      city: cfg.city,
+      // Count what is RENDERED, not what was fetched. The page shipped saying
+      // "4 providers" above a list sliced to three.
+      count: providerCountLabel(Math.min(providers.length, PROVIDER_CARD_LIMIT)),
+    });
 
   /**
    * Paid-traffic funnel: click (Google) -> page_landed -> cta_engaged ->
@@ -147,6 +174,7 @@ export default function CityLandingClient({
      */
     dedupeKey?: string,
   ) => {
+    if (previewing) return;
     const key = dedupeKey ?? eventType;
     if (fired.current.has(key)) return;
     fired.current.add(key);
@@ -230,7 +258,7 @@ export default function CityLandingClient({
   const stepIndex = useMemo(
     () =>
       shortFlow
-        ? ({ intro: 0, who: 1, what: 1, when: 1, contact: 2, done: 3 })[step]
+        ? ({ intro: 0, who: 1, what: 1, when: 1, contact: 2, done: 3 })[step]  // short: what=1, contact=2
         : ({ intro: 0, who: 1, what: 2, when: 3, contact: 4, done: 5 })[step],
     [step, shortFlow],
   );
@@ -314,13 +342,13 @@ export default function CityLandingClient({
         <header className="flex items-center justify-between text-sm">
           <span className="font-semibold tracking-wide text-primary-700">Olera</span>
           <span className="text-gray-500">
-            {step === "intro" || step === "done" ? `${cfg.city}, ${cfg.state}` : `Step ${stepIndex} of ${questionCount + 1}`}
+            {step === "intro" || step === "done" ? `${cfg.city}, ${cfg.state}` : `Step ${stepIndex} of ${totalSteps}`}
           </span>
         </header>
 
         {step !== "intro" && step !== "done" && (
           <div className="mt-4 flex gap-1.5" aria-hidden>
-            {Array.from({ length: questionCount + 1 }, (_, n) => n + 1).map((i) => (
+            {Array.from({ length: totalSteps }, (_, n) => n + 1).map((i) => (
               <i key={i} className={`h-1 w-7 rounded-full ${i <= stepIndex ? "bg-primary-700" : "bg-primary-100"}`} />
             ))}
           </div>
@@ -349,7 +377,7 @@ export default function CityLandingClient({
                 them to nothing, which is the point. */}
             {arm === "providers_first" && providers.length > 0 && (
               <ul className="mt-7 divide-y divide-gray-200 border-y border-gray-200">
-                {providers.slice(0, 3).map((p) => {
+                {providers.slice(0, PROVIDER_CARD_LIMIT).map((p) => {
                   const open = expanded === p.name;
                   const types = p.careTypes
                     .map((t) => CARE_TYPE_LABEL[t])
@@ -385,12 +413,15 @@ export default function CityLandingClient({
                       {open && (
                         <div className="pb-4 pl-[52px] text-sm leading-relaxed text-gray-600">
                           <p>
-                            Serving {p.town} and nearby.
+                            {/* The card knows the business's own town, not the
+                                area it serves. Saying "and nearby" invented a
+                                service-area claim we have no data for. */}
+                            Based in {p.town}.
                             {types.length > 0 && ` ${types.join(" · ")}.`}
                           </p>
                           <p className="mt-1 text-xs text-gray-500">
                             {p.verified
-                              ? "Claimed and verified their listing on Olera."
+                              ? "Listing verified on Olera."
                               : "Listed on Olera."}{" "}
                             An independent business — we do not take a cut of what they charge.
                           </p>
@@ -404,7 +435,7 @@ export default function CityLandingClient({
 
             <button
               type="button"
-              onClick={() => setStep("who")}
+              onClick={() => setStep(shortFlow ? "what" : "who")}
               className="mt-8 block w-full rounded-xl bg-primary-700 px-4 py-4 text-center text-[17px] font-semibold text-white hover:bg-primary-600 active:bg-primary-800"
             >
               {copy.cta}
@@ -426,7 +457,7 @@ export default function CityLandingClient({
                   {concierge ? `Providers near ${cfg.city}` : `Providers in ${cfg.city}`}
                 </p>
                 <ul className="mt-1 divide-y divide-gray-200">
-                  {providers.slice(0, 3).map((p) => (
+                  {providers.slice(0, PROVIDER_CARD_LIMIT).map((p) => (
                     <li key={p.name} className="flex items-center gap-3 py-3">
                       <Avatar name={p.name} photo={p.photo} />
                       <div className="min-w-0 flex-1">
@@ -485,7 +516,7 @@ export default function CityLandingClient({
             <h2 className="mt-6 font-display text-[1.75rem] leading-tight">Who needs care?</h2>
             <div className="mt-3 space-y-2">
               {WHO.map((o) => (
-                <Option key={o.v} label={o.label} selected={who === o.v} onClick={() => pick(setWho, shortFlow ? "contact" : "what")(o.v)} />
+                <Option key={o.v} label={o.label} selected={who === o.v} onClick={() => pick(setWho, "what")(o.v)} />
               ))}
             </div>
           </section>
@@ -496,10 +527,12 @@ export default function CityLandingClient({
             <h2 className="mt-6 font-display text-[1.75rem] leading-tight">What kind of help?</h2>
             <div className="mt-3 space-y-2">
               {WHAT.map((o) => (
-                <Option key={o.v} label={o.label} sub={o.sub} selected={what === o.v} onClick={() => pick(setWhat, "when")(o.v)} />
+                <Option key={o.v} label={o.label} sub={o.sub} selected={what === o.v} onClick={() => pick(setWhat, shortFlow ? "contact" : "when")(o.v)} />
               ))}
             </div>
-            <Back onClick={() => setStep("who")} />
+            {/* On the short arm this is the first question, so Back returns to
+                the intro. On the full flow it returns to the recipient question. */}
+            <Back onClick={() => setStep(shortFlow ? "intro" : "who")} />
           </section>
         )}
 
@@ -593,7 +626,7 @@ export default function CityLandingClient({
                 {busy ? "Sending…" : `Get my ${cfg.city} match`}
               </button>
             </form>
-            <Back onClick={() => setStep(shortFlow ? "who" : "when")} />
+            <Back onClick={() => setStep(shortFlow ? "what" : "when")} />
           </section>
         )}
 
