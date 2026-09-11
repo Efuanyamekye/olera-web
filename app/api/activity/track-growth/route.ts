@@ -4,6 +4,7 @@ import { isBotRequest, incrementBotReject } from "@/lib/analytics/bot-filter";
 import { classifyOrganicPage, normalizeOrganicPagePath } from "@/lib/analytics/content-pages";
 import { classifyReferrer, sanitizeReferrer } from "@/lib/analytics/referrer";
 import { classifyUserAgent } from "@/lib/analytics/user-agent";
+import { isCityLandingArm } from "@/lib/city-ads/landing-variant";
 
 const CLIENT_EVENTS = new Set([
   "page_landed",
@@ -111,6 +112,29 @@ export async function POST(request: NextRequest) {
       gclid: metadata.gclid === true,
       contact_kind: shortText(metadata.contact_kind, 80),
       ua_class: classifyUserAgent(userAgent),
+      // THIS OBJECT IS AN ALLOWLIST, AND THAT IS EASY TO MISS.
+      //
+      // `metadata` arrives from the client whole, but only the fields named
+      // here are stored; everything else is dropped without an error. The
+      // landing-arm experiment shipped on 11 Sep sending `{ arm }` on every
+      // event and lost every one of them, because `arm` was not on this list.
+      // Nothing failed: the insert succeeded, the row looked normal, and the
+      // per-arm rollup read null and skipped it. Roughly 90 minutes of
+      // production landings are unattributable as a result.
+      //
+      // So: a new metadata field needs a line HERE as well as in the client.
+      // That makes four places a growth event has to be declared — the
+      // GrowthClientEvent union, CLIENT_EVENTS above, the DB event_type CHECK,
+      // and this object — and three of the four fail silently.
+      //
+      // Validated, not copied. `arm` is written by client JS, so an arbitrary
+      // string would otherwise land in a column the admin dashboard renders.
+      // An unrecognised value is stored as null, which the rollup already
+      // treats as "not in the experiment".
+      arm: isCityLandingArm(metadata.arm) ? metadata.arm : null,
+      // Which screen a question_viewed fired on. Diagnostic only: it is what
+      // tells you WHERE an arm loses people rather than just that it did.
+      step: shortText(metadata.step, 40),
     };
     const { error } = await db.from("growth_attribution_events").insert({
       anonymous_id: anonymousId,
