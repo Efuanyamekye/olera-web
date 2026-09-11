@@ -3,130 +3,107 @@ import type { CityLandingArm } from "./landing-variant";
 /**
  * Every user-facing string on the /care/{city} landing page, per A/B arm.
  *
- * WHY THIS IS A DATA FILE AND NOT JSX.
- * When copy lives inline in the component, changing a headline means editing
- * React, which means whoever edits it is also touching logic, which means copy
- * drifts while a reviewer is reading the mechanics. Pulling it out gives the
- * words their own review surface: someone who writes can rewrite this file
- * without reading a line of TSX, and someone fixing a bug in the component
- * cannot silently reword the page on the way past.
+ * WHY THIS IS A DATA FILE AND NOT JSX. When copy lives inline in the component,
+ * changing a headline means editing React, so whoever edits words is also
+ * touching logic and a reviewer reading the mechanics never sees the wording go
+ * past. Here the words have their own review surface.
  *
- * It also makes the arms comparable. Three arms whose differences are spread
- * across three branches of JSX are hard to diff; three entries in one table
- * are not. If two arms differ only in a button label, that is now obvious at a
- * glance, and an arm that differs only in wording is not worth a third of the
- * traffic.
+ * THE SHAPE ENFORCES THE DISCIPLINE. There is ONE sub line and ONE micro line,
+ * not two of each. The first build stacked a footnote and a reassurance under
+ * every button — two lines of small grey text, 21 words between them, directly
+ * under the one element that should be unmissable. The type system now makes
+ * that impossible rather than relying on anyone's restraint.
  *
- * HOW TO FILL THIS IN.
- * Every field is required, so a new arm cannot ship half-written. Keep to the
- * house rules for family-facing copy: plain sentences, no em dashes, never
- * promise a timescale the staffed window cannot keep, and never describe the
- * family's situation back to them as a crisis.
+ * THE WORD BUDGET, and it is a real constraint:
+ *   headline   6 words
+ *   sub        8 words
+ *   cta        4 words
+ *   micro      6 words
  *
- * `staffed` / `unstaffed` exist because STAFFED_HOURS is 8am to noon in the
- * city's own timezone and 68% of the first flight's visitors arrived outside
- * it. Both strings have to be true on their own.
+ * Airbnb carries an entire listing's value and its risk reversal in six words:
+ * "From $65 / guest" above "Free cancellation". If a line here needs more than
+ * its budget, the line is doing a job the page should be doing instead.
+ *
+ * The city is already in the header, so a headline does not need to repeat it.
+ *
+ * HOUSE RULES. Plain sentences. No em dashes. Never promise a timescale the
+ * staffed window cannot keep. Never describe the family's situation back to
+ * them as a crisis.
  */
 
 export interface CityLandingCopy {
-  /** H1. `{city}` is substituted. */
+  /** H1. `{city}` is substituted. Six words. */
   headline: string;
-  /** The line under the headline, inside the staffed callback window. */
-  staffed: string;
-  /** The same line outside it. Must not promise same-day contact. */
-  unstaffed: string;
-  /** The primary button. */
+  /** The one line under it. Eight words. `{count}` is substituted. */
+  sub: string;
+  /** Control only: the out-of-hours variant of `sub`. No other arm makes a
+   *  timing claim, so no other arm needs two versions. */
+  subUnstaffed?: string;
+  /** The button. Four words. */
   cta: string;
-  /** The reassurance line under the button, inside the window. */
-  footnoteStaffed: string;
-  /** The same, outside it. */
-  footnoteUnstaffed: string;
+  /**
+   * The single small line under the action. Six words.
+   *
+   * It carries BOTH the price and the risk reversal, the way Airbnb puts "Free
+   * cancellation" directly under the price. Three frictions stop a visitor —
+   * relevance, effort and commitment — and this line is the only thing on the
+   * page attacking commitment.
+   */
+  micro: string;
   /** First row of "How it works", as [title, aside]. */
   firstStep: [string, string];
-  /**
-   * Commitment reassurance, shown next to the action.
-   *
-   * The three frictions a visitor feels are relevance ("is there care for me
-   * here"), effort ("how much work is this") and COMMITMENT ("what happens if I
-   * give you my number"). Proof and short forms attack the first two. Nothing
-   * on the page attacked the third until this line existed. Empty on control,
-   * which is reference only.
-   */
-  reassure: string;
 }
 
-/**
- * `{city}` and `{count}` are the only tokens. Anything else is literal.
- */
 export const CITY_LANDING_COPY: Record<CityLandingArm, CityLandingCopy> = {
-  /** Reference only. Not assigned to traffic. Do not improve it. */
+  /** Reference only, never assigned. Do not improve it. */
   control: {
     headline: "Looking for senior care in {city}?",
-    staffed: "Tell us what you need. We call you back today. Free.",
-    unstaffed: "Tell us what you need. We call you back in the morning. Free.",
+    sub: "Tell us what you need. We call you back today. Free.",
+    subUnstaffed: "Tell us what you need. We call you back in the morning. Free.",
     cta: "Get started",
-    footnoteStaffed: "Four questions · We call you back · Never sold",
-    footnoteUnstaffed: "Four questions · We call you back · Never sold",
+    micro: "Four questions · We call you back · Never sold",
     firstStep: ["Answer four questions", "About two minutes"],
-    reassure: "",
   },
 
-  /** PROOF, THEN ASK. */
+  /** PROOF, THEN ASK. The cards are the sub line; they do not need narrating. */
   providers_first: {
-    headline: "Senior care in {city}, from people who work here.",
-    staffed: "{count} near {city} on Olera. Tap any of them to see what they do.",
-    unstaffed: "{count} near {city} on Olera. Tap any of them to see what they do.",
+    headline: "Care from people who work here.",
+    sub: "{count} near you on Olera.",
     cta: "Request a call",
-    footnoteStaffed: "Free for families · Never sold",
-    footnoteUnstaffed: "Free for families · Never sold",
+    micro: "Free · Does not book care",
     firstStep: ["Tell us what you need", "About a minute"],
-    // The single best line either review produced. It removes a fear neither
-    // analysis had named: not effort, not relevance, but being committed to
-    // something. Airbnb puts "Free cancellation" under the price for the same
-    // reason.
-    reassure: "Requesting a call does not book care. You do not have to choose a provider yet.",
   },
 
   /** ASK, THEN PROOF. */
   one_screen: {
     headline: "Find senior care in {city}.",
-    staffed: "Answer three things and a real person from Olera calls to talk it through. Free for families.",
-    unstaffed: "Answer three things and a real person from Olera calls to talk it through. Free for families.",
+    sub: "Three questions. A real person calls you.",
     cta: "Request a call",
-    footnoteStaffed: "Takes about thirty seconds · Never sold",
-    footnoteUnstaffed: "Takes about thirty seconds · Never sold",
-    firstStep: ["Answer three things", "About thirty seconds"],
-    reassure: "Requesting a call does not book care. You do not have to choose a provider yet.",
+    micro: "Free · Does not book care",
+    firstStep: ["Answer three questions", "About thirty seconds"],
   },
 
   /** DIAGNOSE, THEN ASK. */
   guidance: {
-    headline: "Not sure where to start in {city}?",
-    staffed: "Two questions and we will point you at a sensible first step. Then we can talk it through if you want.",
-    unstaffed: "Two questions and we will point you at a sensible first step. Then we can talk it through if you want.",
-    cta: "Show me where to start",
-    footnoteStaffed: "Two questions · No contact details needed yet",
-    footnoteUnstaffed: "Two questions · No contact details needed yet",
+    headline: "Not sure where to start?",
+    sub: "Two questions, then a real first step.",
+    // Used on the guide screen. Guidance has no intro button: its first
+    // question is the page.
+    cta: "Request a call",
+    micro: "Free · No details needed yet",
     firstStep: ["Answer two questions", "About twenty seconds"],
-    reassure: "Requesting a call does not book care. You do not have to choose a provider yet.",
   },
 };
 
 /** Substitute the tokens. Unknown tokens are left alone rather than blanked. */
-export function fillCopy(
-  template: string,
-  vars: { city: string; count?: string },
-): string {
-  return template
-    .replace(/\{city\}/g, vars.city)
-    .replace(/\{count\}/g, vars.count ?? "");
+export function fillCopy(template: string, vars: { city: string; count?: string }): string {
+  return template.replace(/\{city\}/g, vars.city).replace(/\{count\}/g, vars.count ?? "");
 }
 
 /**
- * "3 providers" / "One provider". Spelled out at one because a bare "1
- * provider" next to a list of one card reads like a database row.
+ * "3 providers" / "One provider". Spelled out at one because a bare "1 provider"
+ * next to a single card reads like a database row.
  */
 export function providerCountLabel(n: number): string {
-  if (n === 1) return "One provider";
-  return `${n} providers`;
+  return n === 1 ? "One provider" : `${n} providers`;
 }

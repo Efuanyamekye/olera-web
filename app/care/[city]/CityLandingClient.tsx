@@ -312,7 +312,9 @@ export default function CityLandingClient({
     const map: Record<Step, number> = shortFlow
       ? { intro: 0, who: 1, what: 1, when: 1, guide: 2, contact: 2, done: 3 }
       : guided
-        ? { intro: 0, who: 1, what: 1, when: 2, guide: 3, contact: 3, done: 4 }
+        // Q1 is answered on the landing screen, so a guidance visitor is
+        // already one question in by the time the step bar appears.
+        ? { intro: 1, who: 1, what: 1, when: 2, guide: 3, contact: 3, done: 4 }
         : { intro: 0, who: 1, what: 2, when: 3, guide: 4, contact: 4, done: 5 };
     return map[step];
   }, [step, shortFlow, guided]);
@@ -439,7 +441,7 @@ export default function CityLandingClient({
               {fill(copy.headline)}
             </h1>
             <p className="mt-3 text-[17px] leading-snug" style={{ color: V3.muted }}>
-              {fill(staffedNow ? copy.staffed : copy.unstaffed)}
+              {fill(!staffedNow && copy.subUnstaffed ? copy.subUnstaffed : copy.sub)}
             </p>
 
             <form
@@ -540,8 +542,8 @@ export default function CityLandingClient({
             </form>
             <div ref={formEndRef} aria-hidden className="h-px" />
 
-            <p className="mt-4 text-[13px] leading-relaxed" style={{ color: V3.muted }}>
-              {copy.reassure}
+            <p className="mt-3.5 text-center text-[13px]" style={{ color: V3.muted }}>
+              {copy.micro}
             </p>
 
             {/* ASK, THEN PROOF. The same real provider records providers_first
@@ -593,13 +595,47 @@ export default function CityLandingClient({
               {fill(copy.headline)}
             </h1>
             <p
-              className={v3 ? "mt-3.5 text-[17px] leading-snug" : "mt-4 text-lg leading-snug text-gray-600"}
+              className={v3 ? "mt-3 text-[17px] leading-snug" : "mt-4 text-lg leading-snug text-gray-600"}
               style={v3 ? { color: V3.muted } : undefined}
             >
               {concierge
-                ? fill(staffedNow ? copy.staffed : copy.unstaffed)
+                ? fill(!staffedNow && copy.subUnstaffed ? copy.subUnstaffed : copy.sub)
                 : "A local provider calls you back. Free."}
             </p>
+
+            {guided && (
+              <div className="mt-7">
+                <p
+                  className="text-[11px] font-semibold uppercase tracking-[0.12em]"
+                  style={{ color: V3.muted }}
+                >
+                  Question 1 of 2
+                </p>
+                <h2 className="mt-1.5 text-[1.45rem] font-semibold leading-tight" style={{ color: V3.ink }}>
+                  What kind of help?
+                </h2>
+                <div className="mt-3.5 flex flex-col gap-2">
+                  {WHAT.map((o) => (
+                    <button
+                      key={o.v}
+                      type="button"
+                      onClick={() => {
+                        setWhat(o.v);
+                        setStep("when");
+                      }}
+                      className="flex min-h-[56px] w-full items-center justify-between rounded-xl border px-4 text-left text-[16px] font-medium"
+                      style={{ borderColor: V3.hairline, background: "#fff", color: V3.ink }}
+                    >
+                      <span>{o.label}</span>
+                      <span aria-hidden style={{ color: V3.muted }}>&rarr;</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-3 text-center text-xs" style={{ color: V3.muted }}>
+                  {copy.micro}
+                </p>
+              </div>
+            )}
 
             {/* providers_first: proof moves ABOVE the ask, and the proof is
                 real rather than decorative.
@@ -669,9 +705,16 @@ export default function CityLandingClient({
               </ul>
             )}
 
+            {/* GUIDANCE HAS NO INTRO BUTTON. Its first question is the page.
+                Putting the question behind "Show me where to start" costs a tap
+                to reveal something that is itself the draw, and Olera's own
+                provider pages already show that asking a question is the single
+                highest-engagement thing a visitor does. A button that only
+                uncovers a question is a toll on the thing people came to do. */}
+            {!guided && (
             <button
               type="button"
-              onClick={() => setStep(guided ? "what" : shortFlow ? "what" : "who")}
+              onClick={() => setStep(shortFlow ? "what" : "who")}
               className={
                 v3
                   ? "mt-7 block min-h-[54px] w-full rounded-full px-5 text-center text-[17px] font-semibold"
@@ -681,24 +724,19 @@ export default function CityLandingClient({
             >
               {copy.cta}
             </button>
+            )}
+            {/* ONE line, carrying the price and the risk reversal together.
+                This shipped as two stacked lines of small grey text, 21 words
+                between them, directly under the element that should have been
+                unmissable. Airbnb puts an entire listing's value and its risk
+                reversal in six words: "From $65 / guest" over "Free
+                cancellation". */}
             <p
               className="mt-2.5 text-center text-xs"
               style={v3 ? { color: V3.muted } : undefined}
             >
-              {concierge
-                ? staffedNow
-                  ? copy.footnoteStaffed
-                  : copy.footnoteUnstaffed
-                : "Four questions · One provider at a time · Never sold"}
+              {concierge ? copy.micro : "Four questions · One provider at a time · Never sold"}
             </p>
-            {/* Commitment reassurance. Effort and relevance were already being
-                attacked by the short form and the provider cards; nothing on the
-                page attacked the fear of being committed until this line. */}
-            {v3 && copy.reassure && (
-              <p className="mt-2 text-center text-[12.5px] leading-snug" style={{ color: V3.muted }}>
-                {copy.reassure}
-              </p>
-            )}
 
             {/* The control and fewer_questions arms keep the cards below, where
                 they have sat since the 10 Sep fix. providers_first has already
@@ -851,8 +889,8 @@ export default function CityLandingClient({
               >
                 {"Request a call"}
               </button>
-              <p className="mt-2.5 text-center text-[12.5px] leading-snug" style={{ color: V3.muted }}>
-                {copy.reassure}
+              <p className="mt-2.5 text-center text-[12.5px]" style={{ color: V3.muted }}>
+                {copy.micro}
               </p>
             </div>
             <Back onClick={() => setStep("when")} />
