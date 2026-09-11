@@ -62,6 +62,34 @@ export async function POST(req: NextRequest) {
   const cfg = getCityConfig(slug);
   if (!cfg) return NextResponse.json({ error: "Unknown city" }, { status: 404 });
 
+  /**
+   * Verification mode. Writes a real row through the real validation, then
+   * stops before anything reaches a human or a third party.
+   *
+   * WHY IT EXISTS. This route is the only thing that can produce a city_leads
+   * row, and it is the only thing that cannot produce a TEST one — every rollup
+   * already honours is_test ("test rows never count", see
+   * docs/city-ads/CHANNEL-INFRASTRUCTURE.md), but nothing could set it, which
+   * is why the handful of test rows this project has had were edited into the
+   * database by hand. Meanwhile a successful submission sends an SMS, posts to
+   * Slack, starts the provider chain and fires a Google Ads conversion, so
+   * verifying the three landing arms end to end would have meant a dozen real
+   * texts and a dozen fake conversions in the campaign whose numbers the
+   * day-14 read depends on.
+   *
+   * AUTHORISED BY HEADER, NOT BY BODY. A body flag would be visible in the page
+   * JS and settable by anyone who reads it, which would let a visitor mark
+   * their own real request as a test and vanish from the queue. This uses the
+   * same `Bearer ${CRON_SECRET}` check every cron route in the codebase uses,
+   * so the landing page cannot reach it at all.
+   *
+   * The row is still written, and written the same way, because the point is to
+   * prove the insert and its constraints work — not to mock them.
+   */
+  const isVerification =
+    req.headers.get("authorization") === `Bearer ${process.env.CRON_SECRET}` &&
+    !!process.env.CRON_SECRET;
+
   const careType = String(body.careType ?? "");
   const recipient = body.careRecipient ? String(body.careRecipient) : null;
   const urgency = body.urgency ? String(body.urgency) : null;
@@ -125,6 +153,7 @@ export async function POST(req: NextRequest) {
       fbclid: str(utm.fbclid, 200),
       session_id: str(body.sessionId),
       landing_arm: str(body.landingArm),
+      is_test: isVerification,
       care_recipient: recipient,
       care_type: careType,
       urgency,
@@ -172,6 +201,26 @@ export async function POST(req: NextRequest) {
   const careLabel = CARE_LABEL[careType as keyof typeof CARE_LABEL];
   const who = RECIPIENT_LABEL[(recipient ?? "other") as keyof typeof RECIPIENT_LABEL];
   const when = urgency ? URGENCY_LABEL[urgency as keyof typeof URGENCY_LABEL] : "";
+
+  // A verification request has proved what it came to prove the moment the row
+  // is in: validation passed, the CHECK accepted the care type, and the arm was
+  // stored. Everything past this point is outbound — a text to a family, a
+  // ping to Slack, a provider chain, two ad-platform conversions — and none of
+  // it should happen for a row nobody is going to call.
+  //
+  // Returned AFTER the medical branch is computed so the response still tells
+  // the caller which way this care type routed, which is the whole reason
+  // `medical` needed verifying separately.
+  if (isVerification) {
+    return NextResponse.json({
+      ok: true,
+      leadId: lead.id,
+      verification: true,
+      redirected: isMedical,
+      landingArm: str(body.landingArm),
+      careType,
+    });
+  }
 
   if (isMedical) {
     await sendSlackAlert(
