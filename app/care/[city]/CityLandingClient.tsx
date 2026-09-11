@@ -19,9 +19,20 @@ export interface CityProviderCard {
   name: string;
   town: string;
   careLabel: string;
+  /** Every care type this provider covers in the city pool. */
+  careTypes: string[];
   verified: boolean;
   photo: string | null;
 }
+
+/** Pool care_types values rendered for a family rather than a database. */
+const CARE_TYPE_LABEL: Record<string, string> = {
+  home_care: "Help at home",
+  assisted_living: "Assisted living",
+  memory_care: "Memory care",
+  respite: "Respite care",
+  medical: "Nursing care",
+};
 
 interface Utm {
   source: string | null;
@@ -100,6 +111,8 @@ export default function CityLandingClient({
    */
   const shortFlow = arm === "fewer_questions";
   const questionCount = shortFlow ? 1 : 4;
+  /** Which provider card is open on the providers_first arm. */
+  const [expanded, setExpanded] = useState<string | null>(null);
 
   /**
    * Paid-traffic funnel: click (Google) -> page_landed -> cta_engaged ->
@@ -116,9 +129,21 @@ export default function CityLandingClient({
    * organic reporting behind /metrics.
    */
   const fired = useRef<Set<string>>(new Set());
-  const fireOnce = (eventType: "page_landed" | "cta_engaged" | "lead_started") => {
-    if (fired.current.has(eventType)) return;
-    fired.current.add(eventType);
+  const fireOnce = (
+    eventType: "page_landed" | "cta_engaged" | "lead_started" | "provider_expanded" | "question_viewed",
+    extra?: Record<string, unknown>,
+    /**
+     * Dedupe key, when one event type legitimately fires more than once.
+     * question_viewed fires per screen, so it dedupes on the step rather than
+     * on the type — keeping them the same string would both collapse four
+     * screens into one event AND put "question_viewed:who" in event_type,
+     * which the CHECK in migration 223 rejects and the tracker swallows.
+     */
+    dedupeKey?: string,
+  ) => {
+    const key = dedupeKey ?? eventType;
+    if (fired.current.has(key)) return;
+    fired.current.add(key);
     // The arm rides on EVERY event, not just page_landed.
     //
     // The tracker attaches referrer and UTM metadata to page_landed alone, so
@@ -128,7 +153,11 @@ export default function CityLandingClient({
     // on 10 Sep it produced a "0 of 25 paid visitors engaged" headline that was
     // false and had to be withdrawn the same day. Stamping the arm directly on
     // each event means the A/B read never depends on reconstructing it.
-    trackGrowthEvent({ eventType, pageCategory: "city_landing", metadata: { arm } });
+    trackGrowthEvent({
+      eventType,
+      pageCategory: "city_landing",
+      metadata: { arm, ...(extra || {}) },
+    });
   };
 
   useEffect(() => {
@@ -140,6 +169,16 @@ export default function CityLandingClient({
   useEffect(() => {
     if (step !== "intro") fireOnce("cta_engaged");
     if (step === "contact") fireOnce("lead_started");
+    // Per-question exposure. cta_engaged and lead_started bracket the quiz but
+    // say nothing about what happens INSIDE it, so a visitor who starts and
+    // quits on question three is indistinguishable from one who quits on
+    // question one. Without this the fewer_questions arm is uninterpretable:
+    // if it wins we would not know which of the three dropped questions was
+    // the barrier, and if it loses we would not know whether the remaining
+    // question was the problem. Keyed per step so it fires once each.
+    if (step !== "intro" && step !== "done") {
+      fireOnce("question_viewed", { step }, `question_viewed:${step}`);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
@@ -298,22 +337,68 @@ export default function CityLandingClient({
                   : "A local provider calls you back. Free."}
             </p>
 
-            {/* providers_first: proof moves ABOVE the ask. The cards are the
-                first real thing on screen, and the button follows them. */}
+            {/* providers_first: proof moves ABOVE the ask, and the proof is
+                real rather than decorative.
+
+                The cards TAP OPEN. An arm that promises "see who is near you"
+                and delivers a four-question form the moment you touch anything
+                is the same bait-and-switch as an ad promising a call "today"
+                onto a page that says "in the morning". If this arm is going to
+                test whether proof-before-ask works, the proof has to actually
+                arrive first. Expanding costs the visitor nothing and commits
+                them to nothing, which is the point. */}
             {arm === "providers_first" && providers.length > 0 && (
               <ul className="mt-7 divide-y divide-gray-200 border-y border-gray-200">
-                {providers.slice(0, 3).map((p) => (
-                  <li key={p.name} className="flex items-center gap-3 py-3">
-                    <Avatar name={p.name} photo={p.photo} />
-                    <div className="min-w-0 flex-1">
-                      <div className="truncate text-[15px] font-semibold">{p.name}</div>
-                      <div className="mt-0.5 text-xs text-gray-500">
-                        {p.careLabel} · {p.town}
-                      </div>
-                    </div>
-                    {p.verified && <span className="text-xs font-medium text-primary-700">✓ Verified</span>}
-                  </li>
-                ))}
+                {providers.slice(0, 3).map((p) => {
+                  const open = expanded === p.name;
+                  const types = p.careTypes
+                    .map((t) => CARE_TYPE_LABEL[t])
+                    .filter(Boolean);
+                  return (
+                    <li key={p.name}>
+                      <button
+                        type="button"
+                        aria-expanded={open}
+                        onClick={() => {
+                          setExpanded(open ? null : p.name);
+                          if (!open) fireOnce("provider_expanded");
+                        }}
+                        className="flex w-full items-center gap-3 py-3 text-left"
+                      >
+                        <Avatar name={p.name} photo={p.photo} />
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-[15px] font-semibold">{p.name}</div>
+                          <div className="mt-0.5 text-xs text-gray-500">
+                            {p.careLabel} · {p.town}
+                          </div>
+                        </div>
+                        {p.verified && (
+                          <span className="shrink-0 text-xs font-medium text-primary-700">✓ Verified</span>
+                        )}
+                        <span
+                          aria-hidden
+                          className={`shrink-0 text-gray-400 transition-transform ${open ? "rotate-90" : ""}`}
+                        >
+                          ›
+                        </span>
+                      </button>
+                      {open && (
+                        <div className="pb-4 pl-[52px] text-sm leading-relaxed text-gray-600">
+                          <p>
+                            Serving {p.town} and nearby.
+                            {types.length > 0 && ` ${types.join(" · ")}.`}
+                          </p>
+                          <p className="mt-1 text-xs text-gray-500">
+                            {p.verified
+                              ? "Claimed and verified their listing on Olera."
+                              : "Listed on Olera."}{" "}
+                            An independent business — we do not take a cut of what they charge.
+                          </p>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             )}
 

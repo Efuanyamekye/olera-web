@@ -132,6 +132,10 @@ export default async function CityCarePage({
             name: (r.display_name as string) ?? "Local provider",
             town: (r.city as string) ?? cfg.city,
             careLabel: types.includes("assisted_living") ? "Assisted living" : "In-home care",
+            // The full set this provider covers in this pool. The header line
+            // only has room for one label; providers_first expands to show the
+            // rest, which is the payoff that arm promises before it asks.
+            careTypes: types,
             verified: ["verified", "not_required"].includes(String(r.verification_state)),
             photo: (r.image_url as string | null) || photoBySlug.get(r.slug as string) || null,
           } as CityProviderCard;
