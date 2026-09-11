@@ -7,7 +7,14 @@ export type GrowthClientEvent =
   | "cta_visible"
   | "cta_engaged"
   | "lead_started"
-  | "contact_intent";
+  | "contact_intent"
+  // Added for the /care/{city} landing A/B test. Three allowlists gate a
+  // growth event and ALL THREE have to know about a new one: this union, the
+  // CLIENT_EVENTS set in app/api/activity/track-growth/route.ts (a 400), and
+  // the CHECK on growth_attribution_events.event_type (migration 223, a silent
+  // drop because the tracker's fetch swallows its own errors).
+  | "question_viewed"
+  | "provider_expanded";
 
 /**
  * Categories that are NOT organic pages and so are never returned by

@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { isBotRequest, incrementBotReject } from "@/lib/analytics/bot-filter";
 import { sendSlackAlert, slackCityQuizStarted } from "@/lib/slack";
 import {
+  CARE_LABEL,
   RECIPIENT_LABEL,
   classifyCityTraffic,
   getCityConfig,
+  type CityCareType,
   type CityRecipient,
 } from "@/lib/city-ads/config";
 import { getSiteUrl } from "@/lib/site-url";
@@ -93,12 +95,36 @@ export async function POST(req: NextRequest) {
     : null;
   const recipientLabel = typeof rawLabel === "string" ? rawLabel : null;
 
+  // Care type, not recipient, is what every arm actually captures.
+  //
+  // This endpoint used to describe the visitor only as "caring for a parent",
+  // which two of the three landing arms never collect: one_screen and guidance
+  // both ask what KIND of help is needed and never ask who it is for. The client
+  // gated its ping on that same missing field, so both arms were silently unable
+  // to notify anyone at all — you would have heard about a third of starts and
+  // had no way to tell the other two thirds were happening.
+  //
+  // Same hasOwnProperty guard as above: unauthenticated endpoint, hostile input,
+  // and `in` would walk the prototype chain and interpolate a function.
+  const rawCare = String(body.careType ?? "");
+  const rawCareLabel = Object.prototype.hasOwnProperty.call(CARE_LABEL, rawCare)
+    ? CARE_LABEL[rawCare as CityCareType]
+    : null;
+  const careLabel = typeof rawCareLabel === "string" ? rawCareLabel : null;
+
+  // Which page they are on. Free text by design (see migration 224) so a
+  // renamed arm cannot break the alert; bounded so it cannot flood Slack.
+  const rawArm = String(body.arm ?? "").slice(0, 40);
+  const arm = /^[a-z_]+$/.test(rawArm) ? rawArm : null;
+
   const utm = (body.utm ?? {}) as Record<string, string | null>;
   const { paid, channel } = classifyCityTraffic(utm);
 
   const alert = slackCityQuizStarted({
     city: cfg.city,
     recipientLabel,
+    careLabel,
+    arm,
     channel,
     campaignTag: utm.campaign ?? cfg.campaignTag,
     paid,

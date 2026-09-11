@@ -11,6 +11,10 @@ const CLIENT_EVENTS = new Set([
   "cta_engaged",
   "lead_started",
   "contact_intent",
+  // /care/{city} landing A/B test. Keep in step with GrowthClientEvent in
+  // lib/analytics/growth-attribution.ts and the CHECK in migration 223.
+  "question_viewed",
+  "provider_expanded",
 ]);
 
 /**

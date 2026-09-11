@@ -9,14 +9,35 @@ import { getOrCreateSessionId } from "@/lib/analytics/session";
 import { trackGrowthEvent } from "@/lib/analytics/growth-attribution";
 import { trackMetaLead } from "@/components/analytics/MetaPixel";
 import { newMetaEventId } from "@/lib/city-ads/meta";
+import {
+  CITY_ARM_COOKIE,
+  CITY_ARM_TTL_SECONDS,
+  type CityLandingArm,
+} from "@/lib/city-ads/landing-variant";
+import { CITY_LANDING_COPY, fillCopy, providerCountLabel } from "@/lib/city-ads/landing-copy";
 
 export interface CityProviderCard {
   name: string;
   town: string;
   careLabel: string;
+  /** Every care type this provider covers in the city pool. */
+  careTypes: string[];
   verified: boolean;
   photo: string | null;
 }
+
+/** Pool care_types values rendered for a family rather than a database. */
+/** How many provider rows the page ever renders. The count in the copy reads
+ *  from this, so the two cannot drift apart again. */
+const PROVIDER_CARD_LIMIT = 3;
+
+const CARE_TYPE_LABEL: Record<string, string> = {
+  home_care: "Help at home",
+  assisted_living: "Assisted living",
+  memory_care: "Memory care",
+  respite: "Respite care",
+  medical: "Nursing care",
+};
 
 interface Utm {
   source: string | null;
@@ -26,7 +47,35 @@ interface Utm {
   fbclid: string | null;
 }
 
-type Step = "intro" | "who" | "what" | "when" | "contact" | "done";
+type Step = "intro" | "who" | "what" | "when" | "guide" | "contact" | "done";
+
+/**
+ * The V3 surface, shared by every assigned arm.
+ *
+ * Warm white ground, charcoal ink, one raspberry action. Three things about it
+ * are deliberate and evidence-led rather than taste:
+ *
+ * 1. THE ACTION COLOUR APPEARS EXACTLY ONCE. On the old page primary-700 painted
+ *    the wordmark, the Verified ticks, the step numerals AND the button, so the
+ *    element that should have been the most salient thing competed with four
+ *    others wearing its colour. Isolation is the part of the CTA-colour
+ *    literature that replicates; hue mostly is not.
+ * 2. NO DISPLAY SERIF. 87% of this traffic is mobile and the audience skews 45
+ *    to 70. A 17px system sans is more legible than an editorial serif and
+ *    renders without waiting on a webfont.
+ * 3. IT IS NOT THE OLERA BRAND. The page is noindex and the visitor has never
+ *    heard of Olera; its only jobs are legible and trustworthy.
+ *
+ * White on #BE123C is about 6.3:1, which clears WCAG AA for normal text.
+ */
+const V3 = {
+  ground: "#FAF9F6",
+  ink: "#222222",
+  muted: "#59595F",
+  action: "#BE123C",
+  actionInk: "#FFFFFF",
+  hairline: "#E4E1DA",
+} as const;
 
 const WHO: { v: CityRecipient; label: string }[] = [
   { v: "parent", label: "My parent" },
@@ -61,6 +110,8 @@ export default function CityLandingClient({
   providers,
   utm,
   staffedNow,
+  arm,
+  previewing = false,
 }: {
   cfg: CityConfig;
   providers: CityProviderCard[];
@@ -71,8 +122,51 @@ export default function CityLandingClient({
    * page is force-dynamic, so this is fresh per request rather than cached.
    */
   staffedNow: boolean;
+  /** Which A/B arm the server picked. See lib/city-ads/landing-variant.ts. */
+  arm: CityLandingArm;
+  /** True when ?v= forced the arm. Suppresses the cookie and all events. */
+  previewing?: boolean;
 }) {
   const [step, setStep] = useState<Step>("intro");
+
+  // Persist the server's pick so a reload does not re-roll the arm. The server
+  // assigns but cannot set cookies from a Server Component, so the client
+  // writes it back on first paint.
+  useEffect(() => {
+    if (previewing) return;
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${CITY_ARM_COOKIE}=${arm}; Max-Age=${CITY_ARM_TTL_SECONDS}; Path=/; SameSite=Lax${secure}`;
+  }, [arm, previewing]);
+
+  /**
+   * `shortFlow` is retained at false while the stepped flow keeps its four
+   * screens. The arm that used it (fewer_questions) was replaced by one_screen;
+   * the constant stays so the step maths reads the same in both directions.
+   */
+  const shortFlow = false;
+  // The progress bar counts SCREENS the visitor passes through, and contact is
+  // the last of them. The four-question flow is four screens: who, what, when,
+  // contact. Deriving the total from a question count produced "Step 4 of 5" in
+  // the control, which had read "Step 4 of 4" for the whole first flight.
+  /** The whole request on one screen, with the proof below it. */
+  const oneScreen = arm === "one_screen";
+  /** Two questions, a tailored starting point, then the request. */
+  const guided = arm === "guidance";
+  /** Every assigned arm wears the V3 surface. Control is reference only. */
+  const v3 = arm !== "control";
+  const totalSteps = shortFlow ? 2 : guided ? 3 : 4;
+  /** Which provider card is open on the providers_first arm. */
+  const [expanded, setExpanded] = useState<string | null>(null);
+
+  /** Every word on this page comes from lib/city-ads/landing-copy.ts. */
+  const copy = CITY_LANDING_COPY[arm];
+  const fill = (t: string) =>
+    fillCopy(t, {
+      city: cfg.city,
+      // Count what is RENDERED, not what was fetched. The page shipped saying
+      // "4 providers" above a list sliced to three.
+      count: providerCountLabel(Math.min(providers.length, PROVIDER_CARD_LIMIT)),
+    });
 
   /**
    * Paid-traffic funnel: click (Google) -> page_landed -> cta_engaged ->
@@ -89,10 +183,36 @@ export default function CityLandingClient({
    * organic reporting behind /metrics.
    */
   const fired = useRef<Set<string>>(new Set());
-  const fireOnce = (eventType: "page_landed" | "cta_engaged" | "lead_started") => {
-    if (fired.current.has(eventType)) return;
-    fired.current.add(eventType);
-    trackGrowthEvent({ eventType, pageCategory: "city_landing" });
+  const fireOnce = (
+    eventType: "page_landed" | "cta_engaged" | "lead_started" | "provider_expanded" | "question_viewed",
+    extra?: Record<string, unknown>,
+    /**
+     * Dedupe key, when one event type legitimately fires more than once.
+     * question_viewed fires per screen, so it dedupes on the step rather than
+     * on the type — keeping them the same string would both collapse four
+     * screens into one event AND put "question_viewed:who" in event_type,
+     * which the CHECK in migration 223 rejects and the tracker swallows.
+     */
+    dedupeKey?: string,
+  ) => {
+    if (previewing) return;
+    const key = dedupeKey ?? eventType;
+    if (fired.current.has(key)) return;
+    fired.current.add(key);
+    // The arm rides on EVERY event, not just page_landed.
+    //
+    // The tracker attaches referrer and UTM metadata to page_landed alone, so
+    // an audit reading cta_engaged on its own sees an untagged event and has to
+    // recover the channel by joining back to the landing on anonymous_id +
+    // visit_id + page_path. That join is easy to get wrong and did get wrong:
+    // on 10 Sep it produced a "0 of 25 paid visitors engaged" headline that was
+    // false and had to be withdrawn the same day. Stamping the arm directly on
+    // each event means the A/B read never depends on reconstructing it.
+    trackGrowthEvent({
+      eventType,
+      pageCategory: "city_landing",
+      metadata: { arm, ...(extra || {}) },
+    });
   };
 
   useEffect(() => {
@@ -104,15 +224,44 @@ export default function CityLandingClient({
   useEffect(() => {
     if (step !== "intro") fireOnce("cta_engaged");
     if (step === "contact") fireOnce("lead_started");
+    // Per-question exposure. cta_engaged and lead_started bracket the quiz but
+    // say nothing about what happens INSIDE it, so a visitor who starts and
+    // quits on question three is indistinguishable from one who quits on
+    // question one. Without this the fewer_questions arm is uninterpretable:
+    // if it wins we would not know which of the three dropped questions was
+    // the barrier, and if it loses we would not know whether the remaining
+    // question was the problem. Keyed per step so it fires once each.
+    // `guide` is excluded: it is the guidance arm's PAYOFF, not a question.
+    // Counting it would report guidance as having four questions when it has
+    // two, and the per-question drop-off this event exists to expose would be
+    // measuring a screen nobody fills in.
+    if (step !== "intro" && step !== "done" && step !== "guide") {
+      fireOnce("question_viewed", { step }, `question_viewed:${step}`);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
+
+  // one_screen has no step transitions to hang the funnel off, so its
+  // engagement is the first touch of a field. Without this the arm would
+  // record landings and submissions and nothing in between, which is the
+  // blindness the per-question events were added to fix.
+  const markOneScreenStart = () => {
+    if (!oneScreen) return;
+    fireOnce("cta_engaged");
+    fireOnce("lead_started");
+  };
 
   const [who, setWho] = useState<CityRecipient | null>(null);
   const [what, setWhat] = useState<CityCareType | null>(null);
   const [when, setWhen] = useState<CityUrgency | null>(null);
   const [firstName, setFirstName] = useState("");
   const [phone, setPhone] = useState("");
-  const [zip, setZip] = useState(cfg.zipPrefill);
+  // The prefill is a convenience on the stepped flow, where the visitor sees
+  // the field and can correct it. one_screen does not show a ZIP field at all,
+  // so prefilling would silently attach a downtown ZIP as lead context that
+  // nobody confirmed. Our one real city lead was in DeSoto, which no pooled
+  // Dallas provider can serve — wrong geography is not a cosmetic problem.
+  const [zip, setZip] = useState(arm === "one_screen" ? "" : cfg.zipPrefill);
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -123,6 +272,28 @@ export default function CityLandingClient({
   const [noteSaved, setNoteSaved] = useState(false);
   const [finished, setFinished] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
+  /**
+   * The sticky bar hides once the bottom of the form is visible.
+   *
+   * A bar that sits under a submit button already on screen is furniture: it
+   * removes nothing and covers content. The evidence for sticky CTAs is about
+   * an action having scrolled OUT of view, so the bar should exist exactly
+   * while that is true and not a moment longer.
+   */
+  const formEndRef = useRef<HTMLDivElement>(null);
+  // Starts TRUE so the bar begins hidden. IntersectionObserver callbacks run
+  // after first paint, so starting false rendered the bar for a frame and then
+  // removed it on every load where the form already fits — which on a 390x844
+  // screen is every load. Better to reveal the bar a frame late than to flash
+  // it on the one arm whose first impression is the whole experiment.
+  const [formEndVisible, setFormEndVisible] = useState(true);
+  useEffect(() => {
+    const el = formEndRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([e]) => setFormEndVisible(e.isIntersecting));
+    io.observe(el);
+    return () => io.disconnect();
+  }, [step, arm]);
 
   /**
    * Slack ping the moment someone answers the first question. Fired on the
@@ -133,20 +304,55 @@ export default function CityLandingClient({
    * notification plumbing fail.
    */
   const pinged = useRef(false);
-  useEffect(() => {
-    if (pinged.current || !who || step === "intro" || step === "who") return;
+  const pingStart = () => {
+    if (pinged.current || previewing) return;
     pinged.current = true;
     fetch("/api/city-leads/start", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug: cfg.slug, recipient: who, utm }),
+      body: JSON.stringify({
+        slug: cfg.slug,
+        // Care type is the field every arm collects. Recipient rides along when
+        // the arm happened to ask, which only providers_first does.
+        careType: what,
+        recipient: who,
+        arm,
+        utm,
+      }),
       keepalive: true,
     }).catch(() => {});
+  };
+  useEffect(() => {
+    // THE ALERT AND THE METRIC DELIBERATELY USE DIFFERENT THRESHOLDS.
+    //
+    // cta_engaged wants sensitivity: any first input, because the experiment is
+    // measuring whether a stranger does anything at all. A human wants signal —
+    // being pinged every time somebody taps a care chip is noise you would learn
+    // to ignore, and an ignored alert is worse than none.
+    //
+    // So the ping fires when someone starts giving CONTACT DETAILS, which is the
+    // first moment there is any chance of a real request. Two arms get there by
+    // reaching the contact step; one_screen has no contact step, so it fires on
+    // the first touch of the name or phone field instead (see the field
+    // handlers). Same meaning in all three: they are filling in who they are.
+    //
+    // The previous gate was `!who`, and only providers_first ever sets `who` —
+    // so one_screen and guidance could never ping at all.
+    if (step === "contact") pingStart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step, who]);
+  }, [step]);
 
   const concierge = cfg.routingMode === "concierge";
-  const stepIndex = useMemo(() => ({ intro: 0, who: 1, what: 2, when: 3, contact: 4, done: 5 })[step], [step]);
+  const stepIndex = useMemo<number>(() => {
+    const map: Record<Step, number> = shortFlow
+      ? { intro: 0, who: 1, what: 1, when: 1, guide: 2, contact: 2, done: 3 }
+      : guided
+        // Q1 is answered on the landing screen, so a guidance visitor is
+        // already one question in by the time the step bar appears.
+        ? { intro: 1, who: 1, what: 1, when: 2, guide: 3, contact: 3, done: 4 }
+        : { intro: 0, who: 1, what: 2, when: 3, guide: 4, contact: 4, done: 5 };
+    return map[step];
+  }, [step, shortFlow, guided]);
 
   useEffect(() => {
     if (step !== "intro") topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -154,6 +360,20 @@ export default function CityLandingClient({
 
   const submit = async () => {
     setError(null);
+    // Care type is REQUIRED by the route (/api/city-leads:74 rejects anything
+    // outside home_care / assisted_living / unsure / medical) and the client
+    // never checked it.
+    //
+    // On the stepped arms that was harmless: you cannot reach the contact screen
+    // without answering the question. one_screen puts the chips and the contact
+    // fields on ONE screen, so nothing stopped someone filling in their name,
+    // their number and the consent box, pressing the button, and getting back
+    // "Pick the kind of help." — an error about a control they had scrolled past,
+    // raised only after the round trip.
+    //
+    // Checked first so the error names the first thing on the form rather than
+    // the last, matching the order the visitor reads.
+    if (!what) return setError("Choose the kind of help you need.");
     if (!firstName.trim()) return setError("Add your first name.");
     if (phone.replace(/\D/g, "").length < 10) return setError("Add a mobile number so the provider can call you.");
     if (!consent) return setError("Tick the box so a provider can contact you.");
@@ -178,6 +398,9 @@ export default function CityLandingClient({
           consent,
           utm,
           sessionId: safeSession(),
+          // Stored on the lead itself, not only on the landing event. See
+          // migration 224 for why a recoverable join was not good enough.
+          landingArm: arm,
           formVersion: CITY_FORM_VERSION,
           metaEventId,
         }),
@@ -221,54 +444,385 @@ export default function CityLandingClient({
   };
 
   return (
-    <div className="min-h-screen bg-vanilla-50 text-gray-900">
+    <div
+      className="min-h-screen bg-vanilla-50 text-gray-900"
+      style={v3 ? { background: V3.ground, color: V3.ink } : undefined}
+    >
       <div ref={topRef} />
       <div className="mx-auto max-w-md px-5 pb-16 pt-5 sm:max-w-lg">
         <header className="flex items-center justify-between text-sm">
           <span className="font-semibold tracking-wide text-primary-700">Olera</span>
           <span className="text-gray-500">
-            {step === "intro" || step === "done" ? `${cfg.city}, ${cfg.state}` : `Step ${stepIndex} of 4`}
+            {step === "intro" || step === "done" || step === "guide"
+              ? `${cfg.city}, ${cfg.state}`
+              : `Step ${stepIndex} of ${totalSteps}`}
           </span>
         </header>
 
-        {step !== "intro" && step !== "done" && (
+        {/* No step bar on `guide`: it is a result, not a step the visitor
+            fills. Leaving it there read "Step 3 of 3" on the guide screen and
+            "Step 3 of 3" again on the contact screen after it. */}
+        {step !== "intro" && step !== "done" && step !== "guide" && (
           <div className="mt-4 flex gap-1.5" aria-hidden>
-            {[1, 2, 3, 4].map((i) => (
+            {Array.from({ length: totalSteps }, (_, n) => n + 1).map((i) => (
               <i key={i} className={`h-1 w-7 rounded-full ${i <= stepIndex ? "bg-primary-700" : "bg-primary-100"}`} />
             ))}
           </div>
         )}
 
-        {step === "intro" && (
-          <section>
-            <h1 className="mt-10 font-display text-[2.4rem] leading-[1.05] tracking-tight text-gray-900 sm:text-[2.9rem]">
-              Looking for senior care in {cfg.city}?
-            </h1>
-            <p className="mt-4 text-lg leading-snug text-gray-600">
-              {concierge
-                ? staffedNow
-                  ? "Tell us what you need. We call you back today. Free."
-                  : "Tell us what you need. We call you back in the morning. Free."
-                : "A local provider calls you back. Free."}
-            </p>
-            <button
-              type="button"
-              onClick={() => setStep("who")}
-              className="mt-8 block w-full rounded-xl bg-primary-700 px-4 py-4 text-center text-[17px] font-semibold text-white hover:bg-primary-600 active:bg-primary-800"
+        {/* ===================== one_screen =====================
+            Three inputs, one screen, one action. No intro to advance past and
+            no quiz to complete, because the outcome being optimised is a
+            COMPLETED SUBMISSION per paid landing and every other concept on
+            the table changes what happens before the form while leaving the
+            form itself alone.
+
+            Only the three things the request cannot be made without: care
+            type (the API rejects anything else), a first name, and a mobile
+            number. ZIP and email are gone — both are optional server-side, and
+            a field that is not required is a field that costs submissions for
+            information a thirty-second phone call recovers anyway.
+
+            The action colour is deliberately NOT the brand teal. On the other
+            arms primary-700 paints the wordmark, the Verified ticks, the step
+            numerals AND the button, so the one element that should be the most
+            salient thing on the page competes with four others wearing its
+            colour. Here the deep slate is used for exactly one thing.
+        */}
+        {oneScreen && step === "intro" && (
+          <section className="pb-28">
+            <h1
+              className="mt-8 text-[2.05rem] font-semibold leading-[1.12] tracking-tight"
+              style={{ color: V3.ink }}
             >
-              Get started
-            </button>
-            <p className="mt-3 text-center text-xs text-gray-500">
-              {concierge ? "Four questions · We call you back · Never sold" : "Four questions · One provider at a time · Never sold"}
+              {fill(copy.headline)}
+            </h1>
+            <p className="mt-3 text-[17px] leading-snug" style={{ color: V3.muted }}>
+              {fill(!staffedNow && copy.subUnstaffed ? copy.subUnstaffed : copy.sub)}
             </p>
 
+            <form
+              id="one-screen-request"
+              className="mt-7 space-y-6"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void submit();
+              }}
+            >
+              <fieldset>
+                <legend className="text-[15px] font-semibold text-gray-900">
+                  What kind of help?
+                </legend>
+                <div className="mt-2.5 flex flex-wrap gap-2">
+                  {WHAT.map((o) => {
+                    const on = what === o.v;
+                    return (
+                      <button
+                        key={o.v}
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() => {
+                          setWhat(o.v);
+                          markOneScreenStart();
+                        }}
+                        className="min-h-[48px] rounded-full border px-4 text-[15px] font-medium transition-colors"
+                        style={
+                          on
+                            ? { borderColor: V3.action, background: V3.action, color: V3.actionInk }
+                            : { borderColor: V3.hairline, background: "#fff", color: V3.ink }
+                        }
+                      >
+                        {o.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
+
+              <Field label="Your first name">
+                <input
+                  className={inputCls}
+                  autoComplete="given-name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  onFocus={() => {
+                    markOneScreenStart();
+                    pingStart();
+                  }}
+                  maxLength={60}
+                />
+              </Field>
+
+              <Field label="Mobile number" hint="Olera calls or texts you about this request. Never sold.">
+                <input
+                  className={inputCls}
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  placeholder="(704) 555-0100"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  onFocus={() => {
+                    markOneScreenStart();
+                    pingStart();
+                  }}
+                />
+              </Field>
+
+              <label className="flex items-start gap-2.5 text-[12px] leading-snug text-gray-600">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-5 w-5 shrink-0 rounded border-gray-400"
+                  style={{ accentColor: V3.action }}
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                />
+                <span>
+                  I agree that Olera may call or text me at this number about my request, including with
+                  automated technology. Consent is not a condition of service. Msg and data rates may apply.
+                  Reply STOP to opt out.
+                </span>
+              </label>
+
+              {error && (
+                <p role="alert" className="rounded-lg bg-error-50 px-3 py-2 text-sm text-error-700">
+                  {error}
+                </p>
+              )}
+
+              {/* The form's own submit. The sticky bar is a FALLBACK for when
+                  this has scrolled out of view, never the only way to submit —
+                  an earlier build had no inline button, so once the bar learned
+                  to hide itself the page had no way to send anything. */}
+              <button
+                type="submit"
+                disabled={busy}
+                className="block min-h-[54px] w-full rounded-full px-5 text-[17px] font-semibold disabled:opacity-60"
+                style={{ background: V3.action, color: V3.actionInk }}
+              >
+                {busy ? "Sending…" : copy.cta}
+              </button>
+            </form>
+            <div ref={formEndRef} aria-hidden className="h-px" />
+
+            <p className="mt-3.5 text-center text-[13px]" style={{ color: V3.muted }}>
+              {copy.micro}
+            </p>
+
+            {/* ASK, THEN PROOF. The same real provider records providers_first
+                shows above its button appear here BELOW the form. A visitor who
+                is ready submits without scrolling; one who is not still gets
+                something rather than a dead end. The two arms now differ in
+                ORDER alone, which is what makes them comparable. */}
             {providers.length > 0 && (
+              <div className="mt-10 border-t pt-7" style={{ borderColor: V3.hairline }}>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: V3.muted }}>
+                  Providers near {cfg.city}
+                </p>
+                <ul className="mt-2 divide-y" style={{ borderColor: V3.hairline }}>
+                  {providers.slice(0, PROVIDER_CARD_LIMIT).map((p) => (
+                    <li key={p.name} className="flex items-center gap-3 py-3">
+                      <Avatar name={p.name} photo={p.photo} />
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-[15px] font-semibold" style={{ color: V3.ink }}>{p.name}</div>
+                        <div className="mt-0.5 text-xs" style={{ color: V3.muted }}>
+                          {p.careLabel} · {p.town}
+                        </div>
+                      </div>
+                      {p.verified && (
+                        <span className="shrink-0 text-xs font-medium" style={{ color: V3.muted }}>✓ Verified</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <footer className="mt-8 text-[11px] leading-relaxed text-gray-400">
+              Olera, Inc. · support@olera.care ·{" "}
+              <Link className="underline" href="/privacy">Privacy</Link> ·{" "}
+              <Link className="underline" href="/terms">Terms</Link>
+            </footer>
+          </section>
+        )}
+
+        {!oneScreen && step === "intro" && (
+          <section>
+            <h1
+              className={
+                v3
+                  ? "mt-9 text-[2.1rem] font-semibold leading-[1.1] tracking-tight sm:text-[2.5rem]"
+                  : "mt-10 font-display text-[2.4rem] leading-[1.05] tracking-tight text-gray-900 sm:text-[2.9rem]"
+              }
+              style={v3 ? { color: V3.ink } : undefined}
+            >
+              {fill(copy.headline)}
+            </h1>
+            <p
+              className={v3 ? "mt-3 text-[17px] leading-snug" : "mt-4 text-lg leading-snug text-gray-600"}
+              style={v3 ? { color: V3.muted } : undefined}
+            >
+              {concierge
+                ? fill(!staffedNow && copy.subUnstaffed ? copy.subUnstaffed : copy.sub)
+                : "A local provider calls you back. Free."}
+            </p>
+
+            {guided && (
+              <div className="mt-7">
+                <p
+                  className="text-[11px] font-semibold uppercase tracking-[0.12em]"
+                  style={{ color: V3.muted }}
+                >
+                  Question 1 of 2
+                </p>
+                <h2 className="mt-1.5 text-[1.45rem] font-semibold leading-tight" style={{ color: V3.ink }}>
+                  What kind of help?
+                </h2>
+                <div className="mt-3.5 flex flex-col gap-2">
+                  {WHAT.map((o) => (
+                    <button
+                      key={o.v}
+                      type="button"
+                      onClick={() => {
+                        setWhat(o.v);
+                        setStep("when");
+                      }}
+                      className="flex min-h-[56px] w-full items-center justify-between rounded-xl border px-4 text-left text-[16px] font-medium"
+                      style={{ borderColor: V3.hairline, background: "#fff", color: V3.ink }}
+                    >
+                      <span>{o.label}</span>
+                      <span aria-hidden style={{ color: V3.muted }}>&rarr;</span>
+                    </button>
+                  ))}
+                </div>
+                <p className="mt-3 text-center text-xs" style={{ color: V3.muted }}>
+                  {copy.micro}
+                </p>
+              </div>
+            )}
+
+            {/* providers_first: proof moves ABOVE the ask, and the proof is
+                real rather than decorative.
+
+                The cards TAP OPEN. An arm that promises "see who is near you"
+                and delivers a four-question form the moment you touch anything
+                is the same bait-and-switch as an ad promising a call "today"
+                onto a page that says "in the morning". If this arm is going to
+                test whether proof-before-ask works, the proof has to actually
+                arrive first. Expanding costs the visitor nothing and commits
+                them to nothing, which is the point. */}
+            {arm === "providers_first" && providers.length > 0 && (
+              <ul className="mt-7 divide-y divide-gray-200 border-y border-gray-200">
+                {providers.slice(0, PROVIDER_CARD_LIMIT).map((p) => {
+                  const open = expanded === p.name;
+                  const types = p.careTypes
+                    .map((t) => CARE_TYPE_LABEL[t])
+                    .filter(Boolean);
+                  return (
+                    <li key={p.name}>
+                      <button
+                        type="button"
+                        aria-expanded={open}
+                        onClick={() => {
+                          setExpanded(open ? null : p.name);
+                          if (!open) {
+                            fireOnce("provider_expanded");
+                            // Opening a card is the single thing this arm exists
+                            // to encourage, and it was not counted as
+                            // engagement — cta_engaged only fired when the step
+                            // changed, which tapping a card does not do. The arm
+                            // would have reported its own success as a miss.
+                            fireOnce("cta_engaged");
+                          }
+                        }}
+                        className="flex w-full items-center gap-3 py-3 text-left"
+                      >
+                        <Avatar name={p.name} photo={p.photo} />
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-[15px] font-semibold">{p.name}</div>
+                          <div className="mt-0.5 text-xs text-gray-500">
+                            {p.careLabel} · {p.town}
+                          </div>
+                        </div>
+                        {p.verified && (
+                          <span className="shrink-0 text-xs font-medium text-primary-700">✓ Verified</span>
+                        )}
+                        <span
+                          aria-hidden
+                          className={`shrink-0 text-gray-400 transition-transform ${open ? "rotate-90" : ""}`}
+                        >
+                          ›
+                        </span>
+                      </button>
+                      {open && (
+                        <div className="pb-4 pl-[52px] text-sm leading-relaxed text-gray-600">
+                          <p>
+                            {/* The card knows the business's own town, not the
+                                area it serves. Saying "and nearby" invented a
+                                service-area claim we have no data for. */}
+                            Based in {p.town}.
+                            {types.length > 0 && ` ${types.join(" · ")}.`}
+                          </p>
+                          <p className="mt-1 text-xs text-gray-500">
+                            {p.verified
+                              ? "Listing verified on Olera."
+                              : "Listed on Olera."}{" "}
+                            An independent business — we do not take a cut of what they charge.
+                          </p>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
+            {/* GUIDANCE HAS NO INTRO BUTTON. Its first question is the page.
+                Putting the question behind "Show me where to start" costs a tap
+                to reveal something that is itself the draw, and Olera's own
+                provider pages already show that asking a question is the single
+                highest-engagement thing a visitor does. A button that only
+                uncovers a question is a toll on the thing people came to do. */}
+            {!guided && (
+            <button
+              type="button"
+              onClick={() => setStep(shortFlow ? "what" : "who")}
+              className={
+                v3
+                  ? "mt-7 block min-h-[54px] w-full rounded-full px-5 text-center text-[17px] font-semibold"
+                  : "mt-8 block w-full rounded-xl bg-primary-700 px-4 py-4 text-center text-[17px] font-semibold text-white hover:bg-primary-600 active:bg-primary-800"
+              }
+              style={v3 ? { background: V3.action, color: V3.actionInk } : undefined}
+            >
+              {copy.cta}
+            </button>
+            )}
+            {/* ONE line, carrying the price and the risk reversal together.
+                This shipped as two stacked lines of small grey text, 21 words
+                between them, directly under the element that should have been
+                unmissable. Airbnb puts an entire listing's value and its risk
+                reversal in six words: "From $65 / guest" over "Free
+                cancellation". */}
+            {/* Guidance renders its own micro line under the question block,
+                so the shared one would be a second copy above the questions. */}
+            {!guided && (
+              <p
+                className="mt-2.5 text-center text-xs"
+                style={v3 ? { color: V3.muted } : undefined}
+              >
+                {concierge ? copy.micro : "Four questions · One provider at a time · Never sold"}
+              </p>
+            )}
+
+            {/* The control and fewer_questions arms keep the cards below, where
+                they have sat since the 10 Sep fix. providers_first has already
+                rendered them above and must not repeat them. */}
+            {providers.length > 0 && arm !== "providers_first" && (
               <div className="mt-12">
                 <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                   {concierge ? `Providers near ${cfg.city}` : `Providers in ${cfg.city}`}
                 </p>
                 <ul className="mt-1 divide-y divide-gray-200">
-                  {providers.slice(0, 3).map((p) => (
+                  {providers.slice(0, PROVIDER_CARD_LIMIT).map((p) => (
                     <li key={p.name} className="flex items-center gap-3 py-3">
                       <Avatar name={p.name} photo={p.photo} />
                       <div className="min-w-0 flex-1">
@@ -289,7 +843,7 @@ export default function CityLandingClient({
               <ol className="mt-1 divide-y divide-gray-200">
                 {(concierge
                   ? ([
-                      ["Answer four questions", "About two minutes"],
+                      copy.firstStep,
                       ["We call you", "To understand what you need"],
                       ["We find your provider", "Local, and right for the care"],
                     ] as [string, string][])
@@ -338,10 +892,12 @@ export default function CityLandingClient({
             <h2 className="mt-6 font-display text-[1.75rem] leading-tight">What kind of help?</h2>
             <div className="mt-3 space-y-2">
               {WHAT.map((o) => (
-                <Option key={o.v} label={o.label} sub={o.sub} selected={what === o.v} onClick={() => pick(setWhat, "when")(o.v)} />
+                <Option key={o.v} label={o.label} sub={o.sub} selected={what === o.v} onClick={() => pick(setWhat, shortFlow ? "contact" : "when")(o.v)} />
               ))}
             </div>
-            <Back onClick={() => setStep("who")} />
+            {/* On the short arm this is the first question, so Back returns to
+                the intro. On the full flow it returns to the recipient question. */}
+            <Back onClick={() => setStep(shortFlow ? "intro" : "who")} />
           </section>
         )}
 
@@ -350,10 +906,69 @@ export default function CityLandingClient({
             <h2 className="mt-6 font-display text-[1.75rem] leading-tight">How soon?</h2>
             <div className="mt-3 space-y-2">
               {WHEN.map((o) => (
-                <Option key={o.v} label={o.label} selected={when === o.v} onClick={() => pick(setWhen, "contact")(o.v)} />
+                <Option key={o.v} label={o.label} selected={when === o.v} onClick={() => pick(setWhen, guided ? "guide" : "contact")(o.v)} />
               ))}
             </div>
             <Back onClick={() => setStep("what")} />
+          </section>
+        )}
+
+        {/* The guidance arm's payoff. Two answers in, one concrete starting
+            point out, BEFORE any contact detail is asked for. The value has to
+            actually arrive here or the arm is just a longer form. Both answers
+            carry into the request rather than being asked again. */}
+        {step === "guide" && (
+          <section>
+            <p className="mt-6 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: V3.muted }}>
+              Where to start
+            </p>
+            <h2 className="mt-1.5 text-[1.65rem] font-semibold leading-tight" style={{ color: V3.ink }}>
+              {what === "assisted_living"
+                ? "Start by touring two or three places."
+                : what === "medical"
+                  ? "You need a licensed agency, not a caregiver."
+                  : what === "unsure"
+                    ? "Start with a few hours a week."
+                    : "Start with a few hours a week."}
+            </h2>
+            <p className="mt-3 text-[16px] leading-relaxed" style={{ color: V3.muted }}>
+              {what === "assisted_living"
+                ? `Most ${cfg.city} families visit two or three communities before deciding. Costs and what is included vary a lot between them, so seeing them side by side is worth the afternoon.`
+                : what === "medical"
+                  ? `Nursing and medical care at home has to come from a licensed home health agency, which is different from the everyday help most ${cfg.city} families start with. We will point you at the right kind of provider rather than the wrong one.`
+                  : what === "unsure"
+                    ? `Most families start smaller than they expect. A few hours a week of help with meals, dressing and errands covers a lot, and it is easy to add more later.`
+                    : `Most ${cfg.city} families begin with a few hours a week rather than full days, then add hours as they need them. Agencies usually have a minimum, often around four hours per visit.`}
+            </p>
+            {when && (
+              <p className="mt-3 text-[16px] leading-relaxed" style={{ color: V3.muted }}>
+                {when === "this_week"
+                  ? "Because you need this week, the practical constraint is who has availability now rather than who looks best on paper."
+                  : when === "this_month"
+                    ? "A month is enough time to compare a few options properly without rushing the decision."
+                    : "Planning ahead is the cheapest time to do this. Nothing has to be decided today."}
+              </p>
+            )}
+            <div className="mt-7 border-t pt-6" style={{ borderColor: V3.hairline }}>
+              <h3 className="text-[1.3rem] font-semibold leading-tight" style={{ color: V3.ink }}>
+                Talk it through with Olera.
+              </h3>
+              <p className="mt-1.5 text-[15px] leading-relaxed" style={{ color: V3.muted }}>
+                We will go through local options with you and what to ask them. Free for families.
+              </p>
+              <button
+                type="button"
+                onClick={() => setStep("contact")}
+                className="mt-4 block min-h-[52px] w-full rounded-full px-5 text-[17px] font-semibold"
+                style={{ background: V3.action, color: V3.actionInk }}
+              >
+                {"Request a call"}
+              </button>
+              <p className="mt-2.5 text-center text-[12.5px]" style={{ color: V3.muted }}>
+                {copy.micro}
+              </p>
+            </div>
+            <Back onClick={() => setStep("when")} />
           </section>
         )}
 
@@ -435,8 +1050,58 @@ export default function CityLandingClient({
                 {busy ? "Sending…" : `Get my ${cfg.city} match`}
               </button>
             </form>
-            <Back onClick={() => setStep("when")} />
+            <Back onClick={() => setStep(shortFlow ? "what" : "when")} />
           </section>
+        )}
+
+        {/* ===================== sticky action bar =====================
+            Airbnb's pattern, not just "a button that follows you": the bar is
+            TWO parts, the terms on the left and the action on the right, with
+            the risk reversal sitting under the terms rather than buried in the
+            page. Their listing bar reads "From $65 / guest · Free cancellation"
+            next to "Show dates"; ours reads what the visitor gets next to what
+            the visitor does.
+
+            It renders on one_screen only. The evidence for sticky CTAs is real
+            (12-28% on deep-page conversions) but the MECHANISM is "the action
+            has scrolled out of view on a long page". Control is a single
+            viewport with its button above the fold, so a bar there would add
+            furniture and remove nothing. one_screen is long enough for the
+            mechanism to apply, which is the whole reason it earns one.
+
+            W3C F110: sticky content that covers a focused control is an
+            accessibility failure, so the section above reserves pb-28 and the
+            bar sits inside the safe area rather than over it.
+        */}
+        {oneScreen && step === "intro" && !formEndVisible && (
+          <div
+            className="fixed inset-x-0 bottom-0 z-20 border-t backdrop-blur"
+            style={{
+              paddingBottom: "max(0.625rem, env(safe-area-inset-bottom))",
+              borderColor: V3.hairline,
+              background: "rgba(250,249,246,0.95)",
+            }}
+          >
+            <div className="mx-auto flex max-w-md items-center gap-3 px-5 pt-2.5 sm:max-w-lg">
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-semibold leading-tight" style={{ color: V3.ink }}>
+                  A real person calls you
+                </p>
+                <p className="text-[12px] leading-tight" style={{ color: V3.muted }}>
+                  Free · Does not book care
+                </p>
+              </div>
+              <button
+                type="submit"
+                form="one-screen-request"
+                disabled={busy}
+                className="min-h-[50px] shrink-0 rounded-full px-7 text-[16px] font-semibold disabled:opacity-60"
+                style={{ background: V3.action, color: V3.actionInk }}
+              >
+                {busy ? "Sending…" : copy.cta}
+              </button>
+            </div>
+          </div>
         )}
 
         {step === "done" && result && (

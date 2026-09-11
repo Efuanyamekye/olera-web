@@ -3,6 +3,22 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import CityQuizFunnel from "@/components/admin/CityQuizFunnel";
+import type { ArmRow } from "@/lib/city-ads/arm-rollup";
+import type { CityLandingArm } from "@/lib/city-ads/landing-variant";
+
+/** Opening the page is the fastest way to know what a number means. */
+const CITY_PREVIEWS = [
+  { slug: "dallas-tx", label: "Dallas" },
+  { slug: "charlotte-nc", label: "Charlotte" },
+] as const;
+
+/** What each arm is, in the words used to describe it everywhere else. */
+const ARM_LABEL: Partial<Record<CityLandingArm, string>> = {
+  providers_first: "Providers first",
+  one_screen: "One screen",
+  guidance: "Find a starting point",
+  control: "Control",
+};
 
 /**
  * /admin/city-ads — Olera-owned city campaigns.
@@ -178,6 +194,7 @@ const TONE: Record<string, string> = {
 export default function CityAdsAdminPage() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [rollup, setRollup] = useState<ChannelRow[]>([]);
+  const [armRollup, setArmRollup] = useState<ArmRow[]>([]);
   const [pool, setPool] = useState<PoolRow[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [lastClockRun, setLastClockRun] = useState<string | null>(null);
@@ -195,6 +212,7 @@ export default function CityAdsAdminPage() {
       const d = await res.json();
       setCampaigns(d.campaigns);
       setRollup(d.channelRollup ?? []);
+      setArmRollup(d.armRollup ?? []);
       setPool(d.pool);
       setLeads(d.leads);
       setLastClockRun(d.lastClockRun ?? null);
@@ -274,6 +292,8 @@ export default function CityAdsAdminPage() {
           {lastClockRun && <span className="text-gray-400"> · clock ran {ago(lastClockRun)}</span>}
         </p>
       </header>
+
+      <LandingArms rows={armRollup} />
 
       {error && <div className="mb-4 rounded-lg bg-error-50 px-3 py-2 text-sm text-error-700">{error}</div>}
       {toast && <div className="fixed bottom-4 right-4 z-50 rounded-lg bg-gray-900 px-4 py-2 text-sm text-white shadow-lg">{toast}</div>}
@@ -694,6 +714,80 @@ function CityEditor({ slug, campaigns, rollup, pool, busy, act }: { slug: string
  * "$0.00 per lead" because nobody typed the spend yet is worse than a channel
  * showing nothing, because it reads as a result.
  */
+/**
+ * The landing-page experiment, per arm.
+ *
+ * Submissions is the only column that decides. Landings is the denominator and
+ * engagement says where an arm loses people; neither picks a winner, and at
+ * roughly 150 visits an arm nothing here can rank two arms that both work.
+ *
+ * The preview links are the other half of the job: the fastest way to know what
+ * a number means is to open the page that produced it.
+ */
+function LandingArms({ rows }: { rows: ArmRow[] }) {
+  const any = rows.some((r) => r.landings > 0);
+  return (
+    <section className="mb-8">
+      <Eyebrow>Landing pages</Eyebrow>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="text-[11px] uppercase tracking-wider text-gray-500">
+            <tr>
+              <th className="py-1 pr-3 font-semibold">Arm</th>
+              <th className="py-1 pr-3 text-right font-semibold">Landings</th>
+              <th className="py-1 pr-3 text-right font-semibold">Engaged</th>
+              <th className="py-1 pr-3 text-right font-semibold">Requests</th>
+              <th className="py-1 text-right font-semibold">Per landing</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 text-gray-800">
+            {rows.map((r) => (
+              <tr key={r.arm}>
+                <td className="py-1.5 pr-3 font-medium text-gray-900">
+                  {ARM_LABEL[r.arm] ?? r.arm}{" "}
+                  {/* Both cities run all three arms, and the numbers in this row
+                      pool them. A single unlabelled "open" implied one city. */}
+                  {CITY_PREVIEWS.map((c) => (
+                    <a
+                      key={c.slug}
+                      className="ml-1.5 font-normal text-primary-700 underline-offset-2 hover:underline"
+                      href={`/care/${c.slug}?v=${r.arm}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {c.label}
+                    </a>
+                  ))}
+                </td>
+                <td className="py-1.5 pr-3 text-right tabular-nums">{r.landings}</td>
+                <td className="py-1.5 pr-3 text-right tabular-nums">
+                  {r.engaged}
+                  {r.engagementRate !== null && r.landings > 0 && (
+                    <span className="text-gray-400"> ({(r.engagementRate * 100).toFixed(0)}%)</span>
+                  )}
+                </td>
+                <td className="py-1.5 pr-3 text-right font-semibold tabular-nums text-gray-900">{r.submissions}</td>
+                <td className="py-1.5 text-right tabular-nums">
+                  {r.submissionRate === null ? (
+                    <span className="text-gray-400">—</span>
+                  ) : (
+                    `${(r.submissionRate * 100).toFixed(1)}%`
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-1.5 text-[11px] leading-relaxed text-gray-500">
+        {any
+          ? "Requests is the number that decides. Engagement says where an arm loses people. At this traffic a one-request gap is noise, and there is no control — this says which new page is best, not that it beat the old one."
+          : "Nothing has landed on the new pages yet."}
+      </p>
+    </section>
+  );
+}
+
 function ChannelCompare({ rows }: { rows: ChannelRow[] }) {
   if (rows.length === 0) return null;
   const anyLeads = rows.some((r) => r.leads > 0);
