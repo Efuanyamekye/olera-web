@@ -124,6 +124,7 @@ export async function POST(req: NextRequest) {
       gclid: str(utm.gclid, 200),
       fbclid: str(utm.fbclid, 200),
       session_id: str(body.sessionId),
+      landing_arm: str(body.landingArm),
       care_recipient: recipient,
       care_type: careType,
       urgency,

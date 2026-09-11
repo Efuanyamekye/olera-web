@@ -295,17 +295,43 @@ export default function CityLandingClient({
    * notification plumbing fail.
    */
   const pinged = useRef(false);
-  useEffect(() => {
-    if (pinged.current || !who || step === "intro" || step === "who") return;
+  const pingStart = () => {
+    if (pinged.current || previewing) return;
     pinged.current = true;
     fetch("/api/city-leads/start", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug: cfg.slug, recipient: who, utm }),
+      body: JSON.stringify({
+        slug: cfg.slug,
+        // Care type is the field every arm collects. Recipient rides along when
+        // the arm happened to ask, which only providers_first does.
+        careType: what,
+        recipient: who,
+        arm,
+        utm,
+      }),
       keepalive: true,
     }).catch(() => {});
+  };
+  useEffect(() => {
+    // THE ALERT AND THE METRIC DELIBERATELY USE DIFFERENT THRESHOLDS.
+    //
+    // cta_engaged wants sensitivity: any first input, because the experiment is
+    // measuring whether a stranger does anything at all. A human wants signal —
+    // being pinged every time somebody taps a care chip is noise you would learn
+    // to ignore, and an ignored alert is worse than none.
+    //
+    // So the ping fires when someone starts giving CONTACT DETAILS, which is the
+    // first moment there is any chance of a real request. Two arms get there by
+    // reaching the contact step; one_screen has no contact step, so it fires on
+    // the first touch of the name or phone field instead (see the field
+    // handlers). Same meaning in all three: they are filling in who they are.
+    //
+    // The previous gate was `!who`, and only providers_first ever sets `who` —
+    // so one_screen and guidance could never ping at all.
+    if (step === "contact") pingStart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step, who]);
+  }, [step]);
 
   const concierge = cfg.routingMode === "concierge";
   const stepIndex = useMemo<number>(() => {
@@ -349,6 +375,9 @@ export default function CityLandingClient({
           consent,
           utm,
           sessionId: safeSession(),
+          // Stored on the lead itself, not only on the landing event. See
+          // migration 224 for why a recoverable join was not good enough.
+          landingArm: arm,
           formVersion: CITY_FORM_VERSION,
           metaEventId,
         }),
@@ -488,7 +517,10 @@ export default function CityLandingClient({
                   autoComplete="given-name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  onFocus={markOneScreenStart}
+                  onFocus={() => {
+                    markOneScreenStart();
+                    pingStart();
+                  }}
                   maxLength={60}
                 />
               </Field>
@@ -502,7 +534,10 @@ export default function CityLandingClient({
                   placeholder="(704) 555-0100"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  onFocus={markOneScreenStart}
+                  onFocus={() => {
+                    markOneScreenStart();
+                    pingStart();
+                  }}
                 />
               </Field>
 
@@ -661,7 +696,15 @@ export default function CityLandingClient({
                         aria-expanded={open}
                         onClick={() => {
                           setExpanded(open ? null : p.name);
-                          if (!open) fireOnce("provider_expanded");
+                          if (!open) {
+                            fireOnce("provider_expanded");
+                            // Opening a card is the single thing this arm exists
+                            // to encourage, and it was not counted as
+                            // engagement — cta_engaged only fired when the step
+                            // changed, which tapping a card does not do. The arm
+                            // would have reported its own success as a miss.
+                            fireOnce("cta_engaged");
+                          }
                         }}
                         className="flex w-full items-center gap-3 py-3 text-left"
                       >

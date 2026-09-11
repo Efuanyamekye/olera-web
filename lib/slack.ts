@@ -2041,14 +2041,22 @@ export function slackCityLead(opts: {
 export function slackCityQuizStarted(opts: {
   city: string;
   recipientLabel: string | null;
+  /** What kind of help. Every landing arm captures this; only one captures
+   *  the recipient, which is why the headline leads with care type. */
+  careLabel?: string | null;
+  /** Which landing-page arm they are on, so whoever calls knows what they saw. */
+  arm?: string | null;
   channel: string | null;
   campaignTag?: string | null;
   paid: boolean;
   adminUrl: string;
 }): { text: string; blocks: SlackBlock[] } {
   const source = opts.paid ? opts.channel ?? "paid" : "direct, no campaign";
-  const caring = opts.recipientLabel ? ` · caring for ${opts.recipientLabel}` : "";
-  const text = `✍️ Started the form · ${opts.city} (${source})${caring}`;
+  // Care type first because all three arms have it; recipient only when the
+  // arm actually asked for it.
+  const what = opts.careLabel ? ` · ${opts.careLabel}` : "";
+  const caring = opts.recipientLabel ? ` · for ${opts.recipientLabel}` : "";
+  const text = `✍️ Reached the contact step · ${opts.city} (${source})${what}${caring}`;
   return {
     text,
     blocks: [
@@ -2061,7 +2069,7 @@ export function slackCityQuizStarted(opts: {
         elements: [
           {
             type: "mrkdwn",
-            text: `No contact details yet — nothing to act on unless they finish.${opts.campaignTag ? ` · \`${opts.campaignTag}\`` : ""} · <${opts.adminUrl}|Open the queue>`,
+            text: `No contact details yet — nothing to act on unless they finish.${opts.arm ? ` · page \`${opts.arm}\`` : ""}${opts.campaignTag ? ` · \`${opts.campaignTag}\`` : ""} · <${opts.adminUrl}|Open the queue>`,
           },
         ],
       },
