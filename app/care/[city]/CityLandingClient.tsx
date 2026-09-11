@@ -111,29 +111,18 @@ export default function CityLandingClient({
   }, [arm, previewing]);
 
   /**
-   * The four-question flow, and the short one.
-   *
-   * fewer_questions asks ONE question and it is care type: intro -> what ->
-   * contact.
-   *
-   * It originally asked `who` and skipped `what`, which could never submit.
-   * /api/city-leads:74 rejects any request whose careType is not one of
-   * home_care / assisted_living / unsure / medical, and a skipped question
-   * posts null, which stringifies to "" and fails that check. The arm would
-   * have taken a third of the traffic to a form that 400s at the end.
-   *
-   * Care type is also the right question to keep if you only keep one: the API
-   * requires it, `medical` routes the request somewhere different, and the
-   * concierge call can establish who it is for in ten seconds. Recipient
-   * cannot be recovered from the API's point of view; care scope cannot be
-   * recovered from operations' point of view.
+   * `shortFlow` is retained at false while the stepped flow keeps its four
+   * screens. The arm that used it (fewer_questions) was replaced by one_screen;
+   * the constant stays so the step maths reads the same in both directions.
    */
-  const shortFlow = arm === "fewer_questions";
+  const shortFlow = false;
   // The progress bar counts SCREENS the visitor passes through, and contact is
   // the last of them. The four-question flow is four screens: who, what, when,
   // contact. Deriving the total from a question count produced "Step 4 of 5" in
   // the control, which had read "Step 4 of 4" for the whole first flight.
   const totalSteps = shortFlow ? 2 : 4;
+  /** The whole request on one screen. No intro, no quiz, no step bar. */
+  const oneScreen = arm === "one_screen";
   /** Which provider card is open on the providers_first arm. */
   const [expanded, setExpanded] = useState<string | null>(null);
 
@@ -216,12 +205,27 @@ export default function CityLandingClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
 
+  // one_screen has no step transitions to hang the funnel off, so its
+  // engagement is the first touch of a field. Without this the arm would
+  // record landings and submissions and nothing in between, which is the
+  // blindness the per-question events were added to fix.
+  const markOneScreenStart = () => {
+    if (!oneScreen) return;
+    fireOnce("cta_engaged");
+    fireOnce("lead_started");
+  };
+
   const [who, setWho] = useState<CityRecipient | null>(null);
   const [what, setWhat] = useState<CityCareType | null>(null);
   const [when, setWhen] = useState<CityUrgency | null>(null);
   const [firstName, setFirstName] = useState("");
   const [phone, setPhone] = useState("");
-  const [zip, setZip] = useState(cfg.zipPrefill);
+  // The prefill is a convenience on the stepped flow, where the visitor sees
+  // the field and can correct it. one_screen does not show a ZIP field at all,
+  // so prefilling would silently attach a downtown ZIP as lead context that
+  // nobody confirmed. Our one real city lead was in DeSoto, which no pooled
+  // Dallas provider can serve — wrong geography is not a cosmetic problem.
+  const [zip, setZip] = useState(arm === "one_screen" ? "" : cfg.zipPrefill);
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -354,7 +358,128 @@ export default function CityLandingClient({
           </div>
         )}
 
-        {step === "intro" && (
+        {/* ===================== one_screen =====================
+            Three inputs, one screen, one action. No intro to advance past and
+            no quiz to complete, because the outcome being optimised is a
+            COMPLETED SUBMISSION per paid landing and every other concept on
+            the table changes what happens before the form while leaving the
+            form itself alone.
+
+            Only the three things the request cannot be made without: care
+            type (the API rejects anything else), a first name, and a mobile
+            number. ZIP and email are gone — both are optional server-side, and
+            a field that is not required is a field that costs submissions for
+            information a thirty-second phone call recovers anyway.
+
+            The action colour is deliberately NOT the brand teal. On the other
+            arms primary-700 paints the wordmark, the Verified ticks, the step
+            numerals AND the button, so the one element that should be the most
+            salient thing on the page competes with four others wearing its
+            colour. Here the deep slate is used for exactly one thing.
+        */}
+        {oneScreen && step === "intro" && (
+          <section className="pb-28">
+            <h1 className="mt-8 font-display text-[2.15rem] leading-[1.08] tracking-tight text-gray-900">
+              {fill(copy.headline)}
+            </h1>
+            <p className="mt-3 text-[17px] leading-snug text-gray-600">
+              {fill(staffedNow ? copy.staffed : copy.unstaffed)}
+            </p>
+
+            <form
+              id="one-screen-request"
+              className="mt-7 space-y-6"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void submit();
+              }}
+            >
+              <fieldset>
+                <legend className="text-[15px] font-semibold text-gray-900">
+                  What kind of help?
+                </legend>
+                <div className="mt-2.5 flex flex-wrap gap-2">
+                  {WHAT.map((o) => {
+                    const on = what === o.v;
+                    return (
+                      <button
+                        key={o.v}
+                        type="button"
+                        aria-pressed={on}
+                        onClick={() => {
+                          setWhat(o.v);
+                          markOneScreenStart();
+                        }}
+                        className={`min-h-[48px] rounded-full border px-4 text-[15px] font-medium transition-colors ${
+                          on
+                            ? "border-secondary-800 bg-secondary-800 text-white"
+                            : "border-gray-300 bg-white text-gray-700 active:bg-gray-50"
+                        }`}
+                      >
+                        {o.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
+
+              <Field label="Your first name">
+                <input
+                  className={inputCls}
+                  autoComplete="given-name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  onFocus={markOneScreenStart}
+                  maxLength={60}
+                />
+              </Field>
+
+              <Field label="Mobile number" hint="Olera calls or texts you about this request. Never sold.">
+                <input
+                  className={inputCls}
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  placeholder="(704) 555-0100"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  onFocus={markOneScreenStart}
+                />
+              </Field>
+
+              <label className="flex items-start gap-2.5 text-[12px] leading-snug text-gray-600">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-5 w-5 shrink-0 rounded border-gray-400 accent-secondary-800"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                />
+                <span>
+                  I agree that Olera may call or text me at this number about my request, including with
+                  automated technology. Consent is not a condition of service. Msg and data rates may apply.
+                  Reply STOP to opt out.
+                </span>
+              </label>
+
+              {error && (
+                <p role="alert" className="rounded-lg bg-error-50 px-3 py-2 text-sm text-error-700">
+                  {error}
+                </p>
+              )}
+            </form>
+
+            <p className="mt-7 text-[13px] leading-relaxed text-gray-500">
+              Olera is free for families. Care itself is paid to the provider you choose.
+            </p>
+            <footer className="mt-8 text-[11px] leading-relaxed text-gray-400">
+              Olera, Inc. · support@olera.care ·{" "}
+              <Link className="underline" href="/privacy">Privacy</Link> ·{" "}
+              <Link className="underline" href="/terms">Terms</Link>
+            </footer>
+          </section>
+        )}
+
+        {!oneScreen && step === "intro" && (
           <section>
             <h1 className="mt-10 font-display text-[2.4rem] leading-[1.05] tracking-tight text-gray-900 sm:text-[2.9rem]">
               {fill(copy.headline)}
@@ -628,6 +753,49 @@ export default function CityLandingClient({
             </form>
             <Back onClick={() => setStep(shortFlow ? "what" : "when")} />
           </section>
+        )}
+
+        {/* ===================== sticky action bar =====================
+            Airbnb's pattern, not just "a button that follows you": the bar is
+            TWO parts, the terms on the left and the action on the right, with
+            the risk reversal sitting under the terms rather than buried in the
+            page. Their listing bar reads "From $65 / guest · Free cancellation"
+            next to "Show dates"; ours reads what the visitor gets next to what
+            the visitor does.
+
+            It renders on one_screen only. The evidence for sticky CTAs is real
+            (12-28% on deep-page conversions) but the MECHANISM is "the action
+            has scrolled out of view on a long page". Control is a single
+            viewport with its button above the fold, so a bar there would add
+            furniture and remove nothing. one_screen is long enough for the
+            mechanism to apply, which is the whole reason it earns one.
+
+            W3C F110: sticky content that covers a focused control is an
+            accessibility failure, so the section above reserves pb-28 and the
+            bar sits inside the safe area rather than over it.
+        */}
+        {oneScreen && step === "intro" && (
+          <div
+            className="fixed inset-x-0 bottom-0 z-20 border-t border-gray-200 bg-vanilla-50/95 backdrop-blur"
+            style={{ paddingBottom: "max(0.625rem, env(safe-area-inset-bottom))" }}
+          >
+            <div className="mx-auto flex max-w-md items-center gap-3 px-5 pt-2.5 sm:max-w-lg">
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-semibold leading-tight text-gray-900">
+                  A real person calls you
+                </p>
+                <p className="text-[12px] leading-tight text-gray-500">Free for families</p>
+              </div>
+              <button
+                type="submit"
+                form="one-screen-request"
+                disabled={busy}
+                className="min-h-[50px] shrink-0 rounded-full bg-secondary-800 px-7 text-[16px] font-semibold text-white active:bg-secondary-900 disabled:opacity-60"
+              >
+                {busy ? "Sending…" : copy.cta}
+              </button>
+            </div>
+          </div>
         )}
 
         {step === "done" && result && (

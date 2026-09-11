@@ -20,16 +20,33 @@
  *                    never rendered for anyone during the whole first flight,
  *                    because the page gated them on the ON CALL texting flag.
  *
- *   fewer_questions  Smaller ask. One question instead of four before the
- *                    contact step, and the intro says so. Theory: the barrier
- *                    is the size of the commitment, not the proof on offer.
+ *   one_screen       The whole request on a single screen: care type as chips,
+ *                    first name, mobile, consent, submit. No intro screen, no
+ *                    quiz, nothing to advance through. A sticky action bar
+ *                    keeps Submit reachable while the fields scroll under it.
+ *                    Theory: the thing we are optimising is COMPLETED
+ *                    SUBMISSIONS per paid landing, and every other concept on
+ *                    the table changes what happens BEFORE the form while
+ *                    leaving the form itself untouched. The form is where a
+ *                    submission is actually won or lost and nobody is testing
+ *                    it.
  *
- * WHAT IS DELIBERATELY NOT AN ARM. The ads promise "We Call You Back Today"
- * while the page says "in the morning" to anyone arriving outside 8am-noon
- * local, which was 68% of the first flight. That is a defect, not a variable,
- * and the honest fix is on the Google ad copy. Putting it in an arm would be
- * testing a lie against the truth. Control keeps the current behaviour so the
- * comparison stays clean.
+ *                    It replaced an earlier `fewer_questions` arm, which cut
+ *                    the quiz from four questions to one and was the weakest
+ *                    thing on the table: on the first screen it was identical
+ *                    to control, so a third of the traffic would have bought a
+ *                    copy change. The evidence also went against it —
+ *                    multi-step forms outperform single-page ones, and "how
+ *                    many questions" and "how they are distributed" are
+ *                    separate variables that it conflated.
+ *
+ * WHAT IS DELIBERATELY NOT AN ARM: RESPONSE TIME. 84% of paid landings arrive
+ * outside the 8am-noon callback window, so any same-day promise is a walk-back
+ * for most visitors. The resolution is not to align the page to the ad, it is
+ * to carry NO timing claim on the first screen at all — it is the one thing we
+ * cannot guarantee, and whether we call at 8am or 2pm has no bearing on whether
+ * someone submits. Those are decoupled. Control keeps its existing wording
+ * because a baseline that quietly improves measures nothing.
  *
  * SAME URL, ALWAYS. Every arm serves from the existing Final URL. Changing an
  * ad's Final URL in this Google account triggers a "Confirm it's you" re-auth
@@ -38,7 +55,7 @@
  * be worth that risk. Content changes here; Google is not touched.
  */
 
-export const CITY_LANDING_ARMS = ["control", "providers_first", "fewer_questions"] as const;
+export const CITY_LANDING_ARMS = ["control", "providers_first", "one_screen"] as const;
 
 export type CityLandingArm = (typeof CITY_LANDING_ARMS)[number];
 
@@ -61,18 +78,28 @@ export function isCityLandingArm(v: unknown): v is CityLandingArm {
 }
 
 /**
- * Even split across the three arms.
+ * Weighted split: the control is a sanity check, not a measurement.
  *
- * Equal weights on purpose. The live flight runs ~38 clean paid landings a
- * day, so three arms get ~13 each and reach ~38 apiece in three days. At a 10%
- * engagement rate the chance of seeing zero in 38 is under 2%, which makes the
- * test decisive on the only question this sample size can answer: DOES ANY
- * VERSION GET A STRANGER TO START AT ALL. It cannot rank two arms that both
- * work — separating 5% from 10% needs several hundred per arm and is not
- * available before the flight ends. Do not read a 2-point gap as a winner.
+ * THE OUTCOME IS COMPLETED SUBMISSIONS PER PAID LANDING. CTA presses and form
+ * starts diagnose friction; callbacks and conversations are separate downstream
+ * outcomes and do not decide which page wins.
+ *
+ * Control takes 10% because we already have 30 observations on it and none of
+ * them converted; spending a third of the remaining money re-measuring that
+ * buys nothing. Each challenger takes 30%, which over the ~450 landings the
+ * remaining budget supports is ~135 apiece.
+ *
+ * WHAT THAT SAMPLE CAN AND CANNOT DO. At 135 visitors a true 3% arm shows zero
+ * only about 1.6% of the time, so this reliably separates "produces
+ * submissions" from "produces none". It CANNOT rank two arms that both work:
+ * separating 5% from 10% needs several hundred each. A one-submission gap is
+ * noise. And the 10% control at ~45 visitors cannot estimate lift against
+ * baseline at all, which is accepted rather than overlooked.
  */
 export function pickCityLandingArm(): CityLandingArm {
-  return CITY_LANDING_ARMS[Math.floor(Math.random() * CITY_LANDING_ARMS.length)];
+  const r = Math.random();
+  if (r < 0.1) return "control";
+  return r < 0.4 ? "providers_first" : "one_screen";
 }
 
 /**

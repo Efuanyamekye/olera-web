@@ -81,17 +81,20 @@ export const CITY_LANDING_COPY: Record<CityLandingArm, CityLandingCopy> = {
   /**
    * A smaller ask. One question instead of four before the contact step.
    */
-  fewer_questions: {
-    headline: "Looking for senior care in {city}?",
-    // No timing claim on either line. 84% of paid landings arrive outside the
-    // 8am-noon callback window, so any same-day promise is a walk-back for most
-    // visitors, and response speed is not what earns the press anyway.
-    staffed: "Tell us what kind of help you need. Someone from Olera calls to talk it through. Free.",
-    unstaffed: "Tell us what kind of help you need. Someone from Olera calls to talk it through. Free.",
-    cta: "Get started",
-    footnoteStaffed: "One question, then your number · Never sold",
-    footnoteUnstaffed: "One question, then your number · Never sold",
-    firstStep: ["Answer one question", "About twenty seconds"],
+  /**
+   * The whole request on one screen. No intro, no quiz, nothing to advance
+   * through. The copy's only job is to say what happens and get out of the way.
+   */
+  one_screen: {
+    headline: "Find senior care in {city}.",
+    // No timing claim: 84% of paid landings arrive outside the callback window.
+    // "A real person" is the thing worth promising and it is true at any hour.
+    staffed: "Answer three things and a real person from Olera calls to talk it through. Free for families.",
+    unstaffed: "Answer three things and a real person from Olera calls to talk it through. Free for families.",
+    cta: "Request a call",
+    footnoteStaffed: "Takes about thirty seconds · Never sold",
+    footnoteUnstaffed: "Takes about thirty seconds · Never sold",
+    firstStep: ["Answer three things", "About thirty seconds"],
   },
 };
 
