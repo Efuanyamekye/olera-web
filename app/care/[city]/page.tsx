@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
 import { getServiceClient } from "@/lib/admin";
 import { getCityConfig, isStaffedNow } from "@/lib/city-ads/config";
+import { CITY_ARM_COOKIE, resolveCityLandingArm } from "@/lib/city-ads/landing-variant";
 import { parseProviderImages } from "@/lib/types/provider";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
 import CityLandingClient, { type CityProviderCard } from "./CityLandingClient";
@@ -50,6 +52,15 @@ export default async function CityCarePage({
   const cfg = getCityConfig(city);
   if (!cfg) notFound();
   const sp = await searchParams;
+
+  // Which landing-page arm this visitor sees. Resolved on the server so the
+  // first paint is already the right one — swapping after hydration would show
+  // every visitor the control for a frame, which is exactly the moment the
+  // page is being judged. The page is force-dynamic, so this is per request.
+  const { arm } = resolveCityLandingArm({
+    override: first(sp.v),
+    cookie: (await cookies()).get(CITY_ARM_COOKIE)?.value ?? null,
+  });
 
   // Local provider cards: the city pool, joined to the account row. Only
   // things we can stand behind: name, town, care type, and whether the account
@@ -139,6 +150,7 @@ export default async function CityCarePage({
       <CityLandingClient
         cfg={cfg}
         providers={providers}
+        arm={arm}
         staffedNow={isStaffedNow(cfg.timeZone)}
         utm={{
           source: first(sp.utm_source),

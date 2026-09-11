@@ -9,6 +9,11 @@ import { getOrCreateSessionId } from "@/lib/analytics/session";
 import { trackGrowthEvent } from "@/lib/analytics/growth-attribution";
 import { trackMetaLead } from "@/components/analytics/MetaPixel";
 import { newMetaEventId } from "@/lib/city-ads/meta";
+import {
+  CITY_ARM_COOKIE,
+  CITY_ARM_TTL_SECONDS,
+  type CityLandingArm,
+} from "@/lib/city-ads/landing-variant";
 
 export interface CityProviderCard {
   name: string;
@@ -61,6 +66,7 @@ export default function CityLandingClient({
   providers,
   utm,
   staffedNow,
+  arm,
 }: {
   cfg: CityConfig;
   providers: CityProviderCard[];
@@ -71,8 +77,29 @@ export default function CityLandingClient({
    * page is force-dynamic, so this is fresh per request rather than cached.
    */
   staffedNow: boolean;
+  /** Which A/B arm the server picked. See lib/city-ads/landing-variant.ts. */
+  arm: CityLandingArm;
 }) {
   const [step, setStep] = useState<Step>("intro");
+
+  // Persist the server's pick so a reload does not re-roll the arm. The server
+  // assigns but cannot set cookies from a Server Component, so the client
+  // writes it back on first paint.
+  useEffect(() => {
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${CITY_ARM_COOKIE}=${arm}; Max-Age=${CITY_ARM_TTL_SECONDS}; Path=/; SameSite=Lax${secure}`;
+  }, [arm]);
+
+  /**
+   * The four-question flow, and the short one.
+   *
+   * fewer_questions skips `what` and `when` entirely: intro -> who -> contact.
+   * Both skipped answers post as null, which /api/city-leads already accepts —
+   * the concierge call establishes care type and urgency anyway, and this arm
+   * exists to find out whether asking for them up front is what loses people.
+   */
+  const shortFlow = arm === "fewer_questions";
+  const questionCount = shortFlow ? 1 : 4;
 
   /**
    * Paid-traffic funnel: click (Google) -> page_landed -> cta_engaged ->
@@ -92,7 +119,16 @@ export default function CityLandingClient({
   const fireOnce = (eventType: "page_landed" | "cta_engaged" | "lead_started") => {
     if (fired.current.has(eventType)) return;
     fired.current.add(eventType);
-    trackGrowthEvent({ eventType, pageCategory: "city_landing" });
+    // The arm rides on EVERY event, not just page_landed.
+    //
+    // The tracker attaches referrer and UTM metadata to page_landed alone, so
+    // an audit reading cta_engaged on its own sees an untagged event and has to
+    // recover the channel by joining back to the landing on anonymous_id +
+    // visit_id + page_path. That join is easy to get wrong and did get wrong:
+    // on 10 Sep it produced a "0 of 25 paid visitors engaged" headline that was
+    // false and had to be withdrawn the same day. Stamping the arm directly on
+    // each event means the A/B read never depends on reconstructing it.
+    trackGrowthEvent({ eventType, pageCategory: "city_landing", metadata: { arm } });
   };
 
   useEffect(() => {
@@ -146,7 +182,13 @@ export default function CityLandingClient({
   }, [step, who]);
 
   const concierge = cfg.routingMode === "concierge";
-  const stepIndex = useMemo(() => ({ intro: 0, who: 1, what: 2, when: 3, contact: 4, done: 5 })[step], [step]);
+  const stepIndex = useMemo(
+    () =>
+      shortFlow
+        ? ({ intro: 0, who: 1, what: 1, when: 1, contact: 2, done: 3 })[step]
+        : ({ intro: 0, who: 1, what: 2, when: 3, contact: 4, done: 5 })[step],
+    [step, shortFlow],
+  );
 
   useEffect(() => {
     if (step !== "intro") topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -227,13 +269,13 @@ export default function CityLandingClient({
         <header className="flex items-center justify-between text-sm">
           <span className="font-semibold tracking-wide text-primary-700">Olera</span>
           <span className="text-gray-500">
-            {step === "intro" || step === "done" ? `${cfg.city}, ${cfg.state}` : `Step ${stepIndex} of 4`}
+            {step === "intro" || step === "done" ? `${cfg.city}, ${cfg.state}` : `Step ${stepIndex} of ${questionCount + 1}`}
           </span>
         </header>
 
         {step !== "intro" && step !== "done" && (
           <div className="mt-4 flex gap-1.5" aria-hidden>
-            {[1, 2, 3, 4].map((i) => (
+            {Array.from({ length: questionCount + 1 }, (_, n) => n + 1).map((i) => (
               <i key={i} className={`h-1 w-7 rounded-full ${i <= stepIndex ? "bg-primary-700" : "bg-primary-100"}`} />
             ))}
           </div>
@@ -242,27 +284,64 @@ export default function CityLandingClient({
         {step === "intro" && (
           <section>
             <h1 className="mt-10 font-display text-[2.4rem] leading-[1.05] tracking-tight text-gray-900 sm:text-[2.9rem]">
-              Looking for senior care in {cfg.city}?
+              {arm === "providers_first" && providers.length > 0
+                ? `Home care in ${cfg.city}, from people who work here.`
+                : `Looking for senior care in ${cfg.city}?`}
             </h1>
             <p className="mt-4 text-lg leading-snug text-gray-600">
-              {concierge
-                ? staffedNow
-                  ? "Tell us what you need. We call you back today. Free."
-                  : "Tell us what you need. We call you back in the morning. Free."
-                : "A local provider calls you back. Free."}
+              {arm === "providers_first" && providers.length > 0
+                ? `${providers.length === 1 ? "One provider" : `${providers.length} providers`} on Olera near ${cfg.city}. Tell us what you need and we will find the right one.`
+                : concierge
+                  ? staffedNow
+                    ? "Tell us what you need. We call you back today. Free."
+                    : "Tell us what you need. We call you back in the morning. Free."
+                  : "A local provider calls you back. Free."}
             </p>
+
+            {/* providers_first: proof moves ABOVE the ask. The cards are the
+                first real thing on screen, and the button follows them. */}
+            {arm === "providers_first" && providers.length > 0 && (
+              <ul className="mt-7 divide-y divide-gray-200 border-y border-gray-200">
+                {providers.slice(0, 3).map((p) => (
+                  <li key={p.name} className="flex items-center gap-3 py-3">
+                    <Avatar name={p.name} photo={p.photo} />
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-[15px] font-semibold">{p.name}</div>
+                      <div className="mt-0.5 text-xs text-gray-500">
+                        {p.careLabel} · {p.town}
+                      </div>
+                    </div>
+                    {p.verified && <span className="text-xs font-medium text-primary-700">✓ Verified</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+
             <button
               type="button"
               onClick={() => setStep("who")}
               className="mt-8 block w-full rounded-xl bg-primary-700 px-4 py-4 text-center text-[17px] font-semibold text-white hover:bg-primary-600 active:bg-primary-800"
             >
-              Get started
+              {arm === "fewer_questions"
+                ? "Start — one question"
+                : arm === "providers_first" && providers.length > 0
+                  ? "Find the right one for me"
+                  : "Get started"}
             </button>
             <p className="mt-3 text-center text-xs text-gray-500">
-              {concierge ? "Four questions · We call you back · Never sold" : "Four questions · One provider at a time · Never sold"}
+              {shortFlow
+                ? staffedNow
+                  ? "One question · We call you back today · Never sold"
+                  : "One question · We call you back in the morning · Never sold"
+                : concierge
+                  ? "Four questions · We call you back · Never sold"
+                  : "Four questions · One provider at a time · Never sold"}
             </p>
 
-            {providers.length > 0 && (
+            {/* The control and fewer_questions arms keep the cards below, where
+                they have sat since the 10 Sep fix. providers_first has already
+                rendered them above and must not repeat them. */}
+            {providers.length > 0 && arm !== "providers_first" && (
               <div className="mt-12">
                 <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">
                   {concierge ? `Providers near ${cfg.city}` : `Providers in ${cfg.city}`}
@@ -289,7 +368,9 @@ export default function CityLandingClient({
               <ol className="mt-1 divide-y divide-gray-200">
                 {(concierge
                   ? ([
-                      ["Answer four questions", "About two minutes"],
+                      shortFlow
+                        ? ["Answer one question", "About twenty seconds"]
+                        : ["Answer four questions", "About two minutes"],
                       ["We call you", "To understand what you need"],
                       ["We find your provider", "Local, and right for the care"],
                     ] as [string, string][])
@@ -327,7 +408,7 @@ export default function CityLandingClient({
             <h2 className="mt-6 font-display text-[1.75rem] leading-tight">Who needs care?</h2>
             <div className="mt-3 space-y-2">
               {WHO.map((o) => (
-                <Option key={o.v} label={o.label} selected={who === o.v} onClick={() => pick(setWho, "what")(o.v)} />
+                <Option key={o.v} label={o.label} selected={who === o.v} onClick={() => pick(setWho, shortFlow ? "contact" : "what")(o.v)} />
               ))}
             </div>
           </section>
@@ -435,7 +516,7 @@ export default function CityLandingClient({
                 {busy ? "Sending…" : `Get my ${cfg.city} match`}
               </button>
             </form>
-            <Back onClick={() => setStep("when")} />
+            <Back onClick={() => setStep(shortFlow ? "who" : "when")} />
           </section>
         )}
 
