@@ -47,7 +47,7 @@ interface StudentStatus {
 function Board() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { profiles, isLoading: authLoading } = useAuth();
+  const { profiles, isLoading: authLoading, openAuth } = useAuth();
 
   const campusParam = searchParams?.get("campus") || "";
   const autoScreener = searchParams?.get("screener") === "1";
@@ -576,6 +576,22 @@ function Board() {
           }}
           onClose={closeScreener}
           onComplete={handleScreenerComplete}
+          onExistingUser={(email) => {
+            // Close the screener (cleans up ?screener=1 from URL) and open auth flow
+            // API already sent them a magic link — they can enter the OTP
+            closeScreener();
+            openAuth({
+              defaultMode: "sign-in",
+              initialEmail: email.toLowerCase(),
+              headline: "Welcome back",
+              subline: "We just sent you a sign-in code. Check your email.",
+              // Deferred action ensures redirect to portal after successful auth
+              deferred: {
+                action: "student-return",
+                returnUrl: "/portal/medjobs",
+              },
+            });
+          }}
         />
       )}
     </>
