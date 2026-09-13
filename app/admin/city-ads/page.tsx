@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { citySendWindow } from "@/lib/city-ads/send-window";
 import CityQuizFunnel from "@/components/admin/CityQuizFunnel";
 import type { ArmRow } from "@/lib/city-ads/arm-rollup";
 import type { CityLandingArm } from "@/lib/city-ads/landing-variant";
@@ -93,6 +94,9 @@ type FamilyText = { id: string; created_at: string; email_type: string; status: 
 type Lead = {
   id: string;
   slug: string;
+  archived_at: string | null;
+  archive_reason: string | null;
+  messages: {id:string;channel:string;body:string;subject:string|null;status:string;send_after:string;last_error:string|null}[];
   utm_medium: string | null;
   care_recipient: string | null;
   care_type: string;
@@ -156,6 +160,7 @@ const acceptedOffer = (l: Lead) => l.offers.find((o) => o.accepted_at);
 
 /** Why a lead is in "Needs you", or null. */
 function needsReason(l: Lead): string | null {
+  if(l.archived_at || ["stopped","client","no_fit","redirected"].includes(l.status)) return null;
   if (l.status === "new" && !l.accepted_offer_id && l.offers.length === 0) return "call them — concierge city, no chain runs";
   if (l.status === "unfilled") return "no one on call took it";
   if (l.family_check_reply === "not_yet" && !l.reached_at) return "family says the provider has not called";
@@ -167,6 +172,7 @@ function needsReason(l: Lead): string | null {
 
 /** The one-line state on the right of a lead row. */
 function stateLine(l: Lead): { text: string; tone: "ok" | "wait" | "warn" | "quiet" } {
+  if(l.archived_at) return {text:`archived · ${(l.archive_reason ?? "closed").replace(/_/g," ")}`,tone:"quiet"};
   if (l.status === "client") return { text: "became a client", tone: "ok" };
   if (l.status === "no_fit") return { text: "not a fit", tone: "quiet" };
   if (l.status === "unreachable") return { text: "unreachable", tone: "quiet" };
@@ -201,6 +207,7 @@ export default function CityAdsAdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [showArchived, setShowArchived] = useState(false);
   const [openLead, setOpenLead] = useState<string | null>(null);
   const [openCity, setOpenCity] = useState<string | null>(null);
   const [, setTick] = useState(0);
@@ -334,8 +341,8 @@ export default function CityAdsAdminPage() {
                   ) : (
                     <OfferTo lead={l} pool={pool} busy={busy} primary onPick={(pid) => void act("Offer", { action: "offer_to", leadId: l.id, providerId: pid })} />
                   )}
-                  <button className={btn} disabled={busy} onClick={() => void act("Stop", { action: "set_status", leadId: l.id, status: "stopped" })}>
-                    Stop
+                  <button className={btn} disabled={busy} onClick={() => void act("Archive", { action: "archive_lead", leadId: l.id, reason: "no_longer_needed" })}>
+                    Archive
                   </button>
                 </div>
               </div>
@@ -346,11 +353,15 @@ export default function CityAdsAdminPage() {
 
       {/* Leads */}
       <Eyebrow>Leads</Eyebrow>
+      <div className="mb-3 flex gap-2">
+        <button className={showArchived ? btn : btnPri} onClick={() => setShowArchived(false)}>Active ({leads.filter(l => !l.archived_at).length})</button>
+        <button className={showArchived ? btnPri : btn} onClick={() => setShowArchived(true)}>Archived ({leads.filter(l => l.archived_at).length})</button>
+      </div>
       <div className="mb-8 rounded-xl border border-gray-200 bg-white px-4">
         {leads.length === 0 && (
           <p className="py-5 text-sm text-gray-500">Leads land here the moment a family submits. Offers go to enabled providers in order, 30 minutes each.</p>
         )}
-        {leads.map((l) => {
+        {leads.filter(l => Boolean(l.archived_at) === showArchived).map((l) => {
           const st = stateLine(l);
           const open = openLead === l.id;
           return (
@@ -486,10 +497,19 @@ function firstWord(name: string | null): string {
  */
 function FamilyTexts({ lead: l, busy, act }: { lead: Lead; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
   const sent = l.texts ?? [];
+  const sendWindow = citySendWindow(l.slug);
   const [draft, setDraft] = useState(
     `Hi ${firstWord(l.first_name)}, this is TJ with Olera. I tried calling about the help at home you asked for. Is there a good time to reach you, or would you rather I text you what I find?`,
   );
-  const tooLong = draft.trim().length > 480;
+  const [channel, setChannel] = useState("sms");
+  const [subject, setSubject] = useState("Following up on your Olera care request");
+  const tooLong = draft.trim().length > (channel === "sms" ? 480 : 10000);
+  const pending = (l.messages ?? []).some(m => m.channel === channel && ["pending","sending"].includes(m.status));
+  const disabled = busy || !draft.trim() || tooLong || pending || (channel === "email" && (!l.email || !subject.trim()));
+  const scheduleLabel = new Date(sendWindow.nextStart).toLocaleString("en-US", {timeZone:sendWindow.timeZone,month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});
+  async function submit(schedule: boolean) {
+    if(await act(schedule ? "Schedule" : "Send", {action:"message_family",leadId:l.id,channel,subject,message:draft.trim(),schedule})) setDraft("");
+  }
   return (
     <div className="mt-3 border-t border-gray-200 pt-3">
       <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">Texts to {firstWord(l.first_name)}</p>
@@ -504,7 +524,18 @@ function FamilyTexts({ lead: l, busy, act }: { lead: Lead; busy: boolean; act: (
           </li>
         ))}
       </ul>
-      <div className="mt-2 flex flex-col gap-1.5">
+      <ul className="mt-3 space-y-2">
+        {(l.messages ?? []).map(m => <li key={m.id} className="rounded border border-gray-200 p-2 text-xs">
+          <p>{m.channel === "email" ? "Email" : "Text"} · {m.status === "sending" ? "Delivery being checked" : m.status} · {new Date(m.send_after).toLocaleString("en-US",{timeZone:sendWindow.timeZone})} ({sendWindow.timeZone})</p>
+          {m.subject && <p className="font-medium">{m.subject}</p>}<p className="whitespace-pre-wrap">{m.body}</p>
+          {m.last_error && <p className="text-error-700">{m.last_error}</p>}
+          {m.status === "pending" && <button className={btn} disabled={busy} onClick={() => void act("Cancel",{action:"cancel_message",leadId:l.id,messageId:m.id})}>Cancel scheduled message</button>}
+        </li>)}
+      </ul>
+      {l.archived_at || l.status === "stopped" ? <p className="mt-3 text-sm text-gray-600">Archived. Sending and follow-ups are stopped.</p> : <div className="mt-2 flex flex-col gap-1.5">
+        <label className="text-xs">Send by <select className={input} value={channel} onChange={e => setChannel(e.target.value)}><option value="sms">Text</option><option value="email" disabled={!l.email}>Email{!l.email ? " (no email address)" : ""}</option></select></label>
+        {channel === "email" && <input aria-label="Email subject" className={input} value={subject} onChange={e => setSubject(e.target.value)} maxLength={200} />}
+        <p className="text-xs text-gray-500">{new Date().toLocaleTimeString("en-US",{timeZone:sendWindow.timeZone,hour:"numeric",minute:"2-digit"})} for them · {sendWindow.timeZone}</p>
         <textarea
           className="w-full rounded-md border border-gray-300 px-2 py-1.5 text-xs text-gray-900"
           rows={3}
@@ -512,29 +543,21 @@ function FamilyTexts({ lead: l, busy, act }: { lead: Lead; busy: boolean; act: (
           onChange={(e) => setDraft(e.target.value)}
           placeholder={`a text to ${firstWord(l.first_name)}`}
         />
-        <div className="flex items-center gap-2">
-          <button
-            className={btnPri}
-            disabled={busy || !draft.trim() || tooLong}
-            onClick={async () => {
-              if (await act("Text", { action: "text_family", leadId: l.id, message: draft.trim() })) setDraft("");
-            }}
-          >
-            Send text
-          </button>
-          <span className={`text-[11px] tabular-nums ${tooLong ? "text-error-700" : "text-gray-400"}`}>
-            {draft.trim().length}/480
-          </span>
-          <span className="text-[11px] text-gray-400">sends from the number their other texts came from</span>
+        <div className="flex flex-wrap items-center gap-2">
+          <button className={btnPri} disabled={disabled || !sendWindow.allowed} onClick={() => void submit(false)}>Send now</button>
+          <button className={btn} disabled={disabled} onClick={() => void submit(true)}>Schedule {scheduleLabel}</button>
+          <span className="text-xs text-gray-500">{draft.trim().length}/{channel === "sms" ? 480 : 10000}</span>
         </div>
-      </div>
+      </div>}
+
     </div>
   );
 }
 
 function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[]; busy: boolean; act: (label: string, body: Record<string, unknown>) => Promise<boolean> }) {
   const [note, setNote] = useState(l.admin_note ?? "");
-  const closed = ["client", "no_fit", "stopped", "redirected"].includes(l.status);
+  const [archiveReason, setArchiveReason] = useState("no_longer_needed");
+  const closed = Boolean(l.archived_at) || ["client", "no_fit", "stopped", "redirected"].includes(l.status);
   return (
     <div className="mb-3 rounded-lg bg-gray-50 px-4 py-3 text-sm">
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
@@ -556,11 +579,11 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
             : o.declined_at
               ? `passed${o.decline_reason ? ` (${o.decline_reason})` : ""}`
               : o.expired_at
-                ? "no reply in 30 min"
+                ? (l.archived_at ? "closed when archived" : "no reply in 30 min")
                 : minsLeft(o.expires_at) >= 0
                   ? `waiting · ${minsLeft(o.expires_at)} min left`
                   : "past due";
-          const isOpen = !o.accepted_at && !o.declined_at && !l.accepted_offer_id;
+          const isOpen = !closed && !o.expired_at && !o.accepted_at && !o.declined_at && !l.accepted_offer_id;
           return (
             <li key={o.id} className="flex flex-wrap items-center gap-2">
               <span className="text-gray-400">#{o.position}</span>
@@ -610,9 +633,6 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
               </button>
             </>
           )}
-          <button className={`${btn} text-gray-500`} disabled={busy} onClick={() => void act("Stop", { action: "set_status", leadId: l.id, status: "stopped" })}>
-            Stop
-          </button>
         </div>
       )}
 
@@ -648,6 +668,13 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
           )}
         </ul>
       )}
+      {!l.archived_at && <div className="mt-3 flex flex-wrap items-center gap-2">
+        <select aria-label="Archive reason" className={input} value={archiveReason} onChange={e => setArchiveReason(e.target.value)}>
+          <option value="no_longer_needed">No longer needs help</option><option value="opted_out">Asked us to stop</option><option value="duplicate">Duplicate lead</option><option value="other">Other</option>
+        </select>
+        <button className={btn} disabled={busy} onClick={() => void act("Archive",{action:"archive_lead",leadId:l.id,reason:archiveReason})}>Archive lead</button>
+        <span className="text-xs text-gray-500">Stops follow-ups and pending messages; keeps history.</span>
+      </div>}
       <FamilyTexts lead={l} busy={busy} act={act} />
 
       <div className="mt-3 flex items-center gap-2">

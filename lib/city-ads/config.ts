@@ -184,16 +184,16 @@ export function isStaffedNow(timeZone: string, at: Date = new Date()): boolean {
 
 /**
  * Next 8:00 local as a Date. Walks forward in 15-minute steps rather than doing
- * zone arithmetic by hand; at most ~48 iterations, fine for a cron.
+ * zone arithmetic by hand; includes a 25-hour day across fall-back.
  */
 export function nextStaffedStart(timeZone: string, from: Date = new Date()): Date {
   const t = new Date(from.getTime());
-  t.setUTCSeconds(0, 0);
+  t.setUTCMinutes(Math.floor(t.getUTCMinutes() / 15) * 15, 0, 0);
   for (let i = 0; i < 24 * 4 + 4; i++) {
     t.setUTCMinutes(t.getUTCMinutes() + 15);
     const h = hourIn(timeZone, t);
     const m = parseInt(new Intl.DateTimeFormat("en-US", { timeZone, minute: "numeric" }).format(t), 10);
-    if (h === STAFFED_HOURS.start && m < 15) return new Date(t.getTime());
+    if (h === STAFFED_HOURS.start && m === 0) return new Date(t.getTime());
   }
   return new Date(from.getTime() + 12 * 60 * 60 * 1000);
 }

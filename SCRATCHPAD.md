@@ -7,6 +7,15 @@
 
 ## Current Focus
 
+### 2026-09-13 — City message scheduling and lead archiving
+
+- Preview QA follow-up (PR #1897): TJ's screenshots show Ann archived/opted out and a saved pending SMS. Fixed `nextStaffedStart` preserving the request's minute offset (8:02/8:03); new schedules now land exactly at 8:00. Added off-quarter, boundary, and 25-hour DST regressions in `scripts/check-city-send-window.ts`. TypeScript, all 14 window checks, and cron registry pass. Existing queued timestamps unchanged; actual delivery/cancellation still unverified.
+- Branch `codex/city-scheduling-archive`, based on staging. Adds SMS/email composition, next-8-AM city-local scheduling, pending cancellation, delivery history, and Active/Archived lead views with archive reasons.
+- Files: city-ads admin page/API; `lib/city-ads/{messages.server,send-window,offers.server,followups.server}.ts`; existing city-lead-offers cron; migration 228; focused checks and `docs/city-ads/scheduled-messages.md`.
+- Archive cancels pending messages/open offers and prevents stale replies reopening leads. Do Not Contact changes archive matching city leads; migration backfills existing opt-outs. Ann McDade was suppressed and her SMS inbox handled during this session; city archival is handled by migration. TJ confirmed migration 228 applied (not independently verified).
+- Validation: TypeScript, cron registry, nine timezone/DST checks, isolated PostgreSQL migration/backfill/cancellation/claim checks passed. No live messages sent during implementation; authenticated preview UI and real delivery still need QA.
+- Next: preview `/admin/city-ads` using a test lead; verify scheduling/cancel/archive for both channels. Do not merge without TJ's request. Ambiguous delivery remains held for review rather than automatically retrying.
+
 ### 2026-09-13 — The CPL ladder rewritten around visit-intent, and the action list rebuilt on verified rather than asserted facts (`joyful-hopper`, ops only, no code)
 
 Review session on the 12 Sep CPL report (artifact `b946978d-89e6-415c-b753-cd344313252c`, v4 → v6). No product code changed. Everything below is either a correction to the report or a verified fact about live code and data that the next session should not re-derive.
