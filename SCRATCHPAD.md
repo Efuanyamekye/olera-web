@@ -7,6 +7,10 @@
 
 ## Current Focus
 
+### 2026-09-13 — Provider banner browsing and dismissal
+
+- Branch `codex/provider-banner-updates`, rebased onto current `origin/staging`; ready for preview PR and human QA. One visible update, arrows/counter, X advances to the next, and View updates restores the queue. Full implementation and pre-test findings are recorded in today's Session Log below.
+
 ### 2026-09-13 — City message scheduling and lead archiving
 
 - Preview QA follow-up (PR #1897): TJ's screenshots show Ann archived/opted out and a saved pending SMS. Fixed `nextStaffedStart` preserving the request's minute offset (8:02/8:03); new schedules now land exactly at 8:00. Added off-quarter, boundary, and 25-hour DST regressions in `scripts/check-city-send-window.ts`. TypeScript, all 14 window checks, and cron registry pass. Existing queued timestamps unchanged; actual delivery/cancellation still unverified.
@@ -5089,6 +5093,8 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 
 ## Next Up
 
+- Provider banner updates: preview `/provider` on desktop/mobile; test browse/X without layout jumps, dismiss-all → reload → restore, fresh inquiry/question recovery, and matching mobile CTA. Use test records because staging shares production data. No merge without TJ's request.
+
 **Ad router positioning — SHIPPED to staging 2026-09-09 (#1849, #1850)**
 - ✅ **The page carries it now.** `TrackRecord` at position two: 990 caregiver leads at $0.55, $60,300, 250+ campaigns, 2.5M impressions, with the scope line. `docs/ad-router/VALUE-PROP.md` holds the full ledger, the per-channel setup cost that is the actual moat, and the claims agreed not to make.
 - ⚪ **This page is for internal alignment, not marketing** (TJ, 9 Sep). Do not spend further passes tightening claims for a hostile reader it does not have.
@@ -5340,6 +5346,8 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 
 ## Decisions Made
 
+- 2026-09-13: Provider banners use manual browsing, no auto-rotation. X dismisses one update per provider/browser until the next local day; it does not resolve underlying tasks. Creation-time watermarks let new inquiries/questions return without treating answers or removals as new activity.
+
 **2026-08-28 — Ad Boost**
 - **Pause all five Sep Nextdoor flights rather than launch.** Only 2 of 5 had a documented authorisation and none were instrumented. Pausing costs $0 and loses a week; spending $375 outside the system produces numbers nobody can reconcile.
 - **Keep $150 Google, park the other $150.** $150 buys ~71 clicks and ~1.9 expected inquiries — a real product. Nextdoor's 0-for-134 now rejects parity with Google at p=0.027, so the second half is not justified until measurement lands.
@@ -5474,6 +5482,14 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 ---
 
 ## Session Log
+
+### 2026-09-13 — Provider banner updates (`codex/provider-banner-updates`)
+
+- Updated `components/provider-dashboard/v2/DashboardHero.tsx`, `heroDismiss.ts`, `DashboardHeroSkeleton.tsx`, parent `components/provider-dashboard/DashboardPage.tsx`, and admin analytics description. Added `scripts/check-provider-banner-updates.cjs`.
+- Keeps existing priority selection, exposes other eligible banners through arrows/counter, reserves the tallest card to prevent browse/dismiss jumps, fades transitions with reduced-motion support, preserves keyboard focus, and keeps mobile CTA and impression tracking aligned with the visible card. Per-provider/day dismissals collapse to View updates; campaign-status banners remain eligible.
+- Pre-test fixed dismissed questions resurfacing on answers/removals (creation-time watermark), and full-card loading flashes after dismiss-all (stored collapsed hint). No schema changes or new event types.
+- Validation: TypeScript and behavioral regressions pass (browse/dismiss/restore, daily expiry, provider isolation, new activity, focus, mobile CTA callbacks, completion editor, impressions/click attribution, loading hint). Desktop/mobile browser checks confirmed identical content-below positions through swaps/dismissals. Core banner lint passes; broader dashboard/admin lint findings were compared with staging and are pre-existing (plain links and unescaped quotes).
+- Next: open ready-for-review PR to staging and QA using the checklist above; do not merge automatically.
 
 ### 2026-09-10 — City quiz funnel and audit attribution correction (Codex)
 

@@ -473,6 +473,7 @@ function DashboardContent({
             </div>
           ) : (
             <DashboardHeroSkeleton
+              providerSlug={profile.slug}
               firstName={deriveFirstName(profile.display_name)}
             />
           )}
