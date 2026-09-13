@@ -60,13 +60,26 @@ export function slackNewLead(opts: {
   familyName: string;
   providerName: string;
   careType: string | null;
+  /**
+   * Ad Boost campaign tag when the managed-UTM cookie attributed this inquiry
+   * to a campaign, otherwise null/undefined. Pass `managedUtm?.utmCampaign`.
+   *
+   * Attributed inquiries are the Ad Boost programme's KPI and there have been
+   * seven in its entire history, yet until 2026-09-07 every inquiry looked
+   * identical in Slack — telling an ad-driven lead from an organic one meant
+   * querying provider_activity by hand. A campaign spending real money on a
+   * provider's behalf must announce itself when it works.
+   */
+  adCampaign?: string | null;
 }): { text: string; blocks: SlackBlock[] } {
+  const paid = Boolean(opts.adCampaign);
+  const headline = paid ? "💸 Ad Boost lead" : "🔔 New Care Inquiry";
   return {
-    text: `New lead: ${opts.familyName} → ${opts.providerName}`,
+    text: `${headline}: ${opts.familyName} → ${opts.providerName}`,
     blocks: [
       {
         type: "header",
-        text: { type: "plain_text", text: "🔔 New Care Inquiry", emoji: true },
+        text: { type: "plain_text", text: headline, emoji: true },
       },
       {
         type: "section",
@@ -76,6 +89,12 @@ export function slackNewLead(opts: {
           ...(opts.careType
             ? [{ type: "mrkdwn", text: `*Care Type:*\n${opts.careType}` }]
             : []),
+          {
+            type: "mrkdwn",
+            text: paid
+              ? `*Source:*\nAd Boost · \`${opts.adCampaign}\``
+              : "*Source:*\nOrganic or direct",
+          },
         ],
       },
     ],
