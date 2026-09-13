@@ -7,6 +7,14 @@
 
 ## Current Focus
 
+### 2026-09-13 — City message scheduling and lead archiving
+
+- Branch `codex/city-scheduling-archive`, based on staging. Adds SMS/email composition, next-8-AM city-local scheduling, pending cancellation, delivery history, and Active/Archived lead views with archive reasons.
+- Files: city-ads admin page/API; `lib/city-ads/{messages.server,send-window,offers.server,followups.server}.ts`; existing city-lead-offers cron; migration 228; focused checks and `docs/city-ads/scheduled-messages.md`.
+- Archive cancels pending messages/open offers and prevents stale replies reopening leads. Do Not Contact changes archive matching city leads; migration backfills existing opt-outs. Ann McDade was suppressed and her SMS inbox handled during this session; city archival is handled by migration. TJ confirmed migration 228 applied (not independently verified).
+- Validation: TypeScript, cron registry, nine timezone/DST checks, isolated PostgreSQL migration/backfill/cancellation/claim checks passed. No live messages sent during implementation; authenticated preview UI and real delivery still need QA.
+- Next: preview `/admin/city-ads` using a test lead; verify scheduling/cancel/archive for both channels. Do not merge without TJ's request. Ambiguous delivery remains held for review rather than automatically retrying.
+
 ### 2026-09-10 — Quiz dashboard preview refinements (PR #1864)
 
 - Branch `codex/correct-city-audit-funnel`, PR #1864 targets staging; nothing merged. Latest product commit `0c40b709b`.

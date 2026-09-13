@@ -1,3 +1,4 @@
+import { cityLeadBlocked } from "./messages.server";
 /**
  * City lead follow-ups — the measurement layer. Server only.
  *
@@ -146,6 +147,7 @@ export async function runFollowups(db: SupabaseClient): Promise<FollowupCounts> 
       continue;
     }
     try {
+      if (await cityLeadBlocked(db, lead.id)) continue;
       // Rung 1 — the family check, once, ~20h after the provider took it.
       if (!lead.family_check_sent_at) {
         const { data: offer } = await db
@@ -335,7 +337,7 @@ export async function handleFamilyCheckReply(
     .order("family_check_sent_at", { ascending: false })
     .limit(1);
   const lead = rows?.[0];
-  if (!lead) return null;
+  if (!lead || await cityLeadBlocked(db, lead.id)) return null;
 
   const now = new Date().toISOString();
   if (yes) {
@@ -391,7 +393,7 @@ export async function handleOutcomeReply(
       .select("id, outcome, outcome_ping_1_at")
       .eq("id", o.lead_id as string)
       .maybeSingle();
-    if (!lead || !lead.outcome_ping_1_at) continue;
+    if (!lead || !lead.outcome_ping_1_at || await cityLeadBlocked(db, lead.id)) continue;
     if (lead.outcome === "client") continue;
     const now = new Date().toISOString();
     await db

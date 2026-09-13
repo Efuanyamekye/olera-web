@@ -1,3 +1,4 @@
+import { cityLeadBlocked } from "./messages.server";
 /**
  * City lead offer chain — server only.
  *
@@ -147,6 +148,7 @@ export async function startOrAdvance(
   leadId: string,
   opts: { force?: boolean; providerId?: string } = {},
 ): Promise<{ action: "offered" | "parked" | "unfilled" | "closed" | "noop"; providerName?: string }> {
+  if (await cityLeadBlocked(db, leadId)) return { action: "noop" };
   const lead = await getLead(db, leadId);
   if (!lead) return { action: "noop" };
   if (lead.accepted_offer_id || !["new", "offered", "unfilled"].includes(lead.status)) {
@@ -269,6 +271,7 @@ export async function startOrAdvance(
     .update({ status: "offered", offer_count: nextPosition, next_offer_at: null, updated_at: new Date().toISOString() })
     .eq("id", lead.id);
 
+  if (await cityLeadBlocked(db, lead.id)) return { action: "noop" };
   const l = labels(lead);
   // Email first: many provider numbers are office lines. The text goes only
   // where a text can land (requireMobile), and carries the same link.
@@ -330,6 +333,7 @@ export async function acceptOffer(
   offer: CityOfferRow,
   source: "provider_sms" | "provider_page" | "admin" = "provider_sms",
 ): Promise<{ won: boolean; reply: string }> {
+  if (await cityLeadBlocked(db, offer.lead_id)) return { won: false, reply: cityOfferGoneSms() };
   const now = new Date().toISOString();
   const { data: claimed } = await db
     .from("city_leads")

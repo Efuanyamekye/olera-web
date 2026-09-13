@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient, getAuthUser, getAdminUser } from "@/lib/admin";
 import { withCronRun } from "@/lib/crons/run";
+import { runCityMessages } from "@/lib/city-ads/messages.server";
 import { runOfferMaintenance } from "@/lib/city-ads/offers.server";
 
 /**
@@ -34,7 +35,8 @@ export async function GET(request: NextRequest) {
     async () => {
       const db = getServiceClient();
       const r = await runOfferMaintenance(db);
-      return { ok: true, ...r };
+      const messages = await runCityMessages(db);
+      return { ok: true, ...r, messages };
     },
     { triggeredBy },
   );

@@ -14,7 +14,8 @@ import { buildArmRollup, type ArmEvent, type ArmLead } from "@/lib/city-ads/arm-
 const ARM_WINDOW_START: string | null = null;
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { acceptOffer, declineOffer, startOrAdvance, type CityOfferRow } from "@/lib/city-ads/offers.server";
-import { sendSMS } from "@/lib/twilio";
+import { suppressPhone } from "@/lib/sms/inbound-store.server";
+import { cityLeadBlocked, citySendWindow, deliverCityMessage } from "@/lib/city-ads/messages.server";
 
 /**
  * /api/admin/city-ads — the tracker behind /admin/city-ads.
@@ -56,6 +57,11 @@ export async function GET() {
   const { data: offers } = leadIds.length
     ? await db.from("city_lead_offers").select("*").in("lead_id", leadIds).order("position")
     : { data: [] as Record<string, unknown>[] };
+
+  const { data: messages, error: messagesError } = leadIds.length
+    ? await db.from("city_lead_messages").select("*").in("lead_id", leadIds).order("created_at", {ascending:false})
+    : {data: [], error: null};
+  if (messagesError) return NextResponse.json({error: messagesError.message}, {status:500});
 
   // Every text this family has had from us, automated or hand-sent. Without it
   // the concierge caller is composing blind: the chain sends confirmations and
@@ -122,6 +128,7 @@ export async function GET() {
     pool: (pool ?? []).map((p) => ({ ...p, provider: byId.get(p.provider_id as string) ?? null })),
     leads: (leads ?? []).map((l) => ({
       ...l,
+      messages: (messages ?? []).filter(m => m.lead_id === l.id),
       offers: (offers ?? [])
         .filter((o) => o.lead_id === l.id)
         .map((o) => ({ ...o, provider: byId.get(o.provider_id as string) ?? null })),
@@ -145,6 +152,24 @@ export async function POST(req: NextRequest) {
 
   try {
     switch (action) {
+      case "archive_lead": {
+        const reason = String(body.reason ?? "");
+        if (!["opted_out", "no_longer_needed", "duplicate", "other"].includes(reason)) return NextResponse.json({error:"Choose an archive reason"},{status:400});
+        if(reason === "opted_out") {
+          const {data:lead,error} = await db.from("city_leads").select("phone").eq("id",String(body.leadId ?? "")).single();
+          if(error) throw error;
+          if(!await suppressPhone(lead.phone, `City lead opt-out recorded by ${auth.user.email ?? auth.user.id}`)) throw new Error("Could not record opt-out; try again");
+        }
+        const {data, error} = await db.from("city_leads").update({archived_at:now,archive_reason:reason,archived_by:auth.user.email ?? auth.user.id,updated_at:now}).eq("id",String(body.leadId ?? "")).select("id").single();
+        if(error) throw error;
+        return NextResponse.json({ok:true,id:data.id,message:"Lead archived. Pending messages and offers canceled."});
+      }
+      case "cancel_message": {
+        const {data,error} = await db.from("city_lead_messages").update({status:"canceled",completed_at:now,last_error:"Canceled by admin"}).eq("id",String(body.messageId ?? "")).eq("lead_id",String(body.leadId ?? "")).eq("status","pending").select("id").maybeSingle();
+        if(error) throw error;
+        if(!data) return NextResponse.json({error:"Message is no longer pending. Refresh to check its status."},{status:409});
+        return NextResponse.json({ok:true,message:"Scheduled message canceled"});
+      }
       case "update_campaign": {
         const id = String(body.id ?? "");
         const f = (body.fields ?? {}) as Record<string, unknown>;
@@ -224,7 +249,9 @@ export async function POST(req: NextRequest) {
         const leadId = String(body.leadId ?? "");
         const status = String(body.status ?? "");
         if (!LEAD_STATUSES.has(status)) return NextResponse.json({ error: "Bad status" }, { status: 400 });
+        if (await cityLeadBlocked(db, leadId)) return NextResponse.json({error:"Lead is archived or opted out"},{status:409});
         const patch: Record<string, unknown> = { status, updated_at: now };
+        if(status === "stopped") Object.assign(patch,{archived_at:now,archive_reason:"no_longer_needed",archived_by:auth.user.email ?? auth.user.id});
         if (status === "contacted") patch.reached_at = now;
         if (status === "client" || status === "no_fit") {
           patch.outcome = status === "client" ? "client" : "no";
@@ -243,51 +270,28 @@ export async function POST(req: NextRequest) {
         if (error) throw error;
         return NextResponse.json({ ok: true });
       }
-      /**
-       * Send one hand-written SMS to the family, from the same Twilio number
-       * every automated city text comes from.
-       *
-       * Concierge cities have no offer chain, so a human does the reaching —
-       * and until now every family-facing text was generated inside that chain,
-       * which meant the human had no way to say anything at all. A call from an
-       * unknown number is the worst channel available: the only number these
-       * families recognise is TWILIO_FROM_NUMBER, because that is where their
-       * confirmation came from.
-       *
-       * Deliberately not a template. The whole point is the sentence the
-       * automated set cannot produce. sendSMS already enforces do-not-contact,
-       * so a suppressed number returns skipped rather than sending.
-       */
-      case "text_family": {
+      // Both channels use the durable queue, including immediate sends.
+      case "text_family":
+      case "message_family": {
         const leadId = String(body.leadId ?? "");
         const message = String(body.message ?? "").trim();
-        if (!leadId || !message) return NextResponse.json({ error: "Pick a lead and write a message first" }, { status: 400 });
-        // Twilio bills per 160-char segment; 480 is three and is plenty for a
-        // "can I reach you" text. The cap is here to catch a paste, not to nag.
-        if (message.length > 480) {
-          return NextResponse.json({ error: `That is ${message.length} characters. Keep it under 480.` }, { status: 400 });
-        }
-        const { data: lead } = await db.from("city_leads").select("id, phone, first_name").eq("id", leadId).maybeSingle();
-        if (!lead) return NextResponse.json({ error: "Lead not found" }, { status: 404 });
-        if (!lead.phone) return NextResponse.json({ error: "This lead has no phone number" }, { status: 400 });
-
-        const sent = await sendSMS({
-          to: lead.phone as string,
-          body: message,
-          emailType: "city_lead_family_manual",
-          recipientType: "family",
-          metadata: { lead_id: leadId, sent_by: auth.user.email ?? auth.user.id },
-        });
-        if (!sent.success) {
-          return NextResponse.json({ error: sent.error ?? "Twilio would not take the message" }, { status: 502 });
-        }
-        // A suppressed number is NOT a success. Returning ok here would let the
-        // client clear the compose box on a message that never went anywhere,
-        // and the sender would have to retype it to find that out.
-        if (sent.skipped) {
-          return NextResponse.json({ error: "Not sent — that number is on the do-not-contact list." }, { status: 409 });
-        }
-        return NextResponse.json({ ok: true, message: `Texted ${String(lead.first_name ?? "them").split(/\s+/)[0]}` });
+        const channel = action === "text_family" ? "sms" : String(body.channel ?? "sms");
+        const subject = String(body.subject ?? "").trim();
+        if (!["sms","email"].includes(channel) || !message || message.length > (channel === "sms" ? 480 : 10000) || (channel === "email" && (!subject || subject.length > 200))) return NextResponse.json({error:"Check the message, channel, and email subject"},{status:400});
+        const {data:lead,error} = await db.from("city_leads").select("id,slug,phone,email").eq("id",leadId).single();
+        if(error) throw error;
+        if(!lead[channel === "sms" ? "phone" : "email"]) return NextResponse.json({error:"No destination for this channel"},{status:400});
+        if(await cityLeadBlocked(db,leadId)) return NextResponse.json({error:"Lead is archived or opted out"},{status:409});
+        const window = citySendWindow(lead.slug);
+        const scheduled = body.schedule === true;
+        if(!scheduled && !window.allowed) return NextResponse.json({error:"Outside their local sending hours. Schedule for the morning."},{status:409});
+        const {data:queued,error:queueError} = await db.from("city_lead_messages").insert({lead_id:leadId,channel,subject:channel === "email" ? subject : null,body:message,send_after:scheduled ? window.nextStart : now,created_by:auth.user.email ?? auth.user.id}).select("id").single();
+        if(queueError) return NextResponse.json({error:queueError.code === "23505" ? "A message is already queued or sending on this channel" : queueError.message},{status:409});
+        if(!scheduled) await deliverCityMessage(db,queued.id);
+        const {data:result,error:resultError} = await db.from("city_lead_messages").select("status,last_error").eq("id",queued.id).single();
+        if(resultError) throw resultError;
+        if(["failed","canceled"].includes(result.status)) return NextResponse.json({error:result.last_error ?? "Not sent"},{status:409});
+        return NextResponse.json({ok:true,message:result.status === "sent" ? "Message sent" : result.status === "sending" ? "Delivery is being checked. Do not resend." : "Message scheduled"});
       }
       default:
         return NextResponse.json({ error: `Unknown action ${action}` }, { status: 400 });
