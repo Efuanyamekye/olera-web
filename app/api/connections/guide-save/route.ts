@@ -516,6 +516,7 @@ export async function POST(request: Request) {
             familyName: "A family (guide)",
             providerName: provider.name,
             careType: null,
+            adCampaign: managedUtm.utmCampaign ?? null,
           });
           await sendSlackAlert(alert.text, alert.blocks);
         } catch {

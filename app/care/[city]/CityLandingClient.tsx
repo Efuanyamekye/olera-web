@@ -9,6 +9,7 @@ import { getOrCreateSessionId } from "@/lib/analytics/session";
 import { trackGrowthEvent } from "@/lib/analytics/growth-attribution";
 import { trackMetaLead } from "@/components/analytics/MetaPixel";
 import { newMetaEventId } from "@/lib/city-ads/meta";
+import { isDialableUSPhone } from "@/lib/phone";
 import {
   CITY_ARM_COOKIE,
   CITY_ARM_TTL_SECONDS,
@@ -375,7 +376,14 @@ export default function CityLandingClient({
     // the last, matching the order the visitor reads.
     if (!what) return setError("Choose the kind of help you need.");
     if (!firstName.trim()) return setError("Add your first name.");
+    // Two messages, not one. "Too few digits" and "those digits cannot be a
+    // phone number" are different mistakes and the second one used to pass:
+    // ten digits was the whole test, so a dropped digit sailed through here,
+    // was stored as an undialable +1 number, and the confirmation text bounced
+    // off the carrier. Caught in the page rather than on submit, because the
+    // route answers a bad number by rejecting the entire form.
     if (phone.replace(/\D/g, "").length < 10) return setError("Add a mobile number so the provider can call you.");
+    if (!isDialableUSPhone(phone)) return setError("That number does not look right. Check the digits and try again.");
     if (!consent) return setError("Tick the box so a provider can contact you.");
     setBusy(true);
     // Minted here and sent to the route so the browser pixel and the server's

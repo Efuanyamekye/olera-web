@@ -2,6 +2,7 @@ import twilio from "twilio";
 import { createClient } from "@supabase/supabase-js";
 import { shouldSendNotification } from "./notification-prefs";
 import { isPhoneDoNotContact } from "./do-not-contact";
+import { usPhoneDigits } from "./phone";
 
 let twilioClient: twilio.Twilio | null = null;
 
@@ -233,13 +234,17 @@ export async function sendSMS(
 
 /**
  * Format a US phone number to E.164 (+1XXXXXXXXXX).
- * Returns null if the number can't be normalized.
+ * Returns null if the number cannot be dialed.
+ *
+ * Counting digits is not enough. This used to accept any ten digits and put
+ * "+1" on the front, which manufactured numbers that no carrier can route --
+ * see the worked example in lib/phone.ts. Callers all handle null already, and
+ * a null is strictly better than a send that fails silently at Twilio: the
+ * claim flow, for one, answers it with "use email verification instead".
  */
 export function normalizeUSPhone(phone: string): string | null {
-  const digits = phone.replace(/\D/g, "");
-  if (digits.length === 10) return `+1${digits}`;
-  if (digits.length === 11 && digits.startsWith("1")) return `+${digits}`;
-  return null;
+  const local = usPhoneDigits(phone);
+  return local ? `+1${local}` : null;
 }
 
 /**
