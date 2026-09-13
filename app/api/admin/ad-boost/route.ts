@@ -50,7 +50,7 @@ const AD_BOOST_EMAIL_TYPES = [
 ];
 
 const ROW_SELECT =
-  "id, provider_id, provider_slug, display_name, requested_setup_week, completeness_at_submit, status, channel, intended_monthly_budget, campaign_tag, admin_note, created_at, updated_at, deleted_at, ended_at, ended_reason, ad_budget_cents, ad_budget_type, ad_spend_cents, ad_clicks, ad_impressions, metrics_updated_at, flight_start_date, flight_end_date, queued_email_sent_at, requested_email_sent_at, profile_reminder_email_sent_at, promotion_email_sent_at, launched_email_sent_at, launched_email_scheduled_at, traction_email_sent_at, promo_complete_email_sent_at, promo_complete_email_scheduled_at, provider_reported_outcome, provider_reported_outcome_at, plan_status, plan_value, stripe_customer_id, stripe_subscription_id, subscribed_at, photo_readiness_status, photo_review_note, photo_reviewed_at, photo_reviewed_by, photo_update_requested_at, photo_update_submitted_at, photo_nudge_email_sent_at, photo_reminder_email_sent_at, photo_ready_email_sent_at, provider_comms_paused_at, provider_comms_paused_reason";
+  "id, provider_id, provider_slug, display_name, requested_setup_week, completeness_at_submit, status, channel, intended_monthly_budget, campaign_tag, admin_note, created_at, updated_at, deleted_at, ended_at, ended_reason, ad_budget_cents, ad_budget_type, ad_spend_cents, ad_clicks, ad_impressions, metrics_updated_at, metrics_source, platform_campaign_id, flight_start_date, flight_end_date, queued_email_sent_at, requested_email_sent_at, profile_reminder_email_sent_at, promotion_email_sent_at, launched_email_sent_at, launched_email_scheduled_at, traction_email_sent_at, promo_complete_email_sent_at, promo_complete_email_scheduled_at, provider_reported_outcome, provider_reported_outcome_at, plan_status, plan_value, stripe_customer_id, stripe_subscription_id, subscribed_at, photo_readiness_status, photo_review_note, photo_reviewed_at, photo_reviewed_by, photo_update_requested_at, photo_update_submitted_at, photo_nudge_email_sent_at, photo_reminder_email_sent_at, photo_ready_email_sent_at, provider_comms_paused_at, provider_comms_paused_reason";
 
 export async function GET(request: NextRequest) {
   const user = await getAuthUser();
@@ -495,6 +495,7 @@ export async function POST(request: NextRequest) {
     ad_spend_cents?: unknown;
     ad_clicks?: unknown;
     ad_impressions?: unknown;
+    platform_campaign_id?: unknown;
     ad_budget_cents?: unknown;
     ad_budget_type?: unknown;
     flight_start_date?: unknown;
@@ -547,6 +548,36 @@ export async function POST(request: NextRequest) {
       typeof body.campaign_tag === "string" && body.campaign_tag.trim()
         ? body.campaign_tag.trim()
         : null;
+  }
+
+  // The Google campaign id this flight maps to. The hourly sync joins on this
+  // and ONLY this -- it refuses to match on campaign name, because attaching one
+  // provider's spend to another provider's row is the worst thing that endpoint
+  // could do. So an unmapped flight silently syncs nothing, which is how a live
+  // campaign ends up with hand-typed figures the provider-facing gate then
+  // withholds. Until now the column was settable only by raw SQL: migration 226
+  // backfilled 17 by hand and every new flight needs another.
+  /** Set when this request assigns a NEW mapping; checked for collisions below,
+   *  once the db client exists. */
+  let pendingPlatformId: string | null = null;
+  if (body.platform_campaign_id !== undefined) {
+    const raw =
+      typeof body.platform_campaign_id === "string" ? body.platform_campaign_id.trim() : "";
+    if (body.platform_campaign_id === null || raw === "") {
+      update.platform_campaign_id = null;
+    } else if (!/^\d{6,25}$/.test(raw)) {
+      // Platform campaign ids are numeric on all three networks. Rejecting
+      // anything else catches the obvious paste error -- a campaign NAME, or a
+      // whole dashboard URL -- before it becomes a mapping that silently
+      // matches nothing forever.
+      return NextResponse.json(
+        { error: "platform_campaign_id must be the numeric campaign id from the ad platform, or empty to clear" },
+        { status: 400 },
+      );
+    } else {
+      update.platform_campaign_id = raw;
+      pendingPlatformId = raw;
+    }
   }
 
   if (body.admin_note !== undefined) {
@@ -679,6 +710,22 @@ export async function POST(request: NextRequest) {
     body.ad_impressions !== undefined
   ) {
     update.metrics_updated_at = new Date().toISOString();
+    // ...and stamps them `verified`: an admin read them off the ad platform
+    // just now and entered them deliberately. That is what earns them the
+    // provenance gate on the receipt and the dashboard hero, which otherwise
+    // withhold anything not machine-synced.
+    //
+    // This ALSO closes a laundering hole. Until now this branch re-dated the
+    // figures but never touched `metrics_source`, so typing over a row the
+    // script had synced left it still claiming `script` -- hand-entered numbers
+    // wearing the sync's credibility, with nothing in the record to say so.
+    // Now every manual entry says what it is.
+    //
+    // The historical `typed` rows stay `typed` and stay withheld. They are the
+    // reason the gate exists (Edmonds Villa's August flight read $0.00 / 4
+    // impressions against a real $43.52 / 391) and nobody has re-checked them.
+    // Re-entering one here is exactly how it gets released.
+    update.metrics_source = "verified";
   }
 
   // Launch-email schedule (UTC ISO; the admin UI collects it as US Eastern).
@@ -735,6 +782,42 @@ export async function POST(request: NextRequest) {
   }
 
   const db = getServiceClient();
+
+  // NO TWO ROWS MAY SHARE A PLATFORM CAMPAIGN ID. The ingest updates by
+  // platform_campaign_id with no limit, so a duplicate means one campaign's
+  // figures get written onto two flights at once. Not hypothetical: HomeWell
+  // Oak Ridge is one Google campaign behind two Olera flights, and migration
+  // 226 worked around it by deliberately leaving the second flight unmapped.
+  // Catch it at entry rather than in a provider's receipt.
+  if (pendingPlatformId) {
+    const [{ data: dupProvider }, { data: dupCity }] = await Promise.all([
+      db
+        .from("ad_campaign_requests")
+        .select("id, display_name, campaign_tag")
+        .eq("platform_campaign_id", pendingPlatformId)
+        .is("deleted_at", null)
+        .neq("id", body.id)
+        .limit(1),
+      db
+        .from("city_campaigns")
+        .select("id, slug")
+        .eq("platform_campaign_id", pendingPlatformId)
+        .limit(1),
+    ]);
+    const clash = dupProvider?.[0] ?? dupCity?.[0];
+    if (clash) {
+      const who =
+        "display_name" in clash
+          ? `${clash.display_name} (${clash.campaign_tag || clash.id})`
+          : `city campaign ${(clash as { slug: string }).slug}`;
+      return NextResponse.json(
+        {
+          error: `Campaign ${pendingPlatformId} is already mapped to ${who}. One ad-platform campaign cannot back two flights -- the sync would write its figures onto both. Enter this flight's figures by hand instead: they are stamped verified and the sync leaves them alone.`,
+        },
+        { status: 409 },
+      );
+    }
+  }
 
   const { data: current, error: currentError } = await db
     .from("ad_campaign_requests")

@@ -82,15 +82,41 @@ export const CATEGORY_ALIASES: Record<string, string> = {
 
 const categoryBySlug = new Map(CATEGORY_CONFIGS.map((c) => [c.slug, c]));
 const categoryByDbValue = new Map(CATEGORY_CONFIGS.map((c) => [c.dbValue, c]));
+// Casing drifts between the pipeline's CATEGORY_MAP and the canonical dbValue
+// ("Home Care (Non-Medical)" vs "Home Care (Non-medical)"). Exact match wins;
+// this is the fallback so one capital letter can't cost a provider its redirect.
+const categoryByDbValueLower = new Map(
+  CATEGORY_CONFIGS.map((c) => [c.dbValue.toLowerCase(), c]),
+);
 
 export function getCategoryBySlug(slug: string): CategoryConfig | null {
   return categoryBySlug.get(slug) ?? null;
 }
 
-/** "Assisted Living" (DB value) → "assisted-living" (URL slug). null when no match. */
+/**
+ * "Assisted Living" (DB value) → "assisted-living" (URL slug). null when no match.
+ *
+ * `provider_category` is not always a single value: the directory stores
+ * multi-service providers as a pipe-delimited list ("Assisted Living | Memory
+ * Care"). An exact-map lookup returns null for those, which sent 229 soft-deleted
+ * providers to a 404 instead of the 301 that `buildPowerPageUrlForDeletedProvider`
+ * was written to give them. Split and take the first token that maps — the order
+ * the provider listed its services in is the best available signal for which
+ * power page it belongs on.
+ *
+ * Widening only adds matches; anything that resolved before still resolves the
+ * same way, since a single value has no delimiter to split on.
+ */
 export function categoryDbValueToSlug(dbValue: string | null): string | null {
   if (!dbValue) return null;
-  return categoryByDbValue.get(dbValue)?.slug ?? null;
+  for (const part of dbValue.split("|")) {
+    const trimmed = part.trim();
+    const slug =
+      categoryByDbValue.get(trimmed)?.slug ??
+      categoryByDbValueLower.get(trimmed.toLowerCase())?.slug;
+    if (slug) return slug;
+  }
+  return null;
 }
 
 /**

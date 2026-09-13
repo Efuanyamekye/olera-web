@@ -40,20 +40,27 @@ import { useManagedAdsVariant, isManagedAdsPreviewMode } from "@/hooks/use-manag
  *
  *   1. Fresh leads this period   (highest intent — someone reaching out)
  *   2. Unanswered questions      (action needed)
- *   3. Family near you           (a real published care-seeker in catchment —
+ *   3. Campaign status           (2026-09-12: a live, or recently ended, ad
+ *                                 flight. They are paying us right now and
+ *                                 every other ad pointer on this dashboard
+ *                                 suppresses itself once a flight starts, so
+ *                                 without this the hero goes quiet about the
+ *                                 thing they bought. Yields on rotation beats
+ *                                 so the reviews nudge keeps its cadence)
+ *   4. Family near you           (a real published care-seeker in catchment —
  *                                 the rare concrete lead; jumps the line over
  *                                 profile housekeeping because there's a live
  *                                 family to reach out to → Find Families)
- *   4. View spike vs. prior      (positive momentum, no CTA)
- *   5. Views ≥ 10                (engagement headline; if profile is
+ *   5. View spike vs. prior      (positive momentum, no CTA)
+ *   6. Views ≥ 10                (engagement headline; if profile is
  *                                 incomplete, CTA opens the highest-impact
  *                                 section's edit modal — otherwise Find
  *                                 Families market intel)
- *   6. Views < 10 + incomplete   (cold: completion pick, but every ~3rd visit
+ *   7. Views < 10 + incomplete   (cold: completion pick, but every ~3rd visit
  *                                 rotates in Find Families market intel so the
  *                                 capability surfaces without letting profile
  *                                 completion collapse)
- *   7. Views < 10 + complete     (Find Families market intel — nothing left to
+ *   8. Views < 10 + complete     (Find Families market intel — nothing left to
  *                                 complete, so pull them toward families)
  *
  * Rule: pick ONE headline signal. Never stack multiple "you have X, Y, and Z."
@@ -112,6 +119,8 @@ const ENGAGEMENT_VIEW_THRESHOLD = 10;
 // (someone reaching out) for the live-family case, the spike photo (upward
 // momentum) for the market read — so no new assets ship.
 const FIND_FAMILIES_HREF = "/provider/matches";
+/** The campaign receipt. Find Families links here too, under the same label. */
+const BOOST_HREF = "/provider/boost";
 const MARKET_HREF = "/provider/growth";
 const FIND_FAMILIES_LIVE_IMAGE = TIER_LEADS_IMAGE;
 const MARKET_INTEL_IMAGE = TIER_SPIKE_IMAGE;
@@ -328,7 +337,13 @@ export default function DashboardHero({
     // When dismissed, the hero shows nothing — report no resolved banner so the
     // dashboard's separate (non-hero) managed-ads nudge isn't wrongly suppressed.
     onBannerResolved?.(hidden ? "" : bannerId);
-    if (!hidden && bannerId === "managed_ads") prefetchBoostState();
+    // Warm the boost-state cache for both banners that land on /provider/boost.
+    // The campaign banner needs it more than the managed-ads pitch does: it is
+    // about money the provider has already spent, so it gets clicked far more
+    // often, and the page it opens is the one that has a loader to skip.
+    if (!hidden && (bannerId === "managed_ads" || bannerId === "campaign_status")) {
+      prefetchBoostState();
+    }
   }, [hidden, bannerId, onBannerResolved]);
 
   // Flatten the resolved CTA for the mobile sticky bar. Reported via effect so
@@ -639,6 +654,75 @@ function nearbyFamiliesHook(nearby: number): Hook {
   };
 }
 
+/** Where the provider's running (or just-finished) campaign stands.
+ *
+ *  THE GAP THIS FILLS. Until this existed, a campaign was not one of the
+ *  hero's priorities, and `hasActiveBoostRequest` appeared here only to
+ *  SUPPRESS things — it killed the views-to-ads pitch and swapped the managed
+ *  ads banner for reviews. Both are right on their own terms: there is no
+ *  point selling ads to someone who already bought. But nothing was ever put
+ *  in their place, so the dashboard went quiet about ads at exactly the moment
+ *  the provider started paying for them, and the results at /provider/boost
+ *  had no prominent way in.
+ *
+ *  NO DOTS HERE. `Hook` is a headline, a subline and a CTA over an image, and
+ *  widening it for one banner's sake would make this the only hook that draws.
+ *  The split is deliberate anyway: this is the invitation, the dot strip on
+ *  /provider/boost is the payoff. One set of numbers, rendered once.
+ *
+ *  LEAD WITH THE STRONGEST TRUE THING, in the tense the flight is in. A family
+ *  who reached out beats a click, a click beats an impression, and an ad with
+ *  no figures yet is young rather than failing — say which. `shown` is null
+ *  when the figures were hand-typed; the server has already withheld them.
+ */
+function campaignHook(campaign: NonNullable<ProviderDashboardV2Data["campaign"]>): Hook {
+  const live = campaign.status === "live";
+  const shown = campaign.shown ?? 0;
+  const clicked = campaign.clicked ?? 0;
+  const spend =
+    campaign.spendCents != null ? `$${(campaign.spendCents / 100).toFixed(2)} spent.` : "";
+
+  if (campaign.leads > 0) {
+    const fam = campaign.leads === 1 ? "family has" : "families have";
+    return {
+      bannerId: "campaign_status",
+      headline: `${campaign.leads} ${fam} reached out.`,
+      subline: shown
+        ? `${shown.toLocaleString()} saw your ad, ${clicked} clicked through to your page.`
+        : "They came from the ad you are running.",
+      cta: { label: "See your campaign", href: BOOST_HREF },
+      imageUrl: TIER_LEADS_IMAGE,
+    };
+  }
+
+  if (shown > 0) {
+    return {
+      bannerId: "campaign_status",
+      headline: live
+        ? `${shown.toLocaleString()} families have seen your ad.`
+        : `Your campaign reached ${shown.toLocaleString()} families.`,
+      subline: live
+        ? `${clicked} clicked through to your page. ${spend}`.trim()
+        : `${clicked} clicked through to your page. Keep it going so the next family finds you.`,
+      cta: { label: live ? "See your campaign" : "See what it bought", href: BOOST_HREF },
+      imageUrl: TIER_MANAGED_ADS_IMAGE,
+    };
+  }
+
+  // Live with no figures means the flight is too young to have any, not that
+  // nothing happened. An ended flight with none means we never got trustworthy
+  // numbers for it, so promise nothing and point at the page that explains.
+  return {
+    bannerId: "campaign_status",
+    headline: live ? "Your campaign is running." : "Your campaign has finished.",
+    subline: live
+      ? "Numbers land here as families start seeing your ad."
+      : "See how it went and what to do next.",
+    cta: { label: "See your campaign", href: BOOST_HREF },
+    imageUrl: TIER_MANAGED_ADS_IMAGE,
+  };
+}
+
 function viewSpikeHook(deltaPct: number, viewsThisPeriod: number, viewsPriorPeriod: number): Hook {
   return {
     bannerId: "view_spike",
@@ -745,7 +829,23 @@ function resolveHook(
   // Priority 2 — unanswered questions. Real family on the other end.
   if (greeting.unansweredQuestions > 0) return questionsHook(greeting.unansweredQuestions);
 
-  // Priority 3 — a real published care-seeker within the catchment. This is the
+  // Priority 3 — a running (or just-finished) campaign. They are paying us
+  // right now, and before this the dashboard said nothing about it: every ad
+  // pointer here suppresses itself once a flight is active, so the moment
+  // someone became a customer this banner went quiet about the thing they
+  // bought. It sits below a real lead and a real unanswered question, because
+  // a family waiting on a reply outranks a status readout, and above profile
+  // housekeeping, because housekeeping does not.
+  //
+  // It yields on rotation beats. Without that it would fire on every visit and
+  // silently kill the reviews nudge for exactly the cohort the old code went
+  // out of its way to keep it for ("providers with active ads see the reviews
+  // banner on rotation visits too"). Ceding one visit in ROTATE_EVERY leaves
+  // that intact and still gives the campaign two thirds of the logins.
+  const onRotationBeat = rotationCount > 0 && rotationCount % ROTATE_EVERY === 0;
+  if (data.campaign && !onRotationBeat) return campaignHook(data.campaign);
+
+  // Priority 4 — a real published care-seeker within the catchment. This is the
   // rare concrete lead: someone Find Families would pin for them. It jumps the
   // line over profile housekeeping and view momentum because there's a live
   // family to reach out to RIGHT NOW. Honest by construction — only fires when
@@ -753,7 +853,7 @@ function resolveHook(
   const nearby = data.nearbyFamilies?.count ?? 0;
   if (nearby > 0) return nearbyFamiliesHook(nearby);
 
-  // Priority 4 — meaningful view spike. Positive reinforcement, no CTA —
+  // Priority 5 — meaningful view spike. Positive reinforcement, no CTA —
   // the headline IS the value.
   if (greeting.deltaPct !== null && greeting.deltaPct >= 25 && greeting.viewsThisPeriod >= 5) {
     return viewSpikeHook(greeting.deltaPct, greeting.viewsThisPeriod, greeting.viewsPriorPeriod);
@@ -761,13 +861,13 @@ function resolveHook(
 
   const next = pickNextAction(completeness, category);
 
-  // Priority 5 — meaningful traffic (≥ 10 views). With a completion gap, the
+  // Priority 6 — meaningful traffic (≥ 10 views). With a completion gap, the
   // engagement headline rewards the activity and the section CTA fills the
   // activation lever (kept strong — no rotation — because traffic means they're
   // closer to converting and the gap is the higher-leverage fix). With a
   // complete profile, there's nothing to fix, so pull them toward Find Families
   // market intel instead of the old no-CTA filler.
-  // Priority 5 — meaningful traffic (≥10 views) with a completion gap. They
+  // Priority 6 — meaningful traffic (≥10 views) with a completion gap. They
   // already have eyeballs arriving organically, so plugging the profile leak
   // converts traffic they ALREADY have — higher leverage than paying for more.
   // No rotation here; this is the strongest activation moment. (Complete + this
@@ -776,14 +876,14 @@ function resolveHook(
     return engagementCompletionHook(greeting.viewsThisPeriod, next);
   }
 
-  // Priority 5b — meaningful traffic (≥10 views) with a COMPLETE profile and no
+  // Priority 6b — meaningful traffic (≥10 views) with a COMPLETE profile and no
   // active boost. They have eyeballs but no completion lever to pull — pitch ads
   // as the way to convert views into leads.
   if (greeting.viewsThisPeriod >= ENGAGEMENT_VIEW_THRESHOLD && !next && !hasActiveBoostRequest) {
     return viewsToAdsHook(greeting.viewsThisPeriod);
   }
 
-  // Priorities 6-7 — the cold, empty-handed majority (~99%): no leads, no
+  // Priorities 7-8 — the cold, empty-handed majority (~99%): no leads, no
   // questions, no nearby family, sparse traffic. Managed Ads leads here — it's
   // the one lever that GENERATES demand (external paid acquisition) rather than
   // waiting on an empty local funnel, so it's the KPI move for this cohort.
@@ -795,7 +895,11 @@ function resolveHook(
   // (when there's a gap) and the market read across rotations. Providers with
   // active ads see the reviews banner on rotation visits too — keeps the
   // reviews nudge visible more often to drive review collection.
-  if (rotationCount > 0 && rotationCount % ROTATE_EVERY === 0) {
+  if (onRotationBeat) {
+    // Covers both cohorts now: a provider mid-flight (whose campaign banner
+    // yielded this beat at priority 3) and one whose request is still
+    // `requested` / `scheduled`, or whose flight ended long enough ago that it
+    // fell out of the campaign window. Neither should be pitched ads.
     if (hasActiveBoostRequest) return reviewsHook();
     const altCompletion = Math.floor(rotationCount / ROTATE_EVERY) % 2 === 0;
     if (next && altCompletion) return coldCompletionHook(next);
@@ -834,6 +938,19 @@ export function buildBannerPreviews(): BannerPreview[] {
     { bannerId: "find_families_intel", hook: marketIntelHook() },
     { bannerId: "view_spike", hook: viewSpikeHook(33, 12, 9) },
     { bannerId: "views_to_ads", hook: viewsToAdsHook(15) },
+    // The mid-flight state. The banner also has a leads-led variant and a
+    // "too young for numbers" one; this is the common case and the one whose
+    // copy carries the figures, so it's the one worth eyeballing.
+    {
+      bannerId: "campaign_status",
+      hook: campaignHook({
+        status: "live",
+        shown: 240,
+        clicked: 14,
+        spendCents: 2840,
+        leads: 0,
+      }),
+    },
   ];
   for (const sectionId of NUDGE_SECTION_IDS) {
     previews.push({

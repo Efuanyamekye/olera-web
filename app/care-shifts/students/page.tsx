@@ -129,7 +129,7 @@ export default function CareShiftStudentsPage() {
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-start gap-3">
                 <Link
-                  href="/caregiver/apply"
+                  href="/medjobs/families?screener=1"
                   className="inline-flex items-center px-7 py-3.5 bg-primary-600 text-white text-[15px] font-semibold rounded-full hover:bg-primary-700 transition-colors shadow-sm shadow-primary-600/20"
                 >
                   Apply to become a caregiver
@@ -224,7 +224,7 @@ export default function CareShiftStudentsPage() {
           </div>
           <div className="mt-12 text-center">
             <Link
-              href="/caregiver/apply"
+              href="/medjobs/families?screener=1"
               className="inline-flex items-center px-7 py-3 bg-primary-600 text-white text-sm font-semibold rounded-full hover:bg-primary-700 transition-colors"
             >
               Start your application
@@ -310,7 +310,7 @@ export default function CareShiftStudentsPage() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              href="/caregiver/apply"
+              href="/medjobs/families?screener=1"
               className="inline-flex items-center px-8 py-3.5 bg-primary-600 text-white text-[15px] font-semibold rounded-full hover:bg-primary-700 transition-colors shadow-sm shadow-primary-600/20"
             >
               Apply to become a caregiver

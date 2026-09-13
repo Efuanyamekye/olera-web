@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Modal from "@/components/ui/Modal";
 import { saveStudentProfile } from "./save-profile";
 import type { BaseEditModalProps } from "./types";
@@ -31,6 +32,9 @@ export default function EditSkillsModal({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number; width: number } | null>(null);
 
   const hasChanges = JSON.stringify(selected) !== JSON.stringify(meta.skills || []);
   const atCap = selected.length >= MAX_SKILLS;
@@ -54,16 +58,43 @@ export default function EditSkillsModal({
     []
   );
 
-  // Close dropdown on outside click
+  // Close dropdown on outside click (check both input wrapper and portal dropdown)
   useEffect(() => {
     if (!dropdownOpen) return;
     function handleClick(e: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      const clickedInWrapper = wrapperRef.current?.contains(target);
+      const clickedInDropdown = dropdownRef.current?.contains(target);
+      if (!clickedInWrapper && !clickedInDropdown) {
         setDropdownOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
+  }, [dropdownOpen]);
+
+  // Calculate dropdown position when open (for portal rendering)
+  useEffect(() => {
+    if (!dropdownOpen || !inputRef.current) {
+      setDropdownPos(null);
+      return;
+    }
+    function updatePosition() {
+      if (!inputRef.current) return;
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownPos({
+        top: rect.bottom + 4, // 4px gap below input
+        left: rect.left,
+        width: rect.width,
+      });
+    }
+    updatePosition();
+    window.addEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition, true);
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition, true);
+    };
   }, [dropdownOpen]);
 
   async function handleSave() {
@@ -181,6 +212,7 @@ export default function EditSkillsModal({
             {/* Search input + dropdown */}
             <div ref={wrapperRef} className="relative text-left">
               <input
+                ref={inputRef}
                 type="text"
                 value={query}
                 onChange={(e) => { setQuery(e.target.value); setDropdownOpen(true); }}
@@ -190,19 +222,30 @@ export default function EditSkillsModal({
                 className="w-full rounded-xl border border-gray-200 px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:border-gray-300 disabled:bg-gray-50 disabled:cursor-not-allowed"
               />
 
-              {dropdownOpen && filtered.length > 0 && !atCap && (
-                <div className="absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
+              {/* Portal-rendered dropdown to escape modal overflow clipping */}
+              {dropdownOpen && filtered.length > 0 && !atCap && dropdownPos && createPortal(
+                <div
+                  ref={dropdownRef}
+                  className="fixed bg-white border border-gray-200 rounded-xl shadow-lg z-[70] max-h-48 overflow-y-auto"
+                  style={{
+                    top: dropdownPos.top,
+                    left: dropdownPos.left,
+                    width: dropdownPos.width,
+                  }}
+                  onMouseDown={(e) => e.preventDefault()} // Prevent blur on input when clicking dropdown
+                >
                   {filtered.map((item) => (
                     <button
                       key={item}
                       type="button"
                       onClick={() => { add(item); setDropdownOpen(true); }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-800 transition-colors"
+                      className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary-800 transition-colors first:rounded-t-xl last:rounded-b-xl"
                     >
                       {item}
                     </button>
                   ))}
-                </div>
+                </div>,
+                document.body
               )}
             </div>
 

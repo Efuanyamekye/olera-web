@@ -62,10 +62,13 @@ export default function StudentEligibilityModal({
   context,
   onClose,
   onComplete,
+  onExistingUser,
 }: {
   context: StudentEligibilityContext;
   onClose: () => void;
   onComplete: () => void | Promise<void>;
+  /** Called when the user already has an account — parent should open auth flow */
+  onExistingUser?: (email: string) => void;
 }) {
   const { refreshAccountData } = useAuth();
   const [step, setStep] = useState<Step>("q1");
@@ -119,7 +122,12 @@ export default function StudentEligibilityModal({
       }
 
       if (data.existing) {
-        // Returning student — can't silently sign in; tell them to check email.
+        // Returning student — close screener and open auth flow so they can sign in
+        if (onExistingUser) {
+          onExistingUser(email.trim());
+          return;
+        }
+        // Fallback: show "Welcome back" if no handler provided
         setExisting(true);
         return;
       }

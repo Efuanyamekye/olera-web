@@ -44,6 +44,8 @@ type CampaignRow = {
   campaign_tag: string | null;
   intended_monthly_budget: number | null;
   ad_spend_cents: number | null;
+  /** Provenance for the three figures above. See receipts.server.ts. */
+  metrics_source?: string | null;
   ad_clicks: number | null;
   /** Optional: older callers may not select it; the receipt degrades. */
   ad_impressions?: number | null;
@@ -154,6 +156,9 @@ export async function sendAdBoostLifecycleEmail(opts: {
           ad_impressions: opts.request.ad_impressions ?? null,
           ad_clicks: opts.request.ad_clicks,
           ad_spend_cents: opts.request.ad_spend_cents,
+          // The wrap-up email quotes these to the provider. Without the source
+          // it cannot tell a synced figure from a typed one.
+          metrics_source: opts.request.metrics_source ?? null,
           provider_reported_outcome: opts.request.provider_reported_outcome ?? null,
         })
       : null;

@@ -7,6 +7,7 @@ import type { Profile, OrganizationMetadata, CaregiverMetadata, GoogleReviewsDat
 import { resolveProvider, resolveProviderForMeta, getClaimedAccount } from "@/lib/providers";
 import { DesktopCTAVariantRouter, MobileCTAVariantRouter } from "@/components/providers/CTAVariantRouter";
 import StudentProviderCTA from "@/components/medjobs/StudentProviderCTA";
+import { StudentContextGate, FamilyOnlyContent } from "@/components/providers/ProviderCTARouter";
 import { buildOpportunity, readOpportunityProfile } from "@/lib/medjobs/opportunity";
 import { DEMAND_PROFILE_KEY } from "@/lib/medjobs/eligibility";
 import { readRequirements, DEMAND_SHAPE_OPTIONS, PRN_OPTIONS } from "@/lib/medjobs/hiring-needs-questions";
@@ -1659,52 +1660,56 @@ export default async function ProviderPage({
           {/* ========== Right Column — Sticky Sidebar (hidden on mobile) ========== */}
           <div className="hidden md:block lg:col-span-1 self-stretch">
             <div id="connection-card" className="sticky top-24">
-              {isStudentContext ? (
-                <StudentProviderCTA
-                  surface="sidebar"
-                  providerId={profile.id}
-                  providerName={profile.display_name}
-                  providerSlug={profile.slug}
-                  providerSource={providerSource}
-                  city={profile.city}
-                  state={profile.state}
-                  campus={studentCampus}
-                />
-              ) : (
-              <DesktopCTAVariantRouter
-                providerId={profile.id}
-                providerName={profile.display_name}
-                providerSlug={profile.slug}
-                priceRange={priceRange}
-                reviewCount={googleReviewsData?.review_count ?? reviewCount}
-                phone={profile.phone}
-                acceptedPayments={acceptedPayments}
-                careTypes={profile.care_types ?? []}
-                city={profile.city}
-                state={profile.state}
-                responseTime={null}
-                providerCategory={profile.category}
-                providerCity={profile.city}
-                providerState={profile.state}
-                providerImage={images[0] || null}
-                rating={googleReviewsData?.rating ?? rating}
-                highlights={highlights.map((h) => h.label)}
-                similarProviders={similarProviders.providers.slice(0, 2).map((p) => ({
-                  id: p.id,
-                  slug: p.slug,
-                  name: p.name,
-                  image: p.image || null,
-                  category: profile.category,
-                  city: p.address?.split(", ")[0] || null,
-                  state: p.address?.split(", ")[1] || null,
-                  rating: p.rating || null,
-                  reviewCount: p.reviewCount || null,
-                  priceRange: p.priceRange || null,
-                  services: p.careTypes || [],
-                  highlights: p.highlights || [],
-                }))}
+              <StudentContextGate
+                isStudentContextFromUrl={isStudentContext}
+                studentContent={
+                  <StudentProviderCTA
+                    surface="sidebar"
+                    providerId={profile.id}
+                    providerName={profile.display_name}
+                    providerSlug={profile.slug}
+                    providerSource={providerSource}
+                    city={profile.city}
+                    state={profile.state}
+                    campus={studentCampus}
+                  />
+                }
+                familyContent={
+                  <DesktopCTAVariantRouter
+                    providerId={profile.id}
+                    providerName={profile.display_name}
+                    providerSlug={profile.slug}
+                    priceRange={priceRange}
+                    reviewCount={googleReviewsData?.review_count ?? reviewCount}
+                    phone={profile.phone}
+                    acceptedPayments={acceptedPayments}
+                    careTypes={profile.care_types ?? []}
+                    city={profile.city}
+                    state={profile.state}
+                    responseTime={null}
+                    providerCategory={profile.category}
+                    providerCity={profile.city}
+                    providerState={profile.state}
+                    providerImage={images[0] || null}
+                    rating={googleReviewsData?.rating ?? rating}
+                    highlights={highlights.map((h) => h.label)}
+                    similarProviders={similarProviders.providers.slice(0, 2).map((p) => ({
+                      id: p.id,
+                      slug: p.slug,
+                      name: p.name,
+                      image: p.image || null,
+                      category: profile.category,
+                      city: p.address?.split(", ")[0] || null,
+                      state: p.address?.split(", ")[1] || null,
+                      rating: p.rating || null,
+                      reviewCount: p.reviewCount || null,
+                      priceRange: p.priceRange || null,
+                      services: p.careTypes || [],
+                      highlights: p.highlights || [],
+                    }))}
+                  />
+                }
               />
-              )}
             </div>
           </div>
         </div>
@@ -1730,72 +1735,76 @@ export default async function ProviderPage({
       </div>
 
       {/* Mobile sticky bottom CTA — opens bottom sheet with ConnectionCard */}
-      {isStudentContext ? (
-        <StudentProviderCTA
-          surface="mobile"
+      <StudentContextGate
+        isStudentContextFromUrl={isStudentContext}
+        studentContent={
+          <StudentProviderCTA
+            surface="mobile"
+            providerId={profile.id}
+            providerName={profile.display_name}
+            providerSlug={profile.slug}
+            providerSource={providerSource}
+            city={profile.city}
+            state={profile.state}
+            campus={studentCampus}
+          />
+        }
+        familyContent={
+          <MobileCTAVariantRouter
+            providerName={profile.display_name}
+            priceRange={priceRange}
+            pricingTier={pricingConfig?.tier}
+            pricingDisclaimer={pricingConfig?.disclaimer({
+              providerName: profile.display_name,
+              city: profile.city ?? undefined,
+              state: profile.state ?? undefined,
+            })}
+            providerId={profile.id}
+            providerSlug={profile.slug}
+            reviewCount={googleReviewsData?.review_count ?? reviewCount}
+            phone={profile.phone}
+            acceptedPayments={acceptedPayments}
+            careTypes={profile.care_types ?? []}
+            providerCategory={profile.category}
+            providerCity={profile.city}
+            providerState={profile.state}
+            providerImage={images[0] || null}
+            rating={googleReviewsData?.rating ?? rating}
+            highlights={highlights.map((h) => h.label)}
+            similarProviders={similarProviders.providers.slice(0, 2).map((p) => ({
+              id: p.id,
+              slug: p.slug,
+              name: p.name,
+              image: p.image || null,
+              category: profile.category,
+              city: p.address?.split(", ")[0] || null,
+              state: p.address?.split(", ")[1] || null,
+              rating: p.rating || null,
+              reviewCount: p.reviewCount || null,
+              priceRange: p.priceRange || null,
+              services: p.careTypes || [],
+              highlights: p.highlights || [],
+            }))}
+          />
+        }
+      />
+
+      {/* Lead capture sheet (unified modal for mobile + desktop) */}
+      <FamilyOnlyContent isStudentContextFromUrl={isStudentContext}>
+        <LeadCaptureSheetWrapper
           providerId={profile.id}
           providerName={profile.display_name}
           providerSlug={profile.slug}
-          providerSource={providerSource}
-          city={profile.city}
-          state={profile.state}
-          campus={studentCampus}
+          providerCity={profile.city}
+          providerState={profile.state}
+          providerCategory={profile.category}
+          staff={staff ? {
+            name: staff.name,
+            role: staff.position,
+            image: staff.image || null,
+          } : null}
         />
-      ) : (
-      <MobileCTAVariantRouter
-        providerName={profile.display_name}
-        priceRange={priceRange}
-        pricingTier={pricingConfig?.tier}
-        pricingDisclaimer={pricingConfig?.disclaimer({
-          providerName: profile.display_name,
-          city: profile.city ?? undefined,
-          state: profile.state ?? undefined,
-        })}
-        providerId={profile.id}
-        providerSlug={profile.slug}
-        reviewCount={googleReviewsData?.review_count ?? reviewCount}
-        phone={profile.phone}
-        acceptedPayments={acceptedPayments}
-        careTypes={profile.care_types ?? []}
-        providerCategory={profile.category}
-        providerCity={profile.city}
-        providerState={profile.state}
-        providerImage={images[0] || null}
-        rating={googleReviewsData?.rating ?? rating}
-        highlights={highlights.map((h) => h.label)}
-        similarProviders={similarProviders.providers.slice(0, 2).map((p) => ({
-          id: p.id,
-          slug: p.slug,
-          name: p.name,
-          image: p.image || null,
-          category: profile.category, // Use same category as current provider
-          city: p.address?.split(", ")[0] || null,
-          state: p.address?.split(", ")[1] || null,
-          rating: p.rating || null,
-          reviewCount: p.reviewCount || null,
-          priceRange: p.priceRange || null,
-          services: p.careTypes || [],
-          highlights: p.highlights || [],
-        }))}
-      />
-      )}
-
-      {/* Lead capture sheet (unified modal for mobile + desktop) */}
-      {!isStudentContext && (
-      <LeadCaptureSheetWrapper
-        providerId={profile.id}
-        providerName={profile.display_name}
-        providerSlug={profile.slug}
-        providerCity={profile.city}
-        providerState={profile.state}
-        providerCategory={profile.category}
-        staff={staff ? {
-          name: staff.name,
-          role: staff.position,
-          image: staff.image || null,
-        } : null}
-      />
-      )}
+      </FamilyOnlyContent>
     </div>
   );
 }

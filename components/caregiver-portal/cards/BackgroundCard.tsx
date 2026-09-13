@@ -6,13 +6,14 @@ interface BackgroundCardProps {
   onEdit?: () => void;
 }
 
+// Neutral tag styles - differentiation through label text, not color
 const TAG_STYLES: Record<string, { label: string; className: string }> = {
-  paid: { label: "Paid", className: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-  volunteer: { label: "Volunteer", className: "bg-blue-50 text-blue-700 border-blue-200" },
-  family: { label: "Family", className: "bg-amber-50 text-amber-700 border-amber-200" },
-  clinical: { label: "Clinical", className: "bg-purple-50 text-purple-700 border-purple-200" },
-  internship: { label: "Internship", className: "bg-indigo-50 text-indigo-700 border-indigo-200" },
-  other: { label: "Other", className: "bg-gray-50 text-gray-600 border-gray-200" },
+  paid: { label: "Paid", className: "bg-gray-100 text-gray-700 border-gray-200" },
+  volunteer: { label: "Volunteer", className: "bg-gray-100 text-gray-700 border-gray-200" },
+  family: { label: "Family", className: "bg-gray-100 text-gray-700 border-gray-200" },
+  clinical: { label: "Clinical", className: "bg-gray-100 text-gray-700 border-gray-200" },
+  internship: { label: "Internship", className: "bg-gray-100 text-gray-700 border-gray-200" },
+  other: { label: "Other", className: "bg-gray-100 text-gray-600 border-gray-200" },
 };
 
 function formatMonth(ym: string): string {

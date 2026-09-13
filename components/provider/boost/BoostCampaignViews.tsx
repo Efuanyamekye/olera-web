@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   boostChannelLabel,
@@ -154,27 +154,252 @@ export function CampaignPerformance({
  * figures. Outcome lines (became a client / still talking) come from the
  * provider's own one-tap reports.
  */
-export function CampaignReceiptBlock({ receipt }: { receipt: CampaignReceiptData }) {
+/**
+ * One dot per person.
+ *
+ * The funnel these rows describe is brutally top-heavy -- the best flight this
+ * product has run went 391 shown -> 18 clicked -> 7 visited. A proportional bar
+ * renders the second stage as a sliver and the third as nothing, and easing the
+ * scale would mean smoothing a number we are asking a provider to trust. Dots
+ * stay literal: a provider can count the eighteen.
+ *
+ * Above MAX_DOTS one dot can no longer be one person, so it says so rather than
+ * quietly thinning them. Not hypothetical -- Graceful Concord ran 608
+ * impressions and LumiWell 435.
+ */
+const MAX_DOTS = 300;
+
+/**
+ * Should the dots animate in on this visit?
+ *
+ * WHEN THE NUMBERS CHANGE, NOT ON A TIMER AND NOT ONCE PER FLIGHT. Once per
+ * flight was too rare: the animation is the best thing on this page and most
+ * providers spent their single showing before there was anything to see. Every
+ * load is worse -- this is also the screen that asks for money, and making
+ * someone sit through an arrival before they can read the evidence is a bad
+ * trade on visit three.
+ *
+ * The rule that falls out of both: replay when the picture actually changed.
+ * That is what the animation MEANS -- people arriving -- so firing it on
+ * unchanged data is a small lie, and firing it on changed data is the honest
+ * reading of the same gesture. It also happens to be what the habituation
+ * literature points at: a repeated identical stimulus decays, and it is a
+ * CHANGE in the stimulus that restores the response. Here the data is the
+ * stimulus, so the two rules are the same rule.
+ *
+ * Metrics sync hourly, so a live flight earns a replay roughly when something
+ * really happened, and an ended flight whose numbers are final animates once
+ * and then stays still. Both are correct.
+ *
+ * Wrapped because Safari private mode throws on localStorage access rather than
+ * returning null, and a receipt that crashes is worse than one that re-animates.
+ */
+function shouldAnimate(key: string | null, signature: string): boolean {
+  if (!key || typeof window === "undefined") return false;
+  try {
+    const k = `olera_boost_receipt_seen:${key}`;
+    const seen = window.localStorage.getItem(k);
+    if (seen === signature) return false;
+    window.localStorage.setItem(k, signature);
+    return true;
+  } catch {
+    return false; // cannot remember -> never animate, rather than animate always
+  }
+}
+
+/** What the dots currently say. The animation replays when this changes.
+ *
+ *  Everything the block actually draws goes in, so the signature moves exactly
+ *  when the picture does and never when it doesn't. A provider who reloads
+ *  four times in an hour sees it once; one who comes back after the hourly
+ *  sync added eleven impressions sees it again, because eleven more people
+ *  really did see their ad. */
+function receiptSignature(receipt: CampaignReceiptData): string {
+  const g = receipt.google;
+  const o = receipt.outcomes;
+  return [
+    g.impressions ?? "-",
+    g.clicks ?? "-",
+    receipt.engagement.visitors,
+    receipt.engagement.saves,
+    receipt.engagement.questionsReceived,
+    o.client,
+    o.talking,
+  ].join(".");
+}
+
+function DotRow({
+  n,
+  label,
+  sub,
+  lit,
+  animate,
+}: {
+  n: number;
+  label: string;
+  sub?: string;
+  lit: boolean;
+  animate: boolean;
+}) {
+  const scale = n > MAX_DOTS ? Math.ceil(n / MAX_DOTS) : 1;
+  const drawn = Math.ceil(n / scale);
+  const maxPerRow = 46;
+  const gap = 9.4;
+  const width = maxPerRow * gap + 5;
+
+  // BALANCE THE ROWS, DO NOT CENTRE THEM.
+  //
+  // The problem was never alignment, it was one full row of 46 followed by a
+  // stub of 18. Centring that stub only moved the raggedness to the middle and
+  // made single-row counts float away from their label, which read worse.
+  //
+  // So pick the row width from the count instead: 64 dots become two rows of 32
+  // rather than 46 + 18, and 268 becomes six rows of ~45. Everything stays left
+  // aligned against the label, and the block ends up rectangular on its own
+  // terms. Spacing is constant across every row and every stat, because the
+  // density IS the quantity -- stretching a short row to fill the width would
+  // make twenty people look like two hundred.
+  const rows = Math.max(1, Math.ceil(drawn / maxPerRow));
+  const perRow = Math.ceil(drawn / rows);
+
+  const dots = Array.from({ length: drawn }, (_, i) => ({
+    cx: 4 + (i % perRow) * gap,
+    cy: 5 + Math.floor(i / perRow) * gap,
+  }));
+
+  return (
+    <div className="py-3">
+      <div className="flex items-baseline justify-between gap-4">
+        <dt className="min-w-0 text-sm text-gray-600">
+          {label}
+          {sub && <span className="ml-2 text-xs text-gray-400">{sub}</span>}
+        </dt>
+        <dd className="shrink-0 text-lg font-display font-bold text-gray-900 tabular-nums">
+          {n.toLocaleString()}
+        </dd>
+      </div>
+      {/* THE CROWD ARRIVES AS A MASS; THE PEOPLE WHO MOVED ARRIVE ONE BY ONE.
+          A faint row is hundreds of strangers -- staggering those is half a
+          second of noise that makes the crowd look like the point. A lit row is
+          the handful who clicked, and watching them land individually is the
+          entire reason they are dots rather than a number. Opacity only: no
+          scale, no bounce. This screen sometimes has to tell a provider they
+          got zero inquiries, and the register has to hold in that case too. */}
+      <svg
+        viewBox={`0 0 ${width} ${rows * gap + 4}`}
+        className="mt-2 block w-full h-auto"
+        style={
+          !lit && animate
+            ? { animation: "olera-dots-in .24s ease-out both" }
+            : undefined
+        }
+        aria-hidden="true"
+      >
+        {dots.map((d, i) => (
+          <circle
+            key={i}
+            cx={d.cx}
+            cy={d.cy}
+            r={lit ? 2.8 : 2.2}
+            // The faint dots were light enough to read as a dotted border rather
+            // than as people. Still clearly recessive, just present.
+            fill={lit ? "#B57F1E" : "#D3CABA"}
+            style={
+              lit && animate
+                ? {
+                    opacity: 0,
+                    animation: `olera-dots-in .2s ease-out ${Math.min(i * 25, 900)}ms forwards`,
+                  }
+                : undefined
+            }
+          />
+        ))}
+      </svg>
+      {scale > 1 && (
+        <p className="mt-1 text-[10px] text-gray-400">each dot is {scale} people</p>
+      )}
+    </div>
+  );
+}
+
+export function CampaignReceiptBlock({
+  receipt,
+  flightKey = null,
+}: {
+  receipt: CampaignReceiptData;
+  /** Campaign tag. Gates the one-time arrival animation; omit to never animate. */
+  flightKey?: string | null;
+}) {
   const { google, engagement, outcomes } = receipt;
   const rows: { label: string; value: string; sub?: string }[] = [];
 
+  // Decided after mount, never during render: localStorage does not exist on the
+  // server, and reading it in render would hand the client a different first
+  // paint than the HTML it hydrates. Starting false also means the no-JS and
+  // reduced-motion paths get the finished state, which is the correct default.
+  const [animate, setAnimate] = useState(false);
+  const blockRef = useRef<HTMLDivElement>(null);
+  const signature = receiptSignature(receipt);
+  useEffect(() => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
+    const el = blockRef.current;
+    if (!el) return;
+
+    // WAIT UNTIL IT IS ACTUALLY ON SCREEN. Firing on mount both plays the
+    // arrival and spends the allowance -- so a provider whose receipt sits
+    // below the fold (the live view puts a facts row, a 3-up stat row and a
+    // momentum line above it) would scroll down to a finished list and never
+    // see it. The feature would have been silently dead for exactly the people
+    // it was built for.
+    const start = () => {
+      if (shouldAnimate(flightKey, signature)) setAnimate(true);
+    };
+    if (typeof IntersectionObserver === "undefined") {
+      start();
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        io.disconnect();
+        start();
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [flightKey, signature]);
+
+  // The first three stages are drawn as dots instead of list rows -- same
+  // numbers, same order, but the shape of the drop-off is the finding and a
+  // right-aligned figure cannot carry it.
+  const dotRows: { n: number; label: string; sub?: string; lit: boolean }[] = [];
   if (google.impressions != null && google.impressions > 0) {
-    rows.push({
+    dotRows.push({
+      n: google.impressions,
       label: "Times your ad was shown",
-      value: google.impressions.toLocaleString(),
       sub: "local families searching for care",
+      lit: false,
     });
   }
   if (google.clicks != null && google.clicks > 0) {
-    rows.push({
+    dotRows.push({
+      n: google.clicks,
       label: "Clicked through to your page",
-      value: google.clicks.toLocaleString(),
       sub: google.ctr != null ? `${google.ctr}% click rate` : undefined,
+      lit: true,
     });
   }
-  if (engagement.visitors > 0) {
-    rows.push({ label: "Visited your page", value: engagement.visitors.toLocaleString() });
-  }
+  // "Visited your page" is deliberately absent. It said the same thing as the
+  // row above it -- a person arriving from the ad -- but counted it from our own
+  // tracking rather than Google's, so the two disagreed: 16 clicked, 19 visited.
+  // A funnel that grows at the second step reads as broken, and a provider
+  // cannot be expected to hold "different measurement windows" in their head.
+  // Google's click count wins because it is what they paid for and it carries
+  // the click rate. The visitor figure still has a home: the VISITORS tile in
+  // CampaignPerformance directly above this block, where it is not pretending
+  // to be a separate funnel stage.
+
   if (engagement.saves > 0) {
     rows.push({
       label: "Saved you to their shortlist",
@@ -191,14 +416,25 @@ export function CampaignReceiptBlock({ receipt }: { receipt: CampaignReceiptData
           : undefined,
     });
   }
-  if (rows.length === 0 && outcomes.client === 0 && outcomes.talking === 0) return null;
+  if (
+    dotRows.length === 0 &&
+    rows.length === 0 &&
+    outcomes.client === 0 &&
+    outcomes.talking === 0
+  ) {
+    return null;
+  }
 
   return (
-    <div className="mt-8">
+    <div className="mt-8" ref={blockRef}>
+      <style>{"@keyframes olera-dots-in{from{opacity:0}to{opacity:1}}"}</style>
       <p className="text-xs font-semibold uppercase tracking-[0.12em] text-gray-400">
         What your campaign bought
       </p>
       <dl className="mt-3 divide-y divide-gray-100 border-y border-gray-100">
+        {dotRows.map((d) => (
+          <DotRow key={d.label} n={d.n} label={d.label} sub={d.sub} lit={d.lit} animate={animate} />
+        ))}
         {rows.map((r) => (
           <div key={r.label} className="flex items-baseline justify-between gap-4 py-3">
             <dt className="min-w-0 text-sm text-gray-600">
@@ -210,23 +446,36 @@ export function CampaignReceiptBlock({ receipt }: { receipt: CampaignReceiptData
             </dd>
           </div>
         ))}
-        {outcomes.client > 0 && (
+        {/* ONE OUTCOME ROW, NEVER TWO.
+            "Became a paying client 1" stacked on "Still in conversation 1" made
+            a provider read two separate results and work out how they relate.
+            They are stages of one thing, so the strongest one leads and the
+            other rides along as a sub -- the same pattern the click-rate sub
+            already uses. Nothing is lost: with no clients, the conversation row
+            leads on its own. */}
+        {outcomes.client > 0 ? (
           <div className="flex items-baseline justify-between gap-4 py-3">
             <dt className="min-w-0 text-sm font-medium text-primary-700">
               Became {outcomes.client === 1 ? "a paying client" : "paying clients"}
+              {outcomes.talking > 0 && (
+                <span className="ml-2 text-xs font-normal text-gray-400">
+                  {outcomes.talking.toLocaleString()} still in conversation
+                </span>
+              )}
             </dt>
             <dd className="shrink-0 text-lg font-display font-bold text-primary-700 tabular-nums">
               {outcomes.client.toLocaleString()}
             </dd>
           </div>
-        )}
-        {outcomes.talking > 0 && (
-          <div className="flex items-baseline justify-between gap-4 py-3">
-            <dt className="min-w-0 text-sm text-gray-600">Still in conversation</dt>
-            <dd className="shrink-0 text-lg font-display font-bold text-gray-900 tabular-nums">
-              {outcomes.talking.toLocaleString()}
-            </dd>
-          </div>
+        ) : (
+          outcomes.talking > 0 && (
+            <div className="flex items-baseline justify-between gap-4 py-3">
+              <dt className="min-w-0 text-sm text-gray-600">Still in conversation</dt>
+              <dd className="shrink-0 text-lg font-display font-bold text-gray-900 tabular-nums">
+                {outcomes.talking.toLocaleString()}
+              </dd>
+            </div>
+          )
         )}
       </dl>
     </div>
@@ -554,7 +803,7 @@ export function WrapUpMoment({
           bought, so you can judge it on the numbers.
         </p>
 
-        {receipt && <CampaignReceiptBlock receipt={receipt} />}
+        {receipt && <CampaignReceiptBlock receipt={receipt} flightKey={request.campaign_tag || request.id} />}
         {receipt && <ReceiptMathLine receipt={receipt} />}
 
         <p className="text-gray-500 mt-6 leading-relaxed max-w-lg">
@@ -595,7 +844,7 @@ export function WrapUpMoment({
       </p>
 
       {campaignStats && <CampaignPerformance stats={campaignStats} />}
-      {receipt && <CampaignReceiptBlock receipt={receipt} />}
+      {receipt && <CampaignReceiptBlock receipt={receipt} flightKey={request.campaign_tag || request.id} />}
 
       {/* The decision — eyebrow only; the cards say what plans are. */}
       <p className="mt-12 text-xs font-semibold uppercase tracking-[0.12em] text-primary-600">
@@ -759,7 +1008,7 @@ export function CampaignInMotion({
       {isLive && receipt && <MomentumLine week={receipt.week} />}
 
       {/* The accruing receipt: ad reach, saves, questions, reported outcomes. */}
-      {isLive && receipt && <CampaignReceiptBlock receipt={receipt} />}
+      {isLive && receipt && <CampaignReceiptBlock receipt={receipt} flightKey={request.campaign_tag || request.id} />}
 
       {/* The early plan choice uses the same visible cards as the wrap-up.
           Providers should not have to discover that a section-heading-looking

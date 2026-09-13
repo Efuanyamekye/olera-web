@@ -62,6 +62,34 @@ export async function POST(req: NextRequest) {
   const cfg = getCityConfig(slug);
   if (!cfg) return NextResponse.json({ error: "Unknown city" }, { status: 404 });
 
+  /**
+   * Verification mode. Writes a real row through the real validation, then
+   * stops before anything reaches a human or a third party.
+   *
+   * WHY IT EXISTS. This route is the only thing that can produce a city_leads
+   * row, and it is the only thing that cannot produce a TEST one — every rollup
+   * already honours is_test ("test rows never count", see
+   * docs/city-ads/CHANNEL-INFRASTRUCTURE.md), but nothing could set it, which
+   * is why the handful of test rows this project has had were edited into the
+   * database by hand. Meanwhile a successful submission sends an SMS, posts to
+   * Slack, starts the provider chain and fires a Google Ads conversion, so
+   * verifying the three landing arms end to end would have meant a dozen real
+   * texts and a dozen fake conversions in the campaign whose numbers the
+   * day-14 read depends on.
+   *
+   * AUTHORISED BY HEADER, NOT BY BODY. A body flag would be visible in the page
+   * JS and settable by anyone who reads it, which would let a visitor mark
+   * their own real request as a test and vanish from the queue. This uses the
+   * same `Bearer ${CRON_SECRET}` check every cron route in the codebase uses,
+   * so the landing page cannot reach it at all.
+   *
+   * The row is still written, and written the same way, because the point is to
+   * prove the insert and its constraints work — not to mock them.
+   */
+  const isVerification =
+    req.headers.get("authorization") === `Bearer ${process.env.CRON_SECRET}` &&
+    !!process.env.CRON_SECRET;
+
   const careType = String(body.careType ?? "");
   const recipient = body.careRecipient ? String(body.careRecipient) : null;
   const urgency = body.urgency ? String(body.urgency) : null;
@@ -84,22 +112,39 @@ export async function POST(req: NextRequest) {
   const now = new Date();
 
   // Abuse cap: 5 leads per IP per hour.
-  if (ip) {
+  //
+  // Skipped for verification, which carries CRON_SECRET and therefore cannot be
+  // the anonymous flood this cap exists to stop. Checking the matrix of three
+  // landing arms against four care types needs twelve submissions and the cap
+  // refused seven of them.
+  //
+  // TEST ROWS ARE EXCLUDED FROM THE COUNT. They were not, which meant a
+  // verification run could push a REAL family on the same egress IP over the
+  // limit and hand them "Too many requests" on a form they had filled in
+  // correctly. Rare, but the failure lands on the visitor rather than on us.
+  if (ip && !isVerification) {
     const { count } = await db
       .from("city_leads")
       .select("id", { count: "exact", head: true })
       .eq("consent_ip", ip)
+      .eq("is_test", false)
       .gte("created_at", new Date(now.getTime() - 60 * 60 * 1000).toISOString());
     if ((count ?? 0) >= 5) return NextResponse.json({ error: "Too many requests. Please try again later." }, { status: 429 });
   }
 
   // Idempotency: same phone + city in 24h returns the existing lead. A stopped
   // request does not count; the family may genuinely be asking again.
+  //
+  // Test rows are excluded for the same reason the abuse cap excludes them: a
+  // verification row carrying a phone number would otherwise block a real
+  // family using that number for 24 hours and hand them back a "duplicate"
+  // pointing at a lead nobody will ever call.
   const { data: existing } = await db
     .from("city_leads")
     .select("id, status, care_type")
     .eq("slug", slug)
     .eq("phone", phone)
+    .eq("is_test", false)
     .neq("status", "stopped")
     .gte("created_at", new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString())
     .order("created_at", { ascending: false })
@@ -124,6 +169,8 @@ export async function POST(req: NextRequest) {
       gclid: str(utm.gclid, 200),
       fbclid: str(utm.fbclid, 200),
       session_id: str(body.sessionId),
+      landing_arm: str(body.landingArm),
+      is_test: isVerification,
       care_recipient: recipient,
       care_type: careType,
       urgency,
@@ -142,6 +189,29 @@ export async function POST(req: NextRequest) {
   if (error || !lead) {
     console.error("[city-leads] insert failed", error);
     return NextResponse.json({ error: "Could not save your request. Please try again." }, { status: 500 });
+  }
+
+  // A verification request has proved what it came to prove the moment the row
+  // is in: validation passed, the CHECK accepted the care type, the arm was
+  // stored, and `isMedical` below already reports which way this care type
+  // routes — the reason `medical` needed checking separately.
+  //
+  // RETURNED BEFORE THE CARE-SEEKER PROFILE, not after. It sat after on the
+  // first pass, on the assumption that deleting the lead would cascade the
+  // profile away. It does not: a run of twelve left seventeen unclaimed
+  // "Verify101" rows sitting in business_profiles, which is the same table the
+  // provider accounts live in. Everything past this line either writes
+  // somewhere else or sends something outbound, and a row nobody will ever
+  // call needs none of it.
+  if (isVerification) {
+    return NextResponse.json({
+      ok: true,
+      leadId: lead.id,
+      verification: true,
+      redirected: isMedical,
+      landingArm: str(body.landingArm),
+      careType,
+    });
   }
 
   // Give the family a care seeker profile, and link it. This is what makes the

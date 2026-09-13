@@ -7,7 +7,20 @@ export type GrowthClientEvent =
   | "cta_visible"
   | "cta_engaged"
   | "lead_started"
-  | "contact_intent";
+  | "contact_intent"
+  // Added for the /care/{city} landing A/B test. FOUR allowlists gate a growth
+  // event and ALL FOUR have to know about a new one:
+  //   1. this union
+  //   2. CLIENT_EVENTS in app/api/activity/track-growth/route.ts  (a 400)
+  //   3. the CHECK on growth_attribution_events.event_type        (silent drop)
+  //   4. the safeMetadata allowlist in that same route            (silent drop)
+  //
+  // This comment said THREE until 11 Sep, and the missing fourth is what let
+  // the landing arms ship dropping their own `arm` tag on every event. Only
+  // (2) announces itself; the other two silent ones are silent because the
+  // fetch below swallows its own errors by design.
+  | "question_viewed"
+  | "provider_expanded";
 
 /**
  * Categories that are NOT organic pages and so are never returned by

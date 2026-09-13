@@ -78,6 +78,19 @@ export interface ProviderDashboardV2Data {
    *  requested, scheduled, or live). Drives banner prioritization — shows
    *  reviews banner instead of managed_ads when they already have a launch plan. */
   hasActiveBoostRequest: boolean;
+  /** The provider's live, or recently ended, ad campaign — the hero's campaign
+   *  banner. Null when there is no campaign, when it never ran (`requested` /
+   *  `scheduled` have nothing to report), or when it ended more than two weeks
+   *  ago. `shown` / `clicked` / `spendCents` are null when the figures were
+   *  hand-typed rather than synced: the server applies the same provenance gate
+   *  the receipt does, so a wrong number can never reach this banner. */
+  campaign: {
+    status: "live" | "ended";
+    shown: number | null;
+    clicked: number | null;
+    spendCents: number | null;
+    leads: number;
+  } | null;
 }
 
 /**

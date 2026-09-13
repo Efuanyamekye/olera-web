@@ -917,7 +917,7 @@ function CampaignTrackerCard({
           href="/provider/boost"
           className="text-sm font-medium text-gray-500 transition-colors hover:text-gray-700"
         >
-          View campaign details →
+          See your campaign →
         </Link>
       </div>
     </div>

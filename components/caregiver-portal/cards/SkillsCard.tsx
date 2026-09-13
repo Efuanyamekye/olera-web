@@ -31,7 +31,7 @@ export default function SkillsCard({ meta, onEdit }: SkillsCardProps) {
           {meta.skills!.map((skill) => (
             <span
               key={skill}
-              className="inline-flex items-center pl-3 pr-3 py-1 rounded-full text-sm font-medium bg-primary-50 text-primary-800 border border-primary-200"
+              className="inline-flex items-center pl-3 pr-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 border border-gray-200"
             >
               {skill}
             </span>

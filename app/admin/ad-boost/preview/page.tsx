@@ -16,7 +16,13 @@ import {
  * checkout button is stubbed: nothing here can charge anyone.
  */
 
-type PreviewKey = "live" | "wrapup" | "wrapup_one" | "weak" | "celebrate" | "steady";
+type PreviewKey =
+  | "live"
+  | "wrapup"
+  | "wrapup_one"
+  | "weak"
+  | "celebrate"
+  | "steady";
 
 /** Sample receipts — Miracle-Lightstar-shaped numbers for the zero-lead demand
  *  receipt, Franchil-shaped for the outcome receipt. */
@@ -36,17 +42,32 @@ const RECEIPT_STRONG: CampaignReceiptData = {
   week: { visitors: 7, questions: 1, leads: 1 },
 };
 
+/**
+ * Sample dates are RELATIVE, not literal.
+ *
+ * They were written as fixed strings in June and by September the "Live ·
+ * mid-flight" preview read "Your campaign is live" above "Flight: Ended Aug 3".
+ * That contradiction is a fixture going stale, not a bug in CampaignInMotion,
+ * but it looks exactly like one and it gets worse every month.
+ */
+function daysFromNow(n: number): string {
+  return new Date(Date.now() + n * 86_400_000).toISOString().slice(0, 10);
+}
+function isoFromNow(n: number): string {
+  return new Date(Date.now() + n * 86_400_000).toISOString();
+}
+
 const SAMPLE_BASE: BoostRequest = {
   id: "preview",
   status: "live",
-  requested_setup_week: "2026-06-22",
+  requested_setup_week: daysFromNow(-24),
   channel: "google",
   intended_monthly_budget: 50,
   campaign_tag: "preview-campaign",
-  created_at: "2026-06-16T12:00:00Z",
+  created_at: isoFromNow(-30),
   plan_status: null,
   plan_value: null,
-  promo_complete_email_sent_at: "2026-07-06T12:00:00Z",
+  promo_complete_email_sent_at: isoFromNow(-3),
 };
 
 const PREVIEWS: {
@@ -88,6 +109,15 @@ const PREVIEWS: {
 
 export default function AdBoostPreviewPage() {
   const [view, setView] = useState<PreviewKey>("wrapup");
+  // The receipt's arrival animation fires once per campaign_tag and then
+  // remembers. That is right for a provider and wrong for a gallery: every
+  // sample shares one tag, so without a per-view, per-load tag you would see it
+  // animate once, reload, see nothing, and reasonably report it broken.
+  const [previewNonce] = useState(() => Date.now().toString(36));
+  const sampleFor = (v: PreviewKey, base: BoostRequest = SAMPLE_BASE): BoostRequest => ({
+    ...base,
+    campaign_tag: `preview-${v}-${previewNonce}`,
+  });
   const [fakeSubmitting, setFakeSubmitting] = useState(false);
   const [fakeError, setFakeError] = useState<string | null>(null);
 
@@ -107,7 +137,7 @@ export default function AdBoostPreviewPage() {
     visitors: 19,
     leads,
     questions: { received: 4, unanswered: 1 },
-    since: "2026-06-22T00:00:00Z",
+    since: isoFromNow(-24),
   });
 
   const active: BoostRequest = {
@@ -175,7 +205,7 @@ export default function AdBoostPreviewPage() {
           {view === "live" && (
             <CampaignInMotion
               key="live"
-              request={{ ...SAMPLE_BASE, flight_end_date: "2026-08-03", promo_complete_email_sent_at: null }}
+              request={{ ...sampleFor("live"), flight_end_date: daysFromNow(6), promo_complete_email_sent_at: null }}
               campaignStats={stats(1)}
               receipt={RECEIPT_STRONG}
               onCheckout={stubCheckout}
@@ -186,7 +216,7 @@ export default function AdBoostPreviewPage() {
           {view === "wrapup" && (
             <WrapUpMoment
               key="wrapup"
-              request={SAMPLE_BASE}
+              request={sampleFor("wrapup")}
               campaignStats={stats(3)}
               receipt={RECEIPT_STRONG}
               onCheckout={stubCheckout}
@@ -197,7 +227,7 @@ export default function AdBoostPreviewPage() {
           {view === "wrapup_one" && (
             <WrapUpMoment
               key="wrapup_one"
-              request={SAMPLE_BASE}
+              request={sampleFor("wrapup_one")}
               campaignStats={stats(1)}
               onCheckout={stubCheckout}
               submitting={fakeSubmitting}
@@ -207,7 +237,7 @@ export default function AdBoostPreviewPage() {
           {view === "weak" && (
             <WrapUpMoment
               key="weak"
-              request={SAMPLE_BASE}
+              request={sampleFor("weak")}
               campaignStats={stats(0)}
               receipt={RECEIPT_ZERO}
               onCheckout={stubCheckout}
@@ -216,10 +246,10 @@ export default function AdBoostPreviewPage() {
             />
           )}
           {view === "celebrate" && (
-            <PlanActive request={active} campaignStats={stats(3)} celebrate />
+            <PlanActive request={sampleFor(view, active)} campaignStats={stats(3)} celebrate />
           )}
           {view === "steady" && (
-            <PlanActive request={active} campaignStats={stats(5)} celebrate={false} />
+            <PlanActive request={sampleFor(view, active)} campaignStats={stats(5)} celebrate={false} />
           )}
         </div>
       </div>

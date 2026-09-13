@@ -31,7 +31,7 @@ export default function CertificationsCard({ meta, onEdit }: CertificationsCardP
           {meta.certifications!.map((cert) => (
             <span
               key={cert}
-              className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-50 text-emerald-700 border border-emerald-200"
+              className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700 border border-gray-200"
             >
               {cert}
             </span>

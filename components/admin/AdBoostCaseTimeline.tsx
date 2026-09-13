@@ -13,6 +13,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
  * it to do and when you will come back and check. Unreviewed tweaks past their date
  * surface at the top of this section and as a badge on the queue, because a change
  * nobody evaluated is how a working campaign gets rebuilt into a dead one.
+ *
+ * The list itself is COLLAPSED by default and sits at the foot of the campaign page.
+ * Entries carry full audit detail and a busy campaign accumulates dozens of them, which
+ * buried the status controls, metrics and photo review under several screens of prose.
+ * The overdue block deliberately stays OUTSIDE the collapse: hiding a change nobody
+ * evaluated behind a disclosure would defeat the rule above. Everything that forces an
+ * action is visible while shut; only the archive is folded away.
  */
 
 export type CaseEntry = {
@@ -94,6 +101,7 @@ export default function AdBoostCaseTimeline({
 }) {
   const [entries, setEntries] = useState<CaseEntry[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -132,6 +140,9 @@ export default function AdBoostCaseTimeline({
     d.setDate(d.getDate() + 3);
     setReviewAfter(d.toISOString().slice(0, 10));
     setShowForm(true);
+    // Writing an entry means reading the ones above it — never leave the author
+    // typing into a form whose context is folded shut.
+    setOpen(true);
   };
 
   const submit = async () => {
@@ -197,14 +208,56 @@ export default function AdBoostCaseTimeline({
 
   return (
     <section className="mb-5 rounded-xl border border-gray-200 bg-white p-5">
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div>
-          <h2 className="text-sm font-semibold text-gray-900">Case history</h2>
-          <p className="mt-1 text-xs leading-relaxed text-gray-500">
-            What we did, what we expected, and what happened. Every tweak has to say what it
-            should produce and when to check.
-          </p>
-        </div>
+      <div
+        className={`flex items-start justify-between gap-3 ${
+          open || error || overdue.length > 0 ? "mb-4" : ""
+        }`}
+      >
+        <button
+          type="button"
+          onClick={() => {
+            // Collapsing also closes the form. Otherwise the action button keeps
+            // reading "Cancel" while the form it would cancel is hidden, and it
+            // takes two clicks to get a visible form back. Typed text survives in
+            // state, so reopening restores the draft.
+            setOpen((v) => {
+              if (v) setShowForm(false);
+              return !v;
+            });
+          }}
+          aria-expanded={open}
+          aria-controls="case-history-body"
+          className="-m-1 flex min-w-0 items-start gap-2 rounded p-1 text-left hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
+        >
+          <svg
+            className={`mt-1 h-3.5 w-3.5 shrink-0 text-gray-400 transition-transform ${open ? "rotate-90" : ""}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+          <span className="min-w-0">
+            <span className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-semibold text-gray-900">Case history</span>
+              {/* A failed load sets entries to [], so the count would assert "0
+                  entries" when the truth is that we do not know. Show a dash. */}
+              <span className="text-xs text-gray-400">
+                {error
+                  ? "—"
+                  : entries === null
+                    ? "loading…"
+                    : `${entries.length} ${entries.length === 1 ? "entry" : "entries"}`}
+              </span>
+            </span>
+            <span className="mt-1 block text-xs leading-relaxed text-gray-500">
+              {open
+                ? "What we did, what we expected, and what happened. Every tweak has to say what it should produce and when to check."
+                : "What we did, what we expected, and what happened."}
+            </span>
+          </span>
+        </button>
         <div className="flex shrink-0 items-center gap-3">
           {campaignTag && (
             <a
@@ -253,7 +306,10 @@ export default function AdBoostCaseTimeline({
         </div>
       )}
 
-      {showForm && (
+      {/* Everything below the fold line. The overdue block above stays outside it on
+          purpose — an unreviewed change has to stay in the operator's face. */}
+      <div id="case-history-body">
+      {open && showForm && (
         <div className="mb-5 flex flex-col gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4">
           <div className="flex flex-wrap gap-1.5">
             {ENTRY_TYPES.map((t) => (
@@ -325,14 +381,14 @@ export default function AdBoostCaseTimeline({
         </div>
       )}
 
-      {!entries && <p className="text-sm text-gray-400">Loading…</p>}
-      {entries && entries.length === 0 && (
+      {open && !entries && <p className="text-sm text-gray-400">Loading…</p>}
+      {open && entries && entries.length === 0 && (
         <p className="text-sm text-gray-400">
           No entries yet. The first one should be what this campaign is meant to do.
         </p>
       )}
 
-      {entries && entries.length > 0 && (
+      {open && entries && entries.length > 0 && (
         <ol className="flex flex-col">
           {entries.map((e, i) => (
             <li
@@ -390,6 +446,7 @@ export default function AdBoostCaseTimeline({
           ))}
         </ol>
       )}
+      </div>
     </section>
   );
 }

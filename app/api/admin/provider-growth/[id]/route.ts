@@ -21,6 +21,130 @@ import {
   type TouchpointType,
 } from "@/lib/provider-growth/stages";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Provider Context Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface ClaimerInfo {
+  name: string;
+  position?: string;
+  email: string;
+}
+
+interface EmailEngagement {
+  total_sent: number;
+  opened: number;
+  clicked: number;
+  last_clicked_at: string | null;
+}
+
+interface ProviderContext {
+  claimer: ClaimerInfo | null;
+  emailEngagement: EmailEngagement | null;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Provider Context Functions
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Get information about who claimed the provider's page.
+ * Priority fallback: staff.name -> accounts.display_name -> "Unknown"
+ *
+ * @param accountId - The account_id from business_profiles (pre-fetched)
+ * @param metadata - The metadata from business_profiles (pre-fetched)
+ */
+async function getClaimerInfo(
+  accountId: string | null,
+  metadata: Record<string, unknown> | null
+): Promise<ClaimerInfo | null> {
+  if (!accountId) return null;
+
+  const db = getServiceClient();
+
+  try {
+    // Get account
+    const { data: account } = await db
+      .from("accounts")
+      .select("user_id, display_name")
+      .eq("id", accountId)
+      .single();
+
+    if (!account?.user_id) return null;
+
+    // Get email from auth
+    const { data: authUser } = await db.auth.admin.getUserById(account.user_id);
+
+    // Extract staff info from metadata
+    const meta = metadata || {};
+    const staff = meta.staff as { name?: string; position?: string } | undefined;
+
+    return {
+      name: staff?.name || account.display_name || "Unknown",
+      position: staff?.position,
+      email: authUser?.user?.email || "",
+    };
+  } catch (e) {
+    console.error("[provider-growth] Failed to fetch claimer info:", e);
+    return null;
+  }
+}
+
+/**
+ * Get email engagement stats for a provider (last 30 days).
+ */
+async function getEmailEngagement(providerEmail: string): Promise<EmailEngagement | null> {
+  if (!providerEmail) return null;
+
+  const db = getServiceClient();
+
+  try {
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+    const { data, error } = await db
+      .from("email_log")
+      .select("id, delivered_at, first_opened_at, first_clicked_at")
+      .eq("recipient", providerEmail)
+      .eq("recipient_type", "provider")
+      .gte("created_at", thirtyDaysAgo);
+
+    if (error || !data) return null;
+
+    return {
+      total_sent: data.length,
+      opened: data.filter((e) => e.first_opened_at).length,
+      clicked: data.filter((e) => e.first_clicked_at).length,
+      last_clicked_at:
+        data
+          .filter((e) => e.first_clicked_at)
+          .sort((a, b) => b.first_clicked_at!.localeCompare(a.first_clicked_at!))[0]
+          ?.first_clicked_at || null,
+    };
+  } catch (e) {
+    console.error("[provider-growth] Failed to fetch email engagement:", e);
+    return null;
+  }
+}
+
+/**
+ * Fetch provider context for the drawer.
+ * Includes claimer identity and email engagement stats.
+ *
+ * @param profileData - Pre-fetched business_profile data (account_id, metadata, email)
+ */
+async function getProviderContext(profileData: {
+  account_id: string | null;
+  metadata: Record<string, unknown> | null;
+  email: string | null;
+}): Promise<ProviderContext> {
+  const [claimer, emailEngagement] = await Promise.all([
+    getClaimerInfo(profileData.account_id, profileData.metadata),
+    profileData.email ? getEmailEngagement(profileData.email) : Promise.resolve(null),
+  ]);
+
+  return { claimer, emailEngagement };
+}
+
 /**
  * Fetch engagement metrics for a provider (questions and leads counts).
  * This gives admins talking points for sales conversations.
@@ -107,13 +231,28 @@ export async function GET(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: "Tracking record not found" }, { status: 404 });
     }
 
-    // Fetch touchpoints and engagement metrics in parallel
-    const [touchpoints, engagement] = await Promise.all([
+    // Fetch business_profile data needed for context queries (single query)
+    const db = getServiceClient();
+    const { data: profile } = await db
+      .from("business_profiles")
+      .select("email, account_id, metadata")
+      .eq("id", tracking.business_profile_id)
+      .single();
+
+    const profileData = {
+      email: profile?.email || null,
+      account_id: profile?.account_id || null,
+      metadata: (profile?.metadata as Record<string, unknown>) || null,
+    };
+
+    // Fetch touchpoints, engagement metrics, and provider context in parallel
+    const [touchpoints, engagement, providerContext] = await Promise.all([
       getTouchpoints(id),
       getEngagementMetrics(tracking.business_profile_id),
+      getProviderContext(profileData),
     ]);
 
-    return NextResponse.json({ tracking, touchpoints, engagement });
+    return NextResponse.json({ tracking, touchpoints, engagement, context: providerContext });
   } catch (e) {
     console.error("[provider-growth] GET [id] error:", e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

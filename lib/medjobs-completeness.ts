@@ -100,13 +100,13 @@ export function getSectionCompleteness(
   const schedulePercent = Math.round((scheduleDone / scheduleItems.length) * 100);
 
   // 4. Availability & Commitment
-  const hasHours = !!meta.hours_per_week_range;
   const hasCommitment = !!(meta.commitment_statement && meta.commitment_statement.length >= 50);
-  const hasDuration = !!meta.duration_commitment;
+  const hasSeasonalAvailability = meta.year_round_availability
+    ? Object.keys(meta.year_round_availability).length > 0
+    : false;
   const availabilityItems = [
-    { key: "hours", label: "Hours per week", done: hasHours },
-    { key: "duration", label: "Duration commitment", done: hasDuration },
     { key: "statement", label: "Commitment statement", done: hasCommitment },
+    { key: "seasonal", label: "Seasonal availability", done: hasSeasonalAvailability },
   ];
   const availabilityDone = availabilityItems.filter((i) => i.done).length;
   const availabilityPercent = Math.round((availabilityDone / availabilityItems.length) * 100);

@@ -53,7 +53,7 @@ const MAX_SENDS_PER_RUN = 20;
 const RETRYABLE_SKIPS = new Set(["send_failed", "reservation_failed", "nudge_cap"]);
 
 const SEND_ROW_SELECT =
-  "id, provider_id, provider_slug, display_name, requested_setup_week, flight_start_date, channel, campaign_tag, intended_monthly_budget, ad_spend_cents, ad_clicks, ad_impressions, created_at";
+  "id, provider_id, provider_slug, display_name, requested_setup_week, flight_start_date, channel, campaign_tag, intended_monthly_budget, ad_spend_cents, ad_clicks, ad_impressions, metrics_source, created_at";
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get("authorization");

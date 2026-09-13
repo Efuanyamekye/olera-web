@@ -6,7 +6,7 @@ import {
   createTouchpoint,
 } from "@/lib/provider-growth/queries";
 import { generateBookingUrl } from "@/lib/provider-growth/calendly";
-import { canTransitionTo, MEETING_TYPES, MEETING_FOCUS_OPTIONS, type MeetingType, type MeetingFocus } from "@/lib/provider-growth/stages";
+import { canTransitionTo, MEETING_TYPES, MEETING_FOCUS_OPTIONS, MEETING_FORMAT_OPTIONS, type MeetingType, type MeetingFocus, type MeetingFormat } from "@/lib/provider-growth/stages";
 
 /**
  * POST /api/admin/provider-growth/schedule-meeting
@@ -42,6 +42,8 @@ export async function POST(request: NextRequest) {
       // Meeting tags
       meeting_type,
       meeting_focus,
+      meeting_format,
+      meeting_phone,
     } = body;
 
     if (!tracking_id) {
@@ -63,6 +65,10 @@ export async function POST(request: NextRequest) {
       const validMeetingFocus: MeetingFocus | undefined = meeting_focus && MEETING_FOCUS_OPTIONS.includes(meeting_focus)
         ? meeting_focus
         : undefined;
+      // Default to video if not specified
+      const validMeetingFormat: MeetingFormat = meeting_format && MEETING_FORMAT_OPTIONS.includes(meeting_format)
+        ? meeting_format
+        : "video";
 
       if (!validMeetingType || !validMeetingFocus) {
         return NextResponse.json(
@@ -91,6 +97,8 @@ export async function POST(request: NextRequest) {
           calendly_event_id: calendly_event_id || null,
           meeting_type: validMeetingType,
           meeting_focus: validMeetingFocus,
+          meeting_format: validMeetingFormat,
+          meeting_phone: validMeetingFormat === "phone" ? (meeting_phone || null) : null,
           reminder_2d_sent_at: null,
           reminder_1d_sent_at: null,
         },
@@ -107,6 +115,8 @@ export async function POST(request: NextRequest) {
           method: "manual",
           meeting_type: validMeetingType,
           meeting_focus: validMeetingFocus,
+          meeting_format: validMeetingFormat,
+          meeting_phone: validMeetingFormat === "phone" ? meeting_phone : undefined,
         },
         admin_user_id: adminUser.id,
       });

@@ -6,7 +6,7 @@
  */
 
 import { getServiceClient } from "@/lib/admin";
-import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource, MeetingType, MeetingFocus } from "./stages";
+import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource, MeetingType, MeetingFocus, MeetingFormat } from "./stages";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -24,6 +24,8 @@ export interface ProviderGrowthTracking {
   meeting_completed_at: string | null;
   meeting_type: MeetingType | null;
   meeting_focus: MeetingFocus | null;
+  meeting_format: MeetingFormat | null;
+  meeting_phone: string | null;
   pitched_at: string | null;
   pitched_ads: boolean;
   pitched_medjobs: boolean;
@@ -851,6 +853,8 @@ export interface UpdateTrackingInput {
   meeting_completed_at?: string;
   meeting_type?: MeetingType | null;
   meeting_focus?: MeetingFocus | null;
+  meeting_format?: MeetingFormat | null;
+  meeting_phone?: string | null;
   pitched_at?: string;
   pitched_ads?: boolean;
   pitched_medjobs?: boolean;

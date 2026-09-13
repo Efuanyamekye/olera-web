@@ -60,13 +60,26 @@ export function slackNewLead(opts: {
   familyName: string;
   providerName: string;
   careType: string | null;
+  /**
+   * Ad Boost campaign tag when the managed-UTM cookie attributed this inquiry
+   * to a campaign, otherwise null/undefined. Pass `managedUtm?.utmCampaign`.
+   *
+   * Attributed inquiries are the Ad Boost programme's KPI and there have been
+   * seven in its entire history, yet until 2026-09-07 every inquiry looked
+   * identical in Slack — telling an ad-driven lead from an organic one meant
+   * querying provider_activity by hand. A campaign spending real money on a
+   * provider's behalf must announce itself when it works.
+   */
+  adCampaign?: string | null;
 }): { text: string; blocks: SlackBlock[] } {
+  const paid = Boolean(opts.adCampaign);
+  const headline = paid ? "💸 Ad Boost lead" : "🔔 New Care Inquiry";
   return {
-    text: `New lead: ${opts.familyName} → ${opts.providerName}`,
+    text: `${headline}: ${opts.familyName} → ${opts.providerName}`,
     blocks: [
       {
         type: "header",
-        text: { type: "plain_text", text: "🔔 New Care Inquiry", emoji: true },
+        text: { type: "plain_text", text: headline, emoji: true },
       },
       {
         type: "section",
@@ -76,6 +89,12 @@ export function slackNewLead(opts: {
           ...(opts.careType
             ? [{ type: "mrkdwn", text: `*Care Type:*\n${opts.careType}` }]
             : []),
+          {
+            type: "mrkdwn",
+            text: paid
+              ? `*Source:*\nAd Boost · \`${opts.adCampaign}\``
+              : "*Source:*\nOrganic or direct",
+          },
         ],
       },
     ],
@@ -2041,14 +2060,22 @@ export function slackCityLead(opts: {
 export function slackCityQuizStarted(opts: {
   city: string;
   recipientLabel: string | null;
+  /** What kind of help. Every landing arm captures this; only one captures
+   *  the recipient, which is why the headline leads with care type. */
+  careLabel?: string | null;
+  /** Which landing-page arm they are on, so whoever calls knows what they saw. */
+  arm?: string | null;
   channel: string | null;
   campaignTag?: string | null;
   paid: boolean;
   adminUrl: string;
 }): { text: string; blocks: SlackBlock[] } {
   const source = opts.paid ? opts.channel ?? "paid" : "direct, no campaign";
-  const caring = opts.recipientLabel ? ` · caring for ${opts.recipientLabel}` : "";
-  const text = `✍️ Started the form · ${opts.city} (${source})${caring}`;
+  // Care type first because all three arms have it; recipient only when the
+  // arm actually asked for it.
+  const what = opts.careLabel ? ` · ${opts.careLabel}` : "";
+  const caring = opts.recipientLabel ? ` · for ${opts.recipientLabel}` : "";
+  const text = `✍️ Reached the contact step · ${opts.city} (${source})${what}${caring}`;
   return {
     text,
     blocks: [
@@ -2061,7 +2088,7 @@ export function slackCityQuizStarted(opts: {
         elements: [
           {
             type: "mrkdwn",
-            text: `No contact details yet — nothing to act on unless they finish.${opts.campaignTag ? ` · \`${opts.campaignTag}\`` : ""} · <${opts.adminUrl}|Open the queue>`,
+            text: `No contact details yet — nothing to act on unless they finish.${opts.arm ? ` · page \`${opts.arm}\`` : ""}${opts.campaignTag ? ` · \`${opts.campaignTag}\`` : ""} · <${opts.adminUrl}|Open the queue>`,
           },
         ],
       },

@@ -42,6 +42,20 @@ export interface CampaignRequest {
   /** When the three fields above were last saved. NULL = entered before this
    *  was tracked (2026-08-20), so their age is unknown. */
   metrics_updated_at?: string | null;
+  /** Where those three came from, and so whether the provider is allowed to see
+   *  them: `script` (hourly Google Ads Script), `verified` (an admin read them
+   *  off the platform and entered them here), `typed` / null (historical, never
+   *  re-checked -- withheld). See `lib/ad-boost/metrics-provenance.ts`. Keep
+   *  this on the type: it has now been forgotten twice in admin plumbing, once
+   *  in a row SELECT that would have blanked every synced campaign's figures,
+   *  and TypeScript cannot catch it where a whole row object is passed. */
+  metrics_source?: string | null;
+  /** The ad-platform campaign id this flight maps to. The hourly sync joins on
+   *  this and only this -- it never matches on name -- so an unmapped flight
+   *  syncs nothing and falls back to hand-typed figures the provider-facing
+   *  gate then withholds. Must be unique across flights: two rows sharing an id
+   *  means one campaign's figures are written onto both. */
+  platform_campaign_id?: string | null;
   /** Idempotency markers for request/readiness messages. A value means the
    *  provider communication completed successfully. */
   queued_email_sent_at?: string | null;

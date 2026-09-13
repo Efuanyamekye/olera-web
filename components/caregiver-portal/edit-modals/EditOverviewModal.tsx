@@ -68,9 +68,24 @@ export default function EditOverviewModal({
   const [displayName, setDisplayName] = useState(profile.display_name || "");
   const [university, setUniversity] = useState(meta.university || "");
   const [major, setMajor] = useState(meta.major || "");
-  const [city, setCity] = useState(profile.city || "");
-  const [state, setState] = useState(profile.state || "");
   const [photoUrl, setPhotoUrl] = useState(profile.image_url || "");
+
+  // Auto-populate city/state from university if missing
+  const initialCityState = (() => {
+    if (profile.city && profile.state) {
+      return { city: profile.city, state: profile.state };
+    }
+    // Try to match existing university to our list
+    const match = UNIVERSITIES.find(
+      (u) => u.name.toLowerCase().trim() === (meta.university || "").toLowerCase().trim()
+    );
+    if (match?.city && match?.state) {
+      return { city: match.city, state: match.state };
+    }
+    return { city: "", state: "" };
+  })();
+  const [city, setCity] = useState(initialCityState.city);
+  const [state, setState] = useState(initialCityState.state);
 
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -466,16 +481,51 @@ export default function EditOverviewModal({
               </div>
             )}
 
-            {/* Show selected location */}
-            {university && city && state && (
-              <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span>{city}, {state}</span>
+          </div>
+
+          {/* City / State */}
+          <div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  City
+                </label>
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="e.g. Austin"
+                  className="w-full bg-white border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all"
+                />
               </div>
-            )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  State
+                </label>
+                <input
+                  type="text"
+                  value={state}
+                  onChange={(e) => {
+                    // Only allow letters, uppercase, max 2 chars
+                    const letters = e.target.value.replace(/[^a-zA-Z]/g, "").toUpperCase().slice(0, 2);
+                    setState(letters);
+                  }}
+                  placeholder="TX"
+                  maxLength={2}
+                  className="w-full bg-white border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all uppercase"
+                />
+              </div>
+            </div>
+            {/* Hint: both needed for completeness */}
+            {(city || state) && !(city && state) ? (
+              <p className="mt-2 text-xs text-amber-600">
+                Both city and state are needed for profile completeness
+              </p>
+            ) : !city && !state ? (
+              <p className="mt-2 text-xs text-gray-400">
+                Location helps providers find you
+              </p>
+            ) : null}
           </div>
 
           {/* Major / Program of Study */}

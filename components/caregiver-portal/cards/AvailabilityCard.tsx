@@ -97,7 +97,7 @@ export default function AvailabilityCard({ meta, onEdit }: AvailabilityCardProps
             </div>
           )}
 
-          {/* Year-round availability */}
+          {/* Year-round availability - neutral with subtle current season accent */}
           {hasSeasonalAvailability && (
             <div className="pt-3 border-t border-gray-100">
               <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Seasonal Availability</p>
@@ -109,16 +109,16 @@ export default function AvailabilityCard({ meta, onEdit }: AvailabilityCardProps
                     <div
                       key={season}
                       className={`rounded-lg p-2 text-center ${
-                        isCurrent ? "bg-primary-50 ring-1 ring-primary-200" : "bg-gray-50"
+                        isCurrent ? "bg-gray-100 ring-1 ring-gray-300" : "bg-gray-50"
                       }`}
                     >
                       <p className={`text-[10px] font-semibold uppercase tracking-wider ${
-                        isCurrent ? "text-primary-600" : "text-gray-400"
+                        isCurrent ? "text-gray-700" : "text-gray-400"
                       }`}>
                         {SEASON_LABELS[season]}
                       </p>
                       <p className={`text-xs font-medium mt-0.5 ${
-                        data?.status ? (isCurrent ? "text-primary-700" : "text-gray-700") : "text-gray-400"
+                        data?.status ? "text-gray-700" : "text-gray-400"
                       }`}>
                         {data?.status ? getShortStatus(data.status) : "—"}
                       </p>
@@ -129,14 +129,14 @@ export default function AvailabilityCard({ meta, onEdit }: AvailabilityCardProps
             </div>
           )}
 
-          {/* Pledges */}
+          {/* Pledges - neutral chips */}
           {hasPledges && (
             <div className="flex flex-wrap gap-2 pt-2">
               {meta.prn_willing && (
-                <span className="text-xs px-2.5 py-1 bg-primary-50 text-primary-700 rounded-full font-medium">PRN willing</span>
+                <span className="text-xs px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full font-medium">PRN willing</span>
               )}
               {meta.advance_notice_pledge && (
-                <span className="text-xs px-2.5 py-1 bg-primary-50 text-primary-700 rounded-full font-medium">Schedule pledge</span>
+                <span className="text-xs px-2.5 py-1 bg-gray-100 text-gray-700 rounded-full font-medium">Schedule pledge</span>
               )}
             </div>
           )}

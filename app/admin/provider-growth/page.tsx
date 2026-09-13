@@ -45,11 +45,9 @@ export default function ProviderGrowthPage() {
       return { type: "pipeline", stage: "new_claim", subTab };
     }
 
-    // Check for meeting_scheduled with subtab (Ads/MedJobs/Both)
+    // Meeting Scheduled has no subtabs - show all meetings, focus shown as badge
     if (tab === "meeting_scheduled") {
-      const validSubTabs = ["ads", "medjobs", "both"];
-      const subTab = sub && validSubTabs.includes(sub) ? (sub as "ads" | "medjobs" | "both") : "ads";
-      return { type: "pipeline", stage: "meeting_scheduled", subTab };
+      return { type: "pipeline", stage: "meeting_scheduled" };
     }
 
     // Check for pitched (Follow-up) with subtab
@@ -164,12 +162,9 @@ export default function ProviderGrowthPage() {
             params.set("pipelineStage", "pitched");
           }
         } else if (activeTab.stage === "meeting_scheduled") {
-          // Meeting Scheduled now includes both meeting_scheduled and upgrade_meeting stages
-          // The API will filter by meetingFocus if provided
+          // Meeting Scheduled shows all meetings (both meeting_scheduled and upgrade_meeting)
+          // No subtabs - meeting focus is displayed as a badge on each row
           params.set("pipelineStage", "meeting_scheduled,upgrade_meeting");
-          if (activeTab.subTab) {
-            params.set("meetingFocus", activeTab.subTab);
-          }
         } else {
           params.set("pipelineStage", activeTab.stage);
         }
@@ -250,8 +245,8 @@ export default function ProviderGrowthPage() {
 
     // Update URL
     if (tab.type === "pipeline") {
-      // Include subtab for tabs that have them
-      if ((tab.stage === "new_claim" || tab.stage === "meeting_scheduled" || tab.stage === "pitched") && tab.subTab) {
+      // Include subtab for tabs that have them (new_claim and pitched have subtabs, meeting_scheduled does not)
+      if ((tab.stage === "new_claim" || tab.stage === "pitched") && tab.subTab) {
         router.push(`/admin/provider-growth?tab=${tab.stage}&sub=${tab.subTab}`, { scroll: false });
       } else {
         router.push(`/admin/provider-growth?tab=${tab.stage}`, { scroll: false });

@@ -1,5 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { buildChannelRollup, type RollupCampaign, type RollupLead } from "@/lib/city-ads/channel-rollup";
+import { buildArmRollup, type ArmEvent, type ArmLead } from "@/lib/city-ads/arm-rollup";
+
+/**
+ * When the three landing arms went live. Everything before it saw a different
+ * page and is excluded from the arm rollup.
+ *
+ * Set this to the deploy timestamp the moment the arms reach production. Null
+ * means "count everything", which is correct only while nothing has shipped —
+ * the arm metadata does not exist on earlier events, so they contribute nothing
+ * either way.
+ */
+const ARM_WINDOW_START: string | null = null;
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { acceptOffer, declineOffer, startOrAdvance, type CityOfferRow } from "@/lib/city-ads/offers.server";
 import { sendSMS } from "@/lib/twilio";
@@ -65,7 +77,7 @@ export async function GET() {
   // quietly understate whichever channel ran earliest.
   const { data: rollupLeads } = await db
     .from("city_leads")
-    .select("slug, utm_source, utm_medium, gclid, fbclid, is_test, created_at");
+    .select("slug, utm_source, utm_medium, gclid, fbclid, is_test, created_at, landing_arm");
 
   const providerIds = Array.from(
     new Set([...(pool ?? []).map((p) => p.provider_id as string), ...(offers ?? []).map((o) => o.provider_id as string)]),
@@ -75,9 +87,34 @@ export async function GET() {
     : { data: [] as Record<string, unknown>[] };
   const byId = new Map((providers ?? []).map((p) => [p.id as string, p]));
 
+  // The arm funnel. Read from growth events rather than from the lead table
+  // because two of its three numbers — landings and engagement — exist only as
+  // events; the third comes from city_leads.landing_arm, which is why that
+  // column exists.
+  //
+  // BOUNDED BY THE WINDOW, NOT JUST BY A ROW CAP. Ordered ascending with a cap,
+  // the rows dropped on overflow would be the NEWEST ones — the table would
+  // quietly stop moving while looking fine. Filtering on the window keeps the
+  // set small enough that the cap never binds, and descending order means that
+  // if it ever did, it sheds the oldest instead.
+  let armQuery = db
+    .from("growth_attribution_events")
+    .select("event_type, anonymous_id, visit_id, occurred_at, metadata")
+    .eq("page_category", "city_landing")
+    .in("event_type", ["page_landed", "cta_engaged", "provider_expanded"]);
+  if (ARM_WINDOW_START) armQuery = armQuery.gte("occurred_at", ARM_WINDOW_START);
+  const { data: armEvents } = await armQuery
+    .order("occurred_at", { ascending: false })
+    .limit(20000);
+
   return NextResponse.json({
     lastClockRun: lastRun?.started_at ?? null,
     campaigns: campaigns ?? [],
+    armRollup: buildArmRollup(
+      (armEvents ?? []) as unknown as ArmEvent[],
+      (rollupLeads ?? []) as unknown as ArmLead[],
+      ARM_WINDOW_START,
+    ),
     channelRollup: buildChannelRollup(
       (campaigns ?? []) as unknown as RollupCampaign[],
       (rollupLeads ?? []) as unknown as RollupLead[],

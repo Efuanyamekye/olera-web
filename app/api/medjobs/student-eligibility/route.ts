@@ -19,6 +19,7 @@ import { sanitizeReferral } from "@/lib/medjobs/apply-link";
 import { sendEmail } from "@/lib/email";
 import { studentReturningEmail } from "@/lib/medjobs-email-templates";
 import { calculateCompleteness } from "@/lib/medjobs-completeness";
+import { sendSlackAlert, slackMedJobsNewStudent } from "@/lib/slack";
 import type { IntendedProfessionalSchool, StudentProgramTrack, StudentMetadata } from "@/lib/types";
 import {
   STUDENT_ELIGIBILITY_COMPLETED_KEY,
@@ -258,6 +259,19 @@ export async function POST(request: NextRequest) {
     } catch (err) {
       // Non-blocking: profile exists; the student can sign in later via email.
       console.error("[medjobs/student-eligibility] account creation error:", err);
+    }
+
+    // Fire-and-forget: Slack alert for new student signup
+    try {
+      const alert = slackMedJobsNewStudent({
+        studentName: displayName,
+        university: university || "Not specified",
+        programTrack: body.careerPath || "Not specified",
+        location: [body.city, body.state].filter(Boolean).join(", ") || "Not specified",
+      });
+      await sendSlackAlert(alert.text, alert.blocks);
+    } catch (err) {
+      console.error("[medjobs/student-eligibility] slack error:", err);
     }
 
     return NextResponse.json({

@@ -72,8 +72,8 @@ export default function ScenariosCard({ meta, onEdit }: ScenariosCardProps) {
                   key={q.key}
                   className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                     isDone
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "bg-gray-100 text-gray-400"
+                      ? "bg-gray-100 text-gray-700"
+                      : "bg-gray-50 text-gray-400"
                   }`}
                 >
                   {isDone ? (

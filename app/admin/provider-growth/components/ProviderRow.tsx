@@ -13,7 +13,8 @@ import {
   type AdsStatus,
   type MedjobsStatus,
   type MeetingType,
-  MEETING_TYPE_LABELS,
+  type MeetingFocus,
+  type MeetingFormat,
 } from "@/lib/provider-growth/stages";
 import { EligibilityBadges } from "./EligibilityBadges";
 
@@ -136,9 +137,11 @@ export function ProviderRow({ provider, onClick, onDelete, selected }: ProviderR
             {/* Meeting/pitch info */}
             {(provider.pipeline_stage === "meeting_scheduled" || provider.pipeline_stage === "upgrade_meeting") && provider.meeting_scheduled_at && (
               <>
-                {provider.meeting_type && (
-                  <MeetingTypeBadge type={provider.meeting_type as MeetingType} />
-                )}
+                <MeetingBadge
+                  type={provider.meeting_type as MeetingType | null}
+                  focus={provider.meeting_focus as MeetingFocus | null}
+                  format={provider.meeting_format as MeetingFormat | null}
+                />
                 <span className="text-xs font-medium text-blue-600">
                   {formatDate(provider.meeting_scheduled_at)}
                 </span>
@@ -353,19 +356,42 @@ function InterestBadge({ level }: { level: string }) {
   );
 }
 
-function MeetingTypeBadge({ type }: { type: MeetingType }) {
-  const config: Record<MeetingType, { label: string; className: string }> = {
-    new: { label: "New", className: "bg-blue-50 text-blue-700 border-blue-200" },
-    upgrade: { label: "Upgrade", className: "bg-amber-50 text-amber-700 border-amber-200" },
+function MeetingBadge({ type, focus, format }: { type: MeetingType | null; focus: MeetingFocus | null; format: MeetingFormat | null }) {
+  const focusLabels: Record<MeetingFocus, string> = {
+    ads: "Ads",
+    medjobs: "MedJobs",
+    both: "Both",
   };
 
-  const { label, className } = config[type];
+  const focusLabel = focus ? focusLabels[focus] : null;
+  const isUpgrade = type === "upgrade";
+  const isPhoneCall = format === "phone";
+
+  // Build clear, self-explanatory label
+  let label: string;
+  if (isUpgrade) {
+    label = focusLabel ? `Upgrade: ${focusLabel}` : "Upgrade Meeting";
+  } else {
+    label = focusLabel ? `Scheduled for ${focusLabel}` : "Meeting Scheduled";
+  }
+
+  // Color: phone calls get green, upgrades amber, new meetings blue
+  const colorClass = isPhoneCall
+    ? "bg-green-50 text-green-700 border-green-200"
+    : isUpgrade
+    ? "bg-amber-50 text-amber-700 border-amber-200"
+    : "bg-blue-50 text-blue-700 border-blue-200";
 
   return (
     <span
-      className={`inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded border ${className}`}
-      title={MEETING_TYPE_LABELS[type]}
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-medium rounded border ${colorClass}`}
+      title={`${isUpgrade ? "Upgrade" : "New"} ${isPhoneCall ? "phone call" : "video call"} for ${focusLabel || "products"}`}
     >
+      {isPhoneCall && (
+        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+      )}
       {label}
     </span>
   );
@@ -413,27 +439,44 @@ function formatClaimDate(isoDate: string): string {
 
 function formatDate(isoDate: string): string {
   const date = new Date(isoDate);
-  const now = new Date();
-  const isToday = date.toDateString() === now.toDateString();
-  const isTomorrow =
-    date.toDateString() === new Date(now.getTime() + 86400000).toDateString();
+  // Compare dates in Eastern Time for accurate "Today"/"Tomorrow" detection
+  const etFormatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/New_York",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const etDateStr = etFormatter.format(date);
+  const nowEtStr = etFormatter.format(new Date());
+
+  // Get tomorrow in ET by parsing today's ET date and adding 1 day
+  // This handles DST correctly (avoids 24-hour assumption)
+  const [month, day, year] = nowEtStr.split("/").map(Number);
+  const tomorrowInET = new Date(year, month - 1, day + 1, 12, 0, 0); // noon to avoid edge cases
+  const tomorrowEtStr = etFormatter.format(tomorrowInET);
+
+  const isToday = etDateStr === nowEtStr;
+  const isTomorrow = etDateStr === tomorrowEtStr;
 
   if (isToday) {
     return `Today ${date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
-    })}`;
+      timeZone: "America/New_York",
+    })} ET`;
   }
   if (isTomorrow) {
     return `Tomorrow ${date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
-    })}`;
+      timeZone: "America/New_York",
+    })} ET`;
   }
-  return date.toLocaleDateString("en-US", {
+  return `${date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     hour: "numeric",
     minute: "2-digit",
-  });
+    timeZone: "America/New_York",
+  })} ET`;
 }

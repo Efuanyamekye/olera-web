@@ -1,4 +1,5 @@
 import { getServiceClient } from "@/lib/admin";
+import { isTrustedMetricsSource } from "@/lib/ad-boost/metrics-provenance";
 import {
   getCampaignQuestions,
   getCampaignStats,
@@ -79,6 +80,15 @@ export interface ReceiptRequestRow {
   ad_impressions: number | null;
   ad_clicks: number | null;
   ad_spend_cents: number | null;
+  /**
+   * Where those three came from. Added 2026-09-11 with the Google Ads Script
+   * sync. Anything that is not 'script' was typed by a human into the admin
+   * form, and those have been wrong by two orders of magnitude -- Edmonds
+   * Villa's August flight was recorded as $0.00 / 4 impressions against a real
+   * $43.52 / 391. Optional because older callers do not select it; absent is
+   * treated exactly like 'typed'.
+   */
+  metrics_source?: string | null;
   /** Whole-flight answer for families who called or visited the provider
    * directly and therefore never created an Olera lead row. */
   provider_reported_outcome?: "client" | "talking" | "no" | null;
@@ -123,9 +133,26 @@ export async function getCampaignReceipt(
     outcomes[request.provider_reported_outcome] += 1;
   }
 
-  const impressions = request.ad_impressions ?? null;
-  const clicks = request.ad_clicks ?? null;
-  const spendCents = request.ad_spend_cents ?? null;
+  // ONLY SYNCED FIGURES REACH A PROVIDER'S SCREEN.
+  //
+  // This receipt is shown to the provider whose money it describes, and until
+  // 2026-09-11 these three columns were typed by hand into the admin form. They
+  // were wrong often enough to be unusable: Edmonds Villa's August flight sat at
+  // $0.00 / 4 impressions while Google reported $43.52 / 391.
+  //
+  // A wrong number here is worse than a missing one. CampaignReceiptBlock
+  // already omits rows whose value is null, so withholding an untrusted figure
+  // costs a row; printing it costs the credibility of every other number on the
+  // page.
+  //
+  // This gate applies to the admin preview too, and that is deliberate: the
+  // receipt admin renders IS the provider's receipt, so the two must agree. The
+  // raw typed figures stay visible to admin where they are actually needed --
+  // the ad-boost detail page, which is the form they were typed into.
+  const metricsTrusted = isTrustedMetricsSource(request.metrics_source);
+  const impressions = metricsTrusted ? (request.ad_impressions ?? null) : null;
+  const clicks = metricsTrusted ? (request.ad_clicks ?? null) : null;
+  const spendCents = metricsTrusted ? (request.ad_spend_cents ?? null) : null;
   const ctr =
     impressions != null && impressions > 0 && clicks != null
       ? Math.round((clicks / impressions) * 1000) / 10

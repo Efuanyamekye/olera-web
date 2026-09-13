@@ -68,6 +68,9 @@ const nextConfig: NextConfig = {
       { source: "/provider-portal/matches", destination: "/portal/profile", permanent: true },
       { source: "/provider-portal/benefits", destination: "/benefits", permanent: true },
       { source: "/provider-portal/availability", destination: "/portal/calendar", permanent: true },
+      // v1.0 served provider detail pages under the portal prefix too. Still in
+      // Google's index and still 404ing; the detail page itself is /provider/:slug.
+      { source: "/provider-portal/provider/:slug", destination: "/provider/:slug", permanent: true },
 
       // Tier 1: Legal page redirects → dedicated v2 pages
       { source: "/terms-and-conditions", destination: "/terms", permanent: true },
@@ -136,6 +139,12 @@ const nextConfig: NextConfig = {
       { source: "/provider/:slug/edit-images", destination: "/provider/:slug", permanent: true },
       { source: "/provider/:slug/edit-prices", destination: "/provider/:slug", permanent: true },
       { source: "/provider/:slug/status", destination: "/provider/:slug", permanent: true },
+      // v1.0's review form lived under the provider page; v2 serves it at
+      // /review/:slug (app/api/review-requests builds that shape). This entry was
+      // missed when the rest of the suffix family was ported, and the leftover
+      // URLs are ~25% of everything GSC reports as Not found — 197 of the 254 in
+      // the sample have a live provider page at the un-suffixed slug.
+      { source: "/provider/:slug/review", destination: "/provider/:slug", permanent: true },
 
       // Tier 4: v1.0 CMS pages catch-all
       { source: "/pages/:slug", destination: "/", permanent: true },

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getServiceClient } from "@/lib/admin";
+import { countDeliveredByCampaign } from "@/lib/ad-boost/delivered.server";
+import { isTrustedMetricsSource } from "@/lib/ad-boost/metrics-provenance";
 
 /**
  * GET /api/provider/dashboard
@@ -111,6 +113,7 @@ export async function GET(request: NextRequest) {
       oleraGeoRes,
       publishedFamiliesRes,
       adBoostRequestRes,
+      latestCampaignRes,
     ] = await Promise.all([
       // All provider_activity events in the prior+current window for delta
       // + activity feed. 20k limit should be ample for a single provider.
@@ -192,6 +195,23 @@ export async function GET(request: NextRequest) {
         .select("id, status")
         .eq("provider_id", profile.id)
         .in("status", ["pending_profile", "requested", "scheduled", "live"])
+        .limit(1)
+        .maybeSingle(),
+
+      // The provider's most recent campaign, whatever its status. Deliberately
+      // SEPARATE from the query above rather than a widening of it: that one
+      // has three existing consumers keyed on "is there an active request",
+      // and an `ended` row is newer than a `live` one often enough that
+      // folding them together would silently flip that flag. Two indexed
+      // single-row reads on the same provider_id cost less than that risk.
+      db
+        .from("ad_campaign_requests")
+        .select(
+          "id, status, campaign_tag, ad_impressions, ad_clicks, ad_spend_cents, metrics_source, flight_end_date, ended_at",
+        )
+        .eq("provider_id", profile.id)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle(),
     ]);
@@ -468,6 +488,73 @@ export async function GET(request: NextRequest) {
       newLeadsThisPeriod: leads.filter((l) => new Date(l.created_at) >= windowStart).length,
     };
 
+    // ── The provider's campaign, for the hero ────────────────────────────────
+    //
+    // Only a flight that actually ran. `requested` / `scheduled` have nothing
+    // to report and would put a promise in the most prominent slot on the page.
+    //
+    // AN ENDED FLIGHT EXPIRES. It stays eligible for ENDED_HERO_WINDOW_DAYS so
+    // the wrap-up lands while it still means something and the renewal ask has
+    // somewhere to live. After that it falls out and the hero returns to normal
+    // priority — a flight from six months ago is not news.
+    //
+    // THE FIGURES ARE GATED ON PROVENANCE, exactly as the receipt gates them
+    // (`lib/ad-boost/receipts.server.ts`). `ad_impressions` / `ad_clicks` /
+    // `ad_spend_cents` were hand-typed for this product's whole life and were
+    // wrong often enough to be unusable — Edmonds Villa's August flight sat at
+    // $0.00 / 4 impressions against a real $43.52 / 391. Only script-synced
+    // numbers reach a provider. A missing figure costs a sentence; a wrong one
+    // in the first thing they see on login costs the page.
+    const ENDED_HERO_WINDOW_DAYS = 14;
+    const campaignRow = latestCampaignRes.data;
+    let campaign: {
+      status: "live" | "ended";
+      shown: number | null;
+      clicked: number | null;
+      spendCents: number | null;
+      leads: number;
+    } | null = null;
+
+    if (campaignRow && (campaignRow.status === "live" || campaignRow.status === "ended")) {
+      const endedAnchor = campaignRow.ended_at || campaignRow.flight_end_date;
+      // An ended row with no anchor at all is treated as EXPIRED, not as
+      // ended-just-now. Both paths that end a flight set `ended_at` (the
+      // scheduler and the admin status flip) so this should be unreachable,
+      // and no such row exists today -- but the two defaults fail in opposite
+      // directions, and the wrong one pins a mystery campaign to the top of
+      // the dashboard permanently with nobody able to say when it ran.
+      const withinWindow =
+        campaignRow.status === "live" ||
+        (!!endedAnchor &&
+          (Date.now() - new Date(endedAnchor).getTime()) / 86_400_000 <=
+            ENDED_HERO_WINDOW_DAYS);
+
+      if (withinWindow) {
+        const trusted = isTrustedMetricsSource(campaignRow.metrics_source);
+        // Effective tag is `campaign_tag || id`, matching the ad links — so the
+        // count is right whether or not a tag was set explicitly.
+        const tag = campaignRow.campaign_tag || campaignRow.id;
+        // Isolated on purpose. This is the one query in the whole payload that
+        // exists only for a banner, and it is the newest: before this the
+        // dashboard had no dependency on the ad-boost readers at all. A lead
+        // count that fails should cost the campaign banner its strongest line,
+        // not 500 the entire provider dashboard.
+        let delivered: Record<string, number> = {};
+        try {
+          delivered = await countDeliveredByCampaign(db, [tag]);
+        } catch (e) {
+          console.error("[provider/dashboard] campaign lead count failed:", e);
+        }
+        campaign = {
+          status: campaignRow.status,
+          shown: trusted ? (campaignRow.ad_impressions ?? null) : null,
+          clicked: trusted ? (campaignRow.ad_clicks ?? null) : null,
+          spendCents: trusted ? (campaignRow.ad_spend_cents ?? null) : null,
+          leads: delivered[tag] ?? 0,
+        };
+      }
+    }
+
     return NextResponse.json({
       profile: {
         id: profile.id,
@@ -496,6 +583,10 @@ export async function GET(request: NextRequest) {
       // requested, scheduled, or live). Used to show reviews banner instead of
       // managed_ads banner on the dashboard.
       hasActiveBoostRequest: !!adBoostRequestRes.data,
+      // The live-or-recently-ended flight, for the hero's campaign banner.
+      // Null when there is no campaign, when it never ran, or when it ended
+      // more than two weeks ago.
+      campaign,
     });
   } catch (err) {
     console.error("[provider/dashboard] fatal:", err);

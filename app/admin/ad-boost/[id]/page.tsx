@@ -21,6 +21,7 @@ import {
   fmtMetricsAge,
 } from "@/components/admin/AdBoostShared";
 import AdBoostCaseTimeline from "@/components/admin/AdBoostCaseTimeline";
+import { isTrustedMetricsSource } from "@/lib/ad-boost/metrics-provenance";
 import { etInputToUtcIso, toEtInputValue, formatEt } from "@/lib/eastern-time";
 import {
   type AdBoostAttentionLevel,
@@ -172,6 +173,7 @@ function Detail({
   );
   const [budgetType, setBudgetType] = useState(request.ad_budget_type ?? "");
   const [tag, setTag] = useState(request.campaign_tag ?? "");
+  const [platformId, setPlatformId] = useState(request.platform_campaign_id ?? "");
   const [note, setNote] = useState(request.admin_note ?? "");
   // Launch-email schedule: datetime-local as US EASTERN wall-clock (TJ
   // schedules from anywhere in the world — see lib/eastern-time.ts).
@@ -281,6 +283,7 @@ function Detail({
     flightBudgetCents !== request.ad_budget_cents ||
     budgetType !== (request.ad_budget_type ?? "") ||
     tag !== (request.campaign_tag ?? "") ||
+    platformId !== (request.platform_campaign_id ?? "") ||
     note !== (request.admin_note ?? "") ||
     launchEmailDirty ||
     wrapUpDirty;
@@ -317,6 +320,7 @@ function Detail({
           ad_budget_cents: flightBudgetCents,
           ad_budget_type: budgetType || null,
           campaign_tag: tag || null,
+          platform_campaign_id: platformId.trim() || null,
           admin_note: note || null,
           // Only when touched: re-sending a stored time would trip the
           // route's not-in-the-past validation between due time and the
@@ -539,13 +543,6 @@ function Detail({
           View provider record ↗
         </Link>
       </div>
-
-      {/* What actually happened to this campaign, in order. Sits above the
-          provider's other flights: the case first, then the wider history. */}
-      <AdBoostCaseTimeline
-        requestId={request.id}
-        campaignTag={request.campaign_tag}
-      />
 
       {providerCampaigns.length > 1 && (
         <CampaignHistory
@@ -904,6 +901,31 @@ function Detail({
           />
         </label>
 
+        {/* The join the hourly sync uses. It matches on this id and NOTHING else
+            -- never on campaign name -- so a flight left unmapped silently syncs
+            no figures at all, and whatever gets typed in the Performance box
+            below is withheld from the provider as unverified. Until this field
+            existed the column was settable only by raw SQL. */}
+        <label className="block text-sm mt-3">
+          <span className="block text-gray-500 mb-1">Ad-platform campaign ID</span>
+          <input
+            value={platformId}
+            onChange={(e) => setPlatformId(e.target.value)}
+            placeholder="e.g. 24223751948"
+            inputMode="numeric"
+            className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 bg-white font-mono text-[13px]"
+          />
+          <span
+            className={`mt-1.5 block text-xs ${
+              request.platform_campaign_id ? "text-gray-500" : "text-amber-600"
+            }`}
+          >
+            {request.platform_campaign_id
+              ? "Metrics sync hourly from the ad platform."
+              : "Not mapped, so nothing syncs for this flight. Copy the numeric campaign ID from the ad platform URL. The sync's run log lists unmapped campaigns under UNMATCHED."}
+          </span>
+        </label>
+
         <label className="block text-sm mt-3">
           <span className="block text-gray-500 mb-1">Note</span>
           <textarea
@@ -1050,6 +1072,19 @@ function Detail({
           {metricsAge
             ? `Ad-platform figures last entered ${metricsAge.label}.`
             : "Ad-platform figures have no recorded entry date."}
+          {/* WHETHER THE PROVIDER CAN SEE THESE. The receipt and the dashboard
+              hero both withhold figures that are neither script-synced nor
+              admin-verified, so a `typed` row shows the provider nothing while
+              showing an admin four confident tiles. Without this line that gap
+              is invisible from here, and the fix (re-enter them) is not
+              obviously the fix. */}
+          {request.metrics_source !== "script" && (
+            <span className="block mt-1">
+              {isTrustedMetricsSource(request.metrics_source)
+                ? "Verified by hand. The provider sees these."
+                : "Not verified, so the provider sees no ad figures. Re-enter them below to release them."}
+            </span>
+          )}
           {(metricsAge?.days ?? 0) >= 7 && " Re-check the dashboard before acting on them."}
         </p>
 
@@ -1177,6 +1212,15 @@ function Detail({
           </div>
         )}
       </section>
+
+      {/* What actually happened to this campaign, in order. Collapsed and last:
+          the operator comes to this page to change something, and a case with
+          thirty audit entries pushed every control several screens down. The
+          overdue-review banner inside it still renders while it is shut. */}
+      <AdBoostCaseTimeline
+        requestId={request.id}
+        campaignTag={request.campaign_tag}
+      />
 
       {/* Danger zone */}
       <section className="rounded-xl border border-gray-200 p-5">

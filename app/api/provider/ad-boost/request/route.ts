@@ -31,7 +31,7 @@ const DEMAND_WINDOW_DAYS = 7;
 // The intro's value event: the wrap-up ask arms at this many delivered leads.
 const WRAPUP_LEADS_THRESHOLD = 3;
 const REQUEST_RETURN_SELECT =
-  "id, status, requested_setup_week, channel, intended_monthly_budget, campaign_tag, created_at, plan_status, plan_value, promo_complete_email_sent_at, flight_start_date, flight_end_date, ad_budget_cents, ad_budget_type, ad_impressions, ad_clicks, ad_spend_cents, provider_reported_outcome, photo_readiness_status, photo_update_requested_at, photo_update_submitted_at";
+  "id, status, requested_setup_week, channel, intended_monthly_budget, campaign_tag, created_at, plan_status, plan_value, promo_complete_email_sent_at, flight_start_date, flight_end_date, ad_budget_cents, ad_budget_type, ad_impressions, ad_clicks, ad_spend_cents, metrics_source, provider_reported_outcome, photo_readiness_status, photo_update_requested_at, photo_update_submitted_at";
 
 export async function GET() {
   const elig = await loadAdBoostEligibility();
@@ -153,6 +153,9 @@ export async function GET() {
         ad_impressions: latest.ad_impressions ?? null,
         ad_clicks: latest.ad_clicks ?? null,
         ad_spend_cents: latest.ad_spend_cents ?? null,
+        // Without this the receipt cannot tell a synced figure from one a human
+        // typed, and this payload goes to the provider's own screen.
+        metrics_source: latest.metrics_source ?? null,
         provider_reported_outcome: latest.provider_reported_outcome ?? null,
       }),
     ]);

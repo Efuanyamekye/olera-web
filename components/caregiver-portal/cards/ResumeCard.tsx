@@ -42,7 +42,7 @@ export default function ResumeCard({ meta, onEdit }: ResumeCardProps) {
                 <p className="text-sm font-medium text-gray-900">Resume uploaded</p>
                 <p className="text-xs text-gray-400">PDF document</p>
               </div>
-              <svg className="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
@@ -60,7 +60,7 @@ export default function ResumeCard({ meta, onEdit }: ResumeCardProps) {
                 <p className="text-sm font-medium text-gray-900">LinkedIn connected</p>
                 <p className="text-xs text-gray-400 truncate">{meta.linkedin_url}</p>
               </div>
-              <svg className="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>

@@ -24,7 +24,7 @@ function escapeHtml(str: string): string {
 }
 
 /**
- * Format meeting date for display in email (always UTC to match Calendly).
+ * Format meeting date for display in email (Eastern Time - Logan's timezone).
  */
 function formatMeetingDate(date: Date): { dateStr: string; timeStr: string } {
   const dateStr = date.toLocaleDateString("en-US", {
@@ -32,14 +32,14 @@ function formatMeetingDate(date: Date): { dateStr: string; timeStr: string } {
     month: "long",
     day: "numeric",
     year: "numeric",
-    timeZone: "UTC",
+    timeZone: "America/New_York",
   });
   const timeStr = date.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
-    timeZone: "UTC",
-  }) + " UTC";
+    timeZone: "America/New_York",
+  }) + " ET";
   return { dateStr, timeStr };
 }
 

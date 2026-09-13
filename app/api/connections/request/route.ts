@@ -1026,6 +1026,7 @@ async function handleGuestConnection({
       familyName: `${firstName || "A family"} (guest)`,
       providerName,
       careType: intentData?.careType ? (careTypeMap[intentData.careType] || intentData.careType) : null,
+      adCampaign: managedUtm?.utmCampaign ?? null,
     });
     await sendSlackAlert(alert.text, alert.blocks);
   } catch {
@@ -2156,6 +2157,7 @@ export async function POST(request: Request) {
         familyName: account.display_name || "A family",
         providerName: providerName,
         careType: intentData?.careType ? (careTypeMap2[intentData.careType] || intentData.careType) : null,
+        adCampaign: managedUtm?.utmCampaign ?? null,
       });
       await sendSlackAlert(alert.text, alert.blocks);
     } catch {

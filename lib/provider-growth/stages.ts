@@ -110,6 +110,19 @@ export const MEETING_FOCUS_LABELS: Record<MeetingFocus, string> = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Meeting Format (video call vs phone call)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const MEETING_FORMAT_OPTIONS = ["video", "phone"] as const;
+
+export type MeetingFormat = (typeof MEETING_FORMAT_OPTIONS)[number];
+
+export const MEETING_FORMAT_LABELS: Record<MeetingFormat, string> = {
+  video: "Zoom Video Call",
+  phone: "Phone Call",
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Pitch Interest Levels
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -157,6 +170,21 @@ export const CLAIM_SOURCE_LABELS: Record<ClaimSource, string> = {
   completion_email: "Directory Claim",
   instant_claim: "Directory Claim",
   new_org_signup: "Self-Created",
+};
+
+/**
+ * Human-readable labels for context section display.
+ * These are more descriptive than CLAIM_SOURCE_LABELS for sales rep context.
+ */
+export const CLAIM_SOURCE_CONTEXT_LABELS: Record<ClaimSource, string> = {
+  cold_outreach: "Cold outreach",
+  city_broadcast: "City Broadcast email",
+  email: "Email link",
+  page: "Profile page",
+  lead_email: "Lead notification",
+  completion_email: "Profile completion email",
+  instant_claim: "Instant claim",
+  new_org_signup: "New signup",
 };
 
 export const CLAIM_SOURCE_COLORS: Record<ClaimSource, string> = {

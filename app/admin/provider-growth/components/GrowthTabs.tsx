@@ -6,9 +6,10 @@
  * Pipeline tabs: New Claims | Meeting Scheduled | Follow-up | Paying
  *
  * New Claims has subtabs: Not Contacted | Converted | In Progress
- * Meeting Scheduled has subtabs: Ads | MedJobs | Both (filters by meeting_focus)
  * Follow-up has subtabs: Active (pitched) | No-show (no_show) | Not Interested (not_interested)
  * Paying has subtabs: Ads | MedJobs | Both
+ *
+ * Meeting Scheduled has no subtabs - meeting focus is shown as a badge on each row
  */
 
 import type { GrowthStats } from "@/lib/provider-growth/queries";
@@ -35,11 +36,7 @@ const NEW_CLAIM_SUB_TABS: Array<{ id: NewClaimSubTab; label: string }> = [
   { id: "in_progress", label: "In Progress" },
 ];
 
-const MEETING_SUB_TABS: Array<{ id: MeetingSubTab; label: string }> = [
-  { id: "ads", label: "Ads" },
-  { id: "medjobs", label: "MedJobs" },
-  { id: "both", label: "Both" },
-];
+// Meeting Scheduled subtabs removed - meeting focus is shown as badge on each row
 
 const FOLLOW_UP_SUB_TABS: Array<{ id: FollowUpSubTab; label: string }> = [
   { id: "active", label: "Active" },
@@ -125,8 +122,7 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
   const isNewClaimSubTabActive = (id: NewClaimSubTab) =>
     activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === id;
 
-  const isMeetingSubTabActive = (id: MeetingSubTab) =>
-    activeTab.type === "pipeline" && activeTab.stage === "meeting_scheduled" && activeTab.subTab === id;
+  // Meeting Scheduled subtabs removed
 
   // Follow-up subtabs map to different stages: active=pitched, no_show=no_show, not_interested=not_interested
   // But the main tab is always "pitched" in the activeTab.stage for Follow-up
@@ -152,9 +148,9 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
               // For new_claim, default to "not_contacted" subtab
               if (tab.id === "new_claim") {
                 onTabChange({ type: "pipeline", stage: tab.id, subTab: "not_contacted" });
-              // For meeting_scheduled, default to "ads" subtab
+              // For meeting_scheduled, no subtabs - show all meetings
               } else if (tab.id === "meeting_scheduled") {
-                onTabChange({ type: "pipeline", stage: tab.id, subTab: "ads" });
+                onTabChange({ type: "pipeline", stage: tab.id });
               // For pitched (Follow-up), default to "active" subtab
               } else if (tab.id === "pitched") {
                 onTabChange({ type: "pipeline", stage: tab.id, subTab: "active" });
@@ -236,30 +232,7 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
         </div>
       )}
 
-      {/* Meeting Scheduled sub-tabs (Ads/MedJobs/Both - filters by meeting_focus) */}
-      {activeTab.type === "pipeline" && activeTab.stage === "meeting_scheduled" && (
-        <div className="flex gap-1 mt-2 pl-4">
-          {MEETING_SUB_TABS.map((subTab) => (
-            <button
-              key={subTab.id}
-              onClick={() =>
-                onTabChange({
-                  type: "pipeline",
-                  stage: "meeting_scheduled",
-                  subTab: subTab.id,
-                })
-              }
-              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
-                isMeetingSubTabActive(subTab.id)
-                  ? "bg-blue-100 text-blue-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {subTab.label}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* Meeting Scheduled has no subtabs - meeting focus shown as badge on each row */}
 
       {/* Follow-up sub-tabs (Active / No-show / Not Interested) */}
       {activeTab.type === "pipeline" && activeTab.stage === "pitched" && (
