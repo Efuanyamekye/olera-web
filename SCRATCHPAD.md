@@ -7,6 +7,32 @@
 
 ## Current Focus
 
+### 2026-09-13 — The CPL ladder rewritten around visit-intent, and the action list rebuilt on verified rather than asserted facts (`joyful-hopper`, ops only, no code)
+
+Review session on the 12 Sep CPL report (artifact `b946978d-89e6-415c-b753-cd344313252c`, v4 → v6). No product code changed. Everything below is either a correction to the report or a verified fact about live code and data that the next session should not re-derive.
+
+**TJ's objection, which is the session.** The report factored CPL into cost-per-visit and conversion, and proposed buying Meta's cheaper clicks. TJ: user intent differs by platform, so a visit is not a fungible unit. Google sells someone who typed a care query, Meta and Nextdoor sell someone who was scrolling. **The ladder multiplies a price observed on one platform by a conversion rate observed on another.** Worst cell is the $48 rung, which pairs Meta's $1.30 click with 2.7%, a rate only ever seen on Google search traffic to provider pages. The report already carried the evidence in two places without connecting them: Nextdoor's 0-from-168, and its own note that the 2.8% provider-page rate "comes almost entirely from Google search traffic," filed under confounds. Applied as provenance marks on every rung (one MEASURED, four BORROWED/TARGET), a replacement for the false "neither multiplier is speculative" note, and a new free lever the equation cannot express: **buy better intent**, i.e. measure what share of Google clicks are competitor-review lookups and exclude them.
+
+**The equation block was unreadable and is now a term grid.** It was one `white-space:nowrap` code line where `$2.45` did not sit under `cost per landed visit`. Each term now has its own column with the number under its label, plus a one-line cohort reading, because nobody can feel a division by the product of two percentages.
+
+**Next Steps went 8 → 11 items and changed ordering axis** from "by multiplier on CPL" to what is verified true today. The old axis put two forecasts at the top and buried a live phone bug in a hygiene blob.
+
+**What `/push` broke in my own rewrite, all verified against code or the database:**
+
+- **A server-only phone fix would have made things worse.** `normalizeUSPhone` (`lib/twilio.ts:238`) takes any ten digits and prefixes `+1`, so Jillanna's `1214870172` stored as `+11214870172` (area code 121 cannot exist). But `app/api/city-leads/route.ts:106` is `if (!phone) return 400`, so tightening the normaliser **rejects the submission** rather than saving it, at the highest-drop-off moment on the page whose conversion rate is the ladder's second multiplier. The client has the same defect at `app/care/[city]/CityLandingClient.tsx:378` (`length < 10`) next to an existing inline error path. **That is where the fix belongs**; the server change is a backstop and it is not three lines, it is **14 importers** including `app/api/claim/send-code/route.ts`, the provider login OTP. NANP needs two conditions: area code and exchange code must each start 2-9.
+- **The 200-click Meta stopping rule was wrong.** Fisher at 200 clicks / 1 outcome vs Google's 10/376 is **p = 0.061**. It would have declared the cheap-click half of the ladder dead on non-significant evidence, in a report that called Nextdoor at p = 0.036. **300 clicks** gives p = 0.0148 at one outcome and p = 0.0027 at zero. About $390 at $1.30/click, ~$320 incremental.
+- **Hoop Cares is not a $129/month leak.** Campaign `24235451655` **has** its `platform_campaign_id` set, `metrics_source = script`, synced 09-13 05:55, and has spent **$1.87 across 1 click** since 8 Sep. Live with no end date and delivering nothing, which is worth closing and is not urgent.
+- **The metrics-sync item is confirmed dead**, from data not memory: the four previously-zeroed flights read $36.50 / $41.49 / $49.26 / $49.97, all re-synced under `src script`. The `verified` guard is live at `app/api/ads/metrics/route.ts:145`. **The comment at `:136` still claims `LAST_30_DAYS` and is stale prose** that will mislead the next reader.
+- **The real orphan is Aggie Assisted Living**, not Hoop: status `live`, `platform_campaign_id` **null**, yet `$28.40` with `metrics_source = script`. The sync matches on that id, so it should not have been able to write that row. Unexplained. Also **Graceful's ended flight reads `$0.00 / clicks None / src None`** — no Nextdoor sync path exists.
+- **Reallocation reverses.** The report said move Google's share to Meta. That moves budget out of the only intent-native channel into an attention channel on a price ratio. **Fund Meta from the Nextdoor money plus incremental, leave Google whole.**
+
+**The finding that is not in the report at all: `city_leads` contains two rows, ever.** Jillanna (12 Sep, Dallas Meta arm) and Ann McDade (7 Sep, called, no pickup). **Both still `unfilled`, both `offer_count: 0`.** No provider was ever offered either lead. The report treats acquisition as the problem and delivery as solved; the delivery half has a 0-for-2 record for two unrelated reasons. At this volume hand-working leads is the correct operating mode, not a defect.
+
+**Jillanna was emailed and TJ sent it.** Drafted in `tj@olera.care` via the automation Dia profile (windowless, so screenshots fail; the draft saved server-side and TJ sent from his own browser). Bcc `support@olera.care`. Two rounds of voice correction from TJ, both about the same defect: the draft opened *"nobody has gotten back to you yet"*, which informs her of a grievance she may not have registered, and my own readout led with the 0-for-2 record. Saved as `feedback_dont_lead_with_the_deficit` — not apologising is not enough, a sentence can carry no apology and still lead with the deficit.
+
+**Next.** Client-side NANP check at `CityLandingClient.tsx:378` is the smallest real fix and nothing depends on it. Then the conversion-signal gate on all three platforms, which under the intent reading is not measurement on Meta but the only mechanism by which Meta can find intent at all. Then pull Google's search-terms report to size the non-intent share, which is the only lever with no dependency on the gate. Open: whether Jillanna replies with a working number, and the unexplained Aggie row.
+
+
 ### 2026-09-10 — Quiz dashboard preview refinements (PR #1864)
 
 - Branch `codex/correct-city-audit-funnel`, PR #1864 targets staging; nothing merged. Latest product commit `0c40b709b`.
