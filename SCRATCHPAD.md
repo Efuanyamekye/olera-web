@@ -5682,3 +5682,41 @@ Charlotte `1023274174694557629` and Dallas `1023340399281833119` published after
 Updated production city_campaigns: reused Charlotte Nextdoor row `6a3dad58-e9cb-44f4-92d5-13fdb9bafe9f`, inserted Dallas `6e31d8d4-bd89-4fda-8cdf-a8e87f40ef12`. Both scheduled, budget_cents=14000 planned flight allocation, max_cpc_cents=null (Autobid), paid_social unchanged, Sep10–24 dates and full notes. Re-read exact rows; Google/Meta rows unchanged. No provider pool or lead changes. Dia admin HTTP429 prevented fresh UI verification; database readback passed.
 
 Beefed up shared ad-boost-setup entry and city track: infer subject from context; ask provider vs city only when missing; preserve authorization; Advanced mode/date/minimum checks; saved geography chips; clone creative on campaign duplication; distinguish ad-only publish from full campaign publish; payment mismatch recovery; explicit city-record mapping and idempotent reconciliation. No new migration or application code; migration220 reserved for Meta. Docs diff check passed. Changes local, not merged/deployed.
+
+
+## 2026-09-12 — Ad Boost full-book audit + CPL system model
+
+**No code changed this session.** Outputs are the artifact, the case log, the state-of-play archive and five memory files. What follows is the engineering backlog it produced.
+
+**Artifact (4 revisions):** https://claude.ai/code/artifact/b946978d-89e6-415c-b753-cd344313252c — "The CPL Ladder". Reframed twice: audit → channel comparison → acquisition system model, on TJ's steer that the goal is a machine producing leads at industry-leading cost.
+
+**The model.** `CPL = cost per landed visit ÷ (visit→start × start→submit)`. Today `$2.45 ÷ (7.7% × 11.1%) = $288` against a $76 bar. Factors into two multipliers, both already achieved elsewhere in the programme: Meta/Nextdoor click prices ($1.30/visit) and a 2× page conversion → $76. At the provider-page rate (2.7%) → $48.
+
+**Channel evidence, pooling BOTH arms (596 clicks; the city-only cohort separates nothing):** Google 10/376 = 2.7%, $85.55/outcome, proven. Meta 1/52 = 1.9%, identical to Google (Fisher p=1.0) at 40% of the click price — best expected value, n=1. Nextdoor **0 of 168**, p=0.036 vs Google; P(0|2.7%) ≈ 1%. Allocation is backwards: Google 63% / Meta 24% / Nextdoor 13% of city spend.
+
+**The gate: all three platforms optimise blind.** Google city arms 0 conversions; Meta pixel has never received a Lead; Nextdoor `Conversion type = None`. Nothing compounds until fixed.
+
+### Code defects found (none fixed — this is the backlog)
+
+- `lib/twilio.ts` `normalizeUSPhone` accepts ANY 10 digits and prefixes `+1`. NANP forbids area/exchange codes starting 0 or 1. Cost us contact with the first Meta-sourced city lead (stored `+11214870172`; Twilio rejected her confirm SMS). Two conditions. **Guards every SMS path on the site.**
+- `scripts/google-ads/metrics-sync.js` uses `WINDOW='LAST_30_DAYS'`; `app/api/ads/metrics/route.ts` writes it into `ad_spend_cents` which every reader treats as lifetime. Zeroed four ended flights on 09-12. `lib/ad-boost/receipts.server.ts` gates on `metrics_source==='script'` and nulls `typed`, so those `$0.00` rows are the ones providers are shown, badged trusted — the exact failure the gate shipped to prevent. Needs ALL_TIME/flight-bounded pull, or a `metrics_window` column the receipt respects.
+- `lib/city-ads/offers.server.ts` `startOrAdvance` still never reads `cfg.routingMode` (documented 09-08). **Latent only because all 13 `city_pool` rows are `enabled=false`** — fix this BEFORE giving the landing page its own display predicate.
+- `app/care/[city]/page.tsx:66` selects the pool on `.eq("enabled", true)`, reusing the "on call" routing flag as a display flag, so provider cards have never rendered for anyone. Likeliest cause of the 7.7% engagement rate. Needs a separate display predicate.
+- No Meta `Lead` reaching pixel `803096730985728` although both halves are correctly wired (`components/analytics/MetaPixel.tsx` `trackMetaLead` + `lib/city-ads/meta-capi.server.ts` `sendMetaLeadEvent`). Check prod `META_CAPI_ACCESS_TOKEN` first — `sendMetaLeadEvent` returns silently without it.
+- `growth_attribution_events`: `lead_started` is NOT comparable across page arms. `one_screen` fires it on first field touch (same second as `cta_engaged`, no `question_viewed`); `guidance` fires it on a real step progression. Check the `arm` field before comparing any funnel stage.
+
+### Ops backlog (not code)
+
+- **Hoop Cares** (Google `24235451655`) runs `$4.30/day with NO END DATE` from 09-11 against a note promising "$50, Sep 15–28" — ~$129/mo uncapped on a flight nobody agreed to fund. Row also has no `platform_campaign_id`, so the sync reports it unmatched.
+- **Five provider Nextdoor flights** (Graceful, Franchil, Pacesetter, Edmonds Villa, Miracle-Lightstar), all 1–7 Sep, all Paused, zero delivery, **no row in `ad_campaign_requests`**. Reachable only via the Nextdoor header account switcher.
+- **Graceful Aug Nextdoor** is `$0.00` in our DB against a real `$50.00 / 134 clicks / 8,318 impr` ($0.37 CPC, 0 inquiries) — the counter-example that kills any cost-per-click framing.
+- **Franchil-90d** "all ads under review" 20 days while serving. Support ticket, not a wait.
+- City Nextdoor rows ~2.5× stale; nothing syncs that channel.
+
+### Where the audit corrected itself
+
+"Meta is the winner" — retracted (cost-per-engaged was the CPC ratio at identical rates; one contact-step event was a `one_screen` first touch). "No channel winner" — reversed by pooling both arms, which is where Nextdoor separates. An apparent engagement step at the landing-test ship time — falsified by the daily series (`cta_engaged` ran 3/3/4/3, never zero; the step was in attribution coverage).
+
+**Durable records:** 33 `ad_campaign_log` observations, all six `city_campaigns.admin_note` appended (prior text preserved), `~/Desktop/adboost-state-of-play.md` rewritten, memories `cpl_system_model` / `cheap_clicks_not_quality` / `metrics_sync_30day_window` / `city_lead_phone_validation` / `nextdoor_account_sweep`.
+
+**Next up:** TJ is sitting on the data to decide actions. When he returns, the ordered list is in the artifact's "Next steps" — email Jillanna, then the conversion signal on all three platforms (the gate), then reallocate, then the two page defects.
