@@ -1,10 +1,10 @@
 "use client";
 
-import { readDismissedToday } from "./heroDismiss";
+import { readUpdatesCollapsed } from "./heroDismiss";
 
 /**
- * Loading state for DashboardHero. Reserves the exact same dimensions as the
- * real hero so swapping in the resolved hero causes no layout shift. The
+ * Loading state for DashboardHero. Reserves the card and browsing-control space
+ * while the provider-specific update queue is loading. The
  * "Hey {firstName}" greeting renders immediately — we have it from the auth
  * context synchronously, so the loading moment is partial-content rather
  * than pure shimmer. Only the headline / subline / CTA pill shimmer.
@@ -17,38 +17,36 @@ import { readDismissedToday } from "./heroDismiss";
  */
 interface Props {
   firstName: string;
+  providerSlug: string;
 }
 
-export default function DashboardHeroSkeleton({ firstName }: Props) {
-  // If the provider dismissed the hero today, don't flash the placeholder card
-  // during the v2Data fetch — the resolved (non-essential) hero will render null
-  // anyway, so the skeleton would just pop in and vanish. This only renders
-  // client-side (DashboardPage gates the whole tree on a client-resolved
-  // `profile`), so reading localStorage here is hydration-safe. Rare tradeoff:
-  // if a NEW action banner (lead/question) qualifies same-day after a dismiss,
-  // it appears without a skeleton — but it animates in via the parent's
-  // card-enter wrapper, and a fresh lead surfacing is good news, not jank.
-  if (readDismissedToday()) return null;
-
+export default function DashboardHeroSkeleton({ firstName, providerSlug }: Props) {
+  // Avoid flashing the full card after all updates were dismissed. A newly
+  // arrived inquiry can still expand the hero once the response is available.
+  if (readUpdatesCollapsed(providerSlug)) {
+    return <div aria-hidden className="mb-6 min-h-11 flex items-center text-sm text-gray-500">Checking updates…</div>;
+  }
   return (
-    <div
-      aria-hidden
-      className="relative overflow-hidden rounded-2xl bg-warm-950 mb-6 md:min-h-[260px]"
-    >
-      <div className="relative px-6 py-5 md:px-9 md:py-7 max-w-[560px]">
-        <p className="font-serif italic text-[15px] md:text-[16px] text-warm-200/85 leading-snug mb-2">
-          Hey {firstName}
-        </p>
-        {/* Headline shimmer — matches the font-display 20-24px line height */}
-        <div className="animate-pulse">
-          <div className="h-7 md:h-8 w-72 max-w-full bg-warm-800 rounded mb-3" />
-          {/* Subline shimmer */}
-          <div className="h-4 w-56 max-w-full bg-warm-800/70 rounded mb-1" />
-          <div className="h-4 w-40 max-w-full bg-warm-800/70 rounded" />
-          {/* CTA pill shimmer */}
-          <div className="mt-4 h-9 w-32 bg-vanilla-100/15 rounded-full" />
+    <div aria-hidden className="mb-6">
+      <div
+        className="relative overflow-hidden rounded-2xl bg-warm-950 md:min-h-[260px]"
+      >
+        <div className="relative px-6 py-5 md:px-9 md:py-7 max-w-[560px]">
+          <p className="font-serif italic text-[15px] md:text-[16px] text-warm-200/85 leading-snug mb-2">
+            Hey {firstName}
+          </p>
+          {/* Headline shimmer — matches the font-display 20-24px line height */}
+          <div className="animate-pulse">
+            <div className="h-7 md:h-8 w-72 max-w-full bg-warm-800 rounded mb-3" />
+            {/* Subline shimmer */}
+            <div className="h-4 w-56 max-w-full bg-warm-800/70 rounded mb-1" />
+            <div className="h-4 w-40 max-w-full bg-warm-800/70 rounded" />
+            {/* CTA pill shimmer */}
+            <div className="mt-4 h-9 w-32 bg-vanilla-100/15 rounded-full" />
+          </div>
         </div>
       </div>
+      <div className="h-12" />
     </div>
   );
 }

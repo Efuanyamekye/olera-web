@@ -14,12 +14,7 @@ import {
 } from "@/lib/next-best-action";
 import { trackProviderEvent } from "@/lib/analytics/track-provider-event";
 import { prefetchBoostState } from "@/lib/ad-boost/boost-state";
-import {
-  HERO_DISMISS_KEY,
-  isDismissibleBanner,
-  todayStamp,
-  readDismissedToday,
-} from "./heroDismiss";
+import { readDismissals, writeDismissals, todayStamp } from "./heroDismiss";
 import type { ManagedAdsVariant } from "@/lib/analytics/managed-ads-variant";
 import { managedAdsPitchCopy } from "@/lib/analytics/managed-ads-variant-copy";
 import { useManagedAdsVariant, isManagedAdsPreviewMode } from "@/hooks/use-managed-ads-variant";
@@ -147,8 +142,6 @@ function bumpHeroRotation(): number {
   }
 }
 
-// Dismiss helpers (shared with DashboardHeroSkeleton so the skeleton hides too).
-// See heroDismiss.ts for the Robinhood-style daily-reset rationale.
 
 interface Props {
   firstName: string;
@@ -233,7 +226,7 @@ export default function DashboardHero({
   // rotation below.
   const [rotationCount] = useState(bumpHeroRotation);
   const managedAdsVariant = useManagedAdsVariant(providerSlug);
-  const hook = resolveHook(
+  const primaryHook = resolveHook(
     data,
     completeness,
     category,
@@ -242,21 +235,44 @@ export default function DashboardHero({
     hasActiveBoostRequest,
   );
 
-  // Robinhood-style dismiss: only the non-essential banner is hideable, and only
-  // for the rest of today. `hidden` gates rendering + every side effect below so
-  // a dismissed banner fires no impression and clears the mobile sticky CTA.
-  const [dismissedToday, setDismissedToday] = useState(readDismissedToday);
-  const dismissible = isDismissibleBanner(hook.bannerId);
-  const hidden = dismissible && dismissedToday;
+  const queue = buildUpdateQueue(data, completeness, category,
+    managedAdsVariant ?? "direct_reach", hasActiveBoostRequest, primaryHook);
+  const [day, setDay] = useState(todayStamp);
+  useEffect(() => {
+    const refreshDay = () => setDay(todayStamp());
+    const interval = window.setInterval(refreshDay, 60_000);
+    window.addEventListener("focus", refreshDay);
+    return () => { window.clearInterval(interval); window.removeEventListener("focus", refreshDay); };
+  }, []);
+  const scope = `${providerSlug}:${day}`;
+  const [dismissalState, setDismissalState] = useState(() => ({
+    scope, keys: readDismissals(providerSlug),
+  }));
+  const dismissed = dismissalState.scope === scope ? dismissalState.keys : readDismissals(providerSlug);
+  const [selected, setSelected] = useState<string | null>(null);
+  const visible = queue.filter(item => !isUpdateDismissed(item, data, dismissed));
+  const index = Math.max(0, visible.findIndex(item => item.bannerId === selected));
+  const hook = visible[index] ?? queue[0];
+  const hidden = visible.length === 0;
+  const restoreRef = useRef<HTMLButtonElement>(null);
+  const dismissRef = useRef<HTMLButtonElement>(null);
+  const pendingFocus = useRef(false);
 
-  const handleDismiss = () => {
-    try {
-      window.localStorage.setItem(HERO_DISMISS_KEY, todayStamp());
-    } catch {
-      /* storage blocked — dismissal just won't persist across reloads */
-    }
-    setDismissedToday(true);
+  const saveDismissals = (keys: string[]) => {
+    writeDismissals(providerSlug, keys, queue.every(item => isUpdateDismissed(item, data, keys)));
+    setDismissalState({ scope, keys });
   };
+  const handleDismiss = () => {
+    const remaining = visible.filter(item => item.bannerId !== hook.bannerId);
+    setSelected(remaining[index % Math.max(1, remaining.length)]?.bannerId ?? null);
+    saveDismissals([...dismissed, updateKey(hook, data)]);
+    pendingFocus.current = true;
+  };
+  useEffect(() => {
+    if (!pendingFocus.current) return;
+    pendingFocus.current = false;
+    (hidden ? restoreRef : dismissRef).current?.focus();
+  });
 
   // Preload every tier image once the hero mounts. After a provider saves
   // a section the picker re-evaluates and the hero swaps to a different
@@ -277,7 +293,7 @@ export default function DashboardHero({
     }
   }, []);
 
-  const firedImpression = useRef<string | null>(null);
+  const firedImpression = useRef(new Set<string>());
   const firedManagedAdsPitch = useRef(false);
   const { bannerId } = hook;
   const sectionId =
@@ -291,8 +307,9 @@ export default function DashboardHero({
   // rollup.
   useEffect(() => {
     if (hidden) return; // dismissed today — not shown, so not an impression
-    if (firedImpression.current === bannerId) return;
-    firedImpression.current = bannerId;
+    const impressionKey = `${providerSlug}:${bannerId}`;
+    if (firedImpression.current.has(impressionKey)) return;
+    firedImpression.current.add(impressionKey);
     track("provider_picker_impression", providerSlug, {
       source: "hero",
       banner: bannerId,
@@ -415,19 +432,40 @@ export default function DashboardHero({
     }
   };
 
-  // Dismissed for today — render nothing. The wrapping div in DashboardPage has
-  // no intrinsic height, so this leaves no gap.
-  if (hidden) return null;
+  if (hidden) return (
+    <button ref={restoreRef} type="button" className="mb-6 min-h-11 text-sm text-primary-700 hover:underline"
+      onClick={() => { saveDismissals([]); setSelected(null); pendingFocus.current = true; }}>
+      View updates ({queue.length})
+    </button>
+  );
 
   return (
-    <HeroCard
-      firstName={firstName}
-      hook={hook}
-      className="mb-6"
-      onSectionClick={handleSectionClick}
-      onNavClick={handleNavClick}
-      onDismiss={dismissible ? handleDismiss : undefined}
-    />
+    <section aria-label="Provider updates" className="mb-6">
+      {/* Invisible, inert copies reserve the tallest eligible card at every width.
+          Dismissing a card keeps the original queue's height until all are hidden. */}
+      <div className="grid rounded-2xl bg-warm-950">
+        {queue.map(item => (
+          <div key={item.bannerId} aria-hidden="true" inert className="invisible col-start-1 row-start-1 pointer-events-none">
+            <HeroCard firstName={firstName} hook={item} reserveControls />
+          </div>
+        ))}
+        <HeroCard firstName={firstName} hook={hook}
+          className="col-start-1 row-start-1 h-full"
+          onSectionClick={handleSectionClick} onNavClick={handleNavClick}
+          onDismiss={handleDismiss} dismissRef={dismissRef} reserveControls />
+      </div>
+      <div className="flex items-center justify-end gap-1 mt-1">
+        <button type="button" aria-label="Previous update" disabled={visible.length < 2}
+          className="h-11 w-11 rounded-full hover:bg-warm-100 disabled:opacity-30 focus-visible:outline focus-visible:outline-2"
+          onClick={() => setSelected(visible[(index - 1 + visible.length) % visible.length].bannerId)}>←</button>
+        <span className="text-xs text-gray-500 tabular-nums" aria-live="polite" aria-atomic="true">
+          {index + 1} of {visible.length}<span className="sr-only">: {hook.headline}</span>
+        </span>
+        <button type="button" aria-label="Next update" disabled={visible.length < 2}
+          className="h-11 w-11 rounded-full hover:bg-warm-100 disabled:opacity-30 focus-visible:outline focus-visible:outline-2"
+          onClick={() => setSelected(visible[(index + 1) % visible.length].bannerId)}>→</button>
+      </div>
+    </section>
   );
 }
 
@@ -459,6 +497,8 @@ export function HeroCard({
   onSectionClick,
   onNavClick,
   onDismiss,
+  dismissRef,
+  reserveControls = false,
 }: {
   firstName: string;
   hook: Hook;
@@ -466,10 +506,10 @@ export function HeroCard({
   className?: string;
   onSectionClick?: (cta: SectionCta) => void;
   onNavClick?: (cta: NavCta) => void;
-  /** When provided, renders a dismiss (X) in the top-right. Only the live
-   *  dashboard passes this (for non-essential banners); the admin preview omits
-   *  it so previews show the banner content uncluttered. */
+  /** Dismisses only the current update; omitted in admin previews. */
   onDismiss?: () => void;
+  dismissRef?: React.Ref<HTMLButtonElement>;
+  reserveControls?: boolean;
 }) {
   // Photo + gradient paint for desktop/responsive; mobile is solid warm-950.
   const showPhoto = surface !== "mobile";
@@ -490,12 +530,15 @@ export function HeroCard({
 
   return (
     <div className={`relative overflow-hidden rounded-2xl bg-warm-950 ${minH} ${className}`}>
+      <style>{`@keyframes hero-update-in { from { opacity: 0; } to { opacity: 1; } }`}</style>
       {onDismiss && (
         <button
           type="button"
+          ref={dismissRef}
           onClick={onDismiss}
-          aria-label="Dismiss"
-          className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/30 text-white/90 backdrop-blur-sm hover:bg-black/50 hover:text-white active:bg-black/60 transition-colors"
+          aria-label="Dismiss this update for today"
+          title="Dismiss this update for today"
+          className="absolute top-3 right-3 z-10 w-11 h-11 flex items-center justify-center rounded-full bg-black/30 text-white/90 backdrop-blur-sm hover:bg-black/50 hover:text-white active:bg-black/60 transition-colors"
         >
           <svg
             className="w-4 h-4"
@@ -518,7 +561,8 @@ export function HeroCard({
               the gradient. */}
           <div
             aria-hidden
-            className={`${photoVis} absolute inset-0 pointer-events-none`}
+            key={hook.imageUrl}
+            className={`${photoVis} absolute inset-0 pointer-events-none motion-safe:animate-[hero-update-in_180ms_ease-out]`}
             style={{
               backgroundImage: `url('${hook.imageUrl ?? HERO_IMAGE_DEFAULT}')`,
               backgroundSize: "auto 150%",
@@ -544,7 +588,7 @@ export function HeroCard({
           />
         </>
       )}
-      <div className={`relative ${pad} max-w-[560px]`}>
+      <div key={hook.bannerId} className={`relative ${pad} max-w-[560px] ${reserveControls ? "!pr-16" : ""} motion-safe:animate-[hero-update-in_180ms_ease-out]`}>
         {/* font-serif (not font-display) because DM Serif Display only loads
             the regular weight — italic on it would be a fake browser-synthesized
             slant. font-serif falls back to New York / Georgia, both of which
@@ -810,6 +854,54 @@ function reviewsHook(): Hook {
     cta: { label: "Get more reviews", href: "/provider/reviews" },
     imageUrl: TIER_SPIKE_IMAGE,
   };
+}
+
+// Creation-time watermarks distinguish new activity from answering, archiving,
+// or an older item falling out of the API's bounded activity list.
+function updateKey(hook: Hook, data: ProviderDashboardV2Data): string {
+  if (hook.bannerId === "questions") {
+    const latest = Math.max(0, ...data.greeting.fiveMostRecentUnanswered.map(q => Date.parse(q.createdAt) || 0));
+    return `questions:created:${latest}`;
+  }
+  if (hook.bannerId === "leads") {
+    const latest = Math.max(0, ...data.recentActivity.filter(a => a.kind === "lead").map(a => Date.parse(a.timestamp) || 0));
+    return `leads:created:${latest}`;
+  }
+  if (hook.bannerId === "find_families_live") return `${hook.bannerId}:${data.nearbyFamilies?.count}`;
+  return hook.bannerId;
+}
+
+function isUpdateDismissed(hook: Hook, data: ProviderDashboardV2Data, dismissed: string[]): boolean {
+  const key = updateKey(hook, data);
+  if (hook.bannerId === "questions" || hook.bannerId === "leads") {
+    const prefix = `${hook.bannerId}:created:`;
+    const latest = Number(key.slice(prefix.length));
+    return dismissed.some(saved => saved.startsWith(prefix) && Number(saved.slice(prefix.length)) >= latest);
+  }
+  return dismissed.includes(key);
+}
+
+function buildUpdateQueue(
+  data: ProviderDashboardV2Data, completeness: ProfileCompleteness,
+  category: ProfileCategory | null, variant: ManagedAdsVariant,
+  hasActiveBoostRequest: boolean, primary: Hook,
+): Hook[] {
+  const { greeting } = data;
+  const hooks: Hook[] = [primary];
+  if (greeting.newLeadsThisPeriod > 0) hooks.push(leadsHook(greeting.newLeadsThisPeriod));
+  if (greeting.unansweredQuestions > 0) hooks.push(questionsHook(greeting.unansweredQuestions));
+  if (data.campaign) hooks.push(campaignHook(data.campaign));
+  const nearby = data.nearbyFamilies?.count ?? 0;
+  if (nearby > 0) hooks.push(nearbyFamiliesHook(nearby));
+  if (greeting.deltaPct !== null && greeting.deltaPct >= 25 && greeting.viewsThisPeriod >= 5)
+    hooks.push(viewSpikeHook(greeting.deltaPct, greeting.viewsThisPeriod, greeting.viewsPriorPeriod));
+  const next = pickNextAction(completeness, category);
+  if (next) hooks.push(greeting.viewsThisPeriod >= ENGAGEMENT_VIEW_THRESHOLD
+    ? engagementCompletionHook(greeting.viewsThisPeriod, next) : coldCompletionHook(next));
+  if (hasActiveBoostRequest || data.campaign) hooks.push(reviewsHook());
+  else if (primary.bannerId !== "views_to_ads") hooks.push(managedAdsHook(variant));
+  hooks.push(marketIntelHook());
+  return hooks.filter((hook, index) => hooks.findIndex(other => other.bannerId === hook.bannerId) === index);
 }
 
 function resolveHook(

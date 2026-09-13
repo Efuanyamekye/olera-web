@@ -2215,7 +2215,7 @@ function DashboardBannersCard({ summary }: { summary: SummaryResponse | null }) 
         <span className="font-medium text-gray-700">distinct providers</span> per banner in this window.
       </p>
       <p className="text-[11px] text-gray-400 mb-4">
-        Contextual nudges, not a controlled A/B test — each provider sees one banner chosen by
+        Contextual nudges, not a controlled A/B test — providers can browse updates selected for
         their own state, so banners reach different audiences (the cohort is noted under each row).
         Read these <span className="italic">within</span> a banner, not as a ranking across banners.
         Converted = did the action within 3 days of seeing the banner; it&rsquo;s a last-touch signal,
