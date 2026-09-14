@@ -7,17 +7,22 @@ import { usePathname } from "next/navigation";
 import type { AdminUser } from "@/lib/types";
 import { useMedJobsRefresh } from "@/hooks/useMedJobsRefresh";
 import { useToast } from "@/components/admin/Toast";
+import AdminToolSearch from "@/components/admin/AdminToolSearch";
+import type { AdminTool } from "@/lib/admin-tool-search";
 import SidebarDrawerToggle from "@/components/admin/SidebarDrawerToggle";
 
 interface AdminSidebarProps {
   adminUser: AdminUser;
   desktopHidden?: boolean;
   onRequestClose?: () => void;
+  onRequestOpen?: () => void;
 }
 
 interface NavItem {
   label: string;
   href: string;
+  description?: string;
+  keywords?: string;
 }
 
 interface NavSection {
@@ -33,21 +38,21 @@ const navSections: NavSection[] = [
     key: "inbox",
     defaultOpen: true,
     items: [
-      { label: "Activity", href: "/admin/activity" },
+      { label: "Activity", href: "/admin/activity", description: "See recent admin activity", keywords: "notifications updates" },
       // Inbound SMS. Carries an unhandled badge because the volume is low —
       // without it this reads as a dead page and stops getting checked.
-      { label: "Messages", href: "/admin/inbox" },
-      { label: "Support Email", href: "/admin/support-email" },
+      { label: "Messages", href: "/admin/inbox", description: "Handle inbound texts and replies", keywords: "sms inbox conversations" },
+      { label: "Support Email", href: "/admin/support-email", description: "Work through support conversations", keywords: "gmail customer help inbox" },
       // "Referrals" = the market-outreach ambassador/nudge queue; renamed
       // to say the job, not the department (2026-07 sidebar naming pass)
-      { label: "Referrals", href: "/admin/market-outreach" },
-      { label: "Connections", href: "/admin/connections" },
+      { label: "Referrals", href: "/admin/market-outreach", description: "Manage ambassador referral outreach", keywords: "market ambassadors nudges" },
+      { label: "Connections", href: "/admin/connections", description: "Manage family and provider inquiries", keywords: "leads matches outbound" },
       // Outreach merged into Connections (direction=outbound toggle)
       // Leads retired — Connections page now handles all lead management
-      { label: "Provider Outreach", href: "/admin/provider-outreach" },
-      { label: "City Broadcasts", href: "/admin/city-broadcasts" },
-      { label: "Provider Growth", href: "/admin/provider-growth" },
-      { label: "Questions", href: "/admin/questions" },
+      { label: "Provider Outreach", href: "/admin/provider-outreach", description: "Reach out to care providers", keywords: "sales prospecting email campaigns" },
+      { label: "City Broadcasts", href: "/admin/city-broadcasts", description: "Send updates to local providers", keywords: "city announcements campaigns" },
+      { label: "Provider Growth", href: "/admin/provider-growth", description: "Track claims through conversion", keywords: "claims claimed follow up meetings paying" },
+      { label: "Questions", href: "/admin/questions", description: "Review care questions and answers", keywords: "qna answers moderation" },
     ],
   },
   {
@@ -55,12 +60,12 @@ const navSections: NavSection[] = [
     key: "records",
     defaultOpen: true,
     items: [
-      { label: "Directory", href: "/admin/directory" },
-      { label: "Care Seekers", href: "/admin/care-seekers" },
-      { label: "Students", href: "/admin/caregivers" },
-      { label: "Reviews", href: "/admin/reviews" },
-      { label: "Emails", href: "/admin/emails" },
-      { label: "Email Verifier", href: "/admin/email-verifier" },
+      { label: "Directory", href: "/admin/directory", description: "Find and manage provider listings", keywords: "organizations facilities care homes" },
+      { label: "Care Seekers", href: "/admin/care-seekers", description: "Find families looking for care", keywords: "families users records" },
+      { label: "Students", href: "/admin/caregivers", description: "Manage student caregiver records", keywords: "candidates medjobs applicants" },
+      { label: "Reviews", href: "/admin/reviews", description: "Review provider ratings and feedback", keywords: "testimonials moderation" },
+      { label: "Emails", href: "/admin/emails", description: "Review emails sent by the platform", keywords: "sent mail history templates logs" },
+      { label: "Email Verifier", href: "/admin/email-verifier", description: "Check email address validity", keywords: "validate verification bounce" },
     ],
   },
   {
@@ -69,11 +74,11 @@ const navSections: NavSection[] = [
     label: "Trust & Safety",
     key: "manage",
     items: [
-      { label: "Verification", href: "/admin/verification" },
-      { label: "Disputes", href: "/admin/disputes" },
-      { label: "Removals", href: "/admin/removal-requests" },
-      { label: "Blocklist", href: "/admin/removal-blocklist" },
-      { label: "Do Not Contact", href: "/admin/do-not-contact" },
+      { label: "Verification", href: "/admin/verification", description: "Review provider verification", keywords: "ownership identity approve claims" },
+      { label: "Disputes", href: "/admin/disputes", description: "Resolve disputed provider claims", keywords: "ownership moderation" },
+      { label: "Removals", href: "/admin/removal-requests", description: "Review listing removal requests", keywords: "delete listings takedown" },
+      { label: "Blocklist", href: "/admin/removal-blocklist", description: "Manage blocked provider listings", keywords: "removed listings protection" },
+      { label: "Do Not Contact", href: "/admin/do-not-contact", description: "Manage outreach exclusions", keywords: "dnc unsubscribe opt out suppression" },
     ],
   },
   {
@@ -81,31 +86,31 @@ const navSections: NavSection[] = [
     key: "operations",
     defaultOpen: true,
     items: [
-      { label: "Organic Growth", href: "/admin/organic-growth" },
-      { label: "Analytics", href: "/admin/analytics" },
-      { label: "Ad Boost", href: "/admin/ad-boost" },
-      { label: "Relationships", href: "/admin/relationships" },
-      { label: "Automations", href: "/admin/automations" },
+      { label: "Organic Growth", href: "/admin/organic-growth", description: "Track search visibility and acquisition", keywords: "seo google traffic metrics" },
+      { label: "Analytics", href: "/admin/analytics", description: "Explore site usage and performance", keywords: "traffic metrics visitors conversion" },
+      { label: "Ad Boost", href: "/admin/ad-boost", description: "Manage provider advertising campaigns", keywords: "ads google nextdoor paid promotion" },
+      { label: "Relationships", href: "/admin/relationships", description: "Track provider contacts and follow-ups", keywords: "crm touches calls meetings quiet" },
+      { label: "Automations", href: "/admin/automations", description: "Review scheduled workflows", keywords: "cron jobs schedules email sequences" },
       // Sits next to Automations on purpose: that page carries account-level
       // send risk, this one carries who stopped hearing from us. Two halves.
-      { label: "Deliverability", href: "/admin/deliverability" },
-      { label: "Family Comms", href: "/admin/family-comms" },
-      { label: "Provider Comms", href: "/admin/provider-comms" },
-      { label: "Benefits", href: "/admin/benefits" },
+      { label: "Deliverability", href: "/admin/deliverability", description: "Check who stopped receiving emails", keywords: "bounces suppression delivery mail" },
+      { label: "Family Comms", href: "/admin/family-comms", description: "Review family communication journeys", keywords: "messages email sms sequences" },
+      { label: "Provider Comms", href: "/admin/provider-comms", description: "Review provider communication journeys", keywords: "messages email sms sequences" },
+      { label: "Benefits", href: "/admin/benefits", description: "Manage benefits guidance and requests", keywords: "financial aid navigator applications" },
       // "Articles" — next to Benefits (also content), "Content" was ambiguous
-      { label: "Articles", href: "/admin/content" },
+      { label: "Articles", href: "/admin/content", description: "Write and manage care articles", keywords: "content blog editorial guides" },
       // v9.0 Phase 7 Commit K: Staffing Outreach retired — its
       // operational concerns are fully covered by the MedJobs
       // section below (sites, prospects, partners, etc.). Hidden
       // here to avoid redundancy + conceptual overlap; the legacy
       // /admin/staffing-outreach route still resolves for any
       // bookmarks during transition.
-      { label: "Team", href: "/admin/team" },
-      { label: "War Room", href: "/admin/war-room" },
+      { label: "Team", href: "/admin/team", description: "Manage admin team access", keywords: "staff permissions members" },
+      { label: "War Room", href: "/admin/war-room", description: "Investigate marketplace issues", keywords: "diagnostics discovery operations" },
       // Last on purpose. Not a queue to work — the whole marketplace as one
       // figure, read when you want to see where a number comes from or
       // which steps nobody measures yet.
-      { label: "Operating Map", href: "/admin/operating-map" },
+      { label: "Operating Map", href: "/admin/operating-map", description: "See how the marketplace works", keywords: "architecture funnel flows metrics" },
     ],
   },
 ];
@@ -153,13 +158,13 @@ const STAKEHOLDERS_KEY = "stakeholders";
 // Stats is retired: the performance instrumentation lives on the architecture.
 const SOP_HREF = "/admin/medjobs/sop";
 const medjobsItems: NavItem[] = [
-  { label: "System", href: SOP_HREF },
-  { label: "Admin",  href: `${SOP_HREF}/admin` },
-  { label: "Sales",  href: `${SOP_HREF}/sales` },
-  { label: "CRM",    href: `${SOP_HREF}/crm` },
+  { label: "System", href: SOP_HREF, description: "Explore the MedJobs operating system", keywords: "staffing sites territories sop" },
+  { label: "Admin", href: `${SOP_HREF}/admin`, description: "Open the MedJobs admin manual", keywords: "staffing operations sop" },
+  { label: "Sales", href: `${SOP_HREF}/sales`, description: "Open the MedJobs sales manual", keywords: "staffing prospecting sop" },
+  { label: "CRM", href: `${SOP_HREF}/crm`, description: "Open the MedJobs relationship manual", keywords: "staffing clients partners sop" },
   // The daily queue sits under the four workspace pages: it is where the work
   // actually happens, and it carries the only count worth glancing at.
-  { label: "In Basket", href: "/admin/medjobs/in-basket" },
+  { label: "In Basket", href: "/admin/medjobs/in-basket", description: "Work the daily MedJobs queue", keywords: "staffing replies meetings calls prospects" },
 ];
 
 /** Map nav-item href → sidebar-counts response key. Only In Basket and Sites
@@ -241,6 +246,15 @@ const pinnableItems: NavItem[] = [
   { label: "Young Caregivers", href: "/admin/young-caregivers" },
 ];
 
+// Search derives destinations from the same registry as the visible navigation.
+const searchableTools: AdminTool[] = [
+  { label: "Overview", href: "/admin", section: "Overview", description: "See the admin dashboard", keywords: "home summary" },
+  ...[...navSections, { label: "MedJobs", items: medjobsItems }].flatMap((section) =>
+    section.items.map((item) => ({ ...item, section: section.label, description: item.description ?? item.label })),
+  ),
+  { label: "Young Caregivers", href: "/admin/young-caregivers", section: "Community", description: "Manage the young caregiver community", keywords: "discord support" },
+];
+
 function getInitials(email: string): string {
   const local = email.split("@")[0];
   if (!local) return "?";
@@ -283,6 +297,7 @@ export default function AdminSidebar({
   adminUser,
   desktopHidden = false,
   onRequestClose,
+  onRequestOpen,
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const toast = useToast();
@@ -497,6 +512,7 @@ export default function AdminSidebar({
             </div>
           )}
 
+          <AdminToolSearch tools={searchableTools} hidden={desktopHidden} onRequestOpen={onRequestOpen}>
           {/* Overview — standalone top link, with collapse/expand-all beside it */}
           <div className="flex items-center justify-between mb-3">
             <Link
@@ -738,6 +754,7 @@ export default function AdminSidebar({
               <Star filled={favorites.includes("/admin/young-caregivers")} />
             </button>
           </div>
+          </AdminToolSearch>
         </nav>
 
         <div className="min-w-52 border-t border-gray-100 px-3 py-3">

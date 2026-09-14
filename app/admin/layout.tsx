@@ -112,6 +112,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             adminUser={adminUser}
             desktopHidden={sidebarHidden}
             onRequestClose={() => setSidebarVisibility(true)}
+            onRequestOpen={() => setSidebarVisibility(false)}
           />
           {sidebarHidden && (
             <div className="fixed left-3 top-3 z-30 hidden md:block">
