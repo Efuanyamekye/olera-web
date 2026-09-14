@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MS/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.530Z
+ * Last updated: 2026-09-14T08:46:01.806Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -161,7 +161,7 @@ export const drafts: PipelineStateDrafts = {
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than $2,000?",
-          "answer": "Yes, the primary home is exempt as long as your loved one lives there or intends to return. There's no equity cap mentioned in Mississippi's program. Other property beyond the primary residence counts toward the $2,000 asset limit."
+          "answer": "Yes, the primary home is exempt as long as your loved one lives there or intends to return. Home equity above $752,000 can count against them, which is the 2026 federal minimum. Other property beyond the primary residence counts toward the $2,000 asset limit."
         },
         {
           "question": "What if my loved one's income is slightly over the 300% SSI limit?",
