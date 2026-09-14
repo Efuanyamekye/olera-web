@@ -422,6 +422,133 @@ export async function getNewClaimSubtabCounts(): Promise<{
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Admin Counts for Filtering
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface AdminCount {
+  count: number;
+  display_name?: string;
+}
+
+export interface AdminCounts {
+  [adminId: string]: AdminCount;
+}
+
+export interface GetAdminCountsOptions {
+  pipelineStages?: PipelineStage[];
+  hasCallAttempts?: boolean;
+  converted?: boolean;
+  notConverted?: boolean;
+  adsStatus?: AdsStatus;
+  medjobsStatus?: MedjobsStatus | MedjobsStatus[];
+}
+
+/**
+ * Get counts of providers per assigned admin for a given tab/filter combination.
+ * Used for the admin filter chips on the Provider Growth page.
+ */
+export async function getAdminCountsForTab(options: GetAdminCountsOptions): Promise<AdminCounts> {
+  const db = getServiceClient();
+
+  // Build base query
+  let query = db
+    .from("provider_growth_tracking")
+    .select("assigned_to, ads_status, medjobs_status, id");
+
+  // Apply pipeline stage filter
+  if (options.pipelineStages && options.pipelineStages.length > 0) {
+    query = query.in("pipeline_stage", options.pipelineStages);
+  }
+
+  // Apply ads status filter
+  if (options.adsStatus && options.adsStatus !== "none") {
+    query = query.eq("ads_status", options.adsStatus);
+  }
+
+  // Apply medjobs status filter
+  if (options.medjobsStatus) {
+    if (Array.isArray(options.medjobsStatus)) {
+      const filtered = options.medjobsStatus.filter((s) => s !== "none");
+      if (filtered.length > 0) {
+        query = query.in("medjobs_status", filtered);
+      }
+    } else if (options.medjobsStatus !== "none") {
+      query = query.eq("medjobs_status", options.medjobsStatus);
+    }
+  }
+
+  // Apply converted filter
+  if (options.converted) {
+    query = query.or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
+  }
+
+  // Apply not converted filter
+  if (options.notConverted) {
+    query = query.eq("ads_status", "none");
+    query = query.neq("medjobs_status", "in_pilot");
+    query = query.neq("medjobs_status", "pilot_expired");
+  }
+
+  // Only include providers with assigned_to set
+  query = query.not("assigned_to", "is", null);
+
+  const { data, error } = await query;
+
+  if (error) {
+    console.error("[provider-growth] Admin counts query error:", error);
+    return {};
+  }
+
+  // If we need to filter by hasCallAttempts, we need to fetch touchpoints
+  let filteredData = data ?? [];
+  if (options.hasCallAttempts !== undefined) {
+    const trackingIds = filteredData.map((r) => r.id);
+    if (trackingIds.length > 0) {
+      const callStats = await getCallStatsForTrackingIds(trackingIds);
+      filteredData = filteredData.filter((r) => {
+        const hasCalls = (callStats.get(r.id)?.count || 0) > 0;
+        return options.hasCallAttempts ? hasCalls : !hasCalls;
+      });
+    }
+  }
+
+  // Group by assigned_to
+  const adminIds = new Set<string>();
+  const counts: Record<string, number> = {};
+
+  for (const row of filteredData) {
+    if (row.assigned_to) {
+      adminIds.add(row.assigned_to);
+      counts[row.assigned_to] = (counts[row.assigned_to] || 0) + 1;
+    }
+  }
+
+  // Fetch admin names
+  const adminCounts: AdminCounts = {};
+
+  if (adminIds.size > 0) {
+    const { data: admins } = await db
+      .from("admin_users")
+      .select("id, display_name")
+      .in("id", Array.from(adminIds));
+
+    const nameMap = new Map<string, string>();
+    for (const admin of admins ?? []) {
+      nameMap.set(admin.id, admin.display_name || "Unknown");
+    }
+
+    for (const adminId of adminIds) {
+      adminCounts[adminId] = {
+        count: counts[adminId] || 0,
+        display_name: nameMap.get(adminId) || "Unknown",
+      };
+    }
+  }
+
+  return adminCounts;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // List Queries
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -448,6 +575,8 @@ export interface ListProvidersOptions {
   notConverted?: boolean;
   // Filter by meeting focus (for Meeting Scheduled subtabs)
   meetingFocus?: MeetingFocus;
+  // Filter by assigned admin
+  assignedTo?: string;
 }
 
 export async function listProviders(options: ListProvidersOptions = {}): Promise<{
@@ -473,6 +602,7 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     converted,
     notConverted,
     meetingFocus,
+    assignedTo,
   } = options;
 
   // Build the query
@@ -552,6 +682,11 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   }
   if (claimedTo) {
     query = query.lte("claimed_at", claimedTo);
+  }
+
+  // Assigned admin filter
+  if (assignedTo) {
+    query = query.eq("assigned_to", assignedTo);
   }
 
   // Apply ordering

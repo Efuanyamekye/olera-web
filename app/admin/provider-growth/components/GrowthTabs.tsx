@@ -3,37 +3,37 @@
 /**
  * GrowthTabs - Tab navigation for provider growth pipeline
  *
- * Pipeline tabs: New Claims | Meeting Scheduled | Follow-up | Paying
+ * Pipeline tabs: Claimed | In Progress | Meetings | Follow-up | Paying
  *
- * New Claims has subtabs: Not Contacted | Converted | In Progress
+ * Claimed has subtabs: Not Contacted | Converted
+ * In Progress has no subtabs (top-level tab for providers with call attempts)
+ * Meetings has no subtabs - meeting focus is shown as a badge on each row
  * Follow-up has subtabs: Active (pitched) | No-show (no_show) | Not Interested (not_interested)
  * Paying has subtabs: Ads | MedJobs | Both
- *
- * Meeting Scheduled has no subtabs - meeting focus is shown as a badge on each row
  */
 
 import type { GrowthStats } from "@/lib/provider-growth/queries";
 import type { PipelineStage } from "@/lib/provider-growth/stages";
-export type NewClaimSubTab = "not_contacted" | "converted" | "in_progress";
+export type ClaimedSubTab = "not_contacted" | "converted";
 export type MeetingSubTab = "ads" | "medjobs" | "both";
 export type FollowUpSubTab = "active" | "no_show" | "not_interested";
 export type PayingSubTab = "ads" | "medjobs" | "both";
 export type ActiveTab =
-  | { type: "pipeline"; stage: PipelineStage; subTab?: NewClaimSubTab | MeetingSubTab | FollowUpSubTab | PayingSubTab }
+  | { type: "pipeline"; stage: PipelineStage; subTab?: ClaimedSubTab | MeetingSubTab | FollowUpSubTab | PayingSubTab }
   | { type: "conversion"; tab: "paying"; subTab: PayingSubTab };
 
 interface GrowthTabsProps {
   activeTab: ActiveTab;
   onTabChange: (tab: ActiveTab) => void;
   stats: GrowthStats | null;
-  newClaimSubtabCounts?: { notContacted: number; converted: number; inProgress: number };
+  claimedSubtabCounts?: { notContacted: number; converted: number };
+  inProgressCount?: number;
   followUpSubtabCounts?: { active: number; noShow: number; notInterested: number };
 }
 
-const NEW_CLAIM_SUB_TABS: Array<{ id: NewClaimSubTab; label: string }> = [
+const CLAIMED_SUB_TABS: Array<{ id: ClaimedSubTab; label: string }> = [
   { id: "not_contacted", label: "Not Contacted" },
   { id: "converted", label: "Converted" },
-  { id: "in_progress", label: "In Progress" },
 ];
 
 // Meeting Scheduled subtabs removed - meeting focus is shown as badge on each row
@@ -46,9 +46,11 @@ const FOLLOW_UP_SUB_TABS: Array<{ id: FollowUpSubTab; label: string }> = [
 
 // Note: "pitched" stage is displayed as "Follow-up" tab with subtabs
 // "not_interested" is now a subtab under Follow-up, not a standalone tab
+// "in_progress" is now a top-level tab (providers with call attempts)
 const PIPELINE_TABS: Array<{ id: PipelineStage; label: string }> = [
   { id: "new_claim", label: "Claimed" },
-  { id: "meeting_scheduled", label: "Meeting Scheduled" },
+  { id: "in_progress", label: "In Progress" },
+  { id: "meeting_scheduled", label: "Meetings" },
   { id: "pitched", label: "Follow-up" },
 ];
 
@@ -58,13 +60,21 @@ const PAYING_SUB_TABS: Array<{ id: PayingSubTab; label: string }> = [
   { id: "both", label: "Both" },
 ];
 
-export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts, followUpSubtabCounts }: GrowthTabsProps) {
+export function GrowthTabs({ activeTab, onTabChange, stats, claimedSubtabCounts, inProgressCount, followUpSubtabCounts }: GrowthTabsProps) {
   const getCount = (tab: PipelineStage | "paying" | PayingSubTab): number => {
     if (!stats) return 0;
 
     switch (tab) {
       case "new_claim":
-        return stats.new_claim;
+        // Claimed tab shows only notContacted + converted (in_progress is separate tab now)
+        if (claimedSubtabCounts) {
+          return claimedSubtabCounts.notContacted + claimedSubtabCounts.converted;
+        }
+        // Fallback: subtract inProgressCount from total if subtab counts not loaded yet
+        return stats.new_claim - (inProgressCount ?? 0);
+      case "in_progress":
+        // Use the separate inProgressCount if provided, otherwise fall back to 0
+        return inProgressCount ?? 0;
       case "meeting_scheduled":
         // Combined count: meeting_scheduled + upgrade_meeting (unified tab)
         return stats.meeting_scheduled + stats.upgrade_meeting;
@@ -119,7 +129,7 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
   const isPayingSubTabActive = (id: PayingSubTab) =>
     activeTab.type === "conversion" && activeTab.tab === "paying" && activeTab.subTab === id;
 
-  const isNewClaimSubTabActive = (id: NewClaimSubTab) =>
+  const isClaimedSubTabActive = (id: ClaimedSubTab) =>
     activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === id;
 
   // Meeting Scheduled subtabs removed
@@ -129,11 +139,10 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
   const isFollowUpSubTabActive = (id: FollowUpSubTab) =>
     activeTab.type === "pipeline" && activeTab.stage === "pitched" && activeTab.subTab === id;
 
-  const getNewClaimSubTabCount = (id: NewClaimSubTab): number => {
-    if (!newClaimSubtabCounts) return 0;
-    if (id === "not_contacted") return newClaimSubtabCounts.notContacted;
-    if (id === "converted") return newClaimSubtabCounts.converted;
-    return newClaimSubtabCounts.inProgress;
+  const getClaimedSubTabCount = (id: ClaimedSubTab): number => {
+    if (!claimedSubtabCounts) return 0;
+    if (id === "not_contacted") return claimedSubtabCounts.notContacted;
+    return claimedSubtabCounts.converted;
   };
 
   return (
@@ -148,6 +157,9 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
               // For new_claim, default to "not_contacted" subtab
               if (tab.id === "new_claim") {
                 onTabChange({ type: "pipeline", stage: tab.id, subTab: "not_contacted" });
+              // For in_progress, no subtabs - top-level tab
+              } else if (tab.id === "in_progress") {
+                onTabChange({ type: "pipeline", stage: tab.id });
               // For meeting_scheduled, no subtabs - show all meetings
               } else if (tab.id === "meeting_scheduled") {
                 onTabChange({ type: "pipeline", stage: tab.id });
@@ -204,10 +216,10 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
         </button>
       </div>
 
-      {/* New Claims sub-tabs */}
+      {/* Claimed sub-tabs (Not Contacted | Converted) */}
       {activeTab.type === "pipeline" && activeTab.stage === "new_claim" && (
         <div className="flex gap-1 mt-2 pl-4">
-          {NEW_CLAIM_SUB_TABS.map((subTab) => (
+          {CLAIMED_SUB_TABS.map((subTab) => (
             <button
               key={subTab.id}
               onClick={() =>
@@ -218,14 +230,14 @@ export function GrowthTabs({ activeTab, onTabChange, stats, newClaimSubtabCounts
                 })
               }
               className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
-                isNewClaimSubTabActive(subTab.id)
+                isClaimedSubTabActive(subTab.id)
                   ? "bg-blue-100 text-blue-700"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
               {subTab.label}
               <span className="ml-1 text-[10px] opacity-70">
-                ({getNewClaimSubTabCount(subTab.id)})
+                ({getClaimedSubTabCount(subTab.id)})
               </span>
             </button>
           ))}

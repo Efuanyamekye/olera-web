@@ -12,6 +12,7 @@
 
 export const PIPELINE_STAGES = [
   "new_claim",
+  "in_progress",
   "meeting_scheduled",
   "pitched",
   "not_interested",
@@ -23,6 +24,7 @@ export type PipelineStage = (typeof PIPELINE_STAGES)[number];
 
 export const PIPELINE_STAGE_LABELS: Record<PipelineStage, string> = {
   new_claim: "Claimed",
+  in_progress: "In Progress",
   meeting_scheduled: "Meeting Scheduled",
   pitched: "Pitched",
   not_interested: "Not Interested",
@@ -32,6 +34,7 @@ export const PIPELINE_STAGE_LABELS: Record<PipelineStage, string> = {
 
 export const PIPELINE_STAGE_DESCRIPTIONS: Record<PipelineStage, string> = {
   new_claim: "Providers who claimed their profile but haven't had a meeting yet",
+  in_progress: "Providers being actively worked - have call attempts logged",
   meeting_scheduled: "Providers with upcoming Calendly meetings",
   pitched: "Providers who've had their pitch meeting",
   not_interested: "Providers who declined after being pitched",
@@ -40,8 +43,11 @@ export const PIPELINE_STAGE_DESCRIPTIONS: Record<PipelineStage, string> = {
 };
 
 // Valid stage transitions
+// Note: "in_progress" is a virtual UI tab, not an actual database stage.
+// Providers in the "In Progress" tab are actually in "new_claim" stage with call attempts.
 export const VALID_STAGE_TRANSITIONS: Record<PipelineStage, PipelineStage[]> = {
   new_claim: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for self-converted providers
+  in_progress: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // Same transitions as new_claim (virtual tab)
   meeting_scheduled: ["meeting_scheduled", "pitched", "no_show", "not_interested"],  // can reschedule, or log meeting outcomes
   pitched: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers
   not_interested: ["meeting_scheduled", "upgrade_meeting", "pitched"],  // upgrade_meeting for Converted providers re-engaging
@@ -333,8 +339,10 @@ export const ACTIVITY_OUTCOME_LABELS: Record<ActivityOutcome, string> = {
 // Which outcomes are available for each stage
 // Note: meeting_scheduled and meeting_rescheduled are intentionally excluded
 // because they should use MeetingScheduler which sets the actual meeting time
+// Note: "in_progress" is a virtual UI tab - providers there are actually in "new_claim" stage
 export const STAGE_OUTCOMES: Record<PipelineStage, ActivityOutcome[]> = {
   new_claim: ["voicemail", "hung_up", "callback_requested", "left_message", "note"],
+  in_progress: ["voicemail", "hung_up", "callback_requested", "left_message", "note"],  // Same as new_claim (virtual tab)
   meeting_scheduled: ["note", "interested", "not_interested", "no_show"],
   pitched: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
   not_interested: ["note"],  // Stop calling them - only log notes. Self-conversion is automatic

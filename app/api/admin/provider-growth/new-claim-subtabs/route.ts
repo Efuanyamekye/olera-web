@@ -5,9 +5,10 @@ import { getNewClaimSubtabCounts } from "@/lib/provider-growth/queries";
 /**
  * GET /api/admin/provider-growth/new-claim-subtabs
  *
- * Returns counts for New Claims subtabs:
- * - notContacted: providers with no call attempts
- * - inProgress: providers with at least one call attempt
+ * Returns counts for Claimed subtabs (In Progress is now a separate top-level tab):
+ * - notContacted: providers with no call attempts and not converted
+ * - converted: providers on free trial with no call attempts (self-converted)
+ * - inProgress: providers with call attempts (now shown as separate top-level tab count)
  */
 export async function GET() {
   try {
@@ -22,6 +23,7 @@ export async function GET() {
     }
 
     const counts = await getNewClaimSubtabCounts();
+    // Return all counts - inProgress is now used as a separate top-level tab
     return NextResponse.json(counts);
   } catch (err) {
     console.error("[new-claim-subtabs] Error:", err);

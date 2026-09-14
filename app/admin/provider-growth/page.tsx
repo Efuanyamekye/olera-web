@@ -12,12 +12,13 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import type { ProviderGrowthWithProfile, GrowthStats } from "@/lib/provider-growth/queries";
+import type { ProviderGrowthWithProfile, GrowthStats, AdminCounts } from "@/lib/provider-growth/queries";
 import type { PipelineStage } from "@/lib/provider-growth/stages";
 import DateRangePopover, {
   resolveRange,
   type DateRangeValue,
 } from "@/components/admin/DateRangePopover";
+import { AdminFilterChips } from "@/components/admin/provider-outreach/AdminFilterChips";
 import {
   GrowthTabs,
   StatsHeader,
@@ -29,6 +30,19 @@ import {
 const PAGE_SIZE = 50;
 const DEFAULT_DATE_RANGE: DateRangeValue = { preset: "all", customFrom: "", customTo: "" };
 
+/**
+ * Generate a unique key for localStorage persistence of admin filter per-tab.
+ */
+function getTabKey(tab: ActiveTab): string {
+  if (tab.type === "pipeline") {
+    if (tab.subTab) {
+      return `provider-growth-${tab.stage}-${tab.subTab}`;
+    }
+    return `provider-growth-${tab.stage}`;
+  }
+  return `provider-growth-${tab.tab}-${tab.subTab}`;
+}
+
 export default function ProviderGrowthPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -36,13 +50,18 @@ export default function ProviderGrowthPage() {
   // Tab state
   const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
     const tab = searchParams.get("tab");
-    const sub = searchParams.get("sub") as "ads" | "medjobs" | "both" | "not_contacted" | "converted" | "in_progress" | "active" | "no_show" | "not_interested" | null;
+    const sub = searchParams.get("sub") as "ads" | "medjobs" | "both" | "not_contacted" | "converted" | "active" | "no_show" | "not_interested" | null;
 
-    // Check for new_claim with subtab (now includes "converted")
+    // Check for new_claim with subtab (Claimed tab)
     if (tab === "new_claim") {
-      const validSubTabs = ["not_contacted", "converted", "in_progress"];
-      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "converted" | "in_progress") : "not_contacted";
+      const validSubTabs = ["not_contacted", "converted"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "converted") : "not_contacted";
       return { type: "pipeline", stage: "new_claim", subTab };
+    }
+
+    // In Progress is now a top-level tab (no subtabs)
+    if (tab === "in_progress") {
+      return { type: "pipeline", stage: "in_progress" };
     }
 
     // Meeting Scheduled has no subtabs - show all meetings, focus shown as badge
@@ -69,11 +88,13 @@ export default function ProviderGrowthPage() {
   // Data state
   const [providers, setProviders] = useState<ProviderGrowthWithProfile[]>([]);
   const [stats, setStats] = useState<GrowthStats | null>(null);
-  const [newClaimSubtabCounts, setNewClaimSubtabCounts] = useState<{
+  const [claimedSubtabCounts, setClaimedSubtabCounts] = useState<{
     notContacted: number;
     converted: number;
-    inProgress: number;
   } | null>(null);
+  const [inProgressCount, setInProgressCount] = useState(0);
+  const [adminCounts, setAdminCounts] = useState<AdminCounts>({});
+  const [selectedAdminFilter, setSelectedAdminFilter] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingStats, setLoadingStats] = useState(true);
   const [total, setTotal] = useState(0);
@@ -98,10 +119,34 @@ export default function ProviderGrowthPage() {
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
+  // Assignment state
+  const [editingAssignmentId, setEditingAssignmentId] = useState<string | null>(null);
+  const [adminNameLookup, setAdminNameLookup] = useState<Map<string, string>>(new Map());
+
   // Keep ref in sync with selected provider
   useEffect(() => {
     selectedProviderIdRef.current = selectedProvider?.id ?? null;
   }, [selectedProvider]);
+
+  // Fetch admin list for name lookup on mount
+  useEffect(() => {
+    async function fetchAdmins() {
+      try {
+        const res = await fetch("/api/admin/provider-outreach/admins");
+        if (res.ok) {
+          const data = await res.json();
+          const lookup = new Map<string, string>();
+          for (const admin of data.admins || []) {
+            lookup.set(admin.id, admin.display_name || admin.email.split("@")[0]);
+          }
+          setAdminNameLookup(lookup);
+        }
+      } catch (err) {
+        console.error("Failed to fetch admin list:", err);
+      }
+    }
+    fetchAdmins();
+  }, []);
 
   // Debounce search
   useEffect(() => {
@@ -117,11 +162,16 @@ export default function ProviderGrowthPage() {
     setPage(0);
   }, [dateRange]);
 
+  // Reset page when admin filter changes
+  useEffect(() => {
+    setPage(0);
+  }, [selectedAdminFilter]);
+
   // Fetch stats (including subtab counts)
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
-      const [statsRes, newClaimSubtabRes] = await Promise.all([
+      const [statsRes, claimedSubtabRes] = await Promise.all([
         fetch("/api/admin/provider-growth/stats"),
         fetch("/api/admin/provider-growth/new-claim-subtabs"),
       ]);
@@ -131,9 +181,15 @@ export default function ProviderGrowthPage() {
         setStats(data.stats);
       }
 
-      if (newClaimSubtabRes.ok) {
-        const data = await newClaimSubtabRes.json();
-        setNewClaimSubtabCounts(data);
+      if (claimedSubtabRes.ok) {
+        const data = await claimedSubtabRes.json();
+        // Set claimed subtab counts (not_contacted, converted)
+        setClaimedSubtabCounts({
+          notContacted: data.notContacted,
+          converted: data.converted,
+        });
+        // Set in_progress count (now a separate top-level tab)
+        setInProgressCount(data.inProgress);
       }
     } catch (e) {
       console.error("Failed to fetch stats:", e);
@@ -165,11 +221,15 @@ export default function ProviderGrowthPage() {
           // Meeting Scheduled shows all meetings (both meeting_scheduled and upgrade_meeting)
           // No subtabs - meeting focus is displayed as a badge on each row
           params.set("pipelineStage", "meeting_scheduled,upgrade_meeting");
+        } else if (activeTab.stage === "in_progress") {
+          // In Progress is now a top-level tab - shows new_claim providers with call attempts
+          params.set("pipelineStage", "new_claim");
+          params.set("hasCallAttempts", "true");
         } else {
           params.set("pipelineStage", activeTab.stage);
         }
 
-        // For new_claim, apply filters based on subtab
+        // For new_claim (Claimed tab), apply filters based on subtab
         if (activeTab.stage === "new_claim" && activeTab.subTab) {
           if (activeTab.subTab === "not_contacted") {
             // Not contacted: no calls AND not converted
@@ -179,9 +239,6 @@ export default function ProviderGrowthPage() {
             // Converted: has free trial AND no calls (self-converted, not yet contacted)
             params.set("converted", "true");
             params.set("hasCallAttempts", "false");
-          } else if (activeTab.subTab === "in_progress") {
-            // In progress: has calls (regardless of conversion - we're actively working on them)
-            params.set("hasCallAttempts", "true");
           }
         }
       } else {
@@ -196,6 +253,11 @@ export default function ProviderGrowthPage() {
             params.set("medjobsStatus", "subscribed");
           }
         }
+      }
+
+      // Admin filter
+      if (selectedAdminFilter) {
+        params.set("assignedTo", selectedAdminFilter);
       }
 
       if (debouncedSearch) {
@@ -220,13 +282,17 @@ export default function ProviderGrowthPage() {
         const data = await res.json();
         setProviders(data.providers);
         setTotal(data.total);
+        // Update admin counts from response
+        if (data.admin_counts) {
+          setAdminCounts(data.admin_counts);
+        }
       }
     } catch (e) {
       console.error("Failed to fetch providers:", e);
     } finally {
       setLoading(false);
     }
-  }, [activeTab, debouncedSearch, dateRange, page]);
+  }, [activeTab, debouncedSearch, dateRange, page, selectedAdminFilter]);
 
   // Initial fetch
   useEffect(() => {
@@ -242,10 +308,12 @@ export default function ProviderGrowthPage() {
     setActiveTab(tab);
     setSelectedProvider(null);
     setPage(0); // Reset to first page
+    // Don't reset admin filter - it persists per-tab via localStorage in AdminFilterChips
 
     // Update URL
     if (tab.type === "pipeline") {
-      // Include subtab for tabs that have them (new_claim and pitched have subtabs, meeting_scheduled does not)
+      // Include subtab for tabs that have them (new_claim and pitched have subtabs)
+      // in_progress and meeting_scheduled have no subtabs
       if ((tab.stage === "new_claim" || tab.stage === "pitched") && tab.subTab) {
         router.push(`/admin/provider-growth?tab=${tab.stage}&sub=${tab.subTab}`, { scroll: false });
       } else {
@@ -303,6 +371,52 @@ export default function ProviderGrowthPage() {
     }
   }, [providers]);
 
+  // Handle assignment update
+  const handleAssignmentUpdate = async (
+    trackingId: string,
+    adminId: string | null,
+    adminName: string | null
+  ) => {
+    try {
+      const res = await fetch("/api/admin/provider-growth/update-assignment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tracking_id: trackingId,
+          assigned_to: adminId,
+        }),
+      });
+
+      if (res.ok) {
+        // Close picker and update local state on success
+        setEditingAssignmentId(null);
+
+        setProviders((prev) =>
+          prev.map((p) =>
+            p.id === trackingId
+              ? { ...p, assigned_to: adminId }
+              : p
+          )
+        );
+
+        // Update the admin name lookup if we got a new name
+        if (adminId && adminName) {
+          setAdminNameLookup((prev) => {
+            const next = new Map(prev);
+            next.set(adminId, adminName);
+            return next;
+          });
+        }
+      } else {
+        // On failure, keep picker open so user knows something went wrong
+        console.error("Failed to update assignment");
+      }
+    } catch (err) {
+      // On network error, keep picker open
+      console.error("Failed to update assignment:", err);
+    }
+  };
+
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
@@ -359,8 +473,18 @@ export default function ProviderGrowthPage() {
         activeTab={activeTab}
         onTabChange={handleTabChange}
         stats={stats}
-        newClaimSubtabCounts={newClaimSubtabCounts ?? undefined}
+        claimedSubtabCounts={claimedSubtabCounts ?? undefined}
+        inProgressCount={inProgressCount}
         followUpSubtabCounts={stats ? { active: stats.pitched, noShow: stats.no_show ?? 0, notInterested: stats.not_interested } : undefined}
+      />
+
+      {/* Admin filter row */}
+      <AdminFilterChips
+        adminCounts={adminCounts}
+        totalCount={total}
+        selectedAdminId={selectedAdminFilter}
+        onSelect={setSelectedAdminFilter}
+        tabKey={getTabKey(activeTab)}
       />
 
       {/* Provider list */}
@@ -387,6 +511,13 @@ export default function ProviderGrowthPage() {
                     name: provider.display_name || "Unnamed Provider",
                   })}
                   selected={selectedProvider?.id === provider.id}
+                  assignedToName={provider.assigned_to ? adminNameLookup.get(provider.assigned_to) || null : null}
+                  onAssignClick={() => setEditingAssignmentId(provider.id)}
+                  isEditingAssignment={editingAssignmentId === provider.id}
+                  onAssignmentSelect={(adminId, adminName) =>
+                    handleAssignmentUpdate(provider.id, adminId, adminName)
+                  }
+                  onAssignmentCancel={() => setEditingAssignmentId(null)}
                 />
               </li>
             ))}

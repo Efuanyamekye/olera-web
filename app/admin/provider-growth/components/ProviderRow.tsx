@@ -17,15 +17,32 @@ import {
   type MeetingFormat,
 } from "@/lib/provider-growth/stages";
 import { EligibilityBadges } from "./EligibilityBadges";
+import { AdminAutocomplete } from "@/components/admin/provider-outreach/AdminAutocomplete";
 
 interface ProviderRowProps {
   provider: ProviderGrowthWithProfile;
   onClick: () => void;
   onDelete?: () => void;
   selected?: boolean;
+  // Assignment props
+  assignedToName?: string | null;
+  onAssignClick?: () => void;
+  isEditingAssignment?: boolean;
+  onAssignmentSelect?: (adminId: string | null, adminName: string | null) => void;
+  onAssignmentCancel?: () => void;
 }
 
-export function ProviderRow({ provider, onClick, onDelete, selected }: ProviderRowProps) {
+export function ProviderRow({
+  provider,
+  onClick,
+  onDelete,
+  selected,
+  assignedToName,
+  onAssignClick,
+  isEditingAssignment,
+  onAssignmentSelect,
+  onAssignmentCancel,
+}: ProviderRowProps) {
   // Line 2: Location · Category
   const location = [provider.city, provider.state].filter(Boolean).join(", ");
   const category = provider.care_types?.slice(0, 2).join(", ") || null;
@@ -180,11 +197,51 @@ export function ProviderRow({ provider, onClick, onDelete, selected }: ProviderR
             )}
           </div>
 
-          {/* Bottom row: Claim date */}
+          {/* Bottom row: Claim date + Assignment */}
           {claimDateDisplay && (
             <span className="text-xs text-gray-400">
               Claimed {claimDateDisplay}
             </span>
+          )}
+
+          {/* Assignment link */}
+          {isEditingAssignment ? (
+            <div
+              className="w-36"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <AdminAutocomplete
+                selectedAdminId={provider.assigned_to}
+                selectedAdminName={assignedToName || null}
+                onSelect={(adminId, adminName) => {
+                  onAssignmentSelect?.(adminId, adminName);
+                }}
+                onClose={() => {
+                  // Just close without saving - user clicked outside to cancel
+                  onAssignmentCancel?.();
+                }}
+                placeholder="Select admin..."
+                autoFocus
+              />
+            </div>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onAssignClick?.();
+              }}
+              className={`text-xs flex items-center gap-0.5 transition-colors ${
+                assignedToName
+                  ? "text-blue-600 hover:text-blue-800"
+                  : "text-gray-400 hover:text-gray-600"
+              }`}
+              title={assignedToName ? `Assigned to ${assignedToName} — click to change` : "Assign to an admin"}
+            >
+              {assignedToName || "Assign"}
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           )}
         </div>
       </div>

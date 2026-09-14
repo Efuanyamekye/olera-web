@@ -3,8 +3,10 @@ import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import {
   listProviders,
   createTracking,
+  getAdminCountsForTab,
   type ListProvidersOptions,
   type CreateTrackingInput,
+  type GetAdminCountsOptions,
 } from "@/lib/provider-growth/queries";
 import { detectMedjobsCatchment } from "@/lib/provider-growth/medjobs-eligibility";
 import {
@@ -128,6 +130,12 @@ export async function GET(request: NextRequest) {
       options.meetingFocus = meetingFocus as MeetingFocus;
     }
 
+    // Assigned admin filter
+    const assignedTo = searchParams.get("assignedTo");
+    if (assignedTo) {
+      options.assignedTo = assignedTo;
+    }
+
     const limit = parseInt(searchParams.get("limit") || "50", 10);
     const offset = parseInt(searchParams.get("offset") || "0", 10);
     options.limit = Math.min(limit, 100);
@@ -148,13 +156,41 @@ export async function GET(request: NextRequest) {
       options.orderDirection = orderDirection;
     }
 
-    const result = await listProviders(options);
+    // Build admin counts options (same filters as listProviders, minus assignedTo)
+    const adminCountsOptions: GetAdminCountsOptions = {};
+    if (options.pipelineStages) {
+      adminCountsOptions.pipelineStages = options.pipelineStages;
+    } else if (options.pipelineStage) {
+      adminCountsOptions.pipelineStages = [options.pipelineStage];
+    }
+    if (options.hasCallAttempts !== undefined) {
+      adminCountsOptions.hasCallAttempts = options.hasCallAttempts;
+    }
+    if (options.converted) {
+      adminCountsOptions.converted = options.converted;
+    }
+    if (options.notConverted) {
+      adminCountsOptions.notConverted = options.notConverted;
+    }
+    if (options.adsStatus) {
+      adminCountsOptions.adsStatus = options.adsStatus;
+    }
+    if (options.medjobsStatus) {
+      adminCountsOptions.medjobsStatus = options.medjobsStatus;
+    }
+
+    // Fetch providers and admin counts in parallel
+    const [result, adminCounts] = await Promise.all([
+      listProviders(options),
+      getAdminCountsForTab(adminCountsOptions),
+    ]);
 
     return NextResponse.json({
       providers: result.providers,
       total: result.total,
       limit: options.limit,
       offset: options.offset,
+      admin_counts: adminCounts,
     });
   } catch (e) {
     console.error("[provider-growth] GET error:", e);
