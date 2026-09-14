@@ -80,6 +80,7 @@ export interface ProviderGrowthWithProfile extends ProviderGrowthTracking {
   // Call tracking
   call_count?: number;
   last_call_at?: string | null;
+  last_call_outcome?: string | null;
   // Ad campaign details (from ad_campaign_requests)
   ads_campaign_status?: "pending_profile" | "requested" | "scheduled" | "live" | "ended" | null;
   ads_campaign_count?: number;
@@ -215,6 +216,7 @@ export async function getGrowthStats(): Promise<GrowthStats> {
 export interface CallStats {
   count: number;
   lastCallAt: string | null;
+  lastCallOutcome: string | null;
 }
 
 /**
@@ -241,7 +243,7 @@ export async function getCallStatsForTrackingIds(
 
     const { data, error } = await db
       .from("provider_growth_touchpoints")
-      .select("tracking_id, created_at, touchpoint_type")
+      .select("tracking_id, created_at, touchpoint_type, details")
       .in("tracking_id", batchIds)
       .in("touchpoint_type", ["call_attempted", "activity_logged"]);
 
@@ -253,15 +255,24 @@ export async function getCallStatsForTrackingIds(
     // Count occurrences and track most recent activity per tracking_id
     for (const row of data ?? []) {
       const id = row.tracking_id;
+      const details = row.details as Record<string, unknown> | null;
+
+      // Extract outcome from details (new format: outcome, legacy: status)
+      let outcome: string | null = null;
+      if (details) {
+        outcome = (details.outcome as string) || (details.status as string) || null;
+      }
+
       const existing = stats.get(id);
       if (existing) {
         existing.count++;
-        // Update lastCallAt if this activity is more recent
+        // Update if this activity is more recent
         if (row.created_at > (existing.lastCallAt || "")) {
           existing.lastCallAt = row.created_at;
+          existing.lastCallOutcome = outcome;
         }
       } else {
-        stats.set(id, { count: 1, lastCallAt: row.created_at });
+        stats.set(id, { count: 1, lastCallAt: row.created_at, lastCallOutcome: outcome });
       }
     }
   }
@@ -612,13 +623,14 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   const trackingIds = providers.map((p) => p.id);
   const callStats = await getCallStatsForTrackingIds(trackingIds);
 
-  // Add call_count and last_call_at to each provider
+  // Add call_count, last_call_at, and last_call_outcome to each provider
   providers = providers.map((p) => {
     const stats = callStats.get(p.id);
     return {
       ...p,
       call_count: stats?.count || 0,
       last_call_at: stats?.lastCallAt || null,
+      last_call_outcome: stats?.lastCallOutcome || null,
     };
   });
 
