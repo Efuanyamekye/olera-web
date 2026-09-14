@@ -424,8 +424,10 @@ const OUTCOME_SHORT_LABELS: Record<string, string> = {
   spoke_with: "Spoke",
   scheduled: "Scheduled",
   interested: "Interested",
-  not_interested: "Not interested",
+  not_interested: "Not int.",
   meeting_scheduled: "Meeting",
+  no_show: "No-show",
+  meeting_rescheduled: "Rescheduled",
 };
 
 function getShortOutcome(outcome: string): string {
