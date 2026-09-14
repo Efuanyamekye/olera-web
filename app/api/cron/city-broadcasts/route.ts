@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
       events_skipped: result.eventsSkipped,
       providers_sent: result.providersSent,
       providers_skipped: result.providersSkipped,
-      // New pool member broadcasts (providers who just entered broadcast_ready)
+      // Welcome broadcasts (providers in pool who haven't received any broadcast yet)
       new_pool_members_found: result.newPoolMembersFound,
       new_pool_members_sent: result.newPoolMembersSent,
       new_pool_members_skipped: result.newPoolMembersSkipped,

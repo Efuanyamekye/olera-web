@@ -1230,7 +1230,10 @@ function ExcludedProviderRow({
   setToast: (toast: { message: string; type: "success" | "error" }) => void;
 }) {
   const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showTrustModal, setShowTrustModal] = useState(false);
   const [newEmail, setNewEmail] = useState(provider.email);
+  const [trustReason, setTrustReason] = useState<"phone_verified" | "official_website" | "admin">("phone_verified");
+  const [trustNote, setTrustNote] = useState("");
   const [saving, setSaving] = useState(false);
 
   const handleUpdateEmail = async () => {
@@ -1286,6 +1289,38 @@ function ExcludedProviderRow({
     }
   };
 
+  const handleTrustEmail = async () => {
+    setSaving(true);
+    try {
+      const res = await fetch("/api/admin/email-override", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: provider.email,
+          reason: trustReason,
+          note: trustNote || `Trusted from City Broadcasts excluded list (was: ${provider.exclusion_reason})`,
+        }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(body.error || "Failed to trust email");
+      }
+      setToast({
+        message: body.warning
+          ? `Email trusted with warning: ${body.warning}`
+          : "Email trusted — provider will receive broadcasts",
+        type: "success"
+      });
+      setShowTrustModal(false);
+      setTrustNote("");
+      onFixed();
+    } catch (e) {
+      setToast({ message: e instanceof Error ? e.message : "Failed to trust email", type: "error" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const issueDate = provider.last_complaint_at || provider.last_bounce_at;
 
   return (
@@ -1318,14 +1353,25 @@ function ExcludedProviderRow({
         <td className="px-4 py-3">
           <div className="flex items-center justify-center gap-2">
             {provider.exclusion_reason === "bounced" && (
-              <button
-                type="button"
-                onClick={() => setShowEmailModal(true)}
-                disabled={saving}
-                className="rounded-lg bg-blue-600 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
-              >
-                Fix Email
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={() => setShowEmailModal(true)}
+                  disabled={saving}
+                  className="rounded-lg bg-blue-600 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                >
+                  Fix Email
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowTrustModal(true)}
+                  disabled={saving}
+                  className="rounded-lg bg-emerald-600 px-2.5 py-1 text-[10px] font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                  title="Trust this email if you've confirmed it works (e.g., provider confirmed by phone)"
+                >
+                  Trust Email
+                </button>
+              </>
             )}
             <button
               type="button"
@@ -1364,6 +1410,53 @@ function ExcludedProviderRow({
                 <button
                   type="button"
                   onClick={() => setShowEmailModal(false)}
+                  className="text-xs text-gray-500 hover:text-gray-700"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      )}
+
+      {/* Trust email modal */}
+      {showTrustModal && (
+        <tr>
+          <td colSpan={6} className="p-0">
+            <div className="border-b border-gray-200 bg-emerald-50 px-4 py-3">
+              <div className="mb-2 text-xs text-gray-700">
+                <strong>Trust this email?</strong> This will override the bounce and allow broadcasts to be sent to <span className="font-mono text-emerald-700">{provider.email}</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <label className="text-xs font-medium text-gray-700">Reason:</label>
+                <select
+                  value={trustReason}
+                  onChange={(e) => setTrustReason(e.target.value as typeof trustReason)}
+                  className="rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                >
+                  <option value="phone_verified">Phone Verified — called provider, confirmed email</option>
+                  <option value="official_website">Official Website — found on provider&apos;s website</option>
+                  <option value="admin">Admin Override — other reason</option>
+                </select>
+                <input
+                  type="text"
+                  value={trustNote}
+                  onChange={(e) => setTrustNote(e.target.value)}
+                  className="flex-1 min-w-[150px] rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                  placeholder="Optional note..."
+                />
+                <button
+                  type="button"
+                  onClick={handleTrustEmail}
+                  disabled={saving}
+                  className="rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                >
+                  {saving ? "Trusting..." : "Trust Email"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setShowTrustModal(false); setTrustNote(""); }}
                   className="text-xs text-gray-500 hover:text-gray-700"
                 >
                   Cancel

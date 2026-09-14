@@ -258,16 +258,18 @@ export async function processEvent(
   return { sent, skipped };
 }
 
-/** How far back to look for new pool members (24 hours) */
-const NEW_POOL_MEMBER_LOOKBACK_MS = 24 * 60 * 60 * 1000;
-
 /** How far back to look for existing family activity to send to new pool members (30 days) */
 const EXISTING_ACTIVITY_LOOKBACK_DAYS = 30;
 
 /**
- * Find providers who recently entered broadcast_ready stage and haven't
- * received any broadcasts yet. These are "new pool members" who should
- * receive broadcasts about existing family activity in their city.
+ * Find providers in the broadcast_ready pool who haven't received any
+ * broadcasts yet. These providers should receive a "welcome" broadcast
+ * about existing family activity in their city.
+ *
+ * Previously this was limited to providers who entered in the last 24 hours,
+ * but that caused issues when providers were added to the pool by teammates
+ * in different timezones or when no family activity occurred within that window.
+ * Now we check ALL broadcast_ready providers who haven't received a broadcast.
  */
 async function findNewPoolMembers(): Promise<
   Array<{
@@ -278,35 +280,42 @@ async function findNewPoolMembers(): Promise<
   }>
 > {
   const db = getServiceClient();
-  const cutoff = new Date(Date.now() - NEW_POOL_MEMBER_LOOKBACK_MS).toISOString();
 
-  // Find providers who recently entered broadcast_ready
-  const { data: recentPoolMembers, error: trackingError } = await db
+  // First, get provider IDs that have already received any broadcast
+  // This prevents the BATCH_SIZE bug where we'd fetch 50 already-processed
+  // providers and miss the unprocessed ones
+  const { data: alreadyProcessed } = await db
+    .from("city_broadcast_recipients")
+    .select("provider_id");
+
+  const alreadyProcessedIds = (alreadyProcessed || []).map((r) => r.provider_id);
+
+  // Find providers in broadcast_ready who haven't received any broadcast yet
+  // Filter at the database level to ensure we get unprocessed providers within BATCH_SIZE
+  let query = db
     .from("provider_outreach_tracking")
     .select("provider_id, city, state")
     .eq("stage", "broadcast_ready")
-    .gte("stage_changed_at", cutoff)
-    .limit(BATCH_SIZE);
+    .not("city", "is", null); // Must have a city
+
+  // Exclude already-processed providers at the DB level
+  // Cast to any to avoid TypeScript's "excessively deep" error with Supabase's recursive generics
+  if (alreadyProcessedIds.length > 0) {
+    query = (query as any).not("provider_id", "in", `(${alreadyProcessedIds.join(",")})`);
+  }
+
+  const { data: poolMembers, error: trackingError } = await query.limit(BATCH_SIZE);
 
   if (trackingError) {
-    console.error("[city-broadcasts] Failed to fetch new pool members:", trackingError);
+    console.error("[city-broadcasts] Failed to fetch pool members:", trackingError);
     return [];
   }
 
-  if (!recentPoolMembers || recentPoolMembers.length === 0) {
+  if (!poolMembers || poolMembers.length === 0) {
     return [];
   }
 
-  const providerIds = recentPoolMembers.map((r) => r.provider_id);
-
-  // Filter out providers who have already received any broadcast (sent, failed, or skipped)
-  // We check all statuses to avoid retrying on every cron run
-  const { data: alreadyProcessed } = await db
-    .from("city_broadcast_recipients")
-    .select("provider_id")
-    .in("provider_id", providerIds);
-
-  const alreadyProcessedIds = new Set((alreadyProcessed || []).map((r) => r.provider_id));
+  const providerIds = poolMembers.map((r) => r.provider_id);
 
   // Get provider categories
   const { data: providers } = await db
@@ -319,15 +328,12 @@ async function findNewPoolMembers(): Promise<
     (providers || []).map((p) => [p.provider_id, p.provider_category])
   );
 
-  return recentPoolMembers
-    .filter((r) => !alreadyProcessedIds.has(r.provider_id))
-    .filter((r) => r.city) // Must have a city
-    .map((r) => ({
-      providerId: r.provider_id,
-      city: r.city,
-      state: r.state || null,
-      category: categoryMap.get(r.provider_id) || null,
-    }));
+  return poolMembers.map((r) => ({
+    providerId: r.provider_id,
+    city: r.city,
+    state: r.state || null,
+    category: categoryMap.get(r.provider_id) || null,
+  }));
 }
 
 /**
