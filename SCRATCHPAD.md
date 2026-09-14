@@ -7,6 +7,14 @@
 
 ## Current Focus
 
+### 2026-09-14 — Admin sidebar tool search; Ad Boost performance preserved
+
+- Branch `codex/admin-tool-search`, rebased onto staging `12e90b25e` after Ad Boost performance PR #1904 merged. Search commit `d381efc61`; quicksave PR targets staging.
+- Added `AdminToolSearch.tsx` and `lib/admin-tool-search.ts`; enriched the existing sidebar destinations with descriptions/aliases, and added an open-sidebar callback in the admin layout. Searches 40 existing destinations locally, including collapsed sections; supports SEO/campaigns/claims, arrow keys/Enter/Escape, and Cmd/Ctrl+K opening a hidden desktop sidebar. Pins and section state survive clearing. Mobile bottom navigation is unchanged.
+- Pre-test fixed new-tab clicks clearing the original query by using Next Link `onNavigate`; normal navigation also restores input focus. Checked every destination exists and is unique, alias ranking, multiword/empty results, keyboard navigation, hidden-sidebar opening, and mobile shortcut non-interception. Isolated browser preview uses mocked counts/navigation; live authenticated route transitions still need preview QA.
+- Compatibility verified on the actual rebased branch: Ad Boost cache provider and deferred MedJobs count request remain intact; search adds no network requests and result prefetching is disabled. All 12 Ad Boost performance regressions, search interaction checks, full TypeScript, targeted ESLint, and diff checks passed. No changes to Ad Boost page/API/readers/migrations relative to updated staging.
+- Next: preview search plus Ad Boost queue → detail → back; verify cache/filter state remains snappy. Search has not been deployed or merged. Prior performance work's migration/measurement follow-ups remain separate.
+
 ### 2026-09-14 — Ad Boost queue performance
 
 - Branch `codex/ad-boost-queue-performance`, based on staging `16038abcb`; quicksave PR targets staging.
