@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T12:54:37.033Z
+ * Last updated: 2026-09-14T13:17:48.178Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2655,6 +2655,11 @@ export const drafts: PipelineStateDrafts = {
         "name": "Community First Choice (CFC)",
         "programId": "community-first-choice-cfc",
         "why": "Covers full cost of in-home personal care, home modifications, and medical support through Medicaid, potentially saving thousands monthly."
+      },
+      {
+        "name": "Supporting Older Adults with Resources (SOAR)",
+        "programId": "soar",
+        "why": "The home-care door for people who are not on Medicaid. Covers personal care, meals, adult day care, respite and part of an assisted living bill, for Marylanders 62+ with income up to $4,358/month."
       },
       {
         "name": "Maryland Medicare Savings Program (MSP)",

@@ -17,7 +17,7 @@
         "stateVariation": false,
         "localEntities": [
           {
-            "name": "DHS Division of County Operations offices by county; DAABHS for service planning; Optum RN for assessment",
+            "name": "DHS Division of County Operations offices by county; DAABHS for service planning; the state’s independent assessment contractor for the assessment",
             "type": "service-area"
           }
         ]
@@ -32,13 +32,18 @@
           "Arkansas resident",
           "Nursing home level of care required",
           "Must score Tier 2 on ARIA assessment",
-          "Medicaid income and asset limits"
+          "Income at or below $2,982/month for one person in 2026, and countable resources under $2,000 ($3,000 for a couple)"
         ],
         "ageRequirement": "65+",
-        "incomeTable": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 2982
+          }
+        ],
         "assetLimits": {
-          "individual": null,
-          "couple": null,
+          "individual": 2000,
+          "couple": 3000,
           "countedAssets": [],
           "exemptAssets": [],
           "homeEquityCap": 752000
@@ -50,7 +55,7 @@
           "Must score exactly Tier 2 on ARIA functional assessment",
           "Live in own home or intend to return home"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": "300% of the SSI federal benefit rate. Arkansas publishes $2,982/month for one person, effective January 1, 2026."
       },
       "applicationGuide": {
         "method": "in-person",
@@ -74,7 +79,7 @@
           {
             "step": 4,
             "title": "Get functional assessment",
-            "description": "An Optum RN will conduct the ARIA assessment to determine your loved one's functional needs and tier level. Only Tier 2 qualifies for ARChoices."
+            "description": "A registered nurse from the state’s independent assessment contractor will conduct the ARIA assessment to determine your loved one's functional needs and tier level. Only Tier 2 qualifies for ARChoices."
           },
           {
             "step": 5,
@@ -82,8 +87,8 @@
             "description": "If approved, DAABHS will work with you to create a Person-Centered Service Plan and Individual Services Budget based on assessed needs."
           }
         ],
-        "processingTime": "Eligibility begins on DCO approval date unless provisional plan of care is needed",
-        "waitlist": null,
+        "processingTime": "Arkansas has 45 days to decide, or 90 days if a disability determination is needed. Someone qualifying on age at 65+ is on the 45-day clock; someone aged 21 to 64 qualifying on disability is on the 90-day one.",
+        "waitlist": "Arkansas works applications in priority tiers, and for most families entry is by the date the application is decided. That is the reason to get it filed sooner rather than later.",
         "tip": "Start with financial eligibility first, many families spend time researching the waiver only to discover their loved one doesn't meet Medicaid income limits.",
         "urls": [
           {
@@ -93,7 +98,7 @@
         ]
       },
       "documentsNeeded": [
-        "Social Security cards for your loved one and spouse",
+        "Social Security numbers for your loved one and their spouse. You give the numbers; the cards are not required.",
         "Birth certificate or other proof of age",
         "Proof of Arkansas residency (utility bill, lease, or state-issued document)",
         "Medicare card if they have one (Medicare is not required for this program)",
@@ -111,10 +116,16 @@
       ],
       "contacts": [
         {
-          "label": "Access Arkansas",
+          "label": "Choices in Living Resource Center (start here)",
+          "phone": "1-866-801-3435",
+          "hours": "Mon-Fri 8am-4pm CT",
+          "description": "The state’s line for long-term care options. They can explain ARChoices and point you to your county DHS office, which is where the application itself has to be filed."
+        },
+        {
+          "label": "Access Arkansas (the online portal)",
           "phone": "855-372-1084",
-          "description": "General assistance locating DHS services and waiver information",
-          "hours": "Business hours"
+          "hours": "",
+          "description": "Help with the benefits portal itself. This is technical support for the website, not the place to ask about ARChoices."
         },
         {
           "label": "Arkansas 2-1-1",
@@ -124,11 +135,14 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "Your first call is about what help your loved one needs, not their money. The financial paperwork comes later, at the county DHS office. Arkansas checks resources from the bank statements you provide, so gather those before that step.",
+        "Do not start paid services while the application is still pending. If your loved one accepts services from an ARChoices provider and the application is then denied, they are responsible for paying that provider themselves.",
         "You must apply at your county DHS office first, you cannot apply directly to the ARChoices program",
         "The ARIA assessment is very specific, scoring Tier 1 or Tier 3 will disqualify your loved one, only Tier 2 qualifies",
         "Financial eligibility follows standard Medicaid rules, spend-down planning may be needed if income is too high",
-        "If approved, you can choose the self-direction option (Independent Choices) to hire and manage caregivers yourself, including family members"
+        "If approved, you can choose the self-direction option (Independent Choices) to hire and manage caregivers yourself, including family members",
+        "If income is over $2,982, a Miller trust can still make your loved one eligible. Only the amount above the limit goes into the trust, not all of their income.",
+        "If your loved one is married and their spouse is staying at home, the spouse can keep between $32,532 and $162,660 in resources for themselves in 2026. The couple limit above does not mean the at-home spouse is left with nothing."
       ],
       "relatedPrograms": [
         "Arkansas Medicaid",
@@ -151,7 +165,7 @@
         },
         {
           "question": "Can family members get paid to provide care through this program?",
-          "answer": "Yes, if your loved one chooses the Independent Choices self-direction option. They can hire and pay family members to provide personal care services, but there are restrictions on spouses providing paid care."
+          "answer": "Yes, through the Independent Choices self-direction option, your loved one can hire and pay family members for personal care. There are three exceptions, and they are absolute: a spouse, a legal guardian and an attorney-in-fact cannot be paid caregivers, no matter the circumstances."
         },
         {
           "question": "What's the difference between ARChoices and regular Medicaid?",
@@ -159,7 +173,7 @@
         },
         {
           "question": "How long does the functional assessment take?",
-          "answer": "The ARIA assessment is conducted by an Optum registered nurse and typically takes 1-2 hours. They evaluate your loved one's ability to perform activities of daily living and cognitive function to determine the appropriate tier level."
+          "answer": "The ARIA assessment is conducted by a registered nurse from the state’s independent assessment contractor and typically takes 1-2 hours. They evaluate your loved one's ability to perform activities of daily living and cognitive function to determine the appropriate tier level."
         },
         {
           "question": "What happens if my loved one's needs change after enrollment?",
@@ -179,11 +193,11 @@
         "visualTone": "editorial"
       },
       "icon": "House",
-      "phone": "855-372-1084",
+      "phone": "1-866-801-3435",
       "sourceUrl": "https://humanservices.arkansas.gov/wp-content/uploads/ARChoices-Detailed-Overview.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "pace-comprehensive-care",
@@ -320,7 +334,7 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. Arkansas checks resources from the bank statements you provide, so gather those before that step. If the office needs something specific it sends a written list with a due date.",
         "PACE is not available statewide, verify your loved one lives in a participating county before applying",
         "Income Trusts are available for those exceeding Medicaid income limits of approximately $2,901/month, contact DHS caseworkers for details",
         "Your loved one must disenroll from Medicare Advantage, prescription drug plans, or hospice before PACE enrollment",
@@ -502,7 +516,7 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. Arkansas checks resources from the bank statements you provide, so gather those before that step. If the office needs something specific it sends a written list with a due date.",
         "Income and asset limits update every April, verify current figures with DHS before applying",
         "QI program excludes people eligible for full Medicaid, but you can have QMB or SLMB with Medicaid",
         "Working disabled individuals may qualify with higher income under special earnings rules",
