@@ -299,8 +299,9 @@ async function findNewPoolMembers(): Promise<
     .not("city", "is", null); // Must have a city
 
   // Exclude already-processed providers at the DB level
+  // Cast to any to avoid TypeScript's "excessively deep" error with Supabase's recursive generics
   if (alreadyProcessedIds.length > 0) {
-    query = query.not("provider_id", "in", `(${alreadyProcessedIds.join(",")})`);
+    query = (query as any).not("provider_id", "in", `(${alreadyProcessedIds.join(",")})`);
   }
 
   const { data: poolMembers, error: trackingError } = await query.limit(BATCH_SIZE);
