@@ -2652,6 +2652,11 @@
         "why": "Covers full cost of in-home personal care, home modifications, and medical support through Medicaid, potentially saving thousands monthly."
       },
       {
+        "name": "Supporting Older Adults with Resources (SOAR)",
+        "programId": "soar",
+        "why": "The home-care door for people who are not on Medicaid. Covers personal care, meals, adult day care, respite and part of an assisted living bill, for Marylanders 62+ with income up to $4,358/month."
+      },
+      {
         "name": "Maryland Medicare Savings Program (MSP)",
         "programId": "medicare-savings-program",
         "why": "Maryland automatically pays Medicare premiums, deductibles, and coinsurance, saving up to $2,000+ annually with no ongoing paperwork."
