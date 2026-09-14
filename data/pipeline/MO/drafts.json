@@ -22,23 +22,33 @@
           }
         ]
       },
-      "intro": "If your loved one lives in Missouri with very limited income and savings, MO HealthNet (Missouri's Medicaid program) covers all their essential healthcare at no cost. This includes doctor visits, hospital stays, prescription medicines, mental health services, and long-term care, both nursing home care and home-based services through special waivers.\n\nFor seniors 65+, the income limits are strict: $860/month for a single person ($1,166 for couples) with assets under $3,000 ($6,000 for couples). However, if your loved one's medical expenses are high enough, they may qualify through \"spend-down\", where their medical bills effectively reduce their income to the qualifying level. The program also includes Medicare Savings Programs that pay Medicare premiums and cost-sharing for those with slightly higher incomes.\n\nBecause MO HealthNet coordinates all care under one system, your loved one won't juggle multiple insurance plans or face surprise medical bills. Home and community-based waiver services help seniors stay in their homes instead of moving to nursing facilities, though these programs often have waitlists due to limited funding slots.",
+      "intro": "If your loved one lives in Missouri with very limited income and savings, MO HealthNet (Missouri's Medicaid program) covers all their essential healthcare at no cost. This includes doctor visits, hospital stays, prescription medicines, mental health services, and long-term care, both nursing home care and home-based services through special waivers.\n\nFor seniors 65+, the income limits are strict: $1,131/month for a single person ($1,166 for couples) with assets under $3,000 ($6,000 for couples). However, if your loved one's medical expenses are high enough, they may qualify through \"spend-down\", where their medical bills effectively reduce their income to the qualifying level. The program also includes Medicare Savings Programs that pay Medicare premiums and cost-sharing for those with slightly higher incomes.\n\nBecause MO HealthNet coordinates all care under one system, your loved one won't juggle multiple insurance plans or face surprise medical bills. Home and community-based waiver services help seniors stay in their homes instead of moving to nursing facilities, though these programs often have waitlists due to limited funding slots.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 65+ (or blind/disabled)",
-          "Income under $860/month (single) or $1,166/month (couple)",
-          "Assets under $3,000 (single) or $6,000 (couple)",
+          "Income under $1,131/month (single) or $1,533/month (couple) in 2026. Blind applicants use a higher limit: $1,330 single, $1,804 couple.",
+          "Assets under $6,220.50 (single) or $12,441 (couple) as of July 2026.",
+          "Over the income limit? Missouri has a spend-down. You can still get covered by paying a set amount each month, and personal care and adult day care count toward it.",
           "Missouri resident",
           "U.S. citizen or qualified non-citizen"
         ],
         "ageRequirement": "65+",
-        "incomeTable": null,
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1131
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 1533
+          }
+        ],
         "assetLimits": {
-          "individual": 3000,
-          "couple": 6000,
+          "individual": 6220.5,
+          "couple": 12441,
           "countedAssets": [
             "Savings accounts",
             "Checking accounts",
@@ -66,7 +76,7 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at mydss.mo.gov or call 855-373-9994, processing typically takes 45 days, or up to 90 days if disability determination is needed.",
+        "summary": "Apply online at mydss.mo.gov, by phone on 855-373-9994 (Missouri does take Medicaid applications by phone), or at a local Resource Center. Processing typically takes 45 days, or up to 90 if a disability determination is needed.",
         "steps": [
           {
             "step": 1,
@@ -95,7 +105,7 @@
           }
         ],
         "processingTime": "Typically 45 days for aged/blind/disabled applications; up to 90 days if disability determination is needed",
-        "waitlist": "No waitlist for basic MO HealthNet coverage, but Home and Community Based Waiver services have waitlists due to limited funding slots",
+        "waitlist": "No waitlist for MO HealthNet coverage itself. In-home care is a separate step: after you have MO HealthNet, call 877-304-7939 for a Home and Community Based Services referral. DHSS decides that separately, and those services do have limited slots.",
         "tip": "If your loved one has high medical expenses, ask about spend-down eligibility even if their income seems too high, medical bills can count toward meeting income requirements.",
         "urls": [
           {
@@ -109,10 +119,9 @@
         ]
       },
       "documentsNeeded": [
-        "Social Security cards for all household members",
-        "Medicare card if you have one",
-        "Birth certificate or other proof of age",
-        "Proof of Missouri residency (utility bill, lease, or state-issued document)",
+        "Social Security numbers for everyone applying. You give the number, not the card. Missouri’s own form never asks for the card.",
+        "Proof of income, if they ask. Missouri verifies electronically first and only requests paper when something does not match.",
+        "One proof of citizenship, if they ask. A driver’s license, passport, birth certificate or Medicare receipt all work.",
         "Most recent Social Security award letter or other income statements",
         "Pension or retirement income documentation",
         "Bank account details for every account: the bank name, account type, and current balance. A recent statement is the easiest proof.",
@@ -129,8 +138,8 @@
         {
           "label": "MO HealthNet Application Line",
           "phone": "(855) 373-9994",
-          "description": "Primary number for MO HealthNet applications and eligibility questions",
-          "hours": "Business hours"
+          "description": "Missouri takes Medicaid applications on this line. The state does not publish hours for it; its other staffed phone lines run Mon-Fri 8am-5pm Central.",
+          "hours": ""
         },
         {
           "label": "HealthCare.gov Help Line",
@@ -139,10 +148,22 @@
           "hours": "24 hours, 7 days a week"
         },
         {
-          "label": "Local FSD Resource Center",
-          "phone": null,
-          "description": "144 offices statewide for in-person assistance, find your local office through mydss.mo.gov",
-          "hours": "Varies by location"
+          "label": "FSD Information Center",
+          "phone": "(855) 373-4636",
+          "description": "Answers questions and can direct you to any of the 135 Resource Centers statewide. Office hours vary by location, so check before visiting.",
+          "hours": "Mon-Fri 8am-5pm CT"
+        },
+        {
+          "label": "Spend-down questions",
+          "phone": "(855) 600-4412",
+          "hours": "",
+          "description": "If your income is over the limit, this is the line for how spend-down works. Personal care and adult day care can count toward the amount."
+        },
+        {
+          "label": "Home and Community Based Services referral",
+          "phone": "(877) 304-7939",
+          "hours": "",
+          "description": "Once your loved one has MO HealthNet, call here to ask for in-home services. Age 63 or older, and the income limit for this is higher at $1,737/month."
         }
       ],
       "applicationNotes": [
@@ -162,7 +183,7 @@
         {
           "type": "callout",
           "title": "Spend-Down Explained",
-          "content": "If your loved one's income is above $860/month but they have significant medical expenses, they may still qualify through spend-down. Missouri counts medical bills, insurance premiums, and other healthcare costs to effectively reduce income to the qualifying level. This is especially important for seniors with chronic conditions who have regular medical expenses."
+          "content": "If your loved one's income is above $1,131/month but they have significant medical expenses, they may still qualify through spend-down. Missouri counts medical bills, insurance premiums, and other healthcare costs to effectively reduce income to the qualifying level. This is especially important for seniors with chronic conditions who have regular medical expenses."
         }
       ],
       "faqs": [
@@ -180,7 +201,7 @@
         },
         {
           "question": "How does spend-down actually work if my loved one's income is too high?",
-          "answer": "Missouri calculates your loved one's monthly medical expenses (insurance premiums, prescription costs, doctor bills) and subtracts them from income. If the remaining amount is under $860/month (single), they qualify. You must provide receipts for all medical expenses."
+          "answer": "Missouri calculates your loved one's monthly medical expenses (insurance premiums, prescription costs, doctor bills) and subtracts them from income. If the remaining amount is under $1,131/month (single), they qualify. You must provide receipts for all medical expenses."
         },
         {
           "question": "Can my loved one have both Medicare and MO HealthNet?",
@@ -209,10 +230,10 @@
       },
       "icon": "Stethoscope",
       "phone": "(855) 373-9994",
-      "sourceUrl": "https://mydss.mo.gov/healthcare/apply",
+      "sourceUrl": "https://dss.mo.gov/healthcare/apply",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "structured-family-caregiving-waiver",

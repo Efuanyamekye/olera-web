@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.538Z
+ * Last updated: 2026-09-14T08:46:01.814Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -12,8 +12,8 @@ export const drafts: PipelineStateDrafts = {
   "programs": [
     {
       "id": "medicaid-long-term-care",
-      "name": "Nevada Medicaid",
-      "shortName": "Nevada Medicaid",
+      "name": "Nevada Medicaid Waiver for the Frail Elderly",
+      "shortName": "Frail Elderly Waiver",
       "tagline": "Covers nursing home care and home health services for Nevada seniors who qualify for long-term care.",
       "programType": "benefit",
       "complexity": "deep",
@@ -22,7 +22,7 @@ export const drafts: PipelineStateDrafts = {
         "stateVariation": false,
         "localEntities": [
           {
-            "name": "Nevada Division of Welfare and Supportive Services (DWSS) offices statewide",
+            "name": "Nevada Division of Social Services (DSS) offices statewide",
             "type": "service-area"
           }
         ]
@@ -34,16 +34,16 @@ export const drafts: PipelineStateDrafts = {
       "structuredEligibility": {
         "summary": [
           "Age 65+",
-          "Income below $2,982/month (single)",
+          "Income at or below 300% of the SSI federal rate. Nevada last published $2,901/month for a single person; ask for the current year’s figure when you call.",
           "Assets under $2,000 (single)",
-          "Needs daily care assistance",
+          "Needs nursing-home level of care. This is a higher bar than needing some daily help, and it is assessed.",
           "Nevada resident"
         ],
         "ageRequirement": "65+",
         "incomeTable": null,
         "assetLimits": {
           "individual": 2000,
-          "couple": 4000,
+          "couple": 3000,
           "countedAssets": [
             "Bank accounts",
             "Investments",
@@ -67,12 +67,12 @@ export const drafts: PipelineStateDrafts = {
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online through Access Nevada or call (775) 684-3600, processing times vary but coverage can be retroactive up to 3 months.",
+        "summary": "Two steps, two places. Call ADSD at (775) 687-4210 to start the waiver assessment, and apply for Medicaid itself online through Access Nevada or at a district office. Medicaid coverage can be backdated up to 3 months.",
         "steps": [
           {
             "step": 1,
             "title": "Start your application",
-            "description": "Apply online at https://accessnevada.dwss.nv.gov/ or call Nevada Medicaid Services at (775) 684-3600. You can also visit your local DWSS office or Aging and Disability Resource Center."
+            "description": "Call the Aging and Disability Services Division at (775) 687-4210 and ask about the Waiver for the Frail Elderly. They can take the intake over the phone. For the Medicaid side, apply at accessnevada.nv.gov or visit a Division of Social Services office."
           },
           {
             "step": 2,
@@ -101,7 +101,7 @@ export const drafts: PipelineStateDrafts = {
         "urls": [
           {
             "label": "Access Nevada Application Portal",
-            "url": "https://accessnevada.dwss.nv.gov/"
+            "url": "https://accessnevada.nv.gov/"
           },
           {
             "label": "Nevada Medicaid Information",
@@ -110,10 +110,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "documentsNeeded": [
-        "Birth certificate or other proof of age",
-        "Social Security card",
-        "Proof of Nevada residency (utility bill, lease, or state-issued document)",
-        "Social Security award letters for all income sources",
+        "Your loved one’s Social Security number. The card is not required, and Nevada will not delay benefits while a number is being issued.",
+        "Income information. Nevada verifies citizenship electronically first and asks for paper only if something does not match.",
         "Pension or retirement income statements",
         "Bank account details for every account: the bank name, account type, and current balance. A recent statement is the easiest proof.",
         "Investment account statements (stocks, bonds, annuities)",
@@ -128,10 +126,10 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Nevada Medicaid Services",
-          "phone": "(775) 684-3600",
-          "description": "Primary Medicaid application and eligibility questions",
-          "hours": "Business hours"
+          "label": "Aging and Disability Services Division (start here)",
+          "phone": "(775) 687-4210",
+          "hours": "",
+          "description": "ADSD takes the waiver application and can do the intake over the phone. No hours are published. Use the office nearest you if you prefer: Las Vegas (702) 486-3545, Reno (775) 687-0800, Elko (775) 738-1966."
         },
         {
           "label": "Nevada 2-1-1",
@@ -144,6 +142,12 @@ export const drafts: PipelineStateDrafts = {
           "phone": "(775) 687-4210",
           "description": "Information about long-term care options and assessments",
           "hours": "Mon-Fri 8am-5pm PT"
+        },
+        {
+          "label": "Personal Care Services (a separate route)",
+          "phone": "(800) 525-2395",
+          "hours": "",
+          "description": "If your loved one needs help with bathing, dressing and similar day to day tasks but not nursing-home-level care, this is the other door. Press 1 then 4. For first requests only."
         }
       ],
       "applicationNotes": [
@@ -171,11 +175,11 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "How long is the waitlist for home care services really?",
-          "answer": "Waitlist length varies by region and specific waiver program, but it can range from several months to multiple years due to limited slots. Nursing home coverage typically has no waitlist. Ask your local DWSS office about current waitlist times for Home and Community-Based Services waivers in your area."
+          "answer": "Waitlist length varies by region and specific waiver program, but it can range from several months to multiple years due to limited slots. Nursing home coverage typically has no waitlist. Ask your local DSS office about current waitlist times for Home and Community-Based Services waivers in your area."
         },
         {
           "question": "Can I apply for Nevada Medicaid and Medicare Savings Programs at the same time?",
-          "answer": "Yes, you can and should apply for both if your loved one is 65+ and has Medicare. Medicare Savings Programs help pay Medicare premiums and may have higher income limits than Medicaid. Use the same Access Nevada portal or mention both programs when calling (775) 684-3600."
+          "answer": "Yes, you can and should apply for both if your loved one is 65+ and has Medicare. Medicare Savings Programs help pay Medicare premiums and may have higher income limits than Medicaid. Use the same Access Nevada portal or mention both programs when calling (775) 687-4210."
         },
         {
           "question": "What if my loved one's income is $50 over the limit?",
@@ -203,11 +207,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Bed",
-      "phone": "(775) 684-3600",
-      "sourceUrl": "https://www.dss.nv.gov/programs/medical/",
+      "phone": "(775) 687-4210",
+      "sourceUrl": "https://www.adsd.nv.gov/programs/programs-for-seniors/home-and-community-based-services-waiver-for-the-frail-elderly/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "hcbs-waiver",
@@ -409,7 +413,7 @@ export const drafts: PipelineStateDrafts = {
         "stateVariation": true,
         "localEntities": [
           {
-            "name": "Local DWSS Welfare District Offices statewide",
+            "name": "Local DSS Welfare District Offices statewide",
             "type": "service-area"
           }
         ]
@@ -486,12 +490,12 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Choose your application method",
-            "description": "Call DWSS at (775) 684-0645 or (800) 992-0900, visit your local Welfare District Office, or apply online through the Access Nevada portal at dwsd.nv.gov."
+            "description": "Call DSS at (775) 684-0645 or (800) 992-0900, visit your local Welfare District Office, or apply online through the Access Nevada portal at dwsd.nv.gov."
           },
           {
             "step": 2,
             "title": "Complete the Medicaid application",
-            "description": "Use the general medical assistance form through DWSS. You're applying for a Medicare Savings Program, not full Medicaid."
+            "description": "Use the general medical assistance form through DSS. You're applying for a Medicare Savings Program, not full Medicaid."
           },
           {
             "step": 3,
@@ -530,13 +534,13 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Nevada DWSS Main Line",
+          "label": "Nevada DSS Main Line",
           "phone": "(775) 684-0645",
           "description": "Division of Welfare and Supportive Services for Medicare Savings Programs",
           "hours": "Monday-Friday 8am-5pm PT"
         },
         {
-          "label": "Nevada DWSS Toll-Free",
+          "label": "Nevada DSS Toll-Free",
           "phone": "(800) 992-0900",
           "description": "Statewide toll-free line for benefit applications",
           "hours": "Monday-Friday 8am-5pm PT"
@@ -573,7 +577,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "Can I apply for my loved one if they have dementia?",
-          "answer": "Yes, family members can apply on behalf of elderly loved ones. You'll need to provide all the required documents and may need to establish yourself as an authorized representative with DWSS."
+          "answer": "Yes, family members can apply on behalf of elderly loved ones. You'll need to provide all the required documents and may need to establish yourself as an authorized representative with DSS."
         },
         {
           "question": "Will this affect my loved one's other benefits like Social Security?",
@@ -581,11 +585,11 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "What if my loved one gets approved for QMB but still receives medical bills?",
-          "answer": "Providers cannot bill QMB beneficiaries for Medicare-covered services. If your loved one receives bills, contact the provider immediately and show them the QMB card. You can also call DWSS for assistance resolving billing issues."
+          "answer": "Providers cannot bill QMB beneficiaries for Medicare-covered services. If your loved one receives bills, contact the provider immediately and show them the QMB card. You can also call DSS for assistance resolving billing issues."
         },
         {
           "question": "How often does my loved one need to requalify?",
-          "answer": "Renewals are typically annual, but DWSS will notify your loved one when it's time to renew. Income and asset limits are reviewed, and you'll need to submit updated financial documentation."
+          "answer": "Renewals are typically annual, but DSS will notify your loved one when it's time to renew. Income and asset limits are reviewed, and you'll need to submit updated financial documentation."
         },
         {
           "question": "Can my loved one apply for QI in December if funding might run out?",
@@ -593,7 +597,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "What's the difference between this and regular Nevada Medicaid?",
-          "answer": "Medicare Savings Programs are specifically for people who have Medicare but need help with Medicare costs. Regular Medicaid is more comprehensive but has different eligibility rules. You apply through the same office (DWSS) but specify you want Medicare Savings Programs."
+          "answer": "Medicare Savings Programs are specifically for people who have Medicare but need help with Medicare costs. Regular Medicaid is more comprehensive but has different eligibility rules. You apply through the same office (DSS) but specify you want Medicare Savings Programs."
         }
       ],
       "layoutIntent": {
@@ -690,7 +694,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Apply online or by phone",
-            "description": "Complete application at Access Nevada (accessnevada.dwss.nv.gov) or call your local Social Services office. Phone applications are accepted but online is faster."
+            "description": "Complete application at Access Nevada (accessnevada.nv.gov) or call your local Social Services office. Phone applications are accepted but online is faster."
           },
           {
             "step": 2,
@@ -714,7 +718,7 @@ export const drafts: PipelineStateDrafts = {
         "urls": [
           {
             "label": "Access Nevada Online Application",
-            "url": "https://accessnevada.dwss.nv.gov"
+            "url": "https://accessnevada.nv.gov"
           },
           {
             "label": "Nevada Division of Welfare & Supportive Services",
@@ -2534,7 +2538,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Enroll in Nevada Medicaid first",
-            "description": "Your loved one must be enrolled in Nevada Medicaid before applying for PCS. Apply at accessnevada.dwss.nv.gov or call your local DWSS office."
+            "description": "Your loved one must be enrolled in Nevada Medicaid before applying for PCS. Apply at accessnevada.nv.gov or call your local DSS office."
           },
           {
             "step": 2,
@@ -2563,7 +2567,7 @@ export const drafts: PipelineStateDrafts = {
         "urls": [
           {
             "label": "Nevada Medicaid Application",
-            "url": "https://accessnevada.dwss.nv.gov"
+            "url": "https://accessnevada.nv.gov"
           },
           {
             "label": "ADSD Personal Care Services",
@@ -2623,7 +2627,7 @@ export const drafts: PipelineStateDrafts = {
       "faqs": [
         {
           "question": "Can my loved one apply for PCS if they don't have Nevada Medicaid yet?",
-          "answer": "No, your loved one must be enrolled in Nevada Medicaid before applying for Personal Care Services. Apply for Medicaid first at accessnevada.dwss.nv.gov, then request the PCS assessment once Medicaid is approved."
+          "answer": "No, your loved one must be enrolled in Nevada Medicaid before applying for Personal Care Services. Apply for Medicaid first at accessnevada.nv.gov, then request the PCS assessment once Medicaid is approved."
         },
         {
           "question": "What if my loved one owns their home worth more than $730,000?",
