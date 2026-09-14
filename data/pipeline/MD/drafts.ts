@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MD/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T08:46:01.803Z
+ * Last updated: 2026-09-14T12:54:37.033Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -357,6 +357,187 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": null
+    },
+    {
+      "id": "soar",
+      "name": "Supporting Older Adults with Resources (SOAR)",
+      "shortName": "SOAR",
+      "tagline": "Help at home, or help with an assisted living bill, for Marylanders 62 and older.",
+      "programType": "benefit",
+      "complexity": "deep",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Maryland Access Point (statewide): 1-844-627-5465",
+            "type": "service-area"
+          },
+          {
+            "name": "Your county Area Agency on Aging runs the screening and the case management. The list of the 24 local offices is on the Maryland Access Point page.",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Maryland folded three older programs into one on July 1, 2026. Senior Care, the Senior Assisted Living Subsidy and Congregate Housing are now a single program called Supporting Older Adults with Resources, or SOAR.\n\nIt pays for the kind of help that keeps someone in their own home: case management, personal care, homemaker and chore help, meals, transportation, adult day care, respite for the person doing the caring, medical supplies, an emergency response button, and small safety repairs like a grab bar or a ramp. It can also cover part of a monthly assisted living bill.\n\nOne thing to know up front. This is paid from a state grant, not an entitlement, so what a county can offer depends on the funding it has that year. There is a waiting list.",
+      "savingsRange": "",
+      "savingsSource": "Maryland does not publish a dollar figure. SOAR pays for services, and for some people part of an assisted living monthly fee. What you get depends on the assessment and on what your county has funding for.",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Age 62 or older",
+          "Maryland resident",
+          "Income at or below $4,358/month for one person, or $4,983/month for a couple, in 2026",
+          "Assets under $20,064 for one person, or $26,400 for a couple",
+          "Needs help with daily activities, confirmed by a county nurse who visits at no cost to you",
+          "U.S. citizen, or meets the immigration criteria in 8 U.S.C. 1622"
+        ],
+        "ageRequirement": "62+",
+        "incomeTable": [
+          {
+            "householdSize": 1,
+            "monthlyLimit": 4358
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 4983
+          }
+        ],
+        "assetLimits": {
+          "individual": 20064,
+          "couple": 26400,
+          "countedAssets": [
+            "Bank accounts",
+            "Retirement and investment accounts"
+          ],
+          "exemptAssets": [
+            "Primary residence"
+          ],
+          "homeEquityCap": null
+        },
+        "functionalRequirement": "Needs help with daily activities. A nurse from the county health department confirms this in person, at no cost to you. You do not arrange or pay for this yourself.",
+        "otherRequirements": [
+          "Maryland resident",
+          "U.S. citizen or qualifying immigration status under 8 U.S.C. 1622"
+        ],
+        "povertyLevelReference": "Income ceiling is 60% of Maryland median income as set by DHCD, so it changes each year. Figures above are the 2026 chart, effective July 1, 2026."
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call Maryland Access Point. They connect you to your county office, which does a short screening call and then sends you an application if SOAR looks like a fit.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call Maryland Access Point",
+            "description": "Call 1-844-627-5465. They will ask what is going on and route you to the Area Agency on Aging for your county. You can also call your county office directly if you already know it."
+          },
+          {
+            "step": 2,
+            "title": "Do the screening call",
+            "description": "Your county office does a short screening over the phone about what help your loved one needs. Nothing to bring, and nothing to prepare."
+          },
+          {
+            "step": 3,
+            "title": "Fill out the application they send you",
+            "description": "If SOAR fits, they send an application. This is the stage where they ask for proof of income and assets. A driver’s license, state ID, birth certificate or passport all work for identity and date of birth."
+          },
+          {
+            "step": 4,
+            "title": "A county nurse visits",
+            "description": "A nurse from the county health department comes out and does the functional assessment in person. It costs you nothing and you do not need a letter from your own doctor."
+          },
+          {
+            "step": 5,
+            "title": "You go on the waiting list",
+            "description": "Applications are date-stamped and worked in the order they arrive. Because SOAR is grant funded, there is usually a wait."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": "There is a waiting list, and Maryland says plainly that SOAR is not an emergency placement or funding program. Applications are date-stamped when they arrive and reviewed in the order received, so the day you get your application in is the day that counts. Neither the state nor the counties publish how long the wait runs.",
+        "tip": "Spell out \"Supporting Older Adults with Resources\" when you call. Maryland has a second, unrelated program also called SOAR, run by the health department for people experiencing homelessness.",
+        "urls": [
+          {
+            "label": "SOAR program page",
+            "url": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources"
+          },
+          {
+            "label": "Maryland Access Point, with the phone list for all 24 counties",
+            "url": "https://aging.maryland.gov/programs-and-services/maryland-access-point"
+          },
+          {
+            "label": "2026 eligibility chart (MDoA Memorandum #26-5)",
+            "url": "https://aging.maryland.gov/media/116"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Nothing for the first call. It is a conversation about what help your loved one needs, not a paperwork review.",
+        "They will ask their age and what county they live in.",
+        "Later, when the county sends the application: proof of income and assets. Bank statements, retirement or asset statements, and a Social Security or pension award letter are what they ask for.",
+        "For identity and date of birth, any one of a driver’s license, state ID, birth certificate or passport.",
+        "You do not need a letter from your loved one’s doctor. A county health department nurse does the assessment in person, at no cost to you."
+      ],
+      "contacts": [
+        {
+          "label": "Maryland Access Point (start here)",
+          "phone": "1-844-627-5465",
+          "hours": "",
+          "description": "The statewide number. A 211 Maryland specialist takes the call and routes you to the Maryland Access Point office for your county, which does the screening and sends the application. The list of all 24 county offices is on the Maryland Access Point page."
+        },
+        {
+          "label": "Maryland Department of Aging",
+          "phone": "(410) 767-1100",
+          "hours": "",
+          "description": "The state office that sets the rules and the funding. It does not take applications, so use this only for general questions about how the program works. Toll-free: 800-243-3425."
+        }
+      ],
+      "applicationNotes": [
+        "SOAR replaced three programs on July 1, 2026: Senior Care, the Senior Assisted Living Subsidy (SALS) and Congregate Housing. If you find a page about any of those, it is out of date.",
+        "The income ceiling is tied to 60% of Maryland median income, so it moves every year. The figures here are the 2026 chart. Ask your county for the current numbers rather than relying on a figure you read.",
+        "Counties differ in how they describe the income test, and at least one county publishes a couple figure $30 below the state chart. If you are close to the line, apply anyway and let the county work it out."
+      ],
+      "relatedPrograms": [
+        "Community First Choice (CFC)",
+        "Maryland PACE",
+        "Home Delivered Meals",
+        "National Family Caregiver Support Program"
+      ],
+      "faqs": [
+        {
+          "question": "What happened to Senior Care?",
+          "answer": "It ended on July 1, 2026. Maryland combined Senior Care, the Senior Assisted Living Subsidy and Congregate Housing into SOAR. If your loved one was already getting help under one of those, call your county Area Agency on Aging and ask how the change affects them."
+        },
+        {
+          "question": "My loved one is 63. Are they too young?",
+          "answer": "No. SOAR starts at 62, which is younger than the old Senior Care program, so some people who did not qualify before do now."
+        },
+        {
+          "question": "Does SOAR help with assisted living?",
+          "answer": "It can cover part of a monthly assisted living fee. That piece came from the old Senior Assisted Living Subsidy. It is partial help, not the whole bill, and it depends on your county having funding."
+        },
+        {
+          "question": "How long is the wait?",
+          "answer": "Nobody publishes a number, so anyone who gives you one is guessing. What Maryland does say is that applications are handled in the order they arrive and that SOAR is not an emergency program. If someone needs help right now, say that on the screening call and ask what else is available while you wait."
+        },
+        {
+          "question": "Do we need a doctor’s letter?",
+          "answer": "No. A nurse from the county health department does the assessment in person and it costs you nothing."
+        }
+      ],
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "asset-focused",
+        "applyDisplay": "step-journey",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "editorial"
+      },
+      "icon": "House",
+      "phone": "1-844-627-5465",
+      "sourceUrl": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-09-14",
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "pace-comprehensive-care",
@@ -2496,7 +2677,8 @@ export const drafts: PipelineStateDrafts = {
         "need": "Help paying for home care",
         "programs": [
           "Community First Choice (CFC)",
-          "Maryland PACE"
+          "Maryland PACE",
+          "Supporting Older Adults with Resources (SOAR)"
         ],
         "description": "Programs that cover or help pay for personal care, medical services, and daily assistance at home."
       },
@@ -2512,7 +2694,8 @@ export const drafts: PipelineStateDrafts = {
         "need": "Help with housing and utility costs",
         "programs": [
           "Low-Income Home Energy Assistance Program (LIHEAP)",
-          "Maryland Weatherization Assistance Program"
+          "Maryland Weatherization Assistance Program",
+          "Supporting Older Adults with Resources (SOAR)"
         ],
         "description": "Programs that reduce heating bills, provide free energy upgrades, or help afford assisted living."
       },
