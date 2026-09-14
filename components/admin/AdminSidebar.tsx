@@ -1,5 +1,6 @@
 "use client";
 
+import { AD_BOOST_QUEUE_SETTLED } from "@/components/admin/AdBoostQueueCache";
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -364,7 +365,27 @@ export default function AdminSidebar({
       /* non-critical */
     }
   }, []);
-  useEffect(() => { void refetchCounts(); }, [refetchCounts]);
+  useEffect(() => {
+    // On a cold queue visit, let its essential queries finish before the
+    // unrelated MedJobs summary competes for database resources.
+    if (window.location.pathname !== "/admin/ad-boost") {
+      void refetchCounts();
+      return;
+    }
+    let started = false;
+    const run = () => {
+      if (started) return;
+      started = true;
+      window.clearTimeout(fallback);
+      void refetchCounts();
+    };
+    const fallback = window.setTimeout(run, 5_000);
+    window.addEventListener(AD_BOOST_QUEUE_SETTLED, run, { once: true });
+    return () => {
+      window.clearTimeout(fallback);
+      window.removeEventListener(AD_BOOST_QUEUE_SETTLED, run);
+    };
+  }, [refetchCounts]);
   useMedJobsRefresh(refetchCounts);
 
   // Inbound texts still awaiting a human. Fetched with count_only so the badge

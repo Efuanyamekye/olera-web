@@ -1,5 +1,6 @@
 "use client";
 
+import { AdBoostQueueCacheProvider } from "@/components/admin/AdBoostQueueCache";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import SidebarDrawerToggle from "@/components/admin/SidebarDrawerToggle";
@@ -105,6 +106,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
     <ToastProvider>
       <RecentMovesProvider>
+      <AdBoostQueueCacheProvider>
         <div className={isWorkspaceRoute ? "flex h-dvh min-h-0 overflow-hidden" : "flex min-h-screen"}>
           <AdminSidebar
             adminUser={adminUser}
@@ -138,6 +140,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </div>
+      </AdBoostQueueCacheProvider>
       </RecentMovesProvider>
     </ToastProvider>
   );

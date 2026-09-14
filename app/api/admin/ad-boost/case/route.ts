@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
   if (params.get("overdue") === "1") {
     const { data, error } = await db
       .from("ad_campaign_log")
-      .select(ROW_SELECT)
+      .select(params.get("counts_only") === "1" ? "request_id" : ROW_SELECT)
       .eq("entry_type", "tweak")
       .is("reviewed_at", null)
       .not("review_after", "is", null)

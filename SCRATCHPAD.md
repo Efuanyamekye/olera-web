@@ -7,6 +7,15 @@
 
 ## Current Focus
 
+### 2026-09-14 — Ad Boost queue performance
+
+- Branch `codex/ad-boost-queue-performance`, based on staging `16038abcb`; quicksave PR targets staging.
+- Changed queue/detail pages and API, shared activity/receipt readers, admin cache/layout/sidebar, smaller review badges; added migration 229, audit document, and `scripts/tests/ad-boost-performance.test.cjs`.
+- Scoped and paginated campaign queries; parallel enrichments; explicit failure instead of false-zero metrics; 60-second identity-scoped memory cache, stable filters/loading, cancellation, and stage timing headers. Detail reuses receipt calculations; sidebar MedJobs startup is deferred.
+- Pre-test reproduced/fixed optional traction-query failure interrupting a committed save/launch notification, and vanished lifecycle filters hiding the queue. Twelve regression checks, TypeScript, cron registry, and diff checks pass.
+- Next: apply/review migration 229 against live index catalog, preview `/admin/ad-boost`, test navigation/filter/archive/restore, and measure Server-Timing. No live migration or performance measurements yet. Do not merge without TJ's request.
+
+
 ### 2026-09-13 — Provider banner browsing and dismissal
 
 - Branch `codex/provider-banner-updates`, rebased onto current `origin/staging`; ready for preview PR and human QA. One visible update, arrows/counter, X advances to the next, and View updates restores the queue. Full implementation and pre-test findings are recorded in today's Session Log below.

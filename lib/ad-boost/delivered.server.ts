@@ -1,3 +1,4 @@
+import { readCampaignRows } from "@/lib/ad-boost/read-campaign-rows";
 import { getServiceClient } from "@/lib/admin";
 
 /**
@@ -62,13 +63,21 @@ export async function countDeliveredByCampaign(
   const idsByTag: Record<string, Set<string>> = {};
   for (const t of wanted) idsByTag[t] = new Set();
 
-  // 1. Primary funnel — inquiries. UTM-tagged `lead_received` on provider_activity.
-  const { data: leads } = await db
-    .from("provider_activity")
-    .select("metadata")
-    .eq("event_type", "lead_received")
-    .filter("metadata->>utm_source", "eq", "olera_managed")
-    .limit(50000);
+  // Filter and paginate in the database; neither funnel depends on the other.
+  const [leads, bens] = await Promise.all([
+    readCampaignRows(wanted, (batch, from, to, signal) => db
+      .from("provider_activity").select("metadata", { count: from === 0 ? "exact" : undefined })
+      .eq("event_type", "lead_received")
+      .filter("metadata->>utm_source", "eq", "olera_managed")
+      .in("metadata->>utm_campaign", batch)
+      .order("id").range(from, to).abortSignal(signal)),
+    readCampaignRows(wanted, (batch, from, to, signal) => db
+      .from("seeker_activity").select("profile_id, metadata", { count: from === 0 ? "exact" : undefined })
+      .eq("event_type", "benefits_completed")
+      .filter("metadata->>utm_source", "eq", "olera_managed")
+      .in("metadata->>utm_campaign", batch)
+      .order("id").range(from, to).abortSignal(signal)),
+  ]);
   for (const row of (leads ?? []) as Array<{
     metadata: { utm_campaign?: string; connection_id?: string; session_id?: string } | null;
   }>) {
@@ -79,13 +88,6 @@ export async function countDeliveredByCampaign(
     }
   }
 
-  // 2. Secondary funnel — benefits completions. UTM-tagged `benefits_completed`.
-  const { data: bens } = await db
-    .from("seeker_activity")
-    .select("profile_id, metadata")
-    .eq("event_type", "benefits_completed")
-    .filter("metadata->>utm_source", "eq", "olera_managed")
-    .limit(50000);
   for (const row of (bens ?? []) as Array<{
     profile_id: string | null;
     metadata: { utm_campaign?: string } | null;
@@ -125,12 +127,12 @@ export async function countAdLandingsByCampaign(
   const sessionsByTag: Record<string, Set<string>> = {};
   for (const t of wanted) sessionsByTag[t] = new Set();
 
-  const { data } = await db
-    .from("provider_activity")
-    .select("metadata")
+  const data = await readCampaignRows(wanted, (batch, from, to, signal) => db
+    .from("provider_activity").select("metadata", { count: from === 0 ? "exact" : undefined })
     .eq("event_type", "page_view")
     .filter("metadata->>utm_source", "eq", "olera_managed")
-    .limit(50000);
+    .in("metadata->>utm_campaign", batch)
+    .order("id").range(from, to).abortSignal(signal));
   for (const row of (data ?? []) as Array<{
     metadata: { utm_campaign?: string; session_id?: string; referrer_class?: string } | null;
   }>) {

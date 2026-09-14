@@ -5,6 +5,8 @@ import {
   getCampaignStats,
   listLeadsByCampaign,
   type CampaignLead,
+  type CampaignQuestions,
+  type CampaignStats,
 } from "@/lib/ad-boost/delivered.server";
 
 /**
@@ -38,6 +40,8 @@ import {
 export const CLICKS_PER_LEAD_BENCHMARK = 30;
 
 export interface CampaignReceipt {
+  /** Reused by the admin detail response; computed once for this request. */
+  campaignStats: CampaignStats & { questions: CampaignQuestions; since: string };
   /** Manual ad-platform numbers. The `google` key is a legacy wire name.
    * Null = not entered yet, render nothing. */
   google: {
@@ -163,6 +167,7 @@ export async function getCampaignReceipt(
       : null;
 
   return {
+    campaignStats: { ...stats, questions, since },
     google: { impressions, clicks, spendCents, ctr, cpcCents },
     engagement: {
       visitors: stats.visitors,
