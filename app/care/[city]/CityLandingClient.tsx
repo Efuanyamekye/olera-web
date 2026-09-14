@@ -414,6 +414,14 @@ export default function CityLandingClient({
     if (phone.replace(/\D/g, "").length < 10) return setError("Add a mobile number so the provider can call you.");
     if (!isDialableUSPhone(phone)) return setError("That number does not look right. Check the digits and try again.");
     if (!consent) return setError("Tick the box so a provider can contact you.");
+    // Validation has passed, so this visitor demonstrably gave contact details.
+    // Firing here guarantees the funnel invariant submissions <= contacts on
+    // one_screen whatever route they took through the form, including any
+    // autofill path that fired neither focus nor change. Idempotent, and a
+    // no-op on the stepped arms, which already fire on reaching the contact
+    // step. Placed after validation so a submit attempt with an empty form
+    // does not count as having started one.
+    markOneScreenContact();
     setBusy(true);
     // Minted here and sent to the route so the browser pixel and the server's
     // Conversions API call carry the SAME id. Meta collapses the pair into one
@@ -581,7 +589,15 @@ export default function CityLandingClient({
                   className={inputCls}
                   autoComplete="given-name"
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  // onChange as well as onFocus, because browser autofill puts
+                  // a value in without ever focusing the field. Both calls are
+                  // idempotent (fireOnce, and pinged.current), so the repeat on
+                  // every keystroke costs nothing.
+                  onChange={(e) => {
+                    setFirstName(e.target.value);
+                    markOneScreenContact();
+                    pingStart();
+                  }}
                   onFocus={() => {
                     markOneScreenContact();
                     pingStart();
@@ -598,7 +614,12 @@ export default function CityLandingClient({
                   autoComplete="tel"
                   placeholder="(704) 555-0100"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  // See the first-name field: autofill fires change, not focus.
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    markOneScreenContact();
+                    pingStart();
+                  }}
                   onFocus={() => {
                     markOneScreenContact();
                     pingStart();
