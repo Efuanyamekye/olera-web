@@ -783,8 +783,8 @@
         ]
       },
       "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly benefits on an EBT card to buy food at grocery stores and farmers markets. The average older adult receives about $188/month, with benefits ranging from $30 to $298/month for single seniors depending on income. Maryland recently increased the minimum benefit to $30/month for seniors 62+ (nearly doubling the federal minimum).\n\nBecause seniors have higher income limits (165% of poverty vs. 130% for younger households) and different asset rules, your loved one may qualify even if their Social Security or pension seemed too high for other programs. Income limit for a single person 60+ is $2,152/month in 2026. The program covers SNAP-approved foods including fruits, vegetables, meat, dairy, and bread, but not alcohol, tobacco, or prepared hot foods.\n\nDespite these benefits, only about half of eligible seniors are enrolled in SNAP. Because medical expenses for those 60+ are deductible from income, many seniors qualify who don't realize it.",
-      "savingsRange": "$360 – $3,576/year in 2026",
-      "savingsSource": "Based on Maryland SNAP minimum $30/month to maximum $298/month for single seniors",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -988,7 +988,7 @@
       "sourceUrl": "https://dhs.maryland.gov/supplemental-nutrition-assistance-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",
@@ -2025,9 +2025,9 @@
     },
     {
       "id": "senior-legal-assistance-program",
-      "name": "Senior Legal Assistance Program (Sixty Plus Legal Program)",
+      "name": "Senior Legal Assistance Program",
       "shortName": "Senior Legal Aid",
-      "tagline": "Free legal help for seniors 60+ facing housing, benefits, or elder abuse issues in Maryland.",
+      "tagline": "Free legal advice for Maryland seniors 60+ facing housing, benefits, or elder abuse issues.",
       "programType": "resource",
       "complexity": "simple",
       "geographicScope": {
@@ -2052,7 +2052,7 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and facing legal problems with housing, benefits denials, or elder abuse, Maryland provides free legal help through local attorneys and law centers. The Senior Legal Assistance Program prioritizes civil legal issues like income maintenance, public benefits disputes, housing problems, and protective services cases.\n\nBecause this program focuses on seniors' most common legal crises, your loved one gets priority help with Social Security appeals, Medicare disputes, landlord problems, utility shutoffs, and elder abuse cases. Income limits apply (typically around $39,125/year for a single person), but the program serves those with the greatest economic or social need first.",
+      "intro": "If your loved one is 60+ and facing legal problems with housing, benefits denials, or elder abuse, Maryland offers free legal advice for older adults through its Area Agencies on Aging and legal services providers. Depending on the problem and the provider, that can mean advice over the phone, help with a document or letter, or a referral; full representation in court is not guaranteed. The Senior Legal Assistance Program prioritizes civil legal issues like income maintenance, public benefits disputes, housing problems, and protective services cases.\n\nBecause this program focuses on seniors' most common legal crises, your loved one gets priority help with Social Security appeals, Medicare disputes, landlord problems, utility shutoffs, and elder abuse cases. Income limits apply (typically around $39,125/year for a single person), but the program serves those with the greatest economic or social need first.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
@@ -2064,32 +2064,6 @@
           "Priority for greatest economic need"
         ],
         "ageRequirement": "60+",
-        "incomeTable": [
-          {
-            "householdSize": 1,
-            "monthlyLimit": 3261
-          },
-          {
-            "householdSize": 2,
-            "monthlyLimit": 4406
-          },
-          {
-            "householdSize": 3,
-            "monthlyLimit": 5552
-          },
-          {
-            "householdSize": 4,
-            "monthlyLimit": 6698
-          },
-          {
-            "householdSize": 5,
-            "monthlyLimit": 7844
-          },
-          {
-            "householdSize": 6,
-            "monthlyLimit": 8990
-          }
-        ],
         "assetLimits": {
           "individual": null,
           "couple": null,
@@ -2146,12 +2120,10 @@
         ]
       },
       "documentsNeeded": [
-        "Valid government-issued photo ID",
-        "Proof of age (birth certificate, driver's license, or passport)",
-        "Proof of Maryland residency (utility bill, lease, or state-issued document)",
-        "Proof of income from last 30 days (Social Security letter, pension statements, or pay stubs)",
-        "Legal documents related to your case (benefit denial letters, eviction notices, utility shutoff notices)",
-        "Medicare and Medicaid cards if applicable"
+        "Nothing needs to be gathered before you call. No Maryland provider publishes a document list for this, and there is no ID check to get advice.",
+        "They will ask your loved one’s age and what county they live in. Both are taken at their word.",
+        "They will ask roughly what the household income is and who lives there. Some providers have an income limit and some do not.",
+        "Have a short description of the legal problem ready, and any dates or deadlines on a letter your loved one received, such as a benefit denial, an eviction notice, or a utility shutoff notice."
       ],
       "contacts": [
         {
@@ -2168,9 +2140,9 @@
         },
         {
           "label": "Baltimore Senior Legal Services",
-          "phone": "(410) 396-1322",
+          "phone": "(410) 396-5605",
           "description": "Direct legal services for Baltimore City residents",
-          "hours": "Business hours"
+          "hours": "Mon-Thu 10am-noon"
         },
         {
           "label": "St. Mary's County example",
@@ -2220,7 +2192,7 @@
       "sourceUrl": "https://aging.maryland.gov/pages/senior-legal-assistance.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2965,7 +2937,7 @@
       {
         "need": "Legal help and advocacy",
         "programs": [
-          "Senior Legal Assistance Program (Sixty Plus Legal Program)",
+          "Senior Legal Assistance Program",
           "Long-Term Care Ombudsman Program"
         ],
         "description": "Free legal assistance and advocacy for seniors facing housing, benefits, or care facility issues."

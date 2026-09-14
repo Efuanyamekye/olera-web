@@ -26,7 +26,7 @@
           }
         ]
       },
-      "intro": "If your loved one is 65+ (or disabled and 21+) and needs daily help with bathing, dressing, or medication management, Mississippi Medicaid's Elderly and Disabled waiver pays for home care services to avoid nursing home placement. The program covers case management, personal care services, adult day programs, home-delivered meals, and respite care.\n\nYour loved one must qualify for nursing home level of care through an in-person assessment and meet Medicaid income limits (roughly $2,400/month for 2026, based on 300% of the federal SSI rate). Because this is a waiver program with limited slots, waitlists are possible depending on your region.\n\nThe 60-month look-back rule applies, any assets transferred for less than fair market value in the past 5 years create penalty periods. If your loved one receives SSI, they automatically qualify for Medicaid income limits.",
+      "intro": "If your loved one is 65+ (or disabled and 21+) and needs daily help with bathing, dressing, or medication management, Mississippi Medicaid's Elderly and Disabled waiver pays for home care services to avoid nursing home placement. The program covers case management, personal care services, adult day programs, home-delivered meals, and respite care.\n\nYour loved one must qualify for nursing home level of care through an in-person assessment and meet Medicaid income limits ($2,982/month in 2026, which is 300% of the federal SSI rate). Because this is a waiver program with limited slots, waitlists are possible depending on your region.\n\nThe 60-month look-back rule applies, any assets transferred for less than fair market value in the past 5 years create penalty periods. If your loved one receives SSI, they automatically qualify for Medicaid income limits.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
@@ -34,7 +34,7 @@
         "summary": [
           "Age 65+ or disabled 21+",
           "Needs nursing home level of care",
-          "Income under 300% SSI rate (~$2,400/month)",
+          "Income under 300% of the SSI rate, which is $2,982/month in 2026",
           "Assets under $2,000",
           "Mississippi resident"
         ],
@@ -84,15 +84,15 @@
           {
             "step": 3,
             "title": "Complete in-person assessment",
-            "description": "A licensed social worker or nurse will conduct an in-person assessment using the Long-Term Services and Supports (LTSS) InterRAI tool. Your loved one must score 50+ to qualify."
+            "description": "A licensed social worker or nurse will conduct an in-person assessment using the Long-Term Services and Supports (LTSS) InterRAI tool to determine whether your loved one needs nursing home level care."
           },
           {
             "step": 4,
             "title": "Wait for approval",
-            "description": "If approved, services are sized to meet nursing home level care needs for 31+ consecutive days. Due to waiver slots being limited, you may be placed on a waitlist."
+            "description": "If approved, services are sized to your loved one’s assessed needs. Waiver slots are limited, so you may be placed on a waiting list. Entry is first come, first served based on the date you were referred, which is why calling sooner matters."
           }
         ],
-        "processingTime": "Not specified, assessment must verify nursing home level care needs for 31+ consecutive days",
+        "processingTime": "Not specified by the Division of Medicaid. Entry is first come, first served by referral date, and capacity is managed regionally, so the wait differs by area.",
         "waitlist": "Possible due to limited waiver slots, varies by region",
         "tip": "Apply while still gathering documents. The in-person assessment is required regardless, so starting early helps secure your place in line.",
         "urls": [
@@ -103,7 +103,7 @@
         ]
       },
       "documentsNeeded": [
-        "Social Security cards for your loved one",
+        "Your loved one’s Social Security number. You write the number on the form; the physical card is not required.",
         "Proof of age (birth certificate or passport)",
         "Proof of Mississippi residency (utility bill, lease, or state-issued document)",
         "Medicare card if they have one (Medicare is not required for this program)",
@@ -121,10 +121,16 @@
       ],
       "contacts": [
         {
-          "label": "Mississippi Division of Medicaid",
-          "phone": "Contact local office via medicaid.ms.gov",
-          "description": "Main application and eligibility questions",
-          "hours": "Varies by local office"
+          "label": "Mississippi Division of Medicaid (start here)",
+          "phone": "(800) 421-2408",
+          "hours": "",
+          "description": "The Division does not publish hours for this line. Call to ask for an application or with any question about submitting one. There are also 30 regional offices, listed at medicaid.ms.gov/about/office-locations."
+        },
+        {
+          "label": "Mississippi Access to Care (MAC) Center",
+          "phone": "(844) 822-4622",
+          "hours": "",
+          "description": "MAC does the screening for Medicaid waivers and can talk through home care options regardless of whether your loved one can pay. The Division’s own fact sheet lists MAC first for questions about the Elderly and Disabled Waiver."
         },
         {
           "label": "Social Security Administration",
@@ -190,11 +196,11 @@
         "visualTone": "editorial"
       },
       "icon": "House",
-      "phone": null,
+      "phone": "(800) 421-2408",
       "sourceUrl": "https://medicaid.ms.gov/programs/elderly-and-disabled-waiver/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "elderly-disabled-waiver",
@@ -593,8 +599,8 @@
         "stateVariation": true
       },
       "intro": "If your loved one is struggling to afford groceries on a fixed income, SNAP provides monthly benefits to help cover food costs. In Mississippi, seniors age 60 and older get special advantages, no gross income limits and higher asset allowances, plus a simplified application process if they have no earned income.\n\nBecause Mississippi offers the Elderly Simplified Application Project (ESAP), eligible seniors can skip much of the paperwork that makes regular SNAP applications complex. Your loved one's primary home and one vehicle don't count toward asset limits, and if they're 60 or older, only their net income (after deductions) matters for qualification.\n\nThe monthly benefit amount varies based on household size and income, but many seniors qualify for $100-300 per month. About half of eligible seniors don't apply despite qualifying, often because they don't know the program exists or assume their income is too high.",
-      "savingsRange": "$1,200 – $3,600/year in 2026",
-      "savingsSource": "Estimated based on typical SNAP benefit amounts for seniors",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
@@ -769,7 +775,7 @@
       "sourceUrl": "https://www.mdhs.ms.gov/help/snap/special/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",

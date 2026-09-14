@@ -843,8 +843,8 @@
         ]
       },
       "intro": "If your loved one is 60+ and struggling with grocery costs, Ohio SNAP provides monthly money on an EBT card they can use at any grocery store. Benefits range from a minimum of $23/month up to $415/month for a 2-person household, depending on income and expenses like rent and medical costs.\n\nYour loved one gets special protections as an older adult, higher asset limits ($4,500 vs. $2,500 for younger people), no gross income cap if their net income qualifies after subtracting expenses, and exemption from work requirements at 65+. However, if they're 55-64, new work requirements now apply unless they're disabled or caring for a young child.\n\nOnly about 50% of eligible older adults actually enroll in SNAP, often because they don't realize they qualify or think the process is too complicated. The application takes about 30 days to process, and benefits are loaded monthly onto an EBT card that works like a debit card at grocery stores.",
-      "savingsRange": "$276 – $4,980/year in 2026",
-      "savingsSource": "Based on minimum $23/month to maximum $415/month for elderly households from Ohio Benefits",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -883,7 +883,7 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at benefits.ohio.gov or call 866-663-3225, typically takes 30 days to process.",
+        "summary": "Apply online at benefits.ohio.gov or call 844-640-6446, typically takes 30 days to process.",
         "steps": [
           {
             "step": 1,
@@ -893,7 +893,7 @@
           {
             "step": 2,
             "title": "Submit application",
-            "description": "Apply online at benefits.ohio.gov (fastest), call 866-663-3225, or visit your local county Job & Family Services office. Use form JFS 07236 if applying by mail."
+            "description": "Apply online at benefits.ohio.gov (fastest), call 844-640-6446, or visit your local county Job & Family Services office. Use form JFS 07200 if applying by mail."
           },
           {
             "step": 3,
@@ -917,9 +917,10 @@
         ]
       },
       "documentsNeeded": [
-        "Valid photo ID (driver's license or state ID)",
-        "Birth certificate or other proof of age",
-        "Social Security card",
+        "A photo ID, or any other document that reasonably establishes identity. Ohio rules say the county cannot require one specific type.",
+        "Your Social Security number. You give the number, not the card.",
+        "Proof of your income for the last 30 days, plus what you pay for rent or mortgage and utilities.",
+        "If anyone in the household is 60 or older or has a disability, out-of-pocket medical costs above $35 a month. These can lower the income Ohio counts, so they are worth gathering.",
         "Social Security award letter or pension statements",
         "Pay stubs from last 30 days (if working)",
         "The current balance of any checking or savings accounts. Every state asks about this. Your savings will not count against you in this state, but you still need the numbers.",
@@ -934,16 +935,16 @@
       ],
       "contacts": [
         {
-          "label": "Ohio Benefits Customer Help Center",
+          "label": "Enterprise Helpdesk (start here)",
           "phone": "(844) 640-6446",
-          "description": "SNAP application help and status questions",
-          "hours": "Monday-Friday 7am-7pm, Saturday 8am-5pm"
+          "hours": "",
+          "description": "Ohio does not publish hours for this line. It answers questions about a SNAP application and can help you complete one. Your county office runs the interview and makes the decision."
         },
         {
-          "label": "Local County Office",
+          "label": "Your county Job and Family Services office",
           "phone": null,
-          "description": "Find your county Department of Job & Family Services office at benefits.ohio.gov",
-          "hours": "Varies by county"
+          "hours": "Varies by county",
+          "description": "Find yours at jfs.ohio.gov/about/local-agencies-directory. The county conducts the interview, issues the verification checklist, and decides within 30 days."
         }
       ],
       "applicationNotes": [
@@ -1007,7 +1008,7 @@
       "sourceUrl": "https://benefits.ohio.gov/SNAP",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "heap-energy-assistance",

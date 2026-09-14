@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-31T10:40:13.371Z
+ * Last updated: 2026-09-14T07:53:39.536Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -712,8 +712,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60+ and struggling with grocery costs on a fixed income, SNAP provides monthly benefits loaded onto an EBT card to buy food. Because New Hampshire expanded eligibility beyond federal minimums, your loved one may qualify even with income up to $2,608/month for a single person, higher than most states.\n\nBecause many seniors don't realize they qualify, only about 40% of eligible elderly participate. Your loved one can use SNAP benefits at grocery stores for most food items, but not hot prepared foods, alcohol, or tobacco. Medical expenses over $35/month count as deductions for seniors, which can significantly boost eligibility.\n\nBecause New Hampshire eliminated asset limits for most households, your loved one's savings or home value won't disqualify them unless their income exceeds 200% of federal poverty guidelines and they have more than $4,500 in countable assets.",
-      "savingsRange": "$100 – $400+/month in 2026",
-      "savingsSource": "Monthly EBT benefits based on household size and net income",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -913,7 +913,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhhs.nh.gov/programs-services/food-stamps",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",

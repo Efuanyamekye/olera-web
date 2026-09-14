@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-31T10:40:13.361Z
+ * Last updated: 2026-09-14T07:53:39.519Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -589,8 +589,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60+ and on a fixed income, they may qualify for $100–300/month toward groceries through SNAP (formerly food stamps). Benefits are loaded monthly onto an EBT card that works like a debit card at most grocery stores and farmers markets.\n\nIowa has more generous income limits than most states, your loved one can earn up to $2,086/month (160% of federal poverty level) and still qualify if they're 60+. Because seniors get special deductions for medical expenses over $35/month and shelter costs, many qualify even when their initial income seems too high.\n\nMost Iowa seniors receiving SNAP get $50–200/month depending on their net income after deductions. The maximum benefit is $291/month for a single person, but actual amounts depend on income, household size, and allowable expenses like medical costs and housing.",
-      "savingsRange": "$600 – $3,500/year in 2026",
-      "savingsSource": "Based on typical SNAP benefits of $50-291/month for seniors",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -788,7 +788,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/assistance-programs/food-assistance/snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",

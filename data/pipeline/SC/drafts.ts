@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T15:30:23.880Z
+ * Last updated: 2026-09-14T07:53:39.544Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1883,8 +1883,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 65 or older and owns their South Carolina home, they can exempt $50,000 from their property's assessed value when calculating county property taxes. If their home is worth $50,000 or less, they pay no property taxes at all.\n\nYour loved one qualifies at age 65 with no income or asset limits, this benefit is available regardless of financial status. They must own their primary residence (house, condo, or mobile home on owned land) and have lived in South Carolina for at least one calendar year. Parents who are totally disabled or legally blind can also qualify regardless of age.\n\nThis is a one-time application that continues automatically once approved. Because each county administers the program through their auditor's office, application procedures and required documents vary slightly by location.",
-      "savingsRange": "$200 – $1,000/year in 2026",
-      "savingsSource": "Estimated savings based on $50,000 exemption applied to typical South Carolina property tax rates",
+      "savingsRange": "Exempts the first $50,000 of your home’s fair market value from property tax",
+      "savingsSource": "South Carolina exempts the first $50,000 of the fair market value of a qualifying legal residence from county, municipal, school and special assessment property taxes (SC Code 12-37-250). The state publishes no typical dollar savings figure; the actual amount depends on your property and your local millage.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
@@ -1940,30 +1940,29 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "documentsNeeded": [
-        "South Carolina Driver's License or state ID card",
-        "Birth certificate (if using for age verification)",
-        "Social Security number documentation",
-        "Deed or proof of home ownership",
-        "Documentation showing ownership percentages (if deed lists multiple names)",
-        "Social Security Administration Award Letter (if applying based on disability)",
-        "State or federal agency disability certification (if applying based on disability)",
-        "Licensed ophthalmologist certification of legal blindness (if applying based on blindness)"
+        "Proof of age: a birth certificate OR your South Carolina driver’s license or state ID. Counties accept any one of these, and a copy is fine.",
+        "Your Social Security number, which you write on the application. The physical card is not required.",
+        "Proof that you own the home, such as the deed or your property tax notice.",
+        "If you are applying based on disability: the certification from the state or federal agency that declared you totally and permanently disabled.",
+        "If you are applying based on blindness: certification from a licensed ophthalmologist.",
+        "Documentation showing ownership percentages, if the deed lists more than one name."
       ],
       "contacts": [
         {
-          "label": "South Carolina 2-1-1",
+          "label": "Find your county auditor (start here)",
           "phone": "2-1-1",
-          "description": "Free helpline for local county auditor office contact information",
-          "hours": "24 hours, 7 days a week"
+          "hours": "24 hours, 7 days a week",
+          "description": "The county auditor takes this application, not the state. South Carolina law requires the form to go to the auditor of the county where the home is. 2-1-1 can look up your county auditor, and the directory at sccounties.org lists all 46. Greenville County handles these through Real Property Services instead."
         },
         {
-          "label": "SC Department of Revenue",
-          "phone": "(803) 898-5709",
-          "description": "General property tax questions and program information",
-          "hours": "Mon-Fri 8:30am-5pm ET"
+          "label": "SC Department of Revenue, Property Division",
+          "phone": "(803) 898-5700",
+          "hours": "Mon-Fri 8:30am-5pm ET",
+          "description": "SCDOR sets the rules but does not administer the Homestead Exemption and cannot take your application. Useful only for general questions about how the exemption works."
         }
       ],
       "applicationNotes": [
+        "Apply before July 16 of the tax year. After that the exemption applies to the following year instead. You qualify based on your status as of December 31 of the year before, including the requirement that you have lived in South Carolina for a full calendar year by then.",
         "If the deed lists your loved one's name with a non-spouse, the exemption is prorated based on ownership percentage, only full ownership with spouse gets the complete $50,000 exemption",
         "The one-year residency requirement is strict, moving to South Carolina mid-year means waiting until the following year to qualify",
         "Each county has slightly different documentation requirements, so call ahead to confirm what they need before visiting"
@@ -2009,10 +2008,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "warm"
       },
       "icon": "HouseLine",
-      "phone": "(803) 898-5709",
+      "phone": "2-1-1",
       "sourceUrl": "https://dor.sc.gov/property/exempt-property",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "esap-food-benefits",

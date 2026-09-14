@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T11:25:55.886Z
+ * Last updated: 2026-09-14T07:53:39.538Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -629,8 +629,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly money loaded onto an EBT card, like a debit card for food purchases. Most Nevada seniors get $100–400 per month, with the exact amount based on income and household size. Because Nevada expanded income limits beyond federal minimums, many seniors who wouldn't qualify elsewhere can get help here.\n\nThe program uses special rules for seniors that make qualifying easier. Your loved one doesn't face the strict gross income test that younger adults do, and medical expenses over $35/month actually increase their benefit amount. Nevada has no waitlist, if your loved one qualifies, benefits start within 30 days of approval.",
-      "savingsRange": "$1,200 – $4,800/year in 2026",
-      "savingsSource": "Based on typical monthly benefits of $100–400 for Nevada seniors",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
@@ -824,7 +824,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dss.nv.gov/programs/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-22"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "energy-assistance-eap-liheap",

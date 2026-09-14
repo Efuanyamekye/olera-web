@@ -843,16 +843,16 @@
       "id": "snap-food-benefits",
       "name": "Supplemental Nutrition Assistance Program (SNAP)",
       "shortName": "SNAP",
-      "tagline": "Monthly food assistance of up to $415 for Missouri seniors on fixed incomes",
+      "tagline": "Monthly help with grocery bills for Missouri seniors on fixed incomes",
       "programType": "benefit",
       "complexity": "medium",
       "geographicScope": {
         "type": "federal",
         "stateVariation": true
       },
-      "intro": "If your loved one is on a fixed income in Missouri, SNAP can provide monthly assistance with grocery bills. A typical 2-person elderly household with $1,200 monthly income receives $415/month in food benefits loaded onto an EBT card that works like a debit card at most grocery stores.\n\nElderly households (60+) have easier qualification rules than younger families. Because seniors bypass the gross income test and only need to meet net income limits, many qualify even if their total monthly income seems too high. They also get higher asset limits ($4,500 instead of $3,000) and longer certification periods, meaning less paperwork once approved.\n\nAbout half of eligible seniors don't apply for SNAP, often because they don't realize they qualify. Social Security, veterans' benefits, and disability payments all count as income, but retirement savings and home ownership typically don't disqualify applicants.",
-      "savingsRange": "$100 – $415/month in 2025",
-      "savingsSource": "Example benefit amounts for elderly households from Missouri DSS",
+      "intro": "If your loved one is on a fixed income in Missouri, SNAP can provide monthly assistance with grocery bills. Benefits are loaded onto an EBT card that works like a debit card at most grocery stores. How much depends on household size, income, and the deductions you qualify for. Through September 30, 2026 the most SNAP pays a one-person household is $298 a month.\n\nElderly households (60+) have easier qualification rules than younger families. Because seniors bypass the gross income test and only need to meet net income limits, many qualify even if their total monthly income seems too high. They also get higher asset limits ($4,500 instead of $3,000) and longer certification periods, meaning less paperwork once approved.\n\nAbout half of eligible seniors don't apply for SNAP, often because they don't realize they qualify. Social Security, veterans' benefits, and disability payments all count as income, but retirement savings and home ownership typically don't disqualify applicants.",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -942,7 +942,7 @@
         ]
       },
       "documentsNeeded": [
-        "Social Security cards for all household members",
+        "Social Security numbers for everyone in the household. You write the number on the form. Missouri does not ask for the physical cards, and it tries to verify identity electronically first.",
         "Most recent Social Security award letter or benefit statement",
         "Pension or retirement income statements",
         "The current balance of any checking or savings accounts. Every state asks about this. In Missouri your savings do count. For a household with someone 60 or older or disabled the limit is $4,500, and it rises to $4,750 on October 1, 2026.",
@@ -956,16 +956,16 @@
       ],
       "contacts": [
         {
-          "label": "State SNAP agency (start here)",
+          "label": "FSD Information Center (start here)",
           "phone": "(855) 373-4636",
-          "description": "Apply for SNAP and ask about your application",
-          "hours": null
+          "hours": "Mon-Fri 8am-5pm CT",
+          "description": "This line answers questions. Missouri does not take SNAP applications by phone: you apply online at mydss.mo.gov, or by mail or fax."
         },
         {
-          "label": "Missouri Department of Social Services",
-          "phone": null,
-          "description": "Local office finder and SNAP information",
-          "hours": "Contact local office for hours"
+          "label": "SNAP interview line",
+          "phone": "(855) 823-4908",
+          "hours": "Mon-Fri 8am-5pm CT",
+          "description": "After you apply, FSD calls the next business day for the required interview. If you miss that call, this is the number to call back. The interview has to happen before benefits start."
         },
         {
           "label": "Missouri 2-1-1",
@@ -1025,7 +1025,7 @@
       "sourceUrl": "https://mydss.mo.gov/food-assistance/apply-for-snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",
