@@ -246,7 +246,36 @@ export default function CityLandingClient({
   // engagement is the first touch of a field. Without this the arm would
   // record landings and submissions and nothing in between, which is the
   // blindness the per-question events were added to fix.
-  const markOneScreenStart = () => {
+  //
+  // These are two events and not one. Both used to fire together on the first
+  // touch of ANY field, which made one_screen's lead_started identical to its
+  // cta_engaged by construction and meant the two events could never be
+  // compared across arms: on the stepped arms lead_started is `step ===
+  // "contact"`, a visitor who answered every question and reached the contact
+  // screen, while on one_screen it was whoever tapped a care chip. Reading
+  // them side by side compared "touched anything" against "got to the end of
+  // the quiz" and flattered one_screen for free.
+  //
+  // The split follows the rule pingStart already uses a few lines below, which
+  // is the same distinction stated in that comment: you are engaged when you
+  // interact at all, and you have STARTED A LEAD when you begin giving contact
+  // details. Same meaning on all three arms.
+
+  /** Any interaction with the form. The one_screen analogue of leaving intro. */
+  const markOneScreenEngaged = () => {
+    if (!oneScreen) return;
+    fireOnce("cta_engaged");
+  };
+
+  /**
+   * First touch of a contact field. The one_screen analogue of reaching the
+   * contact step, so lead_started lines up with the stepped arms.
+   *
+   * Still fires cta_engaged: someone can focus the name field without ever
+   * touching a care chip, and fireOnce is idempotent, so the funnel keeps its
+   * order rather than recording a lead_started with no engagement before it.
+   */
+  const markOneScreenContact = () => {
     if (!oneScreen) return;
     fireOnce("cta_engaged");
     fireOnce("lead_started");
@@ -385,6 +414,14 @@ export default function CityLandingClient({
     if (phone.replace(/\D/g, "").length < 10) return setError("Add a mobile number so the provider can call you.");
     if (!isDialableUSPhone(phone)) return setError("That number does not look right. Check the digits and try again.");
     if (!consent) return setError("Tick the box so a provider can contact you.");
+    // Validation has passed, so this visitor demonstrably gave contact details.
+    // Firing here guarantees the funnel invariant submissions <= contacts on
+    // one_screen whatever route they took through the form, including any
+    // autofill path that fired neither focus nor change. Idempotent, and a
+    // no-op on the stepped arms, which already fire on reaching the contact
+    // step. Placed after validation so a submit attempt with an empty form
+    // does not count as having started one.
+    markOneScreenContact();
     setBusy(true);
     // Minted here and sent to the route so the browser pixel and the server's
     // Conversions API call carry the SAME id. Meta collapses the pair into one
@@ -531,7 +568,7 @@ export default function CityLandingClient({
                         aria-pressed={on}
                         onClick={() => {
                           setWhat(o.v);
-                          markOneScreenStart();
+                          markOneScreenEngaged();
                         }}
                         className="min-h-[48px] rounded-full border px-4 text-[15px] font-medium transition-colors"
                         style={
@@ -552,9 +589,17 @@ export default function CityLandingClient({
                   className={inputCls}
                   autoComplete="given-name"
                   value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
+                  // onChange as well as onFocus, because browser autofill puts
+                  // a value in without ever focusing the field. Both calls are
+                  // idempotent (fireOnce, and pinged.current), so the repeat on
+                  // every keystroke costs nothing.
+                  onChange={(e) => {
+                    setFirstName(e.target.value);
+                    markOneScreenContact();
+                    pingStart();
+                  }}
                   onFocus={() => {
-                    markOneScreenStart();
+                    markOneScreenContact();
                     pingStart();
                   }}
                   maxLength={60}
@@ -569,9 +614,14 @@ export default function CityLandingClient({
                   autoComplete="tel"
                   placeholder="(704) 555-0100"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  // See the first-name field: autofill fires change, not focus.
+                  onChange={(e) => {
+                    setPhone(e.target.value);
+                    markOneScreenContact();
+                    pingStart();
+                  }}
                   onFocus={() => {
-                    markOneScreenStart();
+                    markOneScreenContact();
                     pingStart();
                   }}
                 />

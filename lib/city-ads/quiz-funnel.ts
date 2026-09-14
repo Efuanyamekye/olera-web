@@ -5,6 +5,24 @@ const PAID_ENTRY_REFERRERS: readonly ReferrerClass[] = ["search", "social", "oth
 
 // Confirmed production deployment of the provider-card fix, not midnight that day.
 export const QUIZ_CLEAN_START = "2026-09-10T07:22:00.000Z";
+
+/**
+ * `contacts` has a discontinuity on 14 Sep 2026 and comparisons must not cross it.
+ *
+ * contacts counts `lead_started`. Until the one_screen parity fix, that arm fired
+ * lead_started on the first touch of ANY field, including a care chip, while the
+ * stepped arms fired it on reaching the contact step. one_screen's lead_started
+ * was therefore identical to its cta_engaged by construction, so every engaged
+ * one_screen visitor also landed in contacts.
+ *
+ * These rows are keyed by slug and channel and do NOT break out the arm, so that
+ * inflation is baked into the mixed funnel as well as any arm comparison. Before
+ * the fix, `contacts` reads high by roughly the one_screen share of engagement;
+ * after it, contacts means the same thing on all three arms.
+ *
+ * Do not read a contacts trend across that boundary. If the range spans it, split
+ * at the deploy and compare the halves separately.
+ */
 export interface QuizEvent {
   anonymous_id: string | null;
   visit_id: string | null;
