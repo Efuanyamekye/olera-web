@@ -1,6 +1,7 @@
+import { readCampaignRows } from "@/lib/ad-boost/read-campaign-rows";
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
-import { countDeliveredByCampaign, countAdLandingsByCampaign, listLeadsByCampaign, getCampaignStats, getCampaignQuestions } from "@/lib/ad-boost/delivered.server";
+import { countDeliveredByCampaign, countAdLandingsByCampaign } from "@/lib/ad-boost/delivered.server";
 import { getCampaignReceipt } from "@/lib/ad-boost/receipts.server";
 import { sendAdBoostLifecycleEmail } from "@/lib/ad-boost/lifecycle-notifications.server";
 import { sendAdBoostPhotoEmail } from "@/lib/ad-boost/photo-notifications.server";
@@ -53,9 +54,31 @@ const ROW_SELECT =
   "id, provider_id, provider_slug, display_name, requested_setup_week, completeness_at_submit, status, channel, intended_monthly_budget, campaign_tag, admin_note, created_at, updated_at, deleted_at, ended_at, ended_reason, ad_budget_cents, ad_budget_type, ad_spend_cents, ad_clicks, ad_impressions, metrics_updated_at, metrics_source, platform_campaign_id, flight_start_date, flight_end_date, queued_email_sent_at, requested_email_sent_at, profile_reminder_email_sent_at, promotion_email_sent_at, launched_email_sent_at, launched_email_scheduled_at, traction_email_sent_at, promo_complete_email_sent_at, promo_complete_email_scheduled_at, provider_reported_outcome, provider_reported_outcome_at, plan_status, plan_value, stripe_customer_id, stripe_subscription_id, subscribed_at, photo_readiness_status, photo_review_note, photo_reviewed_at, photo_reviewed_by, photo_update_requested_at, photo_update_submitted_at, photo_nudge_email_sent_at, photo_reminder_email_sent_at, photo_ready_email_sent_at, provider_comms_paused_at, provider_comms_paused_reason";
 
 export async function GET(request: NextRequest) {
-  const user = await getAuthUser();
+  const started = performance.now();
+  const timings: Record<string, number> = {};
+  let response: NextResponse;
+  try {
+    response = await getQueueResponse(request, timings);
+  } catch (error) {
+    console.error("[admin/ad-boost] read failed:", error);
+    response = NextResponse.json({ error: "Campaign data is temporarily unavailable. Please retry." }, { status: 503 });
+  }
+  timings.ad_boost = performance.now() - started;
+  response.headers.set("Server-Timing", Object.entries(timings)
+    .map(([name, duration]) => `${name};dur=${duration.toFixed(1)}`).join(", "));
+  response.headers.set("Cache-Control", "private, no-store");
+  return response;
+}
+
+async function getQueueResponse(request: NextRequest, timings: Record<string, number>) {
+  async function timed<T>(name: string, work: PromiseLike<T>): Promise<T> {
+    const started = performance.now();
+    try { return await work; }
+    finally { timings[name] = performance.now() - started; }
+  }
+  const user = await timed("auth", getAuthUser());
   if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  const adminUser = await getAdminUser(user.id);
+  const adminUser = await timed("admin", getAdminUser(user.id));
   if (!adminUser) return NextResponse.json({ error: "Access denied" }, { status: 403 });
 
   const params = new URL(request.url).searchParams;
@@ -135,10 +158,9 @@ export async function GET(request: NextRequest) {
       (campaign) => campaign.campaign_tag || campaign.id,
     );
     const tag = row.campaign_tag || row.id;
-    const [delivered, adLandings, leads, receipt, communicationResult, profileResult] = await Promise.all([
+    const [delivered, adLandings, receipt, communicationResult, profileResult] = await Promise.all([
       countDeliveredByCampaign(db, campaignTags),
       countAdLandingsByCampaign(db, campaignTags),
-      listLeadsByCampaign(db, tag),
       getCampaignReceipt(db, row),
       db
         .from("email_log")
@@ -197,24 +219,9 @@ export async function GET(request: NextRequest) {
     // readers, so the admin queue mirrors the provider's signed-in view (not
     // the legacy benefits-only `delivered` count). Null until the campaign is
     // live or ended (ended keeps stats — the wrap-up leads with them).
-    let campaignStats:
-      | { visitors: number; leads: number; questions: { received: number; unanswered: number }; since: string }
-      | null = null;
-    if (row.status === "live" || row.status === "ended") {
-      const since = new Date(
-        row.flight_start_date || row.requested_setup_week || row.created_at,
-      ).toISOString();
-      const providerIdVariants = [row.provider_slug, row.provider_id];
-      const [stats, questions] = await Promise.all([
-        getCampaignStats(db, { providerIdVariants, since }),
-        getCampaignQuestions(db, {
-          providerIdVariants,
-          since,
-          campaignTag: row.campaign_tag || row.id,
-        }),
-      ]);
-      campaignStats = { ...stats, questions, since };
-    }
+    const campaignStats = row.status === "live" || row.status === "ended"
+      ? receipt.campaignStats
+      : null;
 
     return NextResponse.json({
       request: {
@@ -222,7 +229,7 @@ export async function GET(request: NextRequest) {
         delivered: delivered[tag] ?? 0,
         ad_landings: adLandings[tag] ?? 0,
       },
-      leads,
+      leads: receipt.leads,
       communications: communicationResult.data ?? [],
       campaignStats,
       receipt: {
@@ -257,7 +264,12 @@ export async function GET(request: NextRequest) {
   query = archived
     ? query.not("deleted_at", "is", null)
     : query.is("deleted_at", null);
-  const { data, error } = await query;
+  const [{ data, error }, activeResult, archivedResult] = await Promise.all([
+    timed("campaigns", query),
+    timed("active_count", db.from("ad_campaign_requests").select("*", { count: "exact", head: true }).is("deleted_at", null)),
+    timed("archived_count", db.from("ad_campaign_requests").select("*", { count: "exact", head: true }).not("deleted_at", "is", null)),
+  ]);
+  if (activeResult.error || archivedResult.error) throw new Error("Queue counts unavailable");
 
   if (error) {
     console.error("[admin/ad-boost] list failed:", error);
@@ -285,43 +297,43 @@ export async function GET(request: NextRequest) {
       last: { email_type: string; subject: string | null; sent_at: string } | null;
     }
   >();
-  if (requests.length > 0) {
-    const requestIds = new Set(requests.map((row: { id: string }) => row.id));
-    const { data: communicationRows, error: communicationError } = await db
-      .from("email_log")
-      .select("email_type, subject, status, created_at, delivered_at, bounced_at, metadata")
-      .in("email_type", AD_BOOST_EMAIL_TYPES)
-      .order("created_at", { ascending: false })
-      .limit(5000);
-    if (communicationError) {
-      console.error("[admin/ad-boost] queue communication summary failed:", communicationError);
-    }
-    for (const communication of ([...(communicationRows ?? [])].reverse()) as QueueCommunicationRow[]) {
-      const requestId = communication.metadata?.request_id;
-      if (
-        typeof requestId !== "string" ||
-        !requestIds.has(requestId) ||
-        communication.bounced_at ||
-        (communication.status !== "sent" && !communication.delivered_at)
-      ) {
-        continue;
+  const loadCommunications = async () => {
+    if (requests.length > 0) {
+      const requestIds = new Set(requests.map((row: { id: string }) => row.id));
+      const communicationRows = await readCampaignRows([...requestIds], (ids, from, to, signal) => db
+        .from("email_log")
+        .select("email_type, subject, status, created_at, delivered_at, bounced_at, metadata", { count: from === 0 ? "exact" : undefined })
+        .in("email_type", AD_BOOST_EMAIL_TYPES)
+        .in("metadata->>request_id", ids)
+        .order("created_at", { ascending: false }).order("id")
+        .range(from, to).abortSignal(signal));
+      for (const communication of ([...(communicationRows ?? [])].reverse()) as QueueCommunicationRow[]) {
+        const requestId = communication.metadata?.request_id;
+        if (
+          typeof requestId !== "string" ||
+          !requestIds.has(requestId) ||
+          communication.bounced_at ||
+          (communication.status !== "sent" && !communication.delivered_at)
+        ) {
+          continue;
+        }
+        const sentAt = communication.delivered_at ?? communication.created_at;
+        const summary = communicationSummaryByRequest.get(requestId) ?? { by_type: {}, last: null };
+        const existing = summary.by_type[communication.email_type];
+        summary.by_type[communication.email_type] = {
+          count: (existing?.count ?? 0) + 1,
+          last_sent_at: sentAt,
+          last_subject: communication.subject,
+        };
+        summary.last = {
+          email_type: communication.email_type,
+          subject: communication.subject,
+          sent_at: sentAt,
+        };
+        communicationSummaryByRequest.set(requestId, summary);
       }
-      const sentAt = communication.delivered_at ?? communication.created_at;
-      const summary = communicationSummaryByRequest.get(requestId) ?? { by_type: {}, last: null };
-      const existing = summary.by_type[communication.email_type];
-      summary.by_type[communication.email_type] = {
-        count: (existing?.count ?? 0) + 1,
-        last_sent_at: sentAt,
-        last_subject: communication.subject,
-      };
-      summary.last = {
-        email_type: communication.email_type,
-        subject: communication.subject,
-        sent_at: sentAt,
-      };
-      communicationSummaryByRequest.set(requestId, summary);
     }
-  }
+  };
 
   // Attach the ROI signal: families delivered per campaign (benefits_completed
   // events tagged with the campaign's utm_campaign). The effective tag is
@@ -330,18 +342,13 @@ export async function GET(request: NextRequest) {
   const tags = requests.map(
     (r: { id: string; campaign_tag: string | null }) => r.campaign_tag || r.id,
   );
-  const [delivered, adLandings] = await Promise.all([
-    countDeliveredByCampaign(db, tags),
-    countAdLandingsByCampaign(db, tags),
-  ]);
-
   // Questions per campaign for the queue rows — same since-launch window the
   // provider-facing counter uses, batched as ONE query across all campaigns
   // (per-row getCampaignQuestions would be N round-trips). Pre-launch rows
   // read 0 and the UI renders a dash.
   const questionsByRequestId: Record<string, number> = {};
   const questionTopicsByRequestId: Record<string, Set<string>> = {};
-  {
+  const loadQuestions = async () => {
     type ListRow = {
       id: string;
       provider_id: string | null;
@@ -375,12 +382,11 @@ export async function GET(request: NextRequest) {
         }
       }
       const minSince = [...sinceByRequest.values()].sort()[0];
-      const { data: qRows } = await db
+      const qRows = await readCampaignRows([...variantToRequestIds.keys()], (ids, from, to, signal) => db
         .from("provider_question_asks")
-        .select("provider_id, question_id, utm_source, utm_campaign, created_at")
-        .in("provider_id", [...variantToRequestIds.keys()])
-        .gte("created_at", minSince)
-        .limit(5000);
+        .select("provider_id, question_id, utm_source, utm_campaign, created_at", { count: from === 0 ? "exact" : undefined })
+        .in("provider_id", ids).gte("created_at", minSince)
+        .order("id").range(from, to).abortSignal(signal));
       type AskRow = {
         provider_id: string | null;
         question_id: string;
@@ -390,9 +396,9 @@ export async function GET(request: NextRequest) {
       };
       const rawAsks = (qRows ?? []) as AskRow[];
       const questionIds = [...new Set(rawAsks.map((ask) => ask.question_id))];
-      const { data: topicRows } = questionIds.length > 0
-        ? await db.from("provider_questions").select("id, status").in("id", questionIds)
-        : { data: [] as Array<{ id: string; status: string }> };
+      const topicRows = await readCampaignRows(questionIds, (ids, from, to, signal) => db
+        .from("provider_questions").select("id, status", { count: from === 0 ? "exact" : undefined }).in("id", ids)
+        .order("id").range(from, to).abortSignal(signal));
       const manageableQuestionIds = new Set(
         (topicRows ?? [])
           .filter((topic) => topic.status !== "archived" && topic.status !== "rejected")
@@ -428,7 +434,14 @@ export async function GET(request: NextRequest) {
         );
       }
     }
-  }
+  };
+
+  const [delivered, adLandings] = await Promise.all([
+    timed("delivered", countDeliveredByCampaign(db, tags)),
+    timed("landings", countAdLandingsByCampaign(db, tags)),
+    timed("communications", loadCommunications()),
+    timed("questions", loadQuestions()),
+  ]);
 
   const withRoi = requests.map((r: { id: string; campaign_tag: string | null }) => ({
     ...r,
@@ -439,16 +452,9 @@ export async function GET(request: NextRequest) {
     communication_summary: communicationSummaryByRequest.get(r.id) ?? { by_type: {}, last: null },
   }));
 
-  // Tab counts (active vs archived) so both tabs show a number regardless of
-  // which view is loaded. Cheap head-only count queries.
-  const [{ count: activeCount }, { count: archivedCount }] = await Promise.all([
-    db.from("ad_campaign_requests").select("*", { count: "exact", head: true }).is("deleted_at", null),
-    db.from("ad_campaign_requests").select("*", { count: "exact", head: true }).not("deleted_at", "is", null),
-  ]);
-
   return NextResponse.json({
     requests: withRoi,
-    counts: { active: activeCount ?? 0, archived: archivedCount ?? 0 },
+    counts: { active: activeResult.count ?? 0, archived: archivedResult.count ?? 0 },
   });
 }
 
@@ -1034,13 +1040,21 @@ export async function POST(request: NextRequest) {
   // slice of provider_activity, and this PATCH also serves status flips, notes
   // and photo review, none of which need it.
   const typedTraction = (data.ad_spend_cents ?? 0) > 0 || (data.ad_clicks ?? 0) > 0;
-  const tractionEmailDue =
-    data.status === "live" &&
-    metricsWereSaved &&
-    (typedTraction ||
-      ((await countAdLandingsByCampaign(db, [data.campaign_tag || data.id]))[
-        data.campaign_tag || data.id
-      ] ?? 0) > 0);
+  let tractionEmailDue = data.status === "live" && metricsWereSaved && typedTraction;
+  let warning: string | undefined;
+  if (data.status === "live" && metricsWereSaved && !typedTraction) {
+    try {
+      const tag = data.campaign_tag || data.id;
+      const landings = await countAdLandingsByCampaign(db, [tag]);
+      tractionEmailDue = (landings[tag] ?? 0) > 0;
+    } catch (error) {
+      // The save has already committed. This optional email eligibility read
+      // must not turn it into a failed save or prevent launch/photo messages.
+      // Unknown traction does not authorize a traction email.
+      console.error("[admin/ad-boost] saved, but traction lookup failed:", error);
+      warning = "Saved. The traction check was unavailable, so no traction email was sent. Retry saving metrics when campaign data is available.";
+    }
+  }
   const lifecycleSends: Array<Promise<unknown>> = [];
 
   if (
@@ -1082,7 +1096,7 @@ export async function POST(request: NextRequest) {
     await Promise.all(lifecycleSends);
   }
 
-  return NextResponse.json({ request: data });
+  return NextResponse.json({ request: data, ...(warning ? { warning } : {}) });
 }
 
 export async function DELETE(request: NextRequest) {

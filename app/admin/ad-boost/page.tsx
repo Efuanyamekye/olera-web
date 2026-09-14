@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback, useRef } from "react";
+import { AD_BOOST_QUEUE_SETTLED, fetchAdBoost, useAdBoostQueueCache } from "@/components/admin/AdBoostQueueCache";
 import Link from "next/link";
 import {
   type CampaignRequest,
@@ -25,18 +26,27 @@ import {
 import styles from "./ad-boost-queue.module.css";
 
 export default function AdminAdBoostPage() {
-  const [requests, setRequests] = useState<CampaignRequest[] | null>(null);
-  const [counts, setCounts] = useState({ active: 0, archived: 0 });
+  const cache = useAdBoostQueueCache();
+  const initial = cache.rows.get(cache.preferences.view);
+  const recent = initial && Date.now() - initial.at < 60_000 ? initial : undefined;
+  const initialFilter = cache.preferences.filter[cache.preferences.view];
+  const controllerRef = useRef<AbortController | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [updatedAt, setUpdatedAt] = useState<number | null>(recent?.at ?? null);
+  const [requests, setRequests] = useState<CampaignRequest[] | null>(recent?.requests ?? null);
+  const [counts, setCounts] = useState(recent?.counts ?? { active: 0, archived: 0 });
   const [error, setError] = useState<string | null>(null);
-  const [view, setView] = useState<"active" | "archived">("active");
+  const [view, setView] = useState<"active" | "archived">(cache.preferences.view);
   // Defaults to Live: the campaigns actually spending money are what this page
-  // is opened for. `load` re-applies this per view — Archived never defaults to
+  // is opened for. Initialize once per view — Archived never defaults to
   // Live (archived rows are ended/cancelled), and an active queue with nothing
   // live falls back to All so the page never opens on an empty list.
-  const [statusFilter, setStatusFilter] = useState<string | null>("live");
-  const [sort, setSort] = useState<AdBoostQueueSort>("priority");
+  const [statusFilter, setStatusFilter] = useState<string | null>(
+    initialFilter === undefined ? (cache.preferences.view === "active" ? "live" : null) : initialFilter,
+  );
+  const [sort, setSort] = useState<AdBoostQueueSort>(cache.preferences.sort);
   const [expandedProviders, setExpandedProviders] = useState<Set<string>>(
-    () => new Set(),
+    () => cache.preferences.expanded,
   );
   // Tweaks whose review date has passed that nobody has come back to. The point of the
   // case log is that the system asks rather than the operator remembering, so an overdue
@@ -46,47 +56,95 @@ export default function AdminAdBoostPage() {
   );
 
   const load = useCallback(async () => {
+    controllerRef.current?.abort();
+    const controller = new AbortController();
+    controllerRef.current = controller;
+    const timeout = window.setTimeout(() => controller.abort(), 20_000);
     setError(null);
+    setRefreshing(true);
     try {
-      const res = await fetch(
+      const res = await fetchAdBoost(
         view === "archived" ? "/api/admin/ad-boost?archived=1" : "/api/admin/ad-boost",
+        { signal: controller.signal, cache: "no-store" },
       );
+      if (controller.signal.aborted) return;
+      if (res.status === 401 || res.status === 403) {
+        cache.rows.clear();
+        setRequests(null);
+        setUpdatedAt(null);
+      }
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
         throw new Error(j.error || "Failed to load");
       }
       const json = await res.json();
+      if (controller.signal.aborted) return;
       const rows = json.requests as CampaignRequest[];
+      const at = Date.now();
+      cache.rows.set(view, { requests: rows, counts: json.counts, at });
       setRequests(rows);
-      setStatusFilter(
-        view === "active" && rows.some((row) => row.status === "live") ? "live" : null,
-      );
-      if (json.counts) setCounts(json.counts);
-
-      // Non-blocking: a failure here should dim the badges, never the queue.
-      try {
-        const od = await fetch("/api/admin/ad-boost/case?overdue=1");
-        if (od.ok) {
-          const odJson = await od.json();
-          const tally = new Map<string, number>();
-          for (const row of (odJson.overdue ?? []) as Array<{ request_id: string | null }>) {
-            if (!row.request_id) continue;
-            tally.set(row.request_id, (tally.get(row.request_id) ?? 0) + 1);
-          }
-          setOverdueByRequest(tally);
-        }
-      } catch {
-        // Leave the map empty; the queue still works without badges.
+      setCounts(json.counts);
+      setUpdatedAt(at);
+      if (cache.preferences.filter[view] === undefined) {
+        cache.preferences.filter[view] = view === "active" && rows.some(row => row.status === "live") ? "live" : null;
       }
+      const selected = cache.preferences.filter[view];
+      if (selected && selected !== "attention" && !rows.some(row => row.status === selected)) {
+        // The last campaign in a remembered lifecycle may have moved on.
+        // Don't leave an invisible selected chip hiding the entire queue.
+        cache.preferences.filter[view] = null;
+      }
+      setStatusFilter(cache.preferences.filter[view] ?? null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load");
+      if (controllerRef.current === controller) {
+        setError(controller.signal.aborted ? "Loading took too long. Please retry." : e instanceof Error ? e.message : "Failed to load");
+      }
+    } finally {
+      window.clearTimeout(timeout);
+      if (controllerRef.current === controller) {
+        setRefreshing(false);
+        window.dispatchEvent(new Event(AD_BOOST_QUEUE_SETTLED));
+      }
     }
-  }, [view]);
+  }, [cache, view]);
 
   useEffect(() => {
-    setRequests(null);
-    load();
-  }, [load]);
+    const snapshot = cache.rows.get(view);
+    const recent = snapshot && Date.now() - snapshot.at < 60_000 ? snapshot : undefined;
+    setRequests(recent?.requests ?? null);
+    setUpdatedAt(recent?.at ?? null);
+    if (recent) setCounts(recent.counts);
+    const savedFilter = cache.preferences.filter[view];
+    setStatusFilter(savedFilter === undefined ? (view === "active" ? "live" : null) : savedFilter);
+    void load();
+    return () => {
+      controllerRef.current?.abort();
+      controllerRef.current = null;
+    };
+  }, [cache, view, load]);
+
+  useEffect(() => {
+    // Review badges are optional and never gate the queue response.
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 10_000);
+    void fetchAdBoost("/api/admin/ad-boost/case?overdue=1&counts_only=1", { signal: controller.signal })
+      .then(async res => {
+        if (!res.ok) return;
+        const json = await res.json();
+        if (controller.signal.aborted) return;
+        const tally = new Map<string, number>();
+        for (const row of json.overdue ?? []) {
+          if (row.request_id) tally.set(row.request_id, (tally.get(row.request_id) ?? 0) + 1);
+        }
+        setOverdueByRequest(tally);
+      }).catch(() => {}).finally(() => window.clearTimeout(timeout));
+    return () => controller.abort();
+  }, [view]);
+
+  const chooseFilter = (filter: string | null) => {
+    cache.preferences.filter[view] = filter;
+    setStatusFilter(filter);
+  };
 
   const tabs = [
     { value: "active" as const, label: "Queue", count: counts.active },
@@ -138,7 +196,7 @@ export default function AdminAdBoostPage() {
     <button
       key={status}
       type="button"
-      onClick={() => setStatusFilter(statusFilter === status ? null : status)}
+      onClick={() => chooseFilter(statusFilter === status ? null : status)}
       className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
         statusFilter === status ? "bg-gray-800 text-white" : "text-gray-500 hover:bg-gray-100"
       }`}
@@ -155,6 +213,7 @@ export default function AdminAdBoostPage() {
       const next = new Set(current);
       if (next.has(providerId)) next.delete(providerId);
       else next.add(providerId);
+      cache.preferences.expanded = next;
       return next;
     });
   };
@@ -212,7 +271,9 @@ export default function AdminAdBoostPage() {
               key={tab.value}
               type="button"
               onClick={() => {
+                cache.preferences.view = tab.value;
                 setView(tab.value);
+                cache.preferences.expanded = new Set();
                 setExpandedProviders(new Set());
               }}
               className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
@@ -223,7 +284,7 @@ export default function AdminAdBoostPage() {
             >
               {tab.label}
               <span className={`text-xs ${view === tab.value ? "text-white/70" : "text-gray-400"}`}>
-                ({tab.count})
+                ({requests ? tab.count : "—"})
               </span>
             </button>
           ))}
@@ -241,10 +302,10 @@ export default function AdminAdBoostPage() {
         <div className={styles.filterRail}>
           <div className={`${styles.filterList} flex items-center gap-1.5`}>
             {showLiveChip && renderStatusChip("live")}
-            {attentionCount > 0 && (
+            {(attentionCount > 0 || statusFilter === "attention") && (
               <button
                 type="button"
-                onClick={() => setStatusFilter(statusFilter === "attention" ? null : "attention")}
+                onClick={() => chooseFilter(statusFilter === "attention" ? null : "attention")}
                 className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
                   statusFilter === "attention"
                     ? "bg-amber-600 text-white"
@@ -257,10 +318,10 @@ export default function AdminAdBoostPage() {
                 </span>
               </button>
             )}
-            {(statusChips.length > 1 || attentionCount > 0) && (
+            {(statusChips.length > 1 || attentionCount > 0 || statusFilter !== null) && (
               <button
                 type="button"
-                onClick={() => setStatusFilter(null)}
+                onClick={() => chooseFilter(null)}
                 className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
                   statusFilter === null
                     ? "bg-gray-800 text-white"
@@ -281,7 +342,11 @@ export default function AdminAdBoostPage() {
           Sort
           <select
             value={sort}
-            onChange={(event) => setSort(event.target.value as AdBoostQueueSort)}
+            onChange={(event) => {
+              const sort = event.target.value as AdBoostQueueSort;
+              cache.preferences.sort = sort;
+              setSort(sort);
+            }}
             className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700"
           >
             <option value="priority">Operational priority</option>
@@ -291,7 +356,10 @@ export default function AdminAdBoostPage() {
         </label>
       </div>
 
-      {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
+      <div className="mb-3 text-xs text-gray-500" role="status">
+        {refreshing ? "Updating campaigns…" : updatedAt ? `Updated ${new Date(updatedAt).toLocaleTimeString()}` : null}
+        {error && <span className="text-amber-800"> {requests ? "Showing previously loaded campaigns. " : ""}{error} <button type="button" className="underline" onClick={() => void load()}>Retry</button></span>}
+      </div>
 
       <div className="rounded-xl border border-gray-200">
         <div className={`${styles.queueHeader} items-center rounded-t-[11px] border-b border-gray-200 bg-gray-50 px-3 py-2.5 text-[10px] font-medium uppercase tracking-[0.06em] text-gray-400`}>
@@ -306,7 +374,11 @@ export default function AdminAdBoostPage() {
           <span className="text-right">Actions</span>
         </div>
 
-        {!requests && !error && <p className="px-4 py-6 text-sm text-gray-400">Loading…</p>}
+        {!requests && !error && <div role="status" aria-label="Loading campaigns" className="divide-y divide-gray-100">
+          {Array.from({ length: 6 }, (_, index) => <div key={index} className="flex h-24 items-center gap-8 px-4 motion-safe:animate-pulse" aria-hidden="true">
+            <div className="h-4 w-1/3 rounded bg-gray-100" /><div className="h-3 w-1/4 rounded bg-gray-100" /><div className="ml-auto h-4 w-16 rounded bg-gray-100" />
+          </div>)}
+        </div>}
         {providerGroups && providerGroups.length === 0 && (
           <p className="px-4 py-6 text-sm text-gray-400">
             {statusFilter
@@ -648,7 +720,7 @@ function CampaignActions({
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/admin/ad-boost", {
+      const res = await fetchAdBoost("/api/admin/ad-boost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: request.id, archived }),
@@ -675,7 +747,7 @@ function CampaignActions({
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch(`/api/admin/ad-boost?id=${encodeURIComponent(request.id)}`, {
+      const res = await fetchAdBoost(`/api/admin/ad-boost?id=${encodeURIComponent(request.id)}`, {
         method: "DELETE",
       });
       if (!res.ok) {

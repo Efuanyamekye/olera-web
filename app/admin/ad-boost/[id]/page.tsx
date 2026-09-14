@@ -1,5 +1,6 @@
 "use client";
 
+import { fetchAdBoost } from "@/components/admin/AdBoostQueueCache";
 import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -85,7 +86,7 @@ export default function AdBoostDetailPage() {
   const load = useCallback(async () => {
     setError(null);
     try {
-      const res = await fetch(`/api/admin/ad-boost?id=${encodeURIComponent(id)}`);
+      const res = await fetchAdBoost(`/api/admin/ad-boost?id=${encodeURIComponent(id)}`);
       if (!res.ok) {
         const j = await res.json().catch(() => ({}));
         throw new Error(j.error || "Failed to load");
@@ -307,7 +308,7 @@ function Detail({
     setSaving(true);
     setMsg(null);
     try {
-      const res = await fetch("/api/admin/ad-boost", {
+      const res = await fetchAdBoost("/api/admin/ad-boost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -345,6 +346,8 @@ function Detail({
         const j = await res.json().catch(() => ({}));
         throw new Error(j.error || "Save failed");
       }
+      const result = await res.json();
+      if (result.warning) setMsg(result.warning);
       onChanged();
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "Save failed");
@@ -377,7 +380,7 @@ function Detail({
     setSavingPerf(true);
     setMsg(null);
     try {
-      const res = await fetch("/api/admin/ad-boost", {
+      const res = await fetchAdBoost("/api/admin/ad-boost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -391,6 +394,8 @@ function Detail({
         const j = await res.json().catch(() => ({}));
         throw new Error(j.error || "Save failed");
       }
+      const result = await res.json();
+      if (result.warning) setMsg(result.warning);
       onChanged();
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "Save failed");
@@ -404,7 +409,7 @@ function Detail({
     setBusy(true);
     setMsg(null);
     try {
-      const res = await fetch("/api/admin/ad-boost", {
+      const res = await fetchAdBoost("/api/admin/ad-boost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: request.id, send_launch_email: true }),
@@ -432,7 +437,7 @@ function Detail({
     setBusy(true);
     setMsg(null);
     try {
-      const res = await fetch("/api/admin/ad-boost", {
+      const res = await fetchAdBoost("/api/admin/ad-boost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: request.id, send_promo_complete_email: true }),
@@ -454,7 +459,7 @@ function Detail({
     setBusy(true);
     setMsg(null);
     try {
-      const res = await fetch("/api/admin/ad-boost", {
+      const res = await fetchAdBoost("/api/admin/ad-boost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: request.id, archived }),
@@ -482,7 +487,7 @@ function Detail({
     setBusy(true);
     setMsg(null);
     try {
-      const res = await fetch(`/api/admin/ad-boost?id=${encodeURIComponent(request.id)}`, {
+      const res = await fetchAdBoost(`/api/admin/ad-boost?id=${encodeURIComponent(request.id)}`, {
         method: "DELETE",
       });
       if (!res.ok) {
@@ -1429,7 +1434,7 @@ function PhotoReadinessReview({
     setBusy(true);
     setMessage(null);
     try {
-      const res = await fetch("/api/admin/ad-boost", {
+      const res = await fetchAdBoost("/api/admin/ad-boost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1452,7 +1457,7 @@ function PhotoReadinessReview({
     setBusy(true);
     setMessage(null);
     try {
-      const res = await fetch("/api/admin/ad-boost", {
+      const res = await fetchAdBoost("/api/admin/ad-boost", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id: request.id, send_photo_email: kind }),
