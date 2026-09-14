@@ -258,16 +258,18 @@ export async function processEvent(
   return { sent, skipped };
 }
 
-/** How far back to look for new pool members (24 hours) */
-const NEW_POOL_MEMBER_LOOKBACK_MS = 24 * 60 * 60 * 1000;
-
 /** How far back to look for existing family activity to send to new pool members (30 days) */
 const EXISTING_ACTIVITY_LOOKBACK_DAYS = 30;
 
 /**
- * Find providers who recently entered broadcast_ready stage and haven't
- * received any broadcasts yet. These are "new pool members" who should
- * receive broadcasts about existing family activity in their city.
+ * Find providers in the broadcast_ready pool who haven't received any
+ * broadcasts yet. These providers should receive a "welcome" broadcast
+ * about existing family activity in their city.
+ *
+ * Previously this was limited to providers who entered in the last 24 hours,
+ * but that caused issues when providers were added to the pool by teammates
+ * in different timezones or when no family activity occurred within that window.
+ * Now we check ALL broadcast_ready providers who haven't received a broadcast.
  */
 async function findNewPoolMembers(): Promise<
   Array<{
@@ -278,26 +280,25 @@ async function findNewPoolMembers(): Promise<
   }>
 > {
   const db = getServiceClient();
-  const cutoff = new Date(Date.now() - NEW_POOL_MEMBER_LOOKBACK_MS).toISOString();
 
-  // Find providers who recently entered broadcast_ready
-  const { data: recentPoolMembers, error: trackingError } = await db
+  // Find ALL providers in broadcast_ready who haven't received any broadcast yet
+  // No time window - any provider who hasn't been welcomed should get a welcome broadcast
+  const { data: poolMembers, error: trackingError } = await db
     .from("provider_outreach_tracking")
     .select("provider_id, city, state")
     .eq("stage", "broadcast_ready")
-    .gte("stage_changed_at", cutoff)
     .limit(BATCH_SIZE);
 
   if (trackingError) {
-    console.error("[city-broadcasts] Failed to fetch new pool members:", trackingError);
+    console.error("[city-broadcasts] Failed to fetch pool members:", trackingError);
     return [];
   }
 
-  if (!recentPoolMembers || recentPoolMembers.length === 0) {
+  if (!poolMembers || poolMembers.length === 0) {
     return [];
   }
 
-  const providerIds = recentPoolMembers.map((r) => r.provider_id);
+  const providerIds = poolMembers.map((r) => r.provider_id);
 
   // Filter out providers who have already received any broadcast (sent, failed, or skipped)
   // We check all statuses to avoid retrying on every cron run
@@ -319,7 +320,7 @@ async function findNewPoolMembers(): Promise<
     (providers || []).map((p) => [p.provider_id, p.provider_category])
   );
 
-  return recentPoolMembers
+  return poolMembers
     .filter((r) => !alreadyProcessedIds.has(r.provider_id))
     .filter((r) => r.city) // Must have a city
     .map((r) => ({
