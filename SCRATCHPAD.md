@@ -7,6 +7,25 @@
 
 ## Current Focus
 
+### 2026-09-14 — Managed Ads turns into a calling motion; live Google audit for all 19 providers (`fair-planck`, ops only, no code)
+
+Meeting-prep session for the Managed Ads KPI review. No product code changed. Four artifacts published and a brief posted to `#product-development`.
+
+**The finding that reframed the meeting.** `provider_touches` holds 17 touches across **4 providers**. The other **15 of 19 have never had a human touch**, including **4 of the 6 who actually received a family** (Edmonds Villa, Abode, Assisting Hands, Happy Mountain). We have sent 11 wrap-up emails asking providers to pay (`ad_boost_promo_complete`) and converted none, and 26 outcome-check emails returning 5 answers, none saying "client" — against a ground truth of at least one (Hilda's 26 Jul phone confirmation, still `status: pending` on the connection).
+
+**Verified numbers as of today.** Provider ads: 19 providers, 25 campaign rows, 20 launched, 5 requested-never-launched (oldest 52 days), $743.25 Olera spend, 354 clicks, $2.10 CPC, **10 attributed inquiries = $74.33 each**, 0 paying accounts. City ads: ~$376 (Google $233.21 + Nextdoor $75.93 + Meta ~$67 **not syncing into `city_campaigns`**), 2 leads.
+
+**City gate, read against the pre-committed thresholds.** Clean window from 10 Sep 07:22 UTC: **155 paid landings, 10 `cta_engaged` (6.5%), 5 `lead_started`, 1 lead.** That is the 5–14% band = *fix the page, do not add budget*. Arms (tiny n, not callable): one_screen 13.8% / guidance 10.0% / providers_first 4.9%. Channels: Google 12.9%, Meta 7.9%, Nextdoor 1.6%.
+
+**Live Google Places audit, all 19 — this data does not exist in our DB.** `business_profiles.metadata.rating`/`review_count` are **null for all 19**, and only **7 of 19 join to `olera-providers` by `slug`**. Pulled live via Places `searchText` with `GOOGLE_PLACES_API_KEY` from `.env.local`. Pattern across the book: **11 of 19 have ≤5 Google reviews; 7 have ≤3 photos on Olera; 2 have none.** Standouts: **Impact 27 reviews / 0 photos**; **LumiWell no rating at all, 0 reviews** (explains 23 visits → 0 contacts better than the photos ask we sent on 5 Sep); **Pacesetter 3.7 off 3 reviews** (our 5 Sep email said 3.0 — correct it); Assisting Hands 4.7/61; Happy Mountain 5.0/21.
+
+**Lead quality, two concrete cases.** Franchil's 12 Sep "lead" is **Emilia Barrows, a caregiver asking for a job**, counted as a delivered inquiry. Pacesetter's "not a fit" was **Ron Amon**, whose wife needed respiratory care. Screening was promised to Sherry on 26 Aug and does not exist.
+
+**Decisions (TJ).** Diagnosis-led calls, no price ask yet. Calls move off TJ to the outbound team: **Chantel** = the 4 lead-receiving providers TJ is not taking; **Grazie** = the 5 who asked for a campaign and never got one; **Cess** = the 8 that ran and produced nothing; **TJ** keeps Franchil and Pacesetter. Four next actions are overdue (Franchil 8 Sep, Pacesetter 9 Sep, Miracle-Lightstar 12 Sep; LumiWell due 19 Sep).
+
+**Artifacts.** Hub `e04e1235-a49c-4426-b5a9-193ed8131abf` · City ads `4deb2690-0a81-4942-bc60-22622b35d101` · Comms/CRM `b77bee5f-82d8-49d1-81e6-1f29b610d171` · Call sheets `8944cc1c-56cb-48db-8634-f13f29bbca8a`. Slack brief: `oleraworkspace.slack.com/archives/C0A91BA205T/p1789372007803559`.
+
+**Correction to carry forward.** The city landing page's provider-cards defect **shipped a fix on 10 Sep** (`c335aa5d5`); do not re-report it as open. A three-arm page test is live and instrumented.
 ### 2026-09-14 — Admin sidebar tool search; Ad Boost performance preserved
 
 - Branch `codex/admin-tool-search`, rebased onto staging `12e90b25e` after Ad Boost performance PR #1904 merged. Search commit `d381efc61`; quicksave PR targets staging.
