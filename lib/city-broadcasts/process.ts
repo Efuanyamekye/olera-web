@@ -281,13 +281,29 @@ async function findNewPoolMembers(): Promise<
 > {
   const db = getServiceClient();
 
-  // Find ALL providers in broadcast_ready who haven't received any broadcast yet
-  // No time window - any provider who hasn't been welcomed should get a welcome broadcast
-  const { data: poolMembers, error: trackingError } = await db
+  // First, get provider IDs that have already received any broadcast
+  // This prevents the BATCH_SIZE bug where we'd fetch 50 already-processed
+  // providers and miss the unprocessed ones
+  const { data: alreadyProcessed } = await db
+    .from("city_broadcast_recipients")
+    .select("provider_id");
+
+  const alreadyProcessedIds = (alreadyProcessed || []).map((r) => r.provider_id);
+
+  // Find providers in broadcast_ready who haven't received any broadcast yet
+  // Filter at the database level to ensure we get unprocessed providers within BATCH_SIZE
+  let query = db
     .from("provider_outreach_tracking")
     .select("provider_id, city, state")
     .eq("stage", "broadcast_ready")
-    .limit(BATCH_SIZE);
+    .not("city", "is", null); // Must have a city
+
+  // Exclude already-processed providers at the DB level
+  if (alreadyProcessedIds.length > 0) {
+    query = query.not("provider_id", "in", `(${alreadyProcessedIds.join(",")})`);
+  }
+
+  const { data: poolMembers, error: trackingError } = await query.limit(BATCH_SIZE);
 
   if (trackingError) {
     console.error("[city-broadcasts] Failed to fetch pool members:", trackingError);
@@ -300,15 +316,6 @@ async function findNewPoolMembers(): Promise<
 
   const providerIds = poolMembers.map((r) => r.provider_id);
 
-  // Filter out providers who have already received any broadcast (sent, failed, or skipped)
-  // We check all statuses to avoid retrying on every cron run
-  const { data: alreadyProcessed } = await db
-    .from("city_broadcast_recipients")
-    .select("provider_id")
-    .in("provider_id", providerIds);
-
-  const alreadyProcessedIds = new Set((alreadyProcessed || []).map((r) => r.provider_id));
-
   // Get provider categories
   const { data: providers } = await db
     .from("olera-providers")
@@ -320,15 +327,12 @@ async function findNewPoolMembers(): Promise<
     (providers || []).map((p) => [p.provider_id, p.provider_category])
   );
 
-  return poolMembers
-    .filter((r) => !alreadyProcessedIds.has(r.provider_id))
-    .filter((r) => r.city) // Must have a city
-    .map((r) => ({
-      providerId: r.provider_id,
-      city: r.city,
-      state: r.state || null,
-      category: categoryMap.get(r.provider_id) || null,
-    }));
+  return poolMembers.map((r) => ({
+    providerId: r.provider_id,
+    city: r.city,
+    state: r.state || null,
+    category: categoryMap.get(r.provider_id) || null,
+  }));
 }
 
 /**
