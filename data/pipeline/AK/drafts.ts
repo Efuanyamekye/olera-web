@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-31T10:40:13.351Z
+ * Last updated: 2026-09-14T07:53:39.507Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -812,8 +812,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is on a fixed income, SNAP can provide monthly grocery money loaded onto an EBT card that works like a debit card at most stores and farmers markets. Because Alaska has expanded beyond federal rules, seniors and disabled adults can qualify with higher incomes than other states, up to $3,258/month for a single person.\n\nThe benefit amount depends on your loved one's net income after deductions for medical expenses over $35/month and housing costs. Households with all adults 60+ or disabled get simplified rules: higher asset limits ($4,500 instead of $3,000), longer certification periods (36 months), and no recertification interviews unless there's a problem.\n\nBecause this is a federal program, your loved one keeps SNAP benefits if they move between states. Alaska administers the program through local Division of Public Assistance offices statewide.",
-      "savingsRange": "$100 – $300/month in 2026",
-      "savingsSource": "Monthly EBT benefits vary by household size and net income",
+      "savingsRange": "Up to $385/month (Urban), $491 (Rural 1) or $598 (Rural 2) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotments for a one-person household in Alaska, which uses three regional tiers: Urban $385, Rural 1 $491, Rural 2 $598 per month. Minimums are $31, $39 and $48. Effective October 1, 2025 through September 30, 2026.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
@@ -1011,7 +1011,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/snap-nutrition-assistance/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.628Z
+ * Last updated: 2026-09-14T07:53:39.551Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -590,8 +590,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60+ and struggling to afford groceries on a fixed income, SNAP provides monthly benefits loaded onto an EBT card for food purchases. West Virginia offers more flexible rules for older adults, your loved one may qualify even if their Social Security or pension puts them over standard income limits.\n\nBenefit amounts depend on household size and net income, but many seniors receive $100-300+ monthly. Because West Virginia has no asset limits under state rules, your loved one's savings account or car value won't disqualify them. The certification period lasts 24 months for households with someone 60+, meaning less frequent renewals than younger applicants face.\n\nWork requirements don't apply to anyone 60 or older. Your loved one can use SNAP benefits at most grocery stores and farmers markets, but not for alcohol, tobacco, or prepared hot foods.",
-      "savingsRange": "$1,200 – $3,600/year in 2026",
-      "savingsSource": "Monthly EBT benefits of $100-300+ based on household size and income",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
@@ -779,7 +779,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhhr.wv.gov/bcf/programs/snap/Pages/default.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",

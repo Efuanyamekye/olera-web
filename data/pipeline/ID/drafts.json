@@ -786,8 +786,8 @@
         ]
       },
       "intro": "If your loved one is 60 or older and struggling with grocery costs, SNAP provides monthly benefits loaded onto an EBT card they can use at most grocery stores. Because Idaho removes the gross income limit for households with seniors, your loved one may qualify even if their Social Security or pension seemed too high under other states' rules.\n\nBenefits vary by household size and net income after deductions, typically $100-300+ monthly for seniors. Because the program allows significant deductions for medical expenses over $35 monthly and high shelter costs, many seniors on fixed incomes qualify even when they don't expect to. Your loved one can even use SNAP benefits to pay for Meals on Wheels deliveries.\n\nWith 64% of eligible Idaho seniors not enrolled, this is one of the most underutilized programs that could immediately reduce your family's grocery expenses.",
-      "savingsRange": "$1,200 – $3,600/year in 2026",
-      "savingsSource": "Monthly EBT benefits typically $100-300+ for seniors based on household size and net income",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -972,7 +972,7 @@
       "sourceUrl": "https://healthandwelfare.idaho.gov/services-programs/food-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "energy-assistance-liheap",

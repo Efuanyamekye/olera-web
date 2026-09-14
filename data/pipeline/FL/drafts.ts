@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/FL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-06T12:14:31.508Z
+ * Last updated: 2026-09-14T07:53:39.515Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -128,7 +128,7 @@ export const drafts: PipelineStateDrafts = {
         {
           "label": "Elder Helpline (start here)",
           "phone": "1-800-963-5337",
-          "description": "Statewide entry point (1-800-963-5337). Routes to your local ADRC for the waitlist screening. Email Medwaiver@elderaffairs.org for general program questions.",
+          "description": "Statewide entry point (1-800-963-5337). Routes to your local ADRC for the waitlist screening. Email Medwaiver@elderaffairs.org for general program questions. Closed on state holidays. The screening call itself takes about 45 minutes to an hour.",
           "hours": "Monday-Friday, 8am-5pm local time"
         },
         {
@@ -276,7 +276,7 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "TJ",
       "reviewedAt": "2026-04-20",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "pace-comprehensive-care",

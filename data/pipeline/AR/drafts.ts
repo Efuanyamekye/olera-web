@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T12:34:27.886Z
+ * Last updated: 2026-09-14T07:53:39.510Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -614,8 +614,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly benefits loaded onto an EBT card. Your loved one could receive $298/month for a single person household, or up to $546/month for two people, the exact amount depends on income after deductions like medical expenses over $35/month.\n\nSeniors get important advantages: no work requirements, no gross income limit (only net income after deductions must be below $1,305/month for one person), and higher asset limits of $4,500. Because Arkansas uses strict federal rules without expansions, meeting these exact thresholds is critical.\n\nBenefits work at grocery stores and some restaurants through the Restaurant Meals Program for eligible elderly or disabled participants. The EBT card cannot be used for alcohol, tobacco, or prepared hot foods at most locations.",
-      "savingsRange": "$1,200 – $3,600/year in 2026",
-      "savingsSource": "Based on maximum monthly SNAP benefits of $298 for 1 person, $546 for 2 people (Oct 2025-Sept 2026 rates)",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -810,7 +810,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://humanservices.arkansas.gov/services-worth-knowing/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",
@@ -824,14 +824,14 @@ export const drafts: PipelineStateDrafts = {
         "stateVariation": true,
         "localEntities": [
           {
-            "name": "Community-Based Organizations (CBOs) by county; find via Arkansas Department of Energy & Environment site or local agencies like CSCDC (cscdc.net), CADC (cadc.com), EOA (eoawc.org), CRDC",
+            "name": "Community action agencies by county. The current list is the state directory at adeq.state.ar.us/energy/assistance/caad.aspx; agencies serving some counties changed in 2026.",
             "type": "service-area"
           }
         ]
       },
       "intro": "If your loved one struggles to pay heating or cooling bills, LIHEAP provides direct payments to utility companies to reduce their energy burden. The program pays between $50-$475 for regular seasonal assistance (heating in winter, cooling in summer), plus up to $500 in crisis situations when utilities face disconnection or fuel runs out.\n\nBecause LIHEAP is administered through local community organizations across Arkansas, income limits and benefit amounts vary slightly by county, but most single-person households earning under $2,251 per month qualify. The program covers electricity, gas, propane, wood, and pellets, making payments directly to energy providers so your loved one never handles the money directly.\n\nFunding is limited each season, so programs often close early when money runs out. Heating assistance typically runs January through March, cooling assistance July through August, and crisis assistance is available during both periods for emergency situations.",
-      "savingsRange": "Up to $570 for heating or up to $344 for cooling, plus up to $600 in a crisis",
-      "savingsSource": "Arkansas FFY2026 benefit matrix: heating $60 minimum to $570 maximum, cooling $60 minimum to $344 maximum, and crisis assistance up to $600. These are maximums. The cooling maximum is reached only by a household of five or more at the lowest income step; a one or two person household tops out at $242. Households generally receive one regular benefit per season, so these do not add together.",
+      "savingsRange": "FY2026 maximums: up to $344 (electric), $437 (natural gas) or $570 (fuel oil) for heating, up to $344 for cooling, plus up to $600 in a crisis",
+      "savingsSource": "Arkansas FY2026 benefit matrix. These are maximums, not typical awards, and heating depends on your fuel: electric $344, natural gas $437, propane $563, fuel oil $570. The maximum only applies at household size 5 or more with almost no income; the minimum benefit is $60. FY2026 ends September 30, 2026.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -927,7 +927,7 @@ export const drafts: PipelineStateDrafts = {
       "documentsNeeded": [
         "Valid government-issued photo ID",
         "Social Security cards for all household members age 18 and older",
-        "Birth certificates and Social Security numbers for all household members under 18",
+        "Social Security numbers for household members under 18. A birth certificate is only needed for an infant age one or younger who does not have a Social Security number yet.",
         "Most recent utility bills (electric, gas, propane, or other energy bills)",
         "Proof of income from previous month for all adult household members (pay stubs, Social Security award letters, pension statements)",
         "Lease agreement if utilities are included in rent",
@@ -935,19 +935,20 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Find the agency for your county (start here)",
-          "phone": "(501) 682-0744",
-          "description": "Arkansas takes applications only at the community agency for your county. Use the county map at adeq.state.ar.us/energy/assistance/caad.aspx to find yours, then call that agency. The state office does not process applications.",
-          "hours": null
+          "label": "Arkansas Energy Office, to find your county agency (start here)",
+          "phone": "(888) 233-0326",
+          "hours": "",
+          "description": "This is the state’s published LIHEAP inquiry line. It does not take applications: your county’s community action agency does. Look yours up at adeq.state.ar.us/energy/assistance/caad.aspx, because the agencies serving some counties changed this year."
         },
         {
           "label": "Arkansas 2-1-1 (locator)",
           "phone": "2-1-1",
-          "description": "General referral line. Can help you find your county agency.",
-          "hours": "24 hours, 7 days a week"
+          "hours": "24 hours, 7 days a week",
+          "description": "Another way to find the agency serving your county."
         }
       ],
       "applicationNotes": [
+        "Timing matters right now. Summer cooling assistance closed to new regular applications on August 31, 2026, and crisis help runs only through September 30. The winter heating program usually opens in early January. Because your loved one is 60 or older they can apply up to about 30 days before it opens to everyone else, so call your county agency now and ask how to get on the list for winter.",
         "Crisis assistance for utility shut-offs or fuel depletion may be processed faster than regular seasonal assistance",
         "Each household can receive only one regular heating benefit, one cooling benefit, and one crisis benefit per season",
         "If your loved one rents and utilities are included in rent, you'll need the lease agreement showing energy burden requirements",
@@ -1003,11 +1004,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": "2-1-1",
+      "phone": "(888) 233-0326",
       "sourceUrl": "https://www.adeq.state.ar.us/energy/assistance/liheap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "weatherization-assistance-program",
@@ -1095,7 +1096,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Find your local Community Action Agency",
-            "description": "Use the county map at adeq.state.ar.us/energy/assistance/wappd.aspx to find the weatherization provider for your county, then call that agency. The Arkansas Energy Office (501-682-0744) can point you to it but does not process applications."
+            "description": "Use the county map at adeq.state.ar.us/energy/assistance/wappd.aspx to find the weatherization provider for your county, then call that agency. The Arkansas Energy Office (888-233-0326) can point you to it but does not process applications."
           },
           {
             "step": 2,
@@ -1151,15 +1152,10 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Find the weatherization provider for your county (start here)",
-          "phone": "(501) 682-0744",
-          "hours": "Mon-Fri 8:00am-4:30pm CT",
-          "description": "Arkansas Energy Office. Five organizations deliver weatherization across all 75 counties. Use the county map at adeq.state.ar.us/energy/assistance/wappd.aspx to find yours, then call that agency to apply. The Arkansas Energy Office does not process applications."
-        },
-        {
-          "label": "Arkansas Energy Office (toll-free)",
+          "label": "Arkansas Energy Office, to find your county provider (start here)",
           "phone": "(888) 233-0326",
-          "hours": "Mon-Fri 8:00am-4:30pm CT"
+          "hours": "Mon-Fri 8:00am-4:30pm CT",
+          "description": "The state office does not weatherize homes or take applications. Your county’s provider does, and the list below shows which one serves your county. The county map is at adeq.state.ar.us/energy/assistance/wappd.aspx."
         },
         {
           "label": "BCD - Arkansas, Ashley, Bradley, Chicot, Cleveland, Desha, Drew, Grant, Jefferson, Lee, Lincoln, Monroe, Phillips, Prairie",
@@ -1248,11 +1244,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": "(501) 682-0744",
+      "phone": "(888) 233-0326",
       "sourceUrl": "https://www.adeq.state.ar.us/energy/assistance/wap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "senior-medicare-patrol-ship",

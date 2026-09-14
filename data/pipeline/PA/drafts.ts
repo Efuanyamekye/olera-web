@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/PA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.618Z
+ * Last updated: 2026-09-14T07:53:39.543Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -710,8 +710,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60 or older and struggling to afford groceries, SNAP can help. Benefits are loaded onto an EBT card each month, which works like a debit card at most grocery stores, farmers' markets, and authorized online retailers like Amazon and Walmart.  <br>The amount your loved one receives is based on their unique financial situation—including their household size, income, and allowable expenses like housing and out-of-pocket medical costs. While the maximum benefit for a single person in the 48 contiguous states is **$298 per month** (and **$546** for a two-person household), many households receive an amount tailored to their specific needs.  <br>Pennsylvania makes it easier for seniors to qualify than younger adults. Even if your loved one's gross income is slightly above the standard limit, they may still qualify by using special 'net income' rules that account for high medical and housing expenses. Furthermore, Pennsylvania does not have an asset test for most SNAP applicants, meaning your loved one can typically maintain eligibility while owning their home, a car, and modest savings.",
-      "savingsRange": "$100 – $3,276/year in 2026",
-      "savingsSource": "Average $106/month for older adults, maximum $273/month for individuals",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -905,7 +905,7 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "lastVerifiedDate": "2026-08-23"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "ship-medicare-counseling",

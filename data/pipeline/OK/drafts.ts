@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.614Z
+ * Last updated: 2026-09-14T07:53:39.541Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -852,8 +852,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly funds on an EBT card for food purchases. The amount depends on household size and income, a typical 2-person elderly household might receive $415/month after deductions, with a minimum of $24 for smaller households.\n\nSeniors get special advantages: they only need to meet the net income test (not gross), can deduct medical expenses over $35/month, and have higher asset limits. Because Oklahoma processes applications within 30 days (7 days if expedited), your loved one could be getting food assistance within weeks of applying.\n\nThe EBT card works like a debit card at grocery stores for food purchases, but cannot be used for alcohol, tobacco, or hot prepared foods. All Social Security, pension, and other income counts, but medical expenses and housing costs are deducted from income calculations.",
-      "savingsRange": "$288 – $4,980/year in 2026",
-      "savingsSource": "Based on minimum $24/month benefit to typical elderly household benefit of $415/month",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -1046,7 +1046,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://oklahoma.gov/okdhs/services/snap.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",

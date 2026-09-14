@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ME/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-31T10:40:13.366Z
+ * Last updated: 2026-09-14T07:53:39.527Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -204,8 +204,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is struggling to afford groceries on a fixed income, SNAP provides monthly benefits loaded onto an EBT card to help pay for food. In Maine, a single person can receive up to $298 per month, with higher amounts for larger households. The actual amount depends on your loved one's income and qualifying expenses like medical bills over $35 per month.\n\nMaine has special rules that make SNAP more accessible for seniors. Your loved one won't face asset limits that exist in other states, and if they're over 60, they only need to meet the net income test (not the gross income limit that applies to younger adults). This means seniors with slightly higher incomes may still qualify if they have medical expenses or other deductions.\n\nThe program covers most food items at grocery stores, farmers markets, and many online retailers. Benefits are loaded monthly onto an EBT card that works like a debit card for eligible food purchases.",
-      "savingsRange": "$100 – $3,600/year in 2026",
-      "savingsSource": "Based on SNAP maximum monthly benefits ($298 for single person, varies by household size and income)",
+      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -407,7 +407,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.maine.gov/dhhs/ofi/programs-services/food-supplement",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.626Z
+ * Last updated: 2026-09-14T07:53:39.550Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -797,12 +797,12 @@ export const drafts: PipelineStateDrafts = {
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at Washington Connection or call the Health Care Authority at 1-800-562-3022, processing takes up to 45 days.",
+        "summary": "Apply online at Washington Connection, or call DSHS at 1-877-501-2233. Washington has no asset test for these programs.",
         "steps": [
           {
             "step": 1,
             "title": "Choose your application method",
-            "description": "Apply online at washingtonconnection.org, call 1-800-562-3022, or visit your local Community Services Office. Online is fastest for most people."
+            "description": "Apply online at washingtonconnection.org, call DSHS at 1-877-501-2233, or visit your local Community Services Office. Online is fastest for most people."
           },
           {
             "step": 2,
@@ -830,7 +830,7 @@ export const drafts: PipelineStateDrafts = {
           },
           {
             "label": "Find Local Community Services Office",
-            "url": "https://www.dshs.wa.gov/esa/community-services-offices"
+            "url": "https://www.dshs.wa.gov/esa/community-services-offices/medicare-savings-program"
           }
         ]
       },
@@ -850,10 +850,16 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Washington Health Care Authority",
+          "label": "DSHS Customer Service Contact Center (start here)",
+          "phone": "(877) 501-2233",
+          "hours": "Mon-Fri 9am-5pm PT",
+          "description": "This is the line Washington publishes for applying to a Medicare Savings Program and for questions about one. You can also apply at washingtonconnection.org. Closed on state holidays."
+        },
+        {
+          "label": "Washington Health Care Authority (after you are approved)",
           "phone": "(800) 562-3022",
-          "description": "Primary line for Medicare Savings Program applications and questions",
-          "hours": "Mon-Fri 8am-5pm PT"
+          "hours": "Mon-Fri 7am-5pm PT",
+          "description": "Ext. 16129 is the Medicare Buy-In unit. If your loved one was approved but Medicare is still taking the premium out after 60 days, this is the line that fixes it. This line does not take applications. Closed on state holidays."
         },
         {
           "label": "King County Medicare Outreach",
@@ -952,11 +958,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Money",
-      "phone": "(800) 562-3022",
-      "sourceUrl": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-need-medical-dental-or-vision-help/medicare-savings-programs",
+      "phone": "(877) 501-2233",
+      "sourceUrl": "https://www.dshs.wa.gov/esa/community-services-offices/medicare-savings-program",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "basic-food-program",
@@ -1150,11 +1156,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "BowlFood",
-      "phone": "(800) 322-2588",
+      "phone": "(877) 501-2233",
       "sourceUrl": "https://kingcounty.gov/en/dept/dph/health-safety/health-centers-programs-services/access-outreach-program/basic-food-program",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-09-14"
     },
     {
       "id": "liheap-energy-assistance",
