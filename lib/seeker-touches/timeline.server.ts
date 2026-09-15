@@ -61,6 +61,43 @@ const MAX_FAMILIES = 400;
 /** A pending inquiry older than this with no provider reply reads as silence. */
 const PROVIDER_SILENT_MS = 3 * DAY_MS;
 
+/**
+ * How many ids go into one PostgREST `in.(…)`.
+ *
+ * The filter travels in the query string, so a long id list becomes a long URL
+ * and the request is rejected before it reaches Postgres — measured on this
+ * project: 300 uuids succeed, 400 fail outright with a fetch error rather than
+ * a partial result. At 417 candidate families in a 45 day window that is not a
+ * degradation, it is the page failing to load at all.
+ *
+ * So every id-filtered read below is chunked. 100 keeps each URL near 4KB with
+ * room to spare, and the chunks run in parallel, so this costs a little fan-out
+ * and buys a list that does not have a size cliff in it.
+ */
+const IN_CHUNK = 100;
+
+/**
+ * Run an id-filtered query in chunks and concatenate the rows.
+ *
+ * Errors are thrown rather than swallowed: a page that silently renders half a
+ * family's history is worse than one that fails and says so.
+ */
+async function fetchInChunks<T>(
+  ids: string[],
+  build: (slice: string[]) => PromiseLike<{ data: unknown; error: unknown }>,
+): Promise<T[]> {
+  if (!ids.length) return [];
+  const groups: string[][] = [];
+  for (let i = 0; i < ids.length; i += IN_CHUNK) groups.push(ids.slice(i, i + IN_CHUNK));
+  const results = await Promise.all(groups.map((g) => build(g)));
+  const out: T[] = [];
+  for (const r of results) {
+    if (r.error) throw r.error;
+    out.push(...((r.data ?? []) as T[]));
+  }
+  return out;
+}
+
 type ProfileRow = {
   id: string;
   display_name: string | null;
@@ -91,7 +128,8 @@ type EmailRow = {
   email_type: string;
   subject: string | null;
   status: string;
-  html_body: string | null;
+  /** Only populated for texts — see the note on EMAIL_COLS. */
+  html_body?: string | null;
   created_at: string;
   delivered_at: string | null;
   first_opened_at: string | null;
@@ -249,7 +287,7 @@ function emailToItem(e: EmailRow): SeekerTimelineItem {
     occurred_at: e.created_at,
     // A text has no subject worth showing; its body is the message.
     title: sms ? clip(e.html_body, 150) ?? humanize(e.email_type) : e.subject ?? humanize(e.email_type),
-    detail: sms ? null : clip(e.html_body, 220),
+    detail: null,
     source: "system",
     status,
     contact_handle: e.recipient,
@@ -587,53 +625,66 @@ async function loadFeeds(
 
   const gte = <Q extends { gte: (c: string, v: string) => Q }>(q: Q, col: string): Q => (sinceIso ? q.gte(col, sinceIso) : q);
 
-  const [profRes, connRes, smsRes, threadRes, leadRes, actRes, dncRes] = await Promise.all([
+  const [profiles, connRows, smsRows, threads0, leads0, actRows, dncRes] = await Promise.all([
     // type='family' is load-bearing, not belt-and-braces: connections.from_profile_id
     // is not always a family (5 of the last 300 were organization rows), so without
     // this a provider sending a connection lands on the care-seeker list.
-    db
-      .from("business_profiles")
-      .select("id, display_name, city, state, email, phone, metadata")
-      .eq("type", "family")
-      .in("id", ids),
-    db
-      .from("connections")
-      .select("id, from_profile_id, to_profile_id, type, status, message, metadata, created_at, to_profile:to_profile_id(id, display_name)")
-      .in("from_profile_id", ids)
-      .order("created_at", { ascending: false })
-      .limit(2000),
-    db
-      .from("sms_inbound")
-      .select("id, from_phone, phone_last10, body, keyword, profile_id, created_at, handled_at")
-      .in("profile_id", ids)
-      .order("created_at", { ascending: false })
-      .limit(2000),
-    db
-      .from("support_email_threads")
-      .select("id, subject, state, category, matched_profile_id, last_message_at")
-      .in("matched_profile_id", ids)
-      .order("last_message_at", { ascending: false })
-      .limit(1000),
-    db
-      .from("city_leads")
-      .select(
-        "id, slug, care_seeker_id, first_name, phone, email, note, care_type, urgency, payment_type, zip, status, reached_at, outcome, admin_note, created_at, archived_at",
-      )
-      .in("care_seeker_id", ids)
-      .limit(1000),
-    gte(
+    fetchInChunks<ProfileRow>(ids, (g) =>
       db
-        .from("seeker_activity")
-        .select("id, profile_id, event_type, related_provider_id, metadata, created_at")
-        .in("profile_id", ids)
+        .from("business_profiles")
+        .select("id, display_name, city, state, email, phone, metadata")
+        .eq("type", "family")
+        .in("id", g),
+    ),
+    fetchInChunks<ConnRow>(ids, (g) =>
+      db
+        .from("connections")
+        .select(
+          "id, from_profile_id, to_profile_id, type, status, message, metadata, created_at, to_profile:to_profile_id(id, display_name)",
+        )
+        .in("from_profile_id", g)
         .order("created_at", { ascending: false })
-        .limit(3000),
-      "created_at",
+        .limit(2000),
+    ),
+    fetchInChunks<SmsRow>(ids, (g) =>
+      db
+        .from("sms_inbound")
+        .select("id, from_phone, phone_last10, body, keyword, profile_id, created_at, handled_at")
+        .in("profile_id", g)
+        .order("created_at", { ascending: false })
+        .limit(2000),
+    ),
+    fetchInChunks<SupportThreadRow>(ids, (g) =>
+      db
+        .from("support_email_threads")
+        .select("id, subject, state, category, matched_profile_id, last_message_at")
+        .in("matched_profile_id", g)
+        .order("last_message_at", { ascending: false })
+        .limit(1000),
+    ),
+    fetchInChunks<CityLeadRow>(ids, (g) =>
+      db
+        .from("city_leads")
+        .select(
+          "id, slug, care_seeker_id, first_name, phone, email, note, care_type, urgency, payment_type, zip, status, reached_at, outcome, admin_note, created_at, archived_at",
+        )
+        .in("care_seeker_id", g)
+        .limit(1000),
+    ),
+    fetchInChunks<ActivityRow>(ids, (g) =>
+      gte(
+        db
+          .from("seeker_activity")
+          .select("id, profile_id, event_type, related_provider_id, metadata, created_at")
+          .in("profile_id", g)
+          .order("created_at", { ascending: false })
+          .limit(3000),
+        "created_at",
+      ),
     ),
     db.from("do_not_contact").select("email, phone, reason").limit(2000),
   ]);
 
-  const profiles = (profRes.data ?? []) as ProfileRow[];
   const addrs = profiles.map((p) => (p.email ?? "").trim()).filter(Boolean);
   // A text lands in email_log with the PHONE NUMBER in `recipient`, so the
   // recipient lookup has to carry both. Benefits texts also set provider_id to
@@ -651,85 +702,102 @@ async function loadFeeds(
   // Two things bound the cost. recipient_type narrows away the provider-facing
   // majority of the table (null is allowed because older rows predate the
   // column — the same predicate the care-seeker comms timeline already uses).
-  // And html_body is selected because an SMS row keeps its whole message there,
-  // which at ~2KB a row is why the limit is 1500 rather than 3000.
+  //
+  // And html_body is NOT selected here. A text keeps its whole message in that
+  // column and needs it; an email keeps a full HTML document in it, and pulling
+  // those for every family cost 14.5MB and seven seconds on a measured load of
+  // 394 families. An email already has a subject to show, so the body preview
+  // was buying almost nothing. Texts get their own small query below.
   const EMAIL_COLS =
-    "id, recipient, provider_id, channel, email_type, subject, status, html_body, created_at, delivered_at, first_opened_at, bounced_at, complained_at, error_message, metadata";
+    "id, recipient, provider_id, channel, email_type, subject, status, created_at, delivered_at, first_opened_at, bounced_at, complained_at, error_message, metadata";
   const EMAIL_LIMIT = 1500;
   const familyScoped = <Q extends { or: (f: string) => Q }>(q: Q): Q =>
     q.or("recipient_type.is.null,recipient_type.eq.family");
 
   const [byAddr, byLegacy, byMeta, bounced] = await Promise.all([
     recipients.length
-      ? gte(
-          familyScoped(db.from("email_log").select(EMAIL_COLS).in("recipient", recipients))
-            .order("created_at", { ascending: false })
-            .limit(EMAIL_LIMIT),
-          "created_at",
+      ? fetchInChunks<EmailRow>(recipients, (g) =>
+          gte(
+            familyScoped(db.from("email_log").select(EMAIL_COLS).in("recipient", g))
+              .order("created_at", { ascending: false })
+              .limit(EMAIL_LIMIT),
+            "created_at",
+          ),
         )
-      : Promise.resolve({ data: [] as EmailRow[] }),
-    gte(
-      familyScoped(db.from("email_log").select(EMAIL_COLS).in("provider_id", ids))
-        .order("created_at", { ascending: false })
-        .limit(EMAIL_LIMIT),
-      "created_at",
+      : Promise.resolve([] as EmailRow[]),
+    fetchInChunks<EmailRow>(ids, (g) =>
+      gte(
+        familyScoped(db.from("email_log").select(EMAIL_COLS).in("provider_id", g))
+          .order("created_at", { ascending: false })
+          .limit(EMAIL_LIMIT),
+        "created_at",
+      ),
     ),
-    gte(
-      familyScoped(db.from("email_log").select(EMAIL_COLS).in("metadata->>family_profile_id", ids))
-        .order("created_at", { ascending: false })
-        .limit(EMAIL_LIMIT),
-      "created_at",
+    fetchInChunks<EmailRow>(ids, (g) =>
+      gte(
+        familyScoped(db.from("email_log").select(EMAIL_COLS).in("metadata->>family_profile_id", g))
+          .order("created_at", { ascending: false })
+          .limit(EMAIL_LIMIT),
+        "created_at",
+      ),
     ),
     // Bounces get their own query, unwindowed and unlimited, because
     // reachability must not depend on whether a bounce happened to survive the
     // row cap above. Saying "reachable by email" about an address that bounced
     // is the exact failure this page exists to stop, and a bounce is rare
     // enough that the extra read is free.
-    addrs.length
-      ? db
-          .from("email_log")
-          .select("id, recipient, bounced_at")
-          .in("recipient", addrs)
-          .not("bounced_at", "is", null)
-          .limit(1000)
-      : Promise.resolve({ data: [] as { id: string; recipient: string | null; bounced_at: string }[] }),
+    fetchInChunks<{ id: string; recipient: string | null; bounced_at: string }>(addrs, (g) =>
+      db.from("email_log").select("id, recipient, bounced_at").in("recipient", g).not("bounced_at", "is", null).limit(1000),
+    ),
   ]);
 
   const bouncedAddrs = new Set(
-    ((bounced.data ?? []) as { recipient: string | null }[])
-      .map((b) => (b.recipient ?? "").trim().toLowerCase())
-      .filter(Boolean),
+    bounced.map((b) => (b.recipient ?? "").trim().toLowerCase()).filter(Boolean),
   );
 
-  const threads = (threadRes.data ?? []) as SupportThreadRow[];
+  // Texts only: short bodies, and the body IS the message, so it has to be shown.
+  const smsBodies = await fetchInChunks<{ id: string; html_body: string | null }>(recipients, (g) =>
+    gte(
+      db
+        .from("email_log")
+        .select("id, html_body")
+        .eq("channel", "sms")
+        .in("recipient", g)
+        .order("created_at", { ascending: false })
+        .limit(EMAIL_LIMIT),
+      "created_at",
+    ),
+  );
+  const smsBodyById = new Map(smsBodies.map((r) => [r.id, r.html_body]));
+
+  const threads = threads0;
   const threadById = new Map(threads.map((t) => [t.id, t]));
   const ownerOfThread = new Map<string, string>();
   for (const t of threads) if (t.matched_profile_id) ownerOfThread.set(t.id, t.matched_profile_id);
 
-  const msgRes = threads.length
-    ? await db
+  const supportMsgs = await fetchInChunks<SupportMsgRow>(
+    threads.map((t) => t.id),
+    (g) =>
+      db
         .from("support_email_messages")
         .select("id, thread_id, direction, from_email, from_name, subject, snippet, internal_date")
-        .in(
-          "thread_id",
-          threads.map((t) => t.id),
-        )
+        .in("thread_id", g)
         .order("internal_date", { ascending: false })
-        .limit(2000)
-    : { data: [] as SupportMsgRow[] };
+        .limit(2000),
+  );
+  supportMsgs.sort((a, b) => (a.internal_date < b.internal_date ? 1 : -1));
 
-  const leads = (leadRes.data ?? []) as CityLeadRow[];
-  const msgsRes = leads.length
-    ? await db
+  const leads = leads0;
+  const cityMsgRows = await fetchInChunks<CityMsgRow>(
+    leads.map((l) => l.id),
+    (g) =>
+      db
         .from("city_lead_messages")
         .select("id, lead_id, channel, body, subject, status, last_error, created_at, completed_at, created_by")
-        .in(
-          "lead_id",
-          leads.map((l) => l.id),
-        )
+        .in("lead_id", g)
         .order("created_at", { ascending: false })
-        .limit(1000)
-    : { data: [] as CityMsgRow[] };
+        .limit(1000),
+  );
 
   // ── group ──
   const idSet = new Set(ids);
@@ -754,8 +822,8 @@ async function loadFeeds(
   }
 
   const allEmails = new Map<string, EmailRow>();
-  for (const e of [...(byAddr.data ?? []), ...(byLegacy.data ?? []), ...(byMeta.data ?? [])] as EmailRow[]) {
-    allEmails.set(e.id, e);
+  for (const e of [...byAddr, ...byLegacy, ...byMeta]) {
+    allEmails.set(e.id, smsBodyById.has(e.id) ? { ...e, html_body: smsBodyById.get(e.id) ?? null } : e);
   }
   const emailOwner = (e: EmailRow): string | null => {
     const fromMeta = (e.metadata ?? {}).family_profile_id;
@@ -772,7 +840,7 @@ async function loadFeeds(
   // Support messages, newest first, so the first per thread is the latest.
   const supportItems = new Map<string, SeekerTimelineItem[]>();
   const latestSeen = new Set<string>();
-  for (const m of (msgRes.data ?? []) as SupportMsgRow[]) {
+  for (const m of supportMsgs) {
     const owner = ownerOfThread.get(m.thread_id);
     if (!owner) continue;
     const latest = !latestSeen.has(m.thread_id);
@@ -790,7 +858,7 @@ async function loadFeeds(
   }
   const cityMsgs = new Map<string, CityMsgRow[]>();
   const leadOwner = new Map(leads.map((l) => [l.id, l.care_seeker_id]));
-  for (const m of (msgsRes.data ?? []) as CityMsgRow[]) {
+  for (const m of cityMsgRows) {
     const owner = leadOwner.get(m.lead_id);
     if (!owner) continue;
     const arr = cityMsgs.get(owner) ?? [];
@@ -808,13 +876,13 @@ async function loadFeeds(
 
   return {
     profiles,
-    conns: byId((connRes.data ?? []) as unknown as ConnRow[], (c) => c.from_profile_id),
+    conns: byId(connRows, (c) => c.from_profile_id),
     emails: byId(Array.from(allEmails.values()), emailOwner),
-    sms: byId((smsRes.data ?? []) as SmsRow[], (s) => s.profile_id),
+    sms: byId(smsRows, (s) => s.profile_id),
     support: supportItems,
     cityLeads,
     cityMsgs,
-    activity: byId((actRes.data ?? []) as ActivityRow[], (a) => a.profile_id),
+    activity: byId(actRows, (a) => a.profile_id),
     bouncedAddrs,
     dncEmails,
     dncPhones,
