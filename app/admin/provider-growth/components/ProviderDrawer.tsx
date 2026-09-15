@@ -19,13 +19,11 @@ import {
   MEDJOBS_STATUS_LABELS,
   INTEREST_LEVEL_LABELS,
   MEETING_FORMAT_LABELS,
-  CLAIM_SOURCE_CONTEXT_LABELS,
   type AdsStatus,
   type MedjobsStatus,
   type MeetingType,
   type MeetingFocus,
   type MeetingFormat,
-  type ClaimSource,
 } from "@/lib/provider-growth/stages";
 import { MeetingScheduler } from "./MeetingScheduler";
 import { ActivityLog } from "./ActivityLog";
@@ -55,182 +53,21 @@ function SectionDivider() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Context Section
+// Briefing Link - Simple one-click access to full sales briefing
 // ─────────────────────────────────────────────────────────────────────────────
 
-interface ClaimerInfo {
-  name: string;
-  position?: string;
-  email: string;
-}
-
-interface EmailEngagement {
-  total_sent: number;
-  opened: number;
-  clicked: number;
-  last_clicked_at: string | null;
-}
-
-interface ProviderContextData {
-  claimer: ClaimerInfo | null;
-  emailEngagement: EmailEngagement | null;
-}
-
-function ContextSection({
-  context,
-  claimSource,
-  claimedAt,
-  expanded,
-  onToggle,
-  onViewBriefing,
-}: {
-  context: ProviderContextData | null;
-  claimSource: ClaimSource | null;
-  claimedAt: string | null;
-  expanded: boolean;
-  onToggle: () => void;
-  onViewBriefing: () => void;
-}) {
-  // Build collapsed summary
-  const claimerName = context?.claimer?.name || "Unknown";
-  const claimSourceLabel = claimSource
-    ? CLAIM_SOURCE_CONTEXT_LABELS[claimSource] || claimSource
-    : null;
-  const claimDateShort = claimedAt ? formatDateShort(claimedAt) : null;
-  const emailStats = context?.emailEngagement;
-  const openedRatio = emailStats && emailStats.total_sent > 0
-    ? `${emailStats.opened}/${emailStats.total_sent} opened`
-    : null;
-
-  // Collapsed summary parts
-  const summaryParts = [
-    claimSourceLabel && `via ${claimSourceLabel}`,
-    claimDateShort,
-    openedRatio,
-  ].filter(Boolean);
-
+function BriefingLink({ onViewBriefing }: { onViewBriefing: () => void }) {
   return (
-    <div className="mb-4">
-      <button
-        onClick={onToggle}
-        className="flex w-full items-center gap-2 text-left group"
-      >
-        <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide">
-          Context
-        </span>
-        <span className="text-gray-400 text-[10px]" aria-hidden>
-          {expanded ? "▾" : "▸"}
-        </span>
-        {!expanded && (
-          <span className="text-[12px] text-gray-500 truncate">
-            {claimerName} claimed {summaryParts.join(" · ")}
-          </span>
-        )}
-      </button>
-
-      {expanded && (
-        <div className="mt-2 px-3 py-2.5 bg-gray-50 rounded-lg space-y-3">
-          {/* Claimer info */}
-          {context?.claimer && (
-            <div className="text-sm">
-              <span className="text-gray-500">Claimed by: </span>
-              <span className="text-gray-900 font-medium">{context.claimer.name}</span>
-              {context.claimer.position && (
-                <span className="text-gray-500"> ({context.claimer.position})</span>
-              )}
-              {context.claimer.email && (
-                <span className="text-gray-600"> – {context.claimer.email}</span>
-              )}
-            </div>
-          )}
-
-          {/* Claim source */}
-          {claimSourceLabel && (
-            <div className="text-sm">
-              <span className="text-gray-500">Found us via: </span>
-              <span className="text-gray-900">{claimSourceLabel}</span>
-            </div>
-          )}
-
-          {/* Claim date with relative time */}
-          {claimedAt && (
-            <div className="text-sm">
-              <span className="text-gray-500">Claimed: </span>
-              <span className="text-gray-900">
-                {formatDateFull(claimedAt)} ({daysAgo(claimedAt)})
-              </span>
-            </div>
-          )}
-
-          {/* Email engagement */}
-          <div className="pt-1 border-t border-gray-200">
-            <div className="text-[11px] font-medium text-gray-500 uppercase tracking-wide mb-1">
-              Email Engagement (30 days)
-            </div>
-            {emailStats && emailStats.total_sent > 0 ? (
-              <div className="space-y-1">
-                <div className="text-sm text-gray-700">
-                  • {emailStats.total_sent} emails sent, {emailStats.opened} opened, {emailStats.clicked} clicked
-                </div>
-                {emailStats.last_clicked_at && (
-                  <div className="text-sm text-gray-700">
-                    • Last clicked: {formatDateShort(emailStats.last_clicked_at)}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="text-sm text-gray-400">No emails sent</div>
-            )}
-          </div>
-
-          {/* View Full Briefing button */}
-          <div className="pt-2 border-t border-gray-200 mt-2">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onViewBriefing();
-              }}
-              className="w-full px-3 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 border border-primary-200 flex items-center justify-center gap-2"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
-              </svg>
-              View Full Briefing
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+    <button
+      onClick={onViewBriefing}
+      className="flex items-center gap-1.5 text-sm text-primary-600 hover:text-primary-700 font-medium"
+    >
+      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+      View Sales Briefing
+    </button>
   );
-}
-
-function formatDateShort(isoDate: string): string {
-  const date = new Date(isoDate);
-  if (isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-}
-
-function formatDateFull(isoDate: string): string {
-  const date = new Date(isoDate);
-  if (isNaN(date.getTime())) return "";
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function daysAgo(isoDate: string): string {
-  const date = new Date(isoDate);
-  if (isNaN(date.getTime())) return "";
-
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffDays === 0) return "today";
-  if (diffDays === 1) return "1 day ago";
-  return `${diffDays} days ago`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -722,8 +559,6 @@ interface EngagementData {
 
 export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: ProviderDrawerProps) {
   const [engagement, setEngagement] = useState<EngagementData | null>(null);
-  const [contextData, setContextData] = useState<ProviderContextData | null>(null);
-  const [contextExpanded, setContextExpanded] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const [activeAction, setActiveAction] = useState<"schedule" | "upgrade" | null>(null);
   const [briefingOpen, setBriefingOpen] = useState(false);
@@ -734,7 +569,6 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
       if (res.ok) {
         const data = await res.json();
         setEngagement(data.engagement || null);
-        setContextData(data.context || null);
       }
     } catch (e) {
       console.error("Failed to fetch provider data:", e);
@@ -876,15 +710,8 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
 
         {(provider.phone || provider.email) && <SectionDivider />}
 
-        {/* Context Section - helps sales reps understand provider history */}
-        <ContextSection
-          context={contextData}
-          claimSource={provider.claim_source as ClaimSource | null}
-          claimedAt={provider.claimed_at}
-          expanded={contextExpanded}
-          onToggle={() => setContextExpanded((prev) => !prev)}
-          onViewBriefing={() => setBriefingOpen(true)}
-        />
+        {/* Sales Briefing link - one click to full context */}
+        <BriefingLink onViewBriefing={() => setBriefingOpen(true)} />
 
         <SectionDivider />
 

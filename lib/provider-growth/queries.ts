@@ -6,6 +6,7 @@
  */
 
 import { getServiceClient } from "@/lib/admin";
+import { calculateProfileCompleteness, type ExtendedMetadata } from "@/lib/profile-completeness";
 import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource, MeetingType, MeetingFocus, MeetingFormat } from "./stages";
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -124,7 +125,7 @@ export interface RichContextData {
   leadCount: number;
 
   // Details for AI
-  leads: Array<{ created_at: string; message: string | null }>;
+  leads: Array<{ created_at: string; message: string | null; familyName: string | null }>;
   touchpoints: Array<{ type: string; notes: string | null; created_at: string }>;
   emailStats: { sent: number; opened: number; clicked: number };
 
@@ -138,6 +139,7 @@ export interface RichContextData {
     state: string;
     careTypes: string[];
     verificationState: string | null;
+    slug: string | null;
   };
 
   // Status
@@ -148,48 +150,201 @@ export interface RichContextData {
 
   // Pre-computed tags (not AI-generated)
   computedTags: string[];
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // NEW: Data-driven briefing fields (no AI generation)
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  // Questions data
+  questions: {
+    received: number;
+    answered: number;
+    unanswered: number;
+    recentQuestions: Array<{
+      question: string;
+      created_at: string;
+      answered: boolean;
+    }>;
+  };
+
+  // Provider activity/engagement data
+  engagement: {
+    lastDashboardVisit: string | null;
+    dashboardVisits30d: number;
+    lastProfileEdit: string | null;
+    profileEdits30d: number;
+    sectionsEdited: string[];
+    lastLogin: string | null;
+    leadsOpened: number;
+    leadOpenRate: number; // percentage
+    contactsRevealed: number;
+  };
+
+  // Photo assessment
+  photos: {
+    count: number;
+    hasHeroImage: boolean;
+    urls: string[]; // first few for display
+  };
+
+  // Google Reviews opportunity assessment
+  reviews: {
+    rating: number | null;
+    count: number | null;
+    opportunityLevel: "none" | "mild" | "strong";
+    opportunityReason: string | null;
+    hasUsedReviewRequests: boolean;
+    reviewRequestsSent: number;
+  };
+
+  // Email assessment
+  emailAssessment: {
+    isGeneric: boolean; // info@, contact@, etc.
+    genericReason: string | null;
+  };
+
+  // Profile completeness breakdown
+  profileCompleteness: {
+    percentage: number;
+    missingSections: string[];
+    hasDescription: boolean;
+    hasPricing: boolean;
+    hasStaffInfo: boolean;
+    hasHours: boolean;
+  };
+
+  // Ad Boost status and performance
+  adBoost: {
+    hasAnyCampaign: boolean;
+    activeCampaign: boolean;
+    totalCampaigns: number;
+    lastCampaignStatus: "pending_profile" | "requested" | "scheduled" | "live" | "ended" | "cancelled" | null;
+    totalLeadsFromAds: number;
+    // Campaign performance (from most recent/active campaign)
+    campaign: {
+      status: "pending_profile" | "requested" | "scheduled" | "live" | "ended" | "cancelled" | null;
+      channel: "google" | "meta" | "both" | null;
+      budgetCents: number | null;
+      spendCents: number | null;
+      impressions: number | null;
+      clicks: number | null;
+      landings: number | null;
+      delivered: number | null;
+      flightStartDate: string | null;
+      flightEndDate: string | null;
+      photoReadiness: "unreviewed" | "update_requested" | "review_requested" | "ready" | null;
+    } | null;
+  };
+
+  // MedJobs (staffing) status and opportunity
+  medjobs: {
+    status: "none" | "in_pilot" | "pilot_expired" | "subscribed";
+    eligible: boolean;
+    pilotStartedAt: string | null;
+    subscribedAt: string | null;
+    // Computed opportunity assessment
+    opportunityLevel: "none" | "pitch" | "convert" | "renew";
+    opportunityReason: string | null;
+  };
+
+  // Feature engagement signals (what they've explored but not acted on)
+  featureEngagement: {
+    // Ad Boost interest
+    adBoostViews: number;
+    adBoostLastViewed: string | null;
+    adBoostApplyStarted: boolean; // Did they start the apply flow?
+    // Review generation interest
+    reviewsCtaClicked: boolean;
+    reviewsCtaLastClicked: string | null;
+    // MedJobs/staffing interest
+    marketViewCount: number;
+    marketLastViewed: string | null;
+    // Summary for pitch
+    warmLeadSignals: string[]; // e.g., ["Viewed Ad Boost 3x", "Clicked reviews CTA"]
+  };
+
+  // Flags for issues to address
+  flags: Array<{
+    type: "warning" | "info" | "opportunity";
+    label: string;
+    detail: string;
+  }>;
+
+  // Deterministic recommended action
+  recommendedAction: {
+    priority: number;
+    action: string;
+    rationale: string;
+    pitchAngle: string;
+  };
+
+  // Data-driven opening script
+  openingScript: string;
+
+  // What to capture on the call
+  captureChecklist: Array<{
+    item: string;
+    reason: string;
+  }>;
 }
 
 /**
- * Get rich context data for AI briefing generation.
- * Aggregates all data sources needed for a comprehensive sales briefing.
+ * Get rich context data for data-driven sales briefing.
+ * Aggregates all data sources needed for a comprehensive, accurate briefing.
+ * NO AI generation - all fields are computed from real database records.
  */
 export async function getRichContextData(
   trackingId: string,
   businessProfileId: string
 ): Promise<RichContextData> {
   const db = getServiceClient();
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
 
-  // Phase 1: Fetch all data in parallel (except email stats which needs profile.email)
+  // Phase 1: Fetch all data in parallel
   const [
     trackingResult,
     profileResult,
-    adSpendResult,
+    adCampaignsResult,
     leadCountResult,
     leadsResult,
     touchpointCountResult,
     touchpointsResult,
+    // NOTE: Questions queries moved to Phase 2 to use provider_id from profile
+    // NEW: Ad Boost campaign details
+    adBoostLeadsResult,
+    // Review requests sent
+    reviewRequestsResult,
   ] = await Promise.all([
-    // Tracking record
+    // Tracking record (includes MedJobs eligibility and status)
     db
       .from("provider_growth_tracking")
-      .select("pipeline_stage, ads_status, medjobs_status, claimed_at, last_activity_at")
+      .select("pipeline_stage, ads_status, medjobs_status, medjobs_eligible, medjobs_pilot_started_at, medjobs_subscribed_at, claimed_at, last_activity_at")
       .eq("id", trackingId)
       .single(),
 
-    // Business profile with Google reviews data and metadata
+    // Business profile with metadata (google_reviews_data is on olera-providers, not here)
     db
       .from("business_profiles")
-      .select("display_name, phone, email, city, state, care_types, metadata, google_reviews_data, account_id, verification_state")
+      .select("id, slug, display_name, phone, email, city, state, care_types, metadata, account_id, verification_state, description, source_provider_id, category, image_url, address")
       .eq("id", businessProfileId)
       .single(),
 
-    // Total ad spend
+    // Ad campaigns (full details for status and performance)
+    // Note: Only select columns that exist in ad_campaign_requests table
+    // - intended_monthly_budget is in whole dollars (not cents)
+    // - delivered families are calculated separately from connections
+    // - flight_start_date doesn't exist, only flight_end_date
     db
       .from("ad_campaign_requests")
-      .select("ad_spend_cents")
+      .select(`
+        id, status, ad_spend_cents, intended_monthly_budget, created_at,
+        ad_clicks, ad_impressions,
+        flight_end_date,
+        photo_readiness_status, channel
+      `)
       .eq("provider_id", businessProfileId)
-      .is("deleted_at", null),
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false }),
 
     // Lead count (total)
     db
@@ -198,10 +353,10 @@ export async function getRichContextData(
       .eq("to_profile_id", businessProfileId)
       .eq("type", "inquiry"),
 
-    // Last 5 leads with details
+    // Last 5 leads with details (including family name)
     db
       .from("connections")
-      .select("created_at, message")
+      .select("created_at, message, from_profile:business_profiles!connections_from_profile_id_fkey(display_name)")
       .eq("to_profile_id", businessProfileId)
       .eq("type", "inquiry")
       .order("created_at", { ascending: false })
@@ -213,59 +368,394 @@ export async function getRichContextData(
       .select("id", { count: "exact", head: true })
       .eq("tracking_id", trackingId),
 
-    // Touchpoint history (last 20 for AI context)
+    // Touchpoint history (last 20)
     db
       .from("provider_growth_touchpoints")
       .select("touchpoint_type, details, created_at")
       .eq("tracking_id", trackingId)
       .order("created_at", { ascending: false })
       .limit(20),
+
+    // NOTE: Questions queries moved to Phase 2 to use provider_id (slug/sourceProviderId)
+    // matching how the drawer queries them
+
+    // Ad Boost leads: placeholder (delivered column doesn't exist in table)
+    // Real lead attribution would require matching connections.utm_campaign to campaign_tag
+    // For now, return empty - we show campaign metrics (impressions/clicks) as proxy
+    Promise.resolve({ data: [] as Array<{ delivered: number }> }),
+
+    // Review requests sent (count of review_request emails sent by this provider)
+    // Uses business_profile_id since review-requests route stamps provider_id with profile.id (UUID)
+    db
+      .from("email_log")
+      .select("id", { count: "exact", head: true })
+      .eq("email_type", "review_request")
+      .eq("provider_id", businessProfileId),
   ]);
 
-  // Phase 2: Fetch email stats using email from profile (avoids redundant query)
-  let emailStatsResult = { sent: 0, opened: 0, clicked: 0 };
-  const providerEmail = profileResult.data?.email;
-  if (providerEmail) {
-    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
-    const { data } = await db
-      .from("email_log")
-      .select("id, first_opened_at, first_clicked_at")
-      .eq("recipient", providerEmail)
-      .eq("recipient_type", "provider")
-      .gte("created_at", thirtyDaysAgo);
-
-    emailStatsResult = {
-      sent: data?.length || 0,
-      opened: data?.filter((e) => e.first_opened_at).length || 0,
-      clicked: data?.filter((e) => e.first_clicked_at).length || 0,
-    };
+  // Validate critical queries succeeded
+  if (trackingResult.error) {
+    console.error("[getRichContextData] Tracking query failed:", JSON.stringify(trackingResult.error), "trackingId:", trackingId);
+    throw new Error(`Failed to load tracking record: ${trackingResult.error.message || "unknown error"}`);
   }
+  if (profileResult.error) {
+    console.error("[getRichContextData] Profile query failed:", JSON.stringify(profileResult.error), "businessProfileId:", businessProfileId);
+    throw new Error(`Failed to load business profile: ${profileResult.error.message || "unknown error"}`);
+  }
+  if (!profileResult.data) {
+    console.error("[getRichContextData] Profile not found for businessProfileId:", businessProfileId);
+    throw new Error("Business profile not found");
+  }
+
+  // Phase 2: Fetch data that depends on profile results
+  const profile = profileResult.data;
+  const providerEmail = profile?.email;
+  const providerSlug = profile?.slug;
+  const sourceProviderId = profile?.source_provider_id;
+
+  // Build provider ID variants for querying provider_activity
+  // Activity can be logged with slug, UUID, or source_provider_id depending on context
+  const providerIdVariants: string[] = [businessProfileId];
+  if (providerSlug) providerIdVariants.push(providerSlug);
+  if (sourceProviderId) providerIdVariants.push(sourceProviderId);
+
+  // Phase 2 queries wrapped in try-catch to prevent breaking if any fail
+  let emailStatsData: { data: Array<{ first_opened_at: string | null; first_clicked_at: string | null }> | null } = { data: [] };
+  let dashboardVisitsResult: { data: Array<{ created_at: string }> | null; count: number | null } = { data: [], count: 0 };
+  let profileEditsResult: { data: Array<{ created_at: string; metadata: unknown }> | null } = { data: [] };
+  let lastLoginResult: { data: Array<{ created_at: string }> | null } = { data: [] };
+  let leadsOpenedResult: { count: number | null } = { count: 0 };
+  let contactsRevealedResult: { count: number | null } = { count: 0 };
+  let googleReviewsResult: { data: { google_reviews_data: { rating?: number; review_count?: number } | null; google_rating: number | null } | null } = { data: null };
+  // Feature engagement signals
+  let adBoostViewsResult: { data: Array<{ created_at: string }> | null; count: number | null } = { data: [], count: 0 };
+  let adBoostStepResult: { data: Array<{ created_at: string }> | null; count: number | null } = { data: [], count: 0 };
+  let reviewsCtaResult: { data: Array<{ created_at: string }> | null } = { data: [] };
+  let marketViewResult: { data: Array<{ created_at: string }> | null; count: number | null } = { data: [], count: 0 };
+  // Questions data (queried by provider_id to match drawer behavior)
+  let questionsReceivedResult: { count: number | null } = { count: 0 };
+  let questionsAnsweredResult: { count: number | null } = { count: 0 };
+  let recentQuestionsResult: { data: Array<{ question: string; answer: string | null; created_at: string }> | null } = { data: [] };
+
+  try {
+    const results = await Promise.all([
+      // Email stats (30 days)
+      providerEmail
+        ? db
+            .from("email_log")
+            .select("id, first_opened_at, first_clicked_at")
+            .eq("recipient", providerEmail)
+            .eq("recipient_type", "provider")
+            .gte("created_at", thirtyDaysAgo)
+        : Promise.resolve({ data: [] }),
+
+      // Dashboard visits (30 days) - query by all provider ID variants
+      db
+        .from("provider_activity")
+        .select("created_at", { count: "exact" })
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "dashboard_arrival")
+        .gte("created_at", thirtyDaysAgo)
+        .order("created_at", { ascending: false })
+        .limit(1),
+
+      // Profile edits (30 days) - query by all provider ID variants
+      db
+        .from("provider_activity")
+        .select("created_at, metadata")
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "provider_profile_edited")
+        .gte("created_at", thirtyDaysAgo)
+        .order("created_at", { ascending: false }),
+
+      // Last login / one-click access - query by all provider ID variants
+      db
+        .from("provider_activity")
+        .select("created_at")
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "one_click_access")
+        .order("created_at", { ascending: false })
+        .limit(1),
+
+      // Leads opened (all time) - query by all provider ID variants
+      db
+        .from("provider_activity")
+        .select("id", { count: "exact", head: true })
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "lead_opened"),
+
+      // Contact info revealed - query by all provider ID variants
+      db
+        .from("provider_activity")
+        .select("id", { count: "exact", head: true })
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "contact_revealed"),
+
+      // Google reviews data - fetched from olera-providers via source_provider_id
+      sourceProviderId
+        ? db
+            .from("olera-providers")
+            .select("google_reviews_data, google_rating")
+            .eq("provider_id", sourceProviderId)
+            .maybeSingle()
+        : Promise.resolve({ data: null }),
+
+      // Feature engagement: Ad Boost page views (all time)
+      db
+        .from("provider_activity")
+        .select("created_at", { count: "exact" })
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "managed_ads_boost_viewed")
+        .order("created_at", { ascending: false })
+        .limit(1),
+
+      // Feature engagement: Ad Boost apply flow started
+      db
+        .from("provider_activity")
+        .select("created_at", { count: "exact" })
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "managed_ads_step_viewed")
+        .order("created_at", { ascending: false })
+        .limit(1),
+
+      // Feature engagement: Reviews CTA clicked
+      db
+        .from("provider_activity")
+        .select("created_at")
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "reviews_cta_clicked")
+        .order("created_at", { ascending: false })
+        .limit(1),
+
+      // Feature engagement: MedJobs/market page views
+      db
+        .from("provider_activity")
+        .select("created_at", { count: "exact" })
+        .in("provider_id", providerIdVariants)
+        .eq("event_type", "your_market_viewed")
+        .order("created_at", { ascending: false })
+        .limit(1),
+
+      // Questions received count - use provider_id (slug/sourceProviderId) to match drawer
+      db
+        .from("provider_questions")
+        .select("id", { count: "exact", head: true })
+        .in("provider_id", providerIdVariants)
+        .is("canonical_question_id", null), // Only count original questions, not duplicates
+
+      // Questions answered count
+      db
+        .from("provider_questions")
+        .select("id", { count: "exact", head: true })
+        .in("provider_id", providerIdVariants)
+        .is("canonical_question_id", null)
+        .not("answer", "is", null),
+
+      // Recent questions (last 5)
+      db
+        .from("provider_questions")
+        .select("question, answer, created_at")
+        .in("provider_id", providerIdVariants)
+        .is("canonical_question_id", null)
+        .order("created_at", { ascending: false })
+        .limit(5),
+    ]);
+
+    emailStatsData = results[0] as typeof emailStatsData;
+    dashboardVisitsResult = results[1] as typeof dashboardVisitsResult;
+    profileEditsResult = results[2] as typeof profileEditsResult;
+    lastLoginResult = results[3] as typeof lastLoginResult;
+    leadsOpenedResult = results[4] as typeof leadsOpenedResult;
+    contactsRevealedResult = results[5] as typeof contactsRevealedResult;
+    googleReviewsResult = results[6] as typeof googleReviewsResult;
+    adBoostViewsResult = results[7] as typeof adBoostViewsResult;
+    adBoostStepResult = results[8] as typeof adBoostStepResult;
+    reviewsCtaResult = results[9] as typeof reviewsCtaResult;
+    marketViewResult = results[10] as typeof marketViewResult;
+    questionsReceivedResult = results[11] as typeof questionsReceivedResult;
+    questionsAnsweredResult = results[12] as typeof questionsAnsweredResult;
+    recentQuestionsResult = results[13] as typeof recentQuestionsResult;
+  } catch (e) {
+    console.error("[getRichContextData] Phase 2 queries failed:", e);
+    // Continue with default values - engagement data will show as 0/null
+  }
+
+  // Process email stats (with null safety)
+  const emailData = emailStatsData?.data || [];
+  const emailStatsResult = {
+    sent: emailData.length,
+    opened: emailData.filter((e) => e?.first_opened_at).length,
+    clicked: emailData.filter((e) => e?.first_clicked_at).length,
+  };
 
   const tracking = trackingResult.data;
-  const profile = profileResult.data;
   const metadata = (profile?.metadata || {}) as Record<string, unknown>;
-  // GoogleReviewsData has: rating, review_count, reviews[], last_synced
-  const googleData = (profile?.google_reviews_data || {}) as { rating?: number; review_count?: number };
+  // GoogleReviewsData comes from olera-providers via source_provider_id
+  const googleReviewsRaw = googleReviewsResult?.data;
+  const googleData: { rating?: number; review_count?: number } = {
+    rating: (googleReviewsRaw?.google_reviews_data as { rating?: number })?.rating ?? googleReviewsRaw?.google_rating ?? undefined,
+    review_count: (googleReviewsRaw?.google_reviews_data as { review_count?: number })?.review_count,
+  };
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Process Reviews Opportunity
+  // ─────────────────────────────────────────────────────────────────────────────
+  const reviewRequestsSent = reviewRequestsResult.count || 0;
+  const hasUsedReviewRequests = reviewRequestsSent > 0;
+
+  // Determine review opportunity level based on rating and count
+  let reviewOpportunityLevel: "none" | "mild" | "strong" = "none";
+  let reviewOpportunityReason: string | null = null;
+
+  const rating = googleData.rating ?? null;
+  const reviewCount = googleData.review_count ?? null;
+
+  if (reviewCount === null || reviewCount === 0) {
+    // No reviews = strong opportunity
+    reviewOpportunityLevel = "strong";
+    reviewOpportunityReason = "No Google reviews yet - help them get their first reviews";
+  } else if (rating !== null && rating < 4.0) {
+    // Low rating = opportunity to improve
+    reviewOpportunityLevel = "strong";
+    reviewOpportunityReason = `Rating is ${rating.toFixed(1)} stars - help them improve with more positive reviews`;
+  } else if (rating !== null && rating < 4.5) {
+    // Good but not great = mild opportunity
+    reviewOpportunityLevel = "mild";
+    reviewOpportunityReason = `Rating is ${rating.toFixed(1)} stars - could reach 4.5+ with a few more reviews`;
+  } else if (rating !== null && rating >= 4.5 && reviewCount < 10) {
+    // Great rating but few reviews = mild opportunity
+    reviewOpportunityLevel = "mild";
+    reviewOpportunityReason = `Great ${rating.toFixed(1)} rating but only ${reviewCount} reviews - more reviews build trust`;
+  }
+  // else: 4.5+ with 10+ reviews = no opportunity needed
+
   const images = Array.isArray(metadata.images) ? metadata.images : [];
   const staff = (metadata.staff || {}) as { name?: string };
+  const verificationState = profile?.verification_state || null;
 
-  // Calculate ad spend - distinguish between "no data" and "actually $0"
-  const adCampaigns = adSpendResult.data || [];
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Process Ad Campaigns
+  // ─────────────────────────────────────────────────────────────────────────────
+  const adCampaigns = adCampaignsResult.data || [];
   let adSpendCents: number | null = null;
   if (adCampaigns.length > 0) {
-    // Has campaigns - check if any have spend recorded
     const hasRecordedSpend = adCampaigns.some(row => row.ad_spend_cents !== null);
     if (hasRecordedSpend) {
-      adSpendCents = adCampaigns.reduce(
-        (sum, row) => sum + (row.ad_spend_cents || 0),
-        0
-      );
+      adSpendCents = adCampaigns.reduce((sum, row) => sum + (row.ad_spend_cents || 0), 0);
     }
-    // If no campaigns have spend recorded, adSpendCents stays null
   }
-  // If no campaigns at all, adSpendCents stays null
 
-  // Calculate days overdue (days since last activity)
+  const activeCampaign = adCampaigns.some(c => c.status === "live");
+  const totalLeadsFromAds = (adBoostLeadsResult.data || []).reduce(
+    (sum, row) => sum + (row.delivered || 0),
+    0
+  );
+
+  // Get the most relevant campaign for briefing (prioritize active states)
+  // Priority: live > scheduled > requested > pending_profile > ended
+  const campaignPriority: Record<string, number> = {
+    live: 1,
+    scheduled: 2,
+    requested: 3,
+    pending_profile: 4,
+    ended: 5,
+    cancelled: 6,
+  };
+  const sortedCampaigns = [...adCampaigns].sort((a, b) => {
+    const aPriority = campaignPriority[a.status] ?? 99;
+    const bPriority = campaignPriority[b.status] ?? 99;
+    return aPriority - bPriority;
+  });
+  const primaryCampaign = sortedCampaigns[0] || null;
+
+  // Build detailed campaign object for briefing
+  // Note: intended_monthly_budget is in whole dollars, convert to cents for consistency
+  // delivered is calculated from totalLeadsFromAds (from connections by campaign_tag)
+  const campaignDetails = primaryCampaign ? {
+    status: primaryCampaign.status as "pending_profile" | "requested" | "scheduled" | "live" | "ended" | "cancelled",
+    channel: primaryCampaign.channel as "google" | "meta" | "both" | null,
+    budgetCents: primaryCampaign.intended_monthly_budget ? primaryCampaign.intended_monthly_budget * 100 : null,
+    spendCents: primaryCampaign.ad_spend_cents ?? null,
+    impressions: primaryCampaign.ad_impressions ?? null,
+    clicks: primaryCampaign.ad_clicks ?? null,
+    landings: null, // Column doesn't exist in table
+    delivered: totalLeadsFromAds, // Use pre-calculated value from adBoostLeadsResult
+    flightStartDate: null, // Column doesn't exist, only flight_end_date
+    flightEndDate: primaryCampaign.flight_end_date ?? null,
+    photoReadiness: primaryCampaign.photo_readiness_status as "unreviewed" | "update_requested" | "review_requested" | "ready" | null,
+  } : null;
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Process MedJobs (Staffing) Status
+  // ─────────────────────────────────────────────────────────────────────────────
+  const medjobsStatus = (tracking?.medjobs_status || "none") as "none" | "in_pilot" | "pilot_expired" | "subscribed";
+  const medjobsEligible = tracking?.medjobs_eligible ?? false;
+  const medjobsPilotStartedAt = tracking?.medjobs_pilot_started_at ?? null;
+  const medjobsSubscribedAt = tracking?.medjobs_subscribed_at ?? null;
+
+  // Determine MedJobs opportunity level
+  let medjobsOpportunityLevel: "none" | "pitch" | "convert" | "renew" = "none";
+  let medjobsOpportunityReason: string | null = null;
+
+  if (medjobsStatus === "subscribed") {
+    // Already paying - no opportunity needed
+    medjobsOpportunityLevel = "none";
+  } else if (medjobsStatus === "pilot_expired") {
+    // Pilot expired - re-engage opportunity
+    medjobsOpportunityLevel = "renew";
+    medjobsOpportunityReason = "Their MedJobs pilot has expired - check if they want to renew";
+  } else if (medjobsStatus === "in_pilot") {
+    // In pilot - conversion opportunity
+    medjobsOpportunityLevel = "convert";
+    const pilotDaysRaw = medjobsPilotStartedAt
+      ? Math.floor((Date.now() - new Date(medjobsPilotStartedAt).getTime()) / (1000 * 60 * 60 * 24))
+      : null;
+    // Validate: must be a valid non-negative number (handles NaN and future dates)
+    const pilotDays = pilotDaysRaw !== null && !isNaN(pilotDaysRaw) && pilotDaysRaw >= 0 ? pilotDaysRaw : null;
+    medjobsOpportunityReason = pilotDays !== null
+      ? `In MedJobs pilot for ${pilotDays} days - check how it's going`
+      : "Currently in MedJobs pilot - check how it's going";
+  } else if (medjobsEligible) {
+    // Eligible but not started - pitch opportunity
+    medjobsOpportunityLevel = "pitch";
+    medjobsOpportunityReason = "Eligible for MedJobs staffing program - pitch if they hire staff";
+  }
+  // else: not eligible, no opportunity
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Process Feature Engagement Signals
+  // ─────────────────────────────────────────────────────────────────────────────
+  const adBoostViews = adBoostViewsResult.count || 0;
+  const adBoostLastViewed = adBoostViewsResult.data?.[0]?.created_at || null;
+  const adBoostApplyStarted = (adBoostStepResult.count || 0) > 0;
+
+  const reviewsCtaClicked = (reviewsCtaResult.data?.length || 0) > 0;
+  const reviewsCtaLastClicked = reviewsCtaResult.data?.[0]?.created_at || null;
+
+  const marketViewCount = marketViewResult.count || 0;
+  const marketLastViewed = marketViewResult.data?.[0]?.created_at || null;
+
+  // Build warm lead signals for pitch context
+  const warmLeadSignals: string[] = [];
+  if (adBoostViews >= 3) {
+    warmLeadSignals.push(`Viewed Ad Boost ${adBoostViews}x`);
+  } else if (adBoostViews > 0) {
+    warmLeadSignals.push("Viewed Ad Boost page");
+  }
+  // Only show if they haven't signed up (ads_status is "none")
+  if (adBoostApplyStarted && !adCampaigns.length && tracking?.ads_status === "none") {
+    warmLeadSignals.push("Started Ad Boost apply but didn't finish");
+  }
+  if (reviewsCtaClicked && !hasUsedReviewRequests) {
+    warmLeadSignals.push("Clicked reviews CTA but hasn't sent any");
+  }
+  if (marketViewCount > 0 && medjobsStatus === "none") {
+    warmLeadSignals.push("Viewed staffing page but not enrolled");
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Calculate basic metrics
+  // ─────────────────────────────────────────────────────────────────────────────
   let daysOverdue = 0;
   if (tracking?.last_activity_at) {
     const lastActivity = new Date(tracking.last_activity_at);
@@ -273,55 +763,611 @@ export async function getRichContextData(
     daysOverdue = Math.floor((now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24));
   }
 
-  // Get counts (use separate count queries for accuracy)
   const touchCount = touchpointCountResult.count || 0;
   const leadCount = leadCountResult.count || 0;
-  const verificationState = profile?.verification_state || null;
 
-  // Compute tags from actual data (not AI-generated)
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Process Questions Data
+  // ─────────────────────────────────────────────────────────────────────────────
+  const questionsReceived = questionsReceivedResult.count || 0;
+  const questionsAnswered = questionsAnsweredResult.count || 0;
+  const questionsUnanswered = questionsReceived - questionsAnswered;
+  const recentQuestions = (recentQuestionsResult.data || []).map((q) => ({
+    question: q.question?.slice(0, 100) || "",
+    created_at: q.created_at,
+    answered: q.answer !== null,
+  }));
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Process Engagement Data
+  // ─────────────────────────────────────────────────────────────────────────────
+  const dashboardVisits30d = dashboardVisitsResult.count || 0;
+  const lastDashboardVisit = dashboardVisitsResult.data?.[0]?.created_at || null;
+
+  const profileEdits = profileEditsResult.data || [];
+  const profileEdits30d = profileEdits.length;
+  const lastProfileEdit = profileEdits[0]?.created_at || null;
+  const sectionsEdited = [...new Set(
+    profileEdits
+      .map((e) => (e.metadata as Record<string, unknown>)?.section as string)
+      .filter(Boolean)
+  )];
+
+  const lastLogin = lastLoginResult.data?.[0]?.created_at || null;
+  const leadsOpened = leadsOpenedResult.count || 0;
+  // Cap at 100% to handle edge cases (duplicate opens, data inconsistencies)
+  const leadOpenRate = leadCount > 0 ? Math.min(100, Math.round((leadsOpened / leadCount) * 100)) : 0;
+  const contactsRevealed = contactsRevealedResult.count || 0;
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Email Assessment
+  // ─────────────────────────────────────────────────────────────────────────────
+  const genericEmailPrefixes = ["info", "contact", "admin", "hello", "support", "office", "mail", "sales", "help", "team", "inquiries", "general"];
+  const emailLower = (profile?.email || "").toLowerCase();
+  const emailPrefix = emailLower.split("@")[0];
+  const isGenericEmail = genericEmailPrefixes.some(prefix => emailPrefix === prefix || emailPrefix.startsWith(prefix + "."));
+  const genericReason = isGenericEmail ? `"${emailPrefix}@" is a generic address - may not reach decision maker` : null;
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Profile Completeness Assessment (using the canonical weighted algorithm)
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Build profile object for completeness calculation
+  // Cast to Profile since calculateProfileCompleteness only uses these fields
+  const profileForCompleteness = {
+    display_name: profile?.display_name || null,
+    category: profile?.category || null,
+    address: profile?.address || null,
+    city: profile?.city || null,
+    state: profile?.state || null,
+    image_url: profile?.image_url || images[0] || null,
+    description: profile?.description || null,
+    care_types: profile?.care_types || [],
+  } as import("@/lib/types").Profile;
+  const metadataForCompleteness: ExtendedMetadata = {
+    lower_price: metadata.lower_price as number | undefined,
+    price_range: metadata.price_range as string | undefined,
+    pricing_details: metadata.pricing_details as ExtendedMetadata["pricing_details"],
+    contact_for_pricing: metadata.contact_for_pricing as boolean | undefined,
+    staff_screening: metadata.staff_screening as string[] | undefined,
+    images: images as string[],
+    accepted_payments: metadata.accepted_payments as string[] | undefined,
+  };
+  const completenessResult = calculateProfileCompleteness(profileForCompleteness, metadataForCompleteness);
+  const completenessPercentage = completenessResult.overall;
+  const missingSections = completenessResult.sections
+    .filter(s => s.percent < 100)
+    .map(s => s.label);
+
+  // Keep simple flags for briefing display
+  const hasDescription = Boolean(profile?.description && profile.description.length > 50);
+  const hasPricing = Boolean(metadata.pricing || metadata.price_range || metadata.contact_for_pricing);
+  const hasStaffInfo = Boolean(staff.name || metadata.staff_count || (metadata.staff_screening as string[] | undefined)?.length);
+  const hasHours = Boolean(metadata.hours || metadata.business_hours);
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Build Flags (issues to address)
+  // ─────────────────────────────────────────────────────────────────────────────
+  const flags: Array<{ type: "warning" | "info" | "opportunity"; label: string; detail: string }> = [];
+
+  if (questionsUnanswered > 0) {
+    flags.push({
+      type: "warning",
+      label: `${questionsUnanswered} unanswered question${questionsUnanswered > 1 ? "s" : ""}`,
+      detail: "Families are waiting for responses",
+    });
+  }
+
+  if (leadCount > 0 && leadOpenRate < 50) {
+    flags.push({
+      type: "warning",
+      label: `Low lead engagement (${leadOpenRate}% opened)`,
+      detail: `Only opened ${leadsOpened} of ${leadCount} leads`,
+    });
+  }
+
+  if (isGenericEmail) {
+    flags.push({
+      type: "info",
+      label: "Generic email address",
+      detail: genericReason || "May not reach decision maker",
+    });
+  }
+
+  if (images.length < 3) {
+    flags.push({
+      type: "opportunity",
+      label: images.length === 0 ? "No photos uploaded" : `Only ${images.length} photo${images.length > 1 ? "s" : ""}`,
+      detail: "Adding real photos helps families connect",
+    });
+  }
+
+  if (completenessPercentage < 70) {
+    flags.push({
+      type: "opportunity",
+      label: `Profile ${completenessPercentage}% complete`,
+      detail: `Missing: ${missingSections.slice(0, 3).join(", ")}`,
+    });
+  }
+
+  if (dashboardVisits30d === 0 && lastLogin === null) {
+    flags.push({
+      type: "info",
+      label: "No recent dashboard activity",
+      detail: "May not know about their provider dashboard",
+    });
+  }
+
+  if (emailStatsResult.sent > 3 && emailStatsResult.opened === 0) {
+    flags.push({
+      type: "warning",
+      label: "Not opening emails",
+      detail: `Sent ${emailStatsResult.sent} emails, 0 opened`,
+    });
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Deterministic Recommended Action (priority order)
+  // All pitchAngles focus on scheduling a call/meeting with founders
+  // ─────────────────────────────────────────────────────────────────────────────
+  let recommendedAction = {
+    priority: 99,
+    action: "General check-in",
+    rationale: "No specific issues detected",
+    pitchAngle: "Schedule a quick call to see how they're finding the platform and if we can help",
+  };
+
+  // Get campaign status for priority decisions
+  const campaignStatus = campaignDetails?.status || null;
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CONVERTED PROVIDERS (have active/recent campaigns)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Priority 1: Campaign is LIVE - check in on performance
+  if (campaignStatus === "live") {
+    const delivered = campaignDetails?.delivered || 0;
+    const spend = campaignDetails?.spendCents ? `$${(campaignDetails.spendCents / 100).toFixed(0)}` : "their budget";
+    recommendedAction = {
+      priority: 1,
+      action: "Campaign performance check-in",
+      rationale: `Active campaign: ${delivered} families delivered so far`,
+      pitchAngle: `Schedule a call to review their campaign results - ${delivered} families reached, ${spend} spent`,
+    };
+  }
+  // Priority 2: Campaign ENDED - review results and pitch renewal
+  else if (campaignStatus === "ended") {
+    const delivered = campaignDetails?.delivered || 0;
+    recommendedAction = {
+      priority: 2,
+      action: "Campaign wrap-up and renewal",
+      rationale: `Campaign ended: delivered ${delivered} families`,
+      pitchAngle: `Schedule a call to review campaign ROI (${delivered} families) and discuss next steps`,
+    };
+  }
+  // Priority 3: Campaign PENDING PROFILE - help complete to launch
+  else if (campaignStatus === "pending_profile") {
+    recommendedAction = {
+      priority: 3,
+      action: "Unblock Ad Boost launch",
+      rationale: `Profile ${completenessPercentage}% complete - needs 70%+ to launch their campaign`,
+      pitchAngle: "Schedule a call to complete their profile together so we can launch their Ad Boost",
+    };
+  }
+  // Priority 4: Campaign REQUESTED - follow up on setup
+  else if (campaignStatus === "requested" || campaignStatus === "scheduled") {
+    recommendedAction = {
+      priority: 4,
+      action: "Ad Boost setup follow-up",
+      rationale: "Campaign requested, awaiting setup",
+      pitchAngle: "Schedule a call to finalize their campaign setup and answer any questions",
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // URGENT ISSUES (affects family experience)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Priority 5: Unanswered questions - families waiting
+  else if (questionsUnanswered > 0) {
+    recommendedAction = {
+      priority: 5,
+      action: `Help answer ${questionsUnanswered} waiting question${questionsUnanswered > 1 ? "s" : ""}`,
+      rationale: "Families asked questions and are waiting for responses",
+      pitchAngle: `Schedule a quick call to help them respond - ${questionsUnanswered} ${questionsUnanswered > 1 ? "families are" : "family is"} waiting`,
+    };
+  }
+  // Priority 6: Low lead engagement - missing opportunities
+  else if (leadCount > 3 && leadOpenRate < 30) {
+    recommendedAction = {
+      priority: 6,
+      action: "Fix notification setup",
+      rationale: `Only opened ${leadsOpened} of ${leadCount} leads (${leadOpenRate}%)`,
+      pitchAngle: "Schedule a call to make sure they're getting notified when families reach out",
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MEDJOBS OPPORTUNITIES
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Priority 7: MedJobs pilot - check conversion
+  else if (medjobsStatus === "in_pilot") {
+    recommendedAction = {
+      priority: 7,
+      action: "MedJobs pilot check-in",
+      rationale: medjobsOpportunityReason || "Currently in MedJobs pilot",
+      pitchAngle: "Schedule a call to see how the staffing pilot is going and discuss continuing",
+    };
+  }
+  // Priority 8: MedJobs expired - re-engage
+  else if (medjobsStatus === "pilot_expired") {
+    recommendedAction = {
+      priority: 8,
+      action: "MedJobs renewal",
+      rationale: "Their MedJobs pilot has expired",
+      pitchAngle: "Schedule a call to discuss renewing their staffing program access",
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // REVIEW GENERATION OPPORTUNITY
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Priority 9: No Google reviews - strong opportunity
+  else if (reviewOpportunityLevel === "strong") {
+    recommendedAction = {
+      priority: 9,
+      action: "Help get Google reviews",
+      rationale: reviewOpportunityReason || "No reviews yet",
+      pitchAngle: "Schedule a call to set up review requests - we can help them get their first reviews",
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WARM LEADS (showed interest in features)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Priority 10: Viewed Ad Boost multiple times but hasn't requested
+  else if (adBoostViews >= 2 && !adCampaigns.length && tracking?.ads_status === "none") {
+    recommendedAction = {
+      priority: 10,
+      action: "Follow up on Ad Boost interest",
+      rationale: `Viewed Ad Boost page ${adBoostViews} times but hasn't requested`,
+      pitchAngle: "Schedule a call to answer their Ad Boost questions - they've been checking it out",
+    };
+  }
+  // Priority 11: Started Ad Boost apply but didn't finish
+  // Only if they haven't signed up yet (ads_status is "none")
+  else if (adBoostApplyStarted && !adCampaigns.length && tracking?.ads_status === "none") {
+    recommendedAction = {
+      priority: 11,
+      action: "Help complete Ad Boost request",
+      rationale: "Started Ad Boost application but didn't finish",
+      pitchAngle: "Schedule a call to help them finish their Ad Boost request",
+    };
+  }
+  // Priority 12: Viewed MedJobs but not enrolled
+  else if (marketViewCount > 0 && medjobsStatus === "none" && medjobsEligible) {
+    recommendedAction = {
+      priority: 12,
+      action: "Follow up on staffing interest",
+      rationale: `Viewed staffing page ${marketViewCount} time${marketViewCount > 1 ? "s" : ""} but not enrolled`,
+      pitchAngle: "Schedule a call to discuss the staffing program - they've been looking at it",
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ENGAGEMENT ISSUES
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Priority 13: Dormant provider
+  else if (dashboardVisits30d === 0 && daysOverdue > 14) {
+    recommendedAction = {
+      priority: 13,
+      action: "Re-engage dormant provider",
+      rationale: `No dashboard activity in 30 days, ${daysOverdue} days since last touch`,
+      pitchAngle: "Schedule a call to walk them through their dashboard and what families see",
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PROFILE OPTIMIZATION
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Priority 14: Incomplete profile (blocking conversions)
+  else if (completenessPercentage < 60) {
+    recommendedAction = {
+      priority: 14,
+      action: "Help complete profile",
+      rationale: `Profile only ${completenessPercentage}% complete - missing ${missingSections.slice(0, 2).join(", ")}`,
+      pitchAngle: "Schedule a call to complete their profile together - it helps families find them",
+    };
+  }
+  // Priority 15: No photos
+  else if (images.length < 2) {
+    recommendedAction = {
+      priority: 15,
+      action: "Add photos",
+      rationale: images.length === 0 ? "No photos uploaded" : "Only 1 photo uploaded",
+      pitchAngle: "Schedule a call to help add photos - it really helps families connect",
+    };
+  }
+  // Priority 16: Mild review opportunity
+  else if (reviewOpportunityLevel === "mild") {
+    recommendedAction = {
+      priority: 16,
+      action: "Boost reviews",
+      rationale: reviewOpportunityReason || "Could use more reviews",
+      pitchAngle: "Schedule a call to set up review requests - more reviews build trust",
+    };
+  }
+  // Priority 17: Generic email
+  else if (isGenericEmail) {
+    recommendedAction = {
+      priority: 17,
+      action: "Get direct contact",
+      rationale: "Using generic email that may not reach decision maker",
+      pitchAngle: "Schedule a call to get their direct contact for better communication",
+    };
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CONVERSION OPPORTUNITIES (no specific issues)
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  // Priority 18: Good engagement, pitch free trial
+  else if (leadCount > 5 && tracking?.ads_status === "none") {
+    recommendedAction = {
+      priority: 18,
+      action: "Pitch Ad Boost free trial",
+      rationale: `Active provider with ${leadCount} leads, good engagement, no ads yet`,
+      pitchAngle: "Schedule a call to discuss Ad Boost - they're doing well, ads could multiply their reach",
+    };
+  }
+  // Priority 19: MedJobs eligible, not pitched
+  else if (medjobsEligible && medjobsStatus === "none") {
+    recommendedAction = {
+      priority: 19,
+      action: "Introduce MedJobs staffing",
+      rationale: "Eligible for MedJobs staffing program",
+      pitchAngle: "Schedule a call to discuss staffing - if they hire, we can help them find candidates",
+    };
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Data-Driven Opening Script
+  // Aligned with recommended action priorities - opener should match the call purpose
+  // ─────────────────────────────────────────────────────────────────────────────
+  const claimDaysAgoRaw = tracking?.claimed_at
+    ? Math.floor((Date.now() - new Date(tracking.claimed_at).getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+  // Handle edge case where claimed_at is in the future (timezone issues, bad data)
+  const claimDaysAgo = claimDaysAgoRaw !== null && claimDaysAgoRaw >= 0 ? claimDaysAgoRaw : null;
+  const claimTimePhrase = claimDaysAgo !== null
+    ? claimDaysAgo === 0 ? "today"
+      : claimDaysAgo === 1 ? "yesterday"
+      : claimDaysAgo < 7 ? `${claimDaysAgo} days ago`
+      : claimDaysAgo < 30 ? `about ${Math.round(claimDaysAgo / 7)} week${Math.round(claimDaysAgo / 7) > 1 ? "s" : ""} ago`
+      : `about ${Math.round(claimDaysAgo / 30)} month${Math.round(claimDaysAgo / 30) > 1 ? "s" : ""} ago`
+    : "recently";
+
+  let openingScript = "";
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CONVERTED PROVIDERS - talk about their campaign
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (campaignStatus === "live") {
+    const delivered = campaignDetails?.delivered || 0;
+    openingScript = `Hi, this is [your name] from Olera. I'm calling about your Ad Boost campaign - you've reached ${delivered} families so far. How are things going with the leads coming in?`;
+  }
+  else if (campaignStatus === "ended") {
+    const delivered = campaignDetails?.delivered || 0;
+    openingScript = `Hi, this is [your name] from Olera. Your Ad Boost campaign just wrapped up - we reached ${delivered} families for you. I wanted to check in and see how the leads worked out.`;
+  }
+  else if (campaignStatus === "pending_profile") {
+    openingScript = `Hi, this is [your name] from Olera. I noticed you requested Ad Boost and we're ready to help get your campaign launched. I just need to go through your profile with you to make sure families see your best side.`;
+  }
+  else if (campaignStatus === "requested" || campaignStatus === "scheduled") {
+    openingScript = `Hi, this is [your name] from Olera. I'm following up on your Ad Boost request - I wanted to make sure you got everything you need and answer any questions about how the campaign will work.`;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // URGENT ISSUES - families are waiting
+  // ═══════════════════════════════════════════════════════════════════════════
+  else if (questionsUnanswered > 0) {
+    openingScript = `Hi, this is [your name] from Olera. I noticed you have ${questionsUnanswered} family question${questionsUnanswered > 1 ? "s" : ""} waiting on your profile - are you getting notified when those come in?`;
+  }
+  else if (leadCount > 3 && leadOpenRate < 30) {
+    openingScript = `Hi, this is [your name] from Olera. You've received ${leadCount} leads, but it looks like some might not be getting to you. I want to make sure your notifications are set up right.`;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MEDJOBS - staffing program
+  // ═══════════════════════════════════════════════════════════════════════════
+  else if (medjobsStatus === "in_pilot") {
+    openingScript = `Hi, this is [your name] from Olera. I'm checking in on your staffing pilot - how's it going finding candidates so far?`;
+  }
+  else if (medjobsStatus === "pilot_expired") {
+    openingScript = `Hi, this is [your name] from Olera. Your staffing pilot recently ended - I wanted to see how it went and if you're still looking to hire.`;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // REVIEWS - social proof opportunity
+  // ═══════════════════════════════════════════════════════════════════════════
+  else if (reviewOpportunityLevel === "strong" && rating === null) {
+    openingScript = `Hi, this is [your name] from Olera. I noticed your profile doesn't have any Google reviews yet - would you like help getting some? Happy families often just need a reminder to leave a review.`;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WARM LEADS - they showed interest in features
+  // ═══════════════════════════════════════════════════════════════════════════
+  else if (adBoostViews >= 2 && !adCampaigns.length && tracking?.ads_status === "none") {
+    openingScript = `Hi, this is [your name] from Olera. I saw you've been checking out Ad Boost on your dashboard. Do you have questions about how it works? I can walk you through it.`;
+  }
+  else if (adBoostApplyStarted && !adCampaigns.length && tracking?.ads_status === "none") {
+    openingScript = `Hi, this is [your name] from Olera. I noticed you started an Ad Boost request but didn't finish - is there something I can help you with to complete it?`;
+  }
+  else if (marketViewCount > 0 && medjobsStatus === "none" && medjobsEligible) {
+    openingScript = `Hi, this is [your name] from Olera. I saw you've been looking at the staffing program. Are you hiring right now? I can tell you more about how it works.`;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ENGAGEMENT - recent activity or dormant
+  // ═══════════════════════════════════════════════════════════════════════════
+  else if (sectionsEdited.length > 0) {
+    openingScript = `Hi, this is [your name] from Olera. I saw you recently updated your ${sectionsEdited[0]} section - how's the profile looking?`;
+  }
+  else if (dashboardVisits30d === 0 && daysOverdue > 14) {
+    openingScript = `Hi, this is [your name] from Olera. It's been a little while since we connected - I wanted to check in and see how things are going. Are you still getting leads from families?`;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GENERAL - good status or no specific issue
+  // ═══════════════════════════════════════════════════════════════════════════
+  else if (leadCount > 5) {
+    openingScript = `Hi, this is [your name] from Olera. You've gotten ${leadCount} family inquiries - that's great! I'm calling to see how things are going and if there's anything we can help with.`;
+  }
+  else if (images.length === 0) {
+    openingScript = `Hi, this is [your name] from Olera. You claimed your profile ${claimTimePhrase} - I noticed your page doesn't have photos yet. Would you like help adding some? It really helps families connect.`;
+  }
+  else {
+    openingScript = `Hi, this is [your name] from Olera. You claimed your profile ${claimTimePhrase}. I'm calling to check in - how's everything going with your page?`;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // What to Capture Checklist
+  // Ordered by priority - most actionable items first, segment-specific
+  // ─────────────────────────────────────────────────────────────────────────────
+  const captureChecklist: Array<{ item: string; reason: string }> = [];
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CAMPAIGN-RELATED CAPTURES (for converted providers)
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (campaignStatus === "live") {
+    captureChecklist.push({ item: "Campaign satisfaction (1-10)", reason: "Active campaign" });
+    captureChecklist.push({ item: "Quality of leads received", reason: "Track campaign effectiveness" });
+  }
+  if (campaignStatus === "ended") {
+    captureChecklist.push({ item: "Ready for another campaign?", reason: "Campaign ended - renewal opportunity" });
+    captureChecklist.push({ item: "What worked/didn't work?", reason: "Improve next campaign" });
+  }
+  if (campaignStatus === "pending_profile") {
+    captureChecklist.push({ item: "When can they complete profile?", reason: "Profile blocking campaign launch" });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // URGENT ISSUES (families waiting)
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (questionsUnanswered > 0) {
+    captureChecklist.push({ item: "Will they respond to questions?", reason: `${questionsUnanswered} waiting` });
+  }
+  if (leadCount > 0 && leadOpenRate < 50) {
+    captureChecklist.push({ item: "Preferred contact method", reason: "Low lead open rate" });
+    captureChecklist.push({ item: "Best time to reach them?", reason: "Improve notification delivery" });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MEDJOBS CAPTURES
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (medjobsStatus === "in_pilot") {
+    captureChecklist.push({ item: "Finding good candidates?", reason: "Pilot satisfaction check" });
+    captureChecklist.push({ item: "Ready to subscribe?", reason: "Conversion opportunity" });
+  }
+  if (medjobsStatus === "pilot_expired") {
+    captureChecklist.push({ item: "Why didn't they continue?", reason: "Learn from churn" });
+    captureChecklist.push({ item: "Still hiring?", reason: "Re-engagement opportunity" });
+  }
+  if (medjobsEligible && medjobsStatus === "none" && marketViewCount > 0) {
+    captureChecklist.push({ item: "What roles do they hire for?", reason: "Showed staffing interest" });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // REVIEW OPPORTUNITY CAPTURES
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (reviewOpportunityLevel === "strong") {
+    captureChecklist.push({ item: "Do they ask families for reviews?", reason: "No/few reviews" });
+    captureChecklist.push({ item: "Would they use review request tool?", reason: "Feature pitch opportunity" });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // WARM LEAD CAPTURES (showed interest but didn't convert)
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (adBoostViews >= 2 && !adCampaigns.length && tracking?.ads_status === "none") {
+    captureChecklist.push({ item: "What's holding them back on Ad Boost?", reason: "Viewed multiple times" });
+  }
+  // Only show if they haven't signed up yet (ads_status is "none")
+  // Otherwise they completed signup but campaign record may not exist yet
+  if (adBoostApplyStarted && !adCampaigns.length && tracking?.ads_status === "none") {
+    captureChecklist.push({ item: "Why didn't they finish Ad Boost request?", reason: "Abandoned application" });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PROFILE OPTIMIZATION CAPTURES
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (completenessPercentage < 70) {
+    captureChecklist.push({ item: "What's blocking profile completion?", reason: "Profile incomplete" });
+  }
+  if (images.length < 2) {
+    captureChecklist.push({ item: "Can they send photos or schedule photo help?", reason: "Few/no photos" });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CONTACT INFO CAPTURES (always important)
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (isGenericEmail) {
+    captureChecklist.push({ item: "Direct contact email", reason: "Current email is generic" });
+  }
+  if (!profile?.phone) {
+    captureChecklist.push({ item: "Phone number", reason: "No phone on file" });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // CONVERSION OPPORTUNITY CAPTURES (no specific issues)
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (tracking?.ads_status === "none" && !adBoostViews && leadCount > 3) {
+    captureChecklist.push({ item: "Interest in ads? Objections?", reason: "Good engagement, no ads" });
+  }
+  if (medjobsEligible && medjobsStatus === "none" && marketViewCount === 0) {
+    captureChecklist.push({ item: "Do they hire caregivers?", reason: "MedJobs eligible" });
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // FALLBACK
+  // ═══════════════════════════════════════════════════════════════════════════
+  if (captureChecklist.length === 0) {
+    captureChecklist.push({ item: "Any feedback or issues?", reason: "General check-in" });
+    captureChecklist.push({ item: "What would make Olera more useful?", reason: "Product feedback" });
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Compute Tags (for backward compatibility)
+  // ─────────────────────────────────────────────────────────────────────────────
   const computedTags: string[] = [];
 
-  // Lead count tag
-  if (leadCount === 0) {
-    computedTags.push("0 leads");
-  } else if (leadCount === 1) {
-    computedTags.push("1 lead");
-  } else {
-    computedTags.push(`${leadCount} leads`);
-  }
+  if (leadCount === 0) computedTags.push("0 leads");
+  else if (leadCount === 1) computedTags.push("1 lead");
+  else computedTags.push(`${leadCount} leads`);
 
-  // Touch/engagement tag
-  if (touchCount === 0) {
-    computedTags.push("no touches");
-  } else if (touchCount >= 10) {
-    computedTags.push(`${touchCount} touches, highly engaged`);
-  } else {
-    computedTags.push(`${touchCount} touches`);
-  }
+  if (touchCount === 0) computedTags.push("no touches");
+  else if (touchCount >= 10) computedTags.push(`${touchCount} touches, highly engaged`);
+  else computedTags.push(`${touchCount} touches`);
 
-  // Overdue tag
-  if (daysOverdue > 14) {
-    computedTags.push(`${daysOverdue} days overdue`);
-  } else if (daysOverdue > 7) {
-    computedTags.push(`${daysOverdue}d since activity`);
-  }
+  if (daysOverdue > 14) computedTags.push(`${daysOverdue} days overdue`);
+  else if (daysOverdue > 7) computedTags.push(`${daysOverdue}d since activity`);
 
-  // Email engagement tag
-  if (emailStatsResult.sent > 0 && emailStatsResult.opened === 0) {
-    computedTags.push("not opening emails");
-  } else if (emailStatsResult.clicked > 0) {
-    computedTags.push("clicks emails");
-  }
+  if (emailStatsResult.sent > 0 && emailStatsResult.opened === 0) computedTags.push("not opening emails");
+  else if (emailStatsResult.clicked > 0) computedTags.push("clicks emails");
 
-  // Verification status tag
-  if (verificationState === "verified") {
-    computedTags.push("verified");
-  } else if (verificationState === "pending") {
-    computedTags.push("pending verification");
-  }
+  if (verificationState === "verified") computedTags.push("verified");
+  else if (verificationState === "pending") computedTags.push("pending verification");
 
+  if (questionsUnanswered > 0) computedTags.push(`${questionsUnanswered} unanswered Q`);
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Return Complete Data
+  // ─────────────────────────────────────────────────────────────────────────────
   return {
-    // Metrics (null = not recorded)
+    // Original metrics
     googleRating: googleData.rating ?? null,
     googleReviewCount: googleData.review_count ?? null,
     photoCount: images.length,
@@ -332,10 +1378,11 @@ export async function getRichContextData(
     daysOverdue,
     leadCount,
 
-    // Details for AI
+    // Details
     leads: (leadsResult.data || []).map((l) => ({
       created_at: l.created_at,
       message: l.message || null,
+      familyName: (l.from_profile as { display_name?: string } | null)?.display_name || null,
     })),
     touchpoints: (touchpointsResult.data || []).map((t) => ({
       type: t.touchpoint_type,
@@ -354,6 +1401,7 @@ export async function getRichContextData(
       state: profile?.state || "",
       careTypes: profile?.care_types || [],
       verificationState,
+      slug: providerSlug || null,
     },
 
     // Status
@@ -362,8 +1410,94 @@ export async function getRichContextData(
     medjobsStatus: tracking?.medjobs_status || "none",
     claimedAt: tracking?.claimed_at || null,
 
-    // Pre-computed tags from real data
+    // Tags
     computedTags,
+
+    // ─────────────────────────────────────────────────────────────────────────────
+    // NEW: Data-driven briefing fields
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    questions: {
+      received: questionsReceived,
+      answered: questionsAnswered,
+      unanswered: questionsUnanswered,
+      recentQuestions,
+    },
+
+    engagement: {
+      lastDashboardVisit,
+      dashboardVisits30d,
+      lastProfileEdit,
+      profileEdits30d,
+      sectionsEdited,
+      lastLogin,
+      leadsOpened,
+      leadOpenRate,
+      contactsRevealed,
+    },
+
+    photos: {
+      count: images.length,
+      hasHeroImage: images.length > 0,
+      urls: images.slice(0, 4) as string[],
+    },
+
+    reviews: {
+      rating: googleData.rating ?? null,
+      count: googleData.review_count ?? null,
+      opportunityLevel: reviewOpportunityLevel,
+      opportunityReason: reviewOpportunityReason,
+      hasUsedReviewRequests,
+      reviewRequestsSent,
+    },
+
+    emailAssessment: {
+      isGeneric: isGenericEmail,
+      genericReason,
+    },
+
+    profileCompleteness: {
+      percentage: completenessPercentage,
+      missingSections,
+      hasDescription,
+      hasPricing,
+      hasStaffInfo,
+      hasHours,
+    },
+
+    adBoost: {
+      hasAnyCampaign: adCampaigns.length > 0,
+      activeCampaign,
+      totalCampaigns: adCampaigns.length,
+      lastCampaignStatus: (primaryCampaign?.status as "pending_profile" | "requested" | "scheduled" | "live" | "ended" | "cancelled") || null,
+      totalLeadsFromAds,
+      campaign: campaignDetails,
+    },
+
+    medjobs: {
+      status: medjobsStatus,
+      eligible: medjobsEligible,
+      pilotStartedAt: medjobsPilotStartedAt,
+      subscribedAt: medjobsSubscribedAt,
+      opportunityLevel: medjobsOpportunityLevel,
+      opportunityReason: medjobsOpportunityReason,
+    },
+
+    featureEngagement: {
+      adBoostViews,
+      adBoostLastViewed,
+      adBoostApplyStarted,
+      reviewsCtaClicked,
+      reviewsCtaLastClicked,
+      marketViewCount,
+      marketLastViewed,
+      warmLeadSignals,
+    },
+
+    flags,
+    recommendedAction,
+    openingScript,
+    captureChecklist,
   };
 }
 
