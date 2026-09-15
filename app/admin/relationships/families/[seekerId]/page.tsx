@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { EPISODE_WORD } from "@/lib/seeker-touches/present";
 import {
   SEEKER_FLAG_LABEL,
   type SeekerFlag,
@@ -123,7 +124,7 @@ export default function AdminSeekerTimelinePage() {
 
       <div className="mt-3 flex flex-wrap items-baseline gap-x-4 gap-y-2 border-b border-gray-200 pb-4">
         <h1
-          className={`text-2xl ${profile.label_is_fallback ? "font-normal italic text-gray-500" : "font-semibold text-gray-950"}`}
+          className={`text-2xl ${profile.label_is_fallback ? "font-normal text-gray-600" : "font-semibold text-gray-950"}`}
         >
           {profile.label}
         </h1>
@@ -154,8 +155,8 @@ export default function AdminSeekerTimelinePage() {
         />
         <Fact label="Consent" value={consentLine.v} note={consentLine.n} tone={consentLine.tone} />
         <Fact
-          label="Episode"
-          value={episode.state === "waiting" ? `Waiting on ${episode.blocked_on}` : episode.state}
+          label="Where it stands"
+          value={episode.state === "waiting" ? `${episode.blocked_on} has it` : EPISODE_WORD[episode.state]}
           note={episode.closed_reason ?? (episode.age_days !== null ? `day ${episode.age_days + 1}` : null)}
         />
         <Fact

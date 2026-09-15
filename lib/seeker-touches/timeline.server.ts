@@ -3,6 +3,7 @@ import { seekerEventLabel } from "@/lib/activity/seeker-categories";
 import { getConnectionTemperature, providerResponded, type ConnectionLike } from "@/lib/connection-temperature";
 import { getCityConfig } from "@/lib/city-ads/config";
 import { isImpossibleUsPhone, last10, seekerLabel } from "./label";
+import { EPISODE_WORD, detailLine, problemLine, stateOf } from "./present";
 import type {
   ChannelReach,
   ConsentScope,
@@ -1112,15 +1113,14 @@ function fmt(iso: string): string {
 }
 
 export function seekerRelationshipsToMarkdown(rows: SeekerRelationshipRow[]): string {
-  const out: string[] = ["# Care seekers — relationships", ""];
+  const out: string[] = ["# Care seekers — who is waiting on us", ""];
   for (const r of rows) {
-    const where = [r.city, r.state].filter(Boolean).join(", ");
-    out.push(`## ${r.label}${where ? ` — ${where}` : ""}`);
-    out.push(`- episode: ${r.episode.state}${r.episode.blocked_on ? ` (waiting on ${r.episode.blocked_on})` : ""}${r.episode.closed_reason ? ` (${r.episode.closed_reason})` : ""}`);
-    out.push(`- reachable by: ${r.reach.open.join(" + ") || "nothing"}${r.reach.note ? ` — ${r.reach.note}` : ""}`);
-    out.push(`- consent: ${r.consent}`);
-    if (r.flags.length) out.push(`- flags: ${r.flags.join(", ")}`);
-    if (r.last_touch) out.push(`- last touch: ${fmt(r.last_touch.occurred_at)} — ${r.last_touch.title}`);
+    const st = stateOf(r);
+    out.push(`## ${r.label} — ${st.phrase}${st.age ? ` (${st.age})` : ""}`);
+    const detail = detailLine(r);
+    if (detail) out.push(detail);
+    const problem = problemLine(r);
+    if (problem) out.push(`**${problem}**`);
     out.push("");
   }
   return out.join("\n");
@@ -1130,7 +1130,9 @@ export function seekerTimelineToMarkdown(t: SeekerRelationship): string {
   const out: string[] = [`# ${t.profile.label}`, ""];
   out.push(`- reachable by: ${t.reach.open.join(" + ") || "nothing"}${t.reach.note ? ` — ${t.reach.note}` : ""}`);
   out.push(`- consent: ${t.consent}`);
-  out.push(`- episode: ${t.episode.state}${t.episode.blocked_on ? ` (waiting on ${t.episode.blocked_on})` : ""}`);
+  out.push(
+    `- where it stands: ${EPISODE_WORD[t.episode.state]}${t.episode.blocked_on ? ` — ${t.episode.blocked_on} has it` : ""}${t.episode.closed_reason ? ` — ${t.episode.closed_reason}` : ""}`,
+  );
   if (t.profile.situation) out.push(`- said: "${t.profile.situation}"`);
   out.push("");
   for (const it of t.items) {
