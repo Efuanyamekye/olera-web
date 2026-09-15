@@ -381,7 +381,7 @@ function activityToItem(a: ActivityRow): SeekerTimelineItem {
  */
 function reachabilityOf(
   contact: SeekerContact,
-  emails: EmailRow[],
+  bouncedAddrs: Set<string>,
   dncEmails: Set<string>,
   dncPhones: Set<string>,
 ): Reachability {
@@ -405,7 +405,7 @@ function reachabilityOf(
   } else if (dncEmails.has(addr)) {
     email = "opted_out";
     notes.push("asked us to stop emailing");
-  } else if (emails.some((e) => !isSms(e) && e.bounced_at && (e.recipient ?? "").toLowerCase() === addr)) {
+  } else if (bouncedAddrs.has(addr)) {
     email = "bounced";
     notes.push(`${contact.email} bounced`);
   }
@@ -507,6 +507,7 @@ type Loaded = {
   cityLeads: Map<string, CityLeadRow>;
   cityMsgs: Map<string, CityMsgRow[]>;
   activity: Map<string, ActivityRow[]>;
+  bouncedAddrs: Set<string>;
   dncEmails: Set<string>;
   dncPhones: Set<string>;
 };
@@ -523,7 +524,13 @@ async function candidateIds(
 ): Promise<string[]> {
   const [conns, leads, sms, threads] = await Promise.all([
     db.from("connections").select("from_profile_id, created_at").gte("created_at", sinceIso).limit(4000),
-    db.from("city_leads").select("care_seeker_id, created_at").eq("is_test", false).not("care_seeker_id", "is", null).limit(1000),
+    db
+      .from("city_leads")
+      .select("care_seeker_id, created_at")
+      .eq("is_test", false)
+      .not("care_seeker_id", "is", null)
+      .gte("created_at", sinceIso)
+      .limit(1000),
     db
       .from("sms_inbound")
       .select("profile_id, created_at")
@@ -572,6 +579,7 @@ async function loadFeeds(
     cityLeads: new Map(),
     cityMsgs: new Map(),
     activity: new Map(),
+    bouncedAddrs: new Set(),
     dncEmails: new Set(),
     dncPhones: new Set(),
   };
@@ -580,7 +588,14 @@ async function loadFeeds(
   const gte = <Q extends { gte: (c: string, v: string) => Q }>(q: Q, col: string): Q => (sinceIso ? q.gte(col, sinceIso) : q);
 
   const [profRes, connRes, smsRes, threadRes, leadRes, actRes, dncRes] = await Promise.all([
-    db.from("business_profiles").select("id, display_name, city, state, email, phone, metadata").in("id", ids),
+    // type='family' is load-bearing, not belt-and-braces: connections.from_profile_id
+    // is not always a family (5 of the last 300 were organization rows), so without
+    // this a provider sending a connection lands on the care-seeker list.
+    db
+      .from("business_profiles")
+      .select("id, display_name, city, state, email, phone, metadata")
+      .eq("type", "family")
+      .in("id", ids),
     db
       .from("connections")
       .select("id, from_profile_id, to_profile_id, type, status, message, metadata, created_at, to_profile:to_profile_id(id, display_name)")
@@ -620,48 +635,71 @@ async function loadFeeds(
 
   const profiles = (profRes.data ?? []) as ProfileRow[];
   const addrs = profiles.map((p) => (p.email ?? "").trim()).filter(Boolean);
+  // A text lands in email_log with the PHONE NUMBER in `recipient`, so the
+  // recipient lookup has to carry both. Benefits texts also set provider_id to
+  // the profile uuid, but city-lead texts leave it null — which is how every
+  // system text sent to a city lead would otherwise be missing from their
+  // timeline, i.e. exactly the story this page was built to show.
+  const phones = profiles.map((p) => (p.phone ?? "").trim()).filter(Boolean);
+  const recipients = Array.from(new Set([...addrs, ...phones]));
 
   // email_log keys a family three different ways depending on which sender wrote
   // the row: the address, the legacy provider_id column (family SMS), and
   // metadata.family_profile_id (modern family email, so history survives an
   // address change). Query each and union.
-  const [byAddr, byLegacy, byMeta] = await Promise.all([
-    addrs.length
+  //
+  // Two things bound the cost. recipient_type narrows away the provider-facing
+  // majority of the table (null is allowed because older rows predate the
+  // column — the same predicate the care-seeker comms timeline already uses).
+  // And html_body is selected because an SMS row keeps its whole message there,
+  // which at ~2KB a row is why the limit is 1500 rather than 3000.
+  const EMAIL_COLS =
+    "id, recipient, provider_id, channel, email_type, subject, status, html_body, created_at, delivered_at, first_opened_at, bounced_at, complained_at, error_message, metadata";
+  const EMAIL_LIMIT = 1500;
+  const familyScoped = <Q extends { or: (f: string) => Q }>(q: Q): Q =>
+    q.or("recipient_type.is.null,recipient_type.eq.family");
+
+  const [byAddr, byLegacy, byMeta, bounced] = await Promise.all([
+    recipients.length
       ? gte(
-          db
-            .from("email_log")
-            .select(
-              "id, recipient, provider_id, channel, email_type, subject, status, html_body, created_at, delivered_at, first_opened_at, bounced_at, complained_at, error_message, metadata",
-            )
-            .in("recipient", addrs)
+          familyScoped(db.from("email_log").select(EMAIL_COLS).in("recipient", recipients))
             .order("created_at", { ascending: false })
-            .limit(3000),
+            .limit(EMAIL_LIMIT),
           "created_at",
         )
       : Promise.resolve({ data: [] as EmailRow[] }),
     gte(
-      db
-        .from("email_log")
-        .select(
-          "id, recipient, provider_id, channel, email_type, subject, status, html_body, created_at, delivered_at, first_opened_at, bounced_at, complained_at, error_message, metadata",
-        )
-        .in("provider_id", ids)
+      familyScoped(db.from("email_log").select(EMAIL_COLS).in("provider_id", ids))
         .order("created_at", { ascending: false })
-        .limit(3000),
+        .limit(EMAIL_LIMIT),
       "created_at",
     ),
     gte(
-      db
-        .from("email_log")
-        .select(
-          "id, recipient, provider_id, channel, email_type, subject, status, html_body, created_at, delivered_at, first_opened_at, bounced_at, complained_at, error_message, metadata",
-        )
-        .in("metadata->>family_profile_id", ids)
+      familyScoped(db.from("email_log").select(EMAIL_COLS).in("metadata->>family_profile_id", ids))
         .order("created_at", { ascending: false })
-        .limit(3000),
+        .limit(EMAIL_LIMIT),
       "created_at",
     ),
+    // Bounces get their own query, unwindowed and unlimited, because
+    // reachability must not depend on whether a bounce happened to survive the
+    // row cap above. Saying "reachable by email" about an address that bounced
+    // is the exact failure this page exists to stop, and a bounce is rare
+    // enough that the extra read is free.
+    addrs.length
+      ? db
+          .from("email_log")
+          .select("id, recipient, bounced_at")
+          .in("recipient", addrs)
+          .not("bounced_at", "is", null)
+          .limit(1000)
+      : Promise.resolve({ data: [] as { id: string; recipient: string | null; bounced_at: string }[] }),
   ]);
+
+  const bouncedAddrs = new Set(
+    ((bounced.data ?? []) as { recipient: string | null }[])
+      .map((b) => (b.recipient ?? "").trim().toLowerCase())
+      .filter(Boolean),
+  );
 
   const threads = (threadRes.data ?? []) as SupportThreadRow[];
   const threadById = new Map(threads.map((t) => [t.id, t]));
@@ -708,7 +746,12 @@ async function loadFeeds(
   };
 
   const addrOwner = new Map<string, string>();
-  for (const p of profiles) if (p.email) addrOwner.set(p.email.trim().toLowerCase(), p.id);
+  const phoneOwner = new Map<string, string>();
+  for (const p of profiles) {
+    if (p.email) addrOwner.set(p.email.trim().toLowerCase(), p.id);
+    const k = last10(p.phone);
+    if (k) phoneOwner.set(k, p.id);
+  }
 
   const allEmails = new Map<string, EmailRow>();
   for (const e of [...(byAddr.data ?? []), ...(byLegacy.data ?? []), ...(byMeta.data ?? [])] as EmailRow[]) {
@@ -718,7 +761,12 @@ async function loadFeeds(
     const fromMeta = (e.metadata ?? {}).family_profile_id;
     if (typeof fromMeta === "string" && idSet.has(fromMeta)) return fromMeta;
     if (e.provider_id && idSet.has(e.provider_id)) return e.provider_id;
-    return addrOwner.get((e.recipient ?? "").trim().toLowerCase()) ?? null;
+    const recipient = (e.recipient ?? "").trim();
+    const byAddress = addrOwner.get(recipient.toLowerCase());
+    if (byAddress) return byAddress;
+    // A text: `recipient` is the number it went to.
+    const digits = last10(recipient);
+    return (digits && phoneOwner.get(digits)) ?? null;
   };
 
   // Support messages, newest first, so the first per thread is the latest.
@@ -767,6 +815,7 @@ async function loadFeeds(
     cityLeads,
     cityMsgs,
     activity: byId((actRes.data ?? []) as ActivityRow[], (a) => a.profile_id),
+    bouncedAddrs,
     dncEmails,
     dncPhones,
   };
@@ -782,7 +831,7 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   const lead = f.cityLeads.get(p.id);
   const cityMsgs = (f.cityMsgs.get(p.id) ?? []).map(cityMsgToItem);
 
-  const reach = reachabilityOf(contact, emails, f.dncEmails, f.dncPhones);
+  const reach = reachabilityOf(contact, f.bouncedAddrs, f.dncEmails, f.dncPhones);
   const inquiries = conns.filter((c) => c.type === "inquiry" || c.type === "request");
   const consent = consentOf(reach, lead, inquiries);
 
@@ -810,6 +859,25 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   if (lead) push(cityLeadToItem(lead));
   const lastTouch = candidates.sort(byNewest)[0] ?? null;
 
+  /**
+   * The clock that decides "quiet" and "dormant" — and it deliberately does NOT
+   * count our own automated sends.
+   *
+   * The publish and completion nudge crons email families on a ladder for
+   * months (1,894 such sends in the last 45 days alone). If a cron email reset
+   * the clock, no family in a nudge sequence could ever read as quiet or go
+   * dormant, and the Open tab would fill with people whose only recent activity
+   * is us emailing them. Same reason the provider list prefers its last *human*
+   * touch. `lastTouch` above still shows a system send when that genuinely was
+   * the last thing to happen; this is only the clock.
+   */
+  const meaningful = [
+    humanTouches[0]?.occurred_at,
+    conns[0]?.created_at,
+    lead?.created_at,
+  ].filter((x): x is string => !!x);
+  const lastMeaningfulAt = meaningful.length ? meaningful.sort().reverse()[0] : null;
+
   const firstSignals = [
     lead?.created_at,
     conns[conns.length - 1]?.created_at,
@@ -817,7 +885,7 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   ].filter((x): x is string => !!x);
   const openedAt = firstSignals.length ? firstSignals.sort()[0] : null;
 
-  const episode = episodeOf(now, openedAt, lastTouch?.occurred_at ?? null, inquiries, reach, consent, windowDays);
+  const episode = episodeOf(now, openedAt, lastMeaningfulAt, inquiries, reach, consent, windowDays);
 
   const flags: SeekerFlag[] = [];
   if (inbound.some((it) => it.status === "needs reply")) flags.push("awaiting_reply");
@@ -865,6 +933,7 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
     providers,
     lastTouch,
     lastHuman,
+    lastMeaningfulAt,
     humanTouchCount: humanTouches.length,
     lead,
     parts: { conns, emails, sms, support, cityMsgs },
@@ -892,7 +961,7 @@ export async function loadSeekerRelationships(opts?: { days?: number }): Promise
       last_touch: a.lastTouch,
       last_human_touch_at: a.lastHuman?.occurred_at ?? null,
       human_touch_count: a.humanTouchCount,
-      days_quiet: daysSince(a.lastTouch?.occurred_at ?? null, now),
+      days_quiet: daysSince(a.lastMeaningfulAt ?? a.lastTouch?.occurred_at ?? null, now),
       reach: a.reach,
       consent: a.consent,
       episode: a.episode,
