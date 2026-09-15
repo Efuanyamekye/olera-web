@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient } from "@/lib/admin";
 import { sendEmail } from "@/lib/email";
 import { profileIncompleteNudgeEmail, studentActivationEmail } from "@/lib/medjobs-email-templates";
-import { calculateCompleteness, getIncompleteItems } from "@/lib/medjobs-completeness";
+import { calculateCompleteness, getIncompleteSections } from "@/lib/medjobs-completeness";
 import { generateStudentPortalUrl } from "@/lib/claim-tokens";
 import type { StudentMetadata } from "@/lib/types";
 import { withCronRun } from "@/lib/crons/run";
@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
     while (hasMore) {
       const { data: students, error } = await db
         .from("business_profiles")
-        .select("id, slug, display_name, email, city, image_url, metadata, created_at")
+        .select("id, slug, display_name, email, city, state, image_url, metadata, created_at")
         .eq("type", "student")
         .not("email", "is", null)
         .not("display_name", "is", null)
@@ -76,9 +76,14 @@ export async function GET(request: NextRequest) {
 
       const meta = (student.metadata || {}) as StudentMetadata;
       const hasPhoto = !!student.image_url;
+      const hasBasicInfo = {
+        hasName: !!student.display_name?.trim(),
+        hasUniversity: !!meta.university,
+        hasLocation: !!(student.city && student.state),
+      };
 
       // Recalculate completeness fresh (single source of truth)
-      const completeness = calculateCompleteness(meta, hasPhoto);
+      const completeness = calculateCompleteness(meta, hasPhoto, hasBasicInfo);
 
       // If 100% complete — check if activation email needs to be sent
       if (completeness >= 100) {
@@ -91,7 +96,7 @@ export async function GET(request: NextRequest) {
             // Generate one-click sign-in URL with 15-day HMAC token
             const magicLink = generateStudentPortalUrl(
               student.email!,
-              "/medjobs/providers",
+              "/portal/medjobs",
               siteUrl
             );
 
@@ -146,9 +151,9 @@ export async function GET(request: NextRequest) {
         if (hoursSinceLastNudge < 20) { skipped++; continue; }
       }
 
-      // Get incomplete items for the email
-      const incompleteItems = getIncompleteItems(meta, hasPhoto);
-      if (incompleteItems.length === 0) { skipped++; continue; }
+      // Get incomplete sections for the email (matches portal UI)
+      const incompleteSections = getIncompleteSections(meta, hasPhoto, hasBasicInfo);
+      if (incompleteSections.length === 0) { skipped++; continue; }
 
       try {
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
@@ -166,7 +171,7 @@ export async function GET(request: NextRequest) {
           html: profileIncompleteNudgeEmail({
             studentName: student.display_name,
             completeness,
-            missingItems: incompleteItems.slice(0, 5),
+            missingItems: incompleteSections.slice(0, 5),
             magicLink,
           }),
           emailType: "profile_incomplete_nudge",

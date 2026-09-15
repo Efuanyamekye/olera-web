@@ -1181,6 +1181,26 @@ function StudentPortalContent({
   const completeSections = getSectionCompleteness(meta, hasPhoto, hasBasicInfo);
   const completenessPercent = calculateCompleteness(meta, hasPhoto, hasBasicInfo);
 
+  // Sync calculated completeness back to storage (keeps metadata.profile_completeness fresh)
+  const storedCompleteness = typeof meta.profile_completeness === "number" ? meta.profile_completeness : null;
+  useEffect(() => {
+    if (storedCompleteness !== completenessPercent) {
+      const sb = createBrowserClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
+      sb.from("business_profiles")
+        .select("metadata")
+        .eq("id", profile.id)
+        .single()
+        .then(({ data }) => {
+          if (data) {
+            const currentMeta = data.metadata || {};
+            sb.from("business_profiles")
+              .update({ metadata: { ...currentMeta, profile_completeness: completenessPercent } })
+              .eq("id", profile.id);
+          }
+        });
+    }
+  }, [completenessPercent, storedCompleteness, profile.id]);
+
   // Convert sections to items format for guided onboarding hook
   const completenessItems = completeSections.map((s) => ({
     key: s.id,

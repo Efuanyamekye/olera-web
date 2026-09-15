@@ -103,6 +103,15 @@ function Board() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading, profiles]);
 
+  // Auto-redirect: ALL logged-in students go straight to their portal.
+  // The landing page is for anonymous visitors only.
+  useEffect(() => {
+    if (authLoading) return;
+    if (studentProfileId) {
+      router.replace("/portal/medjobs");
+    }
+  }, [authLoading, studentProfileId, router]);
+
   // Open the screener for an anon arrival with ?screener=1 (reacts to the
   // param so the marketing "Apply" buttons can trigger it via navigation).
   useEffect(() => {
@@ -136,7 +145,11 @@ function Board() {
         .select("is_active, display_name, metadata")
         .eq("id", profileId)
         .single();
-      if (!data) return;
+      if (!data) {
+        // No data found — assume incomplete, redirect to profile
+        setStudentStatus({ isLive: false, completeness: null, firstName: null });
+        return;
+      }
       const meta = (data.metadata || {}) as Record<string, unknown>;
       setStudentStatus({
         isLive: !!data.is_active,
@@ -145,7 +158,8 @@ function Board() {
       });
       if (!campus && typeof meta.campus === "string") setCampus(meta.campus);
     } catch {
-      /* note falls back to generic copy */
+      // Network error — assume incomplete, redirect to profile
+      setStudentStatus({ isLive: false, completeness: null, firstName: null });
     }
   };
 
@@ -200,8 +214,8 @@ function Board() {
       if (data.session) {
         setShowScreener(false);
         // Land new students on their profile to complete it — providers will
-        // reach out when they see a match.
-        router.push("/portal/medjobs");
+        // reach out when they see a match. Use replace so back button works.
+        router.replace("/portal/medjobs");
         return;
       }
     } catch {
