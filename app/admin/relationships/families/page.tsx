@@ -47,6 +47,10 @@ const TABS: { key: Tab; label: string }[] = [
 function matches(r: SeekerRelationshipRow, tab: Tab): boolean {
   switch (tab) {
     case "needs_you":
+      // Opted out is never "waiting on us": there is no channel left to answer
+      // on, so leaving them here just pads the one tab that is meant to be a
+      // to-do list.
+      if (r.flags.includes("opted_out")) return false;
       return (
         r.flags.includes("awaiting_reply") ||
         r.flags.includes("promise_owed") ||
@@ -66,6 +70,12 @@ function matches(r: SeekerRelationshipRow, tab: Tab): boolean {
 function fmtDate(iso: string | null | undefined): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" });
+}
+
+/** Provider names run long enough to push the column past the card's edge. */
+function shorten(s: string | null, n: number): string {
+  if (!s) return "a provider";
+  return s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s;
 }
 
 function actorWord(a: "out" | "in" | "system"): string {
@@ -202,10 +212,10 @@ export default function AdminSeekerRelationshipsPage() {
         <table className="w-full min-w-[980px] text-sm">
           <thead>
             <tr className="border-b border-gray-200 text-left text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-500">
-              <th className="px-4 py-2.5">Family</th>
-              <th className="px-4 py-2.5">Last touch</th>
-              <th className="px-4 py-2.5">Can we reach them</th>
-              <th className="px-4 py-2.5">Episode</th>
+              <th className="w-[27%] px-4 py-2.5">Family</th>
+              <th className="w-[33%] px-4 py-2.5">Last touch</th>
+              <th className="w-[22%] px-4 py-2.5">Can we reach them</th>
+              <th className="w-[18%] px-4 py-2.5">Episode</th>
             </tr>
           </thead>
           <tbody>
@@ -258,7 +268,9 @@ export default function AdminSeekerRelationshipsPage() {
                       ) : null}
                     </div>
                     {r.situation && (
-                      <p className="mt-1 max-w-[42ch] text-[12px] italic leading-snug text-gray-600">“{r.situation}”</p>
+                      <p className="mt-1 line-clamp-2 text-[12px] italic leading-snug text-gray-600" title={r.situation}>
+                        “{r.situation}”
+                      </p>
                     )}
                     {r.flags.length > 0 && (
                       <div className="mt-1.5 flex flex-wrap gap-1">
@@ -271,7 +283,7 @@ export default function AdminSeekerRelationshipsPage() {
                     )}
                   </td>
 
-                  <td className="max-w-[34ch] px-4 py-3">
+                  <td className="px-4 py-3">
                     {r.last_touch ? (
                       <>
                         <div className="flex items-start gap-1.5">
@@ -286,7 +298,9 @@ export default function AdminSeekerRelationshipsPage() {
                           >
                             {actorWord(r.last_touch.actor)}
                           </span>
-                          <span className="text-gray-900">{r.last_touch.title}</span>
+                          <span className="line-clamp-2 text-gray-900" title={r.last_touch.title}>
+                            {r.last_touch.title}
+                          </span>
                         </div>
                         <div className="mt-0.5 font-mono text-[11px] text-gray-500">
                           {fmtDate(r.last_touch.occurred_at)}
@@ -304,9 +318,12 @@ export default function AdminSeekerRelationshipsPage() {
                     <div className={`mt-1 text-[11px] ${consent.tone}`}>{consent.text}</div>
                   </td>
 
-                  <td className="whitespace-nowrap px-4 py-3">
-                    <div className={`text-[13px] font-medium ${EPISODE_STYLE[r.episode.state] ?? "text-gray-700"}`}>
-                      {r.episode.state === "waiting" ? `Waiting on ${r.episode.blocked_on}` : r.episode.state}
+                  <td className="px-4 py-3">
+                    <div
+                      className={`text-[13px] font-medium ${EPISODE_STYLE[r.episode.state] ?? "text-gray-700"}`}
+                      title={r.episode.blocked_on ?? undefined}
+                    >
+                      {r.episode.state === "waiting" ? `Waiting on ${shorten(r.episode.blocked_on, 20)}` : r.episode.state}
                     </div>
                     <div className="mt-0.5 font-mono text-[11px] text-gray-500">
                       {r.episode.closed_reason
