@@ -21,7 +21,9 @@ export async function runMetaNativeIntake(db: SupabaseClient) {
     .lt("attempts", 12).order("received_at").limit(10);
   if (error) throw new Error("Could not read Meta inbox");
   let processed = 0, failed = 0;
+  const deadline = Date.now() + 25_000;
   for (const receipt of pending ?? []) {
+    if (Date.now() >= deadline) break;
     const { data: claim, error: claimError } = await db.from("meta_lead_receipts")
       .update({ status: "processing", attempts: receipt.attempts + 1, last_attempt_at: new Date().toISOString() })
       .eq("leadgen_id", receipt.leadgen_id).eq("attempts", receipt.attempts).eq("status", receipt.status)
@@ -61,6 +63,7 @@ export async function runMetaNativeIntake(db: SupabaseClient) {
     .is("archived_at", null).limit(20);
   if (linkError) throw new Error("Could not read unlinked Meta leads");
   for (const lead of unlinked ?? []) {
+    if (Date.now() >= deadline) break;
     const cfg = getCityConfig(lead.slug);
     if (!cfg) continue;
     const seeker = await ensureCareSeekerForCityLead(db, { firstName: lead.first_name, phone: lead.phone,

@@ -24,7 +24,8 @@ interface SlackElement {
  */
 export async function sendSlackAlert(
   text: string,
-  blocks?: SlackBlock[]
+  blocks?: SlackBlock[],
+  options?: { timeoutMs?: number }
 ): Promise<{ success: boolean; error?: string }> {
   if (!WEBHOOK_URL) {
     console.warn("[slack] SLACK_WEBHOOK_URL not configured, skipping alert");
@@ -39,6 +40,7 @@ export async function sendSlackAlert(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
+      ...(options?.timeoutMs ? { signal: AbortSignal.timeout(options.timeoutMs) } : {}),
     });
 
     if (!res.ok) {

@@ -22,16 +22,39 @@ export async function GET() {
   // Counts use the same lead outcomes as the city queue. No website visits or
   // assumed spend are used as a denominator for native submissions.
   const counts: Record<string, number> = {};
-  for (const [key, status] of [["leads", null], ["reached", "contacted"], ["clients", "client"]] as const) {
+  for (const [key, status] of [["leads", null], ["introduced", "introduced"], ["accepted", "accepted"], ["reached", "contacted"], ["clients", "client"]] as const) {
     let q = db.from("city_leads").select("id", { count: "exact", head: true })
       .eq("capture_method", "meta_instant_form").eq("is_test", false);
+    if (status === "introduced") q = q.gt("offer_count", 0);
+    if (status === "accepted") q = q.not("accepted_offer_id", "is", null);
     if (status === "contacted") q = q.not("reached_at", "is", null);
     if (status === "client") q = q.or("status.eq.client,outcome.eq.client");
     const { count, error: e } = await q;
     if (e) return NextResponse.json({ error: "Meta outcomes unavailable" }, { status: 503 });
     counts[key] = count ?? 0;
   }
-  return NextResponse.json({ configured, forms, receipts: data, counts }, { headers: { "Cache-Control": "no-store" } });
+  const health: Record<string, number> = {};
+  for (const status of ["pending", "processing", "failed", "duplicate", "blocked"] as const) {
+    const { count, error: e } = await db.from("meta_lead_receipts").select("leadgen_id", { count: "exact", head: true }).eq("status",status);
+    if (e) return NextResponse.json({ error: "Meta delivery health unavailable" }, { status: 503 });
+    health[status] = count ?? 0;
+  }
+  const [clock, oldest, alertResult, alertCount, lastReceived, failedReceipts] = await Promise.all([
+    db.from("cron_runs").select("started_at,status,summary").eq("job_id","city-lead-offers").order("started_at",{ascending:false}).limit(1).maybeSingle(),
+    db.from("meta_lead_receipts").select("received_at").in("status",["pending","processing","failed"]).order("received_at").limit(1).maybeSingle(),
+    db.from("meta_lead_alerts").select("id,kind,status,created_at,last_error").in("status",["pending","sending","failed"]).order("created_at").limit(50),
+    db.from("meta_lead_alerts").select("id",{count:"exact",head:true}).eq("status","failed"),
+    db.from("meta_lead_receipts").select("received_at").order("received_at",{ascending:false}).limit(1).maybeSingle(),
+    db.from("meta_lead_receipts").select("leadgen_id,form_id,status,received_at,last_attempt_at,last_error,attempts,lead_id").eq("status","failed").order("received_at").limit(50),
+  ]);
+  if ([clock,oldest,alertResult,alertCount,lastReceived,failedReceipts].some(r=>r.error)) {
+    return NextResponse.json({ error: "Meta health unavailable. Check migrations and cron logging." }, { status: 503 });
+  }
+  return NextResponse.json({ configured, forms, receipts: [...new Map([...(failedReceipts.data ?? []),...(data ?? [])].map(r=>[r.leadgen_id,r])).values()], counts, health,
+    clock: clock.data, oldestPendingAt: oldest.data?.received_at ?? null,
+    lastReceivedAt: lastReceived.data?.received_at ?? null, slackConfigured: !!process.env.SLACK_WEBHOOK_URL,
+    alerts: alertResult.data, failedAlerts: alertCount.count ?? 0,
+    clientRate: counts.leads > 0 ? counts.clients / counts.leads : null }, { headers: { "Cache-Control": "no-store" } });
 }
 export async function POST(req: NextRequest) {
   if (!await allowed()) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });

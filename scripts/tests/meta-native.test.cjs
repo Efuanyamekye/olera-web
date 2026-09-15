@@ -128,3 +128,35 @@ test('waiting native/test leads cannot consume the website relay batch',async()=
  await offers.runOfferMaintenance(db);
  assert.deepEqual(seen,['website']);
 });
+
+
+test('Slack alerts send once and contain no family contact data',async()=>{
+ const saved=process.env.SLACK_WEBHOOK_URL; process.env.SLACK_WEBHOOK_URL='test-only';
+ try {
+  const sent=[];
+  const alerts=load('lib/city-ads/meta-alerts.server.ts',{
+   '@/lib/slack':{sendSlackAlert:async text=>{sent.push(text);return {success:true}}},
+   '@/lib/site-url':{getSiteUrl:()=> 'https://olera.care'}
+  });
+  const rows=[{id:'alert1',kind:'new_lead',receipt_id:'999',status:'pending'}];
+  const db=fakeDb({meta_lead_alerts:rows});
+  await alerts.runMetaAlerts(db); await alerts.runMetaAlerts(db);
+  assert.equal(sent.length,1); assert.equal(rows[0].status,'sent');
+  assert.match(sent[0],/Meta receipt: 999/); assert.match(sent[0],/https:\/\/olera.care\/admin\/city-ads/);
+  assert.doesNotMatch(sent[0],/2145550100|Test Family/);
+ }finally{if(saved===undefined)delete process.env.SLACK_WEBHOOK_URL;else process.env.SLACK_WEBHOOK_URL=saved;}
+});
+test('uncertain Slack sends are surfaced and not automatically repeated',async()=>{
+ const saved=process.env.SLACK_WEBHOOK_URL;process.env.SLACK_WEBHOOK_URL='test-only';
+ try {
+  let calls=0;
+  const alerts=load('lib/city-ads/meta-alerts.server.ts',{
+   '@/lib/slack':{sendSlackAlert:async()=>{calls++;return {success:false}}},'@/lib/site-url':{getSiteUrl:()=> 'https://olera.care'}
+  });
+  const rows=[{id:'failed-send',status:'pending',kind:'import_failed',receipt_id:'999'},
+   {id:'crashed-send',status:'sending',claimed_at:'2020-01-01',kind:'new_lead',receipt_id:'888'}];
+  const db=fakeDb({meta_lead_alerts:rows});
+  await alerts.runMetaAlerts(db);await alerts.runMetaAlerts(db);
+  assert.equal(calls,1);assert.ok(rows.every(r=>r.status==='failed'));
+ }finally{if(saved===undefined)delete process.env.SLACK_WEBHOOK_URL;else process.env.SLACK_WEBHOOK_URL=saved;}
+});
