@@ -1,5 +1,7 @@
 "use client";
 
+import MetaNativeStatus from "@/components/admin/MetaNativeStatus";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { citySendWindow } from "@/lib/city-ads/send-window";
@@ -92,6 +94,13 @@ type PoolRow = { id: string; slug: string; provider_id: string; position: number
 type Offer = { id: string; provider_id: string; position: number; offered_at: string; expires_at: string; accepted_at: string | null; declined_at: string | null; decline_reason: string | null; expired_at: string | null; provider: Provider };
 type FamilyText = { id: string; created_at: string; email_type: string; status: string; html_body: string | null };
 type Lead = {
+  is_test?: boolean;
+  capture_method?: string;
+  meta_lead_id?: string | null;
+  meta_form_id?: string | null;
+  meta_campaign_id?: string | null;
+  consent_form_version?: string;
+  consent_at?: string;
   id: string;
   slug: string;
   archived_at: string | null;
@@ -351,6 +360,8 @@ export default function CityAdsAdminPage() {
         </div>
       )}
 
+      <MetaNativeStatus />
+
       {/* Leads */}
       <Eyebrow>Leads</Eyebrow>
       <div className="mb-3 flex gap-2">
@@ -369,6 +380,8 @@ export default function CityAdsAdminPage() {
               <button type="button" onClick={() => setOpenLead(open ? null : l.id)} className="flex w-full flex-wrap items-center justify-between gap-x-4 gap-y-1 py-3 text-left">
                 <span className="min-w-0">
                   <span className="font-semibold text-gray-900">{l.first_name}</span>
+                  {l.is_test && <span className="ml-2 text-xs text-gray-500">Test — no outreach</span>}
+                  {l.capture_method === "meta_instant_form" && <span className="ml-2 rounded bg-primary-50 px-2 py-1 text-xs text-primary-800">Meta Instant Form</span>}
                   <span className="ml-2 text-sm text-gray-600">
                     {cityName(l.slug, campaigns)} · {CARE[l.care_type]} for {WHO[l.care_recipient ?? "other"]}
                     {l.urgency ? `, ${WHEN[l.urgency]}` : ""}
@@ -569,6 +582,7 @@ function LeadDetail({ lead: l, pool, busy, act }: { lead: Lead; pool: PoolRow[];
         {l.payment_type && <span className="text-gray-600">{PAY[l.payment_type] ?? l.payment_type}</span>}
         {l.utm_medium && <span className="text-gray-400">via {l.utm_medium}</span>}
       </div>
+      {l.meta_lead_id && <p className="mt-2 text-xs text-gray-500">Meta lead {l.meta_lead_id} · Form {l.meta_form_id} · Campaign {l.meta_campaign_id || "not supplied"} · Consent {l.consent_form_version} at {fmtTime(l.consent_at)}</p>}
       {l.note && <p className="mt-2 rounded bg-white px-2.5 py-1.5 text-xs text-gray-700">“{l.note}”</p>}
 
       <ol className="mt-3 space-y-1 text-xs">
@@ -835,7 +849,7 @@ function ChannelCompare({ rows }: { rows: ChannelRow[] }) {
           {rows.map((r) => (
             <tr key={`${r.slug}-${r.channel}`}>
               <td className="py-1.5 pr-3 font-medium text-gray-900">
-                {cap(r.channel)} <span className="font-normal text-gray-500">{r.status}</span>
+                {r.channel === "meta_instant_form" ? "Meta Instant Form" : cap(r.channel)} <span className="font-normal text-gray-500">{r.status}</span>
               </td>
               <td className="py-1.5 pr-3 text-right tabular-nums">
                 {r.spendCents === null ? <span className="text-gray-400">not typed</span> : money(r.spendCents)}

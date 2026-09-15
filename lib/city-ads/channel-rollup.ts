@@ -18,6 +18,7 @@ import { classifyCityTraffic } from "./config";
  */
 
 export interface RollupLead {
+  capture_method?: string;
   slug: string | null;
   utm_source: string | null;
   utm_medium: string | null;
@@ -70,6 +71,7 @@ export const UNATTRIBUTED = "unattributed";
  * below exists to prevent.
  */
 export function leadChannelKey(lead: RollupLead): string {
+  if (lead.capture_method === "meta_instant_form") return "meta_instant_form";
   const { channel } = classifyCityTraffic({
     source: lead.utm_source,
     medium: lead.utm_medium,

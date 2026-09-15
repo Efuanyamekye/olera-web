@@ -6,9 +6,9 @@ export { citySendWindow } from './send-window';
 
 /** Fail closed, including when checking provider outreach about this family. */
 export async function cityLeadBlocked(db: SupabaseClient, leadId: string): Promise<boolean> {
-  const { data: lead, error } = await db.from('city_leads').select('phone,email,status,archived_at').eq('id', leadId).single();
+  const { data: lead, error } = await db.from('city_leads').select('phone,email,status,archived_at,is_test').eq('id', leadId).single();
   if (error) throw error;
-  if (lead.archived_at || lead.status === 'stopped') return true;
+  if (lead.is_test || lead.archived_at || lead.status === 'stopped') return true;
   const checks = [];
   if (lead.phone) checks.push(db.from('do_not_contact').select('id').eq('phone', String(lead.phone).replace(/\D/g, '').slice(-10)).limit(1));
   if (lead.email) checks.push(db.from('do_not_contact').select('id').eq('email', String(lead.email).trim().toLowerCase()).limit(1));

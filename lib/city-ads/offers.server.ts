@@ -51,6 +51,7 @@ import {
 } from "@/lib/city-ads/config";
 
 export interface CityLeadRow {
+  capture_method?: string;
   id: string;
   slug: string;
   care_recipient: CityRecipient | null;
@@ -99,7 +100,7 @@ interface ProviderLite {
 }
 
 const LEAD_COLS =
-  "id, slug, care_recipient, care_type, urgency, zip, first_name, phone, note, payment_type, status, accepted_offer_id, offer_count, next_offer_at";
+  "capture_method, id, slug, care_recipient, care_type, urgency, zip, first_name, phone, note, payment_type, status, accepted_offer_id, offer_count, next_offer_at";
 
 function last10(phone: string | null | undefined): string | null {
   if (!phone) return null;
@@ -151,6 +152,8 @@ export async function startOrAdvance(
   if (await cityLeadBlocked(db, leadId)) return { action: "noop" };
   const lead = await getLead(db, leadId);
   if (!lead) return { action: "noop" };
+  // Native form promises an Olera conversation before a named introduction.
+  if (lead.capture_method === "meta_instant_form" && !opts.providerId) return { action: "noop" };
   if (lead.accepted_offer_id || !["new", "offered", "unfilled"].includes(lead.status)) {
     return { action: "closed" };
   }
@@ -538,6 +541,8 @@ export async function runOfferMaintenance(db: SupabaseClient): Promise<{
   const { data: waiting } = await db
     .from("city_leads")
     .select("id, next_offer_at, created_at")
+    .eq("is_test", false)
+    .neq("capture_method", "meta_instant_form")
     .in("status", ["new", "offered"])
     .is("accepted_offer_id", null)
     .or(`next_offer_at.lte.${now},and(next_offer_at.is.null,created_at.lte.${twoMinAgo})`)

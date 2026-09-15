@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
           ? "anonymous_id,visit_id,page_path,occurred_at,event_type,metadata"
           : "slug,utm_source,utm_medium,gclid,fbclid,is_test");
         if (table === "growth_attribution_events") q = q.eq("page_category", "city_landing").in("event_type", ["page_landed", "cta_engaged", "lead_started"]);
-        else q = q.eq("is_test", false);
+        else q = q.eq("is_test", false).eq("capture_method", "website");
         const time = table === "growth_attribution_events" ? "occurred_at" : "created_at";
         const { data, error } = await q.gte(time, new Date(start).toISOString()).lt(time, cutoff)
           .order(time).order("id").range(offset, offset + 999);
