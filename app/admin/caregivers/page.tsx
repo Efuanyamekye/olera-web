@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { StudentMetadata } from "@/lib/types";
 
-type FilterTab = "all" | "active" | "paused" | "notLive" | "complete" | "incomplete";
+type FilterTab = "all" | "active" | "paused" | "notLive" | "complete" | "incomplete" | "nonEdu";
 
 interface StudentRow {
   id: string;
@@ -37,6 +37,7 @@ interface TabCounts {
   incomplete: number;
   thisWeek: number;
   students: number;
+  nonEdu: number;
 }
 
 // Format date as "Feb 02, 2026"
@@ -103,6 +104,13 @@ export default function AdminStudentsPage() {
       if (filter === "complete") params.set("complete_only", "true");
       if (filter === "incomplete") params.set("incomplete_only", "true");
 
+      // Email filtering: nonEdu tab shows non-.edu emails, all others show only .edu
+      if (filter === "nonEdu") {
+        params.set("non_edu_only", "true");
+      } else {
+        params.set("edu_only", "true");
+      }
+
       const res = await fetch(`/api/admin/caregivers?${params}`);
       if (res.ok) {
         const data = await res.json();
@@ -130,6 +138,7 @@ export default function AdminStudentsPage() {
           incomplete: statsData.incomplete ?? 0,
           thisWeek: statsData.thisWeek ?? 0,
           students: statsData.students ?? 0,
+          nonEdu: statsData.nonEdu ?? 0,
         });
       }
     } catch { /* ignore */ }
@@ -184,13 +193,14 @@ export default function AdminStudentsPage() {
 
   const hasActiveFilters = filter !== "all";
 
-  const tabs: { label: string; value: FilterTab; count: number | null }[] = [
+  const tabs: { label: string; value: FilterTab; count: number | null; separated?: boolean }[] = [
     { label: "All", value: "all", count: tabCounts?.total ?? null },
     { label: "Active", value: "active", count: tabCounts?.active ?? null },
     { label: "Paused", value: "paused", count: tabCounts?.paused ?? null },
     { label: "Not Live", value: "notLive", count: tabCounts?.notLive ?? null },
     { label: "Complete", value: "complete", count: tabCounts?.complete ?? null },
     { label: "Incomplete", value: "incomplete", count: tabCounts?.incomplete ?? null },
+    { label: "Non-.edu", value: "nonEdu", count: tabCounts?.nonEdu ?? null, separated: true },
   ];
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -211,7 +221,9 @@ export default function AdminStudentsPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Students</h1>
           <p className="text-sm text-gray-500 mt-1">
-            MedJobs student applicants
+            {filter === "nonEdu"
+              ? "Students who signed up with non-.edu emails"
+              : "Verified MedJobs student applicants (.edu emails)"}
           </p>
         </div>
       </div>
@@ -242,30 +254,40 @@ export default function AdminStudentsPage() {
 
       {/* Filter tabs */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           {tabs.map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setFilter(tab.value)}
-              className={[
-                "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-                filter === tab.value
-                  ? "bg-primary-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200",
-              ].join(" ")}
-            >
-              {tab.label}
-              {tab.count !== null && (
-                <span className={[
-                  "ml-1.5 px-1.5 py-0.5 rounded text-xs",
-                  filter === tab.value
-                    ? "bg-white/20 text-white"
-                    : "bg-gray-200 text-gray-500",
-                ].join(" ")}>
-                  {tab.count}
-                </span>
+            <div key={tab.value} className="flex items-center gap-2">
+              {tab.separated && (
+                <div className="w-px h-6 bg-gray-300 mx-1" />
               )}
-            </button>
+              <button
+                onClick={() => setFilter(tab.value)}
+                className={[
+                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                  filter === tab.value
+                    ? tab.separated
+                      ? "bg-amber-600 text-white"
+                      : "bg-primary-600 text-white"
+                    : tab.separated
+                      ? "bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200",
+                ].join(" ")}
+              >
+                {tab.label}
+                {tab.count !== null && (
+                  <span className={[
+                    "ml-1.5 px-1.5 py-0.5 rounded text-xs",
+                    filter === tab.value
+                      ? "bg-white/20 text-white"
+                      : tab.separated
+                        ? "bg-amber-100 text-amber-600"
+                        : "bg-gray-200 text-gray-500",
+                  ].join(" ")}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            </div>
           ))}
         </div>
 

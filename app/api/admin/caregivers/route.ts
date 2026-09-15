@@ -137,6 +137,8 @@ export async function GET(request: NextRequest) {
     const notLiveOnly = searchParams.get("not_live_only") === "true";
     const completeOnly = searchParams.get("complete_only") === "true";
     const incompleteOnly = searchParams.get("incomplete_only") === "true";
+    const eduOnly = searchParams.get("edu_only") === "true";
+    const nonEduOnly = searchParams.get("non_edu_only") === "true";
     const cityFilter = searchParams.get("city")?.trim() || "";
 
     const db = getServiceClient();
@@ -145,7 +147,8 @@ export async function GET(request: NextRequest) {
     // - Filtering by completeness (requires calculation from metadata)
     // - Filtering by paused/not_live (requires checking application_completed in metadata)
     // - Searching (to include university from JSONB metadata)
-    const needsClientSideFilter = completeOnly || incompleteOnly || pausedOnly || notLiveOnly || !!search;
+    // - Filtering by .edu email domain (requires checking email suffix)
+    const needsClientSideFilter = completeOnly || incompleteOnly || pausedOnly || notLiveOnly || eduOnly || nonEduOnly || !!search;
 
     let data: StudentQueryResult[] | null;
     let count: number | null;
@@ -229,6 +232,14 @@ export async function GET(request: NextRequest) {
       students = students.filter((s) => !s.is_active && s.application_completed);
     } else if (notLiveOnly) {
       students = students.filter((s) => !s.is_active && !s.application_completed);
+    }
+
+    // Filter by email domain (.edu vs non-.edu)
+    // Non-.edu includes null/empty emails (unverified students)
+    if (eduOnly) {
+      students = students.filter((s) => s.email?.toLowerCase().endsWith(".edu"));
+    } else if (nonEduOnly) {
+      students = students.filter((s) => !s.email?.toLowerCase().endsWith(".edu"));
     }
 
     // Calculate totals and pagination

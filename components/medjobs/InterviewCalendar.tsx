@@ -440,13 +440,13 @@ export default function InterviewCalendar({
           <p className="text-[15px] text-gray-500 max-w-sm leading-relaxed mb-6">
             {perspective === "provider"
               ? "Browse caregivers and schedule interviews to connect with pre-vetted healthcare students."
-              : "When you request or receive interview invitations, they'll appear here on your calendar."}
+              : "When providers reach out, your interview invitations will appear here."}
           </p>
           <Link
-            href={perspective === "provider" ? "/provider/medjobs/candidates" : "/portal/medjobs/jobs"}
+            href={perspective === "provider" ? "/provider/medjobs/candidates" : "/portal/medjobs"}
             className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-xl transition-colors"
           >
-            {perspective === "provider" ? "Browse caregivers" : "See families hiring near you"}
+            {perspective === "provider" ? "Browse caregivers" : "View your profile"}
           </Link>
         </div>
       )}

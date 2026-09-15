@@ -45,6 +45,7 @@ const fieldClass =
   "w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-base placeholder:text-gray-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent";
 
 const EMAIL_RE = /\S+@\S+\.\S+/;
+const isEduEmail = (email: string) => email.trim().toLowerCase().endsWith(".edu");
 
 export interface StudentEligibilityContext {
   campusName?: string | null;
@@ -92,6 +93,10 @@ export default function StudentEligibilityModal({
     }
     if (!EMAIL_RE.test(email)) {
       setError("Please enter a valid email.");
+      return;
+    }
+    if (!email.trim().toLowerCase().endsWith(".edu")) {
+      setError("Please use your university email (.edu). We only accept .edu emails for student applications.");
       return;
     }
     setError(null);
@@ -283,7 +288,7 @@ export default function StudentEligibilityModal({
                 </option>
               ))}
             </select>
-            <p className="mt-3 text-sm font-medium text-gray-800">Add your email to get started:</p>
+            <p className="mt-3 text-sm font-medium text-gray-800">Add your university email to get started:</p>
             <input
               type="email"
               inputMode="email"
@@ -296,10 +301,16 @@ export default function StudentEligibilityModal({
               placeholder="you@school.edu"
               className={fieldClass + " mt-2"}
             />
+            {/* Real-time .edu validation hint */}
+            {email.trim() && EMAIL_RE.test(email) && !isEduEmail(email) && (
+              <p className="mt-2 text-sm text-amber-600">
+                Please use your university email ending in .edu
+              </p>
+            )}
             {error ? <p className="mt-2 text-sm text-red-600">{error}</p> : null}
             <button
               type="button"
-              disabled={!university || !email.trim()}
+              disabled={!university || !email.trim() || !isEduEmail(email)}
               className={btnPrimary + " disabled:opacity-50"}
               onClick={submit}
             >

@@ -94,6 +94,8 @@ interface BrowseCardProps {
   isInvited?: boolean;
   /** student variant — campus slug, carried into the provider detail link. */
   campus?: string;
+  /** When true, card is purely informational (no link, not clickable). */
+  disableLink?: boolean;
 }
 
 export default function BrowseCard({
@@ -112,6 +114,7 @@ export default function BrowseCard({
   onCta,
   isInvited = false,
   campus,
+  disableLink = false,
 }: BrowseCardProps) {
   const isStudent = variant === "student";
   const isCandidate = variant === "candidate";
@@ -515,6 +518,11 @@ export default function BrowseCard({
         {cardBody}
       </Link>
     );
+  }
+
+  // Non-clickable card (informational only)
+  if (disableLink) {
+    return <div className={rootClass}>{cardBody}</div>;
   }
 
   const linkHref = isCandidate

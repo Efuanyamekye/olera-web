@@ -68,16 +68,16 @@ export default function GoLiveCelebrationModal({
 
         {/* Description with animation */}
         <p className={`relative z-10 text-gray-600 mb-8 max-w-sm mx-auto leading-relaxed transition-all duration-500 ${showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "250ms" }}>
-          Providers can now see your profile. Start browsing jobs and find your first match.
+          Providers can now see your profile and will reach out when they have opportunities that match.
         </p>
 
         {/* Actions with animation */}
         <div className={`relative z-10 space-y-3 transition-all duration-500 ${showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`} style={{ transitionDelay: "350ms" }}>
           <a
-            href="/portal/medjobs/jobs"
+            href="/portal/medjobs"
             className="block w-full px-6 py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-center"
           >
-            Start browsing jobs
+            View your profile
           </a>
           <button
             onClick={handleViewProfile}

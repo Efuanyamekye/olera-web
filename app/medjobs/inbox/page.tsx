@@ -1025,16 +1025,16 @@ function MedJobsInboxContent() {
               <p className="text-xs text-gray-400 mb-4">
                 {conversations.length === 0
                   ? (userRole === "student"
-                    ? "Apply to jobs or wait for invites from providers."
+                    ? "When providers reach out, your conversations will appear here."
                     : "Invite candidates or wait for applications.")
                   : "Try a different filter."}
               </p>
               {conversations.length === 0 && (
                 <Link
-                  href={userRole === "student" ? "/portal/medjobs/jobs" : "/provider/medjobs/candidates"}
+                  href={userRole === "student" ? "/portal/medjobs" : "/provider/medjobs/candidates"}
                   className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-xs font-semibold rounded-lg transition-colors"
                 >
-                  {userRole === "student" ? "Browse Jobs" : "Browse Candidates"}
+                  {userRole === "student" ? "View Profile" : "Browse Candidates"}
                 </Link>
               )}
             </div>

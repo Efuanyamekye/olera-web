@@ -418,16 +418,6 @@ export default function Navbar() {
             <>
               {/* Caregiver (Student) links */}
               <Link
-                href="/portal/medjobs/jobs"
-                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                onClick={() => setIsUserMenuOpen(false)}
-              >
-                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
-                  <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0H8m8 0h2a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h2" />
-                </svg>
-                Find Jobs
-              </Link>
-              <Link
                 href="/portal/medjobs"
                 className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
                 onClick={() => setIsUserMenuOpen(false)}
@@ -470,17 +460,7 @@ export default function Navbar() {
                 <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
                   <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                Application
-              </Link>
-              <Link
-                href="/portal/medjobs/jobs"
-                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                onClick={() => setIsUserMenuOpen(false)}
-              >
-                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
-                  <path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0H8m8 0h2a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h2" />
-                </svg>
-                Find Jobs
+                Profile
               </Link>
               <Link
                 href="/portal/medjobs/interviews"
@@ -702,18 +682,6 @@ export default function Navbar() {
                       }`}
                     >
                       Profile
-                    </Link>
-
-                    {/* Find Jobs */}
-                    <Link
-                      href="/portal/medjobs/jobs"
-                      className={`relative px-4 py-2 text-[15px] font-medium transition-colors ${
-                        pathname.startsWith("/portal/medjobs/jobs")
-                          ? "text-primary-600"
-                          : "text-gray-700 hover:text-gray-900"
-                      }`}
-                    >
-                      Find Jobs
                     </Link>
 
                     {/* Interviews */}
@@ -1276,7 +1244,6 @@ export default function Navbar() {
                           <div className="mt-1 space-y-0.5">
                             {([
                               { label: "Profile", href: "/portal/medjobs", match: "/portal/medjobs", icon: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" },
-                              { label: "Find Jobs", href: "/portal/medjobs/jobs", match: "/portal/medjobs/jobs", icon: "M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0H8m8 0h2a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h2" },
                               { label: "Interviews", href: "/portal/medjobs/interviews", match: "/portal/medjobs/interviews", icon: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" },
                               { label: "Settings", href: "/account/settings", match: "/account/settings", icon: "M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z M15 12a3 3 0 11-6 0 3 3 0 016 0z" },
                             ] as const).map((item) => {

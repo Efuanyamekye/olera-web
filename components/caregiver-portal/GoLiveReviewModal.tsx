@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import Modal from "@/components/ui/Modal";
 import type { CompletenessSection } from "@/lib/medjobs-completeness";
 
@@ -80,22 +79,16 @@ export default function GoLiveReviewModal({
 
           <h2 className="relative z-10 text-2xl font-bold text-gray-900 mb-2">You&apos;re live!</h2>
           <p className="relative z-10 text-gray-600 mb-8 max-w-sm mx-auto leading-relaxed">
-            Providers can now see your profile. Start browsing jobs and find your first match.
+            Providers can now see your profile and will reach out when they have opportunities that match.
           </p>
 
           <div className="relative z-10 space-y-3">
-            <Link
-              href="/portal/medjobs/jobs"
-              className="block w-full px-6 py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all hover:shadow-lg text-center"
-            >
-              Start browsing jobs
-            </Link>
             <button
               type="button"
               onClick={onClose}
-              className="w-full px-6 py-2.5 text-gray-500 hover:text-gray-900 font-medium transition-colors"
+              className="block w-full px-6 py-3.5 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all hover:shadow-lg text-center"
             >
-              Stay on profile
+              Got it
             </button>
           </div>
         </div>

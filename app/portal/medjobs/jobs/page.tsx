@@ -1,19 +1,10 @@
-import type { Metadata } from "next";
-import JobsBoard from "@/components/medjobs/JobsBoard";
-
-export const metadata: Metadata = {
-  title: "Find Jobs | Olera",
-};
+import { redirect } from "next/navigation";
 
 /**
- * The signed-in student's "Find Jobs" board — a campus-catchment job board
- * (cards + map). Protected by the /portal middleware gate. The public
- * landing/marketing surface remains /medjobs/families.
+ * Redirect /portal/medjobs/jobs → /portal/medjobs (profile page).
+ * The Find Jobs board has been retired in favor of a unidirectional flow
+ * where providers reach out to students.
  */
 export default function MedjobsJobsPage() {
-  return (
-    <main className="min-h-screen bg-white">
-      <JobsBoard />
-    </main>
-  );
+  redirect("/portal/medjobs");
 }

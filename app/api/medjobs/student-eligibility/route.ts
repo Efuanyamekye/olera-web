@@ -94,6 +94,9 @@ export async function POST(request: NextRequest) {
     if (!email || !/\S+@\S+\.\S+/.test(email)) {
       return NextResponse.json({ error: "A valid email is required." }, { status: 400 });
     }
+    if (!email.endsWith(".edu")) {
+      return NextResponse.json({ error: "Please use your university email (.edu). We only accept .edu emails for student applications." }, { status: 400 });
+    }
     if (!body.careerPath) {
       return NextResponse.json({ error: "Missing aspiration." }, { status: 400 });
     }
@@ -115,7 +118,7 @@ export async function POST(request: NextRequest) {
       const { data: linkData } = await supabaseAdmin.auth.admin.generateLink({
         type: "magiclink",
         email,
-        options: { redirectTo: `${siteUrl}/portal/medjobs/jobs` },
+        options: { redirectTo: `${siteUrl}/portal/medjobs` },
       });
       // Actually send the sign-in link (generateLink only mints it).
       try {
@@ -250,7 +253,7 @@ export async function POST(request: NextRequest) {
         const { data: linkData } = await supabaseAdmin.auth.admin.generateLink({
           type: "magiclink",
           email,
-          options: { redirectTo: `${siteUrl}/portal/medjobs/jobs` },
+          options: { redirectTo: `${siteUrl}/portal/medjobs` },
         });
         if (linkData?.properties?.hashed_token) {
           insertPathSignInToken = linkData.properties.hashed_token;

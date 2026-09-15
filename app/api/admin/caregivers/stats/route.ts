@@ -12,10 +12,12 @@ type DB = ReturnType<typeof getServiceClient>;
 interface StudentProfile {
   id: string;
   display_name: string;
+  email: string | null;
   image_url: string | null;
   city: string | null;
   state: string | null;
   is_active: boolean;
+  created_at: string;
   metadata: StudentMetadata | null;
 }
 
@@ -31,7 +33,7 @@ async function fetchAllStudents(db: DB): Promise<StudentProfile[]> {
   while (hasMore) {
     const { data, error } = await db
       .from("business_profiles")
-      .select("id, display_name, image_url, city, state, is_active, metadata")
+      .select("id, display_name, email, image_url, city, state, is_active, created_at, metadata")
       .eq("type", "student")
       .range(offset, offset + PAGE_SIZE - 1);
 
@@ -81,29 +83,29 @@ export async function GET() {
 
     const db = getServiceClient();
 
-    // Run count query for thisWeek and fetch all students for other counts
-    const [thisWeekRes, allStudents] = await Promise.all([
-      // New this week
-      db
-        .from("business_profiles")
-        .select("id", { count: "exact", head: true })
-        .eq("type", "student")
-        .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+    // Fetch all students for counts (need metadata for application_completed)
+    const allStudents = await fetchAllStudents(db);
 
-      // Fetch all for all counts (need metadata for application_completed)
-      fetchAllStudents(db),
-    ]);
+    // Cutoff for "this week" calculation
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-    if (thisWeekRes.error) console.error("Stats thisWeek query error:", thisWeekRes.error);
+    // Helper to check if email is .edu
+    const isEduEmail = (email: string | null) => email?.toLowerCase().endsWith(".edu");
 
-    // Count all states by iterating through profiles
+    // Separate .edu and non-.edu students
+    // Non-.edu includes null/empty emails (unverified students)
+    const eduStudents = allStudents.filter((p) => isEduEmail(p.email));
+    const nonEduStudents = allStudents.filter((p) => !isEduEmail(p.email));
+
+    // Count all states by iterating through .edu profiles only
+    // (non-.edu students are shown in their own separate tab)
     let activeCount = 0;
     let pausedCount = 0;     // is_active=false AND application_completed=true
     let notLiveCount = 0;    // is_active=false AND application_completed is falsy
     let completeCount = 0;
     let incompleteCount = 0;
 
-    for (const profile of allStudents) {
+    for (const profile of eduStudents) {
       const meta = (profile.metadata || {}) as StudentMetadata & { application_completed?: boolean };
       const completeness = computeProfileCompleteness(profile);
 
@@ -126,7 +128,11 @@ export async function GET() {
       }
     }
 
-    const total = allStudents.length;
+    const total = eduStudents.length;
+    const nonEduCount = nonEduStudents.length;
+
+    // Count .edu students created this week
+    const thisWeekCount = eduStudents.filter((p) => p.created_at >= oneWeekAgo).length;
 
     return NextResponse.json({
       total,
@@ -135,8 +141,9 @@ export async function GET() {
       notLive: notLiveCount,
       complete: completeCount,
       incomplete: incompleteCount,
-      thisWeek: thisWeekRes.count ?? 0,
+      thisWeek: thisWeekCount,
       students: total, // For backwards compatibility
+      nonEdu: nonEduCount,
     });
   } catch (err) {
     console.error("Admin students stats error:", err);

@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { createBrowserClient } from "@supabase/ssr";
-import ScheduleInterviewModal from "@/components/medjobs/ScheduleInterviewModal";
 import BrowseCard from "@/components/browse/BrowseCard";
 import StudentEligibilityModal from "@/components/medjobs/StudentEligibilityModal";
 import { STUDENT_AGREEMENT_URL } from "@/lib/medjobs/student-eligibility";
@@ -47,7 +46,7 @@ interface StudentStatus {
 function Board() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { profiles, isLoading: authLoading, openAuth } = useAuth();
+  const { profiles, isLoading: authLoading } = useAuth();
 
   const campusParam = searchParams?.get("campus") || "";
   const autoScreener = searchParams?.get("screener") === "1";
@@ -62,8 +61,6 @@ function Board() {
 
   const [studentProfileId, setStudentProfileId] = useState<string | null>(null);
   const [studentStatus, setStudentStatus] = useState<StudentStatus | null>(null);
-  const [requested, setRequested] = useState<Set<string>>(new Set());
-  const [modalTarget, setModalTarget] = useState<FamilyCard | null>(null);
   const [showScreener, setShowScreener] = useState(false);
 
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -102,7 +99,6 @@ function Board() {
       return;
     }
     setStudentProfileId(studentProfile.id);
-    fetchExistingInterviews();
     fetchStudentStatus(studentProfile.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [authLoading, profiles]);
@@ -150,24 +146,6 @@ function Board() {
       if (!campus && typeof meta.campus === "string") setCampus(meta.campus);
     } catch {
       /* note falls back to generic copy */
-    }
-  };
-
-  const fetchExistingInterviews = async () => {
-    try {
-      const res = await fetch("/api/medjobs/interviews");
-      if (!res.ok) return;
-      const data = await res.json();
-      const ids = new Set<string>();
-      const active = ["proposed", "confirmed", "rescheduled", "completed"];
-      for (const iv of data.interviews || []) {
-        if (iv.proposed_by === iv.student_profile_id && active.includes(iv.status)) {
-          ids.add(iv.provider_profile_id);
-        }
-      }
-      setRequested(ids);
-    } catch {
-      /* ignore */
     }
   };
 
@@ -221,10 +199,9 @@ function Board() {
       const { data } = await sb.auth.getSession();
       if (data.session) {
         setShowScreener(false);
-        // Land new students on Find Jobs (the catchment board), not the profile
-        // tab — they see real local opportunities immediately, with the board's
-        // own "complete your profile to apply" nudge.
-        router.push("/portal/medjobs/jobs");
+        // Land new students on their profile to complete it — providers will
+        // reach out when they see a match.
+        router.push("/portal/medjobs");
         return;
       }
     } catch {
@@ -238,11 +215,13 @@ function Board() {
       key={f.id}
       provider={f}
       variant="student"
-      campus={campus || undefined}
-      isRequested={requested.has(f.id)}
-      canRequest={!!studentProfileId}
-      requestLabel={studentStatus?.isLive ? "Request interview" : "Complete profile to apply →"}
-      onRequestInterview={() => (studentProfileId ? setModalTarget(f) : setShowScreener(true))}
+      // Cards not clickable (no link to provider detail page)
+      disableLink
+      // For anon users: "Apply Now" opens screener
+      // For signed-in users: route to their profile
+      canRequest
+      requestLabel={studentProfileId ? (studentStatus?.isLive ? "View Profile" : "Complete Profile") : "Apply Now"}
+      onRequestInterview={() => studentProfileId ? router.push("/portal/medjobs") : setShowScreener(true)}
     />
   );
 
@@ -503,10 +482,10 @@ function Board() {
               <button
                 type="button"
                 onClick={() => {
-                  // Signed-in students get the full Find Jobs board (map + cards);
+                  // Signed-in students go to their profile;
                   // anon visitors expand the preview inline.
                   if (studentProfileId) {
-                    router.push("/portal/medjobs/jobs");
+                    router.push("/portal/medjobs");
                     return;
                   }
                   setExpanded((e) => !e);
@@ -549,18 +528,6 @@ function Board() {
         )}
       </div>
 
-      {modalTarget && (
-        <ScheduleInterviewModal
-          providerProfileId={modalTarget.id}
-          otherName={modalTarget.name}
-          onClose={() => setModalTarget(null)}
-          onScheduled={() => {
-            setRequested((prev) => new Set(prev).add(modalTarget.id));
-            setModalTarget(null);
-          }}
-        />
-      )}
-
       {showScreener && (
         <StudentEligibilityModal
           context={{
@@ -576,22 +543,6 @@ function Board() {
           }}
           onClose={closeScreener}
           onComplete={handleScreenerComplete}
-          onExistingUser={(email) => {
-            // Close the screener (cleans up ?screener=1 from URL) and open auth flow
-            // API already sent them a magic link — they can enter the OTP
-            closeScreener();
-            openAuth({
-              defaultMode: "sign-in",
-              initialEmail: email.toLowerCase(),
-              headline: "Welcome back",
-              subline: "We just sent you a sign-in code. Check your email.",
-              // Deferred action ensures redirect to portal after successful auth
-              deferred: {
-                action: "student-return",
-                returnUrl: "/portal/medjobs",
-              },
-            });
-          }}
         />
       )}
     </>

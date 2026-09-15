@@ -119,6 +119,11 @@ export async function POST(req: NextRequest) {
     const trimmedName = displayName.trim().slice(0, 100);
     const normalizedEmailEarly = email.trim().toLowerCase();
 
+    // Require .edu email for student applications
+    if (!normalizedEmailEarly.endsWith(".edu")) {
+      return NextResponse.json({ error: "Please use your university email (.edu). We only accept .edu emails for student applications." }, { status: 400 });
+    }
+
     // Check for existing student profile with this email
     const supabaseCheck = getSupabaseAdmin();
     const { data: existingProfile } = await supabaseCheck
