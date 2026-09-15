@@ -108,6 +108,266 @@ export interface GrowthStats {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Rich Context Data (for AI Briefing)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface RichContextData {
+  // Metrics (null means not recorded, 0 means actually zero)
+  googleRating: number | null;
+  googleReviewCount: number | null;
+  photoCount: number;
+  adSpendCents: number | null; // null = no campaigns or spend not recorded
+
+  // Computed
+  touchCount: number;
+  daysOverdue: number;
+  leadCount: number;
+
+  // Details for AI
+  leads: Array<{ created_at: string; message: string | null }>;
+  touchpoints: Array<{ type: string; notes: string | null; created_at: string }>;
+  emailStats: { sent: number; opened: number; clicked: number };
+
+  // Provider info
+  provider: {
+    displayName: string;
+    contactName: string | null;
+    phone: string | null;
+    email: string | null;
+    city: string;
+    state: string;
+    careTypes: string[];
+    verificationState: string | null;
+  };
+
+  // Status
+  pipelineStage: string;
+  adsStatus: string;
+  medjobsStatus: string;
+  claimedAt: string | null;
+
+  // Pre-computed tags (not AI-generated)
+  computedTags: string[];
+}
+
+/**
+ * Get rich context data for AI briefing generation.
+ * Aggregates all data sources needed for a comprehensive sales briefing.
+ */
+export async function getRichContextData(
+  trackingId: string,
+  businessProfileId: string
+): Promise<RichContextData> {
+  const db = getServiceClient();
+
+  // Phase 1: Fetch all data in parallel (except email stats which needs profile.email)
+  const [
+    trackingResult,
+    profileResult,
+    adSpendResult,
+    leadCountResult,
+    leadsResult,
+    touchpointCountResult,
+    touchpointsResult,
+  ] = await Promise.all([
+    // Tracking record
+    db
+      .from("provider_growth_tracking")
+      .select("pipeline_stage, ads_status, medjobs_status, claimed_at, last_activity_at")
+      .eq("id", trackingId)
+      .single(),
+
+    // Business profile with Google reviews data and metadata
+    db
+      .from("business_profiles")
+      .select("display_name, phone, email, city, state, care_types, metadata, google_reviews_data, account_id, verification_state")
+      .eq("id", businessProfileId)
+      .single(),
+
+    // Total ad spend
+    db
+      .from("ad_campaign_requests")
+      .select("ad_spend_cents")
+      .eq("provider_id", businessProfileId)
+      .is("deleted_at", null),
+
+    // Lead count (total)
+    db
+      .from("connections")
+      .select("id", { count: "exact", head: true })
+      .eq("to_profile_id", businessProfileId)
+      .eq("type", "inquiry"),
+
+    // Last 5 leads with details
+    db
+      .from("connections")
+      .select("created_at, message")
+      .eq("to_profile_id", businessProfileId)
+      .eq("type", "inquiry")
+      .order("created_at", { ascending: false })
+      .limit(5),
+
+    // Touchpoint count (total)
+    db
+      .from("provider_growth_touchpoints")
+      .select("id", { count: "exact", head: true })
+      .eq("tracking_id", trackingId),
+
+    // Touchpoint history (last 20 for AI context)
+    db
+      .from("provider_growth_touchpoints")
+      .select("touchpoint_type, details, created_at")
+      .eq("tracking_id", trackingId)
+      .order("created_at", { ascending: false })
+      .limit(20),
+  ]);
+
+  // Phase 2: Fetch email stats using email from profile (avoids redundant query)
+  let emailStatsResult = { sent: 0, opened: 0, clicked: 0 };
+  const providerEmail = profileResult.data?.email;
+  if (providerEmail) {
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const { data } = await db
+      .from("email_log")
+      .select("id, first_opened_at, first_clicked_at")
+      .eq("recipient", providerEmail)
+      .eq("recipient_type", "provider")
+      .gte("created_at", thirtyDaysAgo);
+
+    emailStatsResult = {
+      sent: data?.length || 0,
+      opened: data?.filter((e) => e.first_opened_at).length || 0,
+      clicked: data?.filter((e) => e.first_clicked_at).length || 0,
+    };
+  }
+
+  const tracking = trackingResult.data;
+  const profile = profileResult.data;
+  const metadata = (profile?.metadata || {}) as Record<string, unknown>;
+  // GoogleReviewsData has: rating, review_count, reviews[], last_synced
+  const googleData = (profile?.google_reviews_data || {}) as { rating?: number; review_count?: number };
+  const images = Array.isArray(metadata.images) ? metadata.images : [];
+  const staff = (metadata.staff || {}) as { name?: string };
+
+  // Calculate ad spend - distinguish between "no data" and "actually $0"
+  const adCampaigns = adSpendResult.data || [];
+  let adSpendCents: number | null = null;
+  if (adCampaigns.length > 0) {
+    // Has campaigns - check if any have spend recorded
+    const hasRecordedSpend = adCampaigns.some(row => row.ad_spend_cents !== null);
+    if (hasRecordedSpend) {
+      adSpendCents = adCampaigns.reduce(
+        (sum, row) => sum + (row.ad_spend_cents || 0),
+        0
+      );
+    }
+    // If no campaigns have spend recorded, adSpendCents stays null
+  }
+  // If no campaigns at all, adSpendCents stays null
+
+  // Calculate days overdue (days since last activity)
+  let daysOverdue = 0;
+  if (tracking?.last_activity_at) {
+    const lastActivity = new Date(tracking.last_activity_at);
+    const now = new Date();
+    daysOverdue = Math.floor((now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  // Get counts (use separate count queries for accuracy)
+  const touchCount = touchpointCountResult.count || 0;
+  const leadCount = leadCountResult.count || 0;
+  const verificationState = profile?.verification_state || null;
+
+  // Compute tags from actual data (not AI-generated)
+  const computedTags: string[] = [];
+
+  // Lead count tag
+  if (leadCount === 0) {
+    computedTags.push("0 leads");
+  } else if (leadCount === 1) {
+    computedTags.push("1 lead");
+  } else {
+    computedTags.push(`${leadCount} leads`);
+  }
+
+  // Touch/engagement tag
+  if (touchCount === 0) {
+    computedTags.push("no touches");
+  } else if (touchCount >= 10) {
+    computedTags.push(`${touchCount} touches, highly engaged`);
+  } else {
+    computedTags.push(`${touchCount} touches`);
+  }
+
+  // Overdue tag
+  if (daysOverdue > 14) {
+    computedTags.push(`${daysOverdue} days overdue`);
+  } else if (daysOverdue > 7) {
+    computedTags.push(`${daysOverdue}d since activity`);
+  }
+
+  // Email engagement tag
+  if (emailStatsResult.sent > 0 && emailStatsResult.opened === 0) {
+    computedTags.push("not opening emails");
+  } else if (emailStatsResult.clicked > 0) {
+    computedTags.push("clicks emails");
+  }
+
+  // Verification status tag
+  if (verificationState === "verified") {
+    computedTags.push("verified");
+  } else if (verificationState === "pending") {
+    computedTags.push("pending verification");
+  }
+
+  return {
+    // Metrics (null = not recorded)
+    googleRating: googleData.rating ?? null,
+    googleReviewCount: googleData.review_count ?? null,
+    photoCount: images.length,
+    adSpendCents,
+
+    // Computed
+    touchCount,
+    daysOverdue,
+    leadCount,
+
+    // Details for AI
+    leads: (leadsResult.data || []).map((l) => ({
+      created_at: l.created_at,
+      message: l.message || null,
+    })),
+    touchpoints: (touchpointsResult.data || []).map((t) => ({
+      type: t.touchpoint_type,
+      notes: (t.details as Record<string, unknown>)?.notes as string || null,
+      created_at: t.created_at,
+    })),
+    emailStats: emailStatsResult,
+
+    // Provider info
+    provider: {
+      displayName: profile?.display_name || "Unknown Provider",
+      contactName: staff.name || null,
+      phone: profile?.phone || null,
+      email: profile?.email || null,
+      city: profile?.city || "",
+      state: profile?.state || "",
+      careTypes: profile?.care_types || [],
+      verificationState,
+    },
+
+    // Status
+    pipelineStage: tracking?.pipeline_stage || "unknown",
+    adsStatus: tracking?.ads_status || "none",
+    medjobsStatus: tracking?.medjobs_status || "none",
+    claimedAt: tracking?.claimed_at || null,
+
+    // Pre-computed tags from real data
+    computedTags,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Stats Queries
 // ─────────────────────────────────────────────────────────────────────────────
 

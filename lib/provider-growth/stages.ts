@@ -49,9 +49,9 @@ export const VALID_STAGE_TRANSITIONS: Record<PipelineStage, PipelineStage[]> = {
   new_claim: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for self-converted providers
   in_progress: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // Same transitions as new_claim (virtual tab)
   meeting_scheduled: ["meeting_scheduled", "pitched", "no_show", "not_interested"],  // can reschedule, or log meeting outcomes
-  pitched: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers
-  not_interested: ["meeting_scheduled", "upgrade_meeting", "pitched"],  // upgrade_meeting for Converted providers re-engaging
-  no_show: ["meeting_scheduled", "upgrade_meeting", "not_interested"],  // upgrade_meeting for Converted providers rescheduling
+  pitched: ["meeting_scheduled", "upgrade_meeting", "not_interested", "no_show"],  // upgrade_meeting for Converted providers, no_show if they ghosted
+  not_interested: ["meeting_scheduled", "upgrade_meeting", "pitched", "no_show"],  // can re-engage or mark as no-show
+  no_show: ["meeting_scheduled", "upgrade_meeting", "not_interested", "pitched"],  // can reschedule, mark not interested, or re-engage as active
   upgrade_meeting: ["meeting_scheduled", "upgrade_meeting", "pitched", "not_interested"],  // can reschedule (to unified meeting_scheduled), complete, or decline
 };
 
@@ -344,9 +344,9 @@ export const STAGE_OUTCOMES: Record<PipelineStage, ActivityOutcome[]> = {
   new_claim: ["voicemail", "hung_up", "callback_requested", "left_message", "note"],
   in_progress: ["voicemail", "hung_up", "callback_requested", "left_message", "note"],  // Same as new_claim (virtual tab)
   meeting_scheduled: ["note", "interested", "not_interested", "no_show"],
-  pitched: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
-  not_interested: ["note"],  // Stop calling them - only log notes. Self-conversion is automatic
-  no_show: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested"],
+  pitched: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested", "no_show"],
+  not_interested: ["note", "interested", "no_show"],  // Can re-engage or mark as no-show
+  no_show: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "not_interested", "interested"],
   upgrade_meeting: ["voicemail", "hung_up", "callback_requested", "left_message", "note", "interested", "not_interested", "no_show"],
 };
 
@@ -371,7 +371,8 @@ export const OUTCOME_STAGE_TRANSITIONS: Record<ActivityOutcome, Partial<Record<P
   interested: {
     meeting_scheduled: "pitched",
     upgrade_meeting: "pitched",
-    // not_interested removed - we don't call them, self-conversion is automatic
+    no_show: "pitched",        // Re-engaged no-show moves to Active
+    not_interested: "pitched", // Re-engaged not-interested moves to Active
   },
   not_interested: {
     meeting_scheduled: "not_interested",
@@ -382,6 +383,8 @@ export const OUTCOME_STAGE_TRANSITIONS: Record<ActivityOutcome, Partial<Record<P
   no_show: {
     meeting_scheduled: "no_show",
     upgrade_meeting: "no_show",
+    pitched: "no_show",        // Active provider ghosted, mark as no-show
+    not_interested: "no_show", // Turns out they're a no-show, not truly not interested
   },
   meeting_rescheduled: {
     no_show: "meeting_scheduled",

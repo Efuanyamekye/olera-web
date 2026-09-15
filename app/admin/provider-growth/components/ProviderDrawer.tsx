@@ -29,6 +29,7 @@ import {
 } from "@/lib/provider-growth/stages";
 import { MeetingScheduler } from "./MeetingScheduler";
 import { ActivityLog } from "./ActivityLog";
+import { RichContextModal } from "./RichContextModal";
 
 interface ProviderDrawerProps {
   provider: ProviderGrowthWithProfile;
@@ -81,12 +82,14 @@ function ContextSection({
   claimedAt,
   expanded,
   onToggle,
+  onViewBriefing,
 }: {
   context: ProviderContextData | null;
   claimSource: ClaimSource | null;
   claimedAt: string | null;
   expanded: boolean;
   onToggle: () => void;
+  onViewBriefing: () => void;
 }) {
   // Build collapsed summary
   const claimerName = context?.claimer?.name || "Unknown";
@@ -178,6 +181,22 @@ function ContextSection({
             ) : (
               <div className="text-sm text-gray-400">No emails sent</div>
             )}
+          </div>
+
+          {/* View Full Briefing button */}
+          <div className="pt-2 border-t border-gray-200 mt-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onViewBriefing();
+              }}
+              className="w-full px-3 py-2 text-sm font-medium text-primary-700 bg-primary-50 rounded-lg hover:bg-primary-100 border border-primary-200 flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+              </svg>
+              View Full Briefing
+            </button>
           </div>
         </div>
       )}
@@ -707,6 +726,7 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
   const [contextExpanded, setContextExpanded] = useState(false);
   const [loadingData, setLoadingData] = useState(true);
   const [activeAction, setActiveAction] = useState<"schedule" | "upgrade" | null>(null);
+  const [briefingOpen, setBriefingOpen] = useState(false);
 
   const fetchProviderData = useCallback(async () => {
     try {
@@ -803,6 +823,7 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
   );
 
   return (
+    <>
     <DrawerShell onClose={onClose} header={header} footer={footer}>
       <div className="py-2">
         {/* Call Script - for new_claim providers */}
@@ -862,6 +883,7 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
           claimedAt={provider.claimed_at}
           expanded={contextExpanded}
           onToggle={() => setContextExpanded((prev) => !prev)}
+          onViewBriefing={() => setBriefingOpen(true)}
         />
 
         <SectionDivider />
@@ -1021,6 +1043,15 @@ export function ProviderDrawer({ provider, onClose, onUpdate, onCallLogged }: Pr
         />
       </div>
     </DrawerShell>
+
+    {/* Rich Context Modal */}
+    <RichContextModal
+      isOpen={briefingOpen}
+      onClose={() => setBriefingOpen(false)}
+      trackingId={provider.id}
+      providerName={provider.display_name || "Provider"}
+    />
+    </>
   );
 }
 
