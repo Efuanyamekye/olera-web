@@ -416,27 +416,8 @@ export default function Navbar() {
             </>
           ) : hasStudentProfile ? (
             <>
-              {/* Caregiver (Student) links */}
-              <Link
-                href="/portal/medjobs"
-                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                onClick={() => setIsUserMenuOpen(false)}
-              >
-                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
-                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                Profile
-              </Link>
-              <Link
-                href="/portal/medjobs/interviews"
-                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                onClick={() => setIsUserMenuOpen(false)}
-              >
-                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
-                  <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Interviews
-              </Link>
+              {/* Caregiver (Student) links — Profile and Interviews are in the main nav,
+                  so only show Settings here to avoid redundancy */}
               <Link
                 href="/account/settings"
                 className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
@@ -447,30 +428,6 @@ export default function Navbar() {
                   <circle cx="12" cy="12" r="3" />
                 </svg>
                 Settings
-              </Link>
-            </>
-          ) : hasStudentProfile ? (
-            <>
-              {/* Caregiver (Student) links */}
-              <Link
-                href="/portal/medjobs"
-                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                onClick={() => setIsUserMenuOpen(false)}
-              >
-                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
-                  <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                Profile
-              </Link>
-              <Link
-                href="/portal/medjobs/interviews"
-                className="flex items-center gap-3 px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition-colors"
-                onClick={() => setIsUserMenuOpen(false)}
-              >
-                <svg className="w-[18px] h-[18px] text-gray-500 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" viewBox="0 0 24 24">
-                  <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Interviews
               </Link>
             </>
           ) : (
