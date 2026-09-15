@@ -83,7 +83,7 @@ export async function GET() {
   // quietly understate whichever channel ran earliest.
   const { data: rollupLeads } = await db
     .from("city_leads")
-    .select("slug, utm_source, utm_medium, gclid, fbclid, is_test, created_at, landing_arm");
+    .select("slug, utm_source, utm_medium, gclid, fbclid, is_test, created_at, landing_arm, capture_method");
 
   const providerIds = Array.from(
     new Set([...(pool ?? []).map((p) => p.provider_id as string), ...(offers ?? []).map((o) => o.provider_id as string)]),

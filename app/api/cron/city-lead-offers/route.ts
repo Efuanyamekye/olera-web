@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServiceClient, getAuthUser, getAdminUser } from "@/lib/admin";
 import { withCronRun } from "@/lib/crons/run";
+import { runMetaNativeIntake } from "@/lib/city-ads/meta-native.server";
 import { runCityMessages } from "@/lib/city-ads/messages.server";
 import { runOfferMaintenance } from "@/lib/city-ads/offers.server";
 
@@ -34,9 +35,13 @@ export async function GET(request: NextRequest) {
     "city-lead-offers",
     async () => {
       const db = getServiceClient();
+      // Keep the existing relay running even if Meta credentials need attention.
+      let meta: unknown;
+      try { meta = await runMetaNativeIntake(db); }
+      catch { meta = { error: "Meta intake needs attention" }; console.error("[city-lead-offers] Meta intake failed"); }
       const r = await runOfferMaintenance(db);
       const messages = await runCityMessages(db);
-      return { ok: true, ...r, messages };
+      return { ok: true, ...r, messages, meta };
     },
     { triggeredBy },
   );
