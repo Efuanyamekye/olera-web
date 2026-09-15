@@ -108,6 +108,196 @@ export interface GrowthStats {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Rich Context Data (for AI Briefing)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface RichContextData {
+  // Metrics
+  googleRating: number | null;
+  googleReviewCount: number;
+  photoCount: number;
+  adSpendCents: number;
+
+  // Computed
+  touchCount: number;
+  daysOverdue: number;
+  leadCount: number;
+
+  // Details for AI
+  leads: Array<{ created_at: string; message: string | null }>;
+  touchpoints: Array<{ type: string; notes: string | null; created_at: string }>;
+  emailStats: { sent: number; opened: number; clicked: number };
+
+  // Provider info
+  provider: {
+    displayName: string;
+    contactName: string | null;
+    phone: string | null;
+    email: string | null;
+    city: string;
+    state: string;
+    careTypes: string[];
+  };
+
+  // Status
+  pipelineStage: string;
+  adsStatus: string;
+  medjobsStatus: string;
+  claimedAt: string | null;
+}
+
+/**
+ * Get rich context data for AI briefing generation.
+ * Aggregates all data sources needed for a comprehensive sales briefing.
+ */
+export async function getRichContextData(
+  trackingId: string,
+  businessProfileId: string
+): Promise<RichContextData> {
+  const db = getServiceClient();
+
+  // Phase 1: Fetch all data in parallel (except email stats which needs profile.email)
+  const [
+    trackingResult,
+    profileResult,
+    adSpendResult,
+    leadCountResult,
+    leadsResult,
+    touchpointsResult,
+  ] = await Promise.all([
+    // Tracking record
+    db
+      .from("provider_growth_tracking")
+      .select("pipeline_stage, ads_status, medjobs_status, claimed_at, last_activity_at")
+      .eq("id", trackingId)
+      .single(),
+
+    // Business profile with Google reviews data and metadata
+    db
+      .from("business_profiles")
+      .select("display_name, phone, email, city, state, care_types, metadata, google_reviews_data, account_id")
+      .eq("id", businessProfileId)
+      .single(),
+
+    // Total ad spend
+    db
+      .from("ad_campaign_requests")
+      .select("ad_spend_cents")
+      .eq("provider_id", businessProfileId)
+      .is("deleted_at", null),
+
+    // Lead count (total)
+    db
+      .from("connections")
+      .select("id", { count: "exact", head: true })
+      .eq("to_profile_id", businessProfileId)
+      .eq("type", "inquiry"),
+
+    // Last 5 leads with details
+    db
+      .from("connections")
+      .select("created_at, message")
+      .eq("to_profile_id", businessProfileId)
+      .eq("type", "inquiry")
+      .order("created_at", { ascending: false })
+      .limit(5),
+
+    // Touchpoint history
+    db
+      .from("provider_growth_touchpoints")
+      .select("touchpoint_type, details, created_at")
+      .eq("tracking_id", trackingId)
+      .order("created_at", { ascending: false })
+      .limit(20),
+  ]);
+
+  // Phase 2: Fetch email stats using email from profile (avoids redundant query)
+  let emailStatsResult = { sent: 0, opened: 0, clicked: 0 };
+  const providerEmail = profileResult.data?.email;
+  if (providerEmail) {
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const { data } = await db
+      .from("email_log")
+      .select("id, first_opened_at, first_clicked_at")
+      .eq("recipient", providerEmail)
+      .eq("recipient_type", "provider")
+      .gte("created_at", thirtyDaysAgo);
+
+    emailStatsResult = {
+      sent: data?.length || 0,
+      opened: data?.filter((e) => e.first_opened_at).length || 0,
+      clicked: data?.filter((e) => e.first_clicked_at).length || 0,
+    };
+  }
+
+  const tracking = trackingResult.data;
+  const profile = profileResult.data;
+  const metadata = (profile?.metadata || {}) as Record<string, unknown>;
+  const googleData = (profile?.google_reviews_data || {}) as { rating?: number; user_ratings_total?: number };
+  const images = Array.isArray(metadata.images) ? metadata.images : [];
+  const staff = (metadata.staff || {}) as { name?: string };
+
+  // Calculate ad spend
+  const adSpendCents = (adSpendResult.data || []).reduce(
+    (sum, row) => sum + (row.ad_spend_cents || 0),
+    0
+  );
+
+  // Calculate days overdue (days since last activity)
+  let daysOverdue = 0;
+  if (tracking?.last_activity_at) {
+    const lastActivity = new Date(tracking.last_activity_at);
+    const now = new Date();
+    daysOverdue = Math.floor((now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  // Get touch count
+  const touchCount = touchpointsResult.data?.length || 0;
+
+  return {
+    // Metrics
+    googleRating: googleData.rating ?? null,
+    googleReviewCount: googleData.user_ratings_total ?? 0,
+    photoCount: images.length,
+    adSpendCents,
+
+    // Computed
+    touchCount,
+    daysOverdue,
+    leadCount: leadCountResult.count || 0,
+
+    // Details for AI
+    leads: (leadsResult.data || []).map((l) => ({
+      created_at: l.created_at,
+      message: l.message || null,
+    })),
+    touchpoints: (touchpointsResult.data || []).map((t) => ({
+      type: t.touchpoint_type,
+      notes: (t.details as Record<string, unknown>)?.notes as string || null,
+      created_at: t.created_at,
+    })),
+    emailStats: emailStatsResult,
+
+    // Provider info
+    provider: {
+      displayName: profile?.display_name || "Unknown Provider",
+      contactName: staff.name || null,
+      phone: profile?.phone || null,
+      email: profile?.email || null,
+      city: profile?.city || "",
+      state: profile?.state || "",
+      careTypes: profile?.care_types || [],
+    },
+
+    // Status
+    pipelineStage: tracking?.pipeline_stage || "unknown",
+    adsStatus: tracking?.ads_status || "none",
+    medjobsStatus: tracking?.medjobs_status || "none",
+    claimedAt: tracking?.claimed_at || null,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Stats Queries
 // ─────────────────────────────────────────────────────────────────────────────
 
