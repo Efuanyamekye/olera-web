@@ -3,6 +3,15 @@ import CaregiverSectionCard, { EmptyState } from "./CaregiverSectionCard";
 import { parseSchedule } from "@/components/medjobs/ScheduleBuilder";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+const FULL_DAYS: Record<string, string> = {
+  Mon: "Monday",
+  Tue: "Tuesday",
+  Wed: "Wednesday",
+  Thu: "Thursday",
+  Fri: "Friday",
+  Sat: "Saturday",
+  Sun: "Sunday",
+};
 
 function formatTime(t: string): string {
   const [hStr, mStr] = t.split(":");
@@ -12,6 +21,10 @@ function formatTime(t: string): string {
   const hour = h > 12 ? h - 12 : h === 0 ? 12 : h;
   const ampm = h >= 12 ? "pm" : "am";
   return m === "00" ? `${hour}${ampm}` : `${hour}:${m}${ampm}`;
+}
+
+function formatSlot(slot: { start: string; end: string }): string {
+  return `${formatTime(slot.start)}–${formatTime(slot.end)}`;
 }
 
 function slotHours(slot: { start: string; end: string }): number {
@@ -39,9 +52,15 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
   }
   totalHours = Math.round(totalHours * 10) / 10;
 
+  // Get days with availability for mobile view
+  const activeDays = DAYS.filter((day) => {
+    const slots = schedule[day];
+    return Array.isArray(slots) && slots.length > 0;
+  });
+
   return (
     <CaregiverSectionCard
-      title="Weekly Availability"
+      title="Availability"
       isComplete={hasSchedule}
       id="schedule"
       onEdit={onEdit}
@@ -58,52 +77,60 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
         />
       ) : (
         <div>
-          {/* Vertical column calendar - neutral colors, minimal accents */}
-          <div className="grid grid-cols-7 gap-0 overflow-hidden">
-            {DAYS.map((day, dayIdx) => {
+          {/* Mobile: Clean vertical list showing only active days */}
+          <div className="sm:hidden space-y-2">
+            {activeDays.map((day) => {
               const slots = (schedule[day] || []) as Array<{ start: string; end: string }>;
-              const dayHours = slots.reduce((sum, s) => sum + slotHours(s), 0);
-              const isLast = dayIdx === DAYS.length - 1;
+              return (
+                <div
+                  key={day}
+                  className="flex items-baseline gap-3 py-2 border-b border-gray-100 last:border-0"
+                >
+                  <span className="w-20 shrink-0 text-sm font-medium text-gray-900">
+                    {FULL_DAYS[day]}
+                  </span>
+                  <span className="text-sm text-gray-600">
+                    {slots.map((slot) => formatSlot(slot)).join(", ")}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop: Compact 7-column grid */}
+          <div className="hidden sm:grid grid-cols-7 gap-px bg-gray-100 rounded-lg overflow-hidden">
+            {DAYS.map((day) => {
+              const slots = (schedule[day] || []) as Array<{ start: string; end: string }>;
+              const hasSlots = slots.length > 0;
 
               return (
                 <div
                   key={day}
-                  className={`flex flex-col ${!isLast ? "border-r border-gray-100" : ""}`}
+                  className={`flex flex-col bg-white ${hasSlots ? "" : "opacity-50"}`}
                 >
                   {/* Day header */}
-                  <div className={`px-1.5 py-2 text-center border-b border-gray-100 ${
-                    slots.length > 0 ? "bg-gray-50" : "bg-gray-50/50"
-                  }`}>
-                    <span className={`text-xs font-semibold ${
-                      slots.length > 0 ? "text-gray-900" : "text-gray-400"
-                    }`}>
+                  <div className={`px-2 py-2 text-center ${hasSlots ? "bg-gray-50" : ""}`}>
+                    <span className={`text-xs font-semibold ${hasSlots ? "text-gray-900" : "text-gray-400"}`}>
                       {day}
                     </span>
-                    {dayHours > 0 && (
-                      <p className="text-[10px] text-gray-500 mt-0.5">{dayHours}h</p>
-                    )}
                   </div>
 
-                  {/* Time slots stacked vertically */}
-                  <div className="flex-1 flex flex-col gap-1 p-1.5 min-h-[60px]">
-                    {slots.length > 0 ? (
+                  {/* Time slots */}
+                  <div className="flex-1 flex flex-col gap-1 p-1.5 min-h-[48px]">
+                    {hasSlots ? (
                       slots.map((slot, i) => (
                         <div
                           key={i}
-                          className="bg-gray-50 border border-gray-200 rounded-lg px-1.5 py-1.5 text-center"
+                          className="bg-primary-50 rounded px-1.5 py-1 text-center"
                         >
-                          <p className="text-[11px] font-medium text-gray-700 leading-tight">
-                            {formatTime(slot.start)}
-                          </p>
-                          <p className="text-[9px] text-gray-400 leading-tight">to</p>
-                          <p className="text-[11px] font-medium text-gray-700 leading-tight">
-                            {formatTime(slot.end)}
+                          <p className="text-[11px] font-medium text-primary-700 whitespace-nowrap">
+                            {formatSlot(slot)}
                           </p>
                         </div>
                       ))
                     ) : (
                       <div className="flex-1 flex items-center justify-center">
-                        <span className="text-[10px] text-gray-300">—</span>
+                        <span className="text-xs text-gray-300">—</span>
                       </div>
                     )}
                   </div>
@@ -112,11 +139,11 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
             })}
           </div>
 
-          {/* Total hours */}
-          <div className="mt-3 flex items-center justify-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-gray-400" />
-            <span className="text-sm font-semibold text-gray-900">{totalHours} hours/week</span>
-            <span className="text-xs text-gray-400">available</span>
+          {/* Total hours - cleaner presentation */}
+          <div className="mt-4 text-center">
+            <span className="text-sm text-gray-600">
+              <span className="font-semibold text-gray-900">{totalHours} hours</span> per week
+            </span>
           </div>
         </div>
       )}
