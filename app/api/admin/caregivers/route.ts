@@ -37,6 +37,8 @@ function computeProfileCompleteness(row: StudentQueryResult): number {
   const hasPhoto = !!row.image_url;
   const hasBasicInfo = {
     hasName: !!row.display_name,
+    hasEmail: !!row.email,
+    hasPhone: !!row.phone,
     hasUniversity: !!studentMeta.university,
     hasLocation: !!(row.city && row.state),
   };

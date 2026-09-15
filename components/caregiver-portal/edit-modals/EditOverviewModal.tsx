@@ -6,42 +6,103 @@ import Modal from "@/components/ui/Modal";
 import { saveStudentProfile } from "./save-profile";
 import type { BaseEditModalProps } from "./types";
 
-// University list with locations - expand as needed
+// University list with locations - synced with PARTNER_UNIVERSITIES from staffing-outreach
+// This is the single source of truth for university data in the edit modal
 const UNIVERSITIES = [
+  // Texas
   { name: "University of Texas at Austin", city: "Austin", state: "TX" },
   { name: "Texas A&M University", city: "College Station", state: "TX" },
+  { name: "University of Houston", city: "Houston", state: "TX" },
+  { name: "University of Houston / Rice", city: "Houston", state: "TX" },
   { name: "Rice University", city: "Houston", state: "TX" },
   { name: "Baylor University", city: "Waco", state: "TX" },
-  { name: "Texas Tech University", city: "Lubbock", state: "TX" },
-  { name: "University of Houston", city: "Houston", state: "TX" },
-  { name: "Southern Methodist University", city: "Dallas", state: "TX" },
   { name: "Texas Christian University", city: "Fort Worth", state: "TX" },
-  { name: "University of North Texas", city: "Denton", state: "TX" },
-  { name: "Texas State University", city: "San Marcos", state: "TX" },
-  { name: "University of Texas at Dallas", city: "Richardson", state: "TX" },
+  { name: "Southern Methodist University", city: "Dallas", state: "TX" },
+  { name: "The University of Texas at San Antonio", city: "San Antonio", state: "TX" },
   { name: "University of Texas at San Antonio", city: "San Antonio", state: "TX" },
+  { name: "Texas State University", city: "San Marcos", state: "TX" },
+  { name: "University of North Texas", city: "Denton", state: "TX" },
+  { name: "The University of Texas at Dallas", city: "Richardson", state: "TX" },
+  { name: "University of Texas at Dallas", city: "Richardson", state: "TX" },
+  { name: "Texas Tech University", city: "Lubbock", state: "TX" },
+  { name: "The University of Texas at Arlington", city: "Arlington", state: "TX" },
   { name: "University of Texas at Arlington", city: "Arlington", state: "TX" },
+  { name: "The University of Texas at El Paso", city: "El Paso", state: "TX" },
   { name: "University of Texas at El Paso", city: "El Paso", state: "TX" },
+  { name: "Texas Woman's University", city: "Denton", state: "TX" },
+  { name: "Texas Southern University", city: "Houston", state: "TX" },
+  { name: "Trinity University", city: "San Antonio", state: "TX" },
   { name: "Sam Houston State University", city: "Huntsville", state: "TX" },
   { name: "Stephen F. Austin State University", city: "Nacogdoches", state: "TX" },
-  { name: "Tarleton State University", city: "Stephenville", state: "TX" },
-  { name: "Texas A&M University-Commerce", city: "Commerce", state: "TX" },
-  { name: "Texas A&M University-Corpus Christi", city: "Corpus Christi", state: "TX" },
-  { name: "Prairie View A&M University", city: "Prairie View", state: "TX" },
-  { name: "Lamar University", city: "Beaumont", state: "TX" },
-  { name: "Texas Woman's University", city: "Denton", state: "TX" },
-  { name: "Abilene Christian University", city: "Abilene", state: "TX" },
-  { name: "Trinity University", city: "San Antonio", state: "TX" },
-  { name: "Michigan State University", city: "East Lansing", state: "MI" },
-  { name: "University of Michigan", city: "Ann Arbor", state: "MI" },
-  { name: "Ohio State University", city: "Columbus", state: "OH" },
+  // Florida
   { name: "University of Florida", city: "Gainesville", state: "FL" },
   { name: "Florida State University", city: "Tallahassee", state: "FL" },
+  // Georgia
+  { name: "University of Georgia", city: "Athens", state: "GA" },
+  { name: "Emory University", city: "Atlanta", state: "GA" },
+  { name: "Georgia Institute of Technology", city: "Atlanta", state: "GA" },
+  // North Carolina
+  { name: "University of North Carolina at Chapel Hill", city: "Chapel Hill", state: "NC" },
+  { name: "Duke University", city: "Durham", state: "NC" },
+  // Virginia
+  { name: "University of Virginia", city: "Charlottesville", state: "VA" },
+  { name: "Virginia Tech", city: "Blacksburg", state: "VA" },
+  // Tennessee
+  { name: "Vanderbilt University", city: "Nashville", state: "TN" },
+  { name: "University of Tennessee Knoxville", city: "Knoxville", state: "TN" },
+  // Kentucky
+  { name: "University of Kentucky", city: "Lexington", state: "KY" },
+  // Ohio
+  { name: "Ohio State University", city: "Columbus", state: "OH" },
+  // Michigan
+  { name: "University of Michigan", city: "Ann Arbor", state: "MI" },
+  { name: "Michigan State University", city: "East Lansing", state: "MI" },
+  // Pennsylvania
+  { name: "Penn State University", city: "State College", state: "PA" },
+  { name: "University of Pennsylvania", city: "Philadelphia", state: "PA" },
+  // Wisconsin
+  { name: "University of Wisconsin-Madison", city: "Madison", state: "WI" },
+  // Minnesota
+  { name: "University of Minnesota", city: "Minneapolis", state: "MN" },
+  // Illinois
+  { name: "University of Illinois Urbana-Champaign", city: "Champaign", state: "IL" },
+  { name: "Northwestern University", city: "Evanston", state: "IL" },
+  { name: "University of Chicago", city: "Chicago", state: "IL" },
+  // Indiana
+  { name: "Indiana University Bloomington", city: "Bloomington", state: "IN" },
+  // Colorado
+  { name: "University of Colorado Boulder", city: "Boulder", state: "CO" },
+  // Arizona
   { name: "Arizona State University", city: "Tempe", state: "AZ" },
   { name: "University of Arizona", city: "Tucson", state: "AZ" },
+  // Utah
+  { name: "University of Utah", city: "Salt Lake City", state: "UT" },
+  // California
   { name: "University of California, Los Angeles", city: "Los Angeles", state: "CA" },
-  { name: "University of Southern California", city: "Los Angeles", state: "CA" },
   { name: "Stanford University", city: "Stanford", state: "CA" },
+  { name: "University of California, Berkeley", city: "Berkeley", state: "CA" },
+  { name: "University of Southern California", city: "Los Angeles", state: "CA" },
+  // Massachusetts
+  { name: "Harvard University", city: "Cambridge", state: "MA" },
+  { name: "Massachusetts Institute of Technology", city: "Cambridge", state: "MA" },
+  { name: "Boston University", city: "Boston", state: "MA" },
+  // Connecticut
+  { name: "Yale University", city: "New Haven", state: "CT" },
+  // New Jersey
+  { name: "Princeton University", city: "Princeton", state: "NJ" },
+  // New York
+  { name: "Columbia University", city: "New York", state: "NY" },
+  { name: "Cornell University", city: "Ithaca", state: "NY" },
+  { name: "New York University", city: "New York", state: "NY" },
+  // Maryland
+  { name: "Johns Hopkins University", city: "Baltimore", state: "MD" },
+  // Rhode Island
+  { name: "Brown University", city: "Providence", state: "RI" },
+  // New Hampshire
+  { name: "Dartmouth College", city: "Hanover", state: "NH" },
+  // Washington
+  { name: "University of Washington", city: "Seattle", state: "WA" },
+  // Other (must be last)
   { name: "Other", city: "", state: "" },
 ];
 
@@ -66,6 +127,8 @@ export default function EditOverviewModal({
   }, []);
 
   const [displayName, setDisplayName] = useState(profile.display_name || "");
+  const [email, setEmail] = useState(profile.email || "");
+  const [phone, setPhone] = useState(profile.phone || "");
   const [university, setUniversity] = useState(meta.university || "");
   const [major, setMajor] = useState(meta.major || "");
   const [photoUrl, setPhotoUrl] = useState(profile.image_url || "");
@@ -145,13 +208,17 @@ export default function EditOverviewModal({
   // Track changes
   const hasChanges =
     displayName !== (profile.display_name || "") ||
+    email !== (profile.email || "") ||
+    phone !== (profile.phone || "") ||
     university !== (meta.university || "") ||
     major !== (meta.major || "") ||
     city !== (profile.city || "") ||
     state !== (profile.state || "") ||
     photoUrl !== (profile.image_url || "");
 
-  const isValid = displayName.trim().length > 0;
+  // Email is required and must be .edu
+  const isValidEmail = email.trim().length > 0 && email.toLowerCase().endsWith(".edu");
+  const isValid = displayName.trim().length > 0 && isValidEmail;
 
   async function handlePhotoUpload(file: File) {
     if (!file.type.startsWith("image/")) {
@@ -225,6 +292,8 @@ export default function EditOverviewModal({
         profileId: profile.id,
         topLevelFields: {
           display_name: displayName.trim(),
+          email: email.trim().toLowerCase() || null,
+          phone: phone.trim() || null,
           city: city.trim() || null,
           state: state.trim().toUpperCase() || null,
         },
@@ -424,6 +493,50 @@ export default function EditOverviewModal({
               placeholder="Your full name"
               className="w-full bg-white border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all"
             />
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@school.edu"
+              className={`w-full bg-white border focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all ${
+                email && !email.toLowerCase().endsWith(".edu")
+                  ? "border-red-300 focus:border-red-400"
+                  : "border-gray-200 focus:border-primary-600"
+              }`}
+            />
+            {email && !email.toLowerCase().endsWith(".edu") && (
+              <p className="mt-2 text-xs text-red-600">
+                A .edu email is required for student verification
+              </p>
+            )}
+          </div>
+
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Phone number
+            </label>
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => {
+                // Allow only digits, spaces, dashes, parens, and plus
+                const cleaned = e.target.value.replace(/[^\d\s\-()+ ]/g, "");
+                setPhone(cleaned);
+              }}
+              placeholder="(555) 123-4567"
+              className="w-full bg-white border border-gray-200 focus:border-primary-600 focus:ring-2 focus:ring-primary-100 outline-none rounded-xl px-4 py-3.5 text-sm text-gray-900 placeholder:text-gray-400 transition-all"
+            />
+            <p className="mt-2 text-xs text-gray-400">
+              Providers may contact you about shifts
+            </p>
           </div>
 
           {/* University with search/autocomplete */}

@@ -1173,6 +1173,8 @@ function StudentPortalContent({
   // Basic info from onboarding - these are typically already complete
   const hasBasicInfo = {
     hasName: !!profile.display_name,
+    hasEmail: !!profile.email,
+    hasPhone: !!profile.phone,
     hasUniversity: !!meta.university,
     hasLocation: !!(profile.city && profile.state),
   };

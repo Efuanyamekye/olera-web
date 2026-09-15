@@ -13,6 +13,7 @@ interface StudentProfile {
   id: string;
   display_name: string;
   email: string | null;
+  phone: string | null;
   image_url: string | null;
   city: string | null;
   state: string | null;
@@ -33,7 +34,7 @@ async function fetchAllStudents(db: DB): Promise<StudentProfile[]> {
   while (hasMore) {
     const { data, error } = await db
       .from("business_profiles")
-      .select("id, display_name, email, image_url, city, state, is_active, created_at, metadata")
+      .select("id, display_name, email, phone, image_url, city, state, is_active, created_at, metadata")
       .eq("type", "student")
       .range(offset, offset + PAGE_SIZE - 1);
 
@@ -62,6 +63,8 @@ function computeProfileCompleteness(profile: StudentProfile): number {
   const hasPhoto = !!profile.image_url;
   const hasBasicInfo = {
     hasName: !!profile.display_name,
+    hasEmail: !!profile.email,
+    hasPhone: !!profile.phone,
     hasUniversity: !!studentMeta.university,
     hasLocation: !!(profile.city && profile.state),
   };

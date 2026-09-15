@@ -7,6 +7,20 @@ import { generateStudentPortalUrl } from "@/lib/claim-tokens";
 import type { StudentMetadata } from "@/lib/types";
 import { withCronRun } from "@/lib/crons/run";
 
+/** Student profile row from the nudge query */
+interface StudentNudgeRow {
+  id: string;
+  slug: string;
+  display_name: string | null;
+  email: string | null;
+  phone: string | null;
+  city: string | null;
+  state: string | null;
+  image_url: string | null;
+  metadata: StudentMetadata | null;
+  created_at: string;
+}
+
 /**
  * GET /api/cron/medjobs-nudge
  *
@@ -50,7 +64,7 @@ export async function GET(request: NextRequest) {
     while (hasMore) {
       const { data: students, error } = await db
         .from("business_profiles")
-        .select("id, slug, display_name, email, city, state, image_url, metadata, created_at")
+        .select("id, slug, display_name, email, phone, city, state, image_url, metadata, created_at")
         .eq("type", "student")
         .not("email", "is", null)
         .not("display_name", "is", null)
@@ -62,7 +76,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Query failed" }, { status: 500 });
       }
 
-      const batch = students || [];
+      const batch = (students || []) as StudentNudgeRow[];
       hasMore = batch.length === PAGE_SIZE;
       offset += PAGE_SIZE;
       totalProcessed += batch.length;
@@ -78,6 +92,8 @@ export async function GET(request: NextRequest) {
       const hasPhoto = !!student.image_url;
       const hasBasicInfo = {
         hasName: !!student.display_name?.trim(),
+        hasEmail: !!student.email,
+        hasPhone: !!student.phone,
         hasUniversity: !!meta.university,
         hasLocation: !!(student.city && student.state),
       };
