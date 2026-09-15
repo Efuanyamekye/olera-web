@@ -194,6 +194,8 @@ type CityLeadRow = {
 type CityMsgRow = {
   id: string;
   lead_id: string;
+  /** Delivery state lifted off the email_log twin before it is discarded. */
+  delivery?: string;
   channel: string;
   body: string;
   subject: string | null;
@@ -384,7 +386,7 @@ function cityMsgToItem(m: CityMsgRow): SeekerTimelineItem {
     title: clip(m.body, 160) ?? m.subject ?? "(sent by hand)",
     detail: null,
     source: "manual",
-    status: failed ? `failed · ${clip(m.last_error, 60)}` : m.status,
+    status: failed ? `failed · ${clip(m.last_error, 60)}` : m.delivery ?? m.status,
     contact_handle: m.created_by,
     href: `/admin/city-ads`,
   };
@@ -865,6 +867,22 @@ async function loadFeeds(
     const arr = cityMsgs.get(owner) ?? [];
     arr.push(m);
     cityMsgs.set(owner, arr);
+  }
+
+  // A message sent by hand from the city queue is written TWICE: once as the
+  // city_lead_messages row, and once into email_log by the sender that actually
+  // delivered it. Merged naively that renders every hand-sent text as two
+  // timeline entries a minute apart — one labelled "You", one labelled "System",
+  // which was all four of them. Keep the queue row, because it knows a person
+  // sent it, and lift the delivery state off the email twin before dropping it.
+  const cityMsgById = new Map(cityMsgRows.map((m) => [m.id, m]));
+  for (const [id, e] of Array.from(allEmails.entries())) {
+    const twin = (e.metadata ?? {}).city_message_id;
+    if (typeof twin !== "string") continue;
+    const queued = cityMsgById.get(twin);
+    if (!queued) continue;
+    queued.delivery = emailStatus(e);
+    allEmails.delete(id);
   }
 
   const dncEmails = new Set<string>();
