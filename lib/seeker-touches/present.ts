@@ -58,6 +58,11 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
   const age = r.episode.age_days !== null ? `day ${r.episode.age_days + 1}` : null;
   const quiet = days(r.days_quiet);
 
+  // Opted out first, or it reads as "Waiting on us" in amber directly above a
+  // line saying they asked us to stop. Four rows did exactly that.
+  if (r.flags.includes("opted_out")) {
+    return { phrase: "Opted out", tone: "none", age: quiet };
+  }
   if (r.flags.includes("unreachable")) {
     return { phrase: "Can't reach them", tone: "act", age };
   }
@@ -68,17 +73,27 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
     return { phrase: "Waiting on us", tone: "warn", age: quiet };
   }
   if (r.flags.includes("outcome_reported") && r.episode.state !== "closed") {
-    return { phrase: "They told us how it went", tone: "warn", age: quiet };
+    return { phrase: "Outcome reported", tone: "warn", age: quiet };
   }
   if (r.episode.state === "closed") {
-    return { phrase: r.episode.closed_reason ? `Closed — ${r.episode.closed_reason}` : "Closed", tone: "none", age: quiet };
+    // The reason goes in the small line. "Closed — no connection formed" is 29
+    // characters and wrapped to three lines in the state column.
+    return { phrase: "Closed", tone: "none", age: r.episode.closed_reason ?? quiet };
   }
   if (r.episode.state === "waiting") {
+    // A provider holding a request and a provider ignoring one are different
+    // facts, and 260 rows were showing the first while meaning the second. The
+    // phrase carries it; the rail deliberately does not, because amber on 260
+    // rows is the chip problem again in another colour.
+    if (r.flags.includes("provider_silent")) return { phrase: "No provider reply", tone: "none", age: quiet };
     const n = r.providers.length;
     return { phrase: n > 1 ? "Providers have it" : "Provider has it", tone: "none", age: quiet };
   }
   if (r.episode.state === "dormant") {
     return { phrase: "Gone quiet", tone: "none", age: quiet };
+  }
+  if (r.flags.includes("provider_silent")) {
+    return { phrase: "No provider reply", tone: "none", age: quiet };
   }
   return { phrase: "Open", tone: "none", age };
 }
@@ -101,11 +116,6 @@ export function detailLine(r: SeekerRelationshipRow): string {
   if (r.city_lead_id) bits.push("came from a city ad");
 
   if (r.label_is_fallback) bits.push("no name on file");
-
-  // Only worth saying once nothing has happened for a while.
-  if ((r.days_quiet ?? 0) >= 7 && r.last_touch) {
-    bits.push(`last heard ${fmtShort(r.last_touch.occurred_at)}`);
-  }
 
   if (r.episode.state === "waiting" && r.providers.length) {
     const n = r.providers.length;
@@ -138,6 +148,11 @@ function reachProblem(reach: Reachability): string | null {
  * something is, so the shape of the list is visible before any of it is read.
  */
 export function problemLine(r: SeekerRelationshipRow): string | null {
+  // Nothing is owed to someone who asked us to stop, whatever else is true of
+  // them. This has to come first: several opted-out families also carry an
+  // unanswered support thread.
+  if (r.flags.includes("opted_out")) return null;
+
   if (r.flags.includes("unreachable")) {
     const why = reachProblem(r.reach);
     const owed = r.flags.includes("promise_owed") ? "Promised a call. " : "";
@@ -150,9 +165,6 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
   }
 
   if (r.flags.includes("awaiting_reply")) {
-    if (r.last_touch && r.last_touch.actor === "in") {
-      return `Wrote to us ${fmtShort(r.last_touch.occurred_at)}. Nobody has replied.`;
-    }
     return "Wrote to us and nobody has replied.";
   }
 
@@ -172,12 +184,4 @@ export function consentWarning(r: SeekerRelationshipRow): string | null {
 
 function capitalise(s: string): string {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
-}
-
-function fmtShort(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    timeZone: "America/New_York",
-  });
 }

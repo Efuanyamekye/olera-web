@@ -194,7 +194,7 @@ export default function AdminSeekerRelationshipsPage() {
 
         <div className="flex gap-4 border-b border-gray-200 py-2.5 pl-[19px] pr-4 text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-500">
           <span className="flex-1">Family</span>
-          <span className="w-[136px] shrink-0 text-right">Where it stands</span>
+          <span className="w-[150px] shrink-0 text-right">Where it stands</span>
         </div>
 
         {error && <p className="px-4 py-6 text-sm text-red-600">{error}</p>}
@@ -229,7 +229,7 @@ export default function AdminSeekerRelationshipsPage() {
                 )}
                 {consent && <div className="mt-1 text-[11.5px] leading-snug text-gray-400">{consent}</div>}
               </div>
-              <div className="w-[136px] shrink-0 text-right">
+              <div className="w-[150px] shrink-0 text-right">
                 <div className={`text-[13px] font-semibold leading-snug ${STATE_TONE[st.tone]}`}>{st.phrase}</div>
                 {st.age && <div className="mt-0.5 font-mono text-[11px] text-gray-400">{st.age}</div>}
               </div>
