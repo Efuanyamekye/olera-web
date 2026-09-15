@@ -123,7 +123,7 @@ export default function ScheduleCard({ meta, onEdit }: ScheduleCardProps) {
                           key={i}
                           className="bg-primary-50 rounded px-1.5 py-1 text-center"
                         >
-                          <p className="text-[11px] font-medium text-primary-700 whitespace-nowrap">
+                          <p className="text-[11px] font-medium text-primary-700 leading-tight">
                             {formatSlot(slot)}
                           </p>
                         </div>
