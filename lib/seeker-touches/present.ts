@@ -57,6 +57,13 @@ function days(n: number | null | undefined, unit = "day"): string | null {
 export function stateOf(r: SeekerRelationshipRow): RowState {
   const age = r.episode.age_days !== null ? `day ${r.episode.age_days + 1}` : null;
   const quiet = days(r.days_quiet);
+  const today = new Date().toISOString().slice(0, 10);
+
+  // A plan you set and then missed outranks almost everything: it is the one
+  // state on this list that is entirely our own doing.
+  if (r.open_action?.due && r.open_action.due < today && !r.flags.includes("opted_out")) {
+    return { phrase: "Overdue", tone: "act", age: `was due ${r.open_action.due}` };
+  }
 
   // Opted out first, or it reads as "Waiting on us" in amber directly above a
   // line saying they asked us to stop. Four rows did exactly that.
@@ -173,6 +180,17 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
   }
 
   return null;
+}
+
+/**
+ * The plan, when there is one. Rendered apart from the problem line because a
+ * thing you meant to do and a thing that is wrong are different colours of
+ * information, and a family can easily have both.
+ */
+export function nextLine(r: SeekerRelationshipRow): string | null {
+  if (!r.open_action) return null;
+  const due = r.open_action.due ? ` — due ${r.open_action.due}` : "";
+  return `Next: ${r.open_action.text}${due}`;
 }
 
 /** What we're allowed to do, when it restricts us. Silent when it doesn't. */

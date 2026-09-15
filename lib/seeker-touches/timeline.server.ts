@@ -5,6 +5,8 @@ import { getCityConfig } from "@/lib/city-ads/config";
 import { isImpossibleUsPhone, last10, seekerLabel } from "./label";
 import { EPISODE_WORD, detailLine, problemLine, stateOf } from "./present";
 import type {
+  FamilyTouchRow,
+  SeekerOpenAction,
   ChannelReach,
   ConsentScope,
   Episode,
@@ -34,9 +36,9 @@ import type {
  *   sms_inbound            texts to the Olera number (profile_type='family')
  *   support_email_*        replies to support@ (matched_profile_type='family')
  *   seeker_activity        what they did on the site
- *   family_touches         what a person did by hand — PHASE 2, not yet a table.
- *                          Everything here is written so that adding it is one
- *                          more feed, not a rewrite.
+ *   family_touches         what a person did by hand: calls, meetings, texts
+ *                          from a personal phone, anything said out loud. The
+ *                          only feed here that is new capture (migration 230).
  *
  * Nothing in this file writes. Nothing in this file stores state. Same invariant
  * as the provider side (lib/touches/timeline.server.ts): the list is a view over
@@ -392,6 +394,39 @@ function cityMsgToItem(m: CityMsgRow): SeekerTimelineItem {
   };
 }
 
+function touchToItem(t: FamilyTouchRow): SeekerTimelineItem {
+  // "reached" is the difference between calling someone and speaking to them,
+  // and it is the whole reason this column exists.
+  const outcome = t.reached === true ? "spoke to them" : t.reached === false ? "did not reach them" : null;
+  return {
+    id: `touch:${t.id}`,
+    kind: "touch",
+    actor: t.direction,
+    channel: t.channel === "note" ? "in_app" : t.channel,
+    occurred_at: t.occurred_at,
+    title: t.summary,
+    detail: t.detail,
+    source: t.source,
+    status: [outcome, t.next_action ? `next: ${t.next_action}` : null].filter(Boolean).join(" · ") || null,
+    contact_handle: t.contact_handle,
+    href: null,
+  };
+}
+
+function openActionOf(touches: FamilyTouchRow[]): SeekerOpenAction | null {
+  const open = touches
+    .filter((t) => t.next_action && !t.next_action_done_at)
+    .sort((a, b) => (a.occurred_at < b.occurred_at ? 1 : -1))[0];
+  if (!open) return null;
+  return {
+    touch_id: open.id,
+    text: open.next_action as string,
+    due: open.next_action_due,
+    owner: open.next_action_owner,
+    declared_at: open.occurred_at,
+  };
+}
+
 function activityToItem(a: ActivityRow): SeekerTimelineItem {
   const meta = a.metadata ?? {};
   const provider = typeof meta.provider_name === "string" ? meta.provider_name : null;
@@ -548,6 +583,7 @@ type Loaded = {
   cityLeads: Map<string, CityLeadRow>;
   cityMsgs: Map<string, CityMsgRow[]>;
   activity: Map<string, ActivityRow[]>;
+  touches: Map<string, FamilyTouchRow[]>;
   bouncedAddrs: Set<string>;
   dncEmails: Set<string>;
   dncPhones: Set<string>;
@@ -620,6 +656,7 @@ async function loadFeeds(
     cityLeads: new Map(),
     cityMsgs: new Map(),
     activity: new Map(),
+    touches: new Map(),
     bouncedAddrs: new Set(),
     dncEmails: new Set(),
     dncPhones: new Set(),
@@ -628,7 +665,7 @@ async function loadFeeds(
 
   const gte = <Q extends { gte: (c: string, v: string) => Q }>(q: Q, col: string): Q => (sinceIso ? q.gte(col, sinceIso) : q);
 
-  const [profiles, connRows, smsRows, threads0, leads0, actRows, dncRes] = await Promise.all([
+  const [profiles, connRows, smsRows, threads0, leads0, actRows, dncRes, touchRows] = await Promise.all([
     // type='family' is load-bearing, not belt-and-braces: connections.from_profile_id
     // is not always a family (5 of the last 300 were organization rows), so without
     // this a provider sending a connection lands on the care-seeker list.
@@ -686,6 +723,22 @@ async function loadFeeds(
       ),
     ),
     db.from("do_not_contact").select("email, phone, reason").limit(2000),
+    // The ONLY tolerated feed. family_touches (migration 230) is applied by hand
+    // through the Supabase dashboard, so between a deploy and that being run the
+    // table does not exist. Six feeds of real history should not go dark because
+    // the seventh is not there yet; everything else still throws, because a
+    // silently half-rendered relationship is worse than an error.
+    fetchInChunks<FamilyTouchRow>(ids, (g) =>
+      db
+        .from("family_touches")
+        .select("*")
+        .in("seeker_id", g)
+        .order("occurred_at", { ascending: false })
+        .limit(2000),
+    ).catch((err) => {
+      console.warn("[seeker-touches] family_touches unavailable, continuing without it:", err?.message ?? err);
+      return [] as FamilyTouchRow[];
+    }),
   ]);
 
   const addrs = profiles.map((p) => (p.email ?? "").trim()).filter(Boolean);
@@ -902,6 +955,7 @@ async function loadFeeds(
     cityLeads,
     cityMsgs,
     activity: byId(actRows, (a) => a.profile_id),
+    touches: byId(touchRows, (t) => t.seeker_id),
     bouncedAddrs,
     dncEmails,
     dncPhones,
@@ -917,6 +971,10 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   const support = f.support.get(p.id) ?? [];
   const lead = f.cityLeads.get(p.id);
   const cityMsgs = (f.cityMsgs.get(p.id) ?? []).map(cityMsgToItem);
+  const touchRows = (f.touches.get(p.id) ?? []).slice().sort(byNewest);
+  const touches = touchRows.map(touchToItem);
+  const openAction = openActionOf(touchRows);
+  const everReached = touchRows.some((t) => t.reached === true);
 
   const reach = reachabilityOf(contact, f.bouncedAddrs, f.dncEmails, f.dncPhones);
   const inquiries = conns.filter((c) => c.type === "inquiry" || c.type === "request");
@@ -925,7 +983,7 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   // A human touch is anything a person did on either side: their text, their
   // support email, a message we sent by hand. System sends do not count.
   const inbound = [...support, ...sms].sort(byNewest);
-  const humanTouches = [...inbound, ...cityMsgs].sort(byNewest);
+  const humanTouches = [...inbound, ...cityMsgs, ...touches].sort(byNewest);
   const lastHuman = humanTouches[0] ?? null;
 
   const candidates: LastSeekerTouch[] = [];
@@ -941,6 +999,7 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
     });
   };
   push(humanTouches[0]);
+  push(touches[0]);
   push(conns[0] ? connToItem(conns[0]) : undefined);
   if (emails[0]) push(emailToItem(emails[0]));
   if (lead) push(cityLeadToItem(lead));
@@ -998,7 +1057,18 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
   }
   if (humanTouches.length === 0) flags.push("never_human");
   if (contact.label_is_fallback) flags.push("no_name");
-  if (lead && !lead.reached_at && !lead.archived_at && getCityConfig(lead.slug)?.routingMode === "concierge") {
+  // A promised call stays owed until somebody actually SPOKE to them, or until
+  // a dated next action says when we will try again. Logging "called, mailbox
+  // full" must not clear it — trying is not reaching, and clearing on the
+  // attempt would quietly drop the families who are hardest to get hold of.
+  if (
+    lead &&
+    !lead.reached_at &&
+    !lead.archived_at &&
+    getCityConfig(lead.slug)?.routingMode === "concierge" &&
+    !everReached &&
+    !(openAction && openAction.due)
+  ) {
     flags.push("promise_owed");
   }
 
@@ -1022,8 +1092,10 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
     lastHuman,
     lastMeaningfulAt,
     humanTouchCount: humanTouches.length,
+    openAction,
+    everReached,
     lead,
-    parts: { conns, emails, sms, support, cityMsgs },
+    parts: { conns, emails, sms, support, cityMsgs, touches },
   };
 }
 
@@ -1056,6 +1128,8 @@ export async function loadSeekerRelationships(opts?: { days?: number }): Promise
       providers: a.providers,
       city_lead_id: a.lead?.id ?? null,
       city_slug: a.lead?.slug ?? null,
+      open_action: a.openAction,
+      ever_reached: a.everReached,
     };
   });
 
@@ -1101,6 +1175,7 @@ export async function loadSeekerTimeline(seekerId: string): Promise<SeekerRelati
     ...a.parts.sms,
     ...a.parts.support,
     ...a.parts.cityMsgs,
+    ...a.parts.touches,
     ...(feeds.activity.get(seekerId) ?? []).map(activityToItem),
     ...(a.lead ? [cityLeadToItem(a.lead)] : []),
   ].sort(byNewest);
@@ -1114,6 +1189,8 @@ export async function loadSeekerTimeline(seekerId: string): Promise<SeekerRelati
     providers: a.providers,
     city_lead_id: a.lead?.id ?? null,
     city_slug: a.lead?.slug ?? null,
+    open_action: a.openAction,
+    ever_reached: a.everReached,
     items,
   };
 }

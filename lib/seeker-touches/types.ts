@@ -27,8 +27,80 @@
  */
 
 import type { TouchChannel, TouchDirection, TouchSource } from "@/lib/touches/types";
+import { TOUCH_DIRECTIONS, TOUCH_SOURCES } from "@/lib/touches/types";
 
 export type { TouchChannel, TouchDirection, TouchSource };
+// Re-exported as values so the API can validate against them without reaching
+// past this module into the provider vocabulary.
+export { TOUCH_DIRECTIONS, TOUCH_SOURCES };
+
+/**
+ * Channels a family touch can be logged on. "note" has no provider equivalent:
+ * it is for something that happened without a conversation — a voicemail we
+ * could not leave, what a neighbour said, a decision recorded.
+ */
+export const FAMILY_TOUCH_CHANNELS = ["call", "text", "email", "meeting", "in_app", "note"] as const;
+export type FamilyTouchChannel = (typeof FAMILY_TOUCH_CHANNELS)[number];
+
+export const FAMILY_CHANNEL_LABEL: Record<FamilyTouchChannel, string> = {
+  call: "Call",
+  text: "Text",
+  email: "Email",
+  meeting: "Meeting",
+  in_app: "In app",
+  note: "Note",
+};
+
+/** A row of family_touches (migration 230). */
+export type FamilyTouchRow = {
+  id: string;
+  seeker_id: string;
+  channel: FamilyTouchChannel;
+  direction: TouchDirection;
+  occurred_at: string;
+  /** TRUE only when we actually spoke to them. See the migration comment. */
+  reached: boolean | null;
+  summary: string;
+  detail: string | null;
+  contact_name: string | null;
+  contact_handle: string | null;
+  source: TouchSource;
+  source_ref: string | null;
+  next_action: string | null;
+  next_action_due: string | null;
+  next_action_owner: string | null;
+  next_action_done_at: string | null;
+  author: string;
+  admin_user_id: string | null;
+  created_at: string;
+};
+
+/** What the API accepts on POST. */
+export type FamilyTouchInput = {
+  seeker_id: string;
+  channel: FamilyTouchChannel;
+  direction: TouchDirection;
+  occurred_at?: string;
+  reached?: boolean | null;
+  summary: string;
+  detail?: string | null;
+  contact_name?: string | null;
+  contact_handle?: string | null;
+  source?: TouchSource;
+  source_ref?: string | null;
+  next_action?: string | null;
+  next_action_due?: string | null;
+  next_action_owner?: string | null;
+};
+
+/** The one open next action for a family, if there is one. */
+export type SeekerOpenAction = {
+  touch_id: string;
+  text: string;
+  due: string | null;
+  owner: string | null;
+  declared_at: string;
+};
 
 /** Where a family timeline row was read from. */
 export type SeekerTimelineSource = TouchSource | "twilio" | "city";
@@ -207,6 +279,10 @@ export type SeekerRelationshipRow = SeekerContact & {
   /** The city lead behind this family, when they came in that way. */
   city_lead_id: string | null;
   city_slug: string | null;
+  /** The latest declared next action that nobody has marked done. */
+  open_action: SeekerOpenAction | null;
+  /** True once a logged touch says we actually spoke to them. */
+  ever_reached: boolean;
 };
 
 export type SeekerRelationship = {
@@ -218,5 +294,7 @@ export type SeekerRelationship = {
   providers: { id: string; name: string; at: string; responded: boolean }[];
   city_lead_id: string | null;
   city_slug: string | null;
+  open_action: SeekerOpenAction | null;
+  ever_reached: boolean;
   items: SeekerTimelineItem[];
 };

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { EPISODE_WORD } from "@/lib/seeker-touches/present";
+import LogFamilyTouch from "@/components/admin/LogFamilyTouch";
 import {
   SEEKER_FLAG_LABEL,
   type SeekerFlag,
@@ -105,7 +106,16 @@ export default function AdminSeekerTimelinePage() {
     return <div className="mx-auto max-w-4xl px-4 py-10 text-sm text-gray-400">Loading…</div>;
   }
 
-  const { profile, reach, consent, episode, flags, providers, items } = data;
+  const { profile, reach, consent, episode, flags, providers, items, open_action: openAction } = data;
+
+  async function markActionDone(id: string) {
+    await fetch("/api/admin/seeker-touches", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, done: true }),
+    });
+    load();
+  }
 
   const consentLine =
     consent === "opted_out"
@@ -182,6 +192,30 @@ export default function AdminSeekerTimelinePage() {
         </div>
       )}
 
+      {openAction && (
+        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
+          <div className="min-w-0 flex-1">
+            <p className="font-mono text-[9.5px] uppercase tracking-[0.11em] text-amber-700">What happens next</p>
+            <p className="mt-0.5 text-[15px] text-gray-900">{openAction.text}</p>
+            <p className="mt-0.5 font-mono text-[11px] text-amber-800">
+              {openAction.due ? `due ${openAction.due}` : "no date"}
+              {openAction.owner ? ` · ${openAction.owner}` : ""}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => markActionDone(openAction.touch_id)}
+            className="rounded-md border border-amber-300 bg-white px-3 py-1.5 text-xs font-medium text-amber-900 hover:bg-amber-100"
+          >
+            Mark done
+          </button>
+        </div>
+      )}
+
+      <div className="mt-4">
+        <LogFamilyTouch seekerId={seekerId} onLogged={load} />
+      </div>
+
       <h2 className="mt-7 font-mono text-[10px] uppercase tracking-[0.13em] text-gray-500">
         Everything, in order · {items.length} events
       </h2>
@@ -233,8 +267,8 @@ export default function AdminSeekerTimelinePage() {
       </ol>
 
       <p className="mt-6 max-w-3xl font-mono text-[11px] leading-relaxed text-gray-400">
-        Assembled at read time. Nothing here is stored, and nothing on this page writes. Logging a touch by hand is
-        phase 2 (family_touches).
+        Assembled at read time from seven sources. Only what you log by hand is stored here; everything else is
+        derived from what already happened.
       </p>
     </div>
   );

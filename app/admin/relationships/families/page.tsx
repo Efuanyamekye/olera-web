@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { SeekerRelationshipRow } from "@/lib/seeker-touches/types";
-import { consentWarning, detailLine, problemLine, stateOf, type Tone } from "@/lib/seeker-touches/present";
+import { consentWarning, detailLine, nextLine, problemLine, stateOf, type Tone } from "@/lib/seeker-touches/present";
 
 /**
  * Relationships — care seekers.
@@ -207,6 +207,7 @@ export default function AdminSeekerRelationshipsPage() {
           const st = stateOf(r);
           const problem = problemLine(r);
           const consent = consentWarning(r);
+          const next = nextLine(r);
           return (
             <Link
               key={r.seeker_id}
@@ -227,6 +228,7 @@ export default function AdminSeekerRelationshipsPage() {
                 {problem && (
                   <div className={`mt-1.5 text-[13px] font-medium leading-snug ${PROBLEM_TONE[st.tone]}`}>{problem}</div>
                 )}
+                {next && <div className="mt-1.5 text-[13px] leading-snug text-teal-800">{next}</div>}
                 {consent && <div className="mt-1 text-[11.5px] leading-snug text-gray-400">{consent}</div>}
               </div>
               <div className="w-[150px] shrink-0 text-right">
