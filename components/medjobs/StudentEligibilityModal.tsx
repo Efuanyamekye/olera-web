@@ -115,8 +115,9 @@ export default function StudentEligibilityModal({
           university: selectedUni?.name ?? context.universityName ?? undefined,
           universityId: context.universityId ?? undefined,
           campus: university,
-          city: context.city ?? undefined,
-          state: context.state ?? undefined,
+          // Auto-fill city/state from selected university if not in context
+          city: context.city ?? selectedUni?.city ?? undefined,
+          state: context.state ?? selectedUni?.state ?? undefined,
           referral: context.referral,
           website: honeypot,
         }),

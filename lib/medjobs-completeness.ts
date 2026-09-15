@@ -60,12 +60,12 @@ export interface CompletenessSection {
  *
  * @param meta - StudentMetadata from the business_profiles.metadata JSONB
  * @param hasPhoto - Whether the profile has an image_url set
- * @param hasBasicInfo - Whether basic profile info exists (name, university - from onboarding)
+ * @param hasBasicInfo - Whether basic profile info exists (name, email, phone, university, location)
  */
 export function getSectionCompleteness(
   meta: StudentMetadata,
   hasPhoto: boolean,
-  hasBasicInfo: { hasName: boolean; hasUniversity: boolean; hasLocation: boolean }
+  hasBasicInfo: { hasName: boolean; hasEmail: boolean; hasPhone: boolean; hasUniversity: boolean; hasLocation: boolean }
 ): CompletenessSection[] {
   const scenarios = meta.scenario_responses || [];
   const answeredScenarios = scenarios.filter((s) => (s.answer?.length ?? 0) >= 50).length;
@@ -73,6 +73,8 @@ export function getSectionCompleteness(
   // 1. Profile Overview (from onboarding)
   const overviewItems = [
     { key: "name", label: "Name", done: hasBasicInfo.hasName },
+    { key: "email", label: "Email", done: hasBasicInfo.hasEmail },
+    { key: "phone", label: "Phone", done: hasBasicInfo.hasPhone },
     { key: "university", label: "University", done: hasBasicInfo.hasUniversity },
     { key: "location", label: "Location", done: hasBasicInfo.hasLocation },
     { key: "photo", label: "Profile photo", done: hasPhoto },
@@ -172,17 +174,27 @@ export function getSectionCompleteness(
 /**
  * Calculate the overall completeness percentage (0-100).
  * Uses section-weighted average where each section counts equally.
+ *
+ * @param meta - StudentMetadata from the business_profiles.metadata JSONB
+ * @param hasPhoto - Whether the profile has an image_url set
+ * @param hasBasicInfo - Override for basic info checks. If not provided, derives from meta.
+ * @param profileFields - Optional top-level profile fields (email, phone, city, state, display_name)
  */
 export function calculateCompleteness(
   meta: StudentMetadata,
   hasPhoto: boolean,
-  hasBasicInfo: { hasName: boolean; hasUniversity: boolean; hasLocation: boolean } = {
-    hasName: true,
-    hasUniversity: !!meta.university,
-    hasLocation: true, // Location is typically set during onboarding
-  }
+  hasBasicInfo?: { hasName: boolean; hasEmail: boolean; hasPhone: boolean; hasUniversity: boolean; hasLocation: boolean },
+  profileFields?: { email?: string | null; phone?: string | null; city?: string | null; state?: string | null; display_name?: string | null }
 ): number {
-  const sections = getSectionCompleteness(meta, hasPhoto, hasBasicInfo);
+  // Derive hasBasicInfo from profileFields if not explicitly provided
+  const info = hasBasicInfo ?? {
+    hasName: !!(profileFields?.display_name),
+    hasEmail: !!(profileFields?.email),
+    hasPhone: !!(profileFields?.phone),
+    hasUniversity: !!meta.university,
+    hasLocation: !!(profileFields?.city && profileFields?.state),
+  };
+  const sections = getSectionCompleteness(meta, hasPhoto, info);
   const totalPercent = sections.reduce((sum, s) => sum + s.percent, 0);
   return Math.round(totalPercent / sections.length);
 }
@@ -241,7 +253,7 @@ export function getCompletenessItems(
 export function getIncompleteSections(
   meta: StudentMetadata,
   hasPhoto: boolean,
-  hasBasicInfo: { hasName: boolean; hasUniversity: boolean; hasLocation: boolean }
+  hasBasicInfo: { hasName: boolean; hasEmail: boolean; hasPhone: boolean; hasUniversity: boolean; hasLocation: boolean }
 ): string[] {
   return getSectionCompleteness(meta, hasPhoto, hasBasicInfo)
     .filter((s) => !s.done)

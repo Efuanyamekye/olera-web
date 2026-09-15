@@ -148,6 +148,9 @@ export async function POST(request: NextRequest) {
     const university = body.university?.trim() || undefined;
     const slug = generateSlug(displayName, university || "student");
 
+    const cityValue = body.city?.trim() || null;
+    const stateValue = body.state?.trim() || null;
+
     const metadata: Record<string, unknown> = {
       university,
       university_id: body.universityId || undefined,
@@ -162,9 +165,18 @@ export async function POST(request: NextRequest) {
       ...(referral ? { referral: { ...referral, captured_at: nowIso } } : {}),
     };
     // Honest starting completeness (the dashboard recomputes on first visit).
+    // Pass profile fields so completeness reflects actual data at signup.
     metadata.profile_completeness = calculateCompleteness(
       metadata as unknown as StudentMetadata,
-      false,
+      false, // hasPhoto
+      undefined, // hasBasicInfo - let it derive from profileFields
+      {
+        display_name: displayName,
+        email,
+        phone: null, // no phone at signup
+        city: cityValue,
+        state: stateValue,
+      }
     );
 
     // Create the student profile (is_active false until they complete + verify).
@@ -175,8 +187,8 @@ export async function POST(request: NextRequest) {
         type: "student",
         display_name: displayName,
         email,
-        city: body.city?.trim() || null,
-        state: body.state?.trim() || null,
+        city: cityValue,
+        state: stateValue,
         metadata,
         claim_state: "unclaimed",
         verification_state: "unverified",
