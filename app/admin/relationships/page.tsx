@@ -91,6 +91,9 @@ export default function AdminRelationshipsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Link href="/admin/relationships/families" className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50">
+            Care seekers
+          </Link>
           <a href="/api/admin/touches?format=md" target="_blank" rel="noreferrer" className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50">
             Read as text
           </a>
