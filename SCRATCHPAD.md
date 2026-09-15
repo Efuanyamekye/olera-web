@@ -7,6 +7,34 @@
 
 ## Current Focus
 
+### 2026-09-15 — Full-book Ad Boost audit; the city A/B never had the power to conclude (`zealous-planck`, ops only, no code)
+
+`/ad-boost-audit` across all three channels. No product code changed. One artifact published, nine `observation` entries plus three corrections written to `ad_campaign_log`, and the audit appended to all six `city_campaigns.admin_note` fields.
+
+**The headline finding is in the provider book, not the city arms.** Five provider Nextdoor flights — Franchil, Pacesetter, Edmonds Villa, Miracle-Lightstar, Graceful — all ran Sep 1–7 and delivered **0 impressions, 0 clicks, $0.00**. Ads read *Active*, ad groups *Completed*, $75 lifetime budgets each, rejected creatives 0. **None has a row in `ad_campaign_requests`**; two surfaced only as a single attributed landing each in `provider_activity`. The 9 Sep audit found one of these and called it an orphan; it was the whole batch. Visible only through the Nextdoor header account switcher. Counter-example checked, so this is not "Nextdoor doesn't work for us": the Olera city flights delivered 8,083 impressions the same week, and Graceful's own Aug 14–17 flight did **4,420 impressions / 70 clicks / $27.37 / $0.39 CPC** — the cheapest traffic the programme has ever bought, 135 attributed landings, zero inquiries, and its DB row still carries NULL metrics. **Why the September batch delivered zero is not established.** Not budget ($10.71/day vs Graceful's delivering $6.84/day), not review, not creative rejection.
+
+**The city A/B was never powered, and I reported it as concluded.** 132 arm-tagged clean paid visits hit the pre-committed ~130 threshold, arms at 8.3% / 10.4% / 11.1%, best-vs-worst p = 0.72. I briefed that as "the gate is met, pick a page today." TJ pushed back and was right. The ~130 threshold was pre-committed for the **gate** question (does the offer hold a stranger), which the 11 Sep note said explicitly was separate from and much stronger than the arm comparison. Detecting the observed spread needs **1,751 visits per arm**; detecting a *doubling* needs **282**. We have 36–48. **p = 0.72 means we learned nothing, not that the pages are equivalent.** My pick was also the worst available: one_screen's `cta_engaged` fires on first touch of any field while the stepped arms fire on leaving intro, which the code comments and the 11 Sep note both call an unquantified bias. I chose the arm the measurement flatters, on the smallest sample. **Action struck. The decision is due 24 Sep and belongs to product judgment, not these numbers.**
+
+**Joined funnel, 8–15 Sep** (entry keyed on `utm_source=olera_city`, internal excluded, joined on `anonymous_id`+`visit_id`+`page_path`, engaged = `cta_engaged || provider_expanded`):
+
+| Channel | Clicks | Spend | Visitors | Recon | Engaged | Rate | $/visit | Leads |
+|---|---|---|---|---|---|---|---|---|
+| Google | 86 | $274.39 | 61 | 71% | 9 | **14.8%** | $4.50 | 1 |
+| Meta | 96 link | $161.61 | 84 | 88% | 7 | 8.3% | $1.92 | 3 |
+| Nextdoor | 64 | $76.01 | 58 | 91% | 1 | **1.6%** | $1.31 | 0 |
+
+Nextdoor vs the other two pooled p = 0.0258 — **reproducing** the 14 Sep finding at higher n, not discovering it. **Meta does not beat Google**: p = 0.285 engagement, p = 0.639 leads, and Meta's cost-per-lead interval is $25–$189, which contains Google. Google has the *highest* engagement and on-intent search terms, so "Google's traffic is the problem" is false.
+
+**Two items closed, one sharpened.** Google's 0.00 city conversions is **not a defect** — `markAdsLeadConversion` and `sendMetaLeadEvent` both landed 8 Sep (`a51464f1f`, `674a94615`) and Ann McDade's gclid lead was 7 Sep, one day earlier. `normalizeUSPhone` is **fixed**; `lib/phone.ts` now enforces NANP. Meta's Lead event is still dead (388 PageView, zero Lead lifetime).
+
+**Two corrections I had to make to my own audit, both already in this file from 14 Sep.** (1) Franchil's 12 Sep "inquiry" is **Emilia Barrows asking for a job**, not a family — `care_recipient`/`care_type`/`urgency` all null. I wrote it into the case log as a delivered inquiry with the flattering detail "254 = Killeen, read same day." Franchil's 1.00 Google conversion most likely fires on it, which would make one of six lifetime account conversions a job application. (2) The Meta CAPI token was **known missing since 9 Sep** ("blocked on creating a Meta App in the portfolio... off the critical path"), so "check the env var in Vercel" was the wrong instruction — it is not set because the app does not exist. The real unknown is why the **browser** half (`trackMetaLead`, `CityLandingClient.tsx:463`) also never fired for three leads that all returned `redirected:false`. **Lesson: Phase 0 step 2 means sweeping SCRATCHPAD.md too, not just `admin_note`.**
+
+**Stale rows, flagged 14 Sep, still unfixed and now further off.** `buildChannelRollup` reads spend/clicks/status straight off `city_campaigns`, so `/admin/city-ads` prices a **paused** channel at a fifth of real spend and shows nothing for the channel producing 3 of 4 city leads: charlotte/nextdoor row `live·$7.76·8` vs truth `paused·$38.08·39`; dallas/nextdoor `live·$7.06·4` vs `paused·$37.93·25`; both Meta rows NULL vs $86.97/54 and $74.64/42. Google's rows are accurate — the sync script works, it just does not cover Meta or Nextdoor.
+
+**Also found.** Edmonds Villa carries the **first non-"no" outcome in programme history** (`talking`, self-reported 13 Sep on the 5 Sep inquiry, $25.03 lifetime spend). Dallas city is paying for `hcs group homes near me`, `questions to ask a live in caregiver` and a competitor brand; Charlotte's named terms have no equivalents. `Michigan Home Care` sits in the Google account on $15.00/day with 0 impressions and no DB row.
+
+**Artifact.** `BdupqcYibEbX1aG1WKq9eY`. Full working in `~/Desktop/adboost-state-of-play.md`.
+
 ### 2026-09-14 — Managed Ads turns into a calling motion; live Google audit for all 19 providers (`fair-planck`, ops only, no code)
 
 Meeting-prep session for the Managed Ads KPI review. No product code changed. Four artifacts published and a brief posted to `#product-development`.
@@ -5149,7 +5177,7 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 - 🟡 **Re-export the three creatives at 1080×1350** from the `.pxd` sources and swap mid-flight. The library has zero 4:5 assets and you cannot crop upward. Swap on a live ad set is two minutes.
 - 🟡 **Business verification** ("Verification may be required soon" banner) — do it before it interrupts a flight.
 - 🟢 **Rename Charlotte's ad** from "3 creatives" to match the Dallas convention. Cosmetic; costs a re-processing cycle on a delivering ad, so only when it is paused anyway.
-- 🟢 **CAPI token** still blocked on creating a Meta App in the portfolio. Off the critical path — the browser pixel is live; the server half activates later with no code change.
+- 🔴 **CAPI token — NO LONGER off the critical path (revised 15 Sep).** Still blocked on creating a Meta App in the portfolio. Three Meta leads have arrived since (12, 14, 14 Sep) and the pixel has **388 PageView and zero Lead, lifetime**, so Meta has been told about none of them and both arms optimise toward an event it has never seen. Creating the app is the cheapest fix left inside this flight. Separately and still unexplained: the **browser** half (`trackMetaLead`, `CityLandingClient.tsx:463`) should have fired for all three and did not.
 - ⚪ **Read Charlotte as the three-channel city and Dallas as the clean Google-vs-Meta comparison.** Nextdoor runs 10–24 Sep on identical geography.
 
 **Olera City Ads — live 2026-09-07 (`hopeful-joliot`, campaigns `24223751948` Charlotte / `24223844624` Dallas, flight 7–20 Sep)**
@@ -5160,7 +5188,7 @@ Built a "pulse header" for `/admin/questions` and `/admin/leads`:
 - 🟢 **Day-5 / day-14 Slack reads** still unbuilt; conversion rate and $/family were kept off `/admin/city-ads` on purpose and currently arrive nowhere. Spend now lands via the `/ad-boost-optimize` sweep, so the arithmetic can be done by hand at the two gates.
 - ✅ **The page converted its first real visitor on day 1** (Dallas, iPhone via Google Search App, 4 steps completed, phone + email + consent). The page is not the bottleneck. **The 14.5-hour callback lag is** — she arrived 17:44 CT and `STAFFED_HOURS` is 8am–noon CT, so first contact is 8am the next morning.
 - 🔴 **Decide the staffing window.** This is now the highest-leverage open question in the program and it is a staffing decision, not a page or copy decision. The only lead we have arrived in the late afternoon, which is when this audience searches; an 8am–noon CT window is out-of-hours for most of what this pilot will produce. Widening it means someone covers US afternoons, or the promise changes.
-- 🟡 **Recheck Google's conversion count on Dallas.** Showed **0** at 05:45 UTC despite the gclid lead. Wiring inspects clean (route awaits `markAdsLeadConversion`, `AdsConversionPing` mounted unconditionally, same path captured 3/3 Ad Boost inquiries since 22 Jul), so most likely reporting lag at ~7h. If still 0 after 24h, investigate. Note the 20 Sep gate reads `city_leads` and bidding is Maximize clicks, so nothing is being optimised on that zero.
+- ✅ **Google's conversion count on Dallas — RESOLVED 15 Sep, not a defect.** `markAdsLeadConversion` and `sendMetaLeadEvent` both landed 8 Sep (`a51464f1f`, `674a94615`); Ann McDade's gclid lead was 7 Sep, one day before the wiring existed. Nothing to investigate. Do not re-open.
 - 🟢 **Stale doc comment:** `lib/city-ads/offers.server.ts:12` still says "Staffed hours are 8am to 8pm" and contradicts `STAFFED_HOURS {start:8,end:12}` in `lib/city-ads/config.ts`. One-line fix; worth doing so nobody re-derives it.
 
 

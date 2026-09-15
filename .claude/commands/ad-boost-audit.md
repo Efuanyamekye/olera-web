@@ -21,7 +21,7 @@ A bare invocation runs the full book. A provider name runs targeted. **A targete
 
 Canonical references: `/ad-boost-setup` (locked invariants, URL table, campaign ID registry) · `/ad-boost-optimize` (browser mechanics, material-component quirks) · `~/Desktop/adboost-state-of-play.md` (the output format this command reproduces) · `docs/city-ads/CHANNEL-INFRASTRUCTURE.md` (the four collision files, locked attribution decisions) · memory `project_adboost_outcome_blindness`, `reference_ad_metrics_are_hand_typed`, `reference_chrome_devtools_attach_mode`, `project_city_ads_channel_infra`, `project_city_ads_meta_arm`, `reference_meta_business_account`.
 
-## Eight ways this analysis has gone wrong
+## Nine ways this analysis has gone wrong
 
 Read these before forming any view. Each was a confident single-cause story that skipped a counter-example already in the data.
 
@@ -41,6 +41,8 @@ Read these before forming any view. Each was a confident single-cause story that
 **What all three share:** an audit reaching for a fix on one campaign's evidence. This command's output is an explanation. A rule needs a counter-example search first, and the counter-example is usually already in the same account.
 
 8. **"No paid visitor started the quiz."** On 10 Sep the audit reported 0 of 25 by grouping each event on its own `utm_medium`. The production tracker attaches attribution metadata only to `page_landed`; later quiz events legitimately have no tags. Joining on `anonymous_id` + `visit_id` + `page_path` recovered three paid starts already present at that audit's cutoff, and four of 28 visitors at the later 08:32 UTC read. **A working event does not prove a working attribution query.** Use the landing cohort below before drawing a conversion conclusion or applying an early-stop rule.
+
+9. **"The gate is met, so the test concluded."** On 15 Sep the audit reported the city A/B as answered and told TJ to pick a landing page that day. Both halves were wrong. The pre-committed ~130-landing threshold was set for the **gate** question — does the offer hold a stranger at all — and the 11 Sep note said in terms that the arm comparison was *"a separate and much weaker question."* The audit applied one question's threshold to the other question's data. Run the power calculation before calling any comparison concluded: separating the observed 8.3% / 10.4% / 11.1% spread needs **~1,751 visits per arm**, and detecting a *doubling* needs **282**, against the 36–48 actually collected. **A high p-value at n=40 means you learned nothing; it is not evidence the arms are the same.** Worse, the recommended arm was the one whose `cta_engaged` fires on first field touch while the stepped arms fire on leaving intro — a bias the code comments and the 11 Sep note both name as unquantified. The audit picked the arm its own metric flatters, on the smallest sample of the three. TJ caught it. **Before recommending a choice between variants, state the sample each arm needs and whether the metric means the same thing on all of them.**
 
 Two more, statistical: at ~2.7% click-to-inquiry and ~20 clicks a flight, P(zero inquiries | healthy campaign) ≈ 58%. That is a likelihood, not a posterior; it does not mean ignoring a silent campaign is right 58% of the time. The likelihood ratio against "broken" is only 1.7, so **zero inquiries is almost no evidence either way. Zero impressions is.** And the 2.7% itself has a 95% interval of 1.2%–5.8% on 6 of 222 clicks, so any threshold derived from it is soft.
 
@@ -65,8 +67,20 @@ Service-role key is in `.env.local`; never ask TJ for it. **Every metric column 
 
    Sweep every note for: Google's estimated CPC or clicks/week against the cap and budget actually set; any sentence beginning "expect", "watch", "flag for TJ", "PENDING", "decide at"; any deviation from SOP that was recorded and justified; any hypothesis stated at build. **Every one of those is a prediction nobody has scored.** Scoring them is usually cheaper and more conclusive than anything the browser will tell you.
 
+   **`admin_note` is not the only prior record. `SCRATCHPAD.md` is the other one, and it is the one that gets missed.** Sessions that touched Ad Boost without changing code write their findings there and nowhere else, so a campaign's `admin_note` can be complete and still not contain what we already know about that campaign. Before forming any view, run these three greps from the repo root and read every hit:
+
+   ```bash
+   grep -n -i -f <(printf '%s\n' <every campaign_tag and provider display_name from step 1>) SCRATCHPAD.md
+   grep -n -iE 'ad.?boost|city ads|nextdoor|meta arm|CAPI|pixel|city_leads' SCRATCHPAD.md | tail -80
+   grep -n -iE "^#{2,3} 20[0-9]{2}-" SCRATCHPAD.md | tail -12   # the last dozen session headers
+   ```
+
+   Then check the **Next Up** section for open items naming any campaign in scope. An item parked there as "off the critical path" is a scored prediction like any other, and the audit's job is to say whether it still is.
+
+   The failure this exists to prevent, observed 15 Sep 2026, twice in one audit. (1) The audit reported Franchil's 12 Sep inquiry as a delivered lead, with the flattering detail "254 = Killeen, read same day." The 14 Sep scratchpad entry already said: *"Franchil's 12 Sep 'lead' is Emilia Barrows, a caregiver asking for a job, counted as a delivered inquiry."* `care_recipient`, `care_type` and `urgency` were all null in the row the audit had already read. (2) The audit wrote *"[UNKNOWN] Cause. Leading hypothesis: `META_CAPI_ACCESS_TOKEN` unset in Vercel prod"* and told TJ to go check Vercel. The scratchpad had carried the answer since 9 Sep: *"CAPI token still blocked on creating a Meta App in the portfolio. Off the critical path."* The token is not set because the app does not exist, so the recommended action was impossible to perform, and the genuinely unexplained part — that the **browser** half never fired either — went unnamed. Both corrections had to be written into `ad_campaign_log` after publishing.
+
    Two rules that follow from it:
-   - **Nothing is a "new finding" until you have checked whether a prior note already recorded it.** If a note did, say so and credit it — the finding is *"this was flagged on <date> and not acted on"*, which is a different and more actionable claim than *"I discovered this."*
+   - **Nothing is a "new finding" until you have checked whether a prior note already recorded it** — in `admin_note`, in `ad_campaign_log`, **and in `SCRATCHPAD.md`**. If one did, say so and credit it — the finding is *"this was flagged on <date> and not acted on"*, which is a different and more actionable claim than *"I discovered this."*
    - **A pattern across three or more notes outranks anything in one campaign's browser data.** Repeated build-time flags point at a defect in `/ad-boost-setup`, not at three separate campaign mysteries. Say which it is.
 
 3. **The case log** — one request per provider, markdown so it reads as a story:
