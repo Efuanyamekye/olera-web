@@ -213,7 +213,12 @@ export type SeekerFlag =
   | "unreachable"
   /** On do_not_contact. */
   | "opted_out"
-  /** A pending inquiry older than the cold threshold with no provider reply. */
+  /**
+   * A pending inquiry past the cold threshold with no non-auto message in the
+   * on-platform thread. NOT proof the provider ignored them: most providers
+   * answer by phone or email, which we cannot see. Read it as "nothing has come
+   * back through any channel we can observe", never as blame.
+   */
   | "provider_silent"
   /** They told us how it went and the connection row still says "pending". */
   | "outcome_reported"
@@ -228,7 +233,7 @@ export const SEEKER_FLAG_LABEL: Record<SeekerFlag, string> = {
   awaiting_reply: "they wrote, no reply yet",
   unreachable: "no way to reach them",
   opted_out: "opted out",
-  provider_silent: "provider went silent",
+  provider_silent: "no reply on file",
   outcome_reported: "they told us how it went",
   never_human: "never had a human touch",
   no_name: "no name on file",

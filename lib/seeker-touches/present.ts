@@ -91,11 +91,15 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
     return { phrase: "Closed", tone: "none", age: r.episode.closed_reason ?? quiet };
   }
   if (r.episode.state === "waiting") {
-    // A provider holding a request and a provider ignoring one are different
-    // facts, and 260 rows were showing the first while meaning the second. The
-    // phrase carries it; the rail deliberately does not, because amber on 260
-    // rows is the chip problem again in another colour.
-    if (r.flags.includes("provider_silent")) return { phrase: "No provider reply", tone: "none", age: quiet };
+    // "No reply ON FILE", not "no provider reply". The distinction is load
+    // bearing. provider_silent is derived from the absence of a non-auto
+    // message in the on-platform thread, and providers overwhelmingly answer
+    // families by phone or email, which we cannot see. Measured 15 Sep over 397
+    // inquiries in 45 days: 52% have neither a thread nor a family self-report,
+    // so we know nothing about them at all. Where there IS a visible
+    // conversation it runs 52 provider-silent to 7 family-silent, so the lean
+    // is real — but the page must not assert blame on an absence of evidence.
+    if (r.flags.includes("provider_silent")) return { phrase: "No reply on file", tone: "none", age: quiet };
     const n = r.providers.length;
     return { phrase: n > 1 ? "Providers have it" : "Provider has it", tone: "none", age: quiet };
   }
@@ -103,7 +107,7 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
     return { phrase: "Gone quiet", tone: "none", age: quiet };
   }
   if (r.flags.includes("provider_silent")) {
-    return { phrase: "No provider reply", tone: "none", age: quiet };
+    return { phrase: "No reply on file", tone: "none", age: quiet };
   }
   return { phrase: "Open", tone: "none", age };
 }
