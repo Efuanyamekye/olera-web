@@ -13,6 +13,7 @@
  * Pure and client-safe.
  */
 
+import { SCHEDULE_TZ } from "@/lib/eastern-time";
 import type { EpisodeState, Reachability, SeekerRelationshipRow } from "./types";
 
 /** Red = do something now. Amber = they are waiting on us. None = nothing to do. */
@@ -57,13 +58,9 @@ function days(n: number | null | undefined, unit = "day"): string | null {
 export function stateOf(r: SeekerRelationshipRow): RowState {
   const age = r.episode.age_days !== null ? `day ${r.episode.age_days + 1}` : null;
   const quiet = days(r.days_quiet);
-  const today = new Date().toISOString().slice(0, 10);
-
-  // A plan you set and then missed outranks almost everything: it is the one
-  // state on this list that is entirely our own doing.
-  if (r.open_action?.due && r.open_action.due < today && !r.flags.includes("opted_out")) {
-    return { phrase: "Overdue", tone: "act", age: `was due ${r.open_action.due}` };
-  }
+  // Eastern, not UTC: a date typed as "due the 15th" must not turn red at 8pm
+  // Eastern on the 14th, which is what toISOString() would do.
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: SCHEDULE_TZ }).format(new Date());
 
   // Opted out first, or it reads as "Waiting on us" in amber directly above a
   // line saying they asked us to stop. Four rows did exactly that.
@@ -72,6 +69,12 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
   }
   if (r.flags.includes("unreachable")) {
     return { phrase: "Can't reach them", tone: "act", age };
+  }
+  // A missed plan is our own doing and outranks everything except not being
+  // able to contact them at all — telling someone to chase a family they
+  // physically cannot reach is asking for the impossible.
+  if (r.open_action?.due && r.open_action.due < today) {
+    return { phrase: "Overdue", tone: "act", age: `was due ${r.open_action.due}` };
   }
   if (r.flags.includes("promise_owed")) {
     return { phrase: "Owed a call", tone: "act", age };

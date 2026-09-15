@@ -735,8 +735,14 @@ async function loadFeeds(
         .in("seeker_id", g)
         .order("occurred_at", { ascending: false })
         .limit(2000),
-    ).catch((err) => {
-      console.warn("[seeker-touches] family_touches unavailable, continuing without it:", err?.message ?? err);
+    ).catch((err: { code?: string; message?: string }) => {
+      // ONLY the table not existing is tolerated, and only until the migration
+      // is applied. Anything else — permissions, a timeout — must surface,
+      // because an empty touch list is indistinguishable from "nothing was ever
+      // logged", and TJ would reasonably conclude his call had vanished.
+      const missing = err?.code === "PGRST205" || /Could not find the table/i.test(err?.message ?? "");
+      if (!missing) throw err;
+      console.warn("[seeker-touches] family_touches not created yet, continuing without it");
       return [] as FamilyTouchRow[];
     }),
   ]);

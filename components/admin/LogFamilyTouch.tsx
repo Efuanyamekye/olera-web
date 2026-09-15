@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FAMILY_TOUCH_CHANNELS, type FamilyTouchChannel } from "@/lib/seeker-touches/types";
+import type { FamilyTouchChannel } from "@/lib/seeker-touches/types";
 
 /**
  * Log what happened with a family.
@@ -18,7 +18,7 @@ import { FAMILY_TOUCH_CHANNELS, type FamilyTouchChannel } from "@/lib/seeker-tou
  */
 
 const CHANNEL_GUESS: { channel: FamilyTouchChannel; words: RegExp }[] = [
-  { channel: "call", words: /\b(call(ed|ing)?|phone[d]?|voicemail|vm|rang|dial(led|ed)?)\b/i },
+  { channel: "call", words: /\b(call(ed|ing)?|phone[d]?|voicemail|vm|rang|dial(led|ed)?|spoke|talked)\b/i },
   { channel: "text", words: /\b(text(ed)?|sms|messaged|whatsapp)\b/i },
   { channel: "email", words: /\b(email(ed)?|wrote to|replied to|inbox)\b/i },
   { channel: "meeting", words: /\b(met|meeting|zoom|visit(ed)?|in person)\b/i },
@@ -31,19 +31,46 @@ export function guessChannel(text: string): FamilyTouchChannel {
 }
 
 /** "they called us", "she emailed" — a touch that came the other way. */
-function guessInbound(text: string): boolean {
+export function guessInbound(text: string): boolean {
   return /\b(they|she|he|her|his|family)\s+(called|texted|emailed|wrote|replied|got back)/i.test(text);
+}
+
+const SPOKE = /\b(spoke|talked|reached (her|him|them)|got (her|him|them) on|she said|he said|they said|answered|picked up)\b/i;
+const MISSED =
+  /\b(no answer|didn'?t (pick up|answer)|voicemail|mailbox (is )?full|left a (message|vm)|straight to voicemail|no pickup|couldn'?t reach|didn'?t reach|unreachable|rang out)\b/i;
+
+/**
+ * Did we get hold of them, as far as the words say.
+ *
+ * This is inferred rather than left blank because it is the one field that
+ * changes what the list does, and a required-but-optional control defaulting to
+ * the value that changes nothing is a trap: "Spoke to her, she'll call the
+ * agency" would log as neither, and the row would stay red forever. MISSED is
+ * tested first — "left her a voicemail, spoke to her son" is still a miss for
+ * the person we owe the call to.
+ *
+ * An inbound touch counts as reached unless the words say otherwise: if they got
+ * hold of us, contact happened, which is what an owed call is actually asking
+ * for. "She called us back" is a yes even though nothing in it says "spoke".
+ */
+export function guessReached(text: string): boolean | null {
+  if (MISSED.test(text)) return false;
+  if (SPOKE.test(text)) return true;
+  if (guessInbound(text)) return true;
+  return null;
 }
 
 type Props = {
   seekerId: string;
-  /** Shown as the default when we know it, so a spoken-to call is one click. */
+  /** Called after a successful write so the timeline reloads. */
   onLogged: () => void;
 };
 
 export default function LogFamilyTouch({ seekerId, onLogged }: Props) {
   const [text, setText] = useState("");
-  const [reached, setReached] = useState<boolean | null>(null);
+  // undefined = nobody has chosen, so the words decide and keep deciding as you
+  // type. A click pins it and stops the guessing.
+  const [reachedChoice, setReachedChoice] = useState<boolean | null | undefined>(undefined);
   const [nextAction, setNextAction] = useState("");
   const [due, setDue] = useState("");
   const [showNext, setShowNext] = useState(false);
@@ -51,6 +78,7 @@ export default function LogFamilyTouch({ seekerId, onLogged }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const channel = guessChannel(text);
+  const reached = reachedChoice === undefined ? guessReached(text) : reachedChoice;
   const canSave = text.trim().length > 0 && !saving;
 
   async function save() {
@@ -75,7 +103,7 @@ export default function LogFamilyTouch({ seekerId, onLogged }: Props) {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data?.error ?? "Could not save that");
       setText("");
-      setReached(null);
+      setReachedChoice(undefined);
       setNextAction("");
       setDue("");
       setShowNext(false);
@@ -112,7 +140,12 @@ export default function LogFamilyTouch({ seekerId, onLogged }: Props) {
       />
 
       <div className="mt-2.5 flex flex-wrap items-center gap-2">
-        <span className="text-[12px] text-gray-500">Did you get hold of them?</span>
+        <span className="text-[12px] text-gray-500">
+          Did you get hold of them?
+          {reachedChoice === undefined && reached !== null && (
+            <span className="ml-1 text-gray-400">(read from what you wrote)</span>
+          )}
+        </span>
         {(
           [
             [true, "Yes, spoke to them"],
@@ -123,7 +156,7 @@ export default function LogFamilyTouch({ seekerId, onLogged }: Props) {
           <button
             key={String(v)}
             type="button"
-            onClick={() => setReached(v)}
+            onClick={() => setReachedChoice(v)}
             className={`rounded-full border px-2.5 py-1 text-[12px] font-medium ${
               reached === v
                 ? v === true
@@ -182,5 +215,3 @@ export default function LogFamilyTouch({ seekerId, onLogged }: Props) {
     </div>
   );
 }
-
-export { FAMILY_TOUCH_CHANNELS };

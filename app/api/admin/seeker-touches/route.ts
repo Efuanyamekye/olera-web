@@ -179,10 +179,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Failed to log this touch" }, { status: 500 });
   }
 
-  // A new next action supersedes the open ones. Done, not deleted: what we meant
-  // to do next is part of the record. Closed AFTER the insert, so a failed write
-  // never erases the action that was already on the list.
-  if (next_action) {
+  // A new next action supersedes the open ones, AND so does actually reaching
+  // them. The open action existed because we had not got hold of them; getting
+  // hold of them is what it was for. Without this, logging "spoke to him" leaves
+  // the row screaming Overdue until someone separately clicks Mark done — the
+  // double bookkeeping that makes a tool like this decay in a week. A genuinely
+  // new follow-up is declared on the same log, which closes the old one anyway.
+  //
+  // Done, not deleted: what we meant to do next is part of the record. Closed
+  // AFTER the insert, so a failed write never erases the action already on the
+  // list.
+  if (next_action || body.reached === true) {
     const { error: closeErr } = await db
       .from("family_touches")
       .update({ next_action_done_at: nowIso })

@@ -67,7 +67,7 @@ curl -s -X POST "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/provider_touches" \
        "author":"claude (for TJ)"}'
 ```
 
-Before inserting a row with a `next_action`, close that subject's open ones, exactly as the API does — swapping `family_touches?seeker_id=eq.` for the family table:
+Before inserting a row with a `next_action`, close that subject's open ones, exactly as the API does — swapping `family_touches?seeker_id=eq.` for the family table. **On the family table, do the same when `reached` is true even if there is no new action:** the open action existed because we had not got hold of them, and getting hold of them is what it was for.
 
 ```bash
 curl -s -X PATCH "$NEXT_PUBLIC_SUPABASE_URL/rest/v1/provider_touches?provider_id=eq.<uuid>&next_action=not.is.null&next_action_done_at=is.null" \

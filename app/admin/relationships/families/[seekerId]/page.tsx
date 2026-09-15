@@ -75,6 +75,7 @@ export default function AdminSeekerTimelinePage() {
   const { seekerId } = useParams<{ seekerId: string }>();
   const [data, setData] = useState<SeekerRelationship | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setError(null);
@@ -109,12 +110,19 @@ export default function AdminSeekerTimelinePage() {
   const { profile, reach, consent, episode, flags, providers, items, open_action: openAction } = data;
 
   async function markActionDone(id: string) {
-    await fetch("/api/admin/seeker-touches", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, done: true }),
-    });
-    load();
+    setActionError(null);
+    try {
+      const res = await fetch("/api/admin/seeker-touches", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, done: true }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload?.error ?? "Could not mark that done");
+      load();
+    } catch (e) {
+      setActionError(e instanceof Error ? e.message : "Could not mark that done");
+    }
   }
 
   const consentLine =
@@ -209,6 +217,7 @@ export default function AdminSeekerTimelinePage() {
           >
             Mark done
           </button>
+          {actionError && <p className="w-full text-[13px] text-red-700">{actionError}</p>}
         </div>
       )}
 
