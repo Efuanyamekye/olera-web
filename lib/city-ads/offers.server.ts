@@ -541,6 +541,8 @@ export async function runOfferMaintenance(db: SupabaseClient): Promise<{
   const { data: waiting } = await db
     .from("city_leads")
     .select("id, next_offer_at, created_at")
+    .eq("is_test", false)
+    .neq("capture_method", "meta_instant_form")
     .in("status", ["new", "offered"])
     .is("accepted_offer_id", null)
     .or(`next_offer_at.lte.${now},and(next_offer_at.is.null,created_at.lte.${twoMinAgo})`)

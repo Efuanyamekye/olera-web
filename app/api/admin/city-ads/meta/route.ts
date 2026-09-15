@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
   if (!await allowed()) return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   let body;
   try { body = await req.json(); } catch { return NextResponse.json({ error: "Bad request" }, { status: 400 }); }
-  if (!/^\d{1,40}$/.test(body.leadgenId ?? "")) return NextResponse.json({ error: "Invalid lead ID" }, { status: 400 });
+  if (!/^\d{1,40}$/.test(body?.leadgenId ?? "")) return NextResponse.json({ error: "Invalid lead ID" }, { status: 400 });
   const { data, error } = await getServiceClient().from("meta_lead_receipts")
     .update({ status: "pending", attempts: 0, last_error: null })
     .eq("leadgen_id", body.leadgenId).eq("status", "failed").select("leadgen_id").maybeSingle();

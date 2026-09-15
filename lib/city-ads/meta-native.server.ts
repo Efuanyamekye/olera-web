@@ -11,8 +11,13 @@ export async function runMetaNativeIntake(db: SupabaseClient) {
   const version = process.env.META_LEADS_GRAPH_VERSION;
   if (!token || !version || !/^v\d+\.0$/.test(version)) throw new Error("Meta lead retrieval is not configured");
   const stale = new Date(Date.now() - 10 * 60000).toISOString();
+  // Recover the final attempt too: it must become retryable, not stay processing forever.
+  const { error: recoveryError } = await db.from("meta_lead_receipts")
+    .update({ status: "failed", last_error: "Import interrupted. Retry delivery after checking configuration." })
+    .eq("status", "processing").lt("last_attempt_at", stale);
+  if (recoveryError) throw new Error("Could not recover Meta receipts");
   const { data: pending, error } = await db.from("meta_lead_receipts").select("*")
-    .or(`status.in.(pending,failed),and(status.eq.processing,last_attempt_at.lt.${stale})`)
+    .in("status", ["pending", "failed"])
     .lt("attempts", 12).order("received_at").limit(10);
   if (error) throw new Error("Could not read Meta inbox");
   let processed = 0, failed = 0;
@@ -24,10 +29,11 @@ export async function runMetaNativeIntake(db: SupabaseClient) {
     if (claimError) throw new Error("Could not claim Meta receipt");
     if (!claim) continue;
     try {
-      const form = forms.find(f => f.formId === receipt.form_id && f.pageId === receipt.page_id);
+      const enabled = forms.some(f => f.formId === receipt.form_id && f.pageId === receipt.page_id);
+      const form = parseNativeForms(JSON.stringify([receipt.form_config]))[0];
       const cfg = form && getCityConfig(form.slug);
       // The published form promises a conversation before any introduction.
-      if (!form || !cfg || cfg.routingMode !== "concierge") throw new Error("Form needs concierge configuration");
+      if (!enabled || !form || !cfg || cfg.routingMode !== "concierge") throw new Error("Form needs concierge configuration");
       const url = new URL(`https://graph.facebook.com/${version}/${receipt.leadgen_id}`);
       url.searchParams.set("fields", "id,created_time,form_id,campaign_id,adset_id,ad_id,field_data");
       const response = await fetch(url, { headers: { Authorization: `Bearer ${token}` }, cache: "no-store", signal: AbortSignal.timeout(8000) });

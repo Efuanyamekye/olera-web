@@ -17,8 +17,8 @@ Status: implementation prepared on `codex/meta-native-leads`; not deployed or co
 `Meta signed webhook → meta_lead_receipts → existing five-minute city clock → city_leads → city_lead_messages + care seeker → admin conversation → named provider introduction → existing outcomes`
 
 - GET `/api/webhooks/meta-leads` verifies Meta's challenge.
-- POST verifies the raw-body SHA-256 HMAC before accepting an allowlisted Page/form. Only receipt metadata is stored at this stage. A DB failure returns 503 so Meta can retry.
-- The clock retrieves contacts from Meta's Graph API using the Page access token. Contact answers and tokens are never logged. A compare-and-swap lease prevents concurrent import; stale claims recover after ten minutes. Twelve attempts maximum; failed receipts can be retried in admin.
+- POST verifies the raw-body SHA-256 HMAC before accepting an allowlisted Page/form. Receipt metadata and the form configuration snapshot (test mode, consent and attribution) are stored at this stage. Retries never reinterpret a queued test receipt as live. A DB failure returns 503 so Meta can retry.
+- The clock retrieves contacts from Meta's Graph API using the Page access token. Contact answers and tokens are never logged. A compare-and-swap lease prevents concurrent import; stale claims become failed after ten minutes, including the final allowed attempt. Twelve attempts maximum; failed receipts can be retried in admin.
 - The import SQL function serializes a receipt and phone/city, deduplicates within 24 hours, inserts the lead and confirmation message in one transaction. Tests and real leads are separate. Existing attribution is retained when a submission matches an existing lead.
 - Consent time comes from the signed Meta submission timestamp. Form ID/version and the exact configured mandatory consent text are stored. No fabricated browser IP or user agent. Only allowlist a published form after verifying that its required checkbox matches the configured text.
 - Care type starts `unsure`; the ad's theme is not treated as the family's answer. Native leads require an explicit named provider introduction. Existing opt-out and send-window checks apply.
@@ -62,6 +62,6 @@ The form also has the required checkbox: “I agree to calls and texts from Oler
 - `node --test scripts/tests/meta-native.test.cjs`
 - `PGLITE_MODULE=/path/to/@electric-sql/pglite node scripts/tests/meta-native-sql.cjs`
 
-SQL test executes the actual migration/function on isolated PostgreSQL, covering replay, contact deduplication, test isolation, opt-outs, attribution/consent, and service-role-only execution. It uses a minimal fixture for the pre-existing schema, not production. Live Meta delivery, deployment and authenticated UI QA are still required.
+SQL test executes the actual migration/function on isolated PostgreSQL, covering replay, contact deduplication, test isolation, opt-outs, attribution/consent, and service-role-only execution. It uses the actual city lead/message table definitions and relevant triggers in an isolated fixture, not production. Live Meta delivery, deployment and authenticated UI QA are still required.
 
 References: [Meta retrieving leads](https://developers.facebook.com/docs/marketing-api/guides/lead-ads/retrieving/), [Meta webhook setup](https://developers.facebook.com/docs/graph-api/webhooks/getting-started/), [Meta's reference implementation](https://github.com/fbsamples/lead-ads-webhook-sample) (archived; current access and API version must be verified in the app).

@@ -85,3 +85,46 @@ test('test and suppressed city leads are blocked before communication',async()=>
     assert.equal(await cityLeadBlocked(db,'id'),true);
   }
 });
+
+// A small in-memory Supabase boundary; filtering runs before limit, as Postgres does.
+function fakeDb(tables) {
+ return {from(table) {
+  let predicates=[], patch=null, cap=Infinity, single=false;
+  const q={select(){return q},update(p){patch=p;return q},
+   eq(k,v){predicates.push(r=>r[k]===v);return q},neq(k,v){predicates.push(r=>r[k]!==v);return q},
+   in(k,v){predicates.push(r=>v.includes(r[k]));return q},is(k,v){predicates.push(r=>(r[k]??null)===v);return q},
+   lt(k,v){predicates.push(r=>r[k]!=null&&r[k]<v);return q},gt(k,v){predicates.push(r=>r[k]>v);return q},
+   lte(k,v){predicates.push(r=>r[k]<=v);return q},or(){return q},order(){return q},limit(n){cap=n;return q},
+   maybeSingle(){single=true;return q},single(){single=true;return q},
+   then(resolve,reject){try {const rows=(tables[table]??[]).filter(r=>predicates.every(p=>p(r))).slice(0,cap);
+    if(patch) rows.forEach(r=>Object.assign(r,patch));return Promise.resolve({data:single?rows[0]??null:rows,error:null}).then(resolve,reject);
+   }catch(e){return Promise.reject(e).then(resolve,reject)}}};return q;
+ }};
+}
+test('final-attempt crash recovers to failed and can be retried by admin', async()=>{
+ const keys=['META_LEADS_FORMS_JSON','META_LEADS_PAGE_ACCESS_TOKEN','META_LEADS_GRAPH_VERSION'];
+ const saved=Object.fromEntries(keys.map(k=>[k,process.env[k]]));
+ Object.assign(process.env,{META_LEADS_FORMS_JSON:JSON.stringify([form]),META_LEADS_PAGE_ACCESS_TOKEN:'test-only',META_LEADS_GRAPH_VERSION:'v25.0'});
+ try {
+  const receipts=[{...receipt,status:'processing',attempts:12,last_attempt_at:'2020-01-01T00:00:00.000Z'}];
+  const worker=load('lib/city-ads/meta-native.server.ts',{'./care-seeker.server':{ensureCareSeekerForCityLead:async()=>{throw Error('Unexpected profile')}}});
+  const result=await worker.runMetaNativeIntake(fakeDb({meta_lead_receipts:receipts}));
+  assert.equal(receipts[0].status,'failed'); assert.equal(receipts[0].attempts,12);
+  assert.equal(result.processed,0);
+ }finally{for(const k of keys) if(saved[k]===undefined)delete process.env[k];else process.env[k]=saved[k];}
+});
+test('waiting native/test leads cannot consume the website relay batch',async()=>{
+ const leads=Array.from({length:60},(_,i)=>({id:'native'+i,capture_method:'meta_instant_form',status:'new',is_test:false}));
+ leads.push({id:'test',is_test:true,status:'new',capture_method:'website'});
+ // A closed website lead will return before sending; selecting it still proves
+ // that the earlier native rows have not consumed the 50-row database batch.
+ leads.push({id:'website',capture_method:'website',is_test:false,status:'new',accepted_offer_id:null});
+ const db=fakeDb({city_leads:leads});
+ const seen=[];
+ const offers=load('lib/city-ads/offers.server.ts',{
+  '@/lib/twilio':{},'@/lib/slack':{},'@/lib/sms/templates':{},
+  './messages.server':{cityLeadBlocked:async(_db,id)=>{seen.push(id);return true;}}
+ });
+ await offers.runOfferMaintenance(db);
+ assert.deepEqual(seen,['website']);
+});

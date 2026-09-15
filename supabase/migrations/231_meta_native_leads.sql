@@ -15,6 +15,7 @@ CREATE TABLE public.meta_lead_receipts (
   form_id text NOT NULL,
   ad_id text,
   submitted_at timestamptz NOT NULL,
+  form_config jsonb NOT NULL CHECK (jsonb_typeof(form_config) = 'object'),
   received_at timestamptz NOT NULL DEFAULT now(),
   status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','processing','imported','duplicate','blocked','failed')),
   attempts integer NOT NULL DEFAULT 0,
@@ -36,6 +37,11 @@ DECLARE receipt meta_lead_receipts; existing_id uuid; new_lead city_leads;
 BEGIN
   SELECT * INTO STRICT receipt FROM meta_lead_receipts WHERE leadgen_id=receipt_id FOR UPDATE;
   IF receipt.status IN ('imported','duplicate','blocked') THEN RETURN receipt.lead_id; END IF;
+  -- Use the receipt snapshot even if live configuration changed before retry.
+  lead_data := lead_data || jsonb_build_object('is_test', (receipt.form_config->>'testOnly')::boolean,
+    'slug', receipt.form_config->>'slug', 'campaign_tag', receipt.form_config->>'campaignTag',
+    'consent_form_version', receipt.form_config->>'consentVersion', 'consent_text', receipt.form_config->>'consentText');
+  IF (lead_data->>'is_test') IS NULL THEN RAISE EXCEPTION 'Missing receipt test mode'; END IF;
   PERFORM pg_advisory_xact_lock(hashtextextended((lead_data->>'slug') || ':' || (lead_data->>'phone'),0));
   SELECT id INTO existing_id FROM city_leads WHERE meta_lead_id=receipt_id;
   IF existing_id IS NULL THEN

@@ -19,7 +19,8 @@ export function parseNativeForms(value: string | undefined): NativeForm[] {
   const seen = new Set<string>();
   return rows.map((row: NativeForm) => {
     if (!row || !id(row.pageId) || !id(row.formId) || !row.slug || !row.campaignTag ||
-        !row.consentVersion || !row.consentText || typeof row.testOnly !== "boolean" || seen.has(row.formId)) {
+        !row.consentVersion || !row.consentText ||
+        ![row.slug,row.campaignTag,row.consentVersion,row.consentText].every(v => typeof v === "string" && v.trim().length > 0) || typeof row.testOnly !== "boolean" || seen.has(row.formId)) {
       throw new Error("Invalid Meta form configuration");
     }
     seen.add(row.formId);
@@ -33,7 +34,7 @@ export function verifyMetaSignature(raw: string, signature: string | null, secre
 }
 
 export interface NativeReceipt {
-  leadgen_id: string; page_id: string; form_id: string; ad_id: string | null; submitted_at: string;
+  leadgen_id: string; page_id: string; form_id: string; ad_id: string | null; submitted_at: string; form_config: NativeForm;
 }
 export function extractNativeReceipts(body: unknown, forms: NativeForm[]): NativeReceipt[] {
   const payload = body as { object?: string; entry?: { id?: string; changes?: { field?: string; value?: Record<string, unknown> }[] }[] };
@@ -49,7 +50,8 @@ export function extractNativeReceipts(body: unknown, forms: NativeForm[]): Nativ
           !Number.isFinite(v.created_time) || v.created_time < 1 || v.created_time * 1000 > Date.now() + 300000) {
         throw new Error("Malformed lead notification");
       }
-      receipts.set(v.leadgen_id, { leadgen_id: v.leadgen_id, form_id: v.form_id, page_id: v.page_id,
+      const form = forms.find(f => f.formId === v.form_id && f.pageId === v.page_id)!;
+      receipts.set(v.leadgen_id, { form_config: { ...form }, leadgen_id: v.leadgen_id, form_id: v.form_id, page_id: v.page_id,
         ad_id: id(v.ad_id) ? v.ad_id : null, submitted_at: new Date(v.created_time * 1000).toISOString() });
     }
   }

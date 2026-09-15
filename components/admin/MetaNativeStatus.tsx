@@ -14,7 +14,7 @@ export default function MetaNativeStatus() {
       const body = await r.json();
       if (!r.ok) throw new Error(body.error);
       setData(body); setError(null);
-    } catch (e) { setError(e instanceof Error ? e.message : "Could not load Meta intake"); }
+    } catch (e) { setData(null); setError(e instanceof Error ? e.message : "Could not load Meta intake"); }
   }, []);
   useEffect(() => { void load(); }, [load]);
   async function retry(id: string) {
