@@ -83,9 +83,12 @@ export async function POST(
     // Send approval email to student with one-click magic link (15-day expiry)
     if (student.email) {
       try {
-        const profileUrl = `${BASE_URL}/medjobs/candidates/${student.slug}`;
         // Magic link auto-authenticates student and redirects to their portal
         const portalUrl = generateStudentPortalUrl(student.email, "/portal/medjobs");
+        // Public profile URL - only if slug exists, otherwise use portal as fallback
+        const profileUrl = student.slug
+          ? `${BASE_URL}/medjobs/candidates/${student.slug}`
+          : portalUrl;
         await sendEmail({
           to: student.email,
           subject: "Your MedJobs profile is live!",
