@@ -1165,6 +1165,8 @@ function StudentPortalContent({
   // Check if profile has ever gone live (application_completed = true means they went through Go Live at least once)
   const hasCompletedApplication = !!meta.application_completed;
   const isPaused = !profile.is_active && hasCompletedApplication;
+  // Check if review has been requested but not yet approved
+  const isPendingReview = !!(meta as Record<string, unknown>).review_requested_at && !hasCompletedApplication;
 
   // Video verification
   const videoAvailable = hasVideo(meta);
@@ -1363,7 +1365,7 @@ function StudentPortalContent({
                         ? "bg-primary-50 text-primary-700"
                         : isPaused
                         ? "bg-gray-100 text-gray-600"
-                        : verificationDone
+                        : isPendingReview
                         ? "bg-amber-50 text-amber-700"
                         : "bg-gray-100 text-gray-500"
                     }`}>
@@ -1372,11 +1374,11 @@ function StudentPortalContent({
                           ? "bg-primary-500 animate-pulse"
                           : isPaused
                           ? "bg-gray-400"
-                          : verificationDone
-                          ? "bg-amber-500"
+                          : isPendingReview
+                          ? "bg-amber-500 animate-pulse"
                           : "bg-gray-300"
                       }`} />
-                      {profile.is_active ? "Live" : isPaused ? "Paused" : verificationDone ? "Under review" : "Not verified"}
+                      {profile.is_active ? "Live" : isPaused ? "Paused" : isPendingReview ? "Pending Review" : "Draft"}
                     </div>
                   </div>
                   <div className="mt-1 flex flex-wrap items-center gap-x-2 text-[15px] text-gray-500">
@@ -1681,8 +1683,38 @@ function StudentPortalContent({
                   )}
                 </div>
               </div>
+            ) : isPendingReview ? (
+              /* Pending Review state */
+              <div className="bg-white rounded-2xl border border-amber-200 overflow-hidden">
+                {/* Header */}
+                <div className="px-5 py-4 border-b border-amber-100 bg-gradient-to-r from-amber-50 to-white">
+                  <div className="flex items-center gap-3">
+                    {/* Clock icon */}
+                    <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                      <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-[15px] font-semibold text-gray-900">Pending Review</h3>
+                      <p className="text-xs text-amber-600 mt-0.5">Under admin review</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="px-5 py-4">
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    Your profile has been submitted for review. We&apos;ll notify you once it&apos;s approved and visible to providers.
+                  </p>
+                  <div className="mt-4 flex items-center gap-2 text-xs text-amber-600">
+                    <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                    <span>Review in progress</span>
+                  </div>
+                </div>
+              </div>
             ) : (
-              /* First-time Go Live CTA */
+              /* First-time Request Review CTA */
               <div className="bg-white rounded-2xl border border-gray-200/80 overflow-hidden">
                 {/* Header */}
                 <div className="px-5 py-4 border-b border-gray-100 bg-gradient-to-r from-amber-50/50 to-white">
@@ -1703,14 +1735,14 @@ function StudentPortalContent({
                 {/* Content */}
                 <div className="px-5 py-4">
                   <p className="text-sm text-gray-500 leading-relaxed mb-4">
-                    Make your profile visible to healthcare providers and start getting matched with caregiving jobs.
+                    Complete your profile and request a review to go live and get matched with caregiving jobs.
                   </p>
                   <button
                     type="button"
                     onClick={() => setShowGoLiveReview(true)}
                     className="w-full py-3 text-sm font-semibold text-white bg-gray-900 hover:bg-gray-800 rounded-xl transition-colors"
                   >
-                    Go Live
+                    Request Review
                   </button>
                 </div>
               </div>

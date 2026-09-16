@@ -71,6 +71,10 @@ export default function AdminStudentDetailPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
+  const [approving, setApproving] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [rejectReason, setRejectReason] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [student, setStudent] = useState<any>(null);
   const [connections, setConnections] = useState<ConnectionRow[]>([]);
@@ -117,6 +121,47 @@ export default function AdminStudentDetailPage() {
     }
   }
 
+  async function handleApprove() {
+    if (!confirm(`Approve "${student?.display_name}"? Their profile will become visible to providers.`)) return;
+    setApproving(true);
+    try {
+      const res = await fetch(`/api/admin/caregivers/${studentId}/approve`, { method: "POST" });
+      if (res.ok) {
+        await fetchStudent(); // Refresh data
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to approve");
+      }
+    } catch {
+      alert("Failed to approve");
+    } finally {
+      setApproving(false);
+    }
+  }
+
+  async function handleReject() {
+    setRejecting(true);
+    try {
+      const res = await fetch(`/api/admin/caregivers/${studentId}/reject`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: rejectReason || undefined }),
+      });
+      if (res.ok) {
+        setShowRejectModal(false);
+        setRejectReason("");
+        await fetchStudent(); // Refresh data
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Failed to reject");
+      }
+    } catch {
+      alert("Failed to reject");
+    } finally {
+      setRejecting(false);
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -127,8 +172,20 @@ export default function AdminStudentDetailPage() {
 
   if (!student) return null;
 
-  const meta = (student.metadata || {}) as StudentMetadata;
+  const meta = (student.metadata || {}) as StudentMetadata & {
+    review_requested_at?: string;
+    application_completed?: boolean;
+    rejected_at?: string;
+    rejected_by?: string;
+    rejection_reason?: string;
+    approved_at?: string;
+    approved_by?: string;
+  };
   const isGuest = !student.account_id;
+  const isPendingReview = !!meta.review_requested_at && !meta.application_completed;
+  const isApproved = !!meta.application_completed;
+  // Only show rejection history if not approved and not currently pending (i.e., they can re-request)
+  const wasRejected = !!meta.rejected_at && !meta.review_requested_at && !isApproved;
 
   return (
     <div className="max-w-4xl">
@@ -173,6 +230,82 @@ export default function AdminStudentDetailPage() {
           </span>
         </div>
       </div>
+
+      {/* Review Status Banner */}
+      {isPendingReview && (
+        <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-amber-900">Review Requested</h2>
+                <p className="text-sm text-amber-700 mt-1">
+                  This student requested profile review on {new Date(meta.review_requested_at!).toLocaleDateString()}.
+                  Approve to make their profile visible to providers.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 sm:shrink-0">
+              <button
+                onClick={() => setShowRejectModal(true)}
+                disabled={rejecting}
+                className="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
+              >
+                Reject
+              </button>
+              <button
+                onClick={handleApprove}
+                disabled={approving}
+                className="px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
+              >
+                {approving ? "Approving..." : "Approve"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Rejection History */}
+      {wasRejected && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div>
+              <p className="text-sm font-medium text-red-800">
+                Previously rejected on {new Date(meta.rejected_at!).toLocaleDateString()}
+                {meta.rejected_by && <span className="font-normal text-red-600"> by {meta.rejected_by}</span>}
+              </p>
+              {meta.rejection_reason && (
+                <p className="text-sm text-red-700 mt-1">Reason: {meta.rejection_reason}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Approval Status */}
+      {isApproved && (
+        <div className="mb-6 rounded-xl border border-green-200 bg-green-50 p-4">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <p className="text-sm font-medium text-green-800">
+                Profile approved
+                {meta.approved_at && <span className="font-normal text-green-600"> on {new Date(meta.approved_at).toLocaleDateString()}</span>}
+                {meta.approved_by && <span className="font-normal text-green-600"> by {meta.approved_by}</span>}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="space-y-6">
         {/* Identity */}
@@ -516,6 +649,49 @@ export default function AdminStudentDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Reject Modal */}
+      {showRejectModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Reject Profile Review</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              This will clear their review request. The student can make improvements and request review again.
+            </p>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Reason (optional)
+              </label>
+              <textarea
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                placeholder="e.g., Missing certifications, incomplete availability..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+                rows={3}
+              />
+            </div>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowRejectModal(false);
+                  setRejectReason("");
+                }}
+                disabled={rejecting}
+                className="px-4 py-2 text-gray-700 text-sm font-medium hover:text-gray-900 transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleReject}
+                disabled={rejecting}
+                className="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 disabled:opacity-50 transition-colors"
+              >
+                {rejecting ? "Rejecting..." : "Reject"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

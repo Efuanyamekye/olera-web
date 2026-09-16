@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { StudentMetadata } from "@/lib/types";
 
-type FilterTab = "all" | "active" | "paused" | "notLive" | "complete" | "incomplete" | "nonEdu";
+type FilterTab = "all" | "active" | "paused" | "notLive" | "pendingReview" | "complete" | "incomplete" | "nonEdu";
 
 interface StudentRow {
   id: string;
@@ -23,6 +23,7 @@ interface StudentRow {
   source: string;
   is_active: boolean;
   application_completed: boolean;
+  review_requested_at: string | null;
   created_at: string;
   profile_completeness: number;
   university: string | null;
@@ -33,6 +34,7 @@ interface TabCounts {
   active: number;
   paused: number;
   notLive: number;
+  pendingReview: number;
   complete: number;
   incomplete: number;
   thisWeek: number;
@@ -101,6 +103,7 @@ export default function AdminStudentsPage() {
       if (filter === "active") params.set("active_only", "true");
       if (filter === "paused") params.set("paused_only", "true");
       if (filter === "notLive") params.set("not_live_only", "true");
+      if (filter === "pendingReview") params.set("pending_review_only", "true");
       if (filter === "complete") params.set("complete_only", "true");
       if (filter === "incomplete") params.set("incomplete_only", "true");
 
@@ -134,6 +137,7 @@ export default function AdminStudentsPage() {
           active: statsData.active ?? 0,
           paused: statsData.paused ?? 0,
           notLive: statsData.notLive ?? 0,
+          pendingReview: statsData.pendingReview ?? 0,
           complete: statsData.complete ?? 0,
           incomplete: statsData.incomplete ?? 0,
           thisWeek: statsData.thisWeek ?? 0,
@@ -193,11 +197,12 @@ export default function AdminStudentsPage() {
 
   const hasActiveFilters = filter !== "all";
 
-  const tabs: { label: string; value: FilterTab; count: number | null; separated?: boolean }[] = [
+  const tabs: { label: string; value: FilterTab; count: number | null; separated?: boolean; highlight?: boolean }[] = [
     { label: "All", value: "all", count: tabCounts?.total ?? null },
     { label: "Active", value: "active", count: tabCounts?.active ?? null },
     { label: "Paused", value: "paused", count: tabCounts?.paused ?? null },
     { label: "Not Live", value: "notLive", count: tabCounts?.notLive ?? null },
+    { label: "Pending Review", value: "pendingReview", count: tabCounts?.pendingReview ?? null, highlight: true },
     { label: "Complete", value: "complete", count: tabCounts?.complete ?? null },
     { label: "Incomplete", value: "incomplete", count: tabCounts?.incomplete ?? null },
     { label: "Non-.edu", value: "nonEdu", count: tabCounts?.nonEdu ?? null, separated: true },
@@ -267,10 +272,14 @@ export default function AdminStudentsPage() {
                   filter === tab.value
                     ? tab.separated
                       ? "bg-amber-600 text-white"
-                      : "bg-primary-600 text-white"
+                      : tab.highlight
+                        ? "bg-orange-600 text-white"
+                        : "bg-primary-600 text-white"
                     : tab.separated
                       ? "bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200"
-                      : "bg-gray-100 text-gray-600 hover:bg-gray-200",
+                      : tab.highlight
+                        ? "bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200",
                 ].join(" ")}
               >
                 {tab.label}
@@ -281,7 +290,9 @@ export default function AdminStudentsPage() {
                       ? "bg-white/20 text-white"
                       : tab.separated
                         ? "bg-amber-100 text-amber-600"
-                        : "bg-gray-200 text-gray-500",
+                        : tab.highlight
+                          ? "bg-orange-100 text-orange-600"
+                          : "bg-gray-200 text-gray-500",
                   ].join(" ")}>
                     {tab.count}
                   </span>
@@ -379,6 +390,11 @@ export default function AdminStudentsPage() {
                     ) : student.application_completed ? (
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
                         Paused
+                      </span>
+                    ) : student.review_requested_at ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                        Pending
                       </span>
                     ) : (
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">

@@ -1046,6 +1046,40 @@ export function slackMedJobsApplication(opts: {
   };
 }
 
+export function slackMedJobsReviewRequest(opts: {
+  studentName: string;
+  studentId: string;
+  university: string;
+  location: string;
+}): { text: string; blocks: SlackBlock[] } {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
+  const adminUrl = `${siteUrl}/admin/caregivers/${opts.studentId}`;
+  return {
+    text: `MedJobs Review Request: ${opts.studentName} (${opts.university})`,
+    blocks: [
+      {
+        type: "header",
+        text: { type: "plain_text", text: "🔔 Profile Review Requested", emoji: true },
+      },
+      {
+        type: "section",
+        fields: [
+          { type: "mrkdwn", text: `*Student:*\n${opts.studentName}` },
+          { type: "mrkdwn", text: `*University:*\n${opts.university}` },
+          { type: "mrkdwn", text: `*Location:*\n${opts.location}` },
+        ],
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `<${adminUrl}|View in Admin Panel →>`,
+        },
+      },
+    ],
+  };
+}
+
 export function slackProviderAction(opts: {
   providerName: string;
   action: "approved" | "rejected";
