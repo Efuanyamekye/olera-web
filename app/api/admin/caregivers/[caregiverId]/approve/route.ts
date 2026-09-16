@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient, logAuditAction } from "@/lib/admin";
+import { sendEmail } from "@/lib/email";
+import { medjobsProfileApprovedEmail } from "@/lib/email-templates";
 import type { StudentMetadata } from "@/lib/types";
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
 
 /**
  * POST /api/admin/caregivers/[caregiverId]/approve
@@ -26,7 +30,7 @@ export async function POST(
     // Fetch student profile
     const { data: student, error: fetchError } = await db
       .from("business_profiles")
-      .select("id, display_name, email, metadata")
+      .select("id, slug, display_name, email, metadata")
       .eq("id", studentId)
       .eq("type", "student")
       .single();
@@ -74,6 +78,29 @@ export async function POST(
       targetId: studentId,
       details: { studentName: student.display_name, studentEmail: student.email },
     });
+
+    // Send approval email to student
+    if (student.email) {
+      try {
+        const profileUrl = `${BASE_URL}/medjobs/candidates/${student.slug}`;
+        const portalUrl = `${BASE_URL}/portal/medjobs`;
+        await sendEmail({
+          to: student.email,
+          subject: "Your MedJobs profile is live!",
+          html: medjobsProfileApprovedEmail({
+            studentName: student.display_name || "there",
+            profileUrl,
+            portalUrl,
+          }),
+          emailType: "medjobs_profile_approved",
+          recipientType: "student",
+          recipientProfileId: studentId,
+        });
+      } catch (emailErr) {
+        // Non-blocking - log but don't fail the approval
+        console.error("[admin/caregivers/approve] email error:", emailErr);
+      }
+    }
 
     return NextResponse.json({
       ok: true,

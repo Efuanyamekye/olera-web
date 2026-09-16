@@ -4435,6 +4435,98 @@ export function interviewCancelledEmail(opts: {
   `, `Your interview with ${opts.otherName} has been cancelled`);
 }
 
+// ── MedJobs Student Profile Review Emails ──────────────────────────────────
+
+/** Email sent to student when their profile is approved */
+export function medjobsProfileApprovedEmail(opts: {
+  studentName: string;
+  profileUrl: string;
+  portalUrl: string;
+}): string {
+  const safeName = escapeHtml(opts.studentName);
+
+  return layout(`
+    <div style="text-align:center;margin:0 0 24px;">
+      <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,${BRAND_COLOR},#14b8a6);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:28px;">&#10003;</span>
+      </div>
+    </div>
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;text-align:center;">Your profile is live!</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;text-align:center;">
+      Congratulations, ${safeName}! Your MedJobs profile has been approved and is now visible to healthcare providers.
+    </p>
+    <div style="background:#f0fdfa;border:1px solid #99f6e4;border-radius:12px;padding:20px;margin:0 0 24px;">
+      <p style="font-size:14px;font-weight:600;color:#0d9488;margin:0 0 8px;">What happens next?</p>
+      <ul style="font-size:14px;color:#374151;margin:0;padding:0 0 0 20px;line-height:1.6;">
+        <li>Providers in your area can now discover your profile</li>
+        <li>You may receive interview requests from interested providers</li>
+        <li>Keep your availability up to date to get the best matches</li>
+      </ul>
+    </div>
+    <div style="text-align:center;margin:0 0 24px;">${button("View Your Profile", opts.profileUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;text-align:center;">
+      You can manage your profile visibility anytime from your <a href="${opts.portalUrl}" style="color:${BRAND_COLOR};text-decoration:underline;">portal</a>.
+    </p>
+  `, `Your MedJobs profile is now live`);
+}
+
+/** Email sent to student when their profile review is rejected */
+export function medjobsProfileRejectedEmail(opts: {
+  studentName: string;
+  reason?: string;
+  portalUrl: string;
+}): string {
+  const safeName = escapeHtml(opts.studentName);
+  const safeReason = opts.reason ? escapeHtml(opts.reason) : null;
+
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Profile review update</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Hi ${safeName}, we've reviewed your MedJobs profile and it needs a few updates before we can make it live.
+    </p>
+    ${safeReason ? `
+    <div style="background:#fef3c7;border:1px solid #fcd34d;border-radius:12px;padding:20px;margin:0 0 24px;">
+      <p style="font-size:14px;font-weight:600;color:#92400e;margin:0 0 8px;">Feedback from our team:</p>
+      <p style="font-size:14px;color:#78350f;margin:0;line-height:1.5;">${safeReason}</p>
+    </div>
+    ` : ""}
+    <p style="font-size:14px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Don't worry — this is common! Make the suggested improvements and request another review when you're ready. We're here to help you succeed.
+    </p>
+    <div style="text-align:center;margin:0 0 24px;">${button("Update Your Profile", opts.portalUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;text-align:center;">
+      Questions? <a href="${BASE_URL}/contact" style="color:#9ca3af;text-decoration:underline;">Contact us</a>
+    </p>
+  `, `Your MedJobs profile needs some updates`);
+}
+
+/** Email to nudge student to request review when profile is 100% complete */
+export function medjobsReviewNudgeEmail(opts: {
+  studentName: string;
+  portalUrl: string;
+}): string {
+  const safeName = escapeHtml(opts.studentName);
+
+  return layout(`
+    <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Your profile is ready to go live!</h1>
+    <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;">
+      Great work, ${safeName}! You've completed your MedJobs profile. There's just one more step: request a review so providers can start discovering you.
+    </p>
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:12px;padding:20px;margin:0 0 24px;">
+      <p style="font-size:14px;font-weight:600;color:#0369a1;margin:0 0 8px;">What happens when you request a review?</p>
+      <ul style="font-size:14px;color:#374151;margin:0;padding:0 0 0 20px;line-height:1.6;">
+        <li>Our team reviews your profile for quality</li>
+        <li>Once approved, you'll be visible to healthcare providers</li>
+        <li>You can start receiving interview requests</li>
+      </ul>
+    </div>
+    <div style="text-align:center;margin:0 0 24px;">${button("Request Review", opts.portalUrl)}</div>
+    <p style="font-size:13px;color:#9ca3af;margin:0;line-height:1.5;text-align:center;">
+      The review process typically takes 1-2 business days.
+    </p>
+  `, `Your MedJobs profile is 100% complete - request a review to go live`);
+}
+
 /** Email to provider when they request to claim an existing listing */
 export function claimVerificationEmail(opts: {
   providerName: string;

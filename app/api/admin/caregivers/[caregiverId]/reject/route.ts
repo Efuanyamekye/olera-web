@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient, logAuditAction } from "@/lib/admin";
+import { sendEmail } from "@/lib/email";
+import { medjobsProfileRejectedEmail } from "@/lib/email-templates";
 import type { StudentMetadata } from "@/lib/types";
+
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
 
 /**
  * POST /api/admin/caregivers/[caregiverId]/reject
@@ -86,6 +90,28 @@ export async function POST(
         reason,
       },
     });
+
+    // Send rejection email to student
+    if (student.email) {
+      try {
+        const portalUrl = `${BASE_URL}/portal/medjobs`;
+        await sendEmail({
+          to: student.email,
+          subject: "Your MedJobs profile needs some updates",
+          html: medjobsProfileRejectedEmail({
+            studentName: student.display_name || "there",
+            reason,
+            portalUrl,
+          }),
+          emailType: "medjobs_profile_rejected",
+          recipientType: "student",
+          recipientProfileId: studentId,
+        });
+      } catch (emailErr) {
+        // Non-blocking - log but don't fail the rejection
+        console.error("[admin/caregivers/reject] email error:", emailErr);
+      }
+    }
 
     return NextResponse.json({
       ok: true,

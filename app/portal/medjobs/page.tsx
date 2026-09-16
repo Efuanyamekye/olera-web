@@ -1311,9 +1311,40 @@ function StudentPortalContent({
   // Find the first incomplete verification item to auto-open
   const nextVerification = verificationItems.find((v) => !v.done);
 
+  // Show banner when profile is 100% complete but hasn't requested review yet
+  const showReviewBanner = completenessPercent === 100 && !isPendingReview && !hasCompletedApplication;
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-vanilla-50 via-white to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Review Request Banner — shown when profile is 100% complete */}
+        {showReviewBanner && (
+          <div className="mb-6 bg-gradient-to-r from-primary-600 to-primary-700 rounded-2xl p-4 sm:p-6 shadow-lg shadow-primary-500/20">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex items-start sm:items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-semibold text-white">Your profile is ready!</h3>
+                  <p className="text-sm text-primary-100 mt-0.5">
+                    Request a review to go live and start getting matched with providers.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowGoLiveReview(true)}
+                className="w-full sm:w-auto px-6 py-2.5 bg-white text-primary-700 font-semibold text-sm rounded-xl hover:bg-primary-50 transition-colors shadow-sm"
+              >
+                Request Review
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* ── Grid: Main + Sidebar ── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
