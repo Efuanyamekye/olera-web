@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import type { StudentMetadata } from "@/lib/types";
 
-type FilterTab = "all" | "active" | "paused" | "notLive" | "pendingReview" | "complete" | "incomplete" | "nonEdu";
+type FilterTab = "all" | "pendingReview" | "complete" | "incomplete" | "nonEdu";
 
 interface StudentRow {
   id: string;
@@ -100,9 +100,6 @@ export default function AdminStudentsPage() {
       params.set("page", String(page));
       params.set("per_page", String(PAGE_SIZE));
       if (debouncedSearch) params.set("search", debouncedSearch);
-      if (filter === "active") params.set("active_only", "true");
-      if (filter === "paused") params.set("paused_only", "true");
-      if (filter === "notLive") params.set("not_live_only", "true");
       if (filter === "pendingReview") params.set("pending_review_only", "true");
       if (filter === "complete") params.set("complete_only", "true");
       if (filter === "incomplete") params.set("incomplete_only", "true");
@@ -199,9 +196,6 @@ export default function AdminStudentsPage() {
 
   const tabs: { label: string; value: FilterTab; count: number | null; separated?: boolean; highlight?: boolean }[] = [
     { label: "All", value: "all", count: tabCounts?.total ?? null },
-    { label: "Active", value: "active", count: tabCounts?.active ?? null },
-    { label: "Paused", value: "paused", count: tabCounts?.paused ?? null },
-    { label: "Not Live", value: "notLive", count: tabCounts?.notLive ?? null },
     { label: "Pending Review", value: "pendingReview", count: tabCounts?.pendingReview ?? null, highlight: true },
     { label: "Complete", value: "complete", count: tabCounts?.complete ?? null },
     { label: "Incomplete", value: "incomplete", count: tabCounts?.incomplete ?? null },
@@ -234,7 +228,7 @@ export default function AdminStudentsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-5 gap-4 mb-6">
+      <div className="grid grid-cols-6 gap-4 mb-6">
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <p className="text-sm text-gray-500">Total Students</p>
           <p className="text-2xl font-bold text-gray-900">{tabCounts ? tabCounts.students : "—"}</p>
@@ -250,6 +244,10 @@ export default function AdminStudentsPage() {
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <p className="text-sm text-gray-500">Not Live</p>
           <p className="text-2xl font-bold text-gray-400">{tabCounts ? tabCounts.notLive : "—"}</p>
+        </div>
+        <div className={`bg-white rounded-xl border p-4 ${tabCounts && tabCounts.pendingReview > 0 ? "border-orange-200 bg-orange-50" : "border-gray-200"}`}>
+          <p className="text-sm text-gray-500">Pending Review</p>
+          <p className={`text-2xl font-bold ${tabCounts && tabCounts.pendingReview > 0 ? "text-orange-600" : "text-gray-400"}`}>{tabCounts ? tabCounts.pendingReview : "—"}</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
           <p className="text-sm text-gray-500">New This Week</p>
