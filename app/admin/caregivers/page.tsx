@@ -75,6 +75,11 @@ export default function AdminStudentsPage() {
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
+  // For approve/reject actions
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [showRejectModal, setShowRejectModal] = useState<StudentRow | null>(null);
+  const [rejectReason, setRejectReason] = useState("");
+
   function showToast(message: string, type: "success" | "error" = "success") {
     clearTimeout(toastRef.current);
     setToast({ message, type });
@@ -187,19 +192,60 @@ export default function AdminStudentsPage() {
     }
   }
 
-  function clearFilters() {
-    setFilter("all");
-    router.replace("/admin/caregivers");
+  async function handleApprove(student: StudentRow) {
+    if (!confirm(`Approve "${student.display_name}"? Their profile will become visible to providers.`)) return;
+    setActionLoading(student.id);
+    try {
+      const res = await fetch(`/api/admin/caregivers/${student.id}/approve`, { method: "POST" });
+      if (res.ok) {
+        showToast(`Approved ${student.display_name}`);
+        // Remove from list since they're no longer pending
+        setStudents((prev) => prev.filter((s) => s.id !== student.id));
+        setTotal((prev) => prev - 1);
+        fetchTabCounts();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showToast(data.error || "Failed to approve", "error");
+      }
+    } catch {
+      showToast("Network error", "error");
+    } finally {
+      setActionLoading(null);
+    }
   }
 
-  const hasActiveFilters = filter !== "all";
+  async function handleReject(student: StudentRow, reason: string) {
+    setActionLoading(student.id);
+    try {
+      const res = await fetch(`/api/admin/caregivers/${student.id}/reject`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: reason || undefined }),
+      });
+      if (res.ok) {
+        showToast(`Rejected ${student.display_name}`);
+        setStudents((prev) => prev.filter((s) => s.id !== student.id));
+        setTotal((prev) => prev - 1);
+        fetchTabCounts();
+        setShowRejectModal(null);
+        setRejectReason("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        showToast(data.error || "Failed to reject", "error");
+      }
+    } catch {
+      showToast("Network error", "error");
+    } finally {
+      setActionLoading(null);
+    }
+  }
 
-  const tabs: { label: string; value: FilterTab; count: number | null; separated?: boolean; highlight?: boolean }[] = [
+  const tabs: { label: string; value: FilterTab; count: number | null }[] = [
     { label: "All", value: "all", count: tabCounts?.total ?? null },
-    { label: "Pending Review", value: "pendingReview", count: tabCounts?.pendingReview ?? null, highlight: true },
+    { label: "Pending Review", value: "pendingReview", count: tabCounts?.pendingReview ?? null },
     { label: "Complete", value: "complete", count: tabCounts?.complete ?? null },
     { label: "Incomplete", value: "incomplete", count: tabCounts?.incomplete ?? null },
-    { label: "Non-.edu", value: "nonEdu", count: tabCounts?.nonEdu ?? null, separated: true },
+    { label: "Non-.edu", value: "nonEdu", count: tabCounts?.nonEdu ?? null },
   ];
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
@@ -216,98 +262,33 @@ export default function AdminStudentsPage() {
       )}
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Students</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            {filter === "nonEdu"
-              ? "Students who signed up with non-.edu emails"
-              : "Verified MedJobs student applicants (.edu emails)"}
-          </p>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-6 gap-4 mb-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">Total Students</p>
-          <p className="text-2xl font-bold text-gray-900">{tabCounts ? tabCounts.students : "—"}</p>
-        </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">Active</p>
-          <p className="text-2xl font-bold text-primary-600">{tabCounts ? tabCounts.active : "—"}</p>
-        </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">Paused</p>
-          <p className="text-2xl font-bold text-amber-600">{tabCounts ? tabCounts.paused : "—"}</p>
-        </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">Not Live</p>
-          <p className="text-2xl font-bold text-gray-400">{tabCounts ? tabCounts.notLive : "—"}</p>
-        </div>
-        <div className={`bg-white rounded-xl border p-4 ${tabCounts && tabCounts.pendingReview > 0 ? "border-orange-200 bg-orange-50" : "border-gray-200"}`}>
-          <p className="text-sm text-gray-500">Pending Review</p>
-          <p className={`text-2xl font-bold ${tabCounts && tabCounts.pendingReview > 0 ? "text-orange-600" : "text-gray-400"}`}>{tabCounts ? tabCounts.pendingReview : "—"}</p>
-        </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-sm text-gray-500">New This Week</p>
-          <p className="text-2xl font-bold text-emerald-600">{tabCounts ? tabCounts.thisWeek : "—"}</p>
-        </div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Students</h1>
+        <p className="text-sm text-gray-500 mt-1">
+          {filter === "nonEdu"
+            ? "Students who signed up with non-.edu emails"
+            : "Verified MedJobs student applicants (.edu emails)"}
+        </p>
       </div>
 
       {/* Filter tabs */}
-      <div className="flex flex-wrap items-center gap-3 mb-4">
-        <div className="flex gap-2 items-center">
-          {tabs.map((tab) => (
-            <div key={tab.value} className="flex items-center gap-2">
-              {tab.separated && (
-                <div className="w-px h-6 bg-gray-300 mx-1" />
-              )}
-              <button
-                onClick={() => setFilter(tab.value)}
-                className={[
-                  "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-                  filter === tab.value
-                    ? tab.separated
-                      ? "bg-amber-600 text-white"
-                      : tab.highlight
-                        ? "bg-orange-600 text-white"
-                        : "bg-primary-600 text-white"
-                    : tab.separated
-                      ? "bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200"
-                      : tab.highlight
-                        ? "bg-orange-50 text-orange-700 hover:bg-orange-100 border border-orange-200"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200",
-                ].join(" ")}
-              >
-                {tab.label}
-                {tab.count !== null && (
-                  <span className={[
-                    "ml-1.5 px-1.5 py-0.5 rounded text-xs",
-                    filter === tab.value
-                      ? "bg-white/20 text-white"
-                      : tab.separated
-                        ? "bg-amber-100 text-amber-600"
-                        : tab.highlight
-                          ? "bg-orange-100 text-orange-600"
-                          : "bg-gray-200 text-gray-500",
-                  ].join(" ")}>
-                    {tab.count}
-                  </span>
-                )}
-              </button>
-            </div>
-          ))}
-        </div>
-
-        {hasActiveFilters && (
+      <div className="flex gap-2 mb-4">
+        {tabs.map((tab) => (
           <button
-            onClick={clearFilters}
-            className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 underline"
+            key={tab.value}
+            onClick={() => setFilter(tab.value)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+              filter === tab.value
+                ? "bg-primary-600 text-white"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+            }`}
           >
-            Clear filters
+            {tab.label}
+            <span className={`text-xs ${filter === tab.value ? "text-white/70" : "text-gray-400"}`}>
+              ({tab.count ?? "—"})
+            </span>
           </button>
-        )}
+        ))}
       </div>
 
       {/* Search */}
@@ -324,12 +305,16 @@ export default function AdminStudentsPage() {
       {/* List */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         {/* Header */}
-        <div className="grid grid-cols-[2fr_1.5fr_100px_120px_32px] gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide">
+        <div className={`grid gap-4 px-5 py-3 border-b border-gray-200 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wide ${
+          filter === "pendingReview"
+            ? "grid-cols-[2fr_1.5fr_100px_120px_140px]"
+            : "grid-cols-[2fr_1.5fr_100px_120px_32px]"
+        }`}>
           <div>Student</div>
           <div>School & Location</div>
           <div className="text-center">Status</div>
-          <div className="text-right">Joined</div>
-          <div></div>
+          <div className="text-right">{filter === "pendingReview" ? "Requested" : "Joined"}</div>
+          <div className={filter === "pendingReview" ? "text-right" : ""}>{filter === "pendingReview" ? "Actions" : ""}</div>
         </div>
 
         {loading ? (
@@ -341,11 +326,16 @@ export default function AdminStudentsPage() {
             {students.map((student) => {
               const location = [student.city, student.state].filter(Boolean).join(", ");
               const completeness = student.profile_completeness;
+              const isPendingMode = filter === "pendingReview";
 
               return (
                 <div
                   key={student.id}
-                  className="group grid grid-cols-[2fr_1.5fr_100px_120px_32px] gap-4 px-5 py-4 hover:bg-gray-50 cursor-pointer items-start"
+                  className={`group grid gap-4 px-5 py-4 hover:bg-gray-50 cursor-pointer items-center ${
+                    isPendingMode
+                      ? "grid-cols-[2fr_1.5fr_100px_120px_140px]"
+                      : "grid-cols-[2fr_1.5fr_100px_120px_32px]"
+                  }`}
                   onClick={() => router.push(`/admin/caregivers/${student.id}`)}
                 >
                   {/* Student Info */}
@@ -380,7 +370,7 @@ export default function AdminStudentsPage() {
                   </div>
 
                   {/* Status */}
-                  <div className="text-center pt-0.5">
+                  <div className="text-center">
                     {student.is_active ? (
                       <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
                         Active
@@ -401,31 +391,60 @@ export default function AdminStudentsPage() {
                     )}
                   </div>
 
-                  {/* Joined */}
-                  <div className="text-right pt-0.5">
+                  {/* Date - shows review_requested_at for pending, created_at otherwise */}
+                  <div className="text-right">
                     <p className="text-sm text-gray-400">
-                      {formatJoinedDate(student.created_at)}
+                      {isPendingMode && student.review_requested_at
+                        ? formatJoinedDate(student.review_requested_at)
+                        : formatJoinedDate(student.created_at)}
                     </p>
                   </div>
 
-                  {/* Delete */}
-                  <div className="pt-0.5">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setDeleteError(null);
-                        setPendingDelete(student);
-                      }}
-                      className="opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity text-gray-300 hover:text-red-500 p-1"
-                      aria-label="Delete this student"
-                      title="Delete"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
+                  {/* Actions or Delete */}
+                  {isPendingMode ? (
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleApprove(student);
+                        }}
+                        disabled={actionLoading === student.id}
+                        className="px-3 py-1.5 bg-primary-600 text-white text-xs font-medium rounded-lg hover:bg-primary-700 disabled:opacity-50 transition-colors"
+                      >
+                        {actionLoading === student.id ? "..." : "Approve"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowRejectModal(student);
+                        }}
+                        disabled={actionLoading === student.id}
+                        className="px-3 py-1.5 bg-gray-100 text-gray-700 text-xs font-medium rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setDeleteError(null);
+                          setPendingDelete(student);
+                        }}
+                        className="opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity text-gray-300 hover:text-red-500 p-1"
+                        aria-label="Delete this student"
+                        title="Delete"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -518,6 +537,59 @@ export default function AdminStudentsPage() {
                 className="text-xs font-medium text-white bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded-md disabled:opacity-50"
               >
                 {deleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject confirmation modal */}
+      {showRejectModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="reject-student-title"
+        >
+          <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full">
+            <h3 id="reject-student-title" className="text-base font-semibold text-gray-900 mb-1">
+              Reject this profile?
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              {showRejectModal.display_name} will be notified and can make improvements to request review again.
+            </p>
+            <div className="mb-4">
+              <label htmlFor="reject-reason" className="block text-sm font-medium text-gray-700 mb-1">
+                Reason (optional)
+              </label>
+              <textarea
+                id="reject-reason"
+                rows={3}
+                value={rejectReason}
+                onChange={(e) => setRejectReason(e.target.value)}
+                placeholder="e.g., Please add a profile photo and complete your availability section."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none resize-none"
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowRejectModal(null);
+                  setRejectReason("");
+                }}
+                disabled={actionLoading === showRejectModal.id}
+                className="text-sm font-medium text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-md disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleReject(showRejectModal, rejectReason)}
+                disabled={actionLoading === showRejectModal.id}
+                className="text-sm font-medium text-white bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded-lg disabled:opacity-50"
+              >
+                {actionLoading === showRejectModal.id ? "Rejecting..." : "Reject"}
               </button>
             </div>
           </div>
