@@ -4446,11 +4446,13 @@ export function medjobsProfileApprovedEmail(opts: {
   const safeName = escapeHtml(opts.studentName);
 
   return layout(`
-    <div style="text-align:center;margin:0 0 24px;">
-      <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,${BRAND_COLOR},#14b8a6);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;">
-        <span style="font-size:28px;">&#10003;</span>
-      </div>
-    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+      <tr><td align="center">
+        <div style="width:64px;height:64px;border-radius:50%;background:${BRAND_COLOR};margin:0 auto 16px;text-align:center;line-height:64px;">
+          <span style="font-size:28px;color:#ffffff;">&#10003;</span>
+        </div>
+      </td></tr>
+    </table>
     <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;text-align:center;">Your profile is live!</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 24px;line-height:1.5;text-align:center;">
       Congratulations, ${safeName}! Your MedJobs profile has been approved and is now visible to healthcare providers.
