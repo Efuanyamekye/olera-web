@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser, getServiceClient, logAuditAction } from "@/lib/admin";
 import { sendEmail } from "@/lib/email";
 import { medjobsProfileApprovedEmail } from "@/lib/email-templates";
+import { generateStudentPortalUrl } from "@/lib/claim-tokens";
 import type { StudentMetadata } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://olera.care";
@@ -79,11 +80,12 @@ export async function POST(
       details: { studentName: student.display_name, studentEmail: student.email },
     });
 
-    // Send approval email to student
+    // Send approval email to student with one-click magic link (15-day expiry)
     if (student.email) {
       try {
         const profileUrl = `${BASE_URL}/medjobs/candidates/${student.slug}`;
-        const portalUrl = `${BASE_URL}/portal/medjobs`;
+        // Magic link auto-authenticates student and redirects to their portal
+        const portalUrl = generateStudentPortalUrl(student.email, "/portal/medjobs");
         await sendEmail({
           to: student.email,
           subject: "Your MedJobs profile is live!",
