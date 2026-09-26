@@ -32,6 +32,10 @@ export type MoveCandidate = {
   written?: string | null;
   /** For a provider moment: the founder's latest reply, read at brief time and not stored. */
   founderReply?: { at: string; text: string } | null;
+  /** For a provider moment: what they wrote that nobody has answered, newest first. */
+  unansweredFromThem?: Array<{ at: string; text: string }>;
+  /** For a provider moment: the founder's reply before those, already sent. */
+  founderEarlierReply?: { at: string; text: string } | null;
 };
 
 export type BriefMove = {
@@ -85,7 +89,7 @@ export function fallbackMove(move: MoveCandidate): BriefMove {
   // "?." reads as a typo in the one line he is meant to act on.
   const title = /[.!?]$/.test(move.title.trim()) ? move.title.trim() : `${move.title.trim()}.`;
   const owner = move.kind === "approved_not_done" && move.assigned_owner ? ` Owner: ${move.assigned_owner}.` : "";
-  return { line: cleanText(`${verb}: ${title}${owner} ${reason}`.trim()), draft: null };
+  return { line: toFounder(cleanText(`${verb}: ${title}${owner} ${reason}`.trim())), draft: null };
 }
 
 /**
@@ -96,7 +100,16 @@ export function cleanText(text: string) {
   return text.replace(/\s*[—–]\s*/g, ", ").replace(/\*/g, "");
 }
 
-const MOVE_MODEL = process.env.WAR_ROOM_BRIEF_MODEL || "claude-sonnet-5";
+/**
+ * The line is read by the founder, so it says "you", never "TJ". The prompt
+ * says so, and 1 of 2 live renders on 2026-09-27 still wrote "TJ offered
+ * Robbie ...". Only the line: the draft is his own message and may sign off.
+ */
+export function toFounder(line: string) {
+  return line.replace(/^TJ's\b/, "Your").replace(/^TJ\b/, "You").replace(/\bTJ's\b/g, "your").replace(/\bTJ\b/g, "you");
+}
+
+const MOVE_MODEL =process.env.WAR_ROOM_BRIEF_MODEL || "claude-sonnet-5";
 
 const SYSTEM = `You write the first line of a founder's daily brief. The line is one move: an action, the named person or account involved, and why it has to happen now. The move has already been chosen; you only word it. Do not change what it is.
 
@@ -104,7 +117,7 @@ Rules:
 - "line" is one sentence, under 200 characters. Name the real person or business: if the evidence names them (for example "Call Liz Hoop"), use that name, never a description like "the paying provider".
 - If the status says approved, it is already approved. The action is getting it done: who does what, by when. Never write "approve" for it.
 - If the status says waiting on the founder's decision, the action is his decision; say in plain words what he would be approving.
-- If a provider emailed: this is the one move; leave out anything else the summary mentions. Talk to the founder as "you", never by name. Name the person and business and say what they want. If the founder already replied (founder_reply), say what he offered and what happens next, quoting his times and dates exactly as he wrote them, and set draft to null. If he has not replied, the draft is his reply to them.
+- If a provider emailed: this is the one move; leave out anything else the summary mentions. Talk to the founder as "you", never by name. Name the person and business and say what they want. If the founder already replied (founder_reply), say what he offered and what happens next, quoting his times and dates exactly as he wrote them, and set draft to null. If they wrote since (their_unanswered_messages), the draft answers what they actually said, naming their specifics, and does not re-offer anything in founder_earlier_reply (if he already proposed times, confirm or chase those instead of proposing a new call).
 - "draft" is only for a move that means contacting someone. Write the message the named teammate or the founder would send, two or three short sentences, ready to paste. If nobody is being contacted, draft is null.
 - The whole record is record_days_old days old. Every "N days" in it (why_now, finding, evidence) was counted then. Subtract record_days_old from any count you repeat; "30 days" in a 5-day-old record is 25 days now.
 - company_rules include the founder's own corrections ("Founder correction, ..."). If the move is something a correction rules out, still word it but say plainly in the line that it conflicts with his correction.
@@ -133,6 +146,8 @@ function recordFor(move: MoveCandidate, rules: string[]) {
     action_kind: move.action_kind,
     finding: move.finding,
     founder_reply: move.founderReply ?? null,
+    their_unanswered_messages: move.unansweredFromThem ?? [],
+    founder_earlier_reply: move.founderEarlierReply ?? null,
     proposed_solution: move.proposed_solution,
     execution_plan: move.execution_plan,
     evidence: (move.evidence ?? []).slice(0, 12).map((item) => item.detail.slice(0, 600)),
@@ -146,7 +161,7 @@ export function parseMoveReply(raw: string): BriefMove | null {
   try {
     const parsed = JSON.parse(json) as { line?: unknown; draft?: unknown };
     // The voice rule bans em dashes and the model slips anyway, so enforce it here.
-    const line = typeof parsed.line === "string" ? cleanText(parsed.line.replace(/\s+/g, " ").trim()) : "";
+    const line = typeof parsed.line === "string" ? toFounder(cleanText(parsed.line.replace(/\s+/g, " ").trim())) : "";
     if (line.length < 12 || line.length > 260) return null;
     const draft = typeof parsed.draft === "string" && parsed.draft.trim().length > 8
       ? cleanText(parsed.draft.trim()).slice(0, 600)

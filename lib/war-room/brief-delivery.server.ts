@@ -110,6 +110,8 @@ export function momentCandidate(moment: ProviderMoment): MoveCandidate {
     since: moment.lastInboundAt,
     written: moment.lastInboundAt,
     founderReply: moment.reply,
+    unansweredFromThem: moment.unanswered,
+    founderEarlierReply: moment.earlierReply,
   };
 }
 

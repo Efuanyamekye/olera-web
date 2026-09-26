@@ -3,6 +3,7 @@ import { BANGKOK, inEastern, loadBlindSpots, LOOKUP_TOOLS, runLookup, searchStor
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { loadPaidRenewal } from "@/lib/war-room/renewals.server";
 import { correctionLines, extractCorrection, loadCorrections, saveCorrection } from "@/lib/war-room/corrections.server";
+import { loadProviderMoments } from "@/lib/war-room/provider-moments.server";
 import { scrubStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 
 /**
@@ -339,7 +340,7 @@ async function buildConversationContext(
   focusInvestigationId?: string | null,
   question?: string,
 ): Promise<string> {
-  const [investigations, proposals, model, matches, sources, refreshed, blindSpots, renewal, corrections] = await Promise.all([
+  const [investigations, proposals, model, matches, sources, refreshed, blindSpots, renewal, corrections, moments] = await Promise.all([
     db.from("war_room_investigations")
       .select("id, title, status, domain, impact, likely_cause, unknowns, occurrence_count")
       .in("status", ["investigating", "watchlist", "decision_ready"])
@@ -356,6 +357,7 @@ async function buildConversationContext(
     loadBlindSpots(db).catch(() => [] as string[]),
     loadPaidRenewal(db).catch(() => null),
     loadCorrections(db).catch(() => []),
+    loadProviderMoments(db).catch(() => []),
   ]);
 
   const rows = (investigations.data ?? []) as InvestigationRow[];
@@ -367,6 +369,16 @@ async function buildConversationContext(
   return JSON.stringify(inEastern({
     // Rules he has already given. Read before anything else in this record.
     "Your standing corrections (newest last)": correctionLines(corrections),
+    // Provider emails from the last two days. On 2026-09-26 a "what should we
+    // do" answer never mentioned Robbie at Assisting Hands (about 150 owners
+    // across 35 states, two emails unanswered): only the brief could see them.
+    "Provider emails waiting on you (support@, last 48 hours)": moments.map((moment) => ({
+      provider: moment.provider,
+      kind: moment.kind === "partnership" ? "partnership or expansion signal" : "waiting on a reply",
+      summary: moment.summary,
+      theirUnansweredMessages: moment.unanswered.map((message) => ({ at: message.at, text: message.text.slice(0, 600) })),
+      yourLastReply: moment.reply ?? moment.earlierReply,
+    })),
     "Current time": {
       eastern: new Date().toISOString(),
       founderLocalBangkok: BANGKOK.format(new Date()),
@@ -464,6 +476,8 @@ How to think, before anything about what to do:
 First decide what he is actually after. Start from the company's goals in the record (the north star and its targets) and his standing corrections, and name to yourself the outcome this question serves. Then look in the record and your lookups for the move that serves that outcome. The record tells you what is true; it does not tell you what matters.
 Then run the mid-curve test on your draft: would a sharp operator find this obvious or beside the point? Signs it is: asking a customer something whose answer is obvious (providers pay for leads), recommending discovery or more research when the next move is plain, or repeating what a stale proposal or team note says because it is in the record. If it fails, go one level deeper: the concrete thing to do this week that moves the goal.
 His standing corrections are rules. If your answer would contradict one, the answer is wrong.
+Before recommending any action, check it is not already done: archived leads are already out of the provider's queue, a campaign marked scheduled or live is already launching, shipped_work shows what was built this week, and his last reply shows what he already offered. Recommending something already handled is the other kind of mid-curve advice. If you cannot tell whether it is done, say what you checked.
+Provider emails waiting on him, above all partnership signals, come before anything else when he asks what to do.
 
 Questions about what is running for a provider (campaigns, channels, Meta or Google, flights, what leads came in and whether they qualified) are answered with the provider_campaigns lookup. It reads the campaign and lead tables live and outranks team notes and the written record, which go out of date.
 

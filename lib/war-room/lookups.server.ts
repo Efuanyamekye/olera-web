@@ -752,7 +752,7 @@ async function loadProviderCampaigns(db: SupabaseClient, name: string) {
   }
 
   return {
-    note: "Live campaign and lead tables. These outrank team notes, which go out of date. 'Site inquiries' are families contacting the provider on Olera; ad leads come from the campaigns below and are counted separately.",
+    note: "Live campaign and lead tables. These outrank team notes, which go out of date. 'Site inquiries' are families contacting the provider on Olera; ad leads come from the campaigns below and are counted separately. In each campaign's leads, 'archived' leads were already removed from the provider's queue by the team or the classifier: never recommend pulling them out again.",
     campaigns: rows.map((row) => ({
       ...row,
       linkedAdCampaigns: cityCampaigns
