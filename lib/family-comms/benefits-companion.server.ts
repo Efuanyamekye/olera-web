@@ -111,17 +111,22 @@ function usableHours(h: string | null): h is string {
 }
 
 /**
- * Which kind of urgent need a program is about. The opener's one question
- * only makes sense for some programs: "no heat or AC?" to a Medicare Savings
- * family is noise (TJ, 2026-09-27). Same keyword grouping the plan page uses
- * (components/benefits/BenefitsHome.tsx groupLabel).
+ * Which urgent need a program is closest to. It only sets the ORDER of the
+ * examples in the opener's question and whether the urgent reply carries the
+ * heat line. Every family is asked (TJ, 2026-09-27): emergencies don't stay
+ * inside the program page a family landed on (a Weatherization family wrote
+ * "My AC went out"), so a Medicare Savings family with a shutoff notice must
+ * be asked too. A program this misses only changes the word order.
+ * Grouping follows the plan page (components/benefits/BenefitsHome.tsx), plus
+ * the names that list missed across all 642 program records (fuel, CSFP,
+ * AESAP, Project Fresh).
  */
 export type NeedKind = "energy" | "food" | "general";
 
 export function needKindForProgram(name: string | null | undefined): NeedKind {
   const t = (name || "").toLowerCase();
-  if (/(snap|calfresh|food|meal|grocer|nutrition)/.test(t)) return "food";
-  if (/(liheap|ceap|energy|weatheriz|utility|heating|cooling)/.test(t)) return "energy";
+  if (/(snap|calfresh|food|meal|grocer|nutrition|csfp|commodity|senior box|project fresh|farmers|aesap)/.test(t)) return "food";
+  if (/(liheap|ceap|energy|weatheriz|utility|heating|cooling|fuel|propane)/.test(t)) return "energy";
   return "general";
 }
 
@@ -133,37 +138,30 @@ export function needKindForMessage(body: string, fallback: NeedKind): NeedKind {
   return fallback;
 }
 
-const OPENER_QUESTION: Record<NeedKind, string | null> = {
-  energy: "One question: is there a shutoff notice, or no heat or AC at home right now? Reply 1 for yes or 2 for no.",
-  food: "One question: are you out of food at home right now? Reply 1 for yes or 2 for no.",
-  general: null,
+const URGENT_EXAMPLES: Record<NeedKind, string> = {
+  energy: "like a shutoff notice, no heat or AC, no food, or losing your housing",
+  food: "like no food, a shutoff notice, or losing your housing",
+  general: "like a shutoff notice, no food, or losing your housing",
 };
 
 export function companionOpenerSms(p: { shortName: string; phone: string; hours: string | null; planUrl: string; kind: NeedKind }): string {
   const hours = usableHours(p.hours) ? ` (${p.hours})` : "";
-  const ask = OPENER_QUESTION[p.kind] ?? "If anything about the call is unclear, text us here.";
-  return `Olera: For ${p.shortName}, call ${p.phone}${hours}. Your plan: ${p.planUrl}\n${ask} Reply STOP to opt out.`;
-}
-
-/** Does this opener ask the 1 / 2 question? */
-export function openerAsksQuestion(kind: NeedKind): boolean {
-  return OPENER_QUESTION[kind] !== null;
+  return (
+    `Olera: For ${p.shortName}, call ${p.phone}${hours}. Your plan: ${p.planUrl}\n` +
+    `Also, is anything urgent at home right now, ${URGENT_EXAMPLES[p.kind]}? Reply 1 for yes or 2 for no. Reply STOP to opt out.`
+  );
 }
 
 export function companionUrgentReplySms(p: { shortName: string | null; phone: string | null; kind: NeedKind }): string {
-  const call =
-    p.phone && p.shortName
-      ? p.kind === "food"
-        ? `Call ${p.phone} for ${p.shortName} and tell them you have no food at home. `
-        : `Call ${p.phone} for ${p.shortName} and tell them it's urgent. `
-      : "";
-  const safety =
+  const call = p.phone && p.shortName ? `Call ${p.phone} for ${p.shortName} and tell them it's urgent. ` : "";
+  const danger =
     p.kind === "energy"
-      ? "If anyone feels dizzy, confused or very hot, call 911. For a cool or warm place to go today, call 2-1-1."
-      : p.kind === "food"
-        ? "For food today, call 2-1-1 and ask for the nearest food pantry."
-        : "If anyone is in danger, call 911.";
-  return `Thank you for telling us. ${call}A person on our team has been told and will text you. ${safety} Olera`;
+      ? "If anyone feels dizzy, confused or very hot, or is in danger, call 911."
+      : "If anyone is in danger, call 911.";
+  return (
+    `Thank you for telling us. ${call}A person on our team has been told and will text you. ` +
+    `For food, a cool or warm place, or shelter today, call 2-1-1. ${danger} Olera`
+  );
 }
 
 export function companionNotUrgentReplySms(p: { shortName: string | null; documents: string[] }): string {
@@ -300,7 +298,7 @@ export async function startBenefitsCompanion(
     benefits_companion: {
       ...record,
       opener_sent_at: at,
-      open_question: openerAsksQuestion(needKind) ? { kind: "urgency", asked_at: at } : null,
+      open_question: { kind: "urgency", asked_at: at },
     },
   });
   return { handled: true, arm };
@@ -400,7 +398,7 @@ export async function handleCompanionAnswer(
       const who = (match.display_name && match.display_name !== "Care Seeker" ? match.display_name : null) || match.email || fromPhone;
       const contact = pick ? ` They were sent ${stripParen(pick.contact.label)} at ${pick.contact.phone} for ${pick.shortName}.` : "";
       await sendSlackAlert(
-        `🚨 Urgent benefits family: ${who}${match.state ? ` (${match.state})` : ""} said YES to "${kind === "food" ? "out of food at home right now" : "shutoff notice, or no heat or AC right now"}".${contact} ` +
+        `🚨 Urgent benefits family: ${who}${match.state ? ` (${match.state})` : ""} said YES to "is anything urgent at home right now, like a shutoff notice, no food, or losing your housing".${contact} ` +
           `Please text them today. <${getSiteUrl()}/admin/care-seekers/${match.id}|Open family>`,
       );
     } catch (err) {
