@@ -1124,19 +1124,12 @@ function CaseInner() {
     <div className="h-full overflow-y-auto bg-white pb-28 lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden lg:pb-0">
       <FamilyList currentId={seekerId} backQuery={backQuery} />
 
-      {/* PHONE: nothing is fixed to the bottom edge. A round back button and a
-          Message pill float over the content, which fades out beneath them
+      {/* PHONE: nothing is fixed to the bottom edge. A Message pill floats
+          over the content, which fades out beneath them
           (the Jupiter pattern), instead of the admin tab bar plus a composer
           slab that took a third of the screen and never met the edge cleanly. */}
       {!isDesktop && (
         <>
-          <Link
-            href={backHref}
-            aria-label="Back to families"
-            className="fixed left-3 top-[calc(env(safe-area-inset-top,0px)+12px)] z-30 grid h-11 w-11 place-items-center rounded-full bg-white/85 text-[20px] font-semibold text-gray-900 shadow-[0_2px_12px_rgba(0,0,0,0.12)] backdrop-blur"
-          >
-            ‹
-          </Link>
           <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-28 bg-gradient-to-t from-white via-white/80 to-transparent" />
           {canWrite && !sheetOpen && (
             <button
@@ -1165,7 +1158,7 @@ function CaseInner() {
       )}
 
       <main className="flex min-w-0 flex-col border-gray-200 lg:h-full lg:min-h-0 lg:border-l">
-        <header className="border-b border-gray-200 px-4 pb-4 pt-[calc(env(safe-area-inset-top,0px)+68px)] sm:px-6 lg:pt-4">
+        <header className="border-b border-gray-200 px-4 pb-4 pt-[calc(env(safe-area-inset-top,0px)+16px)] sm:px-6 lg:pt-4">
           {!data ? (
             <p className="text-[14px] text-gray-400">Loading…</p>
           ) : (
@@ -1199,7 +1192,16 @@ function CaseInner() {
         </header>
 
         {data && !isDesktop && (
-          <div className="sticky top-0 z-10 flex gap-6 border-b border-gray-200 bg-white/95 px-4 backdrop-blur" role="tablist">
+          <div className="sticky top-0 z-10 flex items-center gap-6 border-b border-gray-200 bg-white/95 px-4 backdrop-blur" role="tablist">
+            {/* The way back rides with the tabs, so it stays in reach as you
+                scroll without floating over anything. */}
+            <Link
+              href={backHref}
+              aria-label="Back to families"
+              className="-ml-1 grid h-9 w-9 flex-none place-items-center rounded-full bg-gray-100 text-[18px] font-semibold text-gray-900"
+            >
+              ‹
+            </Link>
             {(["conversation", "case"] as const).map((t) => (
               <button
                 key={t}
