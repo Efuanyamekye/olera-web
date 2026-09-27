@@ -9,6 +9,8 @@ import { loadPaidRenewal, type PaidRenewal } from "@/lib/war-room/renewals.serve
 import { withoutStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 import { correctionLines, loadCorrections } from "@/lib/war-room/corrections.server";
 import { closeExchange } from "@/lib/war-room/conversation.server";
+import { founderChatId, isTelegramConfigured, sendTelegramMessage } from "@/lib/telegram.server";
+import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
 import { loadBlindSpots, loadLookupGaps } from "@/lib/war-room/lookups.server";
 import type { WarRoomDiscoveryRun, WarRoomProbeReading } from "@/lib/war-room/types";
 
@@ -503,8 +505,22 @@ export async function deliverWarRoomBrief(
       if (result.success) channel = "dm";
       else dmError = result.error ?? "DM failed";
     }
+    // Telegram is where he talks to Cortex now (2026-09-27), so the brief goes
+    // there too, and into Cortex's memory of that chat, so "what about the
+    // second one?" has something to point at. Slack stays as the mirror.
+    let telegram: "sent" | "failed" | "off" = "off";
+    const telegramChat = founderChatId();
+    if (isTelegramConfigured() && telegramChat) {
+      const sent = await sendTelegramMessage(telegramChat, text);
+      telegram = sent.success ? "sent" : "failed";
+      if (sent.success) {
+        await supabaseChatStore(db).append(telegramChat, {
+          surface: "telegram", role: "cortex", kind: "brief", text, at: new Date().toISOString(),
+        }).catch(() => false);
+      }
+    }
     if (!result.success) result = await sendSlackAlert(text);
-    if (!result.success) return { delivered: false, reason: result.error ?? "Slack send failed" };
+    if (!result.success && telegram !== "sent") return { delivered: false, reason: result.error ?? "Slack send failed" };
 
     // Only after the message is out. Recording an ask nobody received would
     // leave an open question that can never be answered, and the next reply
@@ -528,7 +544,7 @@ export async function deliverWarRoomBrief(
       last_error: null,
       // Which path actually carried it. Without this a missing chat:write
       // scope looks identical to a successful DM from the outside.
-      metadata: { run_id: runId, day, brief_only: briefOnly, status: run.status, channel, dm_error: dmError },
+      metadata: { run_id: runId, day, brief_only: briefOnly, status: run.status, channel, dm_error: dmError, telegram },
       updated_at: new Date().toISOString(),
     }, { onConflict: "source_key" }).then(() => undefined, () => undefined);
 

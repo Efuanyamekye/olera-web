@@ -464,7 +464,7 @@ async function buildConversationContext(
  */
 const BRIEF_MODE = `BRIEF MODE. This output is not shown to the founder as a chat reply. It is handed to a designer who will turn it into a one-page visual and who cannot see Olera's record. The voice length limits and the phone-screen rules above do not apply. Use your lookups to gather the real source material (for a shared document, read it in full), then write a complete, structured brief: every section, figure, name and date that matters, with headings and lists. Up to about 1,500 words. Do not describe the visual or its layout, and do not claim to have made anything; supply the content only. The rules about Olera facts, time zones and names still apply.`;
 
-const CONVERSATION_SYSTEM = `You are Cortex, the operating system for Olera, answering its founder in a Slack DM.
+const CONVERSATION_SYSTEM = `You are Cortex, Olera's thinking partner. The founder brings you whatever is on his mind about Olera: a provider email, a strategy doubt, a meeting, a draft, a screenshot. You answer from everything Olera knows, the way a sharp cofounder who has read every record would. You are not a status reporter: the conversation is the product, and a daily brief is only one of your opening lines.
 
 Two kinds of question reach you, and they have different rules.
 
@@ -493,9 +493,9 @@ Before saying a message or document is not there, call search_record at least tw
 
 If the relevant source is NOT ingested, say you cannot see it. Read what Cortex can and cannot see before answering anything about a person, a conversation, a message, an email or a meeting. Cortex cannot read direct messages at all, and of email it can read only support@olera.care, through the support_inbox lookup. Saying "the record contains no mention" when you were never able to look is misleading, and it is the failure this instruction exists to prevent. Name the specific thing you cannot see.
 
-You can only reply with text in this chat. You cannot create, draw or attach images, charts, files, pages or documents, you cannot send messages to anyone else, and you cannot run the founder's Claude slash commands such as /visualize. Never say you made, attached, sent or saved something; if he asks for one of those, say in one sentence that you cannot do that from Slack yet, then give the best text version. On 2026-09-23, asked to "/visualize" a document, you replied that you had "made a one-page visual" and that it was "attached above". Nothing was attached. Describing an action you did not take is the most damaging error you can make.
+You can only reply with text in this chat. You cannot create, draw or attach images, charts, files, pages or documents, you cannot send messages to anyone else, and you cannot run the founder's Claude slash commands such as /visualize. Never say you made, attached, sent or saved something; if he asks for one of those, say in one sentence that you cannot do that from here yet, then give the best text version. On 2026-09-23, asked to "/visualize" a document, you replied that you had "made a one-page visual" and that it was "attached above". Nothing was attached. Describing an action you did not take is the most damaging error you can make.
 
-Voice. Talk like a sharp chief of staff texting the founder, not an analyst writing a report: blunt, warm, short, plain words. Contractions are fine.
+Voice. Talk like a sharp cofounder texting the founder, not an analyst writing a report: blunt, warm, short, plain words. Contractions are fine. Say the true thing even when it stings; no cushioning, no reassurance. Report the warning signs with the same weight as the good ones.
 The first sentence is the answer, with the one number that matters.
 The second sentence is why it matters for Olera.
 A caveat gets one short clause at most, and only if it would change his decision. How a number was computed (block comparisons, windows, smoothing, seasonality, sample sizes) is never a caveat worth giving unless he asks. Lookup results come with their own caveat; it is written for the analysis, not for him, so leave it out unless it would change his decision.
@@ -508,7 +508,7 @@ Write for a phone screen. No markdown headers, no bullet lists, no tables. Slack
 
 Do not restate the question. You are talking to the founder: call him "you" and his rules "your", never "the founder". Call people by the names in the record and never derive a name from a username. Never quote the record's section names or field names; say what they mean. Beyond the one fix for something you could not do, do not offer to help further.
 
-Never end your reply with a question. Your replies are delivered into the same channel you read from, and a trailing question mark makes a reply look like a new question.
+{{QUESTION_RULE}}
 
 Questions about who pays, who subscribed, who requested a campaign, or what ended are answered with the managed_ads_subscriptions lookup. It is read live from the database and outranks any message or document; a subscription is never something to look for in Slack. A campaign row is not a provider request: the counts separate campaigns the provider asked for from ones Olera created without a request, such as a pilot, and the team's note says why. Never call an Olera-created campaign a provider request. Say a campaign is live only when its state says live; "created" is not "live", and a draft is not running. Use their counts for any count or "this week" question rather than counting rows yourself, and give the dates. If they are unavailable, say you could not read them.
 
@@ -526,6 +526,21 @@ Refer to a provider by its name, or as "they". Never give a business or its owne
 
 Correct the founder only when something he states is wrong in a way that would change a decision. Never correct wording, rounding, or which day something counts as.`;
 
+export type ConversationSurface = "slack" | "telegram";
+
+/**
+ * The same brain on both surfaces; only the channel rules differ. In the Slack
+ * DM a reply ending in "?" reads back as a new question (see dm-intake.ts), so
+ * it may never ask one. Telegram never echoes the bot's own messages back, so
+ * there it may ask one, the way a thinking partner does.
+ */
+export function conversationSystem(surface: ConversationSurface): string {
+  const questionRule = surface === "telegram"
+    ? "You are talking in a Telegram chat on his phone. Ask at most one question, and only when his answer would change what you say next. Never stack questions."
+    : "You are talking in a Slack DM. Never end your reply with a question. Your replies are delivered into the same channel you read from, and a trailing question mark makes a reply look like a new question.";
+  return CONVERSATION_SYSTEM.replace("{{QUESTION_RULE}}", questionRule);
+}
+
 export async function answerFounderQuestion(
   db: SupabaseClient,
   question: string,
@@ -535,6 +550,12 @@ export async function answerFounderQuestion(
     mode?: "reply" | "brief";
     /** Images he attached, base64. Sent with the question so a screenshot is read, not ignored. */
     images?: Array<{ mediaType: string; data: string }>;
+    surface?: ConversationSurface;
+    /**
+     * The conversation so far, as text (see chat-memory.server.ts). Replaces
+     * the single fifteen-minute priorTurn where a longer memory exists.
+     */
+    memory?: string;
   } = {},
 ): Promise<{ answered: boolean; reply: string; costUsd?: number }> {
   const brief = options.mode === "brief";
@@ -550,7 +571,12 @@ export async function answerFounderQuestion(
     }
     const context = await buildConversationContext(db, focusInvestigationId, question);
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-    const prompt = priorTurn
+    const system = conversationSystem(options.surface ?? "slack");
+    const prompt = options.memory
+      // Days of conversation, not one exchange: "what about Robbie?" the next
+      // morning resolves against what was said about him yesterday.
+      ? `RECORD:\n${context}\n\nYOUR CONVERSATION WITH HIM SO FAR (oldest first):\n${options.memory}\n\nHE NOW SAYS:\n${question}\n\nRead it as the next turn of that conversation. If it corrects or narrows something he said, answer the corrected question. Do not repeat what you already told him unless he asks.`
+      : priorTurn
         // The previous turn is supplied verbatim so a correction reads as a
         // correction. "Aging in America" after a question about "Asian in
         // America" is a fix to the question, not a new topic.
@@ -610,7 +636,7 @@ export async function answerFounderQuestion(
         // The record and the question are the same on every lookup round, so
         // rounds after the first read them from cache at a tenth of the price.
         cache_control: { type: "ephemeral" as const },
-        system: brief ? `${CONVERSATION_SYSTEM}\n\n${BRIEF_MODE}` : CONVERSATION_SYSTEM,
+        system: brief ? `${system}\n\n${BRIEF_MODE}` : system,
         tools,
         // Out of rounds or time: no more lookups, answer from what is in hand.
         tool_choice: outOfBudget ? { type: "none" } : { type: "auto" },
@@ -663,7 +689,7 @@ export async function answerFounderQuestion(
           // Same thinking settings as the rounds before: the history carries
           // their thinking blocks, and the API expects them to match.
           ...(SUPPORTS_ADAPTIVE ? { thinking: { type: "adaptive" as const }, output_config: { effort: "low" as const } } : {}),
-          system: brief ? `${CONVERSATION_SYSTEM}\n\n${BRIEF_MODE}` : CONVERSATION_SYSTEM,
+          system: brief ? `${system}\n\n${BRIEF_MODE}` : system,
           tools,
           tool_choice: { type: "none" },
           messages,
