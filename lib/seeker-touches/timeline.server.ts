@@ -407,6 +407,24 @@ function supportToItem(m: SupportMsgRow, thread: SupportThreadRow | undefined, l
   };
 }
 
+/**
+ * What the family wrote with an inquiry. Newer inquiries store a JSON care
+ * request in `message` (seeker name, email, care type…), which read as a wall
+ * of raw JSON on the timeline; only its free-text notes are words they wrote.
+ */
+function inquiryWords(message: string | null): string | null {
+  if (!message) return null;
+  const t = message.trim();
+  if (!t.startsWith("{")) return t;
+  try {
+    const p = JSON.parse(t) as Record<string, unknown>;
+    const notes = p.additional_notes ?? p.notes ?? p.message;
+    return typeof notes === "string" && notes.trim() ? notes.trim() : null;
+  } catch {
+    return null;
+  }
+}
+
 function connToItem(c: ConnRow): SeekerTimelineItem {
   const name = c.to_profile?.display_name ?? "a provider";
   const responded = providerResponded(c as ConnectionLike);
@@ -421,7 +439,7 @@ function connToItem(c: ConnRow): SeekerTimelineItem {
     channel: "in_app",
     occurred_at: c.created_at,
     title: `${c.type === "inquiry" ? "Inquiry sent to" : `${humanize(c.type)} —`} ${name}`,
-    detail: clip(c.message, 220),
+    detail: clip(inquiryWords(c.message), 220),
     source: "system",
     status: bits.length ? bits.join(" · ") : `${c.status ?? "pending"}, no provider response`,
     contact_handle: null,
