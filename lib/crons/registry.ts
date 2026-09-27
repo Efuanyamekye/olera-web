@@ -618,7 +618,7 @@ export const CRON_REGISTRY: CronJob[] = [
     id: "family-comms-coordinator",
     name: "Family comms coordinator — help-cascade arbiter",
     description:
-      "The family-side arbitration brain. One daily cron picks the single highest-priority help message per family. In the benefits cascade it composes B1 into the review queue (clean letters then send automatically from the navigator scheduler), then sends B2 3–14 days after the first step. B2 email uses outcome choices; B2 text accepts structured progress replies and can send by itself to a consented text-only family. Any family reply pauses B2 until a person resumes it. STUCK opens an owned help case. Generic completion asks never go to benefits-only families (benefits intake, no provider inquiry) and stay suppressed for other benefits families while the cascade is active.",
+      "The family-side arbitration brain. One daily cron picks the single highest-priority help message per family. In the benefits cascade it sends B2 (B1 letters are composed by benefits-navigator-compose since 2026-09-27) 3–14 days after the first step. B2 email uses outcome choices; B2 text accepts structured progress replies and can send by itself to a consented text-only family. Any family reply pauses B2 until a person resumes it. STUCK opens an owned help case. Generic completion asks never go to benefits-only families (benefits intake, no provider inquiry) and stay suppressed for other benefits families while the cascade is active.",
     recipientCohort:
       "Every family with an open inquiry/request connection PLUS every benefits-intake family (cascade rungs) PLUS incomplete profiles (completion track); at most one governed email per family per run, chosen by the ladder. SMS mirrors require stored phone + sms_consent.",
     audience: "Care seekers",
@@ -645,6 +645,22 @@ export const CRON_REGISTRY: CronJob[] = [
     channels: ["email", "sms"],
     smsTypes: ["benefits_first_step_sms", "benefits_check_in_sms"],
     successSignal: "Family is meaningfully helped (responds, reaches an alternative, starts a benefits application, completes, or publishes).",
+    relatedAdminPath: "/admin/benefits",
+  },
+  {
+    id: "benefits-navigator-compose",
+    name: "Benefits navigator — letter writer",
+    description:
+      "Writes the personal first-step letter for every benefits family once their intake is 48 hours old, newest first, up to 12 per run. It sends nothing: the packet builder judges each letter and the scheduler's autopilot sends clean ones. Moved out of the daily coordinator on 2026-09-27, where a 180-second budget inside a 3-4 minute run left about one family in five with no letter at all. The band runs to 30 days so families the old rung dropped get theirs. A family with no usable program is retried daily up to five times. At 14:00 UTC it posts one Slack line: letters written, and any family past 72 hours with none.",
+    recipientCohort:
+      "(no recipients — writes drafts) Benefits-intake families 48h–30d after intake with no letter yet, not unsubscribed, first step not sent.",
+    audience: "Care seekers",
+    fn: "maintenance",
+    schedule: "5 * * * *",
+    humanSchedule: "Hourly at :05. Daily Slack summary on the 14:05 UTC run.",
+    path: "/api/cron/benefits-navigator-compose",
+    emailTypes: [],
+    successSignal: "No benefits family is more than 72 hours past intake without a first-step letter.",
     relatedAdminPath: "/admin/benefits",
   },
   {

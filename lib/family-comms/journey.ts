@@ -3,8 +3,8 @@
  * /admin/automations/[id] renders as a sequence timeline.
  *
  * WHY THIS EXISTS: the benefits cascade is ONE family experience executed by
- * TWO crons — the daily coordinator composes B1 drafts and sends B2, while the
- * hourly navigator scheduler fires the TJ-approved letters — so no single cron
+ * several crons — the hourly compose cron drafts B1, the daily coordinator
+ * sends B2, and the hourly navigator scheduler fires the letters — so no single cron
  * page can show the whole picture from its own registry entry. This module is
  * the journey-level source both pages share: each page highlights the steps it
  * owns and dims (and links) the ones another automation runs.
@@ -13,7 +13,8 @@
  * entry + delivery paths in components/providers/BenefitsDiscoveryModule*,
  * components/waiver-library/ProgramBenefitsCard.tsx,
  * app/api/benefits/save-results/route.ts,
- * app/api/cron/family-comms-coordinator/route.ts, and
+ * app/api/cron/family-comms-coordinator/route.ts,
+ * app/api/cron/benefits-navigator-compose/route.ts, and
  * lib/family-comms/benefits-navigator-send.server.ts. If you change a gate,
  * CTA, time band, or rung order there, update the matching step here.
  *
@@ -69,7 +70,7 @@ const BENEFITS_CASCADE: CommsJourney = {
   title: "Benefits cascade — the family's sequence",
   ordering: "time",
   description:
-    "One guidance journey from the family's results CTA through the channels they choose: contact capture creates or updates their living plan, results arrive for a new family, the daily coordinator drafts B1 and sends B2, and the hourly scheduler (or TJ's button) fires the approved first step. Text replies update the same plan.",
+    "One guidance journey from the family's results CTA through the channels they choose: contact capture creates or updates their living plan, results arrive for a new family, the hourly compose cron drafts B1, the daily coordinator sends B2, and the hourly scheduler (or TJ's button) fires the approved first step. Text replies update the same plan.",
   steps: [
     {
       key: "results_cta",
@@ -108,10 +109,10 @@ const BENEFITS_CASCADE: CommsJourney = {
     {
       key: "b1_draft",
       title: "B1 · Navigator guidance drafted",
-      timing: "Intake +2–10d",
+      timing: "Intake +2–30d (normally within the hour after +48h)",
       description:
-        "The coordinator composes personal first-step guidance: an email when available and a reply-enabled text for consented families. It parks the draft in /admin/benefits for review.",
-      ownedBy: "family-comms-coordinator",
+        "An hourly cron composes personal first-step guidance, newest intake first: an email when available and a reply-enabled text for consented families. It parks the draft in /admin/benefits. A family with no usable program is retried daily up to five times, and a daily Slack line names any family past 72h with no letter.",
+      ownedBy: "benefits-navigator-compose",
       gate: "Draft only here. It reaches the family when the care team sends it, or automatically once its verdict routes `auto` (see B1 send)",
     },
     {
@@ -914,6 +915,7 @@ const JOURNEYS_BY_CRON: Record<string, string[]> = {
   "profile-preview-nudge": [PROVIDER_ONBOARDING_JOURNEY.key],
   "notification-setup-nudge": [PROVIDER_ONBOARDING_JOURNEY.key],
   "family-comms-coordinator": [HELP_CASCADE_LADDER.key, BENEFITS_CASCADE.key],
+  "benefits-navigator-compose": [BENEFITS_CASCADE.key],
   "benefits-navigator-scheduler": [BENEFITS_CASCADE.key],
   "benefits-results-texts": [BENEFITS_CASCADE.key],
   "ad-boost-profile-reminders": [AD_BOOST_PROVIDER_JOURNEY.key],
