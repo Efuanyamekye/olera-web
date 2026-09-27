@@ -313,11 +313,13 @@ function emailToItem(e: EmailRow): SeekerTimelineItem {
   return {
     id: `email:${e.id}`,
     kind: "email",
+    sent_by_person: e.email_type === "admin_reply",
     actor: "system",
     channel: sms ? "text" : "email",
     occurred_at: e.created_at,
     // A text has no subject worth showing; its body is the message.
     title: sms ? clip(e.html_body, 150) ?? humanize(e.email_type) : e.subject ?? humanize(e.email_type),
+    full_text: sms ? (e.html_body ?? null) : null,
     detail: null,
     source: "system",
     status,
@@ -378,6 +380,7 @@ function smsToItem(r: SmsRow, prompts: string[] = []): SeekerTimelineItem {
     channel: "text",
     occurred_at: r.created_at,
     title: clip(r.body, 160) ?? "(empty text)",
+    full_text: r.body ?? null,
     detail: checkin ? `answered the benefits check-in: ${CHECKIN_WORD[checkin]}` : r.keyword ? `keyword ${r.keyword}` : null,
     source: "twilio",
     status: r.handled_at || checkin ? null : "needs reply",
@@ -470,6 +473,7 @@ function cityMsgToItem(m: CityMsgRow): SeekerTimelineItem {
     channel: m.channel === "sms" ? "text" : "email",
     occurred_at: m.created_at,
     title: clip(m.body, 160) ?? m.subject ?? (human ? "(sent by hand)" : "(sent automatically)"),
+    full_text: m.body ?? null,
     detail: null,
     source: human ? "manual" : "system",
     status: failed ? `failed · ${clip(m.last_error, 60)}` : m.delivery ?? m.status,
@@ -1512,6 +1516,40 @@ function offerToItem(o: CityOfferRow, providerName: string): SeekerTimelineItem 
   };
 }
 
+async function loadThreadItems(db: ReturnType<typeof getServiceClient>, leadId: string): Promise<SeekerTimelineItem[]> {
+  const { data: rows, error } = await db
+    .from("city_lead_thread")
+    .select("id, author, author_profile_id, body, created_at")
+    .eq("lead_id", leadId)
+    .order("created_at", { ascending: true })
+    .limit(500);
+  if (error) {
+    console.error("[seeker-touches] thread read failed:", error);
+    return [];
+  }
+  const ids = Array.from(new Set((rows ?? []).map((r) => r.author_profile_id).filter((v): v is string => !!v)));
+  const { data: profs } = ids.length
+    ? await db.from("business_profiles").select("id, display_name").in("id", ids)
+    : { data: [] as { id: string; display_name: string | null }[] };
+  const names = new Map((profs ?? []).map((p) => [p.id, p.display_name ?? "The provider"]));
+  return (rows ?? []).map((r) => {
+    const provider = r.author === "provider";
+    return {
+      id: `thread:${r.id}`,
+      kind: "city" as const,
+      actor: provider ? ("system" as const) : ("in" as const),
+      channel: "in_app" as const,
+      occurred_at: r.created_at as string,
+      title: String(r.body ?? ""),
+      detail: null,
+      source: "city" as const,
+      status: null,
+      author: provider ? ("provider" as const) : null,
+      author_name: provider ? (names.get(r.author_profile_id as string) ?? "The provider") : null,
+    };
+  });
+}
+
 export async function loadSeekerTimeline(seekerId: string): Promise<SeekerRelationship | null> {
   const db = getServiceClient();
   const now = new Date();
@@ -1522,7 +1560,13 @@ export async function loadSeekerTimeline(seekerId: string): Promise<SeekerRelati
 
   const a = assemble(profile, feeds, now, DEFAULT_WINDOW_DAYS);
 
+  // The shared thread (migration 257): words a provider or the family typed on
+  // our pages. Read only for the one family on screen, so the list never pays
+  // for it.
+  const threadItems = a.lead ? await loadThreadItems(db, a.lead.id) : [];
+
   const items: SeekerTimelineItem[] = [
+    ...threadItems,
     ...a.parts.conns.map(connToItem),
     ...a.parts.emails.map(emailToItem),
     ...a.parts.sms,

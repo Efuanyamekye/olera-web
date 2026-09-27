@@ -302,6 +302,13 @@ async function pageCrisis(
       `🚨 URGENT — ${label} in a text from ${name}: "${body.slice(0, 300)}" ` +
         `(matched: ${crisis.matched.join(", ")}). No auto-reply was sent. Respond from /admin/inbox.`,
     );
+    // And to the founder's phone, now: a crisis is the one thing the inbox
+    // pass must not hold for its next run.
+    const { founderChatId, isTelegramConfigured, sendTelegramMessage } = await import("@/lib/telegram.server");
+    const chatId = founderChatId();
+    if (isTelegramConfigured() && chatId) {
+      await sendTelegramMessage(chatId, `🚨 ${label} in a text from ${name}: "${body.slice(0, 300)}". No auto-reply went out. Answer it in the inbox: https://olera.care/admin/inbox`);
+    }
   } catch (err) {
     console.error("[sms-webhook] Crisis page failed:", err);
   }

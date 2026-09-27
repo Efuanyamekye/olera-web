@@ -140,6 +140,21 @@ export type SeekerTimelineItem = {
   contact_handle?: string | null;
   /** Where to go to act on it (the support inbox, the SMS inbox, the city queue). */
   href?: string | null;
+  /**
+   * Who wrote it, when that is not us or the family: a provider writing in the
+   * shared thread (city_lead_thread). The case page draws these as the
+   * provider's messages rather than as system events.
+   */
+  author?: "provider" | null;
+  author_name?: string | null;
+  /**
+   * A system send a person actually typed (an admin_reply from the SMS inbox).
+   * The row stays actor "system" so the list's counts do not move; the case
+   * page uses this so it never labels a person's words as automatic.
+   */
+  sent_by_person?: boolean;
+  /** The whole message when `title` is clipped for the list. The case page reads this. */
+  full_text?: string | null;
 };
 
 // ── Reachability ──────────────────────────────────────────────────────────────

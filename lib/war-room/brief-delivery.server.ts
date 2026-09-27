@@ -12,6 +12,7 @@ import { closeExchange } from "@/lib/war-room/conversation.server";
 import { founderChatId, isTelegramConfigured, sendTelegramMessage, sendTelegramRecording, sendTelegramVoice } from "@/lib/telegram.server";
 import { sendVoiceNote } from "@/lib/war-room/voice.server";
 import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
+import { loadReactionSummary, recordMove, resolveReactions } from "@/lib/war-room/moves.server";
 import { loadBlindSpots, loadLookupGaps } from "@/lib/war-room/lookups.server";
 import type { WarRoomDiscoveryRun, WarRoomProbeReading } from "@/lib/war-room/types";
 
@@ -92,8 +93,8 @@ type ProposalRow = { title: string; why_now: string; decision_required: string; 
 type ApprovedRow = { title: string; approved_at: string | null; assigned_owner: string | null };
 
 /** Everything the move's wording needs, so it can name the person the row only describes. */
-const MOVE_COLUMNS = "title, why_now, decision_required, created_at, approved_at, assigned_owner, action_kind, proposed_solution, finding, execution_plan, evidence";
-type MoveRow = ProposalRow & ApprovedRow & Omit<MoveCandidate, "kind" | "since">;
+const MOVE_COLUMNS = "id, title, why_now, decision_required, created_at, approved_at, assigned_owner, action_kind, proposed_solution, finding, execution_plan, evidence";
+type MoveRow = ProposalRow & ApprovedRow & Omit<MoveCandidate, "kind" | "since"> & { id?: string };
 
 export function momentCandidate(moment: ProviderMoment): MoveCandidate {
   const who = moment.provider ?? "A provider";
@@ -115,6 +116,7 @@ export function momentCandidate(moment: ProviderMoment): MoveCandidate {
     founderReply: moment.reply,
     unansweredFromThem: moment.unanswered,
     founderEarlierReply: moment.earlierReply,
+    subjectKey: `moment:${moment.threadId}`,
   };
 }
 
@@ -132,6 +134,7 @@ function toCandidate(row: MoveRow, kind: MoveCandidate["kind"]): MoveCandidate {
     evidence: row.evidence,
     since: kind === "approved_not_done" ? row.approved_at : row.created_at ?? null,
     written: row.created_at ?? null,
+    subjectKey: row.id ? `proposal:${row.id}` : undefined,
   };
 }
 
@@ -398,6 +401,7 @@ export async function deliverWarRoomBrief(
     let question: FounderQuestion | null = null;
     let move: (BriefMove & { title: string; kind: MoveCandidate["kind"] }) | null = null;
     let momentCandidates: MoveCandidate[] = [];
+    let chosenKey: string | null = null;
     let unanswerable: string[] = [];
     let blindSpots: string[] = [];
     let renewal: PaidRenewal | null = null;
@@ -438,11 +442,16 @@ export async function deliverWarRoomBrief(
       approvedOpen = approvedRows;
       // Read at brief time from the support inbox's own tables; nothing is stored.
       momentCandidates = (await loadProviderMoments(db).catch(() => [] as ProviderMoment[])).map(momentCandidate);
+      // What he did with earlier moves, filled in before choosing today's.
+      await resolveReactions(db).catch(() => undefined);
+      const reactions = await loadReactionSummary(db).catch(() => null);
       const chosen = pickMove(
         approvedRows.map((row) => toCandidate(row, "approved_not_done")),
         waitingRows.map((row) => toCandidate(row, "decision_waiting")),
         momentCandidates,
+        reactions?.ignoredTwice,
       );
+      chosenKey = chosen?.subjectKey ?? null;
       if (chosen) {
         const { data: model } = await db.from("war_room_company_models")
           .select("constraints")
@@ -524,6 +533,16 @@ export async function deliverWarRoomBrief(
     }
     if (!result.success) result = await sendSlackAlert(text);
     if (!result.success && telegram !== "sent") return { delivered: false, reason: result.error ?? "Slack send failed" };
+
+    // The move is recorded so his reaction to it can be judged tomorrow.
+    if (move) {
+      await recordMove(db, {
+        kind: "brief",
+        subjectKey: chosenKey ?? `brief:${day}`,
+        text: move.line,
+        surface: telegram === "sent" ? "telegram" : "slack",
+      }).catch(() => undefined);
+    }
 
     // Only after the message is out. Recording an ask nobody received would
     // leave an open question that can never be answered, and the next reply
