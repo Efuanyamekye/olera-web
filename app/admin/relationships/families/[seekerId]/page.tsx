@@ -353,18 +353,27 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
   );
 }
 
+/** The composer at the foot of the conversation on a laptop. */
+const INLINE_SHELL = "border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6";
+
 function Composer({
   routing,
   familyName,
   holder,
   suggestions,
   onSent,
+  shell = INLINE_SHELL,
+  onDone,
 }: {
   routing: Routing;
   familyName: string;
   holder: string | null;
   suggestions: { id: string; text: string; name: string }[];
   onSent: () => Promise<void>;
+  /** Wrapper classes: inline at the foot of the conversation, or inside the phone sheet. */
+  shell?: string;
+  /** Called after a successful send, so the phone sheet can close. */
+  onDone?: () => void;
 }) {
   const hasPhone = Boolean(routing.has_phone);
   const hasEmail = Boolean(routing.has_email);
@@ -386,6 +395,7 @@ function Composer({
       setText("");
       setSubject("");
       await onSent();
+      onDone?.();
     } catch (e) {
       setMsg({ tone: "err", text: e instanceof Error ? e.message : "Did not send" });
     } finally {
@@ -406,7 +416,7 @@ function Composer({
   }
 
   return (
-    <div className="sticky bottom-0 border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6 lg:static">
+    <div className={shell}>
       {pending.length > 0 && (
         <ul className="mb-2 space-y-1">
           {pending.map((m) => (
@@ -443,6 +453,8 @@ function Composer({
         <textarea
           aria-label={`Message ${readers}`}
           rows={text.length > 90 ? 3 : 1}
+          // In the phone sheet the keyboard should come up with it.
+          autoFocus={shell !== INLINE_SHELL}
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={channel === "sms" ? 480 : 10000}
@@ -487,10 +499,14 @@ function InquiryComposer({
   conversations,
   familyName,
   onSent,
+  shell = INLINE_SHELL,
+  onDone,
 }: {
   conversations: { connection_id: string; name: string }[];
   familyName: string;
   onSent: () => Promise<void>;
+  shell?: string;
+  onDone?: () => void;
 }) {
   const [pick, setPick] = useState(conversations[0]?.connection_id ?? "");
   const [text, setText] = useState("");
@@ -515,6 +531,7 @@ function InquiryComposer({
       setMsg({ tone: "ok", text: d.notice || "Sent." });
       setText("");
       await onSent();
+      onDone?.();
     } catch (e) {
       setMsg({ tone: "err", text: e instanceof Error ? e.message : "Did not send" });
     } finally {
@@ -523,11 +540,13 @@ function InquiryComposer({
   }
 
   return (
-    <div className="sticky bottom-0 border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6 lg:static">
+    <div className={shell}>
       <div className="flex items-end gap-2 rounded-3xl border border-gray-300 py-1.5 pl-4 pr-1.5 focus-within:border-gray-900">
         <textarea
           aria-label={`Message ${readers}`}
           rows={text.length > 90 ? 3 : 1}
+          // In the phone sheet the keyboard should come up with it.
+          autoFocus={shell !== INLINE_SHELL}
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={4000}
@@ -963,6 +982,13 @@ function CaseInner() {
   const [unarchiving, setUnarchiving] = useState(false);
   const [archiveError, setArchiveError] = useState<string | null>(null);
   const isDesktop = useIsDesktop();
+  const [mobileTab, setMobileTab] = useState<"conversation" | "case">("conversation");
+  const [sheetOpen, setSheetOpen] = useState(false);
+  // A new family starts on its conversation with the sheet closed.
+  useEffect(() => {
+    setMobileTab("conversation");
+    setSheetOpen(false);
+  }, [seekerId]);
 
   const load = useCallback(async () => {
     setError(null);
@@ -1056,35 +1082,111 @@ function CaseInner() {
           ? `${data.episode.blocked_on} has it`
           : EPISODE_WORD[data.episode.state];
 
-  // Below md the admin's tab bar is fixed to the bottom (73px). Padding the
-  // scroll area for it is enough: a sticky composer stops at the padding edge,
-  // so it sits just above the bar.
+  // What the family can be written to, if anything. The same box sits at the
+  // foot of the conversation on a laptop and in a sheet on a phone.
+  const openInquiries = data
+    ? data.providers.filter((p) => p.connection_id && (p.status === "pending" || p.status === "accepted"))
+    : [];
+  const composerFor = (shell: string | undefined, onDone?: () => void) =>
+    !data ? null : routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
+      <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} shell={shell} onDone={onDone} />
+    ) : !routing && openInquiries.length > 0 ? (
+      // Only conversations Olera can write in: a declined or archived one is
+      // closed to the family and the provider too.
+      <InquiryComposer
+        key={seekerId}
+        conversations={openInquiries.map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
+        familyName={familyName === "this family" ? "the family" : familyName}
+        onSent={load}
+        shell={shell}
+        onDone={onDone}
+      />
+    ) : null;
+  const canWrite = Boolean(composerFor(undefined));
+  const noWriteNote = !data || canWrite ? null : routing ? (
+    routing.closed ? "This family is closed, so nothing further goes out from here." : "No phone or email on file to write to."
+  ) : data.profile.phone && data.reach.phone !== "impossible" ? (
+    <>
+      This family isn&apos;t from a city ad, so texts go through{" "}
+      <Link href={`/admin/inbox?phone=${encodeURIComponent(data.profile.phone)}`} className="font-semibold text-gray-900 underline">
+        Messages
+      </Link>
+      .
+    </>
+  ) : null;
+
+  const title = data ? (data.profile.label_is_fallback ? "No name on file" : data.profile.label) : "";
+  const subtitle = data
+    ? [data.profile.label_is_fallback ? data.profile.label : null, cityName(data.city_slug) ?? data.profile.city, where].filter(Boolean).join(" · ")
+    : "";
+
   return (
-    <div className="h-full overflow-y-auto bg-white pb-[4.75rem] md:pb-0 lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden">
+    <div className="h-full overflow-y-auto bg-white pb-28 lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden lg:pb-0">
       <FamilyList currentId={seekerId} backQuery={backQuery} />
 
-      <main className="flex min-w-0 flex-col border-gray-200 lg:h-full lg:min-h-0 lg:border-l">
-        <header className="border-b border-gray-200 px-4 py-4 sm:px-6">
-          <Link href={backHref} className="text-[13px] font-semibold text-gray-500 hover:text-gray-900 lg:hidden">
-            ‹ All families
+      {/* PHONE: nothing is fixed to the bottom edge. A round back button and a
+          Message pill float over the content, which fades out beneath them
+          (the Jupiter pattern), instead of the admin tab bar plus a composer
+          slab that took a third of the screen and never met the edge cleanly. */}
+      {!isDesktop && (
+        <>
+          <Link
+            href={backHref}
+            aria-label="Back to families"
+            className="fixed left-3 top-[calc(env(safe-area-inset-top,0px)+12px)] z-30 grid h-11 w-11 place-items-center rounded-full bg-white/85 text-[20px] font-semibold text-gray-900 shadow-[0_2px_12px_rgba(0,0,0,0.12)] backdrop-blur"
+          >
+            ‹
           </Link>
+          <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-28 bg-gradient-to-t from-white via-white/80 to-transparent" />
+          {canWrite && !sheetOpen && (
+            <button
+              type="button"
+              onClick={() => setSheetOpen(true)}
+              className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] right-4 z-30 flex items-center gap-2 rounded-full bg-gray-900 px-5 py-3.5 text-[15px] font-semibold text-white shadow-[0_6px_20px_rgba(0,0,0,0.25)]"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              Message
+            </button>
+          )}
+          {sheetOpen && (
+            <div className="fixed inset-0 z-40" role="dialog" aria-modal="true" aria-label="Write a message">
+              <button type="button" aria-label="Close" className="absolute inset-0 bg-black/30 motion-safe:animate-[fade-in_150ms_ease-out]" onClick={() => setSheetOpen(false)} />
+              <div className="absolute inset-x-0 bottom-0 rounded-t-3xl bg-white pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-8px_30px_rgba(0,0,0,0.15)] motion-safe:animate-[sheet-up_220ms_cubic-bezier(0.2,0.8,0.2,1)]">
+                <div className="flex items-center justify-between px-5 pb-1 pt-3">
+                  <span className="mx-auto h-1 w-10 rounded-full bg-gray-300" aria-hidden="true" />
+                </div>
+                {composerFor("bg-white px-4 pb-4 pt-2", () => setSheetOpen(false))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      <main className="flex min-w-0 flex-col border-gray-200 lg:h-full lg:min-h-0 lg:border-l">
+        <header className="border-b border-gray-200 px-4 pb-4 pt-[calc(env(safe-area-inset-top,0px)+68px)] sm:px-6 lg:pt-4">
           {!data ? (
             <p className="text-[14px] text-gray-400">Loading…</p>
           ) : (
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0">
-                <h1 className={`text-[24px] font-bold tracking-tight ${data.profile.label_is_fallback ? "text-gray-500" : "text-gray-900"}`}>{data.profile.label}</h1>
-                <p className="text-[14px] text-gray-500">
-                  {[cityName(data.city_slug) ?? data.profile.city, where].filter(Boolean).join(" · ")}
-                </p>
+                <h1 className={`text-[26px] font-bold tracking-tight lg:text-[24px] ${data.profile.label_is_fallback ? "text-gray-500" : "text-gray-900"}`}>{title}</h1>
+                <p className="break-words text-[14px] text-gray-500">{subtitle}</p>
                 <LockLine text={lockText} />
+                {/* On a phone one line says what is wrong; the Next step in the
+                    Case tab says what to do about it. */}
+                {!isDesktop && data.flags[0] && (
+                  <p className="mt-2 text-[14px] font-semibold text-gray-900">{SEEKER_FLAG_LABEL[data.flags[0]]}</p>
+                )}
               </div>
               <div className="flex flex-wrap items-center gap-1.5">
-                {data.flags.map((f) => (
-                  <span key={f} className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">
-                    {SEEKER_FLAG_LABEL[f]}
-                  </span>
-                ))}
+                {isDesktop &&
+                  data.flags.map((f) => (
+                    <span key={f} className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">
+                      {SEEKER_FLAG_LABEL[f]}
+                    </span>
+                  ))}
                 {data.archived && (
                   <button type="button" disabled={unarchiving} onClick={() => void putBack()} className={pillBtn}>
                     {unarchiving ? "Putting back…" : "Put back"}
@@ -1096,47 +1198,33 @@ function CaseInner() {
           {archiveError && <p className="mt-1 text-[13px] text-red-700">{archiveError}</p>}
         </header>
 
+        {data && !isDesktop && (
+          <div className="sticky top-0 z-10 flex gap-6 border-b border-gray-200 bg-white/95 px-4 backdrop-blur" role="tablist">
+            {(["conversation", "case"] as const).map((t) => (
+              <button
+                key={t}
+                type="button"
+                role="tab"
+                aria-selected={mobileTab === t}
+                onClick={() => setMobileTab(t)}
+                className={`-mb-px border-b-2 py-3 text-[15px] font-semibold ${mobileTab === t ? "border-gray-900 text-gray-900" : "border-transparent text-gray-400"}`}
+              >
+                {t === "conversation" ? "Conversation" : "Case"}
+              </button>
+            ))}
+          </div>
+        )}
+
         {data && (
           <>
-            {/* On a phone the case comes before the conversation: who has
-                them and what to do next is what you open the page to see. */}
-            {!isDesktop && (
-              <div className="border-b border-gray-200">
-                <CasePanel key={`m-${seekerId}`} data={data} familyName={familyName} tz={tz} reload={load} />
+            {!isDesktop && mobileTab === "case" && <CasePanel key={`m-${seekerId}`} data={data} familyName={familyName} tz={tz} reload={load} />}
+            {(isDesktop || mobileTab === "conversation") && (
+              <div className="px-4 py-5 sm:px-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+                <Conversation items={data.items} familyName={data.profile.label_is_fallback ? "Family" : data.profile.label} tz={tz} />
+                {!isDesktop && noWriteNote && <p className="mt-6 text-center text-[13px] text-gray-500">{noWriteNote}</p>}
               </div>
             )}
-            <div className="px-4 py-5 sm:px-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
-              <Conversation items={data.items} familyName={data.profile.label_is_fallback ? "Family" : data.profile.label} tz={tz} />
-            </div>
-            {routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
-              <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} />
-            ) : !routing && data.providers.some((p) => p.connection_id && (p.status === "pending" || p.status === "accepted")) ? (
-              <InquiryComposer
-                key={seekerId}
-                // Only conversations Olera can write in: a declined or archived
-                // one is closed to the family and the provider too.
-                conversations={data.providers
-                  .filter((p) => p.connection_id && (p.status === "pending" || p.status === "accepted"))
-                  .map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
-                familyName={familyName === "this family" ? "the family" : familyName}
-                onSent={load}
-              />
-            ) : routing ? (
-              <div className="border-t border-gray-200 px-4 py-3 text-[13px] text-gray-500 sm:px-6">
-                {routing.closed ? "This family is closed, so nothing further goes out from here." : "No phone or email on file to write to."}
-              </div>
-            ) : (
-              data.profile.phone &&
-              data.reach.phone !== "impossible" && (
-                <div className="border-t border-gray-200 px-4 py-3 text-[13px] text-gray-500 sm:px-6">
-                  This family isn&apos;t from a city ad, so texts go through{" "}
-                  <Link href={`/admin/inbox?phone=${encodeURIComponent(data.profile.phone)}`} className="font-semibold text-gray-900 underline">
-                    Messages
-                  </Link>
-                  .
-                </div>
-              )
-            )}
+            {isDesktop && (composerFor(undefined) ?? (noWriteNote && <div className="border-t border-gray-200 px-4 py-3 text-[13px] text-gray-500 sm:px-6">{noWriteNote}</div>))}
           </>
         )}
       </main>
