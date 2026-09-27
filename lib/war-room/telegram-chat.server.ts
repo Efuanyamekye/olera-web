@@ -3,6 +3,7 @@ import { answerFounderQuestion, type ConversationTurn } from "@/lib/war-room/con
 import { loadChatMemory, memoryPromptText, refreshChatSummary, type ChatStore } from "@/lib/war-room/chat-memory.server";
 import { approvalReply, isApproval, MAX_IMAGE_BYTES, nothingWaitingReply } from "@/lib/war-room/dm-intake";
 import { wantsVoice } from "@/lib/war-room/voice.server";
+import { artifactSubject } from "@/lib/war-room/visualize.server";
 import type { WarRoomProposal } from "@/lib/war-room/types";
 
 /**
@@ -52,6 +53,8 @@ export type TelegramDeps = {
   reactions?: { reply: (text: string, options: { pushedBack?: boolean; scoreOnly?: boolean }) => Promise<{ scored?: number } | null> };
   /** Inbox approvals ("send 3") against the latest inbox pass (inbox-operator.server.ts). Null when it is not one. */
   inbox?: { command: (text: string) => Promise<string | null> };
+  /** Starts the Claude Code routine that runs his /visualize skill (visualize.server.ts). */
+  visual?: { start: (text: string) => Promise<{ started: true; sessionUrl: string } | { started: false; reason: string }> };
 };
 
 export type TelegramOutcome =
@@ -234,6 +237,38 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
     if (last) {
       await deps.voice(chatId, last.text, last.kind === "brief" ? "brief" : "reply");
       return { handled: true, kind: "voice", reply: last.text };
+    }
+  }
+
+  // "visualize X", or "make an artifact of X": Cortex gathers the real
+  // material, then a Claude Code session runs his /visualize skill and
+  // publishes the artifact. Same bridge as the Slack DM.
+  const artifact = deps.visual ? artifactSubject(text) : null;
+  if (artifact !== null && deps.visual) {
+    await deps.typing(chatId).catch(() => undefined);
+    const typingArtifact = setInterval(() => { deps.typing(chatId).catch(() => undefined); }, 4_500);
+    try {
+      const memory = await loadChatMemory(deps.store, chatId);
+      const history = { ...memory, recent: memory.recent.filter((entry, i, all) => !(i === all.length - 1 && entry.role === "founder" && Date.parse(entry.at) === Date.parse(at))) };
+      const subject = artifact || "the subject of our last exchange";
+      const brief = await (deps.answer ?? answerFounderQuestion)(
+        deps.db,
+        `Write the source brief for a visual of: ${subject}`,
+        null,
+        lastExchange(history.recent),
+        { mode: "brief", surface: "telegram", memory: memoryPromptText(history) || undefined },
+      );
+      const start = brief.answered
+        ? await deps.visual.start(`TJ asked Cortex on Telegram: "${text}"\n\nSource brief gathered by Cortex from Olera's record:\n\n${brief.reply}`)
+        : { started: false as const, reason: "I could not gather the material for it" };
+      const said = start.started
+        ? `Building it with your /visualize skill in a Claude Code session: <${start.sessionUrl}|open it here>. Tap Allow when it asks to publish; it takes a few minutes.`
+        : `I couldn't start the artifact: ${start.reason}.${brief.answered ? `\n\nHere is the material I gathered for it:\n\n${brief.reply.slice(0, 3_000)}` : ""}`;
+      await reply(said);
+      await remember(said);
+      return { handled: true, kind: "answer", reply: said };
+    } finally {
+      clearInterval(typingArtifact);
     }
   }
 

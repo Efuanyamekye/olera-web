@@ -223,6 +223,8 @@ function FamilyList({ currentId, backQuery }: { currentId: string; backQuery: st
  */
 function isMessage(it: SeekerTimelineItem): boolean {
   if (it.author === "provider") return true;
+  // A page inquiry's own conversation: the family, the provider and Olera.
+  if (it.connection_id && (it.actor === "in" || it.olera_post)) return true;
   if (it.kind === "touch" || it.kind === "activity" || it.kind === "inquiry") return false;
   if (it.id.startsWith("city:")) return false;
   if (it.actor === "system") return it.channel === "text";
@@ -292,7 +294,16 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
           // A support@ email keeps its words in the snippet and its subject in
           // the title, so the bubble shows the words with the subject above.
           const email = it.kind === "support" && it.detail ? emailWords(it.detail) : null;
-          const who = it.author === "provider" ? (it.author_name ?? "The provider") : auto ? "Olera, automatic" : mine ? "Olera" : familyName;
+          const who =
+            it.author === "provider"
+              ? (it.author_name ?? "The provider")
+              : auto
+                ? "Olera, automatic"
+                : it.olera_post && it.author_name
+                  ? `Olera · ${it.author_name}`
+                  : mine
+                    ? "Olera"
+                    : familyName;
           body = (
             <div className={`flex items-end gap-2 ${mine ? "justify-end" : ""}`}>
               {!mine && (
@@ -462,6 +473,95 @@ function Composer({
         <button type="button" disabled={busy || !ready} onClick={() => void send(true)} className="font-semibold text-gray-900 underline disabled:text-gray-400 disabled:no-underline">
           Send in their morning instead
         </button>
+        {msg && <span className={msg.tone === "ok" ? "text-emerald-700" : "text-red-700"}>{msg.text}</span>}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Writes into a page inquiry's conversation as Olera. Both the family and the
+ * provider see it in their inbox and get an email, so the box names them both.
+ */
+function InquiryComposer({
+  conversations,
+  familyName,
+  onSent,
+}: {
+  conversations: { connection_id: string; name: string }[];
+  familyName: string;
+  onSent: () => Promise<void>;
+}) {
+  const [pick, setPick] = useState(conversations[0]?.connection_id ?? "");
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ tone: "ok" | "err"; text: string } | null>(null);
+  const current = conversations.find((c) => c.connection_id === pick) ?? conversations[0];
+  const provider = current ? current.name : "the provider";
+  const readers = `${familyName} and ${provider}`;
+
+  async function send() {
+    if (!current) return;
+    setBusy(true);
+    setMsg(null);
+    try {
+      const res = await fetch(`/api/admin/connections/${current.connection_id}/olera-message`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(d.error || `HTTP ${res.status}`);
+      setMsg({ tone: "ok", text: d.notice || "Sent." });
+      setText("");
+      await onSent();
+    } catch (e) {
+      setMsg({ tone: "err", text: e instanceof Error ? e.message : "Did not send" });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="sticky bottom-0 border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6 lg:static">
+      <div className="flex items-end gap-2 rounded-3xl border border-gray-300 py-1.5 pl-4 pr-1.5 focus-within:border-gray-900">
+        <textarea
+          aria-label={`Message ${readers}`}
+          rows={text.length > 90 ? 3 : 1}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          maxLength={4000}
+          placeholder={`Message ${readers}`}
+          className="min-w-0 flex-1 resize-none bg-transparent py-1.5 text-[14.5px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
+        />
+        <button
+          type="button"
+          aria-label="Send"
+          disabled={busy || !text.trim()}
+          onClick={() => void send()}
+          className="grid h-9 w-9 flex-none place-items-center rounded-full bg-gray-900 text-white disabled:bg-gray-300"
+        >
+          ↑
+        </button>
+      </div>
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-[12.5px] text-gray-500">
+        <span>
+          To: <span className="font-semibold text-gray-900">{readers}</span>, in their inbox and by email
+        </span>
+        {conversations.length > 1 && (
+          <select
+            aria-label="Which conversation"
+            value={pick}
+            onChange={(e) => setPick(e.target.value)}
+            className="rounded-lg bg-gray-100 px-2 py-1 text-[12.5px] font-semibold text-gray-900"
+          >
+            {conversations.map((c) => (
+              <option key={c.connection_id} value={c.connection_id}>
+                With {c.name}
+              </option>
+            ))}
+          </select>
+        )}
         {msg && <span className={msg.tone === "ok" ? "text-emerald-700" : "text-red-700"}>{msg.text}</span>}
       </div>
     </div>
@@ -1010,6 +1110,17 @@ function CaseInner() {
             </div>
             {routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
               <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} />
+            ) : !routing && data.providers.some((p) => p.connection_id && (p.status === "pending" || p.status === "accepted")) ? (
+              <InquiryComposer
+                key={seekerId}
+                // Only conversations Olera can write in: a declined or archived
+                // one is closed to the family and the provider too.
+                conversations={data.providers
+                  .filter((p) => p.connection_id && (p.status === "pending" || p.status === "accepted"))
+                  .map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
+                familyName={familyName === "this family" ? "the family" : familyName}
+                onSent={load}
+              />
             ) : routing ? (
               <div className="border-t border-gray-200 px-4 py-3 text-[13px] text-gray-500 sm:px-6">
                 {routing.closed ? "This family is closed, so nothing further goes out from here." : "No phone or email on file to write to."}

@@ -5,6 +5,7 @@ import { getCityConfig } from "@/lib/city-ads/config";
 import { matchOutcomeReply } from "@/lib/sms/inbound-intent";
 import { isImpossibleUsPhone, last10, seekerLabel } from "./label";
 import { EPISODE_WORD, ORIGIN_LABEL, detailLine, problemLine, stateOf } from "./present";
+import { providerDeclined } from "@/lib/connections/olera-message.server";
 import type {
   FamilyTouchRow,
   SeekerOpenAction,
@@ -407,6 +408,24 @@ function supportToItem(m: SupportMsgRow, thread: SupportThreadRow | undefined, l
   };
 }
 
+/**
+ * What the family wrote with an inquiry. Newer inquiries store a JSON care
+ * request in `message` (seeker name, email, care type…), which read as a wall
+ * of raw JSON on the timeline; only its free-text notes are words they wrote.
+ */
+function inquiryWords(message: string | null): string | null {
+  if (!message) return null;
+  const t = message.trim();
+  if (!t.startsWith("{")) return t;
+  try {
+    const p = JSON.parse(t) as Record<string, unknown>;
+    const notes = p.additional_notes ?? p.notes ?? p.message;
+    return typeof notes === "string" && notes.trim() ? notes.trim() : null;
+  } catch {
+    return null;
+  }
+}
+
 function connToItem(c: ConnRow): SeekerTimelineItem {
   const name = c.to_profile?.display_name ?? "a provider";
   const responded = providerResponded(c as ConnectionLike);
@@ -421,7 +440,7 @@ function connToItem(c: ConnRow): SeekerTimelineItem {
     channel: "in_app",
     occurred_at: c.created_at,
     title: `${c.type === "inquiry" ? "Inquiry sent to" : `${humanize(c.type)} —`} ${name}`,
-    detail: clip(c.message, 220),
+    detail: clip(inquiryWords(c.message), 220),
     source: "system",
     status: bits.length ? bits.join(" · ") : `${c.status ?? "pending"}, no provider response`,
     contact_handle: null,
@@ -1381,6 +1400,10 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
       name: c.to_profile!.display_name ?? "a provider",
       at: c.created_at,
       responded: providerResponded(c as ConnectionLike),
+      connection_id: c.id,
+      // The case page offers only conversations Olera may write in, which
+      // excludes ones the provider declined (lib/connections/olera-message).
+      status: providerDeclined(c) ? "declined" : c.status,
     }));
 
   return {
@@ -1516,6 +1539,66 @@ function offerToItem(o: CityOfferRow, providerName: string): SeekerTimelineItem 
   };
 }
 
+/**
+ * The conversation inside each page inquiry: what the family and the provider
+ * wrote to each other in the inbox (metadata.thread), and what Olera wrote
+ * into it (metadata.olera_messages). Only for the one family on screen.
+ * System lines in the thread are skipped; the inquiry itself is already an
+ * event from connToItem.
+ */
+function connectionThreadItems(conns: ConnRow[]): SeekerTimelineItem[] {
+  const out: SeekerTimelineItem[] = [];
+  for (const c of conns) {
+    if (c.type !== "inquiry" && c.type !== "request") continue;
+    const meta = (c.metadata ?? {}) as Record<string, unknown>;
+    const familyId = c.type === "inquiry" ? c.from_profile_id : c.to_profile_id;
+    const providerName = c.to_profile?.display_name ?? "The provider";
+    const thread = Array.isArray(meta.thread) ? (meta.thread as Record<string, unknown>[]) : [];
+    thread.forEach((m, i) => {
+      const text = typeof m.text === "string" ? m.text : "";
+      if (!text || m.type === "system") return;
+      const fromFamily = m.from_profile_id === familyId;
+      out.push({
+        id: `conv:${c.id}:${i}`,
+        kind: "inquiry",
+        actor: fromFamily ? "in" : "system",
+        channel: "in_app",
+        occurred_at: String(m.created_at ?? c.created_at),
+        title: clip(text, 160) ?? text,
+        full_text: text,
+        detail: m.is_auto_reply ? "sent automatically" : null,
+        source: "system",
+        status: null,
+        author: fromFamily ? null : "provider",
+        author_name: fromFamily ? null : providerName,
+        connection_id: c.id,
+      });
+    });
+    const olera = Array.isArray(meta.olera_messages) ? (meta.olera_messages as Record<string, unknown>[]) : [];
+    for (const m of olera) {
+      const text = typeof m.text === "string" ? m.text : "";
+      if (!text) continue;
+      out.push({
+        id: `olera:${String(m.id ?? m.created_at)}`,
+        kind: "inquiry",
+        actor: "out",
+        channel: "in_app",
+        occurred_at: String(m.created_at),
+        title: clip(text, 160) ?? text,
+        full_text: text,
+        detail: `to them and ${providerName}`,
+        source: "manual",
+        status: null,
+        olera_post: true,
+        sent_by_person: true,
+        author_name: typeof m.author_name === "string" ? m.author_name : null,
+        connection_id: c.id,
+      });
+    }
+  }
+  return out;
+}
+
 async function loadThreadItems(db: ReturnType<typeof getServiceClient>, leadId: string): Promise<SeekerTimelineItem[]> {
   const { data: rows, error } = await db
     .from("city_lead_thread")
@@ -1564,9 +1647,11 @@ export async function loadSeekerTimeline(seekerId: string): Promise<SeekerRelati
   // our pages. Read only for the one family on screen, so the list never pays
   // for it.
   const threadItems = a.lead ? await loadThreadItems(db, a.lead.id) : [];
+  const convItems = connectionThreadItems(a.parts.conns);
 
   const items: SeekerTimelineItem[] = [
     ...threadItems,
+    ...convItems,
     ...a.parts.conns.map(connToItem),
     ...a.parts.emails.map(emailToItem),
     ...a.parts.sms,
