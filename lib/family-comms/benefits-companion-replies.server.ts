@@ -37,6 +37,8 @@ import { getBenefitsCompanionSettings } from "@/lib/analytics/benefits-companion
 import {
   companionActive,
   companionUrgentReplySms,
+  needKindForMessage,
+  needKindForProgram,
   readBenefitsCompanion,
   COMPANION_REPLY_TYPE,
 } from "@/lib/family-comms/benefits-companion.server";
@@ -208,7 +210,10 @@ export function decide(input: {
   // which fires on "AC out with a lung condition", the exact case the 911
   // line is for. Self-harm language never reaches here: the webhook's
   // deterministic crisis check pages a person and sends nothing first.
-  if (label.intent === "urgent") return { kind: "urgent", reply: companionUrgentReplySms({ shortName: pick?.shortName ?? null, phone: pick?.contact.phone ?? null }) };
+  if (label.intent === "urgent") {
+    const kind = needKindForMessage(body, needKindForProgram(pick ? `${pick.name} ${pick.shortName}` : null));
+    return { kind: "urgent", reply: companionUrgentReplySms({ shortName: pick?.shortName ?? null, phone: pick?.contact.phone ?? null, kind }) };
+  }
   if (label.crisis) return { kind: "escalate", reason: "crisis" };
   if (body.length > MAX_BODY_CHARS) return { kind: "escalate", reason: "long message" };
   if (DENY.test(body)) return { kind: "escalate", reason: "sensitive words" };
