@@ -7060,3 +7060,38 @@ export function cityThreadProviderEmail(opts: {
     opts.headline,
   );
 }
+
+/**
+ * Olera's care team wrote into a family–provider conversation.
+ *
+ * The new-message templates promise the conversation is "just between the two
+ * of you", which stops being true the moment Olera writes in it, so this one
+ * says who else is there. No names in the subject line (feedback: PHI in
+ * subjects); the other party is named in the body.
+ */
+export function oleraMessageEmail(opts: {
+  recipientName: string;
+  otherPartyName: string;
+  recipient: "family" | "provider";
+  messagePreview: string;
+  viewUrl: string;
+}): string {
+  const greeting = opts.recipientName && opts.recipientName.trim() ? escapeHtml(firstName(opts.recipientName, "there")) : "there";
+  const other = escapeHtml(opts.otherPartyName || (opts.recipient === "family" ? "the provider" : "the family"));
+  const about = opts.recipient === "family" ? "your care request" : `a family's care request`;
+  return layout(`
+    <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.5;">
+      Hi ${greeting},
+    </p>
+    <p style="font-size:15px;color:#374151;margin:0 0 20px;line-height:1.5;">
+      Olera's care team wrote in your conversation with <strong>${other}</strong> about ${about}:
+    </p>
+    <div style="background:#f9fafb;border-left:3px solid ${BRAND_COLOR};padding:12px 16px;margin:0 0 20px;border-radius:0 8px 8px 0;">
+      <p style="font-size:14px;color:#374151;margin:0;line-height:1.5;">"${escapeHtml(opts.messagePreview)}"</p>
+    </div>
+    <div style="margin:0 0 24px;">${button("Read and reply", opts.viewUrl)}</div>
+    <p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">
+      ${other} can see this conversation too, along with Olera's care team.
+    </p>
+  `);
+}

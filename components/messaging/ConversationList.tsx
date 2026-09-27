@@ -123,7 +123,14 @@ function transformPreviewText(text: string, variant: "family" | "provider"): str
 
 function getLastMessage(connection: ConnectionWithProfile): { text: string; timestamp: string } | null {
   const meta = connection.metadata as Record<string, unknown> | undefined;
-  const thread = (meta?.thread as ThreadMessage[]) || [];
+  const base = (meta?.thread as ThreadMessage[]) || [];
+  // Olera's messages sit beside the thread; the preview shows whichever is newest.
+  const olera = Array.isArray(meta?.olera_messages)
+    ? (meta.olera_messages as { text?: string; created_at?: string }[])
+        .filter((m) => m.text && m.created_at)
+        .map((m) => ({ from_profile_id: "olera", text: `Olera: ${m.text}`, created_at: m.created_at as string }) as ThreadMessage)
+    : [];
+  const thread = olera.length ? [...base, ...olera].sort((a, b) => (a.created_at < b.created_at ? -1 : 1)) : base;
 
   if (thread.length > 0) {
     const last = thread[thread.length - 1];
