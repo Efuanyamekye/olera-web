@@ -248,8 +248,157 @@ function emailWords(snippet: string): string {
   return (cut > 0 ? decoded.slice(0, cut) : decoded).trim();
 }
 
+/**
+ * Three levels of loudness (the "Quieter Case Timeline" proposal):
+ *
+ *   said        words someone wrote to someone else: bubbles
+ *   moment      what changed the case: offers, inquiries, a logged call, an
+ *               outcome, a send that failed. A thin line or a small card.
+ *   background  automatic and passive things (emails and whether they were
+ *               opened, clicks, page visits). Folded into one line per run.
+ *
+ * A notice that repeats a message ("X replied to you") joins that message's
+ * line instead of taking a row of its own. "Everything" shows every row flat.
+ */
+type Tier = "said" | "moment" | "background";
+
+const REPEATS_A_MESSAGE = /replied to you|sent you a message|you can now message/i;
+
+function tierOf(it: SeekerTimelineItem): Tier {
+  const failed = !!it.status && /fail|bounce|complain/i.test(it.status);
+  if (isMessage(it)) return "said";
+  if (failed) return "moment";
+  if (it.id.startsWith("city:") || it.id.startsWith("offer-") || it.id.startsWith("conn:")) return "moment";
+  // A logged call, meeting or note is a moment; a logged "email sent" or
+  // "text sent" repeats a message already on the page.
+  if (it.kind === "touch") return it.channel === "text" || it.channel === "email" ? "background" : "moment";
+  if (/outcome/i.test(it.title)) return "moment";
+  return "background";
+}
+
+type Row =
+  | { type: "said"; item: SeekerTimelineItem; alsoEmailed: string | null }
+  | { type: "moment"; items: SeekerTimelineItem[] }
+  | { type: "call"; item: SeekerTimelineItem }
+  | { type: "fold"; items: SeekerTimelineItem[] };
+
+function buildRows(ordered: SeekerTimelineItem[]): Row[] {
+  const rows: Row[] = [];
+  for (const it of ordered) {
+    const tier = tierOf(it);
+    const last = rows[rows.length - 1];
+    if (tier === "said") {
+      rows.push({ type: "said", item: it, alsoEmailed: null });
+      continue;
+    }
+    // A notice announcing the message just above it joins that message.
+    if (
+      tier === "background" &&
+      last?.type === "said" &&
+      REPEATS_A_MESSAGE.test(it.title) &&
+      new Date(it.occurred_at).getTime() - new Date(last.item.occurred_at).getTime() < 30 * 60 * 1000
+    ) {
+      last.alsoEmailed = it.status ? `emailed, ${it.status}` : "emailed";
+      continue;
+    }
+    if (tier === "moment") {
+      if (it.kind === "touch") {
+        rows.push({ type: "call", item: it });
+        continue;
+      }
+      // A run of offers, or of inquiries, reads as one line.
+      const kindOf = (x: SeekerTimelineItem) => (x.id.startsWith("offer-") ? "offer" : x.id.startsWith("conn:") ? "conn" : x.id);
+      const failed = !!it.status && /fail|bounce|complain/i.test(it.status);
+      const mergeable = kindOf(it) === "offer" || kindOf(it) === "conn";
+      // The run can be broken only by folded background (the email each
+      // inquiry sends), not by anything said: "Asked X and Y", one fold after.
+      const prev = last?.type === "fold" ? rows[rows.length - 2] : last;
+      const near =
+        prev?.type === "moment" &&
+        new Date(it.occurred_at).getTime() - new Date(prev.items[prev.items.length - 1].occurred_at).getTime() < 60 * 60 * 1000;
+      if (!failed && mergeable && prev?.type === "moment" && kindOf(prev.items[0]) === kindOf(it) && near) {
+        prev.items.push(it);
+      } else {
+        rows.push({ type: "moment", items: [it] });
+      }
+      continue;
+    }
+    if (last?.type === "fold") last.items.push(it);
+    else rows.push({ type: "fold", items: [it] });
+  }
+  return rows;
+}
+
+/** "Offer #2 to Cambridge Caregivers" → "Cambridge Caregivers". */
+function targetOf(title: string): string {
+  const m = title.match(/ to (.+)$/);
+  return (m ? m[1] : title).split(/\s+-\s+|,\s/)[0].trim();
+}
+
+function offerOutcome(it: SeekerTimelineItem): string {
+  const d = it.detail ?? "";
+  if (/took it/i.test(d)) return "took it";
+  if (/passed/i.test(d)) return "passed";
+  if (/ran out/i.test(d)) return "no answer";
+  if (/NEVER REACHED/i.test(d)) return "never reached them";
+  return "waiting";
+}
+
+function joinNames(names: string[]): string {
+  if (names.length <= 2) return names.join(" and ");
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
+}
+
+function momentText(items: SeekerTimelineItem[]): { text: ReactNode; warn: boolean } {
+  const first = items[0];
+  const failed = !!first.status && /fail|bounce|complain/i.test(first.status);
+  if (failed) return { text: <>Didn&apos;t reach them: {first.title}</>, warn: true };
+  if (first.id.startsWith("offer-")) {
+    const outcomes = Array.from(new Set(items.map(offerOutcome)));
+    const outcome = outcomes.length === 1 ? outcomes[0] : outcomes.join(", ");
+    return {
+      text:
+        items.length === 1 ? (
+          <>
+            Offered to <b className="font-semibold text-gray-900">{targetOf(first.title)}</b> · {outcome}
+          </>
+        ) : (
+          <>
+            Offered to {items.length} agencies · {outcome}
+          </>
+        ),
+      warn: outcomes.includes("never reached them"),
+    };
+  }
+  if (first.id.startsWith("conn:")) {
+    return {
+      text: (
+        <>
+          Asked <b className="font-semibold text-gray-900">{joinNames(items.map((x) => targetOf(x.title)))}</b>
+        </>
+      ),
+      warn: false,
+    };
+  }
+  if (/outcome reported/i.test(first.title)) return { text: "Told us how it went", warn: false };
+  return { text: first.title, warn: false };
+}
+
+function MomentIcon({ id, warn }: { id: string; warn: boolean }) {
+  const stroke = warn ? "#b54708" : "#417272";
+  const d = id.startsWith("offer-") || id.startsWith("conn:") ? "M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z" : id.startsWith("city:") ? "M12 5v14M5 12h14" : "M20 6 9 17l-5-5";
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="flex-none">
+      <path d={d} />
+    </svg>
+  );
+}
+
 function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; familyName: string; tz: string }) {
   const ordered = useMemo(() => [...items].sort((a, b) => (a.occurred_at < b.occurred_at ? -1 : 1)), [items]);
+  const rows = useMemo(() => buildRows(ordered), [ordered]);
+  const [everything, setEverything] = useState(false);
+  const [open, setOpen] = useState<Record<string, boolean>>({});
   const end = useRef<HTMLDivElement>(null);
   useEffect(() => {
     end.current?.scrollIntoView({ block: "end" });
@@ -259,99 +408,251 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
     return <p className="py-10 text-center text-[14px] text-gray-500">Nothing on record yet.</p>;
   }
 
-  let lastDay = "";
-  return (
-    <div className="flex flex-col gap-2.5">
-      {ordered.map((it) => {
-        const day = dayOf(it.occurred_at, tz);
-        const header = day !== lastDay ? (lastDay = day) : null;
-        const bad = !!it.status && /fail|bounce|complain/i.test(it.status);
-        const via = it.channel === "text" ? "text" : it.channel === "email" ? "email" : it.channel === "in_app" ? "page" : null;
-        const link = it.href ? (
+  const eventLine = (it: SeekerTimelineItem, key?: string) => {
+    const bad = !!it.status && /fail|bounce|complain/i.test(it.status);
+    return (
+      <div key={key} className="mx-auto max-w-[85%] text-center text-[12.5px] leading-snug text-gray-500">
+        <span className="font-semibold text-gray-700">{it.title}</span>
+        {it.detail ? <span> · {it.detail}</span> : null}
+        <span className={bad ? " text-red-700" : ""}>
+          {" · "}
+          {timeOf(it.occurred_at, tz)}
+          {it.status ? ` · ${it.status}` : ""}
+        </span>
+        {it.href ? (
           <Link href={it.href} className="ml-1 font-semibold text-gray-900 underline">
             Open
           </Link>
-        ) : null;
+        ) : null}
+      </div>
+    );
+  };
 
-        let body: ReactNode;
-        if (!isMessage(it)) {
-          body = (
-            <div className="mx-auto max-w-[85%] text-center text-[12.5px] leading-snug text-gray-500">
-              <span className="font-semibold text-gray-700">{it.title}</span>
-              {it.detail ? <span> · {it.detail}</span> : null}
-              <span className={bad ? " text-red-700" : ""}>
-                {" · "}
-                {timeOf(it.occurred_at, tz)}
-                {it.status ? ` · ${it.status}` : ""}
-              </span>
-              {link}
+  // Like iMessage: delivery shows only under our latest message (failures
+  // always show), and the "Open" links and system notes live in Everything.
+  const lastOurs = [...ordered].reverse().find((x) => isMessage(x) && x.author !== "provider" && (x.actor === "out" || x.actor === "system"))?.id;
+  const messageRow = (it: SeekerTimelineItem, alsoEmailed: string | null) => {
+    const bad = !!it.status && /fail|bounce|complain/i.test(it.status);
+    const via = it.channel === "text" ? "text" : it.channel === "email" ? "email" : it.channel === "in_app" ? "page" : null;
+    const auto = it.actor === "system" && it.author !== "provider" && !it.sent_by_person;
+    // Everything we sent sits on our side, typed or automatic.
+    const mine = it.author !== "provider" && (it.actor === "out" || it.actor === "system");
+    // A support@ email keeps its words in the snippet and its subject in the
+    // title, so the bubble shows the words with the subject above.
+    const email = it.kind === "support" && it.detail ? emailWords(it.detail) : null;
+    const who =
+      it.author === "provider"
+        ? (it.author_name ?? "The provider")
+        : auto
+          ? "Olera, automatic"
+          : it.olera_post && it.author_name
+            ? `Olera · ${it.author_name}`
+            : mine
+              ? "Olera"
+              : familyName;
+    return (
+      <div className={`flex items-end gap-2 ${mine ? "justify-end" : ""}`}>
+        {!mine && (
+          <span
+            className={`grid h-8 w-8 flex-none place-items-center rounded-full text-[11px] font-bold text-white ${
+              it.author === "provider" ? "bg-[#417272]" : "bg-[#b5835a]"
+            }`}
+          >
+            {initials(who)}
+          </span>
+        )}
+        <div className={`max-w-[78%] ${mine ? "text-right" : ""}`}>
+          <div
+            className={`inline-block whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-left text-[14.5px] leading-snug ${
+              auto ? "rounded-br-md bg-gray-200 text-gray-800" : mine ? "rounded-br-md bg-gray-900 text-white" : "rounded-bl-md bg-gray-100 text-gray-900"
+            }`}
+          >
+            {email ? (
+              <>
+                <span className={`mb-0.5 block text-[12px] font-semibold ${mine && !auto ? "text-gray-300" : "text-gray-500"}`}>{it.title}</span>
+                {email}
+              </>
+            ) : (
+              it.full_text?.trim() || it.title
+            )}
+          </div>
+          <p className={`mt-1 text-[12px] ${bad ? "text-red-700" : "text-gray-500"}`}>
+            {who}
+            {it.detail && !email && (everything || it.kind !== "sms") ? ` · ${it.detail}` : ""}
+            {via && everything ? ` · ${via}` : ""} · {timeOf(it.occurred_at, tz)}
+            {it.status && (everything || bad || it.id === lastOurs) ? ` · ${it.status}` : ""}
+            {alsoEmailed ? ` · ${alsoEmailed}` : ""}
+            {it.href && everything ? (
+              <Link href={it.href} className="ml-1 font-semibold text-gray-900 underline">
+                Open
+              </Link>
+            ) : null}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  // Day headers go on the first visible row of each day.
+  let lastDay = "";
+  const dayHeader = (iso: string) => {
+    const day = dayOf(iso, tz);
+    if (day === lastDay) return null;
+    lastDay = day;
+    return <p className="my-3 text-center text-[12px] font-semibold text-gray-500">{day}</p>;
+  };
+
+  const toggle = (
+    <div className="mb-2 flex justify-end">
+      <div className="flex gap-1 rounded-full bg-gray-100 p-1 text-[12.5px] font-semibold" role="tablist" aria-label="Show">
+        {(["Conversation", "Everything"] as const).map((label) => {
+          const on = (label === "Everything") === everything;
+          return (
+            <button
+              key={label}
+              type="button"
+              role="tab"
+              aria-selected={on}
+              onClick={() => setEverything(label === "Everything")}
+              className={`rounded-full px-3 py-1 ${on ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"}`}
+            >
+              {label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  if (everything) {
+    return (
+      <div className="flex flex-col gap-2.5">
+        {toggle}
+        {ordered.map((it) => (
+          <div key={it.id}>
+            {dayHeader(it.occurred_at)}
+            {isMessage(it) ? messageRow(it, null) : eventLine(it)}
+          </div>
+        ))}
+        {/* On a phone the newest row must clear the floating Message pill. */}
+      <div ref={end} className="h-20 lg:h-0" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-2.5">
+      {toggle}
+      {rows.map((row) => {
+        if (row.type === "said") {
+          return (
+            <div key={row.item.id}>
+              {dayHeader(row.item.occurred_at)}
+              {messageRow(row.item, row.alsoEmailed)}
             </div>
           );
-        } else {
-          const auto = it.actor === "system" && it.author !== "provider" && !it.sent_by_person;
-          // Everything we sent sits on our side, typed or automatic.
-          const mine = it.author !== "provider" && (it.actor === "out" || it.actor === "system");
-          // A support@ email keeps its words in the snippet and its subject in
-          // the title, so the bubble shows the words with the subject above.
-          const email = it.kind === "support" && it.detail ? emailWords(it.detail) : null;
-          const who =
-            it.author === "provider"
-              ? (it.author_name ?? "The provider")
-              : auto
-                ? "Olera, automatic"
-                : it.olera_post && it.author_name
-                  ? `Olera · ${it.author_name}`
-                  : mine
-                    ? "Olera"
-                    : familyName;
-          body = (
-            <div className={`flex items-end gap-2 ${mine ? "justify-end" : ""}`}>
-              {!mine && (
-                <span
-                  className={`grid h-8 w-8 flex-none place-items-center rounded-full text-[11px] font-bold text-white ${
-                    it.author === "provider" ? "bg-[#417272]" : "bg-[#b5835a]"
-                  }`}
-                >
-                  {initials(who)}
-                </span>
-              )}
-              <div className={`max-w-[78%] ${mine ? "text-right" : ""}`}>
-                <div
-                  className={`inline-block whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-left text-[14.5px] leading-snug ${
-                    auto ? "rounded-br-md bg-gray-200 text-gray-800" : mine ? "rounded-br-md bg-gray-900 text-white" : "rounded-bl-md bg-gray-100 text-gray-900"
-                  }`}
-                >
-                  {email ? (
-                    <>
-                      <span className={`mb-0.5 block text-[12px] font-semibold ${mine && !auto ? "text-gray-300" : "text-gray-500"}`}>{it.title}</span>
-                      {email}
-                    </>
+        }
+        if (row.type === "call") {
+          const it = row.item;
+          const missed = !!it.status && /did not reach|no answer|voicemail/i.test(it.status);
+          const label = it.channel === "call" ? (missed ? "Call · didn't reach them" : it.status?.includes("reached") ? "Call · reached them" : "Call") : it.channel === "meeting" ? "Meeting" : "Note";
+          return (
+            <div key={it.id}>
+              {dayHeader(it.occurred_at)}
+              <div className="mx-auto flex w-full max-w-[520px] items-start gap-2.5 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={missed ? "#b54708" : "#417272"} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="mt-0.5 flex-none">
+                  {it.channel === "call" ? (
+                    <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" />
                   ) : (
-                    it.full_text?.trim() || it.title
+                    <path d="M4 4h16v12H8l-4 4z" />
                   )}
+                </svg>
+                <div className="min-w-0 text-[13px] leading-snug">
+                  <p className="font-semibold text-gray-900">{label}</p>
+                  <p className="text-gray-600">
+                    {it.full_text?.trim() || it.title} · {timeOf(it.occurred_at, tz)}
+                  </p>
                 </div>
-                <p className={`mt-1 text-[12px] ${bad ? "text-red-700" : "text-gray-500"}`}>
-                  {who}
-                  {it.detail && !email ? ` · ${it.detail}` : ""}
-                  {via ? ` · ${via}` : ""} · {timeOf(it.occurred_at, tz)}
-                  {it.status ? ` · ${it.status}` : ""}
-                  {link}
-                </p>
               </div>
             </div>
           );
         }
+        if (row.type === "moment") {
+          const { text, warn } = momentText(row.items);
+          const key = row.items[0].id;
+          const many = row.items.length > 1;
+          return (
+            <div key={key}>
+              {dayHeader(row.items[0].occurred_at)}
+              <button
+                type="button"
+                disabled={!many}
+                onClick={() => setOpen((o) => ({ ...o, [key]: !o[key] }))}
+                className="flex w-full items-center gap-3 text-[12.5px] text-gray-600 disabled:cursor-default"
+              >
+                <span className="h-px min-w-[12px] flex-1 bg-gray-200" />
+                {/* Icon beside one run of text, time inline, so a long line
+                    wraps as a sentence on a phone. */}
+                <span className={`inline-flex max-w-[85%] items-start gap-1.5 text-left leading-snug ${warn ? "text-[#b54708]" : ""}`}>
+                  <span className="mt-[2px]">
+                    <MomentIcon id={row.items[0].id} warn={warn} />
+                  </span>
+                  <span>
+                    {text} <span className="whitespace-nowrap text-gray-400">· {timeOf(row.items[0].occurred_at, tz)}</span>
+                    {many && <span className="ml-1 text-[10px] text-gray-400">{open[key] ? "▴" : "▾"}</span>}
+                  </span>
+                </span>
+                <span className="h-px min-w-[12px] flex-1 bg-gray-200" />
+              </button>
+              {many && open[key] && <div className="mt-1.5 flex flex-col gap-1">{row.items.map((it) => eventLine(it, it.id))}</div>}
+            </div>
+          );
+        }
+        // fold
+        const key = row.items[0].id;
+        const emails = row.items.filter((x) => x.kind === "email" || x.channel === "email");
+        const opened = emails.filter((x) => /open|click/i.test(x.status ?? "")).length;
+        const others = row.items.length - emails.length;
+        const parts: string[] = [];
+        if (emails.length) {
+          parts.push(`${emails.length} automatic email${emails.length === 1 ? "" : "s"}`);
+          if (opened) parts.push(opened === emails.length && emails.length > 1 ? "all opened" : `${opened} opened`);
+        }
+        if (others) parts.push(`${others} other update${others === 1 ? "" : "s"}`);
         return (
-          <div key={it.id}>
-            {header && <p className="my-3 text-center text-[12px] font-semibold text-gray-500">{header}</p>}
-            {body}
+          <div key={key}>
+            {dayHeader(row.items[0].occurred_at)}
+            <div className="flex justify-center">
+              <button
+                type="button"
+                onClick={() => setOpen((o) => ({ ...o, [key]: !o[key] }))}
+                aria-expanded={!!open[key]}
+                className="rounded-full border border-gray-200 bg-white px-3 py-1 text-[12px] text-gray-500 hover:border-gray-400"
+              >
+                {parts.join(" · ")} <span className="text-[10px]">{open[key] ? "▴" : "▾"}</span>
+              </button>
+            </div>
+            {open[key] && (
+              <div className="mx-auto mt-2 flex max-w-[560px] flex-col gap-1 border-l-2 border-gray-100 pl-3 text-[12px] text-gray-500">
+                {row.items.map((it) => (
+                  <span key={it.id}>
+                    {shortWhen(it.occurred_at, tz)} {timeOf(it.occurred_at, tz)} · {it.title}
+                    {it.status ? ` · ${it.status}` : ""}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         );
       })}
-      <div ref={end} />
+      {/* On a phone the newest row must clear the floating Message pill. */}
+      <div ref={end} className="h-20 lg:h-0" />
     </div>
   );
 }
+
+/** The composer at the foot of the conversation on a laptop. */
+const INLINE_SHELL = "border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6";
 
 function Composer({
   routing,
@@ -359,12 +660,18 @@ function Composer({
   holder,
   suggestions,
   onSent,
+  shell = INLINE_SHELL,
+  onDone,
 }: {
   routing: Routing;
   familyName: string;
   holder: string | null;
   suggestions: { id: string; text: string; name: string }[];
   onSent: () => Promise<void>;
+  /** Wrapper classes: inline at the foot of the conversation, or inside the phone sheet. */
+  shell?: string;
+  /** Called after a successful send, so the phone sheet can close. */
+  onDone?: () => void;
 }) {
   const hasPhone = Boolean(routing.has_phone);
   const hasEmail = Boolean(routing.has_email);
@@ -386,6 +693,7 @@ function Composer({
       setText("");
       setSubject("");
       await onSent();
+      onDone?.();
     } catch (e) {
       setMsg({ tone: "err", text: e instanceof Error ? e.message : "Did not send" });
     } finally {
@@ -406,7 +714,7 @@ function Composer({
   }
 
   return (
-    <div className="sticky bottom-0 border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6 lg:static">
+    <div className={shell}>
       {pending.length > 0 && (
         <ul className="mb-2 space-y-1">
           {pending.map((m) => (
@@ -442,11 +750,15 @@ function Composer({
       <div className="flex items-end gap-2 rounded-3xl border border-gray-300 py-1.5 pl-4 pr-1.5 focus-within:border-gray-900">
         <textarea
           aria-label={`Message ${readers}`}
-          rows={text.length > 90 ? 3 : 1}
+          rows={shell !== INLINE_SHELL ? 3 : text.length > 90 ? 3 : 1}
+          // In the phone sheet the keyboard should come up with it.
+          autoFocus={shell !== INLINE_SHELL}
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={channel === "sms" ? 480 : 10000}
-          placeholder={`Message ${readers}`}
+          // The To: line under the box names the readers; a placeholder that
+          // long wrapped and was cut off on a phone.
+          placeholder="Write a message…"
           className="min-w-0 flex-1 resize-none bg-transparent py-1.5 text-[14.5px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
         />
         <button
@@ -487,10 +799,14 @@ function InquiryComposer({
   conversations,
   familyName,
   onSent,
+  shell = INLINE_SHELL,
+  onDone,
 }: {
   conversations: { connection_id: string; name: string }[];
   familyName: string;
   onSent: () => Promise<void>;
+  shell?: string;
+  onDone?: () => void;
 }) {
   const [pick, setPick] = useState(conversations[0]?.connection_id ?? "");
   const [text, setText] = useState("");
@@ -515,6 +831,7 @@ function InquiryComposer({
       setMsg({ tone: "ok", text: d.notice || "Sent." });
       setText("");
       await onSent();
+      onDone?.();
     } catch (e) {
       setMsg({ tone: "err", text: e instanceof Error ? e.message : "Did not send" });
     } finally {
@@ -523,15 +840,19 @@ function InquiryComposer({
   }
 
   return (
-    <div className="sticky bottom-0 border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6 lg:static">
+    <div className={shell}>
       <div className="flex items-end gap-2 rounded-3xl border border-gray-300 py-1.5 pl-4 pr-1.5 focus-within:border-gray-900">
         <textarea
           aria-label={`Message ${readers}`}
-          rows={text.length > 90 ? 3 : 1}
+          rows={shell !== INLINE_SHELL ? 3 : text.length > 90 ? 3 : 1}
+          // In the phone sheet the keyboard should come up with it.
+          autoFocus={shell !== INLINE_SHELL}
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={4000}
-          placeholder={`Message ${readers}`}
+          // The To: line under the box names the readers; a placeholder that
+          // long wrapped and was cut off on a phone.
+          placeholder="Write a message…"
           className="min-w-0 flex-1 resize-none bg-transparent py-1.5 text-[14.5px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
         />
         <button
@@ -963,6 +1284,13 @@ function CaseInner() {
   const [unarchiving, setUnarchiving] = useState(false);
   const [archiveError, setArchiveError] = useState<string | null>(null);
   const isDesktop = useIsDesktop();
+  const [mobileTab, setMobileTab] = useState<"conversation" | "case">("conversation");
+  const [sheetOpen, setSheetOpen] = useState(false);
+  // A new family starts on its conversation with the sheet closed.
+  useEffect(() => {
+    setMobileTab("conversation");
+    setSheetOpen(false);
+  }, [seekerId]);
 
   const load = useCallback(async () => {
     setError(null);
@@ -1056,35 +1384,104 @@ function CaseInner() {
           ? `${data.episode.blocked_on} has it`
           : EPISODE_WORD[data.episode.state];
 
-  // Below md the admin's tab bar is fixed to the bottom (73px). Padding the
-  // scroll area for it is enough: a sticky composer stops at the padding edge,
-  // so it sits just above the bar.
+  // What the family can be written to, if anything. The same box sits at the
+  // foot of the conversation on a laptop and in a sheet on a phone.
+  const openInquiries = data
+    ? data.providers.filter((p) => p.connection_id && (p.status === "pending" || p.status === "accepted"))
+    : [];
+  const composerFor = (shell: string | undefined, onDone?: () => void) =>
+    !data ? null : routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
+      <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} shell={shell} onDone={onDone} />
+    ) : !routing && openInquiries.length > 0 ? (
+      // Only conversations Olera can write in: a declined or archived one is
+      // closed to the family and the provider too.
+      <InquiryComposer
+        key={seekerId}
+        conversations={openInquiries.map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
+        familyName={familyName === "this family" ? "the family" : familyName}
+        onSent={load}
+        shell={shell}
+        onDone={onDone}
+      />
+    ) : null;
+  const canWrite = Boolean(composerFor(undefined));
+  const noWriteNote = !data || canWrite ? null : routing ? (
+    routing.closed ? "This family is closed, so nothing further goes out from here." : "No phone or email on file to write to."
+  ) : data.profile.phone && data.reach.phone !== "impossible" ? (
+    <>
+      This family isn&apos;t from a city ad, so texts go through{" "}
+      <Link href={`/admin/inbox?phone=${encodeURIComponent(data.profile.phone)}`} className="font-semibold text-gray-900 underline">
+        Messages
+      </Link>
+      .
+    </>
+  ) : null;
+
+  const title = data ? (data.profile.label_is_fallback ? "No name on file" : data.profile.label) : "";
+  const subtitle = data
+    ? [data.profile.label_is_fallback ? data.profile.label : null, cityName(data.city_slug) ?? data.profile.city, where].filter(Boolean).join(" · ")
+    : "";
+
   return (
-    <div className="h-full overflow-y-auto bg-white pb-[4.75rem] md:pb-0 lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden">
+    <div className="h-full overflow-y-auto bg-white pb-28 lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden lg:pb-0">
       <FamilyList currentId={seekerId} backQuery={backQuery} />
 
+      {/* PHONE: nothing is fixed to the bottom edge. A Message pill floats
+          over the content, which fades out beneath them
+          (the Jupiter pattern), instead of the admin tab bar plus a composer
+          slab that took a third of the screen and never met the edge cleanly. */}
+      {!isDesktop && (
+        <>
+          <div className="pointer-events-none fixed inset-x-0 bottom-0 z-20 h-28 bg-gradient-to-t from-white via-white/80 to-transparent" />
+          {canWrite && !sheetOpen && (
+            <button
+              type="button"
+              onClick={() => setSheetOpen(true)}
+              className="fixed bottom-[calc(env(safe-area-inset-bottom,0px)+16px)] right-4 z-30 flex items-center gap-2 rounded-full bg-gray-900 px-5 py-3.5 text-[15px] font-semibold text-white shadow-[0_6px_20px_rgba(0,0,0,0.25)]"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              Message
+            </button>
+          )}
+          {sheetOpen && (
+            <div className="fixed inset-0 z-40" role="dialog" aria-modal="true" aria-label="Write a message">
+              <button type="button" aria-label="Close" className="absolute inset-0 bg-black/30 motion-safe:animate-[fade-in_150ms_ease-out]" onClick={() => setSheetOpen(false)} />
+              <div className="absolute inset-x-0 bottom-0 rounded-t-3xl bg-white pb-[env(safe-area-inset-bottom,0px)] shadow-[0_-8px_30px_rgba(0,0,0,0.15)] motion-safe:animate-[sheet-up_220ms_cubic-bezier(0.2,0.8,0.2,1)]">
+                <div className="flex items-center justify-between px-5 pb-1 pt-3">
+                  <span className="mx-auto h-1 w-10 rounded-full bg-gray-300" aria-hidden="true" />
+                </div>
+                {composerFor("bg-white px-4 pb-4 pt-2", () => setSheetOpen(false))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
       <main className="flex min-w-0 flex-col border-gray-200 lg:h-full lg:min-h-0 lg:border-l">
-        <header className="border-b border-gray-200 px-4 py-4 sm:px-6">
-          <Link href={backHref} className="text-[13px] font-semibold text-gray-500 hover:text-gray-900 lg:hidden">
-            ‹ All families
-          </Link>
+        <header className="border-b border-gray-200 px-4 pb-4 pt-[calc(env(safe-area-inset-top,0px)+16px)] sm:px-6 lg:pt-4">
           {!data ? (
             <p className="text-[14px] text-gray-400">Loading…</p>
           ) : (
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0">
-                <h1 className={`text-[24px] font-bold tracking-tight ${data.profile.label_is_fallback ? "text-gray-500" : "text-gray-900"}`}>{data.profile.label}</h1>
-                <p className="text-[14px] text-gray-500">
-                  {[cityName(data.city_slug) ?? data.profile.city, where].filter(Boolean).join(" · ")}
-                </p>
+                <h1 className={`text-[26px] font-bold tracking-tight lg:text-[24px] ${data.profile.label_is_fallback ? "text-gray-500" : "text-gray-900"}`}>{title}</h1>
+                <p className="break-words text-[14px] text-gray-500">{subtitle}</p>
                 <LockLine text={lockText} />
+                {/* On a phone one line says what is wrong; the Next step in the
+                    Case tab says what to do about it. */}
+                {!isDesktop && data.flags[0] && (
+                  <p className="mt-2 text-[14px] font-semibold text-gray-900">{SEEKER_FLAG_LABEL[data.flags[0]]}</p>
+                )}
               </div>
               <div className="flex flex-wrap items-center gap-1.5">
-                {data.flags.map((f) => (
-                  <span key={f} className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">
-                    {SEEKER_FLAG_LABEL[f]}
-                  </span>
-                ))}
+                {isDesktop &&
+                  data.flags.map((f) => (
+                    <span key={f} className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">
+                      {SEEKER_FLAG_LABEL[f]}
+                    </span>
+                  ))}
                 {data.archived && (
                   <button type="button" disabled={unarchiving} onClick={() => void putBack()} className={pillBtn}>
                     {unarchiving ? "Putting back…" : "Put back"}
@@ -1096,47 +1493,42 @@ function CaseInner() {
           {archiveError && <p className="mt-1 text-[13px] text-red-700">{archiveError}</p>}
         </header>
 
+        {data && !isDesktop && (
+          <div className="sticky top-0 z-10 flex items-center gap-6 border-b border-gray-200 bg-white/95 px-4 backdrop-blur" role="tablist">
+            {/* The way back rides with the tabs, so it stays in reach as you
+                scroll without floating over anything. */}
+            <Link
+              href={backHref}
+              aria-label="Back to families"
+              className="-ml-1 grid h-9 w-9 flex-none place-items-center rounded-full bg-gray-100 text-[18px] font-semibold text-gray-900"
+            >
+              ‹
+            </Link>
+            {(["conversation", "case"] as const).map((t) => (
+              <button
+                key={t}
+                type="button"
+                role="tab"
+                aria-selected={mobileTab === t}
+                onClick={() => setMobileTab(t)}
+                className={`-mb-px border-b-2 py-3 text-[15px] font-semibold ${mobileTab === t ? "border-gray-900 text-gray-900" : "border-transparent text-gray-400"}`}
+              >
+                {t === "conversation" ? "Conversation" : "Case"}
+              </button>
+            ))}
+          </div>
+        )}
+
         {data && (
           <>
-            {/* On a phone the case comes before the conversation: who has
-                them and what to do next is what you open the page to see. */}
-            {!isDesktop && (
-              <div className="border-b border-gray-200">
-                <CasePanel key={`m-${seekerId}`} data={data} familyName={familyName} tz={tz} reload={load} />
+            {!isDesktop && mobileTab === "case" && <CasePanel key={`m-${seekerId}`} data={data} familyName={familyName} tz={tz} reload={load} />}
+            {(isDesktop || mobileTab === "conversation") && (
+              <div className="px-4 py-5 sm:px-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+                <Conversation items={data.items} familyName={data.profile.label_is_fallback ? "Family" : data.profile.label} tz={tz} />
+                {!isDesktop && noWriteNote && <p className="mt-6 text-center text-[13px] text-gray-500">{noWriteNote}</p>}
               </div>
             )}
-            <div className="px-4 py-5 sm:px-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
-              <Conversation items={data.items} familyName={data.profile.label_is_fallback ? "Family" : data.profile.label} tz={tz} />
-            </div>
-            {routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
-              <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} />
-            ) : !routing && data.providers.some((p) => p.connection_id && (p.status === "pending" || p.status === "accepted")) ? (
-              <InquiryComposer
-                key={seekerId}
-                // Only conversations Olera can write in: a declined or archived
-                // one is closed to the family and the provider too.
-                conversations={data.providers
-                  .filter((p) => p.connection_id && (p.status === "pending" || p.status === "accepted"))
-                  .map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
-                familyName={familyName === "this family" ? "the family" : familyName}
-                onSent={load}
-              />
-            ) : routing ? (
-              <div className="border-t border-gray-200 px-4 py-3 text-[13px] text-gray-500 sm:px-6">
-                {routing.closed ? "This family is closed, so nothing further goes out from here." : "No phone or email on file to write to."}
-              </div>
-            ) : (
-              data.profile.phone &&
-              data.reach.phone !== "impossible" && (
-                <div className="border-t border-gray-200 px-4 py-3 text-[13px] text-gray-500 sm:px-6">
-                  This family isn&apos;t from a city ad, so texts go through{" "}
-                  <Link href={`/admin/inbox?phone=${encodeURIComponent(data.profile.phone)}`} className="font-semibold text-gray-900 underline">
-                    Messages
-                  </Link>
-                  .
-                </div>
-              )
-            )}
+            {isDesktop && (composerFor(undefined) ?? (noWriteNote && <div className="border-t border-gray-200 px-4 py-3 text-[13px] text-gray-500 sm:px-6">{noWriteNote}</div>))}
           </>
         )}
       </main>
