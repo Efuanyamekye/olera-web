@@ -9,7 +9,8 @@ import { loadPaidRenewal, type PaidRenewal } from "@/lib/war-room/renewals.serve
 import { withoutStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 import { correctionLines, loadCorrections } from "@/lib/war-room/corrections.server";
 import { closeExchange } from "@/lib/war-room/conversation.server";
-import { founderChatId, isTelegramConfigured, sendTelegramMessage } from "@/lib/telegram.server";
+import { founderChatId, isTelegramConfigured, sendTelegramMessage, sendTelegramRecording, sendTelegramVoice } from "@/lib/telegram.server";
+import { sendVoiceNote } from "@/lib/war-room/voice.server";
 import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
 import { loadBlindSpots, loadLookupGaps } from "@/lib/war-room/lookups.server";
 import type { WarRoomDiscoveryRun, WarRoomProbeReading } from "@/lib/war-room/types";
@@ -517,6 +518,8 @@ export async function deliverWarRoomBrief(
         await supabaseChatStore(db).append(telegramChat, {
           surface: "telegram", role: "cortex", kind: "brief", text, at: new Date().toISOString(),
         }).catch(() => false);
+        // Then the brief as a voice note, condensed for the ear. Never throws.
+        await sendVoiceNote(telegramChat, text, "brief", { recording: sendTelegramRecording, sendVoice: sendTelegramVoice });
       }
     }
     if (!result.success) result = await sendSlackAlert(text);

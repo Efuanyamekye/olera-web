@@ -171,3 +171,24 @@ export async function registerTelegramWebhook(url: string) {
       : null,
   };
 }
+
+/** "Cortex is recording a voice message..." while a note is made. */
+export async function sendTelegramRecording(chatId: string) {
+  await call("sendChatAction", { chat_id: chatId, action: "record_voice" }, 5_000);
+}
+
+/** A voice note (Ogg/Opus). sendVoice takes a multipart upload. */
+export async function sendTelegramVoice(chatId: string, audio: Buffer): Promise<{ success: boolean; error?: string }> {
+  const bot = token();
+  if (!bot) return { success: false, error: "TELEGRAM_CORTEX_BOT_TOKEN not configured" };
+  try {
+    const form = new FormData();
+    form.append("chat_id", chatId);
+    form.append("voice", new Blob([new Uint8Array(audio)], { type: "audio/ogg" }), "cortex.ogg");
+    const res = await fetch(`${API}/bot${bot}/sendVoice`, { method: "POST", body: form, signal: AbortSignal.timeout(60_000) });
+    const body = await res.json() as { ok: boolean; description?: string };
+    return body.ok ? { success: true } : { success: false, error: body.description ?? `sendVoice ${res.status}` };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : String(error) };
+  }
+}
