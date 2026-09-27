@@ -811,6 +811,21 @@ export const CRON_REGISTRY: CronJob[] = [
     relatedAdminPath: "/admin/war-room",
   },
   {
+    id: "cortex-inbox-pass",
+    name: "Cortex inbox pass",
+    description:
+      "Twice a day, reads support@ and the SMS inbox and sends the founder one numbered Telegram digest: triage batches (the noise sweep's own dry run, STOP and outcome keywords), ready replies to families' texts (the family-answers engine's drafts), Gmail drafts for family and provider emails, and at most one question. Nothing goes to anyone else until he approves an item by number; sends run through the admin inbox's own code, email is drafted only.",
+    recipientCohort: "The founder only, on Telegram. Families and providers only after he approves an item.",
+    audience: "Data & maintenance",
+    fn: "digest",
+    schedule: "0 1,13 * * *",
+    humanSchedule: "01:00 and 13:00 UTC (8 AM and 8 PM Bangkok; 9 PM and 9 AM ET).",
+    path: "/api/cron/cortex-inbox-pass",
+    emailTypes: [],
+    successSignal: "Items approved without edits per category (cortex_inbox_items); the needs-reply counts falling.",
+    relatedAdminPath: "/admin/inbox",
+  },
+  {
     id: "cortex-tick",
     name: "Cortex judgment tick",
     description:

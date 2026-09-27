@@ -20,6 +20,7 @@
     "check:telegram-cortex": "npx tsx scripts/check-telegram-cortex.ts",
     "check:cortex-voice": "npx tsx scripts/check-cortex-voice.ts",
     "check:cortex-initiative": "npx tsx scripts/check-cortex-initiative.ts",
+    "check:cortex-inbox": "npx tsx scripts/check-cortex-inbox.ts",
     "check:cortex-see-all": "npx tsx scripts/check-cortex-see-all.ts",
     "check:slack-dm": "npx tsx scripts/check-slack-dm-intake.ts",
     "replay:cortex-conversation": "npx tsx scripts/replay-cortex-conversation.ts",

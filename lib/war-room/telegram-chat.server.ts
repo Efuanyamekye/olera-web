@@ -50,6 +50,8 @@ export type TelegramDeps = {
   voice?: (chatId: string, text: string, mode: "reply" | "brief") => Promise<unknown>;
   /** The reaction log (moves.server.ts). Optional so checks can leave it out. */
   reactions?: { reply: (text: string, options: { pushedBack?: boolean; scoreOnly?: boolean }) => Promise<{ scored?: number } | null> };
+  /** Inbox approvals ("send 3") against the latest inbox pass (inbox-operator.server.ts). Null when it is not one. */
+  inbox?: { command: (text: string) => Promise<string | null> };
 };
 
 export type TelegramOutcome =
@@ -181,6 +183,17 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
       await reply(said);
       await remember(said);
       return { handled: true, kind: "answer", reply: said };
+    }
+  }
+
+  // "send 3", "approve 1 2", "skip 4": an inbox pass is waiting on him.
+  // Checked before proposal approval, which also answers to "approve".
+  if (deps.inbox) {
+    const handled = await deps.inbox.command(text).catch((error) => `Inbox action failed: ${error instanceof Error ? error.message : String(error)}`);
+    if (handled) {
+      await reply(handled);
+      await remember(handled);
+      return { handled: true, kind: "approval", reply: handled };
     }
   }
 

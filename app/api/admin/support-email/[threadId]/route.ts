@@ -1,17 +1,15 @@
 import { lookup } from "dns/promises";
 import { isIP } from "net";
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminUser, getAuthUser, getServiceClient, logAuditAction } from "@/lib/admin";
+import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import { decryptGmailToken } from "@/lib/support-email/crypto.server";
 import {
-  buildReplyRaw,
-  createGmailDraft,
   gmailAccessToken,
   modifyGmailThread,
   sendGmailDraft,
-  updateGmailDraft,
 } from "@/lib/support-email/gmail.server";
 import { importGmailMessage, type SupportMailboxRow } from "@/lib/support-email/sync.server";
+import { recordSupportAction, writeSupportDraft } from "@/lib/support-email/thread-actions.server";
 
 interface Context { params: Promise<{ threadId: string }> }
 
@@ -85,14 +83,7 @@ async function verifiedUnsubscribeUrl(values: string[]): Promise<string> {
 }
 
 async function recordAction(threadId: string, actor: string, adminId: string, action: string, details: Record<string, unknown> = {}) {
-  const db = getServiceClient();
-  const [actionResult] = await Promise.all([
-    db.from("support_email_actions").insert({ thread_id: threadId, actor, action, details }),
-    logAuditAction({ adminUserId: adminId, action: `support_email_${action}`, targetType: "support_email_thread", targetId: threadId, details }),
-  ]);
-  if (actionResult.error) {
-    console.error(`[support-email] failed to record ${action} for ${threadId}:`, actionResult.error);
-  }
+  await recordSupportAction(getServiceClient(), threadId, actor, adminId, action, details);
 }
 
 async function updateThread(
@@ -245,35 +236,7 @@ export async function POST(request: NextRequest, context: Context) {
       const draftBody = String(body.body ?? "").trim();
       if (!draftBody) return NextResponse.json({ error: "Reply cannot be empty" }, { status: 400 });
       if (draftBody.length > 20_000) return NextResponse.json({ error: "Reply is too long" }, { status: 400 });
-      const to = String(latestInbound.reply_to || latestInbound.from_email || "");
-      if (!to) throw new Error("The sender has no reply address.");
-      const subject = /^re:/i.test(thread.subject) ? thread.subject : `Re: ${thread.subject}`;
-      const references = [latestInbound.raw_headers?.references, latestInbound.rfc_message_id].filter(Boolean).join(" ");
-      const raw = buildReplyRaw({
-        mailboxEmail: process.env.GMAIL_SUPPORT_FROM_ADDRESS || mailbox.email,
-        to,
-        subject,
-        body: draftBody,
-        inReplyTo: latestInbound.rfc_message_id,
-        references,
-      });
-      let draft;
-      if (thread.gmail_draft_id) {
-        try {
-          draft = await updateGmailDraft(accessToken, thread.gmail_draft_id, raw, thread.gmail_thread_id);
-        } catch {
-          draft = await createGmailDraft(accessToken, raw, thread.gmail_thread_id);
-        }
-      } else {
-        draft = await createGmailDraft(accessToken, raw, thread.gmail_thread_id);
-      }
-      await updateThread(db, threadId, {
-        gmail_draft_id: draft.id,
-        draft_body: draftBody,
-        draft_updated_at: now,
-        draft_updated_by: actor,
-        updated_at: now,
-      });
+      const { draft, to } = await writeSupportDraft({ db, accessToken, thread, mailbox, latestInbound, draftBody, actor, now });
       if (body.action === "save_draft") {
         await recordAction(threadId, actor, auth.admin.id, "save_draft");
         return NextResponse.json({ ok: true, draftId: draft.id });

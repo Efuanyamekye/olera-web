@@ -147,6 +147,12 @@ export async function GET(request: NextRequest) {
                 `${packet.triage.disagreedWithRegex ? " [the keyword check DISAGREED — one of the two layers has a gap]" : ""}. ` +
                 `No draft was written. Respond from /admin/inbox.`,
             );
+            // And to the founder's phone, now, as the webhook's keyword check does.
+            const { founderChatId, isTelegramConfigured, sendTelegramMessage } = await import("@/lib/telegram.server");
+            const chatId = founderChatId();
+            if (isTelegramConfigured() && chatId) {
+              await sendTelegramMessage(chatId, `🚨 The answer engine read a crisis in a text ending ${job.phone_last10.slice(-4)}: "${job.body.slice(0, 240)}" (${packet.triage.crisisReason ?? "no reason given"}). No draft was written. Answer it in the inbox: https://olera.care/admin/inbox`);
+            }
           } catch (err) {
             console.error("[family-answers] Crisis page failed:", err);
           }

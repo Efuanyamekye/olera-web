@@ -157,6 +157,10 @@
       "schedule": "15 */3 * * *"
     },
     {
+      "path": "/api/cron/cortex-inbox-pass",
+      "schedule": "0 1,13 * * *"
+    },
+    {
       "path": "/api/cron/deliverability-watch",
       "schedule": "0 12 * * *"
     },
