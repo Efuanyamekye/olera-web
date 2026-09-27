@@ -483,7 +483,9 @@ function CasePanel({ data, familyName, tz, reload }: { data: CaseData; familyNam
 
   const { profile, reach, consent, flags, providers, open_action: openAction } = data;
   const offers = routing?.offers ?? [];
-  const canQualify = Boolean(routing?.can_route) && plan?.state === "held" && routing?.status !== "unfilled";
+  // Not once a provider holds them: the relay refuses a handed family, so
+  // "Save and route" would only report "closed" and look broken.
+  const canQualify = Boolean(routing?.can_route) && !routing?.handed_at && plan?.state === "held" && routing?.status !== "unfilled";
   const holderName = routing?.handed_at ? routing.campaign_owner : offers.find((o) => o.state === "accepted")?.provider_name ?? null;
 
   // The one thing to do next, most specific first.
@@ -934,6 +936,10 @@ function CaseInner() {
             </div>
             {routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
               <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} />
+            ) : routing ? (
+              <div className="border-t border-gray-200 px-4 py-3 text-[13px] text-gray-500 sm:px-6">
+                {routing.closed ? "This family is closed, so nothing further goes out from here." : "No phone or email on file to write to."}
+              </div>
             ) : (
               data.profile.phone &&
               data.reach.phone !== "impossible" && (
