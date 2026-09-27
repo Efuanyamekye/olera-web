@@ -140,6 +140,13 @@ export type SeekerTimelineItem = {
   contact_handle?: string | null;
   /** Where to go to act on it (the support inbox, the SMS inbox, the city queue). */
   href?: string | null;
+  /**
+   * Who wrote it, when that is not us or the family: a provider writing in the
+   * shared thread (city_lead_thread). The case page draws these as the
+   * provider's messages rather than as system events.
+   */
+  author?: "provider" | null;
+  author_name?: string | null;
 };
 
 // ── Reachability ──────────────────────────────────────────────────────────────

@@ -19,7 +19,9 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { adminUser, isLoading: adminLoading, error, retry } = useAdminAuth();
   const [sidebarHidden, setSidebarHidden] = useState(false);
-  const isWorkspaceRoute = WORKSPACE_ROUTES.has(pathname);
+  // A family's case page is a three-column workspace like the inbox: each
+  // column scrolls on its own instead of the page growing past the viewport.
+  const isWorkspaceRoute = WORKSPACE_ROUTES.has(pathname) || /^\/admin\/relationships\/families\/[^/]+$/.test(pathname);
   const isWideRoute = WIDE_ROUTES.has(pathname);
 
   useEffect(() => {
