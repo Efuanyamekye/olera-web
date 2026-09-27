@@ -589,6 +589,7 @@ function CasePanel({ data, familyName, tz, reload }: { data: CaseData; familyNam
               </li>
             ))}
             {plan?.state === "held" &&
+              !routing?.handed_at &&
               plan.candidates.slice(0, 3).map((c) => (
                 <li key={`cand-${c.providerId}`} className="rounded-2xl border border-dashed border-gray-300 p-3">
                   <p className="text-[14px] font-semibold text-gray-700">{c.providerName}</p>
