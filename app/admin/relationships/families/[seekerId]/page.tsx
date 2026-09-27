@@ -36,6 +36,7 @@ type Routing = Partial<Omit<CityLeadToolsData, "lead_id" | "status">> & {
   status: string;
   can_route: boolean;
   qualification_reply: string | null;
+  qualification_verdict?: string | null;
   pool: { provider_id: string; name: string; position: number; enabled: boolean; already_offered: boolean }[];
   care_summary: string | null;
 };
@@ -513,6 +514,30 @@ function CasePanel({ data, familyName, tz, reload }: { data: CaseData; familyNam
   // Not once a provider holds them: the relay refuses a handed family, so
   // "Save and route" would only report "closed" and look broken.
   const canQualify = Boolean(routing?.can_route) && !routing?.handed_at && plan?.state === "held" && routing?.status !== "unfilled";
+  // Who goes next, named. The button offers to exactly this provider (offer_to,
+  // not offer_next), so the label can never disagree with what happens. It was
+  // an unnamed "Offer to next" that sent Marla to Palm2Palm when Ces meant
+  // Assisting Hands.
+  const nextUp =
+    plan?.state === "held"
+      ? (plan.candidates[0] ? { id: plan.candidates[0].providerId, name: plan.candidates[0].providerName } : null)
+      : (() => {
+          const st = plan?.steps.find((x) => x.state === "upcoming");
+          return st ? { id: st.providerId, name: st.providerName } : null;
+        })();
+  // Never for someone judged not to be a family (a job seeker, spam): the
+  // relay holds them on purpose. For a family still held because they have not
+  // said what they need, it stays available but secondary, because Save and
+  // route is the usual way.
+  const judgedNotFamily = Boolean(routing?.qualification_verdict) && routing?.qualification_verdict !== "care_seeker";
+  const heldUnanswered = plan?.state === "held";
+  const canOfferNext =
+    Boolean(routing?.can_route) &&
+    !routing?.handed_at &&
+    !routing?.closed &&
+    !judgedNotFamily &&
+    !offers.some((o) => o.state === "open") &&
+    Boolean(nextUp);
   const holderName = routing?.handed_at ? routing.campaign_owner : offers.find((o) => o.state === "accepted")?.provider_name ?? null;
 
   // The one thing to do next, most specific first.
@@ -636,6 +661,24 @@ function CasePanel({ data, familyName, tz, reload }: { data: CaseData; familyNam
                 </li>
               ))}
           </ul>
+
+          {routing && canOfferNext && nextUp && (
+            <button
+              type="button"
+              disabled={busy}
+              className={`${heldUnanswered ? pillBtn : darkBtn} mt-3 w-full py-2`}
+              onClick={() => void act({ action: "offer_to", leadId: routing.lead_id, providerId: nextUp.id }, "Offered.")}
+            >
+              Offer to {nextUp.name.split(/\s+-\s+|,\s/)[0]} (next on call)
+            </button>
+          )}
+          {routing && canOfferNext && nextUp && (
+            <p className="mt-1 text-[12.5px] text-gray-500">
+              {heldUnanswered
+                ? "Sends now, before we know what they need. Save and route is the usual way."
+                : "Sends now, even outside their morning hours."}
+            </p>
+          )}
 
           {routing && (routing.can_hand || (routing.can_route && routing.pool.length > 0)) && (
             <div className="mt-3 flex flex-wrap items-center gap-2">
