@@ -427,9 +427,12 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
   }
 }
 
-/** Run a command against the open items. Returns the reply for him. */
-export async function handleInboxCommand(db: SupabaseClient, command: InboxCommand): Promise<string> {
+/** Run a command against the open items. Returns the reply for him, or null
+ *  when "later"/"busy" was just conversation (nothing open), so the normal
+ *  chat reply handles it instead. */
+export async function handleInboxCommand(db: SupabaseClient, command: InboxCommand): Promise<string | null> {
   const open = (await openItems(db)).filter((item) => !(item as StoredItem & { decided_at?: string | null }).decided_at);
+  if (!open.length && command.verb === "later") return null;
   if (!open.length) return "Nothing from the inbox is waiting on you right now.";
   // Nothing is sent or marked. Every thread still waiting on us is proposed
   // again by the next pass (smsProposals / emailProposals read the inboxes,

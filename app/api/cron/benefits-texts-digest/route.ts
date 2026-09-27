@@ -52,10 +52,13 @@ export async function GET(request: NextRequest) {
         .from("family_answer_jobs")
         .select("status, sent_by, packet")
         .gte("completed_at", since),
+      // Recent ones only: a draft nobody sent weeks ago is not "waiting", and
+      // counting it would make this post twice a day forever.
       db
         .from("family_answer_jobs")
         .select("id")
-        .eq("status", "ready"),
+        .eq("status", "ready")
+        .gte("created_at", new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
     ]);
 
     const texts = inbound.data ?? [];

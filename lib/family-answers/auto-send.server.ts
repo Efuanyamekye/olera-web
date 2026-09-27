@@ -57,6 +57,12 @@ export function autoSendReasons(
   if (detectDeceased(inbound)) reasons.push("mentions a death");
   if (PAID_CARE.test(inbound) || PAID_CARE.test(draft)) reasons.push("paid family caregiving");
   if (DISTRESS.test(inbound)) reasons.push("distress or anger");
+  // A packet from a failed stage can be missing its arrays; treat that as
+  // needing a person rather than letting a missing field throw.
+  if (!Array.isArray(packet.claims) || !Array.isArray(packet.objections) || !Array.isArray(packet.personFactRisks)) {
+    reasons.push("incomplete research packet");
+    return reasons;
+  }
   if (packetNeedsAttention(packet)) reasons.push("the checks flagged it (unsourced claim, relied-on fact, length, or an error)");
   if (packet.objections.some((o) => o.verdict === "contested")) reasons.push("the checker and the drafter disagree");
   if (/\$\s?\d/.test(draft)) reasons.push("quotes a dollar amount");
