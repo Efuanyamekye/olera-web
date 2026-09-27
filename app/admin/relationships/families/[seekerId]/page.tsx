@@ -590,14 +590,19 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
                 onClick={() => setOpen((o) => ({ ...o, [key]: !o[key] }))}
                 className="flex w-full items-center gap-3 text-[12.5px] text-gray-600 disabled:cursor-default"
               >
-                <span className="h-px flex-1 bg-gray-200" />
-                <span className={`inline-flex items-center gap-1.5 ${warn ? "text-[#b54708]" : ""}`}>
-                  <MomentIcon id={row.items[0].id} warn={warn} />
-                  <span>{text}</span>
-                  <span className="text-gray-400">· {timeOf(row.items[0].occurred_at, tz)}</span>
-                  {many && <span className="text-[10px] text-gray-400">{open[key] ? "▴" : "▾"}</span>}
+                <span className="h-px min-w-[12px] flex-1 bg-gray-200" />
+                {/* Icon beside one run of text, time inline, so a long line
+                    wraps as a sentence on a phone. */}
+                <span className={`inline-flex max-w-[85%] items-start gap-1.5 text-left leading-snug ${warn ? "text-[#b54708]" : ""}`}>
+                  <span className="mt-[2px]">
+                    <MomentIcon id={row.items[0].id} warn={warn} />
+                  </span>
+                  <span>
+                    {text} <span className="whitespace-nowrap text-gray-400">· {timeOf(row.items[0].occurred_at, tz)}</span>
+                    {many && <span className="ml-1 text-[10px] text-gray-400">{open[key] ? "▴" : "▾"}</span>}
+                  </span>
                 </span>
-                <span className="h-px flex-1 bg-gray-200" />
+                <span className="h-px min-w-[12px] flex-1 bg-gray-200" />
               </button>
               {many && open[key] && <div className="mt-1.5 flex flex-col gap-1">{row.items.map((it) => eventLine(it, it.id))}</div>}
             </div>
