@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { buildWarRoomBriefText, easternDay, isSweepDay, renewalText, sendableQuestion } from "../lib/war-room/brief-delivery.server";
-import { fallbackMove, parseMoveReply, pickMove, type MoveCandidate } from "../lib/war-room/brief-move.server";
+import { fallbackMove, parseMoveReply, pickMove, toFounder, type MoveCandidate } from "../lib/war-room/brief-move.server";
 import { scrubStaleRenewalCounts } from "../lib/war-room/discovery.server";
 
 // The brief leads with one move, asks at most one question he alone can
@@ -80,7 +80,7 @@ assert.equal(
 );
 assert.equal(
   fallbackMove(candidate({ kind: "approved_not_done", title: "Ask her why she paid", assigned_owner: "TJ (Ces helps)" })).line,
-  "Do: Ask her why she paid. Owner: TJ (Ces helps). Because.",
+  "Do: Ask her why she paid. Owner: you (Ces helps). Because.",
 );
 assert.equal(parseMoveReply('{"line":"Call *Liz* Hoop this week.","draft":null}')?.line, "Call Liz Hoop this week.");
 assert.deepEqual(parseMoveReply('{"line":"Approve the funnel report today.","draft":null}'), { line: "Approve the funnel report today.", draft: null });
@@ -133,3 +133,11 @@ assert.equal(isSweepDay(new Date("2026-09-29T14:30:00Z")), false);  // Tuesday E
 assert.equal(isSweepDay(new Date("2026-09-25T14:30:00Z")), true);   // Friday ET
 
 console.log("war room brief checks passed");
+
+// The line speaks to the founder: a live render on 2026-09-27 wrote "TJ offered Robbie ...".
+assert.equal(toFounder("TJ offered Robbie Wed 9/30 at 9:00; now wait for TJ's answer."), "You offered Robbie Wed 9/30 at 9:00; now wait for your answer.");
+assert.equal(parseMoveReply('{"line":"TJ and Ces call Liz Hoop this week before her renewal.","draft":"Hi Liz, TJ here."}')?.line, "You and Ces call Liz Hoop this week before her renewal.");
+assert.equal(parseMoveReply('{"line":"TJ and Ces call Liz Hoop this week before her renewal.","draft":"Hi Liz, TJ here."}')?.draft, "Hi Liz, TJ here.");
+console.log("founder voice checks passed");
+assert.ok(!/\bTJ\b/.test(fallbackMove({ kind: "approved_not_done", title: "Ship the funnel split", why_now: "TJ approved it Monday.", assigned_owner: "TJ" } as MoveCandidate).line), "the fallback line speaks to the founder too");
+console.log("fallback voice check passed");

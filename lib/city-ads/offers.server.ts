@@ -299,7 +299,7 @@ export async function startOrAdvance(
   }
 
   // Who has already seen it.
-  const { data: prior } = await db.from("city_lead_offers").select("provider_id, position").eq("lead_id", lead.id);
+  const { data: prior } = await db.from("city_lead_offers").select("id, provider_id, position").eq("lead_id", lead.id);
   const seen = new Set((prior ?? []).map((o) => o.provider_id as string));
   const nextPosition = (prior?.length ?? 0) + 1;
 
@@ -370,17 +370,44 @@ export async function startOrAdvance(
   }
 
   const expiresAt = new Date(Date.now() + OFFER_WINDOW_MINUTES * 60 * 1000).toISOString();
-  const { data: inserted, error: offerErr } = await db
-    .from("city_lead_offers")
-    .insert({
-      lead_id: lead.id,
-      provider_id: candidate.provider_id,
-      position: nextPosition,
-      provider_phone: last10(phone),
-      expires_at: expiresAt,
-    })
-    .select("id")
-    .single();
+  // A SECOND OFFER TO THE SAME PROVIDER REOPENS THE FIRST. city_lead_offers is
+  // unique on (lead_id, provider_id), so an insert here failed and the admin
+  // saw "Nothing was sent". That is exactly the case a hand-picked provider
+  // hits: Marla Branham's first offer went to Assisting Hands on 21 Sep and
+  // expired unanswered; on 27 Sep she said yes to them by name, and "Offer
+  // to…" could not reach them. Only an explicit providerId gets here with a
+  // provider already seen; the relay filters them out above.
+  const earlier = (prior ?? []).find((o) => o.provider_id === candidate.provider_id);
+  const position = earlier ? (earlier.position as number) : nextPosition;
+  const offerCount = earlier ? (prior?.length ?? 0) : nextPosition;
+  const { data: inserted, error: offerErr } = earlier
+    ? await db
+        .from("city_lead_offers")
+        .update({
+          provider_phone: last10(phone),
+          offered_at: new Date().toISOString(),
+          expires_at: expiresAt,
+          declined_at: null,
+          decline_reason: null,
+          expired_at: null,
+          reached_channels: [],
+          delivery_note: null,
+        })
+        .eq("id", earlier.id as string)
+        .is("accepted_at", null)
+        .select("id")
+        .single()
+    : await db
+        .from("city_lead_offers")
+        .insert({
+          lead_id: lead.id,
+          provider_id: candidate.provider_id,
+          position,
+          provider_phone: last10(phone),
+          expires_at: expiresAt,
+        })
+        .select("id")
+        .single();
   if (offerErr || !inserted) {
     console.error("[city-ads] offer insert failed", offerErr);
     return { action: "noop" };
@@ -388,7 +415,7 @@ export async function startOrAdvance(
   const offerUrl = generateCityOfferUrl(inserted.id as string, getSiteUrl());
   await db
     .from("city_leads")
-    .update({ status: "offered", offer_count: nextPosition, next_offer_at: null, updated_at: new Date().toISOString() })
+    .update({ status: "offered", offer_count: offerCount, next_offer_at: null, updated_at: new Date().toISOString() })
     .eq("id", lead.id);
 
   if (await cityLeadBlocked(db, lead.id)) return { action: "noop" };
@@ -413,7 +440,7 @@ export async function startOrAdvance(
       emailType: "city_lead_offer",
       recipientType: "provider",
       providerId: candidate.provider_id,
-      metadata: { lead_id: lead.id, offer_id: inserted.id, slug: lead.slug, position: nextPosition },
+      metadata: { lead_id: lead.id, offer_id: inserted.id, slug: lead.slug, position: position },
     });
     if (r.success && !r.skipped) channels.push("email");
   }
@@ -425,7 +452,7 @@ export async function startOrAdvance(
       recipientType: "provider",
       recipientLogProfileId: candidate.provider_id,
       requireMobile: !candidate.phone_override, // a number typed as the override was given for texts
-      metadata: { lead_id: lead.id, offer_id: inserted.id, slug: lead.slug, position: nextPosition },
+      metadata: { lead_id: lead.id, offer_id: inserted.id, slug: lead.slug, position: position },
     });
     // "sms", not "text". This array is persisted to reached_channels, and the
     // backfill derived its values from email_log.channel, which is 'sms'. Two
@@ -457,8 +484,8 @@ export async function startOrAdvance(
 
   await sendSlackAlert(
     channels.length
-      ? `City lead ${lead.id.slice(0, 8)} (${city}): offer #${nextPosition} to ${name} by ${spoken(channels)}. ${l.careLabel} for ${l.recipientLabel}, ${l.urgencyLabel ?? "urgency not stated"}. ${OFFER_WINDOW_MINUTES} min clock. /admin/city-ads`
-      : `🚨 City lead ${lead.id.slice(0, 8)} (${city}): offer #${nextPosition} to ${name} REACHED NOBODY (${note}). The 30 min clock is running against a provider who was never told. Fix their contact details or offer it to someone else: /admin/city-ads`,
+      ? `City lead ${lead.id.slice(0, 8)} (${city}): offer #${position} to ${name} by ${spoken(channels)}. ${l.careLabel} for ${l.recipientLabel}, ${l.urgencyLabel ?? "urgency not stated"}. ${OFFER_WINDOW_MINUTES} min clock. /admin/city-ads`
+      : `🚨 City lead ${lead.id.slice(0, 8)} (${city}): offer #${position} to ${name} REACHED NOBODY (${note}). The 30 min clock is running against a provider who was never told. Fix their contact details or offer it to someone else: /admin/city-ads`,
   );
   return { action: "offered", providerName: name };
 }

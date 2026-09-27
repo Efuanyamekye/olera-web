@@ -32,6 +32,15 @@ export type ProviderMoment = {
   lastInboundAt: string | null;
   /** The founder's latest reply on the thread, if he has sent one since they wrote. */
   reply: { at: string; text: string } | null;
+  /**
+   * What they wrote that nobody has answered yet, newest first, read at brief
+   * time and not stored. On 2026-09-26 the brief drafted "can we set up a call
+   * this week" to Robbie while his two unanswered emails said Assisting Hands
+   * has about 150 owners across 35 states, and TJ had already offered times.
+   */
+  unanswered: Array<{ at: string; text: string }>;
+  /** The founder's last reply before those, so a draft does not re-offer it. */
+  earlierReply: { at: string; text: string } | null;
 };
 
 type ThreadRow = {
@@ -71,7 +80,8 @@ function decodeEntities(text: string) {
 /** The reply without quoted history, which is most of any email body. */
 function replyText(message: MessageRow) {
   const body = message.body_text ?? message.snippet ?? "";
-  const cut = body.search(/\n\s*On .{0,120}wrote:|\n-{2,}\s*Original Message|\n>/);
+  // Outlook quotes as "From: ... Date: ..." with no "wrote:" line.
+  const cut = body.search(/\n\s*On .{0,120}wrote:|\n-{2,}\s*Original Message|\n>|\n\s*From: .{0,200}\r?\n\s*(Sent|Date): /);
   return decodeEntities(cut > 0 ? body.slice(0, cut) : body).replace(/\s+/g, " ").trim().slice(0, 700);
 }
 
@@ -155,6 +165,16 @@ export async function loadProviderMoments(db: SupabaseClient, now = new Date()):
       && !lastOutbound && !thread.handled_at && thread.state !== "handled";
     const kind: ProviderMomentKind | null = flags[i] ? "partnership" : awaiting ? "awaiting_reply" : null;
     if (!kind) return;
+    const earlierOutbound = own.find((message) => message.direction === "out"
+      && (message.internal_date ?? "") < (lastInbound.internal_date ?? "")) ?? null;
+    const unanswered = lastOutbound
+      ? []
+      : own
+        .filter((message) => message.direction === "in"
+          && !/@olera\.care$/i.test((message.from_email ?? "").trim())
+          && (message.internal_date ?? "") > (earlierOutbound?.internal_date ?? ""))
+        .slice(0, 3)
+        .map((message) => ({ at: message.internal_date ?? "", text: replyText(message) }));
     moments.push({
       threadId: thread.id,
       kind,
@@ -163,6 +183,8 @@ export async function loadProviderMoments(db: SupabaseClient, now = new Date()):
       summary: thread.agent_summary ?? "",
       lastInboundAt: lastInbound.internal_date,
       reply: lastOutbound?.internal_date ? { at: lastOutbound.internal_date, text: replyText(lastOutbound) } : null,
+      unanswered,
+      earlierReply: earlierOutbound?.internal_date ? { at: earlierOutbound.internal_date, text: replyText(earlierOutbound) } : null,
     });
   });
   const rank = (moment: ProviderMoment) => (moment.kind === "partnership" ? 0 : 1);
