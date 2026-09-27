@@ -339,7 +339,7 @@ export function renderDigest(pass: InboxPass): string {
   ].filter(Boolean);
   const numbers = pass.items.filter((item) => item.kind !== "question").map((item) => item.number);
   const how = numbers.length
-    ? `Reply "approve ${numbers.join(" ")}" for all of them, or "send ${numbers[0]}", "skip ${numbers[0]}", or "send ${numbers[numbers.length - 1]}: your edited text".`
+    ? `Reply "approve ${numbers.join(" ")}" for all of them, or "send ${numbers[0]}", "skip ${numbers[0]}", or "send ${numbers[numbers.length - 1]}: your edited text". Busy? Reply "later" and they come back in the next pass.`
     : "";
   const more = pass.waitingElsewhere ? ` ${pass.waitingElsewhere} more need a person in the inbox.` : "";
   return `${parts.join("\n\n")}\n\n${how}${more}`.trim();
@@ -348,10 +348,14 @@ export function renderDigest(pass: InboxPass): string {
 // ---------------------------------------------------------------------------
 // Approvals
 
-export type InboxCommand = { verb: "approve" | "skip"; numbers: number[]; edit: string | null };
+export type InboxCommand = { verb: "approve" | "skip" | "later"; numbers: number[]; edit: string | null };
 
-/** "approve 1 2", "send 3", "yes 1,2", "skip 4", "send 3: new text". Null when it is not a command. */
+/** "later", "not now", "busy": leave everything open for the next pass (TJ, 2026-09-27). */
+const LATER = /^(later|not now|busy|not now,? busy|tomorrow|snooze|remind me later)[.!]?$/i;
+
+/** "approve 1 2", "send 3", "yes 1,2", "skip 4", "send 3: new text", "later". Null when it is not a command. */
 export function parseInboxCommand(text: string): InboxCommand | null {
+  if (LATER.test(text.trim())) return { verb: "later", numbers: [], edit: null };
   const match = text.trim().match(/^(approve|send|yes|do|ok|skip|no)\s+((?:\d+[\s,&]*(?:and\s+)?)+|all)\s*(?::\s*([\s\S]+))?$/i);
   if (!match) return null;
   const verb = /^(skip|no)$/i.test(match[1]) ? "skip" : "approve";
@@ -427,6 +431,12 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
 export async function handleInboxCommand(db: SupabaseClient, command: InboxCommand): Promise<string> {
   const open = (await openItems(db)).filter((item) => !(item as StoredItem & { decided_at?: string | null }).decided_at);
   if (!open.length) return "Nothing from the inbox is waiting on you right now.";
+  // Nothing is sent or marked. Every thread still waiting on us is proposed
+  // again by the next pass (smsProposals / emailProposals read the inboxes,
+  // not this list), so "later" only has to say so.
+  if (command.verb === "later") {
+    return `OK, nothing sent. The ${open.length} open ${open.length === 1 ? "item stays" : "items stay"} open and come back in the next inbox pass (${nextPassIn()}).`;
+  }
   const chosen = command.numbers.length ? open.filter((item) => command.numbers.includes(item.number)) : open.filter((item) => item.kind !== "question");
   const missing = command.numbers.filter((n) => !open.some((item) => item.number === n));
   const lines: string[] = [];
@@ -440,6 +450,14 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
   }
   if (missing.length) lines.push(`${missing.join(", ")}: not in the current list (already done, skipped, or from an older pass).`);
   return lines.join("\n");
+}
+
+/** Hours until the next cortex-inbox-pass run (vercel.json: 01:00 and 13:00 UTC). */
+function nextPassIn(now = new Date()): string {
+  const h = now.getUTCHours() + now.getUTCMinutes() / 60;
+  const next = [1, 13, 25].find((x) => x > h) as number;
+  const hours = Math.max(1, Math.round(next - h));
+  return `in about ${hours} hour${hours === 1 ? "" : "s"}`;
 }
 
 /** Approvals per category, and how many went through without an edit: the record autonomy would be earned on. */

@@ -410,11 +410,8 @@ export async function handleCompanionFreeText(
       nextMeta.benefits_automation_hold = clearedHold(hold, "companion", record.at);
     }
     await db.from("business_profiles").update({ metadata: nextMeta }).eq("id", profile.id);
-    try {
-      await sendSlackAlert(`↳ Companion answered ${who} automatically (${decision.intent}): "${decision.reply.slice(0, 200)}". No action needed.`);
-    } catch (err) {
-      console.error("[benefits-companion-replies] Slack note failed:", err);
-    }
+    // No Slack post per answer (TJ, 2026-09-27): it goes in the twice-daily
+    // benefits texts digest (/api/cron/benefits-texts-digest).
     return "answered";
   }
 

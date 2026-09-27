@@ -664,6 +664,21 @@ export const CRON_REGISTRY: CronJob[] = [
     relatedAdminPath: "/admin/benefits",
   },
   {
+    id: "benefits-texts-digest",
+    name: "Benefits texts — twice-daily Slack digest",
+    description:
+      "One Slack post twice a day summarising family texts instead of one post per text (TJ, 2026-09-27). Counts texts and families in the last 12 hours, what the text companion answered on its own or handed to a person, and researched answers drafted, sent automatically, or waiting, with the most common reasons a person is needed. Urgent answers, STUCK/help requests, crisis language and death reports still post immediately from their own paths. Silent when nothing happened.",
+    recipientCohort: "(no recipients — posts to the team Slack channel)",
+    audience: "Internal",
+    fn: "digest",
+    schedule: "0 1,13 * * *",
+    humanSchedule: "01:00 and 13:00 UTC (9pm and 9am ET), the same hours as Cortex's Telegram inbox pass.",
+    path: "/api/cron/benefits-texts-digest",
+    emailTypes: [],
+    successSignal: "The team sees every family text within 12 hours without a Slack post per message.",
+    relatedAdminPath: "/admin/inbox",
+  },
+  {
     id: "benefits-companion-followups",
     name: "Benefits text companion — follow-ups",
     description:

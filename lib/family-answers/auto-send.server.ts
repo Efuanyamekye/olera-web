@@ -7,7 +7,7 @@
  * the hard part (research, a draft, an independent model attacking the
  * draft); the only thing slow was the human click. So the default flips, the
  * same way the first-step letters did: a draft that passes every check is
- * announced in Slack and sends after AUTO_SEND_DELAY unless a person replies
+ * listed in the twice-daily digest and sends after AUTO_SEND_DELAY unless a person replies
  * themselves, starts editing it, or dismisses the job in /admin/inbox.
  *
  * Never automatic, whatever the checks say: crisis, a death, distress or
@@ -20,7 +20,6 @@
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { sendSlackAlert } from "@/lib/slack";
 import { replyToSmsThread } from "@/lib/sms/inbox-actions.server";
 import { detectCrisis } from "@/lib/sms/crisis";
 import { detectDeceased, type BenefitsHelpCase } from "@/lib/family-comms/benefits-automation";
@@ -83,13 +82,9 @@ async function familyContext(db: SupabaseClient, profileId: string | null) {
   return { helpCaseOpen, optedOut: data?.phone_validity === "opted_out", who };
 }
 
-function etTime(iso: string): string {
-  return new Date(iso).toLocaleString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" }) + " ET";
-}
-
 /**
  * Called right after a job is finalized as `ready`. Marks it for automatic
- * sending (or says why a person must answer) and tells Slack either way.
+ * sending, or records why a person must answer.
  */
 export async function markForAutoSend(
   db: SupabaseClient,
@@ -110,17 +105,9 @@ export async function markForAutoSend(
     .update({ packet: { ...packet, autoSend: mark } })
     .eq("id", job.id);
 
-  const who = ctx.who || `…${job.phone_last10.slice(-4)}`;
-  try {
-    await sendSlackAlert(
-      mark.eligible
-        ? `🤖 Answer drafted for ${who}. They asked: "${packet.inbound.slice(0, 160)}". Draft: "${packet.draft.slice(0, 300)}". ` +
-            `It sends automatically at ${etTime(mark.sendAfter as string)} unless you reply yourself or dismiss it in /admin/inbox.`
-        : `✋ Answer drafted for ${who}, needs a person before it sends (${reasons.join("; ")}). They asked: "${packet.inbound.slice(0, 160)}". Reply from /admin/inbox.`,
-    );
-  } catch (err) {
-    console.error("[family-answers/auto-send] Slack note failed:", err);
-  }
+  // No Slack post per draft (TJ, 2026-09-27): drafts are listed in the
+  // twice-daily benefits texts digest, and the drafts themselves reach TJ in
+  // Cortex's twice-daily Telegram inbox pass.
   return mark;
 }
 

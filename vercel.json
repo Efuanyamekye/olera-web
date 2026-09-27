@@ -121,6 +121,10 @@
       "schedule": "5 * * * *"
     },
     {
+      "path": "/api/cron/benefits-texts-digest",
+      "schedule": "0 1,13 * * *"
+    },
+    {
       "path": "/api/cron/benefits-companion-followups",
       "schedule": "40 * * * *"
     },
