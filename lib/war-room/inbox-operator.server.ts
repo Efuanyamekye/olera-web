@@ -3,7 +3,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { isOptOutPhrase, matchOutcomeReply } from "@/lib/sms/inbound-intent";
 import { markSmsThreadHandled, MAX_SMS_BODY, replyToSmsThread } from "@/lib/sms/inbox-actions.server";
 import { runNoiseSweep } from "@/lib/support-email/noise-sweep.server";
-import { saveSupportDraft } from "@/lib/support-email/thread-actions.server";
+import { archiveSupportThreads, saveSupportDraft } from "@/lib/support-email/thread-actions.server";
+import { AGED_OUT_DAYS, callbackLine, loadWaitingVoicemails, sortVoicemails, STALE_CALLBACK_DAYS } from "@/lib/war-room/voicemail-triage.server";
 
 /**
  * Cortex as inbox operator: support@ email and the SMS inbox.
@@ -280,27 +281,79 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
 }
 
 // ---------------------------------------------------------------------------
+// Voicemail (voicemail-triage.server.ts)
+
+async function voicemailProposals(db: SupabaseClient): Promise<{ items: ProposedItem[]; costUsd: number }> {
+  const waiting = await loadWaitingVoicemails(db).catch(() => []);
+  if (!waiting.length) return { items: [], costUsd: 0 };
+  const items: ProposedItem[] = [];
+  const { verdicts, costUsd } = await sortVoicemails(waiting);
+
+  // Older than 30 days: aged out, after one read for anything still worth a look.
+  // Offered only while there is something to archive, so the short list is
+  // shown once: the keepers stay in support email and are not re-offered.
+  const aged = verdicts.filter((v) => v.ageDays > AGED_OUT_DAYS);
+  const agedArchive = aged.filter((v) => !v.worthIt);
+  const agedKeep = aged.filter((v) => v.worthIt);
+  if (agedArchive.length) {
+    items.push({
+      kind: "triage_batch",
+      category: "email:voicemail_aged",
+      target: { threadIds: agedArchive.map((v) => v.id) },
+      summary: `Archive ${agedArchive.length} voicemails older than ${AGED_OUT_DAYS} days as aged out. Nothing is deleted; they stay in All Mail. ${agedKeep.length ? `I kept back ${agedKeep.length} that may still matter${agedKeep.length > 20 ? " (the 20 newest below)" : ", below"}; they stay in support email for you.` : "None of them looked worth a call back."}`,
+      body: agedKeep.length ? agedKeep.sort((a, b) => a.ageDays - b.ageDays).slice(0, 20).map(callbackLine).join("\n") : null,
+    });
+  }
+
+  // The last 30 days: noise and stale callbacks to archive, fresh callbacks to make.
+  const recent = verdicts.filter((v) => v.ageDays <= AGED_OUT_DAYS);
+  const recentArchive = recent.filter((v) => !v.worthIt || v.ageDays >= STALE_CALLBACK_DAYS);
+  const callbacks = recent.filter((v) => v.worthIt && v.ageDays < STALE_CALLBACK_DAYS).sort((a, b) => a.ageDays - b.ageDays);
+  if (recentArchive.length) {
+    const stale = recentArchive.filter((v) => v.worthIt).length;
+    items.push({
+      kind: "triage_batch",
+      category: "email:voicemail_recent",
+      target: { threadIds: recentArchive.map((v) => v.id) },
+      summary: `Archive ${recentArchive.length} recent voicemails (${recentArchive.length - stale} noise${stale ? `, ${stale} callbacks nobody made in ${STALE_CALLBACK_DAYS}+ days` : ""}).`,
+    });
+  }
+  if (callbacks.length) {
+    items.push({
+      kind: "question",
+      category: "email:voicemail_callbacks",
+      target: { threadIds: callbacks.map((v) => v.id) },
+      summary: `${callbacks.length} ${callbacks.length === 1 ? "voicemail is" : "voicemails are"} worth a call back:`,
+      body: callbacks.slice(0, 10).map(callbackLine).join("\n"),
+    });
+  }
+  return { items, costUsd };
+}
+
+// ---------------------------------------------------------------------------
 // The pass
 
 export type InboxPass = { passId: string; items: StoredItem[]; waitingElsewhere: number; costUsd: number };
 
 /** What this pass would propose, in digest order, without storing anything. */
 export async function buildInboxProposals(db: SupabaseClient): Promise<{ proposed: ProposedItem[]; waitingElsewhere: number; costUsd: number }> {
-  const [sms, email] = await Promise.all([smsProposals(db), emailProposals(db)]);
+  const [sms, email, voicemail] = await Promise.all([smsProposals(db), emailProposals(db), voicemailProposals(db)]);
   // Order: clear first, then ready to send, then the one question.
   const questions = sms.items.filter((item) => item.kind === "question").slice(0, 1);
   const proposed: ProposedItem[] = [
     ...email.items.filter((item) => item.kind === "triage_batch"),
+    ...voicemail.items.filter((item) => item.kind === "triage_batch"),
     ...sms.items.filter((item) => item.kind === "triage_batch"),
     ...sms.items.filter((item) => item.kind === "sms_draft"),
     ...email.items.filter((item) => item.kind === "email_draft"),
+    ...voicemail.items.filter((item) => item.kind === "question"),
     ...questions,
   ];
   const extraQuestions = sms.items.filter((item) => item.kind === "question").length - questions.length;
   return {
     proposed,
     waitingElsewhere: sms.waitingElsewhere + email.waitingElsewhere + Math.max(0, extraQuestions),
-    costUsd: email.costUsd,
+    costUsd: email.costUsd + voicemail.costUsd,
   };
 }
 
@@ -327,15 +380,16 @@ export function renderDigest(pass: InboxPass): string {
       ? `Inbox pass: nothing I can clear or draft right now. ${pass.waitingElsewhere} ${pass.waitingElsewhere === 1 ? "thread needs" : "threads need"} a person in /admin/inbox or support email.`
       : "Inbox pass: both inboxes are clear.";
   }
-  const section = (title: string, kinds: InboxItemKind[]) => {
-    const rows = pass.items.filter((item) => kinds.includes(item.kind));
+  const section = (title: string, kinds: InboxItemKind[], only: (item: StoredItem) => boolean = () => true) => {
+    const rows = pass.items.filter((item) => kinds.includes(item.kind) && only(item));
     if (!rows.length) return "";
     return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.body ? `\n> ${item.body.replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? "\n(Saved as a Gmail draft when you approve. You send it.)" : ""}`).join("\n\n")}`;
   };
   const parts = [
     section("Clear", ["triage_batch"]),
     section("Ready to send", ["sms_draft", "email_draft"]),
-    section("One question", ["question"]),
+    section("Call back", ["question"], (item) => item.category === "email:voicemail_callbacks"),
+    section("One question", ["question"], (item) => item.category !== "email:voicemail_callbacks"),
   ].filter(Boolean);
   const numbers = pass.items.filter((item) => item.kind !== "question").map((item) => item.number);
   const how = numbers.length
@@ -389,7 +443,7 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
     return `${item.number}: ${result}`;
   };
   try {
-    if (item.kind === "question") return finish("skipped", "that one is a question; answer it here in words and I'll take it from there.");
+    if (item.kind === "question" && item.category !== "email:voicemail_callbacks") return finish("skipped", "that one is a question; answer it here in words and I'll take it from there.");
     if (item.category === "email:noise") {
       // Re-read the cohort: the confirm must match what exists right now.
       const dry = await runNoiseSweep(db, { actor: approver.actor, adminUserId: approver.id, confirm: null });
@@ -397,6 +451,20 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
       if (!count) return finish("done", "nothing left to archive.");
       const run = await runNoiseSweep(db, { actor: approver.actor, adminUserId: approver.id, confirm: String(count) });
       return run.status === 200 ? finish("done", `archived ${run.json.processed ?? count} noise emails.`) : finish("failed", `archive failed: ${String(run.json.error ?? run.status)}`);
+    }
+    if (item.category === "email:voicemail_aged" || item.category === "email:voicemail_recent") {
+      const ids = (item.target.threadIds as string[] | undefined) ?? [];
+      const { archived } = await archiveSupportThreads(db, {
+        threadIds: ids,
+        actor: approver.actor,
+        adminUserId: approver.id,
+        action: item.category === "email:voicemail_aged" ? "voicemail_aged_out" : "voicemail_archive",
+        details: { approvedCount: ids.length },
+      });
+      return finish("done", `archived ${archived} voicemails. They stay in All Mail.`);
+    }
+    if (item.category === "email:voicemail_callbacks") {
+      return finish("skipped", "those are for you to call; I'll keep listing them until they're 14 days old.");
     }
     if (item.category === "sms:keywords") {
       const phones = (item.target.phones as string[] | undefined) ?? [];
