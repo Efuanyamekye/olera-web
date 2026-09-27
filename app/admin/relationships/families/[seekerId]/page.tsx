@@ -228,6 +228,23 @@ function isMessage(it: SeekerTimelineItem): boolean {
   return it.channel === "text" || it.channel === "email" || it.channel === "in_app";
 }
 
+/**
+ * The words of an email, from its Gmail snippet: entities decoded and the
+ * quoted message it replies to cut off ("On Thu, … wrote:"), so the bubble
+ * shows what they said rather than what we said to them.
+ */
+function emailWords(snippet: string): string {
+  const decoded = snippet
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&#x27;/g, "'")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&");
+  const cut = decoded.search(/\s*On (Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*,? .{0,80}?wrote:/i);
+  return (cut > 0 ? decoded.slice(0, cut) : decoded).trim();
+}
+
 function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; familyName: string; tz: string }) {
   const ordered = useMemo(() => [...items].sort((a, b) => (a.occurred_at < b.occurred_at ? -1 : 1)), [items]);
   const end = useRef<HTMLDivElement>(null);
@@ -271,6 +288,9 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
           const auto = it.actor === "system" && it.author !== "provider" && !it.sent_by_person;
           // Everything we sent sits on our side, typed or automatic.
           const mine = it.author !== "provider" && (it.actor === "out" || it.actor === "system");
+          // A support@ email keeps its words in the snippet and its subject in
+          // the title, so the bubble shows the words with the subject above.
+          const email = it.kind === "support" && it.detail ? emailWords(it.detail) : null;
           const who = it.author === "provider" ? (it.author_name ?? "The provider") : auto ? "Olera, automatic" : mine ? "Olera" : familyName;
           body = (
             <div className={`flex items-end gap-2 ${mine ? "justify-end" : ""}`}>
@@ -289,11 +309,18 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
                     auto ? "rounded-br-md bg-gray-200 text-gray-800" : mine ? "rounded-br-md bg-gray-900 text-white" : "rounded-bl-md bg-gray-100 text-gray-900"
                   }`}
                 >
-                  {it.full_text?.trim() || it.title}
+                  {email ? (
+                    <>
+                      <span className={`mb-0.5 block text-[12px] font-semibold ${mine && !auto ? "text-gray-300" : "text-gray-500"}`}>{it.title}</span>
+                      {email}
+                    </>
+                  ) : (
+                    it.full_text?.trim() || it.title
+                  )}
                 </div>
                 <p className={`mt-1 text-[12px] ${bad ? "text-red-700" : "text-gray-500"}`}>
                   {who}
-                  {it.detail ? ` · ${it.detail}` : ""}
+                  {it.detail && !email ? ` · ${it.detail}` : ""}
                   {via ? ` · ${via}` : ""} · {timeOf(it.occurred_at, tz)}
                   {it.status ? ` · ${it.status}` : ""}
                   {link}
