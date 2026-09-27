@@ -11,6 +11,8 @@ import {
   readBenefitsCascade,
 } from "@/lib/family-comms/benefits-cascade.server";
 import { sendSlackAlert } from "@/lib/slack";
+import { companionActive } from "@/lib/family-comms/benefits-companion.server";
+import { getBenefitsCompanionSettings } from "@/lib/analytics/benefits-companion-settings";
 import { isBenefitsAutomationHeld, isBenefitsOnlyFamily } from "@/lib/family-comms/benefits-automation";
 import { sendSMS } from "@/lib/twilio";
 import { benefitsCheckInSms } from "@/lib/sms/templates";
@@ -245,6 +247,9 @@ export async function GET(request: NextRequest) {
     const db = getServiceClient();
     const siteUrl = getSiteUrl();
     const now = Date.now();
+    // Families in the benefits text companion get their texts from it, not
+    // from the cascade rungs here (email still goes). Read once per run.
+    const companionSettings = await getBenefitsCompanionSettings();
 
     const counts = {
       families: 0,
@@ -502,7 +507,7 @@ export async function GET(request: NextRequest) {
         body: string,
         stampKey: "first_step_sms_at" | "check_sms_at",
       ): Promise<CascadeSmsDelivery | null> => {
-        if (!smsEligible || !fp.phone) return null;
+        if (!smsEligible || !fp.phone || companionActive(familyMeta, companionSettings)) return null;
         const smsType = stampKey === "first_step_sms_at" ? "benefits_first_step_sms" : "benefits_check_in_sms";
         // Quiet hours, same policy as the navigator scheduler's companion text:
         // 17:00 UTC is fine for CONUS, but Hawaii/Alaska (and unknown-state

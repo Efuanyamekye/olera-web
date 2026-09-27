@@ -798,6 +798,28 @@ export async function captureFamilyPhoneAndTextResults(
     return { stored: true, smsSent: false };
   }
 
+  // Benefits text companion test. Off and practice change nothing here. When
+  // live, a family in the companion arm gets its opener instead of the results
+  // text below; control (and a companion family with no callable program)
+  // gets the results text, tagged with the arm.
+  let companionArm: string | null = null;
+  try {
+    const { startBenefitsCompanion } = await import("@/lib/family-comms/benefits-companion.server");
+    const companion = await startBenefitsCompanion(db, {
+      profileId: opts.profileId,
+      phone: normalized,
+      source: opts.source,
+      token: tokenRow.token,
+    });
+    companionArm = companion.arm;
+    if (companion.handled) {
+      await pingSlack("Companion opener texted (benefits text companion test).");
+      return { stored: true, smsSent: true };
+    }
+  } catch (err) {
+    console.error("[captureFamilyPhone] companion start failed, sending results text:", err);
+  }
+
   const smsContext = opts.source === "benefits_outcome_help" ? "help_requested" : "results";
   const copyVersion =
     smsContext === "help_requested"
@@ -822,6 +844,7 @@ export async function captureFamilyPhoneAndTextResults(
       copy_version: copyVersion,
       entry_source: opts.source,
       match_count: tokenRow.match_count || 0,
+      ...(companionArm ? { companion_arm: companionArm, companion_kind: "results" } : {}),
     },
   });
   if (!result.success) {

@@ -732,6 +732,24 @@ export async function POST(request: NextRequest) {
       );
       return twiml(); // Twilio sends the carrier opt-out confirmation.
     }
+    // The benefits text companion asks one question in its opener ("shutoff
+    // notice, or no heat, AC or food? Reply 1 or 2"). Its answer must be
+    // claimed before the opt-in branch, because "YES" is also an opt-in
+    // keyword, and before the bare-keyword drop below, which would swallow a
+    // "NO". Scoped to a family with that question open, so any other 1 / YES
+    // / NO falls through exactly as before.
+    if (messageBody) {
+      const db = getServiceDb();
+      if (db) {
+        try {
+          const { handleCompanionAnswer } = await import("@/lib/family-comms/benefits-companion.server");
+          const reply = await handleCompanionAnswer(db, normalizedFrom, messageBody);
+          if (reply) return twiml(reply);
+        } catch (err) {
+          console.error("[sms-webhook] Companion answer handling failed:", err);
+        }
+      }
+    }
     if (OPT_IN_KEYWORDS.has(keyword)) {
       await unsuppressPhone(normalizedFrom);
       const n = await setFamilyPhoneValidity(normalizedFrom, "unverified");

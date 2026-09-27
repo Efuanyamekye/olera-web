@@ -14,6 +14,8 @@
  * Timing/gates are mirrored in lib/family-comms/journey.ts (the admin
  * sequence timeline) — keep that in sync when this path changes.
  */
+import { companionActive } from "@/lib/family-comms/benefits-companion.server";
+import { getBenefitsCompanionSettings } from "@/lib/analytics/benefits-companion-settings";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
 import { careUnsubscribeUrl } from "@/lib/email-templates";
@@ -386,9 +388,12 @@ async function deliverNavigatorLetter(
     };
   }
 
+  // A family in the benefits text companion hears from it by text; the
+  // letter still goes by email so there is one text stream, not two.
+  const inCompanion = companionActive(meta as Record<string, unknown>, await getBenefitsCompanionSettings());
   const smsEligible =
     !!profile.phone && !!(meta as { sms_consent?: unknown }).sms_consent &&
-    profile.phone_validity !== "opted_out";
+    profile.phone_validity !== "opted_out" && !inCompanion;
   if (!profile.email && !smsEligible) {
     return { ok: false, error: "Family has no reachable consented channel", conflict: true };
   }
