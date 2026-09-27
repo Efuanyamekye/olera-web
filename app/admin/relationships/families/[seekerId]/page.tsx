@@ -289,11 +289,11 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
                     auto ? "rounded-br-md bg-gray-200 text-gray-800" : mine ? "rounded-br-md bg-gray-900 text-white" : "rounded-bl-md bg-gray-100 text-gray-900"
                   }`}
                 >
-                  {it.title}
-                  {it.detail ? <span className={`mt-1 block text-[13px] ${mine && !auto ? "text-gray-300" : "text-gray-600"}`}>{it.detail}</span> : null}
+                  {it.full_text?.trim() || it.title}
                 </div>
                 <p className={`mt-1 text-[12px] ${bad ? "text-red-700" : "text-gray-500"}`}>
                   {who}
+                  {it.detail ? ` · ${it.detail}` : ""}
                   {via ? ` · ${via}` : ""} · {timeOf(it.occurred_at, tz)}
                   {it.status ? ` · ${it.status}` : ""}
                   {link}
@@ -834,17 +834,23 @@ function CaseInner() {
   const routing = data?.routing ?? null;
   const holder = routing?.handed_at ? (routing.campaign_owner ?? null) : null;
 
-  // "Ask for a YES" drafts, one per provider Ces is likely to pick: the ones on
-  // call who have not seen this family yet, then the rest. The agency is named
-  // in the text, because a yes to "a home care agency" is not a yes to anyone.
+  // "Ask for a YES" drafts. Only providers the relay would actually send this
+  // family to (the care-type-matched candidates) or has already offered them
+  // to, so a home-care family is never drafted a text about an assisted living
+  // facility. The provider is named, because a yes to "an agency" is not a yes
+  // to anyone.
   const suggestions = useMemo(() => {
     if (!data || !routing || !routing.can_route || routing.handed_at || !routing.has_phone) return [];
-    const city = cityName(data.city_slug);
-    const ranked = [...routing.pool].sort((a, b) => Number(b.enabled && !b.already_offered) - Number(a.enabled && !a.already_offered) || a.position - b.position);
-    return ranked.slice(0, 3).map((p) => ({
-      id: p.provider_id,
-      name: p.name.split(/\s+-\s+/)[0],
-      text: `Hi ${data.profile.label_is_fallback ? "there" : familyName}, this is Olera. ${p.name.split(/\s+-\s+/)[0]}, a home care agency${city ? ` that serves ${city}` : ""}, can help. Is it okay if I pass your number to them so they can call you? Reply YES and I'll set it up.`,
+    const plan = data.plan ?? null;
+    const short = (n: string) => n.split(/\s+-\s+|,\s/)[0].trim();
+    const picks = new Map<string, string>();
+    for (const c of plan?.candidates ?? []) if (!picks.has(c.providerId)) picks.set(c.providerId, c.providerName);
+    for (const p of routing.pool) if (p.already_offered && !picks.has(p.provider_id)) picks.set(p.provider_id, p.name);
+    const hello = data.profile.label_is_fallback ? "there" : familyName;
+    return Array.from(picks, ([id, name]) => ({ id, name })).slice(0, 3).map((p) => ({
+      id: p.id,
+      name: short(p.name),
+      text: `Hi ${hello}, this is Olera. ${short(p.name)} can help with the care you asked about. Is it okay if I pass your number to them so they can call you? Reply YES and I'll set it up.`,
     }));
   }, [data, routing, familyName]);
 

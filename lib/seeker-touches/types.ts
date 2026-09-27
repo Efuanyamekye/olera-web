@@ -153,6 +153,8 @@ export type SeekerTimelineItem = {
    * page uses this so it never labels a person's words as automatic.
    */
   sent_by_person?: boolean;
+  /** The whole message when `title` is clipped for the list. The case page reads this. */
+  full_text?: string | null;
 };
 
 // ── Reachability ──────────────────────────────────────────────────────────────

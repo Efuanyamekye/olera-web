@@ -319,6 +319,7 @@ function emailToItem(e: EmailRow): SeekerTimelineItem {
     occurred_at: e.created_at,
     // A text has no subject worth showing; its body is the message.
     title: sms ? clip(e.html_body, 150) ?? humanize(e.email_type) : e.subject ?? humanize(e.email_type),
+    full_text: sms ? (e.html_body ?? null) : null,
     detail: null,
     source: "system",
     status,
@@ -379,6 +380,7 @@ function smsToItem(r: SmsRow, prompts: string[] = []): SeekerTimelineItem {
     channel: "text",
     occurred_at: r.created_at,
     title: clip(r.body, 160) ?? "(empty text)",
+    full_text: r.body ?? null,
     detail: checkin ? `answered the benefits check-in: ${CHECKIN_WORD[checkin]}` : r.keyword ? `keyword ${r.keyword}` : null,
     source: "twilio",
     status: r.handled_at || checkin ? null : "needs reply",
@@ -471,6 +473,7 @@ function cityMsgToItem(m: CityMsgRow): SeekerTimelineItem {
     channel: m.channel === "sms" ? "text" : "email",
     occurred_at: m.created_at,
     title: clip(m.body, 160) ?? m.subject ?? (human ? "(sent by hand)" : "(sent automatically)"),
+    full_text: m.body ?? null,
     detail: null,
     source: human ? "manual" : "system",
     status: failed ? `failed · ${clip(m.last_error, 60)}` : m.delivery ?? m.status,
