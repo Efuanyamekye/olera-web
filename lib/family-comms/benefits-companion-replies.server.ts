@@ -179,8 +179,9 @@ export function safeReply(
   }
 }
 
+// No time promise: the team cannot keep "2 business days" (TJ, 2026-09-27).
 export const ESCALATION_REPLY =
-  "Thanks, I read this. It needs a person, not an automatic answer. Someone from Olera will text you, usually within 2 business days. Olera";
+  "Thanks, I read this. It needs a person, not an automatic answer. A person on our team reads every message and will text you back. Olera";
 
 export type Decision =
   | { kind: "auto"; intent: SafeIntent; reply: string }
