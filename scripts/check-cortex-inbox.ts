@@ -7,6 +7,7 @@
  * drafts up to three emails, about $0.06). Nothing is stored or sent.
  */
 import assert from "node:assert/strict";
+import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
   buildInboxProposals, cleanSubject, clip, isSmsBookkeeping, parseInboxCommand, renderDigest, waitingOnUs, type StoredItem,
@@ -67,6 +68,14 @@ assert.match(digest, /9 more need a person/);
 assert.equal(cleanSubject("Re: Re:Ã‚Â Your first step for SMMC"), "Your first step for SMMC");
 assert.equal(clip("one two three four five", 12), "one two...");
 console.log("digest checks passed");
+
+// --- Voicemail: one line per caller, the newest kept.
+const vm = (id: string, ageDays: number, number: string, worthIt = true) => ({ id, ageDays, worthIt, who: "Jamie", number, reason: "follow-up" });
+const deduped = dedupeByCaller([vm("old", 44, "(936) 506-2898"), vm("new", 31, "936-506-2898"), vm("other", 40, "(214) 343-6400"), vm("noise", 5, "", false)]);
+assert.deepEqual(deduped.filter((v) => v.worthIt).map((v) => v.id), ["new", "other"], "the older repeat from the same number is archived");
+assert.match(deduped.find((v) => v.id === "old")!.reason, /repeat of a newer voicemail/);
+assert.equal(callbackLine(vm("x", 0, "214-343-6400")), "Jamie, 214-343-6400: follow-up (today)");
+console.log("voicemail checks passed");
 
 (async () => {
   const { readOnly } = await import("./replay-cortex-conversation");

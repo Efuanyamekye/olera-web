@@ -87,7 +87,7 @@ async function loadRouting(seekerId: string, leadId: string) {
   const db = getServiceClient();
   const { data: lead } = await db
     .from("city_leads")
-    .select("id, slug, status, archived_at, accepted_offer_id, qualification_reply, qualification_reply_at, admin_note, handed_at, meta_campaign_id, phone, email, first_name, capture_method")
+    .select("id, slug, status, archived_at, accepted_offer_id, qualification_reply, qualification_reply_at, qualification_verdict, admin_note, handed_at, meta_campaign_id, phone, email, first_name, capture_method")
     .eq("id", leadId)
     .maybeSingle();
   if (!lead) return null;
@@ -154,6 +154,7 @@ async function loadRouting(seekerId: string, leadId: string) {
     // family a provider already had.
     can_route: !closed && !lead.accepted_offer_id && !(offerRows ?? []).some((o) => o.accepted_at),
     qualification_reply: (lead.qualification_reply as string | null) ?? null,
+    qualification_verdict: (lead.qualification_verdict as string | null) ?? null,
     pool: pool.map((p) => ({
       provider_id: p.provider_id,
       name: nameOf.get(p.provider_id) ?? "a provider",

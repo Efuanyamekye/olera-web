@@ -1,7 +1,14 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { logAuditAction } from "@/lib/admin";
 import { decryptGmailToken } from "@/lib/support-email/crypto.server";
-import { buildReplyRaw, createGmailDraft, gmailAccessToken, updateGmailDraft } from "@/lib/support-email/gmail.server";
+import {
+  GMAIL_BATCH_MODIFY_LIMIT,
+  batchModifyGmailMessages,
+  buildReplyRaw,
+  createGmailDraft,
+  gmailAccessToken,
+  updateGmailDraft,
+} from "@/lib/support-email/gmail.server";
 import type { SupportMailboxRow } from "@/lib/support-email/sync.server";
 
 /**
@@ -112,4 +119,81 @@ export async function saveSupportDraft(
   });
   await recordSupportAction(db, args.threadId, args.actor, args.adminUserId, "save_draft");
   return { draftId: draft.id };
+}
+
+/**
+ * Archive named threads the way the noise sweep does: Gmail first (INBOX and
+ * UNREAD removed, everything stays in All Mail), then the rows marked handled,
+ * one support_email_actions row each and one audit row. For the voicemail
+ * sweep, where the cohort is a list the founder approved, not a category.
+ * Only threads still waiting (needs_reply or escalated) are touched.
+ */
+export async function archiveSupportThreads(
+  db: SupabaseClient,
+  args: { threadIds: string[]; actor: string; adminUserId: string; action: string; details?: Record<string, unknown> },
+): Promise<{ archived: number }> {
+  const chunk = <T,>(values: T[], size: number) => Array.from({ length: Math.ceil(values.length / size) }, (_, i) => values.slice(i * size, i * size + size));
+  const threads: Array<{ id: string; gmail_label_ids: string[] | null }> = [];
+  for (const ids of chunk(args.threadIds, 200)) {
+    const { data, error } = await db.from("support_email_threads")
+      .select("id, gmail_label_ids")
+      .in("id", ids)
+      .in("state", ["needs_reply", "escalated"]);
+    if (error) throw error;
+    threads.push(...((data ?? []) as typeof threads));
+  }
+  if (!threads.length) return { archived: 0 };
+
+  const messageIds: string[] = [];
+  for (const ids of chunk(threads.map((t) => t.id), 200)) {
+    const { data, error } = await db.from("support_email_messages").select("gmail_message_id").in("thread_id", ids);
+    if (error) throw error;
+    messageIds.push(...(data ?? []).map((m) => String((m as { gmail_message_id: string }).gmail_message_id)));
+  }
+  const { data: mailboxes, error: mailboxError } = await db
+    .from("support_mailboxes").select("*").not("encrypted_refresh_token", "is", null).limit(1);
+  if (mailboxError) throw mailboxError;
+  const mailbox = (mailboxes ?? [])[0] as SupportMailboxRow | undefined;
+  if (!mailbox?.encrypted_refresh_token) throw new Error("No connected Gmail mailbox.");
+  const accessToken = await gmailAccessToken(decryptGmailToken(mailbox.encrypted_refresh_token));
+  // Gmail is the source of truth, so it moves first.
+  for (const ids of chunk(messageIds, GMAIL_BATCH_MODIFY_LIMIT)) {
+    await batchModifyGmailMessages(accessToken, ids, { removeLabelIds: ["INBOX", "UNREAD"] });
+  }
+
+  const now = new Date().toISOString();
+  // Grouped by the label set left after the archive, as the noise sweep does:
+  // one update per group instead of one per thread. 411 single-row updates
+  // inside a Telegram approval would eat most of its time limit.
+  const byLabels = new Map<string, { labels: string[]; ids: string[] }>();
+  for (const thread of threads) {
+    const labels = (thread.gmail_label_ids ?? []).filter((label) => label !== "INBOX" && label !== "UNREAD");
+    const key = JSON.stringify(labels);
+    const group = byLabels.get(key);
+    if (group) group.ids.push(thread.id);
+    else byLabels.set(key, { labels, ids: [thread.id] });
+  }
+  for (const { labels, ids: groupIds } of byLabels.values()) {
+    for (const ids of chunk(groupIds, 200)) {
+      const { error } = await db.from("support_email_threads").update({
+        state: "handled", unread: false, gmail_label_ids: labels,
+        handled_at: now, handled_by: args.actor, snoozed_until: null, updated_at: now,
+      }).in("id", ids);
+      if (error) throw error;
+    }
+  }
+  for (const ids of chunk(threads.map((t) => t.id), 500)) {
+    const { error } = await db.from("support_email_actions").insert(
+      ids.map((threadId) => ({ thread_id: threadId, actor: args.actor, action: args.action, details: args.details ?? {} })),
+    );
+    if (error) console.error(`[support-email] ${args.action} action insert failed:`, error);
+  }
+  await logAuditAction({
+    adminUserId: args.adminUserId,
+    action: `support_email_${args.action}`,
+    targetType: "support_email_thread",
+    targetId: `${args.action}:${threads.length}`,
+    details: { processed: threads.length, gmailMessages: messageIds.length, ...(args.details ?? {}) },
+  });
+  return { archived: threads.length };
 }
