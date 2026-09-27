@@ -1025,6 +1025,19 @@ export const LOOKUP_TOOLS = [
     },
   },
   {
+    name: "calendar",
+    description: "The founder's own Google Calendar (tj@olera.care), read live: events from a few days ago to two weeks ahead, with times in ET and who is attending (names only). Use for what is on his plate, when a call with someone is, whether he is free, and before suggesting a meeting or a call time.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        days_ahead: { type: "number", description: "Days ahead, 1 to 60. Default 14." },
+        days_back: { type: "number", description: "Days back, 0 to 30. Default 3." },
+        query: { type: "string", description: "Optional text to match in events, e.g. a person or company name." },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
     name: "work_in_progress",
     description: "What the team is in the middle of or just did by hand: open pull requests (not merged, not live) and the SCRATCHPAD's session notes from the last few days (campaigns rebuilt, leads archived, calls made, fixes shipped). Call it before recommending any fix or action, to check it is not already done or under way, and for questions like 'what is in flight' or 'what did we do yesterday'.",
     input_schema: {
@@ -1069,6 +1082,14 @@ export async function runLookup(db: SupabaseClient, name: string, input: Record<
           limit: clampDays(input.limit, 10, 1, 25),
           adsFitOnly: input.ads_fit_only === true,
         }));
+      case "calendar": {
+        const { loadCalendar } = await import("@/lib/war-room/calendar.server");
+        return inEastern(await loadCalendar(db, {
+          daysAhead: clampDays(input.days_ahead, 14, 1, 60),
+          daysBack: clampDays(input.days_back, 3, 0, 30),
+          query: typeof input.query === "string" ? input.query : undefined,
+        }));
+      }
       case "sms_inbox":
         return inEastern(await loadSmsInbox(db, clampDays(input.days, 14, 1, 60), input.waiting_only === true));
       case "work_in_progress":
