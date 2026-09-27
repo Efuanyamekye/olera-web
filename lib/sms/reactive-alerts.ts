@@ -37,6 +37,9 @@ export interface ReactiveAlertOptions {
   body: string;
   /** Injectable clock for tests. */
   now?: Date;
+  /** Extra ledger metadata (e.g. the benefits companion arm). Kept on an
+   *  immediate send; a queued send loses it (sms_queue has no column). */
+  metadata?: Record<string, unknown>;
 }
 
 export type ReactiveAlertResult =
@@ -93,7 +96,7 @@ export async function sendReactiveFamilyAlert(opts: ReactiveAlertOptions): Promi
         emailType: opts.emailType,
         recipientType: "family",
         recipientLogProfileId: opts.familyProfileId,
-        metadata: { reactive: true },
+        metadata: { reactive: true, ...(opts.metadata ?? {}) },
       });
       return res.success
         ? { status: "sent" }

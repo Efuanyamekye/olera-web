@@ -664,6 +664,22 @@ export const CRON_REGISTRY: CronJob[] = [
     relatedAdminPath: "/admin/benefits",
   },
   {
+    id: "benefits-companion-followups",
+    name: "Benefits text companion — follow-ups",
+    description:
+      "Part of the benefits text companion test (switch in /admin/analytics). Two texts. Next morning, companion arm only: 12-48 hours after the opener, 8-10am local, if the family has not replied or said they called, it asks whether they got through (answers are the existing CALLED / NO ANSWER / STUCK keywords). Day 14, BOTH arms with identical words: the test's primary measure, 'Were you able to get through to them? Reply 1 or 2', sent 10am-6pm local between day 14 and day 21. Skips opted-out numbers, families without text consent, and deceased or opt-out holds.",
+    recipientCohort:
+      "Families assigned to either arm of the benefits text companion (metadata.benefits_companion) who have a phone and text consent.",
+    audience: "Care seekers",
+    fn: "nudge",
+    schedule: "40 * * * *",
+    humanSchedule: "Hourly at :40; each text only goes out inside its local-time window.",
+    path: "/api/cron/benefits-companion-followups",
+    emailTypes: [],
+    successSignal: "Every family in the test is asked the day-14 question once, so both arms can be compared on the same answer.",
+    relatedAdminPath: "/admin/analytics",
+  },
+  {
     id: "benefits-navigator-packets",
     name: "Benefits navigator — packet builder",
     description:

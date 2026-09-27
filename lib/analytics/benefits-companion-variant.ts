@@ -39,10 +39,11 @@ export const BENEFITS_COMPANION_DEFAULT_SETTINGS: BenefitsCompanionSettings = {
 /**
  * Live mode can only be switched on once the whole companion ships: the fast
  * replies (part 2) and the follow-ups plus the day-14 question (part 3).
- * Until then, a companion family would lose the day-2 letter's text and the
- * check-in text with nothing replacing them. Flip this in the part-3 PR.
+ * Without them a companion family would lose the day-2 letter's text and the
+ * check-in text with nothing replacing them. All three parts are in, so live
+ * is allowed; the switch still starts on Off.
  */
-export const BENEFITS_COMPANION_LIVE_READY = false;
+export const BENEFITS_COMPANION_LIVE_READY = true;
 
 function djb2(str: string): number {
   let hash = 5381;

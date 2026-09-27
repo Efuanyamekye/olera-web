@@ -121,6 +121,10 @@
       "schedule": "5 * * * *"
     },
     {
+      "path": "/api/cron/benefits-companion-followups",
+      "schedule": "40 * * * *"
+    },
+    {
       "path": "/api/cron/benefits-navigator-packets",
       "schedule": "25 * * * *"
     },

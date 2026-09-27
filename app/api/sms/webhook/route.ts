@@ -551,10 +551,26 @@ async function triageFamilyQuestion(args: {
     }
   }
 
+  // Benefits text companion (test). For a family in its live arm it may
+  // answer on the spot ("answered": no ack, no research job) or send its own
+  // honest "a person will answer" note ("escalated": no generic ack, the job
+  // still queues). In practice mode it only writes down what it would have
+  // done and returns "pass". Any failure falls back to today's path.
+  let companionOutcome: "answered" | "escalated" | "pass" = "pass";
+  if (db && profile) {
+    try {
+      const { handleCompanionFreeText } = await import("@/lib/family-comms/benefits-companion-replies.server");
+      companionOutcome = await handleCompanionFreeText(db, { phone, body, profile });
+    } catch (err) {
+      console.error("[sms-webhook] Companion free-text handling failed:", err);
+    }
+  }
+  if (companionOutcome === "answered") return;
+
   // Acknowledge. sendReactiveFamilyAlert owns quiet hours, the opted-out
   // check, the daily safety cap, and the deferred-send queue, so this call
   // stays honest about all four without repeating any of them here.
-  if (profile && !(await ackedRecently(phone))) {
+  if (companionOutcome === "pass" && profile && !(await ackedRecently(phone))) {
     const result = await sendReactiveFamilyAlert({
       familyProfileId: profile.id,
       phone,
