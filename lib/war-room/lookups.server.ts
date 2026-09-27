@@ -721,7 +721,7 @@ async function loadProviderCampaigns(db: SupabaseClient, name: string) {
   const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
   const [cityResult, inquiryResult] = await Promise.all([
     db.from("city_campaigns")
-      .select("slug, city, state, ring_label, channel, campaign_tag, status, flight_start, flight_end, ad_spend_cents, ad_clicks, ad_impressions, admin_note, request_id")
+      .select("slug, city, state, ring_label, channel, campaign_tag, status, flight_start, flight_end, ad_spend_cents, ad_clicks, ad_impressions, admin_note, request_id, platform_campaign_id")
       .in("request_id", requestIds),
     providerIds.length
       ? db.from("connections").select("to_profile_id", { count: "exact", head: true }).eq("type", "inquiry").in("to_profile_id", providerIds).gte("created_at", since)
@@ -751,15 +751,149 @@ async function loadProviderCampaigns(db: SupabaseClient, name: string) {
     leadsBySlug.set(lead.slug, entry);
   }
 
+  // What Meta says the campaign is set to right now, and what changed in the
+  // last two weeks. Olera's tables hold spend and leads, not the platform's
+  // settings, and on 2026-09-27 that gap had Cortex recommend a form fix and a
+  // budget raise that were both already done.
+  const metaIds = cityCampaigns
+    .filter((campaign) => campaign.channel === "meta" && typeof campaign.platform_campaign_id === "string")
+    .map((campaign) => campaign.platform_campaign_id as string);
+  // Live settings for the first few only (newest provider requests first): a
+  // broad name matches many providers, and ten campaigns' copy and forms
+  // pushed the result past what the conversation reads (64k of a 60k cap).
+  const { loadMetaCampaignSettings, MAX_CAMPAIGNS } = await import("@/lib/war-room/ad-settings.server");
+  const meta = metaIds.length ? await loadMetaCampaignSettings(metaIds) : { campaigns: [] };
+  const skipped = new Set(metaIds.slice(MAX_CAMPAIGNS));
+  const metaById = new Map("campaigns" in meta ? meta.campaigns.map((campaign) => [campaign.campaignId, campaign]) : []);
+  // A broad name ("a") matched ten campaigns whose team notes alone were 51k
+  // characters, past the 60k the conversation reads, so the tail was cut off
+  // mid-JSON. Notes are not in date order, so they are shortened rather than
+  // trimmed from one end, and only when several providers matched.
+  const shortNote = (note: unknown) => {
+    if (typeof note !== "string" || rows.length <= 3 || note.length <= 800) return note;
+    return `${note.slice(0, 800)}... (shortened because several providers matched; ask about this provider by name for the full note)`;
+  };
+  const liveSettings = (campaign: Record<string, unknown>) => {
+    if (campaign.channel === "meta") {
+      if ("unavailable" in meta) return { unreadable: meta.unavailable };
+      const id = String(campaign.platform_campaign_id ?? "");
+      if (skipped.has(id)) return { unreadable: "Not read in this answer: too many campaigns matched. Ask about this provider by name to see its live settings." };
+      return metaById.get(id) ?? { unreadable: "No Meta campaign id is recorded for this arm." };
+    }
+    if (campaign.channel === "google") return { unreadable: "Google's settings (budget, status, ads) can't be read: Olera's Google Ads account has no API access. Only the spend and clicks a script posts hourly are known." };
+    return { unreadable: `Settings for ${String(campaign.channel)} can't be read from here.` };
+  };
+
   return {
-    note: "Live campaign and lead tables. These outrank team notes, which go out of date. 'Site inquiries' are families contacting the provider on Olera; ad leads come from the campaigns below and are counted separately. In each campaign's leads, 'archived' leads were already removed from the provider's queue by the team or the classifier: never recommend pulling them out again.",
+    note: "Live campaign and lead tables. These outrank team notes, which go out of date. 'Site inquiries' are families contacting the provider on Olera; ad leads come from the campaigns below and are counted separately. In each campaign's leads, 'archived' leads were already removed from the provider's queue by the team or the classifier: never recommend pulling them out again. 'liveSettings' is read from the ad platform itself: its budget, dates, which ads are on, their copy, the form's questions and its recentChanges (with who made them) are what is actually running. Before recommending a change to an ad, check liveSettings: if the change is already there or in recentChanges, say it was done and when, and do not recommend it again.",
     campaigns: rows.map((row) => ({
       ...row,
+      admin_note: shortNote(row.admin_note),
       linkedAdCampaigns: cityCampaigns
         .filter((campaign) => campaign.request_id === row.id)
-        .map(({ request_id: _unused, ...campaign }) => ({ ...campaign, leads: leadsBySlug.get(campaign.slug) ?? { total: 0 } })),
+        .map(({ request_id: _unused, platform_campaign_id: _id, ...campaign }) => ({
+          ...campaign,
+          admin_note: shortNote(campaign.admin_note),
+          leads: leadsBySlug.get(campaign.slug) ?? { total: 0 },
+          liveSettings: liveSettings({ ...campaign, platform_campaign_id: _id }),
+        })),
     })),
     siteInquiriesLast30Days: inquiryResult.error ? null : inquiryResult.count ?? 0,
+  };
+}
+
+/**
+ * What the team is in the middle of: open pull requests and the SCRATCHPAD's
+ * recent session notes, read from GitHub. shipped_work covers what merged;
+ * this covers what is open or was just done by hand (a campaign rebuilt in Ads
+ * Manager, a call made, a lead archived), which is where "didn't we already
+ * handle this?" usually lives. On 2026-09-26 Cortex told the founder to pull
+ * six job-seeker leads out of Hoop Cares' queue two days after it was done.
+ */
+export function scratchpadEntries(markdown: string, windowDays: number, now = Date.now()) {
+  const since = new Date(now - windowDays * 86_400_000).toISOString().slice(0, 10);
+  const entries: Array<{ date: string; title: string; opening: string }> = [];
+  const parts = markdown.split(/^### /m).slice(1);
+  for (const part of parts) {
+    const [heading, ...body] = part.split("\n");
+    const date = heading.match(/^(\d{4}-\d{2}-\d{2})/)?.[1];
+    if (!date || date < since) continue;
+    const opening = body.join(" ").replace(/\s+/g, " ").trim().slice(0, 700);
+    entries.push({ date, title: heading.replace(/^\d{4}-\d{2}-\d{2}\s*[-—–]*\s*/, "").trim().slice(0, 240), opening });
+    if (entries.length >= 12) break;
+  }
+  return entries;
+}
+
+async function loadWorkInProgress(windowDays: number) {
+  const token = process.env.WAR_ROOM_GITHUB_TOKEN;
+  const repository = process.env.WAR_ROOM_GITHUB_REPOSITORY;
+  if (!token || !repository) return { unavailable: "GitHub is not configured for Cortex, so open work and the scratchpad cannot be read." };
+  const headers = { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" };
+  type OpenPull = { number: number; title: string; created_at: string; draft?: boolean; user: { login: string } | null; base: { ref: string } | null; head: { ref: string } | null };
+  const [pullsResponse, scratchResponse] = await Promise.all([
+    fetch(`https://api.github.com/repos/${repository}/pulls?state=open&sort=updated&direction=desc&per_page=30`, { headers, signal: AbortSignal.timeout(8_000) }),
+    fetch(`https://api.github.com/repos/${repository}/contents/SCRATCHPAD.md?ref=staging`, { headers: { ...headers, Accept: "application/vnd.github.raw" }, signal: AbortSignal.timeout(8_000) }),
+  ]);
+  const pulls = pullsResponse.ok ? (await pullsResponse.json()) as OpenPull[] : null;
+  const scratch = scratchResponse.ok ? await scratchResponse.text() : null;
+  return {
+    note: "Open pull requests are not merged or live. Scratchpad entries are the team's own notes of what each session did, newest first; an entry saying something was done, rebuilt, archived or sent means it is already handled.",
+    openPullRequests: pulls
+      ? pulls.map((pull) => ({
+        number: pull.number,
+        title: pull.title,
+        into: pull.base?.ref ?? null,
+        author: pull.user?.login ? (GITHUB_NAMES[pull.user.login] ?? pull.user.login) : null,
+        opened: pull.created_at,
+        draft: Boolean(pull.draft),
+      }))
+      : { unreadable: `GitHub ${pullsResponse.status}` },
+    scratchpad: scratch ? scratchpadEntries(scratch, windowDays) : { unreadable: `GitHub ${scratchResponse.status}` },
+  };
+}
+
+/**
+ * Texts people sent Olera (the /admin/inbox SMS side), grouped by person.
+ * Names and message text, never phone numbers. "Handled" is the inbox's own
+ * marker: someone on the team dealt with it, so it is not waiting on anyone.
+ */
+async function loadSmsInbox(db: SupabaseClient, days: number, unhandledOnly: boolean) {
+  const since = new Date(Date.now() - days * 86_400_000).toISOString();
+  let query = db.from("sms_inbound")
+    .select("phone_last10, body, profile_type, display_name, handled_at, created_at")
+    .gte("created_at", since)
+    .order("created_at", { ascending: false })
+    .limit(300);
+  if (unhandledOnly) query = query.is("handled_at", null);
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+  type Row = { phone_last10: string | null; body: string | null; profile_type: string | null; display_name: string | null; handled_at: string | null; created_at: string };
+  const threads = new Map<string, { who: string; kind: string | null; messages: number; lastAt: string; lastText: string; waiting: boolean }>();
+  for (const row of (data ?? []) as Row[]) {
+    const key = row.phone_last10 ?? row.display_name ?? row.created_at;
+    const thread = threads.get(key);
+    if (thread) {
+      thread.messages += 1;
+      if (!row.handled_at) thread.waiting = true;
+      continue;
+    }
+    threads.set(key, {
+      who: row.display_name ?? "Unknown sender",
+      kind: row.profile_type,
+      messages: 1,
+      lastAt: row.created_at,
+      lastText: (row.body ?? "").replace(/\s+/g, " ").trim().slice(0, 300),
+      waiting: !row.handled_at,
+    });
+  }
+  const list = [...threads.values()];
+  return {
+    note: "Texts sent to Olera, one line per person, newest first. 'waiting' means at least one of their texts is not marked handled in the inbox. Phone numbers are left out on purpose.",
+    days,
+    people: list.length,
+    waiting: list.filter((thread) => thread.waiting).length,
+    threads: list.slice(0, 40),
   };
 }
 
@@ -804,7 +938,7 @@ export const LOOKUP_TOOLS = [
   },
   {
     name: "provider_campaigns",
-    description: "Everything running for one provider and what it produced, read live: their Ad Boost campaign (plan, flight dates, spend, clicks), every linked ad campaign including Meta instant forms and city campaigns, the leads each one produced (qualified or not, handed to the provider), and site inquiries in the last 30 days. Use for what ads a provider has, which channels, when a flight ends, and how many leads they got. Outranks team notes.",
+    description: "Everything running for one provider and what it produced, read live: their Ad Boost campaign (plan, flight dates, spend, clicks), every linked ad campaign including Meta instant forms and city campaigns, the leads each one produced (qualified or not, handed to the provider), and site inquiries in the last 30 days, plus each Meta campaign's live settings from Meta itself (budget, end date, which ads are on, their copy, the form's questions) and its changes in the last 14 days with who made them. Use for what ads a provider has, which channels, when a flight ends, how many leads they got, and before recommending any change to an ad (to check it is not already done). Outranks team notes.",
     input_schema: {
       type: "object" as const,
       properties: { name: { type: "string", description: "Part of the provider's name, e.g. Hoop Cares." } },
@@ -879,6 +1013,27 @@ export const LOOKUP_TOOLS = [
     },
   },
   {
+    name: "sms_inbox",
+    description: "Texts families and providers sent Olera (the admin SMS inbox), one line per person: who, whether they are a family or provider, their last text, and whether it is still waiting on a reply. Use for 'who texted', 'what's waiting in the inbox', or before recommending someone be contacted.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        days: { type: "number", description: "How many days back, 1 to 60. Default 14." },
+        waiting_only: { type: "boolean", description: "Only people with texts not yet handled." },
+      },
+      additionalProperties: false,
+    },
+  },
+  {
+    name: "work_in_progress",
+    description: "What the team is in the middle of or just did by hand: open pull requests (not merged, not live) and the SCRATCHPAD's session notes from the last few days (campaigns rebuilt, leads archived, calls made, fixes shipped). Call it before recommending any fix or action, to check it is not already done or under way, and for questions like 'what is in flight' or 'what did we do yesterday'.",
+    input_schema: {
+      type: "object" as const,
+      properties: { window_days: { type: "number", description: "How many days of scratchpad notes, 1 to 14. Default 5." } },
+      additionalProperties: false,
+    },
+  },
+  {
     name: "nothing_fits",
     description: "Only for questions about Olera's own data. Call this when no lookup can answer such a question, before telling the founder you cannot see something. Never call it for questions about the outside world; use web search for those. Record what data would have answered it. It is shown to the founder as a list of lookups worth building.",
     input_schema: {
@@ -914,6 +1069,10 @@ export async function runLookup(db: SupabaseClient, name: string, input: Record<
           limit: clampDays(input.limit, 10, 1, 25),
           adsFitOnly: input.ads_fit_only === true,
         }));
+      case "sms_inbox":
+        return inEastern(await loadSmsInbox(db, clampDays(input.days, 14, 1, 60), input.waiting_only === true));
+      case "work_in_progress":
+        return inEastern(await loadWorkInProgress(clampDays(input.window_days, 5, 1, 14)));
       case "provider_campaigns":
         return inEastern(await loadProviderCampaigns(db, String(input.name ?? "")));
       case "published_care_needs":
