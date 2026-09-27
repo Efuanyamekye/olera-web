@@ -1,7 +1,8 @@
 import { after, NextRequest, NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { getServiceClient } from "@/lib/admin";
-import { downloadTelegramFile, founderChatId, sendTelegramMessage, sendTelegramTyping, transcribeVoiceNote } from "@/lib/telegram.server";
+import { downloadTelegramFile, founderChatId, sendTelegramMessage, sendTelegramRecording, sendTelegramTyping, sendTelegramVoice, transcribeVoiceNote } from "@/lib/telegram.server";
+import { sendVoiceNote } from "@/lib/war-room/voice.server";
 import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
 import { handleTelegramUpdate, type TelegramUpdate } from "@/lib/war-room/telegram-chat.server";
 
@@ -13,7 +14,8 @@ import { handleTelegramUpdate, type TelegramUpdate } from "@/lib/war-room/telegr
  * and Telegram re-sends an update it thinks failed. The update id is stored
  * before any work, so a re-send is dropped rather than answered twice.
  */
-export const maxDuration = 120;
+// An answer takes up to a minute and a voice note after it about 15 seconds more.
+export const maxDuration = 180;
 
 function secretMatches(given: string | null) {
   const expected = process.env.TELEGRAM_CORTEX_WEBHOOK_SECRET?.trim();
@@ -46,6 +48,7 @@ export async function POST(request: NextRequest) {
         typing: sendTelegramTyping,
         download: downloadTelegramFile,
         transcribe: transcribeVoiceNote,
+        voice: (chatId, text, mode) => sendVoiceNote(chatId, text, mode, { recording: sendTelegramRecording, sendVoice: sendTelegramVoice }),
       });
       console.log("[cortex] telegram update", update.update_id, JSON.stringify(
         outcome.handled ? { kind: outcome.kind, costUsd: outcome.costUsd } : { skipped: outcome.reason },

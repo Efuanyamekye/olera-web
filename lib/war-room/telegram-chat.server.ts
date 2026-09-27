@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { answerFounderQuestion, type ConversationTurn } from "@/lib/war-room/conversation.server";
 import { loadChatMemory, memoryPromptText, refreshChatSummary, type ChatStore } from "@/lib/war-room/chat-memory.server";
 import { approvalReply, isApproval, MAX_IMAGE_BYTES, nothingWaitingReply } from "@/lib/war-room/dm-intake";
+import { wantsVoice } from "@/lib/war-room/voice.server";
 import type { WarRoomProposal } from "@/lib/war-room/types";
 
 /**
@@ -45,11 +46,13 @@ export type TelegramDeps = {
   download: (fileId: string) => Promise<Buffer>;
   transcribe: (audio: Buffer, mimeType?: string) => Promise<string | null>;
   answer?: typeof answerFounderQuestion;
+  /** A voice note after a long reply or when he asks "aloud" (voice.server.ts). Optional so checks can leave it out. */
+  voice?: (chatId: string, text: string, mode: "reply" | "brief") => Promise<unknown>;
 };
 
 export type TelegramOutcome =
   | { handled: false; reason: string }
-  | { handled: true; kind: "setup" | "approval" | "scan" | "answer" | "unreadable"; reply: string; costUsd?: number };
+  | { handled: true; kind: "setup" | "approval" | "scan" | "answer" | "unreadable" | "voice"; reply: string; costUsd?: number };
 
 const READABLE_IMAGE = /^image\/(png|jpeg|gif|webp)$/;
 
@@ -196,6 +199,17 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
     return { handled: true, kind: "approval", reply: said };
   }
 
+  // "aloud" or "voice" on its own means: say what you just said. Answering
+  // the word as a question would miss the point.
+  if (deps.voice && /^\s*(aloud|voice(\s+(note|memo|message))?|read (it|that|this)( to me| aloud)?)\s*[.!?]?\s*$/i.test(text)) {
+    const recent = await deps.store.recent(chatId, 6).catch(() => []);
+    const last = [...recent].reverse().find((entry) => entry.role === "cortex");
+    if (last) {
+      await deps.voice(chatId, last.text, last.kind === "brief" ? "brief" : "reply");
+      return { handled: true, kind: "voice", reply: last.text };
+    }
+  }
+
   // Loaded only for a scan: it pulls in the workflow runtime.
   const scans = /\bscan\b/i.test(text) ? await import("@/lib/war-room/scan-command.server") : null;
   const command = scans?.parseScanCommand(text) ?? null;
@@ -224,6 +238,11 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
     const said = answer.reply + imageNote;
     await reply(said);
     if (answer.answered) await remember(said);
+    // The text is already with him; the note follows, as Jade's do.
+    if (answer.answered && deps.voice && wantsVoice(text, answer.reply)) {
+      clearInterval(typing);
+      await deps.voice(chatId, answer.reply, "reply");
+    }
     // After the reply, so he never waits on it.
     await refreshChatSummary(deps.store, chatId).catch(() => false);
     return { handled: true, kind: "answer", reply: said, costUsd: answer.costUsd };
