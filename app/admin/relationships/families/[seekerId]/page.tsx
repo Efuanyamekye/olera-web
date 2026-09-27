@@ -367,7 +367,7 @@ function Composer({
   }
 
   return (
-    <div className="sticky bottom-0 border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6 lg:static">
+    <div className="sticky bottom-[4.75rem] border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6 md:bottom-0 lg:static">
       {pending.length > 0 && (
         <ul className="mb-2 space-y-1">
           {pending.map((m) => (
@@ -886,8 +886,10 @@ function CaseInner() {
           ? `${data.episode.blocked_on} has it`
           : EPISODE_WORD[data.episode.state];
 
+  // Below md the admin's tab bar is fixed to the bottom (73px), so the page
+  // pads for it and the composer sticks just above it.
   return (
-    <div className="h-full overflow-y-auto bg-white lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden">
+    <div className="h-full overflow-y-auto bg-white pb-[4.75rem] md:pb-0 lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden">
       <FamilyList currentId={seekerId} backQuery={backQuery} />
 
       <main className="flex min-w-0 flex-col border-gray-200 lg:h-full lg:min-h-0 lg:border-l">
