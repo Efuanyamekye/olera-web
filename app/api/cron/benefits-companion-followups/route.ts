@@ -42,8 +42,11 @@ const HOUR = 60 * 60 * 1000;
 const DAY = 24 * HOUR;
 const MAX_PER_RUN = 60;
 
-function localHour(state: string | null, now: Date): number | null {
-  const tz = stateToTimezone(state);
+/** Families with no state on file are read in Eastern time. */
+const FALLBACK_TZ = "America/New_York";
+
+function localHour(state: string | null, now: Date, fallback = false): number | null {
+  const tz = stateToTimezone(state) ?? (fallback ? FALLBACK_TZ : null);
   if (!tz) return null;
   const h = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", hour12: false }).format(now);
   const n = parseInt(h, 10);
@@ -124,14 +127,20 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // Day 14, both arms, identical words.
+      // Day 14, both arms, identical words. A family with no state on file
+      // is still asked (dropping them would skew the measure), inside a
+      // narrower Eastern window that is daytime across the lower 48.
       const age = t - new Date(c.assigned_at).getTime();
+      const knownTz = !!stateToTimezone(row.state);
+      const day14Hour = localHour(row.state, now, true);
+      const inDay14Window =
+        day14Hour !== null && (knownTz ? day14Hour >= 10 && day14Hour < 18 : day14Hour >= 12 && day14Hour < 18);
       if (
         !followups.day14_at &&
         !c.day14 &&
         age >= 14 * DAY &&
         age <= 21 * DAY &&
-        hour !== null && hour >= 10 && hour < 18
+        inDay14Window
       ) {
         const body = day14Sms({ shortName: c.program_short_name ?? null });
         if (dryRun) {

@@ -28,7 +28,6 @@ import { familyBenefitsFacts } from "@/lib/family-comms/benefits-guidance.server
 import { selectFirstStepProgram, type FirstStepPick } from "@/lib/family-comms/benefits-cascade.server";
 import {
   clearedHold,
-  isBenefitsAutomationHeld,
   isBenefitsFamilyMeta,
   openHelpCase,
   readBenefitsHold,
@@ -228,6 +227,44 @@ export function decide(input: {
   return { kind: "auto", intent: label.intent, reply };
 }
 
+/**
+ * Does a person already own this thread? The hold can't tell us: every new
+ * text re-stamps held_at, so the hold recordInbound just wrote looks new even
+ * when an older unanswered message was already waiting on a person. Instead
+ * look for an EARLIER free-text message in the last 72 hours that nothing has
+ * cleared since. "Cleared" can't come from the hold either (a new hold drops
+ * the old cleared_at), so it is the latest of: the companion's own
+ * thread_clear_at (stamped when it answers), and the help case's contacted_at
+ * or resolved_at (stamped when a person acts). With none of those, it errs
+ * toward a person. The last entry in sms_inbound is the message being handled,
+ * so it is skipped.
+ */
+export function personOwnsThread(meta: Record<string, unknown>, at: Date): boolean {
+  const log = Array.isArray(meta.sms_inbound)
+    ? (meta.sms_inbound as { at?: string; keyword?: string | null; companion_answer?: string; companion_day14?: string }[])
+    : [];
+  const companion = (meta.benefits_companion as { thread_clear_at?: string } | undefined) ?? {};
+  const helpCase = (meta.benefits_case as BenefitsHelpCase | undefined) ?? {};
+  const clearedAt = [
+    companion.thread_clear_at,
+    helpCase.contacted_at,
+    helpCase.resolved_at,
+    readBenefitsHold(meta)?.cleared_at,
+  ]
+    .filter((x): x is string => typeof x === "string")
+    .sort()
+    .pop() ?? "";
+  return log.slice(0, -1).some(
+    (m) =>
+      !!m.at &&
+      !m.keyword &&
+      !m.companion_answer &&
+      !m.companion_day14 &&
+      at.getTime() - new Date(m.at).getTime() < 72 * 60 * 60 * 1000 &&
+      m.at > clearedAt,
+  );
+}
+
 interface ProfileLike {
   id: string;
   display_name: string | null;
@@ -272,10 +309,7 @@ export async function handleCompanionFreeText(
 
   const at = new Date();
   const hold = readBenefitsHold(meta);
-  // The hold recordInbound just placed is this message's. An older, uncleared
-  // hold means a person already owns the thread.
-  const heldBeforeThisMessage =
-    isBenefitsAutomationHeld(meta) && !!hold?.held_at && at.getTime() - new Date(hold.held_at).getTime() > 2 * 60 * 1000;
+  const heldBeforeThisMessage = personOwnsThread(meta, at);
   const helpCase = (meta.benefits_case as BenefitsHelpCase | undefined) ?? {};
   const helpCaseOpen = !!helpCase.help_opened_at && !(helpCase.resolved_at && helpCase.resolved_at > helpCase.help_opened_at);
   const companion = readBenefitsCompanion(meta);
@@ -363,6 +397,7 @@ export async function handleCompanionFreeText(
       return "pass";
     }
     nextCompanion.auto_replies = [...autoLog, { at: record.at, intent: decision.intent }].slice(-20);
+    nextCompanion.thread_clear_at = record.at;
     // This message is answered, so it no longer needs to hold automation.
     const nextMeta: Record<string, unknown> = { ...meta, benefits_companion: nextCompanion };
     if (hold && !heldBeforeThisMessage) {
@@ -402,8 +437,14 @@ export async function handleCompanionFreeText(
     return "escalated";
   }
 
-  // Escalate: honest note now, a person drafts the answer.
-  await send(ESCALATION_REPLY, "escalate");
+  // Escalate: honest note now, a person drafts the answer. Once per 6 hours,
+  // so a family who sends three texts in a row gets one note, not three
+  // (the same window the generic acknowledgement uses).
+  const lastNote = (companion as { last_escalation_note_at?: string } | null)?.last_escalation_note_at;
+  if (!lastNote || at.getTime() - new Date(lastNote).getTime() > 6 * 60 * 60 * 1000) {
+    const noted = await send(ESCALATION_REPLY, "escalate");
+    if (noted.status !== "skipped") nextCompanion.last_escalation_note_at = record.at;
+  }
   await db.from("business_profiles").update({ metadata: { ...meta, benefits_companion: nextCompanion } }).eq("id", profile.id);
   return "escalated";
 }

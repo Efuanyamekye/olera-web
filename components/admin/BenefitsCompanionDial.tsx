@@ -10,6 +10,7 @@
  * Live is locked until the fast replies and follow-ups ship.
  */
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Mode = "off" | "practice" | "live";
@@ -165,9 +166,9 @@ export default function BenefitsCompanionDial() {
             {feedback.msg}
           </span>
         )}
-        <a href="/admin/benefits/companion" className="ml-auto text-[11px] text-gray-500 hover:text-gray-800 underline underline-offset-2">
+        <Link href="/admin/benefits/companion" className="ml-auto text-[11px] text-gray-500 hover:text-gray-800 underline underline-offset-2">
           Read what it said →
-        </a>
+        </Link>
       </div>
     </div>
   );

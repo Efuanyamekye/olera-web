@@ -676,6 +676,7 @@ export const CRON_REGISTRY: CronJob[] = [
     humanSchedule: "Hourly at :40; each text only goes out inside its local-time window.",
     path: "/api/cron/benefits-companion-followups",
     emailTypes: [],
+    smsTypes: ["benefits_companion_followup"],
     successSignal: "Every family in the test is asked the day-14 question once, so both arms can be compared on the same answer.",
     relatedAdminPath: "/admin/analytics",
   },

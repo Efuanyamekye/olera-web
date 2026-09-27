@@ -35,15 +35,21 @@ export function pickCallContact(contacts: DraftContact[] | null | undefined): Ca
   };
 }
 
-/** Two spoken lines the family can read off the screen. `relationship` is the
- *  free-form display value ("Parent", "Spouse", "Self", "Family member"). */
+/** Two spoken lines the family can read off the screen. `relationship` is
+ *  whatever the caller holds: the card's display value ("Self", "Parent",
+ *  "Spouse", "Family member") or the stored profile value
+ *  (metadata.relationship_to_recipient: "Myself", "My parent", "My spouse",
+ *  "Someone else"). Only the first set used to match, so the plan page and
+ *  the letter told 306 families who picked "Myself" to say "for a family
+ *  member" (found 2026-09-27). */
 export function buildCallScript(programShortName: string, relationship: string | null): string {
+  const r = (relationship || "").trim().toLowerCase().replace(/^my\s+/, "");
   const forWhom =
-    relationship === "Self"
+    r === "self" || r === "myself"
       ? "for myself"
-      : relationship === "Spouse"
+      : r === "spouse"
         ? "for my spouse"
-        : relationship === "Parent"
+        : r === "parent"
           ? "for my parent"
           : "for a family member";
   return `Hi, I'm calling to ask about ${programShortName}. I'd like to apply ${forWhom}. Could you help me get started, or point me to the right person?`;
