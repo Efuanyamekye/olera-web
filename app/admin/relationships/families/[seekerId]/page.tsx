@@ -309,8 +309,15 @@ function buildRows(ordered: SeekerTimelineItem[]): Row[] {
       // A run of offers, or of inquiries, reads as one line.
       const kindOf = (x: SeekerTimelineItem) => (x.id.startsWith("offer-") ? "offer" : x.id.startsWith("conn:") ? "conn" : x.id);
       const failed = !!it.status && /fail|bounce|complain/i.test(it.status);
-      if (!failed && last?.type === "moment" && kindOf(last.items[0]) === kindOf(it) && (kindOf(it) === "offer" || kindOf(it) === "conn")) {
-        last.items.push(it);
+      const mergeable = kindOf(it) === "offer" || kindOf(it) === "conn";
+      // The run can be broken only by folded background (the email each
+      // inquiry sends), not by anything said: "Asked X and Y", one fold after.
+      const prev = last?.type === "fold" ? rows[rows.length - 2] : last;
+      const near =
+        prev?.type === "moment" &&
+        new Date(it.occurred_at).getTime() - new Date(prev.items[prev.items.length - 1].occurred_at).getTime() < 60 * 60 * 1000;
+      if (!failed && mergeable && prev?.type === "moment" && kindOf(prev.items[0]) === kindOf(it) && near) {
+        prev.items.push(it);
       } else {
         rows.push({ type: "moment", items: [it] });
       }
@@ -373,6 +380,7 @@ function momentText(items: SeekerTimelineItem[]): { text: ReactNode; warn: boole
       warn: false,
     };
   }
+  if (/outcome reported/i.test(first.title)) return { text: "Told us how it went", warn: false };
   return { text: first.title, warn: false };
 }
 
