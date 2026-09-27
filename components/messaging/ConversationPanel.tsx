@@ -48,6 +48,8 @@ interface ThreadMessage {
   type?: string;
   next_step?: string;
   is_auto_reply?: boolean;
+  /** Set on Olera's messages, merged in from metadata.olera_messages. */
+  author_name?: string | null;
 }
 
 // ── Helpers ──
@@ -736,7 +738,18 @@ export default function ConversationPanel({
   const plainTextMessage = getPlainTextMessage(connection.message);
   // Show initial notes from: auto_intro, additional_notes (from JSON), or plain text message
   const initialNotes = autoIntro || additionalNotes || plainTextMessage;
-  const thread = (connMetadata?.thread as ThreadMessage[]) || [];
+  // Olera's care team writes beside the thread (metadata.olera_messages), so
+  // nothing that reads the thread for replies or reminders ever counts it.
+  // For display the two are merged in time order.
+  const baseThread = (connMetadata?.thread as ThreadMessage[]) || [];
+  const oleraMessages = Array.isArray(connMetadata?.olera_messages)
+    ? (connMetadata.olera_messages as { text?: string; created_at?: string; author_name?: string | null }[])
+        .filter((m) => m.text && m.created_at)
+        .map((m) => ({ from_profile_id: "olera", text: m.text as string, created_at: m.created_at as string, type: "olera", author_name: m.author_name ?? null }))
+    : [];
+  const thread: ThreadMessage[] = oleraMessages.length
+    ? [...baseThread, ...oleraMessages].sort((a, b) => (a.created_at < b.created_at ? -1 : a.created_at > b.created_at ? 1 : 0))
+    : baseThread;
 
   // Quick reply request handling
   const quickReplyRequest = getQuickReplyRequest(connMetadata);
@@ -843,6 +856,17 @@ export default function ConversationPanel({
           </button>
         )}
       </div>
+
+      {/* Who is in this conversation. Olera's care team can read it and, now,
+          write in it, so the page says so instead of implying it is private
+          to two people. */}
+      <p className="shrink-0 flex items-center gap-1.5 border-b border-gray-100 px-4 py-2 text-xs text-gray-500 sm:px-6">
+        <svg className="h-3 w-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" aria-hidden="true">
+          <rect x="5" y="11" width="14" height="10" rx="2" />
+          <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+        </svg>
+        <span className="truncate">Only you, {otherName} and Olera&apos;s care team can see this conversation</span>
+      </p>
 
       {/* Profile completion nudge - family view only, above scrollable thread */}
       {variant === "family" && familyProfile && completeness < 60 && !nudgeDismissed && connection && (
@@ -976,6 +1000,31 @@ export default function ConversationPanel({
               || nextMsg.type === "system"
               || nextMsg.from_profile_id !== msg.from_profile_id
               || getDateKey(nextMsg.created_at) !== thisDate;
+
+            // Olera's care team, writing to both people in the conversation.
+            if (msg.type === "olera") {
+              return (
+                <div key={i} className="mt-2">
+                  {showSeparator && (
+                    <div className="flex justify-center py-3">
+                      <span className="text-sm font-medium text-gray-400">{formatDateSeparator(msg.created_at)}</span>
+                    </div>
+                  )}
+                  <div className="flex items-end gap-2.5 max-w-[80%]">
+                    <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-white text-[11px] font-bold bg-primary-700">O</div>
+                    <div>
+                      <p className="text-xs text-gray-400 mb-1.5 ml-1">
+                        Olera{msg.author_name ? ` · ${msg.author_name}` : ""}, to both of you
+                      </p>
+                      <div className="bg-primary-50 border border-primary-100 px-4 py-3 rounded-2xl rounded-bl-md">
+                        <p className="text-base leading-relaxed text-gray-800 whitespace-pre-wrap">{msg.text}</p>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1.5 ml-1">{formatTime(msg.created_at)}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
 
             // System messages
             if (msg.type === "system") {

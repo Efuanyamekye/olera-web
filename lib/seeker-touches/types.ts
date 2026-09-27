@@ -155,6 +155,10 @@ export type SeekerTimelineItem = {
   sent_by_person?: boolean;
   /** The whole message when `title` is clipped for the list. The case page reads this. */
   full_text?: string | null;
+  /** Olera's care team wrote this into a family–provider conversation. */
+  olera_post?: boolean;
+  /** The connection a conversation message belongs to, so the case page can reply into it. */
+  connection_id?: string | null;
 };
 
 // ── Reachability ──────────────────────────────────────────────────────────────
@@ -305,7 +309,7 @@ export type SeekerRelationshipRow = SeekerContact & {
   episode: Episode;
   flags: SeekerFlag[];
   /** Providers this family has an open inquiry with, newest first. */
-  providers: { id: string; name: string; at: string; responded: boolean }[];
+  providers: { id: string; name: string; at: string; responded: boolean; connection_id?: string; status?: string | null }[];
   /** The city lead behind this family, when they came in that way. */
   city_lead_id: string | null;
   city_slug: string | null;
@@ -369,7 +373,7 @@ export type SeekerRelationship = {
   consent: ConsentScope;
   episode: Episode;
   flags: SeekerFlag[];
-  providers: { id: string; name: string; at: string; responded: boolean }[];
+  providers: { id: string; name: string; at: string; responded: boolean; connection_id?: string; status?: string | null }[];
   city_lead_id: string | null;
   city_slug: string | null;
   open_action: SeekerOpenAction | null;
