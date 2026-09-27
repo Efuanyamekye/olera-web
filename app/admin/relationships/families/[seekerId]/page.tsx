@@ -428,6 +428,9 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
     );
   };
 
+  // Like iMessage: delivery shows only under our latest message (failures
+  // always show), and the "Open" links and system notes live in Everything.
+  const lastOurs = [...ordered].reverse().find((x) => isMessage(x) && x.author !== "provider" && (x.actor === "out" || x.actor === "system"))?.id;
   const messageRow = (it: SeekerTimelineItem, alsoEmailed: string | null) => {
     const bad = !!it.status && /fail|bounce|complain/i.test(it.status);
     const via = it.channel === "text" ? "text" : it.channel === "email" ? "email" : it.channel === "in_app" ? "page" : null;
@@ -475,11 +478,11 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
           </div>
           <p className={`mt-1 text-[12px] ${bad ? "text-red-700" : "text-gray-500"}`}>
             {who}
-            {it.detail && !email ? ` · ${it.detail}` : ""}
+            {it.detail && !email && (everything || it.kind !== "sms") ? ` · ${it.detail}` : ""}
             {via && everything ? ` · ${via}` : ""} · {timeOf(it.occurred_at, tz)}
-            {it.status ? ` · ${it.status}` : ""}
+            {it.status && (everything || bad || it.id === lastOurs) ? ` · ${it.status}` : ""}
             {alsoEmailed ? ` · ${alsoEmailed}` : ""}
-            {it.href ? (
+            {it.href && everything ? (
               <Link href={it.href} className="ml-1 font-semibold text-gray-900 underline">
                 Open
               </Link>
@@ -531,7 +534,8 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
             {isMessage(it) ? messageRow(it, null) : eventLine(it)}
           </div>
         ))}
-        <div ref={end} />
+        {/* On a phone the newest row must clear the floating Message pill. */}
+      <div ref={end} className="h-20 lg:h-0" />
       </div>
     );
   }
@@ -636,7 +640,8 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
           </div>
         );
       })}
-      <div ref={end} />
+      {/* On a phone the newest row must clear the floating Message pill. */}
+      <div ref={end} className="h-20 lg:h-0" />
     </div>
   );
 }
