@@ -5,6 +5,7 @@ import { getCityConfig } from "@/lib/city-ads/config";
 import { matchOutcomeReply } from "@/lib/sms/inbound-intent";
 import { isImpossibleUsPhone, last10, seekerLabel } from "./label";
 import { EPISODE_WORD, ORIGIN_LABEL, detailLine, problemLine, stateOf } from "./present";
+import { providerDeclined } from "@/lib/connections/olera-message.server";
 import type {
   FamilyTouchRow,
   SeekerOpenAction,
@@ -1400,7 +1401,9 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
       at: c.created_at,
       responded: providerResponded(c as ConnectionLike),
       connection_id: c.id,
-      status: c.status,
+      // The case page offers only conversations Olera may write in, which
+      // excludes ones the provider declined (lib/connections/olera-message).
+      status: providerDeclined(c) ? "declined" : c.status,
     }));
 
   return {

@@ -28,6 +28,26 @@ export interface OleraMessage {
 
 type Db = ReturnType<typeof getServiceClient>;
 
+/**
+ * True when the provider has declined the conversation, however it was
+ * recorded: status "declined", the inbox's decline line in the thread, or an
+ * archive by the provider.
+ */
+export function providerDeclined(conn: {
+  type?: string | null;
+  status?: string | null;
+  from_profile_id?: string | null;
+  to_profile_id?: string | null;
+  metadata?: unknown;
+}): boolean {
+  if (conn.status === "declined") return true;
+  const meta = (conn.metadata ?? {}) as Record<string, unknown>;
+  const thread = Array.isArray(meta.thread) ? (meta.thread as { type?: string; text?: string }[]) : [];
+  if (thread.some((m) => m.type === "system" && /declined this inquiry|passed on this inquiry/.test(m.text ?? ""))) return true;
+  const providerId = conn.type === "request" ? conn.from_profile_id : conn.to_profile_id;
+  return meta.archived === true && !!providerId && meta.archived_by === providerId;
+}
+
 type Party = {
   id: string;
   type: string | null;
@@ -88,6 +108,12 @@ export async function postOleraMessage(
   // email a provider who already said no.
   if (!["pending", "accepted"].includes(String(conn.status))) {
     return { ok: false, error: "This conversation is closed, so nothing was sent.", status: 409 };
+  }
+  // In practice a provider declines from the inbox by archiving with a reason,
+  // which leaves status "pending" and writes a system line into the thread.
+  // All 1,486 inquiries are "pending", three of them declined this way.
+  if (providerDeclined(conn)) {
+    return { ok: false, error: "The provider declined this conversation, so nothing was sent.", status: 409 };
   }
 
   const meta = (conn.metadata ?? {}) as Record<string, unknown>;
