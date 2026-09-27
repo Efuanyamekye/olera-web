@@ -452,13 +452,15 @@ function Composer({
       <div className="flex items-end gap-2 rounded-3xl border border-gray-300 py-1.5 pl-4 pr-1.5 focus-within:border-gray-900">
         <textarea
           aria-label={`Message ${readers}`}
-          rows={text.length > 90 ? 3 : 1}
+          rows={shell !== INLINE_SHELL ? 3 : text.length > 90 ? 3 : 1}
           // In the phone sheet the keyboard should come up with it.
           autoFocus={shell !== INLINE_SHELL}
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={channel === "sms" ? 480 : 10000}
-          placeholder={`Message ${readers}`}
+          // The To: line under the box names the readers; a placeholder that
+          // long wrapped and was cut off on a phone.
+          placeholder="Write a message…"
           className="min-w-0 flex-1 resize-none bg-transparent py-1.5 text-[14.5px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
         />
         <button
@@ -544,13 +546,15 @@ function InquiryComposer({
       <div className="flex items-end gap-2 rounded-3xl border border-gray-300 py-1.5 pl-4 pr-1.5 focus-within:border-gray-900">
         <textarea
           aria-label={`Message ${readers}`}
-          rows={text.length > 90 ? 3 : 1}
+          rows={shell !== INLINE_SHELL ? 3 : text.length > 90 ? 3 : 1}
           // In the phone sheet the keyboard should come up with it.
           autoFocus={shell !== INLINE_SHELL}
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={4000}
-          placeholder={`Message ${readers}`}
+          // The To: line under the box names the readers; a placeholder that
+          // long wrapped and was cut off on a phone.
+          placeholder="Write a message…"
           className="min-w-0 flex-1 resize-none bg-transparent py-1.5 text-[14.5px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
         />
         <button
