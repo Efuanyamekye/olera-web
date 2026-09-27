@@ -7091,7 +7091,7 @@ export function oleraMessageEmail(opts: {
     </div>
     <div style="margin:0 0 24px;">${button("Read and reply", opts.viewUrl)}</div>
     <p style="font-size:14px;color:#6b7280;margin:0;line-height:1.6;">
-      ${other} can see this conversation too, along with Olera's care team.
+      ${other} can see this conversation too, along with Olera's care team. You can also reply to this email and it will reach us.
     </p>
   `);
 }

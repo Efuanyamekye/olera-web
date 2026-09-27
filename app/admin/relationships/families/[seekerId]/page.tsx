@@ -1110,11 +1110,13 @@ function CaseInner() {
             </div>
             {routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
               <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} />
-            ) : !routing && data.providers.some((p) => p.connection_id) ? (
+            ) : !routing && data.providers.some((p) => p.connection_id && (p.status === "pending" || p.status === "accepted")) ? (
               <InquiryComposer
                 key={seekerId}
+                // Only conversations Olera can write in: a declined or archived
+                // one is closed to the family and the provider too.
                 conversations={data.providers
-                  .filter((p) => p.connection_id)
+                  .filter((p) => p.connection_id && (p.status === "pending" || p.status === "accepted"))
                   .map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
                 familyName={familyName === "this family" ? "the family" : familyName}
                 onSent={load}

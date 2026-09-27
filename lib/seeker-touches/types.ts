@@ -309,7 +309,7 @@ export type SeekerRelationshipRow = SeekerContact & {
   episode: Episode;
   flags: SeekerFlag[];
   /** Providers this family has an open inquiry with, newest first. */
-  providers: { id: string; name: string; at: string; responded: boolean; connection_id?: string }[];
+  providers: { id: string; name: string; at: string; responded: boolean; connection_id?: string; status?: string | null }[];
   /** The city lead behind this family, when they came in that way. */
   city_lead_id: string | null;
   city_slug: string | null;
@@ -373,7 +373,7 @@ export type SeekerRelationship = {
   consent: ConsentScope;
   episode: Episode;
   flags: SeekerFlag[];
-  providers: { id: string; name: string; at: string; responded: boolean; connection_id?: string }[];
+  providers: { id: string; name: string; at: string; responded: boolean; connection_id?: string; status?: string | null }[];
   city_lead_id: string | null;
   city_slug: string | null;
   open_action: SeekerOpenAction | null;

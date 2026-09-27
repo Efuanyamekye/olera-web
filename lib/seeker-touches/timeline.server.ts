@@ -1400,6 +1400,7 @@ function assemble(p: ProfileRow, f: Loaded, now: Date, windowDays: number) {
       at: c.created_at,
       responded: providerResponded(c as ConnectionLike),
       connection_id: c.id,
+      status: c.status,
     }));
 
   return {

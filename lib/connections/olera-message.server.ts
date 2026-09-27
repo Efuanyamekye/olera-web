@@ -83,6 +83,12 @@ export async function postOleraMessage(
     .maybeSingle();
   if (error) throw error;
   if (!conn) return { ok: false, error: "Conversation not found", status: 404 };
+  // The same rule the family and provider write under (connections/message):
+  // a declined or archived conversation is closed, and writing in it would
+  // email a provider who already said no.
+  if (!["pending", "accepted"].includes(String(conn.status))) {
+    return { ok: false, error: "This conversation is closed, so nothing was sent.", status: 409 };
+  }
 
   const meta = (conn.metadata ?? {}) as Record<string, unknown>;
   const message: OleraMessage = {
@@ -144,6 +150,10 @@ export async function postOleraMessage(
         emailType: "olera_message",
         recipientType: isFamily ? "family" : "provider",
         providerId: isFamily ? undefined : who.id,
+        // A person wrote this, so a reply by email reaches people: support@,
+        // which the family timeline and the inbox pass already read. The
+        // default sender is noreply@.
+        replyTo: "support@olera.care",
         emailLogId: logId ?? undefined,
         recipientProfileId: who.id,
         metadata: { connection_id: connectionId, olera_message_id: message.id },
