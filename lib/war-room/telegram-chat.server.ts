@@ -48,6 +48,8 @@ export type TelegramDeps = {
   answer?: typeof answerFounderQuestion;
   /** A voice note after a long reply or when he asks "aloud" (voice.server.ts). Optional so checks can leave it out. */
   voice?: (chatId: string, text: string, mode: "reply" | "brief") => Promise<unknown>;
+  /** The reaction log (moves.server.ts). Optional so checks can leave it out. */
+  reactions?: { reply: (text: string, options: { pushedBack?: boolean; scoreOnly?: boolean }) => Promise<{ scored?: number } | null> };
 };
 
 export type TelegramOutcome =
@@ -170,6 +172,18 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
     surface: "telegram", role: "cortex", kind: "message", text: said, at: new Date().toISOString(),
   }).catch(() => false);
 
+  // A 1 to 10 right after Cortex asked for its weekly rating is the rating:
+  // stored with his words as a correction, and thanked, not answered.
+  if (deps.reactions) {
+    const scored = await deps.reactions.reply(text, { scoreOnly: true }).catch(() => null);
+    if (scored?.scored) {
+      const said = `Got it, ${scored.scored}/10. Saved with what you said, and it shapes every answer from here.`;
+      await reply(said);
+      await remember(said);
+      return { handled: true, kind: "answer", reply: said };
+    }
+  }
+
   // "Approve" approves the one decision waiting on him, as in Slack. Only a
   // message that says approve: "go ahead" mid-conversation is conversation.
   if (isApproval(text) && /approv/i.test(text)) {
@@ -238,6 +252,8 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
     const said = answer.reply + imageNote;
     await reply(said);
     if (answer.answered) await remember(said);
+    // His message answers whatever Cortex last put in front of him.
+    await deps.reactions?.reply(text, { pushedBack: Boolean(answer.correction) }).catch(() => null);
     // The text is already with him; the note follows, as Jade's do.
     if (answer.answered && deps.voice && wantsVoice(text, answer.reply)) {
       clearInterval(typing);

@@ -153,6 +153,10 @@
       "schedule": "30 10 * * *"
     },
     {
+      "path": "/api/cron/cortex-tick",
+      "schedule": "15 */3 * * *"
+    },
+    {
       "path": "/api/cron/deliverability-watch",
       "schedule": "0 12 * * *"
     },

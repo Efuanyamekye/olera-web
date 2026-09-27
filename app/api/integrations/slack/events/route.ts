@@ -310,6 +310,10 @@ export async function POST(request: NextRequest) {
         if (dmTarget) {
           await sendSlackDirectMessage(dmTarget, answer.reply + note + imageNote, { threadTs }).catch(() => null);
         }
+        // His reply answers whatever Cortex last put in front of him (the
+        // brief is mirrored here), so the reaction log sees Slack replies too.
+        const { recordFounderReply } = await import("@/lib/war-room/moves.server");
+        await recordFounderReply(db, text, { pushedBack: Boolean(answer.correction) }).catch(() => null);
         // Only a real answer continues the exchange. A failure to answer should
         // not hold the conversation open and swallow the next thing he says.
         if (answer.answered) {

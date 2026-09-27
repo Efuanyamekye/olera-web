@@ -36,6 +36,8 @@ export type MoveCandidate = {
   unansweredFromThem?: Array<{ at: string; text: string }>;
   /** For a provider moment: the founder's reply before those, already sent. */
   founderEarlierReply?: { at: string; text: string } | null;
+  /** What the move is about, stable across days ('proposal:<id>', 'moment:<thread id>'). */
+  subjectKey?: string;
 };
 
 export type BriefMove = {
@@ -63,10 +65,17 @@ export function pickMove(
   approvedOpen: MoveCandidate[],
   waiting: MoveCandidate[],
   moments: MoveCandidate[] = [],
+  /**
+   * Subjects he has ignored twice in two weeks (moves.server.ts). A move he
+   * passed over twice does not lead the brief a third time; it stays listed
+   * below, where he can still pick it up.
+   */
+  ignoredTwice: Set<string> = new Set(),
 ): MoveCandidate | null {
+  const fresh = (rows: MoveCandidate[]) => rows.filter((row) => !row.subjectKey || !ignoredTwice.has(row.subjectKey));
   const oldest = (rows: MoveCandidate[]) =>
-    [...rows].sort((a, b) => (a.since ?? "").localeCompare(b.since ?? ""))[0] ?? null;
-  return moments[0] ?? oldest(approvedOpen) ?? oldest(waiting);
+    [...fresh(rows)].sort((a, b) => (a.since ?? "").localeCompare(b.since ?? ""))[0] ?? null;
+  return fresh(moments)[0] ?? oldest(approvedOpen) ?? oldest(waiting);
 }
 
 /**

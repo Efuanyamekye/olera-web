@@ -811,6 +811,21 @@ export const CRON_REGISTRY: CronJob[] = [
     relatedAdminPath: "/admin/war-room",
   },
   {
+    id: "cortex-tick",
+    name: "Cortex judgment tick",
+    description:
+      "Every three hours, finds moments worth the founder's attention (an unanswered provider or partnership email, a new ad lead for a provider, the paying provider's renewal within a week, approved work not started) and lets a model decide whether one is worth a Telegram message. Usually silent: at most two a day, 08:00-22:00 Bangkok, never the same subject twice in three days, never one he has ignored twice. Sunday evenings it asks him to rate the week's messages.",
+    recipientCohort: "The founder only, on Telegram (TELEGRAM_CORTEX_CHAT_ID).",
+    audience: "Data & maintenance",
+    fn: "alert",
+    schedule: "15 */3 * * *",
+    humanSchedule: "Every 3 hours at :15 UTC; speaks only 08:00-22:00 Bangkok.",
+    path: "/api/cron/cortex-tick",
+    emailTypes: [],
+    successSignal: "Messages he replies to or acts on (cortex_moves.reaction); silence on quiet days.",
+    relatedAdminPath: "/admin/war-room",
+  },
+  {
     id: "support-email-sync",
     name: "Support Gmail sync + triage",
     description:

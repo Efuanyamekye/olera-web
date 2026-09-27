@@ -557,7 +557,7 @@ export async function answerFounderQuestion(
      */
     memory?: string;
   } = {},
-): Promise<{ answered: boolean; reply: string; costUsd?: number }> {
+): Promise<{ answered: boolean; reply: string; costUsd?: number; correction?: string }> {
   const brief = options.mode === "brief";
   if (!process.env.ANTHROPIC_API_KEY) {
     return { answered: false, reply: "I cannot answer questions right now: no model key is configured." };
@@ -565,9 +565,14 @@ export async function answerFounderQuestion(
   try {
     // A correction mid-conversation is saved before answering, so it shapes
     // this answer and every later one. Only when there is an answer to correct.
+    // Returned too, so the reaction log can mark his reply as pushback.
+    let correction: string | undefined;
     if (priorTurn && !brief) {
       const lesson = await extractCorrection(priorTurn.answer, question);
-      if (lesson) await saveCorrection(db, lesson, question).catch(() => false);
+      if (lesson) {
+        correction = lesson;
+        await saveCorrection(db, lesson, question).catch(() => false);
+      }
     }
     const context = await buildConversationContext(db, focusInvestigationId, question);
     const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -723,7 +728,7 @@ export async function answerFounderQuestion(
     // so this string -- the FAILURE path, the one most likely to recur -- would
     // have been self-sustaining loop fuel if the app-message filter ever missed.
     if (!reply) return { answered: false, reply: "I could not put an answer together. Send it again and I will retry." };
-    return { answered: true, reply, costUsd };
+    return { answered: true, reply, costUsd, correction };
   } catch (error) {
     // Never silent. A question that vanishes is the defect this replaces.
     const detail = error instanceof Error ? error.message : String(error);

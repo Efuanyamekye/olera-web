@@ -3,6 +3,7 @@ import { timingSafeEqual } from "node:crypto";
 import { getServiceClient } from "@/lib/admin";
 import { downloadTelegramFile, founderChatId, sendTelegramMessage, sendTelegramRecording, sendTelegramTyping, sendTelegramVoice, transcribeVoiceNote } from "@/lib/telegram.server";
 import { sendVoiceNote } from "@/lib/war-room/voice.server";
+import { recordFounderReply } from "@/lib/war-room/moves.server";
 import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
 import { handleTelegramUpdate, type TelegramUpdate } from "@/lib/war-room/telegram-chat.server";
 
@@ -49,6 +50,7 @@ export async function POST(request: NextRequest) {
         download: downloadTelegramFile,
         transcribe: transcribeVoiceNote,
         voice: (chatId, text, mode) => sendVoiceNote(chatId, text, mode, { recording: sendTelegramRecording, sendVoice: sendTelegramVoice }),
+        reactions: { reply: (text, options) => recordFounderReply(db, text, options) },
       });
       console.log("[cortex] telegram update", update.update_id, JSON.stringify(
         outcome.handled ? { kind: outcome.kind, costUsd: outcome.costUsd } : { skipped: outcome.reason },
