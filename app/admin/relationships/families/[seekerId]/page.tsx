@@ -211,17 +211,21 @@ function FamilyList({ currentId, backQuery }: { currentId: string; backQuery: st
 
 // ── Middle: the conversation ──────────────────────────────────────────────────
 
-/** A row we draw as something someone said, rather than as an event. */
+/**
+ * A row we draw as something someone said, rather than as an event.
+ *
+ * Texts the family received count as said, automatic or not: the qualifying
+ * text and the "still looking" text are what she read, so they sit in the
+ * conversation as Olera's. Automatic emails (digests, nudges) stay events, as
+ * do logged touches (a call, or "email sent", which would otherwise repeat the
+ * email it records) and the form submission itself.
+ */
 function isMessage(it: SeekerTimelineItem): boolean {
   if (it.author === "provider") return true;
-  if (it.actor === "system") return false;
-  // Calls, meetings and notes someone logged are things that happened, not
-  // words sent to the family, so they read as events.
-  if (it.channel !== "text" && it.channel !== "email" && it.channel !== "in_app") return false;
-  if (it.kind === "touch" && it.channel === "in_app") return false;
-  // What they did on the site, and the inquiry record itself, are events.
-  if (it.kind === "activity" || it.kind === "inquiry") return false;
-  return true;
+  if (it.kind === "touch" || it.kind === "activity" || it.kind === "inquiry") return false;
+  if (it.id.startsWith("city:")) return false;
+  if (it.actor === "system") return it.channel === "text";
+  return it.channel === "text" || it.channel === "email" || it.channel === "in_app";
 }
 
 function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; familyName: string; tz: string }) {
@@ -264,8 +268,10 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
             </div>
           );
         } else {
-          const mine = it.actor === "out";
-          const who = it.author === "provider" ? (it.author_name ?? "The provider") : mine ? "Olera" : familyName;
+          const auto = it.actor === "system" && it.author !== "provider" && !it.sent_by_person;
+          // Everything we sent sits on our side, typed or automatic.
+          const mine = it.author !== "provider" && (it.actor === "out" || it.actor === "system");
+          const who = it.author === "provider" ? (it.author_name ?? "The provider") : auto ? "Olera, automatic" : mine ? "Olera" : familyName;
           body = (
             <div className={`flex items-end gap-2 ${mine ? "justify-end" : ""}`}>
               {!mine && (
@@ -280,11 +286,11 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
               <div className={`max-w-[78%] ${mine ? "text-right" : ""}`}>
                 <div
                   className={`inline-block whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-left text-[14.5px] leading-snug ${
-                    mine ? "rounded-br-md bg-gray-900 text-white" : "rounded-bl-md bg-gray-100 text-gray-900"
+                    auto ? "rounded-br-md bg-gray-200 text-gray-800" : mine ? "rounded-br-md bg-gray-900 text-white" : "rounded-bl-md bg-gray-100 text-gray-900"
                   }`}
                 >
                   {it.title}
-                  {it.detail ? <span className={`mt-1 block text-[13px] ${mine ? "text-gray-300" : "text-gray-600"}`}>{it.detail}</span> : null}
+                  {it.detail ? <span className={`mt-1 block text-[13px] ${mine && !auto ? "text-gray-300" : "text-gray-600"}`}>{it.detail}</span> : null}
                 </div>
                 <p className={`mt-1 text-[12px] ${bad ? "text-red-700" : "text-gray-500"}`}>
                   {who}
@@ -838,7 +844,7 @@ function CaseInner() {
     return ranked.slice(0, 3).map((p) => ({
       id: p.provider_id,
       name: p.name.split(/\s+-\s+/)[0],
-      text: `Hi ${familyName}, this is Olera. ${p.name.split(/\s+-\s+/)[0]}, a home care agency${city ? ` that serves ${city}` : ""}, can help. Is it okay if I pass your number to them so they can call you? Reply YES and I'll set it up.`,
+      text: `Hi ${data.profile.label_is_fallback ? "there" : familyName}, this is Olera. ${p.name.split(/\s+-\s+/)[0]}, a home care agency${city ? ` that serves ${city}` : ""}, can help. Is it okay if I pass your number to them so they can call you? Reply YES and I'll set it up.`,
     }));
   }, [data, routing, familyName]);
 
@@ -921,7 +927,7 @@ function CaseInner() {
               <Conversation items={data.items} familyName={data.profile.label_is_fallback ? "Family" : data.profile.label} tz={tz} />
             </div>
             {routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
-              <Composer routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} />
+              <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} />
             ) : (
               data.profile.phone &&
               data.reach.phone !== "impossible" && (

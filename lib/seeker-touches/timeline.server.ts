@@ -313,6 +313,7 @@ function emailToItem(e: EmailRow): SeekerTimelineItem {
   return {
     id: `email:${e.id}`,
     kind: "email",
+    sent_by_person: e.email_type === "admin_reply",
     actor: "system",
     channel: sms ? "text" : "email",
     occurred_at: e.created_at,

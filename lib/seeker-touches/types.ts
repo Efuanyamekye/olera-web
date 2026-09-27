@@ -147,6 +147,12 @@ export type SeekerTimelineItem = {
    */
   author?: "provider" | null;
   author_name?: string | null;
+  /**
+   * A system send a person actually typed (an admin_reply from the SMS inbox).
+   * The row stays actor "system" so the list's counts do not move; the case
+   * page uses this so it never labels a person's words as automatic.
+   */
+  sent_by_person?: boolean;
 };
 
 // ── Reachability ──────────────────────────────────────────────────────────────
