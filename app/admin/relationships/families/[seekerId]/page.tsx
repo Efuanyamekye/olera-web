@@ -664,6 +664,47 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
 /** The composer at the foot of the conversation on a laptop. */
 const INLINE_SHELL = "border-t border-gray-200 bg-white px-4 pb-4 pt-3 sm:px-6";
 
+/**
+ * A small two-way switch in the message box's footer. It replaced an
+ * underlined "by text" that was the only way to switch to email, and nobody
+ * could tell it was a button: Ces asked where emailing a family had gone
+ * (28 Sep).
+ */
+function Segmented<T extends string>({
+  value,
+  options,
+  onChange,
+  label,
+}: {
+  value: T;
+  options: { value: T; label: string }[];
+  onChange: (v: T) => void;
+  label: string;
+}) {
+  return (
+    <span role="group" aria-label={label} className="inline-flex rounded-full bg-gray-100 p-0.5 align-middle">
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          aria-pressed={value === o.value}
+          onClick={() => onChange(o.value)}
+          className={`rounded-full px-3 py-1 text-[12.5px] font-semibold transition-colors ${
+            value === o.value ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-800"
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </span>
+  );
+}
+
+const CHANNEL_OPTIONS: { value: "sms" | "email"; label: string }[] = [
+  { value: "sms", label: "Text" },
+  { value: "email", label: "Email" },
+];
+
 function Composer({
   routing,
   familyName,
@@ -783,13 +824,14 @@ function Composer({
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-[12.5px] text-gray-500">
         <span>
-          To: <span className="font-semibold text-gray-900">{readers}</span> by{" "}
+          To: <span className="font-semibold text-gray-900">{readers}</span>
           {hasPhone && hasEmail ? (
-            <button type="button" onClick={() => setChannel(channel === "sms" ? "email" : "sms")} className="font-semibold text-gray-900 underline">
-              {channel === "sms" ? "text" : "email"}
-            </button>
+            <>
+              {" "}
+              <Segmented label="Send as" value={channel} options={CHANNEL_OPTIONS} onChange={setChannel} />
+            </>
           ) : (
-            <span className="font-semibold text-gray-900">{channel === "sms" ? "text" : "email"}</span>
+            <> by <span className="font-semibold text-gray-900">{channel === "sms" ? "text" : "email"}</span></>
           )}
         </span>
         <button type="button" disabled={busy || !ready} onClick={() => void send(true)} className="font-semibold text-gray-900 underline disabled:text-gray-400 disabled:no-underline">
@@ -811,7 +853,10 @@ function InquiryComposer({
   onSent,
   shell = INLINE_SHELL,
   onDone,
+  header,
 }: {
+  /** Shown at the top of the box: the With / Just switch. */
+  header?: ReactNode;
   conversations: { connection_id: string; name: string }[];
   familyName: string;
   onSent: () => Promise<void>;
@@ -851,6 +896,7 @@ function InquiryComposer({
 
   return (
     <div className={shell}>
+      {header && <div className="mb-2.5">{header}</div>}
       <div className="flex items-end gap-2 rounded-3xl border border-gray-300 py-1.5 pl-4 pr-1.5 focus-within:border-gray-900">
         <textarea
           aria-label={`Message ${readers}`}
@@ -902,6 +948,40 @@ function InquiryComposer({
 // ── Right: the case ───────────────────────────────────────────────────────────
 
 /**
+ * A family who wrote in through a provider's page is written to in their
+ * conversation with that provider, where the provider reads it too. When the
+ * family has gone quiet the note is for them alone ("we've been trying to
+ * reach you"), so the box can switch to writing just to them, by text or
+ * email, the same way it writes to a benefits family. Ces asked for this on
+ * 28 Sep, after the case page replaced the old family page.
+ */
+function WithOrJust({
+  providerName,
+  familyName,
+  withBox,
+  justBox,
+}: {
+  providerName: string;
+  familyName: string;
+  withBox: (header: ReactNode) => ReactNode;
+  justBox: (header: ReactNode) => ReactNode;
+}) {
+  const [mode, setMode] = useState<"with" | "just">("with");
+  const header = (
+    <Segmented
+      label="Who reads this"
+      value={mode}
+      options={[
+        { value: "with", label: `With ${providerName.split(/\s+-\s+|,\s/)[0]}` },
+        { value: "just", label: `Just ${familyName}` },
+      ]}
+      onChange={setMode}
+    />
+  );
+  return <>{mode === "with" ? withBox(header) : justBox(header)}</>;
+}
+
+/**
  * Writes to a family who is not on a city ad and has no open provider
  * conversation: most benefits families. Until 2026-09-28 the page sent these
  * to Messages. Text goes through the inbox's own send path (quiet hours,
@@ -919,7 +999,9 @@ function FamilyComposer({
   onSent,
   shell = INLINE_SHELL,
   onDone,
+  header,
 }: {
+  header?: ReactNode;
   /** The channel they last wrote to us on; the box starts there. */
   lastInbound?: "sms" | "email" | null;
   seekerId: string;
@@ -965,6 +1047,7 @@ function FamilyComposer({
 
   return (
     <div className={shell}>
+      {header && <div className="mb-2.5">{header}</div>}
       {draft && !text && (
         <div className="mb-2 rounded-2xl bg-amber-50 px-3.5 py-2.5 text-[13px] text-amber-900">
           <div className="flex items-baseline justify-between gap-3">
@@ -1013,13 +1096,14 @@ function FamilyComposer({
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-[12.5px] text-gray-500">
         <span>
-          To: <span className="font-semibold text-gray-900">{familyName}</span> by{" "}
+          To: <span className="font-semibold text-gray-900">{familyName}</span>
           {hasPhone && hasEmail ? (
-            <button type="button" onClick={() => setChannel(channel === "sms" ? "email" : "sms")} className="font-semibold text-gray-900 underline">
-              {channel === "sms" ? "text" : "email"}
-            </button>
+            <>
+              {" "}
+              <Segmented label="Send as" value={channel} options={CHANNEL_OPTIONS} onChange={setChannel} />
+            </>
           ) : (
-            <span className="font-semibold text-gray-900">{channel === "sms" ? "text" : "email"}</span>
+            <> by <span className="font-semibold text-gray-900">{channel === "sms" ? "text" : "email"}</span></>
           )}
         </span>
         {channel === "sms" && <span>Outside their hours it waits for their morning.</span>}
@@ -1887,25 +1971,12 @@ function CaseInner() {
   const openInquiries = data
     ? data.providers.filter((p) => p.connection_id && (p.status === "pending" || p.status === "accepted"))
     : [];
-  const composerFor = (shell: string | undefined, onDone?: () => void) =>
-    !data ? null : routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
-      <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} shell={shell} onDone={onDone} />
-    ) : !routing && openInquiries.length > 0 ? (
-      // Only conversations Olera can write in: a declined or archived one is
-      // closed to the family and the provider too.
-      <InquiryComposer
-        key={seekerId}
-        conversations={openInquiries.map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
-        familyName={familyName === "this family" ? "the family" : familyName}
-        onSent={load}
-        shell={shell}
-        onDone={onDone}
-      />
-    ) : !routing && (familyMayText || data.profile.email) ? (
-      // Everyone else, which is most benefits families: Olera writes to them
-      // directly instead of sending the reader off to Messages.
+  const composerFor = (shell: string | undefined, onDone?: () => void) => {
+    const familyBox = (header?: ReactNode) =>
+      !data ? null : (
       <FamilyComposer
         key={seekerId}
+        header={header}
         seekerId={seekerId}
         familyName={familyName === "this family" ? "the family" : familyName}
         hasPhone={familyMayText}
@@ -1922,7 +1993,46 @@ function CaseInner() {
         shell={shell}
         onDone={onDone}
       />
-    ) : null;
+      );
+    return (
+    !data ? null : routing && !routing.closed && (routing.has_phone || routing.has_email) ? (
+      <Composer key={seekerId} routing={routing} familyName={familyName} holder={holder} suggestions={suggestions} onSent={load} shell={shell} onDone={onDone} />
+    ) : !routing && openInquiries.length > 0 && (familyMayText || data.profile.email) ? (
+      // Only conversations Olera can write in: a declined or archived one is
+      // closed to the family and the provider too. With a way to reach the
+      // family directly, the box can also write to them alone.
+      <WithOrJust
+        key={seekerId}
+        providerName={openInquiries[0].name}
+        familyName={familyName === "this family" ? "the family" : familyName}
+        withBox={(header) => (
+          <InquiryComposer
+            header={header}
+            conversations={openInquiries.map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
+            familyName={familyName === "this family" ? "the family" : familyName}
+            onSent={load}
+            shell={shell}
+            onDone={onDone}
+          />
+        )}
+        justBox={(header) => familyBox(header)}
+      />
+    ) : !routing && openInquiries.length > 0 ? (
+      <InquiryComposer
+        key={seekerId}
+        conversations={openInquiries.map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
+        familyName={familyName === "this family" ? "the family" : familyName}
+        onSent={load}
+        shell={shell}
+        onDone={onDone}
+      />
+    ) : !routing && (familyMayText || data.profile.email) ? (
+      // Everyone else, which is most benefits families: Olera writes to them
+      // directly instead of sending the reader off to Messages.
+      familyBox()
+    ) : null
+    );
+  };
   const canWrite = Boolean(composerFor(undefined));
   const noWriteNote = !data || canWrite ? null : routing ? (
     routing.closed ? "This family is closed, so nothing further goes out from here." : "No phone or email on file to write to."
