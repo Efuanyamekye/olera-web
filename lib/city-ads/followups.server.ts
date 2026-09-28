@@ -342,6 +342,8 @@ async function runHandedFollowups(db: SupabaseClient, out: FollowupCounts, now: 
       if (!provider) continue;
       const first = firstWordOf(lead.first_name);
       const handedAt = new Date(lead.handed_at).getTime();
+      // A family re-offered to another agency is worked from that agency's inbox.
+      const where = provider.via === "inbox" ? "in your Olera inbox" : "on your campaign page";
 
       // Rung 1: ask the family, once, the day after. Skipped for a phone our
       // texts have never reached; asking again only logs another failure.
@@ -372,10 +374,10 @@ async function runHandedFollowups(db: SupabaseClient, out: FollowupCounts, now: 
       if (lead.family_check_reply === "not_yet" && !lead.provider_nudged_at && !lead.outcome) {
         await db.from("city_leads").update({ provider_nudged_at: nowIso, updated_at: nowIso }).eq("id", lead.id);
         await notifyProvider(db, lead, provider, {
-          sms: `Olera: ${first} says they haven't had a call yet. Their number is on your campaign page:`,
+          sms: `Olera: ${first} says they haven't had a call yet. Their number is ${where}:`,
           subject: `${first} hasn't heard from you yet`,
           headline: `${first} is still waiting for a call`,
-          body: `We asked ${first} yesterday and they said nobody had reached them yet. Their number is on your campaign page. If now isn't a good time, reply to this email and our team will follow up.`,
+          body: `We asked ${first} yesterday and they said nobody had reached them yet. Their number is ${where}. If now isn't a good time, reply to this email and our team will follow up.`,
           emailType: "city_thread_nudge_provider",
         });
         out.provider_nudges++;
@@ -394,7 +396,7 @@ async function runHandedFollowups(db: SupabaseClient, out: FollowupCounts, now: 
       if (!which) continue;
       await db.from("city_leads").update({ [which]: nowIso, updated_at: nowIso }).eq("id", lead.id);
       await notifyProvider(db, lead, provider, {
-        sms: `Olera: how did it go with ${first}? One tap on your campaign page tells us:`,
+        sms: `Olera: how did it go with ${first}? One tap ${where} tells us:`,
         subject: `How did it go with ${first}?`,
         headline: `How did it go with ${first}?`,
         body: `Talked, became a client, or not a fit: one tap on ${first}'s card. It is the number that tells us whether your ads are working, and it is only ever shown to you and our team.`,
