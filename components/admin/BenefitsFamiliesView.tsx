@@ -1502,7 +1502,7 @@ export function NavigatorDraftEditor({
           No text message will go out: this family hasn&apos;t consented to texts.
         </p>
       )}
-      <div className="mt-2 flex items-center gap-2">
+      <div className="mt-2 flex flex-wrap items-center gap-2">
         <button
           onClick={() => {
             const scheduledNote = navigator.scheduled_at ? " This replaces the scheduled send." : "";
