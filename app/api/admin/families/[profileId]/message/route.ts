@@ -72,7 +72,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const db = getServiceClient();
   const { data: profile } = await db
     .from("business_profiles")
-    .select("id, type, email, phone, phone_validity")
+    .select("id, type, email, phone, phone_validity, metadata")
     .eq("id", profileId)
     .maybeSingle();
   if (!profile || profile.type !== "family") return NextResponse.json({ error: "Family not found" }, { status: 404 });
@@ -87,6 +87,21 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     if (!key) return NextResponse.json({ error: "No phone number on file" }, { status: 400 });
     if (profile.phone_validity === "opted_out") {
       return NextResponse.json({ error: "They texted STOP, so we can't text them. Try email." }, { status: 409 });
+    }
+    // Only people who agreed to texts from us, or who texted us first. A
+    // phone typed into a provider inquiry is not consent to texts from Olera
+    // (412 such families on 2026-09-28), so those are email-only from here.
+    const meta = (profile.metadata as Record<string, unknown> | null) || {};
+    let mayText = Boolean(meta.sms_consent);
+    if (!mayText) {
+      const { data: inbound } = await db.from("sms_inbound").select("id").eq("phone_last10", key).limit(1).maybeSingle();
+      mayText = Boolean(inbound);
+    }
+    if (!mayText) {
+      return NextResponse.json(
+        { error: "They haven't agreed to texts from us and haven't texted us. Email them instead." },
+        { status: 409 },
+      );
     }
     const result = await replyToSmsThread(db, {
       last10: key,

@@ -1815,6 +1815,17 @@ function CaseInner() {
           ? `${data.episode.blocked_on} has it`
           : EPISODE_WORD[data.episode.state];
 
+  // Texting from the family composer needs their say-so: text consent on
+  // file, or they texted us first. A phone typed into a provider inquiry is
+  // not consent to texts from Olera. The server enforces the same rule.
+  const familyMayText = Boolean(
+    data &&
+      data.profile.phone &&
+      data.reach.phone !== "impossible" &&
+      data.consent !== "opted_out" &&
+      (benefits?.smsConsentAt || data.items.some((it) => it.channel === "text" && it.actor === "in")),
+  );
+
   // What the family can be written to, if anything. The same box sits at the
   // foot of the conversation on a laptop and in a sheet on a phone.
   const openInquiries = data
@@ -1834,14 +1845,14 @@ function CaseInner() {
         shell={shell}
         onDone={onDone}
       />
-    ) : !routing && ((data.profile.phone && data.reach.phone !== "impossible") || data.profile.email) ? (
+    ) : !routing && (familyMayText || data.profile.email) ? (
       // Everyone else, which is most benefits families: Olera writes to them
       // directly instead of sending the reader off to Messages.
       <FamilyComposer
         key={seekerId}
         seekerId={seekerId}
         familyName={familyName === "this family" ? "the family" : familyName}
-        hasPhone={Boolean(data.profile.phone) && data.reach.phone !== "impossible" && data.consent !== "opted_out"}
+        hasPhone={familyMayText}
         hasEmail={Boolean(data.profile.email)}
         draft={benefits?.draftAnswer ?? null}
         onSent={load}
