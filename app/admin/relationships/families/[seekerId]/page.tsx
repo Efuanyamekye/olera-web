@@ -834,9 +834,12 @@ function Composer({
             <> by <span className="font-semibold text-gray-900">{channel === "sms" ? "text" : "email"}</span></>
           )}
         </span>
-        <button type="button" disabled={busy || !ready} onClick={() => void send(true)} className="font-semibold text-gray-900 underline disabled:text-gray-400 disabled:no-underline">
-          Send in their morning instead
-        </button>
+        {/* Morning scheduling is for texts; an email goes now at any hour. */}
+        {channel === "sms" && (
+          <button type="button" disabled={busy || !ready} onClick={() => void send(true)} className="font-semibold text-gray-900 underline disabled:text-gray-400 disabled:no-underline">
+            Send in their morning instead
+          </button>
+        )}
         {msg && <span className={msg.tone === "ok" ? "text-emerald-700" : "text-red-700"}>{msg.text}</span>}
       </div>
     </div>
@@ -1695,7 +1698,9 @@ function CasePanel({
           {holderName && routing && !routing.closed && (
             <div className="mt-3">
               <p className="text-[13px] text-gray-500">How it went with {holderName}</p>
-              <div className="mt-1.5 flex flex-wrap gap-2">
+              {/* A 2 by 2 grid: four pills in a row wrapped one onto a line of
+                  its own. */}
+              <div className="mt-1.5 grid grid-cols-2 gap-2 [&>button]:w-full [&>button]:text-center">
                 {routing.status !== "contacted" && (
                   <button type="button" disabled={busy} className={pillBtn} onClick={() => void act({ action: "set_status", leadId: routing.lead_id, status: "contacted" }, "Marked as reached.")}>
                     Reached

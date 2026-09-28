@@ -452,8 +452,11 @@ export async function POST(req: NextRequest) {
         if(error) throw error;
         if(!lead[channel === "sms" ? "phone" : "email"]) return NextResponse.json({error:"No destination for this channel"},{status:400});
         if(await cityLeadBlocked(db,leadId)) return NextResponse.json({error:"Lead is archived or opted out"},{status:409});
-        const window = citySendWindow(lead.slug);
         const scheduled = body.schedule === true;
+        // Quiet hours are for texts, which buzz a phone. An email waits in
+        // their inbox, so it goes now at any hour; it used to be refused
+        // outside 8am-8pm, and threw for a lead with no city time zone.
+        const window = channel === "sms" || scheduled ? citySendWindow(lead.slug) : { allowed: true, nextStart: now };
         if(!scheduled && !window.allowed) return NextResponse.json({error:"Outside their local sending hours. Schedule for the morning."},{status:409});
         const {data:queued,error:queueError} = await db.from("city_lead_messages").insert({lead_id:leadId,channel,subject:channel === "email" ? subject : null,body:message,send_after:scheduled ? window.nextStart : now,created_by:auth.user.email ?? auth.user.id}).select("id").single();
         if(queueError) return NextResponse.json({error:queueError.code === "23505" ? "A message is already queued or sending on this channel" : queueError.message},{status:409});
