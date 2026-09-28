@@ -491,6 +491,7 @@ export async function deliverWarRoomBrief(
         ];
         move = { ...(await phraseMove(chosen, rules)), title: chosen.title, kind: chosen.kind };
       }
+      const lastBriefAt = (state as { last_success_at?: string | null } | null)?.last_success_at ?? null;
       const [ledger, inbox] = await Promise.all([
         loadManagedAdsLedger(db).catch(() => null),
         openItems(db).catch(() => []),
@@ -499,13 +500,15 @@ export async function deliverWarRoomBrief(
       priorityLines = buildPriorityLines({
         payingProviders: ledger?.payingProviders ? ledger.payingProviders.length : null,
         openCampaigns: ledger?.openCampaigns ? ledger.openCampaigns.length : null,
-        movers: readings.filter((reading) => reading.movement !== "steady"),
+        // Only what moved since the last brief. The readings are the latest
+        // per probe across scans, so without this a Friday change would open
+        // Saturday's and Sunday's briefs too, reading as news each day.
+        movers: readings.filter((reading) => reading.movement !== "steady"
+          && (!lastBriefAt || Date.parse(reading.measuredAt) > Date.parse(lastBriefAt))),
         renewal: renewalShort,
         providerEmailsWaiting: momentCandidates.length,
         inboxItemsWaiting: inbox.filter((item) => item.kind !== "question").length,
-        since: (state as { last_success_at?: string | null } | null)?.last_success_at
-          ? shortDate((state as { last_success_at: string }).last_success_at)
-          : null,
+        since: lastBriefAt ? shortDate(lastBriefAt) : null,
       });
       const investigations = (investigationResult.data ?? []) as InvestigationRow[];
       open = investigations.filter((row) => row.status === "investigating").length;
