@@ -6,6 +6,7 @@ import { correctionLines, extractCorrection, loadCorrections, saveCorrection } f
 import { loadProviderMoments } from "@/lib/war-room/provider-moments.server";
 import { openItems, type StoredItem } from "@/lib/war-room/inbox-operator.server";
 import { recentHandoffs } from "@/lib/war-room/handoff.server";
+import { prioritiesPromptText } from "@/lib/war-room/priorities";
 import { scrubStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 
 /**
@@ -400,6 +401,9 @@ async function buildConversationContext(
       handedOff: handoff.created_at,
       closed: handoff.closed_at,
     })),
+    // His four priorities, in his words (priorities.ts). Frame advice by
+    // them; never treat one of them as the whole company.
+    "Olera's four priorities (the founder's, not yours to change)": prioritiesPromptText(),
     "Current time": {
       eastern: new Date().toISOString(),
       founderLocalBangkok: BANGKOK.format(new Date()),
