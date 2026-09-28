@@ -23,9 +23,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const author = (admin.display_name ?? admin.email.split("@")[0] ?? "").trim().split(/\s+/)[0] || null;
+  // The name the team member signed up with ("TJ Falohun", "Ces"). The admin
+  // record's display_name is usually just the start of their email address.
+  const db = getServiceClient();
+  const { data: authUser } = await db.auth.admin.getUserById(user.id);
+  const meta = (authUser?.user?.user_metadata ?? {}) as { full_name?: unknown; name?: unknown };
+  const fullName = [meta.full_name, meta.name, admin.display_name, admin.email.split("@")[0]].find(
+    (v): v is string => typeof v === "string" && v.trim().length > 0,
+  );
+  const author = fullName ? fullName.trim().split(/\s+/)[0] : null;
   try {
-    const r = await postOleraMessage(getServiceClient(), id, text, author);
+    const r = await postOleraMessage(db, id, text, author);
     if (!r.ok) return NextResponse.json({ error: r.error }, { status: r.status });
     const who = r.emailed.length === 2 ? "both of them" : r.emailed.length === 1 ? `the ${r.emailed[0]}` : "nobody (no email on file)";
     return NextResponse.json({ ok: true, message: r.message, emailed: r.emailed, notice: `Sent. Emailed ${who}.` });

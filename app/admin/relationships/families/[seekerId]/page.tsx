@@ -555,7 +555,8 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
         if (row.type === "call") {
           const it = row.item;
           const missed = !!it.status && /did not reach|no answer|voicemail/i.test(it.status);
-          const label = it.channel === "call" ? (missed ? "Call · didn't reach them" : it.status?.includes("reached") ? "Call · reached them" : "Call") : it.channel === "meeting" ? "Meeting" : "Note";
+          const kind = it.channel === "call" ? "Call" : it.channel === "meeting" ? "Meeting" : "Note";
+          const label = missed ? `${kind} · didn't reach them` : it.status?.includes("spoke") || it.status?.includes("reached") ? `${kind} · reached them` : kind;
           return (
             <div key={it.id}>
               {dayHeader(it.occurred_at)}
