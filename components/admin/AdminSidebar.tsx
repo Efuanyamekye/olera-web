@@ -800,7 +800,10 @@ export default function AdminSidebar({
         </div>
       </aside>
 
-      {/* Mobile bottom nav — 5 key items only */}
+      {/* Mobile bottom nav — 5 key items only. Not on a family's case page:
+          it floats its own back and Message buttons, and a second fixed bar
+          under the conversation ate a third of the screen. */}
+      {!/^\/admin\/relationships\/families\/[^/]+$/.test(pathname ?? "") && (
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
         <div className="flex justify-around py-2">
           {mobileNavItems.map((item) => {
@@ -822,6 +825,7 @@ export default function AdminSidebar({
           })}
         </div>
       </nav>
+      )}
     </>
   );
 }

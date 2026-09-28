@@ -50,7 +50,7 @@ export type TelegramDeps = {
   /** A voice note after a long reply or when he asks "aloud" (voice.server.ts). Optional so checks can leave it out. */
   voice?: (chatId: string, text: string, mode: "reply" | "brief") => Promise<unknown>;
   /** The reaction log (moves.server.ts). Optional so checks can leave it out. */
-  reactions?: { reply: (text: string, options: { pushedBack?: boolean; scoreOnly?: boolean }) => Promise<{ scored?: number } | null> };
+  reactions?: { reply: (text: string, options: { pushedBack?: boolean; scoreOnly?: boolean }) => Promise<{ scored?: number; ratings?: number[] } | null> };
   /** Inbox approvals ("send 3") against the latest inbox pass (inbox-operator.server.ts). Null when it is not one. */
   inbox?: { command: (text: string) => Promise<string | null> };
   /** Starts the Claude Code routine that runs his /visualize skill (visualize.server.ts). */
@@ -179,8 +179,14 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
 
   // A 1 to 10 right after Cortex asked for its weekly rating is the rating:
   // stored with his words as a correction, and thanked, not answered.
+  let ratingsNote = "";
   if (deps.reactions) {
     const scored = await deps.reactions.reply(text, { scoreOnly: true }).catch(() => null);
+    // Ratings inside a longer message are saved and the message is still
+    // answered; the reply says they were saved, so he never has to wonder.
+    if (scored?.ratings?.length) {
+      ratingsNote = `\n\n_Saved your ${scored.ratings.length === 1 ? "rating" : "ratings"} (${scored.ratings.map((r) => `${r}/10`).join(", ")}) with what you said; they shape every answer from here._`;
+    }
     if (scored?.scored) {
       const said = `Got it, ${scored.scored}/10. Saved with what you said, and it shapes every answer from here.`;
       await reply(said);
@@ -297,7 +303,7 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
       lastExchange(history.recent),
       { images, surface: "telegram", memory: memoryPromptText(history) || undefined },
     );
-    const said = answer.reply + imageNote;
+    const said = answer.reply + imageNote + ratingsNote;
     await reply(said);
     if (answer.answered) await remember(said);
     // His message answers whatever Cortex last put in front of him.
