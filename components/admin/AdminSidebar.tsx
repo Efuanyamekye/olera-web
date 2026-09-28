@@ -329,6 +329,20 @@ function Star({ filled }: { filled: boolean }) {
   );
 }
 
+/** The six-dot grip, matching ReorderableSections so one gesture looks alike. */
+function Grip() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="9" cy="5" r="1.7" />
+      <circle cx="15" cy="5" r="1.7" />
+      <circle cx="9" cy="12" r="1.7" />
+      <circle cx="15" cy="12" r="1.7" />
+      <circle cx="9" cy="19" r="1.7" />
+      <circle cx="15" cy="19" r="1.7" />
+    </svg>
+  );
+}
+
 function Chevron({ open }: { open: boolean }) {
   return (
     <svg
@@ -354,11 +368,13 @@ export default function AdminSidebar({
   // Pinned pages — per admin, DB-backed (admin_users.favorites) so pins
   // follow the person across devices. Optimistic toggle, revert on failure.
   const [favorites, setFavorites] = useState<string[]>(() => adminUser.favorites ?? []);
-  const toggleFavorite = useCallback(
-    async (href: string) => {
-      const prev = favorites;
-      const next = prev.includes(href) ? prev.filter((f) => f !== href) : [...prev, href];
-      setFavorites(next);
+
+  // The array is the order. The route replaces it whole and its dedupe is a
+  // Set, which keeps insertion order, so reordering the pins is the same
+  // write as adding one — no second endpoint, and the order follows the
+  // person between machines for free.
+  const saveFavorites = useCallback(
+    async (next: string[], prev: string[], failure: string) => {
       try {
         const res = await fetch("/api/admin/favorites", {
           method: "POST",
@@ -368,11 +384,59 @@ export default function AdminSidebar({
         if (!res.ok) throw new Error(String(res.status));
       } catch {
         setFavorites(prev);
-        toast("Couldn't save that pin. Try again.", { variant: "error" });
+        toast(failure, { variant: "error" });
       }
     },
-    [favorites, toast],
+    [toast],
   );
+
+  const toggleFavorite = useCallback(
+    async (href: string) => {
+      const prev = favorites;
+      const next = prev.includes(href) ? prev.filter((f) => f !== href) : [...prev, href];
+      setFavorites(next);
+      await saveFavorites(next, prev, "Couldn't save that pin. Try again.");
+    },
+    [favorites, saveFavorites],
+  );
+
+  // Dragging a pin. `armed` is the one whose grip is held: a row is only
+  // draggable while that is true, so an ordinary click on a pin still
+  // navigates and a drag from the label does nothing.
+  const [dragKey, setDragKey] = useState<string | null>(null);
+  const [armed, setArmed] = useState<string | null>(null);
+  const orderBeforeDrag = useRef<string[] | null>(null);
+
+  // Live reorder under the cursor. The midpoint rule is what stops a row
+  // oscillating: moving down only passes a target once the pointer is below
+  // its middle, moving up only above it.
+  const onPinDragOver = (e: React.DragEvent<HTMLDivElement>, overHref: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (!dragKey || dragKey === overHref) return;
+    const from = favorites.indexOf(dragKey);
+    const to = favorites.indexOf(overHref);
+    if (from < 0 || to < 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pastMidpoint = e.clientY > rect.top + rect.height / 2;
+    if ((from < to && !pastMidpoint) || (from > to && pastMidpoint)) return;
+    const next = [...favorites];
+    next.splice(from, 1);
+    next.splice(to, 0, dragKey);
+    setFavorites(next);
+  };
+
+  const endPinDrag = () => {
+    const before = orderBeforeDrag.current;
+    orderBeforeDrag.current = null;
+    setDragKey(null);
+    setArmed(null);
+    // Grabbed and dropped in place is not a change, and writing it anyway
+    // would spend a request to store what is already stored.
+    if (before && before.join("\u0000") !== favorites.join("\u0000")) {
+      void saveFavorites(favorites, before, "Couldn't save that order. Try again.");
+    }
+  };
   const pinnedItems = favorites
     .map((href) => pinnableItems.find((i) => i.href === href))
     .filter((i): i is NavItem => !!i);
@@ -698,10 +762,49 @@ export default function AdminSidebar({
                 {pinnedItems.map((item) => {
                   const active = isActive(item.href);
                   return (
-                    <div key={item.href} className="relative group/item">
+                    <div
+                      key={item.href}
+                      className={[
+                        "relative group/item transition-opacity",
+                        dragKey === item.href ? "opacity-50" : "",
+                      ].join(" ")}
+                      draggable={armed === item.href}
+                      onDragStart={(e) => {
+                        orderBeforeDrag.current = favorites;
+                        setDragKey(item.href);
+                        e.dataTransfer.effectAllowed = "move";
+                        try {
+                          e.dataTransfer.setData("text/plain", item.href);
+                        } catch {
+                          // some browsers throw on setData — cosmetic, the drag still works
+                        }
+                      }}
+                      onDragEnd={endPinDrag}
+                      onDragOver={(e) => onPinDragOver(e, item.href)}
+                      onDrop={(e) => e.preventDefault()}
+                    >
+                      <div
+                        role="button"
+                        aria-label={`Drag to reorder ${item.label}`}
+                        title="Drag to reorder"
+                        onMouseDown={() => setArmed(item.href)}
+                        onMouseUp={() => setArmed(null)}
+                        className={[
+                          "absolute left-0 top-2 z-10 cursor-grab active:cursor-grabbing rounded p-0.5",
+                          "text-gray-300 hover:text-gray-500 transition-opacity duration-100",
+                          dragKey === item.href ? "opacity-100" : "opacity-0 group-hover/item:opacity-100",
+                        ].join(" ")}
+                      >
+                        <Grip />
+                      </div>
+                      {/* draggable={false}: an anchor drags itself by
+                          default, which would start a link drag from the
+                          label and never reorder anything. Dragging is the
+                          grip's job alone. */}
                       <Link
                         href={item.href}
                         prefetch={false}
+                        draggable={false}
                         className={[
                           "block pl-5 pr-12 py-1.5 rounded-md text-[13px] transition-colors duration-100",
                           active
