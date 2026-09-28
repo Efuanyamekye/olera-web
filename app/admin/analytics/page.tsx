@@ -36,6 +36,7 @@ import {
 import CTAVariantSessionsList from "@/components/admin/CTAVariantSessionsList";
 import MobileNavVariantSessionsList from "@/components/admin/MobileNavVariantSessionsList";
 import ProgramCardFlowDial from "@/components/admin/ProgramCardFlowDial";
+import BenefitsCompanionDial from "@/components/admin/BenefitsCompanionDial";
 import {
   PROVIDER_EMAIL_FUNNEL_LABELS,
   PROVIDER_EMAIL_FUNNEL_ORDER,
@@ -498,12 +499,14 @@ export default function AdminAnalyticsPage() {
       </div>
 
       <CollapsibleSection
-        title="Benefits Program Card Flow"
+        title="Benefits Card Flow and Text Companion"
         storageKey="programCardFlow"
         defaultCollapsed={true}
         loading={loading && !!summary}
       >
         <ProgramCardFlowDial />
+        <div className="mt-6 border-t border-gray-100" />
+        <BenefitsCompanionDial />
       </CollapsibleSection>
 
       <CollapsibleSection
