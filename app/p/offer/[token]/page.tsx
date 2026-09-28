@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getServiceClient } from "@/lib/admin";
 import { validateCityOfferToken } from "@/lib/claim-tokens";
 import { getLeadExchange, type ExchangeTurn } from "@/lib/city-ads/exchange.server";
-import { CARE_LABEL, PAYMENT_LABEL, RECIPIENT_LABEL, URGENCY_LABEL, formatUSPhone, getCityConfig, hourIn } from "@/lib/city-ads/config";
+import { CARE_LABEL, PAYMENT_LABEL, RECIPIENT_LABEL, URGENCY_LABEL, formatUSPhone, formatUntil, getCityConfig, hourIn } from "@/lib/city-ads/config";
 
 /**
  * /p/offer/{token} — what a provider sees when they open an offer link.
@@ -79,6 +79,26 @@ export default async function OfferPage({ params }: { params: Promise<Params> })
         <p className="mt-4 text-sm text-gray-600">
           We told {lead.first_name} to expect your call {callBy}. We will check with them tomorrow, and pass the request to another provider if they have not heard from you.
         </p>
+        {/* The conversation lives in the inbox; this page used to end here. */}
+        <a
+          href={`/portal/inbox?role=provider&ad=${lead.id}`}
+          className="mt-4 inline-block rounded-xl border border-gray-300 px-4 py-2.5 text-[15px] font-semibold text-gray-900 hover:border-gray-900"
+        >
+          Message {lead.first_name} in your inbox
+        </a>
+      </Shell>
+    );
+  }
+
+  // 1b. Taken, then moved on to another agency (the follow-up ladder, or
+  // Move on the case page). Without this the page fell through to the open
+  // state and showed a Take button that could no longer do anything.
+  if (offer.accepted_at && (offer.outcome === "moved" || offer.outcome === "no_contact")) {
+    return (
+      <Shell title="This family has moved on" eyebrow={`Olera · ${city}`}>
+        <p className="text-[15px] text-gray-700">
+          We&rsquo;ve connected them with another agency, so there&rsquo;s nothing more to do here. The next family near you will come the same way.
+        </p>
       </Shell>
     );
   }
@@ -133,7 +153,7 @@ export default async function OfferPage({ params }: { params: Promise<Params> })
       <p className="mt-3 text-sm text-gray-600">
         {late
           ? "The next provider has been asked too, but if nobody has taken it yet, you still can."
-          : "You have 30 minutes before we also offer it to the next provider. Take it and their name and number appear here; you call them today."}
+          : `It's yours until ${formatUntil(cfg?.timeZone ?? "America/New_York", new Date(offer.expires_at))} before we offer it to the next provider. Take it and their name and number appear here.`}
       </p>
       <form method="post" action="/api/city-offers/respond" className="mt-5 grid gap-2">
         <input type="hidden" name="token" value={token} />

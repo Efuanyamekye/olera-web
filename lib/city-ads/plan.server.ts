@@ -2,7 +2,8 @@ import { getServiceClient } from "@/lib/admin";
 import { offerStillHolds } from "@/lib/city-ads/offer-holds";
 import {
   MAX_OFFERS_PER_LEAD,
-  OFFER_WINDOW_MINUTES,
+  OFFER_WINDOW_BUSINESS_MINUTES,
+  addBusinessMinutes,
   getCityConfig,
   isStaffedNow,
   nextStaffedStart,
@@ -218,7 +219,7 @@ export async function getRoutingPlan(
       : new Date(now.getTime());
   if (!held) {
     for (let i = 0; i < remaining.length; i++) {
-      cursor = whenStaffed(i === 0 ? cursor : new Date(cursor.getTime() + OFFER_WINDOW_MINUTES * MIN), tz);
+      cursor = whenStaffed(i === 0 ? cursor : addBusinessMinutes(tz, cursor, OFFER_WINDOW_BUSINESS_MINUTES), tz);
       steps.push({
         position: offers.length + i + 1,
         providerId: remaining[i].provider_id,

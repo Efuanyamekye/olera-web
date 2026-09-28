@@ -25,11 +25,12 @@ import { getThreadLead, notifyProviderOfHandover } from "./thread.server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { sendSMS, normalizeUSPhone } from "@/lib/twilio";
 import { sendEmail } from "@/lib/email";
-import { cityOfferEmail, cityOfferAcceptedEmail } from "@/lib/email-templates";
+import { cityOfferEmail, cityOfferAcceptedEmail, cityThreadProviderEmail } from "@/lib/email-templates";
 import { generateCityOfferUrl } from "@/lib/claim-tokens";
 import { getSiteUrl } from "@/lib/site-url";
 import { sendSlackAlert } from "@/lib/slack";
 import { recordProviderEvent } from "@/lib/analytics/provider-events";
+import { providerSignInUrl } from "@/lib/city-ads/provider-links.server";
 import {
   cityOfferSms,
   cityAcceptedProviderSms,
@@ -44,7 +45,13 @@ import {
   URGENCY_LABEL,
   PAYMENT_LABEL,
   MAX_OFFERS_PER_LEAD,
-  OFFER_WINDOW_MINUTES,
+  OFFER_WINDOW_BUSINESS_MINUTES,
+  OFFER_NUDGE_AFTER_BUSINESS_MINUTES,
+  OFFER_UNREACHED_BUSINESS_MINUTES,
+  addBusinessMinutes,
+  businessMinutesBetween,
+  formatUntil,
+  isProviderHours,
   formatUSPhone,
   getCityConfig,
   hourIn,
@@ -369,7 +376,10 @@ export async function startOrAdvance(
     return startOrAdvance(db, lead.id, { force: opts.force });
   }
 
-  const expiresAt = new Date(Date.now() + OFFER_WINDOW_MINUTES * 60 * 1000).toISOString();
+  // Four of the provider's business hours (config.ts).
+  const offeredAt = new Date();
+  const expiresAt = addBusinessMinutes(tz, offeredAt, OFFER_WINDOW_BUSINESS_MINUTES).toISOString();
+  const until = formatUntil(tz, new Date(expiresAt), offeredAt);
   // A SECOND OFFER TO THE SAME PROVIDER REOPENS THE FIRST. city_lead_offers is
   // unique on (lead_id, provider_id), so an insert here failed and the admin
   // saw "Nothing was sent". That is exactly the case a hand-picked provider
@@ -419,6 +429,9 @@ export async function startOrAdvance(
     return { action: "noop" };
   }
   const offerUrl = generateCityOfferUrl(inserted.id as string, getSiteUrl());
+  // The email opens the family in her inbox, signed in; the text keeps the
+  // one-offer page (provider-links.server.ts).
+  const emailUrl = (await providerSignInUrl(db, candidate.provider_id, lead.id)) ?? offerUrl;
   await db
     .from("city_leads")
     .update({ status: "offered", offer_count: offerCount, next_offer_at: null, updated_at: new Date().toISOString() })
@@ -441,7 +454,7 @@ export async function startOrAdvance(
     const r = await sendEmail({
       to: email,
       subject: `A family in ${city} is looking for ${l.careLabel}`,
-      html: cityOfferEmail({ providerName: name, city, ...l, minutes: OFFER_WINDOW_MINUTES, offerUrl, askedQuestion, familySaid }),
+      html: cityOfferEmail({ providerName: name, city, ...l, until, offerUrl: emailUrl, askedQuestion, familySaid }),
       replyTo: "support@olera.care",
       emailType: "city_lead_offer",
       recipientType: "provider",
@@ -453,7 +466,7 @@ export async function startOrAdvance(
   if (phone) {
     const r = await sendSMS({
       to: phone,
-      body: `${cityOfferSms({ city, ...l, minutes: OFFER_WINDOW_MINUTES, excerpt: familySaid[0] ?? null })} Details: ${offerUrl}`,
+      body: `${cityOfferSms({ city, ...l, until, excerpt: familySaid[0] ?? null })} Details: ${offerUrl}`,
       emailType: "city_lead_offer",
       recipientType: "provider",
       recipientLogProfileId: candidate.provider_id,
@@ -483,15 +496,21 @@ export async function startOrAdvance(
         email ? "email address did not accept the send" : "no email address on file",
         phone ? "number cannot receive texts" : "no phone number on file",
       ].join("; ");
+  // A clock against an agency that was never told only makes the family wait.
+  // An offer that reached nobody gets an hour, for the team to call them, then
+  // moves on (decided 27 Sep: check the offer reached them before moving on).
+  const unreachedUntil = channels.length
+    ? null
+    : addBusinessMinutes(tz, offeredAt, OFFER_UNREACHED_BUSINESS_MINUTES).toISOString();
   await db
     .from("city_lead_offers")
-    .update({ reached_channels: channels, delivery_note: note })
+    .update({ reached_channels: channels, delivery_note: note, ...(unreachedUntil ? { expires_at: unreachedUntil } : {}) })
     .eq("id", inserted.id as string);
 
   await sendSlackAlert(
     channels.length
-      ? `City lead ${lead.id.slice(0, 8)} (${city}): offer #${position} to ${name} by ${spoken(channels)}. ${l.careLabel} for ${l.recipientLabel}, ${l.urgencyLabel ?? "urgency not stated"}. ${OFFER_WINDOW_MINUTES} min clock. /admin/city-ads`
-      : `🚨 City lead ${lead.id.slice(0, 8)} (${city}): offer #${position} to ${name} REACHED NOBODY (${note}). The 30 min clock is running against a provider who was never told. Fix their contact details or offer it to someone else: /admin/city-ads`,
+      ? `City lead ${lead.id.slice(0, 8)} (${city}): offer #${position} to ${name} by ${spoken(channels)}. ${l.careLabel} for ${l.recipientLabel}, ${l.urgencyLabel ?? "urgency not stated"}. Theirs until ${until}. /admin/city-ads`
+      : `🚨 City lead ${lead.id.slice(0, 8)} (${city}): offer #${position} to ${name} REACHED NOBODY (${note}). Call them${phone ? ` at ${formatUSPhone(phone)}` : ""} to take it; otherwise it moves on at ${formatUntil(tz, new Date(unreachedUntil as string), offeredAt)}. /admin/city-ads`,
   );
   return { action: "offered", providerName: name };
 }
@@ -635,7 +654,14 @@ export async function acceptOffer(
     await sendEmail({
       to: provider.email,
       subject: `You took a family's request in ${city}`,
-      html: cityOfferAcceptedEmail({ providerName, city, careLabel: l.careLabel, callBy, offerUrl }),
+      html: cityOfferAcceptedEmail({
+        providerName,
+        city,
+        careLabel: l.careLabel,
+        callBy,
+        // Her conversation with the family, signed in, not the one-offer page.
+        offerUrl: (await providerSignInUrl(db, offer.provider_id, lead.id)) ?? offerUrl,
+      }),
       replyTo: "support@olera.care",
       emailType: "city_lead_accepted_provider",
       recipientType: "provider",
@@ -894,9 +920,10 @@ export async function runOfferMaintenance(db: SupabaseClient): Promise<{
   judged: number;
   filed: number;
   holding: number;
+  nudged: number;
 }> {
   const now = new Date().toISOString();
-  const out = { started: 0, expired: 0, advanced: 0, unfilled: 0, parked: 0, escalated: 0, held: 0, judged: 0, filed: 0, holding: 0 };
+  const out = { started: 0, expired: 0, advanced: 0, unfilled: 0, parked: 0, escalated: 0, held: 0, judged: 0, filed: 0, holding: 0, nudged: 0 };
 
   // Judge first. Everything below reads the verdict, and a lead with none
   // holds, so classifying after routing would hold every lead for a full tick.
@@ -923,6 +950,11 @@ export async function runOfferMaintenance(db: SupabaseClient): Promise<{
     // cannot pass on. Same reason as the decline path: once per expiry.
     else if (r.action === "held") { out.held++; await alertChainStopped(db, o.lead_id, "ran out of time"); }
   }
+
+  // 1b. The one-hour reminder (decided 27 Sep). Email only: it is the channel
+  // that reaches these agencies, and an offer whose email never landed has
+  // already been cut short and flagged in Slack (startOrAdvance).
+  out.nudged = await sendOfferReminders(db);
 
   // 2. Parked leads whose morning has come, plus stragglers never started.
   //
@@ -959,4 +991,71 @@ export async function runOfferMaintenance(db: SupabaseClient): Promise<{
     else if (r.action === "escalated") out.escalated++;
   }
   return out;
+}
+
+/**
+ * An hour into an open offer, one email: a family is still waiting, and when
+ * it stops being hers. Sent inside her business hours, once per offer (a
+ * reopened offer gets its own, keyed on when it was offered).
+ */
+async function sendOfferReminders(db: SupabaseClient): Promise<number> {
+  const now = new Date();
+  const { data: open } = await db
+    .from("city_lead_offers")
+    .select("id, lead_id, provider_id, offered_at, expires_at, reached_channels")
+    .is("accepted_at", null)
+    .is("declined_at", null)
+    .is("expired_at", null)
+    .gt("expires_at", now.toISOString())
+    .contains("reached_channels", ["email"])
+    .limit(50);
+  let sent = 0;
+  for (const o of (open ?? []) as Array<{ id: string; lead_id: string; provider_id: string; offered_at: string; expires_at: string }>) {
+    try {
+      const { data: lead } = await db
+        .from("city_leads")
+        .select("id, slug, care_type, is_test, archived_at")
+        .eq("id", o.lead_id)
+        .maybeSingle();
+      if (!lead || lead.is_test || lead.archived_at) continue;
+      const cfg = getCityConfig(lead.slug as string);
+      const tz = cfg?.timeZone ?? "America/New_York";
+      if (!isProviderHours(tz, now)) continue;
+      if (businessMinutesBetween(tz, new Date(o.offered_at), now) < OFFER_NUDGE_AFTER_BUSINESS_MINUTES) continue;
+      const { count } = await db
+        .from("email_log")
+        .select("id", { count: "exact", head: true })
+        .eq("email_type", "city_lead_offer_reminder")
+        .eq("metadata->>offer_id", o.id)
+        .gte("created_at", o.offered_at);
+      if ((count ?? 0) > 0) continue;
+      const { data: p } = await db.from("business_profiles").select("display_name, email").eq("id", o.provider_id).maybeSingle();
+      const email = (p?.email as string | null) ?? null;
+      if (!email) continue;
+      const city = cfg?.city ?? (lead.slug as string);
+      const care = CARE_LABEL[lead.care_type as CityCareType] ?? "care";
+      const until = formatUntil(tz, new Date(o.expires_at), now);
+      const url = (await providerSignInUrl(db, o.provider_id, o.lead_id)) ?? generateCityOfferUrl(o.id, getSiteUrl());
+      const r = await sendEmail({
+        to: email,
+        subject: `A family in ${city} is still waiting`,
+        html: cityThreadProviderEmail({
+          eyebrow: `Olera · ${city}`,
+          headline: "A family is still waiting on you",
+          body: `We sent you a family's request for ${care} an hour ago. It's yours until ${until}. After that we ask the next agency, so they aren't left waiting.`,
+          ctaUrl: url,
+          ctaLabel: "Take this family",
+        }),
+        replyTo: "support@olera.care",
+        emailType: "city_lead_offer_reminder",
+        recipientType: "provider",
+        providerId: o.provider_id,
+        metadata: { lead_id: o.lead_id, offer_id: o.id },
+      });
+      if (r.success && !r.skipped) sent++;
+    } catch (e) {
+      console.error("[city-ads] offer reminder failed", o.id, e);
+    }
+  }
+  return sent;
 }

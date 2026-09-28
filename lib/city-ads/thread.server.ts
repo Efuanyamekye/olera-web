@@ -23,7 +23,8 @@ import { sendSMS, normalizeUSPhone } from "@/lib/twilio";
 import { sendEmail } from "@/lib/email";
 import { sendSlackAlert } from "@/lib/slack";
 import { getSiteUrl } from "@/lib/site-url";
-import { generateCityThreadUrl, generateFamilyInboxUrl } from "@/lib/claim-tokens";
+import { generateCityThreadUrl } from "@/lib/claim-tokens";
+import { providerSignInUrl } from "@/lib/city-ads/provider-links.server";
 import { cityThreadProviderEmail } from "@/lib/email-templates";
 import { getCityConfig } from "@/lib/city-ads/config";
 import { cityLeadBlocked, citySendWindow, deliverCityMessage } from "@/lib/city-ads/messages.server";
@@ -259,27 +260,11 @@ export function providerThreadUrl(lead: ThreadLead, provider: ThreadProvider): s
     : `${getSiteUrl()}/provider/boost`;
 }
 
-/**
- * The same page from an email, signing her in on the way: the inbox shows
- * nothing to a signed-out visitor. Issued for the email she signs in with,
- * which can differ from the listing's public email. Texts keep the plain link,
- * because a text can reach a shared office line.
- */
+/** The same page from an email, signing her in on the way (provider-links.server.ts). */
 async function providerEmailUrl(db: SupabaseClient, lead: ThreadLead, provider: ThreadProvider): Promise<string> {
   const plain = providerThreadUrl(lead, provider);
   if (provider.via !== "inbox") return plain;
-  try {
-    const { data: bp } = await db.from("business_profiles").select("account_id").eq("id", provider.id).maybeSingle();
-    if (!bp?.account_id) return plain;
-    const { data: acct } = await db.from("accounts").select("user_id").eq("id", bp.account_id).maybeSingle();
-    if (!acct?.user_id) return plain;
-    const { data } = await db.auth.admin.getUserById(acct.user_id as string);
-    const email = data?.user?.email;
-    return email ? generateFamilyInboxUrl(email, `/portal/inbox?role=provider&ad=${lead.id}`, getSiteUrl()) : plain;
-  } catch (e) {
-    console.error("[city-thread] sign-in link failed", e);
-    return plain;
-  }
+  return (await providerSignInUrl(db, provider.id, lead.id)) ?? plain;
 }
 
 /**

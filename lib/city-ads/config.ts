@@ -213,7 +213,23 @@ export const CITY_FORM_VERSION = "v1-2026-09-06";
  * standing between the promise and the person keeping it.
  */
 export const STAFFED_HOURS = { start: 8, end: 12 } as const;
-export const OFFER_WINDOW_MINUTES = 30;
+/**
+ * How long an offer stays one provider's, in their business hours.
+ *
+ * It was 30 wall-clock minutes. Of the first 12 real offers, 1 was taken, none
+ * were passed, and 11 simply ran out: every offer text failed (Dallas agencies
+ * are on landlines), 4 of 11 emails were opened, and an email read an hour
+ * later found the family already gone. Decided 27 Sep: one clock for every
+ * lead, 4 business hours, a reminder at 1, and never a full window against an
+ * agency the offer never reached.
+ */
+export const PROVIDER_HOURS = { start: 8, end: 18 } as const;
+export const OFFER_WINDOW_BUSINESS_MINUTES = 240;
+export const OFFER_NUDGE_AFTER_BUSINESS_MINUTES = 60;
+/** An offer that reached nobody gets an hour for the team to call, then moves on. */
+export const OFFER_UNREACHED_BUSINESS_MINUTES = 60;
+/** Kept for the plan's projections; an offer's real window is business hours. */
+export const OFFER_WINDOW_MINUTES = OFFER_WINDOW_BUSINESS_MINUTES;
 export const MAX_OFFERS_PER_LEAD = 3;
 
 export const RECIPIENT_LABEL: Record<CityRecipient, string> = {
@@ -319,6 +335,51 @@ export function nextStaffedStart(timeZone: string, from: Date = new Date()): Dat
     if (h === STAFFED_HOURS.start && m === 0) return new Date(t.getTime());
   }
   return new Date(from.getTime() + 12 * 60 * 60 * 1000);
+}
+
+function inProviderHours(timeZone: string, at: Date): boolean {
+  const h = hourIn(timeZone, at);
+  return h >= PROVIDER_HOURS.start && h < PROVIDER_HOURS.end;
+}
+
+/**
+ * `minutes` of provider business hours after `from`, in the city's time zone.
+ * Outside 8am to 6pm the clock stops. Walks in 5-minute steps, which is exact
+ * to the step and cheap: a 4-hour window across a night is under 300 steps.
+ */
+export function addBusinessMinutes(timeZone: string, from: Date, minutes: number): Date {
+  const STEP = 5;
+  const t = new Date(from.getTime());
+  let left = minutes;
+  for (let i = 0; left > 0 && i < 20000; i++) {
+    const open = inProviderHours(timeZone, t);
+    t.setTime(t.getTime() + STEP * 60 * 1000);
+    if (open) left -= STEP;
+  }
+  return t;
+}
+
+/** Provider business minutes between two moments, in the city's time zone. */
+export function businessMinutesBetween(timeZone: string, from: Date, to: Date): number {
+  const STEP = 5;
+  let n = 0;
+  for (let t = from.getTime(), i = 0; t < to.getTime() && i < 20000; t += STEP * 60 * 1000, i++) {
+    if (inProviderHours(timeZone, new Date(t))) n += STEP;
+  }
+  return n;
+}
+
+export function isProviderHours(timeZone: string, at: Date = new Date()): boolean {
+  return inProviderHours(timeZone, at);
+}
+
+/** "3:15 PM", or "Tue 9:00 AM" when it isn't today, in the city's time zone. */
+export function formatUntil(timeZone: string, at: Date, now: Date = new Date()): string {
+  const day = (d: Date) => new Intl.DateTimeFormat("en-US", { timeZone, dateStyle: "short" }).format(d);
+  const time = new Intl.DateTimeFormat("en-US", { timeZone, hour: "numeric", minute: "2-digit" }).format(at);
+  if (day(at) === day(now)) return time;
+  const wd = new Intl.DateTimeFormat("en-US", { timeZone, weekday: "short" }).format(at);
+  return `${wd} ${time}`;
 }
 
 export function formatUSPhone(e164OrDigits: string | null | undefined): string {
