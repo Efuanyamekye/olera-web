@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MS/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T08:46:01.806Z
+ * Last updated: 2026-09-28T09:21:59.471Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -145,7 +145,7 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "When you apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "If your loved one receives SSI, they automatically qualify for Medicaid income limits, no separate income verification needed",
         "The 60-month look-back rule creates penalty periods for any assets transferred below fair market value, consult an elder law attorney before transferring property",
         "Dementia diagnosis alone is not sufficient, your loved one must have functional limitations in 2+ activities of daily living verified through assessment",
@@ -205,7 +205,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.ms.gov/programs/elderly-and-disabled-waiver/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "elderly-disabled-waiver",
@@ -257,7 +257,7 @@ export const drafts: PipelineStateDrafts = {
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Contact your regional Planning and Development District for case management screening and assessment, processing time not specified.",
+        "summary": "Call the Mississippi Access to Care (MAC) helpline at 844-822-4622 for a waiver screening. Case management and the assessment are done by your regional Planning and Development District. Processing time is not specified.",
         "steps": [
           {
             "step": 1,
@@ -267,7 +267,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 2,
             "title": "Request waiver screening",
-            "description": "Contact your regional Planning and Development District or the Office of Long Term Care to request case management screening for the E&D Waiver."
+            "description": "Call the Mississippi Access to Care (MAC) helpline at 844-822-4622 and ask for an Elderly and Disabled Waiver screening. The MAC Center connects your loved one to the local case management team (a registered nurse and a social worker at the Planning and Development District)."
           },
           {
             "step": 3,
@@ -312,21 +312,21 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Mississippi Access to Care Center / Mississippi Medicaid Contact (start here)",
-          "phone": "(800) 421-2408",
-          "description": "Mississippi Access to Care Center / Mississippi Medicaid Contact Center — Elderly and Disabled Waiver application help",
+          "label": "Mississippi Access to Care (MAC) Center (start here)",
+          "phone": "(844) 822-4622",
+          "description": "Statewide MAC helpline. MAC Centers do screening for Medicaid waivers, including the Elderly and Disabled Waiver, and connect you to your local case management team.",
           "hours": null
         },
         {
           "label": "Mississippi Division of Medicaid",
-          "phone": null,
-          "description": "Primary agency administering the E&D Waiver program",
+          "phone": "(800) 421-2408",
+          "description": "General Medicaid line, for Medicaid questions. Not for the waiver screening itself.",
           "hours": null
         },
         {
           "label": "Office of Long Term Care",
-          "phone": null,
-          "description": "Waiver administration and provider enrollment",
+          "phone": "(601) 359-6141",
+          "description": "Runs the Elderly and Disabled Waiver. For program questions, not for the waiver screening itself.",
           "hours": null
         },
         {
@@ -341,7 +341,7 @@ export const drafts: PipelineStateDrafts = {
         "You must be assessed in person, remote or phone assessments are not accepted for nursing facility level of care determination",
         "Having dementia or other diagnoses alone doesn't automatically qualify, you must demonstrate need for daily assistance with activities of daily living",
         "If income exceeds 300% of SSI rate, the excess must be paid monthly to Medicaid through a qualified income trust before approval",
-        "Services are only provided after regular Medicaid state plan benefits are exhausted, this extends beyond basic coverage"
+        "Extended home health visits (skilled nursing, aide, therapy) start once your loved one has used up the regular Medicaid home health benefit. Other waiver services, such as personal care, adult day care, meals and respite, don't wait on that."
       ],
       "relatedPrograms": [
         "Mississippi Independent Living Waiver",
@@ -393,11 +393,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "House",
-      "phone": "(800) 421-2408",
+      "phone": "(844) 822-4622",
       "sourceUrl": "https://medicaid.ms.gov/programs/elderly-and-disabled-waiver/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "medicare-savings-programs",
@@ -519,7 +519,7 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "When you apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "SLMB provides up to 3 months retroactive coverage, but QMB only starts the month after approval, apply as soon as you think your loved one qualifies",
         "QI tier has federal funding caps and may close to new applicants even if income-eligible, consider applying for SLMB as backup",
         "Income disregards apply: first $20/month from any source, plus $65 in wages and half of remaining wages don't count toward limits",
@@ -590,13 +590,13 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.ms.gov/medicaid-coverage/who-qualifies-for-coverage/medicare-cost-sharing/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
       "name": "SNAP (Supplemental Nutrition Assistance Program) in Mississippi",
       "shortName": "SNAP Mississippi",
-      "tagline": "Up to $300/month in grocery assistance for aging loved ones on fixed incomes",
+      "tagline": "Up to $306/month in grocery assistance for aging loved ones on fixed incomes",
       "programType": "benefit",
       "complexity": "medium",
       "geographicScope": {
@@ -604,42 +604,42 @@ export const drafts: PipelineStateDrafts = {
         "stateVariation": true
       },
       "intro": "If your loved one is struggling to afford groceries on a fixed income, SNAP provides monthly benefits to help cover food costs. In Mississippi, seniors age 60 and older get special advantages, no gross income limits and higher asset allowances, plus a simplified application process if they have no earned income.\n\nBecause Mississippi offers the Elderly Simplified Application Project (ESAP), eligible seniors can skip much of the paperwork that makes regular SNAP applications complex. Your loved one's primary home and one vehicle don't count toward asset limits, and if they're 60 or older, only their net income (after deductions) matters for qualification.\n\nThe monthly benefit amount varies based on household size and income, but many seniors qualify for $100-300 per month. About half of eligible seniors don't apply despite qualifying, often because they don't know the program exists or assume their income is too high.",
-      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
-      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
+      "savingsRange": "Up to $306/month for one person (FY2027 maximum, from October 1, 2026)",
+      "savingsSource": "USDA FY2027 maximum allotments for the 48 contiguous states and DC, effective October 1, 2026: $306/month for one person, $562/month for two. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+ gets special advantages",
-          "Income below $1,255/month (1 person)",
-          "Assets under $4,500 (seniors)",
+          "Net income below $1,330/month for 1 person (from October 1, 2026)",
+          "Assets under $4,750 when someone is 60+ or disabled (from October 1, 2026)",
           "Mississippi resident"
         ],
         "ageRequirement": null,
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1255
+            "monthlyLimit": 1330
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1704
+            "monthlyLimit": 1804
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 2152
+            "monthlyLimit": 2277
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 2600
+            "monthlyLimit": 2750
           },
           {
             "householdSize": 5,
-            "monthlyLimit": 3049
+            "monthlyLimit": 3224
           }
         ],
         "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
+          "individual": 4750,
+          "couple": 4750,
           "countedAssets": [
             "Bank accounts",
             "Cash",
@@ -659,7 +659,7 @@ export const drafts: PipelineStateDrafts = {
           "If 60+ or disabled, only net income test applies (no gross income limit)",
           "Able-bodied adults without dependents must work 20+ hours/week (seniors exempt)"
         ],
-        "povertyLevelReference": "100% FPL"
+        "povertyLevelReference": "100% FPL net income test (from October 1, 2026)"
       },
       "applicationGuide": {
         "method": "multiple",
@@ -701,7 +701,7 @@ export const drafts: PipelineStateDrafts = {
         "Proof of age (birth certificate, driver's license, or state ID)",
         "Proof of Mississippi residency (utility bill, lease, or mail)",
         "Social Security award letter or pension statements",
-        "The current balance of any checking or savings accounts. Every state asks about this. In Mississippi your savings do count. For a household with someone 60 or older or disabled the limit is $4,500, and it rises to $4,750 on October 1, 2026.",
+        "The current balance of any checking or savings accounts. Every state asks about this. In Mississippi your savings do count. For a household with someone 60 or older or disabled the limit is $4,750 from October 1, 2026 ($3,000 for other households).",
         "Rent or mortgage payment receipts",
         "Medical expenses receipts if claiming medical deductions",
         "Vehicle registration and titles",
@@ -744,7 +744,7 @@ export const drafts: PipelineStateDrafts = {
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than the asset limit?",
-          "answer": "Yes, your loved one's primary residence doesn't count toward the $4,500 asset limit, regardless of its value. Only additional real estate counts as an asset for SNAP purposes."
+          "answer": "Yes, your loved one's primary residence doesn't count toward the $4,750 asset limit (from October 1, 2026), regardless of its value. Only additional real estate counts as an asset for SNAP purposes."
         },
         {
           "question": "What happens if my loved one has both Social Security and a small part-time job?",
@@ -780,7 +780,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mdhs.ms.gov/help/snap/special/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -1305,7 +1305,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Find your local Area Agency on Aging",
-            "description": "Search online for '[Your County] Area Agency on Aging Mississippi' or call 2-1-1 and ask for meal delivery programs in your area."
+            "description": "Call Mississippi Access to Care (MAC) at (844) 822-4622, or use the county search at https://www.mdhs.ms.gov/aging/finding-services-for-older-adults/ to find your Area Agency on Aging."
           },
           {
             "step": 2,
@@ -1402,7 +1402,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.law.cornell.edu/regulations/mississippi/18-Miss-Code-R-SS-2-2-10",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "family-caregiver-support",

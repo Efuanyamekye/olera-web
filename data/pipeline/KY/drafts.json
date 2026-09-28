@@ -125,7 +125,7 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "When you apply, you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "The 60-month look-back period means any gifts or asset transfers in the past 5 years may create penalty periods, gather records of all transfers",
         "Community spouse asset protection varies from $31,584 to $162,660, higher amounts require a fair hearing but are often approved",
         "Home-based waiver services are assessed one-at-a-time based on need, unlike nursing home care which provides comprehensive services immediately",
@@ -177,7 +177,7 @@
       "sourceUrl": "https://kynect.ky.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "hcbs-waivers",
@@ -646,7 +646,7 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "When you apply, you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QI program funding comes from a finite federal block grant, once exhausted, even eligible applicants cannot receive benefits until the next funding cycle",
         "QMB automatically qualifies your loved one for Medicare Part D Extra Help prescription drug assistance",
         "Income limits include a $20 disregard that's already factored into the stated amounts",
@@ -704,7 +704,7 @@
       "sourceUrl": "https://chfs.ky.gov/agencies/dms/dpo/epb/Pages/msp.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -716,14 +716,14 @@
       "geographicScope": {
         "type": "state"
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs, Kentucky SNAP provides monthly assistance loaded onto an EBT card. Your loved one could receive up to $298 a month for groceries if they live alone, and more in a larger household. The actual amount depends on income and expenses. Across Kentucky, SNAP households average about $370 a month.\n\nKentucky has simplified rules for seniors and disabled adults, your loved one can qualify even with higher income if they have significant medical or housing expenses. Because Kentucky waives the standard asset test for most households, your loved one can keep their home, car, and retirement savings while still receiving food assistance.",
-      "savingsRange": "Up to $298/month for one person (FY2026 maximum); Kentucky households average $370/month",
-      "savingsSource": "USDA FY2026 cost-of-living adjustment: $298 is the maximum monthly allotment for a one-person household in the 48 contiguous states, effective October 1, 2025 through September 30, 2026. The $370 figure is the average monthly benefit across all Kentucky SNAP households (average household size 2.1) from USDA Characteristics of SNAP Households FY2024, Appendix Table B.2. USDA does not publish a Kentucky average for older adults specifically; nationally, households with an elderly member averaged $192/month in FY2024.",
+      "intro": "If your loved one is 60+ and struggling with grocery costs, Kentucky SNAP provides monthly assistance loaded onto an EBT card. Your loved one could receive up to $306 a month (from October 1, 2026) for groceries if they live alone, and more in a larger household. The actual amount depends on income and expenses. Across Kentucky, SNAP households average about $370 a month.\n\nKentucky has simplified rules for seniors and disabled adults, your loved one can qualify even with higher income if they have significant medical or housing expenses. Because Kentucky waives the standard asset test for most households, your loved one can keep their home, car, and retirement savings while still receiving food assistance.",
+      "savingsRange": "Up to $306/month for one person (FY2027 maximum, from October 1, 2026); Kentucky households average $370/month",
+      "savingsSource": "USDA FY2027 cost-of-living adjustment: $306 is the maximum monthly allotment for a one-person household in the 48 contiguous states and DC, effective October 1, 2026 through September 30, 2027. The $370 figure is the average monthly benefit across all Kentucky SNAP households (average household size 2.1) from USDA Characteristics of SNAP Households FY2024, Appendix Table B.2. USDA does not publish a Kentucky average for older adults specifically; nationally, households with an elderly member averaged $192/month in FY2024.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
-          "Age 60+",
-          "Income below $2,608/month (single)",
+          "Any age; households with someone 60+ get extra deductions and a higher savings limit",
+          "Income before deductions up to $2,660/month for one person, from October 1, 2026. Above that, a household with someone 60+ can still qualify if income after deductions is $1,330 or less",
           "U.S. citizen or qualified non-citizen",
           "Lives in Kentucky"
         ],
@@ -731,31 +731,31 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2608
+            "monthlyLimit": 2660
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 3526
+            "monthlyLimit": 3607
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 4442
+            "monthlyLimit": 4553
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 5358
+            "monthlyLimit": 5500
           },
           {
             "householdSize": 5,
-            "monthlyLimit": 6276
+            "monthlyLimit": 6447
           },
           {
             "householdSize": 6,
-            "monthlyLimit": 7192
+            "monthlyLimit": 7393
           },
           {
             "householdSize": 7,
-            "monthlyLimit": 8108
+            "monthlyLimit": 8340
           }
         ],
         "assetLimits": {
@@ -775,18 +775,18 @@
         "functionalRequirement": null,
         "otherRequirements": [
           "Must live together and share food preparation with household members",
-          "No work requirements for seniors 60+"
+          "Adults 18 through 64 who can work and have no children under 14 at home must work or train 20 hours a week to keep SNAP beyond 3 months, unless exempt (for example, a disability). People 65 and older are exempt."
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL before deductions (Kentucky broad-based eligibility), from October 1, 2026. Households with someone 60+ or disabled who are over that can qualify at 100% FPL after deductions"
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at kybenefits.ky.gov or call 1-855-306-8959, processing typically takes 30 days with an interview required.",
+        "summary": "Apply online at kynect.ky.gov or call 1-855-306-8959, processing typically takes 30 days with an interview required.",
         "steps": [
           {
             "step": 1,
             "title": "Choose application method",
-            "description": "Apply online at kybenefits.ky.gov (fastest), call 1-855-306-8959, or visit your local DCBS office. If your loved one has no earned income and is elderly or disabled, ask about ESAP (simplified process)."
+            "description": "Apply online at kynect.ky.gov (fastest), call 1-855-306-8959, or visit your local DCBS office. If your loved one has no earned income and is elderly or disabled, ask about ESAP (simplified process)."
           },
           {
             "step": 2,
@@ -814,8 +814,8 @@
         "tip": "Track medical expenses like Medicare premiums and prescription costs, these deductions can significantly increase your loved one's benefit amount.",
         "urls": [
           {
-            "label": "Kentucky Benefits Portal",
-            "url": "https://kybenefits.ky.gov"
+            "label": "kynect Kentucky Benefits Portal",
+            "url": "https://kynect.ky.gov/s/?language=en_US"
           },
           {
             "label": "Find Local DCBS Office",
@@ -828,7 +828,7 @@
         "Social Security numbers for the household members who are applying (not needed for people in the home who are not applying). Proof of identity can be a driver's license, Social Security card, or immigration document.",
         "Social Security award letter or benefit statement",
         "Pension or retirement income statements",
-        "The current balance of any checking or savings accounts. Every state asks about this. Your savings will not count against you in this state, but you still need the numbers.",
+        "The current balance of any checking or savings accounts. Every state asks about this. For most Kentucky households savings do not count, but they can if income is above the limit, so bring the numbers.",
         "Proof of Kentucky residency (utility bill or lease)",
         "Medicare card and premium statements",
         "Prescription drug plan documents and costs",
@@ -855,7 +855,7 @@
         "ESAP (simplified process) available for elderly/disabled households with no earned income, fewer documents required and less frequent recertification",
         "Adult children over 21 can be counted as separate households if they prepare their own meals, which may increase your loved one's benefits",
         "Medical deductions include Medicare premiums, prescription costs, and other out-of-pocket medical expenses, keep receipts",
-        "Kentucky doesn't count your home, vehicles, or most retirement savings as assets, unlike some other states"
+        "Most Kentucky households have no savings limit for SNAP. If income before deductions is above the limit shown here, a savings limit of $4,750 applies to a household with someone 60 or older or disabled (from October 1, 2026). Your home and vehicles never count."
       ],
       "relatedPrograms": [
         "LIHEAP (Energy Assistance)",
@@ -875,7 +875,7 @@
         },
         {
           "question": "How much will my loved one actually receive each month?",
-          "answer": "Benefits depend on net income after deductions for medical expenses and housing costs. A one-person household can receive up to $298/month, and Kentucky households average about $370/month. The amount depends on income after deductions for medical and housing expenses."
+          "answer": "Benefits depend on net income after deductions for medical expenses and housing costs. A one-person household can receive up to $306/month (from October 1, 2026), and Kentucky households average about $370/month. The amount depends on income after deductions for medical and housing expenses."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
@@ -903,7 +903,7 @@
       "sourceUrl": "https://chfs.ky.gov/agencies/dcbs/dfs/nab/Pages/snap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "energy-assistance-liheap",
@@ -1079,57 +1079,57 @@
       "geographicScope": {
         "type": "state"
       },
-      "intro": "If your loved one struggles with high energy bills, Kentucky's Weatherization Assistance Program provides free home improvements that can significantly reduce heating and cooling costs. The program covers everything from sealing ductwork to insulation upgrades, with all work determined by a professional energy audit of your loved one's home.\n\nYour loved one may qualify if household income is at or below 200% of the federal poverty level ($48,240 annually for a single person in recent guidelines) or if they received TANF or K-TAP cash assistance in the past 12 months. The program prioritizes elderly applicants, disabled individuals, and households with young children, meaning your loved one may move up the waitlist faster.\n\nApplications are handled through local Community Action Agencies across Kentucky's 20-22 regions. Because this is a federal energy conservation program, availability and wait times vary by area, but all eligible work is completed at no cost to your loved one.",
-      "savingsRange": "",
-      "savingsSource": "Free service",
-      "savingsVerified": false,
+      "intro": "If your loved one struggles with high energy bills, Kentucky's Weatherization Assistance Program provides free home improvements that can significantly reduce heating and cooling costs. The program covers everything from sealing ductwork to insulation upgrades, with all work determined by a professional energy audit of your loved one's home.\n\nYour loved one may qualify if household income is at or below 200% of the federal poverty level ($31,920 a year for one person in 2026) or if someone in the home received SSI or K-TAP in the past 12 months. The program prioritizes elderly applicants, disabled individuals, and households with young children, meaning your loved one may move up the waitlist faster.\n\nApplications are handled through local Community Action Agencies across Kentucky's 20-22 regions. Because this is a federal energy conservation program, availability and wait times vary by area, but all eligible work is completed at no cost to your loved one.",
+      "savingsRange": "Free home upgrades; households typically save about $372 a year on energy bills (up to about $500)",
+      "savingsSource": "Kentucky Housing Corporation: \"Participating households typically save $372 each year\" and \"Families often save up to $500 annually on utility bills post-retrofit.\" All work is free to the household.",
+      "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Income at or below 200% of poverty level",
           "Own or rent the home they live in",
-          "Home not weatherized since 1994",
+          "Home has not been weatherized in the last 15 years",
           "Landlord permission required if renting"
         ],
         "ageRequirement": null,
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2010
+            "monthlyLimit": 2660
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 2705
+            "monthlyLimit": 3607
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 3400
+            "monthlyLimit": 4553
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 4095
+            "monthlyLimit": 5500
           },
           {
             "householdSize": 5,
-            "monthlyLimit": 4790
+            "monthlyLimit": 6447
           },
           {
             "householdSize": 6,
-            "monthlyLimit": 5485
+            "monthlyLimit": 7393
           },
           {
             "householdSize": 7,
-            "monthlyLimit": 6121
+            "monthlyLimit": 8340
           },
           {
             "householdSize": 8,
-            "monthlyLimit": 6815
+            "monthlyLimit": 9287
           }
         ],
         "assetLimits": null,
         "functionalRequirement": null,
         "otherRequirements": [
           "Must live in the home to be weatherized",
-          "Home cannot have been weatherized on or after September 30, 1994",
+          "Home has not been weatherized in the last 15 years",
           "Must provide proof of U.S. citizenship or legal residency",
           "Renters need written landlord permission"
         ],
@@ -1142,7 +1142,7 @@
           {
             "step": 1,
             "title": "Find your local Community Action Agency",
-            "description": "Call Community Action Kentucky at the number listed or Kentucky Housing Corporation to locate your regional office. Examples: Northern Kentucky Community Action Commission at (859) 581-6607, Boyd County at (606) 405-0019."
+            "description": "Call 2-1-1, or use the Community Action Kentucky map at https://www.capky.org/network/, to find the Community Action Agency that serves your county. That agency takes weatherization applications."
           },
           {
             "step": 2,
@@ -1171,7 +1171,7 @@
         "urls": [
           {
             "label": "Kentucky Housing Corporation Weatherization",
-            "url": "https://www.kyhousing.org/Partners/Developers/Single-Family/Weatherization-Assistance/Pages/default.aspx"
+            "url": "https://www.kyhousing.org/programs/weatherization"
           }
         ]
       },
@@ -1190,27 +1190,27 @@
       ],
       "contacts": [
         {
-          "label": "Northern Kentucky Community Action",
-          "phone": "(859) 581-6607",
-          "description": "Weatherization services for Northern Kentucky region",
-          "hours": "Business hours - call for specific schedule"
-        },
-        {
-          "label": "Northeast Kentucky Community Action (Boyd County)",
-          "phone": "(606) 405-0019",
-          "description": "Weatherization services for Northeast Kentucky region",
-          "hours": "Business hours - call for specific schedule"
-        },
-        {
-          "label": "Kentucky 2-1-1",
+          "label": "Find your local weatherization provider (start here)",
           "phone": "2-1-1",
-          "description": "Free helpline to find your local Community Action Agency",
+          "description": "Weatherization is run county by county by Community Action Agencies. Call 2-1-1, or use the Community Action Kentucky map at https://www.capky.org/network/ (the locator Kentucky Housing Corporation links to), to find the agency for your county. That agency takes the application.",
           "hours": "24 hours, 7 days a week"
+        },
+        {
+          "label": "Northern Kentucky Community Action (Boone, Campbell, Carroll, Gallatin, Grant, Kenton, Owen, Pendleton counties only)",
+          "phone": "(859) 581-6607",
+          "description": "Serves Boone, Campbell, Carroll, Gallatin, Grant, Kenton, Owen and Pendleton counties. This is the Covington headquarters line; applicants make an appointment with their local Neighborhood Center.",
+          "hours": "Business hours - call for specific schedule"
+        },
+        {
+          "label": "Northeast Kentucky Community Action Agency (Boyd, Carter, Elliott, Greenup, Lawrence counties)",
+          "phone": "(800) 817-4443",
+          "description": "Central office, Olive Hill. Weatherization email: weatherization@nkcaa.net.",
+          "hours": "Mon-Fri 8am-4:30pm"
         }
       ],
       "applicationNotes": [
-        "Income limits vary by local Community Action Agency, some use 125% of poverty level instead of 200%, so verify with your specific regional office",
-        "Eligibility expires after 12 months if work hasn't begun, you'll need to re-verify income and eligibility to continue",
+        "Income must be at or below 200% of the federal poverty level. Households that received SSI or K-TAP in the past 12 months qualify automatically on income.",
+        "Eligibility lasts 12 months. If work starts 12 to 15 months after approval, the household must show it is still eligible. After 15 months it must reapply in full.",
         "Emergency priority is given to households with children at risk of removal due to substandard dwelling conditions",
         "Renters must have landlord sign permission documents before any work can begin on the property"
       ],
@@ -1227,7 +1227,7 @@
         },
         {
           "question": "Can my loved one apply if their home was weatherized 20 years ago?",
-          "answer": "It depends on exactly when the work was done. Homes weatherized on or after September 30, 1994 are generally ineligible. However, homes weatherized before October 1, 1993 may qualify for re-weatherization. You'll need documentation of when the previous work occurred to determine eligibility."
+          "answer": "Yes. Kentucky now uses a rolling 15-year rule: a home that has not had weatherization work in the last 15 years can be weatherized again. Bring any record of when the earlier work was done."
         },
         {
           "question": "How long will my loved one really wait for weatherization services?",
@@ -1235,7 +1235,7 @@
         },
         {
           "question": "What happens if my loved one's income changes while they're on the waitlist?",
-          "answer": "Eligibility remains valid for 12 months from the date it was verified. If 12 months pass without work beginning, your loved one must re-verify their income and eligibility to continue. If income rises above the limits during this time, they may no longer qualify for services."
+          "answer": "Eligibility lasts 12 months from the date it was verified. If work starts 12 to 15 months after approval, your loved one must show they are still eligible. After 15 months they must reapply in full. If income rises above the limit, they may no longer qualify."
         },
         {
           "question": "Can I apply on behalf of my elderly loved one who has difficulty traveling to the Community Action Agency office?",
@@ -1256,10 +1256,10 @@
       },
       "icon": "Lightning",
       "phone": "2-1-1",
-      "sourceUrl": "https://www.kyhousing.org/Partners/Developers/Single-Family/Weatherization-Assistance/Pages/default.aspx",
+      "sourceUrl": "https://www.kyhousing.org/programs/weatherization",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-31"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "ship-medicare-counseling",

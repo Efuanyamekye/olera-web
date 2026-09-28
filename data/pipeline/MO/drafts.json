@@ -17,7 +17,7 @@
         "stateVariation": false,
         "localEntities": [
           {
-            "name": "144 Family Support Division (FSD) Resource Centers throughout Missouri",
+            "name": "Local Family Support Division (FSD) Resource Centers throughout Missouri",
             "type": "service-area"
           }
         ]
@@ -81,12 +81,12 @@
           {
             "step": 1,
             "title": "Choose your application method",
-            "description": "Apply online at mydss.mo.gov/healthcare/apply (fastest), call 855-373-9994, or visit one of 144 Family Support Division Resource Centers throughout Missouri."
+            "description": "Apply online at mydss.mo.gov/healthcare/apply (fastest), call 855-373-9994, or visit your local Family Support Division Resource Center."
           },
           {
             "step": 2,
             "title": "Complete the MO HealthNet application",
-            "description": "Provide detailed income, asset, and medical information. If applying for long-term care services, medical records showing care needs are essential."
+            "description": "Provide detailed income, asset, and medical information. If applying for long-term care services, medical records showing care needs are essential. Anyone 65 or older, blind or disabled, on Social Security, on Medicare or VA benefits, or in a nursing facility must also submit the Supplemental Form (IM-1ABDS) with the application."
           },
           {
             "step": 3,
@@ -132,7 +132,8 @@
         "Pre-need burial contracts or irrevocable burial trusts",
         "Medical records documenting care needs (for long-term care services)",
         "Documentation of medical expenses paid out-of-pocket (last 3 months for spend-down)",
-        "Proof of health insurance premiums paid"
+        "Proof of health insurance premiums paid",
+        "Supplemental Form (IM-1ABDS), required with the application if your loved one is 65 or older, blind or disabled, on Social Security, on Medicare or VA benefits, or in a nursing facility"
       ],
       "contacts": [
         {
@@ -150,7 +151,7 @@
         {
           "label": "FSD Information Center",
           "phone": "(855) 373-4636",
-          "description": "Answers questions and can direct you to any of the 135 Resource Centers statewide. Office hours vary by location, so check before visiting.",
+          "description": "Answers questions and can direct you to your local Resource Center. Office hours vary by location, so check before visiting.",
           "hours": "Mon-Fri 8am-5pm CT"
         },
         {
@@ -167,7 +168,7 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "Your first call is the Medicaid application itself: the state takes MO HealthNet applications on this line. You will be asked about income and assets. Missouri checks many records electronically and sends a written list with a due date if it needs anything else.",
         "Asset limits apply strictly to seniors, many miss exemptions like primary home equity limits and burial fund exclusions",
         "Spend-down allows qualification even with higher income if medical expenses are substantial, keep all medical receipts",
         "Different MO HealthNet programs have different rules, Medicare Savings Programs have higher asset limits ($7,560 single) but require separate applications",
@@ -233,7 +234,7 @@
       "sourceUrl": "https://dss.mo.gov/healthcare/apply",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "structured-family-caregiving-waiver",
@@ -275,11 +276,11 @@
             "Cash"
           ],
           "exemptAssets": [
-            "Home (if living in it or intending to return, equity up to $730,000)",
+            "Home (if living in it or intending to return, equity up to $752,000 in 2026)",
             "One vehicle",
             "Personal belongings"
           ],
-          "homeEquityCap": 730000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must meet Nursing Facility Level of Care (assessed via InterRAI HC tool covering activities of daily living, cognition, and care needs, essentially whether your loved one needs daily help with bathing, dressing, medication management, or similar care)",
         "otherRequirements": [
@@ -377,8 +378,8 @@
           "answer": "Yes, as long as your loved one lives full-time in your household. However, you'll need a qualified substitute caregiver employed by the provider agency to cover times when you're unavailable, including work hours. The backup plan is mandatory for program participation."
         },
         {
-          "question": "What if my loved one's house is worth more than the $730,000 equity limit?",
-          "answer": "If your loved one lives in the home or intends to return, and the home equity exceeds $730,000, they won't qualify for Medicaid and therefore can't access this waiver. However, if a spouse, minor child under 21, or blind/disabled adult child also lives in the home, the equity limit doesn't apply."
+          "question": "What if my loved one's house is worth more than the $752,000 equity limit?",
+          "answer": "If your loved one lives in the home or intends to return, and the home equity exceeds $752,000 (the 2026 limit), they won't qualify for Medicaid and therefore can't access this waiver. However, if a spouse, minor child under 21, or blind/disabled adult child also lives in the home, the equity limit doesn't apply."
         },
         {
           "question": "Can I apply for this waiver and other Missouri HCBS services at the same time?",
@@ -418,7 +419,7 @@
       "sourceUrl": "https://mydss.mo.gov/mhd/waiver/structured-family-caregiving",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-elderly-care",
@@ -776,7 +777,7 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "When you apply, you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QI program has limited funding and is awarded first-come, first-served, apply early in the year for best chances",
         "SLMB2 cannot be active at the same time as MO HealthNet insurance, unlike other MSP tiers",
         "Income limits change every April when federal poverty levels are announced, recheck eligibility annually",
@@ -858,7 +859,7 @@
       "sourceUrl": "https://mydss.mo.gov/medicare-cost-savings-programs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -871,39 +872,39 @@
         "type": "federal",
         "stateVariation": true
       },
-      "intro": "If your loved one is on a fixed income in Missouri, SNAP can provide monthly assistance with grocery bills. Benefits are loaded onto an EBT card that works like a debit card at most grocery stores. How much depends on household size, income, and the deductions you qualify for. Through September 30, 2026 the most SNAP pays a one-person household is $298 a month.\n\nElderly households (60+) have easier qualification rules than younger families. Because seniors bypass the gross income test and only need to meet net income limits, many qualify even if their total monthly income seems too high. They also get higher asset limits ($4,500 instead of $3,000) and longer certification periods, meaning less paperwork once approved.\n\nAbout half of eligible seniors don't apply for SNAP, often because they don't realize they qualify. Social Security, veterans' benefits, and disability payments all count as income, but retirement savings and home ownership typically don't disqualify applicants.",
-      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
-      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
+      "intro": "If your loved one is on a fixed income in Missouri, SNAP can provide monthly assistance with grocery bills. Benefits are loaded onto an EBT card that works like a debit card at most grocery stores. How much depends on household size, income, and the deductions you qualify for. From October 1, 2026 the most SNAP pays a one-person household is $306 a month.\n\nElderly households (60+) have easier qualification rules than younger families. Because seniors bypass the gross income test and only need to meet net income limits, many qualify even if their total monthly income seems too high. They also get higher asset limits ($4,750 instead of $3,000 from October 1, 2026) and longer certification periods, meaning less paperwork once approved.\n\nAbout half of eligible seniors don't apply for SNAP, often because they don't realize they qualify. Social Security, veterans' benefits, and disability payments all count as income, but retirement savings and home ownership typically don't disqualify applicants.",
+      "savingsRange": "Up to $306/month ($3,672/year) for one person, October 1, 2026 through September 30, 2027",
+      "savingsSource": "USDA FY2027 maximum allotment for a one-person household in the 48 contiguous states and DC: $306/month, effective October 1, 2026 through September 30, 2027. The minimum for a one- or two-person household is $25/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 60+ household member",
           "Net income below $1,415/month (1 person)",
-          "Assets under $4,500",
+          "Assets under $4,750 (from October 1, 2026)",
           "Missouri resident"
         ],
         "ageRequirement": "60+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1415
+            "monthlyLimit": 1330
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1903
+            "monthlyLimit": 1804
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 2391
+            "monthlyLimit": 2277
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 2879
+            "monthlyLimit": 2750
           }
         ],
         "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
+          "individual": 4750,
+          "couple": 4750,
           "countedAssets": [
             "Bank account balances",
             "Cash on hand",
@@ -966,7 +967,7 @@
         "Social Security numbers for everyone in the household. You write the number on the form. Missouri does not ask for the physical cards, and it tries to verify identity electronically first.",
         "Most recent Social Security award letter or benefit statement",
         "Pension or retirement income statements",
-        "The current balance of any checking or savings accounts. Every state asks about this. In Missouri your savings do count. For a household with someone 60 or older or disabled the limit is $4,500, and it rises to $4,750 on October 1, 2026.",
+        "The current balance of any checking or savings accounts. Every state asks about this. In Missouri your savings do count. For a household with someone 60 or older or disabled the limit is $4,750 from October 1, 2026.",
         "Proof of Missouri residency (utility bill, lease agreement, or state ID)",
         "Valid photo identification",
         "Rent or mortgage payment receipts",
@@ -1046,7 +1047,7 @@
       "sourceUrl": "https://mydss.mo.gov/food-assistance/apply-for-snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -2450,7 +2451,7 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "When you apply, you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Major change in 2017: You can no longer qualify for MoRx with Medicare Part D alone, you must also be eligible for MO HealthNet",
         "If your loved one has MO HealthNet with a spenddown, they must meet the spenddown at least once per year to activate MoRx prescription assistance",
         "Automatic enrollment happens if your loved one is already receiving both Medicare and MO HealthNet, no separate MoRx application needed"
@@ -2500,7 +2501,7 @@
       "sourceUrl": "https://mydss.mo.gov/mhd/morx-general-faqs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "property-tax-credit-circuit-breaker",

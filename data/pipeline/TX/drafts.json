@@ -22,43 +22,26 @@
           }
         ]
       },
-      "intro": "If you have a disabled child whose family earns too much for regular Medicaid, or an elderly loved one struggling with Medicare premiums and co-pays, these Texas programs can provide critical health coverage. MBIC (Medicaid Buy-In for Children) offers full Medicaid benefits for disabled children in families earning up to $8,250 monthly for a family of four. You'll pay a sliding-scale premium based on your income and existing insurance, but your child gets comprehensive coverage including doctor visits, hospital care, therapies, and prescriptions.\n\nFor elderly loved ones on Medicare, three related programs help with costs. QMB (Qualified Medicare Beneficiary) pays all Medicare premiums and cost-sharing for individuals with monthly income under $1,330. SLMB (Specified Low-Income Medicare Beneficiary) covers Medicare Part B premiums ($202.90/month in 2026) for those earning under $1,596 monthly before the $20 disregard. QI (Qualifying Individual) also covers Part B premiums for those earning under $1,796 before the $20 disregard but operates on a first-come, first-served basis.\n\nAll programs require Texas residency and have specific asset limits of $9,950 for individuals or $14,910 for couples (Medicare Savings Programs only — MBIC has no asset test), though your home and one car are typically excluded. Because these programs have strict disability requirements and precise income thresholds, gather documentation carefully before applying at YourTexasBenefits.com.",
+      "intro": "If your loved one has Medicare and is struggling with the premiums and co-pays, three Texas programs can help. QMB (Qualified Medicare Beneficiary) pays all Medicare premiums and cost-sharing for individuals with monthly income up to $1,330. SLMB (Specified Low-Income Medicare Beneficiary) covers the Medicare Part B premium ($202.90/month in 2026) for those earning up to $1,596 monthly. QI (Qualifying Individual) also covers the Part B premium for those earning less than $1,796 a month, but it is first-come, first-served.\n\nThere is no age limit. Your loved one needs Medicare Part A (or Part B immunosuppressive-drug coverage), Texas residency, and countable assets under $9,950 for an individual or $14,910 for a couple. The home and one car are typically excluded. Apply at YourTexasBenefits.com or by calling 2-1-1 and choosing Option 2.",
       "savingsRange": "$2,434.80/year in Medicare Part B premiums (2026)",
       "savingsSource": "The standard 2026 Medicare Part B premium is $202.90/month, which is $2,434.80 over twelve months (CMS 2026 premiums fact sheet). Every QMB, SLMB and QI enrollee gets this premium paid. QMB additionally covers the $283 Part B deductible and Medicare coinsurance, so the total value depends on services used. For people enrolled in Part B immunosuppressive-drug coverage only, the 2026 premium is $121.60/month, or $1,459.20 a year.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
-          "Disabled children 0-18 with family income up to 300% FPL",
-          "Elderly Medicare beneficiaries 65+",
+          "People with Medicare Part A (or Part B immunosuppressive-drug coverage), at any age",
           "Medicare Savings income limits (individual): QMB under $1,330, SLMB $1,330-$1,596, QI $1,596-$1,796/month (before the $20 disregard)",
-          "Assets under $9,950 individual/$14,910 couple (Medicare Savings Programs; MBIC has no asset test)",
+          "Assets under $9,950 individual/$14,910 couple",
           "Texas residents with citizenship/legal status"
         ],
-        "ageRequirement": "0-18 for MBIC, 65+ for QMB/SLMB/QI",
+        "ageRequirement": "No age limit. Your loved one must be entitled to Medicare Part A (or Part B immunosuppressive-drug coverage). People under 65 who have Medicare because of a disability can qualify too.",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 3990
+            "monthlyLimit": 1796
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 5410
-          },
-          {
-            "householdSize": 3,
-            "monthlyLimit": 6830
-          },
-          {
-            "householdSize": 4,
-            "monthlyLimit": 8250
-          },
-          {
-            "householdSize": 5,
-            "monthlyLimit": 9670
-          },
-          {
-            "householdSize": 6,
-            "monthlyLimit": 11090
+            "monthlyLimit": 2435
           }
         ],
         "assetLimits": {
@@ -78,28 +61,27 @@
           ],
           "homeEquityCap": null
         },
-        "functionalRequirement": "MBIC requires disability meeting SSI criteria (child's condition significantly restricts daily activities and is expected to last 12+ months or result in death)",
+        "functionalRequirement": null,
         "otherRequirements": [
           "Texas residency",
           "U.S. citizenship or legal immigrant status",
-          "Medicare enrollment (for QMB/SLMB/QI programs)",
-          "Unmarried status (for MBIC children)"
+          "Entitled to Medicare Part A, or Part B immunosuppressive-drug coverage"
         ],
-        "povertyLevelReference": "300% FPL for MBIC, 100-135% FPL for Medicare programs"
+        "povertyLevelReference": "100-135% FPL"
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at YourTexasBenefits.com or call 2-1-1 for help; processing takes 45-90 days depending on disability determination needs.",
+        "summary": "Apply online at YourTexasBenefits.com or call 2-1-1 (Option 2) for help.",
         "steps": [
           {
             "step": 1,
             "title": "Gather required documents",
-            "description": "Collect disability determination letters, income proof, Medicare cards, bank statements, and residency documents before starting your application."
+            "description": "Collect proof of income, Medicare cards, bank balances, and residency documents before starting your application."
           },
           {
             "step": 2,
             "title": "Choose application method",
-            "description": "Apply for all programs (MBIC, QMB, SLMB, QI) at YourTexasBenefits.com or via the Your Texas Benefits mobile app. For Medicare Savings Programs specifically, use Form H1200."
+            "description": "Apply for QMB, SLMB and QI at YourTexasBenefits.com or with the Your Texas Benefits mobile app, or use paper Form H1200."
           },
           {
             "step": 3,
@@ -109,7 +91,7 @@
           {
             "step": 4,
             "title": "Confirm receipt",
-            "description": "Call 2-1-1 within one week to verify your application was received. Processing can take 45-90 days, especially if disability determination is needed."
+            "description": "Call 2-1-1 within one week to verify your application was received. Processing can take 45-90 days."
           },
           {
             "step": 5,
@@ -117,17 +99,13 @@
             "description": "HHSC may request additional documentation. Respond within 10 days to avoid delays. Check your mail and YourTexasBenefits.com account regularly."
           }
         ],
-        "processingTime": "45-90 days, longer if disability determination needed for MBIC",
+        "processingTime": "45-90 days",
         "waitlist": "QI program may have waitlists due to limited annual funding",
-        "tip": "For MBIC, have your child's SSI determination letter ready, this speeds up the disability verification process significantly.",
+        "tip": "You only need one application. Texas checks your loved one for QMB first, then SLMB and QI.",
         "urls": [
           {
             "label": "Apply Now (Your Texas Benefits)",
             "url": "https://www.yourtexasbenefits.com"
-          },
-          {
-            "label": "MBIC Official Overview",
-            "url": "https://www.hhs.texas.gov/services/health/medicaid-chip/medicaid-chip-programs-services/programs-children-adults-disabilities/medicaid-buy-children"
           },
           {
             "label": "Texas Medicare Savings Programs",
@@ -148,7 +126,6 @@
         "Vehicle titles and registration documents",
         "Property deeds or mortgage statements",
         "Pre-need burial contracts or burial insurance policies",
-        "Documentation of employer-provided health insurance (for MBIC premium calculation)",
         "Any legal guardianship or power of attorney documents"
       ],
       "contacts": [
@@ -171,6 +148,12 @@
           "hours": "Hours not published"
         },
         {
+          "label": "Texas Medicare Help Line (HICAP)",
+          "phone": "800-252-9240",
+          "description": "Free state benefits counseling, including help applying for Medicare Savings Programs.",
+          "hours": null
+        },
+        {
           "label": "Medicare Rights Center",
           "phone": "(800) 333-4114",
           "description": "Free national Medicare counselling.",
@@ -180,8 +163,6 @@
       "applicationNotes": [
         "The 2026 resource limits for QMB, SLMB and QI are $9,950 for an individual and $14,910 for a couple.",
         "Your loved one needs Medicare Part A, or Medicare Part B immunosuppressive-drug coverage, to qualify.",
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
-        "MBIC applications require proof of SSI-level disability, having a diagnosis alone isn't sufficient, the child must meet functional limitation criteria",
         "QI program funding is limited and allocated first-come, first-served each year, apply early in the calendar year for best chances"
       ],
       "relatedPrograms": [
@@ -191,11 +172,6 @@
         "SNAP (Supplemental Nutrition Assistance Program)"
       ],
       "contentSections": [
-        {
-          "type": "callout",
-          "tone": "info",
-          "text": "Asset limits above apply to Medicare Savings Programs (QMB, SLMB, QI) only. MBIC for children does not have an asset test — only family income is tested."
-        },
         {
           "type": "tier-comparison",
           "title": "Medicare Cost-Sharing Program Comparison",
@@ -225,20 +201,12 @@
       ],
       "faqs": [
         {
-          "question": "Can my disabled child get MBIC if our family income is $99,000 a year?",
-          "answer": "Yes. For 2026, the income limit for a family of four is $8,250 monthly, which is $99,000 annually. As long as your family's adjusted gross income is below 300% of the federal poverty level, your child likely qualifies."
-        },
-        {
           "question": "What happens if my loved one's income is just over the QMB limit but they can't afford Medicare costs?",
           "answer": "Check if they qualify for SLMB (income under $1,596/month before the $20 disregard) or QI (under $1,796/month before the $20 disregard). They may also qualify for Extra Help with prescriptions, which has an even higher individual limit of approximately $2,015/month."
         },
         {
           "question": "Does my loved one's home count toward the $9,950 asset limit?",
-          "answer": "No. Your loved one's primary residence is exempt. For Medicare Savings Programs, countable assets must be under $9,950 (up from $9,660). Note: For children applying for MBIC, there is no asset test at all — only family income is considered."
-        },
-        {
-          "question": "How long does the MBIC disability determination take?",
-          "answer": "If your child already receives SSI, approval is faster since disability is established. Without existing SSI, Texas must verify the disability meets SSI criteria, which can extend processing to 90 days or longer. Having comprehensive medical records ready helps speed this process."
+          "answer": "No. Your loved one's primary residence is exempt. For Medicare Savings Programs, countable assets must be under $9,950 (up from $9,660)."
         },
         {
           "question": "Can I apply for multiple Medicare programs at the same time?",
@@ -247,14 +215,6 @@
         {
           "question": "What if my elderly loved one lives in assisted living - can they still get these Medicare programs?",
           "answer": "Yes, assisted living residents can qualify for QMB, SLMB, or QI since these are not considered institutional care. However, if your loved one moves to a nursing home and gets Medicaid coverage there, they may lose these Medicare programs since Medicaid becomes primary."
-        },
-        {
-          "question": "Will getting MBIC affect my family's taxes or other benefits?",
-          "answer": "MBIC coverage itself doesn't count as taxable income. However, the program uses your adjusted gross income for eligibility, so significant income changes could affect renewal. Other means-tested benefits may consider MBIC coverage when determining eligibility, but this varies by program."
-        },
-        {
-          "question": "What happens if we move to another state while my child has MBIC?",
-          "answer": "MBIC coverage ends when you leave Texas since it's a state-specific program. Contact your new state's Medicaid office immediately to apply for similar coverage. Some states have different programs for disabled children, and you'll want continuous coverage during the transition."
         }
       ],
       "layoutIntent": {
@@ -266,11 +226,11 @@
         "visualTone": "editorial"
       },
       "phone": "(877) 541-7905",
-      "sourceUrl": "https://www.hhs.texas.gov/services/health/medicaid-chip/medicaid-chip-programs-services/programs-children-adults-disabilities/medicaid-buy-children",
+      "sourceUrl": "https://www.hhs.texas.gov/services/health/medicare",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "star-plus-medicaid-hcbs",
@@ -284,7 +244,7 @@
         "stateVariation": false,
         "localEntities": [
           {
-            "name": "MCOs: Community First Health Plans, Molina Healthcare, Superior HealthPlan, Wellpoint/Anthem; local HHS offices via 211",
+            "name": "STAR+PLUS MCOs (vary by service area): Community First Health Plans, Community Health Choice, El Paso Health, Molina Healthcare, Superior HealthPlan, UnitedHealthcare Community Plan, Wellpoint; local HHS offices via 211",
             "type": "service-area"
           }
         ]
@@ -356,7 +316,7 @@
           {
             "step": 5,
             "title": "Select MCO",
-            "description": "Choose from available plans in your area: Community First, Molina, Superior, or Wellpoint. Benefits and extras vary by plan."
+            "description": "Choose from the plans in your area. Depending on where you live, STAR+PLUS plans include Community First, Community Health Choice, El Paso Health, Molina, Superior, UnitedHealthcare and Wellpoint. Benefits and extras vary by plan."
           }
         ],
         "processingTime": "45 to 90 days once your loved one reaches the top of the Interest List. During this time, the state verifies financial eligibility while your chosen health plan (MCO) completes a required in-home medical assessment.",
@@ -500,7 +460,7 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-eldercare",
@@ -701,7 +661,7 @@
       "id": "snap-food-benefits",
       "name": "Supplemental Nutrition Assistance Program (SNAP)",
       "shortName": "SNAP Food Benefits",
-      "tagline": "Up to $298/month on an EBT card (Lone Star Card) to help your loved one buy groceries if they're 60+ with limited income",
+      "tagline": "Up to $306/month on an EBT card (Lone Star Card) to help your loved one buy groceries if they're 60+ with limited income",
       "programType": "benefit",
       "complexity": "medium",
       "geographicScope": {
@@ -714,15 +674,15 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling to afford groceries on Social Security or a fixed income, SNAP provides monthly funds loaded onto an EBT card (Lone Star Card) for food purchases. In Texas, seniors can receive up to $298/month for a single person ($516 for couples), with the average senior getting around $188/month.\n\nBecause your loved one is 60+, they only need to pass the net income test (after deducting medical expenses over $35/month and high shelter costs), making qualification easier than for younger adults. Income limit: $1,305/month for one person or $1,766/month for two people after deductions. Social Security, pensions, and disability benefits count as income, but your loved one can still qualify if they have significant medical or housing expenses.\n\nTexas requires an asset test ($4,500 limit for households with a member aged 60+ or with a disability), but this exempts their primary home, most vehicles, household goods, and some retirement savings. The Lone Star Card (EBT) works like a debit card at grocery stores but cannot be used for alcohol, tobacco, or hot prepared foods.",
-      "savingsRange": "Up to $3,576/year for one person (FY2026 maximum)",
-      "savingsSource": "USDA FY2026 maximum allotment for a 1-person household is $298/month; actual amounts vary widely by income and deductions",
+      "intro": "If your loved one is 60+ and struggling to afford groceries on Social Security or a fixed income, SNAP provides monthly funds loaded onto an EBT card (Lone Star Card) for food purchases. In Texas, seniors can receive up to $306/month for a single person ($562 for two people) from October 1, 2026, with the average senior getting around $188/month.\n\nBecause your loved one is 60+, they only need to pass the net income test (after deducting medical expenses over $35/month and high shelter costs), making qualification easier than for younger adults. Income limit from October 1, 2026: $1,330/month for one person or $1,804/month for two people after deductions. Social Security, pensions, and disability benefits count as income, but your loved one can still qualify if they have significant medical or housing expenses.\n\nTexas requires an asset test ($5,000 limit for all households), but this exempts their primary home, most vehicles, household goods, and some retirement savings. The Lone Star Card (EBT) works like a debit card at grocery stores but cannot be used for alcohol, tobacco, or hot prepared foods.",
+      "savingsRange": "Up to $3,672/year for one person (maximum, from October 1, 2026)",
+      "savingsSource": "USDA FY2027 maximum allotment for a 1-person household is $306/month, from October 1, 2026; actual amounts vary widely by income and deductions",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
-          "Net income below $1,305/month (single)",
-          "Assets under $4,500 (households with a member 60+ or disabled)",
+          "Net income below $1,330/month (single, from October 1, 2026)",
+          "Countable assets under $5,000 (all households)",
           "Texas resident",
           "U.S. citizen or qualified immigrant"
         ],
@@ -730,16 +690,16 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1305
+            "monthlyLimit": 1330
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1766
+            "monthlyLimit": 1804
           }
         ],
         "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
+          "individual": 5000,
+          "couple": 5000,
           "countedAssets": [
             "Bank accounts",
             "Cash",
@@ -827,9 +787,9 @@
       ],
       "contacts": [
         {
-          "label": "HHSC Customer Service (start here)",
+          "label": "Texas HHS benefits line, toll-free 2-1-1 Option 2 (start here)",
           "phone": "(877) 541-7905",
-          "description": "Questions about existing SNAP benefits and case status",
+          "description": "The toll-free number for 2-1-1 Texas. Choose your language, then Option 2 for HHS benefits help. They can mail you a SNAP or TSAP application; you apply online or return the paper form.",
           "hours": "Monday-Friday 8am-6pm CT"
         },
         {
@@ -854,12 +814,12 @@
       "contentSections": [],
       "faqs": [
         {
-          "question": "Can my loved one keep their house if it's worth more than $4,500?",
-          "answer": "Yes. The primary home where your loved one lives is completely exempt from SNAP asset limits, regardless of its value. For households with a member aged 60 or older, the countable asset limit is $4,500 (not $2,000). Texas primarily counts liquid assets like bank accounts and stocks toward this limit."
+          "question": "Can my loved one keep their house if it's worth more than $5,000?",
+          "answer": "Yes. The primary home where your loved one lives is completely exempt from SNAP asset limits, regardless of its value. In Texas the countable asset limit is $5,000 for all households. Texas primarily counts liquid assets like bank accounts and stocks toward this limit."
         },
         {
           "question": "Does Social Security income disqualify my loved one from SNAP?",
-          "answer": "Not necessarily. Social Security counts as income, but seniors get to deduct medical expenses over $35/month and high shelter costs first. If your loved one has significant medical bills or housing costs, their net income may fall below the $1,305/month limit even with Social Security."
+          "answer": "Not necessarily. Social Security counts as income, but seniors get to deduct medical expenses over $35/month and high shelter costs first. If your loved one has significant medical bills or housing costs, their net income may fall below the $1,330/month limit even with Social Security."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
@@ -874,7 +834,7 @@
           "answer": "Yes, Texas participates in SNAP online purchasing. Your loved one can use their EBT card to buy eligible groceries for delivery or pickup from participating retailers like Amazon, Walmart, and H-E-B through their websites or apps. Important for 2026: as of April 1, 2026, Texas law prohibits using SNAP benefits to buy candy or sweetened drinks (like soda), whether shopping online or in-person."
         },
         {
-          "question": "What if my loved one owns a car worth more than $4,500?",
+          "question": "What if my loved one owns a car worth more than $5,000?",
           "answer": "One vehicle per household is exempt regardless of value if used for transportation. Additional vehicles may count toward the asset limit, but Texas has exceptions for work vehicles, vehicles needed for medical transportation, and vehicles being used to produce income."
         }
       ],
@@ -890,7 +850,7 @@
       "sourceUrl": "https://www.yourtexasbenefits.com",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -911,7 +871,7 @@
       },
       "intro": "If your loved one struggles to pay electric, gas, or propane bills on a fixed income, LIHEAP provides direct payments to utility companies. In Texas, this program is delivered through CEAP (Comprehensive Energy Assistance Program) and covers payments toward heating and cooling costs, with a separate year-round crisis benefit of up to $1,800 for situations like a shutoff notice. How much a household gets depends on its income and household size. The most any household can receive in a program year is $12,600, but that ceiling assumes a heating or cooling unit replacement, so most households receive far less.",
       "savingsRange": "Up to $12,600/year, though most households receive far less",
-      "savingsSource": "10 TAC 6.309(b) and the TDHCA FY2026 Texas LIHEAP State Plan (approved 2025-09-18, Amendment #1 approved 2026-02-18). $12,600 is the annual cap across all components combined, and reaching it requires both utility and crisis assistance plus a heating or cooling unit replacement of up to $9,000. Per component the cap is $1,800 at 0-50% of the federal poverty guidelines, $1,500 at 50-75%, and $1,200 at 75-150%. Year-round crisis assistance is capped at $1,800. Texas publishes no minimum and no typical or average benefit; the $1 minimum shown on the federal form is a reporting artifact, not a floor.",
+      "savingsSource": "10 TAC 6.309(e)-(h) and the TDHCA FY2026 and FY2027 Texas LIHEAP State Plans (approved 2025-09-18, Amendment #1 approved 2026-02-18). $12,600 is the annual cap across all components combined, and reaching it requires both utility and crisis assistance plus a heating or cooling unit replacement of up to $9,000. Per component the cap is $1,800 at 0-50% of the federal poverty guidelines, $1,500 at 50-75%, and $1,200 at 75-150%. Year-round crisis assistance is capped at $1,800. Texas publishes no minimum and no typical or average benefit; the $1 minimum shown on the federal form is a reporting artifact, not a floor.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -1021,11 +981,11 @@
         }
       ],
       "applicationNotes": [
-        "Households facing a life-threatening energy crisis (such as a broken AC in extreme heat or an immediate shutoff) may receive expedited processing within 48 hours, even when standard waitlists are long.",
+        "Crisis help moves faster than the regular waitlist. In a life-threatening energy crisis the agency must provide some help within 18 hours of an eligible household applying; for extreme weather or a disaster, within 48 hours. Say it is an emergency when you call.",
         "Household size includes everyone living at the address who shares utility bills, not just family members",
         "Benefits are paid directly to your utility company, you won't receive a check or cash payment",
         "Funding runs out quickly each year, so apply as early as possible when applications open",
-        "CEAP has no seasonal application window. The current program period runs October 1, 2025 through September 30, 2027, and crisis assistance is available year round. Individual agencies are a different matter: TDHCA warns that providers \"may be at capacity with their funds, and may not be able to assist all who call them.\" If one agency cannot help, ask whether another in your area can."
+        "CEAP has no seasonal application window. The FY2027 plan period runs October 1, 2026 through September 30, 2028, and crisis assistance is available year round. Individual agencies are a different matter: TDHCA warns that providers \"may be at capacity with their funds, and may not be able to assist all who call them.\" If one agency cannot help, ask whether another in your area can."
       ],
       "relatedPrograms": [
         "Weatherization Assistance Program (WAP)",
@@ -1087,7 +1047,7 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "weatherization-assistance-program",
@@ -1433,13 +1393,13 @@
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
-          "Age 60+ or disabled",
+          "Usually 60+; rules vary by local provider (Tarrant County has no age requirement)",
           "Primarily homebound",
           "Unable to prepare meals",
           "Lives in service area",
           "No income limits"
         ],
-        "ageRequirement": "60+",
+        "ageRequirement": "Usually 60+; varies by local provider",
         "incomeTable": null,
         "assetLimits": null,
         "functionalRequirement": "Must be primarily homebound and unable to prepare nutritious meals without consistent daytime assistance",
@@ -1566,11 +1526,11 @@
         "hasDocumentChecklist": true,
         "visualTone": "warm"
       },
-      "phone": "2-1-1",
+      "phone": "1-855-937-2372",
       "sourceUrl": "https://www.mealsonwheelsamerica.org/find-meals-and-services/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "cba-waiver",
@@ -1621,12 +1581,12 @@
             "Second properties"
           ],
           "exemptAssets": [
-            "Primary home (if equity ≤$730,000)",
+            "Primary home (if equity ≤$752,000 in 2026)",
             "One vehicle",
             "Personal belongings",
             "Burial plots"
           ],
-          "homeEquityCap": 730000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must meet nursing facility level of care criteria (needing daily assistance with bathing, dressing, eating, mobility, or medication management) and be at risk for nursing home placement",
         "otherRequirements": [
@@ -1741,7 +1701,7 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than the asset limit?",
-          "answer": "Yes, your loved one's primary home is exempt from the $2,000 asset limit as long as they live there or intend to return, and the home equity doesn't exceed $730,000. The home remains exempt even if your spouse or disabled child lives there."
+          "answer": "Yes, your loved one's primary home is exempt from the $2,000 asset limit as long as they live there or intend to return, and the home equity doesn't exceed $752,000 (2026). The home remains exempt even if your spouse or disabled child lives there."
         },
         {
           "question": "How long is the waitlist really?",
@@ -1784,7 +1744,7 @@
       "sourceUrl": "https://www.hhs.texas.gov/services/long-term-care/home-community-based-care/community-based-alternatives-cba",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "community-caregiver-support",
@@ -2233,7 +2193,7 @@
     }
   ],
   "stateOverview": {
-    "intro": "Texas offers 12 major programs to help your aging loved one, 9 provide direct financial benefits or services, while 3 offer free guidance and advocacy. The financial help ranges from $298/month for groceries through SNAP to comprehensive healthcare coverage through STAR+PLUS that includes home care services. Free resources include one-on-one Medicare counseling, legal aid for seniors 60+, and nursing home advocacy. Most benefit programs have income limits around $2,000-3,000/month for a single person, but several valuable resources are available regardless of income. Start by checking if your loved one qualifies for Medicaid programs, these provide the most comprehensive coverage and can coordinate multiple types of care under one system.",
+    "intro": "Texas offers 12 major programs to help your aging loved one, 9 provide direct financial benefits or services, while 3 offer free guidance and advocacy. The financial help ranges from $306/month for groceries through SNAP to comprehensive healthcare coverage through STAR+PLUS that includes home care services. Free resources include one-on-one Medicare counseling, legal aid for seniors 60+, and nursing home advocacy. Most benefit programs have income limits around $2,000-3,000/month for a single person, but several valuable resources are available regardless of income. Start by checking if your loved one qualifies for Medicaid programs, these provide the most comprehensive coverage and can coordinate multiple types of care under one system.",
     "startHere": [
       {
         "name": "STAR+PLUS",
@@ -2243,7 +2203,7 @@
       {
         "name": "SNAP",
         "programId": "snap-food-benefits",
-        "why": "Quick way to reduce grocery costs by up to $298/month with relatively simple application process."
+        "why": "Quick way to reduce grocery costs by up to $306/month with relatively simple application process."
       },
       {
         "name": "Texas SHIP",

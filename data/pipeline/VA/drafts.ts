@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.624Z
+ * Last updated: 2026-09-28T09:21:59.486Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -105,7 +105,7 @@ export const drafts: PipelineStateDrafts = {
           "label": "Cover Virginia Call Center",
           "phone": "(833) 522-5582",
           "description": "Takes the Medicaid application. The waiver ALSO requires a long-term services and supports screening, requested through the local Department of Social Services.",
-          "hours": "Mon-Fri 8am-7pm ET"
+          "hours": "Mon-Fri 8am-7pm, Sat 9am-12pm ET"
         },
         {
           "label": "Cover Virginia TDD",
@@ -114,10 +114,10 @@ export const drafts: PipelineStateDrafts = {
           "hours": "Monday-Friday business hours"
         },
         {
-          "label": "Fairfax County DSS (example)",
-          "phone": "(703) 324-7948",
-          "description": "Long-term services screening for adults 18+",
-          "hours": "Monday-Friday business hours"
+          "label": "Your local Department of Social Services (requests the long-term services screening)",
+          "phone": null,
+          "description": "Find yours at dss.virginia.gov/localagency.",
+          "hours": "Varies by office"
         },
         {
           "label": "Virginia 2-1-1",
@@ -187,7 +187,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dmas.virginia.gov/for-members/benefits-and-services/waivers/ccc-plus-waiver/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-01"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "adult-services-program",

@@ -19,6 +19,10 @@
  *   unsourced-savings      AZ/CO presented a ceiling as a typical range
  *   stale                  never verified, or verified long ago
  *
+ * And from the 2026-09-28 round:
+ *   snap-senior-gross-ceiling  a gross SNAP limit read as a ceiling for seniors
+ *   care-screen-boilerplate    waiver screen note copied onto non-waiver programs
+ *
  * Only the FIRST THREE documents reach a family: the composer slices
  * documentsNeeded[0..2] (lib/family-comms/benefits-cascade.server.ts). Document
  * checks therefore only look at that window — a wrong item buried at position 9
@@ -471,6 +475,56 @@ function checkAnchorPhoneDrift(st, p) {
   });
 }
 
+/**
+ * SNAP households with someone 60+ or disabled face no gross income test,
+ * only the net test after medical and shelter deductions (7 CFR 273.9(a)).
+ * A record that states a gross figure as the income limit, with no word about
+ * net income, tells exactly the families we serve that they are over the line
+ * when they may not be. Found 2026-09-28 in AL AESAP, GA Senior SNAP and KY
+ * SNAP, each with live letters.
+ */
+function isSnapProgram(p) {
+  return /\bsnap\b|food (benefit|assistance|stamp)|\besap\b|\baesap\b|basic food|calfresh/i.test(`${p.id} ${p.name}`);
+}
+
+function checkSnapSeniorGrossCeiling(st, p) {
+  if (!isSnapProgram(p)) return;
+  const se = p.structuredEligibility || {};
+  const blob = JSON.stringify([se, p.applicationNotes || []]).toLowerCase();
+  if (!/income/.test(blob) || !/\$\s?\d/.test(blob)) return;
+  if (/\bnet\b|after deductions|no gross/.test(blob)) return;
+  report({
+    state: st, programId: p.id, program: p.name, check: 'snap-senior-gross-ceiling', severity: 'medium',
+    detail: 'A SNAP record states an income limit with no mention of net income. Households with someone 60+ or disabled are judged on net income only, so a gross figure reads as a ceiling that does not apply to them.',
+    value: JSON.stringify(se.summary || se.incomeTable || null).slice(0, 200),
+    fix: 'Give the net limit, and say that households with someone 60+ or disabled can have gross income above the usual limit because medical and housing costs are deducted first.',
+  });
+}
+
+/**
+ * "Your first call is a needs and level-of-care screen" is waiver language
+ * that the pipeline copied onto programs with no care test at all: Medicare
+ * Savings Programs, SNAP, plain Medicaid applications. Found 2026-09-28 in
+ * NC, CA and SC MSP and MO HealthNet. A family told to expect a care screen on
+ * a financial application prepares for the wrong call.
+ */
+function checkCareScreenBoilerplate(st, p) {
+  const blob = JSON.stringify(p).toLowerCase();
+  if (!/level[- ]of[- ]care screen/.test(blob)) return;
+  // Only programs that are purely financial. Care programs (waivers, adult
+  // day, state-funded home care) genuinely start with a needs screen.
+  const name = `${p.id} ${p.name}`;
+  const financial = /medicare savings|\bqmb\b|\bslmb\b|buy-in|\bsnap\b|food (benefit|assistance)|prescription|\brx\b/i.test(name)
+    || (/medicaid|medical assistance|soonercare|husky|healthnet|health plan/i.test(name) && !/waiver|hcbs|long[- ]term|\bltc\b|home care|personal care|choice/i.test(name));
+  if (!financial) return;
+  report({
+    state: st, programId: p.id, program: p.name, check: 'care-screen-boilerplate', severity: 'medium',
+    detail: 'Mentions a level-of-care screen on a program that has no care-need test.',
+    value: (blob.match(/.{0,80}level[- ]of[- ]care screen.{0,80}/) || [''])[0],
+    fix: 'Remove the note, or replace it with what the first call on this line actually asks (usually income, household and assets).',
+  });
+}
+
 const CHECKS = [
   checkAnchorPhoneDrift,
   checkMedicareNotRequired,
@@ -482,6 +536,8 @@ const CHECKS = [
   checkEmptyDocuments,
   checkUnsourcedSavings,
   checkSpouseCaveatMissing,
+  checkSnapSeniorGrossCeiling,
+  checkCareScreenBoilerplate,
   checkNoTimeline,
   checkStale,
 ];

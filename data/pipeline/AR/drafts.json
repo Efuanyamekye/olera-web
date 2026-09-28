@@ -22,7 +22,7 @@
           }
         ]
       },
-      "intro": "If your loved one is 65+ (or 21-64 with a physical disability) and needs substantial help with bathing, dressing, eating, or has Alzheimer's requiring supervision, ARChoices in Homecare may cover personal care assistants, meal preparation, housekeeping, and other services to help them stay home instead of moving to a nursing facility. Because this waiver covers the cost of nursing home level care delivered at home, your loved one gets a personalized service plan with an individual budget based on their assessed needs.\n\nTo qualify, your loved one must meet Medicaid income limits, pass a functional assessment showing they need nursing facility level care, and score exactly Tier 2 on Arkansas's ARIA assessment (Tier 1 needs are too low for the program, Tier 3 needs are too high). Home equity is capped at $752,000 unless a spouse or disabled child lives there. The program includes a self-direction option called Independent Choices where your loved one can hire and manage their own caregivers, including family members.",
+      "intro": "If your loved one is 65+ (or 21-64 with a physical disability) and needs substantial help with bathing, dressing, eating, or has Alzheimer's requiring supervision, ARChoices in Homecare may cover personal care assistants, meal preparation, housekeeping, and other services to help them stay home instead of moving to a nursing facility. Because this waiver covers the cost of nursing home level care delivered at home, your loved one gets a personalized service plan with an individual budget based on their assessed needs.\n\nTo qualify, your loved one must meet Medicaid income limits, pass a functional assessment showing they need nursing facility level care, and score exactly Tier 2 on Arkansas's ARIA assessment (Tier 1 needs are too low for the program, Tier 3 needs are too high). Home equity is capped at $752,000 unless a spouse or disabled child lives there. The program includes a self-direction option called IndependentChoices where your loved one can hire and manage their own caregivers, including relatives (but not a spouse, legal guardian, or anyone holding power of attorney over their care).",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": true,
@@ -125,7 +125,7 @@
           "label": "Access Arkansas (the online portal)",
           "phone": "855-372-1084",
           "hours": "",
-          "description": "Help with the benefits portal itself. This is technical support for the website, not the place to ask about ARChoices."
+          "description": "DHS's statewide Medicaid eligibility line. Call here with questions about the financial application or to find your county DHS office."
         },
         {
           "label": "Arkansas 2-1-1",
@@ -140,7 +140,7 @@
         "You must apply at your county DHS office first, you cannot apply directly to the ARChoices program",
         "The ARIA assessment is very specific, scoring Tier 1 or Tier 3 will disqualify your loved one, only Tier 2 qualifies",
         "Financial eligibility follows standard Medicaid rules, spend-down planning may be needed if income is too high",
-        "If approved, you can choose the self-direction option (Independent Choices) to hire and manage caregivers yourself, including family members",
+        "If approved, you can choose the self-direction option (IndependentChoices) to hire and manage caregivers yourself, including relatives. A spouse cannot be paid, and neither can a legal guardian or anyone holding power of attorney over your loved one's care. If someone other than your loved one chooses self-direction on their behalf, that person cannot be the paid caregiver.",
         "If income is over $2,982, a Miller trust can still make your loved one eligible. Only the amount above the limit goes into the trust, not all of their income.",
         "If your loved one is married and their spouse is staying at home, the spouse can keep between $32,532 and $162,660 in resources for themselves in 2026. The couple limit above does not mean the at-home spouse is left with nothing."
       ],
@@ -165,7 +165,7 @@
         },
         {
           "question": "Can family members get paid to provide care through this program?",
-          "answer": "Yes, through the Independent Choices self-direction option, your loved one can hire and pay family members for personal care. There are three exceptions, and they are absolute: a spouse, a legal guardian and an attorney-in-fact cannot be paid caregivers, no matter the circumstances."
+          "answer": "Yes, through the IndependentChoices self-direction option, your loved one can hire and pay family members for personal care. There are three exceptions, and they are absolute: a spouse, a legal guardian and an attorney-in-fact cannot be paid caregivers, no matter the circumstances."
         },
         {
           "question": "What's the difference between ARChoices and regular Medicaid?",
@@ -197,7 +197,7 @@
       "sourceUrl": "https://humanservices.arkansas.gov/wp-content/uploads/ARChoices-Detailed-Overview.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-comprehensive-care",
@@ -516,7 +516,7 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. Arkansas checks resources from the bank statements you provide, so gather those before that step. If the office needs something specific it sends a written list with a due date.",
+        "Arkansas checks resources from the bank statements you provide, so gather those before you apply. If the office needs something specific it sends a written list with a due date.",
         "Income and asset limits update every April, verify current figures with DHS before applying",
         "QI program excludes people eligible for full Medicaid, but you can have QMB or SLMB with Medicaid",
         "Working disabled individuals may qualify with higher income under special earnings rules",
@@ -603,7 +603,7 @@
       "sourceUrl": "https://humanservices.arkansas.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -622,14 +622,14 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly benefits loaded onto an EBT card. Your loved one could receive $298/month for a single person household, or up to $546/month for two people, the exact amount depends on income after deductions like medical expenses over $35/month.\n\nSeniors get important advantages: no work requirements, no gross income limit (only net income after deductions must be below $1,305/month for one person), and higher asset limits of $4,500. Because Arkansas uses strict federal rules without expansions, meeting these exact thresholds is critical.\n\nBenefits work at grocery stores and some restaurants through the Restaurant Meals Program for eligible elderly or disabled participants. The EBT card cannot be used for alcohol, tobacco, or prepared hot foods at most locations.",
-      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
-      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
+      "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly benefits loaded onto an EBT card. From October 1, 2026, your loved one could receive up to $306/month for a single person household, or up to $562/month for two people, the exact amount depends on income after deductions like medical expenses over $35/month.\n\nSeniors get important advantages: no work requirements, no gross income limit (only net income after deductions must be at or below $1,330/month for one person from October 1, 2026), and higher asset limits of $4,500. Because Arkansas uses strict federal rules without expansions, meeting these exact thresholds is critical.\n\nBenefits work at grocery stores and some restaurants through the Restaurant Meals Program for eligible elderly or disabled participants. The EBT card cannot be used for alcohol, tobacco, or prepared hot foods at most locations.",
+      "savingsRange": "Up to $306/month ($3,672/year) for one person, October 1, 2026 through September 30, 2027",
+      "savingsSource": "USDA FY2027 maximum allotment for a one-person household in the 48 contiguous states and DC: $306/month, effective October 1, 2026 through September 30, 2027. The minimum for a one- or two-person household is $25/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
-          "Net income below $1,305/month (1 person)",
+          "Net income at or below $1,330/month (1 person) from October 1, 2026",
           "Assets under $4,500",
           "Arkansas resident",
           "U.S. citizen or qualified non-citizen"
@@ -638,19 +638,19 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1305
+            "monthlyLimit": 1330
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1763
+            "monthlyLimit": 1804
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 2221
+            "monthlyLimit": 2277
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 2680
+            "monthlyLimit": 2750
           }
         ],
         "assetLimits": {
@@ -779,7 +779,7 @@
         },
         {
           "question": "What if my loved one's Social Security puts them over the income limit?",
-          "answer": "Seniors 60+ get to deduct medical expenses over $35/month from their income. Medicare premiums, prescriptions, and out-of-pocket medical costs often reduce countable income enough to qualify. Net income after deductions must be below $1,305/month for one person."
+          "answer": "Seniors 60+ get to deduct medical expenses over $35/month from their income. Medicare premiums, prescriptions, and out-of-pocket medical costs often reduce countable income enough to qualify. Net income after deductions must be at or below $1,330/month for one person from October 1, 2026."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
@@ -819,7 +819,7 @@
       "sourceUrl": "https://humanservices.arkansas.gov/services-worth-knowing/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",

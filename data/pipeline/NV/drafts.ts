@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T08:46:01.814Z
+ * Last updated: 2026-09-28T09:21:59.477Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -547,7 +547,6 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QI has limited federal funding and applications may be put on hold if the allocation is exhausted during the fiscal year",
         "Income limits change every April 1 based on updated Federal Poverty Level guidelines",
         "QMB protects your loved one from provider billing on Medicare-covered services, but small Medicaid copays may apply for some services",
@@ -613,7 +612,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dss.nv.gov/programs/medical/general-medical-information/2-general-information-4mb/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -1353,7 +1352,7 @@ export const drafts: PipelineStateDrafts = {
             "type": "service-area"
           },
           {
-            "name": "Catholic Charities of Southern Nevada (Las Vegas area)",
+            "name": "Catholic Charities of Southern Nevada Meals on Wheels, Las Vegas and North Las Vegas only (702-385-5284)",
             "type": "service-area"
           },
           {
@@ -1366,7 +1365,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "If your loved one is 60+ and homebound due to illness, disability, or isolation, they can receive free home-delivered meals that meet federal nutrition standards. The program typically provides 7 meals per week: one hot meal plus up to 6 frozen meals per delivery, plus 2 emergency shelf-stable meals annually.\n\nBecause this is managed locally rather than statewide, you'll need to contact your county's Area Agency on Aging or designated provider. In Washoe County (Reno), call Senior Services directly. In Southern Nevada (Las Vegas area), Catholic Charities handles delivery. Your loved one may also qualify through Nevada Medicaid's Frail Elderly waiver if they're already enrolled.\n\nThe key requirement is being homebound, unable to attend congregate meal sites due to illness, disability, or geographic isolation. Most programs require an in-home assessment to confirm eligibility, not just a phone application.",
+      "intro": "If your loved one is 60+ and homebound due to illness, disability, or isolation, they can receive free home-delivered meals that meet federal nutrition standards. The program typically provides 7 meals per week: usually a weekly delivery of frozen meals, sometimes with one hot meal, plus 2 emergency shelf-stable meals annually.\n\nBecause this is managed locally rather than statewide, you'll need to contact your county's Area Agency on Aging or designated provider. In Washoe County (Reno), call Senior Services directly. In Las Vegas and North Las Vegas, Catholic Charities of Southern Nevada delivers the meals (702-385-5284). Your loved one may also qualify through Nevada Medicaid's Frail Elderly waiver if they're already enrolled.\n\nThe key requirement is being homebound, unable to attend congregate meal sites due to illness, disability, or geographic isolation. Most programs require an in-home assessment to confirm eligibility, not just a phone application.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": true,
@@ -1394,7 +1393,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Find your local provider",
-            "description": "Washoe County (Reno area): Call 775-328-2575. Southern Nevada (Las Vegas area): Contact Catholic Charities of Southern Nevada. Other areas: Call Nevada 211 at 2-1-1 for referrals."
+            "description": "Washoe County (Reno area): call 775-328-2575. Las Vegas or North Las Vegas: call Catholic Charities of Southern Nevada Meals on Wheels at 702-385-5284. Anywhere else in Nevada: call the Eldercare Locator at 1-800-677-1116 with the ZIP code, or Nevada Care Connection (Clark, Nye, Lincoln and Esmeralda counties: 702-933-1191; Carson City, Washoe and northern and rural counties: 877-861-1893)."
           },
           {
             "step": 2,
@@ -1431,7 +1430,7 @@ export const drafts: PipelineStateDrafts = {
         "Their home address and city or county. This decides which provider serves them, and some providers only cover certain cities.",
         "Why they cannot get out to a meal site. Illness, disability, mobility, or living too far out all count.",
         "A phone number and a good time to reach them. Staff confirm eligibility during an in-home visit, so someone will call to schedule.",
-        "Any food allergies or dietary restrictions, and whether they have freezer space. Deliveries are usually one hot meal plus frozen meals for the week.",
+        "Any food allergies or dietary restrictions, and whether they have freezer space. Deliveries are usually a weekly drop of frozen meals, sometimes with one hot meal, so ask about freezer space.",
         "If they are already on a Medicaid waiver, the case manager's name. Meals may come through that route instead."
       ],
       "contacts": [
@@ -1462,7 +1461,7 @@ export const drafts: PipelineStateDrafts = {
       ],
       "applicationNotes": [
         "Each county has different providers, Washoe County requires recertification through periodic home visits",
-        "Catholic Charities in Southern Nevada also serves disabled adults living with eligible seniors",
+        "Catholic Charities of Southern Nevada serves homebound adults 60+ who live year-round in Las Vegas or North Las Vegas, and delivers seven frozen meals a week.",
         "Medicaid waiver participants may access additional meals through case management beyond the standard 7 per week",
         "Geographic isolation counts as homebound status in rural counties where meal sites aren't accessible"
       ],
@@ -1520,7 +1519,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://adsd.nv.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "senior-respite-vouchers",
