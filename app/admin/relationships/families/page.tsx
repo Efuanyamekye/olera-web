@@ -395,7 +395,7 @@ function AdminSeekerRelationshipsInner() {
                 {moreTabs.find((t) => t.key === tab)?.label ?? "More"} <span aria-hidden="true">▾</span>
               </button>
               {moreOpen && (
-                <div className="absolute right-0 top-full z-20 mt-1 w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-gray-200 bg-white py-1.5 shadow-lg">
+                <div className="absolute right-0 top-full z-20 mt-1 w-max min-w-[15rem] max-w-[calc(100vw-2rem)] rounded-xl border border-gray-200 bg-white py-1.5 shadow-lg">
                   {moreTabs.map((t) => (
                     <button
                       key={t.key}
@@ -404,7 +404,7 @@ function AdminSeekerRelationshipsInner() {
                         setTab(t.key);
                         setMoreOpen(false);
                       }}
-                      className="flex w-full items-center justify-between gap-4 px-3.5 py-2 text-left text-[14px] text-gray-800 hover:bg-gray-50"
+                      className="flex w-full items-center justify-between gap-6 whitespace-nowrap px-3.5 py-2 text-left text-[14px] text-gray-800 hover:bg-gray-50"
                     >
                       {t.label}
                       <span className="text-[13px] text-gray-400">{rows ? counts[t.key] : ""}</span>
