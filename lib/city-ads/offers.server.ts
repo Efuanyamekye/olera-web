@@ -589,7 +589,7 @@ async function escalateUnqualified(
 export async function acceptOffer(
   db: SupabaseClient,
   offer: CityOfferRow,
-  source: "provider_sms" | "provider_page" | "admin" = "provider_sms",
+  source: "provider_sms" | "provider_page" | "provider_inbox" | "admin" = "provider_sms",
 ): Promise<{ won: boolean; reply: string }> {
   if (await cityLeadBlocked(db, offer.lead_id)) return { won: false, reply: cityOfferGoneSms() };
   const now = new Date().toISOString();
@@ -670,7 +670,7 @@ export async function acceptOffer(
     metadata: { lead_id: lead.id, offer_id: offer.id },
   });
   await sendSlackAlert(
-    `✅ City lead ${lead.id.slice(0, 8)} (${city}) ACCEPTED by ${providerName}${source === "admin" ? " (admin)" : source === "provider_page" ? " (link)" : " (text)"}. ${lead.first_name} told to expect a call ${callBy}. /admin/city-ads`,
+    `✅ City lead ${lead.id.slice(0, 8)} (${city}) ACCEPTED by ${providerName}${source === "admin" ? " (admin)" : source === "provider_inbox" ? " (inbox)" : source === "provider_page" ? " (link)" : " (text)"}. ${lead.first_name} told to expect a call ${callBy}. /admin/city-ads`,
   );
 
   // The receipt. Only for an ad the provider is actually paying for: one whose

@@ -5,6 +5,7 @@ import { postProviderMessage } from "@/lib/city-ads/thread.server";
 import { acceptOffer, declineOffer, type CityOfferRow } from "@/lib/city-ads/offers.server";
 import { adFamilyForWrite, getAdFamily, listAdFamilies } from "@/lib/city-ads/provider-inbox.server";
 import { recordProviderEvent } from "@/lib/analytics/provider-events";
+import { sendSlackAlert } from "@/lib/slack";
 
 /**
  * Families from ads, in the provider's inbox (lib/city-ads/provider-inbox.server.ts).
@@ -107,7 +108,7 @@ export async function POST(request: NextRequest) {
     }
     const minutesOpen = Math.round((Date.now() - new Date(o.offered_at).getTime()) / 60000);
     if (body.action === "take") {
-      const r = await acceptOffer(db, o, "provider_page");
+      const r = await acceptOffer(db, o, "provider_inbox");
       await recordOfferEvent(db, "ad_family_taken", owned.providerId, {
         lead_id: owned.lead.id,
         offer_id: o.id,
@@ -117,6 +118,11 @@ export async function POST(request: NextRequest) {
       if (!r.won) return NextResponse.json({ error: "Another agency already took this family." }, { status: 409 });
     } else {
       await declineOffer(db, o, null);
+      // A pass moves the family on to the next agency, so the team hears
+      // about it the same way it hears about a take.
+      await sendSlackAlert(
+        `↩️ City lead ${owned.lead.id.slice(0, 8)}: ${c.names.get(owned.providerId) ?? "A provider"} passed (inbox) after ${minutesOpen} min. Moving on. /admin/city-ads`,
+      );
       await recordOfferEvent(db, "ad_family_passed", owned.providerId, {
         lead_id: owned.lead.id,
         offer_id: o.id,
