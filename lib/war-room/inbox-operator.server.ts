@@ -4,6 +4,7 @@ import { isOptOutPhrase, matchOutcomeReply } from "@/lib/sms/inbound-intent";
 import { markSmsThreadHandled, MAX_SMS_BODY, replyToSmsThread } from "@/lib/sms/inbox-actions.server";
 import { runNoiseSweep } from "@/lib/support-email/noise-sweep.server";
 import { archiveSupportThreads, saveSupportDraft } from "@/lib/support-email/thread-actions.server";
+import { checkDraft, renderCheck } from "@/lib/war-room/draft-check.server";
 import { AGED_OUT_DAYS, callbackLine, loadWaitingVoicemails, sortVoicemails, STALE_CALLBACK_DAYS } from "@/lib/war-room/voicemail-triage.server";
 
 /**
@@ -393,7 +394,7 @@ export function renderDigest(pass: InboxPass): string {
   ].filter(Boolean);
   const numbers = pass.items.filter((item) => item.kind !== "question").map((item) => item.number);
   const how = numbers.length
-    ? `Reply "approve ${numbers.join(" ")}" for all of them, or "send ${numbers[0]}", "skip ${numbers[0]}", or "send ${numbers[numbers.length - 1]}: your edited text". Busy? Reply "later" and they come back in the next pass.`
+    ? `Reply "approve ${numbers.join(" ")}" for all of them, or "send ${numbers[0]}", "skip ${numbers[0]}", or "send ${numbers[numbers.length - 1]}: your edited text". "check ${numbers[numbers.length - 1]}" fact-checks a draft first. Busy? Reply "later" and they come back in the next pass.`
     : "";
   const more = pass.waitingElsewhere ? ` ${pass.waitingElsewhere} more need a person in the inbox.` : "";
   return `${parts.join("\n\n")}\n\n${how}${more}`.trim();
@@ -402,12 +403,12 @@ export function renderDigest(pass: InboxPass): string {
 // ---------------------------------------------------------------------------
 // Approvals
 
-export type InboxCommand = { verb: "approve" | "skip" | "later"; numbers: number[]; edit: string | null };
+export type InboxCommand = { verb: "approve" | "skip" | "later" | "check"; numbers: number[]; edit: string | null };
 
 /** "later", "not now", "busy": leave everything open for the next pass (TJ, 2026-09-27). */
 const LATER = /^(later|not now|busy|not now,? busy|tomorrow|snooze|remind me later)[.!]?$/i;
 
-/** "approve 1 2", "send 3", "yes 1,2", "skip 4", "send 3: new text", "later". Null when it is not a command. */
+/** "approve 1 2", "send 3", "yes 1,2", "skip 4", "send 3: new text", "later", "check 5 6". Null when it is not a command. */
 export function parseInboxCommand(text: string): InboxCommand | null {
   // A command on its first line counts even with a note under it. On
   // 2026-09-28 "approve 1 2 3 4\n\nFirst let's handle this chunk..." went to
@@ -422,6 +423,9 @@ export function parseInboxCommand(text: string): InboxCommand | null {
 
 function parseOne(text: string): InboxCommand | null {
   if (LATER.test(text.trim())) return { verb: "later", numbers: [], edit: null };
+  // "check 5 6" fact-checks drafts and sends nothing (TJ, 2026-09-28).
+  const check = text.trim().match(/^(?:check|fact[- ]?check|attack|verify)\s+((?:\d+[\s,&]*(?:and\s+)?)+)[.!]?$/i);
+  if (check) return { verb: "check", numbers: [...check[1].matchAll(/\d+/g)].map((m) => Number(m[0])), edit: null };
   const match = text.trim().match(/^(approve|send|yes|do|ok|skip|no)\s+((?:\d+[\s,&]*(?:and\s+)?)+|all)\s*(?::\s*([\s\S]+))?$/i);
   if (!match) return null;
   const verb = /^(skip|no)$/i.test(match[1]) ? "skip" : "approve";
@@ -520,6 +524,7 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
   if (command.verb === "later") {
     return `OK, nothing sent. The ${open.length} open ${open.length === 1 ? "item stays" : "items stay"} open and come back in the next inbox pass (${nextPassIn()}).`;
   }
+  if (command.verb === "check") return checkItems(db, open, command.numbers);
   const chosen = command.numbers.length ? open.filter((item) => command.numbers.includes(item.number)) : open.filter((item) => item.kind !== "question");
   const missing = command.numbers.filter((n) => !open.some((item) => item.number === n));
   const lines: string[] = [];
@@ -533,6 +538,19 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
   }
   if (missing.length) lines.push(`${missing.join(", ")}: not in the current list (already done, skipped, or from an older pass).`);
   return lines.join("\n");
+}
+
+/** "check 5 6": drafts checked in parallel, nothing sent, every item left open. */
+async function checkItems(db: SupabaseClient, open: StoredItem[], numbers: number[]): Promise<string> {
+  const lines: string[] = [];
+  const drafts = open.filter((item) => numbers.includes(item.number) && (item.kind === "sms_draft" || item.kind === "email_draft") && item.body);
+  const notDrafts = numbers.filter((n) => open.some((item) => item.number === n) && !drafts.some((item) => item.number === n));
+  const missing = numbers.filter((n) => !open.some((item) => item.number === n));
+  const results = await Promise.all(drafts.map((item) => checkDraft(db, item).catch((error: unknown) => (error instanceof Error ? error : new Error(String(error))))));
+  drafts.forEach((item, i) => lines.push(renderCheck(item, results[i])));
+  if (notDrafts.length) lines.push(`${notDrafts.join(", ")}: not a draft, nothing to check.`);
+  if (missing.length) lines.push(`${missing.join(", ")}: not in the current list (already done, skipped, or from an older pass).`);
+  return lines.join("\n\n");
 }
 
 /** Hours until the next cortex-inbox-pass run (vercel.json: 01:00 and 13:00 UTC). */
