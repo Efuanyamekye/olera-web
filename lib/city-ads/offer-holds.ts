@@ -10,6 +10,8 @@ export function offerStillHolds(
   o: { id: string; accepted_at: string | null; outcome?: string | null },
   lead: { accepted_offer_id?: string | null },
 ): boolean {
-  if (!o.accepted_at || o.outcome === "no_contact") return false;
+  // "no_contact": released by the follow-up ladder. "moved": moved on by the
+  // team from the case page (move.server.ts).
+  if (!o.accepted_at || o.outcome === "no_contact" || o.outcome === "moved") return false;
   return !lead.accepted_offer_id || lead.accepted_offer_id === o.id;
 }
