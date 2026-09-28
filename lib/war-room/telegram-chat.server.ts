@@ -4,6 +4,7 @@ import { loadChatMemory, memoryPromptText, refreshChatSummary, type ChatStore } 
 import { approvalReply, isApproval, MAX_IMAGE_BYTES, nothingWaitingReply } from "@/lib/war-room/dm-intake";
 import { wantsVoice } from "@/lib/war-room/voice.server";
 import { artifactSubject } from "@/lib/war-room/visualize.server";
+import { draftedNote, parseTeamMessage, TEAM, teamMessageText } from "@/lib/war-room/team-messages.server";
 import { handoffNote, handoffQuestion, handoffSavedReply, type Handoff } from "@/lib/war-room/handoff.server";
 import type { WarRoomProposal } from "@/lib/war-room/types";
 
@@ -56,6 +57,8 @@ export type TelegramDeps = {
   inbox?: { command: (text: string) => Promise<string | null> };
   /** Starts the Claude Code routine that runs his /visualize skill (visualize.server.ts). */
   visual?: { start: (text: string) => Promise<{ started: true; sessionUrl: string } | { started: false; reason: string }> };
+  /** Sends a Slack DM to a teammate on his command ("send that to Logan", team-messages.server.ts). */
+  team?: { send: (slackUserId: string, text: string) => Promise<{ success: boolean; error?: string }> };
   /** Stores a brief Cortex wrote for a Claude Code session ("hand this off", handoff.server.ts). */
   handoff?: { save: (body: string, note: string) => Promise<Handoff> };
 };
@@ -207,6 +210,32 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
       await remember(handled);
       return { handled: true, kind: "approval", reply: handled };
     }
+  }
+
+  // "send that to Logan" / "send to Logan: <text>": his words go to a
+  // teammate only on this command, and the reply says sent only when Slack
+  // accepted it. The text sent is shown back, so he sees exactly what went.
+  const teamCommand = deps.team ? parseTeamMessage(text) : null;
+  if (teamCommand && deps.team) {
+    const person = TEAM[teamCommand.to];
+    let note = teamCommand.text;
+    if (!note) {
+      const recent = await deps.store.recent(chatId, 6).catch(() => []);
+      const last = [...recent].reverse().find((entry) => entry.role === "cortex");
+      note = last ? draftedNote(last.text) : null;
+    }
+    let said: string;
+    if (!note) {
+      said = `Nothing sent: I can't find a drafted note for ${person.name} in my last message. Send "send to ${person.name}: " followed by the text.`;
+    } else {
+      const sent = await deps.team.send(person.slackUserId, teamMessageText(note)).catch((error: unknown) => ({ success: false, error: error instanceof Error ? error.message : String(error) }));
+      said = sent.success
+        ? `Sent to ${person.name} on Slack, from you:\n> ${note.replace(/\n+/g, "\n> ")}`
+        : `Not sent to ${person.name}: ${sent.error ?? "Slack refused it"}.`;
+    }
+    await reply(said);
+    await remember(said);
+    return { handled: true, kind: "approval", reply: said };
   }
 
   // "hand this off": Cortex writes a brief from the conversation and the

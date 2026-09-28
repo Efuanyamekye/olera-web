@@ -17,6 +17,7 @@ import { memoryChatStore, memoryPromptText } from "../lib/war-room/chat-memory.s
 import { handleTelegramUpdate, pickPhoto, sniffImageType, type TelegramDeps, type TelegramUpdate } from "../lib/war-room/telegram-chat.server";
 import { conversationSystem } from "../lib/war-room/conversation.server";
 import { artifactSubject } from "../lib/war-room/visualize.server";
+import { draftedNote, parseTeamMessage } from "../lib/war-room/team-messages.server";
 import { handoffNote, handoffTitle, type Handoff } from "../lib/war-room/handoff.server";
 
 // --- Formatting: Cortex writes Slack markup; Telegram reads HTML.
@@ -70,6 +71,19 @@ assert.equal(handoffNote("I'll note this for later"), null);
 assert.equal(handoffTitle("# Capture ZIP in the Benefits Finder\n\nbody", ""), "Capture ZIP in the Benefits Finder");
 assert.equal(handoffTitle("no heading", "the ZIP fix"), "the ZIP fix");
 console.log("handoff trigger checks passed");
+
+// --- "send that to Logan": only as a command at the start, only to the team list.
+assert.deepEqual(parseTeamMessage("send that to Logan"), { to: "logan", text: null });
+assert.deepEqual(parseTeamMessage("Ok, send it to Logan."), { to: "logan", text: null });
+assert.deepEqual(parseTeamMessage("send to Logan: Robbie call moved to 11"), { to: "logan", text: "Robbie call moved to 11" });
+assert.deepEqual(parseTeamMessage("tell logan: I'll be 5 min late"), { to: "logan", text: "I'll be 5 min late" });
+assert.equal(parseTeamMessage("Should I send that to Logan?"), null, "a question is conversation");
+assert.equal(parseTeamMessage("send that to Ces"), null, "only the team list");
+assert.equal(parseTeamMessage("Can you send Logan a quick note?"), null, "a request for a draft is conversation");
+const cortexSaid = 'Tighter, in your words:\n\n"Logan, quick context for Wednesday 10:30 with Robbie McCullough, Assisting Hands. Mostly a listening call."\n\nSame ask as before.';
+assert.equal(draftedNote(cortexSaid), "Logan, quick context for Wednesday 10:30 with Robbie McCullough, Assisting Hands. Mostly a listening call.");
+assert.equal(draftedNote("No quotes here, just advice."), null);
+console.log("team message checks passed");
 
 // --- The handler, with fakes.
 assert.equal(sniffImageType(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0]), "image/jpeg"), "image/png");
@@ -193,6 +207,29 @@ const update = (id: number, text: string, chat = FOUNDER, extra: Partial<NonNull
     await handleTelegramUpdate(update(41, "hand this off"), deps);
     assert.match(sent[0].text, /^Nothing handed off: saving it failed \(the handoffs table/);
     assert.match(sent[0].text, /The brief\./, "the brief is shown so it isn't lost");
+  }
+  // The drafted note goes to Logan only on the command, and the reply shows exactly what went.
+  {
+    const sentSlack: Array<{ id: string; text: string }> = [];
+    const { deps, sent, store } = fakes({ team: { send: async (id, text) => { sentSlack.push({ id, text }); return { success: true }; } } });
+    await store.append(FOUNDER, { surface: "telegram", role: "cortex", kind: "message", text: 'Here:\n\n"Logan, quick context for Wednesday with Robbie. Mostly a listening call, nothing committed."', at: "2026-09-28T11:00:00Z" });
+    await handleTelegramUpdate(update(50, "send that to Logan"), deps);
+    assert.equal(sentSlack.length, 1);
+    assert.equal(sentSlack[0].id, "U013S7E67RN");
+    assert.match(sentSlack[0].text, /^\*From TJ\* \(sent through Cortex\):\n\nLogan, quick context/);
+    assert.match(sent[0].text, /^Sent to Logan on Slack, from you:\n> Logan, quick context/);
+  }
+  {
+    const { deps, sent } = fakes({ team: { send: async () => ({ success: false, error: "not_in_channel" }) } });
+    await handleTelegramUpdate(update(51, "send to Logan: hi"), deps);
+    assert.equal(sent[0].text, "Not sent to Logan: not_in_channel.");
+  }
+  {
+    const sentSlack: string[] = [];
+    const { deps, sent } = fakes({ team: { send: async (_id, text) => { sentSlack.push(text); return { success: true }; } } });
+    await handleTelegramUpdate(update(52, "send that to Logan"), deps);
+    assert.equal(sentSlack.length, 0, "nothing drafted, nothing sent");
+    assert.match(sent[0].text, /^Nothing sent/);
   }
   console.log("handler checks passed");
 
