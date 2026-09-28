@@ -380,8 +380,11 @@ function AdminSeekerRelationshipsInner() {
               {rows ? <span className={`ml-1.5 text-[13px] ${tab === t.key ? "text-gray-500" : "text-gray-400"}`}>{counts[t.key]}</span> : null}
             </button>
           ))}
+        </div>
+        {/* Outside the scrolling strip on purpose: a scrolling box clips
+            anything that opens below it, and the menu was invisible. */}
           {moreTabs.length > 0 && (
-            <div className="relative">
+            <div className="relative -mb-px shrink-0">
               <button
                 type="button"
                 onClick={() => setMoreOpen((o) => !o)}
@@ -392,7 +395,7 @@ function AdminSeekerRelationshipsInner() {
                 {moreTabs.find((t) => t.key === tab)?.label ?? "More"} <span aria-hidden="true">▾</span>
               </button>
               {moreOpen && (
-                <div className="absolute left-0 top-full z-20 mt-1 w-64 rounded-xl border border-gray-200 bg-white py-1.5 shadow-lg">
+                <div className="absolute right-0 top-full z-20 mt-1 w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-gray-200 bg-white py-1.5 shadow-lg">
                   {moreTabs.map((t) => (
                     <button
                       key={t.key}
@@ -411,7 +414,6 @@ function AdminSeekerRelationshipsInner() {
               )}
             </div>
           )}
-        </div>
         <button
           type="button"
           onClick={() => setFindOpen((o) => !o)}
