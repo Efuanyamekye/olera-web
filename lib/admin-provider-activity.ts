@@ -6,6 +6,8 @@ export const MEANINGFUL_PROVIDER_ACTIONS = [
   "phone_clicked",
   "email_link_clicked",
   "continue_in_inbox",
+  "ad_family_taken",
+  "ad_family_passed",
   "question_responded",
   "review_viewed",
   "reviews_cta_clicked",

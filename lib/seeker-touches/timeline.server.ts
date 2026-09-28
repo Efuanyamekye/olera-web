@@ -1,4 +1,5 @@
 import { getServiceClient } from "@/lib/admin";
+import { benefitsQueueSignals } from "@/lib/benefits/queue-signals";
 import { seekerEventLabel } from "@/lib/activity/seeker-categories";
 import { getConnectionTemperature, providerResponded, type ConnectionLike } from "@/lib/connection-temperature";
 import { getCityConfig } from "@/lib/city-ads/config";
@@ -787,10 +788,45 @@ async function candidateIds(
   for (const r of (threads.data ?? []) as { matched_profile_id: string; last_message_at: string }[]) note(r.matched_profile_id, r.last_message_at);
   for (const r of (answered.data ?? []) as { from_profile_id: string; at: string }[]) note(r.from_profile_id, r.at);
 
-  return Array.from(latest.entries())
+  const recent = Array.from(latest.entries())
     .sort((a, b) => (a[1] < b[1] ? 1 : -1))
     .slice(0, MAX_FAMILIES)
     .map(([id]) => id);
+
+  // Benefits families with work waiting on a person are cases even if they
+  // never wrote in: a letter the verdict held for review, an open help case,
+  // or an urgent answer to the companion. Without this, 39 letters waiting
+  // for a read on 2026-09-28 were only findable on /admin/benefits. Added
+  // after the cap so a busy window never pushes them out.
+  const [letters, helps, urgent] = await Promise.all([
+    db
+      .from("business_profiles")
+      .select("id")
+      .eq("type", "family")
+      .eq("metadata->benefits_navigator->>status", "pending")
+      .in("metadata->benefits_navigator->packet->>route", ["review", "ask"])
+      .limit(500),
+    db
+      .from("business_profiles")
+      .select("id")
+      .eq("type", "family")
+      .not("metadata->benefits_case->>help_opened_at", "is", null)
+      .limit(500),
+    db
+      .from("business_profiles")
+      .select("id")
+      .eq("type", "family")
+      .eq("metadata->benefits_companion->urgency->>answer", "yes")
+      .limit(200),
+  ]);
+  const seen = new Set(recent);
+  for (const r of [...(urgent.data ?? []), ...(helps.data ?? []), ...(letters.data ?? [])] as { id: string }[]) {
+    if (!seen.has(r.id)) {
+      seen.add(r.id);
+      recent.push(r.id);
+    }
+  }
+  return recent;
 }
 
 /** Pull every feed for a known set of family ids. */
@@ -1475,6 +1511,7 @@ export async function loadSeekerRelationships(opts?: { days?: number }): Promise
             detail: a.lastInbound.detail ?? null,
           }
         : null,
+      benefits: benefitsQueueSignals(p.metadata as Record<string, unknown> | null, now.getTime()),
     };
   });
 
@@ -1482,6 +1519,7 @@ export async function loadSeekerRelationships(opts?: { days?: number }): Promise
   // made, then someone we cannot reach. After that, longest quiet — but only
   // within "open", because a dormant family being quiet is not news.
   const rank = (r: SeekerRelationshipRow): number => {
+    if (r.benefits?.urgent_at) return 0;
     if (r.flags.includes("awaiting_reply")) return 0;
     if (r.flags.includes("promise_owed") || r.flags.includes("tried_three")) return 1;
     if (r.flags.includes("unreachable")) return 2;

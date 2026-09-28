@@ -250,7 +250,7 @@ function AdminSeekerRelationshipsInner() {
   }, [load]);
 
   const counts = useMemo(() => {
-    const c: Record<Tab, number> = { reply: 0, call: 0, follow: 0, close: 0, record: 0, reach: 0, all: 0, archived: 0 };
+    const c: Record<Tab, number> = { urgent: 0, reply: 0, letter: 0, help: 0, call: 0, follow: 0, close: 0, record: 0, reach: 0, all: 0, archived: 0 };
     for (const r of rows ?? []) for (const t of TABS) if (matches(r, t.key)) c[t.key] += 1;
     return c;
   }, [rows]);

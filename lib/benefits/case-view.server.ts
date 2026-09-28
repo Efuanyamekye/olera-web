@@ -27,6 +27,7 @@ import {
 } from "@/lib/family-comms/benefits-cascade.server";
 import { readBenefitsNavigator } from "@/lib/family-comms/benefits-navigator.server";
 import {
+  helpCaseWaiting,
   holdNeedsExplicitResume,
   isBenefitsAutomationHeld,
   isBenefitsFamilyMeta,
@@ -152,7 +153,7 @@ export async function loadBenefitsCaseView(db: SupabaseClient, profileId: string
   const hold = readBenefitsHold(meta);
   const held = isBenefitsAutomationHeld(meta) && hold;
   const help = (meta.benefits_case as (BenefitsHelpCase & { contacted_at?: string; resolved_at?: string }) | undefined) ?? {};
-  const helpOpen = !!help.help_opened_at && !(help.resolved_at && help.resolved_at > help.help_opened_at);
+  const helpOpen = helpCaseWaiting(help);
 
   const companionRaw = meta.benefits_companion as
     | { arm?: string; degraded?: boolean; urgency?: { answer?: string } | null; day14?: { answer?: string } | null }

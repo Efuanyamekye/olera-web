@@ -970,6 +970,7 @@ function InboxContent() {
           leadId={selectedAdId}
           onBack={() => setSelectedAdId(null)}
           onChanged={loadAdFamilies}
+          signedInAs={user?.email ?? null}
           className="flex w-full lg:flex-1"
         />
       ) : isViewingPendingRequest && selectedConnection ? (
