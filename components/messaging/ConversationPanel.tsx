@@ -1,5 +1,6 @@
 "use client";
 
+import InboxEmptyState from "@/components/messaging/InboxEmptyState";
 import { useState, useRef, useCallback, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -707,17 +708,15 @@ export default function ConversationPanel({
   // ── Empty state ──
   if (!connection) {
     return (
-      <div className={`flex flex-col items-center justify-center bg-gray-50 ${className}`}>
-        <div className="text-center">
-          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <rect x="2" y="4" width="20" height="16" rx="2" strokeWidth={1.5} />
-              <path d="M22 7l-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7" strokeWidth={1.5} />
-            </svg>
-          </div>
-          <p className="text-lg font-display font-medium text-gray-900 mb-1">Select a conversation</p>
-          <p className="text-[15px] text-gray-500">Choose from your existing conversations to start messaging</p>
-        </div>
+      <div className={`flex flex-col items-center justify-center bg-white ${className}`}>
+        <InboxEmptyState
+          title="Pick a conversation"
+          body={
+            variant === "provider"
+              ? "Choose a family on the left to read what they need and reply."
+              : "Choose a provider on the left to pick up where you left off."
+          }
+        />
       </div>
     );
   }
