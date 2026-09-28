@@ -7,6 +7,7 @@
  * drafts up to three emails, about $0.06). Nothing is stored or sent.
  */
 import assert from "node:assert/strict";
+import { isRealObjection, parseObjections, renderCheck } from "../lib/war-room/draft-check.server";
 import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
@@ -26,6 +27,9 @@ assert.equal(parseInboxCommand("send me the plan"), null);
 assert.deepEqual(parseInboxCommand("approve 1 2 3 4\n\nFirst let's handle this chunk and then I'll handle the next after"), { verb: "approve", numbers: [1, 2, 3, 4], edit: null }, "a note under the command is fine");
 assert.deepEqual(parseInboxCommand("send 5: Hi,\nsecond line of the text"), { verb: "approve", numbers: [5], edit: "Hi,\nsecond line of the text" }, "a multi-line edit still works");
 assert.equal(parseInboxCommand("I think we should approve 1 2 later"), null, "a command mid-sentence is not one");
+assert.deepEqual(parseInboxCommand("check 5 6"), { verb: "check", numbers: [5, 6], edit: null });
+assert.deepEqual(parseInboxCommand("fact-check 5 and 6"), { verb: "check", numbers: [5, 6], edit: null });
+assert.equal(parseInboxCommand("check the voicemails"), null, "check without numbers is a question");
 console.log("command checks passed");
 
 // --- SMS bookkeeping vs conversation.
@@ -71,6 +75,19 @@ assert.match(digest, /9 more need a person/);
 assert.equal(cleanSubject("Re: Re:Ã‚Â Your first step for SMMC"), "Your first step for SMMC");
 assert.equal(clip("one two three four five", 12), "one two...");
 console.log("digest checks passed");
+
+// --- Draft checks. On 28 Sep Perplexity returned three "Supported by an agency page" rows for a clean draft.
+assert.equal(isRealObjection("Supported by an agency page; no contradiction found."), false);
+assert.equal(isRealObjection("Not supported by any agency page found."), true, "no source is an objection");
+assert.equal(isRealObjection("The agency page gives 352-373-7667 x222 for appointments."), true);
+const objections = parseObjections('Here: {"objections":[{"target":"352-373-7667","problem":"Page says call 352-373-7667 x222 for an appointment.","source_quote":"Please call 352-373-7667 x222 for an appointment.","source_url":"https://www.cfcaa.org/weatherization/","confidence":"medium"},{"target":"800-713-9023","problem":"Supported by an agency page.","source_quote":"","source_url":"","confidence":"high"}]}');
+assert.equal(objections.length, 1);
+assert.equal(parseObjections('{"objections":[{"target":"it&#39;s open","problem":"Page says closed.","confidence":"high"}]}')[0].target, "it's open", "entities are decoded");
+const checked = item(6, "sms_draft", "Text a family.", "CFCAA: 352-373-7667.");
+assert.match(renderCheck(checked, objections), /6: 1 objection\.[\s\S]*x222[\s\S]*send 6: your edited text/);
+assert.match(renderCheck(checked, []), /6: clean/);
+assert.match(renderCheck(checked, new Error("timeout")), /couldn't check it \(timeout\)/);
+console.log("draft check checks passed");
 
 // --- Voicemail: one line per caller, the newest kept.
 const vm = (id: string, ageDays: number, number: string, worthIt = true) => ({ id, ageDays, worthIt, who: "Jamie", number, reason: "follow-up" });

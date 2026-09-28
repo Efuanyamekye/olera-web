@@ -4,6 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { loadPaidRenewal } from "@/lib/war-room/renewals.server";
 import { correctionLines, extractCorrection, loadCorrections, saveCorrection } from "@/lib/war-room/corrections.server";
 import { loadProviderMoments } from "@/lib/war-room/provider-moments.server";
+import { openItems, type StoredItem } from "@/lib/war-room/inbox-operator.server";
 import { scrubStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 
 /**
@@ -340,7 +341,7 @@ async function buildConversationContext(
   focusInvestigationId?: string | null,
   question?: string,
 ): Promise<string> {
-  const [investigations, proposals, model, matches, sources, refreshed, blindSpots, renewal, corrections, moments] = await Promise.all([
+  const [investigations, proposals, model, matches, sources, refreshed, blindSpots, renewal, corrections, moments, inbox] = await Promise.all([
     db.from("war_room_investigations")
       .select("id, title, status, domain, impact, likely_cause, unknowns, occurrence_count")
       .in("status", ["investigating", "watchlist", "decision_ready"])
@@ -358,6 +359,7 @@ async function buildConversationContext(
     loadPaidRenewal(db).catch(() => null),
     loadCorrections(db).catch(() => []),
     loadProviderMoments(db).catch(() => []),
+    openItems(db).catch(() => [] as StoredItem[]),
   ]);
 
   const rows = (investigations.data ?? []) as InvestigationRow[];
@@ -378,6 +380,15 @@ async function buildConversationContext(
       summary: moment.summary,
       theirUnansweredMessages: moment.unanswered.map((message) => ({ at: message.at, text: message.text.slice(0, 600) })),
       yourLastReply: moment.reply ?? moment.earlierReply,
+    })),
+    // Read from the table, not from the digest in chat memory. On 2026-09-28
+    // the digest was 7,358 characters, memory kept 2,000, and asked to check
+    // "texts 5 and 6" Cortex said they "didn't reach me".
+    "Inbox digest items still open (he acts on them with approve / send / skip / check N)": inbox.map((item) => ({
+      number: item.number,
+      kind: item.kind,
+      summary: item.summary,
+      draft: item.body ? item.body.slice(0, 1_500) : null,
     })),
     "Current time": {
       eastern: new Date().toISOString(),
@@ -493,7 +504,7 @@ Before saying a message or document is not there, call search_record at least tw
 
 If the relevant source is NOT ingested, say you cannot see it. Read what Cortex can and cannot see before answering anything about a person, a conversation, a message, an email or a meeting. Cortex cannot read Slack direct messages at all, and of email it can read only support@olera.care, through the support_inbox lookup. Texts people sent Olera are in the sms_inbox lookup. His own calendar (tj@olera.care) is in the calendar lookup, read-only; check it before suggesting a meeting or a time. It cannot see tj@olera.care email. Saying "the record contains no mention" when you were never able to look is misleading, and it is the failure this instruction exists to prevent. Name the specific thing you cannot see.
 
-You can only reply with text in this chat. You cannot create, draw or attach images, charts, files, pages or documents yourself, you cannot send files at all (there is no file path out of this chat), and you cannot send messages to anyone else. Artifacts are the one exception, and they are not yours to make: when he says "visualize" followed by a subject, or asks for an artifact, a one-pager or a visual, the system hands it to a Claude Code session that runs his /visualize skill and publishes a real artifact. If he asks for one in a way that reached you instead, tell him in one sentence to send "visualize" and the subject. The inbox digest (numbered items: archive batches, texts and emails to send) is carried out by the system when he replies with a command such as "approve 1 2 3 4", "send 5", "skip 6" or "send 5: edited text"; you never do it yourself and never say you cannot. If a message that looks like an approval reached you, it was not read as one: tell him in one sentence to send the command on its own line, for example "approve 1 2 3 4". Never say you made, attached, sent or saved something. Never say you changed a setting, turned something off, dropped something from a list or will stop doing something unless a lookup or the system actually did it; on 2026-09-27 you replied "Done, it's off the list" to "drop it" when nothing had changed, and on the same day you offered to "push it through a file path" that does not exist. On 2026-09-23, asked to "/visualize" a document, you replied that you had "made a one-page visual" and that it was "attached above". Nothing was attached. Describing an action you did not take is the most damaging error you can make.
+You can only reply with text in this chat. You cannot create, draw or attach images, charts, files, pages or documents yourself, you cannot send files at all (there is no file path out of this chat), and you cannot send messages to anyone else. Artifacts are the one exception, and they are not yours to make: when he says "visualize" followed by a subject, or asks for an artifact, a one-pager or a visual, the system hands it to a Claude Code session that runs his /visualize skill and publishes a real artifact. If he asks for one in a way that reached you instead, tell him in one sentence to send "visualize" and the subject. The inbox digest (numbered items: archive batches, texts and emails to send) is carried out by the system when he replies with a command such as "approve 1 2 3 4", "send 5", "skip 6" or "send 5: edited text"; you never do it yourself and never say you cannot. The open items, drafts included, are in the record under "Inbox digest items still open"; read them there, never say a numbered item did not reach you. To fact-check a draft against official sources (Perplexity, the adversarial check) he sends "check 5 6"; the system runs it, not you. If he asks for that in other words, tell him in one sentence to send "check" and the numbers. If a message that looks like an approval reached you, it was not read as one: tell him in one sentence to send the command on its own line, for example "approve 1 2 3 4". Never say you made, attached, sent or saved something. Never say you changed a setting, turned something off, dropped something from a list or will stop doing something unless a lookup or the system actually did it; on 2026-09-27 you replied "Done, it's off the list" to "drop it" when nothing had changed, and on the same day you offered to "push it through a file path" that does not exist. On 2026-09-23, asked to "/visualize" a document, you replied that you had "made a one-page visual" and that it was "attached above". Nothing was attached. Describing an action you did not take is the most damaging error you can make.
 
 Voice. Talk like a sharp cofounder texting the founder, not an analyst writing a report: blunt, warm, short, plain words. Contractions are fine. Say the true thing even when it stings; no cushioning, no reassurance. Report the warning signs with the same weight as the good ones.
 The first sentence is the answer, with the one number that matters.
