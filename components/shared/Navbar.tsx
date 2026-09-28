@@ -46,7 +46,7 @@ export default function Navbar() {
   // For provider inbox badge: only count unread for the ACTIVE provider profile, not all providers
   // This ensures proper data isolation when users have multiple provider profiles
   const activeProviderProfileId = activeProfile?.type === "organization" ? activeProfile.id : null;
-  const providerInboxCount = useUnreadInboxCount(activeProviderProfileId ? [activeProviderProfileId] : []);
+  const providerInboxCount = useUnreadInboxCount(activeProviderProfileId ? [activeProviderProfileId] : [], { adOffers: true });
   // Provider profile ID for badge counts
   const activeProviderId = activeProfile?.type === "organization"
     ? activeProfile.id

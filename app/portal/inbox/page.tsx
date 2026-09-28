@@ -582,17 +582,31 @@ function InboxContent() {
   // Families from ads sit in the same inbox but come from their own tables
   // (lib/city-ads/provider-inbox.server.ts), so they load on their own.
   const [adFamilies, setAdFamilies] = useState<AdFamilyListItem[]>([]);
+  const autoOpenedAdRef = useRef(false);
+  const userPickedRef = useRef(false);
   const loadAdFamilies = useCallback(async () => {
     if (!user || !hasProviderProfile) return;
     try {
       const res = await fetch("/api/provider/ad-families", { cache: "no-store" });
       if (!res.ok) return;
       const json = await res.json();
-      setAdFamilies((json.families ?? []) as AdFamilyListItem[]);
+      const families = (json.families ?? []) as AdFamilyListItem[];
+      setAdFamilies(families);
+      window.dispatchEvent(new Event("olera:ad-families-changed"));
+      // On a laptop, a family waiting on her answer opens first, over the
+      // newest inquiry: it is the one with a clock on it. Once per visit, and
+      // never over something she picked herself.
+      const waiting = families.find((f) => f.access === "offered");
+      // A link that names a conversation (?id=, ?ad=) wins over this.
+      if (waiting && !autoOpenedAdRef.current && !userPickedRef.current && !urlConnectionId && !urlAdLeadId && window.innerWidth >= 1024) {
+        autoOpenedAdRef.current = true;
+        setSelectedAdId(waiting.leadId);
+        setSelectedId(null);
+      }
     } catch (err) {
       console.error("[inbox] ad families failed:", err);
     }
-  }, [user, hasProviderProfile]);
+  }, [user, hasProviderProfile, urlConnectionId, urlAdLeadId]);
   useEffect(() => {
     loadAdFamilies();
   }, [loadAdFamilies]);
@@ -603,6 +617,7 @@ function InboxContent() {
     }
   }, [urlAdLeadId]);
   const handleSelectAd = useCallback((leadId: string) => {
+    userPickedRef.current = true;
     setSelectedAdId(leadId);
     setSelectedId(null);
   }, []);
@@ -757,7 +772,10 @@ function InboxContent() {
   // Close detail panel when switching conversations
   const handleSelect = useCallback((id: string | null) => {
     setSelectedId(id);
-    if (id) setSelectedAdId(null);
+    if (id) {
+      userPickedRef.current = true;
+      setSelectedAdId(null);
+    }
   }, []);
 
   // Open report modal
