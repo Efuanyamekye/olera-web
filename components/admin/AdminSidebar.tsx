@@ -267,6 +267,25 @@ const mobileNavItems: (NavItem & { icon: React.ReactNode })[] = [
 
 const STORAGE_KEY = "admin-sidebar-collapsed";
 
+/**
+ * How wide the rail is, in pixels, and where it may go.
+ *
+ * MIN is md:w-52 to the pixel, so dragging all the way left lands on exactly
+ * the layout everybody had before the handle existed rather than near it.
+ * MAX is where widening stops paying: the longest row is "Care Seeker
+ * Relationships" with three or four names under it, and past this the rail is
+ * only taking width off the page you are reading.
+ *
+ * Per device rather than per person. Pins are in the database deliberately so
+ * they follow somebody between machines; the right width is a property of the
+ * monitor in front of you, so it stays with the browser, next to the
+ * section-collapse state that already lives there.
+ */
+const WIDTH_KEY = "admin-sidebar-width";
+const MIN_WIDTH = 208;
+const MAX_WIDTH = 360;
+const clampWidth = (px: number) => Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, Math.round(px)));
+
 // Every page a hover-star can pin. Pinned hrefs are stored per admin
 // (admin_users.favorites) and resolve their labels here — a retired route
 // simply stops rendering, no cleanup needed.
@@ -406,6 +425,56 @@ export default function AdminSidebar({
     },
     [pageOwners, people, toast],
   );
+
+  // How wide the rail is. Read from storage after mount, never during render,
+  // so the server and the first client pass agree on MIN_WIDTH and the markup
+  // does not mismatch.
+  // Applied to the rail as an inline style rather than a class, because the
+  // width is a number now and a Tailwind class cannot be built from one at
+  // runtime. Below md the rail is display:none, so it is inert there.
+  const [width, setWidth] = useState(MIN_WIDTH);
+  const [dragging, setDragging] = useState(false);
+  const widthRef = useRef(MIN_WIDTH);
+  const dragFrom = useRef<{ x: number; width: number } | null>(null);
+
+  const applyWidth = useCallback((px: number) => {
+    const next = clampWidth(px);
+    widthRef.current = next;
+    setWidth(next);
+  }, []);
+
+  useEffect(() => {
+    try {
+      const saved = Number(localStorage.getItem(WIDTH_KEY));
+      if (Number.isFinite(saved) && saved > 0) applyWidth(saved);
+    } catch {
+      /* a browser with storage blocked gets the default width */
+    }
+  }, [applyWidth]);
+
+  const rememberWidth = useCallback(() => {
+    try {
+      localStorage.setItem(WIDTH_KEY, String(widthRef.current));
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  // The pointer leaves the 5px handle almost immediately, and pointer capture
+  // keeps the events coming — but the cursor and text selection belong to
+  // whatever is underneath, so they are held still for the length of a drag.
+  useEffect(() => {
+    if (!dragging) return;
+    const { body } = document;
+    const cursor = body.style.cursor;
+    const select = body.style.userSelect;
+    body.style.cursor = "col-resize";
+    body.style.userSelect = "none";
+    return () => {
+      body.style.cursor = cursor;
+      body.style.userSelect = select;
+    };
+  }, [dragging]);
 
   // v9.0 Phase 7: medjobs section toggles open/close. Defaults open
   // since the section is the primary daily-use surface.
@@ -576,11 +645,14 @@ export default function AdminSidebar({
         inert={desktopHidden}
         className={[
           "hidden md:sticky md:top-0 md:flex md:h-dvh md:shrink-0 md:flex-col border-r bg-white",
-          "transition-[width,opacity,border-color] duration-200 ease-out",
+          // A transition on width is right for the drawer opening and wrong
+          // for a drag: 200ms of easing behind the pointer reads as lag.
+          dragging ? "" : "transition-[width,opacity,border-color] duration-200 ease-out",
           desktopHidden
-            ? "md:w-0 opacity-0 border-transparent pointer-events-none overflow-hidden"
-            : "md:w-52 opacity-100 border-gray-100 overflow-y-auto",
+            ? "opacity-0 border-transparent pointer-events-none overflow-hidden"
+            : "opacity-100 border-gray-100 overflow-y-auto",
         ].join(" ")}
+        style={{ width: desktopHidden ? 0 : width }}
       >
         <nav className="flex-1 min-w-52 px-3 pt-3 pb-3">
           {/* The drawer control sits above navigation-level actions so hiding
@@ -881,6 +953,63 @@ export default function AdminSidebar({
           </div>
         </div>
       </aside>
+
+      {/*
+        The resize handle.
+
+        A sibling of the rail rather than a child of it: the rail is the
+        scroll container, so anything positioned inside would scroll away
+        from the edge it is supposed to sit on. As a flex item in the admin
+        layout's row it stays put with no positioning at all.
+
+        Invisible until hovered. It is a 5px strip beside a border that
+        already looks like a divider, so drawing it all the time adds a line
+        nobody asked for.
+      */}
+      {!desktopHidden && (
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize the sidebar"
+          title="Drag to resize · double-click to reset"
+          onPointerDown={(e) => {
+            e.preventDefault();
+            dragFrom.current = { x: e.clientX, width: widthRef.current };
+            e.currentTarget.setPointerCapture(e.pointerId);
+            setDragging(true);
+          }}
+          onPointerMove={(e) => {
+            const from = dragFrom.current;
+            if (!from) return;
+            applyWidth(from.width + (e.clientX - from.x));
+          }}
+          onPointerUp={(e) => {
+            if (!dragFrom.current) return;
+            dragFrom.current = null;
+            e.currentTarget.releasePointerCapture(e.pointerId);
+            setDragging(false);
+            rememberWidth();
+          }}
+          // Lost capture without a pointerup — a dropped pointer, a window
+          // switch mid-drag. Ending the drag here keeps the body cursor from
+          // staying col-resize over the whole app.
+          onLostPointerCapture={() => {
+            if (!dragFrom.current) return;
+            dragFrom.current = null;
+            setDragging(false);
+            rememberWidth();
+          }}
+          onDoubleClick={() => {
+            applyWidth(MIN_WIDTH);
+            rememberWidth();
+          }}
+          className={[
+            "hidden md:block w-[5px] shrink-0 cursor-col-resize touch-none",
+            "transition-colors duration-100",
+            dragging ? "bg-primary-300" : "bg-transparent hover:bg-primary-200",
+          ].join(" ")}
+        />
+      )}
 
       {/* Mobile bottom nav — 5 key items only. Not on a family's case page:
           it floats its own back and Message buttons, and a second fixed bar
