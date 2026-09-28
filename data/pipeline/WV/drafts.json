@@ -17,7 +17,7 @@
         "stateVariation": true,
         "localEntities": [
           {
-            "name": "Local WV DHHR field offices; central BMS in Charleston.",
+            "name": "County DoHS offices; central BMS in Charleston.",
             "type": "service-area"
           }
         ]
@@ -75,7 +75,7 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online through WV DHHR portal, by phone at (304) 587-0105, or at local DHHR offices with processing in 45 days or less.",
+        "summary": "Apply online through the WV Bureau for Medical Services website, by phone at (304) 587-0105, or at your county DoHS office with processing in 45 days or less.",
         "steps": [
           {
             "step": 1,
@@ -85,7 +85,7 @@
           {
             "step": 2,
             "title": "Submit application using form DFA-QSQ-1",
-            "description": "Apply online at bms.wv.gov, call WV Bureau for Medical Services at (304) 587-0105, or visit your local DHHR field office to submit the DFA-QSQ-1 form."
+            "description": "Apply online at bms.wv.gov, call WV Bureau for Medical Services at (304) 587-0105, or visit your county DoHS office to submit the DFA-QSQ-1 form."
           },
           {
             "step": 3,
@@ -103,7 +103,7 @@
         "tip": "Apply for QI early in the calendar year since funding is limited and allocated first-come, first-served.",
         "urls": [
           {
-            "label": "WV DHHR Online Application Portal",
+            "label": "WV Bureau for Medical Services website",
             "url": "https://bms.wv.gov"
           },
           {
@@ -135,14 +135,14 @@
           "hours": "Monday-Friday 8am-5pm ET"
         },
         {
-          "label": "Local DHHR Field Office",
+          "label": "County DoHS Office",
           "phone": null,
           "description": "In-person application assistance and document submission",
           "hours": "Varies by location"
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "When you apply, you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QI program has limited federal funding, apply early in the year for best chance of approval before funds run out",
         "Income disregards apply ($20 general exclusion plus other specific exclusions) which may help you qualify even if income appears slightly over limits",
         "Lump sum payments count as income only in the month received, not ongoing months",
@@ -173,7 +173,7 @@
         },
         {
           "question": "What happens if my loved one's income changes after approval?",
-          "answer": "Report income changes to your local DHHR office within 30 days. If income increases, your loved one might move to a different program tier or lose eligibility. If income decreases, they might qualify for a program with better benefits. Changes are effective the first of the month after reporting."
+          "answer": "Report income changes to your county DoHS office within 30 days. If income increases, your loved one might move to a different program tier or lose eligibility. If income decreases, they might qualify for a program with better benefits. Changes are effective the first of the month after reporting."
         },
         {
           "question": "Does my loved one's house count against the asset limit even if it's worth $200,000?",
@@ -181,7 +181,7 @@
         },
         {
           "question": "Can I apply on behalf of my elderly loved one who has dementia?",
-          "answer": "Yes, family members can apply as authorized representatives. You'll need to complete additional paperwork establishing your authority to act on their behalf. If you have power of attorney or guardianship papers, bring those to the DHHR office when applying."
+          "answer": "Yes, family members can apply as authorized representatives. You'll need to complete additional paperwork establishing your authority to act on their behalf. If you have power of attorney or guardianship papers, bring those to the county DoHS office when applying."
         },
         {
           "question": "How long does QI program approval last?",
@@ -196,8 +196,8 @@
           "answer": "Yes, these programs work with both Original Medicare and Medicare Advantage plans. The savings program pays premiums and cost-sharing regardless of which Medicare option your loved one chooses. They'll also automatically get Extra Help for prescription drugs in any Part D plan."
         },
         {
-          "question": "What if the DHHR office says my loved one makes too much money but I think they calculated wrong?",
-          "answer": "Request a written denial letter explaining exactly how they calculated income. West Virginia applies a $20 general income disregard and other specific exclusions that caseworkers sometimes miss. You can appeal the decision within 90 days and request a fair hearing through the DHHR appeals process."
+          "question": "What if the county DoHS office says my loved one makes too much money but I think they calculated wrong?",
+          "answer": "Request a written denial letter explaining exactly how they calculated income. West Virginia applies a $20 general income disregard and other specific exclusions that caseworkers sometimes miss. You can appeal the decision within 90 days and request a fair hearing through the state fair hearing process."
         }
       ],
       "layoutIntent": {
@@ -213,7 +213,7 @@
       "sourceUrl": "https://bms.wv.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "aged-disabled-waiver",
@@ -226,7 +226,7 @@
         "type": "state",
         "stateVariation": false
       },
-      "intro": "If your loved one needs nursing home-level care but wants to stay in their own home, West Virginia's Aged and Disabled Waiver (ADW) provides in-home personal care services that would otherwise only be available in a nursing facility. This includes daily help with bathing, dressing, medication management, and other activities of daily living.\n\nTo qualify, your loved one must be 18 or older, demonstrate functional deficits in at least 5 areas of daily living, and meet the same medical criteria required for nursing home admission. Home equity cannot exceed $730,000 (as of 2025), though this limit doesn't apply if a spouse or dependent relative lives in the home.\n\nThe biggest challenge: enrollment depends on available funded slots, so there's often a waitlist. Even if your loved one qualifies medically and financially, they may need to wait for an opening. A physician must initiate the application by completing a Medical Necessity Evaluation Request.",
+      "intro": "If your loved one needs nursing home-level care but wants to stay in their own home, West Virginia's Aged and Disabled Waiver (ADW) provides in-home personal care services that would otherwise only be available in a nursing facility. This includes daily help with bathing, dressing, medication management, and other activities of daily living.\n\nTo qualify, your loved one must be 18 or older, demonstrate functional deficits in at least 5 areas of daily living, and meet the same medical criteria required for nursing home admission. Home equity cannot exceed $752,000 (in 2026), though this limit doesn't apply if a spouse or dependent relative lives in the home.\n\nThe biggest challenge: enrollment depends on available funded slots, so there's often a waitlist. Even if your loved one qualifies medically and financially, they may need to wait for an opening. A physician must initiate the application by completing a Medical Necessity Evaluation Request.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
@@ -235,7 +235,7 @@
           "Age 18+",
           "Need help with 5+ daily activities",
           "Meet nursing home medical criteria",
-          "Home equity under $730,000",
+          "Home equity under $752,000",
           "Limited slots available"
         ],
         "ageRequirement": "18+",
@@ -245,7 +245,7 @@
           "couple": null,
           "countedAssets": [],
           "exemptAssets": [],
-          "homeEquityCap": 730000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must need Nursing Facility Level of Care and demonstrate functional deficits in at least 5 activities of daily living (eating, bathing, dressing, grooming, mobility, restroom assistance)",
         "otherRequirements": [
@@ -258,7 +258,7 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Your loved one's physician must initiate by completing a Medical Necessity Evaluation Request, then you apply through your local DHHR office, processing involves multiple evaluations and depends on slot availability.",
+        "summary": "Your loved one's doctor starts the application by sending a Medical Necessity Evaluation Request (MNER) to Acentra Health. Your county DoHS office then decides financial eligibility. Processing involves several evaluations and depends on slot availability.",
         "steps": [
           {
             "step": 1,
@@ -268,12 +268,12 @@
           {
             "step": 2,
             "title": "Submit application",
-            "description": "Call 1-866-767-1575 (Bureau of Senior Services) or visit your local DHHR county office. You can also apply online through the inRoads platform."
+            "description": "Your doctor, PA or nurse sends the completed MNER to Acentra Health-ADW (1007 Bullitt Street, Suite 200, Charleston WV 25301, fax 866-212-5053). Financial eligibility is then decided by your county Department of Human Services (DoHS) office. Questions about the application: Bureau of Senior Services, 1-866-767-1575."
           },
           {
             "step": 3,
             "title": "Financial eligibility review",
-            "description": "Your local DHHR county office will determine Medicaid eligibility based on income and assets."
+            "description": "Your county Department of Human Services (DoHS) office will determine Medicaid eligibility based on income and assets."
           },
           {
             "step": 4,
@@ -291,7 +291,7 @@
             "description": "If approved and a slot is available, a Case Manager will contact you within 5 days to begin coordinating services."
           }
         ],
-        "processingTime": "Timeline not specified, depends on medical evaluation, financial review, and slot availability",
+        "processingTime": "About 56 days on average from MNER to activation; average waitlist time last fiscal year was 44 days.",
         "waitlist": "Enrollment depends on availability of funded ADW slots, waitlist length varies",
         "tip": "Apply early even if your loved one doesn't need services immediately, since slots are limited and there's often a waitlist.",
         "urls": [
@@ -310,7 +310,7 @@
         "Medicaid card (if already enrolled)",
         "Most recent Social Security award letter or pension statements",
         "Bank account details for every account: the bank name, account type, and current balance. A recent statement is the easiest proof.",
-        "Property documents if home equity exceeds $730,000",
+        "Property documents if home equity exceeds $752,000",
         "Documentation of spouse or dependent relative living in home (if applicable for asset exemption)",
         "Medical records supporting need for nursing facility level of care",
         "List of current medications and medical conditions"
@@ -320,7 +320,7 @@
           "label": "Bureau of Senior Services",
           "phone": "(866) 767-1575",
           "description": "ADW program information and application assistance",
-          "hours": "Business hours"
+          "hours": "Mon-Fri 8am-4pm ET"
         },
         {
           "label": "Acentra Health",
@@ -329,7 +329,7 @@
           "hours": "Business hours"
         },
         {
-          "label": "Local DHHR Office",
+          "label": "County Department of Human Services (DoHS) office",
           "phone": null,
           "description": "Financial eligibility determination and application processing",
           "hours": "Varies by county"
@@ -342,11 +342,11 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "The application starts with your loved one's doctor sending the MNER form. Your loved one must be found financially eligible by the county DoHS office before medical eligibility is decided.",
         "Your loved one's physician must initiate the process, self-referrals are not accepted",
         "Home safety is assessed, unsafe conditions for caregivers could delay or disqualify services",
         "Even if your loved one exceeds income limits, they may qualify through the Medically Needy Program if medical expenses consume most monthly income",
-        "Multiple organizations coordinate this program (DHHR, Acentra Health, Case Management agencies), expect coordination delays"
+        "Multiple organizations coordinate this program (DoHS, Acentra Health, Case Management agencies), expect coordination delays"
       ],
       "relatedPrograms": [
         "West Virginia Medicaid",
@@ -357,8 +357,8 @@
       "contentSections": [],
       "faqs": [
         {
-          "question": "Can my loved one keep their house if it's worth more than the $730,000 equity limit?",
-          "answer": "Yes, if your loved one has a spouse or dependent relative (child, grandchild, parent, sibling, aunt/uncle, or niece/nephew) living in the home, the equity limit doesn't apply. Otherwise, home equity above $730,000 may disqualify them unless they qualify through the Medically Needy Program."
+          "question": "Can my loved one keep their house if it's worth more than the $752,000 equity limit?",
+          "answer": "Yes, if your loved one has a spouse or dependent relative (child, grandchild, parent, sibling, aunt/uncle, or niece/nephew) living in the home, the equity limit doesn't apply. Otherwise, home equity above $752,000 (the 2026 limit) may disqualify them unless they qualify through the Medically Needy Program."
         },
         {
           "question": "What if my loved one has dementia but can still do some daily activities independently?",
@@ -402,7 +402,7 @@
       "sourceUrl": "http://www.wvseniorservices.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-22"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-comprehensive-care",
@@ -579,52 +579,52 @@
         "stateVariation": true,
         "localEntities": [
           {
-            "name": "Local DHHR county offices statewide",
+            "name": "County Department of Human Services (DoHS) offices statewide",
             "type": "service-area"
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling to afford groceries on a fixed income, SNAP provides monthly benefits loaded onto an EBT card for food purchases. West Virginia offers more flexible rules for older adults, your loved one may qualify even if their Social Security or pension puts them over standard income limits.\n\nBenefit amounts depend on household size and net income, but many seniors receive $100-300+ monthly. Because West Virginia has no asset limits under state rules, your loved one's savings account or car value won't disqualify them. The certification period lasts 24 months for households with someone 60+, meaning less frequent renewals than younger applicants face.\n\nWork requirements don't apply to anyone 60 or older. Your loved one can use SNAP benefits at most grocery stores and farmers markets, but not for alcohol, tobacco, or prepared hot foods.",
-      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
-      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
+      "intro": "If your loved one is 60+ and struggling to afford groceries on a fixed income, SNAP provides monthly benefits loaded onto an EBT card for food purchases. West Virginia offers more flexible rules for older adults, your loved one may qualify even if their Social Security or pension puts them over standard income limits.\n\nBenefit amounts depend on household size and net income, but many seniors receive $100-300+ monthly. For most households West Virginia has no savings limit, so your loved one's savings account or car value usually won't disqualify them. The certification period lasts 24 months for households with someone 60+, meaning less frequent renewals than younger applicants face.\n\nWork requirements don't apply to anyone 60 or older. Your loved one can use SNAP benefits at most grocery stores and farmers markets, but not for alcohol, tobacco, or prepared hot foods.",
+      "savingsRange": "Up to $306/month ($3,672/year) for one person, October 1, 2026 through September 30, 2027",
+      "savingsSource": "USDA FY2027 maximum allotment for a one-person household in the 48 contiguous states and DC: $306/month, effective October 1, 2026 through September 30, 2027. The minimum for a one- or two-person household is $25/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+ (or any age if disabled)",
-          "Income below $2,608/month for single person",
+          "Income before deductions up to $2,660/month for one person. Above that, a household with someone 60+ can still qualify if income after deductions is $1,330 or less ($1,804 for two), from October 1, 2026",
           "West Virginia resident",
           "U.S. citizen or qualified non-citizen",
-          "No asset limits in West Virginia"
+          "No savings limit for most households. If income before deductions is above the limit, a $4,750 limit applies to a household with someone 60+ or disabled"
         ],
         "ageRequirement": "60+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2608
+            "monthlyLimit": 2660
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 3526
+            "monthlyLimit": 3607
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 4442
+            "monthlyLimit": 4553
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 5358
+            "monthlyLimit": 5500
           },
           {
             "householdSize": 5,
-            "monthlyLimit": 6276
+            "monthlyLimit": 6447
           },
           {
             "householdSize": 6,
-            "monthlyLimit": 7192
+            "monthlyLimit": 7393
           },
           {
             "householdSize": 7,
-            "monthlyLimit": 8108
+            "monthlyLimit": 8340
           }
         ],
         "assetLimits": {
@@ -648,21 +648,21 @@
           "Include all household members who buy and prepare food together",
           "Meet work requirements unless exempt (age 60+ automatically exempt)"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL before deductions (West Virginia broad-based eligibility). Households with someone 60+ or disabled who are over that can qualify at 100% FPL after deductions"
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online through WV PATH or call your local DHHR office, no documents needed to start the application.",
+        "summary": "Apply online through WV PATH or contact your county DoHS office, no documents needed to start the application.",
         "steps": [
           {
             "step": 1,
             "title": "Start your application",
-            "description": "Apply online at wvpath.wv.gov or call your local DHHR county office. You can submit the application without any documents to secure your benefit start date."
+            "description": "Apply online at wvpath.wv.gov or contact your county DoHS office (list at dohs.wv.gov/field-offices). You can submit the application without any documents to secure your benefit start date."
           },
           {
             "step": 2,
             "title": "Complete the interview",
-            "description": "DHHR will schedule a phone or in-person interview to review your application and verify information about income, expenses, and household composition."
+            "description": "Your county DoHS office will schedule a phone or in-person interview to review your application and verify information about income, expenses, and household composition."
           },
           {
             "step": 3,
@@ -677,7 +677,7 @@
         ],
         "processingTime": "Processing time varies by county office, submitting your application secures your benefit start date",
         "waitlist": null,
-        "tip": "Submit your application first, then gather documents. Your benefit start date is protected once DHHR receives your application.",
+        "tip": "Submit your application first, then gather documents. Your benefit start date is protected once DoHS receives your application.",
         "urls": [
           {
             "label": "WV PATH Online Application",
@@ -691,7 +691,7 @@
         "Proof of West Virginia residency (utility bill, lease, or mail)",
         "Most recent Social Security award letter",
         "Pension or retirement income statements",
-        "The current balance of any checking or savings accounts. Every state asks about this. Your savings will not count against you in this state, but you still need the numbers.",
+        "The current balance of any checking or savings accounts. Every state asks about this. For most West Virginia households savings do not count, but a $4,750 limit can apply to a household with someone 60 or older, so bring the numbers.",
         "Rent receipt or mortgage statement for shelter deduction",
         "Medical expense receipts if over age 60 (helps increase benefits)",
         "Utility bills for heating and cooling costs",
@@ -702,10 +702,10 @@
       ],
       "contacts": [
         {
-          "label": "WV DHHR SNAP Information",
-          "phone": "(304) 558-7980",
-          "description": "State SNAP program information and county office locations",
-          "hours": "Mon-Fri 8am-5pm ET"
+          "label": "WV DoHS Customer Service Center (benefit questions)",
+          "phone": "1-877-716-1212",
+          "description": "The state line for SNAP and other benefit questions. To apply, use wvpath.wv.gov or your county DoHS office (list at dohs.wv.gov/field-offices); you can file the same day you contact a county office.",
+          "hours": "Business hours (call to confirm)"
         },
         {
           "label": "WV 2-1-1",
@@ -730,15 +730,15 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house and savings account and still qualify?",
-          "answer": "Yes. West Virginia has no asset limits under state SNAP rules. Your loved one's home, car, savings account, and personal belongings don't count against eligibility. Only if their gross income exceeds 200% of poverty level would a $4,500 asset limit potentially apply under federal rules."
+          "answer": "Usually, yes. Most West Virginia households have no savings limit for SNAP. Your loved one's home, car, savings account, and personal belongings don't count against eligibility. Only if their gross income exceeds 200% of poverty level would a $4,750 savings limit apply (from October 1, 2026). The home never counts."
         },
         {
           "question": "What if my loved one's Social Security puts them over the income limit?",
-          "answer": "Many seniors still qualify even with higher Social Security income. If gross income exceeds $2,608/month for a single person, West Virginia allows eligibility based on net income only after deducting medical expenses and shelter costs. Medical expenses over $35/month and high shelter costs can bring net income below limits."
+          "answer": "Many seniors still qualify even with higher Social Security income. If gross income exceeds $2,660/month for a single person, West Virginia allows eligibility based on net income only after deducting medical expenses and shelter costs. Medical expenses over $35/month and high shelter costs can bring net income below limits."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
-          "answer": "Yes, you can apply as an authorized representative if your loved one cannot apply themselves due to age or disability. You'll need to sign a form designating you as their representative during the application process. Call your local DHHR office to start this process."
+          "answer": "Yes, you can apply as an authorized representative if your loved one cannot apply themselves due to age or disability. You'll need to sign a form designating you as their representative during the application process. Contact your county DoHS office to start this process."
         },
         {
           "question": "Does my loved one have to work or look for work to keep SNAP benefits?",
@@ -750,7 +750,7 @@
         },
         {
           "question": "What happens when my loved one's 24-month certification period ends?",
-          "answer": "DHHR will mail renewal paperwork before the certification expires. Because seniors get 24-month periods instead of 12 months, renewals happen less frequently. Submit the renewal on time to avoid benefit interruption, you typically have 30 days to complete the renewal process."
+          "answer": "DoHS will mail renewal paperwork before the certification expires. Because seniors get 24-month periods instead of 12 months, renewals happen less frequently. Submit the renewal on time to avoid benefit interruption, you typically have 30 days to complete the renewal process."
         },
         {
           "question": "Can my loved one use SNAP benefits to buy groceries online?",
@@ -770,11 +770,11 @@
         "visualTone": "editorial"
       },
       "icon": "BowlFood",
-      "phone": "(304) 558-7980",
-      "sourceUrl": "https://dhhr.wv.gov/bcf/programs/snap/Pages/default.aspx",
+      "phone": "1-877-716-1212",
+      "sourceUrl": "https://bfa.wv.gov/snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -919,7 +919,7 @@
         }
       ],
       "applicationNotes": [
-        "Crisis LIHEAP requires immediate emergency proof like disconnection notices and evaluation by DHHR worker, call your local office immediately",
+        "Crisis LIHEAP requires immediate emergency proof like disconnection notices and evaluation by a DoHS worker, call your local office immediately",
         "If your loved one receives SNAP, TANF, or SSI Code A, they automatically qualify for LIHEAP income requirements",
         "Income exclusions like Social Security and Veterans benefits can significantly change eligibility, make sure the intake worker knows about these exclusions",
         "Applications received after funding exhausts are automatically denied, even if mailed before the deadline, apply as early in the season as possible"
@@ -977,7 +977,8 @@
       "phone": "1-800-642-8589",
       "sourceUrl": "https://bfa.wv.gov/utility-assistancelieap",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "weatherization-assistance-program",

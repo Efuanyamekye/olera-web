@@ -16,7 +16,7 @@
         "type": "state",
         "stateVariation": false
       },
-      "intro": "If your loved one needs daily help with activities like bathing, dressing, or taking medication, Louisiana Medicaid Long-Term Care can cover these services. The program offers three pathways: nursing home care (fully covered in a facility), Long-Term Personal Care Services (in-home care to help your loved one stay at home), and Home and Community-Based Services waivers (specialized care packages).\n\nTo qualify, your loved one must have countable monthly income of $2,982 or less and assets under $2,000 (not including their home up to $688,000 in value). Because Louisiana is an income cap state, your loved one cannot exceed the income limit at application, they must fall below it, though a Medically Needy program exists for certain cases involving high medical expenses.\n\nAll programs require your loved one to meet Nursing Facility Level of Care, meaning they need assistance with daily activities like transferring, mobility, eating, toileting, personal hygiene, or bathing. The application process includes a clinical assessment, and there's a 5-year look-back period for any gifts or asset sales below market value.",
+      "intro": "If your loved one needs daily help with activities like bathing, dressing, or taking medication, Louisiana Medicaid Long-Term Care can cover these services. The program offers three pathways: nursing home care (fully covered in a facility), Long-Term Personal Care Services (in-home care to help your loved one stay at home), and Home and Community-Based Services waivers (specialized care packages).\n\nTo qualify, your loved one must have countable monthly income of $2,982 or less and assets under $2,000 (not including their home, up to $752,000 in equity in 2026). Because Louisiana is an income cap state, your loved one cannot exceed the income limit at application, they must fall below it, though a Medically Needy program exists for certain cases involving high medical expenses.\n\nAll programs require your loved one to meet Nursing Facility Level of Care, meaning they need assistance with daily activities like transferring, mobility, eating, toileting, personal hygiene, or bathing. The application process includes a clinical assessment, and there's a 5-year look-back period for any gifts or asset sales below market value.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
@@ -42,7 +42,7 @@
             "Precious metals"
           ],
           "exemptAssets": [
-            "Home up to $688,000",
+            "Home equity up to $752,000 (2026)",
             "Primary vehicle",
             "Personal belongings",
             "Life insurance up to $10,000 cash value",
@@ -67,8 +67,8 @@
         "steps": [
           {
             "step": 1,
-            "title": "Contact Louisiana Department of Health",
-            "description": "Call the Louisiana Department of Health to locate your nearest Medicaid office and confirm current application procedures. Specific phone numbers and office locations are not published in official sources, contact the department directly for current information."
+            "title": "Call Louisiana Options in Long-Term Care",
+            "description": "Call Louisiana Options in Long-Term Care at 1-877-456-1146 to request home and community-based services or nursing facility admission. You can also send a request online at ldh.la.gov/form/15."
           },
           {
             "step": 2,
@@ -125,7 +125,7 @@
           "label": "Louisiana Options in Long-Term Care",
           "phone": "(877) 456-1146",
           "description": "Call here first to request home and community-based services and get on the Request for Services Registry.",
-          "hours": "Mon-Fri 8am-5pm CT"
+          "hours": null
         },
         {
           "label": "Louisiana Medicaid Long-Term Care (financial application)",
@@ -145,7 +145,7 @@
         "Louisiana is an income cap state, if your loved one's monthly income exceeds $2,982, they cannot simply spend down to qualify, though a Medically Needy program exists for high medical expenses",
         "The 5-year look-back period means any gifts or below-market asset sales within 5 years will trigger penalty periods that delay coverage",
         "For Long-Term Personal Care Services, your loved one must be able to direct their own care or have a representative, this is a significant functional requirement beyond just needing assistance",
-        "Home equity limits differ by program: $688,000 for general homestead exemption, $752,000 for LT-PCS program, verify which applies to your situation"
+        "Home equity up to $752,000 (2026) does not count against your loved one. The same limit applies across these programs."
       ],
       "relatedPrograms": [
         "Louisiana SNAP (Food Benefits)",
@@ -157,7 +157,7 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than $2,000?",
-          "answer": "Yes, the home is exempt up to $688,000 in value for general Medicaid, or $752,000 for the LT-PCS program specifically. The asset limits apply to countable assets like bank accounts and investments, not the primary residence."
+          "answer": "Yes, the home is exempt up to $752,000 in equity in 2026. The asset limits apply to countable assets like bank accounts and investments, not the primary residence."
         },
         {
           "question": "What happens if my loved one's monthly income is $3,100, just over the $2,982 limit?",
@@ -197,11 +197,11 @@
         "visualTone": "editorial"
       },
       "icon": "Bed",
-      "phone": null,
+      "phone": "(877) 456-1146",
       "sourceUrl": "https://ldh.la.gov/medicaid/long-term-care",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "community-choices-waiver",
@@ -863,66 +863,36 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly benefits that load onto an EBT card like a debit card for food purchases. A typical 2-person elderly household with $1,200 monthly income receives $415 in monthly SNAP benefits. Because Louisiana has expanded eligibility beyond federal rules, many Louisiana seniors qualify even if they were denied elsewhere or think their income is too high.\n\nHouseholds with someone 60+ get significantly easier qualification rules: they only need to meet the net income test (100% of Federal Poverty Level) rather than the stricter gross income limits that apply to younger households. Louisiana applies a resource limit of $4,500 for a household with someone 60 or older or disabled, and $3,000 otherwise. The home and car your loved one uses do not count. About half of eligible seniors don't receive SNAP despite qualifying, often because they don't realize the rules are more generous for older adults.",
-      "savingsRange": "$24 - $298/month for one person (FY2026 limits)",
-      "savingsSource": "FY2026 federal SNAP limits for the 48 contiguous states: maximum $298/month for one person and $546 for two; minimum $24/month for eligible one- and two-person households. Actual benefit depends on household size and the benefit calculation.",
+      "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly benefits that load onto an EBT card like a debit card for food purchases. A typical 2-person elderly household with $1,200 monthly income receives $415 in monthly SNAP benefits. Because Louisiana has expanded eligibility beyond federal rules, many Louisiana seniors qualify even if they were denied elsewhere or think their income is too high.\n\nHouseholds with someone 60+ get significantly easier qualification rules: most qualify with income before deductions under $2,660 a month for one person (from October 1, 2026), and there is no savings limit. Above that, a household with someone 60 or older can still qualify if income after deductions is under $1,330 a month and savings are under $4,750. The home and car your loved one uses do not count. About half of eligible seniors don't receive SNAP despite qualifying, often because they don't realize the rules are more generous for older adults.",
+      "savingsRange": "Up to $306/month for one person (FY2027 maximum, from October 1, 2026)",
+      "savingsSource": "FY2027 federal SNAP maximums for the 48 contiguous states and DC, from October 1, 2026: $306/month for one person and $562 for two. Actual benefit depends on household size and the benefit calculation.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+ household",
-          "Net income below $1,305/month (1 person)",
+          "Income before deductions under $2,660/month for 1 person, or under $1,330 after deductions (from October 1, 2026)",
           "Louisiana resident",
-          "Countable resources up to $4,500 for a household with a member 60+ or disabled ($3,000 otherwise); SSI, FITAP, KCSP and STEP recipients are exempt"
+          "No savings limit for most households. Above the income limit, a household with someone 60+ or disabled can have up to $4,750 in savings"
         ],
         "ageRequirement": "60+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1305
+            "monthlyLimit": 2660
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1763
-          },
-          {
-            "householdSize": 3,
-            "monthlyLimit": 2221
-          },
-          {
-            "householdSize": 4,
-            "monthlyLimit": 2680
-          },
-          {
-            "householdSize": 5,
-            "monthlyLimit": 3138
-          },
-          {
-            "householdSize": 6,
-            "monthlyLimit": 3596
+            "monthlyLimit": 3607
           }
         ],
-        "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
-          "countedAssets": [
-            "Cash",
-            "Bank accounts",
-            "Stocks and bonds"
-          ],
-          "exemptAssets": [
-            "Primary home",
-            "One vehicle (typically)",
-            "Burial funds"
-          ],
-          "homeEquityCap": null
-        },
+        "assetLimits": null,
         "functionalRequirement": null,
         "otherRequirements": [
           "Louisiana resident",
           "U.S. citizen or lawfully present non-citizen",
           "Social Security number or application proof"
         ],
-        "povertyLevelReference": "100% FPL (net income test for 60+ households)"
+        "povertyLevelReference": "200% FPL before deductions (Louisiana broad-based eligibility); 100% FPL after deductions above that"
       },
       "applicationGuide": {
         "method": "multiple",
@@ -994,7 +964,7 @@
         }
       ],
       "applicationNotes": [
-        "A household with a member 60 or older or disabled may hold up to $4,500 in countable resources, and $3,000 otherwise. Households where everyone receives SSI, FITAP, KCSP or STEP are exempt from the resource test",
+        "Most households have no savings limit. A savings limit applies only when income before deductions is above $2,660 a month for one person (from October 1, 2026): then it is $4,750 for a household with someone 60 or older or disabled.",
         "Seniors must reapply annually unless they qualify for ESAP (36-month certification for households with no earned income)",
         "If your loved one receives Social Security, veterans benefits, or disability payments, these count toward income but don't automatically disqualify them",
         "Elderly households only need to meet net income test (100% FPL), they can exceed gross income limits that apply to younger applicants"
@@ -1009,11 +979,11 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house and savings account while getting SNAP?",
-          "answer": "Louisiana does apply a resource limit. A household that includes someone 60 or older, or someone disabled, may hold up to $4,500 in countable resources; other households are limited to $3,000. The home your loved one lives in does not count. Households where every member receives SSI or state cash assistance are exempt from the test entirely."
+          "answer": "Yes. Most Louisiana households have no savings limit, and the home does not count. A savings limit applies only if income before deductions is above $2,660 a month for one person (from October 1, 2026). Then it is $4,750 for a household with someone 60 or older or disabled."
         },
         {
           "question": "What if my loved one's Social Security puts them over the income limit?",
-          "answer": "Elderly households (60+) only need to meet the net income test, which subtracts allowable deductions like medical expenses and shelter costs. A single person can have gross income above the standard limit and still qualify if their net income after deductions is below $1,305/month."
+          "answer": "Elderly households (60+) only need to meet the net income test, which subtracts allowable deductions like medical expenses and shelter costs. A single person can have gross income above the standard limit and still qualify if their net income after deductions is below $1,330/month (from October 1, 2026)."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
@@ -1037,7 +1007,7 @@
         },
         {
           "question": "What if my loved one was denied SNAP in another state?",
-          "answer": "Apply again in Louisiana. Louisiana applies the federal resource limits ($4,500 for a household with someone 60 or older or disabled) and uses only the net income test for those households. Previous denials in other states don't affect Louisiana eligibility."
+          "answer": "Apply again in Louisiana. Louisiana has no savings limit for most households and a higher income limit: $2,660 a month for one person before deductions, from October 1, 2026. Previous denials in other states don't affect Louisiana eligibility."
         }
       ],
       "layoutIntent": {
@@ -1053,7 +1023,7 @@
       "sourceUrl": "https://sspweb.ie.dcfs.la.gov/selfservice/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "csfp-senior-food-boxes",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/FL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.515Z
+ * Last updated: 2026-09-28T09:21:59.458Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -21,7 +21,7 @@ export const drafts: PipelineStateDrafts = {
         "type": "state",
         "stateVariation": false
       },
-      "intro": "If your loved one needs nursing home-level care but wants to stay home, Florida's SMMC-LTC waivers provide comprehensive home and community-based services through Medicaid. This includes adult day health care, attendant care, respite care, and case management, all designed to prevent nursing home placement.\n\nYour loved one must qualify medically (a CARES assessment confirming Nursing Facility Level of Care) and financially (income under $2,982/month for a single applicant, countable assets under $2,000 in 2026). Because this program consolidates several former waivers (Alzheimer's Disease, Nursing Home Diversion, Assisted Living for the Elderly, and Consumer Directed Care Plus), there is a statewide waitlist with a priority score from 1 to 7.\n\nUnlike nursing home Medicaid, which cannot have a waitlist, eligible applicants for home care are placed on a waiting list and prioritized by frailty. Families should apply early, even if immediate services aren't needed. If income exceeds the limit, a Qualified Income Trust (Miller Trust) is a standard legal workaround used by thousands of Floridians.",
+      "intro": "If your loved one needs nursing home-level care but wants to stay home, Florida's SMMC-LTC waivers provide comprehensive home and community-based services through Medicaid. This includes adult day health care, attendant care, respite care, and case management, all designed to prevent nursing home placement.\n\nYour loved one must qualify medically (a CARES assessment confirming Nursing Facility Level of Care) and financially (income under $2,982/month for a single applicant, countable assets under $2,000 in 2026). Because this program consolidates several former waivers (Alzheimer's Disease, Nursing Home Diversion, Assisted Living for the Elderly, and Consumer Directed Care Plus), there is a statewide wait list. A phone screening gives a priority score, and a score of 30 or higher goes on the list.\n\nUnlike nursing home Medicaid, which cannot have a waitlist, eligible applicants for home care are placed on a waiting list and prioritized by frailty. Families should apply early, even if immediate services aren't needed. If income exceeds the limit, a Qualified Income Trust (Miller Trust) is a standard legal workaround used by thousands of Floridians.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
@@ -61,7 +61,7 @@ export const drafts: PipelineStateDrafts = {
           ],
           "homeEquityCap": 752000
         },
-        "functionalRequirement": "Must require Nursing Facility Level of Care (NFLOC), confirmed via an in-home CARES assessment. The assessment assigns a priority score from 1 to 7; only those scoring 4 or higher (or flagged 'imminent risk' at 7) are typically released from the waitlist.",
+        "functionalRequirement": "Must require Nursing Facility Level of Care (NFLOC), confirmed by an in-person CARES assessment after release from the wait list. Before that, a phone screening by the local ADRC gives a priority score and a rank from 1 to 8. A score of 30 or higher (rank 3 and up) goes on the wait list. Rank 7 means imminent risk.",
         "otherRequirements": [
           "Florida resident",
           "U.S. citizen or legal resident",
@@ -77,27 +77,27 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Call your local ADRC for a waitlist screening",
-            "description": "Call the statewide Elder Helpline at 1-800-963-5337 (1-800-963-5337). They route you to the Aging and Disability Resource Center (ADRC) for your county. The ADRC does a telephonic screening that assigns a priority score from 1 to 7 based on frailty. Scores of 4 or higher (or 'imminent risk' at 7) are released from the waitlist faster."
+            "description": "Call the statewide Elder Helpline at 1-800-963-5337. They route you to the Aging and Disability Resource Center (ADRC) for your county. The ADRC does a phone screening of about 45 minutes to an hour that gives a priority score and rank. A score of 30 or higher goes on the wait list, and releases happen monthly by score and frailty, not by how long someone has waited."
           },
           {
             "step": 2,
-            "title": "Complete the CARES assessment",
-            "description": "Once released from the waitlist, the Department of Elder Affairs (DOEA) sends a CARES nurse or social worker to your loved one's home for an in-person clinical evaluation. This confirms Nursing Facility Level of Care (NFLOC) eligibility."
+            "title": "Return AHCA Form 5000-3008 from the doctor",
+            "description": "After your loved one is released from the wait list, the ADRC mails AHCA Form 5000-3008. Have their doctor, APRN or PA complete it, then return it to the ADRC."
           },
           {
             "step": 3,
-            "title": "Get AHCA Form 5000-3008 signed by the primary care physician",
-            "description": "This medical certification is a gatekeeper document: the application cannot proceed without a signed Form 3008 from your loved one's doctor."
+            "title": "Apply for financial eligibility through DCF",
+            "description": "If your loved one is not already on Medicaid, apply through the Department of Children and Families (DCF) at ACCESS Florida or 1-866-762-2237. The 2026 income limit is $2,982/month for a single applicant. If income exceeds the limit, a Qualified Income Trust (Miller Trust) must be in place before DCF can approve."
           },
           {
             "step": 4,
-            "title": "Apply for financial eligibility through DCF",
-            "description": "Apply through the Department of Children and Families (DCF) via the ACCESS Florida portal. The 2026 income limit is $2,982/month for a single applicant. If income exceeds the limit, a Qualified Income Trust (Miller Trust) must be in place before DCF can approve."
+            "title": "Complete the CARES assessment",
+            "description": "Once the ADRC has the completed Form 3008, a CARES nurse or social worker from the Department of Elder Affairs (DOEA) visits your loved one in person to confirm Nursing Facility Level of Care (NFLOC)."
           },
           {
             "step": 5,
-            "title": "Select a managed care plan",
-            "description": "Once medical and financial approvals are final, Florida Medicaid Choice Counseling will send a letter asking you to select a health plan (Sunshine Health, Humana, UnitedHealthcare, or similar). The plan is what actually delivers the home health aides, respite care, and adult day services."
+            "title": "Get your health plan",
+            "description": "Once medical and financial eligibility are met, AHCA mails a welcome packet with the plan your loved one has been assigned, its start date, and how to change to another Long-Term Care plan in your region. The plan delivers the home health aides, respite care and adult day services."
           }
         ],
         "processingTime": "Highly variable, depending on waitlist position and priority score. Higher-scoring applicants move through faster.",
@@ -161,7 +161,7 @@ export const drafts: PipelineStateDrafts = {
         {
           "type": "callout",
           "tone": "info",
-          "text": "How the waitlist works: your local ADRC screens applicants by phone and assigns a priority score from 1 (lowest need) to 7 (imminent risk). Scores of 4 or higher are released from the waitlist first. Applying early matters because the score-based queue rewards being in line before urgent need hits."
+          "text": "How the wait list works: your local ADRC screens applicants by phone and gives a priority score and a rank. A score of 30 or higher goes on the wait list. Each month the state releases people by score and frailty, not by how long they have waited, so the screening answers matter more than the date you call."
         },
         {
           "type": "callout",
@@ -238,7 +238,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "How long is the waitlist?",
-          "answer": "It varies by region and priority score. The ADRC screening assigns a score from 1 to 7 based on frailty, and those at 'imminent risk' (7) or with the highest care needs (4+) are released from the waitlist first. Apply early: the ranking rewards being in line before urgent need hits."
+          "answer": "It varies by region and priority score. The ADRC phone screening gives a score and a rank. A score of 30 or higher goes on the wait list, and each month the state releases people by score and frailty, including those at imminent risk. Release is not based on how long someone has been on the list."
         },
         {
           "question": "Can I apply on behalf of my loved one?",
@@ -276,7 +276,7 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "TJ",
       "reviewedAt": "2026-04-20",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-comprehensive-care",
@@ -652,7 +652,7 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "When you apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Florida SHINE (the state Medicare counseling program, via the Department of Elder Affairs) can screen for the right MSP category and help with the DCF application for free.",
         "QI program funding is finite, even if you meet all requirements, you may be denied if annual funds are exhausted, so apply early in the calendar year",
         "Income limits include a $20 general exclusion for unearned income, meaning your loved one can have $20 more in unearned income and still qualify",
@@ -725,13 +725,13 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
       "name": "SNAP (Supplemental Nutrition Assistance Program)",
       "shortName": "SNAP Food Benefits",
-      "tagline": "Up to $298/month for groceries if your loved one is 60+ on a fixed income",
+      "tagline": "Up to $306/month for groceries if your loved one is 60+ on a fixed income",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -744,62 +744,48 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly benefits loaded onto an EBT card for food purchases. Maximum benefit: $298/month for a single person, $546 for two people.\n\nFlorida uses a senior-friendly income test: the gross limit is 200% of the federal poverty level ($2,610/month for one person in 2026), nearly double the 130% limit most states apply to working-age households. On top of that, reporting medical expenses above $35/month, Medicare premiums, prescriptions, out-of-pocket costs, lowers the 'countable income' used to calculate the actual benefit.\n\nThe program covers fruits, vegetables, meat, dairy, and grains. As of April 20, 2026, Florida's Healthy SNAP rules also prohibit soda, energy drinks, candy, and ultra-processed shelf-stable desserts. Benefits are calculated as the maximum allotment minus 30% of net income, a single senior with $800/month net income receives $298 − $240 = $58/month.",
-      "savingsRange": "Up to $298/month for one person (FY2026 maximum)",
-      "savingsSource": "USDA FY2026 allotments: minimum benefit $24/month for 1-2 person households, one-person maximum $298/month; amounts depend on income and deductions",
+      "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly benefits loaded onto an EBT card for food purchases. From October 1, 2026, the maximum benefit is $306/month for a single person and $562 for two people.\n\nFlorida uses a senior-friendly income test: most households can have gross income up to 200% of the federal poverty level ($2,660/month for one person from October 1, 2026), nearly double the usual 130% limit. A household with someone 60+ or disabled that is over that can still qualify on net income. On top of that, reporting medical expenses above $35/month, Medicare premiums, prescriptions, out-of-pocket costs, lowers the 'countable income' used to calculate the actual benefit.\n\nThe program covers fruits, vegetables, meat, dairy, and grains. As of April 20, 2026, Florida's Healthy SNAP rules also prohibit soda, energy drinks, candy, and ultra-processed shelf-stable desserts. Benefits are calculated as the maximum allotment minus 30% of net income, a single senior with $800/month net income receives $306 − $240 = $66/month from October 1, 2026.",
+      "savingsRange": "Up to $306/month for one person (FY2027 maximum, from October 1, 2026)",
+      "savingsSource": "USDA FY2027 allotments, effective October 1, 2026: one-person maximum $306/month, two-person maximum $562/month; minimum benefit for 1-2 person households applies; amounts depend on income and deductions",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
-          "Gross income below $2,610/month for one person (200% FPL)",
+          "Most households: gross income at or below 200% FPL ($2,660/month for one person from October 1, 2026)",
+          "A household with someone 60+ or disabled that is over that can still qualify on net income ($1,330/month for one person from October 1, 2026)",
           "Florida resident",
-          "Assets under $4,500 (home excluded)"
+          "No asset limit for most households"
         ],
         "ageRequirement": "60+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2610
+            "monthlyLimit": 2660
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 3525
+            "monthlyLimit": 3607
           }
         ],
-        "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
-          "countedAssets": [
-            "Bank accounts",
-            "Cash value of life insurance",
-            "Income-producing property"
-          ],
-          "exemptAssets": [
-            "Primary home",
-            "Household goods",
-            "Retirement savings (most)",
-            "One vehicle (often)",
-            "Personal property"
-          ],
-          "homeEquityCap": null
-        },
+        "assetLimits": null,
         "functionalRequirement": null,
         "otherRequirements": [
           "U.S. citizen or qualified non-citizen",
           "Florida resident",
           "Social Security number or proof of application",
-          "Not fleeing felony warrant"
+          "Not fleeing felony warrant",
+          "Asset limits apply only in a few cases: a household with a member disqualified from SNAP ($4,500 if someone is 60+ or disabled), or a senior household over the 200% gross limit that qualifies on net income instead ($4,750 from October 1, 2026)"
         ],
-        "povertyLevelReference": "200% FPL gross, Florida uses Broad-Based Categorical Eligibility (BBCE) for senior/disabled households"
+        "povertyLevelReference": "200% FPL gross for most households under Broad-Based Categorical Eligibility (BBCE); households with a member 60+ or disabled that are over it face only the 100% FPL net test"
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at the MyACCESS Portal or call DCF at (850) 300-4323. Takes 30–60 minutes to complete; most cases processed within 30 days.",
+        "summary": "Apply online at the MyACCESS Portal, or on a paper Government Assistance Application. Call DCF at (850) 300-4323 for help. Most cases are processed within 30 days.",
         "steps": [
           {
             "step": 1,
             "title": "Submit application",
-            "description": "Apply online at the MyACCESS Portal (myaccess.myflfamilies.com) or call DCF Customer Call Center at (850) 300-4323. The application takes 30–60 minutes. You can also download form CF-EBT 1800 and mail to your local DCF office."
+            "description": "Apply online at the MyACCESS Portal (myaccess.myflfamilies.com). If you can't apply online, print the Government Assistance Application from the DCF ESS Forms page and mail, fax or drop it at a service center. Call (850) 300-4323 for help."
           },
           {
             "step": 2,
@@ -855,8 +841,8 @@ export const drafts: PipelineStateDrafts = {
         {
           "label": "DCF Customer Call Center",
           "phone": "(850) 300-4323",
-          "description": "Primary line for SNAP applications, case status, and technical help with the MyACCESS Portal",
-          "hours": "Mon–Fri"
+          "description": "DCF's statewide benefits call center. Help with your case, the MyACCESS portal, or getting a paper application.",
+          "hours": "Mon–Fri 8:00am–5:00pm"
         },
         {
           "label": "Florida 2-1-1",
@@ -886,7 +872,7 @@ export const drafts: PipelineStateDrafts = {
         {
           "type": "callout",
           "tone": "info",
-          "text": "How the benefit amount is calculated: maximum allotment for the household size minus 30% of net income. Example: a single senior with $800/month net income receives $298 − $240 = $58/month. Reporting medical expenses above $35/month lowers net income and raises the monthly benefit."
+          "text": "How the benefit amount is calculated: maximum allotment for the household size minus 30% of net income. Example: a single senior with $800/month net income receives $306 − $240 = $66/month (from October 1, 2026). Reporting medical expenses above $35/month lowers net income and raises the monthly benefit."
         },
         {
           "type": "callout",
@@ -901,7 +887,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "What if my loved one's Social Security is $1,400/month, too high for the income limit?",
-          "answer": "It's not too high. Florida uses 200% of the federal poverty level ($2,610/month for one person in 2026) as the gross income limit for senior/disabled households, nearly double the 130% threshold most states use. Medical expenses above $35/month further lower their countable income, which raises the monthly benefit."
+          "answer": "It's not too high. Most Florida households can have gross income up to 200% of the federal poverty level ($2,660/month for one person from October 1, 2026). A household with someone 60+ or disabled that is over that can still qualify on net income, so there is no hard gross ceiling for seniors. Medical expenses above $35/month further lower their countable income, which raises the monthly benefit."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
@@ -909,11 +895,11 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "How does owning a house affect SNAP eligibility?",
-          "answer": "It doesn't. The primary residence is an excluded asset regardless of value, it never counts toward the $4,500 limit. Rental property or a second home is counted. Property taxes and homeowner's insurance can be deducted as shelter costs, lowering countable income."
+          "answer": "It doesn't. Most Florida households have no asset limit at all, and the primary residence is never counted, whatever it is worth. Property taxes and homeowner's insurance can be deducted as shelter costs, lowering countable income."
         },
         {
           "question": "What happens if my loved one's income changes after approval?",
-          "answer": "Florida uses Simplified Reporting for most senior households. You only need to notify DCF if monthly income crosses $1,696 (130% FPL for one person). If it does, report within 10 days of the following month to avoid overpayments you'd later have to repay. Reporting income decreases or new medical expenses is always optional, and often increases benefits."
+          "answer": "Florida uses Simplified Reporting for most senior households. You only need to notify DCF if monthly income crosses $1,729 (130% FPL for one person, from October 1, 2026). If it does, report within 10 days of the following month to avoid overpayments you'd later have to repay. Reporting income decreases or new medical expenses is always optional, and often increases benefits."
         },
         {
           "question": "Can my loved one use SNAP and still get meals from a senior center?",
@@ -939,7 +925,7 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "TJ",
       "reviewedAt": "2026-04-20",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -1025,7 +1011,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Find your county's LIHEAP provider",
-            "description": "All 67 Florida counties are covered. Locate the designated agency for your loved one's county via 2-1-1 (24/7), the state assistance line at 850-717-8450, or floridaliheap.com."
+            "description": "Find your county's provider in the FloridaCommerce directory (floridajobs.org, 'Find Your Local LIHEAP Provider') or call 2-1-1. Seminole County has no local provider; Seminole residents call FloridaCommerce at 850-717-8450."
           },
           {
             "step": 2,
@@ -1082,7 +1068,7 @@ export const drafts: PipelineStateDrafts = {
           "label": "Find your county LIHEAP provider (start here)",
           "phone": "2-1-1",
           "hours": "24 hours, 7 days a week",
-          "description": "FloridaCommerce says to call your local LIHEAP provider first, because their caseworkers take the application. 2-1-1 locates that provider. The statewide online application at floridaliheap.com is closed as of September 2026 and is expected to reopen around October 1."
+          "description": "FloridaCommerce says to call your local LIHEAP provider, because their caseworkers take the application. 2-1-1 can help you find that provider. The online application at floridaliheap.com is closed right now; the new program year starts October 1, 2026."
         },
         {
           "label": "Economic Opportunities Council of Indian River County",
@@ -1113,7 +1099,7 @@ export const drafts: PipelineStateDrafts = {
         "Year-round crisis assistance, capped at $1,000 per program year, requires proof of an emergency such as a disconnection notice and may be processed faster than regular assistance",
         "You must report ALL household incomes, even for non-citizens or roommates who share the utility bill",
         "Some counties require you to pay your current utility bill before the LIHEAP benefit is awarded",
-        "Benefits are typically limited to one payment per heating season and one per cooling season"
+        "Regular Home Energy help is paid once per year (the clock resets one year after the last award). Crisis help can be paid more than once, up to $1,000 per program year."
       ],
       "relatedPrograms": [
         "Weatherization Assistance Program (WAP)",
@@ -1169,7 +1155,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://floridaliheap.com",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "eheap-emergency-home-energy-elderly",
@@ -1340,11 +1326,11 @@ export const drafts: PipelineStateDrafts = {
             "type": "service-area"
           },
           {
-            "name": "Capital Area Community Action Agency (Franklin, Gulf, Gadsden, Jefferson, Leon, Wakulla)",
+            "name": "Capital Area Community Action Agency (Bradford, Calhoun, Columbia, Dixie, Franklin, Gadsden, Gilchrist, Gulf, Hamilton, Jefferson, Lafayette, Leon, Liberty, Madison, Suwannee, Taylor, Union, Wakulla)",
             "type": "service-area"
           },
           {
-            "name": "Central Florida Community Action Agency",
+            "name": "Central Florida Community Action Agency (Alachua, Levy, Marion)",
             "type": "service-area"
           },
           {
@@ -1353,51 +1339,51 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "If your loved one struggles with high energy bills and their household earns less than $31,300/year for one person (200% of the federal poverty level), they may qualify for free home energy improvements through Florida's Weatherization Assistance Program. The program provides up to $2,600 in upgrades, attic insulation, energy-efficient appliances, new water heaters, heating/cooling system repairs, all at no cost.\n\nPriority goes to households with someone 60+, people with disabilities, or families with children under 12. Funding is limited and demand is high, so most areas have waitlists. Both homeowners and renters qualify, but renters need landlord approval since the improvements stay with the property.",
+      "intro": "If your loved one struggles with high energy bills and their household earns no more than $31,920/year for one person (200% of the federal poverty level), they may qualify for free home energy improvements through Florida's Weatherization Assistance Program. The program provides up to $2,600 in upgrades, attic insulation, energy-efficient appliances, new water heaters, heating/cooling system repairs, all at no cost.\n\nPriority goes to households with someone 60+, people with disabilities, or families with children under 18. Funding is limited and demand is high, so most areas have waitlists. Both homeowners and renters qualify, but renters need landlord approval since the improvements stay with the property.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
-          "Gross income below $2,610/month for one person (200% FPL, 2026)",
+          "Gross income at or below 200% of the federal poverty level ($2,660/month for one person on the 2026 guidelines)",
           "Florida resident in served counties",
           "Homeowner or renter with landlord consent",
-          "Priority for age 60+, disabled, or families with children under 12",
+          "Priority for age 60+, disabled, or families with children under 18",
           "No asset limits"
         ],
         "ageRequirement": null,
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2610
+            "monthlyLimit": 2660
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 3525
+            "monthlyLimit": 3607
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 4440
+            "monthlyLimit": 4553
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 5355
+            "monthlyLimit": 5500
           },
           {
             "householdSize": 5,
-            "monthlyLimit": 6270
+            "monthlyLimit": 6447
           },
           {
             "householdSize": 6,
-            "monthlyLimit": 7185
+            "monthlyLimit": 7393
           },
           {
             "householdSize": 7,
-            "monthlyLimit": 8100
+            "monthlyLimit": 8340
           },
           {
             "householdSize": 8,
-            "monthlyLimit": 9015
+            "monthlyLimit": 9287
           }
         ],
         "assetLimits": null,
@@ -1407,11 +1393,11 @@ export const drafts: PipelineStateDrafts = {
           "Homeowner with proof of ownership OR renter with landlord written consent",
           "Households receiving SSI or TANF are categorically eligible (bypass income test but still apply)"
         ],
-        "povertyLevelReference": "200% FPL gross (2026 guidelines)"
+        "povertyLevelReference": "200% FPL gross (2026 HHS guidelines). Confirm with the local agency, since FloridaCommerce's page still shows older figures."
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "WAP is administered by local Community Action Agencies, contact the agency serving your county directly. State-level questions can go to the WAP Manager at (850) 717-8523.",
+        "summary": "Weatherization is run by a local agency for each county. Find yours in the state directory at floridajobs.org/WAPHelp or by calling 2-1-1, then contact that agency directly.",
         "steps": [
           {
             "step": 1,
@@ -1421,7 +1407,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 2,
             "title": "Contact the agency directly",
-            "description": "Call the local agency (see county directory section below) or their website. For general state-level questions, call the WAP Manager at (850) 717-8523 or email wxadmin@cfcaa.org."
+            "description": "Call the local agency listed for your county at floridajobs.org/WAPHelp and ask how to get their application. Each agency has its own."
           },
           {
             "step": 3,
@@ -1431,7 +1417,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 4,
             "title": "Wait for priority ranking and approval",
-            "description": "Applications are ranked by priority points, households with someone 60+, disabled, or children under 12 move faster. Expect a waitlist; elderly-priority applications can still take 6–18 months depending on region."
+            "description": "Applications are ranked by priority points, households with someone 60+, disabled, or children under 18 move faster. Expect a waitlist; elderly-priority applications can still take 6–18 months depending on region."
           }
         ],
         "processingTime": "Varies widely by county, typically 6–18 months from application to installation, priority households move faster",
@@ -1439,15 +1425,15 @@ export const drafts: PipelineStateDrafts = {
         "tip": "Gather all income documentation for every household member before applying, incomplete applications cause delays. If the waitlist is long, apply to LIHEAP in parallel for immediate bill help.",
         "urls": [
           {
-            "label": "Florida Department of Commerce WAP Directory",
-            "url": "https://www.floridajobs.org/business-growth-and-partnerships/business-development/weatherization-assistance-program"
+            "label": "FloridaCommerce county directory of weatherization agencies",
+            "url": "https://www.floridajobs.org/WAPHelp"
           },
           {
             "label": "You Thrive Florida (7 counties)",
             "url": "https://youthrivefl.org/program/weatherization-assistance-program/"
           },
           {
-            "label": "Central Florida Community Action",
+            "label": "Central Florida Community Action (Alachua, Levy, Marion). Online application currently not available; call (352) 373-7667 ext. 222 for help",
             "url": "https://cfcaa.org/weatherization/"
           }
         ]
@@ -1462,15 +1448,33 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Florida Department of Commerce (start here)",
-          "phone": "(850) 245-7105",
-          "description": "Applications only happen through the weatherization office for your county, never online and never at the state. Call to be pointed to yours, or look it up at floridajobs.org/WAPHelp. Details at www.floridajobs.org/WAPHelp.",
-          "hours": "Mon-Fri, business hours"
+          "label": "Florida 2-1-1 (start here, to find your county's weatherization agency)",
+          "phone": "2-1-1",
+          "description": "2-1-1 is a free referral line, not the weatherization program itself. Ask for the Weatherization Assistance Program agency for your county. Applications happen only through that local agency, not the state. You can also look the agency up yourself in the state's county-by-county directory at floridajobs.org/WAPHelp.",
+          "hours": "24 hours, 7 days a week"
         },
         {
-          "label": "Find your county's weatherization office",
+          "label": "Find your county's weatherization agency (state directory)",
           "phone": null,
-          "description": "State directory covering all 67 counties, with a phone number for each. Details at www.floridajobs.org/WAPHelp.",
+          "description": "FloridaCommerce directory covering all 67 counties, with the phone number of the local agency for each. Applications are only available by contacting that agency. A few agencies, such as You Thrive Florida, also take a short application on their own website. Details at www.floridajobs.org/WAPHelp.",
+          "hours": null
+        },
+        {
+          "label": "Central Florida Community Action Agency (Alachua, Levy and Marion counties)",
+          "phone": "(352) 373-7667",
+          "description": "The state-listed weatherization line for Alachua, Levy and Marion counties. The agency's weatherization application currently shows \"not available at this time\" on its website, so call rather than looking for a form.",
+          "hours": null
+        },
+        {
+          "label": "Central Florida Community Action Agency, weatherization application help",
+          "phone": "(352) 373-7667 ext. 222",
+          "description": "Call to book an appointment for help with the weatherization application. Virtual appointments are available.",
+          "hours": null
+        },
+        {
+          "label": "Central Florida Community Action Agency, Marion County office",
+          "phone": "(352) 732-3008",
+          "description": "The agency's Ocala office, 2703 NE 14th Street, Ocala, FL 34470. General office line for Marion County.",
           "hours": null
         },
         {
@@ -1481,7 +1485,7 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "This is NOT a window replacement program despite common misconceptions, focus is on insulation, appliances, and heating/cooling systems",
+        "Window and door replacement is possible only when the energy audit justifies it. The focus is air sealing, insulation, heating and cooling systems, and appliances.",
         "Income verification is strictly enforced, bank statements and self-prepared tax returns are not accepted, only official documentation",
         "Renters must get landlord approval before applying since improvements become property of the landlord at no cost",
         "Be alert for scams, legitimate WAP staff will never call asking for personal information for 'payroll updates'"
@@ -1518,7 +1522,7 @@ export const drafts: PipelineStateDrafts = {
               "phone": "(904) 362-8052"
             },
             {
-              "name": "Capital Area Community Action (Leon + 5 counties)",
+              "name": "Capital Area Community Action (Leon + 17 counties)",
               "type": "community-action",
               "phone": "(850) 222-2043"
             },
@@ -1556,7 +1560,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "How long is the waitlist really?",
-          "answer": "Varies by county and funding, typically 6–18 months. Households with someone 60+, disabled members, or children under 12 get priority points and move through the queue faster."
+          "answer": "Varies by county and funding, typically 6–18 months. Households with someone 60+, disabled members, or children under 18 get priority points and move through the queue faster."
         },
         {
           "question": "What are the alternatives if the waitlist is too long?",
@@ -1568,7 +1572,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "How are Social Security and pensions counted toward the income limit?",
-          "answer": "All income sources, including Social Security retirement (SSA/SSDI) and pensions, are counted toward the 200% FPL limit ($31,300/year for one person in 2026). One exception: if the household receives SSI (Supplemental Security Income, needs-based) or TANF, they're \"categorically eligible\" and automatically pass the income test, though they still need to complete the standard application. Note the difference: SSI grants auto-eligibility; regular Social Security does not."
+          "answer": "All income sources, including Social Security retirement (SSA/SSDI) and pensions, are counted toward the 200% FPL limit ($31,920/year for one person on the 2026 guidelines). One exception: if the household receives SSI (Supplemental Security Income, needs-based) or TANF, they're \"categorically eligible\" and automatically pass the income test, though they still need to complete the standard application. Note the difference: SSI grants auto-eligibility; regular Social Security does not."
         },
         {
           "question": "What if the home needs major repairs before weatherization can begin?",
@@ -1588,13 +1592,13 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "Lightning",
-      "phone": "(850) 245-7105",
-      "sourceUrl": "https://www.floridajobs.org/business-growth-and-partnerships/business-development/weatherization-assistance-program",
+      "phone": "2-1-1",
+      "sourceUrl": "https://floridajobs.org/community-development/Weatherization-Assistance-Program",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "reviewedBy": "TJ",
       "reviewedAt": "2026-04-20",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "shine-medicare-counseling",
@@ -1745,27 +1749,27 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "If your loved one struggles to shop for groceries or prepare meals safely, they may qualify for home-delivered meals through local Meals on Wheels programs or their Medicaid plan. Your loved one age 60+ who is assessed as homebound or has significant difficulty preparing meals can receive hot, frozen, or special diet meals delivered directly to their door.\n\nMany programs are free or request a small voluntary donation for qualifying low-income seniors; others charge a private-pay fee, typically $7.00 to $9.49 per meal. For enrollees in Medicaid Long-Term Care (LTC) plans, meals are provided at no cost. There is no fixed limit on the number of meals — the amount is determined by the specific health plan's medical authorization based on documented nutritional needs. Because government-funded programs are not entitlements and rely on limited funding, significant waitlists are common, so applying early is essential.",
+      "intro": "If your loved one struggles to shop for groceries or prepare meals safely, they may qualify for home-delivered meals through local Meals on Wheels programs or their Medicaid plan. Your loved one age 60+ who is homebound, or unable to get to a group meal site, can receive hot, frozen, or special diet meals delivered directly to their door.\n\nOlder Americans Act meals have no income test and ask only for a voluntary donation. Some providers also sell private-pay meals, typically $7.00 to $9.49 per meal. For enrollees in Medicaid Long-Term Care (LTC) plans, meals are provided at no cost. There is no fixed limit on the number of meals — the amount is determined by the specific health plan's medical authorization based on documented nutritional needs. Because government-funded programs are not entitlements and rely on limited funding, significant waitlists are common, so applying early is essential.",
       "savingsRange": "",
       "savingsSource": "Free service for qualifying participants",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
-          "Age 60+ or disabled",
-          "Homebound or difficulty cooking",
+          "Age 60+ (a spouse of any age, or a disabled person living with and dependent on an eligible elder, can also get meals)",
+          "Homebound, or unable to get to a group meal site",
           "Must live in delivery zone",
-          "Some programs require income at or below 130% poverty level"
+          "No income limit. Low-income elders get priority."
         ],
         "ageRequirement": "60+",
         "incomeTable": null,
         "assetLimits": null,
-        "functionalRequirement": "Must be assessed as homebound or having difficulty shopping for groceries and preparing meals due to illness, disability, or mobility limitations",
+        "functionalRequirement": "Must be homebound, or physically, mentally or medically unable to attend a congregate (group) meal site.",
         "otherRequirements": [
           "Must reside within specific delivery zones (strictly enforced)",
           "For Medicaid programs: must meet nursing facility level of care as determined by CARES assessment",
           "Local assessment required to verify need"
         ],
-        "povertyLevelReference": "130% FPL"
+        "povertyLevelReference": null
       },
       "applicationGuide": {
         "method": "phone",
@@ -1788,8 +1792,8 @@ export const drafts: PipelineStateDrafts = {
           },
           {
             "step": 4,
-            "title": "Submit required documents",
-            "description": "Provide proof of age, residence, and medical documentation of homebound status. Financial documents may be required for income-tested programs."
+            "title": "Phone screening",
+            "description": "The ADRC screens your loved one by phone (DOEA Form 701S). There is no income test. If a spot is not open right away, they are placed on the priority list."
           },
           {
             "step": 5,
@@ -1829,7 +1833,7 @@ export const drafts: PipelineStateDrafts = {
         "Car ownership or having family members who can cook may disqualify your loved one from some programs, as they assess true need for meal delivery",
         "Service delivery zones are strictly enforced, moving outside the area will terminate service, even within the same county",
         "Medicaid Special Needs Plans (SNCP) and some Medicare Advantage plans offer meal benefits separate from community Meals on Wheels, check health plan benefits first",
-        "Spouses may sometimes be included in meal delivery, but this varies by local program and must be verified during assessment"
+        "The spouse of an eligible homebound person can also get meals, at any age, when that helps keep the person at home."
       ],
       "relatedPrograms": [
         "SNAP Food Benefits",
@@ -1861,7 +1865,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "Can I pay for meals if my loved one doesn't qualify for free service?",
-          "answer": "Many programs offer fee-for-service options at approximately $9.49 per meal for those who don't meet income requirements but still need meal delivery. Contact your local ADRC to ask about private-pay options."
+          "answer": "There is no income test for the free program, but some providers sell private-pay meals, around $9.49 per meal, for people who want meals sooner or do not meet the homebound rule. Contact your local ADRC to ask about private-pay options."
         },
         {
           "question": "What if my loved one has special dietary needs like diabetic or pureed meals?",
@@ -1889,7 +1893,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://elderaffairs.org/programs-and-services/food-assistance/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "adi-respite-services",
@@ -2441,7 +2445,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "Florida's HCE Program recognizes that family members are often the best caregivers, but that the costs of caring for a senior can add up quickly. Rather than sending a stranger into your home, this program provides you — the live-in caregiver — with a monthly check (starting at $160) to help cover the costs of food, medical supplies, and basic needs. It's a way for the state to support the incredible work you're already doing to keep your loved one out of a nursing home.\n\nTo qualify in 2026, the senior must meet specific clinical and financial criteria. Clinically, they must be certified as needing a Nursing Home Level of Care, and they must live in a private home with a caregiver who is willing and able to provide or coordinate their care. Financially, the senior's gross monthly income must be under $2,982, and their countable assets must be under $2,000 for an individual or $3,000 for a couple. All participants receive a basic monthly subsidy of $160, and additional special subsidies may be authorized for medical supplies, home health aide services, or nutritional supplements.\n\nBecause HCE is a state-funded program and not an entitlement, most areas use a Statewide Pre-Enrollment List (Apply early!). Unlike standard waitlists, placement on this list is determined by the senior's frailty and risk score rather than the date of their application. To begin the process and determine if your loved one qualifies for a full assessment, call the statewide Elder Helpline at 1-800-963-5337 for a preliminary phone screening.",
+      "intro": "Florida's HCE Program recognizes that family members are often the best caregivers, but that the costs of caring for a senior can add up quickly. Rather than sending a stranger into your home, this program provides you — the live-in caregiver — with a monthly check (starting at $160) to help cover the costs of food, medical supplies, and basic needs. It's a way for the state to support the incredible work you're already doing to keep your loved one out of a nursing home.\n\nTo qualify in 2026, the senior must meet specific clinical and financial criteria. Clinically, they must be at risk of nursing home placement, based on a state assessment, and they must live in a private home with a caregiver who is willing and able to provide or coordinate their care. Financially, the senior's gross monthly income must be under $2,982, and their countable assets must be under $2,000 for an individual or $3,000 for a couple. All participants receive a basic monthly subsidy of $160, and additional special subsidies may be authorized for medical supplies, home health aide services, or nutritional supplements.\n\nBecause HCE is a state-funded program and not an entitlement, most areas use a Statewide Pre-Enrollment List (Apply early!). Unlike standard waitlists, placement on this list is determined by the senior's frailty and risk score rather than the date of their application. To begin the process and determine if your loved one qualifies for a full assessment, call the statewide Elder Helpline at 1-800-963-5337 for a preliminary phone screening.",
       "savingsRange": "$160/month basic subsidy, paid to the caregiver",
       "savingsSource": "2026 DOEA Home Care for the Elderly handbook, Chapter 11: \"The basic subsidy amount is a standard $160,\" paid to the caregiver. Special subsidies are separate and have no published amount.",
       "savingsVerified": true,
@@ -2451,7 +2455,7 @@ export const drafts: PipelineStateDrafts = {
           "Income below ~$2,982/month",
           "Assets under ~$2,000",
           "Live-in adult caregiver required",
-          "At nursing home level of care need"
+          "At risk of nursing home placement"
         ],
         "ageRequirement": "60+",
         "incomeTable": [
@@ -2477,7 +2481,7 @@ export const drafts: PipelineStateDrafts = {
           ],
           "homeEquityCap": null
         },
-        "functionalRequirement": "Must be certified as needing Nursing Home Level of Care via the 701B Comprehensive Assessment conducted by a state-certified DOEA assessor. Your loved one must require daily help with Activities of Daily Living (ADLs) such as bathing, dressing, eating, or transferring. Significant cognitive impairments such as Alzheimer's or related dementias also meet the requirement when constant supervision is needed for safety.",
+        "functionalRequirement": "Must be at risk of nursing home placement, based on the DOEA 701B comprehensive assessment. This usually means needing daily help with activities such as bathing, dressing, eating, or transferring, or needing constant supervision for safety because of dementia or a similar condition.",
         "otherRequirements": [
           "Florida resident with intent to remain",
           "Lives with an approved adult caregiver (age 18+) in a private, family-type home",
@@ -2556,7 +2560,7 @@ export const drafts: PipelineStateDrafts = {
       ],
       "applicationNotes": [
         "HCE is state general revenue rather than a Medicaid waiver, and the 2026 handbook sets no legally responsible individual restriction. A spouse or adult child living in the home can be the approved caregiver and receive the subsidy. Extraordinary Care approval, which Medicaid waivers require of a spouse, does not apply here.",
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "Your first call is a short phone screen. Income and assets can usually be self-declared to the case manager, who may ask for proof if something looks off.",
         "SSI, QMB, or SLMB recipients automatically meet financial eligibility, bring award letters to speed processing",
         "The caregiver assessment is required even for adult children, they must demonstrate ability and commitment to provide ongoing support",
         "Priority is given based on greatest need and risk factors, having no other support systems may increase priority",
@@ -2595,8 +2599,8 @@ export const drafts: PipelineStateDrafts = {
           "answer": "The program provides support services to help the caregiver arrangement work, but it's not primarily a paid caregiver program. The focus is on preventing nursing home placement through family-based care with professional support services."
         },
         {
-          "question": "What if my loved one doesn't meet the nursing home level of care in the 701B assessment?",
-          "answer": "If your loved one doesn't qualify for nursing home level care, they won't be eligible for HCE. However, they may qualify for other home and community services through Older Americans Act programs or lower-level Medicaid waiver services."
+          "question": "What if my loved one isn't found at risk of nursing home placement in the 701B assessment?",
+          "answer": "If the assessment does not find your loved one at risk of nursing home placement, they won't be eligible for HCE. However, they may qualify for other home and community services through Older Americans Act programs or lower-level Medicaid waiver services."
         },
         {
           "question": "Can we get services immediately in a crisis situation?",
@@ -2616,7 +2620,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://elderaffairs.org/programs-services/home-care-for-the-elderly/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "cce-community-care-elderly",

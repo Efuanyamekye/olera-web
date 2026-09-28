@@ -431,14 +431,14 @@
           }
         ]
       },
-      "intro": "If your loved one struggles to pay Medicare premiums, deductibles, and copays, North Carolina's Medicare Savings Programs can provide immediate relief. These programs pay some or all Medicare costs for people with income below $1,816/month (single) or $2,455/month (couple), plus assets under $9,950/$14,910.\n\nThere are three tiers: QMB covers all Medicare costs including the $202.90 monthly Part B premium, deductibles, and copays. SLMB and QI cover just the Part B premium ($2,435 yearly savings). All three automatically qualify your loved one for Extra Help with prescription drug costs. Because QI has limited federal funding, it operates first-come, first-served and may run out each year, apply early if your loved one's income is in the highest bracket.",
+      "intro": "If your loved one struggles to pay Medicare premiums, deductibles, and copays, North Carolina's Medicare Savings Programs can provide immediate relief. These programs pay some or all Medicare costs for people with countable income up to $1,796/month (single) or $2,435/month (couple), plus assets under $9,950/$14,910.\n\nThere are three tiers: QMB covers all Medicare costs including the $202.90 monthly Part B premium, deductibles, and copays. SLMB and QI cover just the Part B premium ($2,435 yearly savings). All three automatically qualify your loved one for Extra Help with prescription drug costs. Because QI has limited federal funding, it operates first-come, first-served and may run out each year, apply early if your loved one's income is in the highest bracket.",
       "savingsRange": "$2,400 – $8,000/year in 2026",
       "savingsSource": "Medicare Part B premiums, deductibles, copays, and Extra Help prescription savings",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 65+ or disabled with Medicare",
-          "Income below $1,816/month (single)",
+          "Countable income up to $1,796/month (single) or $2,435 (couple) for the highest tier, as of April 2026",
           "Assets under $9,950 (individual)",
           "North Carolina resident"
         ],
@@ -446,11 +446,33 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1350
+            "monthlyLimit": 1330,
+            "program": "QMB (full coverage)"
+          },
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1596,
+            "program": "SLMB (Part B premium)"
+          },
+          {
+            "householdSize": 1,
+            "monthlyLimit": 1796,
+            "program": "QI (Part B premium, limited funding)"
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1824
+            "monthlyLimit": 1804,
+            "program": "QMB (full coverage)"
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2164,
+            "program": "SLMB (Part B premium)"
+          },
+          {
+            "householdSize": 2,
+            "monthlyLimit": 2435,
+            "program": "QI (Part B premium, limited funding)"
           }
         ],
         "assetLimits": {
@@ -497,7 +519,7 @@
           {
             "step": 3,
             "title": "Submit complete application",
-            "description": "Complete the NC Medicaid Application (Form DMA-3000 or online equivalent) with all required income, asset, and identity documentation."
+            "description": "Complete the NC Medicaid application for adults (Form DHB-5200, or the ePASS online application) with all required income, asset, and identity documentation."
           },
           {
             "step": 4,
@@ -512,15 +534,15 @@
         ],
         "processingTime": "Typically 45 days, but varies by county",
         "waitlist": "QI program only operates first-come, first-served with limited federal funding and may run out annually, reapply each year",
-        "tip": "If your loved one's income is close to the QI limit ($1,816/month), apply early in the year before funding runs out.",
+        "tip": "If your loved one's income is close to the QI limit ($1,796/month), apply early in the year before funding runs out.",
         "urls": [
           {
             "label": "NC ePASS Online Application",
             "url": "https://epass.nc.gov"
           },
           {
-            "label": "NC Medicaid MSP Information",
-            "url": "https://medicaid.ncdhhs.gov/providers/programs-and-services/medicare-savings-programs"
+            "label": "How to apply for NC Medicaid",
+            "url": "https://medicaid.ncdhhs.gov/apply"
           }
         ]
       },
@@ -545,6 +567,7 @@
         {
           "label": "NC Medicaid Contact Center",
           "phone": "(888) 245-0179",
+          "description": "Tells you which county Department of Social Services (DSS) to call. The county DSS takes the application by phone, in person or by mail. You can also apply online at epass.nc.gov.",
           "hours": "Mon-Fri 8am-5pm ET"
         },
         {
@@ -561,9 +584,8 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
-        "QI program funding is limited and distributed first-come, first-served, if your loved one's income is between $1,585-$1,816/month, apply early in the calendar year",
-        "Income includes the standard $20 general disregard, so your loved one may qualify even if their gross income appears slightly over the limit",
+        "QI program funding is limited and distributed first-come, first-served. If your loved one's countable income is between $1,596.01 and $1,796/month, apply early in the calendar year",
+        "The first $20 of monthly income is not counted, so gross income can be about $20 over the limits above and still qualify",
         "QMB beneficiaries cannot be billed by providers for covered Medicare services, make sure your loved one carries their MSP identification card",
         "All Medicare Savings Programs automatically trigger enrollment in Extra Help for prescription drugs, but confirm this benefit is active"
       ],
@@ -577,7 +599,7 @@
         {
           "type": "tier-comparison",
           "title": "QMB vs SLMB vs QI: Which Program Fits Your Parent?",
-          "content": "**QMB (Qualified Medicare Beneficiary)**, Income up to $1,350/month (single): Covers Part B premium ($202.90/month), all deductibles, copays, and coinsurance. Providers cannot bill your loved one for covered services.\n\n**SLMB (Specified Low-Income Medicare Beneficiary)**, Income $1,350-$1,616/month (single): Covers Part B premium only ($202.90/month, $2,435/year savings).\n\n**QI (Qualifying Individual)**, Income $1,616-$1,816/month (single): Covers Part B premium only ($202.90/month, $2,435/year savings). Limited funding, first-come first-served."
+          "content": "**QMB (Qualified Medicare Beneficiary)**, Income up to $1,330/month (single): Covers Part B premium ($202.90/month), all deductibles, copays, and coinsurance. Providers cannot bill your loved one for covered services.\n\n**SLMB (Specified Low-Income Medicare Beneficiary)**, Income $1,330-$1,596/month (single): Covers Part B premium only ($202.90/month, $2,435/year savings).\n\n**QI (Qualifying Individual)**, Income $1,596-$1,796/month (single): Covers Part B premium only ($202.90/month, $2,435/year savings). Limited funding, first-come first-served."
         },
         {
           "type": "callout",
@@ -592,7 +614,7 @@
         },
         {
           "question": "What if my loved one's income is just over the limit by a small amount?",
-          "answer": "They may still qualify because North Carolina applies a $20 general income disregard. So if your loved one's income is $1,370/month, only $1,350 counts for QMB eligibility. Always apply if income is close to the limits."
+          "answer": "They may still qualify because North Carolina applies a $20 general income disregard. So if your loved one's income is $1,350/month, only $1,330 counts, which is within the QMB limit. Always apply if income is close to the limits."
         },
         {
           "question": "Can I apply for my loved one if they have dementia or can't handle paperwork?",
@@ -629,16 +651,16 @@
       },
       "icon": "CurrencyDollar",
       "phone": "(888) 245-0179",
-      "sourceUrl": "https://medicaid.ncdhhs.gov/providers/programs-and-services/medicare-savings-programs",
+      "sourceUrl": "https://medicaid.ncdhhs.gov/apply",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-02"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
       "name": "NC Food and Nutrition Services (FNS)/SNAP",
       "shortName": "NC SNAP",
-      "tagline": "Monthly grocery benefits for seniors 60+ on fixed incomes, up to $298/month on an EBT card",
+      "tagline": "Monthly grocery benefits for seniors 60+ on fixed incomes, up to $306/month on an EBT card from October 1, 2026",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -651,39 +673,39 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling to afford groceries on a fixed income, they may qualify for $100–300/month in food benefits through North Carolina's SNAP program. The money comes on an EBT card that works like a debit card at grocery stores, farmers markets, and most food retailers, no cash required, no stigma at checkout.\n\nFor seniors, North Carolina has relaxed income rules (no gross income test, just net income after deductions) and higher asset limits ($4,500 instead of $3,000). Medical expenses over $35/month count as deductions, which often helps seniors qualify who wouldn't otherwise. If your loved one receives SSI and is 65+, they may automatically qualify for Simplified SNAP with 3-year certification periods.\n\nBecause SNAP is federally funded but state-administered, you apply through your local county Department of Social Services office. Processing takes 30 days standard, or 7 days if your loved one has very low income and urgent food needs.",
-      "savingsRange": "Up to $298/month ($3,576/year) for one person in FY2026",
-      "savingsSource": "USDA FY2026 maximum monthly allotments, effective Oct 1 2025 through Sep 30 2026: $298 for one person, $546 for two. NCDHHS republishes the same table and notes that most households do not receive the maximum. No official average benefit for North Carolina seniors is published.",
+      "intro": "If your loved one is 60+ and struggling to afford groceries on a fixed income, they may qualify for $100–300/month in food benefits through North Carolina's SNAP program. The money comes on an EBT card that works like a debit card at grocery stores, farmers markets, and most food retailers, no cash required, no stigma at checkout.\n\nFor seniors, North Carolina has relaxed income rules (no gross income test, just net income after deductions) and higher asset limits ($4,750 instead of $3,000). Medical expenses over $35/month count as deductions, which often helps seniors qualify who wouldn't otherwise. If your loved one receives SSI and is 65+, they may automatically qualify for Simplified SNAP with 3-year certification periods.\n\nBecause SNAP is federally funded but state-administered, you apply through your local county Department of Social Services office. Processing takes 30 days standard, or 7 days if your loved one has very low income and urgent food needs.",
+      "savingsRange": "Up to $306/month ($3,672/year) for one person, from October 1, 2026",
+      "savingsSource": "USDA maximum monthly allotments from October 1, 2026: $306 for one person, $562 for two. NCDHHS republishes the federal table each year and notes that most households do not receive the maximum. No official average benefit for North Carolina seniors is published.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+ (or household with someone 60+)",
-          "Net income below $1,133/month (1 person)",
-          "Assets below $4,500",
+          "Net income below $1,330/month (1 person), from October 1, 2026",
+          "No savings limit for most households. Only a household with someone 60+ or disabled whose income before deductions is over 200% of poverty faces a $4,750 limit (from October 1, 2026)",
           "North Carolina resident"
         ],
         "ageRequirement": "60+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1133
+            "monthlyLimit": 1330
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1526
+            "monthlyLimit": 1804
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 1920
+            "monthlyLimit": 2277
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 2313
+            "monthlyLimit": 2750
           }
         ],
         "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
+          "individual": null,
+          "couple": null,
           "countedAssets": [
             "Bank accounts",
             "Investments",
@@ -796,8 +818,8 @@
       "contentSections": [],
       "faqs": [
         {
-          "question": "Can my loved one keep their house if it's worth more than $4,500?",
-          "answer": "Yes. The primary home where your loved one lives doesn't count toward the $4,500 asset limit, regardless of value. Only countable assets like bank accounts, investments, and second properties count toward the limit."
+          "question": "Can my loved one keep their house and savings?",
+          "answer": "Yes. Most North Carolina households have no savings limit for SNAP, and the home they live in never counts. A $4,750 limit (from October 1, 2026) applies only when a household with someone 60 or older or disabled has income before deductions above 200% of poverty."
         },
         {
           "question": "What medical expenses help my loved one qualify?",
@@ -841,7 +863,7 @@
       "sourceUrl": "https://www.ncdhhs.gov/divisions/child-and-family-well-being/food-and-nutrition-services-food-stamps",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -2209,7 +2231,7 @@
           }
         ]
       },
-      "intro": "If your loved one needs daily help with bathing, dressing, or medication management, North Carolina Long-Term Care Medicaid can cover the full cost of nursing home care, assisted living, or home-based services. Your loved one pays most of their income toward care costs (keeping only $70/month for personal needs), and Medicaid covers the remainder, which can be $8,000–$11,000/month for nursing home care depending on the facility.\n\nTo qualify, your loved one must have less than $2,000 in countable assets (singles) or $3,000 (married couples both needing care), plus income below the regional nursing home pay rate (estimated $7,898–$11,218/month in 2026). They can keep their home if equity is under $730,000 and they intend to return, or if a spouse or disabled child lives there. Because this program requires a clinical assessment proving need for daily care, the application takes 45–90 days including the functional evaluation.",
+      "intro": "If your loved one needs daily help with bathing, dressing, or medication management, North Carolina Long-Term Care Medicaid can cover the full cost of nursing home care, assisted living, or home-based services. Your loved one pays most of their income toward care costs (keeping only $70/month for personal needs), and Medicaid covers the remainder, which can be $8,000–$11,000/month for nursing home care depending on the facility.\n\nTo qualify, your loved one must have less than $2,000 in countable assets (singles) or $3,000 (married couples both needing care), plus income below the regional nursing home pay rate (estimated $7,898–$11,218/month in 2026). They can keep their home if equity is under $752,000 and they intend to return, or if a spouse or disabled child lives there. Because this program requires a clinical assessment proving need for daily care, the application takes 45–90 days including the functional evaluation.",
       "savingsRange": "$8,000 – $11,000/month in 2026",
       "savingsSource": "Regional nursing home pay rates covered by Medicaid minus patient liability",
       "savingsVerified": true,
@@ -2233,13 +2255,13 @@
             "Non-exempt property"
           ],
           "exemptAssets": [
-            "Primary home (equity up to $730,000 if intent to return)",
+            "Primary home (equity up to $752,000 if intent to return)",
             "One vehicle",
             "Personal belongings",
             "Life insurance (face value $1,500 or less)",
             "Burial plots and funeral funds"
           ],
-          "homeEquityCap": 730000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must need Nursing Facility Level of Care (clinical assessment showing need for daily help with bathing, dressing, eating, toileting, mobility, or managing medications and household tasks)",
         "otherRequirements": [
@@ -2341,7 +2363,7 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than $2,000?",
-          "answer": "Yes, the home is exempt from asset limits if your loved one intends to return home, equity is under $730,000, or if a spouse, child under 21, or disabled child lives there. The home only counts toward the $2,000 limit if none of these conditions apply."
+          "answer": "Yes, the home is exempt from asset limits if your loved one intends to return home, equity is under $752,000, or if a spouse, child under 21, or disabled child lives there. The home only counts toward the $2,000 limit if none of these conditions apply."
         },
         {
           "question": "What happens to my loved one's Social Security and pension income?",
@@ -2384,7 +2406,8 @@
       "phone": "1-888-245-0179",
       "sourceUrl": "https://medicaid.ncdhhs.gov/providers/programs-and-services/long-term-care",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "project-care-dementia-caregiver-support",
@@ -2592,7 +2615,15 @@
         ],
         "ageRequirement": "65+",
         "incomeTable": null,
-        "assetLimits": null,
+        "assetLimits": {
+          "individual": 2000,
+          "couple": null,
+          "countedAssets": [
+            "Only your loved one's own resources count; a spouse's do not"
+          ],
+          "exemptAssets": [],
+          "homeEquityCap": null
+        },
         "functionalRequirement": "Must require the level of care provided in a licensed Adult Care Home, verified by a doctor using FL-2 form, but be able to live safely at home with services like in-home aide, home modifications, case management, and supplies",
         "otherRequirements": [
           "U.S. citizen or qualified alien",
@@ -2605,7 +2636,7 @@
       },
       "applicationGuide": {
         "method": "phone",
-        "summary": "Contact your county Department of Social Services office. Apply as soon as you can, because benefits start from the application date. Processing takes up to 45 days for applicants 65+.",
+        "summary": "Contact your county Department of Social Services office. Apply as soon as you can, because benefits can start as early as the application date. Processing takes up to 45 days for applicants 65+.",
         "steps": [
           {
             "step": 1,
@@ -2630,7 +2661,7 @@
         ],
         "processingTime": "Up to 45 days for applicants 65+; up to 60 days for applicants 18-64",
         "waitlist": null,
-        "tip": "Apply first, then chase the FL-2. Your benefits are backdated to the day you apply, so calling DSS before the doctor's form is ready protects money you would otherwise lose.",
+        "tip": "Apply first, then chase the FL-2. Benefits start on the day you apply, or the later day you meet every requirement, so calling DSS before the doctor's form is ready protects money you would otherwise lose.",
         "urls": [
           {
             "label": "NC DHHS Special Assistance Program",
@@ -2642,7 +2673,7 @@
         "State-issued photo identification (driver's license or ID card)",
         "Social Security award letter or SSI documentation",
         "Proof of all income sources (pensions, retirement, wages, benefits)",
-        "Do not wait for paperwork to call. Your payment start date is the day you apply, not the day the doctor signs. The FL-2 form (the doctor's form confirming adult care home level of care) can arrive afterward, during the review.",
+        "Do not wait for paperwork to call. Your payment can start as early as the day you apply, not the day the doctor signs. The FL-2 form (the doctor's form confirming adult care home level of care) can arrive afterward, during the review.",
         "Bank account details for every account: the bank name, account type, and current balance. A recent statement is the easiest proof.",
         "Insurance cards (Medicare, Medicaid, private insurance)",
         "Proof of North Carolina residency (utility bill, lease, voter registration)",
@@ -2658,7 +2689,7 @@
           "label": "NCDHHS Customer Service Center (start here)",
           "phone": "1-800-662-7030",
           "description": "Ask them to connect you to your county Department of Social Services, then ask Adult Services about State-County Special Assistance In-Home. Every county DSS is also listed at ncdhhs.gov/divisions/social-services/local-dss-directory.",
-          "hours": "Business hours"
+          "hours": "Mon-Fri 8am-5pm ET, except state holidays"
         },
         {
           "label": "Wake County Health & Human Services",
@@ -2674,10 +2705,9 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Eligibility is determined case-by-case, meeting the basic criteria doesn't guarantee approval",
         "Your spouse's income and assets do not affect your loved one's eligibility for this program",
-        "Enhanced rate ($1,700/month) requires valid FL-2 form specifically documenting Alzheimer's or dementia diagnosis",
+        "Enhanced rate ($1,862/month in 2026) requires a valid FL-2 form documenting an Alzheimer's or dementia diagnosis",
         "Case management is mandatory and includes monthly contact, quarterly home visits, and annual assessments"
       ],
       "relatedPrograms": [
@@ -2694,7 +2724,7 @@
             "tiers": [
               {
                 "name": "Basic Rate",
-                "amount": "$1,326/month",
+                "amount": "$1,467/month",
                 "requirements": [
                   "Age 65+ or disabled",
                   "Income below poverty level",
@@ -2704,7 +2734,7 @@
               },
               {
                 "name": "Enhanced Rate",
-                "amount": "$1,700/month",
+                "amount": "$1,862/month",
                 "requirements": [
                   "All Basic Rate requirements",
                   "Alzheimer's or dementia diagnosis",
@@ -2735,7 +2765,7 @@
         },
         {
           "question": "How much higher is the Enhanced rate really worth?",
-          "answer": "The Enhanced rate pays $374 more per month than the Basic rate ($1,700 vs $1,326), which equals $4,488 more per year. However, it requires a doctor-verified Alzheimer's or dementia diagnosis on the FL-2 form."
+          "answer": "The Enhanced rate pays $395 more per month than the Basic rate ($1,862 vs $1,467 in 2026), which equals $4,740 more per year. However, it requires a doctor-verified Alzheimer's or dementia diagnosis on the FL-2 form."
         },
         {
           "question": "What happens if my loved one's needs change after approval?",
@@ -2767,7 +2797,7 @@
       "sourceUrl": "https://www.ncdhhs.gov/divisions/social-services/special-assistance/state-and-county-special-assistance-home-residents",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-09-28"
     }
   ],
   "stateOverview": {

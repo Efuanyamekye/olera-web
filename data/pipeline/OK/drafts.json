@@ -130,7 +130,6 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Incomplete applications cause major delays, submit all required documentation at once to avoid processing holds",
         "Different SoonerCare categories have different rules: ABD allows higher assets but basic coverage only, while Nursing Home Medicaid has stricter asset limits but covers long-term care",
         "Spousal impoverishment rules protect the community spouse's assets and income if your loved one needs nursing home care",
@@ -190,7 +189,7 @@
       "sourceUrl": "https://oklahoma.gov/ohca",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "advantage-waiver-hcbs",
@@ -209,14 +208,14 @@
           }
         ]
       },
-      "intro": "If your loved one needs daily help with bathing, dressing, or medication management but wants to stay home, Oklahoma's ADvantage Waiver can pay for home care services that would otherwise require nursing home placement. This Medicaid program covers case management, personal care, and other support services tailored to your loved one's specific needs.\n\nYour loved one must be 65+ or have a qualifying physical disability, meet nursing facility level of care requirements, and have income under $2,901/month in 2025. Because this waiver has limited enrollment slots, eligible applicants are placed on a waitlist until an opening becomes available. The program requires living in your own home or a family member's home, not in assisted living or other facilities.",
+      "intro": "If your loved one needs daily help with bathing, dressing, or medication management but wants to stay home, Oklahoma's ADvantage Waiver can pay for home care services that would otherwise require nursing home placement. This Medicaid program covers case management, personal care, and other support services tailored to your loved one's specific needs.\n\nYour loved one must be 65+ or have a qualifying physical disability, meet nursing facility level of care requirements, and have income under $2,982/month in 2026. Because this waiver has limited enrollment slots, eligible applicants are placed on a waitlist until an opening becomes available. The program requires living in your own home or a family member's home, not in assisted living or other facilities.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 65+ or 19-64 with physical disability",
-          "Income under $2,901/month",
+          "Income under $2,982/month (2026)",
           "Assets under $2,000",
           "Nursing facility level of care required",
           "Oklahoma resident"
@@ -225,18 +224,18 @@
         "incomeTable": null,
         "assetLimits": {
           "individual": 2000,
-          "couple": 2000,
+          "couple": 3000,
           "countedAssets": [
             "Bank accounts",
             "Investments",
             "Stocks and bonds"
           ],
           "exemptAssets": [
-            "Primary home (if equity under $730,000)",
+            "Primary home (if equity under $752,000)",
             "One vehicle",
             "Burial contracts"
           ],
-          "homeEquityCap": 730000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must need nursing facility level of care (assessed through clinical evaluation of ability to perform daily activities like bathing, dressing, and medication management)",
         "otherRequirements": [
@@ -249,12 +248,12 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Call Oklahoma Human Services for assessment, processing includes financial interview, nurse assessment, and waitlist placement if no slots available.",
+        "summary": "Apply online or call 1-800-435-4711 for a phone application. Processing includes a financial review, a nurse assessment at home, and waitlist placement if no slots are available.",
         "steps": [
           {
             "step": 1,
-            "title": "Contact Oklahoma Human Services",
-            "description": "Call your local county OKDHS office or visit in person to start the assessment process. You can also begin online at the Oklahoma Human Services website."
+            "title": "Choose a provider, then apply",
+            "description": "Pick a home care and case management provider for your county with the OKDHS Provider Search tool. Then apply online on the ADvantage page, or call 1-800-435-4711 for a 10-15 minute phone application. Your county OKDHS office can also take it."
           },
           {
             "step": 2,
@@ -284,6 +283,10 @@
           {
             "label": "Oklahoma Human Services",
             "url": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html"
+          },
+          {
+            "label": "OKDHS Provider Search",
+            "url": "https://oklahoma.gov/okdhs/services/cap/providersearch.html"
           }
         ]
       },
@@ -305,22 +308,22 @@
       ],
       "contacts": [
         {
-          "label": "Oklahoma Human Services",
-          "phone": "(800) 522-0310",
-          "description": "Main number for ADvantage Waiver applications and information",
-          "hours": "Mon-Fri 8am-5pm CT"
+          "label": "ADvantage phone application (Oklahoma Human Services Medicaid Services Unit)",
+          "phone": "(800) 435-4711",
+          "description": "Call to apply by phone. It is a 10-15 minute phone interview. You can also apply online on the ADvantage page or through your county OKDHS office.",
+          "hours": null
         },
         {
-          "label": "Regional Provider Example",
-          "phone": "(918) 477-9080",
-          "description": "Local provider contact for services",
-          "hours": "Contact for hours"
+          "label": "ADvantage program (alternate number)",
+          "phone": "(918) 933-4900",
+          "description": "The second number Oklahoma Human Services lists for the ADvantage program.",
+          "hours": null
         }
       ],
       "applicationNotes": [
         "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Limited waiver slots mean even eligible applicants may wait months or years for services to begin",
-        "Annual income and asset limits update each year, 2025 limits are $2,901/month income and $730,000 home equity",
+        "Income and asset limits update each year. The 2026 limits are $2,982 a month in income and $752,000 in home equity.",
         "Participants aged 19-64 with physical disabilities cannot have intellectual disabilities or developmental cognitive impairments",
         "Services must be needed at least monthly to prevent nursing home placement, not just for general Medicaid eligibility"
       ],
@@ -334,7 +337,7 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than the $2,000 asset limit?",
-          "answer": "Yes, the primary home is exempt from the $2,000 asset limit as long as your loved one lives there or intends to return, and the home equity doesn't exceed $730,000 in 2025. If a spouse or dependent child lives in the home, there's no equity limit."
+          "answer": "Yes, the primary home is exempt from the $2,000 asset limit as long as your loved one lives there or intends to return, and the home equity doesn't exceed $752,000 in 2026. If a spouse or dependent child lives in the home, there's no equity limit."
         },
         {
           "question": "How long is the waitlist really?",
@@ -345,7 +348,7 @@
           "answer": "You can help with the application process, but note that people aged 19-64 cannot qualify if they have cognitive impairments related to developmental disabilities. Those 65+ with any type of dementia can qualify if they meet other requirements."
         },
         {
-          "question": "What happens if my loved one's income goes over $2,901/month after enrollment?",
+          "question": "What happens if my loved one's income goes over $2,982/month after enrollment?",
           "answer": "Your loved one would lose eligibility during the annual redetermination process. However, they might qualify for other Medicaid programs or special income trusts, discuss options with your case manager before this happens."
         },
         {
@@ -374,11 +377,11 @@
         "visualTone": "editorial"
       },
       "icon": "House",
-      "phone": "(800) 522-0310",
+      "phone": "(800) 435-4711",
       "sourceUrl": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-comprehensive-care",
@@ -740,7 +743,6 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Income limits update every April 1, verify current amounts with OKDHS when applying",
         "Oklahoma uses stricter income limits than federal baselines, so you may not qualify even if eligible in other states",
         "QI requires annual reapplication and excludes those eligible for other Medicaid programs",
@@ -833,7 +835,7 @@
       "sourceUrl": "https://oklahoma.gov/okdhs/services/health/help.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -852,15 +854,15 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly funds on an EBT card for food purchases. The amount depends on household size and income, a typical 2-person elderly household might receive $415/month after deductions, with a minimum of $24 for smaller households.\n\nSeniors get special advantages: they only need to meet the net income test (not gross), can deduct medical expenses over $35/month, and have higher asset limits. Because Oklahoma processes applications within 30 days (7 days if expedited), your loved one could be getting food assistance within weeks of applying.\n\nThe EBT card works like a debit card at grocery stores for food purchases, but cannot be used for alcohol, tobacco, or hot prepared foods. All Social Security, pension, and other income counts, but medical expenses and housing costs are deducted from income calculations.",
-      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
-      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
+      "intro": "If your loved one is 60+ and struggling with grocery costs, SNAP provides monthly funds on an EBT card for food purchases. The amount depends on household size and income, a typical 2-person elderly household might receive $415/month after deductions, with a minimum of $25 for smaller households.\n\nSeniors get special advantages: they only need to meet the net income test (not gross), can deduct medical expenses over $35/month, and have higher asset limits. Because Oklahoma processes applications within 30 days (7 days if expedited), your loved one could be getting food assistance within weeks of applying.\n\nThe EBT card works like a debit card at grocery stores for food purchases, but cannot be used for alcohol, tobacco, or hot prepared foods. All Social Security, pension, and other income counts, but medical expenses and housing costs are deducted from income calculations.",
+      "savingsRange": "Up to $306/month ($3,672/year) for one person, from October 1, 2026",
+      "savingsSource": "USDA FY2027 maximum allotment for a one-person household in the 48 contiguous states and DC: $306/month, from October 1, 2026 (OKDHS Appendix C-3). The minimum for a one- or two-person household is $25/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
-          "Net income below $1,255/month (1 person)",
-          "Assets under $4,250",
+          "Net income below $1,330/month (1 person, from October 1, 2026)",
+          "Most households have no asset test in Oklahoma. If the test applies, the limit is $4,750 when someone in the home is 60+ or disabled (from October 1, 2026)",
           "Oklahoma resident",
           "U.S. citizen or qualified immigrant"
         ],
@@ -868,24 +870,24 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1255
+            "monthlyLimit": 1330
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1703
+            "monthlyLimit": 1804
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 2151
+            "monthlyLimit": 2277
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 2599
+            "monthlyLimit": 2750
           }
         ],
         "assetLimits": {
-          "individual": 4250,
-          "couple": 4250,
+          "individual": null,
+          "couple": null,
           "countedAssets": [
             "Cash",
             "Bank accounts",
@@ -1014,7 +1016,7 @@
           "answer": "Yes, if you're their legal guardian or have power of attorney. You'll need to provide those legal documents with the application. If you don't have legal authority, your loved one must apply themselves or you can help them apply as their representative during the interview."
         },
         {
-          "question": "Does money in a retirement account count toward the $4,250 asset limit?",
+          "question": "Does money in a retirement account count toward the $4,750 asset limit?",
           "answer": "No, 401(k)s, IRAs, and pension plans don't count as assets. However, any money your loved one withdraws from these accounts does count as income in the month they withdraw it."
         },
         {
@@ -1047,7 +1049,7 @@
       "sourceUrl": "https://oklahoma.gov/okdhs/services/snap.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -1904,14 +1906,14 @@
           }
         ]
       },
-      "intro": "If your loved one is 65+ or disabled and needs daily help with basic tasks like bathing, dressing, or meal preparation, the ADvantage Waiver Program can provide in-home care services as an alternative to nursing home placement. Because this program covers personalized home and community-based services through Medicaid, your loved one can remain in their own home while receiving the care they need.\n\nThe program requires your loved one to qualify for both SoonerCare (Oklahoma Medicaid) financially and meet Nursing Facility Level of Care medically. Income limit: $2,199/month for an individual. Asset limit: $2,000 (home equity up to $730,000 if living there). Because slots are limited, there's a statewide waitlist when the program is full.",
+      "intro": "If your loved one is 65+ or disabled and needs daily help with basic tasks like bathing, dressing, or meal preparation, the ADvantage Waiver Program can provide in-home care services as an alternative to nursing home placement. Because this program covers personalized home and community-based services through Medicaid, your loved one can remain in their own home while receiving the care they need.\n\nThe program requires your loved one to qualify for both SoonerCare (Oklahoma Medicaid) financially and meet Nursing Facility Level of Care medically. Income limit: $2,982/month for an individual in 2026. Asset limit: $2,000 (home equity up to $752,000 if living there). Because slots are limited, there's a statewide waitlist when the program is full.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 65+ or disabled 19-64",
-          "Income below $2,199/month",
+          "Income below $2,982/month (2026)",
           "Assets under $2,000",
           "Needs daily help with bathing, dressing, or similar tasks",
           "Oklahoma resident"
@@ -1927,12 +1929,12 @@
             "Vehicles over one per person"
           ],
           "exemptAssets": [
-            "Primary home (if equity under $730,000)",
+            "Primary home (if equity under $752,000)",
             "Home if spouse or disabled child lives there",
             "Personal belongings",
             "One vehicle per person"
           ],
-          "homeEquityCap": 730000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must need Nursing Facility Level of Care (a clinical assessment showing your loved one needs daily help with basic activities like bathing, dressing, mobility, or medication management)",
         "otherRequirements": [
@@ -2027,9 +2029,9 @@
       "applicationNotes": [
         "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "If your loved one has intellectual disability or cognitive impairment, they may not qualify for ADvantage, ask about other waiver programs that serve those conditions",
-        "Home equity over $730,000 can disqualify your loved one unless a spouse, minor child, or disabled adult child lives in the home",
+        "Home equity over $752,000 can disqualify your loved one unless a spouse, minor child, or disabled adult child lives in the home",
         "Annual redetermination is required, financial and medical eligibility must be renewed each year",
-        "Even if income is slightly over $2,199, deductions for medical expenses may bring it within limits, don't assume disqualification"
+        "If income is a little over $2,982, don't assume your loved one is out. Ask the OKDHS worker what options apply."
       ],
       "relatedPrograms": [
         "SoonerCare (Oklahoma Medicaid)",
@@ -2041,11 +2043,11 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than the $2,000 asset limit?",
-          "answer": "Yes, the family home is exempt from the $2,000 asset limit as long as your loved one lives there or intends to return. However, home equity cannot exceed $730,000 in 2025. If a spouse, minor child under 21, or permanently disabled adult child lives in the home, there's no equity limit at all."
+          "answer": "Yes, the family home is exempt from the $2,000 asset limit as long as your loved one lives there or intends to return. However, home equity cannot exceed $752,000 in 2026. If a spouse, minor child under 21, or permanently disabled adult child lives in the home, there's no equity limit at all."
         },
         {
-          "question": "What if my loved one's income is $2,250/month, just over the $2,199 limit?",
-          "answer": "They may still qualify if they have medical expenses that reduce their countable income below $2,199. Things like Medicare premiums, prescription costs, and other medical expenses can be deducted. The OKDHS financial interview will calculate this for you."
+          "question": "What if my loved one's income is just over the $2,982 limit?",
+          "answer": "Ask before assuming they are out. The OKDHS financial interview looks at your loved one's whole situation and can tell you what options apply."
         },
         {
           "question": "How long is the waitlist really?",
@@ -2085,7 +2087,7 @@
       "sourceUrl": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "chore-services-title-iii",

@@ -22,14 +22,14 @@
           }
         ]
       },
-      "intro": "If your loved one needs daily help with bathing, dressing, or medication management but wants to stay home, Alabama's Elderly and Disabled Waiver covers personal care, homemaker services, respite care, and home-delivered meals. Your loved one must be at risk of nursing home placement (determined by a physician) and meet Medicaid's financial rules, income below $2,829/month and assets under $2,000.\n\nThe program is person-centered, meaning services are tailored to your loved one's specific needs through a care plan developed with a case manager. Services can include personal care assistance, adult day health programs, companion services, and respite care to give you breaks from caregiving.\n\nOnly 15,000 slots are available statewide, so there's often a waitlist when the program is full. The program is administered regionally through local Area Agencies on Aging, so contact your regional office to apply and check current availability.",
+      "intro": "If your loved one needs daily help with bathing, dressing, or medication management but wants to stay home, Alabama's Elderly and Disabled Waiver covers personal care, homemaker services, respite care, and home-delivered meals. Your loved one must be at risk of nursing home placement (determined by a physician) and meet Medicaid's financial rules, income below $2,982/month and assets under $2,000.\n\nThe program is person-centered, meaning services are tailored to your loved one's specific needs through a care plan developed with a case manager. Services can include personal care assistance, adult day health programs, companion services, and respite care to give you breaks from caregiving.\n\nOnly 15,000 slots are available statewide, so there's often a waitlist when the program is full. The program is administered regionally through local Area Agencies on Aging, so contact your regional office to apply and check current availability.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "At risk of nursing home placement",
-          "Income below $2,829/month",
+          "Income below $2,982/month (2026)",
           "Assets under $2,000",
           "Must qualify for Medicaid",
           "Alabama resident"
@@ -46,13 +46,13 @@
             "Stocks and bonds"
           ],
           "exemptAssets": [
-            "Primary home (up to $1,130,000 equity)",
+            "Primary home (up to $752,000 equity in 2026)",
             "One vehicle",
             "Household furnishings",
             "Personal effects",
             "Appliances"
           ],
-          "homeEquityCap": 1130000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must meet nursing facility level of care (a clinical assessment by a physician that your loved one needs daily help with activities like bathing, dressing, eating, or medication management)",
         "otherRequirements": [
@@ -60,7 +60,7 @@
           "Financially eligible for full Medicaid",
           "Willing to receive services at home or in the community"
         ],
-        "povertyLevelReference": "300% of SSI Federal Benefit Rate"
+        "povertyLevelReference": "300% of SSI Federal Benefit Rate ($994 x 3 = $2,982/month in 2026)"
       },
       "applicationGuide": {
         "method": "multiple",
@@ -69,12 +69,12 @@
           {
             "step": 1,
             "title": "Contact your local Area Agency on Aging",
-            "description": "Find your regional AAA through Alabama Department of Senior Services at https://alabamaageline.gov/medicaid-waiver-programs/ or call the general Medicaid line at 1-800-362-1504 for referral to your local office."
+            "description": "Call the Alabama Department of Senior Services AgeLine at 1-800-243-5463. They take E&D waiver applications and connect you to your local Area Agency on Aging. You can also find your AAA at https://alabamaageline.gov/medicaid-waiver-programs/."
           },
           {
             "step": 2,
             "title": "Complete Medicaid eligibility screening",
-            "description": "Your local AAA will help determine if your loved one meets Medicaid's financial requirements (income below $2,829/month, assets under $2,000)."
+            "description": "Your local AAA will help determine if your loved one meets Medicaid's financial requirements (income below $2,982/month, assets under $2,000)."
           },
           {
             "step": 3,
@@ -157,7 +157,7 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than $2,000?",
-          "answer": "Yes, the primary home is exempt from the $2,000 asset limit as long as your loved one lives there, intends to return, or certain family members live there. However, home equity cannot exceed $1,130,000 in 2026. The home may be subject to estate recovery after your loved one's death."
+          "answer": "Yes, the primary home is exempt from the $2,000 asset limit as long as your loved one lives there, intends to return, or certain family members live there. However, home equity cannot exceed $752,000 in 2026. The home may be subject to estate recovery after your loved one's death."
         },
         {
           "question": "What happens if my loved one gave away money or property in the last 5 years?",
@@ -201,7 +201,7 @@
       "sourceUrl": "https://medicaid.alabama.gov/content/6.0_LTC_waivers/6.1_HCBS_waivers.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-comprehensive-care",
@@ -378,7 +378,7 @@
       "id": "medicare-savings-programs-qmb-slmb-qi",
       "name": "Alabama Medicaid Medicare Savings Programs (QMB, SLMB, QI)",
       "shortName": "Medicare Savings Programs",
-      "tagline": "Get help paying Medicare premiums, deductibles, and coinsurance if your loved one's income is below $1,695/month",
+      "tagline": "Get help paying Medicare premiums, deductibles, and coinsurance if your loved one's income is below $1,816/month",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -391,68 +391,52 @@
           }
         ]
       },
-      "intro": "If your loved one struggles to pay Medicare costs on a fixed income, Alabama's Medicare Savings Programs can help. These three programs, QMB, SLMB, and QI, cover Medicare premiums, deductibles, and coinsurance based on income level. QMB provides the most comprehensive help, paying the $206.50 monthly Part B premium plus all deductibles and the 20% coinsurance that Medicare doesn't cover.\n\nYour loved one must have Medicare and meet strict income limits: $1,275/month for QMB, $1,506/month for SLMB, or $1,695/month for QI (higher limits for couples). Asset limits are $9,430 for individuals or $14,130 for couples. Because QMB automatically qualifies your loved one for Extra Help with prescription drug costs, it provides the most value.\n\nThe QI program has limited funding and operates first-come, first-served, so applications may be denied when funds run out. All three programs can provide retroactive coverage, but you must apply to find out which tier your loved one qualifies for.",
+      "intro": "If your loved one struggles to pay Medicare costs on a fixed income, Alabama's Medicare Savings Programs can help. These three programs, QMB, SLMB, and QI, cover Medicare premiums, deductibles, and coinsurance based on income level. QMB provides the most comprehensive help, paying the $202.90 monthly Part B premium (2026) plus all deductibles and the 20% coinsurance that Medicare doesn't cover.\n\nYour loved one must have Medicare and meet strict income limits: $1,350/month for QMB, $1,616/month for SLMB, or $1,816/month for QI (higher limits for couples). Alabama has no asset limit for these programs. Because QMB automatically qualifies your loved one for Extra Help with prescription drug costs, it provides the most value.\n\nThe QI program has limited funding and operates first-come, first-served, so applications may be denied when funds run out. All three programs can provide retroactive coverage, but you must apply to find out which tier your loved one qualifies for.",
       "savingsRange": "$2,435/year in 2026, plus Medicare cost-sharing for QMB enrollees",
       "savingsSource": "CMS: the 2026 standard Part B premium is $202.90/month ($2,434.80/year), which every Medicare Savings Program covers. QMB also pays Part A and B deductibles and coinsurance; that amount depends on the care used and is not quantified here.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
-          "Age 65+ with Medicare",
-          "Income below $1,695/month (single)",
-          "Assets under $9,430 (single)",
+          "Has or is eligible for Medicare Part A (any age)",
+          "Income below $1,816/month (single)",
+          "No asset limit in Alabama",
           "Alabama resident",
           "U.S. citizen or legal status"
         ],
-        "ageRequirement": "65+",
+        "ageRequirement": null,
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1275,
+            "monthlyLimit": 1350,
             "program": "QMB"
           },
           {
             "householdSize": 1,
-            "monthlyLimit": 1506,
+            "monthlyLimit": 1616,
             "program": "SLMB"
           },
           {
             "householdSize": 1,
-            "monthlyLimit": 1695,
+            "monthlyLimit": 1816,
             "program": "QI"
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1724,
+            "monthlyLimit": 1824,
             "program": "QMB"
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 2044,
+            "monthlyLimit": 2184,
             "program": "SLMB"
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 2300,
+            "monthlyLimit": 2455,
             "program": "QI"
           }
         ],
-        "assetLimits": {
-          "individual": 9430,
-          "couple": 14130,
-          "countedAssets": [
-            "Bank accounts",
-            "Stocks and bonds",
-            "Investment accounts"
-          ],
-          "exemptAssets": [
-            "Home",
-            "One car",
-            "Burial plots",
-            "Life insurance up to $1,500 face value",
-            "Personal belongings"
-          ],
-          "homeEquityCap": null
-        },
+        "assetLimits": null,
         "functionalRequirement": null,
         "otherRequirements": [
           "Must be enrolled in Medicare",
@@ -512,13 +496,9 @@
         "Social Security award letter or SSI statement",
         "Pay stubs from last 30 days (if working)",
         "Pension or retirement income statements",
-        "Investment account statements (stocks, bonds, annuities)",
         "Birth certificate or driver's license",
         "Proof of Alabama residency (utility bill or lease)",
-        "Social Security card",
-        "Life insurance policies showing face value",
-        "Vehicle titles and registration",
-        "Property deeds or tax statements"
+        "Social Security card"
       ],
       "contacts": [
         {
@@ -535,11 +515,10 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
+        "There is no screening call. You apply by sending Form 211 with proof of gross monthly income. By signing it you let Medicaid check your income electronically.",
         "QI program funding is limited, apply early in the calendar year before funds are exhausted",
         "SLMB and QI recipients don't get Medicaid cards but still receive premium assistance",
-        "QMB automatically qualifies your loved one for Medicare Part D Extra Help prescription assistance",
-        "Income limits include a $20 general disregard, so actual limits are slightly higher than listed"
+        "QMB automatically qualifies your loved one for Medicare Part D Extra Help prescription assistance"
       ],
       "relatedPrograms": [
         "Medicare Part D Extra Help",
@@ -555,20 +534,20 @@
             "tiers": [
               {
                 "name": "QMB",
-                "incomeLimit": "$1,275 single / $1,724 couple",
-                "benefits": "Part B premium ($206.50/month), deductibles ($1,716 hospital, $288 medical), 20% coinsurance",
+                "incomeLimit": "$1,350 single / $1,824 couple",
+                "benefits": "Part B premium ($202.90/month), deductibles ($1,716 hospital, $288 medical), 20% coinsurance",
                 "extras": "Medicaid card, automatic Extra Help"
               },
               {
                 "name": "SLMB",
-                "incomeLimit": "$1,506 single / $2,044 couple",
-                "benefits": "Part B premium only ($206.50/month)",
+                "incomeLimit": "$1,616 single / $2,184 couple",
+                "benefits": "Part B premium only ($202.90/month)",
                 "extras": "No Medicaid card"
               },
               {
                 "name": "QI",
-                "incomeLimit": "$1,695 single / $2,300 couple",
-                "benefits": "Part B premium only ($206.50/month)",
+                "incomeLimit": "$1,816 single / $2,455 couple",
+                "benefits": "Part B premium only ($202.90/month)",
                 "extras": "Limited funding, first-come first-served"
               }
             ]
@@ -578,11 +557,11 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house and car if the house is worth $200,000?",
-          "answer": "Yes. The family home and one car are completely exempt from the asset limits, regardless of value. Only countable assets like bank accounts and investments count toward the $9,430 individual limit."
+          "answer": "Yes. Alabama does not count savings or property for the Medicare Savings Programs at all. There is no asset limit, so the home, car, and savings do not affect eligibility."
         },
         {
           "question": "What happens if my loved one's income is $50 over the QMB limit?",
-          "answer": "They may still qualify for SLMB (up to $1,506/month) or QI (up to $1,695/month), which cover the Part B premium. Remember there's a $20 income disregard, so limits are slightly higher than published."
+          "answer": "They may still qualify for SLMB (up to $1,616/month) or QI (up to $1,816/month), which cover the Part B premium. These limits already include the $20 income disregard."
         },
         {
           "question": "Will providers balance bill my loved one if they have SLMB or QI?",
@@ -602,7 +581,7 @@
         },
         {
           "question": "What if my loved one's Medicare premium is already deducted from Social Security?",
-          "answer": "The program will reimburse the premium directly to Social Security, so your loved one will see the $206.50 monthly deduction stop or get refunded. This happens automatically after approval."
+          "answer": "The program will reimburse the premium directly to Social Security, so your loved one will see the $202.90 monthly deduction stop or get refunded. This happens automatically after approval."
         },
         {
           "question": "Do these programs cover Medicare Advantage plan premiums?",
@@ -622,7 +601,7 @@
       "sourceUrl": "https://medicaid.alabama.gov/content/3.0_Apply/3.2_Qualifying/3.2.6_Help_Paying_Medicare.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "aesap-elderly-food-assistance",
@@ -641,43 +620,27 @@
           }
         ]
       },
-      "intro": "If your loved one is 65 or older and lives in a household where everyone is 65 or older, they may qualify for monthly food assistance through Alabama's simplified elderly application process. Because AESAP streamlines the regular SNAP application, your loved one gets the same monthly benefits (up to $298 for a single person in 2026) but with a shorter 2-page form, no interview required, and benefits certified for 3 years instead of 1.\n\nThe key requirement: no one in the household can have earned income (wages or self-employment) in the month they apply. Social Security, pensions, and other unearned income are allowed. Income limits are the same as regular SNAP, $1,696 gross monthly income for a single person for the federal fiscal year running October 2025 through September 2026, with limits updated annually.\n\nBecause this is still the same SNAP program underneath, your loved one gets an EBT debit card that works at grocery stores, farmers markets, and online retailers like Amazon and Walmart for eligible food purchases.",
+      "intro": "If your loved one is 65 or older and lives in a household where everyone is 65 or older, they may qualify for monthly food assistance through Alabama's simplified elderly application process. Because AESAP streamlines the regular SNAP application, your loved one gets the same monthly benefits (up to $306 a month for a single person from October 1, 2026) but with a shorter 2-page form, no interview required, and benefits certified for 3 years instead of 1.\n\nThe key requirement: no one in the household can have earned income (wages or self-employment) in the month they apply. Social Security, pensions, and other unearned income are allowed. Income limits are the same as regular SNAP. From October 1, 2026, a single person qualifies with income before deductions under $1,729 a month, and there is no savings limit. Above that, your loved one can still qualify if income after deductions is under $1,330 a month and savings are under $4,750. Medical costs over $35 a month and housing costs are deducted.\n\nBecause this is still the same SNAP program underneath, your loved one gets an EBT debit card that works at grocery stores, farmers markets, and online retailers like Amazon and Walmart for eligible food purchases.",
       "savingsRange": "",
-      "savingsSource": "No official figure. Alabama DHR calculates AESAP benefits under regular SNAP rules. The federal maximum for a one-person household is $298/month for FY2026 (USDA FNS); most households receive less.",
+      "savingsSource": "No official figure. Alabama DHR calculates AESAP benefits under regular SNAP rules. The federal maximum for a one-person household is $306/month from October 1, 2026 (USDA FNS FY2027); most households receive less.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 65+",
           "All household members 65+",
           "No earned income",
-          "Income below $1,696/month (single)",
-          "Same asset limits as SNAP"
+          "Income before deductions under $1,729/month for one person, or under $1,330 after deductions (from October 1, 2026)",
+          "No savings limit for most households"
         ],
         "ageRequirement": "65+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1696
+            "monthlyLimit": 1729
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 2292
-          },
-          {
-            "householdSize": 3,
-            "monthlyLimit": 2888
-          },
-          {
-            "householdSize": 4,
-            "monthlyLimit": 3483
-          },
-          {
-            "householdSize": 5,
-            "monthlyLimit": 4079
-          },
-          {
-            "householdSize": 6,
-            "monthlyLimit": 4675
+            "monthlyLimit": 2345
           }
         ],
         "assetLimits": null,
@@ -688,11 +651,11 @@
           "U.S. citizen or qualified non-citizen",
           "Alabama resident"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": "130% FPL before deductions (Alabama broad-based eligibility); 100% FPL after deductions above that"
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online, by phone at 1-800-438-2958, or mail the 2-page AESAP form to your county DHR office, processing takes up to 30 days.",
+        "summary": "Apply online, by mail, by fax, or at your county DHR office using the 2-page AESAP form. Call 1-800-438-2958 for help filling it out. Processing takes up to 30 days.",
         "steps": [
           {
             "step": 1,
@@ -707,7 +670,7 @@
           {
             "step": 3,
             "title": "Submit your application",
-            "description": "Submit online at dhr.alabama.gov, mail to your county DHR Food Assistance office, or call 1-800-438-2958. No in-person interview required unless specifically requested."
+            "description": "Submit online at dhr.alabama.gov, mail it to Food Assistance Division, P.O. Box 304000, Montgomery, AL 36130-4000, fax it to (334) 353-1177, or drop it at your county DHR office. Call 1-800-438-2958 if you need help filling it out. There is no in-person interview unless you ask for one."
           },
           {
             "step": 4,
@@ -735,7 +698,7 @@
         {
           "label": "AESAP Customer Service (start here)",
           "phone": "1-800-438-2958",
-          "description": "Alabama DHR. They send the 2-page AESAP form, answer questions on it, and take it back by phone.",
+          "description": "Alabama DHR Food Assistance Division. Call for help filling out the 2-page AESAP form or to ask questions about it. Send the finished form by mail, fax, at your county office, or online.",
           "hours": "Mon-Fri 8am-5pm CT"
         },
         {
@@ -752,7 +715,7 @@
         }
       ],
       "applicationNotes": [
-        "No face-to-face interview required unless DHR specifically requests one, most applications processed entirely by mail or online",
+        "No face-to-face interview unless your household asks for one. Most applications are handled entirely by mail or online.",
         "Benefits are certified for 3 years instead of the usual 1 year, but you must submit an annual Interim Contact Form to maintain benefits",
         "Self-declaration is allowed for most information, but DHR will verify questionable details, fraud penalties include fines and possible imprisonment"
       ],
@@ -774,7 +737,7 @@
         },
         {
           "question": "How much in food benefits will my loved one actually receive?",
-          "answer": "The amount depends on household size and income after deductions. A single person with no income gets the maximum $298/month, but most people receive less based on their Social Security or other income. Medical expenses over $35/month can be deducted to increase benefits."
+          "answer": "The amount depends on household size and income after deductions. A single person with no income gets the maximum, $306/month from October 1, 2026, but most people receive less based on their Social Security or other income. Medical expenses over $35/month can be deducted to increase benefits."
         },
         {
           "question": "What happens after the 3-year certification period ends?",
@@ -786,7 +749,7 @@
         },
         {
           "question": "Do the same asset limits apply as regular SNAP?",
-          "answer": "Yes, AESAP follows the same resource limits as regular SNAP. Your loved one's home and one vehicle don't count, but bank accounts, investments, and other countable resources are subject to federal SNAP asset limits."
+          "answer": "Yes, and for most households that means no savings limit. Alabama does not count savings when income before deductions is under $1,729 a month for one person (from October 1, 2026). Above that, savings must be under $4,750. The home does not count either way."
         }
       ],
       "layoutIntent": {
@@ -802,7 +765,7 @@
       "sourceUrl": "https://dhr.alabama.gov/food-assistance/alabama-elderly-simplified-application-project-aesap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -821,7 +784,7 @@
           }
         ]
       },
-      "intro": "If your loved one struggles to pay heating or cooling bills on a fixed income, Alabama LIHEAP provides direct payments to utility companies. The program pays up to $580 toward heating costs and $520 toward cooling costs annually, you get one heating payment and one cooling payment per year, with emergency crisis assistance up to $1,100 for heating emergencies.\n\nBecause LIHEAP operates through local Community Action Agencies rather than a central state office, you must apply through your county's specific agency. Priority goes to households with seniors 60+, disabled members, young children, or those facing disconnection. Income limits are set at 150% of the federal poverty level, about $1,956/month for a single person in 2026. Your agency checks last month’s income.\n\nFunds are limited and distributed first-come, first-served. Cooling assistance runs May 1 through September 30 and heating assistance runs October 1 through April 30. Alabama does not operate year-round crisis help, so crisis assistance follows those same seasons.",
+      "intro": "If your loved one struggles to pay heating or cooling bills on a fixed income, Alabama LIHEAP provides direct payments to utility companies. The program pays up to $580 toward heating costs and $520 toward cooling costs annually, you get one heating payment and one cooling payment per year, with emergency crisis assistance up to $1,100 for heating emergencies.\n\nBecause LIHEAP operates through local Community Action Agencies rather than a central state office, you must apply through your county's specific agency. Priority goes to households with seniors 60+, disabled members, young children, or those facing disconnection. Income limits are set at 150% of the federal poverty level, about $1,995/month for a single person for the program year starting October 1, 2026. Your agency checks last month’s income.\n\nFunds are limited and distributed first-come, first-served. Cooling assistance runs May 1 through September 30 and heating assistance runs October 1 through April 30. Alabama does not operate year-round crisis help, so crisis assistance follows those same seasons.",
       "savingsRange": "Cooling up to $520, heating up to $580 per benefit (FY2026 maximums)",
       "savingsSource": "ADECA FY2026 LIHEAP State Plan sections 2.6 and 3.6 (heating $280-$580, cooling $320-$520), confirmed against the LIHEAP Clearinghouse Alabama profile. Crisis maximums are $1,100 winter and $990 summer. Households with high energy need may receive an extra $50, and a $100 IIJA supplement accompanies each benefit when funding allows. All figures are maximums, not typical awards.",
       "savingsVerified": true,
@@ -837,23 +800,23 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1956
+            "monthlyLimit": 1995
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 2643
+            "monthlyLimit": 2705
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 3331
+            "monthlyLimit": 3415
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 4018
+            "monthlyLimit": 4125
           },
           {
             "householdSize": 5,
-            "monthlyLimit": 4706
+            "monthlyLimit": 4835
           }
         ],
         "assetLimits": null,
@@ -878,7 +841,7 @@
           {
             "step": 2,
             "title": "Schedule an appointment",
-            "description": "Call your local agency to schedule. Some offer online scheduling portals (like West Alabama at https://littliteal.azurewebsites.net), while others require phone calls. Cooling appointments run May 1 through September 30, heating October 1 through April 30."
+            "description": "Call your local agency to schedule. Some offer online scheduling (for example, West Alabama at https://cspwal.com), while others require phone calls. Cooling appointments run May 1 through September 30, heating October 1 through April 30."
           },
           {
             "step": 3,
@@ -995,7 +958,7 @@
       "sourceUrl": "https://adeca.alabama.gov/liheap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "weatherization-assistance-program",
@@ -2252,7 +2215,7 @@
           }
         ]
       },
-      "intro": "If your loved one needs help with bathing, dressing, or medication management but wants to stay home, Alabama's Elderly and Disabled Waiver can cover personal care, homemaker services, adult day health, and respite care through Medicaid. Your loved one must qualify financially for Medicaid (typically income under $2,829/month) and meet clinical criteria showing they need nursing home level care.\n\nThe waiver has no yearly cost cap on services, a case manager develops a personalized care plan based on your loved one's specific needs. Services can include daily personal care, companion services, frozen meal delivery, and adult day programs. Because this waiver covers comprehensive home care under one program, your loved one won't need to coordinate between separate providers.\n\nThere is a waiting list, especially for people not already on Medicaid or SSI. Priority goes to those who are financially pre-qualified through existing Medicaid enrollment.",
+      "intro": "If your loved one needs help with bathing, dressing, or medication management but wants to stay home, Alabama's Elderly and Disabled Waiver can cover personal care, homemaker services, adult day health, and respite care through Medicaid. Your loved one must qualify financially for Medicaid (typically income under $2,982/month) and meet clinical criteria showing they need nursing home level care.\n\nThe waiver has no yearly cost cap on services, a case manager develops a personalized care plan based on your loved one's specific needs. Services can include daily personal care, companion services, frozen meal delivery, and adult day programs. Because this waiver covers comprehensive home care under one program, your loved one won't need to coordinate between separate providers.\n\nThere is a waiting list, especially for people not already on Medicaid or SSI. Priority goes to those who are financially pre-qualified through existing Medicaid enrollment.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
@@ -2260,7 +2223,7 @@
         "summary": [
           "Alabama resident",
           "Need nursing home level of care",
-          "Income under $2,829/month",
+          "Income under $2,982/month (2026)",
           "Assets under $2,000"
         ],
         "ageRequirement": null,
@@ -2274,13 +2237,13 @@
             "Additional vehicles"
           ],
           "exemptAssets": [
-            "Primary home (if equity under $1,130,000)",
+            "Primary home (if equity under $752,000 in 2026)",
             "One vehicle",
             "Household furnishings and appliances",
             "Personal effects",
             "Pre-need burial contracts"
           ],
-          "homeEquityCap": 1130000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must meet Nursing Facility Level of Care through HCBS-1 assessment (need assistance with at least 2 of 11 daily living criteria that put you at risk of nursing home placement)",
         "otherRequirements": [
@@ -2288,7 +2251,7 @@
           "Must have or apply for Medicaid",
           "At risk of nursing home placement"
         ],
-        "povertyLevelReference": "300% of SSI Federal Benefit Rate"
+        "povertyLevelReference": "300% of SSI Federal Benefit Rate ($994 x 3 = $2,982/month in 2026)"
       },
       "applicationGuide": {
         "method": "in-person",
@@ -2372,11 +2335,11 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than $2,000?",
-          "answer": "Yes, the primary home is exempt from the $2,000 asset limit as long as your loved one lives there or intends to return. The home equity limit is $1,130,000 in 2026. The home is also exempt if a non-applicant spouse, disabled child of any age, or child under 21 lives there."
+          "answer": "Yes, the primary home is exempt from the $2,000 asset limit as long as your loved one lives there or intends to return. The home equity limit is $752,000 in 2026. The home is also exempt if a non-applicant spouse, disabled child of any age, or child under 21 lives there."
         },
         {
           "question": "What if my loved one doesn't qualify for regular Medicaid but needs these services?",
-          "answer": "The waiver has its own financial criteria, income up to 300% of the SSI rate (approximately $2,829/month). Your loved one might qualify for the waiver even if they don't meet regular Medicaid income limits. However, there's typically a longer waiting list for non-Medicaid recipients."
+          "answer": "The waiver has its own financial criteria, income up to 300% of the SSI rate ($2,982/month in 2026). Your loved one might qualify for the waiver even if they don't meet regular Medicaid income limits. However, there's typically a longer waiting list for non-Medicaid recipients."
         },
         {
           "question": "How long is the waiting list really?",
@@ -2416,7 +2379,7 @@
       "sourceUrl": "https://medicaid.alabama.gov/content/6.0_LTC_waivers/6.1_HCBS_Waivers/6.1.2_Elderly_Disabled_Waiver.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "senior-aides-program",
@@ -2772,7 +2735,7 @@
       {
         "name": "Alabama Medicaid Medicare Savings Programs (QMB, SLMB, QI)",
         "programId": "medicare-savings-programs-qmb-slmb-qi",
-        "why": "Can eliminate Medicare premiums and out-of-pocket costs if your loved one's income is below $1,695/month."
+        "why": "Can eliminate Medicare premiums and out-of-pocket costs if your loved one's income is below $1,816/month."
       },
       {
         "name": "Alabama SHIP (State Health Insurance Assistance Program)",

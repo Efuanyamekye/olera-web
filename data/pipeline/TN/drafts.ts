@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-31T10:40:13.379Z
+ * Last updated: 2026-09-28T09:21:59.484Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -141,7 +141,6 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QI program funding is limited, applications may be denied once yearly funds are exhausted, even if you meet all other requirements",
         "If your loved one is already on TennCare Medicaid, they cannot get QI benefits but may qualify for QMB or SLMB instead",
         "Income and asset limits increase every January, verify current-year thresholds before applying",
@@ -193,7 +192,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.tn.gov/tenncare/members-applicants/eligibility/categories.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -213,8 +212,8 @@ export const drafts: PipelineStateDrafts = {
         ]
       },
       "intro": "If your loved one is 60+ and struggling to afford groceries, Tennessee SNAP can provide monthly money loaded onto an EBT card for food purchases. Unlike younger adults, seniors face no asset limits and no work requirements, their house, car, and retirement accounts don't count against them.\n\nBenefit amounts depend on household size and net income after deductions. A typical 2-person elderly household receives around $415/month, but amounts vary based on medical expenses over $35/month, shelter costs, and other allowable deductions. Because Tennessee excludes sugary foods from SNAP purchases, the money goes toward nutritious groceries like meat, dairy, produce, and pantry staples.\n\nThe key advantage for seniors: Tennessee exempts households with anyone 60+ from the gross income test, focusing only on net income after deductions. Many seniors who think they earn \"too much\" actually qualify once medical expenses, utility costs, and the standard deduction are subtracted.",
-      "savingsRange": "Up to $546/month for two people (FY2026 maximum)",
-      "savingsSource": "USDA FY2026 allotments: minimum benefit $24/month for 1-2 person households; maximums $298 for one person, $546 for two; amounts depend on income and deductions",
+      "savingsRange": "Up to $562/month for two people (FY2027 maximum, from October 1, 2026)",
+      "savingsSource": "USDA FY2027 allotments from October 1, 2026: maximums $306 for one person, $562 for two; amounts depend on income and deductions",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -227,11 +226,19 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1255
+            "monthlyLimit": 1330
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1703
+            "monthlyLimit": 1804
+          },
+          {
+            "householdSize": 3,
+            "monthlyLimit": 2277
+          },
+          {
+            "householdSize": 4,
+            "monthlyLimit": 2750
           }
         ],
         "assetLimits": {
@@ -299,7 +306,7 @@ export const drafts: PipelineStateDrafts = {
         "Social Security award letters for all household members",
         "Pension or retirement income statements",
         "Pay stubs if anyone still works (most recent 30 days)",
-        "The current balance of any checking or savings accounts. Every state asks about this. In Tennessee your savings do count. For a household with someone 60 or older or disabled the limit is $4,500, and it rises to $4,750 on October 1, 2026.",
+        "The current balance of any checking or savings accounts. Every state asks about this. In Tennessee your savings do count. For a household with someone 60 or older or disabled the limit is $4,750 from October 1, 2026.",
         "Rent receipts or mortgage statements",
         "Utility bills (electric, gas, water, phone)",
         "Medical expense receipts over $35/month (prescriptions, Medicare premiums, doctor visits)",
@@ -383,7 +390,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.tn.gov/humanservices/for-families/supplemental-nutrition-assistance-program-snap.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -1494,13 +1501,13 @@ export const drafts: PipelineStateDrafts = {
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
-          "Age 60+",
+          "Age 60+, or 18-59 with a disability",
           "Tennessee resident",
           "Needs help with 3+ daily activities",
           "Medical certification required",
           "No asset limits"
         ],
-        "ageRequirement": "60+",
+        "ageRequirement": "60+, or 18-59 with a disability",
         "incomeTable": null,
         "assetLimits": null,
         "functionalRequirement": "Must need assistance with at least 3 Activities of Daily Living (bathing, dressing, toileting, mobility) or Instrumental Activities of Daily Living (cooking, shopping, light housekeeping, walking without assistance), certified by a medical professional",
@@ -1518,7 +1525,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Call for screening",
-            "description": "Call the FTAAAD Information and Assistance line at 1-866-836-6678 for initial screening and application. Have medical certification of your loved one's daily living needs ready."
+            "description": "Call Tennessee's statewide Area Agency on Aging and Disability line at 1-866-836-6678 and ask for an OPTIONS screening. Have medical certification of your loved one's daily living needs ready."
           },
           {
             "step": 2,
@@ -1541,8 +1548,8 @@ export const drafts: PipelineStateDrafts = {
         "tip": "Have your loved one's medical documentation ready before calling, this speeds up the screening process and prevents delays.",
         "urls": [
           {
-            "label": "FTAAAD Official Page",
-            "url": "https://www.ftaaad.org/options-subpage"
+            "label": "OPTIONS program page, Tennessee Department of Disability and Aging",
+            "url": "https://www.tn.gov/content/tn/disability-and-aging/disability-aging-programs/hcbs.html"
           }
         ]
       },
@@ -1558,15 +1565,15 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "FTAAAD Statewide Intake",
+          "label": "Tennessee Area Agencies on Aging and Disability statewide line (start here)",
           "phone": "(866) 836-6678",
           "description": "Initial screening and connection to local Area Agency",
           "hours": "Business hours, Monday-Friday"
         },
         {
-          "label": "Tennessee Aging Helpline",
+          "label": "Tennessee 2-1-1",
           "phone": "2-1-1",
-          "description": "General information about aging services statewide",
+          "description": "General social services referral line",
           "hours": "24 hours, 7 days a week"
         }
       ],
@@ -1620,10 +1627,10 @@ export const drafts: PipelineStateDrafts = {
       },
       "icon": "House",
       "phone": "(866) 836-6678",
-      "sourceUrl": "https://www.ftaaad.org/options-subpage",
+      "sourceUrl": "https://www.tn.gov/content/tn/disability-and-aging/disability-aging-programs/hcbs.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "senior-advocate-program",

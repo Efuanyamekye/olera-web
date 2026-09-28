@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T11:25:55.876Z
+ * Last updated: 2026-09-28T09:21:59.467Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -66,12 +66,12 @@ export const drafts: PipelineStateDrafts = {
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at mass.gov, by phone at 1-800-841-2900, or by mail, decision within 30 days.",
+        "summary": "Apply online with the Medicare Savings Programs e-sign form (linked on the mass.gov Medicare Savings Programs page), or print it and mail or fax it. For help filling it out, call MassHealth Customer Service at (800) 841-2900.",
         "steps": [
           {
             "step": 1,
             "title": "Choose application method",
-            "description": "Apply online through the MassHealth portal at mass.gov using the Medicare Savings Programs Application, call MassHealth Customer Service at 1-800-841-2900, or download the PDF application to mail."
+            "description": "Apply online with the Medicare Savings Programs e-sign form (linked on the mass.gov Medicare Savings Programs page), or print the form and mail or fax it. For help filling it out, call MassHealth Customer Service at (800) 841-2900, Monday to Friday 8am to 5pm, or find a SHINE counselor through MassOptions at (800) 243-4636."
           },
           {
             "step": 2,
@@ -86,16 +86,16 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 4,
             "title": "Receive decision",
-            "description": "MassHealth will mail you a decision notice within 30 days. If approved, your benefits begin and you'll receive both Medicare and MassHealth cards."
+            "description": "MassHealth will mail you a decision notice. If your loved one is approved for QMB, they show both their Medicare and MassHealth cards so providers know they're in the QMB Program."
           }
         ],
-        "processingTime": "30 days",
+        "processingTime": "MassHealth mails you a decision notice.",
         "waitlist": null,
-        "tip": "The application also screens you for SNAP food benefits, you can opt out if you don't want food assistance.",
+        "tip": "You can also apply for SNAP food benefits on the same form by checking the SNAP box on page 1. You don't have to.",
         "urls": [
           {
-            "label": "MassHealth online portal",
-            "url": "https://www.mass.gov"
+            "label": "Medicare Savings Programs page (online form link)",
+            "url": "https://www.mass.gov/info-details/get-help-paying-medicare-costs"
           },
           {
             "label": "Medicare Savings Programs Application (PDF)",
@@ -117,7 +117,7 @@ export const drafts: PipelineStateDrafts = {
         {
           "label": "MassHealth Customer Service Center",
           "phone": "(800) 841-2900",
-          "description": "Medicare Savings Program applications and questions",
+          "description": "Help filling out the Medicare Savings Programs application, and questions",
           "hours": "Mon-Fri 8am-5pm ET"
         },
         {
@@ -193,7 +193,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mass.gov/info-details/get-help-paying-medicare-costs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-01"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "frail-elder-waiver",
