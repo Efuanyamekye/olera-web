@@ -68,6 +68,28 @@ export async function GET(request: NextRequest) {
   if (!c.ok) return c.res;
   const db = getServiceClient();
   const name = c.names.values().next().value ?? "Your care provider";
+  // The Inbox badge: offers waiting on her answer. Cheap on purpose; it runs
+  // on every page with the provider nav.
+  if (request.nextUrl.searchParams.get("count") === "open") {
+    if (c.profileIds.length === 0) return NextResponse.json({ open: 0 });
+    const { data: open } = await db
+      .from("city_lead_offers")
+      .select("lead_id")
+      .in("provider_id", c.profileIds)
+      .is("accepted_at", null)
+      .is("declined_at", null)
+      .is("expired_at", null)
+      .gt("expires_at", new Date().toISOString());
+    const ids = Array.from(new Set((open ?? []).map((o) => o.lead_id as string)));
+    if (ids.length === 0) return NextResponse.json({ open: 0 });
+    const { count } = await db
+      .from("city_leads")
+      .select("id", { count: "exact", head: true })
+      .in("id", ids)
+      .eq("is_test", false)
+      .is("archived_at", null);
+    return NextResponse.json({ open: count ?? 0 });
+  }
   const leadId = request.nextUrl.searchParams.get("leadId");
   if (leadId) {
     const family = await getAdFamily(db, leadId, c.profileIds, name);

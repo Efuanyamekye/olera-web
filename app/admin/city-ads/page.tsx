@@ -269,7 +269,7 @@ function needsReason(l: Lead): string | null {
   }
   if (l.family_check_reply === "not_yet" && !l.reached_at) return "family says the provider has not called";
   const o = openOffer(l);
-  if (o && minsLeft(o.expires_at) < 0) return `offer to ${o.provider?.display_name ?? "a provider"} is past its 30 minutes`;
+  if (o && minsLeft(o.expires_at) < 0) return `offer to ${o.provider?.display_name ?? "a provider"} is past its window`;
   if (l.status === "new" && l.next_offer_at && new Date(l.next_offer_at) < new Date()) return "parked past its morning and not offered";
   return null;
 }

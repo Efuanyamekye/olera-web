@@ -6970,7 +6970,8 @@ export function cityOfferEmail(opts: {
   recipientLabel: string;
   urgencyLabel?: string | null;
   paymentLabel?: string | null;
-  minutes: number;
+  /** When the offer stops being hers, in her time: "3:15 PM" or "Tue 9:00 AM". */
+  until: string;
   offerUrl: string;
   /**
    * What the family wrote, already redacted of any contact details she typed
@@ -7003,10 +7004,10 @@ export function cityOfferEmail(opts: {
       ${opts.askedQuestion ? `<p style="font-size:13px;color:#6b7280;margin:0 0 8px;line-height:1.5;">We asked: ${escapeHtml(opts.askedQuestion)}</p>` : ""}
       ${said.map((line) => `<p style="font-size:15px;color:#111827;background:#f9fafb;border-radius:8px;padding:10px 12px;margin:0 0 8px;line-height:1.6;">&ldquo;${escapeHtml(line)}&rdquo;</p>`).join("")}
     </div>` : ""}
-    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">You have <b>${opts.minutes} minutes</b>. After that we ask the next provider too.</p>
+    <p style="font-size:15px;color:#374151;margin:0 0 24px;line-height:1.65;">It&rsquo;s yours until <b>${escapeHtml(opts.until)}</b>. After that we ask the next provider.</p>
     <div>${button("Take this family", opts.offerUrl)}</div>
     <p style="font-size:13px;color:#6b7280;margin:16px 0 0;line-height:1.6;">Can&rsquo;t take it? <a href="${opts.offerUrl}" style="color:#6b7280;text-decoration:underline;">Pass</a></p>`,
-    `A family in ${opts.city} needs ${opts.careLabel}. ${opts.minutes} minutes to take it.`,
+    `A family in ${opts.city} needs ${opts.careLabel}. Yours until ${opts.until}.`,
   );
 }
 

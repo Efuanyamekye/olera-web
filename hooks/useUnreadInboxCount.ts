@@ -15,9 +15,14 @@ import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
  * - Falls back to localStorage for backwards compatibility during migration
  * - Listens for "olera:inbox-read" custom events for immediate updates
  * - Listens for "olera:connection-created" for new connections
+ * - With `adOffers`, adds the families Olera has offered her and she has not
+ *   answered yet (/api/provider/ad-families?count=open), so a waiting offer
+ *   shows on the Inbox badge like an unread message
  */
-export function useUnreadInboxCount(profileIds: string[]): number {
+export function useUnreadInboxCount(profileIds: string[], opts: { adOffers?: boolean } = {}): number {
   const [count, setCount] = useState(0);
+  const [adCount, setAdCount] = useState(0);
+  const withAdOffers = !!opts.adOffers;
   const fetchingRef = useRef(false);
 
   // Stable key for deps — avoids re-running on every render when array ref changes
@@ -209,5 +214,31 @@ export function useUnreadInboxCount(profileIds: string[]): number {
     return () => window.removeEventListener("storage", handleStorage);
   }, [recount]);
 
-  return count;
+  // Offers waiting on her. Kept apart from `count`, which the inbox page
+  // overwrites with its own tally of conversations (olera:inbox-sync).
+  useEffect(() => {
+    if (!withAdOffers || !profileKey) {
+      setAdCount(0);
+      return;
+    }
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/provider/ad-families?count=open", { cache: "no-store" });
+        if (!res.ok) return;
+        const json = (await res.json()) as { open?: number };
+        if (!cancelled) setAdCount(typeof json.open === "number" ? json.open : 0);
+      } catch {
+        // The badge is a convenience; a failed count leaves it as it was.
+      }
+    };
+    void load();
+    window.addEventListener("olera:ad-families-changed", load);
+    return () => {
+      cancelled = true;
+      window.removeEventListener("olera:ad-families-changed", load);
+    };
+  }, [withAdOffers, profileKey]);
+
+  return count + adCount;
 }

@@ -158,7 +158,7 @@ export function familyAnswerAckSms(): string {
  * and the thing that would have told them what the job was sat unread in the
  * database. It costs a segment and it is worth a segment.
  */
-export function cityOfferSms(p: { city: string; careLabel: string; recipientLabel: string; urgencyLabel?: string | null; paymentLabel?: string | null; minutes: number; excerpt?: string | null }): string {
+export function cityOfferSms(p: { city: string; careLabel: string; recipientLabel: string; urgencyLabel?: string | null; paymentLabel?: string | null; until: string; excerpt?: string | null }): string {
   const extra = [p.urgencyLabel, p.paymentLabel].filter(Boolean).join(", ");
   const detail = extra ? ` ${cap(extra)}.` : "";
   // Emoji are stripped here and nowhere else. One of them flips the whole
@@ -167,7 +167,7 @@ export function cityOfferSms(p: { city: string; careLabel: string; recipientLabe
   // email show her text exactly as she wrote it; the SMS pays by the character.
   const plain = smsSafe(p.excerpt ?? "").trim();
   const said = plain ? ` They said: "${truncateWords(plain, 120)}"` : "";
-  return `Olera: a family in ${p.city} needs ${p.careLabel}.${detail}${said} Yours alone for the next ${p.minutes} min, so we can tell them who to expect. Reply YES to take it, or NO and we'll ask another provider.`;
+  return `Olera: a family in ${p.city} needs ${p.careLabel}.${detail}${said} Yours alone until ${p.until}, so we can tell them who to expect. Reply YES to take it, or NO and we'll ask another provider.`;
 }
 
 /**

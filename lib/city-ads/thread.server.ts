@@ -23,11 +23,13 @@ import { sendSMS, normalizeUSPhone } from "@/lib/twilio";
 import { sendEmail } from "@/lib/email";
 import { sendSlackAlert } from "@/lib/slack";
 import { getSiteUrl } from "@/lib/site-url";
-import { generateCityThreadUrl, generateFamilyInboxUrl } from "@/lib/claim-tokens";
+import { generateCityThreadUrl } from "@/lib/claim-tokens";
+import { providerSignInUrl } from "@/lib/city-ads/provider-links.server";
 import { cityThreadProviderEmail } from "@/lib/email-templates";
 import { getCityConfig } from "@/lib/city-ads/config";
 import { cityLeadBlocked, citySendWindow, deliverCityMessage } from "@/lib/city-ads/messages.server";
 import { resolvePrimaryCampaign } from "@/lib/city-ads/primary.server";
+import { offerStillHolds } from "@/lib/city-ads/offer-holds";
 
 export type ThreadAuthor = "olera" | "provider" | "family";
 
@@ -224,14 +226,20 @@ export interface ThreadProvider {
  * owner does.
  */
 export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Promise<ThreadProvider | null> {
-  const { data: taken } = await db
-    .from("city_lead_offers")
-    .select("provider_id")
-    .eq("lead_id", lead.id)
-    .not("accepted_at", "is", null)
-    .order("accepted_at", { ascending: false })
-    .limit(1);
-  const holderId = (taken?.[0]?.provider_id as string | undefined) ?? null;
+  const [{ data: taken }, { data: claim }] = await Promise.all([
+    db
+      .from("city_lead_offers")
+      .select("id, provider_id, accepted_at, outcome")
+      .eq("lead_id", lead.id)
+      .not("accepted_at", "is", null)
+      .order("accepted_at", { ascending: false }),
+    db.from("city_leads").select("accepted_offer_id").eq("id", lead.id).maybeSingle(),
+  ]);
+  // A provider who was moved on no longer holds the family (offerStillHolds).
+  const holding = ((taken ?? []) as Array<{ id: string; provider_id: string; accepted_at: string | null; outcome: string | null }>).find(
+    (o) => offerStillHolds(o, { accepted_offer_id: (claim?.accepted_offer_id as string | null) ?? null }),
+  );
+  const holderId = holding?.provider_id ?? null;
   const primary = holderId ? null : await resolvePrimaryCampaign(db, lead);
   const id = holderId ?? primary?.providerId ?? null;
   if (!id) return null;
@@ -252,27 +260,11 @@ export function providerThreadUrl(lead: ThreadLead, provider: ThreadProvider): s
     : `${getSiteUrl()}/provider/boost`;
 }
 
-/**
- * The same page from an email, signing her in on the way: the inbox shows
- * nothing to a signed-out visitor. Issued for the email she signs in with,
- * which can differ from the listing's public email. Texts keep the plain link,
- * because a text can reach a shared office line.
- */
+/** The same page from an email, signing her in on the way (provider-links.server.ts). */
 async function providerEmailUrl(db: SupabaseClient, lead: ThreadLead, provider: ThreadProvider): Promise<string> {
   const plain = providerThreadUrl(lead, provider);
   if (provider.via !== "inbox") return plain;
-  try {
-    const { data: bp } = await db.from("business_profiles").select("account_id").eq("id", provider.id).maybeSingle();
-    if (!bp?.account_id) return plain;
-    const { data: acct } = await db.from("accounts").select("user_id").eq("id", bp.account_id).maybeSingle();
-    if (!acct?.user_id) return plain;
-    const { data } = await db.auth.admin.getUserById(acct.user_id as string);
-    const email = data?.user?.email;
-    return email ? generateFamilyInboxUrl(email, `/portal/inbox?role=provider&ad=${lead.id}`, getSiteUrl()) : plain;
-  } catch (e) {
-    console.error("[city-thread] sign-in link failed", e);
-    return plain;
-  }
+  return (await providerSignInUrl(db, provider.id, lead.id)) ?? plain;
 }
 
 /**

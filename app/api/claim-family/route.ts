@@ -25,7 +25,14 @@ export async function GET(request: NextRequest) {
   const url = new URL(request.url);
   const token = url.searchParams.get("otk");
   const nextPath = url.searchParams.get("next");
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || url.origin;
+  // Redirect on the host that was hit, because that is where the session
+  // cookies below are written. Email links are built with getSiteUrl(), which
+  // on staging and previews is the deployment's own host (VERCEL_URL), while
+  // NEXT_PUBLIC_SITE_URL there names the staging alias. Sending the visitor to
+  // the alias landed them signed out, or signed in as whoever the alias
+  // already had (found 28 Sep testing provider offer emails). In production
+  // the two are the same host, so nothing changes there.
+  const siteUrl = url.origin;
 
   console.log("[claim-family] route hit", {
     hasToken: !!token,
