@@ -4,6 +4,7 @@ import { getServiceClient } from "@/lib/admin";
 import { postProviderMessage } from "@/lib/city-ads/thread.server";
 import { acceptOffer, declineOffer, type CityOfferRow } from "@/lib/city-ads/offers.server";
 import { adFamilyForWrite, getAdFamily, listAdFamilies } from "@/lib/city-ads/provider-inbox.server";
+import { recordProviderEvent } from "@/lib/analytics/provider-events";
 
 /**
  * Families from ads, in the provider's inbox (lib/city-ads/provider-inbox.server.ts).
@@ -20,6 +21,26 @@ import { adFamilyForWrite, getAdFamily, listAdFamilies } from "@/lib/city-ads/pr
 const OUTCOMES = ["talking", "client", "no"] as const;
 type Outcome = (typeof OUTCOMES)[number];
 const OUTCOME_STATUS: Record<Outcome, string> = { talking: "contacted", client: "client", no: "no_fit" };
+
+/**
+ * What she did with an offer, for the take rate: viewed, taken, passed
+ * (migration 264). Keyed like every provider event: slug in provider_id, the
+ * profile uuid in profile_id.
+ */
+async function recordOfferEvent(
+  db: ReturnType<typeof getServiceClient>,
+  eventType: "ad_family_offer_viewed" | "ad_family_taken" | "ad_family_passed",
+  providerId: string,
+  metadata: Record<string, unknown>,
+): Promise<void> {
+  const { data: p } = await db.from("business_profiles").select("slug").eq("id", providerId).maybeSingle();
+  await recordProviderEvent({
+    provider_id: (p?.slug as string | null) ?? providerId,
+    profile_id: providerId,
+    event_type: eventType,
+    metadata: { source: "inbox", ...metadata },
+  });
+}
 
 type Caller = { ok: true; profileIds: string[]; names: Map<string, string> } | { ok: false; res: NextResponse };
 
@@ -50,6 +71,13 @@ export async function GET(request: NextRequest) {
   if (leadId) {
     const family = await getAdFamily(db, leadId, c.profileIds, name);
     if (!family) return NextResponse.json({ error: "That family isn't in your inbox." }, { status: 404 });
+    if (family.access === "offered") {
+      await recordOfferEvent(db, "ad_family_offer_viewed", family.providerId, {
+        lead_id: family.leadId,
+        offer_id: family.offerId,
+        city: family.city,
+      });
+    }
     return NextResponse.json({ family });
   }
   return NextResponse.json({ families: await listAdFamilies(db, c.profileIds, name) });
@@ -77,11 +105,23 @@ export async function POST(request: NextRequest) {
     if (!o || o.accepted_at || o.declined_at || o.expired_at) {
       return NextResponse.json({ error: "This request is no longer open." }, { status: 409 });
     }
+    const minutesOpen = Math.round((Date.now() - new Date(o.offered_at).getTime()) / 60000);
     if (body.action === "take") {
       const r = await acceptOffer(db, o, "provider_page");
+      await recordOfferEvent(db, "ad_family_taken", owned.providerId, {
+        lead_id: owned.lead.id,
+        offer_id: o.id,
+        minutes_open: minutesOpen,
+        won: r.won,
+      });
       if (!r.won) return NextResponse.json({ error: "Another agency already took this family." }, { status: 409 });
     } else {
       await declineOffer(db, o, null);
+      await recordOfferEvent(db, "ad_family_passed", owned.providerId, {
+        lead_id: owned.lead.id,
+        offer_id: o.id,
+        minutes_open: minutesOpen,
+      });
     }
     return NextResponse.json({ success: true });
   }
