@@ -51,6 +51,7 @@ type CaseData = SeekerRelationship & { plan?: RoutingPlan | null; routing?: Rout
 const OFFER_WORD: Record<string, string> = { open: "Waiting on them", accepted: "Took it", declined: "Passed", expired: "No answer", moved: "Took it, then moved on" };
 const STEP_WORD: Record<PlanStep["state"], string> = {
   accepted: "Took it",
+  moved: "Took it, then moved on",
   declined: "Passed",
   expired: "No answer",
   sent: "Waiting on them",
