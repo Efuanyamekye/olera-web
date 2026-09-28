@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { buildPriorityLines, priorityFor } from "../lib/war-room/priorities";
 import { buildWarRoomBriefText, easternDay, isSweepDay, renewalText, sendableQuestion } from "../lib/war-room/brief-delivery.server";
 import { fallbackMove, parseMoveReply, pickMove, toFounder, type MoveCandidate } from "../lib/war-room/brief-move.server";
 import { scrubStaleRenewalCounts } from "../lib/war-room/discovery.server";
@@ -131,6 +132,33 @@ assert.equal(easternDay(new Date("2026-09-29T01:00:00Z")).date, "2026-09-28");
 assert.equal(isSweepDay(new Date("2026-09-29T01:00:00Z")), true);   // Monday ET
 assert.equal(isSweepDay(new Date("2026-09-29T14:30:00Z")), false);  // Tuesday ET
 assert.equal(isSweepDay(new Date("2026-09-25T14:30:00Z")), true);   // Friday ET
+
+// 14. The four priorities open the brief, every day, and every number is filed under one or cut.
+assert.equal(priorityFor("Provider reachability"), "providers");
+assert.equal(priorityFor("Support backlog"), "operations");
+assert.equal(priorityFor("Organic traffic"), null, "traffic attribution serves none of the four");
+assert.equal(priorityFor("Benefits completions"), "benefits");
+assert.equal(priorityFor("Paying providers"), "crp");
+const priorityLines = buildPriorityLines({
+  payingProviders: 1, openCampaigns: 18,
+  movers: [{ label: "Support backlog", headline: "1,222 unhandled support threads", previousHeadline: "1,747 unhandled support threads" }, { label: "Organic traffic", headline: "Direct up 4%" }],
+  renewal: "Hoop Cares renews Oct 15 ($75), in 17 days.", providerEmailsWaiting: 0, inboxItemsWaiting: 3, since: "Sep 26",
+  now: new Date("2026-09-28T12:00:00Z"),
+});
+assert.deepEqual(priorityLines, [
+  "*CRP (Jan):* 1 of 12 paying providers, 14 weeks to the Jan 5 target.",
+  "*Benefits Finder:* No change since Sep 26.",
+  "*Providers subscribing:* Hoop Cares renews Oct 15 ($75), in 17 days. 18 campaigns open, 1 paying.",
+  "*Operations:* Support backlog 1,747 → 1,222. 3 inbox items waiting on your approval.",
+]);
+const withPriorities = buildWarRoomBriefText({ ...base, renewal, priorityLines, readings: [
+  { probeId: "traffic_by_page_family", label: "Organic traffic", question: "", headline: "Direct up 4%", detail: "", rows: [], caveat: null, measuredAt: base.run.created_at, movement: "moved", previousHeadline: "Direct flat" } as never,
+  { probeId: "support_backlog_composition", label: "Support backlog", question: "", headline: "1,222 unhandled", detail: "", rows: [], caveat: null, measuredAt: base.run.created_at, movement: "moved", previousHeadline: "1,747 unhandled" } as never,
+] });
+assert.ok(withPriorities.startsWith("*CRP (Jan):*"), "the brief opens with the four");
+assert.equal(withPriorities.match(/Hoop Cares renews/g)?.length, 1, "the renewal is said once, in the providers line");
+assert.ok(!withPriorities.includes("Organic traffic"), "a number that serves no priority is cut");
+assert.ok(/\*What moved\*\n• \*Support backlog\*/.test(withPriorities), "a number that serves one stays");
 
 console.log("war room brief checks passed");
 
