@@ -8,6 +8,8 @@
  * view on /admin/benefits.
  */
 
+import { helpCaseWaiting, type BenefitsHelpCase } from "@/lib/family-comms/benefits-automation";
+
 export interface BenefitsQueueSignals {
   /** A drafted letter whose verdict wants a person: route review or ask. */
   letter_to_read: boolean;
@@ -39,7 +41,10 @@ export function benefitsQueueSignals(
   const route = nav?.packet?.route ?? null;
   const letterToRead = nav?.status === "pending" && !nav.scheduled_at && (route === "review" || route === "ask");
 
-  const helpOpen = !!help?.help_opened_at && !(help.resolved_at && help.resolved_at > help.help_opened_at);
+  // The same rule the help-case sweep uses: waiting until a person resolves it
+  // or reaches them after it opened (a text or email sent from the case page
+  // counts, via noteBenefitsContact).
+  const helpOpen = helpCaseWaiting((help ?? {}) as BenefitsHelpCase);
   const helpDue = helpOpen ? help?.help_due_at ?? help?.help_opened_at ?? null : null;
 
   const urgency = companion?.urgency;
