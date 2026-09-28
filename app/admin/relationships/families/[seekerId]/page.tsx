@@ -1422,8 +1422,12 @@ function CaseInner() {
     ? [data.profile.label_is_fallback ? data.profile.label : null, cityName(data.city_slug) ?? data.profile.city, where].filter(Boolean).join(" · ")
     : "";
 
+  // iPhone Safari zooms the whole page into any field whose text is under
+  // 16px when it is tapped, and stays zoomed, so the page looked wider than
+  // the phone. Every field on this page is at least 16px below lg, including
+  // the ones inside LogFamilyTouch.
   return (
-    <div className="h-full overflow-y-auto bg-white pb-28 lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden lg:pb-0">
+    <div className="h-full overflow-y-auto bg-white pb-28 max-lg:[&_input]:!text-[16px] max-lg:[&_select]:!text-[16px] max-lg:[&_textarea]:!text-[16px] lg:grid lg:grid-cols-[300px_minmax(0,1fr)_360px] lg:overflow-hidden lg:pb-0">
       <FamilyList currentId={seekerId} backQuery={backQuery} />
 
       {/* PHONE: nothing is fixed to the bottom edge. A Message pill floats
