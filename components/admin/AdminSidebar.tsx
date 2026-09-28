@@ -10,6 +10,8 @@ import { useToast } from "@/components/admin/Toast";
 import AdminToolSearch from "@/components/admin/AdminToolSearch";
 import type { AdminTool } from "@/lib/admin-tool-search";
 import SidebarDrawerToggle from "@/components/admin/SidebarDrawerToggle";
+import { OwnerNames, OwnersMenu } from "@/components/admin/PageOwners";
+import type { Owner, PageOwners as PageOwnerMap } from "@/lib/admin-page-owners";
 
 interface AdminSidebarProps {
   adminUser: AdminUser;
@@ -265,6 +267,25 @@ const mobileNavItems: (NavItem & { icon: React.ReactNode })[] = [
 
 const STORAGE_KEY = "admin-sidebar-collapsed";
 
+/**
+ * How wide the rail is, in pixels, and where it may go.
+ *
+ * MIN is md:w-52 to the pixel, so dragging all the way left lands on exactly
+ * the layout everybody had before the handle existed rather than near it.
+ * MAX is where widening stops paying: the longest row is "Care Seeker
+ * Relationships" with three or four names under it, and past this the rail is
+ * only taking width off the page you are reading.
+ *
+ * Per device rather than per person. Pins are in the database deliberately so
+ * they follow somebody between machines; the right width is a property of the
+ * monitor in front of you, so it stays with the browser, next to the
+ * section-collapse state that already lives there.
+ */
+const WIDTH_KEY = "admin-sidebar-width";
+const MIN_WIDTH = 208;
+const MAX_WIDTH = 360;
+const clampWidth = (px: number) => Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, Math.round(px)));
+
 // Every page a hover-star can pin. Pinned hrefs are stored per admin
 // (admin_users.favorites) and resolve their labels here — a retired route
 // simply stops rendering, no cleanup needed.
@@ -308,6 +329,20 @@ function Star({ filled }: { filled: boolean }) {
   );
 }
 
+/** The six-dot grip, matching ReorderableSections so one gesture looks alike. */
+function Grip() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="9" cy="5" r="1.7" />
+      <circle cx="15" cy="5" r="1.7" />
+      <circle cx="9" cy="12" r="1.7" />
+      <circle cx="15" cy="12" r="1.7" />
+      <circle cx="9" cy="19" r="1.7" />
+      <circle cx="15" cy="19" r="1.7" />
+    </svg>
+  );
+}
+
 function Chevron({ open }: { open: boolean }) {
   return (
     <svg
@@ -333,11 +368,13 @@ export default function AdminSidebar({
   // Pinned pages — per admin, DB-backed (admin_users.favorites) so pins
   // follow the person across devices. Optimistic toggle, revert on failure.
   const [favorites, setFavorites] = useState<string[]>(() => adminUser.favorites ?? []);
-  const toggleFavorite = useCallback(
-    async (href: string) => {
-      const prev = favorites;
-      const next = prev.includes(href) ? prev.filter((f) => f !== href) : [...prev, href];
-      setFavorites(next);
+
+  // The array is the order. The route replaces it whole and its dedupe is a
+  // Set, which keeps insertion order, so reordering the pins is the same
+  // write as adding one — no second endpoint, and the order follows the
+  // person between machines for free.
+  const saveFavorites = useCallback(
+    async (next: string[], prev: string[], failure: string) => {
       try {
         const res = await fetch("/api/admin/favorites", {
           method: "POST",
@@ -347,14 +384,161 @@ export default function AdminSidebar({
         if (!res.ok) throw new Error(String(res.status));
       } catch {
         setFavorites(prev);
-        toast("Couldn't save that pin. Try again.", { variant: "error" });
+        toast(failure, { variant: "error" });
       }
     },
-    [favorites, toast],
+    [toast],
   );
+
+  const toggleFavorite = useCallback(
+    async (href: string) => {
+      const prev = favorites;
+      const next = prev.includes(href) ? prev.filter((f) => f !== href) : [...prev, href];
+      setFavorites(next);
+      await saveFavorites(next, prev, "Couldn't save that pin. Try again.");
+    },
+    [favorites, saveFavorites],
+  );
+
+  // Dragging a pin. `armed` is the one whose grip is held: a row is only
+  // draggable while that is true, so an ordinary click on a pin still
+  // navigates and a drag from the label does nothing.
+  const [dragKey, setDragKey] = useState<string | null>(null);
+  const [armed, setArmed] = useState<string | null>(null);
+  const orderBeforeDrag = useRef<string[] | null>(null);
+
+  // Live reorder under the cursor. The midpoint rule is what stops a row
+  // oscillating: moving down only passes a target once the pointer is below
+  // its middle, moving up only above it.
+  const onPinDragOver = (e: React.DragEvent<HTMLDivElement>, overHref: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (!dragKey || dragKey === overHref) return;
+    const from = favorites.indexOf(dragKey);
+    const to = favorites.indexOf(overHref);
+    if (from < 0 || to < 0) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const pastMidpoint = e.clientY > rect.top + rect.height / 2;
+    if ((from < to && !pastMidpoint) || (from > to && pastMidpoint)) return;
+    const next = [...favorites];
+    next.splice(from, 1);
+    next.splice(to, 0, dragKey);
+    setFavorites(next);
+  };
+
+  const endPinDrag = () => {
+    const before = orderBeforeDrag.current;
+    orderBeforeDrag.current = null;
+    setDragKey(null);
+    setArmed(null);
+    // Grabbed and dropped in place is not a change, and writing it anyway
+    // would spend a request to store what is already stored.
+    if (before && before.join("\u0000") !== favorites.join("\u0000")) {
+      void saveFavorites(favorites, before, "Couldn't save that order. Try again.");
+    }
+  };
   const pinnedItems = favorites
     .map((href) => pinnableItems.find((i) => i.href === href))
     .filter((i): i is NavItem => !!i);
+
+  // Who leads which page. Shared by the whole team, unlike pins, which are
+  // this admin's own — so it is fetched rather than handed down on the user.
+  // Failure is silent: no names render and the sidebar is what it was before.
+  const [people, setPeople] = useState<Owner[]>([]);
+  const [pageOwners, setPageOwners] = useState<PageOwnerMap>({});
+  useEffect(() => {
+    let live = true;
+    void (async () => {
+      try {
+        const res = await fetch("/api/admin/page-assignments");
+        if (!res.ok) return;
+        const data = (await res.json()) as { people?: Owner[]; owners?: PageOwnerMap };
+        if (!live) return;
+        setPeople(data.people ?? []);
+        setPageOwners(data.owners ?? {});
+      } catch {
+        /* non-critical */
+      }
+    })();
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  const toggleOwner = useCallback(
+    async (pageKey: string, personId: string, next: boolean) => {
+      const person = people.find((p) => p.id === personId);
+      if (!person) return;
+      const prev = pageOwners;
+      const held = prev[pageKey] ?? [];
+      const after = next
+        ? [...held, person].sort((a, b) => a.name.localeCompare(b.name))
+        : held.filter((p) => p.id !== personId);
+      setPageOwners({ ...prev, [pageKey]: after });
+      try {
+        const res = await fetch("/api/admin/page-assignments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pageKey, adminUserId: personId, action: next ? "add" : "remove" }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+      } catch {
+        setPageOwners(prev);
+        toast("Couldn't save that assignment. Try again.", { variant: "error" });
+      }
+    },
+    [pageOwners, people, toast],
+  );
+
+  // How wide the rail is. Read from storage after mount, never during render,
+  // so the server and the first client pass agree on MIN_WIDTH and the markup
+  // does not mismatch.
+  // Applied to the rail as an inline style rather than a class, because the
+  // width is a number now and a Tailwind class cannot be built from one at
+  // runtime. Below md the rail is display:none, so it is inert there.
+  const [width, setWidth] = useState(MIN_WIDTH);
+  const [dragging, setDragging] = useState(false);
+  const widthRef = useRef(MIN_WIDTH);
+  const dragFrom = useRef<{ x: number; width: number } | null>(null);
+
+  const applyWidth = useCallback((px: number) => {
+    const next = clampWidth(px);
+    widthRef.current = next;
+    setWidth(next);
+  }, []);
+
+  useEffect(() => {
+    try {
+      const saved = Number(localStorage.getItem(WIDTH_KEY));
+      if (Number.isFinite(saved) && saved > 0) applyWidth(saved);
+    } catch {
+      /* a browser with storage blocked gets the default width */
+    }
+  }, [applyWidth]);
+
+  const rememberWidth = useCallback(() => {
+    try {
+      localStorage.setItem(WIDTH_KEY, String(widthRef.current));
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  // The pointer leaves the 5px handle almost immediately, and pointer capture
+  // keeps the events coming — but the cursor and text selection belong to
+  // whatever is underneath, so they are held still for the length of a drag.
+  useEffect(() => {
+    if (!dragging) return;
+    const { body } = document;
+    const cursor = body.style.cursor;
+    const select = body.style.userSelect;
+    body.style.cursor = "col-resize";
+    body.style.userSelect = "none";
+    return () => {
+      body.style.cursor = cursor;
+      body.style.userSelect = select;
+    };
+  }, [dragging]);
 
   // v9.0 Phase 7: medjobs section toggles open/close. Defaults open
   // since the section is the primary daily-use surface.
@@ -525,11 +709,14 @@ export default function AdminSidebar({
         inert={desktopHidden}
         className={[
           "hidden md:sticky md:top-0 md:flex md:h-dvh md:shrink-0 md:flex-col border-r bg-white",
-          "transition-[width,opacity,border-color] duration-200 ease-out",
+          // A transition on width is right for the drawer opening and wrong
+          // for a drag: 200ms of easing behind the pointer reads as lag.
+          dragging ? "" : "transition-[width,opacity,border-color] duration-200 ease-out",
           desktopHidden
-            ? "md:w-0 opacity-0 border-transparent pointer-events-none overflow-hidden"
-            : "md:w-52 opacity-100 border-gray-100 overflow-y-auto",
+            ? "opacity-0 border-transparent pointer-events-none overflow-hidden"
+            : "opacity-100 border-gray-100 overflow-y-auto",
         ].join(" ")}
+        style={{ width: desktopHidden ? 0 : width }}
       >
         <nav className="flex-1 min-w-52 px-3 pt-3 pb-3">
           {/* The drawer control sits above navigation-level actions so hiding
@@ -575,27 +762,75 @@ export default function AdminSidebar({
                 {pinnedItems.map((item) => {
                   const active = isActive(item.href);
                   return (
-                    <div key={item.href} className="relative group/item">
+                    <div
+                      key={item.href}
+                      className={[
+                        "relative group/item transition-opacity",
+                        dragKey === item.href ? "opacity-50" : "",
+                      ].join(" ")}
+                      draggable={armed === item.href}
+                      onDragStart={(e) => {
+                        orderBeforeDrag.current = favorites;
+                        setDragKey(item.href);
+                        e.dataTransfer.effectAllowed = "move";
+                        try {
+                          e.dataTransfer.setData("text/plain", item.href);
+                        } catch {
+                          // some browsers throw on setData — cosmetic, the drag still works
+                        }
+                      }}
+                      onDragEnd={endPinDrag}
+                      onDragOver={(e) => onPinDragOver(e, item.href)}
+                      onDrop={(e) => e.preventDefault()}
+                    >
+                      <div
+                        role="button"
+                        aria-label={`Drag to reorder ${item.label}`}
+                        title="Drag to reorder"
+                        onMouseDown={() => setArmed(item.href)}
+                        onMouseUp={() => setArmed(null)}
+                        className={[
+                          "absolute left-0 top-2 z-10 cursor-grab active:cursor-grabbing rounded p-0.5",
+                          "text-gray-300 hover:text-gray-500 transition-opacity duration-100",
+                          dragKey === item.href ? "opacity-100" : "opacity-0 group-hover/item:opacity-100",
+                        ].join(" ")}
+                      >
+                        <Grip />
+                      </div>
+                      {/* draggable={false}: an anchor drags itself by
+                          default, which would start a link drag from the
+                          label and never reorder anything. Dragging is the
+                          grip's job alone. */}
                       <Link
                         href={item.href}
                         prefetch={false}
+                        draggable={false}
                         className={[
-                          "block pl-5 pr-8 py-1.5 rounded-md text-[13px] transition-colors duration-100",
+                          "block pl-5 pr-12 py-1.5 rounded-md text-[13px] transition-colors duration-100",
                           active
                             ? "text-gray-900 font-medium bg-gray-100"
                             : "text-gray-600 hover:text-gray-900 hover:bg-gray-50",
                         ].join(" ")}
                       >
-                        {item.label}
+                        <span className="block truncate">{item.label}</span>
+                        <OwnerNames people={pageOwners[item.href] ?? []} />
                       </Link>
-                      <button
-                        onClick={() => toggleFavorite(item.href)}
-                        title="Unpin"
-                        aria-label={`Unpin ${item.label}`}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-amber-400 opacity-0 group-hover/item:opacity-100 hover:text-amber-500 transition-opacity duration-100"
-                      >
-                        <Star filled />
-                      </button>
+                      <div className="absolute right-1.5 top-1.5 flex items-center gap-0.5">
+                        <OwnersMenu
+                          people={people}
+                          owners={pageOwners[item.href] ?? []}
+                          onToggle={(id, next) => void toggleOwner(item.href, id, next)}
+                          label={item.label}
+                        />
+                        <button
+                          onClick={() => toggleFavorite(item.href)}
+                          title="Unpin"
+                          aria-label={`Unpin ${item.label}`}
+                          className="p-0.5 rounded text-amber-400 opacity-0 group-hover/item:opacity-100 hover:text-amber-500 transition-opacity duration-100"
+                        >
+                          <Star filled />
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
@@ -633,7 +868,7 @@ export default function AdminSidebar({
                             href={item.href}
                             prefetch={false}
                             className={[
-                              "flex items-center justify-between pl-5 pr-8 py-1.5 rounded-md text-[13px] transition-colors duration-100",
+                              "flex items-start justify-between pl-5 pr-12 py-1.5 rounded-md text-[13px] transition-colors duration-100",
                               active
                                 ? "text-gray-900 font-medium bg-gray-100"
                                 : unread > 0
@@ -641,24 +876,35 @@ export default function AdminSidebar({
                                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50",
                             ].join(" ")}
                           >
-                            <span>{item.label}</span>
+                            <span className="min-w-0">
+                              <span className="block truncate">{item.label}</span>
+                              <OwnerNames people={pageOwners[item.href] ?? []} />
+                            </span>
                             {unread > 0 && (
                               <span className="ml-2 text-[11px] tabular-nums font-semibold text-gray-900 rounded px-1 bg-emerald-100">
                                 {unread}
                               </span>
                             )}
                           </Link>
-                          <button
-                            onClick={() => toggleFavorite(item.href)}
-                            title={pinned ? "Unpin" : "Pin to top"}
-                            aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
-                            className={[
-                              "absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 rounded opacity-0 group-hover/item:opacity-100 transition-opacity duration-100",
-                              pinned ? "text-amber-400 hover:text-amber-500" : "text-gray-300 hover:text-amber-400",
-                            ].join(" ")}
-                          >
-                            <Star filled={pinned} />
-                          </button>
+                          <div className="absolute right-1.5 top-1.5 flex items-center gap-0.5">
+                            <OwnersMenu
+                              people={people}
+                              owners={pageOwners[item.href] ?? []}
+                              onToggle={(id, next) => void toggleOwner(item.href, id, next)}
+                              label={item.label}
+                            />
+                            <button
+                              onClick={() => toggleFavorite(item.href)}
+                              title={pinned ? "Unpin" : "Pin to top"}
+                              aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
+                              className={[
+                                "p-0.5 rounded opacity-0 group-hover/item:opacity-100 transition-opacity duration-100",
+                                pinned ? "text-amber-400 hover:text-amber-500" : "text-gray-300 hover:text-amber-400",
+                              ].join(" ")}
+                            >
+                              <Star filled={pinned} />
+                            </button>
+                          </div>
                         </div>
                       );
                     })}
@@ -710,7 +956,7 @@ export default function AdminSidebar({
                         href={item.href}
                         prefetch={false}
                         className={[
-                          "flex items-center justify-between pl-5 pr-8 py-1.5 rounded-md text-[13px] transition-colors duration-100",
+                          "flex items-start justify-between pl-5 pr-12 py-1.5 rounded-md text-[13px] transition-colors duration-100",
                           active
                             ? hasUnread
                               ? "bg-gray-100 font-semibold text-gray-900"
@@ -720,7 +966,10 @@ export default function AdminSidebar({
                               : "font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50",
                         ].join(" ")}
                       >
-                        <span>{item.label}</span>
+                        <span className="min-w-0">
+                          <span className="block truncate">{item.label}</span>
+                          <OwnerNames people={pageOwners[item.href] ?? []} />
+                        </span>
                         {fraction != null && (
                           <span
                             className={[
@@ -735,17 +984,25 @@ export default function AdminSidebar({
                           </span>
                         )}
                       </Link>
-                      <button
-                        onClick={() => toggleFavorite(item.href)}
-                        title={pinned ? "Unpin" : "Pin to top"}
-                        aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
-                        className={[
-                          "absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 rounded opacity-0 group-hover/item:opacity-100 transition-opacity duration-100",
-                          pinned ? "text-amber-400 hover:text-amber-500" : "text-gray-300 hover:text-amber-400",
-                        ].join(" ")}
-                      >
-                        <Star filled={pinned} />
-                      </button>
+                      <div className="absolute right-1.5 top-1.5 flex items-center gap-0.5">
+                        <OwnersMenu
+                          people={people}
+                          owners={pageOwners[item.href] ?? []}
+                          onToggle={(id, next) => void toggleOwner(item.href, id, next)}
+                          label={item.label}
+                        />
+                        <button
+                          onClick={() => toggleFavorite(item.href)}
+                          title={pinned ? "Unpin" : "Pin to top"}
+                          aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
+                          className={[
+                            "p-0.5 rounded opacity-0 group-hover/item:opacity-100 transition-opacity duration-100",
+                            pinned ? "text-amber-400 hover:text-amber-500" : "text-gray-300 hover:text-amber-400",
+                          ].join(" ")}
+                        >
+                          <Star filled={pinned} />
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
@@ -799,6 +1056,63 @@ export default function AdminSidebar({
           </div>
         </div>
       </aside>
+
+      {/*
+        The resize handle.
+
+        A sibling of the rail rather than a child of it: the rail is the
+        scroll container, so anything positioned inside would scroll away
+        from the edge it is supposed to sit on. As a flex item in the admin
+        layout's row it stays put with no positioning at all.
+
+        Invisible until hovered. It is a 5px strip beside a border that
+        already looks like a divider, so drawing it all the time adds a line
+        nobody asked for.
+      */}
+      {!desktopHidden && (
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize the sidebar"
+          title="Drag to resize · double-click to reset"
+          onPointerDown={(e) => {
+            e.preventDefault();
+            dragFrom.current = { x: e.clientX, width: widthRef.current };
+            e.currentTarget.setPointerCapture(e.pointerId);
+            setDragging(true);
+          }}
+          onPointerMove={(e) => {
+            const from = dragFrom.current;
+            if (!from) return;
+            applyWidth(from.width + (e.clientX - from.x));
+          }}
+          onPointerUp={(e) => {
+            if (!dragFrom.current) return;
+            dragFrom.current = null;
+            e.currentTarget.releasePointerCapture(e.pointerId);
+            setDragging(false);
+            rememberWidth();
+          }}
+          // Lost capture without a pointerup — a dropped pointer, a window
+          // switch mid-drag. Ending the drag here keeps the body cursor from
+          // staying col-resize over the whole app.
+          onLostPointerCapture={() => {
+            if (!dragFrom.current) return;
+            dragFrom.current = null;
+            setDragging(false);
+            rememberWidth();
+          }}
+          onDoubleClick={() => {
+            applyWidth(MIN_WIDTH);
+            rememberWidth();
+          }}
+          className={[
+            "hidden md:block w-[5px] shrink-0 cursor-col-resize touch-none",
+            "transition-colors duration-100",
+            dragging ? "bg-primary-300" : "bg-transparent hover:bg-primary-200",
+          ].join(" ")}
+        />
+      )}
 
       {/* Mobile bottom nav — 5 key items only. Not on a family's case page:
           it floats its own back and Message buttons, and a second fixed bar
