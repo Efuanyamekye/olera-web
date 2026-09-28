@@ -107,3 +107,34 @@ export async function noteBenefitsFamilyEmailReply(
     }
   }
 }
+
+/**
+ * A person on the team reached a benefits family (a call that connected, or a
+ * text or email sent from the case page). Mark the help case contacted and
+ * lift a reply hold, so the case page and /admin/benefits agree: until
+ * 2026-09-28 a call logged on the case page left the benefits help clock
+ * running and automation paused, and "I contacted them" on /admin/benefits
+ * never reached the case page. Death reports and STOPs keep their hold; those
+ * take the explicit Resume, the same rule resumeAfterHumanReply follows.
+ * No-op for a family that never used the benefits finder.
+ */
+export async function noteBenefitsContact(
+  db: SupabaseClient,
+  profileId: string,
+  at: string,
+  by: string,
+): Promise<void> {
+  const { data: row } = await db
+    .from("business_profiles")
+    .select("metadata")
+    .eq("id", profileId)
+    .maybeSingle();
+  const meta = (row?.metadata as Record<string, unknown> | null) || {};
+  if (!isBenefitsFamilyMeta(meta)) return;
+  const caseMeta = (meta.benefits_case as Record<string, unknown> | undefined) ?? {};
+  const base = isBenefitsAutomationHeld(meta) && !holdNeedsExplicitResume(meta) ? withHoldCleared(meta, by, at) : meta;
+  await db
+    .from("business_profiles")
+    .update({ metadata: { ...base, benefits_case: { ...caseMeta, contacted_at: at } } })
+    .eq("id", profileId);
+}

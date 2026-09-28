@@ -6,6 +6,8 @@ import Link from "next/link";
 import { ORIGIN_LABEL, EPISODE_WORD } from "@/lib/seeker-touches/present";
 import type { PlanStep, RoutingPlan } from "@/lib/city-ads/plan.server";
 import LogFamilyTouch from "@/components/admin/LogFamilyTouch";
+import { NavigatorDraftEditor, type NavigatorDetail } from "@/components/admin/BenefitsFamiliesView";
+import type { BenefitsCaseView } from "@/lib/benefits/case-view.server";
 import type { CityLeadToolsData } from "@/components/admin/CityLeadTools";
 import { TABS, matches, type Tab } from "@/lib/seeker-touches/queues";
 import {
@@ -168,8 +170,11 @@ function FamilyList({ currentId, backQuery }: { currentId: string; backQuery: st
     };
   }, [days]);
 
-  const shown = (rows ?? []).filter((r) => matches(r, tab));
-  const label = TABS.find((t) => t.key === tab)?.label ?? "Families";
+  // The list page's origin filter (?from=benefits) carries through, so a
+  // Benefits queue opens into benefits families, not the mixed queue.
+  const origin = back.get("from");
+  const shown = (rows ?? []).filter((r) => matches(r, tab) && (!origin || r.origin === origin));
+  const label = `${TABS.find((t) => t.key === tab)?.label ?? "Families"}${origin && ORIGIN_LABEL[origin as keyof typeof ORIGIN_LABEL] ? ` · ${ORIGIN_LABEL[origin as keyof typeof ORIGIN_LABEL]}` : ""}`;
   const q = backQuery ? `?back=${encodeURIComponent(backQuery)}` : "";
 
   return (
@@ -463,7 +468,7 @@ function Conversation({ items, familyName, tz }: { items: SeekerTimelineItem[]; 
         )}
         <div className={`max-w-[78%] ${mine ? "text-right" : ""}`}>
           <div
-            className={`inline-block whitespace-pre-wrap rounded-2xl px-3.5 py-2.5 text-left text-[14.5px] leading-snug ${
+            className={`inline-block max-w-full whitespace-pre-wrap [overflow-wrap:anywhere] rounded-2xl px-3.5 py-2.5 text-left text-[14.5px] leading-snug ${
               auto ? "rounded-br-md bg-gray-200 text-gray-800" : mine ? "rounded-br-md bg-gray-900 text-white" : "rounded-bl-md bg-gray-100 text-gray-900"
             }`}
           >
@@ -892,7 +897,410 @@ function InquiryComposer({
 
 // ── Right: the case ───────────────────────────────────────────────────────────
 
-function CasePanel({ data, familyName, tz, reload }: { data: CaseData; familyName: string; tz: string; reload: () => Promise<void> }) {
+/**
+ * Writes to a family who is not on a city ad and has no open provider
+ * conversation: most benefits families. Until 2026-09-28 the page sent these
+ * to Messages. Text goes through the inbox's own send path (quiet hours,
+ * do-not-contact, the drafted answer marked sent); email is a plain personal
+ * note with replies to support@. A drafted research answer, when one is
+ * waiting, sits above the box with the reason it needs a person.
+ */
+function FamilyComposer({
+  seekerId,
+  familyName,
+  hasPhone,
+  hasEmail,
+  draft,
+  onSent,
+  shell = INLINE_SHELL,
+  onDone,
+}: {
+  seekerId: string;
+  familyName: string;
+  hasPhone: boolean;
+  hasEmail: boolean;
+  draft: BenefitsCaseView["draftAnswer"];
+  onSent: () => Promise<void>;
+  shell?: string;
+  onDone?: () => void;
+}) {
+  const [channel, setChannel] = useState<"sms" | "email">(hasPhone ? "sms" : "email");
+  const [text, setText] = useState("");
+  const [subject, setSubject] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ tone: "ok" | "err"; text: string } | null>(null);
+  const ready = text.trim() && (channel === "sms" || subject.trim());
+
+  async function send(sendNow: boolean) {
+    setBusy(true);
+    setMsg(null);
+    try {
+      const res = await fetch(`/api/admin/families/${seekerId}/message`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ channel, body: text, subject, sendNow }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(d?.error ?? "Did not send");
+      setMsg({ tone: "ok", text: d.message ?? "Sent." });
+      setText("");
+      setSubject("");
+      await onSent();
+      onDone?.();
+    } catch (e) {
+      setMsg({ tone: "err", text: e instanceof Error ? e.message : "Did not send" });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className={shell}>
+      {draft && !text && (
+        <div className="mb-2 rounded-2xl bg-amber-50 px-3.5 py-2.5 text-[13px] text-amber-900">
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="font-semibold">A drafted answer is waiting</span>
+            <button
+              type="button"
+              onClick={() => {
+                setChannel(hasPhone ? "sms" : "email");
+                setText(draft.body);
+              }}
+              className="font-semibold underline"
+            >
+              Use it
+            </button>
+          </div>
+          <p className="mt-1 line-clamp-2 text-amber-800">{draft.body}</p>
+          {draft.reasons.length > 0 && <p className="mt-1 text-[12px] text-amber-700">Needs a person: {draft.reasons.join("; ")}</p>}
+        </div>
+      )}
+      {channel === "email" && (
+        <input
+          aria-label="Email subject"
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+          placeholder="Subject"
+          className="mb-2 w-full rounded-xl border border-gray-300 px-3.5 py-2 text-[14px] text-gray-900 focus:border-gray-900 focus:outline-none"
+        />
+      )}
+      <div className="flex items-end gap-2 rounded-3xl border border-gray-300 py-1.5 pl-4 pr-1.5 focus-within:border-gray-900">
+        <textarea
+          aria-label={`Message ${familyName}`}
+          rows={shell !== INLINE_SHELL ? 3 : text.length > 90 ? 3 : 1}
+          autoFocus={shell !== INLINE_SHELL}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          maxLength={channel === "sms" ? 480 : 10000}
+          placeholder="Write a message…"
+          className="min-w-0 flex-1 resize-none bg-transparent py-1.5 text-[14.5px] text-gray-900 placeholder:text-gray-400 focus:outline-none"
+        />
+        <button
+          type="button"
+          aria-label="Send"
+          disabled={busy || !ready}
+          onClick={() => void send(false)}
+          className="grid h-9 w-9 flex-none place-items-center rounded-full bg-gray-900 text-white disabled:bg-gray-300"
+        >
+          ↑
+        </button>
+      </div>
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 px-1 text-[12.5px] text-gray-500">
+        <span>
+          To: <span className="font-semibold text-gray-900">{familyName}</span> by{" "}
+          {hasPhone && hasEmail ? (
+            <button type="button" onClick={() => setChannel(channel === "sms" ? "email" : "sms")} className="font-semibold text-gray-900 underline">
+              {channel === "sms" ? "text" : "email"}
+            </button>
+          ) : (
+            <span className="font-semibold text-gray-900">{channel === "sms" ? "text" : "email"}</span>
+          )}
+        </span>
+        {channel === "sms" && <span>Outside their hours it waits for their morning.</span>}
+        {channel === "sms" && (
+          <button type="button" disabled={busy || !ready} onClick={() => void send(true)} className="font-semibold text-gray-900 underline disabled:text-gray-400 disabled:no-underline">
+            Send now anyway
+          </button>
+        )}
+        {msg && <span className={msg.tone === "ok" ? "text-emerald-700" : "text-red-700"}>{msg.text}</span>}
+      </div>
+    </div>
+  );
+}
+
+const APPLICATION_WORD: Record<string, string> = {
+  called: "Called",
+  no_answer: "Called, no answer",
+  applied: "Applied",
+  need_docs: "Needs documents",
+  waiting: "Waiting on the agency",
+  stuck: "Stuck",
+  not_eligible: "Not eligible",
+};
+const HOLD_WORD: Record<string, string> = {
+  sms_reply: "they texted back",
+  email_reply: "they emailed back",
+  deceased: "their message suggests someone died",
+  sms_opt_out: "they texted STOP",
+};
+
+function shortDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" });
+}
+
+/**
+ * The program card: the benefits counterpart of the Providers section. For a
+ * benefits family the other party is a program, not a provider, so this shows
+ * which program we sent them to and its number, how far they've got, the
+ * letter (read and approved here), whether automation is paused, who owns
+ * their help request, and the text companion.
+ */
+function BenefitsSection({
+  seekerId,
+  view,
+  familyLabel,
+  hasEmail,
+  textable,
+  reload,
+}: {
+  seekerId: string;
+  view: BenefitsCaseView;
+  familyLabel: string;
+  hasEmail: boolean;
+  textable: boolean;
+  reload: () => Promise<void>;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<{ tone: "ok" | "err"; text: string } | null>(null);
+  const [letterOpen, setLetterOpen] = useState(false);
+  const [navigator, setNavigator] = useState<NavigatorDetail | null>(null);
+
+  const post = useCallback(
+    async (body: Record<string, unknown>) => {
+      const res = await fetch(`/api/admin/benefits/families/${seekerId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const d = await res.json().catch(() => ({}));
+      return { res, d };
+    },
+    [seekerId],
+  );
+
+  async function act(action: "hold_clear" | "resolved" | "reopen", done: string) {
+    setBusy(true);
+    setMsg(null);
+    try {
+      const { res, d } = await post({ action });
+      if (!res.ok) throw new Error(d?.error ?? "Did not save");
+      setMsg({ tone: "ok", text: done });
+      await reload();
+    } catch (e) {
+      setMsg({ tone: "err", text: e instanceof Error ? e.message : "Did not save" });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function openLetter() {
+    if (letterOpen) {
+      setLetterOpen(false);
+      return;
+    }
+    setMsg(null);
+    try {
+      const res = await fetch(`/api/admin/benefits/families/${seekerId}`);
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok || !d?.navigator) throw new Error(d?.error ?? "Couldn't load the letter");
+      setNavigator(d.navigator as NavigatorDetail);
+      setLetterOpen(true);
+    } catch (e) {
+      setMsg({ tone: "err", text: e instanceof Error ? e.message : "Couldn't load the letter" });
+    }
+  }
+
+  // Same behaviour as the caseload: a send the facts gate blocks asks once,
+  // naming the reason, before sending anyway.
+  const onNavigator = async (
+    action: "navigator_send" | "navigator_dismiss" | "navigator_test" | "navigator_recompose" | "navigator_save" | "navigator_schedule" | "navigator_unschedule" | "navigator_build_packet",
+    subject?: string,
+    letter?: string,
+    sms?: string,
+    testEmail?: string,
+    scheduledAt?: string,
+    overridePacket?: boolean,
+  ): Promise<boolean> => {
+    setBusy(true);
+    setMsg(null);
+    try {
+      let { res, d } = await post({ action, subject, body: letter, sms, testEmail, scheduledAt, overridePacket });
+      if (res.status === 409 && action === "navigator_send" && !overridePacket && d?.error) {
+        if (!window.confirm(`${d.error}\n\nSend it anyway?`)) {
+          setMsg({ tone: "err", text: d.error });
+          return false;
+        }
+        ({ res, d } = await post({ action, subject, body: letter, sms, testEmail, scheduledAt, overridePacket: true }));
+      }
+      if (!res.ok) {
+        setMsg({ tone: "err", text: d?.error ?? "That didn't go through. Try again." });
+        return false;
+      }
+      if (action !== "navigator_test") {
+        const fresh = await fetch(`/api/admin/benefits/families/${seekerId}`).then((r) => r.json()).catch(() => null);
+        if (fresh?.navigator) setNavigator(fresh.navigator as NavigatorDetail);
+        await reload();
+      }
+      if (action === "navigator_send") setLetterOpen(false);
+      return true;
+    } catch {
+      setMsg({ tone: "err", text: "That didn't go through. Try again." });
+      return false;
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const p = view.program;
+  const status = view.progress.applicationStatus ? APPLICATION_WORD[view.progress.applicationStatus] ?? view.progress.applicationStatus : null;
+  const letterLine =
+    view.letter.status === "sent" && view.letter.sentAt
+      ? `Letter sent ${shortDate(view.letter.sentAt)}${view.letter.sentVia === "auto" ? " (automatic)" : view.letter.sentVia === "scheduler" ? " (scheduled)" : ""}`
+      : view.letter.status === "pending"
+        ? view.letter.scheduledAt
+          ? `Letter scheduled for ${shortDate(view.letter.scheduledAt)}`
+          : "Letter written, not sent yet"
+        : view.letter.status === "dismissed"
+          ? "Letter dismissed"
+          : "No letter yet";
+
+  return (
+    <section>
+      <h3 className={sectionTitle}>Benefits</h3>
+
+      {p ? (
+        <div className="mt-2 rounded-xl border border-gray-200 px-3.5 py-3">
+          <p className="text-[14.5px] font-semibold text-gray-900">{p.shortName}</p>
+          {p.name !== p.shortName && <p className="text-[12.5px] text-gray-500">{p.name}</p>}
+          {p.phone && (
+            <p className="mt-1.5 text-[13.5px] text-gray-800">
+              {p.contactLabel ? `${p.contactLabel}: ` : ""}
+              <span className="font-semibold tabular-nums">{p.phone}</span>
+              {p.hours && <span className="text-gray-500"> · {p.hours}</span>}
+            </p>
+          )}
+          {p.switchLine && <p className="mt-1 text-[12.5px] text-gray-500">{p.switchLine}</p>}
+          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[12.5px]">
+            {view.planUrl && (
+              <a href={view.planUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 underline">
+                Their plan ↗
+              </a>
+            )}
+            {p.programPath && (
+              <a href={p.programPath} target="_blank" rel="noopener noreferrer" className="font-semibold text-gray-900 underline">
+                Program page ↗
+              </a>
+            )}
+          </div>
+        </div>
+      ) : (
+        <p className="mt-1 text-[13px] text-gray-500">No program with a phone number on file for them yet.</p>
+      )}
+
+      <div className="mt-3 flex flex-wrap gap-1.5">
+        <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">{letterLine}</span>
+        {view.progress.calledAt && (
+          <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-800">Made the call {shortDate(view.progress.calledAt)}</span>
+        )}
+        {status && <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-800">{status}</span>}
+        {view.smsConsentAt && (
+          <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">Agreed to texts {shortDate(view.smsConsentAt)}</span>
+        )}
+        {view.companion && (
+          <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-[12px] font-semibold text-indigo-800">
+            Text companion: {view.companion.arm === "companion" ? "in the conversation" : "control group"}
+          </span>
+        )}
+        {view.companion?.urgency === "yes" && (
+          <span className="rounded-full bg-rose-50 px-2.5 py-1 text-[12px] font-semibold text-rose-800">Said something is urgent</span>
+        )}
+        {view.companion?.day14 && (
+          <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">
+            Day 14: {view.companion.day14 === "yes" ? "got through" : "not yet"}
+          </span>
+        )}
+      </div>
+
+      {view.letter.status === "pending" && (
+        <div className="mt-3">
+          <button type="button" onClick={() => void openLetter()} className={pillBtn}>
+            {letterOpen ? "Close the letter" : "Read the letter"}
+          </button>
+          {letterOpen && navigator && (
+            <div className="mt-3 [&_textarea]:w-full">
+              <NavigatorDraftEditor
+                navigator={navigator}
+                reviewContext={{ state: null, careNeed: null, situation: null, completedAt: view.completedAt, firstName: null }}
+                familyLabel={familyLabel}
+                hasEmail={hasEmail}
+                textable={textable}
+                busy={busy}
+                onNavigator={onNavigator}
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {view.help && (
+        <p className={`mt-3 text-[13px] ${view.help.overdue ? "font-semibold text-red-700" : "text-gray-700"}`}>
+          Asked for a person{view.help.owner ? ` · ${view.help.owner} owns it` : ""}
+          {view.help.dueAt ? ` · ${view.help.overdue ? "overdue since" : "due"} ${shortDate(view.help.dueAt)}` : ""}
+        </p>
+      )}
+
+      {view.hold && (
+        <div className="mt-3 flex items-center gap-3 rounded-xl bg-amber-50 px-3.5 py-2.5">
+          <p className="min-w-0 flex-1 text-[13px] text-amber-900">
+            Automated messages paused: {HOLD_WORD[view.hold.reason] ?? view.hold.reason}.
+            {view.hold.needsExplicitResume ? " Resume only if that was misread." : " Replying to them resumes it."}
+          </p>
+          <button type="button" disabled={busy} onClick={() => void act("hold_clear", "Automated messages resumed.")} className={pillBtn}>
+            Resume
+          </button>
+        </div>
+      )}
+
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        {view.resolvedAt && (!view.help || view.resolvedAt > view.help.openedAt) ? (
+          <button type="button" disabled={busy} onClick={() => void act("reopen", "Reopened.")} className={pillBtn}>
+            Reopen their case
+          </button>
+        ) : (
+          <button type="button" disabled={busy} onClick={() => void act("resolved", "Marked resolved.")} className={pillBtn}>
+            Mark resolved
+          </button>
+        )}
+        {view.contactedAt && <span className="text-[12.5px] text-gray-500">Last reached {shortDate(view.contactedAt)}</span>}
+      </div>
+      {msg && <p className={`mt-2 text-[13px] ${msg.tone === "ok" ? "text-emerald-700" : "text-red-700"}`}>{msg.text}</p>}
+    </section>
+  );
+}
+
+function CasePanel({
+  data,
+  familyName,
+  tz,
+  reload,
+  benefits,
+}: {
+  data: CaseData;
+  familyName: string;
+  tz: string;
+  reload: () => Promise<void>;
+  benefits: BenefitsCaseView | null;
+}) {
   const routing = data.routing ?? null;
   const plan = data.plan ?? null;
   const [busy, setBusy] = useState(false);
@@ -982,7 +1390,9 @@ function CasePanel({ data, familyName, tz, reload }: { data: CaseData; familyNam
         ? "Olera only. Providers hear from us, not from them."
         : consent === "provider_ok"
           ? "They asked to be contacted by providers."
-          : "No consent on record. Treat as Olera only.";
+          : data.origin === "benefits"
+            ? "Came for benefits. We don't share them with providers."
+            : "No consent on record. Treat as Olera only.";
 
   return (
     <div className="flex flex-col gap-6 px-5 py-5">
@@ -1024,6 +1434,18 @@ function CasePanel({ data, familyName, tz, reload }: { data: CaseData; familyNam
       </section>
 
       <hr className="border-gray-200" />
+
+      {benefits?.isBenefits && (
+        <BenefitsSection
+          key={`b-${profile.seeker_id}`}
+          seekerId={profile.seeker_id}
+          view={benefits}
+          familyLabel={profile.label_is_fallback ? profile.email ?? "this family" : profile.label}
+          hasEmail={Boolean(profile.email)}
+          textable={Boolean(profile.phone) && Boolean(benefits.smsConsentAt) && consent !== "opted_out"}
+          reload={reload}
+        />
+      )}
 
       {(offers.length > 0 || routing?.handed_at || routing?.can_hand || routing?.can_route || providers.length > 0) && (
         <section>
@@ -1281,6 +1703,10 @@ function CaseInner() {
   const backQuery = useSearchParams().get("back");
   const backHref = `/admin/relationships/families${backQuery ? `?${backQuery}` : ""}`;
   const [data, setData] = useState<CaseData | null>(null);
+  // The benefits side of the case (program card, drafted answer). Null for a
+  // family who never used the benefits finder; loaded beside the case, never
+  // blocking it.
+  const [benefits, setBenefits] = useState<BenefitsCaseView | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [unarchiving, setUnarchiving] = useState(false);
   const [archiveError, setArchiveError] = useState<string | null>(null);
@@ -1296,9 +1722,13 @@ function CaseInner() {
   const load = useCallback(async () => {
     setError(null);
     try {
-      const res = await fetch(`/api/admin/seeker-touches?seeker=${seekerId}`);
+      const [res, bres] = await Promise.all([
+        fetch(`/api/admin/seeker-touches?seeker=${seekerId}`),
+        fetch(`/api/admin/benefits/case/${seekerId}`).catch(() => null),
+      ]);
       if (!res.ok) throw new Error(String(res.status));
       setData(await res.json());
+      setBenefits(bres && bres.ok ? ((await bres.json()) as BenefitsCaseView) : null);
     } catch {
       setError("Failed to load this family. Reload to try again.");
     }
@@ -1306,6 +1736,7 @@ function CaseInner() {
 
   useEffect(() => {
     setData(null);
+    setBenefits(null);
     void load();
   }, [load]);
 
@@ -1385,6 +1816,17 @@ function CaseInner() {
           ? `${data.episode.blocked_on} has it`
           : EPISODE_WORD[data.episode.state];
 
+  // Texting from the family composer needs their say-so: text consent on
+  // file, or they texted us first. A phone typed into a provider inquiry is
+  // not consent to texts from Olera. The server enforces the same rule.
+  const familyMayText = Boolean(
+    data &&
+      data.profile.phone &&
+      data.reach.phone !== "impossible" &&
+      data.consent !== "opted_out" &&
+      (benefits?.smsConsentAt || data.items.some((it) => it.channel === "text" && it.actor === "in")),
+  );
+
   // What the family can be written to, if anything. The same box sits at the
   // foot of the conversation on a laptop and in a sheet on a phone.
   const openInquiries = data
@@ -1400,6 +1842,20 @@ function CaseInner() {
         key={seekerId}
         conversations={openInquiries.map((p) => ({ connection_id: p.connection_id as string, name: p.name }))}
         familyName={familyName === "this family" ? "the family" : familyName}
+        onSent={load}
+        shell={shell}
+        onDone={onDone}
+      />
+    ) : !routing && (familyMayText || data.profile.email) ? (
+      // Everyone else, which is most benefits families: Olera writes to them
+      // directly instead of sending the reader off to Messages.
+      <FamilyComposer
+        key={seekerId}
+        seekerId={seekerId}
+        familyName={familyName === "this family" ? "the family" : familyName}
+        hasPhone={familyMayText}
+        hasEmail={Boolean(data.profile.email)}
+        draft={benefits?.draftAnswer ?? null}
         onSent={load}
         shell={shell}
         onDone={onDone}
@@ -1526,7 +1982,7 @@ function CaseInner() {
 
         {data && (
           <>
-            {!isDesktop && mobileTab === "case" && <CasePanel key={`m-${seekerId}`} data={data} familyName={familyName} tz={tz} reload={load} />}
+            {!isDesktop && mobileTab === "case" && <CasePanel key={`m-${seekerId}`} data={data} familyName={familyName} tz={tz} reload={load} benefits={benefits} />}
             {(isDesktop || mobileTab === "conversation") && (
               <div className="px-4 py-5 sm:px-6 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
                 <Conversation items={data.items} familyName={data.profile.label_is_fallback ? "Family" : data.profile.label} tz={tz} />
@@ -1539,7 +1995,7 @@ function CaseInner() {
       </main>
 
       <aside className="hidden min-h-0 overflow-y-auto border-l border-gray-200 lg:block lg:h-full">
-        {data && isDesktop && <CasePanel key={`d-${seekerId}`} data={data} familyName={familyName} tz={tz} reload={load} />}
+        {data && isDesktop && <CasePanel key={`d-${seekerId}`} data={data} familyName={familyName} tz={tz} reload={load} benefits={benefits} />}
       </aside>
     </div>
   );
