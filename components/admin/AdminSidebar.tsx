@@ -10,6 +10,8 @@ import { useToast } from "@/components/admin/Toast";
 import AdminToolSearch from "@/components/admin/AdminToolSearch";
 import type { AdminTool } from "@/lib/admin-tool-search";
 import SidebarDrawerToggle from "@/components/admin/SidebarDrawerToggle";
+import { OwnerNames, OwnersMenu } from "@/components/admin/PageOwners";
+import type { Owner, PageOwners as PageOwnerMap } from "@/lib/admin-page-owners";
 
 interface AdminSidebarProps {
   adminUser: AdminUser;
@@ -356,6 +358,55 @@ export default function AdminSidebar({
     .map((href) => pinnableItems.find((i) => i.href === href))
     .filter((i): i is NavItem => !!i);
 
+  // Who leads which page. Shared by the whole team, unlike pins, which are
+  // this admin's own — so it is fetched rather than handed down on the user.
+  // Failure is silent: no names render and the sidebar is what it was before.
+  const [people, setPeople] = useState<Owner[]>([]);
+  const [pageOwners, setPageOwners] = useState<PageOwnerMap>({});
+  useEffect(() => {
+    let live = true;
+    void (async () => {
+      try {
+        const res = await fetch("/api/admin/page-assignments");
+        if (!res.ok) return;
+        const data = (await res.json()) as { people?: Owner[]; owners?: PageOwnerMap };
+        if (!live) return;
+        setPeople(data.people ?? []);
+        setPageOwners(data.owners ?? {});
+      } catch {
+        /* non-critical */
+      }
+    })();
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  const toggleOwner = useCallback(
+    async (pageKey: string, personId: string, next: boolean) => {
+      const person = people.find((p) => p.id === personId);
+      if (!person) return;
+      const prev = pageOwners;
+      const held = prev[pageKey] ?? [];
+      const after = next
+        ? [...held, person].sort((a, b) => a.name.localeCompare(b.name))
+        : held.filter((p) => p.id !== personId);
+      setPageOwners({ ...prev, [pageKey]: after });
+      try {
+        const res = await fetch("/api/admin/page-assignments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pageKey, adminUserId: personId, action: next ? "add" : "remove" }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+      } catch {
+        setPageOwners(prev);
+        toast("Couldn't save that assignment. Try again.", { variant: "error" });
+      }
+    },
+    [pageOwners, people, toast],
+  );
+
   // v9.0 Phase 7: medjobs section toggles open/close. Defaults open
   // since the section is the primary daily-use surface.
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() => {
@@ -580,22 +631,31 @@ export default function AdminSidebar({
                         href={item.href}
                         prefetch={false}
                         className={[
-                          "block pl-5 pr-8 py-1.5 rounded-md text-[13px] transition-colors duration-100",
+                          "block pl-5 pr-12 py-1.5 rounded-md text-[13px] transition-colors duration-100",
                           active
                             ? "text-gray-900 font-medium bg-gray-100"
                             : "text-gray-600 hover:text-gray-900 hover:bg-gray-50",
                         ].join(" ")}
                       >
-                        {item.label}
+                        <span className="block truncate">{item.label}</span>
+                        <OwnerNames people={pageOwners[item.href] ?? []} />
                       </Link>
-                      <button
-                        onClick={() => toggleFavorite(item.href)}
-                        title="Unpin"
-                        aria-label={`Unpin ${item.label}`}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-amber-400 opacity-0 group-hover/item:opacity-100 hover:text-amber-500 transition-opacity duration-100"
-                      >
-                        <Star filled />
-                      </button>
+                      <div className="absolute right-1.5 top-1.5 flex items-center gap-0.5">
+                        <OwnersMenu
+                          people={people}
+                          owners={pageOwners[item.href] ?? []}
+                          onToggle={(id, next) => void toggleOwner(item.href, id, next)}
+                          label={item.label}
+                        />
+                        <button
+                          onClick={() => toggleFavorite(item.href)}
+                          title="Unpin"
+                          aria-label={`Unpin ${item.label}`}
+                          className="p-0.5 rounded text-amber-400 opacity-0 group-hover/item:opacity-100 hover:text-amber-500 transition-opacity duration-100"
+                        >
+                          <Star filled />
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
@@ -633,7 +693,7 @@ export default function AdminSidebar({
                             href={item.href}
                             prefetch={false}
                             className={[
-                              "flex items-center justify-between pl-5 pr-8 py-1.5 rounded-md text-[13px] transition-colors duration-100",
+                              "flex items-start justify-between pl-5 pr-12 py-1.5 rounded-md text-[13px] transition-colors duration-100",
                               active
                                 ? "text-gray-900 font-medium bg-gray-100"
                                 : unread > 0
@@ -641,24 +701,35 @@ export default function AdminSidebar({
                                   : "text-gray-600 hover:text-gray-900 hover:bg-gray-50",
                             ].join(" ")}
                           >
-                            <span>{item.label}</span>
+                            <span className="min-w-0">
+                              <span className="block truncate">{item.label}</span>
+                              <OwnerNames people={pageOwners[item.href] ?? []} />
+                            </span>
                             {unread > 0 && (
                               <span className="ml-2 text-[11px] tabular-nums font-semibold text-gray-900 rounded px-1 bg-emerald-100">
                                 {unread}
                               </span>
                             )}
                           </Link>
-                          <button
-                            onClick={() => toggleFavorite(item.href)}
-                            title={pinned ? "Unpin" : "Pin to top"}
-                            aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
-                            className={[
-                              "absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 rounded opacity-0 group-hover/item:opacity-100 transition-opacity duration-100",
-                              pinned ? "text-amber-400 hover:text-amber-500" : "text-gray-300 hover:text-amber-400",
-                            ].join(" ")}
-                          >
-                            <Star filled={pinned} />
-                          </button>
+                          <div className="absolute right-1.5 top-1.5 flex items-center gap-0.5">
+                            <OwnersMenu
+                              people={people}
+                              owners={pageOwners[item.href] ?? []}
+                              onToggle={(id, next) => void toggleOwner(item.href, id, next)}
+                              label={item.label}
+                            />
+                            <button
+                              onClick={() => toggleFavorite(item.href)}
+                              title={pinned ? "Unpin" : "Pin to top"}
+                              aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
+                              className={[
+                                "p-0.5 rounded opacity-0 group-hover/item:opacity-100 transition-opacity duration-100",
+                                pinned ? "text-amber-400 hover:text-amber-500" : "text-gray-300 hover:text-amber-400",
+                              ].join(" ")}
+                            >
+                              <Star filled={pinned} />
+                            </button>
+                          </div>
                         </div>
                       );
                     })}
@@ -710,7 +781,7 @@ export default function AdminSidebar({
                         href={item.href}
                         prefetch={false}
                         className={[
-                          "flex items-center justify-between pl-5 pr-8 py-1.5 rounded-md text-[13px] transition-colors duration-100",
+                          "flex items-start justify-between pl-5 pr-12 py-1.5 rounded-md text-[13px] transition-colors duration-100",
                           active
                             ? hasUnread
                               ? "bg-gray-100 font-semibold text-gray-900"
@@ -720,7 +791,10 @@ export default function AdminSidebar({
                               : "font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50",
                         ].join(" ")}
                       >
-                        <span>{item.label}</span>
+                        <span className="min-w-0">
+                          <span className="block truncate">{item.label}</span>
+                          <OwnerNames people={pageOwners[item.href] ?? []} />
+                        </span>
                         {fraction != null && (
                           <span
                             className={[
@@ -735,17 +809,25 @@ export default function AdminSidebar({
                           </span>
                         )}
                       </Link>
-                      <button
-                        onClick={() => toggleFavorite(item.href)}
-                        title={pinned ? "Unpin" : "Pin to top"}
-                        aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
-                        className={[
-                          "absolute right-1.5 top-1/2 -translate-y-1/2 p-0.5 rounded opacity-0 group-hover/item:opacity-100 transition-opacity duration-100",
-                          pinned ? "text-amber-400 hover:text-amber-500" : "text-gray-300 hover:text-amber-400",
-                        ].join(" ")}
-                      >
-                        <Star filled={pinned} />
-                      </button>
+                      <div className="absolute right-1.5 top-1.5 flex items-center gap-0.5">
+                        <OwnersMenu
+                          people={people}
+                          owners={pageOwners[item.href] ?? []}
+                          onToggle={(id, next) => void toggleOwner(item.href, id, next)}
+                          label={item.label}
+                        />
+                        <button
+                          onClick={() => toggleFavorite(item.href)}
+                          title={pinned ? "Unpin" : "Pin to top"}
+                          aria-label={`${pinned ? "Unpin" : "Pin"} ${item.label}`}
+                          className={[
+                            "p-0.5 rounded opacity-0 group-hover/item:opacity-100 transition-opacity duration-100",
+                            pinned ? "text-amber-400 hover:text-amber-500" : "text-gray-300 hover:text-amber-400",
+                          ].join(" ")}
+                        >
+                          <Star filled={pinned} />
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
