@@ -7,6 +7,37 @@
 
 ## Current Focus
 
+### 2026-09-28 — Ad Boost audit (Phase 0 only) → Ces's call sheet + shared-inbox tutorial (`fine-brahe`, no app code)
+
+**Output.** Ces's call sheet for the week of 28 Sep: https://claude.ai/artifact/L9eea82hBPEL7dJCW1rhT7 (v3; private, TJ must share with `cchavez.olera@gmail.com`). It covers where Robbie stands, 6 families in order, 3 check-ins through the shared inbox, 5 families to close by Thursday, 5 providers, a shared-inbox tutorial and how-to-log recipes. It supersedes the 25 Sep sheet (Un8A9ttZWyQQQPUcT31N6B).
+
+**Audit scope.** Only `/ad-boost-audit` Phase 0 was run: DB, notes, SCRATCHPAD, `family_touches`, `provider_touches`, `city_lead_messages`, `sms_inbound`, and support@ email. No Google/Meta/Nextdoor reads, no `ad_campaign_log` observations, no state-of-play doc.
+
+**Facts (28 Sep).**
+- **City leads.** 33 real city leads since 7 Sep: 14 job seekers, 2 opt-outs, 15 real families open, 0 recorded as client. The new Fresno and Atlanta Meta forms returned 3 job seekers out of 3.
+- **Ad Boost provider-page inquiries in Sep.** There were 8. Two were job seekers, and 5 of the 6 real ones left an email but no phone. Provider outcomes: Edmonds "talking", two "no".
+- **Robbie holds Helen, Rudy and Marla by email from support@.**
+  - Helen: intro 24 Sep. Robbie left her a voicemail 25 Sep.
+  - Rudy: intro 26 Sep; Rudy wants a call Mon 28 Sep after 2 PM CT.
+  - Marla: intro 26 Sep.
+  - Robbie has not replied about Rudy or Marla.
+  - TJ told him Dallas families go to the regional line 214-571-7059.
+  - The partnership call is Wed 30 Sep 9:30 CT.
+  - **None of the three is in Robbie's /portal/inbox**: Rudy's offer was released (no_contact), and the other two were never offers.
+- **Records that show nothing.** Assisting Hands still has 0 `provider_touches`. Helen's lead still reads `new`, so a text from her could auto-route her.
+- **Shared inbox reach.** It covers own-ad families only: CareAssist (Nancy, Marta), Hoop (Barbara, Shirley), Rosemonte (Elvis). A taken offer shows the agency only its own conversation, with no Olera texts. `family_touches` calls show to the agency as one-line events. The family sees neither the events nor Ces's note text.
+- **Test data flagged as real.** TJ's test data is still `is_test=false`: lead 956aaa77 and the two college-station-tx `city_pool` rows.
+- **Stale Ces next-actions.** Franchil "call back after 2PM EDT" and Impact "Email Pat" were both due 18 Sep.
+
+**Mistakes this session (corrected on the sheet).**
+1. Told Ces to re-send Robbie the referrals. Missed that support@ had already sent all three. Read `support_email_messages` before claiming a provider hasn't been told.
+2. Warned that offers expire after 30 minutes. #2249 had reached main via #2252 that day; it is now 4 business hours.
+
+**Next Up.**
+- TJ decides whether Ces puts Robbie's three on record (Offer to → They said yes by phone; this texts the family and emails Robbie) or leaves them on email until Wednesday.
+- Add a care-vs-work screener to the Meta forms.
+- Clean up the test rows. Close the two stale Ces actions.
+
 ### 2026-09-26 — STUCK case (718) 404-1055: a fall, not a benefits question (`silly-meitner`, no app code)
 
 **The case.** FL family (writing about herself), 76 (intake said 80), income under $2,500, Medicaid. She replied STUCK to the 24 Sep SMMC LTC text, then: "Slipped and fell on blue very high gloss sidewalk, went to Morgan and Morgan, they said no." We don't know who owns the sidewalk, her city or ZIP, or when she fell. `benefits_case.help_owner = TJ`, due 28 Sep.
