@@ -186,7 +186,9 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
   // A 1 to 10 right after Cortex asked for its weekly rating is the rating:
   // stored with his words as a correction, and thanked, not answered.
   let ratingsNote = "";
-  if (deps.reactions) {
+  // A message he is sending to someone else is not a rating of Cortex, even
+  // when it says "that call was a 9/10".
+  if (deps.reactions && !parseTeamMessage(text)) {
     const scored = await deps.reactions.reply(text, { scoreOnly: true }).catch(() => null);
     // Ratings inside a longer message are saved and the message is still
     // answered; the reply says they were saved, so he never has to wonder.

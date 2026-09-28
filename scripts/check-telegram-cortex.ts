@@ -17,7 +17,7 @@ import { memoryChatStore, memoryPromptText } from "../lib/war-room/chat-memory.s
 import { handleTelegramUpdate, pickPhoto, sniffImageType, type TelegramDeps, type TelegramUpdate } from "../lib/war-room/telegram-chat.server";
 import { conversationSystem } from "../lib/war-room/conversation.server";
 import { artifactSubject } from "../lib/war-room/visualize.server";
-import { draftedNote, parseTeamMessage, pickTarget } from "../lib/war-room/team-messages.server";
+import { draftedNote, parseTeamMessage, pickTarget, sendToSlack } from "../lib/war-room/team-messages.server";
 import { handoffNote, handoffTitle, type Handoff } from "../lib/war-room/handoff.server";
 
 // --- Formatting: Cortex writes Slack markup; Telegram reads HTML.
@@ -79,6 +79,9 @@ assert.deepEqual(parseTeamMessage("post that in #general"), { target: "#general"
 assert.deepEqual(parseTeamMessage("send it to Ces Chavez"), { target: "Ces Chavez", text: null });
 assert.deepEqual(parseTeamMessage("send to Logan: Robbie call moved to 11"), { target: "Logan", text: "Robbie call moved to 11" });
 assert.deepEqual(parseTeamMessage("post in #careseeker-support: heads up"), { target: "#careseeker-support", text: "heads up" });
+assert.deepEqual(parseTeamMessage("send that to Logan now"), { target: "Logan", text: null }, "now is not a surname");
+assert.deepEqual(parseTeamMessage("send it to Logan please"), { target: "Logan", text: null });
+assert.equal(parseTeamMessage("send that to Logan and Ces"), null, "two people at once is not a command yet");
 assert.equal(parseTeamMessage("Should I send that to Logan?"), null, "a question is conversation");
 assert.equal(parseTeamMessage("Can you send Logan a quick note?"), null, "a request for a draft is conversation");
 // Names resolve against the workspace; an ambiguous one sends nothing.
@@ -258,6 +261,45 @@ const update = (id: number, text: string, chat = FOUNDER, extra: Partial<NonNull
     await handleTelegramUpdate(update(52, "send that to Logan"), deps);
     assert.equal(sentSlack.length, 0, "nothing drafted, nothing sent");
     assert.match(sent[0].text, /^Nothing sent/);
+  }
+  // sendToSlack against a fake Slack: lookups, joining a public channel once, and a missing permission.
+  {
+    const realFetch = globalThis.fetch;
+    const calls: string[] = [];
+    const reply = (body: unknown) => new Response(JSON.stringify(body), { status: 200 });
+    let scenario: "ok" | "noGroups" | "noUsers" = "ok";
+    globalThis.fetch = (async (url: string | URL, init?: RequestInit) => {
+      const method = String(url).split("/api/")[1];
+      const form = new URLSearchParams(String(init?.body ?? ""));
+      calls.push(`${method}${form.get("types") ? `:${form.get("types")}` : ""}${form.get("channel") ? `:${form.get("channel")}` : ""}`);
+      if (method === "users.list") return reply(scenario === "noUsers" ? { ok: false, error: "missing_scope", needed: "users:read" } : { ok: true, members: [{ id: "U1", name: "logan", real_name: "Logan DuBose", profile: { real_name: "Logan DuBose", display_name: "Logan" } }] });
+      if (method === "conversations.list") {
+        if (form.get("types") === "private_channel" && scenario === "noGroups") return reply({ ok: false, error: "missing_scope", needed: "groups:read" });
+        return reply({ ok: true, channels: form.get("types") === "public_channel" ? [{ id: "C1", name: "general" }] : [{ id: "C2", name: "secret", is_private: true }] });
+      }
+      if (method === "conversations.join") return reply({ ok: true });
+      if (method === "chat.postMessage") {
+        const joinedFirst = calls.some((call) => call === "conversations.join:C1");
+        if (form.get("channel") === "C1" && !joinedFirst) return reply({ ok: false, error: "not_in_channel" });
+        return reply({ ok: true, ts: "1" });
+      }
+      return reply({ ok: false, error: "unknown_method" });
+    }) as typeof fetch;
+    try {
+      assert.deepEqual(await sendToSlack("Logan", "hi", "xoxb-test"), { success: true, label: "Logan DuBose" });
+      calls.length = 0;
+      assert.deepEqual(await sendToSlack("#general", "hi", "xoxb-test"), { success: true, label: "#general" });
+      assert.deepEqual(calls.filter((c) => c.startsWith("chat") || c.startsWith("conversations.join")), ["chat.postMessage:C1", "conversations.join:C1", "chat.postMessage:C1"], "joins a public channel once, then posts");
+      scenario = "noGroups";
+      assert.deepEqual(await sendToSlack("#general", "hi", "xoxb-test"), { success: true, label: "#general" }, "public channels still work without groups:read");
+      const hidden = await sendToSlack("#secret-plans", "hi", "xoxb-test");
+      assert.ok(!hidden.success && /groups:read/.test(hidden.error), "a hidden private channel names the permission");
+      scenario = "noUsers";
+      const noUsers = await sendToSlack("Logan", "hi", "xoxb-test");
+      assert.ok(!noUsers.success && /users:read/.test(noUsers.error));
+    } finally {
+      globalThis.fetch = realFetch;
+    }
   }
   console.log("handler checks passed");
 

@@ -33,7 +33,8 @@ export function parseTeamMessage(text: string): SlackSendCommand | null {
   if (withText) return { target: withText[1].trim(), text: withText[2].trim() };
   const drafted = trimmed.match(DRAFTED);
   // Names may hold a dot (chris.a), so a sentence's closing period lands in the match.
-  if (drafted) return { target: drafted[1].trim().replace(/[.!]+$/, ""), text: null };
+  // "now"/"please" would otherwise be read as a surname ("Logan now").
+  if (drafted) return { target: drafted[1].trim().replace(/[.!]+$/, "").replace(/\s+(now|please)$/i, ""), text: null };
   return null;
 }
 
@@ -63,9 +64,10 @@ export function draftedNote(cortexMessage: string): string | null {
   return inline.length ? inline.sort((a, b) => b.length - a.length)[0] : null;
 }
 
-export function teamMessageText(text: string): string {
-  // The Cortex app's DM is one-way (Slack's messages tab is off), so say where a reply goes.
-  return `*From TJ* (sent through Cortex; reply to TJ directly):\n\n${text}`;
+export function teamMessageText(text: string, inChannel = false): string {
+  // The Cortex app's DM is one-way (Slack's messages tab is off), so a DM
+  // says where a reply goes. In a channel people reply in the thread.
+  return `*From TJ* (sent through Cortex${inChannel ? "" : "; reply to TJ directly"}):\n\n${text}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -150,8 +152,12 @@ export async function sendToSlack(target: string, text: string, token = process.
   const wantsChannel = target.startsWith("#");
   const [users, channels] = await Promise.all([
     wantsChannel ? Promise.resolve({ items: [] as RawUser[] } as { items: RawUser[]; error?: SlackPayload }) : listAll<RawUser>(token, "users.list", "members", {}),
-    listAll<RawChannel>(token, "conversations.list", "channels", { types: "public_channel,private_channel", exclude_archived: "true" }),
-  ]);
+    // Public and private asked for separately: private needs groups:read, and
+    // one call for both fails whole when that permission is missing, which
+    // would make every public channel unreachable too.
+    listAll<RawChannel>(token, "conversations.list", "channels", { types: "public_channel", exclude_archived: "true" }),
+    listAll<RawChannel>(token, "conversations.list", "channels", { types: "private_channel", exclude_archived: "true" }),
+  ]).then(([people, open, closed]) => [people, { items: [...open.items, ...closed.items], error: open.error, privateError: closed.error }] as const);
   // Say which permission is missing rather than "no one by that name".
   const needed = wantsChannel ? channels.error : users.error;
   if (needed && needed.error === "missing_scope") return { success: false, error: slackErrorText(needed, target) };
@@ -160,12 +166,17 @@ export async function sendToSlack(target: string, text: string, token = process.
     users.items.map((u) => ({ id: u.id, name: u.name, realName: u.profile?.real_name || u.real_name || "", displayName: u.profile?.display_name || "", deleted: u.deleted, isBot: u.is_bot || u.id === "USLACKBOT" })),
     channels.items.map((c) => ({ id: c.id, name: c.name, isPrivate: Boolean(c.is_private) })),
   );
-  if (!resolved.ok) return { success: false, error: resolved.reason };
-  let posted = await slack(token, "chat.postMessage", { channel: resolved.id, text: teamMessageText(text) });
+  if (!resolved.ok) {
+    // A private channel is invisible without groups:read; say that, not "no such channel".
+    const hidden = wantsChannel && channels.privateError?.error === "missing_scope";
+    return { success: false, error: hidden ? slackErrorText(channels.privateError!, target) : resolved.reason };
+  }
+  const body = teamMessageText(text, Boolean(resolved.channel));
+  let posted = await slack(token, "chat.postMessage", { channel: resolved.id, text: body });
   // A public channel Cortex hasn't joined: join it once, then post.
   if (!posted.ok && posted.error === "not_in_channel" && resolved.channel && !resolved.channel.isPrivate) {
     const joined = await slack(token, "conversations.join", { channel: resolved.id });
-    if (joined.ok) posted = await slack(token, "chat.postMessage", { channel: resolved.id, text: teamMessageText(text) });
+    if (joined.ok) posted = await slack(token, "chat.postMessage", { channel: resolved.id, text: body });
   }
   return posted.ok ? { success: true, label: resolved.label } : { success: false, error: slackErrorText(posted, resolved.label) };
 }
