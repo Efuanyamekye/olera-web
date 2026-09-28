@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { tracking_id, business_profile_id, outcome, notes } = body;
+    const { tracking_id, business_profile_id, outcome, notes, callback_date } = body;
 
     if (!tracking_id || !business_profile_id) {
       return NextResponse.json(
@@ -88,6 +88,11 @@ export async function POST(request: NextRequest) {
       outcome,
       notes: notes?.trim() || null,
     };
+
+    // Store callback date for callback_requested outcomes
+    if (outcome === "callback_requested" && callback_date) {
+      details.callback_date = callback_date;
+    }
 
     if (newStage) {
       details.previous_stage = current.pipeline_stage;

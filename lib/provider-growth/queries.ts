@@ -7,7 +7,19 @@
 
 import { getServiceClient } from "@/lib/admin";
 import { calculateProfileCompleteness, type ExtendedMetadata } from "@/lib/profile-completeness";
-import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource, MeetingType, MeetingFocus, MeetingFormat } from "./stages";
+import {
+  CARE_TYPE_FILTER_MAPPING,
+  CALLBACK_FOLLOWUP_OUTCOMES,
+  type PipelineStage,
+  type AdsStatus,
+  type MedjobsStatus,
+  type TouchpointType,
+  type ClaimSource,
+  type MeetingType,
+  type MeetingFocus,
+  type MeetingFormat,
+  type ActivityOutcome,
+} from "./stages";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -2027,6 +2039,11 @@ export interface ListProvidersOptions {
   adsOnly?: boolean;     // ads_subscribed AND medjobs NOT subscribed
   medjobsOnly?: boolean; // medjobs_subscribed AND ads NOT subscribed
   churned?: boolean;     // has churn timestamp AND not currently subscribed to either
+  // Lead scoring filters (profile completeness bands)
+  completenessMin?: number;  // e.g., 70 for "Hot" leads
+  completenessMax?: number;  // e.g., 49 for "Cold" leads
+  // Care type filter (maps to care_types array values)
+  careTypes?: string[];  // e.g., ["home_care", "assisted_living"]
 }
 
 export async function listProviders(options: ListProvidersOptions = {}): Promise<{
@@ -2056,6 +2073,9 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     adsOnly,
     medjobsOnly,
     churned,
+    completenessMin,
+    completenessMax,
+    careTypes,
   } = options;
 
   // Build the query
@@ -2164,12 +2184,20 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   // Apply ordering
   query = query.order(orderBy, { ascending: orderDirection === "asc" });
 
-  // When searching or filtering by hasCallAttempts, fetch all matching rows
+  // When searching or filtering by computed fields, fetch all matching rows
   // then filter + paginate in memory because:
   // - PostgREST doesn't support ilike on joined columns (search)
   // - hasCallAttempts requires joining with touchpoints (in memory)
+  // - completeness is computed at query time (not stored)
+  // - careTypes requires matching against array values
   // Without these filters, apply pagination at DB level for efficiency.
-  if (!search && hasCallAttempts === undefined) {
+  const needsInMemoryFiltering = search ||
+    hasCallAttempts !== undefined ||
+    completenessMin !== undefined ||
+    completenessMax !== undefined ||
+    (careTypes && careTypes.length > 0);
+
+  if (!needsInMemoryFiltering) {
     query = query.range(offset, offset + limit - 1);
   }
 
@@ -2268,8 +2296,44 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     );
   }
 
-  // Apply pagination in memory if we did search or hasCallAttempts filtering
-  if (search || hasCallAttempts !== undefined) {
+  // Filter by profile completeness if specified
+  if (completenessMin !== undefined) {
+    providers = providers.filter((p) => (p.profile_completeness ?? 0) >= completenessMin);
+  }
+  if (completenessMax !== undefined) {
+    providers = providers.filter((p) => (p.profile_completeness ?? 0) <= completenessMax);
+  }
+
+  // Filter by care types if specified
+  // Care types filter uses mapped values to match database variations
+  if (careTypes && careTypes.length > 0) {
+    // Build a set of all known care types for "other" detection
+    const knownCareTypes = new Set(
+      Object.values(CARE_TYPE_FILTER_MAPPING).flat().map((ct) => ct.toLowerCase())
+    );
+
+    providers = providers.filter((p) => {
+      const providerCareTypes = p.care_types || [];
+      if (providerCareTypes.length === 0) return false;
+
+      return careTypes.some((filterType) => {
+        if (filterType === "other") {
+          // Match if provider has any care type not in known categories
+          return providerCareTypes.some(
+            (pct) => !knownCareTypes.has(pct.toLowerCase())
+          );
+        }
+        // Match if provider has any care type in the mapped values
+        const mappedValues = CARE_TYPE_FILTER_MAPPING[filterType] || [];
+        return providerCareTypes.some((pct) =>
+          mappedValues.some((mv) => mv.toLowerCase() === pct.toLowerCase())
+        );
+      });
+    });
+  }
+
+  // Apply pagination in memory if we did any in-memory filtering
+  if (needsInMemoryFiltering) {
     const filteredTotal = providers.length;
     providers = providers.slice(offset, offset + limit);
     return { providers, total: filteredTotal };
@@ -2717,4 +2781,169 @@ export async function updateConversionStatusBatch(
   }
 
   return { updated: updatedCount };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Callback Queue Queries
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface CallbackDueEntry {
+  tracking_id: string;
+  business_profile_id: string;
+  callback_date: string;
+  notes: string | null;
+  touchpoint_created_at: string;
+  // Joined from provider
+  display_name: string | null;
+  pipeline_stage: PipelineStage;
+  assigned_to: string | null;
+}
+
+export interface CallbacksDueResult {
+  dueToday: CallbackDueEntry[];
+  overdue: CallbackDueEntry[];
+  upcoming: CallbackDueEntry[];
+  totalDue: number;  // dueToday + overdue
+}
+
+/**
+ * Get callbacks that are due today, overdue, or upcoming (next 7 days).
+ *
+ * A callback is "due" if:
+ * 1. There's a touchpoint with outcome = "callback_requested" and a callback_date
+ * 2. The provider is still in an active pipeline stage (not not_interested)
+ * 3. There's no more recent touchpoint (they haven't been followed up)
+ */
+export async function getCallbacksDue(): Promise<CallbacksDueResult> {
+  const db = getServiceClient();
+  const today = new Date().toISOString().split("T")[0];
+  const sevenDaysFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+
+  // Get all callback_requested touchpoints with callback_date
+  const { data: touchpoints, error: touchpointsError } = await db
+    .from("provider_growth_touchpoints")
+    .select(`
+      id,
+      tracking_id,
+      business_profile_id,
+      details,
+      created_at
+    `)
+    .eq("touchpoint_type", "activity_logged")
+    .not("details", "is", null)
+    .order("created_at", { ascending: false });
+
+  if (touchpointsError) {
+    console.error("[callbacks-due] Error fetching touchpoints:", touchpointsError);
+    throw new Error("Failed to fetch callbacks");
+  }
+
+  // Filter to only callback_requested with callback_date
+  const callbackTouchpoints = (touchpoints || []).filter((tp) => {
+    const details = tp.details as Record<string, unknown> | null;
+    return details?.outcome === "callback_requested" && details?.callback_date;
+  });
+
+  if (callbackTouchpoints.length === 0) {
+    return { dueToday: [], overdue: [], upcoming: [], totalDue: 0 };
+  }
+
+  // Get unique tracking IDs
+  const trackingIds = [...new Set(callbackTouchpoints.map((tp) => tp.tracking_id))];
+
+  // Fetch tracking records with provider info to filter by stage
+  const { data: trackingRecords, error: trackingError } = await db
+    .from("provider_growth_tracking")
+    .select(`
+      id,
+      business_profile_id,
+      pipeline_stage,
+      assigned_to,
+      business_profiles!inner (
+        display_name
+      )
+    `)
+    .in("id", trackingIds)
+    .in("pipeline_stage", ["new_claim", "pitched", "no_show"]);
+
+  if (trackingError) {
+    console.error("[callbacks-due] Error fetching tracking:", trackingError);
+    throw new Error("Failed to fetch tracking records");
+  }
+
+  const trackingMap = new Map(
+    (trackingRecords || []).map((t) => [t.id, t])
+  );
+
+  // Build a map of tracking_id -> list of touchpoints (already sorted by created_at desc)
+  const touchpointsByTracking = new Map<string, typeof touchpoints>();
+  for (const tp of touchpoints || []) {
+    const list = touchpointsByTracking.get(tp.tracking_id) || [];
+    list.push(tp);
+    touchpointsByTracking.set(tp.tracking_id, list);
+  }
+
+  // Process callbacks
+  const dueToday: CallbackDueEntry[] = [];
+  const overdue: CallbackDueEntry[] = [];
+  const upcoming: CallbackDueEntry[] = [];
+
+  for (const tp of callbackTouchpoints) {
+    const tracking = trackingMap.get(tp.tracking_id);
+    if (!tracking) continue; // Provider not in active stage
+
+    // Check if this callback has been followed up on
+    // Only dismiss if there's a NEWER touchpoint that is a follow-up action (not just a note)
+    const trackingTouchpoints = touchpointsByTracking.get(tp.tracking_id) || [];
+    const hasFollowUp = trackingTouchpoints.some((otherTp) => {
+      // Skip if this is the callback touchpoint itself or older
+      if (otherTp.id === tp.id || otherTp.created_at <= tp.created_at) {
+        return false;
+      }
+      // Check if the newer touchpoint is a follow-up action
+      const details = otherTp.details as Record<string, unknown> | null;
+      const outcome = details?.outcome as ActivityOutcome | undefined;
+      return outcome && CALLBACK_FOLLOWUP_OUTCOMES.includes(outcome);
+    });
+
+    if (hasFollowUp) {
+      // Callback was followed up on, skip it
+      continue;
+    }
+
+    const details = tp.details as Record<string, unknown>;
+    const callbackDate = details.callback_date as string;
+    const profile = tracking.business_profiles as { display_name: string | null };
+
+    const entry: CallbackDueEntry = {
+      tracking_id: tp.tracking_id,
+      business_profile_id: tp.business_profile_id,
+      callback_date: callbackDate,
+      notes: (details.notes as string) || null,
+      touchpoint_created_at: tp.created_at,
+      display_name: profile.display_name,
+      pipeline_stage: tracking.pipeline_stage as PipelineStage,
+      assigned_to: tracking.assigned_to,
+    };
+
+    if (callbackDate === today) {
+      dueToday.push(entry);
+    } else if (callbackDate < today) {
+      overdue.push(entry);
+    } else if (callbackDate <= sevenDaysFromNow) {
+      upcoming.push(entry);
+    }
+  }
+
+  // Sort each list by callback_date
+  dueToday.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+  overdue.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+  upcoming.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+
+  return {
+    dueToday,
+    overdue,
+    upcoming,
+    totalDue: dueToday.length + overdue.length,
+  };
 }

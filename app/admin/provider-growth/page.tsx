@@ -20,11 +20,14 @@ import DateRangePopover, {
 } from "@/components/admin/DateRangePopover";
 import { AdminFilterChips } from "@/components/admin/provider-outreach/AdminFilterChips";
 import {
+  CallbackBanner,
   GrowthTabs,
   StatsHeader,
   ProviderRow,
   ProviderDrawer,
+  ProviderFilters,
   type ActiveTab,
+  type ProviderFiltersValue,
 } from "./components";
 
 const PAGE_SIZE = 50;
@@ -103,6 +106,11 @@ export default function ProviderGrowthPage() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [dateRange, setDateRange] = useState<DateRangeValue>(DEFAULT_DATE_RANGE);
+  const [providerFilters, setProviderFilters] = useState<ProviderFiltersValue>({
+    completenessMin: undefined,
+    completenessMax: undefined,
+    careTypes: [],
+  });
 
   // Pagination state
   const [page, setPage] = useState(0);
@@ -122,6 +130,9 @@ export default function ProviderGrowthPage() {
   // Assignment state
   const [editingAssignmentId, setEditingAssignmentId] = useState<string | null>(null);
   const [adminNameLookup, setAdminNameLookup] = useState<Map<string, string>>(new Map());
+
+  // Callback banner refresh key - increment to trigger refetch
+  const [callbackRefreshKey, setCallbackRefreshKey] = useState(0);
 
   // Keep ref in sync with selected provider
   useEffect(() => {
@@ -166,6 +177,11 @@ export default function ProviderGrowthPage() {
   useEffect(() => {
     setPage(0);
   }, [selectedAdminFilter]);
+
+  // Reset page when provider filters change
+  useEffect(() => {
+    setPage(0);
+  }, [providerFilters]);
 
   // Fetch stats (including subtab counts)
   const fetchStats = useCallback(async () => {
@@ -279,6 +295,17 @@ export default function ProviderGrowthPage() {
       params.set("limit", String(PAGE_SIZE));
       params.set("offset", String(page * PAGE_SIZE));
 
+      // Provider filters (completeness and care types)
+      if (providerFilters.completenessMin !== undefined) {
+        params.set("completenessMin", String(providerFilters.completenessMin));
+      }
+      if (providerFilters.completenessMax !== undefined) {
+        params.set("completenessMax", String(providerFilters.completenessMax));
+      }
+      if (providerFilters.careTypes.length > 0) {
+        params.set("careTypes", providerFilters.careTypes.join(","));
+      }
+
       const res = await fetch(`/api/admin/provider-growth?${params}`);
       if (res.ok) {
         const data = await res.json();
@@ -294,7 +321,7 @@ export default function ProviderGrowthPage() {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, debouncedSearch, dateRange, page, selectedAdminFilter]);
+  }, [activeTab, debouncedSearch, dateRange, page, selectedAdminFilter, providerFilters]);
 
   // Initial fetch
   useEffect(() => {
@@ -421,6 +448,18 @@ export default function ProviderGrowthPage() {
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
+  // Handle clicking a provider from the callback banner
+  const handleCallbackProviderClick = (trackingId: string) => {
+    const provider = providers.find((p) => p.id === trackingId);
+    if (provider) {
+      setSelectedProvider(provider);
+    } else {
+      // Provider may not be in current list, fetch and select it
+      // For now, just log - could add a fetch here if needed
+      console.log("Provider not in current list:", trackingId);
+    }
+  };
+
   return (
     <div>
       {/* Page Header */}
@@ -438,6 +477,12 @@ export default function ProviderGrowthPage() {
               value={dateRange}
               onChange={setDateRange}
               ariaLabel="Filter by claim date"
+            />
+
+            {/* Lead scoring filters */}
+            <ProviderFilters
+              value={providerFilters}
+              onChange={setProviderFilters}
             />
 
             {/* Search */}
@@ -488,6 +533,14 @@ export default function ProviderGrowthPage() {
         onSelect={setSelectedAdminFilter}
         tabKey={getTabKey(activeTab)}
       />
+
+      {/* Callback banner - only shown on In Progress tab */}
+      {activeTab.type === "pipeline" && activeTab.stage === "in_progress" && (
+        <CallbackBanner
+          onProviderClick={handleCallbackProviderClick}
+          refreshKey={callbackRefreshKey}
+        />
+      )}
 
       {/* Provider list */}
       <div className="bg-white rounded-xl border border-gray-200">
@@ -563,9 +616,10 @@ export default function ProviderGrowthPage() {
           onClose={() => setSelectedProvider(null)}
           onUpdate={handleProviderUpdate}
           onCallLogged={() => {
-            // Refresh stats and providers when a call is logged
+            // Refresh stats, providers, and callback banner when a call is logged
             fetchStats();
             fetchProviders();
+            setCallbackRefreshKey((k) => k + 1);
           }}
         />
       )}

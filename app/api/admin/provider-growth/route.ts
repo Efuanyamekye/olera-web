@@ -152,6 +152,22 @@ export async function GET(request: NextRequest) {
       options.churned = true;
     }
 
+    // Profile completeness filters (for lead scoring)
+    const completenessMin = searchParams.get("completenessMin");
+    if (completenessMin) {
+      options.completenessMin = parseInt(completenessMin, 10);
+    }
+    const completenessMax = searchParams.get("completenessMax");
+    if (completenessMax) {
+      options.completenessMax = parseInt(completenessMax, 10);
+    }
+
+    // Care types filter (comma-separated)
+    const careTypes = searchParams.get("careTypes");
+    if (careTypes) {
+      options.careTypes = careTypes.split(",").filter(Boolean);
+    }
+
     const limit = parseInt(searchParams.get("limit") || "50", 10);
     const offset = parseInt(searchParams.get("offset") || "0", 10);
     options.limit = Math.min(limit, 100);

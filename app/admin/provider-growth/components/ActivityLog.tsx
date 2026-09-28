@@ -62,6 +62,7 @@ export function ActivityLog({
     availableOutcomes[0] || "note"
   );
   const [notes, setNotes] = useState("");
+  const [callbackDate, setCallbackDate] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -72,6 +73,7 @@ export function ActivityLog({
   useEffect(() => {
     setActivities([]);
     setNotes("");
+    setCallbackDate("");
     setError(null);
     setPendingOutcome(null);
     // Reset to first available outcome for new stage
@@ -98,7 +100,7 @@ export function ActivityLog({
     fetchActivities();
   }, [fetchActivities]);
 
-  const handleSubmit = useCallback(async (outcome: ActivityOutcome, notesText: string) => {
+  const handleSubmit = useCallback(async (outcome: ActivityOutcome, notesText: string, callbackDateValue?: string) => {
     if (submitting) return;
     setSubmitting(true);
     setError(null);
@@ -112,6 +114,7 @@ export function ActivityLog({
           business_profile_id: businessProfileId,
           outcome,
           notes: notesText.trim() || null,
+          callback_date: outcome === "callback_requested" && callbackDateValue ? callbackDateValue : undefined,
         }),
       });
 
@@ -127,6 +130,7 @@ export function ActivityLog({
         setActivities((prev) => [data.activity, ...prev]);
       }
       setNotes("");
+      setCallbackDate("");
       // Reset to first outcome
       const outcomes = STAGE_OUTCOMES[pipelineStage] || [];
       setSelectedOutcome(outcomes[0] || "note");
@@ -146,13 +150,13 @@ export function ActivityLog({
     if (STAGE_CHANGING_OUTCOMES.includes(selectedOutcome)) {
       setPendingOutcome(selectedOutcome);
     } else {
-      handleSubmit(selectedOutcome, notes);
+      handleSubmit(selectedOutcome, notes, callbackDate);
     }
   };
 
   const handleConfirm = () => {
     if (pendingOutcome) {
-      handleSubmit(pendingOutcome, notes);
+      handleSubmit(pendingOutcome, notes, callbackDate);
     }
   };
 
@@ -213,6 +217,20 @@ export function ActivityLog({
             }
           }}
         />
+        {/* Callback date picker - only shows when "Callback Requested" is selected */}
+        {selectedOutcome === "callback_requested" && (
+          <div className="mt-2 flex items-center gap-2">
+            <label className="text-xs text-gray-500 whitespace-nowrap">Callback date:</label>
+            <input
+              type="date"
+              value={callbackDate}
+              onChange={(e) => setCallbackDate(e.target.value)}
+              min={new Date().toISOString().split("T")[0]}
+              className="flex-1 px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+              disabled={submitting}
+            />
+          </div>
+        )}
         {/* Show description for selected outcome */}
         <p className="mt-1.5 text-xs text-gray-500">
           {OUTCOME_DESCRIPTIONS[selectedOutcome]}
