@@ -117,6 +117,18 @@
       "schedule": "0 17 * * *"
     },
     {
+      "path": "/api/cron/benefits-navigator-compose",
+      "schedule": "5 * * * *"
+    },
+    {
+      "path": "/api/cron/benefits-texts-digest",
+      "schedule": "0 1,13 * * *"
+    },
+    {
+      "path": "/api/cron/benefits-companion-followups",
+      "schedule": "40 * * * *"
+    },
+    {
       "path": "/api/cron/benefits-navigator-packets",
       "schedule": "25 * * * *"
     },

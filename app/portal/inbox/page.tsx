@@ -6,7 +6,8 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import type { Connection, ConnectionStatus, Profile } from "@/lib/types";
 import ConversationList from "@/components/messaging/ConversationList";
-import type { ConnectionWithProfile, FamilyTab } from "@/components/messaging/ConversationList";
+import type { AdFamilyListItem, ConnectionWithProfile, FamilyTab } from "@/components/messaging/ConversationList";
+import AdFamilyPanel from "@/components/messaging/AdFamilyPanel";
 import ConversationPanel from "@/components/messaging/ConversationPanel";
 import RequestDetailPanel from "@/components/messaging/RequestDetailPanel";
 import ProviderDetailPanel from "@/components/messaging/ProviderDetailPanel";
@@ -46,6 +47,7 @@ function InboxContent() {
   const urlConnectionId = searchParams.get("id");
   const urlToken = searchParams.get("token");
   const urlRole = searchParams.get("role") as RoleFilter | null;
+  const urlAdLeadId = searchParams.get("ad");
 
   // Track email click-back if arriving from a family email link
   const emailTrackingDone = useRef(false);
@@ -175,6 +177,10 @@ function InboxContent() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedIdRef = useRef(selectedId);
   selectedIdRef.current = selectedId;
+  // A family from an ad, open in place of an inquiry.
+  const [selectedAdId, setSelectedAdId] = useState<string | null>(urlAdLeadId);
+  const selectedAdIdRef = useRef(selectedAdId);
+  selectedAdIdRef.current = selectedAdId;
   const [detailOpen, setDetailOpen] = useState(false);
   const [reportingConnectionId, setReportingConnectionId] = useState<string | null>(null);
   const [archivedCount, setArchivedCount] = useState(0);
@@ -549,7 +555,7 @@ function InboxContent() {
       }
 
       // Auto-select first conversation if none selected and on desktop
-      if (!selectedIdRef.current && enriched.length > 0 && window.innerWidth >= 1024) {
+      if (!selectedIdRef.current && !selectedAdIdRef.current && enriched.length > 0 && window.innerWidth >= 1024) {
         setSelectedId(enriched[0].id);
       }
     } catch (err) {
@@ -573,11 +579,39 @@ function InboxContent() {
 
   // Track if a manual refresh is in progress
   const [refreshing, setRefreshing] = useState(false);
+  // Families from ads sit in the same inbox but come from their own tables
+  // (lib/city-ads/provider-inbox.server.ts), so they load on their own.
+  const [adFamilies, setAdFamilies] = useState<AdFamilyListItem[]>([]);
+  const loadAdFamilies = useCallback(async () => {
+    if (!user || !hasProviderProfile) return;
+    try {
+      const res = await fetch("/api/provider/ad-families", { cache: "no-store" });
+      if (!res.ok) return;
+      const json = await res.json();
+      setAdFamilies((json.families ?? []) as AdFamilyListItem[]);
+    } catch (err) {
+      console.error("[inbox] ad families failed:", err);
+    }
+  }, [user, hasProviderProfile]);
+  useEffect(() => {
+    loadAdFamilies();
+  }, [loadAdFamilies]);
+  useEffect(() => {
+    if (urlAdLeadId) {
+      setSelectedAdId(urlAdLeadId);
+      setSelectedId(null);
+    }
+  }, [urlAdLeadId]);
+  const handleSelectAd = useCallback((leadId: string) => {
+    setSelectedAdId(leadId);
+    setSelectedId(null);
+  }, []);
+
   const handleManualRefresh = useCallback(async () => {
     setRefreshing(true);
-    await fetchConnections();
+    await Promise.all([fetchConnections(), loadAdFamilies()]);
     setRefreshing(false);
-  }, [fetchConnections]);
+  }, [fetchConnections, loadAdFamilies]);
 
   // Auto-switch to Requests tab when URL points to a pending provider-initiated request
   // This handles old email links redirected via next.config.ts (/portal/matches/:id → /portal/inbox?id=:id)
@@ -723,6 +757,7 @@ function InboxContent() {
   // Close detail panel when switching conversations
   const handleSelect = useCallback((id: string | null) => {
     setSelectedId(id);
+    if (id) setSelectedAdId(null);
   }, []);
 
   // Open report modal
@@ -911,7 +946,7 @@ function InboxContent() {
         onDeleteConnection={handleDelete}
         onLoadArchived={fetchArchived}
         archivedCount={archivedCount}
-        className={`w-full lg:w-[360px] lg:shrink-0 ${selectedId ? "hidden lg:flex" : "flex"}`}
+        className={`w-full lg:w-[360px] lg:shrink-0 ${selectedId || selectedAdId ? "hidden lg:flex" : "flex"}`}
         variant={roleFilter === "provider" ? "provider" : "family"}
         roleFilter={roleFilter}
         onRoleFilterChange={handleRoleFilterChange}
@@ -924,10 +959,20 @@ function InboxContent() {
         onRefresh={handleManualRefresh}
         refreshing={refreshing}
         isVerified={verification.isVerified}
+        adFamilies={roleFilter === "family" ? [] : adFamilies}
+        selectedAdId={selectedAdId}
+        onSelectAd={handleSelectAd}
       />
 
-      {/* Middle panel — request detail OR conversation */}
-      {isViewingPendingRequest && selectedConnection ? (
+      {/* Middle panel — a family from an ad, request detail, OR conversation */}
+      {selectedAdId ? (
+        <AdFamilyPanel
+          leadId={selectedAdId}
+          onBack={() => setSelectedAdId(null)}
+          onChanged={loadAdFamilies}
+          className="flex w-full lg:flex-1"
+        />
+      ) : isViewingPendingRequest && selectedConnection ? (
         <RequestDetailPanel
           connection={selectedConnection}
           onConnect={handleConnectRequest}
@@ -957,7 +1002,7 @@ function InboxContent() {
       )}
 
       {/* Right panel — provider details (animated width) - Desktop only */}
-      {otherProfile && (
+      {otherProfile && !selectedAdId && (
         <div
           className={`hidden lg:flex shrink-0 overflow-hidden transition-[width] duration-300 ease-in-out ${
             detailOpen ? "w-[360px]" : "w-0"
@@ -975,7 +1020,7 @@ function InboxContent() {
       )}
 
       {/* Mobile bottom sheet — Details drawer */}
-      {otherProfile && detailOpen && (
+      {otherProfile && detailOpen && !selectedAdId && (
         <>
           {/* Overlay */}
           <div

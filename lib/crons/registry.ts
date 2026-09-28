@@ -618,7 +618,7 @@ export const CRON_REGISTRY: CronJob[] = [
     id: "family-comms-coordinator",
     name: "Family comms coordinator — help-cascade arbiter",
     description:
-      "The family-side arbitration brain. One daily cron picks the single highest-priority help message per family. In the benefits cascade it composes B1 into the review queue (clean letters then send automatically from the navigator scheduler), then sends B2 3–14 days after the first step. B2 email uses outcome choices; B2 text accepts structured progress replies and can send by itself to a consented text-only family. Any family reply pauses B2 until a person resumes it. STUCK opens an owned help case. Generic completion asks never go to benefits-only families (benefits intake, no provider inquiry) and stay suppressed for other benefits families while the cascade is active.",
+      "The family-side arbitration brain. One daily cron picks the single highest-priority help message per family. In the benefits cascade it sends B2 (B1 letters are composed by benefits-navigator-compose since 2026-09-27) 3–14 days after the first step. B2 email uses outcome choices; B2 text accepts structured progress replies and can send by itself to a consented text-only family. Any family reply pauses B2 until a person resumes it. STUCK opens an owned help case. Generic completion asks never go to benefits-only families (benefits intake, no provider inquiry) and stay suppressed for other benefits families while the cascade is active.",
     recipientCohort:
       "Every family with an open inquiry/request connection PLUS every benefits-intake family (cascade rungs) PLUS incomplete profiles (completion track); at most one governed email per family per run, chosen by the ladder. SMS mirrors require stored phone + sms_consent.",
     audience: "Care seekers",
@@ -646,6 +646,54 @@ export const CRON_REGISTRY: CronJob[] = [
     smsTypes: ["benefits_first_step_sms", "benefits_check_in_sms"],
     successSignal: "Family is meaningfully helped (responds, reaches an alternative, starts a benefits application, completes, or publishes).",
     relatedAdminPath: "/admin/benefits",
+  },
+  {
+    id: "benefits-navigator-compose",
+    name: "Benefits navigator — letter writer",
+    description:
+      "Writes the personal first-step letter for every benefits family once their intake is 48 hours old, newest first, up to 12 per run. It sends nothing: the packet builder judges each letter and the scheduler's autopilot sends clean ones. Moved out of the daily coordinator on 2026-09-27, where a 180-second budget inside a 3-4 minute run left about one family in five with no letter at all. The band runs to 30 days so families the old rung dropped get theirs. A family with no usable program is retried daily up to five times. At 14:00 UTC it posts one Slack line: letters written, and any family past 72 hours with none.",
+    recipientCohort:
+      "(no recipients — writes drafts) Benefits-intake families 48h–30d after intake with no letter yet, not unsubscribed, first step not sent.",
+    audience: "Care seekers",
+    fn: "maintenance",
+    schedule: "5 * * * *",
+    humanSchedule: "Hourly at :05. Daily Slack summary on the 14:05 UTC run.",
+    path: "/api/cron/benefits-navigator-compose",
+    emailTypes: [],
+    successSignal: "No benefits family is more than 72 hours past intake without a first-step letter.",
+    relatedAdminPath: "/admin/benefits",
+  },
+  {
+    id: "benefits-texts-digest",
+    name: "Benefits texts — twice-daily Slack digest",
+    description:
+      "One Slack post twice a day summarising family texts instead of one post per text (TJ, 2026-09-27). Counts texts and families in the last 12 hours, what the text companion answered on its own or handed to a person, and researched answers drafted, sent automatically, or waiting, with the most common reasons a person is needed. Urgent answers, STUCK/help requests, crisis language and death reports still post immediately from their own paths. Silent when nothing happened.",
+    recipientCohort: "(no recipients — posts to the team Slack channel)",
+    audience: "Internal",
+    fn: "digest",
+    schedule: "0 1,13 * * *",
+    humanSchedule: "01:00 and 13:00 UTC (9pm and 9am ET), the same hours as Cortex's Telegram inbox pass.",
+    path: "/api/cron/benefits-texts-digest",
+    emailTypes: [],
+    successSignal: "The team sees every family text within 12 hours without a Slack post per message.",
+    relatedAdminPath: "/admin/inbox",
+  },
+  {
+    id: "benefits-companion-followups",
+    name: "Benefits text companion — follow-ups",
+    description:
+      "Part of the benefits text companion test (switch in /admin/analytics). Two texts. Next morning, companion arm only: 12-48 hours after the opener, 8-10am local, if the family has not replied or said they called, it asks whether they got through (answers are the existing CALLED / NO ANSWER / STUCK keywords). Day 14, BOTH arms with identical words: the test's primary measure, 'Were you able to get through to them? Reply 1 or 2', sent 10am-6pm local between day 14 and day 21. Skips opted-out numbers, families without text consent, and deceased or opt-out holds.",
+    recipientCohort:
+      "Families assigned to either arm of the benefits text companion (metadata.benefits_companion) who have a phone and text consent.",
+    audience: "Care seekers",
+    fn: "nudge",
+    schedule: "40 * * * *",
+    humanSchedule: "Hourly at :40; each text only goes out inside its local-time window.",
+    path: "/api/cron/benefits-companion-followups",
+    emailTypes: [],
+    smsTypes: ["benefits_companion_followup"],
+    successSignal: "Every family in the test is asked the day-14 question once, so both arms can be compared on the same answer.",
+    relatedAdminPath: "/admin/analytics",
   },
   {
     id: "benefits-navigator-packets",

@@ -360,6 +360,22 @@ export async function POST(request: NextRequest) {
     if (closeErr) console.error("[seeker-touches] failed to close prior actions:", closeErr);
   }
 
+  // A benefits family reached by a person: clear their help clock and lift
+  // the reply hold, the same as "I contacted them" on /admin/benefits, so the
+  // two pages agree about this family. A call only counts when it connected;
+  // a text or email logged as sent always does.
+  const reachedThem =
+    direction === "out" &&
+    (body.reached === true || channel === "text" || channel === "email" || channel === "meeting");
+  if (reachedThem) {
+    try {
+      const { noteBenefitsContact } = await import("@/lib/family-comms/benefits-replies.server");
+      await noteBenefitsContact(db, seeker_id, occurred_at ?? nowIso, admin.display_name || admin.email || "admin");
+    } catch (err) {
+      console.error("[seeker-touches] benefits contact stamp failed:", err);
+    }
+  }
+
   // Read the note for the care details a provider would ask for.
   //
   // AFTER the insert and deliberately not awaited into the success of it: the

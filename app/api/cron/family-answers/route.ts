@@ -3,6 +3,7 @@ import { getServiceClient } from "@/lib/admin";
 import { withCronRun } from "@/lib/crons/run";
 import { buildAnswerPacket } from "@/lib/family-answers/engine.server";
 import { packetNeedsAttention } from "@/lib/family-answers/types";
+import { markForAutoSend, sweepAutoSends } from "@/lib/family-answers/auto-send.server";
 import {
   familyAnswerCategoryAutoCloses,
   familyAnswerCategoryNeedsDraft,
@@ -64,7 +65,23 @@ export async function GET(request: NextRequest) {
 
   return withCronRun("family-answers", async () => {
     const db = getServiceClient();
-    const result = { considered: 0, drafted: 0, skipped: 0, crisis: 0, failed: 0, requeued: 0, abandoned: 0 };
+    const result = {
+      considered: 0, drafted: 0, skipped: 0, crisis: 0, failed: 0, requeued: 0, abandoned: 0,
+      autoSent: 0, autoStopped: 0, autoFailed: 0, autoMarked: 0,
+    };
+
+    // First, send the drafted answers whose stop window has passed (see
+    // lib/family-answers/auto-send.server.ts). Never on a dry run.
+    if (!dryRun) {
+      try {
+        const swept = await sweepAutoSends(db);
+        result.autoSent = swept.sent;
+        result.autoStopped = swept.stopped;
+        result.autoFailed = swept.failed;
+      } catch (err) {
+        console.error("[family-answers] Auto-send sweep failed:", err);
+      }
+    }
 
     // Release anything a previous invocation claimed and never finished. Vercel
     // kills a function at its maxDuration, which leaves the row in `running`
@@ -228,6 +245,18 @@ export async function GET(request: NextRequest) {
 
         if (needsDraft && packetNeedsAttention(packet) && !packet.triage.isCrisis) {
           console.log(`[family-answers] Job ${job.id} needs attention before sending.`);
+        }
+
+        // A ready draft either gets a send time (a person has three hours to
+        // stop it) or a named reason it must wait for a person. Slack hears
+        // about both.
+        if (needsDraft && !packet.triage.isCrisis && !draftFailed) {
+          try {
+            const mark = await markForAutoSend(db, job, packet);
+            if (mark.eligible) result.autoMarked++;
+          } catch (err) {
+            console.error(`[family-answers] Auto-send mark failed for ${job.id}:`, err);
+          }
         }
       } catch (err) {
         result.failed++;

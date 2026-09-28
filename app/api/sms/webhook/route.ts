@@ -219,16 +219,17 @@ async function recordInbound(
       .update({ metadata: nextMeta })
       .eq("id", p.id);
   }
-  // A free-form reply or an explicit STUCK reply deserves a human. Other
-  // structured updates move the plan forward without creating queue noise.
-  if (((alertUnstructured && !structured) || humanAlert) && profiles.length > 0) {
+  // An explicit STUCK (or other needs-a-human keyword) pings Slack now. A
+  // free-form reply no longer does, one post per text (TJ, 2026-09-27): it is
+  // counted in the twice-daily benefits texts digest, and the reply itself
+  // reaches TJ through Cortex's twice-daily Telegram inbox pass. Crisis and
+  // death reports page separately and are unchanged.
+  if (humanAlert && profiles.length > 0) {
     try {
       const { sendSlackAlert } = await import("@/lib/slack");
       const who = profiles[0].display_name || profiles[0].email || phone;
       await sendSlackAlert(
-        humanAlert
-          ? `🆘 Benefits family needs help: ${who} ${humanAlert}.${helpDue ? ` Owner: ${helpDue.owner}. Due ${formatDueEt(helpDue.due)} ET.` : ""} Reply from the Benefits queue (/admin/benefits)`
-          : `Family texted back: ${who}: "${body.slice(0, 300)}". Automated follow-ups are paused until someone replies. Reply from the Benefits queue (/admin/benefits)`,
+        `🆘 Benefits family needs help: ${who} ${humanAlert}.${helpDue ? ` Owner: ${helpDue.owner}. Due ${formatDueEt(helpDue.due)} ET.` : ""} Reply from the Benefits queue (/admin/benefits)`,
       );
     } catch (err) {
       console.error("[sms-webhook] Slack ping failed:", err);
@@ -551,10 +552,26 @@ async function triageFamilyQuestion(args: {
     }
   }
 
+  // Benefits text companion (test). For a family in its live arm it may
+  // answer on the spot ("answered": no ack, no research job) or send its own
+  // honest "a person will answer" note ("escalated": no generic ack, the job
+  // still queues). In practice mode it only writes down what it would have
+  // done and returns "pass". Any failure falls back to today's path.
+  let companionOutcome: "answered" | "escalated" | "pass" = "pass";
+  if (db && profile) {
+    try {
+      const { handleCompanionFreeText } = await import("@/lib/family-comms/benefits-companion-replies.server");
+      companionOutcome = await handleCompanionFreeText(db, { phone, body, profile });
+    } catch (err) {
+      console.error("[sms-webhook] Companion free-text handling failed:", err);
+    }
+  }
+  if (companionOutcome === "answered") return;
+
   // Acknowledge. sendReactiveFamilyAlert owns quiet hours, the opted-out
   // check, the daily safety cap, and the deferred-send queue, so this call
   // stays honest about all four without repeating any of them here.
-  if (profile && !(await ackedRecently(phone))) {
+  if (companionOutcome === "pass" && profile && !(await ackedRecently(phone))) {
     const result = await sendReactiveFamilyAlert({
       familyProfileId: profile.id,
       phone,
@@ -731,6 +748,24 @@ export async function POST(request: NextRequest) {
         `[sms-webhook] STOP from ${normalizedFrom} → do_not_contact=${suppressed}, opted_out ${n} profile(s)`,
       );
       return twiml(); // Twilio sends the carrier opt-out confirmation.
+    }
+    // The benefits text companion asks one question in its opener ("shutoff
+    // notice, or no heat, AC or food? Reply 1 or 2"). Its answer must be
+    // claimed before the opt-in branch, because "YES" is also an opt-in
+    // keyword, and before the bare-keyword drop below, which would swallow a
+    // "NO". Scoped to a family with that question open, so any other 1 / YES
+    // / NO falls through exactly as before.
+    if (messageBody) {
+      const db = getServiceDb();
+      if (db) {
+        try {
+          const { handleCompanionAnswer } = await import("@/lib/family-comms/benefits-companion.server");
+          const reply = await handleCompanionAnswer(db, normalizedFrom, messageBody);
+          if (reply) return twiml(reply);
+        } catch (err) {
+          console.error("[sms-webhook] Companion answer handling failed:", err);
+        }
+      }
     }
     if (OPT_IN_KEYWORDS.has(keyword)) {
       await unsuppressPhone(normalizedFrom);

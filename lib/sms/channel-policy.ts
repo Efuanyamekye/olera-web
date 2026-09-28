@@ -50,6 +50,11 @@ const SMS_ELIGIBLE: Record<string, PolicyEntry> = {
   // that a person is on it. Cap-exempt, but the per-day safety throttle and
   // the 6-hour dedupe in the webhook still apply.
   care_seeker_ack: { policy: "sms_reactive", transactional: true },
+  // Benefits text companion (test, lib/family-comms/benefits-companion.server.ts).
+  // The opener replaces the results text the family just asked for, and the
+  // reply answers a text they just sent, so both are reactive.
+  benefits_companion_opener: { policy: "sms_reactive", transactional: true },
+  benefits_companion_reply: { policy: "sms_reactive", transactional: true },
 
   // ── Tier 2: proactive, opt-in, governed (Phase 2 — listed for completeness) ──
   family_outcome_check: { policy: "sms_proactive", transactional: false },
@@ -62,6 +67,8 @@ const SMS_ELIGIBLE: Record<string, PolicyEntry> = {
   family_reach_out_nudge: { policy: "sms_proactive", transactional: false },
   benefits_first_step_sms: { policy: "sms_proactive", transactional: false },
   benefits_check_in_sms: { policy: "sms_proactive", transactional: false },
+  // Benefits text companion follow-ups (next morning; the day-14 measure).
+  benefits_companion_followup: { policy: "sms_proactive", transactional: false },
 };
 
 /** The channel policy for a family message type. Unlisted → email-only. */

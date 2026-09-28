@@ -152,7 +152,7 @@ function nextEasternMorning(): string {
 }
 
 /** Full draft payload from the per-family GET (list rows carry status only). */
-interface NavigatorDetail {
+export interface NavigatorDetail {
   status?: "pending" | "sent" | "dismissed";
   subject?: string;
   body?: string;
@@ -1114,7 +1114,9 @@ export default function BenefitsFamiliesView() {
                   <tr className="hover:bg-gray-50 cursor-pointer" onClick={() => toggleExpand(f.profileId)}>
                     <td className="px-4 py-3">
                       <Link
-                        href={`/admin/care-seekers/${f.profileId}`}
+                        // The case workspace: conversation, reply box and the
+                        // program card in one place (2026-09-28).
+                        href={`/admin/relationships/families/${f.profileId}?back=${encodeURIComponent("tab=all&from=benefits")}`}
                         onClick={(e) => e.stopPropagation()}
                         className="font-medium text-gray-900 hover:text-primary-600 transition-colors"
                       >
@@ -1312,7 +1314,8 @@ export default function BenefitsFamiliesView() {
  * edit made here is the concierge feedback loop the draft-queue design exists
  * to capture.
  */
-function NavigatorDraftEditor({
+/** Also used by the case workspace (/admin/relationships/families/[id]). */
+export function NavigatorDraftEditor({
   navigator,
   reviewContext,
   familyLabel,
@@ -1499,7 +1502,7 @@ function NavigatorDraftEditor({
           No text message will go out: this family hasn&apos;t consented to texts.
         </p>
       )}
-      <div className="mt-2 flex items-center gap-2">
+      <div className="mt-2 flex flex-wrap items-center gap-2">
         <button
           onClick={() => {
             const scheduledNote = navigator.scheduled_at ? " This replaces the scheduled send." : "";

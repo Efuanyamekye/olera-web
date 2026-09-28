@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, type ReactNode } from "react";
 import { useClickOutside } from "@/hooks/use-click-outside";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +15,17 @@ export interface ConnectionWithProfile extends Connection {
 type RoleFilter = "all" | "family" | "provider";
 
 export type FamilyTab = "messages" | "requests";
+
+/** A family from an ad, listed beside page inquiries (lib/city-ads/provider-inbox.server.ts). */
+export interface AdFamilyListItem {
+  leadId: string;
+  access: "own_ad" | "offered" | "taken";
+  name: string;
+  need: string;
+  city: string;
+  lastText: string;
+  lastAt: string;
+}
 
 interface ConversationListProps {
   connections: ConnectionWithProfile[];
@@ -53,6 +64,10 @@ interface ConversationListProps {
   refreshing?: boolean;
   /** Whether the provider is verified (controls PII redaction) */
   isVerified?: boolean;
+  /** Families from ads, shown among the conversations by latest activity. */
+  adFamilies?: AdFamilyListItem[];
+  selectedAdId?: string | null;
+  onSelectAd?: (leadId: string) => void;
 }
 
 /** Deterministic gradient for fallback avatars */
@@ -362,6 +377,9 @@ export default function ConversationList({
   onRefresh,
   refreshing = false,
   isVerified = true,
+  adFamilies = [],
+  selectedAdId = null,
+  onSelectAd,
 }: ConversationListProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -527,6 +545,16 @@ export default function ConversationList({
       onSelect(null);
     }
   }, [roleFilter, familyTab, filtered, selectedId, loading, onSelect]);
+
+  // Families from ads that match the current view. They have no read state
+  // of their own yet, so "unread only" keeps just the requests still to answer.
+  const adRows = (() => {
+    const q = searchQuery.toLowerCase().trim();
+    let list = adFamilies;
+    if (searchOpen && q) list = list.filter((a) => `${a.name} ${a.need} ${a.city}`.toLowerCase().includes(q));
+    if (!searchOpen && unreadOnly) list = list.filter((a) => a.access === "offered");
+    return list;
+  })();
 
   // Shared conversation item renderer
   const renderConversationItem = (conn: ConnectionWithProfile, isPast = false) => {
@@ -721,6 +749,52 @@ export default function ConversationList({
     );
   };
 
+  function renderAdItem(a: AdFamilyListItem) {
+    const isSelected = a.leadId === selectedAdId;
+    const offered = a.access === "offered";
+    return (
+      <div key={`ad-${a.leadId}`} className="pl-0 sm:pl-[28px] pr-0 sm:pr-3 py-0.5">
+        <div className={`rounded-xl transition-colors ${isSelected ? "bg-primary-50/80" : "hover:bg-gray-50"}`}>
+          <button onClick={() => onSelectAd?.(a.leadId)} className="w-full text-left flex items-start gap-3.5 px-4 py-4">
+            <div className="relative shrink-0 mt-0.5">
+              <div className="w-12 h-12 rounded-full flex items-center justify-center bg-primary-50 text-primary-700 text-base font-bold">
+                {offered ? "?" : a.name.charAt(0).toUpperCase()}
+              </div>
+              {offered && <span className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-primary-600 border-2 border-white" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <span className={`text-base truncate text-gray-900 ${offered ? "font-semibold" : "font-normal"}`}>{a.name}</span>
+                <span className={`text-[13px] shrink-0 ${offered ? "text-primary-600 font-medium" : "text-gray-400"}`}>
+                  {formatRelativeTime(a.lastAt)}
+                </span>
+              </div>
+              <p className="text-sm text-primary-600 font-medium truncate mt-0.5">
+                {a.access === "own_ad" ? "From your ad" : "From Olera"} · {a.need}
+              </p>
+              <p className="text-[15px] text-gray-500 truncate mt-0.5">{a.lastText}</p>
+            </div>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // One list, newest activity first. The inquiries keep the order they came
+  // in; each ad family goes in ahead of the first inquiry older than it.
+  const listNodes = (() => {
+    const ads = [...adRows].sort((a, b) => (a.lastAt < b.lastAt ? 1 : -1));
+    const nodes: ReactNode[] = [];
+    let i = 0;
+    for (const conn of filtered) {
+      const at = getLastMessage(conn)?.timestamp ?? conn.created_at;
+      while (i < ads.length && ads[i].lastAt > at) nodes.push(renderAdItem(ads[i++]));
+      nodes.push(renderConversationItem(conn));
+    }
+    while (i < ads.length) nodes.push(renderAdItem(ads[i++]));
+    return nodes;
+  })();
+
   // Loading state
   if (loading) {
     return (
@@ -747,7 +821,7 @@ export default function ConversationList({
   }
 
   // Empty state (no connections at all)
-  if (connections.length === 0) {
+  if (connections.length === 0 && adFamilies.length === 0) {
     return (
       <div className={`flex flex-col border-r border-gray-200 bg-white ${className}`}>
         <div className="pl-5 sm:pl-[44px] pr-5 py-3 sm:py-5">
@@ -929,8 +1003,8 @@ export default function ConversationList({
       <div ref={scrollRef} className="flex-1 overflow-y-auto flex flex-col">
         {/* Active conversations — flex-1 pushes archive accordion to bottom */}
         <div className="flex-1">
-          {filtered.length > 0 ? (
-            filtered.map((conn) => renderConversationItem(conn))
+          {listNodes.length > 0 ? (
+            listNodes
           ) : (
             <div className="flex flex-col items-center justify-center py-16 px-6">
               {searchOpen ? (
