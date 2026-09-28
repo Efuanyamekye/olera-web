@@ -64,34 +64,74 @@ export function parseScore(text: string): { score: number; words: string } | nul
  * day. A weekly rating request takes a score, which is stored with his words
  * as a correction, so it shapes every later answer.
  */
+/**
+ * Ratings written inside a longer message: "9 out of 10 there", "a 6.5/10".
+ * On 2026-09-27 he rated two answers that way, in one message, hours after the
+ * weekly request, and neither was saved: only a message that started with the
+ * number counted. Each rating keeps the line it came in, which says what it
+ * was for.
+ */
+export function findScores(text: string): Array<{ score: number; context: string }> {
+  const found: Array<{ score: number; context: string }> = [];
+  for (const line of text.split(/\n+/)) {
+    const context = line.replace(/^\s*\d+[.)]\s*/, "").replace(/\[sent a screenshot\]/g, "").replace(/\s+/g, " ").trim().slice(0, 220);
+    const taken: Array<[number, number]> = [];
+    for (const match of line.matchAll(/(\d{1,2}(?:\.\d)?)\s*(?:out of|\/)\s*10\b/gi)) {
+      const score = Number(match[1]);
+      if (score < 0 || score > 10) continue;
+      taken.push([match.index ?? 0, (match.index ?? 0) + match[0].length]);
+      found.push({ score, context });
+    }
+    // Split ratings by name: "facts 6, thinking 9" (TJ, 2026-09-28: a right
+    // argument on wrong facts deserves two numbers, not one).
+    for (const match of line.matchAll(/\b(facts?|thinking|logic|reasoning|resonance|overall)\s*[:=-]?\s*(\d{1,2}(?:\.\d)?)\b(?!\s*(?:%|\/|out of|days?|leads?|hours?))/gi)) {
+      const at = match.index ?? 0;
+      if (taken.some(([a, b]) => at < b && at + match[0].length > a)) continue;
+      const score = Number(match[2]);
+      if (score < 0 || score > 10) continue;
+      found.push({ score, context: `${match[1].toLowerCase()}: ${context}` });
+    }
+  }
+  return found;
+}
+
 export async function recordFounderReply(
   db: SupabaseClient,
   text: string,
   options: { pushedBack?: boolean; scoreOnly?: boolean } = {},
-): Promise<{ scored?: number } | null> {
+): Promise<{ scored?: number; ratings?: number[] } | null> {
   const since = new Date(Date.now() - REPLY_WINDOW_MS).toISOString();
   const { data, error } = await db.from("cortex_moves")
     .select(COLUMNS)
     .is("reaction", null)
     .gte("sent_at", since)
     .order("sent_at", { ascending: false })
-    .limit(1);
-  if (error || !data?.length) return null;
-  const move = data[0] as MoveRecord;
-  if (move.kind === "rate_me") {
-    const score = parseScore(text);
-    if (!score) return null;
-    const day = new Date().toISOString().slice(0, 10);
-    await saveCorrection(
-      db,
-      `Weekly rating ${score.score}/10 (${day})${score.words ? `: ${score.words.slice(0, 240)}` : ""}`,
-      text,
-    ).catch(() => false);
-    await setReaction(db, move.id, "replied", `${score.score}/10`);
-    return { scored: score.score };
+    .limit(5);
+  const open = error ? [] : (data ?? []) as MoveRecord[];
+  const move = open[0] ?? null;
+  const rateMe = open.find((m) => m.kind === "rate_me") ?? null;
+  const day = new Date().toISOString().slice(0, 10);
+
+  if (options.scoreOnly) {
+    // A bare score answering the weekly request: thanked, not answered.
+    const bare = rateMe ? parseScore(text) : null;
+    if (rateMe && bare) {
+      await saveCorrection(db, `Weekly rating ${bare.score}/10 (${day})${bare.words ? `: ${bare.words.slice(0, 240)}` : ""}`, text).catch(() => false);
+      await setReaction(db, rateMe.id, "replied", `${bare.score}/10`);
+      return { scored: bare.score };
+    }
+    // Ratings inside a longer message, whenever he gives them.
+    const inline = findScores(text);
+    if (inline.length) {
+      for (const rating of inline) {
+        await saveCorrection(db, `Rating ${rating.score}/10 (${day}): ${rating.context}`, text).catch(() => false);
+      }
+      if (rateMe) await setReaction(db, rateMe.id, "replied", inline.map((r) => `${r.score}/10`).join(", "));
+      return { ratings: inline.map((r) => r.score) };
+    }
+    return null;
   }
-  // Called once early to catch a score, then again after the answer.
-  if (options.scoreOnly) return null;
+  if (!move || move.kind === "rate_me") return null;
   await setReaction(db, move.id, options.pushedBack ? "pushed_back" : "replied", text);
   return {};
 }
