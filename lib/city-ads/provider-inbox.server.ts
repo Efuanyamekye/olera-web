@@ -25,6 +25,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getFamilyTimeline, getThreadLead, firstWordOf, type ThreadEntry, type ThreadLead } from "@/lib/city-ads/thread.server";
 import { getLeadExchange } from "@/lib/city-ads/exchange.server";
+import { offerStillHolds } from "@/lib/city-ads/offer-holds";
 import { CARE_LABEL, PAYMENT_LABEL, RECIPIENT_LABEL, URGENCY_LABEL, formatUSPhone, getCityConfig } from "@/lib/city-ads/config";
 
 export type AdFamilyAccess = "own_ad" | "offered" | "taken";
@@ -70,6 +71,7 @@ type OfferRow = {
   accepted_at: string | null;
   declined_at: string | null;
   expired_at: string | null;
+  outcome: string | null;
 };
 
 type LeadRow = ThreadLead & {
@@ -80,10 +82,11 @@ type LeadRow = ThreadLead & {
   zip: string | null;
   note: string | null;
   is_test: boolean | null;
+  accepted_offer_id: string | null;
 };
 
 const LEAD_COLS =
-  "id, slug, first_name, phone, email, created_at, handed_at, handed_request_id, care_seeker_id, archived_at, meta_campaign_id, qualification_reply, qualification_reply_at, family_check_sent_at, family_check_reply, family_check_reply_at, provider_nudged_at, outcome_ping_1_at, outcome_ping_2_at, outcome, outcome_at, outcome_source, care_type, care_recipient, urgency, payment_type, zip, note, is_test";
+  "id, slug, first_name, phone, email, created_at, handed_at, handed_request_id, care_seeker_id, archived_at, meta_campaign_id, qualification_reply, qualification_reply_at, family_check_sent_at, family_check_reply, family_check_reply_at, provider_nudged_at, outcome_ping_1_at, outcome_ping_2_at, outcome, outcome_at, outcome_source, care_type, care_recipient, urgency, payment_type, zip, note, is_test, accepted_offer_id";
 
 function cap(s: string): string {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
@@ -117,12 +120,12 @@ async function accessFor(
 ): Promise<{ access: AdFamilyAccess; providerId: string; offer: OfferRow | null } | null> {
   const { data: allOffers } = await db
     .from("city_lead_offers")
-    .select("id, lead_id, provider_id, offered_at, expires_at, accepted_at, declined_at, expired_at")
+    .select("id, lead_id, provider_id, offered_at, expires_at, accepted_at, declined_at, expired_at, outcome")
     .eq("lead_id", lead.id)
     .order("offered_at", { ascending: false });
   const offers = (allOffers ?? []) as OfferRow[];
   // Another agency took this family: the conversation is theirs now.
-  const takenElsewhere = offers.some((o) => o.accepted_at && !profileIds.includes(o.provider_id));
+  const takenElsewhere = offers.some((o) => offerStillHolds(o, lead) && !profileIds.includes(o.provider_id));
   if (lead.handed_request_id && !takenElsewhere) {
     const { data: req } = await db
       .from("ad_campaign_requests")
@@ -134,7 +137,9 @@ async function accessFor(
   }
   const now = Date.now();
   for (const o of offers.filter((x) => profileIds.includes(x.provider_id))) {
-    if (o.accepted_at) return { access: "taken", providerId: o.provider_id, offer: o };
+    if (offerStillHolds(o, lead)) return { access: "taken", providerId: o.provider_id, offer: o };
+    // Taken and then moved on: hers no longer. Nothing new is shown.
+    if (o.accepted_at) return null;
     if (isOpen(o, now)) return { access: "offered", providerId: o.provider_id, offer: o };
   }
   return null;
