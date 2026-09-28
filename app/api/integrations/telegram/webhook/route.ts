@@ -8,7 +8,7 @@ import { startVisualRoutine } from "@/lib/war-room/visualize.server";
 import { handleInboxCommand, parseInboxCommand } from "@/lib/war-room/inbox-operator.server";
 import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
 import { saveHandoff } from "@/lib/war-room/handoff.server";
-import { sendSlackDirectMessage } from "@/lib/slack";
+import { sendToSlack } from "@/lib/war-room/team-messages.server";
 import { handleTelegramUpdate, type TelegramUpdate } from "@/lib/war-room/telegram-chat.server";
 
 /**
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
         voice: (chatId, text, mode) => sendVoiceNote(chatId, text, mode, { recording: sendTelegramRecording, sendVoice: sendTelegramVoice }),
         reactions: { reply: (text, options) => recordFounderReply(db, text, options) },
         visual: { start: startVisualRoutine },
-        team: { send: (slackUserId, text) => sendSlackDirectMessage(slackUserId, text) },
+        team: { send: (target, text) => sendToSlack(target, text) },
         handoff: { save: (body, note) => saveHandoff(db, { body, note, chatId: founderChatId() ?? "" }) },
         inbox: {
           command: async (text) => {
