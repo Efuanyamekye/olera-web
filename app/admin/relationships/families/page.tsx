@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import type { SeekerRelationshipRow } from "@/lib/seeker-touches/types";
 import { TABS, TAB_BLURB, matches, openWorkCount, type Tab } from "@/lib/seeker-touches/queues";
-import { ORIGIN_LABEL, consentWarning, detailLine, nextLine, problemLine, retryLine, stateOf, type Tone } from "@/lib/seeker-touches/present";
+import { ORIGIN_LABEL, consentWarning, detailLine, nextLine, problemLine, stateOf } from "@/lib/seeker-touches/present";
 
 /**
  * Relationships — care seekers.
@@ -15,33 +15,30 @@ import { ORIGIN_LABEL, consentWarning, detailLine, nextLine, problemLine, retryL
  * objects, four type sizes, three font families, nine forced wrap points. It
  * read as chaos however few chips were on it.
  *
- * So: one flex row per family. Name and one muted line on the left, where it
- * stands on the right. A row earns a third line only when something is actually
- * wrong, which means the loud rows are taller than the quiet ones and the shape
- * of the list is visible before a word of it is read. State is carried by a
- * coloured left rail — red act now, amber waiting on us, nothing otherwise —
- * rather than by five colours of chip.
+ * So: one row per family, in the case page's language (28 Sep). An avatar,
+ * the name, one muted line of context, and one line that says what they wrote
+ * or what to do; the time on the right. Only "act now" rows are marked, with a
+ * dot on the avatar and the state in amber: when every row was tinted and
+ * railed, nothing stood out. The page opens on one sentence naming what is
+ * waiting, the tabs hide empty queues, and search sits behind an icon.
  *
  * Nothing here is stored. Every value is derived at read time in
  * lib/seeker-touches/timeline.server.ts and put into words in ./present.
  */
 
-const RAIL: Record<Tone, string> = {
-  act: "border-l-red-600 bg-red-50/30",
-  warn: "border-l-amber-500 bg-amber-50/30",
-  none: "border-l-transparent",
-};
-
-const STATE_TONE: Record<Tone, string> = {
-  act: "text-red-700",
-  warn: "text-amber-700",
-  none: "text-gray-700",
-};
-
-const PROBLEM_TONE: Record<Tone, string> = {
-  act: "text-red-700",
-  warn: "text-amber-700",
-  none: "text-gray-600",
+/** "{N} families …" — what the open queue is waiting on, in plain words. */
+const TAB_SENTENCE: Record<Tab, string> = {
+  urgent: "told us something is urgent at home",
+  reply: "wrote to us and are waiting on a reply",
+  letter: "have a letter waiting for your read",
+  help: "asked for a person",
+  call: "are waiting on a call from us",
+  follow: "need a follow-up",
+  close: "have been tried three times",
+  record: "say the provider never got back to them",
+  reach: "have no working way to reach them",
+  all: "have something open in this window",
+  archived: "are archived",
 };
 
 /**
@@ -310,106 +307,129 @@ function AdminSeekerRelationshipsInner() {
     return c;
   }, [rows, tab]);
 
+  // THE TABS SHOW WHAT HAS WORK IN IT. Empty queues are hidden (a row of
+  // zeros read as a wall of alarms), the first five with work are shown, and
+  // the rest sit under More. The open tab always shows, even when it empties.
+  const workTabs = TABS.filter((t) => t.key !== "all" && t.key !== "archived");
+  const withWork = workTabs.filter((t) => counts[t.key] > 0 || t.key === tab);
+  const shownTabs = withWork.slice(0, 5);
+  const moreTabs = [...withWork.slice(5), ...TABS.filter((t) => t.key === "all" || t.key === "archived")].filter(
+    (t) => !shownTabs.some((x) => x.key === t.key),
+  );
+  const [moreOpen, setMoreOpen] = useState(false);
+  // Search, the window and where-they-came-from sit behind one icon: they are
+  // for finding someone, not for working a queue. Open while any is in use.
+  const [findOpen, setFindOpen] = useState(false);
+  const findActive = searching || origin !== "all" || days !== 45;
+  const n = counts[tab];
+
   return (
-    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
-      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-950">Care Seeker Relationships</h1>
-          {/* Says what to DO, matching tabs that are now jobs rather than
-              states. The old line described the page's contents; a queue
-              should describe the work. */}
-          <p className="mt-1 max-w-xl text-sm text-gray-500">
-            Every family who needs something from us, grouped by what to do about it. Open one for the whole story.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {/* "Providers" alone also describes the directory at
-              /admin/directory. Name the page it actually opens. */}
-          <Link
-            href="/admin/relationships"
-            className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
-          >
-            Provider relationships
-          </Link>
-          <a
-            href={`/api/admin/seeker-touches?days=${days}&format=md`}
-            target="_blank"
-            rel="noreferrer"
-            className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
-          >
-            Read as text
-          </a>
-        </div>
-      </div>
+    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-8">
+      <h1 className="text-[26px] font-bold tracking-[-0.02em] text-gray-950">Care Seeker Relationships</h1>
+      {/* One sentence that says what is waiting, in the open queue's words. */}
+      <p className="mt-1.5 text-[18px] font-semibold leading-snug text-gray-900 [text-wrap:balance]">
+        {rows === null ? (
+          <span className="text-gray-400">Loading…</span>
+        ) : n === 0 ? (
+          "Nothing is waiting here."
+        ) : (
+          <>
+            <span className="text-[#b54708]">
+              {n} {n === 1 ? "family" : "families"}
+            </span>{" "}
+            {TAB_SENTENCE[tab]}.
+          </>
+        )}
+      </p>
+      {/* The facts true of most of the list, as quiet links, so they never
+          have to appear on a row. */}
+      <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-gray-500">
+        {rows !== null && stats.unreachable > 0 && (
+          <button type="button" onClick={() => setTab("reach")} className="underline decoration-gray-300 underline-offset-[3px] hover:text-gray-800">
+            {stats.unreachable} with no working way to reach
+          </button>
+        )}
+        {rows !== null && <span>{stats.withProvider} handed over, outcome unknown</span>}
+        {rows !== null && <span>{stats.unnamed} with no name</span>}
+        <Link href="/admin/relationships" className="underline decoration-gray-300 underline-offset-[3px] hover:text-gray-800">
+          Provider relationships
+        </Link>
+        <a
+          href={`/api/admin/seeker-touches?days=${days}&format=md`}
+          target="_blank"
+          rel="noreferrer"
+          className="underline decoration-gray-300 underline-offset-[3px] hover:text-gray-800"
+        >
+          Read as text
+        </a>
+      </p>
 
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-        {/* Four numbers before the first row. */}
-        <div className="grid grid-cols-2 gap-px bg-gray-200 sm:grid-cols-4">
-          {[
-            { n: stats.unanswered, k: "wrote to us, still unanswered", tone: "text-orange-800" },
-            { n: stats.unreachable, k: "no working way to reach", tone: "text-red-700" },
-            { n: stats.withProvider, k: "handed over, outcome unknown", tone: "text-gray-900" },
-            { n: stats.unnamed, k: "we don't know their name", tone: "text-gray-900" },
-          ].map((s) => (
-            <div key={s.k} className="bg-white px-3.5 py-3">
-              <div className={`text-[25px] font-semibold leading-none tracking-tight tabular-nums ${s.tone}`}>
-                {rows === null ? "—" : s.n}
-              </div>
-              <div className="mt-1.5 text-[11.5px] leading-tight text-gray-500">{s.k}</div>
-            </div>
+      {/* Underline tabs: only the open one is dark; counts are small and grey. */}
+      <div className="mt-6 flex items-end gap-3 border-b border-gray-200">
+        <div className="-mb-px flex min-w-0 flex-1 gap-6 overflow-x-auto [mask-image:linear-gradient(90deg,#000_88%,transparent)] sm:[mask-image:none]">
+          {shownTabs.map((t) => (
+            <button
+              key={t.key}
+              type="button"
+              onClick={() => setTab(t.key)}
+              className={`whitespace-nowrap border-b-2 pb-3 text-[14.5px] transition-colors ${
+                tab === t.key ? "border-gray-900 font-semibold text-gray-900" : "border-transparent font-medium text-gray-500 hover:text-gray-800"
+              }`}
+            >
+              {t.label}
+              {rows ? <span className={`ml-1.5 text-[13px] ${tab === t.key ? "text-gray-500" : "text-gray-400"}`}>{counts[t.key]}</span> : null}
+            </button>
           ))}
-        </div>
-
-        {/* UNDERLINE TABS, NOT PILLS — the same strip /admin/connections uses.
-            Six filled capsules were the loudest thing on the page and they
-            competed with the coloured rails, which are the part that actually
-            says something. They also wrapped: with ml-auto in the same wrapping
-            flow, the window select was pushed onto a line of its own the moment
-            the tabs filled the row. The strip scrolls sideways instead of
-            wrapping, so the chrome is a fixed height at every width, and the
-            select sits outside it and never moves. */}
-        <div className="flex items-stretch gap-2 border-t border-gray-200 pl-2 pr-3.5">
-          <div className="flex min-w-0 flex-1 gap-1 overflow-x-auto">
-            {TABS.map((t) => (
+          {moreTabs.length > 0 && (
+            <div className="relative">
               <button
-                key={t.key}
                 type="button"
-                onClick={() => setTab(t.key)}
-                className={`whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors ${
-                  tab === t.key
-                    ? "border-gray-900 text-gray-900"
-                    : "border-transparent text-gray-400 hover:text-gray-600"
+                onClick={() => setMoreOpen((o) => !o)}
+                className={`whitespace-nowrap border-b-2 pb-3 text-[14.5px] font-medium ${
+                  moreTabs.some((t) => t.key === tab) ? "border-gray-900 text-gray-900" : "border-transparent text-gray-500 hover:text-gray-800"
                 }`}
               >
-                {t.label}
-                {rows ? <span className={`ml-1.5 ${tab === t.key ? "text-gray-500" : "text-gray-300"}`}>{counts[t.key]}</span> : null}
+                {moreTabs.find((t) => t.key === tab)?.label ?? "More"} <span aria-hidden="true">▾</span>
               </button>
-            ))}
-          </div>
-          <select
-            value={days}
-            onChange={(e) => setDays(Number(e.target.value))}
-            className="my-auto shrink-0 rounded border border-gray-200 bg-white px-1.5 py-1 font-mono text-[11px] text-gray-600"
-            aria-label="How far back to look"
-          >
-            {DAY_CHOICES.map((d) => (
-              <option key={d} value={d}>
-                {d} days
-              </option>
-            ))}
-          </select>
+              {moreOpen && (
+                <div className="absolute left-0 top-full z-20 mt-1 w-64 rounded-xl border border-gray-200 bg-white py-1.5 shadow-lg">
+                  {moreTabs.map((t) => (
+                    <button
+                      key={t.key}
+                      type="button"
+                      onClick={() => {
+                        setTab(t.key);
+                        setMoreOpen(false);
+                      }}
+                      className="flex w-full items-center justify-between px-3.5 py-2 text-left text-[14px] text-gray-800 hover:bg-gray-50"
+                    >
+                      {t.label}
+                      <span className="text-[13px] text-gray-400">{rows ? counts[t.key] : ""}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
+        <button
+          type="button"
+          onClick={() => setFindOpen((o) => !o)}
+          aria-label="Find someone"
+          aria-expanded={findOpen || findActive}
+          className={`mb-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border ${
+            findActive ? "border-gray-900 text-gray-900" : "border-gray-200 text-gray-500 hover:text-gray-800"
+          }`}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.5-3.5" />
+          </svg>
+        </button>
+      </div>
 
-        {/* One line saying what this queue IS. The tab label is a verb; this is
-            the rule behind it, so nobody has to infer why a row qualified. */}
-        <p className="px-3.5 pb-2 text-[11.5px] leading-tight text-gray-500">{TAB_BLURB[tab]}</p>
-
-        {/* Where they came from. Separate from the queue on purpose: the useful
-            question is "the ad families in THIS queue". Provider page is the
-            honest name for the big one — a connection records nothing about
-            acquisition, so we know they enquired from a provider page and not
-            how they got there. Paid counts are a floor, never a total. */}
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 border-b border-gray-200 px-3.5 pb-3 text-[11px]">
+      {(findOpen || findActive) && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-gray-100 py-3 text-[13px]">
           <input
             id="family-search"
             type="search"
@@ -417,177 +437,184 @@ function AdminSeekerRelationshipsInner() {
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Find anyone: name, email, phone, city"
             aria-label="Find a family"
-            className="order-last w-full rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-[13px] text-gray-900 placeholder:text-gray-400 sm:order-none sm:ml-auto sm:w-64"
+            autoFocus={findOpen && !findActive}
+            className="w-full rounded-full border border-gray-200 bg-white px-4 py-2 text-[14px] text-gray-900 placeholder:text-gray-400 sm:w-72"
           />
           {searching ? (
             <span className="text-gray-500">
               Searching everyone, every tab and archived · {shown.length} found ·{" "}
-              <button type="button" onClick={() => setDraft("")} className="font-medium text-teal-700 hover:underline">
+              <button type="button" onClick={() => setDraft("")} className="font-medium text-gray-900 underline underline-offset-2">
                 Clear
               </button>
             </span>
           ) : (
-          <>
-          <span className="mr-0.5 font-mono uppercase tracking-[0.1em] text-gray-400">From</span>
-          <button
-            type="button"
-            onClick={() => setOrigin("all")}
-            className={`font-medium ${origin === "all" ? "text-gray-900 underline underline-offset-2" : "text-gray-500 hover:text-gray-800"}`}
-          >
-            Anywhere
-          </button>
-          {/* Only origins that are actually in this queue. A greyed "Ad Boost 0"
-              reads as "we have no Ad Boost families", when it means "none in
-              this queue" — and half the row was that. An origin the filter is
-              currently ON stays visible even at zero, or clicking it would make
-              the control that produced the empty list disappear. */}
-          {ORIGINS.filter((o) => originCounts[o] || origin === o).map((o) => (
-            <span key={o} className="flex items-center gap-2">
-              <span aria-hidden className="text-gray-300">
-                ·
-              </span>
+            <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-gray-500">
+              <span>From</span>
               <button
                 type="button"
-                onClick={() => setOrigin(o)}
-                className={`font-medium ${origin === o ? "text-gray-900 underline underline-offset-2" : "text-gray-500 hover:text-gray-800"}`}
+                onClick={() => setOrigin("all")}
+                className={origin === "all" ? "font-semibold text-gray-900" : "hover:text-gray-800"}
               >
-                {ORIGIN_LABEL[o]} {rows ? originCounts[o] ?? 0 : ""}
+                Anywhere
               </button>
+              {ORIGINS.filter((o) => originCounts[o] || origin === o).map((o) => (
+                <button
+                  key={o}
+                  type="button"
+                  onClick={() => setOrigin(o)}
+                  className={origin === o ? "font-semibold text-gray-900" : "hover:text-gray-800"}
+                >
+                  · {ORIGIN_LABEL[o]} {rows ? originCounts[o] ?? 0 : ""}
+                </button>
+              ))}
             </span>
-          ))}
-          </>
+          )}
+          <select
+            value={days}
+            onChange={(e) => setDays(Number(e.target.value))}
+            className="ml-auto rounded-full border border-gray-200 bg-white px-3 py-1.5 text-[13px] text-gray-700"
+            aria-label="How far back to look"
+          >
+            {DAY_CHOICES.map((d) => (
+              <option key={d} value={d}>
+                Last {d} days
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {/* The rule behind the queue, in a line. */}
+      {!searching && <p className="mt-3 text-[13px] text-gray-500">{TAB_BLURB[tab]}</p>}
+
+      {error && <p className="py-6 text-sm text-red-600">{error}</p>}
+      {rows === null && !error && <p className="py-10 text-center text-sm text-gray-400">Loading…</p>}
+      {rows !== null && searching && shown.length === 0 && (
+        <p className="py-10 text-center text-sm text-gray-500">Nobody in the last {days} days matches &ldquo;{q}&rdquo;. Try a wider window.</p>
+      )}
+      {rows !== null && !searching && shown.length === 0 && (
+        // An empty queue is the goal, not an error, and it should say where
+        // the remaining work went rather than leaving a dead end.
+        <div className="py-12 text-center">
+          {origin !== "all" && inTab > 0 ? (
+            <>
+              <p className="text-[15px] font-semibold text-gray-800">No {ORIGIN_LABEL[origin].toLowerCase()} families in this queue.</p>
+              <button type="button" onClick={() => setOrigin("all")} className="mt-1 text-[13px] text-gray-900 underline underline-offset-2">
+                Show all {inTab} from anywhere
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="text-[15px] font-semibold text-gray-800">{tab === "all" ? "Nobody has a live episode in this window." : "All clear here."}</p>
+              {tab !== "all" && (
+                <p className="mt-1 text-[13px] text-gray-500">
+                  {openWorkCount(rows) === 0
+                    ? "No family is waiting on anything right now."
+                    : `${openWorkCount(rows)} still need something in the other queues.`}
+                </p>
+              )}
+            </>
           )}
         </div>
+      )}
 
-        <div className="flex gap-4 border-b border-gray-200 py-2.5 pl-[19px] pr-4 text-[10px] font-semibold uppercase tracking-[0.08em] text-gray-500">
-          <span className="flex-1">Family</span>
-          <span className="w-[150px] shrink-0 text-right">Where it stands</span>
-        </div>
-
-        {error && <p className="px-4 py-6 text-sm text-red-600">{error}</p>}
-        {rows === null && !error && <p className="px-4 py-10 text-center text-sm text-gray-400">Loading…</p>}
-        {rows !== null && searching && shown.length === 0 && (
-          <p className="px-4 py-10 text-center text-sm text-gray-500">Nobody in the last {days} days matches &ldquo;{q}&rdquo;. Try a wider window.</p>
-        )}
-        {rows !== null && !searching && shown.length === 0 && (
-          // An empty queue is the goal, not an error, and it should say where
-          // the remaining work went rather than leaving a dead end.
-          <div className="px-4 py-10 text-center">
-            {/* "Nothing in this queue" is false when the queue has rows and the
-                origin filter hid them — and it sends someone looking for work
-                that is on screen behind a chip they forgot they clicked. */}
-            {origin !== "all" && inTab > 0 ? (
-              <>
-                <p className="text-sm font-medium text-gray-700">
-                  No {ORIGIN_LABEL[origin].toLowerCase()} families in this queue.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setOrigin("all")}
-                  className="mt-1 text-xs text-teal-700 underline-offset-2 hover:underline"
-                >
-                  Show all {inTab} from anywhere
-                </button>
-              </>
-            ) : (
-              <>
-                <p className="text-sm font-medium text-gray-700">
-                  {tab === "all" ? "Nobody has a live episode in this window." : "Nothing in this queue."}
-                </p>
-                {tab !== "all" && (
-                  <p className="mt-1 text-xs text-gray-500">
-                    {openWorkCount(rows) === 0
-                      ? "No family is waiting on anything right now."
-                      : `${openWorkCount(rows)} still need something in the other queues.`}
-                  </p>
-                )}
-              </>
-            )}
-          </div>
-        )}
-
+      <div className="mt-2">
         {visible.map((r) => {
           const st = stateOf(r);
           const problem = problemLine(r);
           const consent = consentWarning(r);
           const next = nextLine(r);
-          const retry = retryLine(r);
           // What you need to act without opening the row: the number on a
           // call, their own words on a reply.
           const showPhone =
             Boolean(r.phone) && (r.flags.includes("promise_owed") || r.flags.includes("tried_three") || r.flags.includes("unreachable"));
           const said = r.flags.includes("awaiting_reply") ? r.last_inbound : null;
+          // One line of context: where, what, where they came from, and the
+          // number when a call is the job.
+          const meta = [
+            detailLine(r),
+            r.origin !== "provider_page" && r.origin !== "unknown" ? ORIGIN_LABEL[r.origin] : null,
+            showPhone ? formatPhone(r.phone!) : null,
+          ]
+            .filter(Boolean)
+            .join(" · ");
+          // The one line that tells you what to do or what they said, most
+          // useful first.
+          const saidText = said
+            ? theirWords(said.channel === "email" && said.detail && said.detail !== said.title ? said.detail : said.title)
+            : null;
+          const initial = (r.label.replace(/[^A-Za-z0-9]/g, "").charAt(0) || "?").toUpperCase();
+          // Mixed views need the state named; inside one queue the queue says it.
+          const mixed = searching || tab === "all" || tab === "archived";
           return (
-            <div
-              key={r.seeker_id}
-              className={`flex items-start border-b border-l-[3px] border-b-gray-100 transition-colors last:border-b-0 hover:bg-gray-50 ${RAIL[st.tone]}`}
-            >
-            <Link
-              href={`/admin/relationships/families/${r.seeker_id}${listQuery ? `?back=${encodeURIComponent(listQuery)}` : ""}`}
-              className="flex min-w-0 flex-1 items-start gap-4 py-3.5 pl-4 pr-2"
-            >
-              <div className="min-w-0 flex-1">
-                <div
-                  className={`text-[15px] leading-snug tracking-[-0.01em] ${
-                    r.label_is_fallback ? "font-normal text-gray-600" : "font-semibold text-gray-900"
+            <div key={r.seeker_id} className="group flex items-start gap-2 border-b border-gray-100">
+              <Link
+                href={`/admin/relationships/families/${r.seeker_id}${listQuery ? `?back=${encodeURIComponent(listQuery)}` : ""}`}
+                className="grid min-w-0 flex-1 grid-cols-[40px_minmax(0,1fr)_auto] items-start gap-3.5 py-4 sm:grid-cols-[44px_minmax(0,1fr)_auto]"
+              >
+                <span
+                  className={`relative flex h-10 w-10 items-center justify-center rounded-full text-[14px] font-bold sm:h-11 sm:w-11 ${
+                    st.tone === "act" ? "bg-[#f4e9dc] text-[#8a5a2b]" : "bg-[#edf7f7] text-[#417272]"
                   }`}
                 >
-                  {r.label}
-                  {/* Only where it earns the ink. "Provider page" on 330 of 394
-                      rows is noise; the two paid origins and benefits are the
-                      ones a person scans for. */}
-                  {r.origin !== "provider_page" && r.origin !== "unknown" && (
-                    <span className="ml-2 rounded bg-gray-100 px-1.5 py-0.5 align-middle font-mono text-[10px] font-normal uppercase tracking-[0.08em] text-gray-600">
-                      {ORIGIN_LABEL[r.origin]}
+                  {initial}
+                  {st.tone === "act" && (
+                    <span className="absolute -right-px -top-px h-3 w-3 rounded-full border-2 border-white bg-[#b54708]" aria-label="Needs you now" />
+                  )}
+                </span>
+                <span className="min-w-0">
+                  <span
+                    className={`block truncate text-[15.5px] ${r.label_is_fallback ? "font-medium text-gray-700" : "font-semibold text-gray-950"}`}
+                  >
+                    {r.label}
+                  </span>
+                  {meta && <span className="mt-0.5 block truncate text-[13.5px] text-gray-500">{meta}</span>}
+                  {saidText ? (
+                    <span className="mt-1.5 line-clamp-2 block text-[14px] leading-snug text-gray-700 sm:line-clamp-1">&ldquo;{saidText}&rdquo;</span>
+                  ) : problem ? (
+                    <span className={`mt-1.5 line-clamp-2 block text-[14px] leading-snug sm:line-clamp-1 ${st.tone === "act" ? "text-[#b54708]" : "text-gray-700"}`}>
+                      {problem}
+                    </span>
+                  ) : next ? (
+                    <span className="mt-1.5 line-clamp-2 block text-[14px] leading-snug text-gray-700 sm:line-clamp-1">{next}</span>
+                  ) : null}
+                  {consent && <span className="mt-1 block text-[12.5px] text-gray-400">{consent}</span>}
+                </span>
+                <span className="whitespace-nowrap pt-0.5 text-right text-[13px] text-gray-500">
+                  {st.age}
+                  {(st.tone === "act" || mixed) && (
+                    <span className={`mt-0.5 block text-[12.5px] font-semibold ${st.tone === "act" ? "text-[#b54708]" : "text-gray-600"}`}>
+                      {st.phrase}
                     </span>
                   )}
-                </div>
-                {detailLine(r) && (
-                  <div className="mt-0.5 text-[12.5px] leading-normal text-gray-500">{detailLine(r)}</div>
-                )}
-                {problem && (
-                  <div className={`mt-1.5 text-[13px] font-medium leading-snug ${PROBLEM_TONE[st.tone]}`}>{problem}</div>
-                )}
-                {showPhone && <div className="mt-1 font-mono text-[12.5px] text-gray-700">{formatPhone(r.phone!)}</div>}
-                {said && (
-                  <div className="mt-1.5 border-l-2 border-gray-200 pl-2 text-[13px] leading-snug text-gray-700">
-                    <span className="font-medium">{theirWords(said.title)}</span>
-                    {/* A text's detail is the matched keyword, not more of what they said. */}
-                    {said.channel === "email" && said.detail && said.detail !== said.title && <span className="text-gray-500"> — {theirWords(said.detail)}</span>}
-                  </div>
-                )}
-                {retry && <div className="mt-1.5 text-[12.5px] leading-snug text-gray-500">{retry}</div>}
-                {next && <div className="mt-1.5 text-[13px] leading-snug text-teal-800">{next}</div>}
-                {consent && <div className="mt-1 text-[11.5px] leading-snug text-gray-400">{consent}</div>}
+                </span>
+              </Link>
+              {/* Outside the Link on purpose: a button nested in an anchor is
+                  invalid, and every click on it would navigate instead. Shown
+                  on hover on a laptop, always on a phone (no hover there). */}
+              <div className="transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
+                <ArchiveControl row={r} onDone={load} />
               </div>
-              <div className="w-[150px] shrink-0 text-right">
-                <div className={`text-[13px] font-semibold leading-snug ${STATE_TONE[st.tone]}`}>{st.phrase}</div>
-                {st.age && <div className="mt-0.5 font-mono text-[11px] text-gray-400">{st.age}</div>}
-              </div>
-            </Link>
-            {/* Outside the Link on purpose: a button nested in an anchor is
-                invalid, and every click on it would navigate instead. */}
-            <ArchiveControl row={r} onDone={load} />
             </div>
           );
         })}
-        {shown.length > visible.length && (
-          <div className="flex items-center justify-between border-t border-gray-100 px-4 py-3 text-[12.5px]">
-            <span className="text-gray-500">
-              Showing {visible.length} of {shown.length}
-            </span>
-            <button
-              type="button"
-              onClick={() => setLimit((n) => n + PAGE)}
-              className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
-            >
-              Show {Math.min(PAGE, shown.length - visible.length)} more
-            </button>
-          </div>
-        )}
       </div>
+      {shown.length > visible.length && (
+        <div className="flex items-center justify-between py-4 text-[13px]">
+          <span className="text-gray-500">
+            Showing {visible.length} of {shown.length}
+          </span>
+          <button
+            type="button"
+            onClick={() => setLimit((n) => n + PAGE)}
+            className="rounded-full border border-gray-300 bg-white px-4 py-2 text-[13px] font-semibold text-gray-900 hover:border-gray-900"
+          >
+            Show {Math.min(PAGE, shown.length - visible.length)} more
+          </button>
+        </div>
+      )}
 
-      <p className="mt-3 max-w-3xl text-[11.5px] leading-relaxed text-gray-400">
+      <p className="mt-6 max-w-3xl text-[12px] leading-relaxed text-gray-400">
         Derived at read time from connections, city leads, email, inbound texts, support@ threads and site activity.
         Nothing on this page is stored, so it cannot disagree with the events it is built from.
       </p>
