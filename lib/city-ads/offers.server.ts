@@ -392,9 +392,15 @@ export async function startOrAdvance(
           expired_at: null,
           reached_channels: [],
           delivery_note: null,
+          // A provider released after taking the family (the follow-up
+          // ladder's "no_contact", or Move on the case page) can be offered
+          // them again. Without this the guard below matched no row, and the
+          // re-offer did nothing while reporting nothing.
+          accepted_at: null,
+          outcome: null,
         })
         .eq("id", earlier.id as string)
-        .is("accepted_at", null)
+        .or("accepted_at.is.null,outcome.in.(no_contact,moved)")
         .select("id")
         .single()
     : await db

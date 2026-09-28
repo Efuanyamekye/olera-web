@@ -28,7 +28,7 @@ import { cityThreadProviderEmail } from "@/lib/email-templates";
 import { sendSlackAlert } from "@/lib/slack";
 import { getSiteUrl } from "@/lib/site-url";
 import { CARE_LABEL, getCityConfig } from "@/lib/city-ads/config";
-import { cityLeadBlocked, deliverCityMessage } from "@/lib/city-ads/messages.server";
+import { cityLeadBlocked, citySendWindow, deliverCityMessage } from "@/lib/city-ads/messages.server";
 import { startOrAdvance } from "@/lib/city-ads/offers.server";
 import { offerStillHolds } from "@/lib/city-ads/offer-holds";
 
@@ -111,6 +111,13 @@ export async function moveToProvider(
   //    page and the case page like any other text from us.
   if (offered) {
     const care = CARE_LABEL[lead.care_type as keyof typeof CARE_LABEL] ?? "care";
+    // Inside the family's sending hours; a move at night texts them in the morning.
+    let window: { allowed: boolean; nextStart: string };
+    try {
+      window = citySendWindow(lead.slug as string);
+    } catch {
+      window = { allowed: true, nextStart: now };
+    }
     const { data: queued, error: qErr } = await db
       .from("city_lead_messages")
       .insert({
@@ -118,13 +125,13 @@ export async function moveToProvider(
         channel: "sms",
         subject: null,
         body: `Olera: Hi ${first}, we're connecting you with another agency near ${city} for ${care}. They'll reach out soon.\n\nReply STOP to opt out, HELP for help.`,
-        send_after: now,
+        send_after: window.allowed ? now : window.nextStart,
         created_by: `admin:${by}`,
       })
       .select("id")
       .maybeSingle();
     if (qErr) console.error("[city-ads/move] family text queue failed", qErr);
-    else if (queued?.id) {
+    else if (queued?.id && window.allowed) {
       try {
         await deliverCityMessage(db, queued.id as string);
       } catch (e) {
