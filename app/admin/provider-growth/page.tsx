@@ -20,11 +20,14 @@ import DateRangePopover, {
 } from "@/components/admin/DateRangePopover";
 import { AdminFilterChips } from "@/components/admin/provider-outreach/AdminFilterChips";
 import {
+  CallbackBanner,
   GrowthTabs,
   StatsHeader,
   ProviderRow,
   ProviderDrawer,
+  ProviderFilters,
   type ActiveTab,
+  type ProviderFiltersValue,
 } from "./components";
 
 const PAGE_SIZE = 50;
@@ -50,18 +53,29 @@ export default function ProviderGrowthPage() {
   // Tab state
   const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
     const tab = searchParams.get("tab");
-    const sub = searchParams.get("sub") as "ads_only" | "medjobs_only" | "both" | "churned" | "not_contacted" | "converted" | "active" | "no_show" | "not_interested" | null;
+    const sub = searchParams.get("sub") as "ads_only" | "medjobs_only" | "both" | "churned" | "not_contacted" | "in_progress" | "live" | "ended" | "active" | "no_show" | "not_interested" | "converted" | null;
 
     // Check for new_claim with subtab (Claimed tab)
     if (tab === "new_claim") {
-      const validSubTabs = ["not_contacted", "converted"];
-      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "converted") : "not_contacted";
+      // Backwards compatibility: old ?tab=new_claim&sub=converted → Converted tab
+      if (sub === "converted") {
+        return { type: "conversion", tab: "converted", subTab: "not_contacted" };
+      }
+      const validSubTabs = ["not_contacted", "in_progress"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "in_progress") : "not_contacted";
       return { type: "pipeline", stage: "new_claim", subTab };
     }
 
-    // In Progress is now a top-level tab (no subtabs)
+    // Backwards compatibility: old ?tab=in_progress URLs → Claimed → In Progress
     if (tab === "in_progress") {
-      return { type: "pipeline", stage: "in_progress" };
+      return { type: "pipeline", stage: "new_claim", subTab: "in_progress" };
+    }
+
+    // Converted tab (conversion type with subtabs)
+    if (tab === "converted") {
+      const validSubTabs = ["not_contacted", "in_progress", "live", "ended"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "not_contacted" | "in_progress" | "live" | "ended") : "not_contacted";
+      return { type: "conversion", tab: "converted", subTab };
     }
 
     // Meeting Scheduled has no subtabs - show all meetings, focus shown as badge
@@ -90,9 +104,14 @@ export default function ProviderGrowthPage() {
   const [stats, setStats] = useState<GrowthStats | null>(null);
   const [claimedSubtabCounts, setClaimedSubtabCounts] = useState<{
     notContacted: number;
-    converted: number;
+    inProgress: number;
   } | null>(null);
-  const [inProgressCount, setInProgressCount] = useState(0);
+  const [convertedSubtabCounts, setConvertedSubtabCounts] = useState<{
+    notContacted: number;
+    inProgress: number;
+    live: number;
+    ended: number;
+  } | null>(null);
   const [adminCounts, setAdminCounts] = useState<AdminCounts>({});
   const [selectedAdminFilter, setSelectedAdminFilter] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -103,6 +122,11 @@ export default function ProviderGrowthPage() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [dateRange, setDateRange] = useState<DateRangeValue>(DEFAULT_DATE_RANGE);
+  const [providerFilters, setProviderFilters] = useState<ProviderFiltersValue>({
+    completenessMin: undefined,
+    completenessMax: undefined,
+    careTypes: [],
+  });
 
   // Pagination state
   const [page, setPage] = useState(0);
@@ -122,6 +146,9 @@ export default function ProviderGrowthPage() {
   // Assignment state
   const [editingAssignmentId, setEditingAssignmentId] = useState<string | null>(null);
   const [adminNameLookup, setAdminNameLookup] = useState<Map<string, string>>(new Map());
+
+  // Callback banner refresh key - increment to trigger refetch
+  const [callbackRefreshKey, setCallbackRefreshKey] = useState(0);
 
   // Keep ref in sync with selected provider
   useEffect(() => {
@@ -167,13 +194,18 @@ export default function ProviderGrowthPage() {
     setPage(0);
   }, [selectedAdminFilter]);
 
+  // Reset page when provider filters change
+  useEffect(() => {
+    setPage(0);
+  }, [providerFilters]);
+
   // Fetch stats (including subtab counts)
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
-      const [statsRes, claimedSubtabRes] = await Promise.all([
+      const [statsRes, subtabRes] = await Promise.all([
         fetch("/api/admin/provider-growth/stats"),
-        fetch("/api/admin/provider-growth/new-claim-subtabs"),
+        fetch("/api/admin/provider-growth/subtab-counts"),
       ]);
 
       if (statsRes.ok) {
@@ -181,15 +213,20 @@ export default function ProviderGrowthPage() {
         setStats(data.stats);
       }
 
-      if (claimedSubtabRes.ok) {
-        const data = await claimedSubtabRes.json();
-        // Set claimed subtab counts (not_contacted, converted)
+      if (subtabRes.ok) {
+        const data = await subtabRes.json();
+        // Set claimed subtab counts (not_contacted, in_progress) - non-converted providers
         setClaimedSubtabCounts({
-          notContacted: data.notContacted,
-          converted: data.converted,
+          notContacted: data.claimed.notContacted,
+          inProgress: data.claimed.inProgress,
         });
-        // Set in_progress count (now a separate top-level tab)
-        setInProgressCount(data.inProgress);
+        // Set converted subtab counts - providers on free trial, organized by campaign status
+        setConvertedSubtabCounts({
+          notContacted: data.converted.notContacted,
+          inProgress: data.converted.inProgress,
+          live: data.converted.live,
+          ended: data.converted.ended,
+        });
       }
     } catch (e) {
       console.error("Failed to fetch stats:", e);
@@ -221,10 +258,6 @@ export default function ProviderGrowthPage() {
           // Meeting Scheduled shows all meetings (both meeting_scheduled and upgrade_meeting)
           // No subtabs - meeting focus is displayed as a badge on each row
           params.set("pipelineStage", "meeting_scheduled,upgrade_meeting");
-        } else if (activeTab.stage === "in_progress") {
-          // In Progress is now a top-level tab - shows new_claim providers with call attempts
-          params.set("pipelineStage", "new_claim");
-          params.set("hasCallAttempts", "true");
         } else {
           params.set("pipelineStage", activeTab.stage);
         }
@@ -232,18 +265,37 @@ export default function ProviderGrowthPage() {
         // For new_claim (Claimed tab), apply filters based on subtab
         if (activeTab.stage === "new_claim" && activeTab.subTab) {
           if (activeTab.subTab === "not_contacted") {
-            // Not contacted: no calls AND not converted
+            // Not contacted: no calls AND not converted (never started free trial)
             params.set("hasCallAttempts", "false");
             params.set("notConverted", "true");
-          } else if (activeTab.subTab === "converted") {
-            // Converted: has free trial AND no calls (self-converted, not yet contacted)
-            params.set("converted", "true");
-            params.set("hasCallAttempts", "false");
+          } else if (activeTab.subTab === "in_progress") {
+            // In progress: has call attempts AND not converted
+            params.set("hasCallAttempts", "true");
+            params.set("notConverted", "true");
           }
         }
       } else {
-        // Conversion tabs (only Paying now)
-        if (activeTab.tab === "paying") {
+        // Conversion tabs (Converted and Paying)
+        if (activeTab.tab === "converted") {
+          // Converted tab: providers on free trial (not yet paying)
+          params.set("pipelineStage", "new_claim");
+          params.set("converted", "true");
+          if (activeTab.subTab === "not_contacted") {
+            // No calls yet, campaign not live/ended
+            params.set("hasCallAttempts", "false");
+            params.set("campaignStatusNot", "live,ended");
+          } else if (activeTab.subTab === "in_progress") {
+            // Has calls, campaign not live/ended
+            params.set("hasCallAttempts", "true");
+            params.set("campaignStatusNot", "live,ended");
+          } else if (activeTab.subTab === "live") {
+            // Campaign is currently live
+            params.set("campaignStatus", "live");
+          } else if (activeTab.subTab === "ended") {
+            // Campaign has ended
+            params.set("campaignStatus", "ended");
+          }
+        } else if (activeTab.tab === "paying") {
           if (activeTab.subTab === "ads_only") {
             params.set("adsOnly", "true");
           } else if (activeTab.subTab === "medjobs_only") {
@@ -279,6 +331,17 @@ export default function ProviderGrowthPage() {
       params.set("limit", String(PAGE_SIZE));
       params.set("offset", String(page * PAGE_SIZE));
 
+      // Provider filters (completeness and care types)
+      if (providerFilters.completenessMin !== undefined) {
+        params.set("completenessMin", String(providerFilters.completenessMin));
+      }
+      if (providerFilters.completenessMax !== undefined) {
+        params.set("completenessMax", String(providerFilters.completenessMax));
+      }
+      if (providerFilters.careTypes.length > 0) {
+        params.set("careTypes", providerFilters.careTypes.join(","));
+      }
+
       const res = await fetch(`/api/admin/provider-growth?${params}`);
       if (res.ok) {
         const data = await res.json();
@@ -294,7 +357,7 @@ export default function ProviderGrowthPage() {
     } finally {
       setLoading(false);
     }
-  }, [activeTab, debouncedSearch, dateRange, page, selectedAdminFilter]);
+  }, [activeTab, debouncedSearch, dateRange, page, selectedAdminFilter, providerFilters]);
 
   // Initial fetch
   useEffect(() => {
@@ -315,13 +378,14 @@ export default function ProviderGrowthPage() {
     // Update URL
     if (tab.type === "pipeline") {
       // Include subtab for tabs that have them (new_claim and pitched have subtabs)
-      // in_progress and meeting_scheduled have no subtabs
+      // meeting_scheduled has no subtabs
       if ((tab.stage === "new_claim" || tab.stage === "pitched") && tab.subTab) {
         router.push(`/admin/provider-growth?tab=${tab.stage}&sub=${tab.subTab}`, { scroll: false });
       } else {
         router.push(`/admin/provider-growth?tab=${tab.stage}`, { scroll: false });
       }
     } else {
+      // Conversion tabs (converted and paying)
       router.push(`/admin/provider-growth?tab=${tab.tab}&sub=${tab.subTab}`, { scroll: false });
     }
   };
@@ -421,6 +485,18 @@ export default function ProviderGrowthPage() {
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
+  // Handle clicking a provider from the callback banner
+  const handleCallbackProviderClick = (trackingId: string) => {
+    const provider = providers.find((p) => p.id === trackingId);
+    if (provider) {
+      setSelectedProvider(provider);
+    } else {
+      // Provider may not be in current list, fetch and select it
+      // For now, just log - could add a fetch here if needed
+      console.log("Provider not in current list:", trackingId);
+    }
+  };
+
   return (
     <div>
       {/* Page Header */}
@@ -438,6 +514,12 @@ export default function ProviderGrowthPage() {
               value={dateRange}
               onChange={setDateRange}
               ariaLabel="Filter by claim date"
+            />
+
+            {/* Lead scoring filters */}
+            <ProviderFilters
+              value={providerFilters}
+              onChange={setProviderFilters}
             />
 
             {/* Search */}
@@ -476,7 +558,7 @@ export default function ProviderGrowthPage() {
         onTabChange={handleTabChange}
         stats={stats}
         claimedSubtabCounts={claimedSubtabCounts ?? undefined}
-        inProgressCount={inProgressCount}
+        convertedSubtabCounts={convertedSubtabCounts ?? undefined}
         followUpSubtabCounts={stats ? { active: stats.pitched, noShow: stats.no_show ?? 0, notInterested: stats.not_interested } : undefined}
       />
 
@@ -488,6 +570,15 @@ export default function ProviderGrowthPage() {
         onSelect={setSelectedAdminFilter}
         tabKey={getTabKey(activeTab)}
       />
+
+      {/* Callback banner - shown on In Progress subtabs (Claimed or Converted) */}
+      {((activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === "in_progress") ||
+        (activeTab.type === "conversion" && activeTab.tab === "converted" && activeTab.subTab === "in_progress")) && (
+        <CallbackBanner
+          onProviderClick={handleCallbackProviderClick}
+          refreshKey={callbackRefreshKey}
+        />
+      )}
 
       {/* Provider list */}
       <div className="bg-white rounded-xl border border-gray-200">
@@ -563,9 +654,10 @@ export default function ProviderGrowthPage() {
           onClose={() => setSelectedProvider(null)}
           onUpdate={handleProviderUpdate}
           onCallLogged={() => {
-            // Refresh stats and providers when a call is logged
+            // Refresh stats, providers, and callback banner when a call is logged
             fetchStats();
             fetchProviders();
+            setCallbackRefreshKey((k) => k + 1);
           }}
         />
       )}

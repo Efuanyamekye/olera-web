@@ -7,7 +7,19 @@
 
 import { getServiceClient } from "@/lib/admin";
 import { calculateProfileCompleteness, type ExtendedMetadata } from "@/lib/profile-completeness";
-import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource, MeetingType, MeetingFocus, MeetingFormat } from "./stages";
+import {
+  CARE_TYPE_FILTER_MAPPING,
+  CALLBACK_FOLLOWUP_OUTCOMES,
+  type PipelineStage,
+  type AdsStatus,
+  type MedjobsStatus,
+  type TouchpointType,
+  type ClaimSource,
+  type MeetingType,
+  type MeetingFocus,
+  type MeetingFormat,
+  type ActivityOutcome,
+} from "./stages";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -1785,37 +1797,59 @@ async function getAdCampaignStatusForProviders(
  * - notContacted: no calls AND not converted
  * - converted: has free trial AND no calls (self-converted, not yet contacted)
  * - inProgress: has calls (regardless of conversion status - we're actively working on them)
+ *
+ * Converted subtabs are now campaign-status aware:
+ * - notContacted: no calls yet, campaign not live/ended
+ * - inProgress: has calls, campaign not live/ended
+ * - live: campaign is currently live (success state)
+ * - ended: campaign has ended (follow up needed)
  */
-export async function getNewClaimSubtabCounts(): Promise<{
-  notContacted: number;
-  converted: number;
-  inProgress: number;
-}> {
+export interface SubtabCounts {
+  claimed: { notContacted: number; inProgress: number };
+  converted: { notContacted: number; inProgress: number; live: number; ended: number };
+}
+
+export async function getClaimedAndConvertedSubtabCounts(): Promise<SubtabCounts> {
   const db = getServiceClient();
 
   // Get all new_claim tracking records with conversion status
   const { data: newClaims, error: claimsError } = await db
     .from("provider_growth_tracking")
-    .select("id, ads_status, medjobs_status")
+    .select("id, business_profile_id, ads_status, medjobs_status")
     .eq("pipeline_stage", "new_claim");
 
   if (claimsError || !newClaims) {
     console.error("[provider-growth] New claims query error:", claimsError);
-    return { notContacted: 0, converted: 0, inProgress: 0 };
+    return {
+      claimed: { notContacted: 0, inProgress: 0 },
+      converted: { notContacted: 0, inProgress: 0, live: 0, ended: 0 },
+    };
   }
 
   if (newClaims.length === 0) {
-    return { notContacted: 0, converted: 0, inProgress: 0 };
+    return {
+      claimed: { notContacted: 0, inProgress: 0 },
+      converted: { notContacted: 0, inProgress: 0, live: 0, ended: 0 },
+    };
   }
 
   // Get call stats for ALL new_claim providers
   const allIds = newClaims.map((c) => c.id);
   const callStats = await getCallStatsForTrackingIds(allIds);
 
+  // Get campaign status for converted providers (those with ads_status = free_intro)
+  const convertedProviderIds = newClaims
+    .filter((c) => c.ads_status === "free_intro")
+    .map((c) => c.business_profile_id);
+  const campaignData = convertedProviderIds.length > 0
+    ? await getAdCampaignStatusForProviders(convertedProviderIds)
+    : new Map<string, CampaignInfo>();
+
   // Categorize each provider
-  let notContacted = 0;
-  let converted = 0;
-  let inProgress = 0;
+  const counts = {
+    claimed: { notContacted: 0, inProgress: 0 },
+    converted: { notContacted: 0, inProgress: 0, live: 0, ended: 0 },
+  };
 
   for (const claim of newClaims) {
     const hasCalls = (callStats.get(claim.id)?.count || 0) > 0;
@@ -1825,27 +1859,63 @@ export async function getNewClaimSubtabCounts(): Promise<{
       claim.medjobs_status === "in_pilot" ||
       claim.medjobs_status === "pilot_expired";
     // "Not converted" = no free trial started (ads_status=none, medjobs not in trial)
-    // This matches the notConverted filter in listProviders
     const isNotConverted =
       claim.ads_status === "none" &&
       claim.medjobs_status !== "in_pilot" &&
       claim.medjobs_status !== "pilot_expired";
+    // Skip providers already paying (ads_status="subscribed" or medjobs_status="subscribed")
+    const isPaying =
+      claim.ads_status === "subscribed" || claim.medjobs_status === "subscribed";
 
-    if (hasCalls) {
-      // Any provider with call attempts goes to In Progress
-      inProgress++;
-    } else if (isConverted) {
-      // Converted but no calls yet - self-converted, waiting for outreach
-      converted++;
-    } else if (isNotConverted) {
-      // Not converted and no calls - fresh claim
-      notContacted++;
+    if (isPaying) {
+      // Paying providers belong in the Paying tab, not here
+      continue;
     }
-    // Note: Providers with ads_status="subscribed" or medjobs_status="subscribed"
-    // but no calls are not counted in any subtab (they should be in Paying tab)
+
+    if (isConverted) {
+      // Converted providers - categorize by campaign status
+      const campaign = campaignData.get(claim.business_profile_id);
+      const campaignStatus = campaign?.status;
+
+      if (campaignStatus === "live") {
+        // Campaign is live - success state
+        counts.converted.live++;
+      } else if (campaignStatus === "ended") {
+        // Campaign ended - follow up needed
+        counts.converted.ended++;
+      } else if (hasCalls) {
+        // Has calls but campaign not live/ended yet
+        counts.converted.inProgress++;
+      } else {
+        // No calls yet
+        counts.converted.notContacted++;
+      }
+    } else if (isNotConverted) {
+      // Non-converted providers (no free trial)
+      if (hasCalls) {
+        counts.claimed.inProgress++;
+      } else {
+        counts.claimed.notContacted++;
+      }
+    }
   }
 
-  return { notContacted, converted, inProgress };
+  return counts;
+}
+
+// Legacy function for backwards compatibility
+export async function getNewClaimSubtabCounts(): Promise<{
+  notContacted: number;
+  converted: number;
+  inProgress: number;
+}> {
+  const counts = await getClaimedAndConvertedSubtabCounts();
+  // Map to legacy structure for any old code still using this
+  return {
+    notContacted: counts.claimed.notContacted,
+    converted: counts.converted.notContacted + counts.converted.inProgress,
+    inProgress: counts.claimed.inProgress,
+  };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1907,16 +1977,19 @@ export async function getAdminCountsForTab(options: GetAdminCountsOptions): Prom
     }
   }
 
-  // Apply converted filter
+  // Apply converted filter (excludes paying providers)
   if (options.converted) {
     query = query.or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
+    query = query.neq("ads_status", "subscribed");
+    query = query.neq("medjobs_status", "subscribed");
   }
 
-  // Apply not converted filter
+  // Apply not converted filter (excludes paying providers)
   if (options.notConverted) {
     query = query.eq("ads_status", "none");
     query = query.neq("medjobs_status", "in_pilot");
     query = query.neq("medjobs_status", "pilot_expired");
+    query = query.neq("medjobs_status", "subscribed");
   }
 
   // Apply mutually exclusive Paying subtab filters
@@ -2027,6 +2100,14 @@ export interface ListProvidersOptions {
   adsOnly?: boolean;     // ads_subscribed AND medjobs NOT subscribed
   medjobsOnly?: boolean; // medjobs_subscribed AND ads NOT subscribed
   churned?: boolean;     // has churn timestamp AND not currently subscribed to either
+  // Lead scoring filters (profile completeness bands)
+  completenessMin?: number;  // e.g., 70 for "Hot" leads
+  completenessMax?: number;  // e.g., 49 for "Cold" leads
+  // Care type filter (maps to care_types array values)
+  careTypes?: string[];  // e.g., ["home_care", "assisted_living"]
+  // Campaign status filters (for Converted subtabs)
+  campaignStatus?: "pending_profile" | "requested" | "scheduled" | "live" | "ended";
+  campaignStatusNot?: Array<"pending_profile" | "requested" | "scheduled" | "live" | "ended">;
 }
 
 export async function listProviders(options: ListProvidersOptions = {}): Promise<{
@@ -2056,6 +2137,11 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     adsOnly,
     medjobsOnly,
     churned,
+    completenessMin,
+    completenessMax,
+    careTypes,
+    campaignStatus,
+    campaignStatusNot,
   } = options;
 
   // Build the query
@@ -2113,16 +2199,21 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     query = query.eq("medjobs_eligible", medjobsEligible);
   }
   // Converted filter: ads free_intro OR medjobs in_pilot/pilot_expired
+  // EXCLUDES paying providers (ads_status=subscribed OR medjobs_status=subscribed)
   if (converted) {
     query = query.or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
+    // Exclude paying providers - they belong in the Paying tab
+    query = query.neq("ads_status", "subscribed");
+    query = query.neq("medjobs_status", "subscribed");
   }
   // Not converted filter: no free trial active
-  // Must have ads_status = none AND medjobs_status not in (in_pilot, pilot_expired)
+  // Must have ads_status = none AND medjobs_status not in (in_pilot, pilot_expired, subscribed)
   if (notConverted) {
     query = query.eq("ads_status", "none");
-    // Exclude providers with active MedJobs trial (in_pilot or pilot_expired)
+    // Exclude providers with active MedJobs trial or subscription
     query = query.neq("medjobs_status", "in_pilot");
     query = query.neq("medjobs_status", "pilot_expired");
+    query = query.neq("medjobs_status", "subscribed");
   }
   // Meeting focus filter (for Meeting Scheduled subtabs)
   // Include null meeting_focus for legacy providers who were scheduled before this field existed
@@ -2164,12 +2255,22 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   // Apply ordering
   query = query.order(orderBy, { ascending: orderDirection === "asc" });
 
-  // When searching or filtering by hasCallAttempts, fetch all matching rows
+  // When searching or filtering by computed fields, fetch all matching rows
   // then filter + paginate in memory because:
   // - PostgREST doesn't support ilike on joined columns (search)
   // - hasCallAttempts requires joining with touchpoints (in memory)
+  // - completeness is computed at query time (not stored)
+  // - careTypes requires matching against array values
   // Without these filters, apply pagination at DB level for efficiency.
-  if (!search && hasCallAttempts === undefined) {
+  const needsInMemoryFiltering = search ||
+    hasCallAttempts !== undefined ||
+    completenessMin !== undefined ||
+    completenessMax !== undefined ||
+    (careTypes && careTypes.length > 0) ||
+    campaignStatus !== undefined ||
+    (campaignStatusNot && campaignStatusNot.length > 0);
+
+  if (!needsInMemoryFiltering) {
     query = query.range(offset, offset + limit - 1);
   }
 
@@ -2261,6 +2362,19 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     });
   }
 
+  // Filter by campaign status if specified (for Converted subtabs)
+  if (campaignStatus) {
+    providers = providers.filter((p) => p.ads_campaign_status === campaignStatus);
+  }
+  if (campaignStatusNot && campaignStatusNot.length > 0) {
+    providers = providers.filter((p) => {
+      // If no campaign status, include them (MedJobs-only providers)
+      if (!p.ads_campaign_status) return true;
+      // Exclude if campaign status is in the exclusion list
+      return !campaignStatusNot.includes(p.ads_campaign_status as "pending_profile" | "requested" | "scheduled" | "live" | "ended");
+    });
+  }
+
   // Filter by hasCallAttempts if specified
   if (hasCallAttempts !== undefined) {
     providers = providers.filter((p) =>
@@ -2268,8 +2382,44 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     );
   }
 
-  // Apply pagination in memory if we did search or hasCallAttempts filtering
-  if (search || hasCallAttempts !== undefined) {
+  // Filter by profile completeness if specified
+  if (completenessMin !== undefined) {
+    providers = providers.filter((p) => (p.profile_completeness ?? 0) >= completenessMin);
+  }
+  if (completenessMax !== undefined) {
+    providers = providers.filter((p) => (p.profile_completeness ?? 0) <= completenessMax);
+  }
+
+  // Filter by care types if specified
+  // Care types filter uses mapped values to match database variations
+  if (careTypes && careTypes.length > 0) {
+    // Build a set of all known care types for "other" detection
+    const knownCareTypes = new Set(
+      Object.values(CARE_TYPE_FILTER_MAPPING).flat().map((ct) => ct.toLowerCase())
+    );
+
+    providers = providers.filter((p) => {
+      const providerCareTypes = p.care_types || [];
+      if (providerCareTypes.length === 0) return false;
+
+      return careTypes.some((filterType) => {
+        if (filterType === "other") {
+          // Match if provider has any care type not in known categories
+          return providerCareTypes.some(
+            (pct) => !knownCareTypes.has(pct.toLowerCase())
+          );
+        }
+        // Match if provider has any care type in the mapped values
+        const mappedValues = CARE_TYPE_FILTER_MAPPING[filterType] || [];
+        return providerCareTypes.some((pct) =>
+          mappedValues.some((mv) => mv.toLowerCase() === pct.toLowerCase())
+        );
+      });
+    });
+  }
+
+  // Apply pagination in memory if we did any in-memory filtering
+  if (needsInMemoryFiltering) {
     const filteredTotal = providers.length;
     providers = providers.slice(offset, offset + limit);
     return { providers, total: filteredTotal };
@@ -2717,4 +2867,173 @@ export async function updateConversionStatusBatch(
   }
 
   return { updated: updatedCount };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Callback Queue Queries
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface CallbackDueEntry {
+  tracking_id: string;
+  business_profile_id: string;
+  callback_date: string;
+  notes: string | null;
+  touchpoint_created_at: string;
+  // Joined from provider
+  display_name: string | null;
+  pipeline_stage: PipelineStage;
+  assigned_to: string | null;
+}
+
+export interface CallbacksDueResult {
+  dueToday: CallbackDueEntry[];
+  overdue: CallbackDueEntry[];
+  upcoming: CallbackDueEntry[];
+  totalDue: number;  // dueToday + overdue
+}
+
+/**
+ * Get callbacks that are due today, overdue, or upcoming (next 7 days).
+ *
+ * A callback is "due" if:
+ * 1. There's a touchpoint with outcome = "callback_requested" and a callback_date
+ * 2. The provider is still in an active pipeline stage (not not_interested)
+ * 3. There's no more recent touchpoint (they haven't been followed up)
+ */
+export async function getCallbacksDue(): Promise<CallbacksDueResult> {
+  const db = getServiceClient();
+  const today = new Date().toISOString().split("T")[0];
+  const sevenDaysFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+
+  // Get all callback_requested touchpoints with callback_date
+  const { data: touchpoints, error: touchpointsError } = await db
+    .from("provider_growth_touchpoints")
+    .select(`
+      id,
+      tracking_id,
+      business_profile_id,
+      details,
+      created_at
+    `)
+    .eq("touchpoint_type", "activity_logged")
+    .not("details", "is", null)
+    .order("created_at", { ascending: false });
+
+  if (touchpointsError) {
+    console.error("[callbacks-due] Error fetching touchpoints:", touchpointsError);
+    throw new Error("Failed to fetch callbacks");
+  }
+
+  // Filter to only callback_requested with callback_date
+  const callbackTouchpoints = (touchpoints || []).filter((tp) => {
+    const details = tp.details as Record<string, unknown> | null;
+    return details?.outcome === "callback_requested" && details?.callback_date;
+  });
+
+  if (callbackTouchpoints.length === 0) {
+    return { dueToday: [], overdue: [], upcoming: [], totalDue: 0 };
+  }
+
+  // Get unique tracking IDs
+  const trackingIds = [...new Set(callbackTouchpoints.map((tp) => tp.tracking_id))];
+
+  // Fetch tracking records with provider info to filter by stage
+  const { data: trackingRecords, error: trackingError } = await db
+    .from("provider_growth_tracking")
+    .select(`
+      id,
+      business_profile_id,
+      pipeline_stage,
+      assigned_to,
+      business_profiles!inner (
+        display_name
+      )
+    `)
+    .in("id", trackingIds)
+    .in("pipeline_stage", ["new_claim", "pitched", "no_show"]);
+
+  if (trackingError) {
+    console.error("[callbacks-due] Error fetching tracking:", trackingError);
+    throw new Error("Failed to fetch tracking records");
+  }
+
+  const trackingMap = new Map(
+    (trackingRecords || []).map((t) => [t.id, t])
+  );
+
+  // Build a map of tracking_id -> list of touchpoints (already sorted by created_at desc)
+  const touchpointsByTracking = new Map<string, typeof touchpoints>();
+  for (const tp of touchpoints || []) {
+    const list = touchpointsByTracking.get(tp.tracking_id) || [];
+    list.push(tp);
+    touchpointsByTracking.set(tp.tracking_id, list);
+  }
+
+  // Process callbacks
+  const dueToday: CallbackDueEntry[] = [];
+  const overdue: CallbackDueEntry[] = [];
+  const upcoming: CallbackDueEntry[] = [];
+
+  for (const tp of callbackTouchpoints) {
+    const tracking = trackingMap.get(tp.tracking_id);
+    if (!tracking) continue; // Provider not in active stage
+
+    // Check if this callback has been followed up on
+    // Only dismiss if there's a NEWER touchpoint that is a follow-up action (not just a note)
+    const trackingTouchpoints = touchpointsByTracking.get(tp.tracking_id) || [];
+    const hasFollowUp = trackingTouchpoints.some((otherTp) => {
+      // Skip if this is the callback touchpoint itself or older
+      if (otherTp.id === tp.id || otherTp.created_at <= tp.created_at) {
+        return false;
+      }
+      // Check if the newer touchpoint is a follow-up action
+      const details = otherTp.details as Record<string, unknown> | null;
+      const outcome = details?.outcome as ActivityOutcome | undefined;
+      return outcome && CALLBACK_FOLLOWUP_OUTCOMES.includes(outcome);
+    });
+
+    if (hasFollowUp) {
+      // Callback was followed up on, skip it
+      continue;
+    }
+
+    const details = tp.details as Record<string, unknown>;
+    const callbackDate = details.callback_date as string;
+    // Handle both array and object shapes from Supabase join
+    const profileData = tracking.business_profiles as
+      | { display_name: string | null }
+      | { display_name: string | null }[];
+    const profile = Array.isArray(profileData) ? profileData[0] : profileData;
+
+    const entry: CallbackDueEntry = {
+      tracking_id: tp.tracking_id,
+      business_profile_id: tp.business_profile_id,
+      callback_date: callbackDate,
+      notes: (details.notes as string) || null,
+      touchpoint_created_at: tp.created_at,
+      display_name: profile?.display_name ?? null,
+      pipeline_stage: tracking.pipeline_stage as PipelineStage,
+      assigned_to: tracking.assigned_to,
+    };
+
+    if (callbackDate === today) {
+      dueToday.push(entry);
+    } else if (callbackDate < today) {
+      overdue.push(entry);
+    } else if (callbackDate <= sevenDaysFromNow) {
+      upcoming.push(entry);
+    }
+  }
+
+  // Sort each list by callback_date
+  dueToday.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+  overdue.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+  upcoming.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+
+  return {
+    dueToday,
+    overdue,
+    upcoming,
+    totalDue: dueToday.length + overdue.length,
+  };
 }

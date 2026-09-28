@@ -124,6 +124,16 @@ export async function GET(request: NextRequest) {
       options.notConverted = true;
     }
 
+    // Campaign status filters (for Converted subtabs)
+    const campaignStatus = searchParams.get("campaignStatus");
+    if (campaignStatus) {
+      options.campaignStatus = campaignStatus as "pending_profile" | "requested" | "scheduled" | "live" | "ended";
+    }
+    const campaignStatusNot = searchParams.get("campaignStatusNot");
+    if (campaignStatusNot) {
+      options.campaignStatusNot = campaignStatusNot.split(",") as Array<"pending_profile" | "requested" | "scheduled" | "live" | "ended">;
+    }
+
     // Meeting focus filter (for Meeting Scheduled subtabs)
     const meetingFocus = searchParams.get("meetingFocus");
     if (meetingFocus && MEETING_FOCUS_OPTIONS.includes(meetingFocus as MeetingFocus)) {
@@ -150,6 +160,22 @@ export async function GET(request: NextRequest) {
     const churned = searchParams.get("churned");
     if (churned === "true") {
       options.churned = true;
+    }
+
+    // Profile completeness filters (for lead scoring)
+    const completenessMin = searchParams.get("completenessMin");
+    if (completenessMin) {
+      options.completenessMin = parseInt(completenessMin, 10);
+    }
+    const completenessMax = searchParams.get("completenessMax");
+    if (completenessMax) {
+      options.completenessMax = parseInt(completenessMax, 10);
+    }
+
+    // Care types filter (comma-separated)
+    const careTypes = searchParams.get("careTypes");
+    if (careTypes) {
+      options.careTypes = careTypes.split(",").filter(Boolean);
     }
 
     const limit = parseInt(searchParams.get("limit") || "50", 10);
