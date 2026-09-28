@@ -147,7 +147,10 @@ export function memoryPromptText(memory: ChatMemory): string {
       const who = message.role === "founder"
         ? "He said"
         : message.kind === "brief" ? "Your daily brief said" : message.kind === "ping" ? "You messaged first" : "You said";
-      return `[${message.at.slice(0, 16).replace("T", " ")} UTC] ${who}: ${message.text.slice(0, MESSAGE_CHARS)}`;
+      // A brief or inbox digest is long and numbered; cut at 2k, Cortex could
+      // read items 1 and 2 of a 10-item digest and nothing after (28 Sep).
+      const limit = message.kind === "message" ? MESSAGE_CHARS : 8_000;
+      return `[${message.at.slice(0, 16).replace("T", " ")} UTC] ${who}: ${message.text.slice(0, limit)}`;
     }).join("\n"));
   }
   return lines.join("\n\n");

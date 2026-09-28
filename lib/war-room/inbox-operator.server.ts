@@ -409,6 +409,18 @@ const LATER = /^(later|not now|busy|not now,? busy|tomorrow|snooze|remind me lat
 
 /** "approve 1 2", "send 3", "yes 1,2", "skip 4", "send 3: new text", "later". Null when it is not a command. */
 export function parseInboxCommand(text: string): InboxCommand | null {
+  // A command on its first line counts even with a note under it. On
+  // 2026-09-28 "approve 1 2 3 4\n\nFirst let's handle this chunk..." went to
+  // the model as a question and nothing ran. An edit ("send 3: ...") may span
+  // lines, so the whole message is tried first.
+  const whole = parseOne(text);
+  if (whole) return whole;
+  const first = text.trim().split(/\n/)[0] ?? "";
+  const line = parseOne(first);
+  return line && !line.edit ? line : null;
+}
+
+function parseOne(text: string): InboxCommand | null {
   if (LATER.test(text.trim())) return { verb: "later", numbers: [], edit: null };
   const match = text.trim().match(/^(approve|send|yes|do|ok|skip|no)\s+((?:\d+[\s,&]*(?:and\s+)?)+|all)\s*(?::\s*([\s\S]+))?$/i);
   if (!match) return null;

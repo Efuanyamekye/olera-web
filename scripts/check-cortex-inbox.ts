@@ -23,6 +23,9 @@ assert.deepEqual(parseInboxCommand("send 3: Hi Barbara, it's TJ. Call Hoop Cares
 assert.equal(parseInboxCommand("send 2 3: text"), null, "an edit applies to one item");
 assert.equal(parseInboxCommand("Approved, go ahead"), null, "a proposal approval is not an inbox command");
 assert.equal(parseInboxCommand("send me the plan"), null);
+assert.deepEqual(parseInboxCommand("approve 1 2 3 4\n\nFirst let's handle this chunk and then I'll handle the next after"), { verb: "approve", numbers: [1, 2, 3, 4], edit: null }, "a note under the command is fine");
+assert.deepEqual(parseInboxCommand("send 5: Hi,\nsecond line of the text"), { verb: "approve", numbers: [5], edit: "Hi,\nsecond line of the text" }, "a multi-line edit still works");
+assert.equal(parseInboxCommand("I think we should approve 1 2 later"), null, "a command mid-sentence is not one");
 console.log("command checks passed");
 
 // --- SMS bookkeeping vs conversation.
@@ -81,10 +84,13 @@ console.log("voicemail checks passed");
   const { readOnly } = await import("./replay-cortex-conversation");
   const db = readOnly(createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!));
 
-  // The Robbie regression, live: TJ answered on 26 Sep, so his thread must not be offered.
+  // The Robbie regression, on the live thread as it stood on 26 Sep: TJ had
+  // answered, so it must not be offered. (Robbie wrote back on 27 Sep, so the
+  // thread is rightly waiting again after that; the cut keeps the case fixed.)
   const { data: robbie } = await db.from("support_email_messages")
     .select("direction, from_email, internal_date")
-    .eq("thread_id", "b5f8a774-bda1-4780-adbe-c0057aa4ce48");
+    .eq("thread_id", "b5f8a774-bda1-4780-adbe-c0057aa4ce48")
+    .lte("internal_date", "2026-09-26T23:59:59Z");
   if (robbie?.length) {
     assert.equal(waitingOnUs(robbie as never), false, "Robbie's thread, answered by TJ, is not surfaced");
     console.log("Robbie regression passed (live thread)");
@@ -99,7 +105,7 @@ console.log("voicemail checks passed");
     costUsd: built.costUsd,
   });
   console.log(`\n--- sample digest (drafting cost $${built.costUsd.toFixed(3)}) ---\n${sample}`);
-  assert.ok(!built.proposed.some((p) => String(p.target.threadId) === "b5f8a774-bda1-4780-adbe-c0057aa4ce48"), "Robbie is not in today's pass");
+
 })().catch((error) => {
   console.error(error);
   process.exit(1);
