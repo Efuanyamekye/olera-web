@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
       // A pass moves the family on to the next agency, so the team hears
       // about it the same way it hears about a take.
       await sendSlackAlert(
-        `↩️ City lead ${owned.lead.id.slice(0, 8)}: ${c.names.get(owned.providerId) ?? "A provider"} passed (inbox) after ${minutesOpen} min. Moving on. /admin/city-ads`,
+        `↩️ City lead ${owned.lead.id.slice(0, 8)}: ${c.names.get(owned.providerId) ?? "A provider"} passed (inbox) after ${minutesOpen} min. /admin/city-ads`,
       );
       await recordOfferEvent(db, "ad_family_passed", owned.providerId, {
         lead_id: owned.lead.id,

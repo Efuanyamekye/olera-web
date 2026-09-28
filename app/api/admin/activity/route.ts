@@ -35,6 +35,10 @@ const PROVIDER_ACTION_EVENT_TYPES = [
   "phone_clicked",
   "email_link_clicked",
   "continue_in_inbox",
+  // A family Olera offered, from the inbox (migration 264)
+  "ad_family_offer_viewed",
+  "ad_family_taken",
+  "ad_family_passed",
   "one_click_access",
   "email_click", // provider clicked a tracked link in a notification email
   // Question answering
