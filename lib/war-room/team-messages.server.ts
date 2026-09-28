@@ -43,11 +43,27 @@ export function parseTeamMessage(text: string): TeamMessageCommand | null {
  * there is none, so nothing is guessed at and sent.
  */
 export function draftedNote(cortexMessage: string): string | null {
-  const quoted = [...cortexMessage.matchAll(/["“]([\s\S]{40,}?)["”](?=\s|$|[.,;:!?])/g)].map((match) => match[1].trim());
-  if (!quoted.length) return null;
-  return quoted.sort((a, b) => b.length - a.length)[0];
+  // Whole paragraphs that open and close with a quote mark, so a word quoted
+  // inside the note ("what "preferred" means") cannot end it early. Matching
+  // quote to quote did exactly that: half a note would have gone to Logan.
+  const blocks = cortexMessage.split(/\n\s*\n/).map((block) => block.trim());
+  const start = blocks.findIndex((block) => /^["“]/.test(block));
+  if (start >= 0) {
+    for (let end = start; end < blocks.length; end += 1) {
+      if (/["”][.!?]?$/.test(blocks[end]) && (end > start || blocks[start].length > 1)) {
+        const note = blocks.slice(start, end + 1).join("\n\n").replace(/^["“]/, "").replace(/["”][.!?]?$/, "").trim();
+        if (note.length >= 20) return note;
+        break;
+      }
+    }
+  }
+  // A short note quoted inline: "…here it is: "Running 5 late"." Only when it
+  // holds no quote marks of its own, so nothing is cut in half.
+  const inline = [...cortexMessage.matchAll(/["“]([^"“”\n]{20,})["”]/g)].map((match) => match[1].trim());
+  return inline.length ? inline.sort((a, b) => b.length - a.length)[0] : null;
 }
 
 export function teamMessageText(text: string): string {
-  return `*From TJ* (sent through Cortex):\n\n${text}`;
+  // The Cortex app's DM is one-way (Slack's messages tab is off), so say where a reply goes.
+  return `*From TJ* (sent through Cortex; reply to TJ directly):\n\n${text}`;
 }

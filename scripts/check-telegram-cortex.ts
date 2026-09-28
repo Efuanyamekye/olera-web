@@ -83,6 +83,16 @@ assert.equal(parseTeamMessage("Can you send Logan a quick note?"), null, "a requ
 const cortexSaid = 'Tighter, in your words:\n\n"Logan, quick context for Wednesday 10:30 with Robbie McCullough, Assisting Hands. Mostly a listening call."\n\nSame ask as before.';
 assert.equal(draftedNote(cortexSaid), "Logan, quick context for Wednesday 10:30 with Robbie McCullough, Assisting Hands. Mostly a listening call.");
 assert.equal(draftedNote("No quotes here, just advice."), null);
+assert.equal(
+  draftedNote('Tighter:\n\n"Logan, context for Wednesday with Robbie McCullough. Agree on what "preferred" means first. Mostly listening."\n\nSame ask as before.'),
+  'Logan, context for Wednesday with Robbie McCullough. Agree on what "preferred" means first. Mostly listening.',
+  "a word quoted inside the note does not cut it in half",
+);
+assert.equal(
+  draftedNote('Here:\n\n"Logan, first paragraph of the note.\n\nSecond paragraph, still the note."\n\nWant changes?'),
+  "Logan, first paragraph of the note.\n\nSecond paragraph, still the note.",
+  "a note of several paragraphs is sent whole",
+);
 console.log("team message checks passed");
 
 // --- The handler, with fakes.
@@ -216,7 +226,7 @@ const update = (id: number, text: string, chat = FOUNDER, extra: Partial<NonNull
     await handleTelegramUpdate(update(50, "send that to Logan"), deps);
     assert.equal(sentSlack.length, 1);
     assert.equal(sentSlack[0].id, "U013S7E67RN");
-    assert.match(sentSlack[0].text, /^\*From TJ\* \(sent through Cortex\):\n\nLogan, quick context/);
+    assert.match(sentSlack[0].text, /^\*From TJ\* \(sent through Cortex; reply to TJ directly\):\n\nLogan, quick context/);
     assert.match(sent[0].text, /^Sent to Logan on Slack, from you:\n> Logan, quick context/);
   }
   {
