@@ -144,7 +144,6 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Income limits vary by county and update annually, always verify current limits with your local JFS office",
         "SSI income is often excluded from countable income calculations, but this must be verified during application",
         "If your loved one's home equity exceeds $752,000, they may still qualify if a spouse, disabled child, or caregiver child lives there",
@@ -204,7 +203,7 @@
       "sourceUrl": "https://medicaid.ohio.gov/families-and-individuals/support/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "passport-waiver",
@@ -243,7 +242,7 @@
           "Must qualify for Ohio Medicaid",
           "At risk of nursing home placement",
           "Primary care provider approval for home safety",
-          "Total service cost stays at or below 60% of nursing home care cost",
+          "Waiver services in the care plan cannot cost more than $14,700 a month, unless the Ohio Department of Aging approves more",
           "Agrees to accept coordinated services"
         ],
         "povertyLevelReference": null
@@ -331,7 +330,7 @@
         "Each of Ohio's 12 Area Agencies on Aging has different local providers and contact numbers, make sure you're calling the right region",
         "Structured Family Caregiving is new as of October 2024, ask specifically about paying family members to provide care. A spouse or a relative with legal decision-making authority is paid only when no other willing and able caregiver is available and the state confirms health and safety needs can be met, capped at 40 hours per week",
         "The nursing home level of care assessment is strict, your loved one must need significant daily assistance, not just occasional help",
-        "Services are customized but capped at 60% of nursing home costs, higher-need individuals may hit this limit and need additional private care"
+        "Services are customized but capped at $14,700 a month in waiver services unless the state approves more. Higher-need individuals may hit this limit and need additional private care"
       ],
       "relatedPrograms": [
         "Assisted Living Waiver",
@@ -354,8 +353,8 @@
           "answer": "Sometimes, and it depends on who you are. Since October 2024, Structured Family Caregiving can pay a family member who lives with your loved one, working through a certified agency and written into the approved care plan. If you are the spouse, or a relative who holds legal decision-making authority, the bar is higher: Ohio pays you only when there is no other willing and able caregiver available and the state agrees your loved one's health and safety can still be met. Payment to a spouse is also capped at 40 hours a week. Ask your Area Agency on Aging whether you clear those conditions before counting on the income."
         },
         {
-          "question": "What if my loved one needs more care than the 60% cost cap allows?",
-          "answer": "Because PASSPORT is a cost-effective alternative to nursing facility care, the state requires that the total cost of your loved one's care plan remain below a certain percentage of what a nursing home would cost. If an applicant's assessed needs are too high to be safely and cost-effectively met in the community under these limits, they may not be eligible for the PASSPORT waiver. Your care manager will discuss these requirements with you during the assessment process."
+          "question": "What if my loved one needs more care than the cost limit allows?",
+          "answer": "PASSPORT has a cost limit: waiver services in your loved one's care plan cannot cost more than $14,700 a month unless the Ohio Department of Aging approves more. If your loved one's needs cannot be met safely within that limit, they may not be eligible for PASSPORT. Your care manager will go over this with you during the assessment."
         },
         {
           "question": "How long does the assessment process really take?",
@@ -387,7 +386,7 @@
       "sourceUrl": "https://aging.ohio.gov/passport",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-all-inclusive-care",
@@ -842,23 +841,23 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs, Ohio SNAP provides monthly money on an EBT card they can use at any grocery store. Benefits range from a minimum of $23/month up to $415/month for a 2-person household, depending on income and expenses like rent and medical costs.\n\nYour loved one gets special protections as an older adult, higher asset limits ($4,500 vs. $2,500 for younger people), no gross income cap if their net income qualifies after subtracting expenses, and exemption from work requirements at 65+. However, if they're 55-64, new work requirements now apply unless they're disabled or caring for a young child.\n\nOnly about 50% of eligible older adults actually enroll in SNAP, often because they don't realize they qualify or think the process is too complicated. The application takes about 30 days to process, and benefits are loaded monthly onto an EBT card that works like a debit card at grocery stores.",
-      "savingsRange": "Up to $298/month ($3,576/year) for one person, through September 30, 2026",
-      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $298/month, effective October 1, 2025 through September 30, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
+      "intro": "If your loved one is 60+ and struggling with grocery costs, Ohio SNAP provides monthly money on an EBT card they can use at any grocery store. Benefits range from a minimum of $24/month up to $562/month for a 2-person household (from October 1, 2026), depending on income and expenses like rent and medical costs.\n\nYour loved one gets special protections as an older adult, higher asset limits ($4,750 vs. $3,000 for younger people), no gross income cap if their net income qualifies after subtracting expenses, and exemption from work requirements at 65+. However, if they're 55-64, new work requirements now apply unless they're disabled or caring for a young child.\n\nOnly about 50% of eligible older adults actually enroll in SNAP, often because they don't realize they qualify or think the process is too complicated. The application takes about 30 days to process, and benefits are loaded monthly onto an EBT card that works like a debit card at grocery stores.",
+      "savingsRange": "Up to $306/month ($3,672/year) for one person, from October 1, 2026",
+      "savingsSource": "USDA FY2026 maximum allotment for a one-person household in the 48 contiguous states and DC: $306/month, from October 1, 2026. The minimum for a one- or two-person household is $24/month. Actual amounts depend on household size, net income, and deductions; age affects deductions, not the maximum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
           "Net income at or below federal poverty line",
-          "Most Ohio households have no asset test; a $4,500 federal limit may apply if income is over 200% of poverty",
+          "Most Ohio households have no asset test; a $4,750 federal limit may apply if income before deductions is over 130% of poverty",
           "Ohio resident",
           "U.S. citizen or qualified immigrant"
         ],
         "ageRequirement": "60+",
         "incomeTable": null,
         "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
+          "individual": null,
+          "couple": null,
           "countedAssets": [
             "Cash",
             "Savings accounts",
@@ -948,7 +947,7 @@
         }
       ],
       "applicationNotes": [
-        "In Ohio, most households do not have to meet an asset limit for SNAP. Bank savings, vehicles, and personal property generally do not count against you. If your household includes someone age 60 or older or with a disability, and gross income exceeds 200% of the federal poverty level, a federal asset limit of $4,500 may apply",
+        "In Ohio, most households do not have to meet an asset limit for SNAP. Bank savings, vehicles, and personal property generally do not count against you. If your household includes someone age 60 or older or with a disability, and gross income exceeds 130% of the federal poverty level, a federal asset limit of $4,750 may apply",
         "Work requirements: most adults aged 18 to 64 must work, volunteer, or participate in approved training for at least 80 hours per month. Individuals aged 65 and older are exempt. Adults aged 55 to 64 who do not meet a specific exemption, such as having a disability, being pregnant, or caring for a child under age 14, are generally subject to these work rules",
         "Separate household rules: if your loved one is age 60 or older and living with others but unable to purchase and prepare meals separately due to a permanent disability, they and their spouse may qualify to apply as a separate SNAP household, provided the other household members' income meets specific limits",
         "Medical expenses: seniors and individuals with disabilities can subtract verified out-of-pocket medical expenses over $35 per month from their income when calculating benefits. This can help them qualify or increase their monthly benefit, so keep all relevant receipts and bills",
@@ -971,8 +970,8 @@
           "answer": "If your loved one is 60+ and unable to prepare meals with the household due to age or disability, they can apply as a separate SNAP household even if living with family. This often results in higher benefits than applying as one large household."
         },
         {
-          "question": "Does my loved one's house count toward the $4,500 asset limit?",
-          "answer": "No, their primary home is completely exempt regardless of value. Also exempt are most vehicles, retirement accounts like 401(k)s and IRAs, and personal belongings. Only count cash, savings, and checking accounts toward the $4,500 limit."
+          "question": "Does my loved one's house count against them?",
+          "answer": "No, their primary home is completely exempt regardless of value. Also exempt are most vehicles, retirement accounts like 401(k)s and IRAs, and personal belongings. Most Ohio households have no savings limit at all. Only if income before deductions is over 130% of poverty do cash, savings and checking accounts count, up to $4,750 for a household with someone 60+ or disabled (from October 1, 2026)."
         },
         {
           "question": "How do medical expenses help with SNAP eligibility?",
@@ -1008,7 +1007,7 @@
       "sourceUrl": "https://benefits.ohio.gov/SNAP",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "heap-energy-assistance",

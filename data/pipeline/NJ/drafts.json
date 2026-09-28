@@ -16,15 +16,15 @@
         "type": "state",
         "stateVariation": false
       },
-      "intro": "If your loved one is 65+ and owns their New Jersey home, they can get 50% of their property taxes back, up to $6,500 per year. This means if they pay $10,000 in property taxes, they'll receive $5,000 back.\n\nStay NJ is designed for older homeowners with annual income below $500,000 who have lived in their home for the full previous year. Because one application (PAS-1) covers multiple New Jersey tax relief programs, the state automatically determines which benefits your loved one qualifies for, they may receive Stay NJ plus additional programs like ANCHOR or Senior Freeze for even more savings.",
-      "savingsRange": "$1,000 – $6,500/year in 2026",
-      "savingsSource": "50% reimbursement of property taxes up to maximum $6,500 benefit",
+      "intro": "If your loved one is 65+ and owns their New Jersey home, Stay NJ can pay back part of their property taxes. The most it pays is $6,500 a year with income of $100,000 or less, $5,000 with income up to $150,000, and $4,000 with income up to $200,000. Over $200,000 the benefit is $0.\n\nStay NJ is for older homeowners with income of $200,000 or less who lived in their home for the full previous year. Because one application (PAS-1) covers multiple New Jersey tax relief programs, the state automatically determines which benefits your loved one qualifies for, they may receive Stay NJ plus additional programs like ANCHOR or Senior Freeze for even more savings.",
+      "savingsRange": "Up to $6,500 a year (income $100,000 or less); up to $5,000 ($100,000-$150,000); up to $4,000 ($150,000-$200,000). The 2025 benefit is paid in February and May 2027.",
+      "savingsSource": "Maximum benefit by income tier ($6,500 / $5,000 / $4,000), paid quarterly; total relief cannot exceed property taxes paid.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 65+",
           "Own and live in NJ home",
-          "Annual income below $500,000",
+          "Income of $200,000 or less (2025 income)",
           "Full-year residency required"
         ],
         "ageRequirement": "65+",
@@ -35,14 +35,14 @@
           "Must own home in New Jersey as principal residence",
           "Must have lived in home for all 12 months of the prior year",
           "Mobile homeowners are not eligible",
-          "Annual income below $500,000 (based on prior year tax return)",
+          "Income of $200,000 or less (2025 income)",
           "P.I.L.O.T. payments qualify if you're the homeowner"
         ],
         "povertyLevelReference": null
       },
       "applicationGuide": {
         "method": "online",
-        "summary": "Apply online at propertytaxreliefapp.nj.gov with ID verification, deadline is October 31.",
+        "summary": "Apply online at propertytaxreliefapp.nj.gov with ID verification. The deadline to apply for the 2025 PAS-1 is November 2, 2026.",
         "steps": [
           {
             "step": 1,
@@ -57,17 +57,17 @@
           {
             "step": 3,
             "title": "Verify your identity",
-            "description": "Use ID.me with your government-issued photo ID. Online application is required if you want direct deposit."
+            "description": "Use ID.me with your government-issued photo ID. Only online filers can get direct deposit, and only for some payments; paper filers are paid by check."
           },
           {
             "step": 4,
             "title": "Submit by deadline",
-            "description": "Applications must be submitted by October 31 of the tax year you're applying for (October 31, 2026 for 2025 taxes)."
+            "description": "The deadline to apply for the 2025 PAS-1 is November 2, 2026."
           }
         ],
         "processingTime": "Not specified in official sources",
         "waitlist": null,
-        "tip": "Apply online rather than by mail if you want direct deposit, it's faster and more secure than waiting for a check.",
+        "tip": "Apply online if you want direct deposit. Online filers can get some payments by direct deposit; paper filers are paid by check.",
         "urls": [
           {
             "label": "Online Application Portal",
@@ -102,7 +102,7 @@
         }
       ],
       "applicationNotes": [
-        "The October 31 deadline is firm, late applications are not accepted for the tax year",
+        "The deadline to apply for the 2025 PAS-1 is November 2, 2026. Late applications are not accepted for the tax year",
         "One PAS-1 application automatically checks you for Stay NJ, ANCHOR, and Senior Freeze, you may qualify for multiple programs",
         "Social Security disability alone does not qualify for Stay NJ (unlike some other relief programs), you must meet the age requirement",
         "Mobile homeowners are specifically excluded even if they pay property taxes or P.I.L.O.T. payments"
@@ -124,18 +124,18 @@
         },
         {
           "question": "Can I apply on behalf of my elderly loved one who has difficulty with online applications?",
-          "answer": "Yes, you can help your loved one apply, but the application must be in their name and use their information. You can print the PAS-1 form and mail it to the New Jersey Division of Taxation if online access is difficult, though direct deposit requires online submission."
+          "answer": "Yes, you can help your loved one apply, but the application must be in their name and use their information. You can print the PAS-1 form and mail it to the New Jersey Division of Taxation if online access is difficult, though only online filers can get direct deposit, and only for some payments."
         },
         {
-          "question": "How much will my loved one actually receive if their property taxes are $8,000?",
-          "answer": "Your loved one would receive $4,000 (50% of $8,000). The reimbursement is exactly half of the property taxes billed, up to a maximum benefit of $6,500 for those paying $13,000 or more in property taxes."
+          "question": "How much will my loved one actually receive?",
+          "answer": "It depends on income and on the property taxes paid. The most Stay NJ pays is $6,500 with income of $100,000 or less, $5,000 with income up to $150,000, and $4,000 with income up to $200,000. Total property tax relief from all programs cannot be more than the property taxes paid on the home."
         },
         {
           "question": "Can my loved one get Stay NJ and ANCHOR benefits at the same time?",
           "answer": "The state determines which combination of benefits your loved one receives based on their PAS-1 application. Many people qualify for multiple programs simultaneously, Stay NJ, ANCHOR, and Senior Freeze can often be combined for maximum tax relief."
         },
         {
-          "question": "What happens if my loved one's income is close to the $500,000 limit?",
+          "question": "What happens if my loved one's income is close to the $200,000 limit?",
           "answer": "The income limit is based on the prior year's state tax return, so use that year's actual income. If your loved one's income fluctuates around the limit, apply anyway, the state will make the determination based on the specific tax year's income."
         }
       ],
@@ -152,7 +152,7 @@
       "sourceUrl": "https://www.nj.gov/treasury/taxation/staynj/index.shtml",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "senior-freeze-property-tax",
@@ -1198,16 +1198,16 @@
           }
         ]
       },
-      "intro": "If your loved one is 65+ and drives on New Jersey toll roads, this discount can cut their toll costs by 10% during off-peak hours on the NJ Turnpike and Garden State Parkway. Because there are no income or asset limits, any senior with a valid driver's license and vehicle registration can qualify, regardless of how much money they have.\n\nThe catch: your loved one must be actively driving the vehicle (not just a passenger), must have a New Jersey E-ZPass account specifically, and the discount only applies during off-peak hours (weekdays off-peak and weekends). There's also a separate program for four Delaware River bridges that provides an $18 credit if your loved one makes 18+ trips in a month.\n\nBecause the program requires annual renewal tied to vehicle registration dates, some enrollment periods may be less than 12 months. Your loved one can only have one discounted E-ZPass tag, and if anyone else uses it, they'll lose the discount permanently.",
+      "intro": "If your loved one is 65+ and drives on New Jersey toll roads, this discount can cut their toll costs by 10% during off-peak hours on the NJ Turnpike and Garden State Parkway. Because there are no income or asset limits, any senior with a valid driver's license and vehicle registration can qualify, regardless of how much money they have.\n\nThe catch: your loved one must be in the car when the toll is charged, must have a New Jersey E-ZPass account specifically, and the discount only applies off-peak. Weekday rush hours and all day Saturday and Sunday count as peak. There's also a separate senior discount on four Delaware River bridges, where enrolled seniors pay a $3.00 toll, half the regular car toll.\n\nBecause the program requires annual renewal tied to vehicle registration dates, some enrollment periods may be less than 12 months. Your loved one can only have one discounted E-ZPass tag, and if anyone else uses it, they'll lose the discount permanently.",
       "savingsRange": "",
-      "savingsSource": "10% discount on off-peak tolls",
+      "savingsSource": "10% off the off-peak toll on the NJ Turnpike and Garden State Parkway; on the four DRPA bridges enrolled seniors pay $3.00, which is 50% of the passenger toll",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 65+",
           "Valid driver's license",
           "NJ E-ZPass account required",
-          "Must be actively driving"
+          "Must be in the car when the toll is charged"
         ],
         "ageRequirement": "65+",
         "incomeTable": null,
@@ -1217,8 +1217,8 @@
           "Must have an active New Jersey E-ZPass account",
           "Must have a valid driver's license from any state",
           "Must have a passenger vehicle registered in your name or spouse's name",
-          "Must be the driver in the vehicle at time of toll transaction",
-          "Only one E-ZPass tag per senior (must start with 009 or 022)",
+          "The enrolled senior must be a licensed driver and must be in the vehicle when the toll is charged",
+          "Only one E-ZPass tag per senior (the 11-digit tag number must start with 003, 009, 022, 025 or 029)",
           "Annual renewal required"
         ],
         "povertyLevelReference": null
@@ -1279,9 +1279,9 @@
       ],
       "contacts": [
         {
-          "label": "NJTA Senior Discount Enrollment",
+          "label": "NJTA Senior Discount questions line",
           "phone": "(732) 750-5300",
-          "description": "Enroll in Turnpike and Garden State Parkway senior discount",
+          "description": "Questions about the Turnpike and Garden State Parkway senior discount. This line cannot enroll you; apply online or by mail.",
           "hours": "Business hours"
         },
         {
@@ -1301,7 +1301,7 @@
         "You must have a New Jersey E-ZPass account, accounts from other states won't work for this discount",
         "Annual renewal is required and timed to your vehicle registration renewal date, which may be less than 12 months from enrollment",
         "Only one discounted tag per senior, if family members use your tag, you'll permanently lose discount privileges",
-        "The discount only applies during off-peak hours, no savings during rush hour periods"
+        "The discount does not apply at peak times: weekdays 7-9am and 4:30-6:30pm, and all day Saturday and Sunday."
       ],
       "relatedPrograms": [
         "NJ PAAD Prescription Assistance",
@@ -1320,11 +1320,11 @@
         },
         {
           "question": "Does this work during rush hour when tolls are highest?",
-          "answer": "No, the discount only applies during off-peak hours, weekdays off-peak and weekends. You won't save money during peak rush hour periods when tolls are most expensive."
+          "answer": "No. The discount does not apply at peak times: weekdays 7-9am and 4:30-6:30pm, and all day Saturday and Sunday."
         },
         {
           "question": "Can my loved one get both the Turnpike discount and the bridge discount?",
-          "answer": "Yes, but they're separate programs requiring separate applications. Call 732-750-5300 for Turnpike/Parkway and 856-968-2000 press 5 for the four Delaware River bridges."
+          "answer": "Yes, but they're separate programs requiring separate applications. For the Turnpike and Parkway, apply online at seniordiscount.njta.gov or by mail (questions: 732-750-5300). For the four Delaware River bridges, call 856-968-2000 and press 5."
         },
         {
           "question": "What if my loved one's E-ZPass account is from New York or Pennsylvania?",
@@ -1332,7 +1332,7 @@
         },
         {
           "question": "How much can my loved one actually save with this discount?",
-          "answer": "Savings depend on how often they drive toll roads during off-peak hours. The 10% discount applies to their off-peak tolls on Turnpike and Parkway only. For bridges, they get $18 credit only if they make 18+ trips per month."
+          "answer": "Savings depend on how often they drive toll roads during off-peak hours. The 10% discount applies to their off-peak tolls on Turnpike and Parkway only. On the four DRPA bridges, enrolled seniors pay $3.00, which is half the regular car toll."
         }
       ],
       "layoutIntent": {
@@ -1348,7 +1348,7 @@
       "sourceUrl": "https://seniordiscount.njta.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     }
   ],
   "stateOverview": {

@@ -217,15 +217,15 @@
         "summary": [
           "Age 65+ (or disabled under 65)",
           "Need daily help with bathing, dressing, or medication",
-          "Meet Medicaid nursing home income limits",
+          "Income up to $2,982/month (2026). Above that, a Qualified Income Trust can still qualify them",
           "Georgia resident",
-          "Assets under $121,220 if married"
+          "Countable assets under $2,000 (single). If married and only one spouse needs care, the at-home spouse can keep up to $162,660."
         ],
         "ageRequirement": "65+",
         "incomeTable": null,
         "assetLimits": {
-          "individual": null,
-          "couple": 121220,
+          "individual": 2000,
+          "couple": null,
           "countedAssets": [
             "Bank accounts",
             "Investment accounts",
@@ -254,32 +254,32 @@
         "steps": [
           {
             "step": 1,
-            "title": "Call for initial screening",
-            "description": "Call 1-866-55-AGING (866-552-4464) to reach your regional Area Agency on Aging. They will conduct intake screening and determine if your loved one meets basic eligibility."
+            "title": "Call for a phone screening",
+            "description": "Call 1-866-55-AGING (866-552-4464) to reach your regional Area Agency on Aging. Staff do a phone screening that decides eligibility and how urgent the need is."
           },
           {
             "step": 2,
-            "title": "Complete functional assessment",
-            "description": "Schedule Determination of Need Functional Assessment-Revised (DON-R) and Minimum Data Set Home Care (MDS-HC) to evaluate your loved one's need for daily assistance with activities."
+            "title": "Join the waiting list",
+            "description": "If your loved one is eligible, they go on the EDWP waiting list. Their place depends on the urgency found at screening."
           },
           {
             "step": 3,
-            "title": "Get physician approval",
-            "description": "Your loved one's doctor must approve the care plan and confirm they need intermediate nursing facility level of care."
+            "title": "In-home assessment when a slot opens",
+            "description": "When a slot opens, a care coordinator visits for an in-home assessment and builds a care plan with you."
           },
           {
             "step": 4,
             "title": "Apply for Medicaid",
-            "description": "After EDWP assessment, apply for Medicaid through your county Department of Family and Children Services office."
+            "description": "Apply for Medicaid through your county Division of Family and Children Services (DFCS). Medicaid under EDWP starts once waiver services start."
           },
           {
             "step": 5,
-            "title": "Wait for prioritization",
-            "description": "If approved, you may be placed on a waitlist. The program prioritizes those with the greatest unmet care needs."
+            "title": "Get physician approval",
+            "description": "Your loved one's doctor approves the care plan and confirms they need intermediate nursing home level of care."
           }
         ],
         "processingTime": "Not specified, depends on assessment scheduling and Medicaid processing",
-        "waitlist": "Possible, program prioritizes those most in need",
+        "waitlist": "Usually. Georgia says there is often a waitlist; placement depends on the urgency of need found at screening.",
         "tip": "Start with the functional assessment even if you're not sure about Medicaid eligibility, the evaluation determines if your loved one qualifies medically before financial review.",
         "urls": [
           {
@@ -379,7 +379,7 @@
       "sourceUrl": "https://aging.georgia.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "home-community-based-services",
@@ -844,7 +844,7 @@
           }
         ]
       },
-      "intro": "For older adults in Georgia, the Supplemental Nutrition Assistance Program (SNAP), commonly known as food stamps, provides essential monthly financial assistance to ensure households can comfortably buy fresh, nutritious food. Designed to help fixed-income seniors maintain their health and independence at home, the program delivers benefits directly via an Electronic Benefit Transfer (EBT) card that works just like a debit card at participating grocery stores and farmers' markets.\n\nTo make food security more accessible for older residents, Georgia's program includes special provisions tailored to seniors aged 60 and older, such as higher gross income thresholds and valuable deductions for out-of-pocket medical expenses and housing costs.\n\nBecause these specific deductions can significantly lower a household's countable net income, fixed-income seniors whose earnings appear slightly above standard baselines are still strongly encouraged to apply through the Georgia Gateway portal or local county Department of Family and Children Services (DFCS) offices.",
+      "intro": "For older adults in Georgia, the Supplemental Nutrition Assistance Program (SNAP), commonly known as food stamps, provides essential monthly financial assistance to ensure households can comfortably buy fresh, nutritious food. Designed to help fixed-income seniors maintain their health and independence at home, the program delivers benefits directly via an Electronic Benefit Transfer (EBT) card that works just like a debit card at participating grocery stores and farmers' markets.\n\nTo make food security more accessible for older residents, Georgia's program includes special provisions tailored to seniors aged 60 and older, such as no savings limit for most households, a second way to qualify on income after deductions, and valuable deductions for out-of-pocket medical expenses and housing costs.\n\nBecause these specific deductions can significantly lower a household's countable net income, fixed-income seniors whose earnings appear slightly above standard baselines are still strongly encouraged to apply through the Georgia Gateway portal or local county Department of Family and Children Services (DFCS) offices.",
       "savingsRange": "",
       "savingsSource": "Monthly grocery benefits based on household income",
       "savingsVerified": false,
@@ -852,59 +852,21 @@
         "summary": [
           "Age 60+",
           "Fixed income only, no work earnings",
-          "Gross income under $1,696/month (single) or $2,292/month (couple)",
+          "Income before deductions under $1,729/month (single) or $2,345/month (couple) from October 1, 2026, with no savings limit. Above that, a senior household can still qualify if income after deductions is under $1,330 (single) and savings are under $4,750.",
           "Georgia resident"
         ],
         "ageRequirement": "60+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1696
+            "monthlyLimit": 1729
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 2292
-          },
-          {
-            "householdSize": 3,
-            "monthlyLimit": 2888
-          },
-          {
-            "householdSize": 4,
-            "monthlyLimit": 3483
-          },
-          {
-            "householdSize": 5,
-            "monthlyLimit": 4079
-          },
-          {
-            "householdSize": 6,
-            "monthlyLimit": 4675
-          },
-          {
-            "householdSize": 7,
-            "monthlyLimit": 5271
-          },
-          {
-            "householdSize": 8,
-            "monthlyLimit": 5867
+            "monthlyLimit": 2345
           }
         ],
-        "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
-          "countedAssets": [
-            "Cash",
-            "Bank accounts",
-            "Non-exempt property"
-          ],
-          "exemptAssets": [
-            "Home",
-            "Retirement savings",
-            "Household goods"
-          ],
-          "homeEquityCap": null
-        },
+        "assetLimits": null,
         "functionalRequirement": null,
         "otherRequirements": [
           "No earned income from work (including excluded types)",
@@ -912,7 +874,7 @@
           "U.S. citizen or qualified non-citizen (5+ years residency, disability benefits, or child under 18)",
           "All household members must meet age/no-work criteria and share food preparation"
         ],
-        "povertyLevelReference": "130% FPL"
+        "povertyLevelReference": "130% FPL before deductions (Georgia broad-based eligibility); 100% FPL after deductions above that"
       },
       "applicationGuide": {
         "method": "multiple",
@@ -968,7 +930,7 @@
         "Proof of Georgia residency (utility bill, lease, or state document)",
         "Medical expense receipts (if reporting medical costs)",
         "Shelter expense documentation (rent receipt, mortgage statement, property tax)",
-        "Bank statements for any accounts with more than $4,500 total"
+        "Bank statements, only if income before deductions is above $1,729/month for one person (from October 1, 2026). Most households have no savings limit."
       ],
       "contacts": [
         {
@@ -1004,7 +966,7 @@
         },
         {
           "question": "What if my loved one receives both Social Security and a small pension?",
-          "answer": "Multiple fixed-income sources such as Social Security, pensions, retirement benefits, and VA payments are completely allowed, provided there are no earned work wages. Gross monthly income limits adjust annually based on the Federal Poverty Level guidelines, so verify current thresholds via Georgia Gateway or with DFCS when applying."
+          "answer": "Multiple fixed-income sources such as Social Security, pensions, retirement benefits, and VA payments are completely allowed, provided there are no earned work wages. Income limits adjust every October 1 based on the Federal Poverty Level guidelines, so verify current thresholds via Georgia Gateway or with DFCS when applying."
         },
         {
           "question": "How much will my loved one receive in grocery benefits?",
@@ -1032,7 +994,7 @@
       "sourceUrl": "https://dfcs.georgia.gov/services/snap/senior-snap",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -1218,7 +1180,7 @@
         "stateVariation": true,
         "localEntities": [
           {
-            "name": "Local providers listed by county at https://gefa.georgia.gov/weatherization",
+            "name": "Local providers listed by county at https://gefa.georgia.gov/locations/community-action-agency",
             "type": "service-area"
           }
         ]
@@ -1277,7 +1239,7 @@
           {
             "step": 1,
             "title": "Find your county's agency",
-            "description": "Visit https://gefa.georgia.gov/weatherization to find your local community action agency. Examples: CSRA EOA serves Richmond, Columbia, and surrounding counties at (706) 945-1616. Action Pact serves Savannah/Chatham County."
+            "description": "Visit https://gefa.georgia.gov/locations/community-action-agency to find the agency for your county. Examples: CSRA EOA serves Richmond, Columbia, and surrounding counties at (706) 945-1616. Action Pact serves Savannah/Chatham County."
           },
           {
             "step": 2,
@@ -1310,7 +1272,7 @@
           },
           {
             "label": "CSRA EOA Application (Richmond/Columbia counties)",
-            "url": "https://www.csraeoa.org"
+            "url": "https://www.csraeoa.org/programs/"
           }
         ]
       },
@@ -1326,7 +1288,7 @@
       ],
       "contacts": [
         {
-          "label": "Georgia Weatherization Assistance Program, GEFA (start here)",
+          "label": "Georgia Environmental Finance Authority main line (runs weatherization statewide; does not take applications)",
           "phone": "(404) 584-1000",
           "description": "State program office. GEFA does not take applications. Call to find out which community action agency serves your county, then apply with that agency. Details at gefa.georgia.gov/weatherization-assistance-program.",
           "hours": "Mon-Fri 8am-5pm ET"
@@ -1404,7 +1366,7 @@
       "sourceUrl": "https://gefa.georgia.gov/weatherization-assistance-program",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-06"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "ship-medicare-counseling",

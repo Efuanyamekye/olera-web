@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { OLERA_PRIORITIES } from "@/lib/war-room/priorities";
 import { scrubStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 import { createHash } from "node:crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -2006,8 +2007,17 @@ async function loadCompanyModel(db: SupabaseClient): Promise<WarRoomCompanyModel
     .select("*")
     .eq("key", "olera")
     .maybeSingle();
-  if (error || !data) return DEFAULT_COMPANY_MODEL;
-  return data as WarRoomCompanyModel;
+  const model = error || !data ? DEFAULT_COMPANY_MODEL : data as WarRoomCompanyModel;
+  // The founder's four priorities replace whatever the stored row says. They
+  // live in code (priorities.ts) so the scan can read them and never rewrite
+  // them, and every case it opens must serve one of them (TJ, 2026-09-28).
+  return {
+    ...model,
+    current_priorities: [
+      ...OLERA_PRIORITIES.map((priority) => `${priority.label}: ${priority.meaning}`),
+      "RULE: work only on what moves one of these four. A question that serves none of them (traffic attribution for its own sake, channel decomposition) is not worth a probe or a line in the brief. Name the priority each case serves.",
+    ],
+  };
 }
 
 export type WarRoomPreparedDiscovery = {

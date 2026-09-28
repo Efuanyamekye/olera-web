@@ -13,7 +13,10 @@ import { founderChatId, isTelegramConfigured, sendTelegramMessage, sendTelegramR
 import { sendVoiceNote } from "@/lib/war-room/voice.server";
 import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
 import { loadReactionSummary, recordMove, resolveReactions } from "@/lib/war-room/moves.server";
-import { loadBlindSpots, loadLookupGaps } from "@/lib/war-room/lookups.server";
+import { loadBlindSpots, loadLookupGaps, loadManagedAdsLedger } from "@/lib/war-room/lookups.server";
+import { buildPriorityLines, priorityFor } from "@/lib/war-room/priorities";
+import { openItems } from "@/lib/war-room/inbox-operator.server";
+import { loadCalendar } from "@/lib/war-room/calendar.server";
 import type { WarRoomDiscoveryRun, WarRoomProbeReading } from "@/lib/war-room/types";
 
 /**
@@ -214,6 +217,8 @@ export function buildWarRoomBriefText(input: {
   question?: FounderQuestion | null;
   unanswerable?: string[];
   blindSpots?: string[];
+  /** One line per priority (priorities.ts). When given, the brief opens with them. */
+  priorityLines?: string[];
 }): string {
   const { run, siteUrl } = input;
   const date = shortDate(run.created_at);
@@ -232,6 +237,11 @@ export function buildWarRoomBriefText(input: {
 
   const lines: string[] = [];
   const question = sendableQuestion(input.question);
+
+  // The four priorities first, every day (TJ, 2026-09-28: "I just don't want
+  // to be reading updates and data without thinking about the most important
+  // things with Olera"). The renewal lives in the providers line.
+  if (input.priorityLines?.length) lines.push(...input.priorityLines, "");
 
   if (input.move) {
     lines.push(`*${input.move.line}*`);
@@ -260,19 +270,22 @@ export function buildWarRoomBriefText(input: {
   // The renewal is checked every day, scan or not. It is the one date where
   // being a day late is the whole cost. The renewal is Stripe's next charge;
   // the ad flight's end is a different date and is named as one.
-  const renewalLine = renewalText(input.renewal);
+  const renewalLine = input.priorityLines?.length ? null : renewalText(input.renewal);
   if (renewalLine) {
     if (lines.length) lines.push("");
     lines.push(renewalLine);
   }
 
   if (!lines.length) lines.push("Nothing needs you today.");
+  while (lines[lines.length - 1] === "") lines.pop();
 
   lines.push("", "───────────", `_Below the line: what I measured, ${date}. ${href}_`);
 
   // Only what moved. A number earns a line by having changed; six unchanged
   // numbers is proof the query ran, not a report of the company.
-  const movers = input.readings.filter((reading) => reading.movement !== "steady");
+  // And only what serves one of the four priorities; the rest stays on the
+  // Cortex page ("tie every number to a priority, or cut it").
+  const movers = input.readings.filter((reading) => reading.movement !== "steady" && priorityFor(reading.label) !== null);
   if (movers.length) {
     lines.push("", "*What moved*");
     lines.push(...movers.slice(0, 3).map((reading) => readingLine(reading, date)));
@@ -405,6 +418,7 @@ export async function deliverWarRoomBrief(
     let unanswerable: string[] = [];
     let blindSpots: string[] = [];
     let renewal: PaidRenewal | null = null;
+    let priorityLines: string[] | undefined;
     if (run.status !== "failed") {
       renewal = await loadPaidRenewal(db).catch(() => null);
       unanswerable = await loadUnanswerable(db, (state as { last_success_at?: string | null } | null)?.last_success_at ?? null)
@@ -461,7 +475,15 @@ export async function deliverWarRoomBrief(
         // a move he has already rejected is not the brief's first line.
         const corrections = correctionLines(await loadCorrections(db).catch(() => []))
           .map((line) => `Founder correction, ${line}`);
+        // His calendar, so a move never tells him to book or invite for a
+        // meeting that is already on it. On 2026-09-28 the brief said "send
+        // the calendar invite" for Robbie's call, which he had sent that morning.
+        const calendar = await loadCalendar(db, { daysAhead: 14, daysBack: 0 }).catch(() => null);
+        const events = calendar && "events" in calendar ? (calendar.events as unknown[]) : [];
         const rules = [
+          ...(events.length
+            ? [`Already on the founder's calendar (next 14 days); never tell him to schedule, book or send an invite for any of these: ${JSON.stringify(events).slice(0, 3_000)}`]
+            : []),
           ...(Array.isArray(model?.constraints)
             ? (model.constraints as unknown[]).filter((rule): rule is string => typeof rule === "string")
             : []),
@@ -469,6 +491,25 @@ export async function deliverWarRoomBrief(
         ];
         move = { ...(await phraseMove(chosen, rules)), title: chosen.title, kind: chosen.kind };
       }
+      const lastBriefAt = (state as { last_success_at?: string | null } | null)?.last_success_at ?? null;
+      const [ledger, inbox] = await Promise.all([
+        loadManagedAdsLedger(db).catch(() => null),
+        openItems(db).catch(() => []),
+      ]);
+      const renewalShort = renewalText(renewal)?.replace(/^_|_$/g, "") ?? null;
+      priorityLines = buildPriorityLines({
+        payingProviders: ledger?.payingProviders ? ledger.payingProviders.length : null,
+        openCampaigns: ledger?.openCampaigns ? ledger.openCampaigns.length : null,
+        // Only what moved since the last brief. The readings are the latest
+        // per probe across scans, so without this a Friday change would open
+        // Saturday's and Sunday's briefs too, reading as news each day.
+        movers: readings.filter((reading) => reading.movement !== "steady"
+          && (!lastBriefAt || Date.parse(reading.measuredAt) > Date.parse(lastBriefAt))),
+        renewal: renewalShort,
+        providerEmailsWaiting: momentCandidates.length,
+        inboxItemsWaiting: inbox.filter((item) => item.kind !== "question").length,
+        since: lastBriefAt ? shortDate(lastBriefAt) : null,
+      });
       const investigations = (investigationResult.data ?? []) as InvestigationRow[];
       open = investigations.filter((row) => row.status === "investigating").length;
       watching = investigations.filter((row) => row.status === "watchlist").length;
@@ -490,6 +531,7 @@ export async function deliverWarRoomBrief(
       question,
       unanswerable,
       blindSpots,
+      priorityLines,
     });
 
     // Prefer a DM. The shared webhook posts to the operations channel, where

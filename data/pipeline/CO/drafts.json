@@ -140,7 +140,6 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QI tier has limited federal funding and often maintains waitlists, QMB and SLMB typically have no waiting periods",
         "Asset limits exclude your primary home and one vehicle, but count all bank accounts and investments",
         "You can apply for Medicare Savings Programs even if you've been denied other Medicaid programs, different eligibility rules apply",
@@ -230,7 +229,7 @@
       "sourceUrl": "https://www.healthfirstcolorado.com/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "hcbs-waivers",
@@ -444,7 +443,7 @@
           "Age 55+",
           "Nursing home level of care needed",
           "Must live in PACE service area",
-          "Income under $2,901/month for Medicaid portion"
+          "Income under $2,982/month for Medicaid portion (2026)"
         ],
         "ageRequirement": "55+",
         "incomeTable": null,
@@ -544,7 +543,7 @@
       "applicationNotes": [
         "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Medicare-only participants have no income or asset limits, but must still meet age and nursing home level of care requirements",
-        "Exceeding standard Medicaid financial limits ($2,901/month income, $2,000 assets) does not automatically disqualify, Medicaid planning strategies may help establish eligibility",
+        "Exceeding standard Medicaid financial limits ($2,982/month income in 2026, $2,000 assets) does not automatically disqualify, Medicaid planning strategies may help establish eligibility",
         "Assessment includes evaluation of safety to live in community, your loved one must demonstrate ability to remain at home with PACE support rather than requiring immediate institutional care",
         "Once enrolled, PACE becomes the exclusive source of Medicare and Medicaid benefits, participants cannot see providers outside the PACE network"
       ],
@@ -561,7 +560,7 @@
           "answer": "No. PACE becomes your loved one's sole source of Medicare and Medicaid benefits, meaning they must receive all care through the PACE provider network. They cannot see outside providers or specialists unless referred by the PACE team."
         },
         {
-          "question": "What if my loved one's income is slightly over the $2,901/month Medicaid limit?",
+          "question": "What if my loved one's income is slightly over the $2,982/month Medicaid limit?",
           "answer": "Your loved one can still qualify for PACE through Medicare alone (no income limits), or through Medicaid planning strategies that may help meet financial requirements. The PACE team can help evaluate options during the assessment process."
         },
         {
@@ -602,7 +601,7 @@
       "sourceUrl": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -622,8 +621,8 @@
         ]
       },
       "intro": "If your loved one is 60+ and on a fixed income, they may qualify for $100–400+ monthly toward groceries through SNAP. Because seniors have relaxed income rules and special medical deductions, your loved one might qualify even if their Social Security puts them slightly over the standard income limits. In Colorado, there's no asset limit for most households, so your loved one can keep their home, car, and modest savings.\n\nSNAP provides an EBT card that works like a debit card at grocery stores, farmers markets, and many retailers. The amount depends on household size and income, a two-person elderly household with net income around $1,000/month typically receives about $400/month. Because all medical expenses over $35/month count as deductions for seniors, many families are surprised to discover their loved one qualifies.",
-      "savingsRange": "Up to $3,576/year for one person (FY2026 maximum)",
-      "savingsSource": "USDA FY2026 maximum allotment for a 1-person household is $298/month; actual amounts vary by household size, net income, and deductions",
+      "savingsRange": "Up to $306/month for one person (FY2027 maximum, from October 1, 2026)",
+      "savingsSource": "USDA FY2027 maximum allotment for a 1-person household is $306/month from October 1, 2026; actual amounts vary by household size, net income, and deductions",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
@@ -659,20 +658,7 @@
             "monthlyLimit": 7192
           }
         ],
-        "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
-          "countedAssets": [
-            "Bank accounts",
-            "Cash value of life insurance",
-            "Some retirement savings"
-          ],
-          "exemptAssets": [
-            "Home",
-            "Vehicles"
-          ],
-          "homeEquityCap": null
-        },
+        "assetLimits": null,
         "functionalRequirement": null,
         "otherRequirements": [
           "Colorado resident",
@@ -767,7 +753,7 @@
       ],
       "applicationNotes": [
         "Seniors 60+ who exceed the gross income limit can still qualify through the net income test if medical expenses bring their countable income down",
-        "Colorado has no asset limit for most households, but if your loved one uses the special elderly rules, federal asset limits of $4,500 may apply",
+        "Colorado has no asset limit for most households, but if your loved one uses the special elderly rules, federal asset limits of $4,750 (from October 1, 2026) may apply",
         "Medical deduction only applies to out-of-pocket expenses over $35/month, keep receipts for Medicare premiums, prescription costs, and medical bills",
         "You must recertify every 6-12 months and report income changes annually to keep benefits active"
       ],
@@ -785,7 +771,7 @@
         },
         {
           "question": "Will my loved one's house or car count against the asset limit?",
-          "answer": "No, homes and vehicles are exempt from asset limits. In Colorado, most households have no asset limit anyway due to broad-based categorical eligibility. Only seniors using special income rules might face the federal $4,500 asset limit."
+          "answer": "No, homes and vehicles are exempt from asset limits. In Colorado, most households have no asset limit anyway due to broad-based categorical eligibility. Only seniors using special income rules might face the federal $4,750 asset limit (from October 1, 2026)."
         },
         {
           "question": "Can I apply for SNAP on behalf of my elderly loved one?",
@@ -825,7 +811,7 @@
       "sourceUrl": "https://www.colorado.gov/PEAK",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "weatherization-assistance-program",
@@ -1953,11 +1939,11 @@
         "visualTone": "warm"
       },
       "icon": "CurrencyDollar",
-      "phone": "(303) 688-4825",
+      "phone": "2-1-1",
       "sourceUrl": "https://www.sos.state.co.us/CCR/GenerateRulePdf.do?ruleVersionId=5243&fileName=9+CCR+2503-3",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "home-care-allowance-hca",

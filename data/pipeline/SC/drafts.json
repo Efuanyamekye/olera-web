@@ -233,7 +233,7 @@
             "Bank accounts",
             "Investments",
             "Property other than primary home",
-            "Vehicles over $4,650 value"
+            "A second vehicle, unless it is used for transportation (the first vehicle does not count at any value)"
           ],
           "exemptAssets": [
             "Primary home (if equity ≤$752,000)",
@@ -254,12 +254,12 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply through your local Community Long Term Care office by phone or in-person, though processing time and waitlist length vary by region.",
+        "summary": "Call CLTC Centralized Intake at (888) 971-1637 or refer online. Once a slot opens, people are admitted first come, first served by the date of their application, with priority for a few groups.",
         "steps": [
           {
             "step": 1,
-            "title": "Contact your local CLTC office",
-            "description": "Find your Community Long Term Care office through the SCDHHS directory and call to start the application process."
+            "title": "Call CLTC Centralized Intake",
+            "description": "Call (888) 971-1637, or make a referral online at phoenix.scdhhs.gov/cltc_referrals/new. Anyone, including a family member, can make the referral."
           },
           {
             "step": 2,
@@ -279,7 +279,7 @@
           {
             "step": 5,
             "title": "Wait for slot availability",
-            "description": "If eligible, your loved one will be placed on waitlist until a waiver slot becomes available in your region."
+            "description": "If eligible, your loved one will be placed on the waitlist until a waiver slot opens. Slots are filled first come, first served by the date of application."
           }
         ],
         "processingTime": null,
@@ -291,7 +291,7 @@
             "url": "https://phoenix.scdhhs.gov/cltc_referrals/new"
           },
           {
-            "label": "CLTC brochure with county office phone numbers",
+            "label": "CLTC brochure (2023; some office numbers are out of date, the current list is on the online referral page)",
             "url": "https://www.scdhhs.gov/sites/dhhs/files/CLTC%20Brochure%20May%202023%20v2.pdf"
           },
           {
@@ -342,7 +342,7 @@
         "You must already qualify for or be applying for South Carolina Medicaid, the waiver doesn't provide Medicaid eligibility itself",
         "NFLOC assessment is not automatic with age or dementia diagnosis, specific functional limitations must be documented",
         "Home equity over $752,000 may disqualify unless spouse, disabled child, or child under 21 lives there",
-        "Regional differences exist in waitlist length and available providers, ask about current wait times in your specific area"
+        "Available providers differ by area. Ask about current wait times when you call."
       ],
       "relatedPrograms": [
         "South Carolina Medicaid (Healthy Connections)",
@@ -361,7 +361,7 @@
         },
         {
           "question": "How long is the waitlist really in South Carolina?",
-          "answer": "Waitlist length varies significantly by region and priority level. Some areas may have shorter waits while others extend several months. Contact your local CLTC office for current wait times in your specific county."
+          "answer": "Slots are filled statewide, first come, first served by the date of application, with priority for a few groups such as people moving out of a nursing home. How long the wait is depends on when slots open. Call CLTC Centralized Intake at (888) 971-1637 to ask about current wait times."
         },
         {
           "question": "Can I apply on behalf of my elderly loved one?",
@@ -397,13 +397,13 @@
       "sourceUrl": "https://www.scdhhs.gov/resources/waivers/community-choices-cc-waiver",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "medicare-savings-programs",
       "name": "Medicare Savings Programs (QMB, SLMB, QI)",
       "shortName": "Medicare Savings Programs",
-      "tagline": "If your loved one's income is under $1,620/month, they could get their Medicare premiums and copays paid for free.",
+      "tagline": "If your loved one's income is under $1,796/month, they could get their Medicare Part B premium paid, and under $1,330/month their copays too.",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -416,53 +416,53 @@
           }
         ]
       },
-      "intro": "If your loved one struggles to afford Medicare premiums or copays, three programs can help. QMB (Qualified Medicare Beneficiary) covers your loved one's $202.90 monthly Medicare Part B premium plus all deductibles and copays. SLMB (Specified Low-Income Medicare Beneficiary) and QI (Qualifying Individual) cover just the Part B premium.\n\nYour loved one qualifies based on income: QMB for incomes up to $1,350/month for singles, SLMB for $1,350-$1,620/month, and QI for $1,620-$1,823/month (2026 limits). Asset limits are $9,660 for individuals, $14,470 for couples. In South Carolina, QMB provides full Medicaid benefits, meaning providers cannot bill your loved one for any covered services.\n\nQI has limited federal funding and operates first-come, first-served, if your loved one might qualify, apply early in the calendar year before funds run out.",
+      "intro": "If your loved one struggles to afford Medicare premiums or copays, three programs can help. QMB (Qualified Medicare Beneficiary) covers your loved one's $202.90 monthly Medicare Part B premium plus all deductibles and copays. SLMB (Specified Low-Income Medicare Beneficiary) and QI (Qualifying Individual) cover just the Part B premium.\n\nYour loved one qualifies based on income: QMB for incomes up to $1,330/month for singles, SLMB for $1,330-$1,596/month, and QI for $1,596-$1,796/month (2026 limits, effective March 1, 2026). Asset limits are $9,950 for individuals, $14,910 for couples. In South Carolina, QMB provides full Medicaid benefits, meaning providers cannot bill your loved one for any covered services.\n\nQI has limited federal funding and operates first-come, first-served, if your loved one might qualify, apply early in the calendar year before funds run out.",
       "savingsRange": "$2,435/year in 2026, plus Medicare cost-sharing for QMB enrollees",
       "savingsSource": "CMS: the 2026 standard Part B premium is $202.90/month ($2,434.80/year), which every Medicare Savings Program covers. QMB also pays Part A and B deductibles and coinsurance; that amount depends on the care used and is not quantified here.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 65+ or Medicare-eligible",
-          "Income under $1,823/month (single)",
-          "Assets under $9,660 (single)",
+          "Countable income under $1,796/month (single); the first $20 of income is not counted",
+          "Assets under $9,950 (single)",
           "South Carolina resident"
         ],
         "ageRequirement": "65+",
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1350,
+            "monthlyLimit": 1330,
             "program": "QMB"
           },
           {
             "householdSize": 1,
-            "monthlyLimit": 1620,
+            "monthlyLimit": 1596,
             "program": "SLMB"
           },
           {
             "householdSize": 1,
-            "monthlyLimit": 1823,
+            "monthlyLimit": 1796,
             "program": "QI"
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1824,
+            "monthlyLimit": 1804,
             "program": "QMB"
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 2189,
+            "monthlyLimit": 2164,
             "program": "SLMB"
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 2461,
+            "monthlyLimit": 2435,
             "program": "QI"
           }
         ],
         "assetLimits": {
-          "individual": 9660,
-          "couple": 14470,
+          "individual": 9950,
+          "couple": 14910,
           "countedAssets": [
             "Bank accounts",
             "Stocks and bonds",
@@ -494,7 +494,7 @@
           {
             "step": 1,
             "title": "Choose your application method",
-            "description": "Apply online at access.scdhhs.gov, call 1-888-549-0820, or visit your local SCDHHS county office. Online is fastest for most people."
+            "description": "Apply online at apply.scdhhs.gov, call 1-888-549-0820, or visit your local SCDHHS county office. Online is fastest for most people."
           },
           {
             "step": 2,
@@ -517,8 +517,8 @@
         "tip": "Apply for the highest tier you think you might qualify for. If you don't qualify for QMB, they'll automatically consider you for SLMB and QI.",
         "urls": [
           {
-            "label": "SCDHHS ACCESS Portal",
-            "url": "https://access.scdhhs.gov/"
+            "label": "Apply online (SCDHHS)",
+            "url": "https://apply.scdhhs.gov/CitizenPortal/apply"
           },
           {
             "label": "SCDHHS Eligibility Information",
@@ -547,16 +547,9 @@
           "phone": "1-888-549-0820",
           "description": "Medicare Savings Programs applications and questions",
           "hours": "Monday-Friday, business hours"
-        },
-        {
-          "label": "Local SCDHHS Office",
-          "phone": "1-888-549-0820",
-          "description": "Find your county office for in-person help",
-          "hours": "Varies by location"
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QI funding is limited nationally, apply early in the calendar year before funds run out",
         "Income limits include a $20 general disregard monthly, so your net countable income may be lower than your gross income",
         "In South Carolina, QMB provides full Medicaid benefits, meaning no copays for any covered services and providers cannot bill you",
@@ -575,17 +568,17 @@
           "content": [
             {
               "tier": "QMB",
-              "income": "Up to $1,350/month (single)",
+              "income": "Up to $1,330/month (single)",
               "covers": "Part B premium + all deductibles and copays + full Medicaid benefits in SC"
             },
             {
               "tier": "SLMB",
-              "income": "$1,350-$1,620/month (single)",
+              "income": "$1,330-$1,596/month (single)",
               "covers": "Part B premium only"
             },
             {
               "tier": "QI",
-              "income": "$1,620-$1,823/month (single)",
+              "income": "$1,596-$1,796/month (single)",
               "covers": "Part B premium only (limited funding)"
             }
           ]
@@ -599,7 +592,7 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than the asset limit?",
-          "answer": "Yes. The primary home and the land it sits on are completely exempt from asset limits, regardless of value. Only countable assets like bank accounts, stocks, and bonds count toward the $9,660 limit for individuals."
+          "answer": "Yes. The primary home and the land it sits on are completely exempt from asset limits, regardless of value. Only countable assets like bank accounts, stocks, and bonds count toward the $9,950 limit for individuals."
         },
         {
           "question": "What's the difference between these three programs if they all pay the Part B premium?",
@@ -643,7 +636,7 @@
       "sourceUrl": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -662,14 +655,14 @@
           }
         ]
       },
-      "intro": "If your loved one struggles to afford groceries on Social Security or a pension, SNAP provides monthly food assistance loaded onto an EBT card. The amount depends on income, household size, and deductible expenses. For FY2026 the most a one-person household can receive is $298/month and the most a two-person household can receive is $546/month.\n\nSouth Carolina offers streamlined application options for seniors. The Elderly Simplified Application Project (ESAP) requires no interview and provides 36-month certification periods for households where everyone is 60+ with no earned income. Because South Carolina has expanded income limits beyond federal minimums, your loved one may qualify even if their income seems too high for other programs.\n\nSNAP benefits work like a debit card at grocery stores, farmers markets, and many online retailers. Medical expenses over $35/month can be deducted from income calculations, potentially increasing the benefit amount.",
+      "intro": "If your loved one struggles to afford groceries on Social Security or a pension, SNAP provides monthly food assistance loaded onto an EBT card. The amount depends on income, household size, and deductible expenses. From October 1, 2026, the most a one-person household can receive is $306/month and the most a two-person household can receive is $562/month.\n\nSouth Carolina offers streamlined application options for seniors. The Elderly Simplified Application Project (ESAP) needs only one interview, at the start, and provides 36-month certification periods with a one-page mail-in form each year, for households where everyone is 60+ with no earned income. Because South Carolina has expanded income limits beyond federal minimums, your loved one may qualify even if their income seems too high for other programs.\n\nSNAP benefits work like a debit card at grocery stores, farmers markets, and many online retailers. Medical expenses over $35/month can be deducted from income calculations, potentially increasing the benefit amount.",
       "savingsRange": "",
-      "savingsSource": "No state publishes a typical or average senior benefit. FY2026 federal maximums are $298/month for one person and $546/month for two (USDA FNS). Nationally, SNAP households including someone 60 or older averaged $192/month in FY2024 (USDA FNS, Characteristics of SNAP Households).",
+      "savingsSource": "No state publishes a typical or average senior benefit. Federal maximums from October 1, 2026 are $306/month for one person and $562/month for two (USDA FNS). Nationally, SNAP households including someone 60 or older averaged $192/month in FY2024 (USDA FNS, Characteristics of SNAP Households).",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
-          "Income below $2,608/month (single) or $3,526/month (couple)",
+          "Income below $1,729/month (single) or $2,345/month (couple) before deductions, from October 1, 2026. A household with someone 60+ or disabled that is over this can still qualify if income after deductions is under $1,330/month for one person (from October 1, 2026); savings count only in that case, up to $4,750",
           "U.S. citizen or qualified non-citizen",
           "South Carolina resident"
         ],
@@ -677,27 +670,27 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2608
+            "monthlyLimit": 1729
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 3526
+            "monthlyLimit": 2345
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 4442
+            "monthlyLimit": 2960
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 5358
+            "monthlyLimit": 3575
           },
           {
             "householdSize": 5,
-            "monthlyLimit": 6276
+            "monthlyLimit": 4191
           },
           {
             "householdSize": 6,
-            "monthlyLimit": 7192
+            "monthlyLimit": 4806
           }
         ],
         "assetLimits": null,
@@ -707,7 +700,7 @@
           "For ESAP (simplified application): no earned income in household",
           "Medical expenses over $35/month can be deducted to increase benefits"
         ],
-        "povertyLevelReference": "165% FPL"
+        "povertyLevelReference": "130% FPL"
       },
       "applicationGuide": {
         "method": "multiple",
@@ -731,7 +724,7 @@
           {
             "step": 4,
             "title": "Wait for decision",
-            "description": "You'll receive written notification of eligibility. ESAP applications typically require no interview. Benefits begin from your application date if approved."
+            "description": "You'll receive written notification of eligibility. ESAP needs one interview at the start. Benefits begin from your application date if approved."
           }
         ],
         "processingTime": "Benefits begin from application date if eligible, specific processing timeline varies",
@@ -784,7 +777,7 @@
         "ESAP is only available if ALL household members are 60+ and there is NO earned income from jobs",
         "Even though South Carolina has no asset limit for most applicants, you may still be asked about assets on the application form",
         "Social Security, pensions, and investment income all count toward income limits",
-        "The simplified ESAP process has no interview requirement and provides 36-month certification periods instead of annual renewals"
+        "The simplified ESAP process needs one interview at the start, then no more interviews. It certifies you for 36 months, with a one-page form to mail back each year"
       ],
       "relatedPrograms": [
         "LIHEAP Energy Assistance",
@@ -796,7 +789,7 @@
       "faqs": [
         {
           "question": "Can my loved one keep their house and still qualify for SNAP?",
-          "answer": "Yes, your primary home is exempt from asset limits regardless of value. South Carolina generally has no asset limits for SNAP, but if your household has more than $4,500 in countable assets (bank accounts, investments), you must meet the gross income test."
+          "answer": "Yes, your primary home is exempt from asset limits regardless of value. South Carolina generally has no asset limits for SNAP, Savings only count when a household with someone 60+ or disabled has income before deductions above 130% of poverty; then the limit is $4,750 (from October 1, 2026)."
         },
         {
           "question": "What if my loved one receives both Social Security and a small pension?",
@@ -808,7 +801,7 @@
         },
         {
           "question": "What's the difference between regular SNAP and ESAP?",
-          "answer": "ESAP (Elderly Simplified Application Project) is available when everyone in the household is 60+ with no job income. It requires no interview, has 36-month certification periods instead of annual renewals, and uses data matching to reduce required documentation."
+          "answer": "ESAP (Elderly Simplified Application Project) is available when everyone in the household is 60+ with no job income. It needs only one interview, at the start, and certifies you for 36 months with a one-page mail-in form each year instead of renewal interviews, and uses data matching to reduce required documentation."
         },
         {
           "question": "Can SNAP benefits be used for grocery delivery or online shopping?",
@@ -832,7 +825,7 @@
       "sourceUrl": "https://dss.sc.gov/assistance-programs/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -933,8 +926,8 @@
         "tip": "Apply early in the season (fall for heating, summer for cooling) as funds run out quickly. Crisis assistance is available year-round.",
         "urls": [
           {
-            "label": "Online Pre-screening Tool",
-            "url": "https://liheap.acf.hhs.gov/eligibility-tool"
+            "label": "Find your county Community Action Agency",
+            "url": "https://oeo.sc.gov/managedsites/prd/oeo/help.html"
           },
           {
             "label": "South Carolina LIHEAP Information",
@@ -975,7 +968,7 @@
       ],
       "applicationNotes": [
         "Heating assistance runs October 1 through April 30 and cooling assistance runs May 1 through September 30. Crisis assistance is available year-round.",
-        "Priority households (elderly 60+, disabled, young children) may receive additional benefit amounts beyond the standard maximums",
+        "Priority households (someone 60+, disabled, a child 5 or under, or a veteran) get add-ons to the $200 base benefit, up to the $850 heating or $775 cooling maximum.",
         "Energy bills must be in a household member's name, if utilities are included in rent, you need an itemized breakdown from your landlord",
         "You can receive up to two different services per calendar year. Each has its own maximum: $850 heating, $775 cooling, $1,000 crisis."
       ],
@@ -1078,7 +1071,7 @@
       "sourceUrl": "https://oeo.sc.gov/managedsites/prd/oeo/liheap.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "weatherization-assistance",
@@ -2038,15 +2031,16 @@
         ]
       },
       "intro": "If your loved one is 60 or older and lives on Social Security or retirement income only, South Carolina's Elderly Simplified Application Project (ESAP) provides monthly SNAP food assistance with far less paperwork than standard food assistance programs. Because ESAP is designed specifically for elderly households with no earned income, your loved one won't need to attend recertification interviews or submit monthly reports, once approved, benefits continue for 36 months.\n\nESAP has achieved a 93% approval rate since 2015, meaning virtually all eligible seniors who apply receive benefits. The program requires all household members to be 60 or older with zero earned income from work. Your loved one can receive Social Security, pensions, or other retirement income and still qualify, the key restriction is no wages or self-employment income.",
-      "savingsRange": "Up to $298/month for one person (FY2026 federal maximum), minimum $24/month",
-      "savingsSource": "USDA FY2026 allotments for the 48 contiguous states, effective October 1, 2025 through September 30, 2026. $298 is the maximum for a one-person household and is paid only when countable net income is at or near zero; most households receive less.",
+      "savingsRange": "Up to $306/month for one person (federal maximum from October 1, 2026), minimum $24/month",
+      "savingsSource": "USDA allotments for the 48 contiguous states, from October 1, 2026. $306 is the maximum for a one-person household and is paid only when countable net income is at or near zero; most households receive less.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+ for all household members",
           "No earned income from work",
           "Not already receiving regular SNAP",
-          "Purchase and prepare food together"
+          "Purchase and prepare food together",
+          "Income under the SNAP limit for household size"
         ],
         "ageRequirement": "60+",
         "incomeTable": null,
@@ -2056,13 +2050,14 @@
           "All household members must be age 60 or older",
           "Household members must have no earned income (no salaries from work)",
           "Household must not already receive SNAP benefits under South Carolina Combined Application Project (SCCAP)",
-          "Household members must purchase and prepare food together"
+          "Household members must purchase and prepare food together",
+          "Household's total monthly income must be under the SNAP income limit for its size"
         ],
         "povertyLevelReference": null
       },
       "applicationGuide": {
         "method": "mail",
-        "summary": "Complete Form 16176 and mail it in, then attend one required interview at your local DSS office.",
+        "summary": "Complete Form 16176 and mail it in, then complete one required interview.",
         "steps": [
           {
             "step": 1,
@@ -2077,15 +2072,15 @@
           {
             "step": 3,
             "title": "Attend initial interview",
-            "description": "You'll be scheduled for one required interview at your local DSS office. This is the only interview required, no recertification interviews needed."
+            "description": "After DSS gets your application, a letter tells you how to complete the one required interview. This is the only interview. There are no interviews at renewal."
           },
           {
             "step": 4,
             "title": "Receive decision",
-            "description": "DSS will notify you in writing of their decision. If approved, benefits are certified for 36 months with no periodic reporting required."
+            "description": "DSS will tell you its decision in writing. If approved, you will not need another interview. Each year you fill in a one-page form and mail it back."
           }
         ],
-        "processingTime": "SNAP applications are decided within 30 days, or 7 days if the household qualifies for expedited service. Mail the form, then wait for the interview notice. Once approved, ESAP certifies you for three years instead of the usual annual renewal.",
+        "processingTime": "SNAP applications are decided within 30 days, or 7 days if the household qualifies for expedited service. Mail the form, then wait for the interview notice. Once approved, there are no more interviews. Each year you mail back a one-page form.",
         "waitlist": "There is no waiting list. Benefits run from the date you file, so file first and send anything missing later.",
         "tip": "Submit all verification documents with your initial application to avoid delays, ESAP requires limited verification but what you do submit should be complete.",
         "urls": [
@@ -2154,7 +2149,7 @@
         },
         {
           "question": "What if my loved one's income changes during the 36-month certification period?",
-          "answer": "Because ESAP has no periodic reporting requirements, your loved one won't need to report most changes immediately. However, contact DSS if there are major changes like starting work (which would disqualify them from ESAP) or significant income increases."
+          "answer": "ESAP has fewer reporting rules than regular SNAP, but each year your loved one mails back a one-page form. However, contact DSS if there are major changes like starting work (which would disqualify them from ESAP) or significant income increases."
         }
       ],
       "layoutIntent": {
@@ -2170,7 +2165,7 @@
       "sourceUrl": "https://dss.sc.gov/assistance-programs/snap/how-do-i-apply/help-for-the-elderly/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "senior-farmers-market-nutrition",
@@ -2606,7 +2601,7 @@
       {
         "name": "Medicare Savings Programs (QMB, SLMB, QI)",
         "programId": "medicare-savings-programs",
-        "why": "Eliminates Medicare premiums and copays for incomes under $1,620/month, guaranteed monthly savings."
+        "why": "Pays the Medicare Part B premium for incomes under $1,796/month, and copays too under $1,330/month."
       },
       {
         "name": "Community Choices Waiver",

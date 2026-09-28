@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.522Z
+ * Last updated: 2026-09-28T09:21:59.464Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -194,19 +194,19 @@ export const drafts: PipelineStateDrafts = {
         "stateVariation": false,
         "localEntities": [
           {
-            "name": "Area Agencies on Aging (AAA) statewide; Managed care plans like Anthem; Maximus Health Services (assessments from July 2025)",
+            "name": "Area Agencies on Aging (INconnect Alliance) statewide; health plans Anthem, Humana and UnitedHealthcare; Maximus (all level-of-care assessments since July 2025)",
             "type": "service-area"
           }
         ]
       },
-      "intro": "If your loved one is 60+ and needs daily help with bathing, dressing, eating, or medication management, Indiana PathWays for Aging provides home care services as an alternative to nursing home placement. This Medicaid waiver program covers meal preparation, transportation to medical appointments, home health visits, adult day center services, and other supports based on your loved one's assessed needs.\n\nTo qualify, your loved one must be Medicaid-eligible (income under $2,901/month for a single person in 2025) and meet Nursing Facility Level of Care through a clinical assessment. Because this program has limited slots, there is typically a waitlist, priority goes to those at highest risk of immediate nursing home placement. Services are individualized rather than offering fixed dollar amounts or hours.",
+      "intro": "If your loved one is 60+ and needs daily help with bathing, dressing, eating, or medication management, Indiana PathWays for Aging provides home care services as an alternative to nursing home placement. This Medicaid waiver program covers meal preparation, transportation to medical appointments, home health visits, adult day center services, and other supports based on your loved one's assessed needs.\n\nTo qualify, your loved one must be Medicaid-eligible (income under $2,982/month for a single person in 2026) and meet Nursing Facility Level of Care through a clinical assessment. Because this program has limited slots, there is a waiting list. People leaving a nursing facility, a hospital, or the CHOICE program are invited first, and everyone else is invited in order of their assessment date. Services are individualized rather than offering fixed dollar amounts or hours.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 60+",
-          "Income under $2,901/month",
+          "Income under $2,982/month (2026)",
           "Need help with 3+ daily activities",
           "Must qualify for Medicaid",
           "Indiana resident"
@@ -215,11 +215,7 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2901
-          },
-          {
-            "householdSize": 2,
-            "monthlyLimit": 3933
+            "monthlyLimit": 2982
           }
         ],
         "assetLimits": {
@@ -232,12 +228,12 @@ export const drafts: PipelineStateDrafts = {
             "Property other than primary home"
           ],
           "exemptAssets": [
-            "Primary home (if equity under $730,000)",
+            "Primary home (if equity under $752,000)",
             "Primary home (if spouse or disabled child lives there)",
             "Burial funds",
             "One vehicle"
           ],
-          "homeEquityCap": 730000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must need help with at least 3 activities of daily living (bathing, dressing, mobility, eating, toileting) or be medically unable to provide self-care, verified through clinical assessment",
         "otherRequirements": [
@@ -250,7 +246,7 @@ export const drafts: PipelineStateDrafts = {
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Contact your local Area Agency on Aging for functional assessment, then enroll through Medicaid managed care plans during open enrollment (October-December).",
+        "summary": "Call your Area Agency on Aging at (800) 713-9023 to ask for the level-of-care assessment and apply for Medicaid at the same time. When your loved one joins PathWays, they choose a health plan by calling 877-284-9294.",
         "steps": [
           {
             "step": 1,
@@ -259,27 +255,27 @@ export const drafts: PipelineStateDrafts = {
           },
           {
             "step": 2,
-            "title": "Request functional assessment",
-            "description": "Contact your local Area Agency on Aging (AAA) to schedule a Nursing Facility Level of Care assessment. This determines if your loved one needs help with 3+ daily activities."
+            "title": "Request the level-of-care assessment",
+            "description": "Ask for the level-of-care assessment right away: call your Area Agency on Aging at (800) 713-9023 for a referral, or call Maximus directly at (833) 597-2777. Your loved one's place on the waiting list is set by the date of this assessment, so don't wait for Medicaid to finish first."
           },
           {
             "step": 3,
             "title": "Get placed on waitlist",
-            "description": "If assessment shows your loved one qualifies, they'll be placed on the PathWays waiver waitlist. Priority is given to those at highest risk of nursing home placement."
+            "description": "If the assessment shows your loved one qualifies, they go on the PathWays waiver waiting list. People leaving a nursing facility, a hospital, or the CHOICE program are invited first. Everyone else is invited in order of their assessment date."
           },
           {
             "step": 4,
-            "title": "Choose managed care plan",
-            "description": "During open enrollment (October-December), select a managed care plan like Anthem that participates in PathWays. Services begin when slot becomes available."
+            "title": "Choose a health plan",
+            "description": "When your loved one joins PathWays, call 87-PATHWAY-4 (877-284-9294) to choose a health plan: Anthem, Humana or UnitedHealthcare. The mid-October to mid-December window is only for changing plans later."
           }
         ],
-        "processingTime": "Functional assessment timeline varies by region; managed care enrollment effective January following open enrollment",
-        "waitlist": "Waitlist exists with priority tiers; wait time varies by region and risk level",
+        "processingTime": "The level-of-care assessment is done by Maximus. Waiver services start when your loved one is invited off the waiting list, about a year after the assessment date as of September 2026.",
+        "waitlist": "12,266 people were on the PathWays waiver waiting list in September 2026. People leaving a nursing facility, a hospital, or the CHOICE program are invited first. Everyone else is invited in order of their assessment date. September 2026 invitations reached assessments dated late September 2025, which is about a one-year wait.",
         "tip": "Start the Medicaid application process early, you can request the functional assessment while Medicaid eligibility is being processed.",
         "urls": [
           {
-            "label": "Indiana PathWays Portal",
-            "url": "https://www.in.gov/pathways/home/"
+            "label": "Indiana PathWays for Aging",
+            "url": "https://www.in.gov/pathways/"
           }
         ]
       },
@@ -302,30 +298,42 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "Indiana 2-1-1",
-          "phone": "2-1-1",
-          "description": "Free helpline to find your local Area Agency on Aging",
-          "hours": "24 hours, 7 days a week"
+          "label": "Area Agency on Aging, INconnect Alliance (start here)",
+          "phone": "(800) 713-9023",
+          "description": "Indiana's statewide line to your local Area Agency on Aging, the state's front door for PathWays waiver services. They take your request and refer your loved one for the nursing-facility level-of-care assessment, which puts them on the waiver waiting list.",
+          "hours": null
+        },
+        {
+          "label": "Maximus Level of Care Assessment (LCAR)",
+          "phone": "(833) 597-2777",
+          "description": "Since July 2025, Maximus does every nursing-facility level-of-care assessment for PathWays. You or your Area Agency on Aging can call to request one.",
+          "hours": null
         },
         {
           "label": "FSSA Customer Service",
           "phone": "(800) 403-0864",
           "description": "Medicaid application and eligibility questions",
-          "hours": "Monday-Friday 8am-4:30pm ET"
+          "hours": "Monday-Friday 8am-4:30pm local time"
         },
         {
-          "label": "PathWays Information",
+          "label": "Indiana Area Agencies on Aging toll-free line (Indiana Association of Area Agencies on Aging)",
           "phone": "(800) 986-3505",
-          "description": "General waiver program questions",
-          "hours": "Monday-Friday 8am-5pm ET"
+          "description": "Published by the association of Indiana's Area Agencies on Aging. Connects you to your local Area Agency on Aging. Not a PathWays or state line.",
+          "hours": null
+        },
+        {
+          "label": "Indiana 2-1-1",
+          "phone": "2-1-1",
+          "description": "Locator only. Can give you the address and phone of your nearest Area Agency on Aging.",
+          "hours": "24 hours, 7 days a week"
         }
       ],
       "applicationNotes": [
         "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
-        "Assessment process is transitioning from Area Agencies on Aging to Maximus Health Services in July 2025, current applicants may experience process changes",
-        "Those currently in nursing facilities, hospitals, or at immediate risk of placement receive priority for available slots",
+        "Since July 2025, Maximus does all level-of-care assessments. Your Area Agency on Aging still helps you get started and plans services after approval.",
+        "People leaving a nursing facility, a hospital, or the CHOICE program are invited off the waiting list first. Everyone else is invited in order of their assessment date.",
         "You cannot be enrolled in other Indiana waivers (Family Support, Community Integration, TBI, ESRD) while receiving PathWays services",
-        "Home equity over $730,000 disqualifies your loved one unless their spouse or disabled child lives in the home"
+        "Home equity over $752,000 disqualifies your loved one unless their spouse or disabled child lives in the home"
       ],
       "relatedPrograms": [
         "Indiana CHOICE Medicaid Waiver",
@@ -337,7 +345,7 @@ export const drafts: PipelineStateDrafts = {
       "faqs": [
         {
           "question": "Can my loved one keep their house if it's worth more than the $2,000 asset limit?",
-          "answer": "Yes, the primary home is exempt from asset limits as long as home equity doesn't exceed $730,000. If your loved one's spouse or disabled child lives in the home, there's no equity limit at all."
+          "answer": "Yes, the primary home is exempt from asset limits as long as home equity doesn't exceed $752,000. If your loved one's spouse or disabled child lives in the home, there's no equity limit at all."
         },
         {
           "question": "What if my loved one is 62 and doesn't have a disability determination from Social Security?",
@@ -345,7 +353,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "How long is the waitlist really?",
-          "answer": "Wait times vary significantly by region and your loved one's priority level. Those at immediate risk of nursing home placement get priority, while others may wait months to years depending on available slots in their area."
+          "answer": "In September 2026, 12,266 people were on the PathWays waiting list, and invitations reached people whose assessment was dated late September 2025, about a one-year wait. People leaving a nursing facility, a hospital, or the CHOICE program are invited first. For everyone else the order is set by the assessment date, so request the assessment as early as you can."
         },
         {
           "question": "Can I apply for PathWays if my loved one is already on Healthy Indiana Plan?",
@@ -377,11 +385,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "House",
-      "phone": "(800) 986-3505",
-      "sourceUrl": "https://www.in.gov/pathways/home/",
+      "phone": "(800) 713-9023",
+      "sourceUrl": "https://www.in.gov/pathways/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pathways-aging-ltss",
@@ -395,7 +403,7 @@ export const drafts: PipelineStateDrafts = {
         "stateVariation": false,
         "localEntities": [
           {
-            "name": "Managed care entities: Anthem, Humana, UnitedHealthcare; Area Agencies on Aging for assessments; Maximus Health Services (Enrollment Broker/LCAR from July 2025)",
+            "name": "Managed care entities: Anthem, Humana, UnitedHealthcare; Area Agencies on Aging for referrals and service planning; Maximus (Enrollment Broker, and all level-of-care assessments since July 2025)",
             "type": "service-area"
           }
         ]
@@ -422,11 +430,11 @@ export const drafts: PipelineStateDrafts = {
             "Property other than primary home"
           ],
           "exemptAssets": [
-            "Primary home (up to $730,000 equity)",
+            "Primary home (up to $752,000 equity)",
             "Household goods",
             "One vehicle"
           ],
-          "homeEquityCap": 730000
+          "homeEquityCap": 752000
         },
         "functionalRequirement": "Must need daily help with at least 3 activities of daily living (bathing, dressing, mobility, eating, toileting) as determined by Area Agency on Aging assessment",
         "otherRequirements": [
@@ -486,7 +494,7 @@ export const drafts: PipelineStateDrafts = {
         "Property deeds and tax statements",
         "Vehicle titles and registration",
         "Life insurance policies with face values",
-        "Home equity documentation if home value exceeds $730,000",
+        "Home equity documentation if home value exceeds $752,000",
         "Medical records supporting need for daily care assistance",
         "Current medication list and prescribing physician information",
         "Documentation of current services or care providers",
@@ -533,12 +541,12 @@ export const drafts: PipelineStateDrafts = {
       "contentSections": [],
       "faqs": [
         {
-          "question": "Can my loved one keep their house if it's worth more than $730,000?",
-          "answer": "No, if your loved one lives in the home or intends to return, the home equity cannot exceed $730,000. However, this limit doesn't apply if a spouse, child under 18, or disabled/blind child lives in the home. Other property and assets follow standard Medicaid rules."
+          "question": "Can my loved one keep their house if it's worth more than $752,000?",
+          "answer": "No, if your loved one lives in the home or intends to return, the home equity cannot exceed $752,000. However, this limit doesn't apply if a spouse, child under 18, or disabled/blind child lives in the home. Other property and assets follow standard Medicaid rules."
         },
         {
           "question": "What's the difference between the three managed care entities?",
-          "answer": "Anthem, Humana, and UnitedHealthcare all provide the same core PathWays services, but their provider networks and service delivery may vary by region. You can change your selection within 90 days of enrollment or during open enrollment periods (October-December each year)."
+          "answer": "Anthem, Humana, and UnitedHealthcare all provide the same core PathWays services, but their provider networks and service delivery may vary by region. You can change your selection within 90 days of enrollment or during the yearly plan change period (mid-October to mid-December)."
         },
         {
           "question": "Can I apply if my loved one is already in a nursing home?",
@@ -578,7 +586,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.in.gov/pathways/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "medicare-savings-programs",
@@ -736,7 +744,6 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QI has limited federal funding and may have waitlists, apply early in the calendar year for best chance",
         "If you qualify for QMB, providers cannot balance-bill your loved one for Medicare-covered services, report violations to the state",
         "QMB-Also and SLMB-Also categories provide full Medicaid benefits in addition to Medicare cost assistance if income and assets allow",
@@ -796,7 +803,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.in.gov/medicaid/providers/about-ihcp-programs/medicare-savings-programs/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",

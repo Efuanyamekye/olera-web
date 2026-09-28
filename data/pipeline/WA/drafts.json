@@ -195,14 +195,14 @@
           }
         ]
       },
-      "intro": "If your loved one needs help with bathing, dressing, or getting around but doesn't need nursing home-level care, Washington's Medicaid Personal Care program provides in-home assistance with daily activities. Your loved one can receive personal care services in their own home, an adult family home, or assisted living facility.\n\nTo qualify, your loved one must have limited income (typically under $771/month for single applicants) and need extensive help with at least one daily activity or minimal help with three or more activities. Because this program specifically serves people who don't need nursing facility-level care, it fills the gap between independent living and more intensive care programs.\n\nThe program covers personal hygiene assistance, help with dressing and toileting, transferring support, and mobility assistance. The exact amount of care is determined through a functional assessment called the CARE tool, which evaluates your loved one's specific needs.",
+      "intro": "If your loved one needs help with bathing, dressing, or getting around but doesn't need nursing home-level care, Washington's Medicaid Personal Care program provides in-home assistance with daily activities. Your loved one can receive personal care services in their own home, an adult family home, or assisted living facility.\n\nTo qualify, your loved one must have limited income (at or below $994/month for a single person or $1,491 for a couple in 2026) and need extensive help with at least one daily activity or minimal help with three or more activities. Because this program specifically serves people who don't need nursing facility-level care, it fills the gap between independent living and more intensive care programs.\n\nThe program covers personal hygiene assistance, help with dressing and toileting, transferring support, and mobility assistance. The exact amount of care is determined through a functional assessment called the CARE tool, which evaluates your loved one's specific needs.",
       "savingsRange": "",
       "savingsSource": "Free service",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
           "Age 65+ or disabled",
-          "Income below $771/month (single person)",
+          "Income at or below $994/month (single) or $1,491 (couple) in 2026",
           "Assets under $2,000",
           "Needs help with daily activities",
           "Washington resident"
@@ -211,7 +211,7 @@
         "incomeTable": null,
         "assetLimits": {
           "individual": 2000,
-          "couple": null,
+          "couple": 3000,
           "countedAssets": [
             "Bank accounts",
             "Retirement accounts",
@@ -235,12 +235,12 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply for Washington Apple Health (Medicaid) first online or by phone, then complete a functional assessment.",
+        "summary": "Apply by phone with Home and Community Services Intake at (877) 429-7019, or online at Washington Connection. HCS does the financial review and the in-home care assessment.",
         "steps": [
           {
             "step": 1,
-            "title": "Find your county's Home and Community Services office",
-            "description": "Look yours up at dshs.wa.gov/ALTSA/resources, or call Community Living Connections at 1-855-567-0252 and ask. HCS is the office that arranges the in-home assessment. If your loved one is 65 or older or on Medicare, the financial application goes through Washington Connection, not Healthplanfinder."
+            "title": "Apply with Home and Community Services",
+            "description": "Call Home and Community Services Intake at (877) 429-7019 to apply by phone, or apply online at Washington Connection. Your local HCS office is listed at dshs.wa.gov/office-locations. HCS is the office that arranges the in-home assessment. If your loved one is 65 or older or on Medicare, the financial application goes through Washington Connection, not Healthplanfinder."
           },
           {
             "step": 2,
@@ -249,8 +249,8 @@
           },
           {
             "step": 3,
-            "title": "Schedule functional assessment",
-            "description": "Once Medicaid-eligible, contact your local Area Agency on Aging or DSHS office to schedule the CARE assessment that determines your care needs."
+            "title": "Care needs assessment",
+            "description": "After you apply, an HCS social services worker contacts you to do the personal care needs assessment. You do not have to wait for the financial decision."
           },
           {
             "step": 4,
@@ -265,15 +265,19 @@
         ],
         "processingTime": "About 45 days for the financial decision and about 45 days from intake for the in-home CARE assessment. Up to 60 days if a disability determination is needed.",
         "waitlist": null,
-        "tip": "Apply for Medicaid even if you're unsure about eligibility - the functional assessment for personal care services happens after Medicaid approval.",
+        "tip": "Apply even if you're unsure about eligibility. The care needs assessment and the financial review run at the same time.",
         "urls": [
           {
-            "label": "Washington Healthplanfinder",
+            "label": "Washington Connection (apply online)",
+            "url": "https://www.washingtonconnection.org/home/"
+          },
+          {
+            "label": "Washington Healthplanfinder (under 65 and not on Medicare only)",
             "url": "https://www.wahealthplanfinder.org"
           },
           {
-            "label": "Find Local DSHS Office",
-            "url": "https://www.dshs.wa.gov/find-an-office"
+            "label": "Find your local HCS office",
+            "url": "https://www.dshs.wa.gov/office-locations"
           }
         ]
       },
@@ -289,7 +293,12 @@
       ],
       "contacts": [
         {
-          "label": "Community Living Connections (start here)",
+          "label": "DSHS Home and Community Services Intake (start here)",
+          "phone": "(877) 429-7019",
+          "description": "Apply by phone for in-home personal care. Home and Community Services does the financial review and the in-home care assessment."
+        },
+        {
+          "label": "Community Living Connections",
           "phone": "1-855-567-0252",
           "description": "Washington's ADRC referral line. Helps you find your local Home and Community Services office, which is the office that does the assessment. It is a referral line, not an application line.",
           "hours": "Hours not published"
@@ -369,11 +378,11 @@
         "visualTone": "editorial"
       },
       "icon": "HandHeart",
-      "phone": "1-855-567-0252",
+      "phone": "(877) 429-7019",
       "sourceUrl": "https://www.dshs.wa.gov/altsa/home-and-community-services/how-apply-medicaid",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "mac-waiver",
@@ -870,7 +879,6 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "QMB recipients cannot be billed by providers for Medicare-covered services, make sure your loved one tells doctors and hospitals about their QMB status",
         "Income calculations use countable income after deductions, so don't assume gross Social Security or pension income disqualifies your loved one",
         "QI program has funding limits and operates first-come, first-served, apply early in the year for best chances",
@@ -957,71 +965,71 @@
       "sourceUrl": "https://www.dshs.wa.gov/esa/community-services-offices/medicare-savings-program",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "basic-food-program",
       "name": "Basic Food Program (Washington State SNAP)",
       "shortName": "Basic Food Program",
-      "tagline": "Monthly food assistance from $292-$1,158 for Washington families based on income and household size.",
+      "tagline": "Monthly food assistance for Washington households, up to $306 a month for one person from October 1, 2026, based on income and household size.",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
         "type": "federal",
         "stateVariation": true
       },
-      "intro": "If your loved one lives in Washington and earns less than $2,608 per month (or $3,525 for a two-person household), they may qualify for monthly food assistance through the Basic Food Program. This is Washington's version of SNAP that provides $292-$1,158 monthly on an EBT card to buy groceries at most stores.\n\nUnlike other benefit programs, your loved one's house, car, and savings don't count against eligibility, only monthly income matters. However, significant changes are coming: starting July 2025, adults aged 18-64 must work at least 80 hours per month to qualify unless they have children under 14 or qualify for other exemptions.\n\nThe program requires an in-person interview after you apply, but the application itself can be completed online at washingtonconnection.org. Benefits are calculated based on household size, income, and living expenses like rent and utilities.",
-      "savingsRange": "Up to $298/month for one person (FY2026 maximum)",
-      "savingsSource": "USDA FY2026 maximum allotments: $298/month for one person, up to $1,183/month for five; actual amounts depend on income and deductions",
+      "intro": "If your loved one lives in Washington and earns less than $2,660 per month (or $3,607 for a two-person household), they may qualify for monthly food assistance through the Basic Food Program. This is Washington's version of SNAP that provides up to $306 a month for one person or $562 for two (from October 1, 2026) on an EBT card to buy groceries at most stores.\n\nUnlike other benefit programs, your loved one's house, car, and savings don't count against eligibility, only monthly income matters. Since February 1, 2026, adults 18 to 64 without a child under 14 at home can get only 3 months of benefits in 3 years unless they work, volunteer or train at least 80 hours a month or qualify for an exemption. People 65 and older are not affected.\n\nThe program requires an interview after you apply, usually by phone, and the application itself can be completed online at washingtonconnection.org. Benefits are calculated based on household size, income, and living expenses like rent and utilities.",
+      "savingsRange": "Up to $306/month for one person (FY2027 maximum, from Oct 1, 2026)",
+      "savingsSource": "USDA FY2027 maximum allotments (Oct 1, 2026 - Sep 30, 2027): $306/month for one person, $562 for two, up to $1,217/month for five; actual amounts depend on income and deductions",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Household income at or below 200% Federal Poverty Level",
           "U.S. citizenship or lawful residency",
           "Washington State residency",
-          "Work requirement (18-64, 80 hours/month starting July 2025)",
+          "Time limit for adults 18-64 without a child under 14, unless they work 80 hours/month or are exempt (not for 65+)",
           "No asset limits on house, car, or savings"
         ],
         "ageRequirement": null,
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 2608
+            "monthlyLimit": 2660
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 3525
+            "monthlyLimit": 3607
           },
           {
             "householdSize": 3,
-            "monthlyLimit": 4442
+            "monthlyLimit": 4553
           },
           {
             "householdSize": 4,
-            "monthlyLimit": 5358
+            "monthlyLimit": 5500
           },
           {
             "householdSize": 5,
-            "monthlyLimit": 6275
+            "monthlyLimit": 6447
           },
           {
             "householdSize": 6,
-            "monthlyLimit": 7192
+            "monthlyLimit": 7393
           },
           {
             "householdSize": 7,
-            "monthlyLimit": 8108
+            "monthlyLimit": 8340
           },
           {
             "householdSize": 8,
-            "monthlyLimit": 9025
+            "monthlyLimit": 9287
           }
         ],
         "assetLimits": null,
         "functionalRequirement": null,
         "otherRequirements": [
           "Must be U.S. citizen or meet 5-year lawful residency requirement (children with U.S. citizen status may qualify even if parents don't)",
-          "Starting July 2025: Adults 18-64 must work 80 hours/month unless they have children under 14, participate in SNAP Employment & Training, or combine qualifying activities like volunteering or training",
+          "Adults 18-64 without a child under 14 in the household (ABAWDs) can get only 3 months of benefits in 36 unless they work, volunteer or train at least 80 hours/month or qualify for an exemption. Statewide since Feb 1, 2026; DSHS screens current recipients for exemptions at their next eligibility review. People 65+ are not subject to it.",
           "Must participate in Food Assistance work and training program if applicable",
           "Income counted is gross income before taxes and deductions"
         ],
@@ -1029,7 +1037,7 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at washingtonconnection.org, then complete a required in-person interview at your local Community Services Office.",
+        "summary": "Apply online at washingtonconnection.org or by phone at 877-501-2233, then complete a required interview by phone or in person.",
         "steps": [
           {
             "step": 1,
@@ -1048,8 +1056,8 @@
           },
           {
             "step": 4,
-            "title": "Complete mandatory interview",
-            "description": "Schedule and attend an in-person interview at your local Community Services Office. This interview is required for all applications and cannot be waived."
+            "title": "Complete your interview",
+            "description": "DSHS will interview you, usually by phone. Call 877-501-2233 to complete or reschedule it. You can also do it in person at your local Community Services Office."
           },
           {
             "step": 5,
@@ -1096,8 +1104,8 @@
         }
       ],
       "applicationNotes": [
-        "Major policy changes in July 2025 will require most adults 18-64 to work 80 hours monthly, significantly reducing eligibility for working-age adults without young children",
-        "December 2025 changes will eliminate eligibility for refugees, asylum seekers, and immigrants with humanitarian protections under new federal rules",
+        "Adults 18-64 without a child under 14 in the household (ABAWDs) can get only 3 months of benefits in 36 unless they work, volunteer or train at least 80 hours/month or qualify for an exemption. Statewide since Feb 1, 2026; DSHS screens current recipients for exemptions at their next eligibility review. People 65+ are not subject to it.",
+        "Under federal H.R. 1, refugees, asylees and other immigrants with humanitarian protections are no longer eligible for federal SNAP, but Washington moved them to state-funded food benefits in May 2026 at the same benefit amount. Lawful permanent residents remain eligible for federal SNAP.",
         "The mandatory interview can be a barrier - call ahead to schedule and ask about available appointment times",
         "An estimated 170,300 Washingtonians could lose food assistance due to the expanded work requirements and immigrant eligibility changes"
       ],
@@ -1114,8 +1122,8 @@
           "answer": "No. Resources like a house, car, or money in the bank do not count against Basic Food Program eligibility in Washington. Only monthly income matters for qualification, and the income limits are generous compared to other programs."
         },
         {
-          "question": "How will the new work requirements starting July 2025 affect my elderly loved one?",
-          "answer": "Adults aged 18-64 must work 80 hours per month starting July 2025, but there are exceptions for parents with children under 14 and participants in SNAP Employment & Training programs. If your loved one is over 64, the work requirement doesn't apply to them."
+          "question": "How do the work rules affect my elderly loved one?",
+          "answer": "The time limit applies to adults 18 to 64 without a child under 14 in the household, everywhere in Washington since February 1, 2026. They can get only 3 months of benefits in 36 months unless they work, volunteer or train at least 80 hours a month or qualify for an exemption. If your loved one is 65 or older, it does not apply to them."
         },
         {
           "question": "Can I apply for Basic Food benefits on behalf of my loved one who has dementia?",
@@ -1138,8 +1146,8 @@
           "answer": "You must report income changes to maintain benefits. Increases in income may reduce benefit amounts or end eligibility, while decreases may increase benefits. Contact your local Community Services Office within 10 days of any significant income change to avoid overpayment issues."
         },
         {
-          "question": "If my loved one is an immigrant, how will the December 2025 changes affect their eligibility?",
-          "answer": "Starting December 1, 2025, refugees, asylum seekers, and immigrants with humanitarian protections will lose eligibility under new federal rules. However, if your loved one has U.S. citizen children, those children may still qualify for benefits even if the loved one doesn't."
+          "question": "If my loved one is an immigrant, how do the federal rule changes affect their eligibility?",
+          "answer": "Refugees, asylees and immigrants with humanitarian protections are no longer eligible for federal SNAP under H.R. 1. Washington moved them to state-funded food benefits in May 2026, and the benefit amount stays the same, so they can still get help. Lawful permanent residents remain eligible for federal SNAP."
         }
       ],
       "layoutIntent": {
@@ -1155,7 +1163,7 @@
       "sourceUrl": "https://kingcounty.gov/en/dept/dph/health-safety/health-centers-programs-services/access-outreach-program/basic-food-program",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",

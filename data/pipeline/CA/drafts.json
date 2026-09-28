@@ -37,11 +37,13 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1330
+            "monthlyLimit": 1330,
+            "tier": "QMB"
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1804
+            "monthlyLimit": 1804,
+            "tier": "QMB"
           }
         ],
         "assetLimits": {
@@ -131,7 +133,7 @@
       ],
       "contacts": [
         {
-          "label": "Apply through your county (start here)",
+          "label": "Medi-Cal Helpline (finds your county office) (start here)",
           "phone": "(800) 541-5555",
           "description": "The Medi-Cal helpline for questions about these programs. Your county decides eligibility, not a helpline. The fastest route is applying online at benefitscal.com.",
           "hours": null
@@ -144,7 +146,6 @@
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Applications go through your county Medi-Cal office (form MC 14A by mail, by phone, online, or in person). HICAP counselors help with the paperwork for free.",
         "California became a Part A Buy-In state in January 2025, QMB recipients are now automatically enrolled in Medicare Part A if eligible",
         "Providers cannot legally bill QMB recipients for Medicare deductibles or copays, but choose providers who accept Medi-Cal to avoid billing confusion",
@@ -223,11 +224,11 @@
         "visualTone": "editorial"
       },
       "icon": "Money",
-      "phone": "2-1-1",
+      "phone": "(800) 541-5555",
       "sourceUrl": "https://www.dhcs.ca.gov/individuals/Pages/Medicare-Savings-Programs-in-California.aspx",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "mssp-waiver",
@@ -575,7 +576,7 @@
       "id": "calfresh-food-benefits",
       "name": "CalFresh",
       "shortName": "CalFresh",
-      "tagline": "Up to $298/month for groceries if your loved one is 60+ and on a limited income.",
+      "tagline": "Up to $306/month for groceries (from October 1, 2026) if your loved one is 60+ and on a limited income.",
       "programType": "benefit",
       "complexity": "deep",
       "geographicScope": {
@@ -588,9 +589,9 @@
           }
         ]
       },
-      "intro": "If your loved one is 60+ and struggling with grocery costs, CalFresh provides monthly funds loaded onto an EBT card for food purchases. Benefits range from a minimum of $24/month up to $298/month for individuals, depending on income and expenses like medical costs and housing.\n\nBecause seniors get special eligibility rules, your loved one may qualify even if the full household wouldn't. Seniors can form their own separate household for CalFresh purposes, use net income after medical and housing deductions, and face no asset limits in most cases. The program also covers prepared meals at participating restaurants statewide through the Restaurant Meals Program.\n\nSSI/SSP recipients can receive CalFresh in addition to their cash benefits, but they are not automatically income-eligible, they must apply and meet the same income rules as everyone else. Your loved one won't face work requirements, and all out-of-pocket medical expenses over $35 count as deductions to lower their countable income.",
-      "savingsRange": "$24 - $298/month for one person (FY2026 limits)",
-      "savingsSource": "FY2026 California limits: maximum $298/month for one person, $1,789 for eight. The $24 minimum is the federal floor and applies only to eligible one- and two-person households. Actual benefit depends on household size and the benefit calculation.",
+      "intro": "If your loved one is 60+ and struggling with grocery costs, CalFresh provides monthly funds loaded onto an EBT card for food purchases. Benefits range from a minimum of $25/month up to $306/month for individuals (from October 1, 2026), depending on income and expenses like medical costs and housing.\n\nBecause seniors get special eligibility rules, your loved one may qualify even if the full household wouldn't. Seniors can form their own separate household for CalFresh purposes, use net income after medical and housing deductions, and face no asset limits in most cases. The program also covers prepared meals at participating restaurants statewide through the Restaurant Meals Program.\n\nSSI/SSP recipients can receive CalFresh in addition to their cash benefits, but they are not automatically income-eligible, they must apply and meet the same income rules as everyone else. Your loved one won't face work requirements, and all out-of-pocket medical expenses over $35 count as deductions to lower their countable income.",
+      "savingsRange": "$25 - $306/month for one person (FY2027 limits, from October 1, 2026)",
+      "savingsSource": "USDA FY2027 limits (October 1, 2026 to September 30, 2027): maximum $306/month for one person, $1,841 for eight. The $25 minimum is the federal floor and applies only to eligible one- and two-person households. Actual benefit depends on household size and the benefit calculation.",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
@@ -706,7 +707,7 @@
       },
       "documentsNeeded": [
         "Social Security award letter or other proof of income",
-        "The current balance of any checking or savings accounts. In California, if gross monthly income is at or below the state limit ($2,610 for one person in 2026), savings do not count at all. Above that limit an older or disabled household can still qualify, but savings then count against a $4,500 limit.",
+        "The current balance of any checking or savings accounts. In California, if gross monthly income is at or below the state limit ($2,610 for one person in 2026), savings do not count at all. Above that limit an older or disabled household can still qualify, but savings then count against a $4,750 limit (from October 1, 2026).",
         "Out-of-pocket medical expenses totalling more than $35 in a month, if a household member is 60 or older or meets the SNAP disability rules. Only costs your household actually paid count; anything covered by Medi-Cal or other insurance does not.",
         "Rent receipt or mortgage statement",
         "Utility bills (electric, gas, water, phone)",
@@ -748,7 +749,7 @@
       "faqs": [
         {
           "question": "Can my loved one keep CalFresh if they live in assisted living?",
-          "answer": "Yes, residents of assisted living facilities can receive CalFresh benefits. However, if the facility provides all meals as part of the monthly fee, benefits may be reduced to the minimum $24/month. Your loved one can use benefits at grocery stores for snacks and additional food items."
+          "answer": "Yes, residents of assisted living facilities can receive CalFresh benefits. However, if the facility provides all meals as part of the monthly fee, benefits may be reduced to the minimum $25/month. Your loved one can use benefits at grocery stores for snacks and additional food items."
         },
         {
           "question": "What if my loved one's income is mostly Social Security, do they still qualify?",
@@ -760,7 +761,7 @@
         },
         {
           "question": "Does my loved one's house count against the asset limit?",
-          "answer": "For most seniors, no. CalFresh in California generally does not apply an asset test, unlike Medi-Cal (which brought back asset limits in 2026), it looks at income rather than savings for the vast majority of households. In the rare case a household is subject to an asset review, the 2026 limit is $4,500 when the household includes someone 60 or older, and the primary home, one vehicle, household goods, and retirement accounts are all excluded."
+          "answer": "For most seniors, no. CalFresh in California generally does not apply an asset test, unlike Medi-Cal (which brought back asset limits in 2026), it looks at income rather than savings for the vast majority of households. In the rare case a household is subject to an asset review, the limit from October 1, 2026 is $4,750 when the household includes someone 60 or older, and the primary home, one vehicle, household goods, and retirement accounts are all excluded."
         },
         {
           "question": "Can my loved one use CalFresh benefits at restaurants?",
@@ -792,7 +793,7 @@
       "sourceUrl": "https://www.cdss.ca.gov/calfresh",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -806,19 +807,7 @@
         "stateVariation": true,
         "localEntities": [
           {
-            "name": "Maravilla: San Fernando Valley, Northeast LA, East LA areas",
-            "type": "service-area"
-          },
-          {
-            "name": "PACE: West LA, Central LA, South LA areas",
-            "type": "service-area"
-          },
-          {
-            "name": "Long Beach Community Action Partnership (LBCAP): Harbor area",
-            "type": "service-area"
-          },
-          {
-            "name": "Inyo Mono Advocates for Community Action (IMACA): Owens Valley area",
+            "name": "Local LIHEAP service providers (find yours on CSD's Find Services In Your Area page)",
             "type": "service-area"
           }
         ]
@@ -881,17 +870,17 @@
       },
       "applicationGuide": {
         "method": "multiple",
-        "summary": "Apply online at caliheapapply.com or call 1-866-675-6623. Application processing may take several weeks.",
+        "summary": "Apply through your local LIHEAP service provider: online at caliheapapply.com if your provider uses it, or by contacting the provider directly for an in-person or mail application. The CSD call center (1-866-675-6623) answers questions and helps you find your provider. Processing may take several weeks.",
         "steps": [
           {
             "step": 1,
             "title": "Find your local service provider",
-            "description": "Visit caliheapapply.com and use the service provider search tool to identify which agency serves your area (Maravilla, PACE, LBCAP, or IMACA)."
+            "description": "Find your local LIHEAP provider at CSD's Find Services In Your Area page (https://www.csd.ca.gov/Pages/FindServicesInYourArea.aspx?ct=Energy_Bill) or by calling CSD at 1-866-675-6623. Some providers take applications online at caliheapapply.com."
           },
           {
             "step": 2,
             "title": "Complete the application",
-            "description": "Apply online at caliheapapply.com or call 1-866-675-6623. You can also contact your local provider directly for in-person or mail applications."
+            "description": "Apply with your local provider: online at caliheapapply.com if your provider uses it, or contact the provider directly for an in-person or mail application. The CSD call center (1-866-675-6623) answers questions but does not take applications."
           },
           {
             "step": 3,
@@ -908,6 +897,10 @@
         "waitlist": "Federal funding is limited, some eligible households may not receive benefits due to prioritization of vulnerable populations",
         "tip": "While waiting for LIHEAP processing, contact your energy provider about lower rates and payment plans to avoid disconnection.",
         "urls": [
+          {
+            "label": "Find your local LIHEAP provider (CSD)",
+            "url": "https://www.csd.ca.gov/Pages/FindServicesInYourArea.aspx?ct=Energy_Bill"
+          },
           {
             "label": "California LIHEAP Online Application",
             "url": "https://caliheapapply.com"
@@ -996,7 +989,7 @@
       "sourceUrl": "https://www.csd.ca.gov/pages/liheapprogram.aspx",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-22"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "weatherization-assistance-program",
@@ -2108,14 +2101,14 @@
           }
         ]
       },
-      "intro": "If your loved one is 65+, disabled, or blind and receives federal SSI (Supplemental Security Income), California automatically provides an additional cash payment called State Supplementary Payment (SSP). This means your loved one gets more money each month, up to $239.94 extra for an individual or $607.83 extra for couples in 2026.\n\nThe total monthly payment becomes $1,206.94 for individuals or $2,057.83 for couples when combining federal SSI and California's SSP supplement. Because SSP follows SSI eligibility automatically, your loved one doesn't need to apply separately, if they qualify for SSI, they get SSP.\n\nTo qualify, your loved one must have very limited income (generally under $1,207/month after disregards) and assets under $2,000 for individuals or $3,000 for couples. The payment is reduced dollar-for-dollar by other countable income, and living arrangements can affect the amount.",
+      "intro": "If your loved one is 65+, disabled, or blind and receives federal SSI (Supplemental Security Income), California automatically provides an additional cash payment called State Supplementary Payment (SSP). This means your loved one gets more money each month, up to $239.94 extra for an individual or $607.83 extra for couples in 2026.\n\nThe total monthly payment becomes $1,233.94 for individuals or $2,098.83 for couples when combining federal SSI and California's SSP supplement. Because SSP follows SSI eligibility automatically, your loved one doesn't need to apply separately, if they qualify for SSI, they get SSP.\n\nTo qualify, your loved one must have very limited income (generally under $1,233.94/month after disregards) and assets under $2,000 for individuals or $3,000 for couples. The payment is reduced dollar-for-dollar by other countable income, and living arrangements can affect the amount.",
       "savingsRange": "$239.94/month ($2,879/year) for a single aged or disabled adult living independently in 2026",
       "savingsSource": "SSA POMS SI 01415.058, California payment standards effective 2026-01-01. The state supplement for a single recipient depends entirely on category and living arrangement: $239.94/month living independently (aged or disabled), $324.32 blind, $368.81 without cooking facilities, $632.07 in non-medical out-of-home care, and $0.00 in some settings. There is no single typical amount and no guaranteed minimum.",
       "savingsVerified": true,
       "structuredEligibility": {
         "summary": [
           "Age 65+ or disabled/blind",
-          "Income under $1,207/month",
+          "Income under $1,233.94/month (single, aged or disabled, living independently, 2026)",
           "Assets under $2,000 individual/$3,000 couple",
           "Must qualify for federal SSI",
           "California resident"
@@ -2142,7 +2135,7 @@
         },
         "functionalRequirement": "If under 65: Must be unable to work due to disability lasting 1+ year, or be legally blind",
         "otherRequirements": [
-          "U.S. citizen or qualified non-citizen (permanent resident with 40 work quarters, refugee/asylee in first 5 years, veteran/spouse/child)",
+          "U.S. citizen or qualified non-citizen (permanent resident with 40 work quarters, refugee/asylee within 7 years of getting that status, veteran/spouse/child)",
           "Must apply for all other available benefits",
           "Living in the United States"
         ],
@@ -2219,7 +2212,7 @@
       ],
       "applicationNotes": [
         "In-kind support like free food or shelter from family can count as income and reduce your SSP payment amount",
-        "Non-citizens need specific qualifications, permanent residents must have 40 work quarters, refugees/asylees qualify only in first 5 years",
+        "Non-citizens need specific qualifications, permanent residents must have 40 work quarters, refugees/asylees can qualify for up to 7 years",
         "Living arrangements directly affect payment levels, sharing housing typically reduces the amount you receive",
         "You must apply for other benefits like SNAP as a condition of SSP eligibility"
       ],
@@ -2269,7 +2262,7 @@
       "sourceUrl": "https://www.cdss.ca.gov/inforesources/cdss-programs/ssi-ssp/ssi-ssp-eligibility-summary",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "property-tax-postponement",

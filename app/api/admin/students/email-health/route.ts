@@ -19,7 +19,8 @@ import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
  */
 export const maxDuration = 60;
 
-const DEFAULT_WINDOW_DAYS = 90;
+// days=0 means "all time" (no date filter)
+const DEFAULT_WINDOW_DAYS = 0;
 const PAGE_SIZE_MAX = 100;
 
 /**
@@ -140,28 +141,42 @@ export async function GET(request: NextRequest) {
   const db = getServiceClient();
   const { searchParams } = new URL(request.url);
 
-  const days = Math.min(Math.max(parseInt(searchParams.get("days") || "", 10) || DEFAULT_WINDOW_DAYS, 1), 365);
+  // Date filtering: prefer from/to params, fall back to days param
+  // days=0 or no params means "all time"
+  const fromParam = searchParams.get("from"); // ISO date string
+  const toParam = searchParams.get("to"); // ISO date string
+  const daysParam = parseInt(searchParams.get("days") || "", 10);
+  const days = isNaN(daysParam) ? DEFAULT_WINDOW_DAYS : (daysParam === 0 ? 0 : Math.min(Math.max(daysParam, 1), 365));
+
   const filter = searchParams.get("filter") || "all";
   const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
   const perPage = Math.min(PAGE_SIZE_MAX, Math.max(1, parseInt(searchParams.get("per_page") || "50", 10)));
 
-  const since = new Date(Date.now() - days * 86_400_000).toISOString();
-
   try {
-    // Fetch all student emails in the window
-    const rows = await readAll<LogRow>((from, to) =>
-      db
+    // Fetch all student emails (optionally filtered by date window)
+    const rows = await readAll<LogRow>((from, to) => {
+      let query = db
         .from("email_log")
         .select(
           "id, recipient, email_type, status, error_message, created_at, delivered_at, first_opened_at, first_clicked_at, bounced_at, complained_at"
         )
-        .eq("channel", "email") // Only email, not SMS/push
+        .eq("channel", "email")
         .eq("recipient_type", "student")
-        .in("email_type", STUDENT_EMAIL_TYPES as unknown as string[])
-        .gte("created_at", since)
-        .order("id", { ascending: true })
-        .range(from, to),
-    );
+        .in("email_type", STUDENT_EMAIL_TYPES as unknown as string[]);
+
+      // Apply date filter: from/to params take precedence over days
+      if (fromParam) {
+        query = query.gte("created_at", fromParam);
+      } else if (days > 0) {
+        const since = new Date(Date.now() - days * 86_400_000).toISOString();
+        query = query.gte("created_at", since);
+      }
+      if (toParam) {
+        query = query.lt("created_at", toParam);
+      }
+
+      return query.order("id", { ascending: true }).range(from, to);
+    });
 
     // Aggregate by email address (lowercased for deduplication)
     interface StudentStats {
@@ -288,48 +303,65 @@ export async function GET(request: NextRequest) {
       lastComplainedAt: string | null;
     }
 
-    let students: StudentEmailHealth[] = [...byEmail.values()].map((stats) => {
-      const profile = profileMap.get(stats.email.toLowerCase());
-      const meta = profile?.metadata ?? {};
+    let students: StudentEmailHealth[] = [...byEmail.values()]
+      .map((stats) => {
+        const profile = profileMap.get(stats.email.toLowerCase());
+        const meta = profile?.metadata ?? {};
 
-      // Determine health status (complaints are worse than bounces)
-      let status: "healthy" | "bounced" | "complained" = "healthy";
-      if (stats.complained > 0) {
-        status = "complained";
-      } else if (stats.bounced > 0) {
-        status = "bounced";
-      }
+        // Determine health status (complaints are worse than bounces)
+        let status: "healthy" | "bounced" | "complained" = "healthy";
+        if (stats.complained > 0) {
+          status = "complained";
+        } else if (stats.bounced > 0) {
+          status = "bounced";
+        }
 
-      // Calculate rates (avoid division by zero)
-      const openRate = stats.delivered > 0 ? Math.round((stats.opened / stats.delivered) * 100) : 0;
-      const clickRate = stats.delivered > 0 ? Math.round((stats.clicked / stats.delivered) * 100) : 0;
+        // Calculate rates (avoid division by zero)
+        const openRate = stats.delivered > 0 ? Math.round((stats.opened / stats.delivered) * 100) : 0;
+        const clickRate = stats.delivered > 0 ? Math.round((stats.clicked / stats.delivered) * 100) : 0;
 
-      return {
-        email: stats.email,
-        profileId: profile?.id ?? null,
-        name: profile?.display_name ?? "(unknown)",
-        slug: profile?.slug ?? null,
-        university: meta.university ?? null,
-        phone: profile?.phone ?? null,
-        imageUrl: profile?.image_url ?? null,
-        isActive: profile?.is_active ?? false,
-        isApproved: !!meta.application_completed,
-        sent: stats.sent,
-        delivered: stats.delivered,
-        opened: stats.opened,
-        clicked: stats.clicked,
-        bounced: stats.bounced,
-        complained: stats.complained,
-        openRate,
-        clickRate,
-        status,
-        lastEmailAt: stats.lastEmailAt,
-        lastBouncedAt: stats.lastBouncedAt,
-        lastComplainedAt: stats.lastComplainedAt,
-      };
-    });
+        return {
+          email: stats.email,
+          profileId: profile?.id ?? null,
+          name: profile?.display_name ?? "(unknown)",
+          slug: profile?.slug ?? null,
+          university: meta.university ?? null,
+          phone: profile?.phone ?? null,
+          imageUrl: profile?.image_url ?? null,
+          isActive: profile?.is_active ?? false,
+          isApproved: !!meta.application_completed,
+          sent: stats.sent,
+          delivered: stats.delivered,
+          opened: stats.opened,
+          clicked: stats.clicked,
+          bounced: stats.bounced,
+          complained: stats.complained,
+          openRate,
+          clickRate,
+          status,
+          lastEmailAt: stats.lastEmailAt,
+          lastBouncedAt: stats.lastBouncedAt,
+          lastComplainedAt: stats.lastComplainedAt,
+        };
+      })
+      // Filter out orphaned emails (deleted students) — only show students with active profiles
+      .filter((s) => s.profileId !== null);
 
-    // Apply filter
+    // Calculate aggregate stats from all students (before status filter)
+    const allActiveStudents = students; // Already filtered to only those with profiles
+    const totalSent = allActiveStudents.reduce((sum, s) => sum + s.sent, 0);
+    const totalDelivered = allActiveStudents.reduce((sum, s) => sum + s.delivered, 0);
+    const totalOpened = allActiveStudents.reduce((sum, s) => sum + s.opened, 0);
+    const totalClicked = allActiveStudents.reduce((sum, s) => sum + s.clicked, 0);
+    const totalBounced = allActiveStudents.reduce((sum, s) => sum + s.bounced, 0);
+    const totalComplaints = allActiveStudents.reduce((sum, s) => sum + s.complained, 0);
+
+    const overallOpenRate = totalDelivered > 0 ? Math.round((totalOpened / totalDelivered) * 100) : 0;
+    const overallClickRate = totalDelivered > 0 ? Math.round((totalClicked / totalDelivered) * 100) : 0;
+    const bounceRate = totalSent > 0 ? Math.round((totalBounced / totalSent) * 100) : 0;
+    const complaintRate = totalDelivered > 0 ? Math.round((totalComplaints / totalDelivered) * 10000) / 100 : 0;
+
+    // Apply status filter for display
     if (filter === "bounced") {
       students = students.filter((s) => s.status === "bounced");
     } else if (filter === "complained") {
@@ -346,31 +378,18 @@ export async function GET(request: NextRequest) {
       return b.sent - a.sent;
     });
 
-    // Calculate aggregate stats
-    const allStudents = [...byEmail.values()];
-    const totalSent = allStudents.reduce((sum, s) => sum + s.sent, 0);
-    const totalDelivered = allStudents.reduce((sum, s) => sum + s.delivered, 0);
-    const totalOpened = allStudents.reduce((sum, s) => sum + s.opened, 0);
-    const totalClicked = allStudents.reduce((sum, s) => sum + s.clicked, 0);
-    const totalBounced = allStudents.reduce((sum, s) => sum + s.bounced, 0);
-    const totalComplaints = allStudents.reduce((sum, s) => sum + s.complained, 0);
-
-    const overallOpenRate = totalDelivered > 0 ? Math.round((totalOpened / totalDelivered) * 100) : 0;
-    const overallClickRate = totalDelivered > 0 ? Math.round((totalClicked / totalDelivered) * 100) : 0;
-    const bounceRate = totalSent > 0 ? Math.round((totalBounced / totalSent) * 100) : 0;
-    const complaintRate = totalDelivered > 0 ? Math.round((totalComplaints / totalDelivered) * 10000) / 100 : 0; // Per 100, shown as percentage
-
     // Pagination
-    const totalStudents = students.length;
-    const totalPages = Math.ceil(totalStudents / perPage);
+    const totalStudentsFiltered = students.length;
+    const totalPages = Math.ceil(totalStudentsFiltered / perPage);
     const from = (page - 1) * perPage;
     const paginatedStudents = students.slice(from, from + perPage);
 
     return NextResponse.json({
-      windowDays: days,
+      windowDays: fromParam ? 0 : days, // 0 when using custom date range
+      dateRange: fromParam ? { from: fromParam, to: toParam } : null,
       generatedAt: new Date().toISOString(),
       summary: {
-        totalStudents: allStudents.length,
+        totalStudents: allActiveStudents.length,
         totalSent,
         totalDelivered,
         totalOpened,
@@ -381,15 +400,15 @@ export async function GET(request: NextRequest) {
         clickRate: overallClickRate,
         bounceRate,
         complaintRate,
-        bouncedStudents: allStudents.filter((s) => s.bounced > 0 && s.complained === 0).length,
-        complainedStudents: allStudents.filter((s) => s.complained > 0).length,
-        healthyStudents: allStudents.filter((s) => s.bounced === 0 && s.complained === 0).length,
+        bouncedStudents: allActiveStudents.filter((s) => s.status === "bounced").length,
+        complainedStudents: allActiveStudents.filter((s) => s.status === "complained").length,
+        healthyStudents: allActiveStudents.filter((s) => s.status === "healthy").length,
       },
       students: paginatedStudents,
       pagination: {
         page,
         perPage,
-        totalStudents,
+        totalStudents: totalStudentsFiltered,
         totalPages,
       },
     });

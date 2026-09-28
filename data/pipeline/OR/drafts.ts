@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-06T12:14:31.530Z
+ * Last updated: 2026-09-28T09:21:59.480Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -55,7 +55,7 @@ export const drafts: PipelineStateDrafts = {
             "Property other than home"
           ],
           "exemptAssets": [
-            "Primary home",
+            "Primary home (Medicaid home-equity limit applies)",
             "One vehicle",
             "Personal belongings"
           ],
@@ -181,7 +181,7 @@ export const drafts: PipelineStateDrafts = {
         },
         {
           "question": "Will my loved one's home count against the asset limit?",
-          "answer": "Primary homes are typically exempt from Medicaid asset limits, but OPI-M follows specific Oregon rules for non-standard living arrangements. The exact asset limit equals six months of nursing facility costs in your area. Contact your ADRC for specific guidance about your loved one's situation."
+          "answer": "The home your loved one lives in does not count toward the asset limit, but OPI-M applies the Medicaid home-equity limit, so a home with very high equity can affect eligibility. The exact asset limit equals six months of nursing facility costs in your area. Contact your ADRC for specific guidance about your loved one's situation."
         }
       ],
       "layoutIntent": {
@@ -197,7 +197,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "pace-elderly-care",
@@ -477,7 +477,6 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "If you're interested in the QI/SMF tier (income $1,596-$1,796), apply early in the calendar year, this program has federal enrollment caps and may close mid-year",
         "Oregon's income calculation starts with gross income and subtracts $20, plus additional deductions for earned income, you may qualify even if your income appears too high",
         "Multnomah County residents can also contact Oregon Medicare Savings Connect, which operates under the same eligibility rules",
@@ -568,7 +567,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/aging-disability-services/pages/medicare-savings-programs.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "snap-food-benefits",
@@ -581,13 +580,13 @@ export const drafts: PipelineStateDrafts = {
         "type": "federal",
         "stateVariation": true
       },
-      "intro": "If your elderly loved one struggles to afford groceries on Social Security or pension income, Oregon SNAP provides monthly benefits to help pay for food. Because Oregon expanded eligibility beyond federal requirements, your loved one may qualify even if their income is higher than you'd expect, up to $2,608/month for a single person.\n\nFor seniors 60 and older, special rules make qualifying easier. Out-of-pocket medical costs (prescriptions, doctor visits, dental work) count as deductions that reduce countable income, potentially qualifying your loved one for benefits or increasing their monthly amount. Adults 65+ can also receive benefits as direct deposit, check, or EBT card in some counties, rather than just the standard EBT card.\n\nBecause SNAP uses a formula where every $100 more in net income reduces benefits by $30, even middle-income seniors often qualify for meaningful assistance. Your loved one's house, car, and most bank accounts don't count against eligibility, making this accessible for homeowners with modest savings.",
+      "intro": "If your elderly loved one struggles to afford groceries on Social Security or pension income, Oregon SNAP provides monthly benefits to help pay for food. Because Oregon expanded eligibility beyond federal requirements, your loved one may qualify even if their income is higher than you'd expect, up to $2,660/month for a single person.\n\nFor seniors 60 and older, special rules make qualifying easier. Out-of-pocket medical costs (prescriptions, doctor visits, dental work) count as deductions that reduce countable income, potentially qualifying your loved one for benefits or increasing their monthly amount. Adults 65+ can also receive benefits as direct deposit, check, or EBT card in some counties, rather than just the standard EBT card.\n\nBecause SNAP uses a formula where every $100 more in net income reduces benefits by $30, even middle-income seniors often qualify for meaningful assistance. Your loved one's house, car, and most bank accounts don't count against eligibility, making this accessible for homeowners with modest savings.",
       "savingsRange": "",
       "savingsSource": "Monthly grocery assistance based on household income",
       "savingsVerified": false,
       "structuredEligibility": {
         "summary": [
-          "Income below $2,608/month (single person)",
+          "Income below $2,660/month (single person)",
           "Special rules for age 60+",
           "Oregon residency required",
           "Must be U.S. citizen or eligible non-citizen"
@@ -628,8 +627,8 @@ export const drafts: PipelineStateDrafts = {
           }
         ],
         "assetLimits": {
-          "individual": 4500,
-          "couple": 4500,
+          "individual": null,
+          "couple": null,
           "countedAssets": [
             "Liquid assets from lottery or gambling winnings above the state limit"
           ],
@@ -692,7 +691,7 @@ export const drafts: PipelineStateDrafts = {
       },
       "documentsNeeded": [
         "Social Security award letter or pension statements",
-        "The current balance of any checking or savings accounts. In Oregon most households are approved with no asset test at all, but a limit ($4,500 when someone in the home is 60 or older or has a disability) still applies in a few situations, so bring the numbers.",
+        "The current balance of any checking or savings accounts. In Oregon most households are approved with no asset test at all, but a limit ($4,750 from October 1, 2026, when someone in the home is 60 or older or has a disability) still applies in a few situations, so bring the numbers.",
         "Proof of Oregon residency (utility bill, lease, or state-issued document)",
         "Valid government-issued photo ID",
         "Citizenship documents (birth certificate, passport, or naturalization papers)",
@@ -727,7 +726,7 @@ export const drafts: PipelineStateDrafts = {
         "Since June 1, 2026 Oregon requires a SNAP interview for every household, including households where all adults are 60 or older with no earned income. Those households were previously exempt, so this may be their first interview at renewal.",
         "Households with all members 65+ in Clackamas, Columbia, Multnomah, and Washington counties can receive benefits as direct deposit or check instead of EBT card",
         "If your loved one lives with you but buys food separately, they may still be counted as one household, household definition affects benefit amounts",
-        "Work requirements now apply statewide and affect about 37,000 Oregonians, able-bodied adults 18-64 without disabilities or children may only receive 3 months of benefits unless working",
+        "Work rules apply to able-bodied adults 18-64 without a child under 14 on the case, except in exempt counties (Crook, Gilliam, Jefferson, Lake, Morrow, Sherman and Wheeler) and waived Tribal lands. Without an exemption they can get only 3 months of benefits in a 3-year period unless they work or do an activity 80 hours a month.",
         "Expedited benefits require specific income thresholds, ask specifically about expedited processing when applying if your loved one has very low income or faces utility shutoff"
       ],
       "relatedPrograms": [
@@ -784,7 +783,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/food/pages/snap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "liheap-energy-assistance",
@@ -2134,8 +2133,8 @@ export const drafts: PipelineStateDrafts = {
         "steps": [
           {
             "step": 1,
-            "title": "Contact Oregon Housing and Community Services",
-            "description": "Call OHCS to find your local homeless prevention program provider. They will connect you to the Coordinated Entry System in your area."
+            "title": "Find your local community action agency",
+            "description": "Call 2-1-1 (or 866-698-6155), or look up your county at caporegon.org/find-help. ERA is run by your local community action agency, not by the state office, and the state office cannot take your application."
           },
           {
             "step": 2,
@@ -2158,8 +2157,8 @@ export const drafts: PipelineStateDrafts = {
         "tip": "Even if your loved one seems ineligible, request the assessment, it's free and providers may identify other housing resources.",
         "urls": [
           {
-            "label": "Oregon Housing and Community Services",
-            "url": "https://www.oregon.gov/ohcs/pages/index.aspx"
+            "label": "Find your local community action agency",
+            "url": "https://caporegon.org/find-help/"
           }
         ]
       },
@@ -2238,11 +2237,11 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "editorial"
       },
       "icon": "HouseLine",
-      "phone": "(800) 453-5511",
+      "phone": "2-1-1",
       "sourceUrl": "https://secure.sos.state.or.us/oard/displayDivisionRules.action?selectedDivision=3636",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-28"
     },
     {
       "id": "senior-tuition-audit",
@@ -2524,7 +2523,6 @@ export const drafts: PipelineStateDrafts = {
         }
       ],
       "applicationNotes": [
-        "Your first call is a needs and level-of-care screen, not a financial review. Financial paperwork comes later. When you do apply you sign a form letting the state pull your bank records electronically, at no cost to you, so you may never be asked for statements at all. If the office needs something specific it sends a written list with a due date.",
         "Don't submit applications to multiple CCOs for the same benefits, work with the CCO your loved one is already enrolled with",
         "This is not for emergency situations, contact Community Action Agencies for immediate crisis assistance instead",
         "Housing benefits require your loved one to already have housing (with a lease) and lack resources to maintain it, this doesn't help find housing for unhoused individuals without a housing path",
@@ -2584,7 +2582,7 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/oha/hsd/medicaid-policy/pages/hrsn.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": "2026-09-28"
     }
   ],
   "stateOverview": {
