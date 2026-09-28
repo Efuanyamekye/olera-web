@@ -10,11 +10,6 @@ import {
   benefitsCompletedAt,
   readBenefitsCascade,
 } from "@/lib/family-comms/benefits-cascade.server";
-import {
-  composeNavigatorDraft,
-  readBenefitsNavigator,
-  pickSnapshot,
-} from "@/lib/family-comms/benefits-navigator.server";
 import { sendSlackAlert } from "@/lib/slack";
 import { isBenefitsAutomationHeld, isBenefitsOnlyFamily } from "@/lib/family-comms/benefits-automation";
 import { sendSMS } from "@/lib/twilio";
@@ -263,10 +258,6 @@ export async function GET(request: NextRequest) {
     const bump = (rung: string) => {
       counts.byRung[rung] = (counts.byRung[rung] || 0) + 1;
     };
-    // Navigator compose budget (see the B1 rung): drains backlogs over days
-    // instead of blowing the route's maxDuration in one run.
-    const NAVIGATOR_COMPOSES_PER_RUN = 12;
-    let navigatorComposeCount = 0;
 
     // 1. Gather candidates broadly. Inquiry connections drive rungs 1-4 & 6; request
     //    connections drive rung 5. day-10 (rung 4) keys off provider-response age, not
@@ -1094,94 +1085,12 @@ export async function GET(request: NextRequest) {
           };
         }
 
-        // ── Rung B1 → NAVIGATOR DRAFT QUEUE (2026-07-29, TJ decision). The
-        //    coordinator no longer auto-sends the first-step email. Instead it
-        //    composes a personal TJ-signed navigator letter (AI-drafted from
-        //    the family's own facts + the verified first-step pick, see
-        //    lib/family-comms/benefits-navigator.server.ts) and parks it in
-        //    /admin/benefits for care-team approval. Nothing reaches the family
-        //    until the team sends it; first_step_sent_at is stamped by the admin
-        //    send route, so B2 stays correctly downstream of the REAL send.
-        //    Band: opens at 48h and stays open to 10 days — a letter approved
-        //    on day 6 is still useful, and the old one-shot 96h window silently
-        //    dropped families whenever a run was missed.
-        //    One-shot per family on successful composition; a failed compose
-        //    logs and retries next run. Dry runs skip composition entirely
-        //    (it writes metadata and spends tokens). ──
-        if (
-          benefitsDoneAt &&
-          !benefitsCascade.first_step_sent_at &&
-          fpr?.account_id &&
-          !readBenefitsNavigator(familyMeta).composed_at
-        ) {
-          const intakeAge = now - new Date(benefitsDoneAt).getTime();
-          // Budget guards: composition is an LLM call (seconds each). The
-          // 10-day band means the FIRST run after deploy sees the whole
-          // backlog at once — uncapped, that blows the route's 300s
-          // maxDuration and kills every rung after the cutoff point. Cap
-          // composes per run and stop composing past the time guard; skipped
-          // families simply retry next run (their guard key is never set).
-          const composeBudgetLeft = navigatorComposeCount < NAVIGATOR_COMPOSES_PER_RUN;
-          const composeTimeLeft = Date.now() - now < 180_000;
-          if (
-            intakeAge >= 48 * HOUR &&
-            intakeAge <= 10 * DAY &&
-            !dryRun &&
-            composeBudgetLeft &&
-            composeTimeLeft
-          ) {
-            navigatorComposeCount++;
-            try {
-              const draft = await composeNavigatorDraft(db, {
-                profileId: fam.familyId,
-                accountId: fpr.account_id,
-                displayName: fpr.display_name || null,
-                state: fpr.state || null,
-                city: fpr.city || null,
-                careTypes: (fpr.care_types as string[] | null) || [],
-                intakeAt: benefitsDoneAt,
-                profileMeta: familyMeta,
-                factsRow: fpr,
-              });
-              if (draft) {
-                const navStamp = {
-                  status: "pending",
-                  composed_at: new Date().toISOString(),
-                  subject: draft.subject,
-                  body: draft.body,
-                  sms: draft.sms,
-                  model: "claude-opus-5",
-                  pick: pickSnapshot(draft.pick),
-                  provider_count: draft.providerCount,
-                };
-                // Composition took seconds — the run-start metadata copy may
-                // be stale (a family tapping /m gap chips mid-run would lose
-                // those facts to a blind spread). Re-read fresh metadata and
-                // merge the stamp into THAT; also mutate familyMeta (archetype
-                // pattern) so later stamps this run carry the draft forward.
-                const { data: freshRow } = await db
-                  .from("business_profiles")
-                  .select("metadata")
-                  .eq("id", fam.familyId)
-                  .maybeSingle();
-                const freshMeta =
-                  (freshRow?.metadata as Record<string, unknown> | null) || familyMeta;
-                freshMeta.benefits_navigator = navStamp;
-                familyMeta.benefits_navigator = navStamp;
-                await db
-                  .from("business_profiles")
-                  .update({ metadata: { ...freshMeta } })
-                  .eq("id", fam.familyId);
-                bump("benefits_navigator_draft");
-              }
-            } catch (err) {
-              console.error("[family-comms-coordinator] navigator compose failed:", err);
-            }
-          }
-          // Deliberately NO return: this rung never emails. The family falls
-          // through to later rungs (completion stays suppressed while the
-          // cascade is in flight) and the letter goes out when TJ approves it.
-        }
+        // Rung B1 (the first-step letter) moved to its own hourly cron,
+        // /api/cron/benefits-navigator-compose, on 2026-09-27. Composing here
+        // was capped at 180s from the start of a 3-4 minute run, so most
+        // days the loop never reached many benefits families and they aged
+        // out with no letter. Nothing about B1 happens in this route now.
+
 
         // ── Rung B2: benefits check-in — first step sent 3-14d ago, no outcome,
         //    one-shot. Three chips, all forward-looking; each links to
@@ -1508,19 +1417,6 @@ export async function GET(request: NextRequest) {
 
       bump(plan.rung);
       counts.sent++;
-    }
-
-    // Navigator drafts wait on a human — one aggregate ping so TJ knows the
-    // queue moved without per-family noise. Best-effort, never fails the run.
-    const draftCount = counts.byRung["benefits_navigator_draft"] || 0;
-    if (draftCount > 0) {
-      try {
-        await sendSlackAlert(
-          `📝 ${draftCount} navigator draft${draftCount === 1 ? "" : "s"} ready for review → ${siteUrl}/admin/benefits`,
-        );
-      } catch (err) {
-        console.error("[family-comms-coordinator] draft Slack ping failed:", err);
-      }
     }
 
     return { ok: true, ...counts };
