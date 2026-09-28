@@ -17,6 +17,7 @@ import { memoryChatStore, memoryPromptText } from "../lib/war-room/chat-memory.s
 import { handleTelegramUpdate, pickPhoto, sniffImageType, type TelegramDeps, type TelegramUpdate } from "../lib/war-room/telegram-chat.server";
 import { conversationSystem } from "../lib/war-room/conversation.server";
 import { artifactSubject } from "../lib/war-room/visualize.server";
+import { handoffNote, handoffTitle, type Handoff } from "../lib/war-room/handoff.server";
 
 // --- Formatting: Cortex writes Slack markup; Telegram reads HTML.
 assert.equal(slackToTelegramHtml("*Hoop Cares* renews Oct 15."), "<b>Hoop Cares</b> renews Oct 15.");
@@ -55,6 +56,20 @@ assert.equal(artifactSubject("Could you make a visual of the funnel?"), "the fun
 assert.equal(artifactSubject("Turn the brief into an artifact"), "the brief");
 assert.equal(artifactSubject("please make me an artifact"), "");
 console.log("artifact trigger checks passed");
+
+// --- "hand this off" at the start of a message; a question about handing off is conversation.
+assert.equal(handoffNote("hand this off"), "");
+assert.equal(handoffNote("Hand this off: the five benefits fixes"), "the five benefits fixes");
+assert.equal(handoffNote("handoff the ZIP capture idea"), "the ZIP capture idea");
+assert.equal(handoffNote("/handoff"), "");
+assert.equal(handoffNote("note this for later"), "");
+assert.equal(handoffNote("Save that for later. It's about SMS length"), "It's about SMS length");
+assert.equal(handoffNote("Should we hand this off to Logan?"), null);
+assert.equal(handoffNote("handoffs are working?"), null, "the word is not the command");
+assert.equal(handoffNote("I'll note this for later"), null);
+assert.equal(handoffTitle("# Capture ZIP in the Benefits Finder\n\nbody", ""), "Capture ZIP in the Benefits Finder");
+assert.equal(handoffTitle("no heading", "the ZIP fix"), "the ZIP fix");
+console.log("handoff trigger checks passed");
 
 // --- The handler, with fakes.
 assert.equal(sniffImageType(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0]), "image/jpeg"), "image/png");
@@ -155,6 +170,29 @@ const update = (id: number, text: string, chat = FOUNDER, extra: Partial<NonNull
     assert.deepEqual(briefs, ["brief:Write the source brief for a visual of: the managed ads orientation"]);
     assert.match(started[0], /BRIEF/);
     assert.match(sent[0].text, /claude\.ai\/code\/s1/);
+  }
+  // "hand this off": a brief in handoff mode, saved, and the reply says so only once the row exists.
+  {
+    const modes: string[] = [];
+    const saved: Array<{ body: string; note: string }> = [];
+    const { deps, sent, store } = fakes({
+      answer: async (_db, question, _f, _p, options = {}) => { modes.push(`${options.mode}:${question.slice(0, 40)}`); return { answered: true, reply: "# Capture ZIP early\n\nBrief." }; },
+      handoff: { save: async (body, note) => { saved.push({ body, note }); return { id: "abcdef12-0000", title: "Capture ZIP early", body, repo: "olera-web", status: "open", result: null, created_at: "", closed_at: null } as Handoff; } },
+    });
+    await handleTelegramUpdate(update(40, "hand this off: the benefits fixes"), deps);
+    assert.equal(modes[0], "handoff:Write a handoff brief for a Claude Code ");
+    assert.deepEqual(saved, [{ body: "# Capture ZIP early\n\nBrief.", note: "the benefits fixes" }]);
+    assert.match(sent[0].text, /Handed off: "Capture ZIP early"/);
+    assert.ok((store.messages.get(FOUNDER) ?? []).some((m) => m.role === "cortex" && /Handed off/.test(m.text)), "remembered");
+  }
+  {
+    const { deps, sent } = fakes({
+      answer: async () => ({ answered: true, reply: "# T\n\nThe brief." }),
+      handoff: { save: async () => { throw new Error("the handoffs table isn't there yet (migration 265)"); } },
+    });
+    await handleTelegramUpdate(update(41, "hand this off"), deps);
+    assert.match(sent[0].text, /^Nothing handed off: saving it failed \(the handoffs table/);
+    assert.match(sent[0].text, /The brief\./, "the brief is shown so it isn't lost");
   }
   console.log("handler checks passed");
 

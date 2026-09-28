@@ -4,6 +4,7 @@ import { loadChatMemory, memoryPromptText, refreshChatSummary, type ChatStore } 
 import { approvalReply, isApproval, MAX_IMAGE_BYTES, nothingWaitingReply } from "@/lib/war-room/dm-intake";
 import { wantsVoice } from "@/lib/war-room/voice.server";
 import { artifactSubject } from "@/lib/war-room/visualize.server";
+import { handoffNote, handoffQuestion, handoffSavedReply, type Handoff } from "@/lib/war-room/handoff.server";
 import type { WarRoomProposal } from "@/lib/war-room/types";
 
 /**
@@ -55,6 +56,8 @@ export type TelegramDeps = {
   inbox?: { command: (text: string) => Promise<string | null> };
   /** Starts the Claude Code routine that runs his /visualize skill (visualize.server.ts). */
   visual?: { start: (text: string) => Promise<{ started: true; sessionUrl: string } | { started: false; reason: string }> };
+  /** Stores a brief Cortex wrote for a Claude Code session ("hand this off", handoff.server.ts). */
+  handoff?: { save: (body: string, note: string) => Promise<Handoff> };
 };
 
 export type TelegramOutcome =
@@ -203,6 +206,41 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
       await reply(handled);
       await remember(handled);
       return { handled: true, kind: "approval", reply: handled };
+    }
+  }
+
+  // "hand this off": Cortex writes a brief from the conversation and the
+  // record, and the system stores it for his /handoff skill. The reply says
+  // it was saved only when the row exists.
+  const note = deps.handoff ? handoffNote(text) : null;
+  if (note !== null && deps.handoff) {
+    await deps.typing(chatId).catch(() => undefined);
+    const typingBrief = setInterval(() => { deps.typing(chatId).catch(() => undefined); }, 4_500);
+    try {
+      const memory = await loadChatMemory(deps.store, chatId);
+      const history = { ...memory, recent: memory.recent.filter((entry, i, all) => !(i === all.length - 1 && entry.role === "founder" && Date.parse(entry.at) === Date.parse(at))) };
+      const brief = await (deps.answer ?? answerFounderQuestion)(
+        deps.db,
+        handoffQuestion(note),
+        null,
+        lastExchange(history.recent),
+        { mode: "handoff", surface: "telegram", memory: memoryPromptText(history) || undefined },
+      );
+      let said: string;
+      if (!brief.answered) {
+        said = `Nothing handed off: I couldn't write the brief (${brief.reply.slice(0, 200)}).`;
+      } else {
+        try {
+          said = handoffSavedReply(await deps.handoff.save(brief.reply, note));
+        } catch (error) {
+          said = `Nothing handed off: saving it failed (${error instanceof Error ? error.message : String(error)}). Here's the brief so it isn't lost:\n\n${brief.reply.slice(0, 3_500)}`;
+        }
+      }
+      await reply(said);
+      await remember(said);
+      return { handled: true, kind: "answer", reply: said, costUsd: brief.costUsd };
+    } finally {
+      clearInterval(typingBrief);
     }
   }
 
