@@ -10,6 +10,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import InboxEmptyState from "@/components/messaging/InboxEmptyState";
 
 type Entry = {
   at: string;
@@ -67,9 +68,12 @@ export default function AdFamilyPanel({
   leadId,
   onBack,
   onChanged,
+  signedInAs,
   className = "",
 }: {
   leadId: string;
+  /** The account's email, so a "not yours" screen can say who is looking. */
+  signedInAs?: string | null;
   onBack: () => void;
   /** Something changed that the list shows (a message, a take, an outcome). */
   onChanged: () => void;
@@ -134,12 +138,28 @@ export default function AdFamilyPanel({
   };
 
   if (error) {
+    const notHers = /isn't in your inbox/.test(error);
     return (
-      <div className={`flex-col items-center justify-center bg-white p-6 text-center ${className}`}>
-        <p className="text-[15px] text-gray-600">{error}</p>
-        <button onClick={onBack} className="mt-4 text-sm font-medium text-primary-600 lg:hidden">
-          Back to inbox
-        </button>
+      <div className={`flex-col items-center justify-center bg-white pb-16 ${className}`}>
+        <InboxEmptyState
+          kind={notHers ? "private" : "waiting"}
+          title={notHers ? "This family isn't in your inbox" : "We couldn't open this family"}
+          body={
+            notHers ? (
+              <>
+                Another agency may have them, or the link was meant for a different account.
+                {signedInAs ? (
+                  <>
+                    {" "}You&apos;re signed in as <span className="font-medium text-gray-700">{signedInAs}</span>.
+                  </>
+                ) : null}
+              </>
+            ) : (
+              error
+            )
+          }
+          action={{ label: "Back to inbox", onClick: onBack }}
+        />
       </div>
     );
   }

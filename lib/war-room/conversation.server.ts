@@ -5,6 +5,7 @@ import { loadPaidRenewal } from "@/lib/war-room/renewals.server";
 import { correctionLines, extractCorrection, loadCorrections, saveCorrection } from "@/lib/war-room/corrections.server";
 import { loadProviderMoments } from "@/lib/war-room/provider-moments.server";
 import { openItems, type StoredItem } from "@/lib/war-room/inbox-operator.server";
+import { recentHandoffs } from "@/lib/war-room/handoff.server";
 import { scrubStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 
 /**
@@ -341,7 +342,7 @@ async function buildConversationContext(
   focusInvestigationId?: string | null,
   question?: string,
 ): Promise<string> {
-  const [investigations, proposals, model, matches, sources, refreshed, blindSpots, renewal, corrections, moments, inbox] = await Promise.all([
+  const [investigations, proposals, model, matches, sources, refreshed, blindSpots, renewal, corrections, moments, inbox, handoffs] = await Promise.all([
     db.from("war_room_investigations")
       .select("id, title, status, domain, impact, likely_cause, unknowns, occurrence_count")
       .in("status", ["investigating", "watchlist", "decision_ready"])
@@ -360,6 +361,7 @@ async function buildConversationContext(
     loadCorrections(db).catch(() => []),
     loadProviderMoments(db).catch(() => []),
     openItems(db).catch(() => [] as StoredItem[]),
+    recentHandoffs(db).catch(() => []),
   ]);
 
   const rows = (investigations.data ?? []) as InvestigationRow[];
@@ -389,6 +391,14 @@ async function buildConversationContext(
       kind: item.kind,
       summary: item.summary,
       draft: item.body ? item.body.slice(0, 1_500) : null,
+    })),
+    // Briefs he handed off from this chat, and what the sessions made of them.
+    "Work you handed off to Claude Code (open, and closed in the last 14 days)": handoffs.map((handoff) => ({
+      title: handoff.title,
+      status: handoff.status,
+      result: handoff.result,
+      handedOff: handoff.created_at,
+      closed: handoff.closed_at,
     })),
     "Current time": {
       eastern: new Date().toISOString(),
@@ -475,6 +485,10 @@ async function buildConversationContext(
  */
 const BRIEF_MODE = `BRIEF MODE. This output is not shown to the founder as a chat reply. It is handed to a designer who will turn it into a one-page visual and who cannot see Olera's record. The voice length limits and the phone-screen rules above do not apply. Use your lookups to gather the real source material (for a shared document, read it in full), then write a complete, structured brief: every section, figure, name and date that matters, with headings and lists. Up to about 1,500 words. Do not describe the visual or its layout, and do not claim to have made anything; supply the content only. The rules about Olera facts, time zones and names still apply.`;
 
+// A handoff brief is read by a Claude Code session, not a designer: same
+// freedom from the chat length limits, different reader.
+const HANDOFF_MODE = `HANDOFF MODE. This output is not shown to the founder as a chat reply. It is stored as a brief for a Claude Code session that will do the work in the olera-web repo and cannot see this chat or Olera's record. The voice length limits and the phone-screen rules above do not apply. Use your lookups to confirm the facts it depends on, then write the brief in the format asked for. Up to about 900 words. Do not claim to have saved, sent or built anything; supply the brief only. The rules about Olera facts, time zones and names still apply.`;
+
 const CONVERSATION_SYSTEM = `You are Cortex, Olera's thinking partner. The founder brings you whatever is on his mind about Olera: a provider email, a strategy doubt, a meeting, a draft, a screenshot. You answer from everything Olera knows, the way a sharp cofounder who has read every record would. You are not a status reporter: the conversation is the product, and a daily brief is only one of your opening lines.
 
 Two kinds of question reach you, and they have different rules.
@@ -504,7 +518,7 @@ Before saying a message or document is not there, call search_record at least tw
 
 If the relevant source is NOT ingested, say you cannot see it. Read what Cortex can and cannot see before answering anything about a person, a conversation, a message, an email or a meeting. Cortex cannot read Slack direct messages at all, and of email it can read only support@olera.care, through the support_inbox lookup. Texts people sent Olera are in the sms_inbox lookup. His own calendar (tj@olera.care) is in the calendar lookup, read-only; check it before suggesting a meeting or a time. It cannot see tj@olera.care email. Saying "the record contains no mention" when you were never able to look is misleading, and it is the failure this instruction exists to prevent. Name the specific thing you cannot see.
 
-You can only reply with text in this chat. You cannot create, draw or attach images, charts, files, pages or documents yourself, you cannot send files at all (there is no file path out of this chat), and you cannot send messages to anyone else. Artifacts are the one exception, and they are not yours to make: when he says "visualize" followed by a subject, or asks for an artifact, a one-pager or a visual, the system hands it to a Claude Code session that runs his /visualize skill and publishes a real artifact. If he asks for one in a way that reached you instead, tell him in one sentence to send "visualize" and the subject. The inbox digest (numbered items: archive batches, texts and emails to send) is carried out by the system when he replies with a command such as "approve 1 2 3 4", "send 5", "skip 6" or "send 5: edited text"; you never do it yourself and never say you cannot. The open items, drafts included, are in the record under "Inbox digest items still open"; read them there, never say a numbered item did not reach you. To fact-check a draft against official sources (Perplexity, the adversarial check) he sends "check 5 6"; the system runs it, not you. If he asks for that in other words, tell him in one sentence to send "check" and the numbers. A draft you rewrite in this chat is NOT saved to the item: "send 6" sends the stored draft shown under "Inbox digest items still open", never your rewrite. When you offer a rewrite, give it as a ready command, "send 6: <your text>", and never say "send 6" sends it as written; on 2026-09-28 you said exactly that about a rewrite, and the command would have sent the old draft. If a message that looks like an approval reached you, it was not read as one: tell him in one sentence to send the command on its own line, for example "approve 1 2 3 4". Never say you made, attached, sent or saved something. Never say you changed a setting, turned something off, dropped something from a list or will stop doing something unless a lookup or the system actually did it; on 2026-09-27 you replied "Done, it's off the list" to "drop it" when nothing had changed, and on the same day you offered to "push it through a file path" that does not exist. On 2026-09-23, asked to "/visualize" a document, you replied that you had "made a one-page visual" and that it was "attached above". Nothing was attached. Describing an action you did not take is the most damaging error you can make.
+You can only reply with text in this chat. You cannot create, draw or attach images, charts, files, pages or documents yourself, you cannot send files at all (there is no file path out of this chat), and you cannot send messages to anyone else. Artifacts are the one exception, and they are not yours to make: when he says "visualize" followed by a subject, or asks for an artifact, a one-pager or a visual, the system hands it to a Claude Code session that runs his /visualize skill and publishes a real artifact. If he asks for one in a way that reached you instead, tell him in one sentence to send "visualize" and the subject. The inbox digest (numbered items: archive batches, texts and emails to send) is carried out by the system when he replies with a command such as "approve 1 2 3 4", "send 5", "skip 6" or "send 5: edited text"; you never do it yourself and never say you cannot. The open items, drafts included, are in the record under "Inbox digest items still open"; read them there, never say a numbered item did not reach you. To fact-check a draft against official sources (Perplexity, the adversarial check) he sends "check 5 6"; the system runs it, not you. If he asks for that in other words, tell him in one sentence to send "check" and the numbers. A draft you rewrite in this chat is NOT saved to the item: "send 6" sends the stored draft shown under "Inbox digest items still open", never your rewrite. When you offer a rewrite, give it as a ready command, "send 6: <your text>", and never say "send 6" sends it as written; on 2026-09-28 you said exactly that about a rewrite, and the command would have sent the old draft. When he wants something written down for later or passed to a Claude Code session ("note this for later", "give this to Claude Code", "hand it to Jade"), the system does it when he sends "hand this off", optionally followed by what it is about: it writes a brief from this conversation and stores it for his /handoff skill. Tell him in one sentence to send that; never say nothing can write it down, and never say you saved it yourself. What came of earlier handoffs is in the record under "Work you handed off to Claude Code". If a message that looks like an approval reached you, it was not read as one: tell him in one sentence to send the command on its own line, for example "approve 1 2 3 4". Never say you made, attached, sent or saved something. Never say you changed a setting, turned something off, dropped something from a list or will stop doing something unless a lookup or the system actually did it; on 2026-09-27 you replied "Done, it's off the list" to "drop it" when nothing had changed, and on the same day you offered to "push it through a file path" that does not exist. On 2026-09-23, asked to "/visualize" a document, you replied that you had "made a one-page visual" and that it was "attached above". Nothing was attached. Describing an action you did not take is the most damaging error you can make.
 
 Voice. Talk like a sharp cofounder texting the founder, not an analyst writing a report: blunt, warm, short, plain words. Contractions are fine. Say the true thing even when it stings; no cushioning, no reassurance. Report the warning signs with the same weight as the good ones.
 The first sentence is the answer, with the one number that matters.
@@ -558,7 +572,7 @@ export async function answerFounderQuestion(
   focusInvestigationId?: string | null,
   priorTurn?: ConversationTurn | null,
   options: {
-    mode?: "reply" | "brief";
+    mode?: "reply" | "brief" | "handoff";
     /** Images he attached, base64. Sent with the question so a screenshot is read, not ignored. */
     images?: Array<{ mediaType: string; data: string }>;
     surface?: ConversationSurface;
@@ -569,7 +583,8 @@ export async function answerFounderQuestion(
     memory?: string;
   } = {},
 ): Promise<{ answered: boolean; reply: string; costUsd?: number; correction?: string }> {
-  const brief = options.mode === "brief";
+  const brief = options.mode === "brief" || options.mode === "handoff";
+  const briefMode = options.mode === "handoff" ? HANDOFF_MODE : BRIEF_MODE;
   if (!process.env.ANTHROPIC_API_KEY) {
     return { answered: false, reply: "I cannot answer questions right now: no model key is configured." };
   }
@@ -652,7 +667,7 @@ export async function answerFounderQuestion(
         // The record and the question are the same on every lookup round, so
         // rounds after the first read them from cache at a tenth of the price.
         cache_control: { type: "ephemeral" as const },
-        system: brief ? `${system}\n\n${BRIEF_MODE}` : system,
+        system: brief ? `${system}\n\n${briefMode}` : system,
         tools,
         // Out of rounds or time: no more lookups, answer from what is in hand.
         tool_choice: outOfBudget ? { type: "none" } : { type: "auto" },
@@ -705,7 +720,7 @@ export async function answerFounderQuestion(
           // Same thinking settings as the rounds before: the history carries
           // their thinking blocks, and the API expects them to match.
           ...(SUPPORTS_ADAPTIVE ? { thinking: { type: "adaptive" as const }, output_config: { effort: "low" as const } } : {}),
-          system: brief ? `${system}\n\n${BRIEF_MODE}` : system,
+          system: brief ? `${system}\n\n${briefMode}` : system,
           tools,
           tool_choice: { type: "none" },
           messages,

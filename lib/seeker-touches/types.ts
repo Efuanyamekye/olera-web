@@ -326,6 +326,9 @@ export type SeekerRelationshipRow = SeekerContact & {
   missed_calls: number;
   /** Their newest text or support email, so a reply row shows what they said. */
   last_inbound: { occurred_at: string; channel: string; title: string; detail: string | null } | null;
+  /** Benefits work waiting on a person (letter to read, help due, urgent),
+   *  or null. Feeds the Urgent / Letter to read / Help due queues. */
+  benefits: import("@/lib/benefits/queue-signals").BenefitsQueueSignals | null;
   /**
    * A person decided this row is not a case to work. Null for everyone else.
    *

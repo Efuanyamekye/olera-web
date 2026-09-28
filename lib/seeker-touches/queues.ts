@@ -37,10 +37,13 @@ import type { SeekerRelationshipRow } from "@/lib/seeker-touches/types";
  * thirty-eight days old and there is nothing useful to say to a family about
  * a referral from last quarter.
  */
-export type Tab = "reply" | "call" | "follow" | "close" | "record" | "reach" | "all" | "archived";
+export type Tab = "urgent" | "reply" | "letter" | "help" | "call" | "follow" | "close" | "record" | "reach" | "all" | "archived";
 
 export const TABS: { key: Tab; label: string }[] = [
+  { key: "urgent", label: "Urgent" },
   { key: "reply", label: "Reply to them" },
+  { key: "letter", label: "Letter to read" },
+  { key: "help", label: "Help due" },
   { key: "call", label: "Call them" },
   { key: "follow", label: "Follow up" },
   { key: "close", label: "Tried 3 times" },
@@ -51,6 +54,9 @@ export const TABS: { key: Tab; label: string }[] = [
 ];
 
 export const TAB_BLURB: Record<Tab, string> = {
+  urgent: "They told the text companion something is urgent (a shutoff, no food, losing housing) in the last week, and nobody has reached them since.",
+  letter: "A first-step letter the verdict held for a person to read. Open the case and read it in the Benefits section.",
+  help: "They asked for a person (STUCK or \"I'd like help\"). Overdue ones first.",
   reply: "They wrote to us and nobody has answered.",
   call: "We promised a call and have not reached them. A logged missed call parks them for 24 hours.",
   follow: "Tried and waiting, or a next step is set. A missed call comes back to Call them after 24 hours.",
@@ -71,6 +77,16 @@ export function matches(r: SeekerRelationshipRow, tab: Tab): boolean {
   // on, so it only pads the lists meant to be finished.
   if (tab !== "all" && r.flags.includes("opted_out")) return false;
   switch (tab) {
+    // The three benefits queues (2026-09-28). These are about the family's
+    // benefits work, not their messages, so they are read off r.benefits.
+    case "urgent":
+      return Boolean(r.benefits?.urgent_at);
+    // Not for a family we cannot reach: the letter has nowhere to land, so
+    // they belong in "Fix how we reach them" first.
+    case "letter":
+      return Boolean(r.benefits?.letter_to_read) && !r.flags.includes("unreachable");
+    case "help":
+      return Boolean(r.benefits?.help_due_at);
     case "reply":
       return r.flags.includes("awaiting_reply");
     case "call":

@@ -911,10 +911,13 @@ function FamilyComposer({
   hasPhone,
   hasEmail,
   draft,
+  lastInbound,
   onSent,
   shell = INLINE_SHELL,
   onDone,
 }: {
+  /** The channel they last wrote to us on; the box starts there. */
+  lastInbound?: "sms" | "email" | null;
   seekerId: string;
   familyName: string;
   hasPhone: boolean;
@@ -924,7 +927,9 @@ function FamilyComposer({
   shell?: string;
   onDone?: () => void;
 }) {
-  const [channel, setChannel] = useState<"sms" | "email">(hasPhone ? "sms" : "email");
+  const [channel, setChannel] = useState<"sms" | "email">(
+    lastInbound === "email" && hasEmail ? "email" : hasPhone ? "sms" : "email",
+  );
   const [text, setText] = useState("");
   const [subject, setSubject] = useState("");
   const [busy, setBusy] = useState(false);
@@ -962,10 +967,7 @@ function FamilyComposer({
             <span className="font-semibold">A drafted answer is waiting</span>
             <button
               type="button"
-              onClick={() => {
-                setChannel(hasPhone ? "sms" : "email");
-                setText(draft.body);
-              }}
+              onClick={() => setText(draft.body)}
               className="font-semibold underline"
             >
               Use it
@@ -1212,7 +1214,7 @@ function BenefitsSection({
         {view.progress.calledAt && (
           <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-800">Made the call {shortDate(view.progress.calledAt)}</span>
         )}
-        {status && <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-800">{status}</span>}
+        {status && !(view.progress.calledAt && view.progress.applicationStatus === "called") && <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[12px] font-semibold text-emerald-800">{status}</span>}
         {view.smsConsentAt && (
           <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-semibold text-gray-800">Agreed to texts {shortDate(view.smsConsentAt)}</span>
         )}
@@ -1856,6 +1858,13 @@ function CaseInner() {
         hasPhone={familyMayText}
         hasEmail={Boolean(data.profile.email)}
         draft={benefits?.draftAnswer ?? null}
+        lastInbound={
+          [...data.items]
+            .filter((it) => it.actor === "in" && (it.channel === "text" || it.channel === "email"))
+            .sort((a, b) => b.occurred_at.localeCompare(a.occurred_at))[0]?.channel === "email"
+            ? "email"
+            : "sms"
+        }
         onSent={load}
         shell={shell}
         onDone={onDone}

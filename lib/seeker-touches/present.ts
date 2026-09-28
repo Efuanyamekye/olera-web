@@ -77,6 +77,13 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
   if (r.flags.includes("unreachable")) {
     return { phrase: "Can't reach them", tone: "act", age };
   }
+  // Benefits work waiting on a person, most pressing first.
+  if (r.benefits?.urgent_at) {
+    return { phrase: "Urgent", tone: "act", age: quiet };
+  }
+  if (r.benefits?.help_due_at && r.benefits.help_overdue) {
+    return { phrase: "Help overdue", tone: "act", age: quiet };
+  }
   // A missed plan is our own doing and outranks everything except not being
   // able to contact them at all — telling someone to chase a family they
   // physically cannot reach is asking for the impossible.
@@ -91,6 +98,12 @@ export function stateOf(r: SeekerRelationshipRow): RowState {
   }
   if (r.flags.includes("awaiting_reply")) {
     return { phrase: "Waiting on us", tone: "warn", age: quiet };
+  }
+  if (r.benefits?.help_due_at) {
+    return { phrase: "Help due", tone: "warn", age: quiet };
+  }
+  if (r.benefits?.letter_to_read) {
+    return { phrase: "Letter to read", tone: "warn", age: quiet };
   }
   // The age here is days since they ANSWERED, not days since we last heard
   // anything, because the answer is what puts the row in the queue and the
@@ -201,6 +214,15 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
     return why ? `${owed}${why}` : `${owed}No working way to contact them.`.trim();
   }
 
+  // Benefits work waiting on a person (lib/benefits/queue-signals.ts). An
+  // urgent answer and a help request outrank an unanswered message: they are
+  // the family telling us they are stuck or in trouble, not asking a question.
+  if (r.benefits?.urgent_at) return "Told us something is urgent at home. Nobody has reached them since.";
+  if (r.benefits?.help_due_at) {
+    const d = shortEt(r.benefits.help_due_at);
+    return r.benefits.help_overdue ? `Asked for a person. Overdue since ${d}.` : `Asked for a person. Due ${d}.`;
+  }
+
   if (r.flags.includes("tried_three")) {
     return `Called ${r.missed_calls} times, never reached. Send one last text or email, then archive as Never answered.`;
   }
@@ -218,7 +240,15 @@ export function problemLine(r: SeekerRelationshipRow): string | null {
     return "Told us the provider never got back to them.";
   }
 
+  if (r.benefits?.letter_to_read) {
+    return r.benefits.letter_reason ? `Letter waiting for your read: ${r.benefits.letter_reason}.` : "Letter waiting for your read.";
+  }
+
   return null;
+}
+
+function shortEt(iso: string): string {
+  return new Date(iso).toLocaleString("en-US", { timeZone: "America/New_York", weekday: "short", month: "short", day: "numeric" });
 }
 
 /**

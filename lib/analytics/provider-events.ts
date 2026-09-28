@@ -3,7 +3,11 @@ import { createClient } from "@supabase/supabase-js";
 type ProviderEventType =
   | "lead_received"
   | "review_received"
-  | "question_received";
+  | "question_received"
+  // A family Olera offered her, from her inbox (migration 264).
+  | "ad_family_offer_viewed"
+  | "ad_family_taken"
+  | "ad_family_passed";
 
 interface RecordProviderEventInput {
   provider_id: string;
