@@ -37,6 +37,9 @@ type Routing = Partial<Omit<CityLeadToolsData, "lead_id" | "status">> & {
   lead_id: string;
   status: string;
   can_route: boolean;
+  /** Someone holds the family and the team can send them to another agency. */
+  can_move?: boolean;
+  holder_id?: string | null;
   qualification_reply: string | null;
   qualification_verdict?: string | null;
   pool: { provider_id: string; name: string; position: number; enabled: boolean; already_offered: boolean }[];
@@ -45,9 +48,10 @@ type Routing = Partial<Omit<CityLeadToolsData, "lead_id" | "status">> & {
 
 type CaseData = SeekerRelationship & { plan?: RoutingPlan | null; routing?: Routing | null };
 
-const OFFER_WORD: Record<string, string> = { open: "Waiting on them", accepted: "Took it", declined: "Passed", expired: "No answer" };
+const OFFER_WORD: Record<string, string> = { open: "Waiting on them", accepted: "Took it", declined: "Passed", expired: "No answer", moved: "Took it, then moved on" };
 const STEP_WORD: Record<PlanStep["state"], string> = {
   accepted: "Took it",
+  moved: "Took it, then moved on",
   declined: "Passed",
   expired: "No answer",
   sent: "Waiting on them",
@@ -1310,6 +1314,9 @@ function CasePanel({
   const [need, setNeed] = useState(() => routing?.care_summary ?? "");
   const [note, setNote] = useState(routing?.admin_note ?? "");
   const [logOpen, setLogOpen] = useState(false);
+  // Move to another agency: pick, then confirm, because it texts the family
+  // and tells the current agency.
+  const [moveTo, setMoveTo] = useState("");
 
   async function act(body: Record<string, unknown>, done: string) {
     setBusy(true);
@@ -1551,6 +1558,52 @@ function CasePanel({
                     </option>
                   ))}
                 </select>
+              )}
+            </div>
+          )}
+
+          {routing?.can_move && holderName && (
+            <div className="mt-3 rounded-xl border border-gray-200 p-3">
+              <p className="text-[13px] font-semibold text-gray-900">Move to another agency</p>
+              <p className="mt-0.5 text-[12.5px] text-gray-500">
+                For when {holderName.split(/\s+-\s+|,\s/)[0]} hasn&apos;t helped. They lose the family, and {familyName} gets a text that
+                we&apos;re connecting them with someone.
+              </p>
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <select
+                  aria-label="Move to"
+                  value={moveTo}
+                  disabled={busy}
+                  onChange={(e) => setMoveTo(e.target.value)}
+                  className="max-w-full rounded-lg bg-gray-100 px-3 py-1.5 text-[13px] font-semibold text-gray-900"
+                >
+                  <option value="">Pick an agency…</option>
+                  {routing.pool
+                    .filter((p) => p.provider_id !== routing.holder_id)
+                    .map((p) => (
+                      <option key={p.provider_id} value={p.provider_id}>
+                        {p.name}
+                        {p.already_offered ? " (offered before)" : p.enabled ? "" : " (not on call)"}
+                      </option>
+                    ))}
+                </select>
+                {moveTo && (
+                  <button
+                    type="button"
+                    disabled={busy}
+                    className={darkBtn}
+                    onClick={() => {
+                      const to = moveTo;
+                      setMoveTo("");
+                      void act({ action: "move_to", leadId: routing.lead_id, providerId: to }, "Moved.");
+                    }}
+                  >
+                    Move {familyName}
+                  </button>
+                )}
+              </div>
+              {routing.pool.filter((p) => p.provider_id !== routing.holder_id).length === 0 && (
+                <p className="mt-1.5 text-[12.5px] text-gray-500">No other agency is set up for this city yet.</p>
               )}
             </div>
           )}

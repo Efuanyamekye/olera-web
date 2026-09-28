@@ -194,7 +194,7 @@ export const CRON_REGISTRY: CronJob[] = [
     id: "city-lead-offers",
     name: "City ads — offer chain",
     description:
-      "Retrieves allowlisted Meta Instant Form leads into the concierge queue, drains confirmation messages, and delivers deduplicated Slack lead/failure alerts. Runs the sequential lead relay for Olera-owned city campaigns (/care/{city}). Every five minutes: expires provider offers past their 30-minute window and advances to the next provider in the city pool; starts chains parked outside staffed hours (8am to 8pm local) once the morning opens; picks up any new lead the request path failed to start. After three misses a lead is marked unfilled and Slack is paged.",
+      "Retrieves allowlisted Meta Instant Form leads into the concierge queue, drains confirmation messages, and delivers deduplicated Slack lead/failure alerts. Runs the sequential lead relay for Olera-owned city campaigns (/care/{city}). Every five minutes: expires provider offers past their window (4 of the provider's business hours, 8am to 6pm local; 1 hour for an offer that reached nobody), emails a reminder an hour in, and advances to the next provider in the city pool; starts chains parked outside staffed hours (8am to 8pm local) once the morning opens; picks up any new lead the request path failed to start. After three misses a lead is marked unfilled and Slack is paged.",
     recipientCohort:
       "Providers in city_pool with enabled=true (offer texts); families with an open city lead (confirmation and status texts).",
     audience: "Providers",

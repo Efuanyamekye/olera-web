@@ -1,7 +1,9 @@
 import { getServiceClient } from "@/lib/admin";
+import { offerStillHolds } from "@/lib/city-ads/offer-holds";
 import {
   MAX_OFFERS_PER_LEAD,
-  OFFER_WINDOW_MINUTES,
+  OFFER_WINDOW_BUSINESS_MINUTES,
+  addBusinessMinutes,
   getCityConfig,
   isStaffedNow,
   nextStaffedStart,
@@ -28,7 +30,7 @@ import {
  * accepted or declined early moves everything after it earlier.
  */
 
-export type PlanStepState = "accepted" | "declined" | "expired" | "sent" | "upcoming";
+export type PlanStepState = "accepted" | "moved" | "declined" | "expired" | "sent" | "upcoming";
 
 export interface PlanStep {
   position: number;
@@ -76,6 +78,7 @@ interface LeadRow {
   next_offer_at: string | null;
   archived_at: string | null;
   capture_method: string | null;
+  accepted_offer_id: string | null;
 }
 
 const MIN = 60 * 1000;
@@ -93,7 +96,7 @@ export async function getRoutingPlan(
   const { data: leadRow } = await db
     .from("city_leads")
     .select(
-      "id, slug, status, care_type, qualification_reply_at, qualification_verdict, next_offer_at, archived_at, capture_method",
+      "id, slug, status, care_type, qualification_reply_at, qualification_verdict, next_offer_at, archived_at, capture_method, accepted_offer_id",
     )
     .eq("id", leadId)
     .maybeSingle();
@@ -105,10 +108,12 @@ export async function getRoutingPlan(
 
   const { data: offerRows } = await db
     .from("city_lead_offers")
-    .select("provider_id, position, offered_at, expires_at, accepted_at, declined_at, expired_at")
+    .select("id, provider_id, position, offered_at, expires_at, accepted_at, declined_at, expired_at, outcome")
     .eq("lead_id", lead.id)
     .order("position", { ascending: true });
   const offers = (offerRows ?? []) as {
+    id: string;
+    outcome: string | null;
     provider_id: string;
     position: number;
     offered_at: string;
@@ -144,10 +149,11 @@ export async function getRoutingPlan(
     providerName: nameOf(o.provider_id),
     at: o.offered_at,
     projected: false,
-    state: o.accepted_at ? "accepted" : o.declined_at ? "declined" : o.expired_at ? "expired" : "sent",
+    // Taken and then released (the ladder, or Move) reads as moved on.
+    state: o.accepted_at ? (offerStillHolds(o, lead) ? "accepted" : "moved") : o.declined_at ? "declined" : o.expired_at ? "expired" : "sent",
   }));
 
-  const accepted = offers.find((o) => o.accepted_at);
+  const accepted = offers.find((o) => offerStillHolds(o, lead));
   if (accepted) {
     return {
       state: "accepted",
@@ -213,7 +219,7 @@ export async function getRoutingPlan(
       : new Date(now.getTime());
   if (!held) {
     for (let i = 0; i < remaining.length; i++) {
-      cursor = whenStaffed(i === 0 ? cursor : new Date(cursor.getTime() + OFFER_WINDOW_MINUTES * MIN), tz);
+      cursor = whenStaffed(i === 0 ? cursor : addBusinessMinutes(tz, cursor, OFFER_WINDOW_BUSINESS_MINUTES), tz);
       steps.push({
         position: offers.length + i + 1,
         providerId: remaining[i].provider_id,

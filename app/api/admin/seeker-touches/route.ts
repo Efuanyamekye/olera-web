@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { offerStillHolds } from "@/lib/city-ads/offer-holds";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import { getRoutingPlan } from "@/lib/city-ads/plan.server";
 import { resolvePrimaryCampaign } from "@/lib/city-ads/primary.server";
@@ -103,7 +104,7 @@ async function loadRouting(seekerId: string, leadId: string) {
       .order("position", { ascending: true }),
     db
       .from("city_lead_offers")
-      .select("id, provider_id, position, offered_at, expires_at, accepted_at, declined_at, expired_at")
+      .select("id, provider_id, position, offered_at, expires_at, accepted_at, declined_at, expired_at, outcome")
       .eq("lead_id", leadId)
       .order("position", { ascending: true }),
     db.from("business_profiles").select("metadata").eq("id", seekerId).maybeSingle(),
@@ -119,7 +120,13 @@ async function loadRouting(seekerId: string, leadId: string) {
     accepted_at: string | null;
     declined_at: string | null;
     expired_at: string | null;
+    outcome: string | null;
   }[];
+  // Who has the family now. A taken offer that was since released (the
+  // follow-up ladder, or Move on the case page) no longer counts; see
+  // lib/city-ads/offer-holds.ts. Rudy is the case: taken, released to
+  // Cambridge, and still unroutable here while any take counted.
+  const holding = offers.find((o) => offerStillHolds(o, lead as { accepted_offer_id: string | null }));
   const ids = Array.from(new Set([...pool.map((p) => p.provider_id), ...offers.map((o) => o.provider_id)]));
   const { data: names } = ids.length
     ? await db.from("business_profiles").select("id, display_name").in("id", ids)
@@ -152,7 +159,11 @@ async function loadRouting(seekerId: string, leadId: string) {
     // offer was accepted while his lead row kept status "offered" and no
     // accepted_offer_id, so a pointer-only check showed "Offer to next" on a
     // family a provider already had.
-    can_route: !closed && !lead.accepted_offer_id && !(offerRows ?? []).some((o) => o.accepted_at),
+    can_route: !closed && !lead.accepted_offer_id && !holding,
+    // Move to another agency: someone holds the family and it isn't finished.
+    // A family from the provider's own ad is not moved from here.
+    can_move: !closed && Boolean(holding) && !lead.handed_at,
+    holder_id: holding?.provider_id ?? null,
     qualification_reply: (lead.qualification_reply as string | null) ?? null,
     qualification_verdict: (lead.qualification_verdict as string | null) ?? null,
     pool: pool.map((p) => ({
@@ -170,9 +181,9 @@ async function loadRouting(seekerId: string, leadId: string) {
       id: o.id,
       provider_name: nameOf.get(o.provider_id) ?? "a provider",
       offered_at: o.offered_at,
-      state: o.accepted_at ? "accepted" : o.declined_at ? "declined" : o.expired_at || new Date(o.expires_at) < new Date() ? "expired" : "open",
+      state: o.accepted_at ? (holding?.id === o.id ? "accepted" : "moved") : o.declined_at ? "declined" : o.expired_at || new Date(o.expires_at) < new Date() ? "expired" : "open",
     })),
-    has_provider: Boolean(lead.accepted_offer_id) || offers.some((o) => o.accepted_at) || Boolean(lead.handed_at),
+    has_provider: Boolean(holding) || Boolean(lead.handed_at),
     handed_at: (lead.handed_at as string | null) ?? null,
     campaign_owner: primary?.providerName ?? null,
     can_hand: !closed && !lead.handed_at && !lead.accepted_offer_id && Boolean(primary),

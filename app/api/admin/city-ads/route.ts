@@ -15,6 +15,7 @@ const ARM_WINDOW_START: string | null = null;
 import { getAuthUser, getAdminUser, getServiceClient } from "@/lib/admin";
 import { acceptOffer, declineOffer, startOrAdvance, type CityOfferRow } from "@/lib/city-ads/offers.server";
 import { resolvePrimaryCampaign, handToPrimary } from "@/lib/city-ads/primary.server";
+import { moveToProvider } from "@/lib/city-ads/move.server";
 import { getThreadLead, notifyProviderOfHandover } from "@/lib/city-ads/thread.server";
 import { suppressPhone } from "@/lib/sms/inbound-store.server";
 import { cityLeadBlocked, citySendWindow, deliverCityMessage } from "@/lib/city-ads/messages.server";
@@ -392,6 +393,11 @@ export async function POST(req: NextRequest) {
           console.error("[admin/city-ads] handover notice failed", e);
         }
         return NextResponse.json({ ok: true, message: `${lead.first_name} is now on ${primary.providerName ?? "the provider"}'s campaign page.` });
+      }
+      case "move_to": {
+        const r = await moveToProvider(db, String(body.leadId ?? ""), String(body.providerId ?? ""), auth.user.email ?? auth.user.id);
+        if (!r.ok) return NextResponse.json({ error: r.error }, { status: r.status });
+        return NextResponse.json({ ok: true, offered: r.offered, message: r.message });
       }
       case "offer_to": {
         const r = await startOrAdvance(db, String(body.leadId ?? ""), { force: true, providerId: String(body.providerId ?? "") });
