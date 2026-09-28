@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Connection, Profile } from "@/lib/types";
 import { formatRedactedName } from "@/lib/utils/pii-redaction";
+import InboxEmptyState from "@/components/messaging/InboxEmptyState";
 
 export interface ConnectionWithProfile extends Connection {
   fromProfile: Profile | null;
@@ -827,29 +828,20 @@ export default function ConversationList({
         <div className="pl-5 sm:pl-[44px] pr-5 py-3 sm:py-5">
           <h2 className="text-2xl font-display font-bold text-gray-900">Inbox</h2>
         </div>
-        <div className="flex-1 flex items-center justify-center p-6">
-          <div className="text-center">
-            <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <rect x="2" y="4" width="20" height="16" rx="2" strokeWidth={1.5} />
-                <path d="M22 7l-8.97 5.7a1.94 1.94 0 01-2.06 0L2 7" strokeWidth={1.5} />
-              </svg>
-            </div>
-            <p className="text-[15px] font-display font-medium text-gray-900 mb-1">No conversations yet</p>
-            {variant === "provider" ? (
-              <p className="text-sm text-gray-500">When families connect with you, their messages will appear here</p>
-            ) : (
-              <>
-                <p className="text-sm text-gray-500 mb-4">Connect with a provider to start messaging</p>
-                <Link
-                  href="/browse"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors"
-                >
-                  Browse providers
-                </Link>
-              </>
-            )}
-          </div>
+        <div className="flex-1 flex items-center justify-center pb-16">
+          {variant === "provider" ? (
+            <InboxEmptyState
+              title="No messages yet"
+              body="When a family writes to you, or Olera sends you a family looking for care, they'll be waiting here."
+              action={{ label: "Polish your profile", href: "/provider/profile" }}
+            />
+          ) : (
+            <InboxEmptyState
+              title="No messages yet"
+              body="Reach out to a provider and your conversation will live here, all in one place."
+              action={{ label: "Browse providers", href: "/browse" }}
+            />
+          )}
         </div>
       </div>
     );
@@ -1015,74 +1007,33 @@ export default function ConversationList({
                   <p className="text-sm text-gray-500">You&apos;re all caught up</p>
                 </div>
               ) : isInFamilyMode && familyTab === "messages" ? (
-                /* Messages tab empty state */
-                <div className="text-center">
-                  <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-                    </svg>
-                  </div>
-                  <p className="text-[15px] font-display font-medium text-gray-900 mb-1">No messages yet</p>
-                  <p className="text-sm text-gray-500 mb-4">Find and connect with care providers</p>
-                  <Link
-                    href="/browse"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors"
-                  >
-                    Browse providers
-                  </Link>
-                </div>
+                <InboxEmptyState
+                  title="No messages yet"
+                  body="Reach out to a provider and your conversation will live here, all in one place."
+                  action={{ label: "Browse providers", href: "/browse" }}
+                />
               ) : isInFamilyMode && familyTab === "requests" ? (
-                /* Requests tab empty state */
-                <div className="text-center">
-                  <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                    </svg>
-                  </div>
-                  <p className="text-[15px] font-display font-medium text-gray-900 mb-1">No requests yet</p>
-                  {isProfileLive ? (
-                    <p className="text-sm text-gray-500">When providers reach out about your care needs, they&apos;ll appear here</p>
-                  ) : (
-                    <>
-                      <p className="text-sm text-gray-500 mb-4">Go live with your care profile so providers can find you</p>
-                      <Link
-                        href="/portal/profile"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors"
-                      >
-                        Go live
-                      </Link>
-                    </>
-                  )}
-                </div>
-              ) : roleFilter !== "all" ? (
-                <div className="text-center">
-                  <p className="text-[15px] font-display font-medium text-gray-900 mb-1">
-                    No {roleFilter} messages
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {roleFilter === "provider"
-                      ? "When families connect with your provider profile, they'll appear here"
-                      : "When you connect with providers as a family, they'll appear here"
-                    }
-                  </p>
-                </div>
+                <InboxEmptyState
+                  title="No requests yet"
+                  body={
+                    isProfileLive
+                      ? "When a provider reaches out about your care, you'll see it here first."
+                      : "Go live with your care profile and providers near you can reach out."
+                  }
+                  action={isProfileLive ? undefined : { label: "Go live", href: "/portal/profile" }}
+                />
+              ) : variant === "provider" || roleFilter === "provider" ? (
+                <InboxEmptyState
+                  title="No messages yet"
+                  body="When a family writes to you, or Olera sends you a family looking for care, they'll be waiting here."
+                  action={{ label: "Polish your profile", href: "/provider/profile" }}
+                />
               ) : (
-                <div className="text-center">
-                  <p className="text-[15px] font-display font-medium text-gray-900 mb-1">You have no messages yet</p>
-                  {variant === "provider" ? (
-                    <p className="text-sm text-gray-500">When families connect with you, their messages will appear here</p>
-                  ) : (
-                    <>
-                      <p className="text-sm text-gray-500 mb-4">Browse providers to start a conversation</p>
-                      <Link
-                        href="/browse"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors"
-                      >
-                        Browse providers
-                      </Link>
-                    </>
-                  )}
-                </div>
+                <InboxEmptyState
+                  title="No messages yet"
+                  body="Reach out to a provider and your conversation will live here, all in one place."
+                  action={{ label: "Browse providers", href: "/browse" }}
+                />
               )}
             </div>
           )}
