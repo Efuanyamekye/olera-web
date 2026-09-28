@@ -203,20 +203,53 @@ export async function getFamilyTimeline(
   return out;
 }
 
-/** The provider on a lead's campaign, with the details we need to reach her. */
-export async function threadProvider(
-  db: SupabaseClient,
-  lead: ThreadLead,
-): Promise<{ id: string; name: string; phone: string | null; email: string | null } | null> {
-  const primary = await resolvePrimaryCampaign(db, lead);
-  if (!primary) return null;
-  const { data: p } = await db.from("business_profiles").select("id, display_name, phone, email").eq("id", primary.providerId).maybeSingle();
+export interface ThreadProvider {
+  id: string;
+  name: string;
+  phone: string | null;
+  email: string | null;
+  /**
+   * Where she works this family. "campaign": the lead came from her own ad and
+   * sits on her campaign page. "inbox": she took it as an offer, so it lives
+   * in her inbox only.
+   */
+  via: "campaign" | "inbox";
+}
+
+/**
+ * The provider who holds this family, with the details we need to reach her.
+ *
+ * A provider who took the family as an offer holds it, even when the ad was
+ * someone else's: that is who the family is talking to. Otherwise the ad's
+ * owner does.
+ */
+export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Promise<ThreadProvider | null> {
+  const { data: taken } = await db
+    .from("city_lead_offers")
+    .select("provider_id")
+    .eq("lead_id", lead.id)
+    .not("accepted_at", "is", null)
+    .order("accepted_at", { ascending: false })
+    .limit(1);
+  const holderId = (taken?.[0]?.provider_id as string | undefined) ?? null;
+  const primary = holderId ? null : await resolvePrimaryCampaign(db, lead);
+  const id = holderId ?? primary?.providerId ?? null;
+  if (!id) return null;
+  const { data: p } = await db.from("business_profiles").select("id, display_name, phone, email").eq("id", id).maybeSingle();
   return {
-    id: primary.providerId,
-    name: (p?.display_name as string | null) ?? primary.providerName ?? "Your care provider",
+    id,
+    name: (p?.display_name as string | null) ?? primary?.providerName ?? "Your care provider",
     phone: p?.phone ? normalizeUSPhone(p.phone as string) : null,
     email: (p?.email as string | null) ?? null,
+    via: holderId ? "inbox" : "campaign",
   };
+}
+
+/** The page where a provider reads and answers this family. */
+export function providerThreadUrl(lead: ThreadLead, provider: ThreadProvider): string {
+  return provider.via === "inbox"
+    ? `${getSiteUrl()}/portal/inbox?role=provider&ad=${lead.id}`
+    : `${getSiteUrl()}/provider/boost`;
 }
 
 /**
@@ -314,10 +347,10 @@ export async function postProviderMessage(
 export async function notifyProvider(
   db: SupabaseClient,
   lead: ThreadLead,
-  provider: { id: string; name: string; phone: string | null; email: string | null },
+  provider: ThreadProvider,
   what: { sms: string; subject: string; headline: string; quote?: string | null; body: string; emailType: string },
 ): Promise<void> {
-  const url = `${getSiteUrl()}/provider/boost`;
+  const url = providerThreadUrl(lead, provider);
   if (provider.phone) {
     await sendSMS({
       to: provider.phone,
@@ -338,7 +371,7 @@ export async function notifyProvider(
         quote: what.quote ?? null,
         body: what.body,
         ctaUrl: url,
-        ctaLabel: "Open your campaign",
+        ctaLabel: provider.via === "inbox" ? "Open your inbox" : "Open your campaign",
       }),
       replyTo: "support@olera.care",
       emailType: what.emailType,
@@ -359,7 +392,10 @@ export async function notifyProviderOfReply(db: SupabaseClient, lead: ThreadLead
     subject: `${first} replied`,
     headline: `${first} replied`,
     quote: words.slice(0, 400),
-    body: `${first} is one of the families from your ad. Their reply is on your campaign page, with everything else we know about them.`,
+    body:
+      provider.via === "inbox"
+        ? `${first} is the family you took through Olera. Their reply is in your inbox, with everything they told us.`
+        : `${first} is one of the families from your ad. Their reply is on your campaign page, with everything else we know about them.`,
     emailType: "city_thread_family_reply_provider",
   });
   await sendSlackAlert(`💬 ${first} replied (city lead ${lead.id.slice(0, 8)}, with ${provider.name}): "${words.slice(0, 200)}"`);
