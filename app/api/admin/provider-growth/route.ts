@@ -178,6 +178,12 @@ export async function GET(request: NextRequest) {
       options.careTypes = careTypes.split(",").filter(Boolean);
     }
 
+    // Single tracking ID filter (for fetching a specific provider)
+    const trackingId = searchParams.get("trackingId");
+    if (trackingId) {
+      options.trackingId = trackingId;
+    }
+
     const limit = parseInt(searchParams.get("limit") || "50", 10);
     const offset = parseInt(searchParams.get("offset") || "0", 10);
     options.limit = Math.min(limit, 100);

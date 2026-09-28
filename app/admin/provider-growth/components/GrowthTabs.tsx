@@ -3,9 +3,9 @@
 /**
  * GrowthTabs - Tab navigation for provider growth pipeline
  *
- * Pipeline tabs: Claimed | Meetings | Follow-up
- * Conversion tabs: Converted | Paying
+ * Tab order: Claimed | Work Queue | Meetings | Follow-up | Converted | Paying
  *
+ * Work Queue: Shows providers needing follow-up action (callbacks, retries, stale)
  * Claimed has subtabs: Not Contacted | In Progress (non-converted providers)
  * Converted has subtabs: Not Contacted | In Progress (providers on free trial)
  * Meetings has no subtabs - meeting focus is shown as a badge on each row
@@ -20,10 +20,12 @@ export type ConvertedSubTab = "not_contacted" | "in_progress" | "live" | "ended"
 export type MeetingSubTab = "ads" | "medjobs" | "both";
 export type FollowUpSubTab = "active" | "no_show" | "not_interested";
 export type PayingSubTab = "ads_only" | "medjobs_only" | "both" | "churned";
+export type WorkQueueSubTab = "returned_calls" | "overdue" | "due_today" | "needs_retry" | "stale";
 export type ActiveTab =
   | { type: "pipeline"; stage: PipelineStage; subTab?: ClaimedSubTab | MeetingSubTab | FollowUpSubTab }
   | { type: "conversion"; tab: "converted"; subTab: ConvertedSubTab }
-  | { type: "conversion"; tab: "paying"; subTab: PayingSubTab };
+  | { type: "conversion"; tab: "paying"; subTab: PayingSubTab }
+  | { type: "work_queue"; subTab: WorkQueueSubTab };
 
 interface GrowthTabsProps {
   activeTab: ActiveTab;
@@ -32,6 +34,8 @@ interface GrowthTabsProps {
   claimedSubtabCounts?: { notContacted: number; inProgress: number };
   convertedSubtabCounts?: { notContacted: number; inProgress: number; live: number; ended: number };
   followUpSubtabCounts?: { active: number; noShow: number; notInterested: number };
+  workQueueCount?: number;
+  workQueueSubtabCounts?: { returnedCalls: number; overdue: number; dueToday: number; needsRetry: number; stale: number };
 }
 
 const CLAIMED_SUB_TABS: Array<{ id: ClaimedSubTab; label: string }> = [
@@ -70,7 +74,31 @@ const PAYING_SUB_TABS: Array<{ id: PayingSubTab; label: string }> = [
   { id: "churned", label: "Churned" },
 ];
 
-export function GrowthTabs({ activeTab, onTabChange, stats, claimedSubtabCounts, convertedSubtabCounts, followUpSubtabCounts }: GrowthTabsProps) {
+const WORK_QUEUE_SUB_TABS: Array<{ id: WorkQueueSubTab; label: string }> = [
+  { id: "returned_calls", label: "Returned Calls" },
+  { id: "overdue", label: "Overdue" },
+  { id: "due_today", label: "Due Today" },
+  { id: "needs_retry", label: "Needs Retry" },
+  { id: "stale", label: "Stale" },
+];
+
+export function GrowthTabs({ activeTab, onTabChange, stats, claimedSubtabCounts, convertedSubtabCounts, followUpSubtabCounts, workQueueCount, workQueueSubtabCounts }: GrowthTabsProps) {
+  const isWorkQueueActive = activeTab.type === "work_queue";
+
+  const getWorkQueueSubTabCount = (id: WorkQueueSubTab): number => {
+    if (!workQueueSubtabCounts) return 0;
+    switch (id) {
+      case "returned_calls": return workQueueSubtabCounts.returnedCalls;
+      case "overdue": return workQueueSubtabCounts.overdue;
+      case "due_today": return workQueueSubtabCounts.dueToday;
+      case "needs_retry": return workQueueSubtabCounts.needsRetry;
+      case "stale": return workQueueSubtabCounts.stale;
+      default: return 0;
+    }
+  };
+
+  const isWorkQueueSubTabActive = (id: WorkQueueSubTab) =>
+    activeTab.type === "work_queue" && activeTab.subTab === id;
   const getCount = (tab: PipelineStage | "converted" | "paying" | PayingSubTab): number => {
     if (!stats) return 0;
 
@@ -184,42 +212,91 @@ export function GrowthTabs({ activeTab, onTabChange, stats, claimedSubtabCounts,
     <div className="mb-6">
       {/* Main tabs */}
       <div className="flex flex-wrap gap-1 border-b border-gray-200">
-        {/* Pipeline tabs */}
-        {PIPELINE_TABS.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => {
-              // For new_claim (Claimed), default to "not_contacted" subtab
-              if (tab.id === "new_claim") {
-                onTabChange({ type: "pipeline", stage: tab.id, subTab: "not_contacted" });
-              // For meeting_scheduled, no subtabs - show all meetings
-              } else if (tab.id === "meeting_scheduled") {
-                onTabChange({ type: "pipeline", stage: tab.id });
-              // For pitched (Follow-up), default to "active" subtab
-              } else if (tab.id === "pitched") {
-                onTabChange({ type: "pipeline", stage: tab.id, subTab: "active" });
-              } else {
-                onTabChange({ type: "pipeline", stage: tab.id });
-              }
-            }}
-            className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
-              isPipelineActive(tab.id)
-                ? "border-blue-500 text-blue-600"
-                : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+        {/* Claimed tab */}
+        <button
+          onClick={() => onTabChange({ type: "pipeline", stage: "new_claim", subTab: "not_contacted" })}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            isPipelineActive("new_claim")
+              ? "border-blue-500 text-blue-600"
+              : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+          }`}
+        >
+          Claimed
+          <span
+            className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${
+              isPipelineActive("new_claim")
+                ? "bg-blue-100 text-blue-700"
+                : "bg-gray-100 text-gray-600"
             }`}
           >
-            {tab.label}
+            {getCount("new_claim")}
+          </span>
+        </button>
+
+        {/* Work Queue tab - shows providers needing follow-up */}
+        <button
+          onClick={() => onTabChange({ type: "work_queue", subTab: "returned_calls" })}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            isWorkQueueActive
+              ? "border-orange-500 text-orange-600"
+              : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+          }`}
+        >
+          Work Queue
+          {(workQueueCount ?? 0) > 0 && (
             <span
               className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${
-                isPipelineActive(tab.id)
-                  ? "bg-blue-100 text-blue-700"
-                  : "bg-gray-100 text-gray-600"
+                isWorkQueueActive
+                  ? "bg-orange-100 text-orange-700"
+                  : "bg-orange-100 text-orange-600"
               }`}
             >
-              {getCount(tab.id)}
+              {workQueueCount}
             </span>
-          </button>
-        ))}
+          )}
+        </button>
+
+        {/* Meetings tab */}
+        <button
+          onClick={() => onTabChange({ type: "pipeline", stage: "meeting_scheduled" })}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            isPipelineActive("meeting_scheduled")
+              ? "border-blue-500 text-blue-600"
+              : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+          }`}
+        >
+          Meetings
+          <span
+            className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${
+              isPipelineActive("meeting_scheduled")
+                ? "bg-blue-100 text-blue-700"
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {getCount("meeting_scheduled")}
+          </span>
+        </button>
+
+        {/* Follow-up tab */}
+        <button
+          onClick={() => onTabChange({ type: "pipeline", stage: "pitched", subTab: "active" })}
+          className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            isPipelineActive("pitched")
+              ? "border-blue-500 text-blue-600"
+              : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+          }`}
+        >
+          Follow-up
+          <span
+            className={`ml-1.5 px-1.5 py-0.5 text-xs rounded-full ${
+              isPipelineActive("pitched")
+                ? "bg-blue-100 text-blue-700"
+                : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {getCount("pitched")}
+          </span>
+        </button>
 
         {/* Converted tab (conversion type) */}
         <button
@@ -293,6 +370,33 @@ export function GrowthTabs({ activeTab, onTabChange, stats, claimedSubtabCounts,
               {subTab.label}
               <span className="ml-1 text-[10px] opacity-70">
                 ({getClaimedSubTabCount(subTab.id)})
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Work Queue sub-tabs */}
+      {activeTab.type === "work_queue" && (
+        <div className="flex gap-1 mt-2 pl-4">
+          {WORK_QUEUE_SUB_TABS.map((subTab) => (
+            <button
+              key={subTab.id}
+              onClick={() =>
+                onTabChange({
+                  type: "work_queue",
+                  subTab: subTab.id,
+                })
+              }
+              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
+                isWorkQueueSubTabActive(subTab.id)
+                  ? "bg-orange-100 text-orange-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              {subTab.label}
+              <span className="ml-1 text-[10px] opacity-70">
+                ({getWorkQueueSubTabCount(subTab.id)})
               </span>
             </button>
           ))}

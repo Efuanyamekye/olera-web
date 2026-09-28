@@ -12,7 +12,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import type { ProviderGrowthWithProfile, GrowthStats, AdminCounts } from "@/lib/provider-growth/queries";
+import type { ProviderGrowthWithProfile, GrowthStats, AdminCounts, WorkQueueResult } from "@/lib/provider-growth/queries";
 import type { PipelineStage } from "@/lib/provider-growth/stages";
 import DateRangePopover, {
   resolveRange,
@@ -26,6 +26,7 @@ import {
   ProviderRow,
   ProviderDrawer,
   ProviderFilters,
+  WorkQueueTab,
   type ActiveTab,
   type ProviderFiltersValue,
 } from "./components";
@@ -37,6 +38,9 @@ const DEFAULT_DATE_RANGE: DateRangeValue = { preset: "all", customFrom: "", cust
  * Generate a unique key for localStorage persistence of admin filter per-tab.
  */
 function getTabKey(tab: ActiveTab): string {
+  if (tab.type === "work_queue") {
+    return "provider-growth-work-queue";
+  }
   if (tab.type === "pipeline") {
     if (tab.subTab) {
       return `provider-growth-${tab.stage}-${tab.subTab}`;
@@ -54,6 +58,13 @@ export default function ProviderGrowthPage() {
   const [activeTab, setActiveTab] = useState<ActiveTab>(() => {
     const tab = searchParams.get("tab");
     const sub = searchParams.get("sub") as "ads_only" | "medjobs_only" | "both" | "churned" | "not_contacted" | "in_progress" | "live" | "ended" | "active" | "no_show" | "not_interested" | "converted" | null;
+
+    // Work Queue tab with subtabs
+    if (tab === "work_queue") {
+      const validSubTabs = ["returned_calls", "overdue", "due_today", "needs_retry", "stale"];
+      const subTab = sub && validSubTabs.includes(sub) ? (sub as "returned_calls" | "overdue" | "due_today" | "needs_retry" | "stale") : "returned_calls";
+      return { type: "work_queue", subTab };
+    }
 
     // Check for new_claim with subtab (Claimed tab)
     if (tab === "new_claim") {
@@ -111,6 +122,16 @@ export default function ProviderGrowthPage() {
     inProgress: number;
     live: number;
     ended: number;
+  } | null>(null);
+  const [workQueueCount, setWorkQueueCount] = useState<number>(0);
+  const [workQueueData, setWorkQueueData] = useState<WorkQueueResult | null>(null);
+  const [workQueueError, setWorkQueueError] = useState<string | null>(null);
+  const [workQueueSubtabCounts, setWorkQueueSubtabCounts] = useState<{
+    returnedCalls: number;
+    overdue: number;
+    dueToday: number;
+    needsRetry: number;
+    stale: number;
   } | null>(null);
   const [adminCounts, setAdminCounts] = useState<AdminCounts>({});
   const [selectedAdminFilter, setSelectedAdminFilter] = useState<string | null>(null);
@@ -199,13 +220,14 @@ export default function ProviderGrowthPage() {
     setPage(0);
   }, [providerFilters]);
 
-  // Fetch stats (including subtab counts)
+  // Fetch stats (including subtab counts and work queue count)
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
-      const [statsRes, subtabRes] = await Promise.all([
+      const [statsRes, subtabRes, workQueueRes] = await Promise.all([
         fetch("/api/admin/provider-growth/stats"),
         fetch("/api/admin/provider-growth/subtab-counts"),
+        fetch("/api/admin/provider-growth/work-queue"),
       ]);
 
       if (statsRes.ok) {
@@ -228,8 +250,25 @@ export default function ProviderGrowthPage() {
           ended: data.converted.ended,
         });
       }
+
+      if (workQueueRes.ok) {
+        const data = await workQueueRes.json() as WorkQueueResult;
+        setWorkQueueData(data);
+        setWorkQueueError(null);
+        setWorkQueueCount(data.totalCount || 0);
+        setWorkQueueSubtabCounts({
+          returnedCalls: data.returnedCalls?.length || 0,
+          overdue: data.overdueCallbacks?.length || 0,
+          dueToday: data.dueToday?.length || 0,
+          needsRetry: data.needsRetry?.length || 0,
+          stale: data.stale?.length || 0,
+        });
+      } else {
+        setWorkQueueError("Failed to load work queue");
+      }
     } catch (e) {
       console.error("Failed to fetch stats:", e);
+      setWorkQueueError("Failed to load work queue");
     } finally {
       setLoadingStats(false);
     }
@@ -242,6 +281,12 @@ export default function ProviderGrowthPage() {
       const params = new URLSearchParams();
 
       // Set filters based on active tab
+      // Skip fetching providers for work_queue tab - it uses WorkQueueTab component
+      if (activeTab.type === "work_queue") {
+        setLoading(false);
+        return;
+      }
+
       if (activeTab.type === "pipeline") {
         // For Follow-up tab (pitched), filter based on subtab
         if (activeTab.stage === "pitched") {
@@ -274,7 +319,7 @@ export default function ProviderGrowthPage() {
             params.set("notConverted", "true");
           }
         }
-      } else {
+      } else if (activeTab.type === "conversion") {
         // Conversion tabs (Converted and Paying)
         if (activeTab.tab === "converted") {
           // Converted tab: providers on free trial (not yet paying)
@@ -376,7 +421,9 @@ export default function ProviderGrowthPage() {
     // Don't reset admin filter - it persists per-tab via localStorage in AdminFilterChips
 
     // Update URL
-    if (tab.type === "pipeline") {
+    if (tab.type === "work_queue") {
+      router.push(`/admin/provider-growth?tab=work_queue&sub=${tab.subTab}`, { scroll: false });
+    } else if (tab.type === "pipeline") {
       // Include subtab for tabs that have them (new_claim and pitched have subtabs)
       // meeting_scheduled has no subtabs
       if ((tab.stage === "new_claim" || tab.stage === "pitched") && tab.subTab) {
@@ -485,16 +532,32 @@ export default function ProviderGrowthPage() {
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
+  // Fetch a single provider by tracking ID
+  const fetchAndSelectProvider = useCallback(async (trackingId: string) => {
+    // First check if it's already in the providers list
+    const cached = providers.find((p) => p.id === trackingId);
+    if (cached) {
+      setSelectedProvider(cached);
+      return;
+    }
+
+    // Fetch from API - use the main listing API with a filter
+    try {
+      const res = await fetch(`/api/admin/provider-growth?trackingId=${trackingId}&limit=1`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.providers?.length > 0) {
+          setSelectedProvider(data.providers[0]);
+        }
+      }
+    } catch (e) {
+      console.error("Failed to fetch provider:", e);
+    }
+  }, [providers]);
+
   // Handle clicking a provider from the callback banner
   const handleCallbackProviderClick = (trackingId: string) => {
-    const provider = providers.find((p) => p.id === trackingId);
-    if (provider) {
-      setSelectedProvider(provider);
-    } else {
-      // Provider may not be in current list, fetch and select it
-      // For now, just log - could add a fetch here if needed
-      console.log("Provider not in current list:", trackingId);
-    }
+    fetchAndSelectProvider(trackingId);
   };
 
   return (
@@ -560,91 +623,108 @@ export default function ProviderGrowthPage() {
         claimedSubtabCounts={claimedSubtabCounts ?? undefined}
         convertedSubtabCounts={convertedSubtabCounts ?? undefined}
         followUpSubtabCounts={stats ? { active: stats.pitched, noShow: stats.no_show ?? 0, notInterested: stats.not_interested } : undefined}
+        workQueueCount={workQueueCount}
+        workQueueSubtabCounts={workQueueSubtabCounts ?? undefined}
       />
 
-      {/* Admin filter row */}
-      <AdminFilterChips
-        adminCounts={adminCounts}
-        totalCount={total}
-        selectedAdminId={selectedAdminFilter}
-        onSelect={setSelectedAdminFilter}
-        tabKey={getTabKey(activeTab)}
-      />
-
-      {/* Callback banner - shown on In Progress subtabs (Claimed or Converted) */}
-      {((activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === "in_progress") ||
-        (activeTab.type === "conversion" && activeTab.tab === "converted" && activeTab.subTab === "in_progress")) && (
-        <CallbackBanner
-          onProviderClick={handleCallbackProviderClick}
-          refreshKey={callbackRefreshKey}
+      {/* Work Queue Tab - separate view */}
+      {activeTab.type === "work_queue" ? (
+        <WorkQueueTab
+          data={workQueueData}
+          loading={loadingStats}
+          error={workQueueError}
+          subTab={activeTab.subTab}
+          onProviderClick={(trackingId) => {
+            fetchAndSelectProvider(trackingId);
+          }}
         />
-      )}
+      ) : (
+        <>
+          {/* Admin filter row */}
+          <AdminFilterChips
+            adminCounts={adminCounts}
+            totalCount={total}
+            selectedAdminId={selectedAdminFilter}
+            onSelect={setSelectedAdminFilter}
+            tabKey={getTabKey(activeTab)}
+          />
 
-      {/* Provider list */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        {loading ? (
-          <div className="p-8 text-center text-gray-500">
-            Loading providers...
-          </div>
-        ) : providers.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
-            {debouncedSearch
-              ? `No providers found matching "${debouncedSearch}"`
-              : "No providers in this stage"}
-          </div>
-        ) : (
-          <ul className="divide-y divide-gray-100">
-            {providers.map((provider) => (
-              <li key={provider.id}>
-                <ProviderRow
-                  provider={provider}
-                  onClick={() => setSelectedProvider(provider)}
-                  onDelete={() => setPendingDelete({
-                    id: provider.id,
-                    name: provider.display_name || "Unnamed Provider",
-                  })}
-                  selected={selectedProvider?.id === provider.id}
-                  assignedToName={provider.assigned_to ? adminNameLookup.get(provider.assigned_to) || null : null}
-                  onAssignClick={() => setEditingAssignmentId(provider.id)}
-                  isEditingAssignment={editingAssignmentId === provider.id}
-                  onAssignmentSelect={(adminId, adminName) =>
-                    handleAssignmentUpdate(provider.id, adminId, adminName)
-                  }
-                  onAssignmentCancel={() => setEditingAssignmentId(null)}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+          {/* Callback banner - shown on In Progress subtabs (Claimed or Converted) */}
+          {((activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === "in_progress") ||
+            (activeTab.type === "conversion" && activeTab.tab === "converted" && activeTab.subTab === "in_progress")) && (
+            <CallbackBanner
+              onProviderClick={handleCallbackProviderClick}
+              refreshKey={callbackRefreshKey}
+            />
+          )}
 
-      {/* Pagination */}
-      {!loading && total > 0 && (
-        <div className="flex items-center justify-between mt-6 px-2">
-          <p className="text-sm text-gray-500">
-            {total <= PAGE_SIZE
-              ? `${total} total`
-              : `${page * PAGE_SIZE + 1}–${Math.min((page + 1) * PAGE_SIZE, total)} of ${total}`}
-          </p>
-          {totalPages > 1 && (
-            <div className="flex gap-2">
-              <button
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                disabled={page === 0}
-                className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-                disabled={page >= totalPages - 1}
-                className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                Next
-              </button>
+          {/* Provider list */}
+          <div className="bg-white rounded-xl border border-gray-200">
+            {loading ? (
+              <div className="p-8 text-center text-gray-500">
+                Loading providers...
+              </div>
+            ) : providers.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                {debouncedSearch
+                  ? `No providers found matching "${debouncedSearch}"`
+                  : "No providers in this stage"}
+              </div>
+            ) : (
+              <ul className="divide-y divide-gray-100">
+                {providers.map((provider) => (
+                  <li key={provider.id}>
+                    <ProviderRow
+                      provider={provider}
+                      onClick={() => setSelectedProvider(provider)}
+                      onDelete={() => setPendingDelete({
+                        id: provider.id,
+                        name: provider.display_name || "Unnamed Provider",
+                      })}
+                      selected={selectedProvider?.id === provider.id}
+                      assignedToName={provider.assigned_to ? adminNameLookup.get(provider.assigned_to) || null : null}
+                      onAssignClick={() => setEditingAssignmentId(provider.id)}
+                      isEditingAssignment={editingAssignmentId === provider.id}
+                      onAssignmentSelect={(adminId, adminName) =>
+                        handleAssignmentUpdate(provider.id, adminId, adminName)
+                      }
+                      onAssignmentCancel={() => setEditingAssignmentId(null)}
+                    />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Pagination */}
+          {!loading && total > 0 && (
+            <div className="flex items-center justify-between mt-6 px-2">
+              <p className="text-sm text-gray-500">
+                {total <= PAGE_SIZE
+                  ? `${total} total`
+                  : `${page * PAGE_SIZE + 1}–${Math.min((page + 1) * PAGE_SIZE, total)} of ${total}`}
+              </p>
+              {totalPages > 1 && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setPage((p) => Math.max(0, p - 1))}
+                    disabled={page === 0}
+                    className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                    disabled={page >= totalPages - 1}
+                    className="px-3 py-1.5 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           )}
-        </div>
+        </>
       )}
 
       {/* Drawer */}
