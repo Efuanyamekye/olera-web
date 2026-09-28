@@ -10,12 +10,10 @@
  * product into the text thread: it knows their answers, gives the number,
  * and asks the one question that changes what they should do next.
  *
- * Part 1 (this file) sends one opener and understands "1" / "2" to its
- * question. Fast replies to free text are part 2; the next-morning and later
- * follow-ups, plus the day-14 question sent to BOTH arms (the primary
- * measure), are part 3. Live mode stays locked until part 3 ships
- * (BENEFITS_COMPANION_LIVE_READY), so until then this only ever runs in
- * practice mode: it writes the opener it would have sent onto the profile.
+ * This file sends the opener and reads "1" / "2" answers, both to the
+ * opener's urgency question and to the day-14 question. Fast replies to free
+ * text are in benefits-companion-replies.server.ts; the next-morning and
+ * day-14 texts are sent by /api/cron/benefits-companion-followups.
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -44,9 +42,12 @@ import { getBenefitsCompanionSettings } from "@/lib/analytics/benefits-companion
 const ACTIVE_DAYS = 21;
 /** An unanswered question stops claiming "1" / "2" after this. */
 const OPEN_QUESTION_HOURS = 72;
+/** The day-14 question stays answerable longer: it is the measure. */
+const DAY14_OPEN_HOURS = 7 * 24;
 
 export const COMPANION_OPENER_TYPE = "benefits_companion_opener";
 export const COMPANION_REPLY_TYPE = "benefits_companion_reply";
+export const COMPANION_FOLLOWUP_TYPE = "benefits_companion_followup";
 
 export interface BenefitsCompanionMeta {
   arm: BenefitsCompanionArm;
@@ -58,12 +59,20 @@ export interface BenefitsCompanionMeta {
   program_id?: string | null;
   state_id?: string | null;
   program_short_name?: string | null;
+  program_phone?: string | null;
+  /** Which urgent need the opener asked about, if any (energy / food / none). */
+  need_kind?: NeedKind;
   opener_sent_at?: string | null;
   /** Companion arm with no callable program: got today's results text instead.
    *  Still analysed in its arm (intent to treat). */
   degraded?: boolean;
-  open_question?: { kind: "urgency"; asked_at: string } | null;
+  open_question?: { kind: "urgency" | "day14"; asked_at: string } | null;
   urgency?: { answer: "yes" | "no"; at: string } | null;
+  /** Part 3's follow-ups, stamped when sent. */
+  followups?: { morning_at?: string; day14_at?: string };
+  /** The primary measure: the day-14 "did you get through?" answer. Asked of
+   *  BOTH arms with identical wording so the comparison is fair. */
+  day14?: { answer: "yes" | "no"; at: string } | null;
 }
 
 export function readBenefitsCompanion(meta: Record<string, unknown> | null | undefined): BenefitsCompanionMeta | null {
@@ -101,23 +110,57 @@ function usableHours(h: string | null): h is string {
   return !!h && looksLikeHours(h) && !/not (published|listed|available)|unknown|varies|n\/a/i.test(h);
 }
 
-export function companionOpenerSms(p: { shortName: string; phone: string; hours: string | null; planUrl: string }): string {
+/**
+ * Which urgent need a program is closest to. It only sets the ORDER of the
+ * examples in the opener's question and whether the urgent reply carries the
+ * heat line. Every family is asked (TJ, 2026-09-27): emergencies don't stay
+ * inside the program page a family landed on (a Weatherization family wrote
+ * "My AC went out"), so a Medicare Savings family with a shutoff notice must
+ * be asked too. A program this misses only changes the word order.
+ * Grouping follows the plan page (components/benefits/BenefitsHome.tsx), plus
+ * the names that list missed across all 642 program records (fuel, CSFP,
+ * AESAP, Project Fresh).
+ */
+export type NeedKind = "energy" | "food" | "general";
+
+export function needKindForProgram(name: string | null | undefined): NeedKind {
+  const t = (name || "").toLowerCase();
+  if (/(snap|calfresh|food|meal|grocer|nutrition|csfp|commodity|senior box|project fresh|farmers|aesap)/.test(t)) return "food";
+  if (/(liheap|ceap|energy|weatheriz|utility|heating|cooling|fuel|propane)/.test(t)) return "energy";
+  return "general";
+}
+
+/** The need a family's own words point at, whatever program they came for. */
+export function needKindForMessage(body: string, fallback: NeedKind): NeedKind {
+  const t = body.toLowerCase();
+  if (/\b(power|electric\w*|gas|heat\w*|a\/?c|air ?condition\w*|shut ?off|shutoff|disconnect\w*|utilit\w*|propane|cold|hot)\b/.test(t)) return "energy";
+  if (/\b(food|hungry|eat|meals?|groceries)\b/.test(t)) return "food";
+  return fallback;
+}
+
+const URGENT_EXAMPLES: Record<NeedKind, string> = {
+  energy: "like a shutoff notice, no heat or AC, no food, or losing your housing",
+  food: "like no food, a shutoff notice, or losing your housing",
+  general: "like a shutoff notice, no food, or losing your housing",
+};
+
+export function companionOpenerSms(p: { shortName: string; phone: string; hours: string | null; planUrl: string; kind: NeedKind }): string {
   const hours = usableHours(p.hours) ? ` (${p.hours})` : "";
   return (
     `Olera: For ${p.shortName}, call ${p.phone}${hours}. Your plan: ${p.planUrl}\n` +
-    `One question: is there a shutoff notice, or no heat, AC or food at home right now? ` +
-    `Reply 1 for yes or 2 for no. Reply STOP to opt out.`
+    `Also, is anything urgent at home right now, ${URGENT_EXAMPLES[p.kind]}? Reply 1 for yes or 2 for no. Reply STOP to opt out.`
   );
 }
 
-export function companionUrgentReplySms(p: { shortName: string | null; phone: string | null }): string {
-  const call =
-    p.phone && p.shortName
-      ? `Call ${p.phone} for ${p.shortName} and tell them it's urgent. `
-      : "";
+export function companionUrgentReplySms(p: { shortName: string | null; phone: string | null; kind: NeedKind }): string {
+  const call = p.phone && p.shortName ? `Call ${p.phone} for ${p.shortName} and tell them it's urgent. ` : "";
+  const danger =
+    p.kind === "energy"
+      ? "If anyone feels dizzy, confused or very hot, or is in danger, call 911."
+      : "If anyone is in danger, call 911.";
   return (
     `Thank you for telling us. ${call}A person on our team has been told and will text you. ` +
-    `If anyone feels dizzy, confused or very hot, call 911. For a cool or warm place to go today, call 2-1-1. Olera`
+    `For food, a cool or warm place, or shelter today, call 2-1-1. ${danger} Olera`
   );
 }
 
@@ -125,6 +168,18 @@ export function companionNotUrgentReplySms(p: { shortName: string | null; docume
   const docs = p.documents.slice(0, 2).map((d) => d.replace(/\s*\([^)]*\)/g, "").trim()).filter(Boolean);
   const ready = docs.length > 0 && p.shortName ? ` When you call ${p.shortName}, have these ready: ${docs.join("; ")}.` : "";
   return `Got it, thank you.${ready} If you get stuck, text us here. Olera`;
+}
+
+/** Part 3, next morning, companion arm only. Answers are the existing keywords. */
+export function morningCheckSms(p: { shortName: string; phone: string | null }): string {
+  const at = p.phone ? ` at ${p.phone}` : "";
+  return `Olera: Morning. Did you get through to ${p.shortName}${at}? Reply CALLED, NO ANSWER, or STUCK. Reply STOP to opt out.`;
+}
+
+/** Part 3, day 14, BOTH arms, identical words: the test's primary measure. */
+export function day14Sms(p: { shortName: string | null }): string {
+  const what = p.shortName ? `about ${p.shortName}` : "about the program we sent you";
+  return `Olera: A quick question ${what}. Were you able to get through to them? Reply 1 for yes or 2 for not yet. Reply STOP to opt out.`;
 }
 
 // ── Assignment + opener ─────────────────────────────────────────────────────
@@ -174,8 +229,9 @@ export async function startBenefitsCompanion(
 
   const planUrl = withSmsSource(`${getSiteUrl()}/m/${opts.token}`, COMPANION_OPENER_TYPE);
   const pick = await firstStepFor(db, { ...profile, metadata: meta });
+  const needKind = needKindForProgram(pick ? `${pick.name} ${pick.shortName}` : null);
   const opener = pick
-    ? companionOpenerSms({ shortName: pick.shortName, phone: pick.contact.phone, hours: pick.contact.hours, planUrl })
+    ? companionOpenerSms({ shortName: pick.shortName, phone: pick.contact.phone, hours: pick.contact.hours, planUrl, kind: needKind })
     : null;
   const at = new Date().toISOString();
 
@@ -212,6 +268,8 @@ export async function startBenefitsCompanion(
     program_id: pick?.programId ?? null,
     state_id: pick?.stateId ?? null,
     program_short_name: pick?.shortName ?? null,
+    program_phone: pick?.contact.phone ?? null,
+    need_kind: needKind,
   };
   if (arm === "control") {
     await writeMeta({ benefits_companion: record });
@@ -285,11 +343,11 @@ export async function handleCompanionAnswer(
     if (last10(String(r.phone ?? "")) !== target) return false;
     if (r.phone_validity === "opted_out") return false;
     const c = readBenefitsCompanion(r.metadata as Record<string, unknown>);
-    return (
-      !!c?.open_question &&
-      c.arm === "companion" &&
-      now - new Date(c.open_question.asked_at).getTime() < OPEN_QUESTION_HOURS * 60 * 60 * 1000
-    );
+    if (!c?.open_question) return false;
+    const age = now - new Date(c.open_question.asked_at).getTime();
+    // The day-14 question goes to both arms; the urgency question only to the companion.
+    if (c.open_question.kind === "day14") return age < DAY14_OPEN_HOURS * 60 * 60 * 1000;
+    return c.arm === "companion" && age < OPEN_QUESTION_HOURS * 60 * 60 * 1000;
   });
   if (!match) return null;
 
@@ -297,6 +355,25 @@ export async function handleCompanionAnswer(
   const companion = readBenefitsCompanion(meta) as BenefitsCompanionMeta;
   const at = new Date().toISOString();
   const inbound = Array.isArray(meta.sms_inbound) ? (meta.sms_inbound as unknown[]) : [];
+
+  if (companion.open_question?.kind === "day14") {
+    const day14Reply =
+      answer === "yes"
+        ? "Thank you for telling us. Getting through is the hardest part. If anything comes up, text us here. Olera"
+        : "Thanks for telling us. If you want help getting through, reply STUCK and a person from Olera will text you. Olera";
+    await db
+      .from("business_profiles")
+      .update({
+        metadata: {
+          ...meta,
+          sms_inbound: [...inbound, { at, body: body.slice(0, 500), keyword: null, companion_day14: answer }].slice(-20),
+          benefits_companion: { ...companion, open_question: null, day14: { answer, at } },
+        },
+      })
+      .eq("id", match.id);
+    await logCompanionReply(db, fromPhone, match.id, day14Reply, companion.arm, `day14_${answer}`);
+    return day14Reply;
+  }
   const pick = await firstStepFor(db, { ...match, metadata: meta });
   const shortName = pick?.shortName ?? companion.program_short_name ?? null;
 
@@ -315,12 +392,13 @@ export async function handleCompanionAnswer(
     if (!isBenefitsAutomationHeld(nextMeta)) {
       nextMeta = withReplyHold(nextMeta, "sms_reply", "sms", body, at);
     }
-    reply = companionUrgentReplySms({ shortName, phone: pick?.contact.phone ?? null });
+    const kind = companion.need_kind ?? needKindForProgram(shortName);
+    reply = companionUrgentReplySms({ shortName, phone: pick?.contact.phone ?? null, kind });
     try {
       const who = (match.display_name && match.display_name !== "Care Seeker" ? match.display_name : null) || match.email || fromPhone;
       const contact = pick ? ` They were sent ${stripParen(pick.contact.label)} at ${pick.contact.phone} for ${pick.shortName}.` : "";
       await sendSlackAlert(
-        `🚨 Urgent benefits family: ${who}${match.state ? ` (${match.state})` : ""} said YES to "shutoff notice, or no heat, AC or food right now".${contact} ` +
+        `🚨 Urgent benefits family: ${who}${match.state ? ` (${match.state})` : ""} said YES to "is anything urgent at home right now, like a shutoff notice, no food, or losing your housing".${contact} ` +
           `Please text them today. <${getSiteUrl()}/admin/care-seekers/${match.id}|Open family>`,
       );
     } catch (err) {
@@ -332,23 +410,33 @@ export async function handleCompanionAnswer(
 
   await db.from("business_profiles").update({ metadata: nextMeta }).eq("id", match.id);
 
-  // Ledger entry for the reply (TwiML sends it; this records it). Best effort.
+  await logCompanionReply(db, fromPhone, match.id, reply, "companion", `urgency_${answer}`);
+  return reply;
+}
+
+/** Ledger row for a reply sent through TwiML (same shape as lib/twilio.ts logSms). */
+async function logCompanionReply(
+  db: SupabaseClient,
+  phone: string,
+  profileId: string,
+  body: string,
+  arm: BenefitsCompanionArm,
+  kind: string,
+): Promise<void> {
   try {
-    // Same row shape as lib/twilio.ts logSms.
     await db.from("email_log").insert({
       channel: "sms",
-      recipient: fromPhone,
+      recipient: phone,
       sender: process.env.TWILIO_FROM_NUMBER ?? "twilio",
       subject: `SMS: ${COMPANION_REPLY_TYPE}`,
       email_type: COMPANION_REPLY_TYPE,
       recipient_type: "family",
-      provider_id: match.id,
+      provider_id: profileId,
       status: "sent",
-      html_body: reply,
-      metadata: { companion_arm: "companion", companion_kind: `urgency_${answer}` },
+      html_body: body,
+      metadata: { companion_arm: arm, companion_kind: kind },
     });
   } catch (err) {
     console.error("[benefits-companion] reply ledger insert failed:", err);
   }
-  return reply;
 }

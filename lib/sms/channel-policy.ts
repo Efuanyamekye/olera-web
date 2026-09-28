@@ -67,6 +67,8 @@ const SMS_ELIGIBLE: Record<string, PolicyEntry> = {
   family_reach_out_nudge: { policy: "sms_proactive", transactional: false },
   benefits_first_step_sms: { policy: "sms_proactive", transactional: false },
   benefits_check_in_sms: { policy: "sms_proactive", transactional: false },
+  // Benefits text companion follow-ups (next morning; the day-14 measure).
+  benefits_companion_followup: { policy: "sms_proactive", transactional: false },
 };
 
 /** The channel policy for a family message type. Unlisted → email-only. */

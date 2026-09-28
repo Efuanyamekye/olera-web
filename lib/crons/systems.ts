@@ -73,6 +73,8 @@ export const AUTOMATION_SYSTEMS: AutomationSystem[] = [
       "benefits-results-texts",
       "family-comms-coordinator",
       "benefits-navigator-compose",
+      "benefits-companion-followups",
+      "benefits-texts-digest",
       "benefits-navigator-scheduler",
     ],
   },
