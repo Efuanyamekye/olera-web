@@ -535,16 +535,33 @@ function openActionOf(touches: FamilyTouchRow[]): SeekerOpenAction | null {
   };
 }
 
+/**
+ * What a family answered to "Did {provider} get back to you?" (or "Are you
+ * still looking?"), in words. The event used to show as "Connection Outcome
+ * Reported" with no answer, so the answer sat three screens away from the
+ * question (TJ, Marie Ragione, 28 Sep).
+ */
+function answerWords(meta: Record<string, unknown>): string | null {
+  const v = typeof meta.value === "string" ? meta.value : null;
+  if (!v) return null;
+  if (meta.question === "placement") return v === "looking" ? "They answered: still looking for care" : `They answered: ${v.replace(/_/g, " ")}`;
+  if (v === "yes") return "They answered: yes, the provider got back to them";
+  if (v === "no") return "They answered: no, the provider never got back to them";
+  if (v === "not_yet") return "They answered: not yet";
+  return `They answered: ${v.replace(/_/g, " ")}`;
+}
+
 function activityToItem(a: ActivityRow): SeekerTimelineItem {
   const meta = a.metadata ?? {};
   const provider = typeof meta.provider_name === "string" ? meta.provider_name : null;
+  const answer = a.event_type === "connection_outcome_reported" ? answerWords(meta) : null;
   return {
     id: `act:${a.id}`,
     kind: "activity",
     actor: "in",
     channel: "in_app",
     occurred_at: a.created_at,
-    title: seekerEventLabel(a.event_type) + (provider ? ` — ${provider}` : ""),
+    title: answer ?? seekerEventLabel(a.event_type) + (provider ? ` — ${provider}` : ""),
     detail: null,
     source: "system",
     status: null,

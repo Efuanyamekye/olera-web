@@ -281,7 +281,7 @@ function tierOf(it: SeekerTimelineItem): Tier {
   // A logged call, meeting or note is a moment; a logged "email sent" or
   // "text sent" repeats a message already on the page.
   if (it.kind === "touch") return it.channel === "text" || it.channel === "email" ? "background" : "moment";
-  if (/outcome/i.test(it.title)) return "moment";
+  if (/outcome/i.test(it.title) || /^They answered:/.test(it.title)) return "moment";
   return "background";
 }
 
@@ -390,6 +390,9 @@ function momentText(items: SeekerTimelineItem[]): { text: ReactNode; warn: boole
     };
   }
   if (/outcome reported/i.test(first.title)) return { text: "Told us how it went", warn: false };
+  // Their answer to "did the provider get back to you?" (timeline.server.ts).
+  // A "no" means they need someone new, so it reads amber.
+  if (/^They answered:/.test(first.title)) return { text: first.title, warn: /never got back/.test(first.title) };
   return { text: first.title, warn: false };
 }
 
