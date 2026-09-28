@@ -17,7 +17,9 @@
  *             wrote, what the family wrote after she took them, and nothing
  *             from Olera's texts or any other agency the family was offered to.
  *
- * An offer she passed on or let lapse is not listed.
+ * An offer she passed on or let lapse is not listed, and neither is a family
+ * from her own ad that another agency has since taken: the shared thread would
+ * show her their conversation.
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -113,7 +115,15 @@ async function accessFor(
   lead: LeadRow,
   profileIds: string[],
 ): Promise<{ access: AdFamilyAccess; providerId: string; offer: OfferRow | null } | null> {
-  if (lead.handed_request_id) {
+  const { data: allOffers } = await db
+    .from("city_lead_offers")
+    .select("id, lead_id, provider_id, offered_at, expires_at, accepted_at, declined_at, expired_at")
+    .eq("lead_id", lead.id)
+    .order("offered_at", { ascending: false });
+  const offers = (allOffers ?? []) as OfferRow[];
+  // Another agency took this family: the conversation is theirs now.
+  const takenElsewhere = offers.some((o) => o.accepted_at && !profileIds.includes(o.provider_id));
+  if (lead.handed_request_id && !takenElsewhere) {
     const { data: req } = await db
       .from("ad_campaign_requests")
       .select("provider_id")
@@ -122,14 +132,8 @@ async function accessFor(
     const owner = req?.provider_id ? String(req.provider_id) : null;
     if (owner && profileIds.includes(owner)) return { access: "own_ad", providerId: owner, offer: null };
   }
-  const { data: offers } = await db
-    .from("city_lead_offers")
-    .select("id, lead_id, provider_id, offered_at, expires_at, accepted_at, declined_at, expired_at")
-    .eq("lead_id", lead.id)
-    .in("provider_id", profileIds)
-    .order("offered_at", { ascending: false });
   const now = Date.now();
-  for (const o of (offers ?? []) as OfferRow[]) {
+  for (const o of offers.filter((x) => profileIds.includes(x.provider_id))) {
     if (o.accepted_at) return { access: "taken", providerId: o.provider_id, offer: o };
     if (isOpen(o, now)) return { access: "offered", providerId: o.provider_id, offer: o };
   }
