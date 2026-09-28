@@ -591,8 +591,9 @@ function AdminSeekerRelationshipsInner() {
               </Link>
               {/* Outside the Link on purpose: a button nested in an anchor is
                   invalid, and every click on it would navigate instead. Shown
-                  on hover on a laptop, always on a phone (no hover there). */}
-              <div className="transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
+                  on hover on a laptop; left off phones, where it sat beside
+                  every row's time and squeezed the name. */}
+              <div className="hidden transition-opacity sm:block sm:opacity-0 sm:group-hover:opacity-100 sm:focus-within:opacity-100">
                 <ArchiveControl row={r} onDone={load} />
               </div>
             </div>
