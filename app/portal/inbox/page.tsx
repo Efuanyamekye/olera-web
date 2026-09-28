@@ -177,6 +177,10 @@ function InboxContent() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedIdRef = useRef(selectedId);
   selectedIdRef.current = selectedId;
+  // A family from an ad, open in place of an inquiry.
+  const [selectedAdId, setSelectedAdId] = useState<string | null>(urlAdLeadId);
+  const selectedAdIdRef = useRef(selectedAdId);
+  selectedAdIdRef.current = selectedAdId;
   const [detailOpen, setDetailOpen] = useState(false);
   const [reportingConnectionId, setReportingConnectionId] = useState<string | null>(null);
   const [archivedCount, setArchivedCount] = useState(0);
@@ -551,7 +555,7 @@ function InboxContent() {
       }
 
       // Auto-select first conversation if none selected and on desktop
-      if (!selectedIdRef.current && enriched.length > 0 && window.innerWidth >= 1024) {
+      if (!selectedIdRef.current && !selectedAdIdRef.current && enriched.length > 0 && window.innerWidth >= 1024) {
         setSelectedId(enriched[0].id);
       }
     } catch (err) {
@@ -578,7 +582,6 @@ function InboxContent() {
   // Families from ads sit in the same inbox but come from their own tables
   // (lib/city-ads/provider-inbox.server.ts), so they load on their own.
   const [adFamilies, setAdFamilies] = useState<AdFamilyListItem[]>([]);
-  const [selectedAdId, setSelectedAdId] = useState<string | null>(urlAdLeadId);
   const loadAdFamilies = useCallback(async () => {
     if (!user || !hasProviderProfile) return;
     try {
