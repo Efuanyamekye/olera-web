@@ -11,7 +11,7 @@ import { isRealObjection, parseObjections, renderCheck } from "../lib/war-room/d
 import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  buildInboxProposals, cleanSubject, clip, isSmsBookkeeping, parseInboxCommand, renderDigest, waitingOnUs, type StoredItem,
+  buildInboxProposals, cleanSubject, clip, currentText, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
 } from "../lib/war-room/inbox-operator.server";
 
 // --- Commands.
@@ -31,6 +31,14 @@ assert.deepEqual(parseInboxCommand("check 5 6"), { verb: "check", numbers: [5, 6
 assert.deepEqual(parseInboxCommand("fact-check 5 and 6"), { verb: "check", numbers: [5, 6], edit: null });
 assert.equal(parseInboxCommand("check the voicemails"), null, "check without numbers is a question");
 assert.deepEqual(parseInboxCommand("check 8: Having Medicaid is the first thing SMMC needs."), { verb: "check", numbers: [8], edit: "Having Medicaid is the first thing SMMC needs." }, "his version can be checked");
+// Rewrites Cortex offers in chat become the latest version: its real reply from 29 Sep.
+const cortexReply = "On the voice, you're right. Here they are as a human guide would say them:\n\nsend 5: Waiting on an approval is the worst part. While it sits, call 352-373-7667 and ask two things: where your application stands, and whether you need to file separately for help with cooling costs.\n\nsend 6: That's frustrating, and it happens a lot. Which number did you call, and roughly when?\n\nsend 7: Hi Marti, glad that helped. Medicaid works differently in every state, so tell me which state you're in. TJ, Olera";
+assert.deepEqual(parseRewrites(cortexReply).map((r) => r.number), [5, 6, 7]);
+assert.equal(parseRewrites(cortexReply)[1].text, "That's frustrating, and it happens a lot. Which number did you call, and roughly when?");
+assert.deepEqual(parseRewrites("I'd send 5 as is, it's fine."), [], "mentioning send is not a rewrite");
+const withLatest = { id: "x", pass_id: "p", number: 6, kind: "sms_draft", category: "sms:reply", target: { last10: "1", latest: { text: "New words here for the family.", at: "", by: "cortex" } }, summary: "", body: "Old draft.", status: "proposed", created_at: "" } as StoredItem;
+assert.equal(currentText(withLatest), "New words here for the family.", "send sends the version he last saw");
+assert.equal(currentText({ ...withLatest, target: { last10: "1" } }), "Old draft.");
 console.log("command checks passed");
 
 // --- SMS bookkeeping vs conversation.
@@ -85,9 +93,9 @@ const objections = parseObjections('Here: {"objections":[{"target":"352-373-7667
 assert.equal(objections.length, 1);
 assert.equal(parseObjections('{"objections":[{"target":"it&#39;s open","problem":"Page says closed.","confidence":"high"}]}')[0].target, "it's open", "entities are decoded");
 const checked = item(6, "sms_draft", "Text a family.", "CFCAA: 352-373-7667.");
-assert.match(renderCheck(checked, objections), /6: 1 objection\.[\s\S]*x222[\s\S]*send 6: your edited text/);
+assert.match(renderCheck(checked, objections), /6: 1 objection\.[\s\S]*x222[\s\S]*"send 6" sends this version/);
 assert.match(renderCheck(checked, []), /6: clean/);
-assert.match(renderCheck(checked, [], true), /6 \(your version\): clean[\s\S]*"send 6: " followed by that text/, "a checked rewrite is never sent by a bare send 6");
+assert.match(renderCheck(checked, [], "Cortex's rewrite"), /6 \(Cortex's rewrite\): clean[\s\S]*"send 6"/, "the checked version is named, and send sends it");
 assert.match(renderCheck(checked, new Error("timeout")), /couldn't check it \(timeout\)/);
 console.log("draft check checks passed");
 

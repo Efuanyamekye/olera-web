@@ -123,10 +123,10 @@ export async function checkDraft(db: SupabaseClient, item: StoredItem): Promise<
 }
 
 /** One block per draft for Telegram. Contradictions first; "no source found" is labelled as such, not as an error. */
-export function renderCheck(item: StoredItem, objections: Objection[] | Error, yourVersion = false): string {
-  const what = yourVersion ? `${item.number} (your version)` : String(item.number);
-  // "send 8" would send the stored draft, not the version just checked.
-  const sendIt = yourVersion ? `"send ${item.number}: " followed by that text` : `"send ${item.number}"`;
+export function renderCheck(item: StoredItem, objections: Objection[] | Error, version: string | null = null): string {
+  const what = version ? `${item.number} (${version})` : String(item.number);
+  // "send 8" sends the latest version, which is the one just checked.
+  const sendIt = `"send ${item.number}"`;
   if (objections instanceof Error) return `${what}: couldn't check it (${objections.message}). It's still open.`;
   if (!objections.length) return `${what}: clean. Nothing contradicted by an agency page. Send it with ${sendIt} when you're ready.`;
   const order = { high: 0, medium: 1, low: 2 };
@@ -135,5 +135,5 @@ export function renderCheck(item: StoredItem, objections: Objection[] | Error, y
     const url = objection.sourceUrl ? `\n  ${objection.sourceUrl}` : "";
     return `• [${objection.confidence}] "${objection.target.slice(0, 120)}": ${objection.problem.slice(0, 300)}${quote}${url}`;
   });
-  return `${what}: ${objections.length} ${objections.length === 1 ? "objection" : "objections"}.\n${rows.join("\n")}\nStill open: ${yourVersion ? `${sendIt}, or "send ${item.number}" for the stored draft` : `"send ${item.number}", or "send ${item.number}: your edited text"`}.`;
+  return `${what}: ${objections.length} ${objections.length === 1 ? "objection" : "objections"}.\n${rows.join("\n")}\nStill open: ${sendIt} sends this version, or send your own words after "send ${item.number}:".`;
 }

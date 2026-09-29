@@ -37,6 +37,22 @@ export type ProposedItem = {
 };
 export type StoredItem = ProposedItem & { id: string; pass_id: string; number: number; status: string; created_at: string };
 
+/**
+ * The version of a draft he last saw. When Cortex rewrites a draft in chat
+ * ("send 5: <new text>"), or he writes or checks his own, that text becomes
+ * the item's latest version, and "send 5" sends it. TJ, 2026-09-29: "If I say
+ * send it, it should send the right version, not the version that I don't
+ * even know exists."
+ */
+export type LatestVersion = { text: string; at: string; by: "cortex" | "you" };
+export function latestVersion(item: StoredItem): LatestVersion | null {
+  const latest = (item.target as { latest?: LatestVersion } | null)?.latest;
+  return latest?.text ? latest : null;
+}
+export function currentText(item: StoredItem): string {
+  return latestVersion(item)?.text ?? item.body ?? "";
+}
+
 const EMAIL_DRAFTS_PER_PASS = 3;
 const SMS_DRAFTS_PER_PASS = 4;
 /** Outbound SMS a person wrote: the inbox reply box, and a manual city-lead text. */
@@ -468,9 +484,18 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
     .is("decided_at", null)
     .select("id");
   if (!claimed?.length) return `${item.number}: already being handled.`;
+  // What actually goes: his words in the command, else the latest version
+  // he saw, else the stored draft. The reply quotes it when it isn't the
+  // stored draft, so he never wonders which one went.
+  const latest = edit ? null : latestVersion(item);
+  const sentText = edit ?? currentText(item);
+  const changed = sentText !== (item.body ?? "");
   const finish = async (status: "done" | "failed" | "skipped", result: string) => {
-    await db.from("cortex_inbox_items").update({ status, result, decided_at: new Date().toISOString(), edited: Boolean(edit), ...(edit ? { body: edit } : {}) }).eq("id", item.id).eq("status", "proposed");
-    return `${item.number}: ${result}`;
+    await db.from("cortex_inbox_items").update({ status, result, decided_at: new Date().toISOString(), edited: changed, ...(changed ? { body: sentText } : {}) }).eq("id", item.id).eq("status", "proposed");
+    const which = status === "done" && latest && (item.kind === "sms_draft" || item.kind === "email_draft")
+      ? ` (${latest.by === "cortex" ? "Cortex's rewrite" : "your version"}: "${clip(latest.text, 90)}")`
+      : "";
+    return `${item.number}: ${result}${which}`;
   };
   try {
     if (item.kind === "question" && item.category !== "email:voicemail_callbacks") return finish("skipped", "that one is a question; answer it here in words and I'll take it from there.");
@@ -506,13 +531,13 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
       return finish(ok === phones.length ? "done" : "failed", `marked ${ok} of ${phones.length} text threads handled.`);
     }
     if (item.kind === "sms_draft") {
-      const result = await replyToSmsThread(db, { last10: String(item.target.last10), body: edit ?? item.body ?? "", actor: approver.actor, adminUserId: approver.id });
+      const result = await replyToSmsThread(db, { last10: String(item.target.last10), body: edit ?? currentText(item), actor: approver.actor, adminUserId: approver.id });
       if (result.status !== 200) return finish("failed", `not sent: ${String(result.json.error ?? result.status)}`);
       const scheduled = result.json.scheduled as { sendAfter?: string; tz?: string } | undefined;
       return finish("done", scheduled?.sendAfter ? `scheduled for their morning (quiet hours where they are).` : "sent.");
     }
     if (item.kind === "email_draft") {
-      await saveSupportDraft(db, { threadId: String(item.target.threadId), body: edit ?? item.body ?? "", actor: approver.actor, adminUserId: approver.id });
+      await saveSupportDraft(db, { threadId: String(item.target.threadId), body: edit ?? currentText(item), actor: approver.actor, adminUserId: approver.id });
       return finish("done", "saved as a Gmail draft on the thread. Send it from Gmail when you're ready.");
     }
     return finish("failed", "I don't know how to do that one.");
@@ -554,16 +579,96 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
 async function checkItems(db: SupabaseClient, open: StoredItem[], numbers: number[], edit: string | null = null): Promise<string> {
   const lines: string[] = [];
   const drafts = open
-    .filter((item) => numbers.includes(item.number) && (item.kind === "sms_draft" || item.kind === "email_draft") && (item.body || edit))
-    // His version is checked in place of the stored draft; nothing is saved.
-    .map((item) => (edit ? { ...item, body: edit } : item));
+    .filter((item) => numbers.includes(item.number) && (item.kind === "sms_draft" || item.kind === "email_draft") && (currentText(item) || edit))
+    // The version he'd send: his words, else the latest rewrite, else the draft.
+    .map((item) => ({ ...item, body: edit ?? currentText(item) }));
+  // A version he wrote and checked becomes the one "send" sends.
+  if (edit && drafts.length === 1) await saveLatest(db, drafts[0], { text: edit, at: new Date().toISOString(), by: "you" });
   const notDrafts = numbers.filter((n) => open.some((item) => item.number === n) && !drafts.some((item) => item.number === n));
   const missing = numbers.filter((n) => !open.some((item) => item.number === n));
   const results = await Promise.all(drafts.map((item) => checkDraft(db, item).catch((error: unknown) => (error instanceof Error ? error : new Error(String(error))))));
-  drafts.forEach((item, i) => lines.push(renderCheck(item, results[i], Boolean(edit))));
+  drafts.forEach((item, i) => {
+    const latest = latestVersion(open.find((o) => o.id === item.id)!);
+    const version = edit ? "your version" : latest ? (latest.by === "cortex" ? "Cortex's rewrite" : "your version") : null;
+    lines.push(renderCheck(item, results[i], version));
+  });
   if (notDrafts.length) lines.push(`${notDrafts.join(", ")}: not a draft, nothing to check.`);
   if (missing.length) lines.push(`${missing.join(", ")}: not in the current list (already done, skipped, or from an older pass).`);
   return lines.join("\n\n");
+}
+
+async function saveLatest(db: SupabaseClient, item: StoredItem, latest: LatestVersion) {
+  await db.from("cortex_inbox_items")
+    .update({ target: { ...(item.target ?? {}), latest } })
+    .eq("id", item.id)
+    .eq("status", "proposed");
+}
+
+/**
+ * Rewrites Cortex offered in its reply, as "send 5: <text>" blocks (it is
+ * told to write them that way). Each becomes that item's latest version.
+ */
+export function parseRewrites(reply: string): Array<{ number: number; text: string }> {
+  const out: Array<{ number: number; text: string }> = [];
+  const pattern = /(?:^|\n)\s*\**send (\d+)\**\s*:\s*([\s\S]*?)(?=\n\s*\n|\n\s*\**send \d+\**\s*:|$)/gi;
+  for (const match of reply.matchAll(pattern)) {
+    const text = match[2].trim().replace(/^["“]|["”]$/g, "").trim();
+    if (text.length >= 20) out.push({ number: Number(match[1]), text });
+  }
+  return out;
+}
+
+export async function rememberRewrites(db: SupabaseClient, reply: string): Promise<number> {
+  const rewrites = parseRewrites(reply);
+  if (!rewrites.length) return 0;
+  const open = await openItems(db);
+  let saved = 0;
+  for (const rewrite of rewrites) {
+    const item = open.find((o) => o.number === rewrite.number && (o.kind === "sms_draft" || o.kind === "email_draft"));
+    if (!item) continue;
+    await saveLatest(db, item, { text: rewrite.text, at: new Date().toISOString(), by: "cortex" });
+    saved += 1;
+  }
+  return saved;
+}
+
+/** Words that can start an inbox action. Anything without one is conversation, and costs nothing. */
+const ACTION_WORDS = /\b(send|sent|check|fact[- ]?check|verify|perplexity|approve|go ahead|ship|skip|drop|do it|push it|fire)\b/i;
+
+/**
+ * "check it", "yeah send those two", "go ahead with 6": what he meant, read
+ * by Haiku against the open items and Cortex's last message, when the words
+ * are not an exact command. TJ, 2026-09-29: "Can we not be so strict, because
+ * there's a good chance I'll forget in a couple days?" Returns null unless he
+ * clearly asked for an action on numbered inbox items; a sent text cannot be
+ * unsent, so any doubt is conversation.
+ */
+export async function inferInboxCommand(text: string, open: StoredItem[], lastCortex: string | null): Promise<InboxCommand | null> {
+  if (!ACTION_WORDS.test(text) || !process.env.ANTHROPIC_API_KEY) return null;
+  const drafts = open.filter((item) => item.kind !== "question");
+  if (!drafts.length) return null;
+  try {
+    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    const reply = await anthropic.messages.create({
+      model: "claude-haiku-4-5",
+      max_tokens: 200,
+      system: `You decide whether the founder's message is an instruction to act on numbered items in his inbox digest. Actions: "send" (send or approve those items), "check" (fact-check those drafts with Perplexity), "skip". Resolve "it", "them", "those", "both" from Cortex's last message. Say "none" unless the message clearly instructs one of these actions now: a question about sending, a discussion of a draft, or a message to a person or channel on Slack ("send that to Logan", "post in #general") is "none". When unsure, "none". Reply with JSON only: {"action":"send"|"check"|"skip"|"none","numbers":[...]}.`,
+      messages: [{
+        role: "user",
+        content: `OPEN ITEMS:\n${drafts.map((item) => `${item.number}. ${clip(item.summary, 140)}`).join("\n")}\n\nCORTEX'S LAST MESSAGE:\n${clip(lastCortex ?? "(none)", 1_500)}\n\nHE SAYS:\n${text}`,
+      }],
+    }, { timeout: 15_000, maxRetries: 0 });
+    const raw = reply.content.find((block): block is Anthropic.TextBlock => block.type === "text")?.text ?? "";
+    const parsed = JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1)) as { action?: string; numbers?: number[] };
+    const numbers = (parsed.numbers ?? []).filter((n) => drafts.some((item) => item.number === n));
+    if (!numbers.length) return null;
+    if (parsed.action === "send") return { verb: "approve", numbers, edit: null };
+    if (parsed.action === "check") return { verb: "check", numbers, edit: null };
+    if (parsed.action === "skip") return { verb: "skip", numbers, edit: null };
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 /** Hours until the next cortex-inbox-pass run (vercel.json: 01:00 and 13:00 UTC). */

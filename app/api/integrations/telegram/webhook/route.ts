@@ -5,7 +5,7 @@ import { downloadTelegramFile, founderChatId, sendTelegramMessage, sendTelegramR
 import { sendVoiceNote } from "@/lib/war-room/voice.server";
 import { recordFounderReply } from "@/lib/war-room/moves.server";
 import { startVisualRoutine } from "@/lib/war-room/visualize.server";
-import { handleInboxCommand, parseInboxCommand } from "@/lib/war-room/inbox-operator.server";
+import { handleInboxCommand, inferInboxCommand, openItems, parseInboxCommand, rememberRewrites } from "@/lib/war-room/inbox-operator.server";
 import { supabaseChatStore } from "@/lib/war-room/chat-memory.server";
 import { saveHandoff } from "@/lib/war-room/handoff.server";
 import { sendToSlack } from "@/lib/war-room/team-messages.server";
@@ -59,12 +59,14 @@ export async function POST(request: NextRequest) {
         team: { send: (target, text) => sendToSlack(target, text) },
         handoff: { save: (body, note) => saveHandoff(db, { body, note, chatId: founderChatId() ?? "" }) },
         inbox: {
-          command: async (text) => {
+          command: async (text, lastCortex) => {
             // A command with nothing open still gets a plain answer, not a
-            // model reply to "send 3".
-            const command = parseInboxCommand(text);
+            // model reply to "send 3". Plain words ("check it", "send
+            // those two") are read by Haiku only when no exact command fits.
+            const command = parseInboxCommand(text) ?? await inferInboxCommand(text, await openItems(db), await lastCortex());
             return command ? handleInboxCommand(db, command) : null;
           },
+          rewrites: (reply) => rememberRewrites(db, reply),
         },
       });
       console.log("[cortex] telegram update", update.update_id, JSON.stringify(
