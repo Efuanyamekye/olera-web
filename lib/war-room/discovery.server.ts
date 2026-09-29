@@ -59,6 +59,13 @@ import {
   type WarRoomScanMode,
 } from "@/lib/war-room/lean-scan";
 
+/**
+ * Output effort for lean mode's calls. Output is most of a lean scan's cost:
+ * on 2026-09-29 the scan wrote 3,852 tokens ($0.039 of $0.070) and a forced
+ * draft 1,296, putting an agenda day at $0.109 against a $0.10 target.
+ */
+const LEAN_EFFORT = (process.env.WAR_ROOM_LEAN_EFFORT || "low") as "low" | "medium" | "high";
+
 export const WAR_ROOM_DISCOVERY_MODEL = process.env.WAR_ROOM_DISCOVERY_MODEL
   || process.env.WAR_ROOM_MODEL
   || "claude-opus-5";
@@ -972,6 +979,8 @@ async function callWarRoomTool<T>(input: {
   prompt: string;
   /** Overrides the stage's model. Only the dev sweep passes this. */
   model?: string;
+  /** Output effort on models that accept it; lean mode sends "low" (see LEAN_EFFORT). */
+  effort?: "low" | "medium" | "high";
 }): Promise<{ output: T; inputTokens: number; outputTokens: number; cost: WarRoomCallCost }> {
   if (!process.env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY is not configured");
   const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -984,6 +993,7 @@ async function callWarRoomTool<T>(input: {
       system: input.system,
       tools: [input.tool],
       tool_choice: { type: "tool", name: input.tool.name },
+      ...(input.effort && /^claude-(sonnet-5|opus)/.test(stageModel) ? { output_config: { effort: input.effort } } : {}),
       messages: [{ role: "user", content: input.prompt }],
     }, REQUEST_OPTIONS).finalMessage();
     // A truncated tool call still parses into a partial object. Accepting it
@@ -1433,6 +1443,8 @@ async function runCommissionPass(
     tool: WIRE_PROPOSAL_TOOL,
     maxTokens: 12_000,
     model: options.model,
+    // Only lean mode sets a model here, so only lean drafts run at low effort.
+    effort: options.model ? LEAN_EFFORT : undefined,
     prompt: `This condition is real and material, and it is NOT decidable yet: its cause is unresolved and it needs evidence. Do not write a decision brief and do not ask the founder to choose anything.
 
 Commission the smallest bounded act that would resolve ONE named unknown on it. Name that unknown explicitly in the finding.
@@ -1487,6 +1499,8 @@ async function runProposalPass(
     tool: WIRE_PROPOSAL_TOOL,
     maxTokens: 12_000,
     model: options.model,
+    // Only lean mode sets a model here, so only lean drafts run at low effort.
+    effort: options.model ? LEAN_EFFORT : undefined,
     prompt: `Triage nominated exactly one condition for the founder agenda. Write it up as a one-minute CEO decision brief. If, while writing it, you conclude it does not clear the founder-interruption standard after all, return a brief whose decisionRequired says so plainly rather than inventing a case.\n\nNOMINATED CONDITION:\n${JSON.stringify(nominated)}\n\nCOUNCIL CONTEXT:\n${JSON.stringify(options.context ?? draftingContextFor(scrubbedForPrompt(operatingPack), nominated.fingerprint))}\n\nCHIEF-OF-STAFF READ:\n${investigator.rawInvestigatorOutput.portfolioRead}`,
   });
   const brief = call.output?.brief ?? {};
@@ -2646,6 +2660,7 @@ async function runLeanScanPass(prepared: WarRoomPreparedDiscovery, model?: strin
     stage: "lean_scan",
     system: LEAN_SYSTEM,
     tool: WIRE_LEAN_SCAN_TOOL,
+    effort: LEAN_EFFORT,
     // Measured output is a few thousand tokens; the ceiling leaves room
     // without inviting a long answer.
     maxTokens: 10_000,

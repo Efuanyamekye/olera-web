@@ -217,7 +217,10 @@ export function buildLeanContext(
 export type LeanPayload = ReturnType<typeof leanPayload>;
 
 /** Families a draft always keeps: computed numbers, probe answers, capabilities, the founder's answers. */
-const DRAFT_KEPT_FAMILIES = new Set(["metric", "signal", "comparison", "provider", "probe", "capability", "founder"]);
+// Capability, comparison and signal items reach the draft only when the
+// condition cites them: at low effort a forced draft still came to $0.099
+// with them all in (2026-09-29), too close to the $0.10 line.
+const DRAFT_KEPT_FAMILIES = new Set(["metric", "provider", "probe", "founder"]);
 
 /**
  * What the one draft call reads: the scan's payload narrowed to the condition
