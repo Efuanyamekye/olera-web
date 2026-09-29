@@ -351,6 +351,15 @@ export interface BoardUniversity {
   /** A teaching campus. Badged on the board, and out of every rollup. */
   isDemo?: boolean;
   /**
+   * Put out of sight on the board, for the whole team.
+   *
+   * A campus nobody is working still has records and still takes a row.
+   * This drops the row and nothing else: the records, the tasks, the
+   * assignments and every rollup carry on untouched, and unhiding puts the
+   * board back exactly as it was.
+   */
+  hidden?: boolean;
+  /**
    * Who approved our contacting faculty here, when somebody has.
    *
    * A department chair, industry relations, or a communications office —

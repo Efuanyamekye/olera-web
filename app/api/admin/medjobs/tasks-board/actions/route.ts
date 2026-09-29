@@ -123,6 +123,18 @@ type Body =
       campusId: string;
       section: string;
       adminUserId: string | null;
+    }
+  | {
+      /**
+       * Put a campus out of sight on the board, or bring it back.
+       *
+       * Shared, so the whole team looks at the same short list. It draws a
+       * row or does not draw it: the campus keeps its records, its tasks and
+       * its assignments, and appears in every rollup either way.
+       */
+      op: "set_campus_hidden";
+      campusId: string;
+      hidden: boolean;
     };
 
 const ARCHIVED_STATUS = "archived";
@@ -563,6 +575,30 @@ export async function POST(req: Request) {
   }
 
   const db = getServiceClient();
+
+  // ── hiding a campus ───────────────────────────────────────────────────
+  // Campus-level, so it goes before the record lookup below.
+  if (body.op === "set_campus_hidden") {
+    const campusId = (body.campusId ?? "").trim();
+    if (!campusId) return NextResponse.json({ error: "Missing campus" }, { status: 400 });
+    if (typeof body.hidden !== "boolean") {
+      return NextResponse.json({ error: "Missing hidden" }, { status: 400 });
+    }
+
+    // Unhiding clears who hid it as well as when. Leaving a stale name on a
+    // visible campus would have it answer a question nobody asked.
+    const { error } = await db
+      .from("student_outreach_campuses")
+      .update(
+        body.hidden
+          ? { hidden_at: new Date().toISOString(), hidden_by: admin.id }
+          : { hidden_at: null, hidden_by: null },
+      )
+      .eq("id", campusId);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+    return NextResponse.json({ ok: true, hidden: body.hidden });
+  }
 
   // ── who owns a task type ──────────────────────────────────────────────
   // Campus-level, like create_record, so it is handled before the lookup
