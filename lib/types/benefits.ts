@@ -383,8 +383,10 @@ export function needsToCategories(needs: PrimaryNeed[]): BenefitCategory[] {
     healthManagement: ["healthcare"],
     companionship: ["caregiver"],
     financialHelp: ["income", "food", "housing", "utilities"],
-    memoryCare: ["healthcare"],
-    mobilityHelp: ["healthcare"],
+    // Dementia care leans on caregiver programs (respite, adult day, family
+    // caregiver support) as much as on medical ones.
+    memoryCare: ["healthcare", "caregiver"],
+    mobilityHelp: ["healthcare", "housing"],
   };
   const categories = new Set<BenefitCategory>();
   for (const need of needs) {
