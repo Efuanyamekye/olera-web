@@ -32,6 +32,18 @@ import UniversityFlow from "./UniversityFlow";
 /** Where the My work choice is remembered. */
 const FILTER_KEY = "medjobs.tasks.filter";
 
+/**
+ * Where "I have put the teaching campus away" is remembered.
+ *
+ * Separate from the real campuses, which are hidden in the database for the
+ * whole team, because the teaching campus is itself a browser-only object:
+ * it is built on load, never fetched, never written, and thrown away on
+ * refresh. There is no row to hide it in, and hiding it for everybody would
+ * be wrong anyway — whether you want a practice campus on screen is a
+ * property of you, not of the programme.
+ */
+const DEMO_HIDDEN_KEY = "medjobs.tasks.hideDemo";
+
 const CHANNEL_OF: Partial<Record<SectionKey, "st3" | "st4" | "st5" | "st6" | "st7">> = {
   jobboard: "st3",
   advisors: "st4",
@@ -87,10 +99,13 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
    */
   const [filterId, setFilterId] = useState<string | null>(null);
 
+  const [demoHidden, setDemoHidden] = useState(false);
+
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem(FILTER_KEY);
       if (saved) setFilterId(saved);
+      setDemoHidden(window.localStorage.getItem(DEMO_HIDDEN_KEY) === "1");
     } catch {
       /* no storage, no memory. The board still works. */
     }
@@ -115,7 +130,26 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
   const [showHidden, setShowHidden] = useState(false);
   const [hiding, setHiding] = useState<string | null>(null);
 
+  /**
+   * Whether a row is put away. Two stores behind one question, so nothing
+   * downstream has to know which kind of campus it is looking at.
+   */
+  const isHidden = (u: BoardUniversity) => (isDemoUniversity(u) ? demoHidden : !!u.hidden);
+
   const setHiddenFor = async (u: BoardUniversity, hidden: boolean) => {
+    // The teaching campus has no row to write to, so it is remembered here
+    // instead. No request, and nothing for the server to refuse.
+    if (isDemoUniversity(u)) {
+      setDemoHidden(hidden);
+      try {
+        if (hidden) window.localStorage.setItem(DEMO_HIDDEN_KEY, "1");
+        else window.localStorage.removeItem(DEMO_HIDDEN_KEY);
+      } catch {
+        /* the choice still applies to this sitting. */
+      }
+      return;
+    }
+
     setHiding(u.id);
     const before = board;
     // Optimistic, because the row vanishing is the whole feedback. Waiting
@@ -195,12 +229,12 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
     ? board.filter((u) => sectionsFor(u.assignments, filterId).length > 0)
     : board;
 
-  const hiddenCount = visible.filter((u) => u.hidden).length;
-  const rows = [...(showHidden ? visible : visible.filter((u) => !u.hidden))].sort(
+  const hiddenCount = visible.filter(isHidden).length;
+  const rows = [...(showHidden ? visible : visible.filter((u) => !isHidden(u)))].sort(
     (a, b) =>
       // Hidden below everything, including the teaching campus: they are
       // only on screen at all so somebody can put one back.
-      Number(!!a.hidden) - Number(!!b.hidden) ||
+      Number(isHidden(a)) - Number(isHidden(b)) ||
       Number(isDemoUniversity(a)) - Number(isDemoUniversity(b)) ||
       waitingFor(b) - waitingFor(a) ||
       a.name.localeCompare(b.name),
@@ -272,7 +306,7 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
                   key={u.slug}
                   onClick={() => setOpenSlug(u.slug)}
                   className={`group/row cursor-pointer border-b border-gray-100 hover:bg-gray-50 ${
-                    u.hidden ? "opacity-45" : ""
+                    isHidden(u) ? "opacity-45" : ""
                   }`}
                 >
                   <td className="py-2.5 pr-3">
@@ -331,30 +365,27 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
                     );
                   })}
                   <td className="py-2.5 pr-1 text-right align-top">
-                    {/* The teaching campus is built in the browser and has
-                        no row in the database, so there is nothing to hide
-                        it in. It already sorts to the bottom and is badged. */}
-                    {!isDemoUniversity(u) && (
-                      <button
-                        type="button"
-                        disabled={hiding === u.id}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          void setHiddenFor(u, !u.hidden);
-                        }}
-                        title={
-                          u.hidden
-                            ? `Show ${u.name} on the board again`
+                    <button
+                      type="button"
+                      disabled={hiding === u.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void setHiddenFor(u, !isHidden(u));
+                      }}
+                      title={
+                        isHidden(u)
+                          ? `Show ${u.name} on the board again`
+                          : isDemoUniversity(u)
+                            ? "Put the teaching campus away. Just for you, and it comes back from the line below."
                             : `Hide ${u.name}. Nothing on it is archived or lost.`
-                        }
-                        aria-label={u.hidden ? `Show ${u.name}` : `Hide ${u.name}`}
-                        className={`rounded p-1 text-gray-300 transition-opacity duration-100 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-40 ${
-                          u.hidden ? "opacity-100" : "opacity-0 group-hover/row:opacity-100"
-                        }`}
-                      >
-                        {u.hidden ? <EyeIcon /> : <EyeOffIcon />}
-                      </button>
-                    )}
+                      }
+                      aria-label={isHidden(u) ? `Show ${u.name}` : `Hide ${u.name}`}
+                      className={`rounded p-1 text-gray-300 transition-opacity duration-100 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-40 ${
+                        isHidden(u) ? "opacity-100" : "opacity-0 group-hover/row:opacity-100"
+                      }`}
+                    >
+                      {isHidden(u) ? <EyeIcon /> : <EyeOffIcon />}
+                    </button>
                   </td>
                 </tr>
               );
