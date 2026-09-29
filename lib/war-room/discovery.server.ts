@@ -129,7 +129,9 @@ const PASS_MODELS: Record<string, string | undefined> = {
   sweeping_lenses: process.env.WAR_ROOM_MODEL_SWEEP || "claude-sonnet-5",
   forming_candidates: process.env.WAR_ROOM_MODEL_DOSSIER || "claude-haiku-4-5-20251001",
   challenging_candidates: process.env.WAR_ROOM_MODEL_TRIAGE || "claude-haiku-4-5-20251001",
-  drafting_decision: process.env.WAR_ROOM_MODEL_DRAFT,
+  // Was unset, so it fell back to Opus: $0.20 of a $0.59 scan on 28 Sep, the
+  // largest single line. TJ, 29 Sep: under $0.10 a scan.
+  drafting_decision: process.env.WAR_ROOM_MODEL_DRAFT || "claude-sonnet-5",
 };
 
 export function modelForStage(stage: string): string {
