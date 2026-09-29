@@ -44,7 +44,7 @@ export type StoredItem = ProposedItem & { id: string; pass_id: string; number: n
  * send it, it should send the right version, not the version that I don't
  * even know exists."
  */
-export type LatestVersion = { text: string; at: string; by: "cortex" | "you" };
+export type LatestVersion = { text: string; at: string; by: "cortex" | "you"; checked?: boolean };
 export function latestVersion(item: StoredItem): LatestVersion | null {
   const latest = (item.target as { latest?: LatestVersion } | null)?.latest;
   return latest?.text ? latest : null;
@@ -564,6 +564,22 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
   const missing = command.numbers.filter((n) => !open.some((item) => item.number === n));
   const lines: string[] = [];
   for (const item of chosen) {
+    // A rewrite from the chat has not been through the drafter's own checks,
+    // so the first "send" fact-checks it and holds it on a high objection.
+    // On 2026-09-29 a chat rewrite told a family "you're eligible for SMMC
+    // Long-Term Care"; Perplexity flagged it high. Saying send again sends it.
+    if (command.verb !== "skip" && !command.edit) {
+      const latest = latestVersion(item);
+      if (latest?.by === "cortex" && !latest.checked && (item.kind === "sms_draft" || item.kind === "email_draft")) {
+        const objections = await checkDraft(db, { ...item, body: latest.text }).catch(() => null);
+        await saveLatest(db, item, { ...latest, checked: true });
+        const high = (objections ?? []).filter((objection) => objection.confidence === "high");
+        if (high.length) {
+          lines.push(`${renderCheck({ ...item, body: latest.text }, high, "Cortex's rewrite")}\nNot sent. Say send ${item.number} again to send it anyway.`);
+          continue;
+        }
+      }
+    }
     if (command.verb === "skip") {
       await db.from("cortex_inbox_items").update({ status: "skipped", decided_at: new Date().toISOString() }).eq("id", item.id).eq("status", "proposed");
       lines.push(`${item.number}: skipped.`);
@@ -583,10 +599,15 @@ async function checkItems(db: SupabaseClient, open: StoredItem[], numbers: numbe
     // The version he'd send: his words, else the latest rewrite, else the draft.
     .map((item) => ({ ...item, body: edit ?? currentText(item) }));
   // A version he wrote and checked becomes the one "send" sends.
-  if (edit && drafts.length === 1) await saveLatest(db, drafts[0], { text: edit, at: new Date().toISOString(), by: "you" });
+  if (edit && drafts.length === 1) await saveLatest(db, drafts[0], { text: edit, at: new Date().toISOString(), by: "you", checked: true });
   const notDrafts = numbers.filter((n) => open.some((item) => item.number === n) && !drafts.some((item) => item.number === n));
   const missing = numbers.filter((n) => !open.some((item) => item.number === n));
   const results = await Promise.all(drafts.map((item) => checkDraft(db, item).catch((error: unknown) => (error instanceof Error ? error : new Error(String(error))))));
+  // A rewrite he has now seen checked goes out on the next "send" without a second check.
+  for (const item of drafts) {
+    const latest = latestVersion(open.find((o) => o.id === item.id)!);
+    if (!edit && latest && !latest.checked) await saveLatest(db, item, { ...latest, checked: true });
+  }
   drafts.forEach((item, i) => {
     const latest = latestVersion(open.find((o) => o.id === item.id)!);
     const version = edit ? "your version" : latest ? (latest.by === "cortex" ? "Cortex's rewrite" : "your version") : null;
@@ -610,10 +631,14 @@ async function saveLatest(db: SupabaseClient, item: StoredItem, latest: LatestVe
  */
 export function parseRewrites(reply: string): Array<{ number: number; text: string }> {
   const out: Array<{ number: number; text: string }> = [];
-  const pattern = /(?:^|\n)\s*\**send (\d+)\**\s*:\s*([\s\S]*?)(?=\n\s*\n|\n\s*\**send \d+\**\s*:|$)/gi;
+  // At the start of a line, allowing the quote marks, blockquote, bullet and
+  // bold Cortex may wrap it in: "send 5: …", > send 5: …, • *send 5:* …
+  const lead = String.raw`[\s>•*"“-]*`;
+  const pattern = new RegExp(String.raw`(?:^|\n)${lead}send (\d+)\**\s*:\**\s*([\s\S]*?)(?=\n\s*\n|\n${lead}send \d+\**\s*:|$)`, "gi");
   for (const match of reply.matchAll(pattern)) {
-    const text = match[2].trim().replace(/^["“]|["”]$/g, "").trim();
-    if (text.length >= 20) out.push({ number: Number(match[1]), text });
+    const text = match[2].trim().replace(/^[>\s]+/gm, "").replace(/^["“]|["”]$/g, "").trim();
+    // "send 5: <your edited text>" is an instruction, not a rewrite.
+    if (text.length >= 20 && !/^<[^>]*>$/.test(text) && !/^(your|the) (own |edited )?(words|text|version)/i.test(text)) out.push({ number: Number(match[1]), text });
   }
   return out;
 }
