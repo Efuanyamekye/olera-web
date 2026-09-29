@@ -22,7 +22,7 @@ import { getStateSlug } from "@/lib/program-data";
 import { resolveBenefitsProgramEntry } from "@/lib/benefits/program-entry";
 import { calculateFamilyCompleteness } from "@/lib/admin/profile-completeness";
 import { emailReturningUserSignInLink, resolveExistingUserId } from "@/lib/auth/returning-user";
-import { readCareAge, AGE_BAND_LABELS } from "@/lib/benefits/age";
+import { readCareAge, AGE_BAND_LABELS, isAgeBand } from "@/lib/benefits/age";
 import { benefitAmountLabel } from "@/lib/benefits/savings-label";
 import { readCareNeedSource, isInferredCareNeed, type CareNeedSource } from "@/lib/benefits/care-need-source";
 
@@ -117,7 +117,7 @@ interface SaveResultsPayload {
    *  absent on older clients, where it is inferred from entrySource. */
   careNeedSource?: CareNeedSource;
   age: number | null;
-  medicaidStatus: "alreadyHas" | "applying" | "notSure" | "doesNotHave" | null;
+  medicaidStatus: "alreadyHas" | "applying" | "notSure" | "doesNotHave" | "denied" | null;
   incomeRange: "under1500" | "under2500" | "under4000" | "over4000" | "preferNotToSay" | null;
   stateCode: string | null; // 2-letter (TX, MI, etc.)
 
@@ -150,6 +150,13 @@ interface SaveResultsPayload {
   utmCampaign?: string;
   matchedPrograms: SavedProgramInput[];
   matchCount: number;
+  /** Full finder (/benefits/finder) answers the card never asks. Each is
+   *  optional and only written when the family gave it. */
+  ageBand?: string;
+  veteranStatus?: "yes" | "no" | "spouse" | "unsure";
+  householdSize?: "1" | "2" | "3";
+  finderNeeds?: string[];
+  caregiverNeeds?: string[];
 }
 
 export async function POST(req: Request) {
@@ -187,6 +194,11 @@ export async function POST(req: Request) {
     utmCampaign,
     matchedPrograms,
     matchCount,
+    ageBand,
+    veteranStatus,
+    householdSize,
+    finderNeeds,
+    caregiverNeeds,
   } = payload;
 
   // Channel-dependent contact validation. The V3 2-step flow lets the user
@@ -479,6 +491,16 @@ export async function POST(req: Request) {
   const completedAt = new Date().toISOString();
   const intakeMetadata: Record<string, unknown> = {
     age: age || undefined,
+    // A band from the finder's age question. Readers go through readCareAge,
+    // which prefers a typed exact age when one exists.
+    age_band: isAgeBand(ageBand) ? ageBand : undefined,
+    // Only yes/no are facts the eligibility rules read. A veteran's spouse
+    // is kept apart so VA programs stay in without claiming service.
+    veteran_status: veteranStatus === "yes" || veteranStatus === "no" ? veteranStatus : undefined,
+    veteran_spouse: veteranStatus === "spouse" ? true : undefined,
+    household_size: householdSize === "1" || householdSize === "2" || householdSize === "3" ? Number(householdSize) : undefined,
+    finder_needs: Array.isArray(finderNeeds) && finderNeeds.length ? finderNeeds.slice(0, 8).map(String) : undefined,
+    caregiver_needs: Array.isArray(caregiverNeeds) && caregiverNeeds.length ? caregiverNeeds.slice(0, 8).map(String) : undefined,
     care_needs: granularCareNeeds.length > 0 ? granularCareNeeds : undefined,
     income_range: incomeRange || undefined,
     medicaid_status: medicaidStatus || undefined,
