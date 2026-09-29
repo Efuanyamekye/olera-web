@@ -40,6 +40,30 @@ const CHANNEL_OF: Partial<Record<SectionKey, "st3" | "st4" | "st5" | "st6" | "st
   professors: "st7",
 };
 
+/** Hide: an eye with a line through it. */
+function EyeOffIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <path d="M6.6 6.6A18.5 18.5 0 0 0 2 12s3 8 10 8a9.1 9.1 0 0 0 5.4-1.6" />
+      <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+      <path d="M2 2l20 20" />
+    </svg>
+  );
+}
+
+/** Show again. */
+function EyeIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
 export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
   const [board, setBoard] = useState<BoardUniversity[] | null>(seed ?? null);
   // Built once and kept, so working a real university — which refetches the
@@ -79,6 +103,40 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
       else window.localStorage.removeItem(FILTER_KEY);
     } catch {
       /* the choice still applies to this sitting. */
+    }
+  };
+
+  /**
+   * Whether the hidden campuses are on screen.
+   *
+   * Not remembered. Hiding is shared and meant to stay out of the way; the
+   * reveal is something you do to put one back, not a mode to sit in.
+   */
+  const [showHidden, setShowHidden] = useState(false);
+  const [hiding, setHiding] = useState<string | null>(null);
+
+  const setHiddenFor = async (u: BoardUniversity, hidden: boolean) => {
+    setHiding(u.id);
+    const before = board;
+    // Optimistic, because the row vanishing is the whole feedback. Waiting
+    // on a round trip to redraw the table reads as a click that did nothing.
+    setBoard((prev) =>
+      (prev ?? []).map((x) => (x.id === u.id ? { ...x, hidden } : x)),
+    );
+    try {
+      const res = await fetch("/api/admin/medjobs/tasks-board/actions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ op: "set_campus_hidden", campusId: u.id, hidden }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+    } catch {
+      setBoard(before);
+      setFailed(
+        hidden ? `${u.name} could not be hidden.` : `${u.name} could not be brought back.`,
+      );
+    } finally {
+      setHiding(null);
     }
   };
 
@@ -137,8 +195,12 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
     ? board.filter((u) => sectionsFor(u.assignments, filterId).length > 0)
     : board;
 
-  const rows = [...visible].sort(
+  const hiddenCount = visible.filter((u) => u.hidden).length;
+  const rows = [...(showHidden ? visible : visible.filter((u) => !u.hidden))].sort(
     (a, b) =>
+      // Hidden below everything, including the teaching campus: they are
+      // only on screen at all so somebody can put one back.
+      Number(!!a.hidden) - Number(!!b.hidden) ||
       Number(isDemoUniversity(a)) - Number(isDemoUniversity(b)) ||
       waitingFor(b) - waitingFor(a) ||
       a.name.localeCompare(b.name),
@@ -196,6 +258,9 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
                   {LADDERS[s].label}
                 </th>
               ))}
+              {/* The hide control. No label: the column is 2rem of hover
+                  affordance, and a heading over it would read as data. */}
+              <th className={`${TH} w-8`} aria-label="Hide" />
             </tr>
           </thead>
           <tbody>
@@ -206,7 +271,9 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
                 <tr
                   key={u.slug}
                   onClick={() => setOpenSlug(u.slug)}
-                  className="cursor-pointer border-b border-gray-100 hover:bg-gray-50"
+                  className={`group/row cursor-pointer border-b border-gray-100 hover:bg-gray-50 ${
+                    u.hidden ? "opacity-45" : ""
+                  }`}
                 >
                   <td className="py-2.5 pr-3">
                     <span className="flex items-center gap-2">
@@ -263,12 +330,52 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
                       </td>
                     );
                   })}
+                  <td className="py-2.5 pr-1 text-right align-top">
+                    {/* The teaching campus is built in the browser and has
+                        no row in the database, so there is nothing to hide
+                        it in. It already sorts to the bottom and is badged. */}
+                    {!isDemoUniversity(u) && (
+                      <button
+                        type="button"
+                        disabled={hiding === u.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          void setHiddenFor(u, !u.hidden);
+                        }}
+                        title={
+                          u.hidden
+                            ? `Show ${u.name} on the board again`
+                            : `Hide ${u.name}. Nothing on it is archived or lost.`
+                        }
+                        aria-label={u.hidden ? `Show ${u.name}` : `Hide ${u.name}`}
+                        className={`rounded p-1 text-gray-300 transition-opacity duration-100 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-40 ${
+                          u.hidden ? "opacity-100" : "opacity-0 group-hover/row:opacity-100"
+                        }`}
+                      >
+                        {u.hidden ? <EyeIcon /> : <EyeOffIcon />}
+                      </button>
+                    )}
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
+
+      {/* Without this, hiding is a one-way door and the only way back is a
+          database. Shown only when something is actually hidden. */}
+      {hiddenCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setShowHidden((v) => !v)}
+          className="mt-2 text-[12px] text-gray-500 underline-offset-2 hover:text-gray-900 hover:underline"
+        >
+          {showHidden
+            ? "Put the hidden ones away"
+            : `${hiddenCount} hidden \u00B7 show ${hiddenCount === 1 ? "it" : "them"}`}
+        </button>
+      )}
 
 
       {open && (
