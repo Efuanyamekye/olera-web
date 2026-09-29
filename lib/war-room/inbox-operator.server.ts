@@ -5,6 +5,7 @@ import { markSmsThreadHandled, MAX_SMS_BODY, replyToSmsThread } from "@/lib/sms/
 import { runNoiseSweep } from "@/lib/support-email/noise-sweep.server";
 import { archiveSupportThreads, saveSupportDraft } from "@/lib/support-email/thread-actions.server";
 import { checkDraft, renderCheck } from "@/lib/war-room/draft-check.server";
+import { HUMAN_VOICE_RULES } from "@/lib/family-answers/human-voice";
 import { AGED_OUT_DAYS, callbackLine, loadWaitingVoicemails, sortVoicemails, STALE_CALLBACK_DAYS } from "@/lib/war-room/voicemail-triage.server";
 
 /**
@@ -187,9 +188,13 @@ const DRAFT_SYSTEM = `You draft email replies from Olera's support inbox (suppor
 
 Write the reply the founder would send:
 - Answer only what they wrote after Olera's last reply. Never repeat or re-offer anything Olera already said or offered in the thread.
-- Plain, warm, short: three to six sentences. One clear next step. No hedging, no over-apologising, no em dashes, no marketing language.
+- Short: three to six sentences. One clear next step. No hedging, no over-apologising, no em dashes, no marketing language.
+- To a family: never say they qualify or are eligible for a program. The agency decides; say what the next step is and who decides.
 - Never invent a fact, a price, a date or a promise the thread does not support. If something needs checking, say what you will find out instead of guessing.
 - Sign off as "TJ, Olera".
+
+${HUMAN_VOICE_RULES}
+
 Reply with the email body only.`;
 
 async function draftEmail(thread: ThreadRow, messages: MessageRow[]): Promise<{ body: string; costUsd: number } | null> {
@@ -426,6 +431,11 @@ function parseOne(text: string): InboxCommand | null {
   // "check 5 6" fact-checks drafts and sends nothing (TJ, 2026-09-28).
   const check = text.trim().match(/^(?:check|fact[- ]?check|attack|verify)\s+((?:\d+[\s,&]*(?:and\s+)?)+)[.!]?$/i);
   if (check) return { verb: "check", numbers: [...check[1].matchAll(/\d+/g)].map((m) => Number(m[0])), edit: null };
+  // "check 8: <text>" checks his version, or Cortex's rewrite, before it is
+  // sent. On 2026-09-29 a chat rewrite told a family "you're eligible for SMMC
+  // Long-Term Care" and "check" could only read the stored draft.
+  const checkEdit = text.trim().match(/^(?:check|fact[- ]?check|attack|verify)\s+(\d+)\s*:\s*([\s\S]+)$/i);
+  if (checkEdit) return { verb: "check", numbers: [Number(checkEdit[1])], edit: checkEdit[2].trim() };
   const match = text.trim().match(/^(approve|send|yes|do|ok|skip|no)\s+((?:\d+[\s,&]*(?:and\s+)?)+|all)\s*(?::\s*([\s\S]+))?$/i);
   if (!match) return null;
   const verb = /^(skip|no)$/i.test(match[1]) ? "skip" : "approve";
@@ -524,7 +534,7 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
   if (command.verb === "later") {
     return `OK, nothing sent. The ${open.length} open ${open.length === 1 ? "item stays" : "items stay"} open and come back in the next inbox pass (${nextPassIn()}).`;
   }
-  if (command.verb === "check") return checkItems(db, open, command.numbers);
+  if (command.verb === "check") return checkItems(db, open, command.numbers, command.edit);
   const chosen = command.numbers.length ? open.filter((item) => command.numbers.includes(item.number)) : open.filter((item) => item.kind !== "question");
   const missing = command.numbers.filter((n) => !open.some((item) => item.number === n));
   const lines: string[] = [];
@@ -541,13 +551,16 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
 }
 
 /** "check 5 6": drafts checked in parallel, nothing sent, every item left open. */
-async function checkItems(db: SupabaseClient, open: StoredItem[], numbers: number[]): Promise<string> {
+async function checkItems(db: SupabaseClient, open: StoredItem[], numbers: number[], edit: string | null = null): Promise<string> {
   const lines: string[] = [];
-  const drafts = open.filter((item) => numbers.includes(item.number) && (item.kind === "sms_draft" || item.kind === "email_draft") && item.body);
+  const drafts = open
+    .filter((item) => numbers.includes(item.number) && (item.kind === "sms_draft" || item.kind === "email_draft") && (item.body || edit))
+    // His version is checked in place of the stored draft; nothing is saved.
+    .map((item) => (edit ? { ...item, body: edit } : item));
   const notDrafts = numbers.filter((n) => open.some((item) => item.number === n) && !drafts.some((item) => item.number === n));
   const missing = numbers.filter((n) => !open.some((item) => item.number === n));
   const results = await Promise.all(drafts.map((item) => checkDraft(db, item).catch((error: unknown) => (error instanceof Error ? error : new Error(String(error))))));
-  drafts.forEach((item, i) => lines.push(renderCheck(item, results[i])));
+  drafts.forEach((item, i) => lines.push(renderCheck(item, results[i], Boolean(edit))));
   if (notDrafts.length) lines.push(`${notDrafts.join(", ")}: not a draft, nothing to check.`);
   if (missing.length) lines.push(`${missing.join(", ")}: not in the current list (already done, skipped, or from an older pass).`);
   return lines.join("\n\n");

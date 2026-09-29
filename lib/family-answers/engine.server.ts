@@ -1,4 +1,5 @@
 import "server-only";
+import { HUMAN_VOICE_RULES } from "@/lib/family-answers/human-voice";
 
 import Anthropic from "@anthropic-ai/sdk";
 import { getCanonicalProgramIds, getEnrichedProgram, getStateSlug } from "@/lib/program-data";
@@ -255,7 +256,7 @@ const DRAFT_RULES = `Drafting rules, all of them hard:
 - No em dashes. Use periods or commas.
 - Never open with a name and never address them by name. Any name you think you have was inferred from the thread, not verified, and calling a stranger by the wrong name in a message about their family is worse than using none. A text needs no salutation.
 - If an eligibility claim depends on a fact we have NOT verified, either ask about it or phrase it conditionally. "EHEAP is for households with someone 60 or older, if that's you" costs eight characters and survives our record being wrong.
-- WHEN you are pointing them at an agency, tell them the specific words to say when they call. A person with limited energy should not have to work out how to describe their own situation to an intake worker. This does not apply when you are only asking an orientation question.
+- WHEN you are pointing them at an agency, say in a few plain words what to ask for ("ask where your application stands"), so they do not have to work out how to describe their situation. Never as a quoted script ("Tell them: '...'"): TJ, 2026-09-29, that reads as a form letter. This does not apply when you are only asking an orientation question.
 - Warm, direct, no over-apologising. Never call their situation tragic or their problem unfortunate.
 - If the message states NO need at all, a bare link or a photo or a fragment: say what you received, give any fact that is true regardless of why they wrote, ask ONE open question about what is going on, and stop there. KEEP THE WHOLE REPLY UNDER 200 CHARACTERS. Do NOT offer a menu of guesses about their intent, and do not pre-answer a question they have not asked. Anything you explain before they have told you what they need is a guess taking up space, and it is one message away if they ask. People pick from the options they are handed, especially when they are being polite to someone helping them, so a guessed menu can manufacture a wrong answer that then gets confidently solved.
 - Do not promise outcomes, and do not imply we will handle it for them. Olera finds things and points at them. It is not a personal assistant and cannot act on anyone's behalf. "We will see what we can find" is honest. "We will take it from there", "leave it with us", and "we will sort this out" are not.`;
@@ -327,7 +328,9 @@ const VOICE_RULES = `How it should sound:
 - Lead with what IS possible. If there is a rule against them and an exception for them, the exception goes first. Do not open by telling someone what they cannot have.
 - Weight by likelihood, not by interest. A long-shot program that would be worth a lot still gets one sentence at the end, not the whole message.
 - Correct a mistake as a fact, never as a fault. "Your zip came to us instead of 211", not "you sent it to the wrong number". They are tired and doing their best.
-- If earlier advice failed them, say so once in a short clause and move on. Never re-recommend it, and never explain at length why it did not work.`;
+- If earlier advice failed them, say so once in a short clause and move on. Never re-recommend it, and never explain at length why it did not work.
+
+${HUMAN_VOICE_RULES}`;
 
 interface DraftOut {
   draft: string;

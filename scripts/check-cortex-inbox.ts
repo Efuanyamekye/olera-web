@@ -30,6 +30,7 @@ assert.equal(parseInboxCommand("I think we should approve 1 2 later"), null, "a 
 assert.deepEqual(parseInboxCommand("check 5 6"), { verb: "check", numbers: [5, 6], edit: null });
 assert.deepEqual(parseInboxCommand("fact-check 5 and 6"), { verb: "check", numbers: [5, 6], edit: null });
 assert.equal(parseInboxCommand("check the voicemails"), null, "check without numbers is a question");
+assert.deepEqual(parseInboxCommand("check 8: Having Medicaid is the first thing SMMC needs."), { verb: "check", numbers: [8], edit: "Having Medicaid is the first thing SMMC needs." }, "his version can be checked");
 console.log("command checks passed");
 
 // --- SMS bookkeeping vs conversation.
@@ -86,6 +87,7 @@ assert.equal(parseObjections('{"objections":[{"target":"it&#39;s open","problem"
 const checked = item(6, "sms_draft", "Text a family.", "CFCAA: 352-373-7667.");
 assert.match(renderCheck(checked, objections), /6: 1 objection\.[\s\S]*x222[\s\S]*send 6: your edited text/);
 assert.match(renderCheck(checked, []), /6: clean/);
+assert.match(renderCheck(checked, [], true), /6 \(your version\): clean[\s\S]*"send 6: " followed by that text/, "a checked rewrite is never sent by a bare send 6");
 assert.match(renderCheck(checked, new Error("timeout")), /couldn't check it \(timeout\)/);
 console.log("draft check checks passed");
 
