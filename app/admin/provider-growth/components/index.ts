@@ -8,4 +8,5 @@ export { ProviderDrawer } from "./ProviderDrawer";
 export { ProviderFilters, type ProviderFiltersValue } from "./ProviderFilters";
 export { ProviderRow } from "./ProviderRow";
 export { StatsHeader } from "./StatsHeader";
+export { WorkflowGuideModal } from "./WorkflowGuideModal";
 export { WorkQueueTab } from "./WorkQueueTab";

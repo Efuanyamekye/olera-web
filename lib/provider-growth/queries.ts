@@ -3059,6 +3059,9 @@ export interface WorkQueueEntry {
   state: string | null;
   phone: string | null;
   email: string | null;
+  verification_state: string | null;
+  care_types: string[] | null;
+  profile_completeness: number;
   pipeline_stage: PipelineStage;
   assigned_to: string | null;
   // What makes them in the queue
@@ -3073,6 +3076,10 @@ export interface WorkQueueEntry {
   is_converted: boolean;
   ads_status: AdsStatus;
   medjobs_status: MedjobsStatus;
+  // Eligibility
+  ads_eligible?: boolean;
+  medjobs_eligible?: boolean;
+  medjobs_catchment_university?: string | null;
 }
 
 export interface WorkQueueResult {
@@ -3108,10 +3115,17 @@ export interface ReturnedCallEntry {
   city: string | null;
   state: string | null;
   phone: string | null;
+  verification_state: string | null;
+  care_types: string[] | null;
+  profile_completeness: number;
   pipeline_stage: PipelineStage;
   is_converted: boolean;
   ads_status: AdsStatus;
   medjobs_status: MedjobsStatus;
+  // Eligibility
+  ads_eligible?: boolean;
+  medjobs_eligible?: boolean;
+  medjobs_catchment_university?: string | null;
 }
 
 /**
@@ -3196,13 +3210,23 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
       last_activity_at,
       ads_status,
       medjobs_status,
+      ads_eligible,
+      medjobs_eligible,
+      medjobs_catchment_university,
       business_profiles!inner (
         display_name,
         slug,
         city,
         state,
         phone,
-        email
+        email,
+        verification_state,
+        category,
+        address,
+        description,
+        image_url,
+        care_types,
+        metadata
       )
     `)
     .in("id", trackingIdsWithActivity)
@@ -3218,6 +3242,11 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
   const trackingMap = new Map(
     (trackingRecords || []).map((t) => [t.id, t])
   );
+
+  // Fetch campaign status for all tracked providers to exclude those with live campaigns
+  // Providers with live campaigns belong in Converted → Live tab, not Work Queue
+  const businessProfileIds = (trackingRecords || []).map((t) => t.business_profile_id);
+  const campaignStatusMap = await getAdCampaignStatusForProviders(businessProfileIds);
 
   // Process into work queue categories
   const overdueCallbacks: WorkQueueEntry[] = [];
@@ -3252,10 +3281,15 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
       });
 
       if (!hasFollowUp && (callbackDate <= today)) {
+        // Skip providers with live campaigns - they belong in Converted → Live tab
+        const campaignInfo = campaignStatusMap.get(tracking.business_profile_id);
+        if (campaignInfo?.status === "live") {
+          continue;
+        }
+
         // Handle both array and object shapes from Supabase join
-        const profileData = tracking.business_profiles as
-          | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }
-          | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }[];
+        type ProfileShape = ProfileFields & { slug: string | null; verification_state: string | null };
+        const profileData = tracking.business_profiles as ProfileShape | ProfileShape[];
         const profile = Array.isArray(profileData) ? profileData[0] : profileData;
 
         const isConverted = tracking.ads_status === "free_intro" ||
@@ -3272,6 +3306,9 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
           state: profile?.state ?? null,
           phone: profile?.phone ?? null,
           email: profile?.email ?? null,
+          verification_state: profile?.verification_state ?? null,
+          care_types: profile?.care_types ?? null,
+          profile_completeness: profile ? computeProfileCompleteness(profile) : 0,
           pipeline_stage: tracking.pipeline_stage as PipelineStage,
           assigned_to: tracking.assigned_to,
           queue_reason: callbackDate < today ? "overdue_callback" : "due_today",
@@ -3282,6 +3319,9 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
           is_converted: isConverted,
           ads_status: tracking.ads_status as AdsStatus,
           medjobs_status: tracking.medjobs_status as MedjobsStatus,
+          ads_eligible: tracking.ads_eligible ?? undefined,
+          medjobs_eligible: tracking.medjobs_eligible ?? undefined,
+          medjobs_catchment_university: tracking.medjobs_catchment_university ?? null,
         };
 
         if (callbackDate < today) {
@@ -3312,9 +3352,14 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
 
     // Check if last outcome was a retry-worthy outcome and it's been > 2 days
     if (outcome && retryOutcomes.includes(outcome) && latestTp.created_at < twoDaysAgo) {
-      const profileData = tracking.business_profiles as
-        | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }
-        | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }[];
+      // Skip providers with live campaigns - they belong in Converted → Live tab
+      const campaignInfo = campaignStatusMap.get(tracking.business_profile_id);
+      if (campaignInfo?.status === "live") {
+        continue;
+      }
+
+      type ProfileShape = ProfileFields & { slug: string | null; verification_state: string | null };
+      const profileData = tracking.business_profiles as ProfileShape | ProfileShape[];
       const profile = Array.isArray(profileData) ? profileData[0] : profileData;
 
       const isConverted = tracking.ads_status === "free_intro" ||
@@ -3331,6 +3376,9 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
         state: profile?.state ?? null,
         phone: profile?.phone ?? null,
         email: profile?.email ?? null,
+        verification_state: profile?.verification_state ?? null,
+        care_types: profile?.care_types ?? null,
+        profile_completeness: profile ? computeProfileCompleteness(profile) : 0,
         pipeline_stage: tracking.pipeline_stage as PipelineStage,
         assigned_to: tracking.assigned_to,
         queue_reason: "needs_retry",
@@ -3340,6 +3388,9 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
         is_converted: isConverted,
         ads_status: tracking.ads_status as AdsStatus,
         medjobs_status: tracking.medjobs_status as MedjobsStatus,
+        ads_eligible: tracking.ads_eligible ?? undefined,
+        medjobs_eligible: tracking.medjobs_eligible ?? undefined,
+        medjobs_catchment_university: tracking.medjobs_catchment_university ?? null,
       });
       processedTrackingIds.add(trackingId);
     }
@@ -3357,10 +3408,15 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
 
     // Stale if last activity was > 7 days ago
     if (latestTp.created_at < sevenDaysAgo) {
+      // Skip providers with live campaigns - they belong in Converted → Live tab
+      const campaignInfo = campaignStatusMap.get(tracking.business_profile_id);
+      if (campaignInfo?.status === "live") {
+        continue;
+      }
+
       const details = latestTp.details as Record<string, unknown> | null;
-      const profileData = tracking.business_profiles as
-        | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }
-        | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }[];
+      type ProfileShape = ProfileFields & { slug: string | null; verification_state: string | null };
+      const profileData = tracking.business_profiles as ProfileShape | ProfileShape[];
       const profile = Array.isArray(profileData) ? profileData[0] : profileData;
 
       const isConverted = tracking.ads_status === "free_intro" ||
@@ -3377,6 +3433,9 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
         state: profile?.state ?? null,
         phone: profile?.phone ?? null,
         email: profile?.email ?? null,
+        verification_state: profile?.verification_state ?? null,
+        care_types: profile?.care_types ?? null,
+        profile_completeness: profile ? computeProfileCompleteness(profile) : 0,
         pipeline_stage: tracking.pipeline_stage as PipelineStage,
         assigned_to: tracking.assigned_to,
         queue_reason: "stale",
@@ -3386,6 +3445,9 @@ export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
         is_converted: isConverted,
         ads_status: tracking.ads_status as AdsStatus,
         medjobs_status: tracking.medjobs_status as MedjobsStatus,
+        ads_eligible: tracking.ads_eligible ?? undefined,
+        medjobs_eligible: tracking.medjobs_eligible ?? undefined,
+        medjobs_catchment_university: tracking.medjobs_catchment_university ?? null,
       });
     }
   }
@@ -3538,12 +3600,22 @@ async function getReturnedCallsForGrowthProviders(): Promise<ReturnedCallEntry[]
       pipeline_stage,
       ads_status,
       medjobs_status,
+      ads_eligible,
+      medjobs_eligible,
+      medjobs_catchment_university,
       business_profiles!inner (
         display_name,
         slug,
         city,
         state,
-        phone
+        phone,
+        verification_state,
+        category,
+        address,
+        description,
+        image_url,
+        care_types,
+        metadata
       )
     `)
     .in("pipeline_stage", ["new_claim", "meeting_scheduled", "pitched", "no_show", "upgrade_meeting"])
@@ -3563,9 +3635,15 @@ async function getReturnedCallsForGrowthProviders(): Promise<ReturnedCallEntry[]
     city: string | null;
     state: string | null;
     phone: string | null;
+    verificationState: string | null;
+    careTypes: string[] | null;
+    profileCompleteness: number;
     pipelineStage: PipelineStage;
     adsStatus: AdsStatus;
     medjobsStatus: MedjobsStatus;
+    adsEligible: boolean | null;
+    medjobsEligible: boolean | null;
+    medjobsCatchmentUniversity: string | null;
   }>();
 
   for (const p of providers || []) {
@@ -3578,6 +3656,9 @@ async function getReturnedCallsForGrowthProviders(): Promise<ReturnedCallEntry[]
     const normalizedPhone = normalizePhoneForMatch(profile.phone);
     if (!normalizedPhone) continue;
 
+    // Cast profile to ProfileFields for completeness calculation
+    const profileForCompleteness = profile as unknown as ProfileFields;
+
     providersByPhone.set(normalizedPhone, {
       trackingId: p.id,
       businessProfileId: p.business_profile_id,
@@ -3586,9 +3667,15 @@ async function getReturnedCallsForGrowthProviders(): Promise<ReturnedCallEntry[]
       city: profile.city,
       state: profile.state,
       phone: profile.phone,
+      verificationState: profile.verification_state ?? null,
+      careTypes: profile.care_types ?? null,
+      profileCompleteness: computeProfileCompleteness(profileForCompleteness),
       pipelineStage: p.pipeline_stage as PipelineStage,
       adsStatus: p.ads_status as AdsStatus,
       medjobsStatus: p.medjobs_status as MedjobsStatus,
+      adsEligible: p.ads_eligible ?? null,
+      medjobsEligible: p.medjobs_eligible ?? null,
+      medjobsCatchmentUniversity: p.medjobs_catchment_university ?? null,
     });
   }
 
@@ -3621,10 +3708,16 @@ async function getReturnedCallsForGrowthProviders(): Promise<ReturnedCallEntry[]
       city: provider.city,
       state: provider.state,
       phone: provider.phone,
+      verification_state: provider.verificationState,
+      care_types: provider.careTypes,
+      profile_completeness: provider.profileCompleteness,
       pipeline_stage: provider.pipelineStage,
       is_converted: isConverted,
       ads_status: provider.adsStatus,
       medjobs_status: provider.medjobsStatus,
+      ads_eligible: provider.adsEligible ?? undefined,
+      medjobs_eligible: provider.medjobsEligible ?? undefined,
+      medjobs_catchment_university: provider.medjobsCatchmentUniversity,
     });
   }
 

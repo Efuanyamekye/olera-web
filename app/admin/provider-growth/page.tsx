@@ -26,6 +26,7 @@ import {
   ProviderRow,
   ProviderDrawer,
   ProviderFilters,
+  WorkflowGuideModal,
   WorkQueueTab,
   type ActiveTab,
   type ProviderFiltersValue,
@@ -170,6 +171,9 @@ export default function ProviderGrowthPage() {
 
   // Callback banner refresh key - increment to trigger refetch
   const [callbackRefreshKey, setCallbackRefreshKey] = useState(0);
+
+  // Workflow guide modal state
+  const [showWorkflowGuide, setShowWorkflowGuide] = useState(false);
 
   // Keep ref in sync with selected provider
   useEffect(() => {
@@ -569,6 +573,16 @@ export default function ProviderGrowthPage() {
             <h1 className="text-2xl font-semibold text-gray-900">Provider Growth</h1>
             <p className="mt-1 text-sm text-gray-500">
               Track claimed providers from claim to conversion
+              <span className="mx-2 text-gray-300">·</span>
+              <button
+                type="button"
+                onClick={() => setShowWorkflowGuide(true)}
+                className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-primary-700 transition-colors hover:text-primary-800"
+                title="View the workflow guide for this page"
+              >
+                Workflow guide
+                <span aria-hidden="true">&rarr;</span>
+              </button>
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -637,6 +651,9 @@ export default function ProviderGrowthPage() {
           onProviderClick={(trackingId) => {
             fetchAndSelectProvider(trackingId);
           }}
+          search={debouncedSearch}
+          assignedTo={selectedAdminFilter}
+          filters={providerFilters}
         />
       ) : (
         <>
@@ -774,6 +791,11 @@ export default function ProviderGrowthPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Workflow Guide Modal */}
+      {showWorkflowGuide && (
+        <WorkflowGuideModal onClose={() => setShowWorkflowGuide(false)} />
       )}
     </div>
   );
