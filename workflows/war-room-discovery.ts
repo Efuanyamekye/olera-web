@@ -2,6 +2,7 @@ import { getStepMetadata } from "workflow";
 import type {
   WarRoomCouncilCheckpoint,
   WarRoomInvestigatorCheckpoint,
+  WarRoomLeanScanCheckpoint,
   WarRoomLensSweepCheckpoint,
   WarRoomPreparedDiscovery,
   WarRoomTriageCheckpoint,
@@ -28,6 +29,20 @@ async function sweepLensesStep(
   return sweepWarRoomLenses(runId, prepared, attempt);
 }
 sweepLensesStep.maxRetries = 1;
+
+// Lean mode: one call in place of the sweep, dossier and triage steps. The
+// mode is fixed at prepare time and stored on the run, so a retry never
+// switches it mid-scan.
+async function leanScanStep(
+  runId: string,
+  prepared: WarRoomPreparedDiscovery,
+): Promise<WarRoomLeanScanCheckpoint> {
+  "use step";
+  const { attempt } = getStepMetadata();
+  const { scanWarRoomLean } = await import("@/lib/war-room/discovery.server");
+  return scanWarRoomLean(runId, prepared, attempt);
+}
+leanScanStep.maxRetries = 1;
 
 async function investigateCompanyStep(
   runId: string,
@@ -129,9 +144,15 @@ export async function warRoomDiscoveryWorkflow(runId: string) {
 
   try {
     const prepared = await prepareDiscoveryStep(runId);
-    const sweep = await sweepLensesStep(runId, prepared);
-    const investigator = await investigateCompanyStep(runId, prepared, sweep);
-    const triage = await triageAgendaStep(runId, prepared, investigator);
+    let investigator: WarRoomInvestigatorCheckpoint;
+    let triage: WarRoomTriageCheckpoint;
+    if (prepared.scanMode === "lean") {
+      ({ investigator, triage } = await leanScanStep(runId, prepared));
+    } else {
+      const sweep = await sweepLensesStep(runId, prepared);
+      investigator = await investigateCompanyStep(runId, prepared, sweep);
+      triage = await triageAgendaStep(runId, prepared, investigator);
+    }
     const council = await challengeCompanyStep(runId, prepared, investigator, triage);
     const persisted = await persistDiscoveryStep(runId, prepared, investigator, council);
     const probes = await runProbesStep(runId);

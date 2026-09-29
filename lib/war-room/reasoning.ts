@@ -1,4 +1,6 @@
 import type { WarRoomCompanyRead, WarRoomProposalEvidence } from "@/lib/war-room/types";
+import { leanAllClear, type LeanPriorityRead } from "@/lib/war-room/lean-scan";
+import type { PriorityKey } from "@/lib/war-room/priorities";
 import {
   applyAgendaGate,
   normalizeCompanyRead,
@@ -17,7 +19,32 @@ export type WarRoomInvestigatorOutput = {
   dossiers: InvestigationDraft[];
   lensReviews: StrategicLensReview[];
   portfolioRead: string;
+  /**
+   * Present only on a lean scan, which reads the four priorities instead of
+   * the ten lenses. Its presence is what switches coverage below.
+   */
+  priorityReads?: Partial<Record<PriorityKey, LeanPriorityRead>>;
 };
+
+/**
+ * What "the company was fully reviewed" means for this output. A full scan
+ * must cover all ten lenses; a lean scan covers the four priorities and has no
+ * lens reviews to require or to promote into investigations.
+ */
+function coverageFor(investigator: Pick<WarRoomInvestigatorOutput, "lensReviews" | "priorityReads">) {
+  if (investigator.priorityReads) {
+    return {
+      lean: true,
+      allClear: leanAllClear(investigator.priorityReads),
+      clearSummary: "No founder decision is supported today. All four priorities were reviewed and the supplied evidence did not establish a material unresolved condition.",
+    };
+  }
+  return {
+    lean: false,
+    allClear: (investigator.lensReviews ?? []).every((review) => review.status === "clear"),
+    clearSummary: undefined,
+  };
+}
 
 export type WarRoomCouncilOutput = {
   challenge: string;
@@ -50,8 +77,10 @@ export function reconcilePersistedWarRoomAgenda(input: {
   companyRead: CompanyReadDraft;
   evidenceCatalog: WarRoomProposalEvidence[];
   lensReviews: StrategicLensReview[];
+  priorityReads?: WarRoomInvestigatorOutput["priorityReads"];
   acceptedInvestigationFingerprints: ReadonlySet<string>;
 }) {
+  const coverage = coverageFor(input);
   const assessments = normalizeInvestigationAssessments(
     input.investigations,
     input.assessments,
@@ -62,10 +91,7 @@ export function reconcilePersistedWarRoomAgenda(input: {
     input.investigations,
     assessments,
     input.evidenceCatalog,
-    {
-      complete: true,
-      allClear: input.lensReviews.every((review) => review.status === "clear"),
-    },
+    { complete: true, allClear: coverage.allClear, clearSummary: coverage.clearSummary },
   );
   return { assessments, companyRead };
 }
@@ -82,13 +108,14 @@ export function evaluateWarRoomReasoning(input: {
   blockedInterventionFingerprints?: ReadonlySet<string>;
 }): WarRoomReasoningResult {
   const { evidenceCatalog, investigator, council } = input;
-  const lensReviews = requireCompleteStrategicLensCoverage(investigator.lensReviews ?? [], evidenceCatalog);
+  const coverage = coverageFor(investigator);
+  const lensReviews = coverage.lean
+    ? []
+    : requireCompleteStrategicLensCoverage(investigator.lensReviews ?? [], evidenceCatalog);
   const detailedInvestigations = validateInvestigations(investigator.dossiers ?? [], evidenceCatalog);
-  const investigations = retainStrategicLensInvestigations(
-    detailedInvestigations,
-    lensReviews,
-    evidenceCatalog,
-  );
+  const investigations = coverage.lean
+    ? detailedInvestigations
+    : retainStrategicLensInvestigations(detailedInvestigations, lensReviews, evidenceCatalog);
   const eligibleProposals = (council.proposals ?? []).filter((proposal) =>
     !input.blockedInterventionFingerprints?.has(proposal.fingerprint));
   const initialAssessments = normalizeInvestigationAssessments(
@@ -129,7 +156,7 @@ export function evaluateWarRoomReasoning(input: {
     investigations,
     assessments,
     evidenceCatalog,
-    { complete: true, allClear: lensReviews.every((review) => review.status === "clear") },
+    { complete: true, allClear: coverage.allClear, clearSummary: coverage.clearSummary },
   );
 
   return {
