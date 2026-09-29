@@ -516,7 +516,7 @@ export function normalizeCompanyRead(
   investigations: InvestigationDraft[],
   assessments: InvestigationAssessment[],
   evidenceCatalog: WarRoomProposalEvidence[],
-  lensCoverage?: { complete: boolean; allClear: boolean },
+  lensCoverage?: { complete: boolean; allClear: boolean; clearSummary?: string },
 ): WarRoomCompanyRead {
   const validEvidenceIds = new Set(evidenceCatalog.map((item) => item.id));
   const activeAssessments = assessments.filter((assessment) => assessment.disposition !== "drop");
@@ -534,7 +534,8 @@ export function normalizeCompanyRead(
   if (!investigations.length) {
     if (lensCoverage?.complete && lensCoverage.allClear) {
       return {
-        summary: "No founder decision is supported today. All ten company lenses were reviewed and the supplied evidence did not establish a material unresolved condition.",
+        summary: lensCoverage.clearSummary
+          ?? "No founder decision is supported today. All ten company lenses were reviewed and the supplied evidence did not establish a material unresolved condition.",
         stance: "stable",
         investigationFingerprints: [],
         evidenceIds: [...new Set((draft?.evidenceIds ?? []).filter((id) => validEvidenceIds.has(id)))].slice(0, 10),

@@ -45,6 +45,19 @@ import {
   type WarRoomCouncilOutput,
   type WarRoomInvestigatorOutput,
 } from "@/lib/war-room/reasoning";
+import {
+  buildLeanContext,
+  leanDraftContext,
+  LEAN_SCAN_TOOL,
+  LEAN_SYSTEM,
+  mapLeanOutput,
+  priorityReadsFrom,
+  unaliasIds,
+  unaliasLeanOutput,
+  warRoomScanMode,
+  type LeanScanOutput,
+  type WarRoomScanMode,
+} from "@/lib/war-room/lean-scan";
 
 export const WAR_ROOM_DISCOVERY_MODEL = process.env.WAR_ROOM_DISCOVERY_MODEL
   || process.env.WAR_ROOM_MODEL
@@ -132,7 +145,18 @@ const PASS_MODELS: Record<string, string | undefined> = {
   // Was unset, so it fell back to Opus: $0.20 of a $0.59 scan on 28 Sep, the
   // largest single line. TJ, 29 Sep: under $0.10 a scan.
   drafting_decision: process.env.WAR_ROOM_MODEL_DRAFT || "claude-sonnet-5",
+  // Lean mode (lib/war-room/lean-scan.ts): one call replaces sweep, dossiers
+  // and triage. Its strict schema compiles on Sonnet 5; see the PR for the
+  // measured cost and the comparison against the 28 Sep full scan.
+  lean_scan: process.env.WAR_ROOM_MODEL_LEAN || "claude-sonnet-5",
 };
+
+/**
+ * The model that drafts a lean scan's one agenda item. Separate from full
+ * mode's drafting model so the two can be tuned apart; see the PR for why
+ * this is the default.
+ */
+const LEAN_DRAFT_MODEL = process.env.WAR_ROOM_MODEL_LEAN_DRAFT || "claude-sonnet-5";
 
 export function modelForStage(stage: string): string {
   return PASS_MODELS[stage] || WAR_ROOM_DISCOVERY_MODEL;
@@ -611,13 +635,25 @@ export const WAR_ROOM_STRICT_TOOLS = [
   DOSSIER_TOOL,
   TRIAGE_TOOL,
   PROPOSAL_TOOL,
+  // Last on purpose: the slices below read the others by position.
+  LEAN_SCAN_TOOL as unknown as Anthropic.Messages.Tool,
 ].map((tool) => toWireSchema(tool) as Anthropic.Messages.Tool);
+
+/** Which model each strict tool runs on, so the contract check compiles it where it runs. */
+export function warRoomModelForTool(name: string): string {
+  if (name === LEAN_SCAN_TOOL.name) return modelForStage("lean_scan");
+  if (name.startsWith("submit_lens_sweep")) return modelForStage("sweeping_lenses");
+  if (name === "submit_opportunity_dossiers") return modelForStage("forming_candidates");
+  if (name === "submit_ceo_triage") return modelForStage("challenging_candidates");
+  return modelForStage("drafting_decision");
+}
 
 // Sliced by group count rather than destructured positionally: adding a lens
 // group must not silently shift the dossier, triage, and proposal tools.
 const WIRE_LENS_SWEEP_TOOLS = WAR_ROOM_STRICT_TOOLS.slice(0, WAR_ROOM_LENS_SWEEP_GROUPS.length);
 const [WIRE_DOSSIER_TOOL, WIRE_TRIAGE_TOOL, WIRE_PROPOSAL_TOOL] =
   WAR_ROOM_STRICT_TOOLS.slice(WAR_ROOM_LENS_SWEEP_GROUPS.length);
+const WIRE_LEAN_SCAN_TOOL = WAR_ROOM_STRICT_TOOLS.find((tool) => tool.name === LEAN_SCAN_TOOL.name)!;
 
 type InvestigatorOutput = WarRoomInvestigatorOutput;
 type LensSweepToolOutput = {
@@ -650,6 +686,7 @@ type DiscoveryStage =
   | "forming_candidates"
   | "challenging_candidates"
   | "drafting_decision"
+  | "lean_scan"
   | "saving_decisions";
 
 /**
@@ -1376,16 +1413,26 @@ function pickCommissionCandidate(
  * the model is told plainly that a human act with a named owner is often the
  * right answer -- because the founder is frequently the wrong actor.
  */
+/**
+ * What a drafting call reads. Full mode sends `draftingContextFor`; a lean scan
+ * sends its own lean context, which already carries the open conditions, prior
+ * proposals and the evidence the gate resolves against, at a fraction of the
+ * size. `model` is set only by lean mode.
+ */
+type DraftOptions = { context?: unknown; model?: string };
+
 async function runCommissionPass(
   operatingPack: ReturnType<typeof buildOperatingPack>,
   investigator: WarRoomInvestigatorCheckpoint,
   commissioned: InvestigationDraft,
+  options: DraftOptions = {},
 ) {
   const call = await callWarRoomTool<ProposalToolOutput>({
     stage: "drafting_decision",
     system: COUNCIL_SYSTEM,
     tool: WIRE_PROPOSAL_TOOL,
     maxTokens: 12_000,
+    model: options.model,
     prompt: `This condition is real and material, and it is NOT decidable yet: its cause is unresolved and it needs evidence. Do not write a decision brief and do not ask the founder to choose anything.
 
 Commission the smallest bounded act that would resolve ONE named unknown on it. Name that unknown explicitly in the finding.
@@ -1401,7 +1448,7 @@ Rules:
 CONDITION:\n${JSON.stringify(commissioned)}
 
 COUNCIL CONTEXT:
-${JSON.stringify(draftingContextFor(scrubbedForPrompt(operatingPack), commissioned.fingerprint))}
+${JSON.stringify(options.context ?? draftingContextFor(scrubbedForPrompt(operatingPack), commissioned.fingerprint))}
 
 CHIEF-OF-STAFF READ:
 ${investigator.rawInvestigatorOutput.portfolioRead}`,
@@ -1432,13 +1479,15 @@ async function runProposalPass(
   operatingPack: ReturnType<typeof buildOperatingPack>,
   investigator: WarRoomInvestigatorCheckpoint,
   nominated: InvestigationDraft,
+  options: DraftOptions = {},
 ) {
   const call = await callWarRoomTool<ProposalToolOutput>({
     stage: "drafting_decision",
     system: COUNCIL_SYSTEM,
     tool: WIRE_PROPOSAL_TOOL,
     maxTokens: 12_000,
-    prompt: `Triage nominated exactly one condition for the founder agenda. Write it up as a one-minute CEO decision brief. If, while writing it, you conclude it does not clear the founder-interruption standard after all, return a brief whose decisionRequired says so plainly rather than inventing a case.\n\nNOMINATED CONDITION:\n${JSON.stringify(nominated)}\n\nCOUNCIL CONTEXT:\n${JSON.stringify(draftingContextFor(scrubbedForPrompt(operatingPack), nominated.fingerprint))}\n\nCHIEF-OF-STAFF READ:\n${investigator.rawInvestigatorOutput.portfolioRead}`,
+    model: options.model,
+    prompt: `Triage nominated exactly one condition for the founder agenda. Write it up as a one-minute CEO decision brief. If, while writing it, you conclude it does not clear the founder-interruption standard after all, return a brief whose decisionRequired says so plainly rather than inventing a case.\n\nNOMINATED CONDITION:\n${JSON.stringify(nominated)}\n\nCOUNCIL CONTEXT:\n${JSON.stringify(options.context ?? draftingContextFor(scrubbedForPrompt(operatingPack), nominated.fingerprint))}\n\nCHIEF-OF-STAFF READ:\n${investigator.rawInvestigatorOutput.portfolioRead}`,
   });
   const brief = call.output?.brief ?? {};
   const execution = call.output?.execution ?? {};
@@ -1499,6 +1548,7 @@ function evaluatePortfolio(
       rejectedReasons: (review.rejectedReasons ?? []).map(cleanExecutiveText).filter(Boolean).slice(0, 5),
       portfolioRead: investigatorOutput.portfolioRead,
       lensReviews: investigatorOutput.lensReviews,
+      ...(investigatorOutput.priorityReads ? { priorityReads: investigatorOutput.priorityReads } : {}),
       detailedInvestigationCount: reasoning.detailedInvestigations.length,
       companyRead,
       companyVerdict: companyRead.summary,
@@ -2031,6 +2081,8 @@ export type WarRoomPreparedDiscovery = {
   blockedInterventionFingerprints: string[];
   factPackHash: string;
   sourceSummary: Record<string, unknown>;
+  /** Absent on runs prepared before lean mode existed; those are full. */
+  scanMode?: WarRoomScanMode;
 };
 
 export type WarRoomLensSweepCheckpoint = {
@@ -2053,6 +2105,12 @@ export type WarRoomTriageCheckpoint = {
   inputTokens: number;
   outputTokens: number;
   calls: WarRoomCallCost[];
+  /**
+   * Lean mode names its own candidate, so drafting follows it instead of
+   * `pickCommissionCandidate`. `null` means the scan nominated nothing (or
+   * nothing that could pass the gate) and no draft call is made.
+   */
+  leanAgenda?: { kind: "decision" | "commission"; fingerprint: string } | null;
 };
 
 export type WarRoomCouncilCheckpoint = {
@@ -2160,7 +2218,9 @@ export async function prepareWarRoomDiscovery(runId: string, attempt = 1): Promi
   await updateDiscoveryStage(db, runId, "building_operating_pack", { slack, notion, archive, stage_attempt: attempt });
   const inputs = await assembleWarRoomInputs(db);
   const { factPack, externalEvidence, factPackHash, sourceEvidence, probeEvidence } = inputs;
+  const scanMode = warRoomScanMode();
   const sourceSummary = {
+    scan_mode: scanMode,
     slack,
     notion,
     archive,
@@ -2170,8 +2230,8 @@ export async function prepareWarRoomDiscovery(runId: string, attempt = 1): Promi
     fact_pack_hash: factPackHash,
     prompt_version: WAR_ROOM_PROMPT_VERSION,
   };
-  await updateDiscoveryStage(db, runId, "forming_candidates", sourceSummary);
-  return { ...inputs.prepared, sourceSummary };
+  await updateDiscoveryStage(db, runId, scanMode === "lean" ? "lean_scan" : "forming_candidates", sourceSummary);
+  return { ...inputs.prepared, sourceSummary, scanMode };
 }
 
 /**
@@ -2500,6 +2560,11 @@ export async function challengeWarRoomDiscovery(
     };
   }
 
+  if (triage.leanAgenda !== undefined) {
+    return withFailureDiagnostic(runId, "drafting_decision", () =>
+      draftLeanAgenda(db, runId, prepared, investigator, triage, attempt));
+  }
+
   const nominatedFingerprints = new Set(
     (triage.rawTriageOutput.assessments ?? [])
       .filter((assessment) => assessment.disposition === "agenda")
@@ -2553,6 +2618,278 @@ export async function challengeWarRoomDiscovery(
   });
 }
 
+// ---------------------------------------------------------------------------
+// Lean mode. See lib/war-room/lean-scan.ts for why it exists and what it cuts.
+// ---------------------------------------------------------------------------
+
+export type WarRoomLeanScanCheckpoint = {
+  investigator: WarRoomInvestigatorCheckpoint;
+  triage: WarRoomTriageCheckpoint;
+};
+
+function leanContextFor(prepared: WarRoomPreparedDiscovery) {
+  // The prompt view of the pack: stale renewal counts scrubbed and the
+  // design doc and old scratchpad chunks already left out (scrubbedForPrompt).
+  // Validation still resolves ids against the whole catalog.
+  return buildLeanContext(scrubbedForPrompt(operatingPackFor(prepared)), prepared.proposalMemory, prepared.investigationMemory);
+}
+
+/**
+ * The one call. Returns the output already mapped onto the investigator and
+ * triage shapes the rest of the scan reads, so everything after it (the gate,
+ * persistence, probes, the brief) is the same code full mode runs.
+ */
+async function runLeanScanPass(prepared: WarRoomPreparedDiscovery, model?: string) {
+  const operatingPack = operatingPackFor(prepared);
+  const { payload: context, aliases } = leanContextFor(prepared);
+  const call = await callWarRoomTool<LeanScanOutput>({
+    stage: "lean_scan",
+    system: LEAN_SYSTEM,
+    tool: WIRE_LEAN_SCAN_TOOL,
+    // Measured output is a few thousand tokens; the ceiling leaves room
+    // without inviting a long answer.
+    maxTokens: 10_000,
+    model,
+    prompt: `Read today's pack through the four priorities. Give each priority one read, keep or update the open conditions that still hold, open a new one only if it is material and untracked, and nominate at most one agenda item.\n${JSON.stringify(context)}`,
+  });
+  // Short evidence aliases back to real catalog ids before anything reads them.
+  const output = unaliasLeanOutput(call.output, aliases);
+  const validIds = new Set(operatingPack.evidenceCatalog.map((item) => item.id));
+  const mapped = mapLeanOutput(output, prepared.investigationMemory, validIds);
+  const priorityReads = priorityReadsFrom(output.priorityReads);
+  const rawInvestigatorOutput: InvestigatorOutput = {
+    dossiers: mapped.dossiers,
+    lensReviews: [],
+    portfolioRead: output.companyRead?.summary ?? "",
+    priorityReads,
+  };
+  const readIds = Object.values(priorityReads).flatMap((read) => read.evidenceIds);
+  const rawTriageOutput: TriageToolOutput = {
+    challenge: mapped.agendaSkipped ?? (output.agenda?.reason || "No agenda candidate this scan."),
+    companyRead: {
+      summary: output.companyRead?.summary ?? "",
+      stance: output.companyRead?.stance ?? "investigating",
+      investigationFingerprints: mapped.assessments
+        .filter((assessment) => assessment.disposition !== "drop")
+        .map((assessment) => assessment.fingerprint),
+      evidenceIds: [...new Set(readIds.filter((id) => validIds.has(id)))].slice(0, 10),
+      unresolvedQuestions: output.companyRead?.unresolvedQuestions ?? [],
+    },
+    rejectedReasons: mapped.agendaSkipped ? [mapped.agendaSkipped] : [],
+    assessments: mapped.assessments,
+    outcomes: output.outcomes ?? [],
+  };
+  return { context, output, rawInvestigatorOutput, rawTriageOutput, leanAgenda: mapped.agenda, call };
+}
+
+function provisionalInvestigationsFor(
+  prepared: WarRoomPreparedDiscovery,
+  output: InvestigatorOutput,
+) {
+  return evaluateWarRoomReasoning({
+    evidenceCatalog: operatingPackFor(prepared).evidenceCatalog,
+    investigator: output,
+    council: {
+      challenge: "Investigator pass only.",
+      companyRead: { summary: "Investigator pass only.", stance: "investigating", investigationFingerprints: [], evidenceIds: [], unresolvedQuestions: [] },
+      rejectedReasons: [], assessments: [], proposals: [],
+    },
+  }).investigations;
+}
+
+/** The lean replacement for the sweep, dossier and triage steps. One call. */
+export async function scanWarRoomLean(
+  runId: string,
+  prepared: WarRoomPreparedDiscovery,
+  attempt = 1,
+): Promise<WarRoomLeanScanCheckpoint> {
+  const db = getServiceClient();
+  const existing = (await readCheckpoints(db, runId)).leanScan as WarRoomLeanScanCheckpoint | undefined;
+  // Resumed: the call was billed and ledgered on the earlier attempt.
+  if (existing?.triage?.rawTriageOutput) {
+    return {
+      investigator: { ...existing.investigator, calls: [] },
+      triage: { ...existing.triage, calls: [] },
+    };
+  }
+
+  await updateDiscoveryStage(db, runId, "lean_scan", { stage_attempt: attempt });
+  return withFailureDiagnostic(runId, "lean_scan", async () => {
+    const scan = await runLeanScanPass(prepared);
+    let provisionalInvestigations;
+    try {
+      provisionalInvestigations = provisionalInvestigationsFor(prepared, scan.rawInvestigatorOutput);
+    } catch (error) {
+      await writeCheckpoint(db, runId, "rejectedLeanScan", {
+        output: scan.output,
+        reason: error instanceof Error ? error.message : String(error),
+        rejectedAt: new Date().toISOString(),
+      });
+      throw error;
+    }
+    const investigator: WarRoomInvestigatorCheckpoint = {
+      rawInvestigatorOutput: scan.rawInvestigatorOutput,
+      provisionalInvestigations,
+      inputTokens: scan.call.inputTokens,
+      outputTokens: scan.call.outputTokens,
+      calls: [scan.call.cost],
+    };
+    // The call's tokens live on the investigator side, so the council step
+    // adds only what drafting costs.
+    const triage: WarRoomTriageCheckpoint = {
+      rawTriageOutput: scan.rawTriageOutput,
+      inputTokens: 0,
+      outputTokens: 0,
+      calls: [],
+      leanAgenda: scan.leanAgenda,
+    };
+    const { error: checkpointError } = await db.from("war_room_discovery_runs").update({
+      raw_investigator_output: scan.rawInvestigatorOutput,
+      input_tokens: investigator.inputTokens,
+      output_tokens: investigator.outputTokens,
+    }).eq("id", runId).eq("status", "running");
+    if (checkpointError) throw checkpointError;
+    await writeCheckpoint(db, runId, "leanScan", { investigator, triage });
+    await appendCostLedger(db, runId, investigator.calls);
+    return { investigator, triage };
+  });
+}
+
+/**
+ * Draft the lean scan's one candidate, or nothing. The candidate already
+ * cleared the gate's cheap preconditions in `mapLeanOutput`; the gate itself
+ * still decides at persistence, exactly as in full mode.
+ */
+async function draftLeanAgendaCalls(
+  prepared: WarRoomPreparedDiscovery,
+  investigator: WarRoomInvestigatorCheckpoint,
+  pick: { kind: "decision" | "commission"; fingerprint: string } | null | undefined,
+  onDrafting?: () => Promise<void>,
+) {
+  const condition = pick
+    ? investigator.provisionalInvestigations.find((investigation) => investigation.fingerprint === pick.fingerprint)
+    : undefined;
+  if (!pick || !condition) {
+    return { proposals: [] as AgendaProposalDraft[], inputTokens: 0, outputTokens: 0, calls: [] as WarRoomCallCost[] };
+  }
+  await onDrafting?.();
+  const { payload, aliases } = leanContextFor(prepared);
+  const options = { context: leanDraftContext(payload, aliases, condition), model: LEAN_DRAFT_MODEL };
+  const drafted = pick.kind === "decision"
+    ? await runProposalPass(operatingPackFor(prepared), investigator, condition, options)
+    : await runCommissionPass(operatingPackFor(prepared), investigator, condition, options);
+  const proposal = {
+    ...drafted.proposal,
+    evidenceIds: unaliasIds(drafted.proposal.evidenceIds, aliases),
+    capabilityEvidenceIds: unaliasIds(drafted.proposal.capabilityEvidenceIds, aliases),
+  };
+  return { proposals: [proposal], inputTokens: drafted.inputTokens, outputTokens: drafted.outputTokens, calls: drafted.calls };
+}
+
+async function draftLeanAgenda(
+  db: SupabaseClient,
+  runId: string,
+  prepared: WarRoomPreparedDiscovery,
+  investigator: WarRoomInvestigatorCheckpoint,
+  triage: WarRoomTriageCheckpoint,
+  attempt: number,
+): Promise<WarRoomCouncilCheckpoint> {
+  const drafted = await draftLeanAgendaCalls(prepared, investigator, triage.leanAgenda, () =>
+    updateDiscoveryStage(db, runId, "drafting_decision", { stage_attempt: attempt }));
+  const rawCouncilOutput: CouncilOutput = { ...triage.rawTriageOutput, proposals: drafted.proposals };
+  const inputTokens = triage.inputTokens + drafted.inputTokens;
+  const outputTokens = triage.outputTokens + drafted.outputTokens;
+  const { error: checkpointError } = await db.from("war_room_discovery_runs").update({
+    raw_council_output: rawCouncilOutput,
+    input_tokens: investigator.inputTokens + inputTokens,
+    output_tokens: investigator.outputTokens + outputTokens,
+  }).eq("id", runId).eq("status", "running");
+  if (checkpointError) throw checkpointError;
+  await appendCostLedger(db, runId, drafted.calls);
+  return { rawCouncilOutput, inputTokens, outputTokens, calls: drafted.calls };
+}
+
+/** The exact lean prompt payload, for measuring it without paying for a call. Reads only. */
+export async function devWarRoomLeanContext(db: SupabaseClient) {
+  const { prepared } = await assembleWarRoomInputs(db);
+  return leanContextFor({ ...prepared, sourceSummary: {}, scanMode: "lean" }).payload;
+}
+
+/**
+ * A lean scan on today's data, end to end, touching nothing: the one call, the
+ * draft if one is nominated, and the same deterministic gate persistence runs.
+ * Pass a read-only client (scripts/cortex-dev-lean.ts).
+ *
+ * `forceDraft` drafts against the most material condition even when the scan
+ * nominated nothing, so the cost of an agenda day can be measured on a day
+ * without one. A forced draft is labelled as such and is never what production
+ * would do.
+ */
+export async function devLeanScan(
+  db: SupabaseClient,
+  options: { model?: string; forceDraft?: boolean } = {},
+) {
+  const { prepared: assembled } = await assembleWarRoomInputs(db);
+  const prepared: WarRoomPreparedDiscovery = { ...assembled, sourceSummary: {}, scanMode: "lean" };
+  const fullContextChars = JSON.stringify(sweepContextFor(operatingPackFor(prepared))).length;
+  const scan = await runLeanScanPass(prepared, options.model);
+  const provisionalInvestigations = provisionalInvestigationsFor(prepared, scan.rawInvestigatorOutput);
+  const investigator: WarRoomInvestigatorCheckpoint = {
+    rawInvestigatorOutput: scan.rawInvestigatorOutput,
+    provisionalInvestigations,
+    inputTokens: scan.call.inputTokens,
+    outputTokens: scan.call.outputTokens,
+    calls: [scan.call.cost],
+  };
+  let pick = scan.leanAgenda;
+  let forced = false;
+  let rawTriageOutput = scan.rawTriageOutput;
+  if (!pick && options.forceDraft) {
+    const target = provisionalInvestigations.find((investigation) =>
+      investigation.impact === "high" && investigation.strategicFit === "central")
+      ?? provisionalInvestigations[0];
+    if (target) {
+      pick = { kind: "commission", fingerprint: target.fingerprint };
+      forced = true;
+      rawTriageOutput = {
+        ...rawTriageOutput,
+        assessments: rawTriageOutput.assessments.map((assessment) => assessment.fingerprint === target.fingerprint
+          ? { ...assessment, disposition: "investigate" as const, reasonCode: "needs_evidence" as const }
+          : assessment),
+      };
+    }
+  }
+  const drafted = await draftLeanAgendaCalls(prepared, investigator, pick);
+  const council: WarRoomCouncilCheckpoint = {
+    rawCouncilOutput: { ...rawTriageOutput, proposals: drafted.proposals },
+    inputTokens: drafted.inputTokens,
+    outputTokens: drafted.outputTokens,
+    calls: drafted.calls,
+  };
+  const result = evaluatePortfolio(
+    operatingPackFor(prepared),
+    investigator,
+    council,
+    prepared.proposalMemory,
+    new Set(prepared.blockedInterventionFingerprints),
+  );
+  return {
+    contextChars: JSON.stringify(scan.context).length,
+    context: scan.context,
+    fullContextChars,
+    output: scan.output,
+    agenda: pick,
+    forcedDraft: forced,
+    agendaSkipped: rawTriageOutput.rejectedReasons,
+    draftedProposals: drafted.proposals,
+    gatedProposals: result.proposals,
+    investigations: result.investigations,
+    assessments: result.assessments,
+    companyRead: result.review.companyRead,
+    calls: [...investigator.calls, ...drafted.calls],
+  };
+}
+
 export async function persistWarRoomDiscovery(
   runId: string,
   prepared: WarRoomPreparedDiscovery,
@@ -2592,6 +2929,7 @@ export async function persistWarRoomDiscovery(
     companyRead: result.rawCouncilOutput.companyRead,
     evidenceCatalog: result.evidenceCatalog,
     lensReviews: result.rawInvestigatorOutput.lensReviews,
+    priorityReads: result.rawInvestigatorOutput.priorityReads,
     acceptedInvestigationFingerprints: selectedInvestigationFingerprints,
   });
   const persistedAssessments = persistedAgenda.assessments;
@@ -2631,6 +2969,7 @@ export async function persistWarRoomDiscovery(
       last_heartbeat_at: new Date().toISOString(),
       company_verdict: persistedCompanyRead.summary,
       company_read: persistedCompanyRead,
+      ...(result.rawInvestigatorOutput.priorityReads ? { priority_reads: result.rawInvestigatorOutput.priorityReads } : {}),
       investigation_count: investigationsSaved,
       watchlist_count: persistedAssessments.filter((assessment) => assessment.disposition === "watchlist").length,
     },
