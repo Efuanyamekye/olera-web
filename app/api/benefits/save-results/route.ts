@@ -22,7 +22,7 @@ import { getStateSlug } from "@/lib/program-data";
 import { resolveBenefitsProgramEntry } from "@/lib/benefits/program-entry";
 import { calculateFamilyCompleteness } from "@/lib/admin/profile-completeness";
 import { emailReturningUserSignInLink, resolveExistingUserId } from "@/lib/auth/returning-user";
-import { readCareAge, AGE_BAND_LABELS } from "@/lib/benefits/age";
+import { readCareAge, AGE_BAND_LABELS, isAgeBand } from "@/lib/benefits/age";
 import { benefitAmountLabel } from "@/lib/benefits/savings-label";
 import { readCareNeedSource, isInferredCareNeed, type CareNeedSource } from "@/lib/benefits/care-need-source";
 
@@ -117,7 +117,7 @@ interface SaveResultsPayload {
    *  absent on older clients, where it is inferred from entrySource. */
   careNeedSource?: CareNeedSource;
   age: number | null;
-  medicaidStatus: "alreadyHas" | "applying" | "notSure" | "doesNotHave" | null;
+  medicaidStatus: "alreadyHas" | "applying" | "notSure" | "doesNotHave" | "denied" | null;
   incomeRange: "under1500" | "under2500" | "under4000" | "over4000" | "preferNotToSay" | null;
   stateCode: string | null; // 2-letter (TX, MI, etc.)
 
@@ -150,6 +150,16 @@ interface SaveResultsPayload {
   utmCampaign?: string;
   matchedPrograms: SavedProgramInput[];
   matchCount: number;
+  /** Full finder (/benefits/finder) answers the card never asks. Each is
+   *  optional and only written when the family gave it. */
+  ageBand?: string;
+  veteranStatus?: "yes" | "no" | "spouse" | "unsure";
+  householdSize?: "1" | "2" | "3";
+  finderNeeds?: string[];
+  caregiverNeeds?: string[];
+  /** The program the finder told them to call first. Kept so the plan page,
+   *  letter and texts lead with the same one. Must be in matchedPrograms. */
+  firstStepProgramId?: string;
 }
 
 export async function POST(req: Request) {
@@ -187,7 +197,16 @@ export async function POST(req: Request) {
     utmCampaign,
     matchedPrograms,
     matchCount,
+    ageBand,
+    veteranStatus,
+    householdSize,
+    finderNeeds,
+    caregiverNeeds,
+    firstStepProgramId,
   } = payload;
+  const finderFirst = firstStepProgramId
+    ? (matchedPrograms || []).find((p) => p.programId === firstStepProgramId)
+    : undefined;
 
   // Channel-dependent contact validation. The V3 2-step flow lets the user
   // pick email or SMS at submit; legacy V2 5-step always sent email.
@@ -479,6 +498,16 @@ export async function POST(req: Request) {
   const completedAt = new Date().toISOString();
   const intakeMetadata: Record<string, unknown> = {
     age: age || undefined,
+    // A band from the finder's age question. Readers go through readCareAge,
+    // which prefers a typed exact age when one exists.
+    age_band: isAgeBand(ageBand) ? ageBand : undefined,
+    // Only yes/no are facts the eligibility rules read. A veteran's spouse
+    // is kept apart so VA programs stay in without claiming service.
+    veteran_status: veteranStatus === "yes" || veteranStatus === "no" ? veteranStatus : undefined,
+    veteran_spouse: veteranStatus === "spouse" ? true : undefined,
+    household_size: householdSize === "1" || householdSize === "2" || householdSize === "3" ? Number(householdSize) : undefined,
+    finder_needs: Array.isArray(finderNeeds) && finderNeeds.length ? finderNeeds.slice(0, 8).map(String) : undefined,
+    caregiver_needs: Array.isArray(caregiverNeeds) && caregiverNeeds.length ? caregiverNeeds.slice(0, 8).map(String) : undefined,
     care_needs: granularCareNeeds.length > 0 ? granularCareNeeds : undefined,
     income_range: incomeRange || undefined,
     medicaid_status: medicaidStatus || undefined,
@@ -490,6 +519,9 @@ export async function POST(req: Request) {
       answers: careNeed ? { careNeed, careNeedSource } : undefined,
       matchCount,
       completed_at: completedAt,
+      finder_first_step: finderFirst
+        ? { program_id: finderFirst.programId, state_id: finderFirst.stateId }
+        : undefined,
       // This is the family's explicit intent, not an eligibility result. Keep
       // it separate from the ranked matches so later guidance can acknowledge
       // what they asked about without reconstructing it from account signup.
