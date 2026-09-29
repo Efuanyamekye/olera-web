@@ -524,7 +524,7 @@ async function tighten(draftText: string): Promise<string> {
 
 Cut it down. Return ONLY the shortened message, no preamble and no quotes.
 
-Keep, in this order of priority: the phone number, the exact words to say when they call, who decides, and any question you are asking them. Cut hedging, restatement, and background before you cut any of those. Do not add anything new.
+Keep, in this order of priority: the phone number, what to ask for when they call, who decides, and any question you are asking them. Cut hedging, restatement, and background before you cut any of those. Do not add anything new.
 
 ${DRAFT_RULES}`,
     messages: [{ role: "user", content: draftText }],
