@@ -195,13 +195,19 @@ export function warRoomScanCost(run: WarRoomDiscoveryRun | null): WarRoomScanCos
   // a saving it had not made, which is worse than reporting nothing.
   const ledger = (run.source_summary as { cost_ledger?: unknown } | null)?.cost_ledger;
   if (Array.isArray(ledger) && ledger.length) {
-    const entries = ledger as Array<{ model?: string; inputTokens?: number; outputTokens?: number }>;
+    const entries = ledger as Array<{ model?: string; inputTokens?: number; outputTokens?: number; cacheReadTokens?: number; cacheCreationTokens?: number }>;
     let usd = 0;
     let priced = true;
     for (const entry of entries) {
       const entryPrice = MODEL_PRICE_PER_MTOK[entry.model ?? ""];
       if (!entryPrice) { priced = false; break; }
-      usd += ((entry.inputTokens ?? 0) * entryPrice.input + (entry.outputTokens ?? 0) * entryPrice.output) / 1_000_000;
+      // Cached tokens are not in inputTokens. Reads bill at a tenth of the
+      // input price, writes at 1.25x; leaving them out would understate a
+      // cached scan and report a saving bigger than the real one.
+      usd += ((entry.inputTokens ?? 0) * entryPrice.input
+        + (entry.cacheReadTokens ?? 0) * entryPrice.input * 0.1
+        + (entry.cacheCreationTokens ?? 0) * entryPrice.input * 1.25
+        + (entry.outputTokens ?? 0) * entryPrice.output) / 1_000_000;
     }
     const models = [...new Set(entries.map((entry) => entry.model).filter(Boolean))] as string[];
     if (priced) {

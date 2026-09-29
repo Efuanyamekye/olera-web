@@ -7,6 +7,29 @@
 
 ## Current Focus
 
+### 2026-09-29 — Ad Boost full-book audit + Phase 2F (instant forms) added to the command (`thirsty-panini`, #2272, docs only)
+
+**Output.** Audit page https://claude.ai/artifact/MtHHUT1NX7LWtggmaeYCWw (v2, private). 19 `ad_campaign_log` rows (18 observations at 10:00Z + 1 correction), notes appended. State-of-play in `~/Desktop/Claude Screenshots/adboost-state-of-play.md`.
+
+**Facts.**
+- City flights closed: $1,450.79, 15 families, 0 recorded clients. Google $601/family; Meta web ~$63; Dallas form ~$50 (ended 29 Sep, $400 cap); Nextdoor $76 for 0.
+- The seven open-ended Google campaigns: $655.41, 311 clicks, 9 inquiries, 0 with care details. Their notes set **30 Sep** to name the qualified-inquiry number that justifies the remaining ~$2,387 to 31 Dec. Graceful hits its $150 ceiling ~5 Oct.
+- Pilot (pulled forward to 25 Sep): forms 9 leads, 6 job seekers by 29 Sep morning; 3 families (Boulder x2, Rosemonte). Google arms 15 clicks, 0 inquiries.
+- Franchil: 17 Sep + 28 Sep inquiries unread (dead inbox, known 22 Sep). Caring Senior: a second profile filed a new request 28 Sep.
+- A Pascagoula receipt (v2 form, 20 Sep) is `failed` at 12 attempts: possibly a family Liz never got.
+
+**Where I was wrong.** (1) Read the Dallas form as spending past the flight; its ad set ended 29 Sep. (2) Called the instant-form rule "challenged" from one traffic-ad inquiry without opening a form. Withdrawn; became lesson 10 and Phase 2F.
+
+**Phase 2F (#2272).** Reads forms via `/api/admin/city-ads/meta` config + `meta_lead_receipts` + Graph through the Ads Manager tab's session. Hand-over (`primary.server.ts`) never reads consent, so an Olera-only consent on a provider form passes details without agreement.
+
+**Next Up.**
+- 30 Sep: portfolio decision on the seven; Robbie call 9:30 CT; Hoop check-in.
+- Text Hilda the two Franchil inquiries.
+- Pull the failed Pascagoula lead from Meta.
+- Fix six stale Charlotte/Dallas rows; register Dallas form row; clear stale comms pauses (HomeWell, Rosemonte, LumiWell). Awaiting TJ's go.
+- Run Phase 2F on the eight forms (first real use of the section).
+- Decide whether to set a read-only `META_ADS_ACCESS_TOKEN`.
+
 ### 2026-09-28 — Ad Boost audit (Phase 0 only) → Ces's call sheet + shared-inbox tutorial (`fine-brahe`, no app code)
 
 **Output.** Ces's call sheet for the week of 28 Sep: https://claude.ai/artifact/L9eea82hBPEL7dJCW1rhT7 (v3; private, TJ must share with `cchavez.olera@gmail.com`). It covers where Robbie stands, 6 families in order, 3 check-ins through the shared inbox, 5 families to close by Thursday, 5 providers, a shared-inbox tutorial and how-to-log recipes. It supersedes the 25 Sep sheet (Un8A9ttZWyQQQPUcT31N6B).
