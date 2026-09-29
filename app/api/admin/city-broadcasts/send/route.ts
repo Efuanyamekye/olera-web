@@ -86,16 +86,17 @@ export async function POST(req: NextRequest) {
 
   try {
     // Step 1: Create the broadcast event record
+    // Generate a random UUID for manual broadcasts since event_id is NOT NULL
+    const manualEventId = crypto.randomUUID();
     const { data: eventRecord, error: eventError } = await db
       .from("city_broadcast_events")
       .insert({
         event_type,
-        event_id: null, // Manual broadcasts don't have an associated event
+        event_id: manualEventId, // Random UUID for manual broadcasts
         city,
         category: category || null,
         status: "processing",
-        // Mark as manual in a way that doesn't require schema changes
-        // We'll use the skip_reason field to note it's manual when completed
+        // Mark as manual in skip_reason when completed
       })
       .select("id")
       .single();

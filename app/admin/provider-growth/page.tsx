@@ -20,12 +20,12 @@ import DateRangePopover, {
 } from "@/components/admin/DateRangePopover";
 import { AdminFilterChips } from "@/components/admin/provider-outreach/AdminFilterChips";
 import {
-  CallbackBanner,
   GrowthTabs,
   StatsHeader,
   ProviderRow,
   ProviderDrawer,
   ProviderFilters,
+  WorkflowGuideModal,
   WorkQueueTab,
   type ActiveTab,
   type ProviderFiltersValue,
@@ -168,8 +168,9 @@ export default function ProviderGrowthPage() {
   const [editingAssignmentId, setEditingAssignmentId] = useState<string | null>(null);
   const [adminNameLookup, setAdminNameLookup] = useState<Map<string, string>>(new Map());
 
-  // Callback banner refresh key - increment to trigger refetch
-  const [callbackRefreshKey, setCallbackRefreshKey] = useState(0);
+
+  // Workflow guide modal state
+  const [showWorkflowGuide, setShowWorkflowGuide] = useState(false);
 
   // Keep ref in sync with selected provider
   useEffect(() => {
@@ -224,10 +225,48 @@ export default function ProviderGrowthPage() {
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
+      // Build filter params for subtab-counts to match provider list filters
+      const subtabParams = new URLSearchParams();
+      if (providerFilters.completenessMin !== undefined) {
+        subtabParams.set("completenessMin", String(providerFilters.completenessMin));
+      }
+      if (providerFilters.completenessMax !== undefined) {
+        subtabParams.set("completenessMax", String(providerFilters.completenessMax));
+      }
+      if (providerFilters.careTypes.length > 0) {
+        subtabParams.set("careTypes", providerFilters.careTypes.join(","));
+      }
+      const resolved = resolveRange(dateRange);
+      if (resolved.from) {
+        subtabParams.set("claimedFrom", resolved.from);
+      }
+      if (resolved.to) {
+        subtabParams.set("claimedTo", resolved.to);
+      }
+      if (debouncedSearch) {
+        subtabParams.set("search", debouncedSearch);
+      }
+      if (selectedAdminFilter) {
+        subtabParams.set("assignedTo", selectedAdminFilter);
+      }
+
+      const filterQueryString = subtabParams.toString();
+
+      // Build URLs with filter params for all three endpoints
+      const statsUrl = filterQueryString
+        ? `/api/admin/provider-growth/stats?${filterQueryString}`
+        : "/api/admin/provider-growth/stats";
+      const subtabUrl = filterQueryString
+        ? `/api/admin/provider-growth/subtab-counts?${filterQueryString}`
+        : "/api/admin/provider-growth/subtab-counts";
+      const workQueueUrl = filterQueryString
+        ? `/api/admin/provider-growth/work-queue?${filterQueryString}`
+        : "/api/admin/provider-growth/work-queue";
+
       const [statsRes, subtabRes, workQueueRes] = await Promise.all([
-        fetch("/api/admin/provider-growth/stats"),
-        fetch("/api/admin/provider-growth/subtab-counts"),
-        fetch("/api/admin/provider-growth/work-queue"),
+        fetch(statsUrl),
+        fetch(subtabUrl),
+        fetch(workQueueUrl),
       ]);
 
       if (statsRes.ok) {
@@ -272,7 +311,7 @@ export default function ProviderGrowthPage() {
     } finally {
       setLoadingStats(false);
     }
-  }, []);
+  }, [providerFilters, dateRange, debouncedSearch, selectedAdminFilter]);
 
   // Fetch providers
   const fetchProviders = useCallback(async () => {
@@ -555,10 +594,6 @@ export default function ProviderGrowthPage() {
     }
   }, [providers]);
 
-  // Handle clicking a provider from the callback banner
-  const handleCallbackProviderClick = (trackingId: string) => {
-    fetchAndSelectProvider(trackingId);
-  };
 
   return (
     <div>
@@ -569,6 +604,16 @@ export default function ProviderGrowthPage() {
             <h1 className="text-2xl font-semibold text-gray-900">Provider Growth</h1>
             <p className="mt-1 text-sm text-gray-500">
               Track claimed providers from claim to conversion
+              <span className="mx-2 text-gray-300">·</span>
+              <button
+                type="button"
+                onClick={() => setShowWorkflowGuide(true)}
+                className="inline-flex items-center gap-1 whitespace-nowrap font-medium text-primary-700 transition-colors hover:text-primary-800"
+                title="View the workflow guide for this page"
+              >
+                Workflow guide
+                <span aria-hidden="true">&rarr;</span>
+              </button>
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -613,7 +658,13 @@ export default function ProviderGrowthPage() {
       </div>
 
       {/* Stats */}
-      <StatsHeader stats={stats} loading={loadingStats} />
+      <StatsHeader
+        stats={stats}
+        loading={loadingStats}
+        workQueueCount={workQueueCount}
+        workQueueReturnedCalls={workQueueSubtabCounts?.returnedCalls ?? 0}
+        workQueueDueToday={workQueueSubtabCounts?.dueToday ?? 0}
+      />
 
       {/* Tabs */}
       <GrowthTabs
@@ -637,6 +688,32 @@ export default function ProviderGrowthPage() {
           onProviderClick={(trackingId) => {
             fetchAndSelectProvider(trackingId);
           }}
+          onReturnedCallResolved={(threadId) => {
+            // Optimistically remove the resolved item from local state
+            if (threadId) {
+              setWorkQueueData((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      returnedCalls: prev.returnedCalls.filter((rc) => rc.thread_id !== threadId),
+                      totalCount: Math.max(0, prev.totalCount - 1),
+                    }
+                  : null
+              );
+              // Also update the subtab counts
+              setWorkQueueSubtabCounts((prev) =>
+                prev
+                  ? { ...prev, returnedCalls: Math.max(0, prev.returnedCalls - 1) }
+                  : null
+              );
+              setWorkQueueCount((prev) => Math.max(0, prev - 1));
+            }
+            // Refresh stats to get fresh data from server
+            fetchStats();
+          }}
+          search={debouncedSearch}
+          assignedTo={selectedAdminFilter}
+          filters={providerFilters}
         />
       ) : (
         <>
@@ -648,15 +725,6 @@ export default function ProviderGrowthPage() {
             onSelect={setSelectedAdminFilter}
             tabKey={getTabKey(activeTab)}
           />
-
-          {/* Callback banner - shown on In Progress subtabs (Claimed or Converted) */}
-          {((activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === "in_progress") ||
-            (activeTab.type === "conversion" && activeTab.tab === "converted" && activeTab.subTab === "in_progress")) && (
-            <CallbackBanner
-              onProviderClick={handleCallbackProviderClick}
-              refreshKey={callbackRefreshKey}
-            />
-          )}
 
           {/* Provider list */}
           <div className="bg-white rounded-xl border border-gray-200">
@@ -734,10 +802,9 @@ export default function ProviderGrowthPage() {
           onClose={() => setSelectedProvider(null)}
           onUpdate={handleProviderUpdate}
           onCallLogged={() => {
-            // Refresh stats, providers, and callback banner when a call is logged
+            // Refresh stats and providers when a call is logged
             fetchStats();
             fetchProviders();
-            setCallbackRefreshKey((k) => k + 1);
           }}
         />
       )}
@@ -774,6 +841,11 @@ export default function ProviderGrowthPage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Workflow Guide Modal */}
+      {showWorkflowGuide && (
+        <WorkflowGuideModal onClose={() => setShowWorkflowGuide(false)} />
       )}
     </div>
   );

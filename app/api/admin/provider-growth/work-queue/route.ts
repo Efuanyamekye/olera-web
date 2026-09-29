@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser, getAdminUser } from "@/lib/admin";
-import { getWorkQueueProviders } from "@/lib/provider-growth/queries";
+import { getWorkQueueProviders, type SubtabCountsFilterOptions } from "@/lib/provider-growth/queries";
 
 /**
  * GET /api/admin/provider-growth/work-queue
@@ -10,8 +10,17 @@ import { getWorkQueueProviders } from "@/lib/provider-growth/queries";
  * - Due Today: callback_date = today
  * - Needs Retry: voicemail/hung_up/left_message, stale > 2 days
  * - Stale: no activity in 7+ days
+ *
+ * Supports filter parameters to match the main provider list:
+ * - completenessMin: minimum profile completeness percentage
+ * - completenessMax: maximum profile completeness percentage
+ * - careTypes: comma-separated care type filter values
+ * - search: provider name search
+ * - assignedTo: filter by assigned admin ID
+ * - claimedFrom: filter by claim date start
+ * - claimedTo: filter by claim date end
  */
-export async function GET(_request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
     const user = await getAuthUser();
     if (!user) {
@@ -23,7 +32,46 @@ export async function GET(_request: NextRequest) {
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    const result = await getWorkQueueProviders();
+    // Parse filter parameters
+    const { searchParams } = new URL(request.url);
+    const filters: SubtabCountsFilterOptions = {};
+
+    const completenessMin = searchParams.get("completenessMin");
+    if (completenessMin) {
+      filters.completenessMin = parseInt(completenessMin, 10);
+    }
+
+    const completenessMax = searchParams.get("completenessMax");
+    if (completenessMax) {
+      filters.completenessMax = parseInt(completenessMax, 10);
+    }
+
+    const careTypes = searchParams.get("careTypes");
+    if (careTypes) {
+      filters.careTypes = careTypes.split(",").filter(Boolean);
+    }
+
+    const search = searchParams.get("search");
+    if (search) {
+      filters.search = search;
+    }
+
+    const assignedTo = searchParams.get("assignedTo");
+    if (assignedTo) {
+      filters.assignedTo = assignedTo;
+    }
+
+    const claimedFrom = searchParams.get("claimedFrom");
+    if (claimedFrom) {
+      filters.claimedFrom = claimedFrom;
+    }
+
+    const claimedTo = searchParams.get("claimedTo");
+    if (claimedTo) {
+      filters.claimedTo = claimedTo;
+    }
+
+    const result = await getWorkQueueProviders(filters);
 
     return NextResponse.json(result);
   } catch (e) {

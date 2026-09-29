@@ -117,8 +117,8 @@ export async function detectNewEvents(): Promise<DetectedEvent[]> {
     console.error("[city-broadcasts] Failed to fetch profiles:", pErr);
   } else if (recentProfiles && recentProfiles.length > 0) {
     // Filter out profiles that already have a broadcast event
-    // Use prefixed IDs to match what findExistingActivityForCity returns
-    const profileEventIds = recentProfiles.map((p) => `profile_${p.id}`);
+    // Use raw UUID - event_type column distinguishes profile events from question events
+    const profileEventIds = recentProfiles.map((p) => p.id);
     const { data: existing } = await db
       .from("city_broadcast_events")
       .select("event_id")
@@ -127,7 +127,8 @@ export async function detectNewEvents(): Promise<DetectedEvent[]> {
     const existingIds = new Set((existing || []).map((e) => e.event_id));
 
     for (const profile of recentProfiles) {
-      const eventId = `profile_${profile.id}`;
+      // Use raw UUID - event_type column distinguishes profile events from question events
+      const eventId = profile.id;
       if (existingIds.has(eventId)) continue;
       if (!profile.city) continue;
 
@@ -364,9 +365,10 @@ async function findExistingActivityForCity(
     // Previously we required a seeker_activity record with event_type='profile_published',
     // but those records were never being created, causing broadcasts to never send.
     // The business_profile itself is sufficient evidence of family activity.
+    // Use raw UUID - event_type column already distinguishes profile events from question events
     return {
       eventType: "profile_published",
-      eventId: `profile_${profile.id}`, // Prefix to distinguish from seeker_activity IDs
+      eventId: profile.id,
       city: profile.city,
       state: profile.state || null,
       category: null,

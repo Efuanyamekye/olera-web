@@ -11,9 +11,13 @@
  * - Stale: no activity in 7+ days
  */
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { WorkQueueEntry, WorkQueueResult, ReturnedCallEntry } from "@/lib/provider-growth/queries";
 import type { WorkQueueSubTab } from "./GrowthTabs";
+import type { ProviderFiltersValue } from "./ProviderFilters";
+import { EligibilityBadges } from "./EligibilityBadges";
+import { CARE_TYPE_FILTER_MAPPING } from "@/lib/provider-growth/stages";
 
 interface WorkQueueTabProps {
   data: WorkQueueResult | null;
@@ -21,9 +25,106 @@ interface WorkQueueTabProps {
   error: string | null;
   subTab: WorkQueueSubTab;
   onProviderClick: (trackingId: string) => void;
+  /** Called after resolving a returned call. Pass thread_id for optimistic removal. */
+  onReturnedCallResolved?: (threadId: string) => void;
+  // Filters
+  search?: string;
+  assignedTo?: string | null;
+  filters?: ProviderFiltersValue;
 }
 
-export function WorkQueueTab({ data, loading, error, subTab, onProviderClick }: WorkQueueTabProps) {
+export function WorkQueueTab({
+  data,
+  loading,
+  error,
+  subTab,
+  onProviderClick,
+  onReturnedCallResolved,
+  search,
+  assignedTo,
+  filters,
+}: WorkQueueTabProps) {
+  // State for resolve confirmation modal
+  const [pendingResolve, setPendingResolve] = useState<ReturnedCallEntry | null>(null);
+  const [resolving, setResolving] = useState(false);
+  const [resolveError, setResolveError] = useState<string | null>(null);
+
+  // State for undo toast
+  const [undoToast, setUndoToast] = useState<{
+    threadId: string;
+    displayName: string | null;
+  } | null>(null);
+  const [undoing, setUndoing] = useState(false);
+  const undoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Auto-dismiss undo toast after 5 seconds
+  useEffect(() => {
+    if (undoToast) {
+      undoTimeoutRef.current = setTimeout(() => {
+        setUndoToast(null);
+      }, 5000);
+      return () => {
+        if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+      };
+    }
+  }, [undoToast]);
+
+  // Handle resolve confirmation
+  const handleResolve = async () => {
+    if (!pendingResolve) return;
+    setResolving(true);
+    setResolveError(null);
+    try {
+      const res = await fetch(`/api/admin/support-email/${encodeURIComponent(pendingResolve.thread_id)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "mark_handled" }),
+      });
+      if (!res.ok) {
+        const responseData = await res.json().catch(() => ({}));
+        throw new Error(responseData.error || "Failed to resolve");
+      }
+      // Show undo toast
+      setUndoToast({
+        threadId: pendingResolve.thread_id,
+        displayName: pendingResolve.display_name,
+      });
+      // Close modal and trigger optimistic removal
+      const threadId = pendingResolve.thread_id;
+      setPendingResolve(null);
+      onReturnedCallResolved?.(threadId);
+    } catch (e) {
+      setResolveError(e instanceof Error ? e.message : "Failed to resolve");
+    } finally {
+      setResolving(false);
+    }
+  };
+
+  // Handle undo
+  const handleUndo = async () => {
+    if (!undoToast) return;
+    setUndoing(true);
+    try {
+      const res = await fetch(`/api/admin/support-email/${encodeURIComponent(undoToast.threadId)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "needs_reply" }),
+      });
+      if (!res.ok) {
+        console.error("Failed to undo resolve");
+        return;
+      }
+      // Clear toast and refresh to bring item back
+      if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+      setUndoToast(null);
+      // Trigger a refresh - pass empty string to signal "just refresh, no optimistic removal"
+      onReturnedCallResolved?.("");
+    } catch (e) {
+      console.error("Failed to undo:", e);
+    } finally {
+      setUndoing(false);
+    }
+  };
   if (loading) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-500">
@@ -44,19 +145,77 @@ export function WorkQueueTab({ data, loading, error, subTab, onProviderClick }: 
     return null;
   }
 
-  // Get the right list based on subtab
+  // Common filter logic for both entry types
+  const matchesFilters = (e: WorkQueueEntry | ReturnedCallEntry): boolean => {
+    // Search filter (match display_name)
+    if (search?.trim()) {
+      const searchLower = search.toLowerCase().trim();
+      if (!e.display_name?.toLowerCase().includes(searchLower)) {
+        return false;
+      }
+    }
+
+    // Assigned to filter (only for WorkQueueEntry which has assigned_to)
+    if (assignedTo && "assigned_to" in e) {
+      if ((e as WorkQueueEntry).assigned_to !== assignedTo) {
+        return false;
+      }
+    }
+
+    // Profile completeness filter
+    if (filters?.completenessMin !== undefined) {
+      if ((e.profile_completeness ?? 0) < filters.completenessMin) {
+        return false;
+      }
+    }
+    if (filters?.completenessMax !== undefined) {
+      if ((e.profile_completeness ?? 0) > filters.completenessMax) {
+        return false;
+      }
+    }
+
+    // Care types filter (matches main query logic exactly)
+    if (filters?.careTypes && filters.careTypes.length > 0) {
+      if (!e.care_types || e.care_types.length === 0) return false;
+
+      // Build set of all known care types for "other" detection
+      const knownCareTypes = new Set(
+        Object.values(CARE_TYPE_FILTER_MAPPING).flat().map((ct) => ct.toLowerCase())
+      );
+
+      const hasMatch = filters.careTypes.some((filterType) => {
+        if (filterType === "other") {
+          // Match if provider has any care type not in known categories
+          return e.care_types!.some(
+            (pct) => !knownCareTypes.has(pct.toLowerCase())
+          );
+        }
+        // Match if provider has any care type in the mapped values (exact match)
+        const mappedValues = CARE_TYPE_FILTER_MAPPING[filterType] || [];
+        return e.care_types!.some((pct) =>
+          mappedValues.some((mv) => mv.toLowerCase() === pct.toLowerCase())
+        );
+      });
+
+      if (!hasMatch) return false;
+    }
+
+    return true;
+  };
+
+  // Get the filtered list based on subtab
   const getEntries = (): WorkQueueEntry[] | ReturnedCallEntry[] => {
     switch (subTab) {
       case "returned_calls":
-        return data.returnedCalls;
+        return data.returnedCalls.filter(matchesFilters);
       case "overdue":
-        return data.overdueCallbacks;
+        return data.overdueCallbacks.filter(matchesFilters);
       case "due_today":
-        return data.dueToday;
+        return data.dueToday.filter(matchesFilters);
       case "needs_retry":
-        return data.needsRetry;
+        return data.needsRetry.filter(matchesFilters);
       case "stale":
-        return data.stale;
+        return data.stale.filter(matchesFilters);
       default:
         return [];
     }
@@ -83,15 +242,80 @@ export function WorkQueueTab({ data, loading, error, subTab, onProviderClick }: 
   // Render different row types based on subtab
   if (subTab === "returned_calls") {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
-        {(entries as ReturnedCallEntry[]).map((entry) => (
-          <ReturnedCallRow
-            key={entry.thread_id}
-            entry={entry}
-            onClick={() => onProviderClick(entry.tracking_id)}
-          />
-        ))}
-      </div>
+      <>
+        <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+          {(entries as ReturnedCallEntry[]).map((entry) => (
+            <ReturnedCallRow
+              key={entry.thread_id}
+              entry={entry}
+              onClick={() => onProviderClick(entry.tracking_id)}
+              onResolve={() => setPendingResolve(entry)}
+            />
+          ))}
+        </div>
+
+        {/* Resolve confirmation modal */}
+        {pendingResolve && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold text-gray-900">Resolve returned call</h3>
+              <p className="mt-2 text-sm text-gray-600">
+                Mark the voicemail from <strong>{pendingResolve.display_name || "this provider"}</strong> as handled?
+                This will remove it from the work queue.
+              </p>
+              {resolveError && (
+                <p className="mt-3 text-sm text-red-600">{resolveError}</p>
+              )}
+              <div className="mt-4 flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setPendingResolve(null);
+                    setResolveError(null);
+                  }}
+                  disabled={resolving}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleResolve}
+                  disabled={resolving}
+                  className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                >
+                  {resolving ? "Resolving..." : "Resolve"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Undo toast */}
+        {undoToast && (
+          <div className="fixed bottom-4 right-4 z-50 flex items-center gap-3 bg-gray-900 text-white px-4 py-3 rounded-lg shadow-lg">
+            <span className="text-sm">
+              Resolved {undoToast.displayName || "returned call"}
+            </span>
+            <button
+              onClick={handleUndo}
+              disabled={undoing}
+              className="text-sm font-medium text-primary-300 hover:text-primary-200 transition-colors disabled:opacity-50"
+            >
+              {undoing ? "Undoing..." : "Undo"}
+            </button>
+            <button
+              onClick={() => {
+                if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+                setUndoToast(null);
+              }}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+      </>
     );
   }
 
@@ -119,6 +343,8 @@ interface WorkQueueRowProps {
 
 function WorkQueueRow({ entry, onClick }: WorkQueueRowProps) {
   const location = [entry.city, entry.state].filter(Boolean).join(", ");
+  const category = entry.care_types?.slice(0, 2).join(", ") || null;
+  const locationCategory = [location, category].filter(Boolean).join(" · ");
 
   return (
     <div
@@ -128,7 +354,7 @@ function WorkQueueRow({ entry, onClick }: WorkQueueRowProps) {
       <div className="flex items-start justify-between gap-4">
         {/* Left: Provider info */}
         <div className="min-w-0 flex-1">
-          {/* Line 1: Name + stage badge */}
+          {/* Line 1: Name + verification badge + stage badge */}
           <div className="flex items-center gap-2">
             {entry.slug ? (
               <Link
@@ -143,12 +369,13 @@ function WorkQueueRow({ entry, onClick }: WorkQueueRowProps) {
                 {entry.display_name || "Unnamed Provider"}
               </span>
             )}
+            <VerificationBadge state={entry.verification_state} providerName={entry.display_name} />
             <StageBadge stage={entry.pipeline_stage} isConverted={entry.is_converted} />
           </div>
 
-          {/* Line 2: Location */}
-          {location && (
-            <p className="mt-0.5 truncate text-xs text-gray-500">{location}</p>
+          {/* Line 2: Location · Category */}
+          {locationCategory && (
+            <p className="mt-0.5 truncate text-xs text-gray-500">{locationCategory}</p>
           )}
 
           {/* Line 3: Contact info */}
@@ -169,8 +396,16 @@ function WorkQueueRow({ entry, onClick }: WorkQueueRowProps) {
           )}
         </div>
 
-        {/* Right: Queue reason info */}
+        {/* Right: Eligibility badges + Queue reason info */}
         <div className="flex shrink-0 flex-col items-end gap-1">
+          {/* Eligibility badges */}
+          <div className="flex items-center gap-2">
+            <EligibilityBadges
+              adsEligible={entry.ads_eligible}
+              medjobsEligible={entry.medjobs_eligible}
+              medjobsUniversity={entry.medjobs_catchment_university}
+            />
+          </div>
           <QueueReasonBadge entry={entry} />
           {entry.last_activity_outcome && (
             <span className="text-xs text-gray-400">
@@ -195,10 +430,13 @@ function WorkQueueRow({ entry, onClick }: WorkQueueRowProps) {
 interface ReturnedCallRowProps {
   entry: ReturnedCallEntry;
   onClick: () => void;
+  onResolve: () => void;
 }
 
-function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
+function ReturnedCallRow({ entry, onClick, onResolve }: ReturnedCallRowProps) {
   const location = [entry.city, entry.state].filter(Boolean).join(", ");
+  const category = entry.care_types?.slice(0, 2).join(", ") || null;
+  const locationCategory = [location, category].filter(Boolean).join(" · ");
   const hasAudio = entry.audio_message_id && entry.audio_attachment_id;
 
   // Build audio URL for playback
@@ -212,7 +450,7 @@ function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
       <div className="flex items-start justify-between gap-4">
         {/* Left: Provider info */}
         <div className="min-w-0 flex-1">
-          {/* Line 1: Name + stage badge */}
+          {/* Line 1: Name + verification badge + stage badge */}
           <div className="flex items-center gap-2">
             <button
               onClick={onClick}
@@ -220,14 +458,15 @@ function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
             >
               {entry.display_name || "Unnamed Provider"}
             </button>
+            <VerificationBadge state={entry.verification_state} providerName={entry.display_name} />
             <StageBadge stage={entry.pipeline_stage} isConverted={entry.is_converted} />
           </div>
 
-          {/* Line 2: Location + phone */}
-          {(location || entry.phone) && (
+          {/* Line 2: Location · Category + phone */}
+          {(locationCategory || entry.phone) && (
             <p className="mt-0.5 text-xs text-gray-500">
-              {location && <span>{location}</span>}
-              {location && entry.phone && <span className="text-gray-400"> · </span>}
+              {locationCategory && <span>{locationCategory}</span>}
+              {locationCategory && entry.phone && <span className="text-gray-400"> · </span>}
               {entry.phone && (
                 <a
                   href={`tel:${entry.phone}`}
@@ -263,8 +502,16 @@ function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
           )}
         </div>
 
-        {/* Right: Time info */}
+        {/* Right: Eligibility badges + Time info + Resolve button */}
         <div className="flex shrink-0 flex-col items-end gap-1">
+          {/* Eligibility badges */}
+          <div className="flex items-center gap-2">
+            <EligibilityBadges
+              adsEligible={entry.ads_eligible}
+              medjobsEligible={entry.medjobs_eligible}
+              medjobsUniversity={entry.medjobs_catchment_university}
+            />
+          </div>
           <span className="text-xs text-gray-400">
             {timeAgo(entry.voicemail_at)}
           </span>
@@ -277,6 +524,16 @@ function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
               {entry.callback_number}
             </a>
           )}
+          {/* Resolve button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onResolve();
+            }}
+            className="mt-1 px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+          >
+            Resolve
+          </button>
         </div>
       </div>
     </div>
@@ -288,6 +545,7 @@ function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function StageBadge({ stage, isConverted }: { stage: string; isConverted: boolean }) {
+  // Show "Converted" badge for free trial providers
   if (isConverted) {
     return (
       <span className="px-1.5 py-0.5 text-[10px] font-medium bg-amber-100 text-amber-700 rounded">
@@ -296,25 +554,105 @@ function StageBadge({ stage, isConverted }: { stage: string; isConverted: boolea
     );
   }
 
+  // Only show badges for meaningful pipeline states
+  // Skip "new_claim" - all providers here are claimed by definition, showing it is noise
   const stageLabels: Record<string, string> = {
-    new_claim: "Claimed",
     meeting_scheduled: "Meeting",
     pitched: "Pitched",
     no_show: "No-show",
+    not_interested: "Not Interested",
   };
 
   const stageColors: Record<string, string> = {
-    new_claim: "bg-blue-100 text-blue-700",
     meeting_scheduled: "bg-purple-100 text-purple-700",
     pitched: "bg-purple-100 text-purple-700",
     no_show: "bg-orange-100 text-orange-700",
+    not_interested: "bg-gray-100 text-gray-600",
   };
+
+  // No badge for new_claim - it's the default state, no need to show it
+  if (stage === "new_claim") {
+    return null;
+  }
+
+  // Only render badge if we have a label for this stage
+  if (!stageLabels[stage]) {
+    return null;
+  }
 
   return (
     <span className={`px-1.5 py-0.5 text-[10px] font-medium rounded ${stageColors[stage] || "bg-gray-100 text-gray-600"}`}>
-      {stageLabels[stage] || stage}
+      {stageLabels[stage]}
     </span>
   );
+}
+
+function VerificationBadge({ state, providerName }: { state: string | null; providerName: string | null }) {
+  const verificationLink = `/admin/verification?search=${encodeURIComponent(providerName || "")}`;
+
+  // Verified or not_required: show green checkmark
+  if (state === "verified" || state === "not_required") {
+    return (
+      <a
+        href={verificationLink}
+        onClick={(e) => e.stopPropagation()}
+        className="text-emerald-600 hover:text-emerald-700 transition-colors"
+        title="Verified — click to view"
+      >
+        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fillRule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clipRule="evenodd"
+          />
+        </svg>
+      </a>
+    );
+  }
+
+  // Pending verification: show amber badge
+  if (state === "pending") {
+    return (
+      <a
+        href={verificationLink}
+        onClick={(e) => e.stopPropagation()}
+        className="px-1.5 py-0.5 text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200 rounded hover:bg-amber-100 transition-colors"
+        title="Click to review verification"
+      >
+        Pending Verification
+      </a>
+    );
+  }
+
+  // Unverified: show orange badge
+  if (state === "unverified") {
+    return (
+      <a
+        href={verificationLink}
+        onClick={(e) => e.stopPropagation()}
+        className="px-1.5 py-0.5 text-[10px] font-medium bg-orange-100 text-orange-700 rounded hover:bg-orange-200 transition-colors"
+        title="Click to verify this provider"
+      >
+        Unverified
+      </a>
+    );
+  }
+
+  // Rejected: show red badge
+  if (state === "rejected") {
+    return (
+      <a
+        href={verificationLink}
+        onClick={(e) => e.stopPropagation()}
+        className="px-1.5 py-0.5 text-[10px] font-medium bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors"
+        title="Verification rejected — click for details"
+      >
+        Rejected
+      </a>
+    );
+  }
+
+  return null;
 }
 
 function QueueReasonBadge({ entry }: { entry: WorkQueueEntry }) {
