@@ -228,10 +228,48 @@ export default function ProviderGrowthPage() {
   const fetchStats = useCallback(async () => {
     setLoadingStats(true);
     try {
+      // Build filter params for subtab-counts to match provider list filters
+      const subtabParams = new URLSearchParams();
+      if (providerFilters.completenessMin !== undefined) {
+        subtabParams.set("completenessMin", String(providerFilters.completenessMin));
+      }
+      if (providerFilters.completenessMax !== undefined) {
+        subtabParams.set("completenessMax", String(providerFilters.completenessMax));
+      }
+      if (providerFilters.careTypes.length > 0) {
+        subtabParams.set("careTypes", providerFilters.careTypes.join(","));
+      }
+      const resolved = resolveRange(dateRange);
+      if (resolved.from) {
+        subtabParams.set("claimedFrom", resolved.from);
+      }
+      if (resolved.to) {
+        subtabParams.set("claimedTo", resolved.to);
+      }
+      if (debouncedSearch) {
+        subtabParams.set("search", debouncedSearch);
+      }
+      if (selectedAdminFilter) {
+        subtabParams.set("assignedTo", selectedAdminFilter);
+      }
+
+      const filterQueryString = subtabParams.toString();
+
+      // Build URLs with filter params for all three endpoints
+      const statsUrl = filterQueryString
+        ? `/api/admin/provider-growth/stats?${filterQueryString}`
+        : "/api/admin/provider-growth/stats";
+      const subtabUrl = filterQueryString
+        ? `/api/admin/provider-growth/subtab-counts?${filterQueryString}`
+        : "/api/admin/provider-growth/subtab-counts";
+      const workQueueUrl = filterQueryString
+        ? `/api/admin/provider-growth/work-queue?${filterQueryString}`
+        : "/api/admin/provider-growth/work-queue";
+
       const [statsRes, subtabRes, workQueueRes] = await Promise.all([
-        fetch("/api/admin/provider-growth/stats"),
-        fetch("/api/admin/provider-growth/subtab-counts"),
-        fetch("/api/admin/provider-growth/work-queue"),
+        fetch(statsUrl),
+        fetch(subtabUrl),
+        fetch(workQueueUrl),
       ]);
 
       if (statsRes.ok) {
@@ -276,7 +314,7 @@ export default function ProviderGrowthPage() {
     } finally {
       setLoadingStats(false);
     }
-  }, []);
+  }, [providerFilters, dateRange, debouncedSearch, selectedAdminFilter]);
 
   // Fetch providers
   const fetchProviders = useCallback(async () => {
