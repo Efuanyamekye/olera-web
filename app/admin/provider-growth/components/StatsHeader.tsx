@@ -16,14 +16,20 @@ import type { GrowthStats } from "@/lib/provider-growth/queries";
 interface StatsHeaderProps {
   stats: GrowthStats | null;
   loading?: boolean;
+  /** Total work queue items needing attention */
+  workQueueCount?: number;
+  /** Returned calls (high priority - someone called back) */
+  workQueueReturnedCalls?: number;
+  /** Callbacks due today */
+  workQueueDueToday?: number;
 }
 
-export function StatsHeader({ stats, loading }: StatsHeaderProps) {
+export function StatsHeader({ stats, loading, workQueueCount = 0, workQueueReturnedCalls = 0, workQueueDueToday = 0 }: StatsHeaderProps) {
   if (loading) {
     return (
       <div className="mb-6">
-        <div className="grid grid-cols-4 gap-3">
-          {Array.from({ length: 4 }).map((_, i) => (
+        <div className="grid grid-cols-5 gap-3">
+          {Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="rounded-xl border border-gray-200 bg-white px-4 py-3 animate-pulse">
               <div className="h-7 w-16 bg-gray-200 rounded mb-1" />
               <div className="h-3 w-20 bg-gray-100 rounded" />
@@ -44,7 +50,17 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
       ? `${stats.pending_outcomes_today} today, ${stats.pending_outcomes_past} past`
       : `${stats.pending_outcomes_today} today`;
 
-  // Key metrics: Claims → Converted → Paying + Pending Outcomes
+  // Build sublabel for work queue
+  const workQueueParts: string[] = [];
+  if (workQueueReturnedCalls > 0) workQueueParts.push(`${workQueueReturnedCalls} returned`);
+  if (workQueueDueToday > 0) workQueueParts.push(`${workQueueDueToday} due today`);
+  const workQueueSublabel = workQueueCount === 0
+    ? "All done"
+    : workQueueParts.length > 0
+      ? workQueueParts.join(", ")
+      : "Needs attention";
+
+  // Key metrics: Claims → Converted → Paying + Pending Outcomes + Work Queue
   const statItems = [
     {
       label: "New Claims",
@@ -66,13 +82,19 @@ export function StatsHeader({ stats, loading }: StatsHeaderProps) {
       value: stats.pending_outcomes,
       sublabel: pendingSublabel,
       highlight: stats.pending_outcomes > 0,
-      warning: stats.pending_outcomes_past > 0, // Warning color if past meetings need logging
+      warning: stats.pending_outcomes_past > 0,
+    },
+    {
+      label: "Work Queue",
+      value: workQueueCount,
+      sublabel: workQueueSublabel,
+      // No highlight/warning - keep it neutral
     },
   ];
 
   return (
     <div className="mb-6">
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-5 gap-3">
         {statItems.map((item) => {
           // Determine card styling based on state
           let cardClass = "border-gray-200 bg-white";

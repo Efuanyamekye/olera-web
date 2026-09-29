@@ -1,6 +1,5 @@
 export { ActivityLog } from "./ActivityLog";
 export { ActivityConfirmModal } from "./ActivityConfirmModal";
-export { CallbackBanner } from "./CallbackBanner";
 export { EligibilityBadges } from "./EligibilityBadges";
 export { GrowthTabs, type ActiveTab, type ClaimedSubTab, type ConvertedSubTab, type FollowUpSubTab, type PayingSubTab, type WorkQueueSubTab } from "./GrowthTabs";
 export { MeetingScheduler } from "./MeetingScheduler";

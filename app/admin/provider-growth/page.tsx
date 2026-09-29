@@ -20,7 +20,6 @@ import DateRangePopover, {
 } from "@/components/admin/DateRangePopover";
 import { AdminFilterChips } from "@/components/admin/provider-outreach/AdminFilterChips";
 import {
-  CallbackBanner,
   GrowthTabs,
   StatsHeader,
   ProviderRow,
@@ -169,8 +168,6 @@ export default function ProviderGrowthPage() {
   const [editingAssignmentId, setEditingAssignmentId] = useState<string | null>(null);
   const [adminNameLookup, setAdminNameLookup] = useState<Map<string, string>>(new Map());
 
-  // Callback banner refresh key - increment to trigger refetch
-  const [callbackRefreshKey, setCallbackRefreshKey] = useState(0);
 
   // Workflow guide modal state
   const [showWorkflowGuide, setShowWorkflowGuide] = useState(false);
@@ -597,10 +594,6 @@ export default function ProviderGrowthPage() {
     }
   }, [providers]);
 
-  // Handle clicking a provider from the callback banner
-  const handleCallbackProviderClick = (trackingId: string) => {
-    fetchAndSelectProvider(trackingId);
-  };
 
   return (
     <div>
@@ -665,7 +658,13 @@ export default function ProviderGrowthPage() {
       </div>
 
       {/* Stats */}
-      <StatsHeader stats={stats} loading={loadingStats} />
+      <StatsHeader
+        stats={stats}
+        loading={loadingStats}
+        workQueueCount={workQueueCount}
+        workQueueReturnedCalls={workQueueSubtabCounts?.returnedCalls ?? 0}
+        workQueueDueToday={workQueueSubtabCounts?.dueToday ?? 0}
+      />
 
       {/* Tabs */}
       <GrowthTabs
@@ -689,6 +688,29 @@ export default function ProviderGrowthPage() {
           onProviderClick={(trackingId) => {
             fetchAndSelectProvider(trackingId);
           }}
+          onReturnedCallResolved={(threadId) => {
+            // Optimistically remove the resolved item from local state
+            if (threadId) {
+              setWorkQueueData((prev) =>
+                prev
+                  ? {
+                      ...prev,
+                      returnedCalls: prev.returnedCalls.filter((rc) => rc.thread_id !== threadId),
+                      totalCount: Math.max(0, prev.totalCount - 1),
+                    }
+                  : null
+              );
+              // Also update the subtab counts
+              setWorkQueueSubtabCounts((prev) =>
+                prev
+                  ? { ...prev, returnedCalls: Math.max(0, prev.returnedCalls - 1) }
+                  : null
+              );
+              setWorkQueueCount((prev) => Math.max(0, prev - 1));
+            }
+            // Refresh stats to get fresh data from server
+            fetchStats();
+          }}
           search={debouncedSearch}
           assignedTo={selectedAdminFilter}
           filters={providerFilters}
@@ -703,15 +725,6 @@ export default function ProviderGrowthPage() {
             onSelect={setSelectedAdminFilter}
             tabKey={getTabKey(activeTab)}
           />
-
-          {/* Callback banner - shown on In Progress subtabs (Claimed or Converted) */}
-          {((activeTab.type === "pipeline" && activeTab.stage === "new_claim" && activeTab.subTab === "in_progress") ||
-            (activeTab.type === "conversion" && activeTab.tab === "converted" && activeTab.subTab === "in_progress")) && (
-            <CallbackBanner
-              onProviderClick={handleCallbackProviderClick}
-              refreshKey={callbackRefreshKey}
-            />
-          )}
 
           {/* Provider list */}
           <div className="bg-white rounded-xl border border-gray-200">
@@ -789,10 +802,9 @@ export default function ProviderGrowthPage() {
           onClose={() => setSelectedProvider(null)}
           onUpdate={handleProviderUpdate}
           onCallLogged={() => {
-            // Refresh stats, providers, and callback banner when a call is logged
+            // Refresh stats and providers when a call is logged
             fetchStats();
             fetchProviders();
-            setCallbackRefreshKey((k) => k + 1);
           }}
         />
       )}

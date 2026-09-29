@@ -11,6 +11,7 @@
  * - Stale: no activity in 7+ days
  */
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import type { WorkQueueEntry, WorkQueueResult, ReturnedCallEntry } from "@/lib/provider-growth/queries";
 import type { WorkQueueSubTab } from "./GrowthTabs";
@@ -24,6 +25,8 @@ interface WorkQueueTabProps {
   error: string | null;
   subTab: WorkQueueSubTab;
   onProviderClick: (trackingId: string) => void;
+  /** Called after resolving a returned call. Pass thread_id for optimistic removal. */
+  onReturnedCallResolved?: (threadId: string) => void;
   // Filters
   search?: string;
   assignedTo?: string | null;
@@ -36,10 +39,92 @@ export function WorkQueueTab({
   error,
   subTab,
   onProviderClick,
+  onReturnedCallResolved,
   search,
   assignedTo,
   filters,
 }: WorkQueueTabProps) {
+  // State for resolve confirmation modal
+  const [pendingResolve, setPendingResolve] = useState<ReturnedCallEntry | null>(null);
+  const [resolving, setResolving] = useState(false);
+  const [resolveError, setResolveError] = useState<string | null>(null);
+
+  // State for undo toast
+  const [undoToast, setUndoToast] = useState<{
+    threadId: string;
+    displayName: string | null;
+  } | null>(null);
+  const [undoing, setUndoing] = useState(false);
+  const undoTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Auto-dismiss undo toast after 5 seconds
+  useEffect(() => {
+    if (undoToast) {
+      undoTimeoutRef.current = setTimeout(() => {
+        setUndoToast(null);
+      }, 5000);
+      return () => {
+        if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+      };
+    }
+  }, [undoToast]);
+
+  // Handle resolve confirmation
+  const handleResolve = async () => {
+    if (!pendingResolve) return;
+    setResolving(true);
+    setResolveError(null);
+    try {
+      const res = await fetch(`/api/admin/support-email/${encodeURIComponent(pendingResolve.thread_id)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "mark_handled" }),
+      });
+      if (!res.ok) {
+        const responseData = await res.json().catch(() => ({}));
+        throw new Error(responseData.error || "Failed to resolve");
+      }
+      // Show undo toast
+      setUndoToast({
+        threadId: pendingResolve.thread_id,
+        displayName: pendingResolve.display_name,
+      });
+      // Close modal and trigger optimistic removal
+      const threadId = pendingResolve.thread_id;
+      setPendingResolve(null);
+      onReturnedCallResolved?.(threadId);
+    } catch (e) {
+      setResolveError(e instanceof Error ? e.message : "Failed to resolve");
+    } finally {
+      setResolving(false);
+    }
+  };
+
+  // Handle undo
+  const handleUndo = async () => {
+    if (!undoToast) return;
+    setUndoing(true);
+    try {
+      const res = await fetch(`/api/admin/support-email/${encodeURIComponent(undoToast.threadId)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "needs_reply" }),
+      });
+      if (!res.ok) {
+        console.error("Failed to undo resolve");
+        return;
+      }
+      // Clear toast and refresh to bring item back
+      if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+      setUndoToast(null);
+      // Trigger a refresh - pass empty string to signal "just refresh, no optimistic removal"
+      onReturnedCallResolved?.("");
+    } catch (e) {
+      console.error("Failed to undo:", e);
+    } finally {
+      setUndoing(false);
+    }
+  };
   if (loading) {
     return (
       <div className="bg-white rounded-xl border border-gray-200 p-8 text-center text-gray-500">
@@ -157,15 +242,80 @@ export function WorkQueueTab({
   // Render different row types based on subtab
   if (subTab === "returned_calls") {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
-        {(entries as ReturnedCallEntry[]).map((entry) => (
-          <ReturnedCallRow
-            key={entry.thread_id}
-            entry={entry}
-            onClick={() => onProviderClick(entry.tracking_id)}
-          />
-        ))}
-      </div>
+      <>
+        <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
+          {(entries as ReturnedCallEntry[]).map((entry) => (
+            <ReturnedCallRow
+              key={entry.thread_id}
+              entry={entry}
+              onClick={() => onProviderClick(entry.tracking_id)}
+              onResolve={() => setPendingResolve(entry)}
+            />
+          ))}
+        </div>
+
+        {/* Resolve confirmation modal */}
+        {pendingResolve && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold text-gray-900">Resolve returned call</h3>
+              <p className="mt-2 text-sm text-gray-600">
+                Mark the voicemail from <strong>{pendingResolve.display_name || "this provider"}</strong> as handled?
+                This will remove it from the work queue.
+              </p>
+              {resolveError && (
+                <p className="mt-3 text-sm text-red-600">{resolveError}</p>
+              )}
+              <div className="mt-4 flex justify-end gap-3">
+                <button
+                  onClick={() => {
+                    setPendingResolve(null);
+                    setResolveError(null);
+                  }}
+                  disabled={resolving}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleResolve}
+                  disabled={resolving}
+                  className="px-4 py-2 text-sm font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 transition-colors disabled:opacity-50"
+                >
+                  {resolving ? "Resolving..." : "Resolve"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Undo toast */}
+        {undoToast && (
+          <div className="fixed bottom-4 right-4 z-50 flex items-center gap-3 bg-gray-900 text-white px-4 py-3 rounded-lg shadow-lg">
+            <span className="text-sm">
+              Resolved {undoToast.displayName || "returned call"}
+            </span>
+            <button
+              onClick={handleUndo}
+              disabled={undoing}
+              className="text-sm font-medium text-primary-300 hover:text-primary-200 transition-colors disabled:opacity-50"
+            >
+              {undoing ? "Undoing..." : "Undo"}
+            </button>
+            <button
+              onClick={() => {
+                if (undoTimeoutRef.current) clearTimeout(undoTimeoutRef.current);
+                setUndoToast(null);
+              }}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        )}
+      </>
     );
   }
 
@@ -280,9 +430,10 @@ function WorkQueueRow({ entry, onClick }: WorkQueueRowProps) {
 interface ReturnedCallRowProps {
   entry: ReturnedCallEntry;
   onClick: () => void;
+  onResolve: () => void;
 }
 
-function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
+function ReturnedCallRow({ entry, onClick, onResolve }: ReturnedCallRowProps) {
   const location = [entry.city, entry.state].filter(Boolean).join(", ");
   const category = entry.care_types?.slice(0, 2).join(", ") || null;
   const locationCategory = [location, category].filter(Boolean).join(" · ");
@@ -351,7 +502,7 @@ function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
           )}
         </div>
 
-        {/* Right: Eligibility badges + Time info */}
+        {/* Right: Eligibility badges + Time info + Resolve button */}
         <div className="flex shrink-0 flex-col items-end gap-1">
           {/* Eligibility badges */}
           <div className="flex items-center gap-2">
@@ -373,6 +524,16 @@ function ReturnedCallRow({ entry, onClick }: ReturnedCallRowProps) {
               {entry.callback_number}
             </a>
           )}
+          {/* Resolve button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onResolve();
+            }}
+            className="mt-1 px-2 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
+          >
+            Resolve
+          </button>
         </div>
       </div>
     </div>
