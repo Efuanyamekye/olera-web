@@ -4,7 +4,7 @@ import { loadChatMemory, memoryPromptText, refreshChatSummary, type ChatStore } 
 import { approvalReply, isApproval, MAX_IMAGE_BYTES, nothingWaitingReply } from "@/lib/war-room/dm-intake";
 import { wantsVoice } from "@/lib/war-room/voice.server";
 import { artifactSubject } from "@/lib/war-room/visualize.server";
-import { draftedNote, parseTeamMessage, TEAM, teamMessageText } from "@/lib/war-room/team-messages.server";
+import { draftedNote, parseTeamMessage } from "@/lib/war-room/team-messages.server";
 import { handoffNote, handoffQuestion, handoffSavedReply, type Handoff } from "@/lib/war-room/handoff.server";
 import type { WarRoomProposal } from "@/lib/war-room/types";
 
@@ -53,12 +53,17 @@ export type TelegramDeps = {
   voice?: (chatId: string, text: string, mode: "reply" | "brief") => Promise<unknown>;
   /** The reaction log (moves.server.ts). Optional so checks can leave it out. */
   reactions?: { reply: (text: string, options: { pushedBack?: boolean; scoreOnly?: boolean }) => Promise<{ scored?: number; ratings?: number[] } | null> };
-  /** Inbox approvals ("send 3") against the latest inbox pass (inbox-operator.server.ts). Null when it is not one. */
-  inbox?: { command: (text: string) => Promise<string | null> };
+  /**
+   * Inbox actions against the latest pass (inbox-operator.server.ts): exact
+   * commands, or plain words read against Cortex's last message. Null when
+   * the message is not one. `rewrites` stores any "send N: <text>" Cortex
+   * offered, so "send N" sends the version he last saw.
+   */
+  inbox?: { command: (text: string, lastCortex: () => Promise<string | null>) => Promise<string | null>; rewrites?: (reply: string) => Promise<unknown> };
   /** Starts the Claude Code routine that runs his /visualize skill (visualize.server.ts). */
   visual?: { start: (text: string) => Promise<{ started: true; sessionUrl: string } | { started: false; reason: string }> };
-  /** Sends a Slack DM to a teammate on his command ("send that to Logan", team-messages.server.ts). */
-  team?: { send: (slackUserId: string, text: string) => Promise<{ success: boolean; error?: string }> };
+  /** Sends to a person or channel in Olera's Slack on his command ("send that to Logan", team-messages.server.ts). */
+  team?: { send: (target: string, text: string) => Promise<{ success: true; label: string } | { success: false; error: string }> };
   /** Stores a brief Cortex wrote for a Claude Code session ("hand this off", handoff.server.ts). */
   handoff?: { save: (body: string, note: string) => Promise<Handoff> };
 };
@@ -186,7 +191,9 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
   // A 1 to 10 right after Cortex asked for its weekly rating is the rating:
   // stored with his words as a correction, and thanked, not answered.
   let ratingsNote = "";
-  if (deps.reactions) {
+  // A message he is sending to someone else is not a rating of Cortex, even
+  // when it says "that call was a 9/10".
+  if (deps.reactions && !parseTeamMessage(text)) {
     const scored = await deps.reactions.reply(text, { scoreOnly: true }).catch(() => null);
     // Ratings inside a longer message are saved and the message is still
     // answered; the reply says they were saved, so he never has to wonder.
@@ -201,23 +208,11 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
     }
   }
 
-  // "send 3", "approve 1 2", "skip 4": an inbox pass is waiting on him.
-  // Checked before proposal approval, which also answers to "approve".
-  if (deps.inbox) {
-    const handled = await deps.inbox.command(text).catch((error) => `Inbox action failed: ${error instanceof Error ? error.message : String(error)}`);
-    if (handled) {
-      await reply(handled);
-      await remember(handled);
-      return { handled: true, kind: "approval", reply: handled };
-    }
-  }
-
   // "send that to Logan" / "send to Logan: <text>": his words go to a
   // teammate only on this command, and the reply says sent only when Slack
   // accepted it. The text sent is shown back, so he sees exactly what went.
   const teamCommand = deps.team ? parseTeamMessage(text) : null;
   if (teamCommand && deps.team) {
-    const person = TEAM[teamCommand.to];
     let note = teamCommand.text;
     if (!note) {
       const recent = await deps.store.recent(chatId, 6).catch(() => []);
@@ -226,16 +221,32 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
     }
     let said: string;
     if (!note) {
-      said = `Nothing sent: I can't find a drafted note for ${person.name} in my last message. Send "send to ${person.name}: " followed by the text.`;
+      said = `Nothing sent: I can't find a drafted note in my last message. Send "send to ${teamCommand.target}: " followed by the text.`;
     } else {
-      const sent = await deps.team.send(person.slackUserId, teamMessageText(note)).catch((error: unknown) => ({ success: false, error: error instanceof Error ? error.message : String(error) }));
+      const sent = await deps.team.send(teamCommand.target, note)
+        .catch((error: unknown) => ({ success: false as const, error: error instanceof Error ? error.message : String(error) }));
       said = sent.success
-        ? `Sent to ${person.name} on Slack, from you:\n> ${note.replace(/\n+/g, "\n> ")}`
-        : `Not sent to ${person.name}: ${sent.error ?? "Slack refused it"}.`;
+        ? `Sent to ${sent.label} on Slack, from you:\n> ${note.replace(/\n+/g, "\n> ")}`
+        : `Not sent to ${teamCommand.target}: ${sent.error}.`;
     }
     await reply(said);
     await remember(said);
     return { handled: true, kind: "approval", reply: said };
+  }
+
+  // "send 3", "approve 1 2", "skip 4": an inbox pass is waiting on him.
+  // Checked before proposal approval, which also answers to "approve".
+  if (deps.inbox) {
+    const lastCortex = async () => {
+      const recent = await deps.store.recent(chatId, 6).catch(() => []);
+      return [...recent].reverse().find((entry) => entry.role === "cortex")?.text ?? null;
+    };
+    const handled = await deps.inbox.command(text, lastCortex).catch((error) => `Inbox action failed: ${error instanceof Error ? error.message : String(error)}`);
+    if (handled) {
+      await reply(handled);
+      await remember(handled);
+      return { handled: true, kind: "approval", reply: handled };
+    }
   }
 
   // "hand this off": Cortex writes a brief from the conversation and the
@@ -373,6 +384,8 @@ export async function handleTelegramUpdate(update: TelegramUpdate, deps: Telegra
     const said = answer.reply + imageNote + ratingsNote;
     await reply(said);
     if (answer.answered) await remember(said);
+    // A rewrite offered as "send 5: <text>" becomes item 5's latest version.
+    if (answer.answered) await deps.inbox?.rewrites?.(answer.reply).catch(() => undefined);
     // His message answers whatever Cortex last put in front of him.
     await deps.reactions?.reply(text, { pushedBack: Boolean(answer.correction) }).catch(() => null);
     // The text is already with him; the note follows, as Jade's do.

@@ -7,7 +7,19 @@
 
 import { getServiceClient } from "@/lib/admin";
 import { calculateProfileCompleteness, type ExtendedMetadata } from "@/lib/profile-completeness";
-import type { PipelineStage, AdsStatus, MedjobsStatus, TouchpointType, ClaimSource, MeetingType, MeetingFocus, MeetingFormat } from "./stages";
+import {
+  CARE_TYPE_FILTER_MAPPING,
+  CALLBACK_FOLLOWUP_OUTCOMES,
+  type PipelineStage,
+  type AdsStatus,
+  type MedjobsStatus,
+  type TouchpointType,
+  type ClaimSource,
+  type MeetingType,
+  type MeetingFocus,
+  type MeetingFormat,
+  type ActivityOutcome,
+} from "./stages";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -1785,37 +1797,59 @@ async function getAdCampaignStatusForProviders(
  * - notContacted: no calls AND not converted
  * - converted: has free trial AND no calls (self-converted, not yet contacted)
  * - inProgress: has calls (regardless of conversion status - we're actively working on them)
+ *
+ * Converted subtabs are now campaign-status aware:
+ * - notContacted: no calls yet, campaign not live/ended
+ * - inProgress: has calls, campaign not live/ended
+ * - live: campaign is currently live (success state)
+ * - ended: campaign has ended (follow up needed)
  */
-export async function getNewClaimSubtabCounts(): Promise<{
-  notContacted: number;
-  converted: number;
-  inProgress: number;
-}> {
+export interface SubtabCounts {
+  claimed: { notContacted: number; inProgress: number };
+  converted: { notContacted: number; inProgress: number; live: number; ended: number };
+}
+
+export async function getClaimedAndConvertedSubtabCounts(): Promise<SubtabCounts> {
   const db = getServiceClient();
 
   // Get all new_claim tracking records with conversion status
   const { data: newClaims, error: claimsError } = await db
     .from("provider_growth_tracking")
-    .select("id, ads_status, medjobs_status")
+    .select("id, business_profile_id, ads_status, medjobs_status")
     .eq("pipeline_stage", "new_claim");
 
   if (claimsError || !newClaims) {
     console.error("[provider-growth] New claims query error:", claimsError);
-    return { notContacted: 0, converted: 0, inProgress: 0 };
+    return {
+      claimed: { notContacted: 0, inProgress: 0 },
+      converted: { notContacted: 0, inProgress: 0, live: 0, ended: 0 },
+    };
   }
 
   if (newClaims.length === 0) {
-    return { notContacted: 0, converted: 0, inProgress: 0 };
+    return {
+      claimed: { notContacted: 0, inProgress: 0 },
+      converted: { notContacted: 0, inProgress: 0, live: 0, ended: 0 },
+    };
   }
 
   // Get call stats for ALL new_claim providers
   const allIds = newClaims.map((c) => c.id);
   const callStats = await getCallStatsForTrackingIds(allIds);
 
+  // Get campaign status for converted providers (those with ads_status = free_intro)
+  const convertedProviderIds = newClaims
+    .filter((c) => c.ads_status === "free_intro")
+    .map((c) => c.business_profile_id);
+  const campaignData = convertedProviderIds.length > 0
+    ? await getAdCampaignStatusForProviders(convertedProviderIds)
+    : new Map<string, CampaignInfo>();
+
   // Categorize each provider
-  let notContacted = 0;
-  let converted = 0;
-  let inProgress = 0;
+  const counts = {
+    claimed: { notContacted: 0, inProgress: 0 },
+    converted: { notContacted: 0, inProgress: 0, live: 0, ended: 0 },
+  };
 
   for (const claim of newClaims) {
     const hasCalls = (callStats.get(claim.id)?.count || 0) > 0;
@@ -1825,27 +1859,63 @@ export async function getNewClaimSubtabCounts(): Promise<{
       claim.medjobs_status === "in_pilot" ||
       claim.medjobs_status === "pilot_expired";
     // "Not converted" = no free trial started (ads_status=none, medjobs not in trial)
-    // This matches the notConverted filter in listProviders
     const isNotConverted =
       claim.ads_status === "none" &&
       claim.medjobs_status !== "in_pilot" &&
       claim.medjobs_status !== "pilot_expired";
+    // Skip providers already paying (ads_status="subscribed" or medjobs_status="subscribed")
+    const isPaying =
+      claim.ads_status === "subscribed" || claim.medjobs_status === "subscribed";
 
-    if (hasCalls) {
-      // Any provider with call attempts goes to In Progress
-      inProgress++;
-    } else if (isConverted) {
-      // Converted but no calls yet - self-converted, waiting for outreach
-      converted++;
-    } else if (isNotConverted) {
-      // Not converted and no calls - fresh claim
-      notContacted++;
+    if (isPaying) {
+      // Paying providers belong in the Paying tab, not here
+      continue;
     }
-    // Note: Providers with ads_status="subscribed" or medjobs_status="subscribed"
-    // but no calls are not counted in any subtab (they should be in Paying tab)
+
+    if (isConverted) {
+      // Converted providers - categorize by campaign status
+      const campaign = campaignData.get(claim.business_profile_id);
+      const campaignStatus = campaign?.status;
+
+      if (campaignStatus === "live") {
+        // Campaign is live - success state
+        counts.converted.live++;
+      } else if (campaignStatus === "ended") {
+        // Campaign ended - follow up needed
+        counts.converted.ended++;
+      } else if (hasCalls) {
+        // Has calls but campaign not live/ended yet
+        counts.converted.inProgress++;
+      } else {
+        // No calls yet
+        counts.converted.notContacted++;
+      }
+    } else if (isNotConverted) {
+      // Non-converted providers (no free trial)
+      if (hasCalls) {
+        counts.claimed.inProgress++;
+      } else {
+        counts.claimed.notContacted++;
+      }
+    }
   }
 
-  return { notContacted, converted, inProgress };
+  return counts;
+}
+
+// Legacy function for backwards compatibility
+export async function getNewClaimSubtabCounts(): Promise<{
+  notContacted: number;
+  converted: number;
+  inProgress: number;
+}> {
+  const counts = await getClaimedAndConvertedSubtabCounts();
+  // Map to legacy structure for any old code still using this
+  return {
+    notContacted: counts.claimed.notContacted,
+    converted: counts.converted.notContacted + counts.converted.inProgress,
+    inProgress: counts.claimed.inProgress,
+  };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1907,16 +1977,19 @@ export async function getAdminCountsForTab(options: GetAdminCountsOptions): Prom
     }
   }
 
-  // Apply converted filter
+  // Apply converted filter (excludes paying providers)
   if (options.converted) {
     query = query.or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
+    query = query.neq("ads_status", "subscribed");
+    query = query.neq("medjobs_status", "subscribed");
   }
 
-  // Apply not converted filter
+  // Apply not converted filter (excludes paying providers)
   if (options.notConverted) {
     query = query.eq("ads_status", "none");
     query = query.neq("medjobs_status", "in_pilot");
     query = query.neq("medjobs_status", "pilot_expired");
+    query = query.neq("medjobs_status", "subscribed");
   }
 
   // Apply mutually exclusive Paying subtab filters
@@ -2027,6 +2100,16 @@ export interface ListProvidersOptions {
   adsOnly?: boolean;     // ads_subscribed AND medjobs NOT subscribed
   medjobsOnly?: boolean; // medjobs_subscribed AND ads NOT subscribed
   churned?: boolean;     // has churn timestamp AND not currently subscribed to either
+  // Lead scoring filters (profile completeness bands)
+  completenessMin?: number;  // e.g., 70 for "Hot" leads
+  completenessMax?: number;  // e.g., 49 for "Cold" leads
+  // Care type filter (maps to care_types array values)
+  careTypes?: string[];  // e.g., ["home_care", "assisted_living"]
+  // Campaign status filters (for Converted subtabs)
+  campaignStatus?: "pending_profile" | "requested" | "scheduled" | "live" | "ended";
+  campaignStatusNot?: Array<"pending_profile" | "requested" | "scheduled" | "live" | "ended">;
+  // Single tracking ID filter (for fetching a specific provider)
+  trackingId?: string;
 }
 
 export async function listProviders(options: ListProvidersOptions = {}): Promise<{
@@ -2056,6 +2139,12 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     adsOnly,
     medjobsOnly,
     churned,
+    completenessMin,
+    completenessMax,
+    careTypes,
+    campaignStatus,
+    campaignStatusNot,
+    trackingId,
   } = options;
 
   // Build the query
@@ -2087,6 +2176,11 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     );
 
   // Apply filters
+  // Single tracking ID filter takes precedence
+  if (trackingId) {
+    query = query.eq("id", trackingId);
+  }
+
   if (pipelineStages && pipelineStages.length > 0) {
     query = query.in("pipeline_stage", pipelineStages);
   } else if (pipelineStage) {
@@ -2113,16 +2207,21 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     query = query.eq("medjobs_eligible", medjobsEligible);
   }
   // Converted filter: ads free_intro OR medjobs in_pilot/pilot_expired
+  // EXCLUDES paying providers (ads_status=subscribed OR medjobs_status=subscribed)
   if (converted) {
     query = query.or("ads_status.eq.free_intro,medjobs_status.in.(in_pilot,pilot_expired)");
+    // Exclude paying providers - they belong in the Paying tab
+    query = query.neq("ads_status", "subscribed");
+    query = query.neq("medjobs_status", "subscribed");
   }
   // Not converted filter: no free trial active
-  // Must have ads_status = none AND medjobs_status not in (in_pilot, pilot_expired)
+  // Must have ads_status = none AND medjobs_status not in (in_pilot, pilot_expired, subscribed)
   if (notConverted) {
     query = query.eq("ads_status", "none");
-    // Exclude providers with active MedJobs trial (in_pilot or pilot_expired)
+    // Exclude providers with active MedJobs trial or subscription
     query = query.neq("medjobs_status", "in_pilot");
     query = query.neq("medjobs_status", "pilot_expired");
+    query = query.neq("medjobs_status", "subscribed");
   }
   // Meeting focus filter (for Meeting Scheduled subtabs)
   // Include null meeting_focus for legacy providers who were scheduled before this field existed
@@ -2164,12 +2263,22 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
   // Apply ordering
   query = query.order(orderBy, { ascending: orderDirection === "asc" });
 
-  // When searching or filtering by hasCallAttempts, fetch all matching rows
+  // When searching or filtering by computed fields, fetch all matching rows
   // then filter + paginate in memory because:
   // - PostgREST doesn't support ilike on joined columns (search)
   // - hasCallAttempts requires joining with touchpoints (in memory)
+  // - completeness is computed at query time (not stored)
+  // - careTypes requires matching against array values
   // Without these filters, apply pagination at DB level for efficiency.
-  if (!search && hasCallAttempts === undefined) {
+  const needsInMemoryFiltering = search ||
+    hasCallAttempts !== undefined ||
+    completenessMin !== undefined ||
+    completenessMax !== undefined ||
+    (careTypes && careTypes.length > 0) ||
+    campaignStatus !== undefined ||
+    (campaignStatusNot && campaignStatusNot.length > 0);
+
+  if (!needsInMemoryFiltering) {
     query = query.range(offset, offset + limit - 1);
   }
 
@@ -2261,6 +2370,19 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     });
   }
 
+  // Filter by campaign status if specified (for Converted subtabs)
+  if (campaignStatus) {
+    providers = providers.filter((p) => p.ads_campaign_status === campaignStatus);
+  }
+  if (campaignStatusNot && campaignStatusNot.length > 0) {
+    providers = providers.filter((p) => {
+      // If no campaign status, include them (MedJobs-only providers)
+      if (!p.ads_campaign_status) return true;
+      // Exclude if campaign status is in the exclusion list
+      return !campaignStatusNot.includes(p.ads_campaign_status as "pending_profile" | "requested" | "scheduled" | "live" | "ended");
+    });
+  }
+
   // Filter by hasCallAttempts if specified
   if (hasCallAttempts !== undefined) {
     providers = providers.filter((p) =>
@@ -2268,8 +2390,44 @@ export async function listProviders(options: ListProvidersOptions = {}): Promise
     );
   }
 
-  // Apply pagination in memory if we did search or hasCallAttempts filtering
-  if (search || hasCallAttempts !== undefined) {
+  // Filter by profile completeness if specified
+  if (completenessMin !== undefined) {
+    providers = providers.filter((p) => (p.profile_completeness ?? 0) >= completenessMin);
+  }
+  if (completenessMax !== undefined) {
+    providers = providers.filter((p) => (p.profile_completeness ?? 0) <= completenessMax);
+  }
+
+  // Filter by care types if specified
+  // Care types filter uses mapped values to match database variations
+  if (careTypes && careTypes.length > 0) {
+    // Build a set of all known care types for "other" detection
+    const knownCareTypes = new Set(
+      Object.values(CARE_TYPE_FILTER_MAPPING).flat().map((ct) => ct.toLowerCase())
+    );
+
+    providers = providers.filter((p) => {
+      const providerCareTypes = p.care_types || [];
+      if (providerCareTypes.length === 0) return false;
+
+      return careTypes.some((filterType) => {
+        if (filterType === "other") {
+          // Match if provider has any care type not in known categories
+          return providerCareTypes.some(
+            (pct) => !knownCareTypes.has(pct.toLowerCase())
+          );
+        }
+        // Match if provider has any care type in the mapped values
+        const mappedValues = CARE_TYPE_FILTER_MAPPING[filterType] || [];
+        return providerCareTypes.some((pct) =>
+          mappedValues.some((mv) => mv.toLowerCase() === pct.toLowerCase())
+        );
+      });
+    });
+  }
+
+  // Apply pagination in memory if we did any in-memory filtering
+  if (needsInMemoryFiltering) {
     const filteredTotal = providers.length;
     providers = providers.slice(offset, offset + limit);
     return { providers, total: filteredTotal };
@@ -2717,4 +2875,761 @@ export async function updateConversionStatusBatch(
   }
 
   return { updated: updatedCount };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Callback Queue Queries
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface CallbackDueEntry {
+  tracking_id: string;
+  business_profile_id: string;
+  callback_date: string;
+  notes: string | null;
+  touchpoint_created_at: string;
+  // Joined from provider
+  display_name: string | null;
+  pipeline_stage: PipelineStage;
+  assigned_to: string | null;
+}
+
+export interface CallbacksDueResult {
+  dueToday: CallbackDueEntry[];
+  overdue: CallbackDueEntry[];
+  upcoming: CallbackDueEntry[];
+  totalDue: number;  // dueToday + overdue
+}
+
+/**
+ * Get callbacks that are due today, overdue, or upcoming (next 7 days).
+ *
+ * A callback is "due" if:
+ * 1. There's a touchpoint with outcome = "callback_requested" and a callback_date
+ * 2. The provider is still in an active pipeline stage (not not_interested)
+ * 3. There's no more recent touchpoint (they haven't been followed up)
+ */
+export async function getCallbacksDue(): Promise<CallbacksDueResult> {
+  const db = getServiceClient();
+  const today = new Date().toISOString().split("T")[0];
+  const sevenDaysFromNow = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+
+  // Get all callback_requested touchpoints with callback_date
+  const { data: touchpoints, error: touchpointsError } = await db
+    .from("provider_growth_touchpoints")
+    .select(`
+      id,
+      tracking_id,
+      business_profile_id,
+      details,
+      created_at
+    `)
+    .eq("touchpoint_type", "activity_logged")
+    .not("details", "is", null)
+    .order("created_at", { ascending: false });
+
+  if (touchpointsError) {
+    console.error("[callbacks-due] Error fetching touchpoints:", touchpointsError);
+    throw new Error("Failed to fetch callbacks");
+  }
+
+  // Filter to only callback_requested with callback_date
+  const callbackTouchpoints = (touchpoints || []).filter((tp) => {
+    const details = tp.details as Record<string, unknown> | null;
+    return details?.outcome === "callback_requested" && details?.callback_date;
+  });
+
+  if (callbackTouchpoints.length === 0) {
+    return { dueToday: [], overdue: [], upcoming: [], totalDue: 0 };
+  }
+
+  // Get unique tracking IDs
+  const trackingIds = [...new Set(callbackTouchpoints.map((tp) => tp.tracking_id))];
+
+  // Fetch tracking records with provider info to filter by stage
+  const { data: trackingRecords, error: trackingError } = await db
+    .from("provider_growth_tracking")
+    .select(`
+      id,
+      business_profile_id,
+      pipeline_stage,
+      assigned_to,
+      business_profiles!inner (
+        display_name
+      )
+    `)
+    .in("id", trackingIds)
+    .in("pipeline_stage", ["new_claim", "pitched", "no_show"]);
+
+  if (trackingError) {
+    console.error("[callbacks-due] Error fetching tracking:", trackingError);
+    throw new Error("Failed to fetch tracking records");
+  }
+
+  const trackingMap = new Map(
+    (trackingRecords || []).map((t) => [t.id, t])
+  );
+
+  // Build a map of tracking_id -> list of touchpoints (already sorted by created_at desc)
+  const touchpointsByTracking = new Map<string, typeof touchpoints>();
+  for (const tp of touchpoints || []) {
+    const list = touchpointsByTracking.get(tp.tracking_id) || [];
+    list.push(tp);
+    touchpointsByTracking.set(tp.tracking_id, list);
+  }
+
+  // Process callbacks
+  const dueToday: CallbackDueEntry[] = [];
+  const overdue: CallbackDueEntry[] = [];
+  const upcoming: CallbackDueEntry[] = [];
+
+  for (const tp of callbackTouchpoints) {
+    const tracking = trackingMap.get(tp.tracking_id);
+    if (!tracking) continue; // Provider not in active stage
+
+    // Check if this callback has been followed up on
+    // Only dismiss if there's a NEWER touchpoint that is a follow-up action (not just a note)
+    const trackingTouchpoints = touchpointsByTracking.get(tp.tracking_id) || [];
+    const hasFollowUp = trackingTouchpoints.some((otherTp) => {
+      // Skip if this is the callback touchpoint itself or older
+      if (otherTp.id === tp.id || otherTp.created_at <= tp.created_at) {
+        return false;
+      }
+      // Check if the newer touchpoint is a follow-up action
+      const details = otherTp.details as Record<string, unknown> | null;
+      const outcome = details?.outcome as ActivityOutcome | undefined;
+      return outcome && CALLBACK_FOLLOWUP_OUTCOMES.includes(outcome);
+    });
+
+    if (hasFollowUp) {
+      // Callback was followed up on, skip it
+      continue;
+    }
+
+    const details = tp.details as Record<string, unknown>;
+    const callbackDate = details.callback_date as string;
+    // Handle both array and object shapes from Supabase join
+    const profileData = tracking.business_profiles as
+      | { display_name: string | null }
+      | { display_name: string | null }[];
+    const profile = Array.isArray(profileData) ? profileData[0] : profileData;
+
+    const entry: CallbackDueEntry = {
+      tracking_id: tp.tracking_id,
+      business_profile_id: tp.business_profile_id,
+      callback_date: callbackDate,
+      notes: (details.notes as string) || null,
+      touchpoint_created_at: tp.created_at,
+      display_name: profile?.display_name ?? null,
+      pipeline_stage: tracking.pipeline_stage as PipelineStage,
+      assigned_to: tracking.assigned_to,
+    };
+
+    if (callbackDate === today) {
+      dueToday.push(entry);
+    } else if (callbackDate < today) {
+      overdue.push(entry);
+    } else if (callbackDate <= sevenDaysFromNow) {
+      upcoming.push(entry);
+    }
+  }
+
+  // Sort each list by callback_date
+  dueToday.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+  overdue.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+  upcoming.sort((a, b) => a.callback_date.localeCompare(b.callback_date));
+
+  return {
+    dueToday,
+    overdue,
+    upcoming,
+    totalDue: dueToday.length + overdue.length,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Work Queue
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface WorkQueueEntry {
+  tracking_id: string;
+  business_profile_id: string;
+  display_name: string | null;
+  slug: string | null;
+  city: string | null;
+  state: string | null;
+  phone: string | null;
+  email: string | null;
+  pipeline_stage: PipelineStage;
+  assigned_to: string | null;
+  // What makes them in the queue
+  queue_reason: "overdue_callback" | "due_today" | "needs_retry" | "stale";
+  // For callbacks
+  callback_date?: string | null;
+  // Last activity info
+  last_activity_at: string | null;
+  last_activity_outcome?: string | null;
+  last_activity_notes?: string | null;
+  // Conversion status
+  is_converted: boolean;
+  ads_status: AdsStatus;
+  medjobs_status: MedjobsStatus;
+}
+
+export interface WorkQueueResult {
+  returnedCalls: ReturnedCallEntry[];
+  overdueCallbacks: WorkQueueEntry[];
+  dueToday: WorkQueueEntry[];
+  needsRetry: WorkQueueEntry[];
+  stale: WorkQueueEntry[];
+  totalCount: number;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Returned Calls (Voicemails from Growth Providers)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface ReturnedCallEntry {
+  // Voicemail info
+  thread_id: string;
+  voicemail_subject: string;
+  voicemail_summary: string | null;
+  voicemail_transcript: string | null;
+  callback_number: string | null;
+  voicemail_at: string;
+  // Audio attachment info for playback
+  audio_message_id: string | null;
+  audio_attachment_id: string | null;
+  audio_filename: string | null;
+  // Matched provider info
+  tracking_id: string;
+  business_profile_id: string;
+  display_name: string | null;
+  slug: string | null;
+  city: string | null;
+  state: string | null;
+  phone: string | null;
+  pipeline_stage: PipelineStage;
+  is_converted: boolean;
+  ads_status: AdsStatus;
+  medjobs_status: MedjobsStatus;
+}
+
+/**
+ * Normalize a phone number to last 10 digits for matching.
+ */
+function normalizePhoneForMatch(phone: string | null): string | null {
+  if (!phone) return null;
+  const digits = phone.replace(/\D/g, "");
+  // Return last 10 digits (handles +1 prefix)
+  return digits.length >= 10 ? digits.slice(-10) : null;
+}
+
+/**
+ * Extract callback number from voicemail text using regex.
+ */
+function extractCallbackNumber(text: string): string | null {
+  const match = text.match(/(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/);
+  return match?.[0]?.trim() ?? null;
+}
+
+/**
+ * Get all providers that need follow-up action, organized by urgency.
+ *
+ * Categories:
+ * 1. Overdue Callbacks - callback_date < today
+ * 2. Due Today - callback_date = today
+ * 3. Needs Retry - voicemail/hung_up/left_message, no callback date, last activity > 2 days ago
+ * 4. Stale - no activity in 7+ days, has been contacted at least once
+ */
+export async function getWorkQueueProviders(): Promise<WorkQueueResult> {
+  const db = getServiceClient();
+  const today = new Date().toISOString().split("T")[0];
+  const twoDaysAgo = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString();
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+  // Get all activity touchpoints
+  const { data: touchpoints, error: touchpointsError } = await db
+    .from("provider_growth_touchpoints")
+    .select(`
+      id,
+      tracking_id,
+      business_profile_id,
+      details,
+      created_at
+    `)
+    .eq("touchpoint_type", "activity_logged")
+    .not("details", "is", null)
+    .order("created_at", { ascending: false });
+
+  if (touchpointsError) {
+    console.error("[work-queue] Error fetching touchpoints:", touchpointsError);
+    throw new Error("Failed to fetch touchpoints");
+  }
+
+  // Group touchpoints by tracking_id
+  const touchpointsByTracking = new Map<string, typeof touchpoints>();
+  for (const tp of touchpoints || []) {
+    const list = touchpointsByTracking.get(tp.tracking_id) || [];
+    list.push(tp);
+    touchpointsByTracking.set(tp.tracking_id, list);
+  }
+
+  // Get tracking IDs that have any activity
+  const trackingIdsWithActivity = [...touchpointsByTracking.keys()];
+
+  if (trackingIdsWithActivity.length === 0) {
+    // Still fetch returned calls - they're independent of touchpoints
+    const returnedCalls = await getReturnedCallsForGrowthProviders();
+    return { returnedCalls, overdueCallbacks: [], dueToday: [], needsRetry: [], stale: [], totalCount: returnedCalls.length };
+  }
+
+  // Fetch all tracking records with profile info for providers with activity
+  // Include providers in active stages (new_claim, pitched, no_show) that are NOT paying
+  // Exclude paying providers (ads_status = subscribed AND/OR medjobs_status = subscribed)
+  const { data: trackingRecords, error: trackingError } = await db
+    .from("provider_growth_tracking")
+    .select(`
+      id,
+      business_profile_id,
+      pipeline_stage,
+      assigned_to,
+      last_activity_at,
+      ads_status,
+      medjobs_status,
+      business_profiles!inner (
+        display_name,
+        slug,
+        city,
+        state,
+        phone,
+        email
+      )
+    `)
+    .in("id", trackingIdsWithActivity)
+    .in("pipeline_stage", ["new_claim", "pitched", "no_show"])
+    .neq("ads_status", "subscribed")
+    .neq("medjobs_status", "subscribed");
+
+  if (trackingError) {
+    console.error("[work-queue] Error fetching tracking:", trackingError);
+    throw new Error("Failed to fetch tracking records");
+  }
+
+  const trackingMap = new Map(
+    (trackingRecords || []).map((t) => [t.id, t])
+  );
+
+  // Process into work queue categories
+  const overdueCallbacks: WorkQueueEntry[] = [];
+  const dueTodayCallbacks: WorkQueueEntry[] = [];
+  const needsRetry: WorkQueueEntry[] = [];
+  const stale: WorkQueueEntry[] = [];
+  const processedTrackingIds = new Set<string>();
+
+  // First pass: Find callbacks (overdue and due today)
+  for (const [trackingId, tps] of touchpointsByTracking) {
+    const tracking = trackingMap.get(trackingId);
+    if (!tracking) continue;
+
+    // Find the most recent callback_requested with a callback_date
+    const callbackTp = tps.find((tp) => {
+      const details = tp.details as Record<string, unknown> | null;
+      return details?.outcome === "callback_requested" && details?.callback_date;
+    });
+
+    if (callbackTp) {
+      const details = callbackTp.details as Record<string, unknown>;
+      const callbackDate = details.callback_date as string;
+
+      // Check if callback was followed up on (newer follow-up touchpoint exists)
+      const hasFollowUp = tps.some((otherTp) => {
+        if (otherTp.id === callbackTp.id || otherTp.created_at <= callbackTp.created_at) {
+          return false;
+        }
+        const otherDetails = otherTp.details as Record<string, unknown> | null;
+        const outcome = otherDetails?.outcome as ActivityOutcome | undefined;
+        return outcome && CALLBACK_FOLLOWUP_OUTCOMES.includes(outcome);
+      });
+
+      if (!hasFollowUp && (callbackDate <= today)) {
+        // Handle both array and object shapes from Supabase join
+        const profileData = tracking.business_profiles as
+          | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }
+          | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }[];
+        const profile = Array.isArray(profileData) ? profileData[0] : profileData;
+
+        const isConverted = tracking.ads_status === "free_intro" ||
+          tracking.ads_status === "subscribed" ||
+          tracking.medjobs_status === "in_pilot" ||
+          tracking.medjobs_status === "subscribed";
+
+        const entry: WorkQueueEntry = {
+          tracking_id: trackingId,
+          business_profile_id: tracking.business_profile_id,
+          display_name: profile?.display_name ?? null,
+          slug: profile?.slug ?? null,
+          city: profile?.city ?? null,
+          state: profile?.state ?? null,
+          phone: profile?.phone ?? null,
+          email: profile?.email ?? null,
+          pipeline_stage: tracking.pipeline_stage as PipelineStage,
+          assigned_to: tracking.assigned_to,
+          queue_reason: callbackDate < today ? "overdue_callback" : "due_today",
+          callback_date: callbackDate,
+          last_activity_at: tracking.last_activity_at,
+          last_activity_outcome: details.outcome as string,
+          last_activity_notes: (details.notes as string) || null,
+          is_converted: isConverted,
+          ads_status: tracking.ads_status as AdsStatus,
+          medjobs_status: tracking.medjobs_status as MedjobsStatus,
+        };
+
+        if (callbackDate < today) {
+          overdueCallbacks.push(entry);
+        } else {
+          dueTodayCallbacks.push(entry);
+        }
+        processedTrackingIds.add(trackingId);
+      }
+    }
+  }
+
+  // Second pass: Find needs-retry (voicemail/hung_up/left_message, stale > 2 days)
+  const retryOutcomes = ["voicemail", "hung_up", "left_message"];
+
+  for (const [trackingId, tps] of touchpointsByTracking) {
+    if (processedTrackingIds.has(trackingId)) continue;
+
+    const tracking = trackingMap.get(trackingId);
+    if (!tracking) continue;
+
+    // Get the most recent touchpoint
+    const latestTp = tps[0]; // Already sorted by created_at desc
+    if (!latestTp) continue;
+
+    const details = latestTp.details as Record<string, unknown> | null;
+    const outcome = details?.outcome as string | undefined;
+
+    // Check if last outcome was a retry-worthy outcome and it's been > 2 days
+    if (outcome && retryOutcomes.includes(outcome) && latestTp.created_at < twoDaysAgo) {
+      const profileData = tracking.business_profiles as
+        | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }
+        | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }[];
+      const profile = Array.isArray(profileData) ? profileData[0] : profileData;
+
+      const isConverted = tracking.ads_status === "free_intro" ||
+        tracking.ads_status === "subscribed" ||
+        tracking.medjobs_status === "in_pilot" ||
+        tracking.medjobs_status === "subscribed";
+
+      needsRetry.push({
+        tracking_id: trackingId,
+        business_profile_id: tracking.business_profile_id,
+        display_name: profile?.display_name ?? null,
+        slug: profile?.slug ?? null,
+        city: profile?.city ?? null,
+        state: profile?.state ?? null,
+        phone: profile?.phone ?? null,
+        email: profile?.email ?? null,
+        pipeline_stage: tracking.pipeline_stage as PipelineStage,
+        assigned_to: tracking.assigned_to,
+        queue_reason: "needs_retry",
+        last_activity_at: latestTp.created_at,
+        last_activity_outcome: outcome,
+        last_activity_notes: (details?.notes as string) || null,
+        is_converted: isConverted,
+        ads_status: tracking.ads_status as AdsStatus,
+        medjobs_status: tracking.medjobs_status as MedjobsStatus,
+      });
+      processedTrackingIds.add(trackingId);
+    }
+  }
+
+  // Third pass: Find stale (no activity in 7+ days, has been contacted)
+  for (const [trackingId, tps] of touchpointsByTracking) {
+    if (processedTrackingIds.has(trackingId)) continue;
+
+    const tracking = trackingMap.get(trackingId);
+    if (!tracking) continue;
+
+    const latestTp = tps[0];
+    if (!latestTp) continue;
+
+    // Stale if last activity was > 7 days ago
+    if (latestTp.created_at < sevenDaysAgo) {
+      const details = latestTp.details as Record<string, unknown> | null;
+      const profileData = tracking.business_profiles as
+        | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }
+        | { display_name: string | null; slug: string | null; city: string | null; state: string | null; phone: string | null; email: string | null }[];
+      const profile = Array.isArray(profileData) ? profileData[0] : profileData;
+
+      const isConverted = tracking.ads_status === "free_intro" ||
+        tracking.ads_status === "subscribed" ||
+        tracking.medjobs_status === "in_pilot" ||
+        tracking.medjobs_status === "subscribed";
+
+      stale.push({
+        tracking_id: trackingId,
+        business_profile_id: tracking.business_profile_id,
+        display_name: profile?.display_name ?? null,
+        slug: profile?.slug ?? null,
+        city: profile?.city ?? null,
+        state: profile?.state ?? null,
+        phone: profile?.phone ?? null,
+        email: profile?.email ?? null,
+        pipeline_stage: tracking.pipeline_stage as PipelineStage,
+        assigned_to: tracking.assigned_to,
+        queue_reason: "stale",
+        last_activity_at: latestTp.created_at,
+        last_activity_outcome: (details?.outcome as string) || null,
+        last_activity_notes: (details?.notes as string) || null,
+        is_converted: isConverted,
+        ads_status: tracking.ads_status as AdsStatus,
+        medjobs_status: tracking.medjobs_status as MedjobsStatus,
+      });
+    }
+  }
+
+  // Sort each list
+  overdueCallbacks.sort((a, b) => (a.callback_date || "").localeCompare(b.callback_date || ""));
+  dueTodayCallbacks.sort((a, b) => (a.callback_date || "").localeCompare(b.callback_date || ""));
+  needsRetry.sort((a, b) => (a.last_activity_at || "").localeCompare(b.last_activity_at || ""));
+  stale.sort((a, b) => (a.last_activity_at || "").localeCompare(b.last_activity_at || ""));
+
+  // Get returned calls (voicemails from growth providers)
+  const returnedCalls = await getReturnedCallsForGrowthProviders();
+
+  return {
+    returnedCalls,
+    overdueCallbacks,
+    dueToday: dueTodayCallbacks,
+    needsRetry,
+    stale,
+    totalCount: returnedCalls.length + overdueCallbacks.length + dueTodayCallbacks.length + needsRetry.length + stale.length,
+  };
+}
+
+/**
+ * Get voicemails from providers in the growth pipeline.
+ * Matches voicemail callback numbers against provider phone numbers.
+ */
+async function getReturnedCallsForGrowthProviders(): Promise<ReturnedCallEntry[]> {
+  const db = getServiceClient();
+
+  // Step 1: Get all voicemails that need attention (needs_reply or escalated)
+  const { data: voicemails, error: voicemailError } = await db
+    .from("support_email_threads")
+    .select(`
+      id,
+      subject,
+      agent_summary,
+      last_message_at
+    `)
+    .eq("category", "voicemail")
+    .in("state", ["needs_reply", "escalated"])
+    .order("last_message_at", { ascending: false })
+    .limit(100);
+
+  if (voicemailError) {
+    console.error("[work-queue] Error fetching voicemails:", voicemailError);
+    return [];
+  }
+
+  if (!voicemails || voicemails.length === 0) {
+    return [];
+  }
+
+  // Step 2: Get message details (transcript + audio) for each voicemail
+  const { data: messages, error: messagesError } = await db
+    .from("support_email_messages")
+    .select(`
+      id,
+      thread_id,
+      body_text,
+      snippet,
+      attachments,
+      direction
+    `)
+    .in("thread_id", voicemails.map((v) => v.id))
+    .eq("direction", "in");
+
+  if (messagesError) {
+    console.error("[work-queue] Error fetching voicemail messages:", messagesError);
+  }
+
+  // Build a map of thread_id -> message info
+  // Prioritize messages with audio attachments over those without
+  const messagesByThread = new Map<string, {
+    transcript: string;
+    audioMessageId: string | null;
+    audioAttachmentId: string | null;
+    audioFilename: string | null;
+  }>();
+
+  for (const msg of messages || []) {
+    const transcript = msg.body_text || msg.snippet || "";
+    const attachments = (msg.attachments || []) as Array<{
+      attachmentId: string | null;
+      filename: string;
+      mimeType: string;
+    }>;
+    const audio = attachments.find(
+      (a) => a.mimeType?.startsWith("audio/") || /\.(?:mp3|m4a|wav|ogg)$/i.test(a.filename || "")
+    );
+
+    const existing = messagesByThread.get(msg.thread_id);
+    // Keep the message with audio, or use latest if neither has audio
+    if (!existing || audio || !existing.audioMessageId) {
+      messagesByThread.set(msg.thread_id, {
+        transcript: transcript || existing?.transcript || "",
+        audioMessageId: audio ? msg.id : existing?.audioMessageId || null,
+        audioAttachmentId: audio?.attachmentId || existing?.audioAttachmentId || null,
+        audioFilename: audio?.filename || existing?.audioFilename || null,
+      });
+    }
+  }
+
+  // Step 3: Extract callback numbers from voicemails
+  const voicemailsWithNumbers: Array<{
+    threadId: string;
+    subject: string;
+    summary: string | null;
+    transcript: string | null;
+    callbackNumber: string | null;
+    normalizedNumber: string | null;
+    voicemailAt: string;
+    audioMessageId: string | null;
+    audioAttachmentId: string | null;
+    audioFilename: string | null;
+  }> = [];
+
+  for (const vm of voicemails) {
+    const msgInfo = messagesByThread.get(vm.id);
+    const text = [vm.subject, vm.agent_summary || "", msgInfo?.transcript || ""].join("\n");
+    const callbackNumber = extractCallbackNumber(text);
+    const normalizedNumber = normalizePhoneForMatch(callbackNumber);
+
+    if (normalizedNumber) {
+      voicemailsWithNumbers.push({
+        threadId: vm.id,
+        subject: vm.subject,
+        summary: vm.agent_summary,
+        transcript: msgInfo?.transcript || null,
+        callbackNumber,
+        normalizedNumber,
+        voicemailAt: vm.last_message_at,
+        audioMessageId: msgInfo?.audioMessageId || null,
+        audioAttachmentId: msgInfo?.audioAttachmentId || null,
+        audioFilename: msgInfo?.audioFilename || null,
+      });
+    }
+  }
+
+  if (voicemailsWithNumbers.length === 0) {
+    return [];
+  }
+
+  // Step 4: Get all growth providers with phone numbers
+  const { data: providers, error: providersError } = await db
+    .from("provider_growth_tracking")
+    .select(`
+      id,
+      business_profile_id,
+      pipeline_stage,
+      ads_status,
+      medjobs_status,
+      business_profiles!inner (
+        display_name,
+        slug,
+        city,
+        state,
+        phone
+      )
+    `)
+    .in("pipeline_stage", ["new_claim", "meeting_scheduled", "pitched", "no_show", "upgrade_meeting"])
+    .not("business_profiles.phone", "is", null);
+
+  if (providersError) {
+    console.error("[work-queue] Error fetching providers for phone match:", providersError);
+    return [];
+  }
+
+  // Build a map of normalized phone -> provider info
+  const providersByPhone = new Map<string, {
+    trackingId: string;
+    businessProfileId: string;
+    displayName: string | null;
+    slug: string | null;
+    city: string | null;
+    state: string | null;
+    phone: string | null;
+    pipelineStage: PipelineStage;
+    adsStatus: AdsStatus;
+    medjobsStatus: MedjobsStatus;
+  }>();
+
+  for (const p of providers || []) {
+    const profile = Array.isArray(p.business_profiles)
+      ? p.business_profiles[0]
+      : p.business_profiles;
+
+    if (!profile?.phone) continue;
+
+    const normalizedPhone = normalizePhoneForMatch(profile.phone);
+    if (!normalizedPhone) continue;
+
+    providersByPhone.set(normalizedPhone, {
+      trackingId: p.id,
+      businessProfileId: p.business_profile_id,
+      displayName: profile.display_name,
+      slug: profile.slug,
+      city: profile.city,
+      state: profile.state,
+      phone: profile.phone,
+      pipelineStage: p.pipeline_stage as PipelineStage,
+      adsStatus: p.ads_status as AdsStatus,
+      medjobsStatus: p.medjobs_status as MedjobsStatus,
+    });
+  }
+
+  // Step 5: Match voicemails to providers
+  const returnedCalls: ReturnedCallEntry[] = [];
+
+  for (const vm of voicemailsWithNumbers) {
+    const provider = providersByPhone.get(vm.normalizedNumber!);
+    if (!provider) continue;
+
+    const isConverted =
+      provider.adsStatus === "free_intro" ||
+      provider.medjobsStatus === "in_pilot" ||
+      provider.medjobsStatus === "pilot_expired";
+
+    returnedCalls.push({
+      thread_id: vm.threadId,
+      voicemail_subject: vm.subject,
+      voicemail_summary: vm.summary,
+      voicemail_transcript: vm.transcript,
+      callback_number: vm.callbackNumber,
+      voicemail_at: vm.voicemailAt,
+      audio_message_id: vm.audioMessageId,
+      audio_attachment_id: vm.audioAttachmentId,
+      audio_filename: vm.audioFilename,
+      tracking_id: provider.trackingId,
+      business_profile_id: provider.businessProfileId,
+      display_name: provider.displayName,
+      slug: provider.slug,
+      city: provider.city,
+      state: provider.state,
+      phone: provider.phone,
+      pipeline_stage: provider.pipelineStage,
+      is_converted: isConverted,
+      ads_status: provider.adsStatus,
+      medjobs_status: provider.medjobsStatus,
+    });
+  }
+
+  // Sort by most recent first
+  returnedCalls.sort((a, b) => b.voicemail_at.localeCompare(a.voicemail_at));
+
+  return returnedCalls;
 }

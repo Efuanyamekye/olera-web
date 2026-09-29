@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server";
 import { getAuthUser, getAdminUser } from "@/lib/admin";
-import { getNewClaimSubtabCounts } from "@/lib/provider-growth/queries";
+import { getClaimedAndConvertedSubtabCounts } from "@/lib/provider-growth/queries";
 
 /**
- * GET /api/admin/provider-growth/new-claim-subtabs
+ * GET /api/admin/provider-growth/subtab-counts
  *
- * Returns counts for Claimed subtabs (In Progress is now a separate top-level tab):
- * - notContacted: providers with no call attempts and not converted
- * - converted: providers on free trial with no call attempts (self-converted)
- * - inProgress: providers with call attempts (now shown as separate top-level tab count)
+ * Returns counts for both Claimed and Converted tabs:
+ *
+ * Claimed tab (non-converted providers):
+ * - claimed.notContacted: no call attempts, never started free trial
+ * - claimed.inProgress: has call attempts, never started free trial
+ *
+ * Converted tab (providers on free trial):
+ * - converted.notContacted: no call attempts, on free trial
+ * - converted.inProgress: has call attempts, on free trial
  */
 export async function GET() {
   try {
@@ -22,11 +27,10 @@ export async function GET() {
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    const counts = await getNewClaimSubtabCounts();
-    // Return all counts - inProgress is now used as a separate top-level tab
+    const counts = await getClaimedAndConvertedSubtabCounts();
     return NextResponse.json(counts);
   } catch (err) {
-    console.error("[new-claim-subtabs] Error:", err);
+    console.error("[subtab-counts] Error:", err);
     return NextResponse.json(
       { error: `Internal server error: ${err instanceof Error ? err.message : String(err)}` },
       { status: 500 }

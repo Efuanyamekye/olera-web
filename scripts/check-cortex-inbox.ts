@@ -11,7 +11,7 @@ import { isRealObjection, parseObjections, renderCheck } from "../lib/war-room/d
 import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  buildInboxProposals, cleanSubject, clip, isSmsBookkeeping, parseInboxCommand, renderDigest, waitingOnUs, type StoredItem,
+  buildInboxProposals, cleanSubject, clip, currentText, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
 } from "../lib/war-room/inbox-operator.server";
 
 // --- Commands.
@@ -30,6 +30,19 @@ assert.equal(parseInboxCommand("I think we should approve 1 2 later"), null, "a 
 assert.deepEqual(parseInboxCommand("check 5 6"), { verb: "check", numbers: [5, 6], edit: null });
 assert.deepEqual(parseInboxCommand("fact-check 5 and 6"), { verb: "check", numbers: [5, 6], edit: null });
 assert.equal(parseInboxCommand("check the voicemails"), null, "check without numbers is a question");
+assert.deepEqual(parseInboxCommand("check 8: Having Medicaid is the first thing SMMC needs."), { verb: "check", numbers: [8], edit: "Having Medicaid is the first thing SMMC needs." }, "his version can be checked");
+// Rewrites Cortex offers in chat become the latest version: its real reply from 29 Sep.
+const cortexReply = "On the voice, you're right. Here they are as a human guide would say them:\n\nsend 5: Waiting on an approval is the worst part. While it sits, call 352-373-7667 and ask two things: where your application stands, and whether you need to file separately for help with cooling costs.\n\nsend 6: That's frustrating, and it happens a lot. Which number did you call, and roughly when?\n\nsend 7: Hi Marti, glad that helped. Medicaid works differently in every state, so tell me which state you're in. TJ, Olera";
+assert.deepEqual(parseRewrites(cortexReply).map((r) => r.number), [5, 6, 7]);
+assert.equal(parseRewrites(cortexReply)[1].text, "That's frustrating, and it happens a lot. Which number did you call, and roughly when?");
+assert.deepEqual(parseRewrites("I'd send 5 as is, it's fine."), [], "mentioning send is not a rewrite");
+assert.deepEqual(parseRewrites('Here:\n\n"send 5: Waiting on an approval is the worst part, call them today."').map((r) => r.text), ["Waiting on an approval is the worst part, call them today."], "wrapped in quotes");
+assert.deepEqual(parseRewrites("Here:\n\n> send 6: That is frustrating, which number did you call?").map((r) => r.number), [6], "in a blockquote");
+assert.deepEqual(parseRewrites("• *send 7:* Hi Marti, tell me which state you are in. TJ, Olera").map((r) => r.number), [7], "bulleted and bold");
+assert.deepEqual(parseRewrites("Or reply\nsend 5: <your edited text here please>"), [], "a placeholder is not a rewrite");
+const withLatest = { id: "x", pass_id: "p", number: 6, kind: "sms_draft", category: "sms:reply", target: { last10: "1", latest: { text: "New words here for the family.", at: "", by: "cortex" } }, summary: "", body: "Old draft.", status: "proposed", created_at: "" } as StoredItem;
+assert.equal(currentText(withLatest), "New words here for the family.", "send sends the version he last saw");
+assert.equal(currentText({ ...withLatest, target: { last10: "1" } }), "Old draft.");
 console.log("command checks passed");
 
 // --- SMS bookkeeping vs conversation.
@@ -84,8 +97,9 @@ const objections = parseObjections('Here: {"objections":[{"target":"352-373-7667
 assert.equal(objections.length, 1);
 assert.equal(parseObjections('{"objections":[{"target":"it&#39;s open","problem":"Page says closed.","confidence":"high"}]}')[0].target, "it's open", "entities are decoded");
 const checked = item(6, "sms_draft", "Text a family.", "CFCAA: 352-373-7667.");
-assert.match(renderCheck(checked, objections), /6: 1 objection\.[\s\S]*x222[\s\S]*send 6: your edited text/);
+assert.match(renderCheck(checked, objections), /6: 1 objection\.[\s\S]*x222[\s\S]*"send 6" sends this version/);
 assert.match(renderCheck(checked, []), /6: clean/);
+assert.match(renderCheck(checked, [], "Cortex's rewrite"), /6 \(Cortex's rewrite\): clean[\s\S]*"send 6"/, "the checked version is named, and send sends it");
 assert.match(renderCheck(checked, new Error("timeout")), /couldn't check it \(timeout\)/);
 console.log("draft check checks passed");
 
@@ -98,6 +112,42 @@ assert.equal(callbackLine(vm("x", 0, "214-343-6400")), "Jamie, 214-343-6400: fol
 console.log("voicemail checks passed");
 
 (async () => {
+  // An unchecked Cortex rewrite is fact-checked on the first "send" and held on a high objection.
+  {
+    const { handleInboxCommand } = await import("../lib/war-room/inbox-operator.server");
+    const row: Record<string, unknown> = {
+      id: "i8", pass_id: "p", number: 8, kind: "email_draft", category: "email:draft:care_seeker", summary: "Email a family", body: "Stored draft.", status: "proposed", created_at: new Date().toISOString(), decided_at: null,
+      target: { threadId: "t1", latest: { text: "With both Medicare and Medicaid you're eligible for SMMC Long-Term Care.", at: "", by: "cortex" } },
+    };
+    const updates: unknown[] = [];
+    // A chainable fake: every call returns the chain, awaiting it gives rows.
+    const fakeDb = { from: (table: string) => {
+      let update: unknown = null;
+      const chain: Record<string, unknown> = {};
+      for (const method of ["select", "eq", "gte", "order", "limit", "in", "is"]) chain[method] = () => chain;
+      chain.update = (value: unknown) => { update = value; return chain; };
+      chain.maybeSingle = () => Promise.resolve({ data: null, error: null });
+      chain.then = (resolve: (v: unknown) => unknown) => {
+        if (update) { updates.push(update); if (table === "cortex_inbox_items") Object.assign(row, update); return Promise.resolve({ data: [row], error: null }).then(resolve); }
+        return Promise.resolve({ data: table === "cortex_inbox_items" ? [row] : [], error: null }).then(resolve);
+      };
+      return chain;
+    } } as never;
+    const realFetch = globalThis.fetch;
+    const realKey = process.env.PERPLEXITY_API_KEY;
+    process.env.PERPLEXITY_API_KEY = "test";
+    globalThis.fetch = (async () => new Response(JSON.stringify({ choices: [{ message: { content: '{"objections":[{"target":"you\'re eligible","problem":"The agency requires medical and financial eligibility.","source_quote":"must meet both medical and financial eligibility requirements","source_url":"https://ahca.myflorida.com/x","confidence":"high"}]}' } }] }), { status: 200 })) as typeof fetch;
+    try {
+      const held = await handleInboxCommand(fakeDb, { verb: "approve", numbers: [8], edit: null });
+      assert.match(held ?? "", /8 \(Cortex's rewrite\): 1 objection[\s\S]*Not sent\. Say send 8 again/);
+      assert.equal(((row.target as { latest: { checked?: boolean } }).latest).checked, true, "marked checked, so the next send goes");
+    } finally {
+      globalThis.fetch = realFetch;
+      if (realKey === undefined) delete process.env.PERPLEXITY_API_KEY; else process.env.PERPLEXITY_API_KEY = realKey;
+    }
+    console.log("rewrite hold checks passed");
+  }
+
   const { readOnly } = await import("./replay-cortex-conversation");
   const db = readOnly(createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!));
 

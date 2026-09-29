@@ -408,3 +408,35 @@ export const OUTCOME_DESCRIPTIONS: Record<ActivityOutcome, string> = {
   no_show: "Provider missed the meeting",
   meeting_rescheduled: "Provider rescheduled the meeting",
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Care Type Filtering
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Maps filter category keys to actual database care_types values.
+ * Used by both the frontend filter UI and backend query filtering.
+ */
+export const CARE_TYPE_FILTER_MAPPING: Record<string, string[]> = {
+  home_care: ["Home Care", "Home Care (Non-Medical)", "In-Home Care", "Non-Medical Home Care"],
+  assisted_living: ["Assisted Living", "Assisted Living Facility"],
+  nursing_home: ["Nursing Home", "Skilled Nursing Facility", "Nursing Facility"],
+  other: [], // Matches any care type not in the above categories
+};
+
+/**
+ * Outcomes that indicate a callback was followed up on.
+ * Used to determine if a callback_requested touchpoint should still be shown in the queue.
+ * Note: "note" is excluded - adding a note doesn't mean the callback was completed.
+ */
+export const CALLBACK_FOLLOWUP_OUTCOMES: ActivityOutcome[] = [
+  "voicemail",
+  "hung_up",
+  "callback_requested", // Scheduled another callback
+  "left_message",
+  "interested",
+  "not_interested",
+  "no_show",
+  "meeting_scheduled",
+  "meeting_rescheduled",
+];
