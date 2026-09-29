@@ -157,6 +157,9 @@ interface SaveResultsPayload {
   householdSize?: "1" | "2" | "3";
   finderNeeds?: string[];
   caregiverNeeds?: string[];
+  /** The program the finder told them to call first. Kept so the plan page,
+   *  letter and texts lead with the same one. Must be in matchedPrograms. */
+  firstStepProgramId?: string;
 }
 
 export async function POST(req: Request) {
@@ -199,7 +202,11 @@ export async function POST(req: Request) {
     householdSize,
     finderNeeds,
     caregiverNeeds,
+    firstStepProgramId,
   } = payload;
+  const finderFirst = firstStepProgramId
+    ? (matchedPrograms || []).find((p) => p.programId === firstStepProgramId)
+    : undefined;
 
   // Channel-dependent contact validation. The V3 2-step flow lets the user
   // pick email or SMS at submit; legacy V2 5-step always sent email.
@@ -512,6 +519,9 @@ export async function POST(req: Request) {
       answers: careNeed ? { careNeed, careNeedSource } : undefined,
       matchCount,
       completed_at: completedAt,
+      finder_first_step: finderFirst
+        ? { program_id: finderFirst.programId, state_id: finderFirst.stateId }
+        : undefined,
       // This is the family's explicit intent, not an eligibility result. Keep
       // it separate from the ranked matches so later guidance can acknowledge
       // what they asked about without reconstructing it from account signup.

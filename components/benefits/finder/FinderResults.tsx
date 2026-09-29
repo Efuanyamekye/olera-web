@@ -88,6 +88,7 @@ function SendPlan({ f }: { f: FinderState }) {
             programType: "benefit",
           })),
           matchCount: programs.length,
+          firstStepProgramId: r.firstStep && r.firstStep.id !== "local-agency" ? r.firstStep.id : undefined,
         }),
       });
       const body = await res.json().catch(() => ({}));

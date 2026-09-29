@@ -75,6 +75,9 @@ export function useFinder() {
   const [error, setError] = useState<string | null>(null);
   const [restored, setRestored] = useState(false);
   const stepShownAt = useRef<number>(Date.now());
+  // A second tap during the short pause before advancing would skip a step
+  // (or submit twice on the last one).
+  const advancing = useRef(false);
 
   const steps = finderSteps(answers);
   const step: FinderStep = steps[Math.min(stepIndex, steps.length - 1)];
@@ -180,12 +183,17 @@ export function useFinder() {
   /** Answer a single-choice question and move on. */
   const choose = useCallback(
     (partial: Partial<FinderAnswers>) => {
+      if (advancing.current) return;
+      advancing.current = true;
       const latest = { ...answers, ...partial };
       // Switching to "myself" drops the caregiver answers they no longer see.
       if (partial.who === "me") latest.caregiverNeeds = [];
       setAnswers(latest);
       // A short pause so the tap registers visually before the page moves.
-      window.setTimeout(() => next(latest), 160);
+      window.setTimeout(() => {
+        advancing.current = false;
+        next(latest);
+      }, 160);
     },
     [answers, next],
   );
