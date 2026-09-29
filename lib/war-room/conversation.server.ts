@@ -41,7 +41,12 @@ import { scrubStaleRenewalCounts } from "@/lib/war-room/stale-counts";
 // answered from its own ledger ("call her and ask why she paid") where the
 // obvious read was "she pays for leads, get her leads"; the founder called it
 // mid-curve. A handful of DMs a day; the scans keep their cheaper tiering.
-const CONVERSATION_MODEL = process.env.WAR_ROOM_CONVERSATION_MODEL || "claude-opus-5";
+// Replies run on Sonnet: at about $0.40 an answer on Opus, ten messages a day
+// cost more than the daily scan (TJ, 2026-09-29: "Let's move them from Opus to
+// Sonnet"). Briefs for /visualize and handoffs are rarer and longer, so they
+// stay on Opus.
+const CONVERSATION_MODEL = process.env.WAR_ROOM_CONVERSATION_MODEL || "claude-sonnet-5";
+const BRIEF_MODEL = process.env.WAR_ROOM_BRIEF_MODEL || "claude-opus-5";
 const CONVERSATION_EFFORT = (process.env.WAR_ROOM_CONVERSATION_EFFORT || "high") as "low" | "medium" | "high" | "max";
 // Per million tokens: input, output. Cache reads bill at a tenth of input,
 // cache writes at 1.25x.
@@ -68,7 +73,7 @@ const LOOKUP_RESULT_CHARS = 60_000;
 // Adaptive thinking and effort are rejected outright by Haiku (400: "adaptive
 // thinking is not supported on this model"), so an env override back to Haiku
 // would have failed every answer. Sent only where the model accepts them.
-const SUPPORTS_ADAPTIVE = /^claude-(sonnet-(5|4-6)|opus|fable|mythos)/.test(CONVERSATION_MODEL);
+const supportsAdaptive = (model: string) => /^claude-(sonnet-(5|4-6)|opus|fable|mythos)/.test(model);
 
 /**
  * How long an exchange stays "in progress".
@@ -588,6 +593,8 @@ export async function answerFounderQuestion(
   } = {},
 ): Promise<{ answered: boolean; reply: string; costUsd?: number; correction?: string }> {
   const brief = options.mode === "brief" || options.mode === "handoff";
+  const model = brief ? BRIEF_MODEL : CONVERSATION_MODEL;
+  const SUPPORTS_ADAPTIVE = supportsAdaptive(model);
   const briefMode = options.mode === "handoff" ? HANDOFF_MODE : BRIEF_MODE;
   if (!process.env.ANTHROPIC_API_KEY) {
     return { answered: false, reply: "I cannot answer questions right now: no model key is configured." };
@@ -638,7 +645,7 @@ export async function answerFounderQuestion(
     // What this answer cost, across every round, so the price of a DM is known.
     let costUsd = 0;
     const track = (reply: Anthropic.Message) => {
-      const [input, output] = CONVERSATION_PRICE[CONVERSATION_MODEL] ?? [0, 0];
+      const [input, output] = CONVERSATION_PRICE[model] ?? [0, 0];
       const usage = reply.usage as Anthropic.Usage;
       costUsd += ((usage.input_tokens ?? 0) * input
         + (usage.cache_read_input_tokens ?? 0) * input * 0.1
@@ -662,7 +669,7 @@ export async function answerFounderQuestion(
     for (let round = 0; round <= MAX_LOOKUP_ROUNDS; round += 1) {
       const outOfBudget = round === MAX_LOOKUP_ROUNDS || Date.now() > deadline;
       message = await anthropic.messages.create({
-        model: CONVERSATION_MODEL,
+        model,
         max_tokens: brief ? 12_000 : MAX_ANSWER_TOKENS,
         // Adaptive thinking stays on: it is what made Sonnet correct a wrong
         // premise instead of agreeing with it. Never low: at low it said "five
@@ -719,7 +726,7 @@ export async function answerFounderQuestion(
       });
       try {
         message = await anthropic.messages.create({
-          model: CONVERSATION_MODEL,
+          model,
           max_tokens: brief ? 12_000 : MAX_ANSWER_TOKENS,
           // Same thinking settings as the rounds before: the history carries
           // their thinking blocks, and the API expects them to match.
