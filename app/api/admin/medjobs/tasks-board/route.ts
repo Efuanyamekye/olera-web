@@ -203,7 +203,10 @@ export async function GET() {
     adminsRes,
   ] =
     await Promise.all([
-      db.from("student_outreach_campuses").select("id, slug, name, is_demo").order("name"),
+      db
+        .from("student_outreach_campuses")
+        .select("id, slug, name, is_demo, hidden_at")
+        .order("name"),
       db.from("campus_channels").select("id, campus_id, channel, status, criteria, detail"),
       db
         .from("campus_channel_records")
@@ -972,6 +975,9 @@ export async function GET() {
       // Badged on the board. A teaching campus that looks like a real one is
       // a trap for whoever opens the board next and starts working it.
       isDemo: campus.is_demo === true,
+      // Sent as a boolean: the board only ever asks whether to draw the row.
+      // When it was hidden and by whom stay in the column for whoever asks.
+      hidden: campus.hidden_at != null,
       facultyPermission,
       mapsDestination,
       channels,

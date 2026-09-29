@@ -32,6 +32,18 @@ import UniversityFlow from "./UniversityFlow";
 /** Where the My work choice is remembered. */
 const FILTER_KEY = "medjobs.tasks.filter";
 
+/**
+ * Where "I have put the teaching campus away" is remembered.
+ *
+ * Separate from the real campuses, which are hidden in the database for the
+ * whole team, because the teaching campus is itself a browser-only object:
+ * it is built on load, never fetched, never written, and thrown away on
+ * refresh. There is no row to hide it in, and hiding it for everybody would
+ * be wrong anyway — whether you want a practice campus on screen is a
+ * property of you, not of the programme.
+ */
+const DEMO_HIDDEN_KEY = "medjobs.tasks.hideDemo";
+
 const CHANNEL_OF: Partial<Record<SectionKey, "st3" | "st4" | "st5" | "st6" | "st7">> = {
   jobboard: "st3",
   advisors: "st4",
@@ -39,6 +51,30 @@ const CHANNEL_OF: Partial<Record<SectionKey, "st3" | "st4" | "st5" | "st6" | "st
   events: "st6",
   professors: "st7",
 };
+
+/** Hide: an eye with a line through it. */
+function EyeOffIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19" />
+      <path d="M6.6 6.6A18.5 18.5 0 0 0 2 12s3 8 10 8a9.1 9.1 0 0 0 5.4-1.6" />
+      <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+      <path d="M2 2l20 20" />
+    </svg>
+  );
+}
+
+/** Show again. */
+function EyeIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2 12s3-8 10-8 10 8 10 8-3 8-10 8-10-8-10-8Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
 
 export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
   const [board, setBoard] = useState<BoardUniversity[] | null>(seed ?? null);
@@ -63,10 +99,13 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
    */
   const [filterId, setFilterId] = useState<string | null>(null);
 
+  const [demoHidden, setDemoHidden] = useState(false);
+
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem(FILTER_KEY);
       if (saved) setFilterId(saved);
+      setDemoHidden(window.localStorage.getItem(DEMO_HIDDEN_KEY) === "1");
     } catch {
       /* no storage, no memory. The board still works. */
     }
@@ -79,6 +118,59 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
       else window.localStorage.removeItem(FILTER_KEY);
     } catch {
       /* the choice still applies to this sitting. */
+    }
+  };
+
+  /**
+   * Whether the hidden campuses are on screen.
+   *
+   * Not remembered. Hiding is shared and meant to stay out of the way; the
+   * reveal is something you do to put one back, not a mode to sit in.
+   */
+  const [showHidden, setShowHidden] = useState(false);
+  const [hiding, setHiding] = useState<string | null>(null);
+
+  /**
+   * Whether a row is put away. Two stores behind one question, so nothing
+   * downstream has to know which kind of campus it is looking at.
+   */
+  const isHidden = (u: BoardUniversity) => (isDemoUniversity(u) ? demoHidden : !!u.hidden);
+
+  const setHiddenFor = async (u: BoardUniversity, hidden: boolean) => {
+    // The teaching campus has no row to write to, so it is remembered here
+    // instead. No request, and nothing for the server to refuse.
+    if (isDemoUniversity(u)) {
+      setDemoHidden(hidden);
+      try {
+        if (hidden) window.localStorage.setItem(DEMO_HIDDEN_KEY, "1");
+        else window.localStorage.removeItem(DEMO_HIDDEN_KEY);
+      } catch {
+        /* the choice still applies to this sitting. */
+      }
+      return;
+    }
+
+    setHiding(u.id);
+    const before = board;
+    // Optimistic, because the row vanishing is the whole feedback. Waiting
+    // on a round trip to redraw the table reads as a click that did nothing.
+    setBoard((prev) =>
+      (prev ?? []).map((x) => (x.id === u.id ? { ...x, hidden } : x)),
+    );
+    try {
+      const res = await fetch("/api/admin/medjobs/tasks-board/actions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ op: "set_campus_hidden", campusId: u.id, hidden }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+    } catch {
+      setBoard(before);
+      setFailed(
+        hidden ? `${u.name} could not be hidden.` : `${u.name} could not be brought back.`,
+      );
+    } finally {
+      setHiding(null);
     }
   };
 
@@ -137,8 +229,12 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
     ? board.filter((u) => sectionsFor(u.assignments, filterId).length > 0)
     : board;
 
-  const rows = [...visible].sort(
+  const hiddenCount = visible.filter(isHidden).length;
+  const rows = [...(showHidden ? visible : visible.filter((u) => !isHidden(u)))].sort(
     (a, b) =>
+      // Hidden below everything, including the teaching campus: they are
+      // only on screen at all so somebody can put one back.
+      Number(isHidden(a)) - Number(isHidden(b)) ||
       Number(isDemoUniversity(a)) - Number(isDemoUniversity(b)) ||
       waitingFor(b) - waitingFor(a) ||
       a.name.localeCompare(b.name),
@@ -196,6 +292,9 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
                   {LADDERS[s].label}
                 </th>
               ))}
+              {/* The hide control. No label: the column is 2rem of hover
+                  affordance, and a heading over it would read as data. */}
+              <th className={`${TH} w-8`} aria-label="Hide" />
             </tr>
           </thead>
           <tbody>
@@ -206,7 +305,9 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
                 <tr
                   key={u.slug}
                   onClick={() => setOpenSlug(u.slug)}
-                  className="cursor-pointer border-b border-gray-100 hover:bg-gray-50"
+                  className={`group/row cursor-pointer border-b border-gray-100 hover:bg-gray-50 ${
+                    isHidden(u) ? "opacity-45" : ""
+                  }`}
                 >
                   <td className="py-2.5 pr-3">
                     <span className="flex items-center gap-2">
@@ -263,12 +364,49 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
                       </td>
                     );
                   })}
+                  <td className="py-2.5 pr-1 text-right align-top">
+                    <button
+                      type="button"
+                      disabled={hiding === u.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        void setHiddenFor(u, !isHidden(u));
+                      }}
+                      title={
+                        isHidden(u)
+                          ? `Show ${u.name} on the board again`
+                          : isDemoUniversity(u)
+                            ? "Put the teaching campus away. Just for you, and it comes back from the line below."
+                            : `Hide ${u.name}. Nothing on it is archived or lost.`
+                      }
+                      aria-label={isHidden(u) ? `Show ${u.name}` : `Hide ${u.name}`}
+                      className={`rounded p-1 text-gray-300 transition-opacity duration-100 hover:bg-gray-100 hover:text-gray-600 disabled:opacity-40 ${
+                        isHidden(u) ? "opacity-100" : "opacity-0 group-hover/row:opacity-100"
+                      }`}
+                    >
+                      {isHidden(u) ? <EyeIcon /> : <EyeOffIcon />}
+                    </button>
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
+
+      {/* Without this, hiding is a one-way door and the only way back is a
+          database. Shown only when something is actually hidden. */}
+      {hiddenCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setShowHidden((v) => !v)}
+          className="mt-2 text-[12px] text-gray-500 underline-offset-2 hover:text-gray-900 hover:underline"
+        >
+          {showHidden
+            ? "Put the hidden ones away"
+            : `${hiddenCount} hidden \u00B7 show ${hiddenCount === 1 ? "it" : "them"}`}
+        </button>
+      )}
 
 
       {open && (
