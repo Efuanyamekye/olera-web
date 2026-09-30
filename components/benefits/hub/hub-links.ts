@@ -38,9 +38,11 @@ export function finderHref(who?: HubWho): string {
 export function matchStates(states: HubState[], query: string): HubState[] {
   const q = query.trim().toLowerCase();
   if (!q) return [];
-  return states.filter(
-    (s) => s.name.toLowerCase().startsWith(q) || s.abbreviation.toLowerCase() === q,
-  );
+  // Prefix matches first ("new" → New Hampshire…), then anywhere in the name,
+  // so "carolina" still finds both Carolinas, the same as the phone list.
+  const first = states.filter((s) => s.name.toLowerCase().startsWith(q) || s.abbreviation.toLowerCase() === q);
+  const rest = states.filter((s) => !first.includes(s) && s.name.toLowerCase().includes(q));
+  return [...first, ...rest];
 }
 
 /**
