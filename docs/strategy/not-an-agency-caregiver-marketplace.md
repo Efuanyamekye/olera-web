@@ -133,7 +133,7 @@ Every player that went direct either stayed shallow (companion only, like Papa),
 
 ## 6. Recommendation (revised after his follow-up)
 
-**Test family-direct now, narrowly, as a pilot outside the CRP, and name it in the January application as the fallback if the student pathway stays blocked.**
+**Test family-direct now, narrowly, as a pilot Olera runs and pays for itself, and put it in the application as a second path to commercial traction, not a fallback.** TJ decided the application cannot rest on students alone (section 8).
 
 The first version recommended keeping everything inside the committed broker model. That rested on two things TJ has since addressed: competing with customers (not a concern) and the committed model working (the notes show it blocked at the university gate). What still holds from the first version is that the pilot must not quietly contradict what the application says, so it runs as a separate pilot and is named honestly in the application as the fallback.
 
@@ -155,13 +155,17 @@ The stop lines are **proposed, not derived**: there is no Olera baseline for any
 
 **Where to run it:** one metro with the most active family demand and no paying provider in it. The live care-post counts pick the metro; Hoop Cares' area is excluded.
 
-**What it leaves alone:** MedJobs keeps running (students are one caregiver source, not the only one), Managed Ads keeps selling, and neither CRP document changes unless the pilot works.
+**What it leaves alone:** MedJobs keeps running (students are one caregiver source, not the only one), Managed Ads keeps selling, and the CRP documents describe the pilot as a second path to traction, reporting whatever it has shown by submission.
 
-## 8. The one decision only TJ can make
+## 8. Decided: the application does not rest on students alone
 
-**Does the January application name family-direct as the fallback revenue path if the student pathway stays blocked, or does it stay silent on it until the pilot has results?**
+TJ, 2026-09-30: "Everything is up in the air. The January application won't hold if we say it's only students and we're not able to show commercial traction with students."
 
-Naming it is more honest to reviewers and protects Aim 2 if students stall. Staying silent keeps the application simpler, but leaves the plan resting on the gate the notes show is stuck. Either way, the pilot can start before January.
+So the question is no longer whether to *name* family-direct. It is whether the pilot can produce **commercial traction a reviewer will accept before submission.** The pre-CRP plan runs to 1 January, about 13 weeks from today. The pilot's own clock is roughly: counsel's confirmation, 4 weeks to recruit caregivers, then 30 days to see whether families rebook. That is 9 to 10 weeks if it starts by mid-October. It fits, with nothing to spare.
+
+That leaves one open choice for TJ:
+
+**Submit in January with whatever the pilot has shown by then, or move to April so it can show a full cycle?** Logan and Qiping each said in August they were comfortable with January or April (`docs/crp/WHERE-WE-ARE-2026-08-27.md:154`). If the pilot has not started by mid-October, January only carries a plan, not traction.
 
 ## Open items
 - Collect Chantel's research folder (marketplace vs. agency, licensing, requirements), which she offered on 2026-09-03. It likely covers the per-state licensing question the pilot needs first.
