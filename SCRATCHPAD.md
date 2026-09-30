@@ -7,6 +7,23 @@
 
 ## Current Focus
 
+### 2026-09-30 (evening) — Provider-by-provider sweep: Pacesetter, Miracle, Impact, LumiWell, Caring Senior (`thirsty-panini`, no app code)
+
+**Sent today (TJ), all logged as provider_touches:** Pacesetter email (move to Facebook + review call Fri/Mon), Impact email to Pat (Facebook ready; she named ~$150/mo for Google+FB at signup), Colorado CareAssist email to Jason cc Jacob, texts to Zardy ("Ok") and Hilda (sending her FB page link). LumiWell text queued from Olera's number for 8 AM PT (sms_queue 7b2977e6). Overdue actions cleared on Pacesetter, Miracle, Impact, LumiWell.
+
+**Findings.**
+- **Catch-all suppression blocks real providers.** Sender suppresses any address on a catch-all domain ("Suppressed: catch-all (risky) on cold lane"). 30 days: 50 emails / 29 providers blocked, 42 were family-question alerts; 8 of the 29 inboxes had opened an Olera email before. LumiWell fixed via `/api/admin/email-override` (trusted info@, 3 held questions delivered). Fix to scope: auto-trust any address that has opened/clicked.
+- **Miracle-Lightstar page:** care_types cleaned 14 -> 9 (Hospice, Home Health, dupes removed per his own website). Description restored to his original (TJ: provider text is theirs; memory `feedback_provider_page_edits_scope`). Google listing 5.0/5 already renders (my "no rating" claim was wrong: read the wrong field).
+- **Caring Senior:** best inquiry of the week (28 Sep, Meta traffic arm); 3 new questions unanswered; second account louisville@caringinc.com re-requested Ad Boost 28 Sep (split-login risk). Ces calls Kaitlin Thursday (on the sheet).
+- **Olera admin in Chrome:** the Meta Chrome profile is now signed in as tj@olera.care (Google), so admin routes work from the browser for future drives.
+
+**Next Up.**
+- Tonight: Liz call, Robbie 9:30 CT. Log outcomes.
+- Thu: Ces calls Kaitlin. Fri/Mon: Sherry's review call if she picks a time.
+- Next week: build Meta forms for Franchil, Graceful, Miracle-Lightstar, Pacesetter (+ Impact if Pat says yes), family image.
+- Product tasks: auto-trust opened/clicked addresses (catch-all filter); render ProfileSwitcher; campaign page shows all families equally.
+- After 8 AM PT: check LumiWell text delivered (landline?).
+
 ### 2026-09-30 (night) — Benefits Finder + Hub in PRODUCTION; pick up with the three priorities below (`jolly-ramanujan`, #2283 #2284 #2286 #2291 #2293 → promote #2288 #2294)
 
 **PICK UP HERE.** When TJ says "let's pick up benefits finder work", start with these three, in order (his "Still to do" in #care-nav-study-team, 30 Sep):
