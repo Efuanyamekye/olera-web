@@ -68,20 +68,41 @@ const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 /** Summary lines about age or money are covered by the questions. */
 const COVERED_RULE = /priority|\bage\b|\d+\s*\+|income|asset|savings|fpl|poverty|resident|citizen|immigra|medicare part|medicaid/i;
 
+/** Summary lines that say nothing a family needs to check ("Must reside in
+ *  Alabama", "All ages eligible", "Own or rent"). Shown as the "also requires"
+ *  line, they read as a hurdle that isn't one. */
+const TRIVIAL_RULE = /must (reside|live) in|resident of|all ages|any age|all housing|own or rent|homeowners? (or|and) renters?|renters? (are )?eligible|qualify automatically|automatically qualif|responsible for paying/i;
+
+/** A rule no question settles and that decides the program: a level-of-care
+ *  or daily-help assessment, being homebound, or an asset limit. With one of
+ *  these, a family can't be "likely" on income alone (ARChoices needs
+ *  nursing-home level of care; Georgia's ABD Medicaid caps resources). */
+const UNASKED_GATE = /level of care|nursing (home|facility)|daily help|help with (bathing|dressing|eating|daily)|activities of daily living|\badls?\b|at risk of|homebound|assessment|functional|resources|asset/i;
+
+/** Lowercase the first letter to follow "It also requires:", but leave an
+ *  acronym alone ("SSI recipients", not "sSI recipients"). */
+function lowerFirst(text: string): string {
+  return /^[A-Z][a-z]/.test(text) ? text.charAt(0).toLowerCase() + text.slice(1) : text;
+}
+
 /** The first rule the questions don't cover, e.g. "State-certified need for
  *  nursing home level of care" or "Primarily homebound". */
 function otherRequirement(p: WaiverProgram): string | null {
-  const line = (p.structuredEligibility?.summary || []).find((l) => !COVERED_RULE.test(l));
+  const line = (p.structuredEligibility?.summary || []).find((l) => !COVERED_RULE.test(l) && !TRIVIAL_RULE.test(l));
   if (!line) return null;
   const clean = line.replace(/[.;]\s*$/, "").trim();
-  return clean ? `It also requires: ${clean.charAt(0).toLowerCase()}${clean.slice(1)}.` : null;
+  return clean ? `It also requires: ${lowerFirst(clean)}.` : null;
 }
 
 /** The program's own first rule, for when nothing we asked settles it. */
 function mainRule(p: WaiverProgram): string | null {
   const line = (p.structuredEligibility?.summary || [])[0];
-  return line ? `The main rule: ${line.charAt(0).toLowerCase()}${line.slice(1).replace(/[.;]\s*$/, "")}.` : null;
+  return line ? `The main rule: ${lowerFirst(line.replace(/[.;]\s*$/, ""))}.` : null;
 }
+
+/** Medicaid for the "aged, blind and disabled": under 65 it needs a
+ *  disability, which the finder never asks about. */
+const AGED_OR_DISABLED = /\baged\b|\belderly\b|seniors?\s*(\/|and)\s*disabled/i;
 
 function factsFor(a: FinderAnswers, stateCode: string): FamilyBenefitsFacts {
   return {
@@ -139,10 +160,14 @@ interface Screened {
   category: BenefitCategory;
   score: number;
   raw: WaiverProgram;
+  /** The money facts fit and only an assessment the call arranges is open. */
+  fitsButAssess: boolean;
 }
 
+type TierResult = Pick<FinderProgram, "tier" | "reason"> & { fitsButAssess?: boolean };
+
 /** Likely or worth checking, and the one-line reason, for a kept program. */
-function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAnswers): Pick<FinderProgram, "tier" | "reason"> {
+function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAnswers): TierResult {
   const v = finderVoice(a.who);
   const helping = isHelpingSomeone(a);
 
@@ -182,6 +207,9 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
   if (MEDICARE_HELP.test(p.name) && (a.age === "under_60" || a.age === "60_64")) {
     return { tier: "check", reason: "Needs Medicare, which usually starts at 65 or comes with a disability." };
   }
+  if (AGED_OR_DISABLED.test(p.name) && (a.age === "under_60" || a.age === "60_64")) {
+    return { tier: "check", reason: "For people 65 or older, or with a disability." };
+  }
 
   // A denial rules out programs that sit on top of Medicaid (the shared
   // rules drop them), but not the application itself: long-term care
@@ -214,15 +242,22 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
   const fits: string[] = [];
   if (ageOk === true && draftAge != null) fits.push(`${draftAge} or older`);
   if (income === "under" && limit != null) fits.push(`income under the ${money(limit)} limit`);
-  if (gated && hasMedicaid) fits.push("already has Medicaid");
+  if (gated && hasMedicaid) fits.push(fits.length ? "Medicaid already in place" : "already has Medicaid");
   const sentence = fits.length ? fits.join(", with ") : "";
   const cap = sentence ? sentence.charAt(0).toUpperCase() + sentence.slice(1) + "." : "";
   // A rule about a diagnosis or disability is one we never asked about, so
   // it can't be likely (NY's developmental-disability waiver otherwise led
   // for a 70-year-old with Medicaid).
   const needsDiagnosis = !!also && /diagnos|disab|autism|blind/i.test(also);
-  if ((income === "under" || (gated && hasMedicaid)) && !needsDiagnosis) {
+  const needsAssessment = !!also && UNASKED_GATE.test(also);
+  if ((income === "under" || (gated && hasMedicaid)) && !needsDiagnosis && !needsAssessment) {
     return { tier: "likely", reason: withAlso(cap) };
+  }
+  // Income or Medicaid fits and the only open rule is an assessment (level
+  // of care, daily help): still "worth checking", but calling is how the
+  // assessment starts, so it can lead the plan.
+  if ((income === "under" || (gated && hasMedicaid)) && needsAssessment && !needsDiagnosis) {
+    return { tier: "check", reason: withAlso(cap), fitsButAssess: true };
   }
   if (cap) return { tier: "check", reason: withAlso(cap) };
   if (draftAge != null && ageOk == null) {
@@ -255,7 +290,7 @@ function pickFirstStep(list: Screened[], a: FinderAnswers): Screened | null {
   // is likely, a local benefits counselor is a better first call than a
   // long shot, so return null and let the caller lead with the agency.
   for (const pref of preferences.slice(0, -1)) {
-    const likely = pool.find((s) => pref(s) && s.program.tier === "likely");
+    const likely = pool.find((s) => pref(s) && s.program.tier === "likely") ?? pool.find((s) => pref(s) && s.fitsButAssess);
     if (likely) return likely;
     if (pool.some(pref)) return null;
   }
@@ -322,7 +357,7 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
   const screened: Screened[] = kept.map(({ item, verdict }, idx) => {
     const category = programCategory(item);
     const contact = pickCallContact(item.contacts);
-    const { tier, reason } = tierAndReason(item, category, a);
+    const { tier, reason, fitsButAssess = false } = tierAndReason(item, category, a);
     let score = verdict.boost - idx * 0.01;
     if (wanted.has(category)) score += 15;
     if (a.needs.includes("memory") && /alzheimer|dementia|memory|respite|adult day/i.test(item.name)) score += 10;
@@ -342,11 +377,23 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
       docs: (item.documentsNeeded || []).slice(0, 4),
       url: `/benefits/${stateSlug}/${item.id}`,
     };
-    return { program, category, score, raw: item };
+    return { program, category, score, raw: item, fitsButAssess };
   });
 
   // Likely before worth checking; within each, what they asked for first.
   screened.sort((x, y) => (x.program.tier === y.program.tier ? y.score - x.score : x.program.tier === "likely" ? -1 : 1));
+  // The program data holds some programs twice under two ids (14 states on
+  // 1 Oct, e.g. Alabama's E&D waiver, Idaho's caregiver support). Keep the
+  // higher-ranked copy so a family never sees the same program twice.
+  const seen = new Set<string>();
+  const unique = screened.filter((s) => {
+    const key = s.program.name.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    if (seen.has(s.program.id) || seen.has(key)) return false;
+    seen.add(s.program.id);
+    seen.add(key);
+    return true;
+  });
+  screened.splice(0, screened.length, ...unique);
   const first = pickFirstStep(screened, a);
 
   const leftOut: FinderLeftOut[] = [
