@@ -4,22 +4,34 @@
 Written 30 September 2026.
 
 This is the report Logan showed the team on 30 September: how many actions
-each person logged, on which day, at which university. It takes about fifteen
-minutes, and most of that is Claude writing the summary.
+each person logged, on which day, at which university.
 
-You need three things: the Supabase SQL editor, Claude, and twenty minutes
-before the meeting.
+## Do not work from this document. Run the skill.
+
+In Claude Code, type:
+
+```
+/rtl-report
+```
+
+It walks you through the whole thing: it asks for the dates, hands you one
+query at a time already filled in, reads each result back to you, runs the
+sanity checks, and writes the report. You need the Supabase SQL editor open
+and about fifteen minutes, most of it waiting on Claude.
+
+This document is the reference behind that skill: what the queries are, why
+these numbers and not others, and what to do when something looks wrong. Read
+it if you want to understand the report or change it. You do not need to read
+it to make one.
 
 ---
 
-## The short version
+## The short version, if you are doing it by hand anyway
 
 1. Open Supabase, paste in the five queries below, change the two dates at
    the top of each one.
-2. Copy the results.
-3. Paste them into Claude with the prompt in section 4.
-4. Read what comes back against the four sanity checks in section 5.
-5. Bring the numbers to the RTL.
+2. Read the results against the four sanity checks in section 5.
+3. Bring the numbers to the RTL.
 
 ---
 
@@ -194,52 +206,22 @@ ORDER BY 1, 3 DESC;
 
 ---
 
-## 4. The prompt for Claude
+## 4. Turning the results into the report
 
-Open Claude, attach the CSV from query 4, and paste the results of queries 1, 2,
-3 and 5 as plain text. Then use this prompt. Change the dates and the names.
+This is what `/rtl-report` does for you, and the reason the skill exists
+rather than a prompt you paste. It knows the four rules that keep this report
+honest:
 
-> I run the weekly operations meeting for Olera MedJobs, a program that places
-> student caregivers with home care providers. Our team works a board of
-> university campuses: each campus has providers, students, a job board,
-> advising offices, student organisations, events and professors, and each
-> record moves along a sequence of follow-up steps.
->
-> Below are five SQL outputs covering **Monday 28 and Tuesday 29 September
-> 2026**. Every row in the attached CSV is one logged action on the board.
->
-> The team is Graize, Logan, Chantel and Sara. Graize and Sara are on research
-> and outreach; Chantel is on providers, students and job boards.
->
-> Write me a one-page summary I can show the team as progress. I need:
->
-> 1. Total actions logged, and the split by person and by day.
-> 2. The split by university, and by record type.
-> 3. Two or three things that actually happened, quoted from the notes column,
->    that show the work was real and not just clicks.
-> 4. Anything that looks off: a person at zero, a campus at zero, a day at zero,
->    a lot of actions with no notes.
->
-> Rules:
->
-> - **This is not a league table.** Providers carry many more follow-up steps
->   than students or job boards, so whoever is on providers will always show
->   more actions. Say so in the summary.
-> - A person showing `(not recorded)` is missing data, not missing work. Never
->   report anyone as having done nothing without saying which query would prove
->   it either way.
-> - Do not estimate, round up, or fill a gap with a plausible number. If a
->   number is not in what I gave you, say it is not there.
-> - Plain language. No jargon, no em dashes.
->
-> Then give me the same thing as a single-page HTML file I can print, using
-> Olera's colours: teal `#4d8a8a` for headings and accents, cream `#F9F6F2` for
-> the page background, dark teal `#1a3030` for body text.
+- **It is not a league table.** Providers carry far more follow-up steps than
+  students or job boards, so whoever is on providers will always show the
+  larger number. The report has to say that on the page.
+- **`(not recorded)` is missing data, not missing work.** Nobody gets reported
+  as having done nothing without the report saying which query would settle it.
+- **No estimating, no rounding up, no filling a gap with a plausible number.**
+- Count touchpoints. Not records, not logins.
 
-If you want the PDF version, ask for it after: *"turn that HTML into a PDF,
-one page, nothing cut off."*
-
----
+The skill also writes the one-page PDF, in Olera's colours, through the
+rendering toolchain already in the repo.
 
 ## 5. Four sanity checks before you present it
 
