@@ -15,6 +15,7 @@
  * sequence timeline) — keep that in sync when this path changes.
  */
 import { companionActive } from "@/lib/family-comms/benefits-companion.server";
+import { inOleraVoice } from "@/lib/family-comms/olera-voice";
 import { getBenefitsCompanionSettings } from "@/lib/analytics/benefits-companion-settings";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
@@ -404,10 +405,13 @@ async function deliverNavigatorLetter(
     typeof opts.subject === "string" && opts.subject.trim()
       ? opts.subject.trim().slice(0, 150)
       : navigator.edited_subject || navigator.subject || "Your first step";
-  const letter =
+  // In Olera's voice whoever sends it: letters drafted before 2026-09-30 were
+  // written and signed as TJ (see olera-voice.ts).
+  const letter = inOleraVoice(
     typeof opts.body === "string" && opts.body.trim().length >= 40
       ? opts.body.trim()
-      : navigator.edited_body || navigator.body;
+      : navigator.edited_body || navigator.body,
+  );
 
   const siteUrl = getSiteUrl();
   const { data: tokenRow } = await db
@@ -497,7 +501,8 @@ async function deliverNavigatorLetter(
      * that a person chose to drop the number. This repairs every pending
      * draft without recomposing it.
      */
-    const preferredSms = editedSms || navigator.edited_sms || navigator.sms || null;
+    const preferredSmsRaw = editedSms || navigator.edited_sms || navigator.sms || null;
+    const preferredSms = preferredSmsRaw ? inOleraVoice(preferredSmsRaw) : null;
     const draftSms =
       preferredSms && smsCarriesPhone(preferredSms, navigator.pick.contactPhone)
         ? preferredSms
