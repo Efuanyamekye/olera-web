@@ -7,6 +7,15 @@
 
 ## Current Focus
 
+### 2026-09-30 (night) — Liz call attempt, Robbie prep sharpened, Caring Senior moved to Thursday (`thirsty-panini`, no app code)
+
+- **Liz (Hoop):** called for the two-week check-in; she was at a funeral, asked for a callback in 30 min (clashed with Robbie). Logged. Next: TJ texts her gently to reschedule (drafted), due 1 Oct.
+- **Robbie prep** (https://claude.ai/artifact/7yonrRHCdmJWjzaeCKwwvX) gained a "How we're different" section: vs ad agency (all channels, our own pages + city pages + in-ad forms, screening before he hears, $81/inquiry vs $80-150, $60K own spend since 2022) and vs A Place for Mom (no commission/per-lead fee, one agency at a time, family chooses him, Franchil client 21 -> 42 hrs/wk). Pitch framing: pilot = first call not exclusivity, 1-business-hour callback, 60-90 days, month 1 ads on us, then paid plan + CRP letter. Carol is the care recipient in the Rudy case (Rudy = friend/contact); Marla is a separate Frisco family.
+- **/managed-ads page is stale:** says the one client "was never recorded"; Franchil's client is now confirmed in writing (care from 5 Sep, 42 hrs/wk). Fix the copy.
+- **Caring Senior:** Kaitlin call moved to Thursday, below the six families on Ces's sheet (TJ: today was too much). Replies logged: Hilda sending FB link; Zardy "Ok".
+
+**Next Up.** Robbie call outcome -> log + pilot terms email. Text Liz. Update /managed-ads client line.
+
 ### 2026-09-30 (evening) — Provider-by-provider sweep: Pacesetter, Miracle, Impact, LumiWell, Caring Senior (`thirsty-panini`, no app code)
 
 **Sent today (TJ), all logged as provider_touches:** Pacesetter email (move to Facebook + review call Fri/Mon), Impact email to Pat (Facebook ready; she named ~$150/mo for Google+FB at signup), Colorado CareAssist email to Jason cc Jacob, texts to Zardy ("Ok") and Hilda (sending her FB page link). LumiWell text queued from Olera's number for 8 AM PT (sms_queue 7b2977e6). Overdue actions cleared on Pacesetter, Miracle, Impact, LumiWell.
