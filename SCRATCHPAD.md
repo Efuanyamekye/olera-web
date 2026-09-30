@@ -7,6 +7,57 @@
 
 ## Current Focus
 
+### 2026-09-30 (night) — Benefits Finder + Hub in PRODUCTION; pick up with the three priorities below (`jolly-ramanujan`, #2283 #2284 #2286 #2291 #2293 → promote #2288 #2294)
+
+**PICK UP HERE.** When TJ says "let's pick up benefits finder work", start with these three, in order (his "Still to do" in #care-nav-study-team, 30 Sep):
+1. **Accuracy of results.** Families should get relevant recommendations. The engine is `lib/benefits/finder-engine.server.ts`, which uses the fact-checked pipeline drafts (`@/data/pipeline-drafts`) and `lib/benefits/eligibility.server.ts`. Known open items: the CARES "Not yet" list (a "no" to Medicaid may still show Medicaid, veteran help for non-veterans, "100% match"), TX PACE El Paso phone, 15 states with no caregiver program, NY developmental-disability waiver.
+2. **Reconcile product with the study protocol.** Match the product details to CARE-NAV protocol procedures (Qiping is finalizing the protocol paper). Also: the study tag (`?cohort=v1`, `metadata.study_cohort`) is not yet in letters, texts or events; freeze the program facts per cohort; one timeline per family.
+3. **UI/UX of the program pages and state pages** (`/benefits/[state]`, `/benefits/[state]/[program]`). Same design language as the new hub and finder: light, Airbnb restraint, no nested boxes, less text.
+
+**Shipped today.**
+- Finder: the cover is the first question; nine questions; ZIP to county; results lead with one call; the plan link and letter use the same list.
+- Hub `/senior-benefits` rebuilt (`app/senior-benefits/page.tsx`, `components/benefits/hub/*`, `app/api/geo/region/route.ts`).
+- `?who` opens the finder on question 2; `?cohort` tags study families.
+- Click tracking: `cta_engaged`, surface `benefits_hub`.
+
+**Pages.**
+- Walkthrough for Logan / the study team, every screen: https://claude.ai/artifact/PXK1RGpdrvHRXD57P8HjWy. Update it by re-running `qa/walk.js` and rebuilding with `walk/build2.py`; if the scratchpad is gone, recreate them.
+- The team update is posted in #care-nav-study-team.
+
+**Decisions.** Airbnb's browse model was rejected for the hub ("vibe-coded Airbnb"): guidance first, one main path, no tabs that do nothing. Counts use waiver-library `programs.length` (528), matching the state pages.
+
+**Parked.**
+- A sharp Chapter 3 hero frame (TJ: later).
+- `NIH_AWARD_NUMBER` (empty).
+- A US tap on "Use my location".
+- Deleting the unused `HeroStateSearch` / `MobileStateList`.
+- Whether a typed state should carry into the finder.
+- The pre-existing USMap hydration warning.
+
+### 2026-09-30 (later) — Winners: Robbie + Liz call preps, Colorado CareAssist ask, Franchil consolidated (`thirsty-panini`, no app code)
+
+**Artifacts.** Robbie prep https://claude.ai/artifact/7yonrRHCdmJWjzaeCKwwvX · Liz prep https://claude.ai/artifact/Ke3McBDJLV2RnnnWhmU2iN · Franchil two-accounts + journey https://claude.ai/artifact/QpxkEFQYFhhtZAzXQNBHdg · Ces sheet v9 (Elvis backup Kierland, Marta email to Jacob, no family names in subjects).
+
+**Franchil FIXED (TJ ran SQL; auto-mode blocked Claude's write).** Real page 900bf6a1 now on her daily login d43d0915 (hilda.administrator@franchil.com), opens on sign-in; renamed listing 131ddb57 parked on the June login; her 3 reach-outs moved. Verified; logged as `tweak`, review 3 Oct. SQL at `~/Desktop/Claude Screenshots/franchil-consolidate.sql`.
+- **Product finding:** a login cannot switch between two provider pages. `components/shared/ProfileSwitcher.tsx` is built but rendered nowhere; `Navbar.tsx:174` takes the first organization profile. 14 prod logins hold 2+ org profiles and can reach only one. Small fix: render the switcher.
+- The "Amedisys" listing has HER address and franchil.com website (different phone). Ask Hilda before releasing it. Real page has no lat/lng.
+
+**Hilda's Facebook ask (verbatim, TJ screenshot 8 Sep):** "I am ready to run our business on Facebook ad... I have a business facebook account, how do incorporate that." Decision: run her instant form under OLERA; keep her FB page link on file; running from her own page only if she insists, as a custom-fee add-on.
+
+**Decisions.**
+- Don't kill Graceful / Miracle-Lightstar / Pacesetter Google; switch them to Meta forms (batch with Franchil's). Focus on winners: Assisting Hands, Hoop, Colorado CareAssist, Franchil.
+- Robbie is Area Rep for North Texas (half royalties from 8 owners): pilot = first call on North Texas families, not exclusivity; campaign in his name; monthly plan after first client.
+- Colorado CareAssist: TJ emailing Jason (cc Jacob, director of client development, + support@) for a call before their 9 Oct flight end.
+- Provider-ad family with no provider contact: line up a backup now; ask the family by CALL not text (provider sees our texts in the shared thread).
+- Relationship texts to providers go from TJ's phone, in his casual register, not Olera's number.
+
+**Next Up.**
+- Today: TJ calls Liz, texts Hilda, Robbie call 9:30 CT. Log outcomes.
+- Build Meta forms: Franchil, Graceful, Miracle-Lightstar, Pacesetter (family image, 25+ decision pending).
+- Render ProfileSwitcher in the account menu (14 multi-profile logins).
+- Campaign page features one family; second gets missed (Marta). Show all families equally.
+- 3 Oct: Franchil read check; 5 Oct: image-swap review.
+
 ### 2026-09-30 — Phase 2F run on eight Meta forms, three ad images swapped, Ces's queue for six ad families (`thirsty-panini`, no app code)
 
 **Instant-form read (Phase 2F, first real use).** All nine forms pass: screener, privacy link, required consent box; live provider forms name Olera + provider. Meta leads reconcile 1:1 with `city_leads`. Flexible form delivery not readable via API. `is_optimized_for_quality` is OFF on every provider form (Hoop memory was wrong); Dallas form is HIGHER_INTENT (scratchpad 18 Sep said More volume). Failed Pascagoula receipt 20 Sep = deleted test lead.
