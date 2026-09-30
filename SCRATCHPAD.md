@@ -7,6 +7,30 @@
 
 ## Current Focus
 
+### 2026-09-30 (later) — Winners: Robbie + Liz call preps, Colorado CareAssist ask, Franchil consolidated (`thirsty-panini`, no app code)
+
+**Artifacts.** Robbie prep https://claude.ai/artifact/7yonrRHCdmJWjzaeCKwwvX · Liz prep https://claude.ai/artifact/Ke3McBDJLV2RnnnWhmU2iN · Franchil two-accounts + journey https://claude.ai/artifact/QpxkEFQYFhhtZAzXQNBHdg · Ces sheet v9 (Elvis backup Kierland, Marta email to Jacob, no family names in subjects).
+
+**Franchil FIXED (TJ ran SQL; auto-mode blocked Claude's write).** Real page 900bf6a1 now on her daily login d43d0915 (hilda.administrator@franchil.com), opens on sign-in; renamed listing 131ddb57 parked on the June login; her 3 reach-outs moved. Verified; logged as `tweak`, review 3 Oct. SQL at `~/Desktop/Claude Screenshots/franchil-consolidate.sql`.
+- **Product finding:** a login cannot switch between two provider pages. `components/shared/ProfileSwitcher.tsx` is built but rendered nowhere; `Navbar.tsx:174` takes the first organization profile. 14 prod logins hold 2+ org profiles and can reach only one. Small fix: render the switcher.
+- The "Amedisys" listing has HER address and franchil.com website (different phone). Ask Hilda before releasing it. Real page has no lat/lng.
+
+**Hilda's Facebook ask (verbatim, TJ screenshot 8 Sep):** "I am ready to run our business on Facebook ad... I have a business facebook account, how do incorporate that." Decision: run her instant form under OLERA; keep her FB page link on file; running from her own page only if she insists, as a custom-fee add-on.
+
+**Decisions.**
+- Don't kill Graceful / Miracle-Lightstar / Pacesetter Google; switch them to Meta forms (batch with Franchil's). Focus on winners: Assisting Hands, Hoop, Colorado CareAssist, Franchil.
+- Robbie is Area Rep for North Texas (half royalties from 8 owners): pilot = first call on North Texas families, not exclusivity; campaign in his name; monthly plan after first client.
+- Colorado CareAssist: TJ emailing Jason (cc Jacob, director of client development, + support@) for a call before their 9 Oct flight end.
+- Provider-ad family with no provider contact: line up a backup now; ask the family by CALL not text (provider sees our texts in the shared thread).
+- Relationship texts to providers go from TJ's phone, in his casual register, not Olera's number.
+
+**Next Up.**
+- Today: TJ calls Liz, texts Hilda, Robbie call 9:30 CT. Log outcomes.
+- Build Meta forms: Franchil, Graceful, Miracle-Lightstar, Pacesetter (family image, 25+ decision pending).
+- Render ProfileSwitcher in the account menu (14 multi-profile logins).
+- Campaign page features one family; second gets missed (Marta). Show all families equally.
+- 3 Oct: Franchil read check; 5 Oct: image-swap review.
+
 ### 2026-09-30 — Phase 2F run on eight Meta forms, three ad images swapped, Ces's queue for six ad families (`thirsty-panini`, no app code)
 
 **Instant-form read (Phase 2F, first real use).** All nine forms pass: screener, privacy link, required consent box; live provider forms name Olera + provider. Meta leads reconcile 1:1 with `city_leads`. Flexible form delivery not readable via API. `is_optimized_for_quality` is OFF on every provider form (Hoop memory was wrong); Dallas form is HIGHER_INTENT (scratchpad 18 Sep said More volume). Failed Pascagoula receipt 20 Sep = deleted test lead.
