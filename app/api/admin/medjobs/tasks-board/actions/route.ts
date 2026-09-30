@@ -1131,6 +1131,12 @@ export async function POST(req: Request) {
               // now, so say so rather than leaving the row mislabelled.
               task_type: taskTypeFor(section, step),
               completed_at: new Date().toISOString(),
+              // Who closed it. The column has been here since migration 064
+              // and nothing ever filled it, so every provider, advisor, org,
+              // event and professor task on the board was anonymous — five
+              // of the seven sections. Students and the job board have
+              // always recorded it; these three writes are what was missing.
+              completed_by: user.id,
               // Which button was pressed. Without it every finished task
               // reads "Logged" and four attempts are indistinguishable.
               payload: {
@@ -1161,6 +1167,7 @@ export async function POST(req: Request) {
             status: "completed",
             due_at: new Date().toISOString().slice(0, 10),
             completed_at: new Date().toISOString(),
+            completed_by: user.id,
             payload: {
               step,
               round,
@@ -1203,6 +1210,10 @@ export async function POST(req: Request) {
               .update({
                 status: "completed",
                 completed_at: new Date().toISOString(),
+                // Skipped rather than worked, but somebody's action closed
+                // it. Leaving it null would put a hole in any count of who
+                // moved a record along.
+                completed_by: user.id,
                 payload: { ...((t.payload ?? {}) as object), outcome: SKIPPED },
               })
               .eq("id", t.id);
