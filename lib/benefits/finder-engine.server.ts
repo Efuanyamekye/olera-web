@@ -46,6 +46,7 @@ import {
   type FinderLeftOut,
   type FinderGroup,
   type FinderAgency,
+  type FinderIconName,
   careNeedFromFinder,
   finderVoice,
   isHelpingSomeone,
@@ -101,6 +102,30 @@ function factsFor(a: FinderAnswers, stateCode: string): FamilyBenefitsFacts {
   };
 }
 
+/** The glyph for a program: its kind of help, from the category plus a few
+ *  name patterns that split a category (meals vs groceries, weatherization
+ *  vs bill help, Medicare help vs care at home vs a clinic-style program). */
+function iconFor(p: WaiverProgram, category: BenefitCategory): FinderIconName {
+  const name = `${p.name} ${p.shortName ?? ""}`;
+  switch (category) {
+    case "caregiver":
+      return "caregiver";
+    case "food":
+      return /meal|nutrition|congregate/i.test(name) ? "meals" : "groceries";
+    case "utilities":
+      return /weatheriz|repair|insulat/i.test(name) ? "weather" : "energy";
+    case "housing":
+      return "home";
+    case "income":
+      return "money";
+    default:
+      if (MEDICARE_HELP.test(name) || /prescription|pharmac|drug|insurance/i.test(name)) return "medicare";
+      if (/\bpace\b|all-inclusive|clinic|health center/i.test(name)) return "clinic";
+      if (PAYS_FOR_CARE.test(name) || /home|personal care|attendant/i.test(name)) return "home";
+      return "clinic";
+  }
+}
+
 function groupFor(category: BenefitCategory, helping: boolean): FinderGroup {
   if (category === "caregiver") return helping ? "you" : "care";
   if (category === "healthcare") return "care";
@@ -120,8 +145,10 @@ function tierAndReason(p: WaiverProgram, category: BenefitCategory, a: FinderAns
   const helping = isHelpingSomeone(a);
 
   if (category === "caregiver") {
+    const where = a.place ? ` in ${a.place.split(",")[0]}` : "";
+    const whom = a.who === "parent" ? "your parent" : a.who === "spouse" ? "your spouse" : "someone";
     return helping
-      ? { tier: "likely", reason: "You're caring for someone, and caregivers can get this help for themselves." }
+      ? { tier: "likely", reason: `You're caring for ${whom}${where}, and family caregivers can get this help for themselves.` }
       : { tier: "check", reason: "For family members caring for someone at home." };
   }
 
@@ -244,6 +271,7 @@ function agencyStep(agency: FinderAgency, a: FinderAnswers): FinderProgram {
     tier: "likely",
     reason: `Nothing on the list is a clear fit yet for what ${v.subject === "you" ? "you" : v.subject} need${v.subject === "you" ? "" : "s"} most, so start with someone who can check them all.`,
     group: "care",
+    icon: "helper",
     phone: agency.phone,
     phoneLabel: agency.name,
     hours: null,
@@ -305,6 +333,7 @@ export async function buildFinderResult(db: SupabaseClient, a: FinderAnswers): P
       tier,
       reason,
       group: groupFor(category, helping),
+      icon: iconFor(item, category),
       phone: contact?.phone || item.phone || null,
       phoneLabel: contact ? stripParen(contact.label) : null,
       hours: contact?.hours || null,

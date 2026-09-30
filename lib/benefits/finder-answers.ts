@@ -230,6 +230,21 @@ export function answerLabel(step: FinderStep, a: FinderAnswers): string | null {
 // ── Results ────────────────────────────────────────────────────────────────
 
 export type FinderTier = "likely" | "check";
+
+/** Which glyph a program row shows (components/benefits/finder/FinderIcon). */
+export type FinderIconName =
+  | "phone"
+  | "caregiver"
+  | "medicare"
+  | "energy"
+  | "home"
+  | "groceries"
+  | "meals"
+  | "weather"
+  | "clinic"
+  | "helper"
+  | "docs"
+  | "money";
 export type FinderGroup = "care" | "bills" | "you";
 
 export interface FinderProgram {
@@ -243,6 +258,7 @@ export interface FinderProgram {
   /** Why it is on the list, in the family's terms. */
   reason: string;
   group: FinderGroup;
+  icon: FinderIconName;
   phone: string | null;
   phoneLabel: string | null;
   hours: string | null;
