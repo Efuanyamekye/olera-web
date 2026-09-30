@@ -213,8 +213,8 @@ export default function BenefitsHubPage() {
                   From Olera&apos;s <i>Aging in America</i> series.
                 </p>
               </div>
-              <div className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-1 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-[1.35fr_1fr_1fr] md:items-start md:gap-5 md:overflow-visible md:px-0">
-                {stories.map((ep, i) => (
+              <div className="-mx-5 flex snap-x snap-mandatory scroll-px-5 gap-4 overflow-x-auto px-5 pb-1 [scrollbar-width:none] md:mx-0 md:grid md:grid-cols-3 md:items-start md:gap-5 md:overflow-visible md:px-0">
+                {stories.map((ep) => (
                   <Link
                     key={ep.slug}
                     href={`/aging-in-america/${ep.slug}`}
@@ -229,7 +229,7 @@ export default function BenefitsHubPage() {
                         className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                       />
                     </div>
-                    <p className={i === 0 ? "font-display text-[22px] leading-tight" : "text-[17px] font-semibold leading-snug"}>
+                    <p className="text-[17px] font-semibold leading-snug">
                       {ep.title.split(" | ")[0]}
                     </p>
                     <p className="text-sm text-gray-500">
