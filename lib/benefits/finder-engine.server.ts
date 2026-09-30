@@ -111,6 +111,8 @@ function iconFor(p: WaiverProgram, category: BenefitCategory): FinderIconName {
     case "caregiver":
       return "caregiver";
     case "food":
+      // SNAP's full name says "Nutrition", so groceries is decided first.
+      if (/\bsnap\b|supplemental nutrition|food stamp|calfresh|basic food|grocer/i.test(name)) return "groceries";
       return /meal|nutrition|congregate/i.test(name) ? "meals" : "groceries";
     case "utilities":
       return /weatheriz|repair|insulat/i.test(name) ? "weather" : "energy";

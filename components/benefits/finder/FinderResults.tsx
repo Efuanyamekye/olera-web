@@ -34,7 +34,11 @@ const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, "")}`;
  *  or two short sentences, so the list starts short; the full text is one
  *  tap away. */
 function shortDoc(text: string): string {
-  const parts = text.split(/(?<=\.)\s+/);
+  // No regex lookbehind: iOS Safari before 16.4 cannot parse one, and a
+  // parse error takes the whole results bundle down with it.
+  // Sentence ends are a period, a space and a capital, so "U.S. citizen"
+  // stays whole.
+  const parts = text.split(/\.\s+(?=[A-Z])/).map((x, i, all) => (i < all.length - 1 ? `${x}.` : x).trim());
   let out = parts[0] || text;
   if (out.length < 22 && parts[1]) out = `${out} ${parts[1]}`;
   return out.length > 90 ? `${out.slice(0, 88).trimEnd()}…` : out;
@@ -335,21 +339,30 @@ function Group({ title, items, total }: { title: string; items: FinderProgram[];
 export default function FinderResults({ f }: { f: FinderState }) {
   const [showAll, setShowAll] = useState(false);
   const [sendOpen, setSendOpen] = useState(false);
-  const [barVisible, setBarVisible] = useState(false);
+  const [cardAbove, setCardAbove] = useState(false);
+  const [endInView, setEndInView] = useState(false);
+  const barVisible = cardAbove && !endInView;
   const cardRef = useRef<HTMLElement | null>(null);
+  const endRef = useRef<HTMLDivElement | null>(null);
   const sendRef = useRef<HTMLDivElement | null>(null);
   const r = f.result;
 
   // Phone: once the first-step card scrolls away, a slim bar keeps Call and
   // "Text me the plan" in reach.
+  // It steps aside again at the end of the results, so it never sits on the
+  // site footer.
   useEffect(() => {
-    const el = cardRef.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(
-      ([e]) => setBarVisible(!e.isIntersecting && e.boundingClientRect.top < 0),
-      { threshold: 0 },
-    );
-    io.observe(el);
+    const card = cardRef.current;
+    const end = endRef.current;
+    if (!card || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.target === card) setCardAbove(!e.isIntersecting && e.boundingClientRect.top < 0);
+        if (e.target === end) setEndInView(e.isIntersecting || e.boundingClientRect.top < 0);
+      }
+    });
+    io.observe(card);
+    if (end) io.observe(end);
     return () => io.disconnect();
   }, [r]);
 
@@ -358,10 +371,12 @@ export default function FinderResults({ f }: { f: FinderState }) {
   const v = finderVoice(a.who);
   const likely = r.programs.filter((p) => p.tier === "likely");
   const check = r.programs.filter((p) => p.tier === "check");
-  const firstIsProgram = !!r.firstStep && r.firstStep.id !== "local-agency";
-  const total = r.programs.length + (firstIsProgram ? 1 : 0);
-  const likelyCount = likely.length + (firstIsProgram && r.firstStep?.tier === "likely" ? 1 : 0);
-  const checkCount = total - likelyCount;
+
+  const countParts = [
+    likely.length > 0 ? `${likely.length} likely to qualify` : null,
+    check.length > 0 ? `${check.length} worth checking` : null,
+  ].filter(Boolean);
+  const countDetail = countParts.length ? `: ${countParts.join(", ")}` : "";
 
   // Preview the first few rows across both groups; "Show all" reveals the rest.
   const likelyShown = showAll ? likely : likely.slice(0, PREVIEW_ROWS);
@@ -399,11 +414,15 @@ export default function FinderResults({ f }: { f: FinderState }) {
             Plan for {v.planFor} · {a.place || r.stateName}
           </p>
           <h1 className="font-display text-[32px] lg:text-[40px] leading-[1.1] text-gray-900 mt-1.5 mb-0">Start with one call</h1>
-          {total > 0 && (
+          {/* Counts describe the list below the card, so they match the group
+              headers exactly. */}
+          {r.programs.length > 0 && (
             <p className="mt-2 mb-0 text-[16px] text-gray-600">
-              <strong className="font-semibold text-gray-900">{total} programs</strong>
-              {likelyCount > 0 && ` · ${likelyCount} likely to qualify`}
-              {checkCount > 0 && ` · ${checkCount} ${likelyCount > 0 ? "more " : ""}worth checking`}
+              <strong className="font-semibold text-gray-900">
+                {r.firstStep ? "Plus " : ""}
+                {r.programs.length} {r.firstStep ? "more " : ""}program{r.programs.length > 1 ? "s" : ""}
+              </strong>
+              {countDetail}
             </p>
           )}
         </header>
@@ -486,6 +505,7 @@ export default function FinderResults({ f }: { f: FinderState }) {
         </p>
 
         <div className="lg:hidden border-t border-gray-200 pt-5">{answers}</div>
+        <div ref={endRef} aria-hidden className="h-px" />
       </div>
 
       {/* Desktop: a quiet side column. The recommendation stays dominant. */}
