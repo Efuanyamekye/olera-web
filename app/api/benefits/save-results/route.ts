@@ -160,6 +160,10 @@ interface SaveResultsPayload {
   /** The program the finder told them to call first. Kept so the plan page,
    *  letter and texts lead with the same one. Must be in matchedPrograms. */
   firstStepProgramId?: string;
+  /** The finder's programs in the order the family saw them. The plan page
+   *  lists exactly these instead of rebuilding a list from one care-need
+   *  keyword, which dropped programs the finder had just shown. */
+  finderProgramIds?: string[];
 }
 
 export async function POST(req: Request) {
@@ -203,6 +207,7 @@ export async function POST(req: Request) {
     finderNeeds,
     caregiverNeeds,
     firstStepProgramId,
+    finderProgramIds,
   } = payload;
   const finderFirst = firstStepProgramId
     ? (matchedPrograms || []).find((p) => p.programId === firstStepProgramId)
@@ -519,6 +524,9 @@ export async function POST(req: Request) {
       answers: careNeed ? { careNeed, careNeedSource } : undefined,
       matchCount,
       completed_at: completedAt,
+      finder_program_ids: Array.isArray(finderProgramIds) && finderProgramIds.length
+        ? finderProgramIds.filter((id) => typeof id === "string").slice(0, 30)
+        : undefined,
       finder_first_step: finderFirst
         ? { program_id: finderFirst.programId, state_id: finderFirst.stateId }
         : undefined,

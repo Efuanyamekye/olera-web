@@ -276,40 +276,67 @@ function Question({ f }: { f: FinderState }) {
 
 // ── Rail (desktop) ─────────────────────────────────────────────────────────
 
+/**
+ * The care profile as a timeline. Every row is the same height whatever its
+ * state, and the answer line is always reserved, so nothing below it moves
+ * when you answer, go back, or move on (TJ flagged the jumping, 2026-09-30).
+ */
 function Rail({ f }: { f: FinderState }) {
   return (
-    <nav aria-label="Your answers" className="flex flex-col gap-1">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-400 mb-3">
+    <nav aria-label="Your answers">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-500 mb-4 mt-0">
         {f.answers.who && f.answers.who !== "me" ? "Their care profile" : "Your care profile"}
       </p>
-      {f.steps.map((s: FinderStep, i) => {
-        const now = i === f.stepIndex;
-        const done = !now && isStepAnswered(s, f.answers);
-        const label = answerLabel(s, f.answers);
-        return (
-          <button
-            key={s}
-            type="button"
-            disabled={!done}
-            onClick={() => f.goTo(s)}
-            className="grid grid-cols-[22px_1fr] gap-2.5 items-start bg-transparent border-none py-1.5 text-left cursor-pointer disabled:cursor-default"
-          >
-            <span
-              aria-hidden
-              className={[
-                "w-[18px] h-[18px] mt-0.5 rounded-full border-[1.5px] grid place-items-center text-[11px] text-white",
-                done ? "bg-primary-600 border-primary-600" : now ? "bg-gray-900 border-gray-900" : "border-gray-300",
-              ].join(" ")}
-            >
-              {done ? "✓" : ""}
-            </span>
-            <span className={["text-sm font-medium", done || now ? "text-gray-900" : "text-gray-400"].join(" ")}>
-              {STEP_LABELS[s]}
-              {done && label && <span className="block text-[13px] font-normal text-gray-500">{label}</span>}
-            </span>
-          </button>
-        );
-      })}
+      <ol className="relative m-0 p-0 list-none">
+        {/* The connecting line runs behind the dots. */}
+        <span aria-hidden className="absolute left-[9px] top-[12px] bottom-[34px] w-px bg-gray-300" />
+        {f.steps.map((s: FinderStep, i) => {
+          const now = i === f.stepIndex;
+          const answered = isStepAnswered(s, f.answers);
+          const done = !now && answered;
+          const label = answered ? answerLabel(s, f.answers) : null;
+          return (
+            <li key={s} className="relative">
+              <button
+                type="button"
+                disabled={!answered || now}
+                onClick={() => f.goTo(s)}
+                aria-current={now ? "step" : undefined}
+                className="w-full h-[56px] grid grid-cols-[20px_minmax(0,1fr)] gap-3 items-start bg-transparent border-none p-0 text-left cursor-pointer disabled:cursor-default group"
+              >
+                <span
+                  aria-hidden
+                  className={[
+                    "relative z-[1] mt-[2px] w-[19px] h-[19px] rounded-full border-[1.5px] grid place-items-center text-[11px] leading-none text-white transition-colors duration-200",
+                    done
+                      ? "bg-primary-600 border-primary-600"
+                      : now
+                        ? "bg-vanilla-100 border-gray-900 after:content-[''] after:w-[9px] after:h-[9px] after:rounded-full after:bg-gray-900"
+                        : "bg-vanilla-100 border-gray-300",
+                  ].join(" ")}
+                >
+                  {done ? "✓" : ""}
+                </span>
+                <span className="min-w-0 flex flex-col">
+                  <span
+                    className={[
+                      "text-[15px] font-medium leading-[22px] transition-colors duration-200",
+                      done || now ? "text-gray-900" : "text-gray-400",
+                      done ? "group-hover:underline underline-offset-2" : "",
+                    ].join(" ")}
+                  >
+                    {STEP_LABELS[s]}
+                  </span>
+                  {/* Always one line, reserved even when empty. */}
+                  <span className="block truncate text-[13px] leading-[20px] text-gray-500" title={label ?? undefined}>
+                    {label ?? "\u00a0"}
+                  </span>
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
     </nav>
   );
 }
