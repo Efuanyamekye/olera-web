@@ -1193,6 +1193,34 @@ function Field({
       </button>
     );
   }
+  // A fixed list. Rendered as a real select rather than a row of chips
+  // because nine options in chips is a wall, and this is a question with one
+  // answer that somebody types once per student.
+  if (field.type === "select") {
+    return (
+      <label className="mt-3 flex items-center gap-2.5">
+        <span className="w-24 shrink-0 text-[12px] text-gray-500">
+          {field.label}
+          {field.required && <span className="ml-0.5 text-error-600">*</span>}
+        </span>
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-[13px] text-gray-900 focus:border-primary-600 focus:outline-none"
+        >
+          {/* Empty and first, so an unanswered question reads as unanswered
+              rather than as whichever option happened to be at the top. */}
+          <option value="">&mdash;</option>
+          {(field.options ?? []).map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+      </label>
+    );
+  }
+
   return (
     <label className="mt-3 flex items-center gap-2.5">
       <span className="w-24 shrink-0 text-[12px] text-gray-500">

@@ -61,7 +61,20 @@ export interface LadderInput {
   key: string;
   label: string;
   /** Defaults to a plain text field. */
-  type?: "text" | "datetime-local" | "date" | "url" | "number" | "check";
+  type?: "text" | "datetime-local" | "date" | "url" | "number" | "check" | "select";
+  /**
+   * The choices, for a `select`.
+   *
+   * A fixed list rather than a text box, because the whole reason to capture
+   * a thing like "where did they come from" is to add it up later, and free
+   * text never adds up: Handshake, handshake, HandShake and "handshake ad"
+   * are four answers to a question with one answer.
+   *
+   * The last entry should be a catch-all. A list that cannot express what
+   * happened is a list people put the nearest wrong thing into, which is
+   * worse than free text because it looks like data.
+   */
+  options?: readonly string[];
   /**
    * The rung cannot be finished without it.
    *
@@ -1088,21 +1101,158 @@ If you are unsure on any of the four, leave it out and say so in the note. A pro
     label: "Students",
     goal: "hired",
     auto: true,
-    // The application opens on its own now. The meeting used to open beside
-    // it, on the reasoning that neither waits on the other; the order this
-    // ladder runs in says otherwise — qualification comes between them, and
-    // there is no point meeting a student who has not been qualified.
+    // One rung opens when an application lands: reaching out. Everything
+    // else waits on it.
     openTogether: 1,
     emptyNote: "Students appear here when an application lands.",
+    // ── the order this ladder runs in ────────────────────────────────────
+    //
+    // Rewritten on 30 September, because it described a process nobody runs.
+    // It began with "Complete their application" and put the meeting third,
+    // on the assumption that a student finishes their application and we
+    // then talk to them. The reverse is what happens, every time: an
+    // incomplete application lands, we reach out to book a call, we hold the
+    // call and take notes, and the application gets finished after that,
+    // usually with our help. Nobody has yet completed one before the call.
+    //
+    // The first three rungs are what "Meeting with the student" used to be,
+    // taken apart: reaching out, booking, and holding it are three different
+    // waits with three different failure modes, and one rung could record
+    // none of them. The fields on them are the five things Chantel asked for.
+    //
+    // "Get them an interview" is now "Get them a provider interview". Two
+    // different interviews live on this ladder and calling both of them the
+    // interview is how the first version of this rewrite got built wrong.
+    //
+    // NOTE FOR ANY FUTURE REORDERING: business_profile_tasks.payload.step is
+    // an integer index into this array, so moving a rung silently repoints
+    // every task already stored, with no error anywhere.
+    // scripts/migration/36-medjobs-student-interview-remap.sql remaps the
+    // old indices to these. Do not reorder without writing the next one.
     steps: [
+      {
+        name: "reach-out-to-them",
+        title: "Reach out to them",
+        what: "First contact after their application lands, to get a call in the diary.",
+        why: "An application is somebody raising their hand. Nothing happens until we answer it, and the first day is the day they are most likely to reply.",
+        steps: [
+          "Read what they sent: university, course, what they are looking for.",
+          "Email or call them, asking for a time to talk.",
+          "Log it here, so the clock starts and the next person can see it was done.",
+        ],
+        textarea: "Anything worth saying about the approach",
+        email: {
+          subject: "Your Olera application — can we talk this week?",
+          body: `Hi {first},
+
+Thanks for applying to the Student Caregiver Program. I would like to put twenty minutes in the diary with you before we go further: what you are looking for, the hours that work around your course, and the kind of families we would put you with.
+
+What does the rest of this week look like for you?
+
+Best,
+[your name]
+Dr. Logan DuBose's office · Olera`,
+        },
+        actions: [
+          { label: "Reached out", outcome: "next", delay: 0 },
+          { label: "No answer — try again", outcome: "repeat", delay: 3 },
+        ],
+      },
+      {
+        name: "schedule-the-interview",
+        title: "Schedule the interview",
+        what: "Put the intro call in the diary.",
+        why: "A call with a date on it happens. A call somebody means to arrange does not, and until 30 September the board had nowhere to write the date down, so nobody could tell the difference.",
+        steps: ["Agree a time.", "Send the invite.", "Put the date and time in below."],
+        // The rung that holds the interview comes due on the day of the
+        // interview, not two working days from booking it.
+        actions: [
+          {
+            label: "Booked",
+            outcome: "next",
+            delay: 0,
+            delayFrom: "interview_at",
+            carry: ["interview_at"],
+            inputs: [
+              {
+                key: "interview_at",
+                label: "Date and time",
+                type: "datetime-local",
+                required: true,
+                needs: "Put the date and time in",
+              },
+            ],
+          },
+          { label: "Could not reach them", outcome: "repeat", delay: 3 },
+        ],
+      },
+      {
+        name: "hold-the-interview",
+        title: "Hold the interview",
+        what: "Our intro call with the applicant.",
+        why: "We meet every student before putting them in front of a provider. It is also the only conversation in which anybody asks them how they found us.",
+        steps: [
+          "Hold the call.",
+          "Write down what you learned while it is fresh.",
+          "Ask how they heard about us, and record it.",
+        ],
+        textarea: "Interview notes",
+        actions: [
+          {
+            label: "Interviewed",
+            outcome: "next",
+            delay: 0,
+            inputs: [
+              {
+                key: "student_source",
+                label: "How they found us",
+                type: "select",
+                // Six and a catch-all. Deliberately short: a list nobody can
+                // hold in their head gets answered with whatever is nearest.
+                // The Other box is the point — read what people type into it
+                // after a month and promote whatever keeps coming up.
+                options: [
+                  "Handshake",
+                  "CareerLink",
+                  "University job board",
+                  "Student org, advisor or professor",
+                  "Campus event",
+                  "Referred by another student",
+                  "Other",
+                ],
+              },
+              { key: "student_source_other", label: "If other, what" },
+            ],
+          },
+          // Back to booking, not on to the next thing. A student who did not
+          // turn up has not been interviewed, and the old ladder had only
+          // "held" and "not needed" to log it with — both of which said
+          // something untrue and moved the record on regardless.
+          {
+            label: "No show",
+            outcome: "next",
+            delay: 1,
+            goto: "schedule-the-interview",
+          },
+          {
+            label: "Rescheduled",
+            outcome: "next",
+            delay: 0,
+            goto: "schedule-the-interview",
+          },
+          // Somebody already interviewed elsewhere, or a student we know
+          // well enough not to need one. Rare, and it has to stay possible.
+          { label: "No interview needed", outcome: "next", delay: 0 },
+        ],
+      },
       {
         name: "complete-their-application",
         title: "Complete their application",
         what: "Chase whatever is missing from their profile.",
-        why: "An incomplete application can't be sent to a provider.",
+        why: "An incomplete application can't be sent to a provider. After the call rather than before it, because that is when it actually gets finished — usually with our help, on the call or right after it.",
         steps: ["Check what's missing.", "Email or call them for it.", "Log it when complete."],
-        // They may finish it themselves, and most will. The record says so
-        // the moment they go live.
+        // They may finish it themselves, and some will. The record says so
+        // the moment they go live, wherever the ladder has got to.
         satisfiedBy: "application_complete",
         satisfiedNote: "They completed it themselves.",
         email: {
@@ -1130,26 +1280,13 @@ Dr. Logan DuBose's office · Olera`,
         actions: [{ label: "Qualified", outcome: "next", delay: 0 }],
       },
       {
-        name: "meeting-with-the-student",
-        title: "Meeting with the student",
-        what: "The intro call with the applicant.",
-        why: "We meet every student before putting them in front of a provider.",
-        steps: ["Book a time.", "Hold it.", "Log how it went."],
-        textarea: "How it went",
-        // Not every student needs one, and a student who has already been
-        // interviewed plainly did not. The second outcome exists so nobody
-        // has to log a meeting that never happened to move a record on.
-        actions: [
-          { label: "Meeting held", outcome: "next", delay: 0 },
-          { label: "No meeting needed", outcome: "next", delay: 0 },
-          { label: "Something else", outcome: "next", delay: 0, goto: "errand" },
-        ],
-      },
-      {
         name: "get-them-an-interview",
-        title: "Get them an interview",
+        title: "Get them a provider interview",
         what: "Put them in front of a signed-up provider.",
-        why: "The interview is what turns an applicant into a hire.",
+        why: "The provider interview is what turns an applicant into a hire.",
+        // Renamed from "Get them an interview". Two interviews live on this
+        // ladder now — ours and the provider's — and one of them being
+        // called "the interview" is exactly how they get confused.
         steps: ["Pick a provider taking students.", "Introduce them.", "Confirm the interview is booked."],
         satisfiedBy: "interview_booked",
         satisfiedNote: "An interview is on the calendar.",
@@ -1204,12 +1341,14 @@ Dr. Logan DuBose's office · Olera`,
             outcome: "next",
             delay: 0,
             // Back to the rung the errand was opened from, which the
-            // errand carries with it. The fixed rung below is only the
-            // fallback for an errand queued before origins were carried:
-            // on its own it sent a record at "Confirm hire" back to
-            // "Meeting with the student", which is why nobody trusted it.
+            // errand carries with it. The named rung below is only the
+            // fallback, for an errand queued before origins were carried.
+            // On its own it sent every record to the same place whatever
+            // rung it had left, which on a ladder where "Something else"
+            // is offered everywhere would be wrong far more often than
+            // right.
             resume: true,
-            goto: "meeting-with-the-student",
+            goto: "hold-the-interview",
           },
         ],
       },
@@ -1324,10 +1463,12 @@ Dr. Logan DuBose's office · Olera`,
             outcome: "next",
             delay: 0,
             // Back to the rung the errand was opened from, which the
-            // errand carries with it. The fixed rung below is only the
-            // fallback for an errand queued before origins were carried:
-            // on its own it sent a record at "Confirm hire" back to
-            // "Meeting with the student", which is why nobody trusted it.
+            // errand carries with it. The named rung below is only the
+            // fallback, for an errand queued before origins were carried.
+            // On its own it sent every record to the same place whatever
+            // rung it had left, which on a ladder where "Something else"
+            // is offered everywhere would be wrong far more often than
+            // right.
             resume: true,
             goto: "confirm-it-s-submitted",
           },
@@ -1489,10 +1630,12 @@ If two names turn out to be the same office, add it once. If you are not sure wh
             outcome: "next",
             delay: 0,
             // Back to the rung the errand was opened from, which the
-            // errand carries with it. The fixed rung below is only the
-            // fallback for an errand queued before origins were carried:
-            // on its own it sent a record at "Confirm hire" back to
-            // "Meeting with the student", which is why nobody trusted it.
+            // errand carries with it. The named rung below is only the
+            // fallback, for an errand queued before origins were carried.
+            // On its own it sent every record to the same place whatever
+            // rung it had left, which on a ladder where "Something else"
+            // is offered everywhere would be wrong far more often than
+            // right.
             resume: true,
             goto: "confirm-the-flyer-is-circulating",
           },
@@ -1608,10 +1751,12 @@ Dr. Logan DuBose's office · Olera`,
             outcome: "next",
             delay: 0,
             // Back to the rung the errand was opened from, which the
-            // errand carries with it. The fixed rung below is only the
-            // fallback for an errand queued before origins were carried:
-            // on its own it sent a record at "Confirm hire" back to
-            // "Meeting with the student", which is why nobody trusted it.
+            // errand carries with it. The named rung below is only the
+            // fallback, for an errand queued before origins were carried.
+            // On its own it sent every record to the same place whatever
+            // rung it had left, which on a ladder where "Something else"
+            // is offered everywhere would be wrong far more often than
+            // right.
             resume: true,
             goto: "send-the-program-info",
           },
@@ -1721,10 +1866,12 @@ Dr. Logan DuBose's office · Olera`,
             outcome: "next",
             delay: 0,
             // Back to the rung the errand was opened from, which the
-            // errand carries with it. The fixed rung below is only the
-            // fallback for an errand queued before origins were carried:
-            // on its own it sent a record at "Confirm hire" back to
-            // "Meeting with the student", which is why nobody trusted it.
+            // errand carries with it. The named rung below is only the
+            // fallback, for an errand queued before origins were carried.
+            // On its own it sent every record to the same place whatever
+            // rung it had left, which on a ladder where "Something else"
+            // is offered everywhere would be wrong far more often than
+            // right.
             resume: true,
             goto: "prepare-for-the-event",
           },
@@ -1836,10 +1983,12 @@ Dr. Logan DuBose's office · Olera`,
             outcome: "next",
             delay: 0,
             // Back to the rung the errand was opened from, which the
-            // errand carries with it. The fixed rung below is only the
-            // fallback for an errand queued before origins were carried:
-            // on its own it sent a record at "Confirm hire" back to
-            // "Meeting with the student", which is why nobody trusted it.
+            // errand carries with it. The named rung below is only the
+            // fallback, for an errand queued before origins were carried.
+            // On its own it sent every record to the same place whatever
+            // rung it had left, which on a ladder where "Something else"
+            // is offered everywhere would be wrong far more often than
+            // right.
             resume: true,
             goto: "confirm-they-shared-it",
           },
