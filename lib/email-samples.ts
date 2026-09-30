@@ -105,6 +105,7 @@ import {
   // profile review emails
   medjobsProfileApprovedEmail,
   medjobsProfileRejectedEmail,
+  medjobsProfileRevokedEmail,
   medjobsReviewNudgeEmail,
   medjobsReviewRequestedEmail,
   // placement emails
@@ -1439,6 +1440,22 @@ export const EMAIL_VARIANTS: EmailVariant[] = [
     render: () => medjobsProfileRejectedEmail({
       studentName: SAMPLE_STUDENT.studentName,
       reason: "Please re-record your intro video with better lighting and ensure your face is clearly visible throughout. Also, your driver's license photo is blurry — please upload a clearer image.",
+      portalUrl: SAMPLE_STUDENT.magicLink,
+    }),
+  },
+  {
+    id: "student_profile_revoked",
+    audience: "student",
+    group: "Student · Profile Review",
+    label: "Profile revoked",
+    subject: "Your MedJobs profile needs attention",
+    emailType: "medjobs_profile_revoked",
+    timing: "When admin revokes a previously approved student profile",
+    who: "Student whose approved profile was revoked by admin.",
+    why: "Notify them their profile is no longer visible and explain next steps.",
+    render: () => medjobsProfileRevokedEmail({
+      studentName: SAMPLE_STUDENT.studentName,
+      reason: "We noticed some inconsistencies in your certification documentation. Please upload current, valid credentials to restore your profile.",
       portalUrl: SAMPLE_STUDENT.magicLink,
     }),
   },

@@ -24,17 +24,34 @@ import AssigneeChip from "./AssigneeChip";
 /**
  * Sections where a record can be typed in, and what one is called.
  *
- * Only providers, deliberately. Everything else on the board either arrives
- * from a system — students from applications, the job board from the channel
- * — or is found by a rung whose whole job is finding them, and a hand-typed
- * row would sit outside the count those rungs are measured on.
+ * Every section a sweep fills. A sweep runs once per campus and the world
+ * carries on afterwards: an agency somebody hears about on a call, an
+ * advising office that did not exist when the sweep ran, a second student
+ * organisation nobody had heard of in week one.
+ *
+ * This used to be providers and advising offices alone, on the reasoning
+ * that an org, an event or a professor "arrives from its own rung" and a
+ * hand-typed one would sit outside the count that rung is measured on. That
+ * reasoning did not survive contact with the work. Close the org sweep and
+ * the section has no way to gain a record at all: on 30 September that left
+ * somebody unable to add a second student organisation for two weeks, with
+ * nothing on screen to say why or what to do instead.
+ *
+ * The count argument was also the wrong way round. A record typed in by hand
+ * is stamped with its own found_by, so it is distinguishable from a swept one
+ * whenever anybody wants to distinguish them. A record that could not be
+ * created at all is not.
+ *
+ * Students and the job board still have no entry here, and that is a
+ * different kind of no: a student is a person who applied, and the job board
+ * is a property of the campus rather than a row you can have two of.
  */
-// Both sections the sweeps fill. A sweep is once per campus and the world
-// carries on afterwards: an agency somebody hears about on a call, an
-// advising office that did not exist when the sweep ran.
 const ADD_BY_HAND = new Map<SectionKey, string>([
   ["providers", "provider"],
   ["advisors", "advising office"],
+  ["orgs", "student org"],
+  ["events", "campus event"],
+  ["professors", "professor"],
 ]);
 
 export default function SummaryView({
@@ -113,6 +130,7 @@ export default function SummaryView({
           // Somebody else's section under a filter stays shut, whatever the
           // expanded state said before the filter was applied.
           const inScope = mine.includes(key);
+          const newHere = records.filter((r) => r.isNew).length;
           const expanded = Boolean(open[key]) && inScope;
           return (
             <div
@@ -134,6 +152,15 @@ export default function SummaryView({
                   <span className="truncate text-[13.5px] font-medium text-gray-900">
                     {ladder.label}
                   </span>
+                  {/* On the closed section, because the whole complaint was
+                      having to open it to find out. The waiting count beside
+                      it is how much there is to do; this is how much of it
+                      nobody knows about yet. */}
+                  {newHere > 0 && (
+                    <span className="shrink-0 rounded-full bg-success-50 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-success-700">
+                      {newHere} new
+                    </span>
+                  )}
                 </button>
                 {/* Beside the name it belongs to, not out by the count. Who
                     owns this reads as part of the label; against the number
@@ -209,6 +236,15 @@ export default function SummaryView({
                           )}
                           <span className="min-w-0 flex-1 truncate text-[13px] text-gray-900">
                             {r.name}
+                            {/* An applicant nobody has opened. It arrived on
+                                its own, so unlike every other record on this
+                                board there was nothing to tell anybody it was
+                                here. Clears the first time it is opened. */}
+                            {r.isNew && (
+                              <span className="ml-1.5 rounded-full bg-success-50 px-1.5 py-px align-[1px] text-[10px] font-semibold uppercase tracking-wide text-success-700">
+                                new
+                              </span>
+                            )}
                           </span>
                           <span
                             className={`shrink-0 text-[11.5px] ${

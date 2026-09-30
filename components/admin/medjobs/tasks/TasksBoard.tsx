@@ -8,7 +8,10 @@ import {
   readyCount,
   readyCountIn,
   readyForStudents,
+  NO_UNIVERSITY,
   type BoardUniversity,
+  type WaitingGroup,
+  type WaitingStudent,
 } from "@/lib/medjobs/task-board";
 import {
   assignedPeople,
@@ -16,6 +19,7 @@ import {
   sectionsFor,
   type Person,
 } from "@/lib/medjobs/assignments";
+import { applyWhenIdle } from "@/lib/medjobs/editing-guard";
 import { demoUniversity, isDemoUniversity } from "@/lib/medjobs/demo-university";
 import UniversityFlow from "./UniversityFlow";
 
@@ -101,6 +105,17 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
 
   const [demoHidden, setDemoHidden] = useState(false);
 
+  /**
+   * Applicants from universities the board has not opened.
+   *
+   * Sits under the table beside the hidden campuses, and for the same
+   * reason: a short list worth glancing at, not part of the day's work.
+   */
+  const [elsewhere, setElsewhere] = useState<WaitingGroup[]>([]);
+  const [showElsewhere, setShowElsewhere] = useState(false);
+  const [showHiddenStudents, setShowHiddenStudents] = useState(false);
+  const [hidingStudent, setHidingStudent] = useState<string | null>(null);
+
   useEffect(() => {
     try {
       const saved = window.localStorage.getItem(FILTER_KEY);
@@ -174,21 +189,62 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
     }
   };
 
+  /**
+   * Put a waiting applicant away, or bring them back.
+   *
+   * Optimistic for the same reason the campus one is: the row disappearing
+   * is the feedback, and a round trip before it moves reads as a dead click.
+   */
+  const setStudentHidden = async (st: WaitingStudent, hidden: boolean) => {
+    setHidingStudent(st.id);
+    const before = elsewhere;
+    setElsewhere((prev) =>
+      prev.map((g) => ({
+        ...g,
+        students: g.students.map((x) => (x.id === st.id ? { ...x, hidden } : x)),
+      })),
+    );
+    try {
+      const res = await fetch("/api/admin/medjobs/tasks-board/actions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ op: "set_student_hidden", studentId: st.id, hidden }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+    } catch {
+      setElsewhere(before);
+      setFailed(
+        hidden ? `${st.name} could not be hidden.` : `${st.name} could not be brought back.`,
+      );
+    } finally {
+      setHidingStudent(null);
+    }
+  };
+
   const load = useCallback(async () => {
     if (seed) return;
     try {
       const res = await fetch("/api/admin/medjobs/tasks-board");
       const d = (await res.json()) as {
         universities: BoardUniversity[];
+        elsewhere?: WaitingGroup[];
         people?: Person[];
         me?: Person | null;
         error?: string;
       };
       if (!res.ok) throw new Error(d.error ?? `Request failed (${res.status}).`);
-      setBoard([...d.universities, demo.current!]);
-      setPeople(d.people ?? []);
-      setMe(d.me ?? null);
-      setFailed(null);
+      // Fetched now, shown the moment nobody is typing. A reload replaces
+      // the whole university object, and replacing the one a field is bound
+      // to while somebody is mid-word throws the word away with no error and
+      // nothing on screen. Saving a field no longer reloads at all, which is
+      // where that actually bit; this covers the reloads that remain.
+      applyWhenIdle(() => {
+        setBoard([...d.universities, demo.current!]);
+        setElsewhere(d.elsewhere ?? []);
+        setPeople(d.people ?? []);
+        setMe(d.me ?? null);
+        setFailed(null);
+      });
     } catch (e) {
       setFailed(e instanceof Error ? e.message : "The board could not be loaded.");
     }
@@ -230,6 +286,16 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
     : board;
 
   const hiddenCount = visible.filter(isHidden).length;
+  // The link counts who is waiting, which means the ones not put away. A
+  // count that included them would offer to show a list that opens empty.
+  const waitingCount = elsewhere.reduce(
+    (n, g) => n + g.students.filter((st) => !st.hidden).length,
+    0,
+  );
+  const hiddenStudentCount = elsewhere.reduce(
+    (n, g) => n + g.students.filter((st) => st.hidden).length,
+    0,
+  );
   const rows = [...(showHidden ? visible : visible.filter((u) => !isHidden(u)))].sort(
     (a, b) =>
       // Hidden below everything, including the teaching campus: they are
@@ -394,18 +460,122 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
         </table>
       </div>
 
-      {/* Without this, hiding is a one-way door and the only way back is a
-          database. Shown only when something is actually hidden. */}
-      {hiddenCount > 0 && (
-        <button
-          type="button"
-          onClick={() => setShowHidden((v) => !v)}
-          className="mt-2 text-[12px] text-gray-500 underline-offset-2 hover:text-gray-900 hover:underline"
-        >
-          {showHidden
-            ? "Put the hidden ones away"
-            : `${hiddenCount} hidden \u00B7 show ${hiddenCount === 1 ? "it" : "them"}`}
-        </button>
+      {/* Two links of the same weight, under the table. Both open a short
+          list you glance at rather than work: campuses put away, and
+          applicants from campuses we have not opened. Neither is shown when
+          it would be empty. */}
+      <div className="mt-2 flex flex-wrap items-baseline gap-x-5 gap-y-1">
+        {/* Without this, hiding is a one-way door and the only way back is a
+            database. Shown only when something is actually hidden. */}
+        {hiddenCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowHidden((v) => !v)}
+            className="text-[12px] text-gray-500 underline-offset-2 hover:text-gray-900 hover:underline"
+          >
+            {showHidden
+              ? "Put the hidden ones away"
+              : `${hiddenCount} hidden \u00B7 show ${hiddenCount === 1 ? "it" : "them"}`}
+          </button>
+        )}
+
+        {/* Shown while anybody is on the list, including when every one of
+            them has been put away. Gating on the visible count alone would
+            make hiding the last one a door that locks behind you. */}
+        {waitingCount + hiddenStudentCount > 0 && (
+          <button
+            type="button"
+            onClick={() => setShowElsewhere((v) => !v)}
+            className="text-[12px] text-gray-500 underline-offset-2 hover:text-gray-900 hover:underline"
+          >
+            {showElsewhere
+              ? "Put the waiting list away"
+              : waitingCount > 0
+                ? `${waitingCount} student${waitingCount === 1 ? "" : "s"} out of area \u00B7 show`
+                : `${hiddenStudentCount} out of area, all put away \u00B7 show`}
+          </button>
+        )}
+      </div>
+
+      {showElsewhere && (
+        <div className="mt-2 overflow-hidden rounded-lg border border-gray-200">
+          <div className="border-b border-gray-200 bg-gray-50 px-3.5 py-2">
+            <p className="text-[12.5px] font-semibold text-gray-900">Students out of area</p>
+            <p className="mt-0.5 text-[11.5px] leading-snug text-gray-500">
+              They applied from a university the board has not opened, so they have no
+              column to sit in. Grouped by what they typed. Where they pile up is where
+              to open next.
+            </p>
+          </div>
+          {elsewhere.map((g) => {
+            const showing = g.students.filter((st) => !st.hidden || showHiddenStudents);
+            if (showing.length === 0) return null;
+            return (
+              <div key={g.university} className="border-b border-gray-100 last:border-b-0">
+                <div className="bg-white px-3.5 pt-2">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="truncate text-[12.5px] font-medium text-gray-900">
+                      {g.university}
+                    </span>
+                    <span className="shrink-0 text-[11.5px] tabular-nums text-gray-500">
+                      {g.students.length} applicant{g.students.length === 1 ? "" : "s"}
+                    </span>
+                  </div>
+                  {/* Not the same problem as the groups above it, and the
+                      difference decides what you do: these may be at a
+                      campus already on the board. */}
+                  {g.university === NO_UNIVERSITY && (
+                    <p className="text-[11px] leading-snug text-gray-400">
+                      Started the short form, which does not ask. Some of them are
+                      probably at a campus we already work. Ask.
+                    </p>
+                  )}
+                </div>
+                {showing.map((st) => (
+                  <div
+                    key={st.id}
+                    className={`flex items-center gap-2.5 px-3.5 py-1.5 ${
+                      st.hidden ? "opacity-45" : ""
+                    }`}
+                  >
+                    <span className="min-w-0 flex-1 truncate text-[12.5px] text-gray-700">
+                      {st.name}
+                    </span>
+                    <span className="shrink-0 text-[11.5px] text-gray-400">
+                      {new Date(st.appliedAt).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={hidingStudent === st.id}
+                      onClick={() => void setStudentHidden(st, !st.hidden)}
+                      title={st.hidden ? "Put back on the list" : "Take off the list"}
+                      aria-label={st.hidden ? `Put ${st.name} back` : `Hide ${st.name}`}
+                      className="shrink-0 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-40"
+                    >
+                      {st.hidden ? <EyeIcon /> : <EyeOffIcon />}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+          {hiddenStudentCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setShowHiddenStudents((v) => !v)}
+              className="block w-full border-t border-gray-100 px-3.5 py-2 text-left text-[11.5px] text-gray-500 underline-offset-2 hover:text-gray-900 hover:underline"
+            >
+              {showHiddenStudents
+                ? "Put the hidden ones away"
+                : `${hiddenStudentCount} hidden here \u00B7 show ${
+                    hiddenStudentCount === 1 ? "it" : "them"
+                  }`}
+            </button>
+          )}
+        </div>
       )}
 
 
