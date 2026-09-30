@@ -14,6 +14,16 @@ TJ, 2026-09-30:
 
 He named it an initiative, "not an agency", limited it to non-medical home care, and called liability the central problem. He wrote that it could change the landscape for "Asian Americans". That is almost certainly dictation for "aging Americans" (the same dictation error, "Asian in America" for "Aging in America", is recorded in `lib/war-room/conversation.server.ts`). This memo reads it that way. **Assumption, confirm.**
 
+### His follow-up, the same day
+
+After the first version of this memo, TJ added three points (2026-09-30):
+
+1. **Recruiting students has been extremely difficult.** Universities guard student contacts, and the model has a chicken-and-egg problem: "students and universities are less likely to sign up unless you have a provider, and providers are less likely to join unless you have students."
+2. **Competing with customers is not a concern.** "Think about Amazon ... Amazon has its own goods, and it has a vendor market." Olera can also start where it has no active customer relationships.
+3. **Be nimble, not doctrinaire, but not doomed either.** "As a startup, you have to be nimble and react to the situation at hand, as opposed to sticking to a broken doctrine. If students don't work, this is an obvious need to fill. However, I do want to be smart and not just do something that is doomed from the start."
+
+This version takes all three as given. Point 2 removes the "customers become competitors" objection, and points 1 and 3 change the recommendation (sections 6 to 8).
+
 ## 2. What already exists
 
 This is not new ground. Three things were already in place before the question:
@@ -21,6 +31,16 @@ This is not new ground. Three things were already in place before the question:
 1. **Olera 3.0's two phases (decided 2026-05-14, Product Development Meeting).** Phase 1 is students to providers, with the provider as customer. **Phase 2 is families to caregivers direct, with the family as customer and no provider in between.** TJ's idea is Phase 2. Chantel's Care Shift build (family landing pages, student profiles, booking, payments, visit tracking; the `/care-shifts` mockup in this repo) was Phase 2 infrastructure. **verified** (meeting record in Notion, summarized in team memory).
 2. **Chantel's competitive research, "Research Competitors: Care Shifts"** ([Google Doc](https://docs.google.com/document/d/1-bNwS5Kwy24-0J9hxYbbBEebPkeB_kaCKjFHWBXm1I0/edit)), shared in #product-development on 2026-09-03 after TJ asked for "your summary on the service we were exploring, where we were connecting families directly to caregivers like care.com" ([Slack](https://oleraworkspace.slack.com/archives/C0A91BA205T/p1788437698548149)). Her conclusion was that Care Shift should be **a licensed agency that employs, trains and supervises every caregiver**, specifically *because* the marketplace competitors avoid that. She offered a folder of further research on marketplace vs. agency, licensing and requirements. It hasn't been collected. **verified** (document read 2026-09-30).
 3. **The January CRP application commits to a different model: Caregiver Staffing, where a licensed provider employs.** Quoted in section 4. **verified**.
+
+### The binding constraint: three gates Olera controls none of
+
+The committed model has three gates. A university lets Olera reach students, a student signs up, and a provider agrees to hire. Each waits on the others. The meeting notes record it:
+
+- **2026-09-28, MedJobs run-the-list meeting:** University of Florida, the highest-priority campus, "cannot post on the job board until provider names are confirmed; no providers cleared yet, this is a current blocker for student recruitment." **verified** (Notion meeting notes).
+- **2026-09-25, MedJobs and Managed Ads KPIs meeting:** a campus ambassador program, one student representing Olera on campus, was floated as a way around university gatekeeping, and the focus narrowed to Indiana University. **verified** (Notion).
+- **2026-06-18, Product Development meeting:** Logan called MedJobs versus Care Shifts a "false dichotomy", because both share the same student acquisition funnel. **verified** (Notion).
+
+Family-direct removes two of the three gates. **Demand is already Olera's**: families arrive through search, the Benefits Finder and Care Navigator (225 active published family care posts, 37 in the last 30 days; **pullable**). **Supply does not need a university**: working caregivers already look for jobs in the open. The Commercialization Plan itself says Indeed generated 68% of applications to participating home-care agencies in Q1 2026 (`docs/crp/living/Commercialization_Plan_2026-08-31.txt:375-376`; **verified** as cited there, not re-checked). Students become one optional source of caregivers, not a precondition.
 
 ## 3. The three models, and who carries the risk
 
@@ -61,7 +81,7 @@ Committed positions, quoted:
 - **The supply side exists**: MedJobs recruits students, and the verified record (Senior Care Experience Passport) is the asset either model needs. **records-exist** (MedJobs pilot, 900 applications; ledger flags the placement count as conflicting).
 
 ### Cons
-- **It turns customers into competitors.** The commercial target is 12 paying providers by 2027-01-05, with one paying today (Hoop Cares). Every non-medical agency Olera sells Managed Ads or Caregiver Staffing to would compete with a direct model for the same families. **verified** (target in the company model; payer count from Stripe).
+- ~~It turns customers into competitors.~~ **Set aside by TJ (2026-09-30):** the Amazon model (own goods alongside a vendor market) works, and a pilot can start where Olera has no customer relationships. Worth keeping in mind only where a paying provider operates, starting with Hoop Cares' area.
 - **Liability moves toward Olera.** Under B, all of it. Under A, the reputational and negligent-referral share, which terms of service don't fully remove in practice.
 - **Two-sided local liquidity.** A direct model needs caregivers available near each family, at the hours they need, continuously. Demand is thin and spread out: 225 active published family care posts, 37 in the last 30 days, with home care and home health at 93 of 249 care-type tags. **pullable** (Cortex lookup 2026-09-30).
 - **Caregiver churn.** Median professional-caregiver turnover is about 75% (2024). **verified** (ledger). A direct model inherits that churn without an employer to absorb it.
@@ -111,19 +131,39 @@ Every player that went direct either stayed shallow (companion only, like Papa),
 - It has the verified-record mechanism, and the doctrine in CANON already explains why the pool grows rather than recirculates.
 - Chantel's research and the Phase 2 plan mean the thinking has been done once already.
 
-## 6. Recommendation
+## 6. Recommendation (revised after his follow-up)
 
-**Keep the January application on the committed model (C), and build TJ's idea inside it as family-initiated placement.** When a family can't get care because no agency responds, can fit them or is nearby, Olera supplies a vetted caregiver for that family to a partner agency, which employs them. The family gets care, Olera controls the match and the follow-through, the agency stays employer and customer, and nothing in the CRP has to be rewritten. The failure TJ described is measured by the Aim 2 staffing pathway already.
+**Test family-direct now, narrowly, as a pilot outside the CRP, and name it in the January application as the fallback if the student pathway stays blocked.**
 
-Keep A (registry) and B (Olera as agency) as the **post-award Phase 2 decision**, taken with evidence from Aim 2. If A is ever tested, start companion-only (no hands-on care) in one state, after counsel confirms the exemption, never in the January scope.
+The first version recommended keeping everything inside the committed broker model. That rested on two things TJ has since addressed: competing with customers (not a concern) and the committed model working (the notes show it blocked at the university gate). What still holds from the first version is that the pilot must not quietly contradict what the application says, so it runs as a separate pilot and is named honestly in the application as the fallback.
 
-## 7. The one decision only TJ can make
+The cheapest shape that avoids "doomed from the start" is **model A (registry) with companion and homemaker scope only**: the family is the employer, Olera vets and matches, and there is no hands-on personal care. That keeps it inside the lightest licensing exemption Chantel found for Texas (§ 142.003(a)(15) companion/chore, with (a)(3) registry and (a)(13) direct hire as the structure), needs no payroll or insurance program from Olera, and can be stopped in a day. Counsel confirms the state's exemption before the first family.
 
-**Is family-direct care (Phase 2, models A or B) still Olera's destination, knowing it puts Olera in competition with the agencies it sells to and moves liability onto Olera? Or does "not an agency" mean Olera stays the broker, and every caregiver it supplies is employed by a licensed provider?**
+## 7. The pilot, and when to stop it
 
-The January application only works cleanly with the second answer. The first answer is legitimate, but then it needs its own plan, its own counsel and its own funding, separate from the CRP.
+What kills it, in order, and what the pilot measures for each:
+
+| Risk | What the pilot measures | Proposed stop line |
+|---|---|---|
+| A safety incident | Every visit's outcome; any complaint | **Any** safety incident stops the pilot pending review. Vetting is the product: background check, reference, video interview, verified record. |
+| Local supply (the usual marketplace killer) | Vetted caregivers available in the metro, by hours covered | Fewer than 15 vetted caregivers after 4 weeks of open-market recruiting (Indeed, Facebook, community boards; no campuses) |
+| Families booking | Share of family requests matched within 7 days; first-match time | Under half of requests matched within 14 days |
+| Families paying and staying | Rebooking within 30 days | Under a third of matched families book again |
+| Legal model | Counsel's written confirmation of the exemption, per state | No confirmation, no launch |
+
+The stop lines are **proposed, not derived**: there is no Olera baseline for any of them yet. TJ sets them before the pilot starts, so the result can't be argued afterward.
+
+**Where to run it:** one metro with the most active family demand and no paying provider in it. The live care-post counts pick the metro; Hoop Cares' area is excluded.
+
+**What it leaves alone:** MedJobs keeps running (students are one caregiver source, not the only one), Managed Ads keeps selling, and neither CRP document changes unless the pilot works.
+
+## 8. The one decision only TJ can make
+
+**Does the January application name family-direct as the fallback revenue path if the student pathway stays blocked, or does it stay silent on it until the pilot has results?**
+
+Naming it is more honest to reviewers and protects Aim 2 if students stall. Staying silent keeps the application simpler, but leaves the plan resting on the gate the notes show is stuck. Either way, the pilot can start before January.
 
 ## Open items
-- Collect Chantel's research folder (marketplace vs. agency, licensing, requirements), which she offered on 2026-09-03.
+- Collect Chantel's research folder (marketplace vs. agency, licensing, requirements), which she offered on 2026-09-03. It likely covers the per-state licensing question the pilot needs first.
 - Confirm "Asian Americans" means "aging Americans".
 - Before any claim here enters the CRP, give it a row in `docs/crp/evidence-ledger.md`. The agency-markup and legal claims are **unsourced**.
