@@ -110,6 +110,7 @@ function SendPlan({ f, id }: { f: FinderState; id: string }) {
           matchCount: programs.length,
           firstStepProgramId: r.firstStep && r.firstStep.id !== "local-agency" ? r.firstStep.id : undefined,
           finderProgramIds: programs.map((p) => p.id),
+          cohort: f.cohort ?? undefined,
         }),
       });
       const body = await res.json().catch(() => ({}));

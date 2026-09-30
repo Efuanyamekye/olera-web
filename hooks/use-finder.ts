@@ -35,8 +35,15 @@ interface Stored {
   stepIndex: number;
   phase: "quiz" | "results";
   result: FinderResult | null;
+  /** Research cohort from a study link (?cohort=v1), kept until the plan is
+   *  sent so it lands on the family's record. */
+  cohort?: string | null;
   savedAt: number;
 }
+
+const WHO_VALUES = ["me", "parent", "spouse", "other"] as const;
+/** Short, safe cohort ids only ("v1", "iib-c1"). Anything else is ignored. */
+const COHORT_RE = /^[a-z0-9][a-z0-9_-]{0,23}$/i;
 
 function load(): Stored | null {
   try {
@@ -74,6 +81,7 @@ export function useFinder() {
   const [result, setResult] = useState<FinderResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [restored, setRestored] = useState(false);
+  const [cohort, setCohort] = useState<string | null>(null);
   const stepShownAt = useRef<number>(Date.now());
   // A second tap during the short pause before advancing would skip a step
   // (or submit twice on the last one).
@@ -82,10 +90,21 @@ export function useFinder() {
   const steps = finderSteps(answers);
   const step: FinderStep = steps[Math.min(stepIndex, steps.length - 1)];
 
-  // Restore a draft (or finished results) from this browser.
+  // Restore a draft (or finished results) from this browser, then apply a
+  // link from the Benefits Hub: ?who= answers the first question there, so
+  // the finder opens on the next one; ?cohort= tags a study family.
   useEffect(() => {
     const s = load();
-    if (s) {
+    const params = new URLSearchParams(window.location.search);
+    const whoParam = params.get("who");
+    const cohortParam = params.get("cohort");
+    const who = (WHO_VALUES as readonly string[]).includes(whoParam || "") ? (whoParam as FinderAnswers["who"]) : null;
+
+    if (who) {
+      // A fresh start from the hub: they just answered question one.
+      setAnswers({ ...emptyFinderAnswers(), who });
+      setStepIndex(1);
+    } else if (s) {
       setAnswers({ ...emptyFinderAnswers(), ...s.answers });
       setStepIndex(s.stepIndex);
       if (s.phase === "results" && s.result) {
@@ -93,15 +112,24 @@ export function useFinder() {
         setPhase("results");
       }
     }
+    setCohort(cohortParam && COHORT_RE.test(cohortParam) ? cohortParam.toLowerCase() : (s?.cohort ?? null));
+
+    // Drop the params so a reload resumes the draft instead of restarting.
+    if (whoParam || cohortParam) {
+      params.delete("who");
+      params.delete("cohort");
+      const q = params.toString();
+      window.history.replaceState(null, "", window.location.pathname + (q ? `?${q}` : "") + window.location.hash);
+    }
     setRestored(true);
   }, []);
 
   useEffect(() => {
     if (!restored) return;
     if (phase === "quiz" || phase === "results") {
-      save({ answers, stepIndex, phase, result: phase === "results" ? result : null });
+      save({ answers, stepIndex, phase, result: phase === "results" ? result : null, cohort });
     }
-  }, [answers, stepIndex, phase, result, restored]);
+  }, [answers, stepIndex, phase, result, restored, cohort]);
 
   const track = useCallback(
     (event: "benefits_entry_viewed" | "benefits_step_viewed" | "benefits_step_completed", stepName: string, stepNumber: number) => {
@@ -223,6 +251,7 @@ export function useFinder() {
 
   return {
     answers,
+    cohort,
     steps,
     allAnswered,
     step,

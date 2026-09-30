@@ -7,6 +7,30 @@
 
 ## Current Focus
 
+### 2026-09-30 — Phase 2F run on eight Meta forms, three ad images swapped, Ces's queue for six ad families (`thirsty-panini`, no app code)
+
+**Instant-form read (Phase 2F, first real use).** All nine forms pass: screener, privacy link, required consent box; live provider forms name Olera + provider. Meta leads reconcile 1:1 with `city_leads`. Flexible form delivery not readable via API. `is_optimized_for_quality` is OFF on every provider form (Hoop memory was wrong); Dallas form is HIGHER_INTENT (scratchpad 18 Sep said More volume). Failed Pascagoula receipt 20 Sep = deleted test lead.
+
+**Finding: the ad image picks the audience.** Caregiver-in-scrubs images 12 job seekers / 13 leads; daughter-mother images 2 / 13 (Fisher p≈0.0002, confounded). Lesson from Hoop v2 (24 Sep) never reached `/ad-boost-setup`. Memory `project_meta_form_image_job_seekers`.
+
+**Live changes (TJ-approved).** Oak Ridge, Fresno, Atlanta form ads swapped to `olera-meta-01-outdoor-daughter-mother.jpg` in the Ads Manager UI; verified at source (new creatives 1781124949754326 / 2594746024365705 / 1655305709347174, Advantage+ creative all off). Logged as `tweak`, review 5 Oct. 8 Phase 2F observations in `ad_campaign_log`.
+
+**Cases (shared inbox).** Elvis (Rosemonte) replied "not yet"; Rosemonte opened both emails, no message. Backup lined up: Kierland Sanctuary of Scottsdale (claimed 30 Sep, email only). Backup question to the family goes by CALL, never text: the provider sees our texts in the shared thread. Marta (Colorado CareAssist) speaks Spanish; agency said they lack her details though the campaign page shows every handed family's phone, so they likely missed her (listed under Nancy). Ces's sheet v8 (https://claude.ai/artifact/L9eea82hBPEL7dJCW1rhT7) carries all six with copyable texts and the Marta email; TJ posted the brief in #careseeker-support.
+
+**Decisions.**
+- Two real leads per provider is the subscribe trigger (TJ). Already met: Assisting Hands (3), Colorado CareAssist (2 form families), Franchil (2 unseen, routing). Constraint is making the ask, not spend.
+- Ops docs carry no consent caveats; queue the backup now (TJ, memory `feedback_rnd_mode_no_consent_caveats`).
+- Call sheet + a Slack message, not tasks buried in the admin; no task-inbox feature built yet (TJ: not the time).
+
+**Next Up.**
+- TJ decision: stop Graceful, Miracle-Lightstar, Pacesetter Google (0 inquiries on ~150 clicks, P≈1.5%), decide the rest 31 Oct.
+- 5 Oct: read the image-swap tweaks (job-seeker share on Fresno/Oak Ridge/Atlanta).
+- Add image rule (family images only) to `/ad-boost-setup`; decide 25+ age floor and turning off Meta image recomposition (it AI-expanded Rosemonte's photo).
+- Campaign page features one family; second family gets missed (Colorado CareAssist/Marta). Scope: show every family equally.
+- Standing rule candidate: provider-ad family with no provider contact in 24h → line up a second provider.
+- Oak Ridge form preview showed an SMS verification screen; confirm whether OTP is on (friction gate).
+- Fix Franchil routing (inquiries go to the abandoned profile).
+
 ### 2026-09-29 — Ad Boost full-book audit + Phase 2F (instant forms) added to the command (`thirsty-panini`, #2272, docs only)
 
 **Output.** Audit page https://claude.ai/artifact/MtHHUT1NX7LWtggmaeYCWw (v2, private). 19 `ad_campaign_log` rows (18 observations at 10:00Z + 1 correction), notes appended. State-of-play in `~/Desktop/Claude Screenshots/adboost-state-of-play.md`.

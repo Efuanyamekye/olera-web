@@ -164,6 +164,9 @@ interface SaveResultsPayload {
    *  lists exactly these instead of rebuilding a list from one care-need
    *  keyword, which dropped programs the finder had just shown. */
   finderProgramIds?: string[];
+  /** Research cohort from a study link (?cohort=v1 on the Benefits Hub or
+   *  finder), so study families can be pulled as a group. */
+  cohort?: string;
 }
 
 export async function POST(req: Request) {
@@ -208,6 +211,7 @@ export async function POST(req: Request) {
     caregiverNeeds,
     firstStepProgramId,
     finderProgramIds,
+    cohort,
   } = payload;
   const finderFirst = firstStepProgramId
     ? (matchedPrograms || []).find((p) => p.programId === firstStepProgramId)
@@ -510,6 +514,12 @@ export async function POST(req: Request) {
     // is kept apart so VA programs stay in without claiming service.
     veteran_status: veteranStatus === "yes" || veteranStatus === "no" ? veteranStatus : undefined,
     veteran_spouse: veteranStatus === "spouse" ? true : undefined,
+    // Only set when the family arrived through a study link; a later visit
+    // without one leaves an existing tag alone.
+    study_cohort:
+      typeof cohort === "string" && /^[a-z0-9][a-z0-9_-]{0,23}$/i.test(cohort)
+        ? { id: cohort.toLowerCase(), at: new Date().toISOString(), entry_source: entrySource || null }
+        : undefined,
     household_size: householdSize === "1" || householdSize === "2" || householdSize === "3" ? Number(householdSize) : undefined,
     finder_needs: Array.isArray(finderNeeds) && finderNeeds.length ? finderNeeds.slice(0, 8).map(String) : undefined,
     caregiver_needs: Array.isArray(caregiverNeeds) && caregiverNeeds.length ? caregiverNeeds.slice(0, 8).map(String) : undefined,
