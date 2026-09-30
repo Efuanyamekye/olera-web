@@ -142,6 +142,19 @@ export interface LadderAction {
    */
   resume?: boolean;
   /**
+   * In the row of buttons, but outlined rather than filled.
+   *
+   * For an action that is always available and is never the answer the rung
+   * is asking for. "Something else" is the only one: it has to be visible,
+   * because an escape hatch nobody can find is not an escape hatch, and it
+   * must not look like the thing to press, because on all 37 rungs it is
+   * the exception.
+   *
+   * It was under the menu until 30 September, where the person who needed it
+   * most found it by accident and said "this is just a little bit hidden".
+   */
+  quiet?: boolean;
+  /**
    * Offered under the menu rather than in the row of buttons.
    *
    * Booking a call and logging something the ladder did not foresee are
@@ -436,6 +449,22 @@ export const ERRAND: LadderAction = {
       type: "check",
     },
   ],
+};
+
+/**
+ * The same errand, in the row of buttons rather than under the menu.
+ *
+ * This is what every rung gets. The three provider rungs that had ERRAND
+ * under the menu keep the identical behaviour and only move; the other 34
+ * gain it. `hint` is reworded because the provider version speaks about a
+ * person who asked for something, and a rung on a campus event or a job
+ * board has no "they".
+ */
+export const ERRAND_EVERYWHERE: LadderAction = {
+  ...ERRAND,
+  secondary: false,
+  quiet: true,
+  hint: "Something happened that no button here covers. Say what it is and when to come back.",
 };
 
 /**
@@ -736,7 +765,7 @@ function errandRung(): LadderRung {
 
 export const FOLLOW_UP_ROUNDS = 7;
 
-export const LADDERS: Record<SectionKey, Ladder> = {
+const RAW_LADDERS: Record<SectionKey, Ladder> = {
   providers: {
     label: "Providers",
     goal: "ready for students",
@@ -1169,7 +1198,20 @@ Dr. Logan DuBose's office · Olera`,
         why: "Nobody can guess in advance what a student will need.",
         steps: ["Do the thing.", "Log what it was."],
         textarea: "What it was",
-        actions: [{ label: "Done — back to the sequence", outcome: "next", delay: 0, goto: "meeting-with-the-student" }],
+        actions: [
+          {
+            label: "Done — back to the sequence",
+            outcome: "next",
+            delay: 0,
+            // Back to the rung the errand was opened from, which the
+            // errand carries with it. The fixed rung below is only the
+            // fallback for an errand queued before origins were carried:
+            // on its own it sent a record at "Confirm hire" back to
+            // "Meeting with the student", which is why nobody trusted it.
+            resume: true,
+            goto: "meeting-with-the-student",
+          },
+        ],
       },
     ],
   },
@@ -1276,7 +1318,20 @@ Dr. Logan DuBose's office · Olera`,
         why: "Every campus runs its board differently and some ask for things nothing here anticipates.",
         steps: ["Do the thing.", "Log what it was."],
         textarea: "What it was",
-        actions: [{ label: "Done — back to the sequence", outcome: "next", delay: 0, goto: "confirm-it-s-submitted" }],
+        actions: [
+          {
+            label: "Done — back to the sequence",
+            outcome: "next",
+            delay: 0,
+            // Back to the rung the errand was opened from, which the
+            // errand carries with it. The fixed rung below is only the
+            // fallback for an errand queued before origins were carried:
+            // on its own it sent a record at "Confirm hire" back to
+            // "Meeting with the student", which is why nobody trusted it.
+            resume: true,
+            goto: "confirm-it-s-submitted",
+          },
+        ],
       },
     ],
   },
@@ -1428,7 +1483,20 @@ If two names turn out to be the same office, add it once. If you are not sure wh
         why: "Nobody can guess in advance what an advising office will need.",
         steps: ["Do the thing.", "Log what it was."],
         textarea: "What it was",
-        actions: [{ label: "Done — back to the sequence", outcome: "next", delay: 0, goto: "confirm-the-flyer-is-circulating" }],
+        actions: [
+          {
+            label: "Done — back to the sequence",
+            outcome: "next",
+            delay: 0,
+            // Back to the rung the errand was opened from, which the
+            // errand carries with it. The fixed rung below is only the
+            // fallback for an errand queued before origins were carried:
+            // on its own it sent a record at "Confirm hire" back to
+            // "Meeting with the student", which is why nobody trusted it.
+            resume: true,
+            goto: "confirm-the-flyer-is-circulating",
+          },
+        ],
       },
     ],
   },
@@ -1534,7 +1602,20 @@ Dr. Logan DuBose's office · Olera`,
         why: "Nobody can guess in advance what a student organisation will need.",
         steps: ["Do the thing.", "Log what it was."],
         textarea: "What it was",
-        actions: [{ label: "Done — back to the sequence", outcome: "next", delay: 0, goto: "send-the-program-info" }],
+        actions: [
+          {
+            label: "Done — back to the sequence",
+            outcome: "next",
+            delay: 0,
+            // Back to the rung the errand was opened from, which the
+            // errand carries with it. The fixed rung below is only the
+            // fallback for an errand queued before origins were carried:
+            // on its own it sent a record at "Confirm hire" back to
+            // "Meeting with the student", which is why nobody trusted it.
+            resume: true,
+            goto: "send-the-program-info",
+          },
+        ],
       },
     ],
   },
@@ -1634,7 +1715,20 @@ Dr. Logan DuBose's office · Olera`,
         why: "Getting an event approved and in front of students throws up things nobody can list in advance.",
         steps: ["Do the thing.", "Log what it was."],
         textarea: "What it was",
-        actions: [{ label: "Done — back to the sequence", outcome: "next", delay: 0, goto: "prepare-for-the-event" }],
+        actions: [
+          {
+            label: "Done — back to the sequence",
+            outcome: "next",
+            delay: 0,
+            // Back to the rung the errand was opened from, which the
+            // errand carries with it. The fixed rung below is only the
+            // fallback for an errand queued before origins were carried:
+            // on its own it sent a record at "Confirm hire" back to
+            // "Meeting with the student", which is why nobody trusted it.
+            resume: true,
+            goto: "prepare-for-the-event",
+          },
+        ],
       },
     ],
   },
@@ -1736,7 +1830,20 @@ Dr. Logan DuBose's office · Olera`,
         why: "A reply asking for something specific is the best outcome this channel has, and it never fits a template.",
         steps: ["Do the thing.", "Log what it was."],
         textarea: "What it was",
-        actions: [{ label: "Done — back to the sequence", outcome: "next", delay: 0, goto: "confirm-they-shared-it" }],
+        actions: [
+          {
+            label: "Done — back to the sequence",
+            outcome: "next",
+            delay: 0,
+            // Back to the rung the errand was opened from, which the
+            // errand carries with it. The fixed rung below is only the
+            // fallback for an errand queued before origins were carried:
+            // on its own it sent a record at "Confirm hire" back to
+            // "Meeting with the student", which is why nobody trusted it.
+            resume: true,
+            goto: "confirm-they-shared-it",
+          },
+        ],
       },
       {
         branch: "permission",
@@ -1786,6 +1893,52 @@ Dr. Logan DuBose's office · Olera`,
     ],
   },
 };
+
+/**
+ * "Something else", on every rung, in the row.
+ *
+ * Reality does not fit 37 buttons. A provider asks for something nobody
+ * wrote a rung for; a student needs a thing on a Tuesday. The escape hatch
+ * for that has existed since the provider ladder was written: it records
+ * what needs doing and when to come back, parks the follow-up sequence
+ * until then, and returns the record exactly where it left off.
+ *
+ * It was on 10 of 37 rungs, and 7 of those 10 were a hand-written copy that
+ * carried none of that: no description, no date, no way home, so finishing
+ * one threw the record back to a rung hard-coded into the branch. Only the
+ * three provider rungs using the shared ERRAND actually worked.
+ *
+ * Appending it here rather than typing it into 27 more places is the point.
+ * A rung added next month gets it without anybody remembering to, and a
+ * hand-written near-copy cannot drift from the real one again. The build
+ * gate asserts the coverage.
+ *
+ * Branches are skipped, and that covers the two cases worth skipping. A
+ * branch is already the off-sequence path, so an escape hatch out of one is
+ * an escape hatch out of an escape hatch: the errand branch offers a second
+ * errand itself, deliberately, and says so in its own label. The sweeps are
+ * branches too, which is the other case: a sweep fans out into other records
+ * and is then finished, so it has no sequence to park.
+ */
+const withErrand = (ladders: Record<SectionKey, Ladder>): Record<SectionKey, Ladder> =>
+  Object.fromEntries(
+    Object.entries(ladders).map(([key, ladder]) => [
+      key,
+      {
+        ...ladder,
+        steps: ladder.steps.map((rung) => {
+          if (rung.branch) return rung;
+          // A hand-written "Something else" is replaced, not kept beside
+          // the real one. Two buttons with the same label, one of which
+          // silently loses the record's place, is worse than either.
+          const rest = rung.actions.filter((a) => a.goto !== "errand");
+          return { ...rung, actions: [...rest, ERRAND_EVERYWHERE] };
+        }),
+      },
+    ]),
+  ) as Record<SectionKey, Ladder>;
+
+export const LADDERS: Record<SectionKey, Ladder> = withErrand(RAW_LADDERS);
 
 /** Column order, left to right, everywhere the seven appear together. */
 export const SECTION_ORDER: SectionKey[] = [

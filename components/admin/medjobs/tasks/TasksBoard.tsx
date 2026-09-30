@@ -16,6 +16,7 @@ import {
   sectionsFor,
   type Person,
 } from "@/lib/medjobs/assignments";
+import { applyWhenIdle } from "@/lib/medjobs/editing-guard";
 import { demoUniversity, isDemoUniversity } from "@/lib/medjobs/demo-university";
 import UniversityFlow from "./UniversityFlow";
 
@@ -185,10 +186,17 @@ export default function TasksBoard({ seed }: { seed?: BoardUniversity[] }) {
         error?: string;
       };
       if (!res.ok) throw new Error(d.error ?? `Request failed (${res.status}).`);
-      setBoard([...d.universities, demo.current!]);
-      setPeople(d.people ?? []);
-      setMe(d.me ?? null);
-      setFailed(null);
+      // Fetched now, shown the moment nobody is typing. A reload replaces
+      // the whole university object, and replacing the one a field is bound
+      // to while somebody is mid-word throws the word away with no error and
+      // nothing on screen. Saving a field no longer reloads at all, which is
+      // where that actually bit; this covers the reloads that remain.
+      applyWhenIdle(() => {
+        setBoard([...d.universities, demo.current!]);
+        setPeople(d.people ?? []);
+        setMe(d.me ?? null);
+        setFailed(null);
+      });
     } catch (e) {
       setFailed(e instanceof Error ? e.message : "The board could not be loaded.");
     }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { DrawerShell } from "@/components/admin/medjobs/DrawerShell";
+import { useSaveState } from "@/components/admin/medjobs/SaveStatus";
 import { LADDERS, SECTION_ORDER, rungAt, type ContactField, type SectionKey } from "@/lib/medjobs/ladders";
 import { sectionsFor, type Person } from "@/lib/medjobs/assignments";
 import {
@@ -160,6 +161,14 @@ export default function UniversityFlow({
   /** Set when a write that refetches should hand over the next task after. */
   const resume = useRef(false);
 
+  /**
+   * What the drawer header says about the last write.
+   *
+   * Driven from send(), which is the only function in here that writes, so
+   * the line cannot fall out of step with what actually reached the server.
+   */
+  const { state: saveState, saving: beginSave } = useSaveState();
+
   useEffect(
     () => () => {
       for (const t of timers.current) window.clearTimeout(t);
@@ -210,6 +219,9 @@ export default function UniversityFlow({
       return { ok: true };
     }
     setBusy(true);
+    // Claimed here rather than at each call site, so a write added later
+    // reports itself without anybody having to remember to make it.
+    const write = beginSave();
     try {
       const res = await fetch("/api/admin/medjobs/tasks-board/actions", {
         method: "POST",
@@ -228,16 +240,21 @@ export default function UniversityFlow({
             : `Not saved: ${json.error ?? "the server refused it"}`,
         );
         opts?.undo?.();
+        write.failed(
+          res.status === 401 ? "Your session has expired." : json.error ?? "The server refused it.",
+        );
         void onReload();
         return { ok: false };
       }
       setFailed(null);
+      write.saved();
       if (done) say(done);
       if (!opts?.keepBoard) await onReload();
       return { ok: true, data: json };
     } catch {
       setFailed("Could not reach the server, so nothing was saved. Check your connection and redo the last step.");
       opts?.undo?.();
+      write.failed("Could not reach the server.");
       return { ok: false };
     } finally {
       setBusy(false);
@@ -463,6 +480,27 @@ export default function UniversityFlow({
     record[f] = v;
     force((n) => n + 1);
   };
+  /**
+   * Write the contact fields on the open record.
+   *
+   * Every field on the record screen calls this on blur. Both branches keep
+   * the board rather than reloading it, and that is the whole of the fix for
+   * the bug people described as "my typing disappears".
+   *
+   * What was happening: the non-job-board branch reloaded the entire board
+   * from the server after every field save. The edit itself is applied by
+   * mutating the record in place, so the reload changed nothing that was
+   * already on screen — but it replaced the object being typed into. Tab out
+   * of one field, start typing the next, and the reload landing mid-word
+   * threw the new keystrokes away. Two or three attempts and one would stick,
+   * because by then the reload had finished. It cost real work and it read as
+   * the screen being haunted.
+   *
+   * There is nothing for a reload to tell us here. A contact field changes
+   * that record and nothing else: no task moves, no count changes, no other
+   * record is touched. The job board branch has always known this. The other
+   * five sections now do too.
+   */
   const saveFields = () => {
     if (!record) return;
     if (record.section === "jobboard") {
@@ -502,6 +540,7 @@ export default function UniversityFlow({
         others: record.others,
       },
       "Saved",
+      { keepBoard: true },
     );
   };
   const campusFor = university.mapsDestination
@@ -515,6 +554,7 @@ export default function UniversityFlow({
   return (
     <DrawerShell
       onClose={onClose}
+      save={saveState}
       header={
         <div className="min-w-0">
           <button

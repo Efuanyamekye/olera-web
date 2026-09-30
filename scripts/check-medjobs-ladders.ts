@@ -125,7 +125,53 @@ for (const [section, key] of READS_FIRST_ANCHORS) {
   }
 }
 
-const line = `${rungs} rungs across ${SECTION_ORDER.length} ladders · ${seeded.size} document sections`;
+// ── the escape hatch, on every rung that can take one ─────────────────────
+//
+// "Something else" is appended to every non-branch rung by withErrand() in
+// ladders.ts, so this cannot fail by somebody forgetting to type it. It can
+// fail if somebody writes one by hand beside the appended one, or edits the
+// shared action into a shape that no longer carries its way home. Seven of
+// these existed as hand-written near-copies until 30 September: no
+// description, no return date, no origin, so finishing one threw the record
+// back to a rung hard-coded in the branch.
+let hatches = 0;
+for (const section of SECTION_ORDER) {
+  for (const rung of LADDERS[section].steps) {
+    if (rung.branch) continue;
+    const found = rung.actions.filter((a) => a.goto === "errand");
+    const where = `${section} rung "${rung.title ?? rung.name}"`;
+    if (found.length === 0) {
+      note(`${where} has no "Something else"`);
+      continue;
+    }
+    if (found.length > 1) {
+      note(`${where} has ${found.length} actions going to the errand branch; there should be one`);
+      continue;
+    }
+    const [a] = found;
+    if (!a.carryOrigin) note(`${where}: "Something else" does not carry where the record was, so it cannot come back`);
+    if (!a.quiet) note(`${where}: "Something else" is not marked quiet, so it renders as an answer`);
+    if (a.secondary) note(`${where}: "Something else" is under the menu again`);
+    if (!a.inputs?.some((i) => i.key === "todo")) note(`${where}: "Something else" asks for no description`);
+    if (!a.inputs?.some((i) => i.key === "due_on")) note(`${where}: "Something else" asks for no return date`);
+    hatches += 1;
+  }
+}
+
+// And the branch it leads to must be able to send the record back where it
+// came from, rather than to one rung named in the branch.
+for (const section of SECTION_ORDER) {
+  const errand = LADDERS[section].steps.find((r) => r.branch === "errand");
+  if (!errand) {
+    note(`${section} has no errand branch, but every rung offers "Something else"`);
+    continue;
+  }
+  if (!errand.actions.some((a) => a.resume)) {
+    note(`${section}'s errand branch has no action that resumes, so it cannot return the record`);
+  }
+}
+
+const line = `${rungs} rungs across ${SECTION_ORDER.length} ladders · ${seeded.size} document sections · ${hatches} escape hatches`;
 
 if (problems.length) {
   console.error(`✗ MedJobs ladders — ${line}\n`);

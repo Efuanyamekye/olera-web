@@ -12,6 +12,7 @@ import {
   forwardStep,
   formatPhone,
   resolveNext,
+  isSweptSection,
   type SweptSection,
 } from "@/lib/medjobs/task-board";
 import { firstName, isAssignableSection, onRoster } from "@/lib/medjobs/assignments";
@@ -668,13 +669,20 @@ export async function POST(req: Request) {
   if (body.op === "create_record") {
     const name = (body.name ?? "").trim();
     if (!name) return NextResponse.json({ error: "A record needs a name" }, { status: 400 });
-    // Providers and advising offices only. Both have a sweep that fills them
-    // and both carry on needing additions after it — a student org or a
-    // professor arrives from its own rung, and a hand-typed one would sit
-    // outside the count those are measured on.
-    if (body.section !== "providers" && body.section !== "advisors") {
+    // Every section a sweep fills, which is every section whose records are
+    // student_outreach rows. This was providers and advising offices alone
+    // until 30 September, on the reasoning that an org, an event or a
+    // professor arrives from its own rung. In practice that left a section
+    // with no way to gain a record once its sweep was closed, and somebody
+    // stuck for two weeks with nothing on screen to say why.
+    //
+    // Students and the job board are still refused, and for a reason that
+    // does hold: a student is a business_profile that exists because
+    // somebody applied, and the job board is the campus's own channel row.
+    // Neither is a thing createFound can make.
+    if (!isSweptSection(body.section)) {
       return NextResponse.json(
-        { error: "Only providers and advising offices can be added by hand" },
+        { error: `A ${body.section} record cannot be added by hand` },
         { status: 400 },
       );
     }

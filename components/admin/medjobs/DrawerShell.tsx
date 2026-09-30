@@ -20,7 +20,8 @@
  * Mark-as-unread overflow).
  */
 
-import { useEffect, type ReactNode } from "react";
+import { useCallback, useEffect, type ReactNode } from "react";
+import SaveStatus, { type SaveState } from "./SaveStatus";
 
 interface DrawerShellProps {
   onClose: () => void;
@@ -32,6 +33,19 @@ interface DrawerShellProps {
   headerExtras?: ReactNode;
   /** Sticky footer content rendered below the scroll area. */
   footer?: ReactNode;
+  /**
+   * Whether this drawer's last write landed.
+   *
+   * Rendered in the header, and it also guards the exits. A drawer that is
+   * mid-save closes freely: the request is already with the server and
+   * unmounting the drawer does not cancel it. A drawer whose last write
+   * FAILED does not, because closing it is how somebody loses work and never
+   * finds out. Escape and the backdrop go through the same check as the
+   * close button, since they are the two ways a drawer gets shut by accident.
+   *
+   * Leave it out and the drawer behaves exactly as it did before.
+   */
+  save?: SaveState;
   children: ReactNode;
 }
 
@@ -40,30 +54,47 @@ export function DrawerShell({
   header,
   headerExtras,
   footer,
+  save,
   children,
 }: DrawerShellProps) {
+  const failed = save?.kind === "failed";
+  const message = save?.kind === "failed" ? save.message : "";
+
+  const tryClose = useCallback(() => {
+    if (
+      failed &&
+      !window.confirm(
+        `The last change was not saved.\n\n${message}\n\nClose anyway? What you typed will be lost.`,
+      )
+    ) {
+      return;
+    }
+    onClose();
+  }, [failed, message, onClose]);
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") tryClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [tryClose]);
 
   return (
     <>
       <div
         className="fixed inset-0 z-40 bg-black/20"
-        onClick={onClose}
+        onClick={tryClose}
         aria-label="Close drawer"
       />
       <aside className="fixed inset-y-0 right-0 z-50 flex w-full max-w-2xl flex-col bg-white shadow-2xl">
         <header className="flex items-start justify-between gap-4 border-b border-gray-100 px-6 py-4">
           <div className="min-w-0 flex-1">{header}</div>
-          <div className="flex shrink-0 items-center gap-1">
+          <div className="flex shrink-0 items-center gap-2">
+            {save && <SaveStatus state={save} />}
             {headerExtras}
             <button
-              onClick={onClose}
+              onClick={tryClose}
               className="rounded-md p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
               aria-label="Close"
             >

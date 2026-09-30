@@ -62,8 +62,28 @@ export const SWEEPS: Record<
 };
 
 /** The sections a sweep fills. Each one's records are student_outreach rows,
- *  which is what lets one creator serve all three. */
+ *  which is what lets one creator serve all five. */
 export type SweptSection = "providers" | "advisors" | "orgs" | "events" | "professors";
+
+/** The same five, as a value, so a route can check one without repeating them. */
+export const SWEPT_SECTIONS: readonly SweptSection[] = [
+  "providers",
+  "advisors",
+  "orgs",
+  "events",
+  "professors",
+];
+
+/**
+ * Whether this section's records are student_outreach rows.
+ *
+ * The question behind it is always the same: can this thing be created by
+ * `createFound`? Students cannot, because a student is a business_profile
+ * that exists because somebody applied. The job board cannot, because it is
+ * the campus's channel row and there is exactly one.
+ */
+export const isSweptSection = (s: string): s is SweptSection =>
+  (SWEPT_SECTIONS as readonly string[]).includes(s);
 
 export const sweepId = (kind: SweepKind, campusId: string) =>
   `${SWEEP_PREFIX}${kind}:${campusId}`;

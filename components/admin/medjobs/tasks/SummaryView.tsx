@@ -24,17 +24,34 @@ import AssigneeChip from "./AssigneeChip";
 /**
  * Sections where a record can be typed in, and what one is called.
  *
- * Only providers, deliberately. Everything else on the board either arrives
- * from a system — students from applications, the job board from the channel
- * — or is found by a rung whose whole job is finding them, and a hand-typed
- * row would sit outside the count those rungs are measured on.
+ * Every section a sweep fills. A sweep runs once per campus and the world
+ * carries on afterwards: an agency somebody hears about on a call, an
+ * advising office that did not exist when the sweep ran, a second student
+ * organisation nobody had heard of in week one.
+ *
+ * This used to be providers and advising offices alone, on the reasoning
+ * that an org, an event or a professor "arrives from its own rung" and a
+ * hand-typed one would sit outside the count that rung is measured on. That
+ * reasoning did not survive contact with the work. Close the org sweep and
+ * the section has no way to gain a record at all: on 30 September that left
+ * somebody unable to add a second student organisation for two weeks, with
+ * nothing on screen to say why or what to do instead.
+ *
+ * The count argument was also the wrong way round. A record typed in by hand
+ * is stamped with its own found_by, so it is distinguishable from a swept one
+ * whenever anybody wants to distinguish them. A record that could not be
+ * created at all is not.
+ *
+ * Students and the job board still have no entry here, and that is a
+ * different kind of no: a student is a person who applied, and the job board
+ * is a property of the campus rather than a row you can have two of.
  */
-// Both sections the sweeps fill. A sweep is once per campus and the world
-// carries on afterwards: an agency somebody hears about on a call, an
-// advising office that did not exist when the sweep ran.
 const ADD_BY_HAND = new Map<SectionKey, string>([
   ["providers", "provider"],
   ["advisors", "advising office"],
+  ["orgs", "student org"],
+  ["events", "campus event"],
+  ["professors", "professor"],
 ]);
 
 export default function SummaryView({

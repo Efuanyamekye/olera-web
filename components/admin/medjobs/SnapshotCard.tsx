@@ -125,6 +125,10 @@ export function ProviderSnapshotCard({
 
   const [notes, setNotes] = useState<string>(outreach.notes ?? "");
   const [savingNotes, setSavingNotes] = useState(false);
+  // The General Contact fields have said "Saved" since v9 and the notes box
+  // never did, so the one field people type paragraphs into was the one with
+  // no confirmation. Same badge, same three-second fade.
+  const [notesSavedAt, setNotesSavedAt] = useState<number | null>(null);
 
   useEffect(() => {
     setNotes(outreach.notes ?? "");
@@ -136,6 +140,7 @@ export function ProviderSnapshotCard({
     setError(null);
     try {
       await action("update_outreach", { notes });
+      setNotesSavedAt(Date.now());
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to save notes");
     } finally {
@@ -295,9 +300,12 @@ export function ProviderSnapshotCard({
       {/* Notes sit BELOW the workflow (call to confirm + launch) so they
           don't interrupt the main path — matches the Partner drawer. */}
       <div>
-        <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-          Research notes
-        </p>
+        <div className="mb-1.5 flex items-baseline justify-between gap-2">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+            Research notes
+          </p>
+          <SaveStatusBadge saving={savingNotes ? "notes" : null} savedAt={notesSavedAt} />
+        </div>
         <Input
           as="textarea"
           value={notes}
@@ -307,7 +315,6 @@ export function ProviderSnapshotCard({
           rows={3}
           size="sm"
         />
-        {savingNotes && <p className="mt-0.5 text-[11px] text-gray-400">Saving…</p>}
       </div>
     </section>
   );
