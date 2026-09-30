@@ -220,7 +220,7 @@ Write the reply the founder would send:
 - Short: three to six sentences. One clear next step. No hedging, no over-apologising, no em dashes, no marketing language.
 - To a family: never say they qualify or are eligible for a program. The agency decides; say what the next step is and who decides.
 - Never invent a fact, a price, a date or a promise the thread does not support. If something needs checking, say what you will find out instead of guessing.
-- Sign off as "TJ, Olera".
+- Sign off as "Olera", never with a person's name. TJ, 2026-09-30: for a free benefits service a named sender adds liability and personal obligation for no gain.
 
 ${HUMAN_VOICE_RULES}
 
