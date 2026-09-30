@@ -94,7 +94,19 @@ async function recipients(
   return { to: [email], owner: email, campusName: campus.name };
 }
 
-function body(app: NewApplication, owner: string | null, campusName: string | null): string {
+/**
+ * The email itself.
+ *
+ * Exported so it can be rendered and looked at without waiting for a real
+ * student to apply. There is no screen for this anywhere in the admin panel
+ * and there should not be: it is a thing that happens once, to one inbox,
+ * at the moment somebody applies.
+ */
+export function newApplicationNoticeHtml(
+  app: NewApplication,
+  owner: string | null,
+  campusName: string | null,
+): string {
   const url = `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://olera.care"}/admin/medjobs/${app.profileId}`;
   const facts = [
     app.university || "No university given",
@@ -143,7 +155,7 @@ export async function notifyNewApplication(
     await sendEmail({
       to,
       subject: `New student application: ${app.name}${app.university ? `, ${app.university}` : ""}`,
-      html: body(app, owner, campusName),
+      html: newApplicationNoticeHtml(app, owner, campusName),
       emailType: "medjobs_new_application",
       recipientType: "admin",
       metadata: { profileId: app.profileId, campus: campusName, owner },
