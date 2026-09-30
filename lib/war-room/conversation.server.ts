@@ -65,6 +65,23 @@ const CONVERSATION_PRICE: Record<string, [number, number]> = {
 const MAX_ANSWER_TOKENS = 8_000;
 // Time after which an empty answer is not retried (route limit is 90 seconds).
 const RECOVERY_CUTOFF_MS = 55_000;
+// Telegram answers in `after()` on a route allowed 180 seconds, twice Slack's
+// 90. On 2026-09-30 a long strategy question ran past the Slack-sized cutoff,
+// the last Sonnet round ended with thinking and no text, and he got "I could
+// not put an answer together" instead of the recovery answer, which a replay
+// showed would have worked. Voice notes follow a reply, so leave them room.
+// Measured on the same question (2026-09-30): a 90 s lookup budget let the
+// final round start late and finish empty at 141 s, past a fixed 120 s
+// recovery cutoff. Lookups stop sooner, and recovery runs whenever the route
+// still has time for it (RECOVERY_NEEDS_MS), not before a fixed mark.
+const TELEGRAM_LOOKUP_BUDGET_MS = 60_000;
+const RECOVERY_NEEDS_MS = 35_000;
+// Every model call stops before the route does, so a slow call ends in the
+// failure line rather than a killed function and no reply at all. The calls
+// had no timeout; the SDK default is ten minutes. Routes: Slack 90 s,
+// Telegram 180 s.
+const SLACK_HARD_STOP_MS = 85_000;
+const TELEGRAM_HARD_STOP_MS = 165_000;
 // A lookup answer takes several model calls. The Slack route allows 90s; the
 // budget leaves room for the final answer after the last lookup returns.
 const MAX_LOOKUP_ROUNDS = 4;
@@ -540,7 +557,7 @@ Never use em dashes.
 
 Write for a phone screen. No markdown headers, no bullet lists, no tables. Slack bold is single asterisks.
 
-Do not restate the question. You are talking to the founder: call him "you" and his rules "your", never "the founder". Call people by the names in the record and never derive a name from a username. Never quote the record's section names or field names; say what they mean. Beyond the one fix for something you could not do, do not offer to help further.
+Do not restate the question. You are talking to the founder: call him "you" and his rules "your", never "the founder", and never "he" or "him" (on 2026-09-30 a reply began "He hasn't told me the idea yet"; the conversation history labels his lines "He said", which is for you to read, not to copy). Call people by the names in the record and never derive a name from a username. Never quote the record's section names or field names; say what they mean. Beyond the one fix for something you could not do, do not offer to help further.
 
 {{QUESTION_RULE}}
 
@@ -652,7 +669,16 @@ export async function answerFounderQuestion(
         + (usage.cache_creation_input_tokens ?? 0) * input * 1.25
         + (usage.output_tokens ?? 0) * output) / 1_000_000;
     };
-    const deadline = startedAt + LOOKUP_BUDGET_MS;
+    const telegram = options.surface === "telegram";
+    const deadline = startedAt + (telegram ? TELEGRAM_LOOKUP_BUDGET_MS : LOOKUP_BUDGET_MS);
+    const hardStop = startedAt + (telegram ? TELEGRAM_HARD_STOP_MS : SLACK_HARD_STOP_MS);
+    // Time left before the route's limit, for each call. The timeout applies
+    // per attempt, so one retry (for an overloaded API) is allowed only with
+    // time for two attempts, each given half of what is left.
+    const callOptions = () => {
+      const left = Math.max(5_000, hardStop - Date.now());
+      return left >= 90_000 ? { timeout: Math.floor(left / 2), maxRetries: 1 } : { timeout: left, maxRetries: 0 };
+    };
     // Web search is a server tool: Anthropic runs it and returns results in the
     // same response. On 2026-09-23 the founder asked whether Telegram really
     // has about thirty employees and a billion users, and Cortex answered that
@@ -683,8 +709,9 @@ export async function answerFounderQuestion(
         // Out of rounds or time: no more lookups, answer from what is in hand.
         tool_choice: outOfBudget ? { type: "none" } : { type: "auto" },
         messages,
-      });
+      }, callOptions());
       track(message);
+      console.log("[cortex] round", round, JSON.stringify({ ms: Date.now() - startedAt, stop: message.stop_reason, text: message.content.some((b) => b.type === "text" && b.text.trim()) }));
       // A long server-side search can pause the turn; hand it back to continue.
       if (message.stop_reason === "pause_turn") {
         messages.push({ role: "assistant", content: message.content });
@@ -709,7 +736,9 @@ export async function answerFounderQuestion(
     // tools, answers from what the lookups already returned.
     // Only with time left: the Slack route stops at 90 seconds, and a reply
     // cut off there is silence, which is worse than the fallback line.
-    const recoverable = Date.now() - startedAt < RECOVERY_CUTOFF_MS;
+    const recoverable = telegram
+      ? hardStop - Date.now() >= RECOVERY_NEEDS_MS
+      : Date.now() - startedAt < RECOVERY_CUTOFF_MS;
     if (message && recoverable && !message.content.some((block) => block.type === "text" && block.text.trim())) {
       console.error("[cortex] empty answer; recovering", JSON.stringify({ stop: message.stop_reason, usage: message.usage }));
       // A paused search turn is the last entry; a follow-up after it is not
@@ -735,7 +764,7 @@ export async function answerFounderQuestion(
           tools,
           tool_choice: { type: "none" },
           messages,
-        });
+        }, callOptions());
         track(message);
       } catch (retryError) {
         console.error("[cortex] recovery call failed:", retryError instanceof Error ? retryError.message : String(retryError));
