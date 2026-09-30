@@ -23,6 +23,9 @@ import {
   type BoardUniversity,
   type ChannelStatus,
   type ExtraContact,
+  NO_UNIVERSITY,
+  type WaitingGroup,
+  type WaitingStudent,
 } from "@/lib/medjobs/task-board";
 import {
   byName,
@@ -324,18 +327,78 @@ export async function GET() {
     .order("display_name", { ascending: true })
     .order("id", { ascending: true });
 
-  // Only students at one of the campuses on this board. A student somewhere
-  // else has nowhere to sit, and showing them would be asking somebody to
-  // work a campus we have not opened.
+  // Only students at one of the campuses on this board get a place on it:
+  // the board is a list of campuses, and a student from somewhere else has
+  // no column to sit in.
+  //
+  // They used to be dropped here and that was the end of it. Nobody saw
+  // them, nobody replied to them, and we never learned how many there were.
+  // Somebody who applies to a caregiving programme unprompted, from a
+  // university we have not opened, is the clearest signal we get about
+  // where to open next, and it was going in the bin.
+  //
+  // So they come back, in `elsewhere`, grouped by the university they typed.
+  // Not on the ladder: this is a waiting list, not a queue of work. It says
+  // who is waiting and where they are piling up.
   type Student = NonNullable<typeof studentRows>[number] & { campusId: string };
   const students: Student[] = [];
+  const waiting: WaitingStudent[] = [];
   for (const row of studentRows ?? []) {
-    const meta = (row.metadata ?? {}) as { university_id?: string; university?: string };
+    const meta = (row.metadata ?? {}) as {
+      university_id?: string;
+      university?: string;
+      board_hidden_at?: string;
+    };
     const campusId =
       (meta.university_id ? campusOfUniversity.get(meta.university_id) : undefined) ??
       (meta.university ? campusOfName.get(meta.university.trim().toLowerCase()) : undefined);
-    if (campusId) students.push({ ...row, campusId });
+    if (campusId) {
+      students.push({ ...row, campusId });
+      continue;
+    }
+    waiting.push({
+      id: row.id,
+      name: row.display_name ?? "Unnamed applicant",
+      // What they typed, not what we matched: the point of the list is to
+      // read the names people actually give us.
+      //
+      // Blank is its own group and a different problem. The short form on
+      // the apply page takes a name and an email and nothing else, so
+      // everybody who starts there has no university until they come back
+      // and finish. They are not out of area; they are unplaceable until
+      // somebody asks them where they are. Same list, sorted last, labelled
+      // separately on screen.
+      university: (meta.university ?? "").trim() || NO_UNIVERSITY,
+      appliedAt: row.created_at,
+      hidden: typeof meta.board_hidden_at === "string",
+    });
   }
+
+  // Newest first inside a university, most applicants first between them.
+  // Both answer the question the list is for: where is this piling up.
+  const elsewhere: WaitingGroup[] = [
+    ...waiting
+      .reduce((acc, st) => {
+        const g = acc.get(st.university) ?? { university: st.university, students: [] };
+        g.students.push(st);
+        acc.set(st.university, g);
+        return acc;
+      }, new Map<string, WaitingGroup>())
+      .values(),
+  ]
+    .map((g) => ({
+      ...g,
+      students: g.students.sort((a, b) => (a.appliedAt < b.appliedAt ? 1 : -1)),
+    }))
+    .sort((a, b) => {
+      // The unplaceable group goes last however big it is. It is the one
+      // group that says nothing about where to open a campus next, which is
+      // what the ordering above is for.
+      const an = a.university === NO_UNIVERSITY ? 1 : 0;
+      const bn = b.university === NO_UNIVERSITY ? 1 : 0;
+      if (an !== bn) return an - bn;
+      return b.students.length - a.students.length || a.university.localeCompare(b.university);
+    });
 
   // The facts the ladder reads: an interview on the calendar, a placement
   // accepted. Both live in their own tables, and both are read rather than
@@ -694,6 +757,7 @@ export async function GET() {
       const meta = (st.metadata ?? {}) as {
         intended_professional_school?: string;
         major?: string;
+        admin_viewed_at?: string;
       };
 
       records.students.push({
@@ -718,6 +782,10 @@ export async function GET() {
         // who arrived yesterday and somebody nobody has called since March
         // are different problems.
         appliedOn: st.created_at ? day(st.created_at) : undefined,
+        // Nobody has opened them. An application arrives on its own and
+        // somebody has to notice; until this, noticing meant remembering to
+        // go and look, and two were missed in a week because nobody did.
+        isNew: !meta.admin_viewed_at,
         program: meta.intended_professional_school ?? meta.major ?? "",
         completeness: app.percent,
         missing: app.missing,
@@ -996,6 +1064,10 @@ export async function GET() {
   // the same way every time.
   return NextResponse.json({
     universities: withSomething,
+    // Applicants from universities the board has not opened. Sits under the
+    // table beside the hidden campuses, because it is the same kind of
+    // thing: a short list you look at occasionally, not part of the work.
+    elsewhere,
     people: [...people.values()].sort(byName),
     // Who is reading. Lets the board pin "My work" at the top of the filter
     // without a second call, and is null for an admin who is not on the

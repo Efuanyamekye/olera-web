@@ -277,8 +277,32 @@ export default function UniversityFlow({
    * A check rung is worked on the record, so it opens the record. Everything
    * else opens the task screen. Nothing left opens the summary.
    */
+  /**
+   * Clear the "new" tag the first time somebody opens an applicant.
+   *
+   * Fire and forget, and the tag is dropped locally whatever the request
+   * does. The worst case is a tag that comes back on the next reload, which
+   * is a great deal better than a drawer that refuses to open because a
+   * bookkeeping call failed. It writes metadata.admin_viewed_at, the same
+   * field the In Basket and the sidebar counts read, so opening a student
+   * here clears them there too.
+   */
+  const markSeen = (r: BoardRecord) => {
+    if (r.section !== "students" || !r.isNew) return;
+    r.isNew = false;
+    redraw();
+    void fetch("/api/admin/medjobs/mark-entity-read", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ kind: "candidate", id: r.id, action: "read" }),
+    }).catch(() => {
+      /* it stays new until the next reload. Nothing is lost. */
+    });
+  };
+
   /** Remember where we were, so the summary can put us back. */
   const openRecord = (r: BoardRecord) => {
+    markSeen(r);
     setOpenSections((o) => ({ ...o, [r.section]: true }));
     setCameFrom(r.id);
     // The map sweep has no record behind it — no contact, no address, no
@@ -296,6 +320,9 @@ export default function UniversityFlow({
       setView({ kind: "summary" });
       return;
     }
+    // Working through the queue lands on records too, and an applicant you
+    // have just done a task on is not new any more.
+    markSeen(next.record);
     setOpenSections((o) => ({ ...o, [next.record.section]: true }));
     setCameFrom(next.record.id);
     setView(

@@ -352,10 +352,59 @@ export interface BoardRecord {
   step: number | null;
   round: number;
   state: string | null;
+  /**
+   * Nobody has opened this record yet.
+   *
+   * Students only, for now, because a student is the one record that
+   * appears without anybody putting it there: an application lands and the
+   * row exists. The rest arrive from a sweep or from somebody typing them
+   * in, so there is nothing to notice.
+   *
+   * Reads metadata.admin_viewed_at, the same field the In Basket and the
+   * sidebar counts already use, so opening the record anywhere clears it
+   * everywhere.
+   */
+  isNew?: boolean;
   /** Where it stopped, so it can be started up again. */
   deadAt?: { step: number; round: number };
   reschedules?: number;
   tasks: BoardTask[];
+}
+
+/**
+ * Somebody who applied from a university the board has not opened.
+ *
+ * They exist in the database either way. What they did not have until now
+ * was a screen: the board lists campuses, and a student from somewhere else
+ * matched none of them, so the loop that builds the board dropped the row
+ * and nobody ever knew. An unprompted application from a campus we have not
+ * opened is the clearest evidence we get about where to open next, and it
+ * was being thrown away every time.
+ */
+export interface WaitingStudent {
+  id: string;
+  name: string;
+  /** What they typed, not what we matched. Nothing matched. */
+  university: string;
+  appliedAt: string;
+  /** Put away by hand. Still counted, not shown. */
+  hidden: boolean;
+}
+
+/**
+ * The group for an applicant who has not told us where they study.
+ *
+ * A distinct case from being out of area, and the larger one: the short
+ * form on the apply page asks for a name and an email and nothing else, so
+ * everybody who starts there lands here until they come back and finish.
+ * They may well be at a campus already on the board. Somebody has to ask.
+ */
+export const NO_UNIVERSITY = "No university given";
+
+/** One university's worth of them. The grouping is the useful part. */
+export interface WaitingGroup {
+  university: string;
+  students: WaitingStudent[];
 }
 
 export interface BoardUniversity {

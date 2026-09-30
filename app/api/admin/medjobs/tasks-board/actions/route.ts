@@ -136,6 +136,12 @@ type Body =
       op: "set_campus_hidden";
       campusId: string;
       hidden: boolean;
+    }
+  | {
+      op: "set_student_hidden";
+      /** business_profiles.id of a student on the waiting list. */
+      studentId: string;
+      hidden: boolean;
     };
 
 const ARCHIVED_STATUS = "archived";
@@ -596,6 +602,58 @@ export async function POST(req: Request) {
           : { hidden_at: null, hidden_by: null },
       )
       .eq("id", campusId);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+    return NextResponse.json({ ok: true, hidden: body.hidden });
+  }
+
+  // ── putting a waiting applicant away ──────────────────────────────────
+  //
+  // A student from a university the board has not opened sits on a waiting
+  // list under the table. Some of them are never going anywhere: the wrong
+  // side of the country, a course we do not place from, somebody who filled
+  // the form in twice. Hiding drops them off that list and nothing else.
+  //
+  // Stored on the profile's metadata rather than in a column of its own,
+  // because that is where the rest of the board's view of a student already
+  // lives: university, university_id and admin_viewed_at are all there, and
+  // a migration for a flag on a list this size would be the wrong trade.
+  // Read-modify-write, because Postgres has no partial jsonb update and the
+  // alternative would drop every other key on the object.
+  if (body.op === "set_student_hidden") {
+    const studentId = (body.studentId ?? "").trim();
+    if (!studentId) return NextResponse.json({ error: "Missing student" }, { status: 400 });
+    if (typeof body.hidden !== "boolean") {
+      return NextResponse.json({ error: "Missing hidden" }, { status: 400 });
+    }
+
+    const { data: profile } = await db
+      .from("business_profiles")
+      .select("id, metadata, type")
+      .eq("id", studentId)
+      .maybeSingle();
+    if (!profile) return NextResponse.json({ error: "No such student" }, { status: 404 });
+    // The op names a student, so refuse anything else rather than writing a
+    // student-shaped flag onto a provider's profile.
+    if (profile.type !== "student") {
+      return NextResponse.json({ error: "That profile is not a student" }, { status: 400 });
+    }
+
+    const meta = { ...((profile.metadata ?? {}) as Record<string, unknown>) };
+    if (body.hidden) {
+      meta.board_hidden_at = new Date().toISOString();
+      meta.board_hidden_by = admin.id;
+    } else {
+      // Cleared rather than set false, so "is this hidden" stays one check
+      // and an unhidden student's metadata looks the way it did before.
+      delete meta.board_hidden_at;
+      delete meta.board_hidden_by;
+    }
+
+    const { error } = await db
+      .from("business_profiles")
+      .update({ metadata: meta })
+      .eq("id", studentId);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
     return NextResponse.json({ ok: true, hidden: body.hidden });

@@ -130,6 +130,7 @@ export default function SummaryView({
           // Somebody else's section under a filter stays shut, whatever the
           // expanded state said before the filter was applied.
           const inScope = mine.includes(key);
+          const newHere = records.filter((r) => r.isNew).length;
           const expanded = Boolean(open[key]) && inScope;
           return (
             <div
@@ -151,6 +152,15 @@ export default function SummaryView({
                   <span className="truncate text-[13.5px] font-medium text-gray-900">
                     {ladder.label}
                   </span>
+                  {/* On the closed section, because the whole complaint was
+                      having to open it to find out. The waiting count beside
+                      it is how much there is to do; this is how much of it
+                      nobody knows about yet. */}
+                  {newHere > 0 && (
+                    <span className="shrink-0 rounded-full bg-success-50 px-1.5 py-px text-[10px] font-semibold uppercase tracking-wide text-success-700">
+                      {newHere} new
+                    </span>
+                  )}
                 </button>
                 {/* Beside the name it belongs to, not out by the count. Who
                     owns this reads as part of the label; against the number
@@ -226,6 +236,15 @@ export default function SummaryView({
                           )}
                           <span className="min-w-0 flex-1 truncate text-[13px] text-gray-900">
                             {r.name}
+                            {/* An applicant nobody has opened. It arrived on
+                                its own, so unlike every other record on this
+                                board there was nothing to tell anybody it was
+                                here. Clears the first time it is opened. */}
+                            {r.isNew && (
+                              <span className="ml-1.5 rounded-full bg-success-50 px-1.5 py-px align-[1px] text-[10px] font-semibold uppercase tracking-wide text-success-700">
+                                new
+                              </span>
+                            )}
                           </span>
                           <span
                             className={`shrink-0 text-[11.5px] ${

@@ -4,6 +4,7 @@ import { sendEmail } from "@/lib/email";
 import { studentAccountCreatedEmail } from "@/lib/medjobs-email-templates";
 import { generateStudentPortalUrl } from "@/lib/claim-tokens";
 import { sendSlackAlert, slackMedJobsNewStudent } from "@/lib/slack";
+import { notifyNewApplication } from "@/lib/medjobs/new-application-notice";
 import { sanitizeReferral } from "@/lib/medjobs/apply-link";
 
 // Lazy initialization to avoid build-time errors when env vars are not available
@@ -219,6 +220,22 @@ export async function POST(req: NextRequest) {
     } catch (err) {
       console.error("[medjobs/apply-partial] slack error:", err);
     }
+
+    // This form takes a name and an email and nothing else, so there is no
+    // university to route on and the notice goes to the whole team. That is
+    // the right way round: an applicant nobody can place is the one most
+    // likely to be forgotten, and until somebody asks them where they study
+    // they sit on the waiting list under the board with no campus of their
+    // own. If the volume of these ever makes four inboxes unhappy, the place
+    // to batch them into a daily digest is new-application-notice.ts.
+    await notifyNewApplication(supabaseAdmin, {
+      profileId: profile.id,
+      name: trimmedName,
+      university: "",
+      city: city?.trim() || undefined,
+      state: state?.trim() || undefined,
+      complete: false,
+    });
 
     return NextResponse.json({ profileId: profile.id, slug, tokenHash: autoSignInToken });
   } catch (err) {
