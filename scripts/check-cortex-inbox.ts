@@ -11,7 +11,7 @@ import { isRealObjection, parseObjections, renderCheck } from "../lib/war-room/d
 import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  buildInboxProposals, cleanSubject, clip, currentText, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
+  buildInboxProposals, cleanSubject, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
 } from "../lib/war-room/inbox-operator.server";
 
 // --- Commands.
@@ -63,6 +63,11 @@ assert.equal(waitingOnUs([
   { direction: "in", from_email: "robbie@example.com", internal_date: at("2026-09-25T15:11:57Z") },
 ]), true, "their reply after ours is waiting");
 assert.equal(waitingOnUs([{ direction: "in", from_email: "ces@olera.care", internal_date: at("2026-09-26T01:00:00Z") }]), false, "a teammate's handoff is not a customer");
+// An approved draft saved after their last message is waiting on TJ in Gmail, not on a new draft (29 Sep).
+const lastIn = [{ direction: "in", internal_date: "2026-09-28T13:59:43Z" }];
+assert.equal(draftAwaitingSend({ gmail_draft_id: "r-1", draft_updated_at: "2026-09-29T04:11:45Z" }, lastIn), true);
+assert.equal(draftAwaitingSend({ gmail_draft_id: "r-1", draft_updated_at: "2026-09-27T10:00:00Z" }, lastIn), false, "they wrote again after the draft");
+assert.equal(draftAwaitingSend({ gmail_draft_id: null, draft_updated_at: null }, lastIn), false);
 console.log("thread direction checks passed");
 
 // --- The digest.
@@ -85,6 +90,8 @@ assert.match(digest, /> Hi Robbie,\n> Wednesday works\./, "a draft is quoted lin
 assert.match(digest, /You send it/, "email is drafted, never sent");
 assert.match(digest, /approve 1 2 3"/, "the question is not in approve-all");
 assert.match(digest, /9 more need a person/);
+assert.match(renderDigest({ passId: "p", items: [item(1, "triage_batch", "Archive 3.")], waitingElsewhere: 0, costUsd: 0, draftsInGmail: 3 }), /3 approved drafts are in Gmail waiting for you to send\./);
+assert.equal(renderDigest({ passId: "p", items: [], waitingElsewhere: 0, costUsd: 0, draftsInGmail: 1 }), "Inbox pass: both inboxes are clear. 1 approved draft is in Gmail waiting for you to send.");
 assert.equal(cleanSubject("Re: Re:Ã‚Â Your first step for SMMC"), "Your first step for SMMC");
 assert.equal(clip("one two three four five", 12), "one two...");
 console.log("digest checks passed");
