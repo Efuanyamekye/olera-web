@@ -7,6 +7,33 @@
 
 ## Current Focus
 
+### 2026-09-30 (night) — Benefits Finder + Hub in PRODUCTION; pick up with the three priorities below (`jolly-ramanujan`, #2283 #2284 #2286 #2291 #2293 → promote #2288 #2294)
+
+**PICK UP HERE.** When TJ says "let's pick up benefits finder work", start with these three, in order (his "Still to do" in #care-nav-study-team, 30 Sep):
+1. **Accuracy of results.** Families should get relevant recommendations. The engine is `lib/benefits/finder-engine.server.ts`, which uses the fact-checked pipeline drafts (`@/data/pipeline-drafts`) and `lib/benefits/eligibility.server.ts`. Known open items: the CARES "Not yet" list (a "no" to Medicaid may still show Medicaid, veteran help for non-veterans, "100% match"), TX PACE El Paso phone, 15 states with no caregiver program, NY developmental-disability waiver.
+2. **Reconcile product with the study protocol.** Match the product details to CARE-NAV protocol procedures (Qiping is finalizing the protocol paper). Also: the study tag (`?cohort=v1`, `metadata.study_cohort`) is not yet in letters, texts or events; freeze the program facts per cohort; one timeline per family.
+3. **UI/UX of the program pages and state pages** (`/benefits/[state]`, `/benefits/[state]/[program]`). Same design language as the new hub and finder: light, Airbnb restraint, no nested boxes, less text.
+
+**Shipped today.**
+- Finder: the cover is the first question; nine questions; ZIP to county; results lead with one call; the plan link and letter use the same list.
+- Hub `/senior-benefits` rebuilt (`app/senior-benefits/page.tsx`, `components/benefits/hub/*`, `app/api/geo/region/route.ts`).
+- `?who` opens the finder on question 2; `?cohort` tags study families.
+- Click tracking: `cta_engaged`, surface `benefits_hub`.
+
+**Pages.**
+- Walkthrough for Logan / the study team, every screen: https://claude.ai/artifact/PXK1RGpdrvHRXD57P8HjWy. Update it by re-running `qa/walk.js` and rebuilding with `walk/build2.py`; if the scratchpad is gone, recreate them.
+- The team update is posted in #care-nav-study-team.
+
+**Decisions.** Airbnb's browse model was rejected for the hub ("vibe-coded Airbnb"): guidance first, one main path, no tabs that do nothing. Counts use waiver-library `programs.length` (528), matching the state pages.
+
+**Parked.**
+- A sharp Chapter 3 hero frame (TJ: later).
+- `NIH_AWARD_NUMBER` (empty).
+- A US tap on "Use my location".
+- Deleting the unused `HeroStateSearch` / `MobileStateList`.
+- Whether a typed state should carry into the finder.
+- The pre-existing USMap hydration warning.
+
 ### 2026-09-30 (later) — Winners: Robbie + Liz call preps, Colorado CareAssist ask, Franchil consolidated (`thirsty-panini`, no app code)
 
 **Artifacts.** Robbie prep https://claude.ai/artifact/7yonrRHCdmJWjzaeCKwwvX · Liz prep https://claude.ai/artifact/Ke3McBDJLV2RnnnWhmU2iN · Franchil two-accounts + journey https://claude.ai/artifact/QpxkEFQYFhhtZAzXQNBHdg · Ces sheet v9 (Elvis backup Kierland, Marta email to Jacob, no family names in subjects).
