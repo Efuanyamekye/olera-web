@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
 import { studentWelcomeEmail, studentReturningEmail } from "@/lib/medjobs-email-templates";
 import { sendSlackAlert, slackMedJobsNewStudent } from "@/lib/slack";
+import { notifyNewApplication } from "@/lib/medjobs/new-application-notice";
 import { sanitizeReferral } from "@/lib/medjobs/apply-link";
 import type { IntendedProfessionalSchool, StudentProgramTrack } from "@/lib/types";
 
@@ -326,6 +327,24 @@ export async function POST(req: NextRequest) {
           console.error("[medjobs/apply] slack error:", err);
         }
 
+        // And addressed to whoever owns Students at their campus. The Slack
+        // alert above goes to a channel, which is how two applications were
+        // missed in the last week of September: everybody could see them and
+        // nobody was told.
+        await notifyNewApplication(getSupabaseAdmin(), {
+          profileId: existingProfile.id,
+          name: trimmedName,
+          university: (updateMetadata.university as string) || "",
+          universityId: (updateMetadata.university_id as string) || null,
+          program:
+            (updateMetadata.intended_professional_school as string) ||
+            (updateMetadata.program_track as string) ||
+            undefined,
+          city,
+          state,
+          complete: true,
+        });
+
         return NextResponse.json({
           profileId: existingProfile.id,
           slug: resolvedSlug,
@@ -571,6 +590,17 @@ export async function POST(req: NextRequest) {
     } catch (err) {
       console.error("[medjobs/apply] slack error:", err);
     }
+
+    await notifyNewApplication(getSupabaseAdmin(), {
+      profileId: profile.id,
+      name: trimmedName,
+      university: metadata.university || "",
+      universityId: metadata.university_id || null,
+      program: metadata.intended_professional_school || metadata.program_track || undefined,
+      city,
+      state,
+      complete: true,
+    });
 
     // NOTE: Do NOT send Loops event here — adding students to the seeker audience
     // enrolls them in the care-seeker onboarding drip (Logan's intro email).

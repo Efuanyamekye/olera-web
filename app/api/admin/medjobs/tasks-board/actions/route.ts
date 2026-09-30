@@ -12,6 +12,7 @@ import {
   forwardStep,
   formatPhone,
   resolveNext,
+  isSweptSection,
   type SweptSection,
 } from "@/lib/medjobs/task-board";
 import { firstName, isAssignableSection, onRoster } from "@/lib/medjobs/assignments";
@@ -134,6 +135,12 @@ type Body =
        */
       op: "set_campus_hidden";
       campusId: string;
+      hidden: boolean;
+    }
+  | {
+      op: "set_student_hidden";
+      /** business_profiles.id of a student on the waiting list. */
+      studentId: string;
       hidden: boolean;
     };
 
@@ -600,6 +607,58 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: true, hidden: body.hidden });
   }
 
+  // ── putting a waiting applicant away ──────────────────────────────────
+  //
+  // A student from a university the board has not opened sits on a waiting
+  // list under the table. Some of them are never going anywhere: the wrong
+  // side of the country, a course we do not place from, somebody who filled
+  // the form in twice. Hiding drops them off that list and nothing else.
+  //
+  // Stored on the profile's metadata rather than in a column of its own,
+  // because that is where the rest of the board's view of a student already
+  // lives: university, university_id and admin_viewed_at are all there, and
+  // a migration for a flag on a list this size would be the wrong trade.
+  // Read-modify-write, because Postgres has no partial jsonb update and the
+  // alternative would drop every other key on the object.
+  if (body.op === "set_student_hidden") {
+    const studentId = (body.studentId ?? "").trim();
+    if (!studentId) return NextResponse.json({ error: "Missing student" }, { status: 400 });
+    if (typeof body.hidden !== "boolean") {
+      return NextResponse.json({ error: "Missing hidden" }, { status: 400 });
+    }
+
+    const { data: profile } = await db
+      .from("business_profiles")
+      .select("id, metadata, type")
+      .eq("id", studentId)
+      .maybeSingle();
+    if (!profile) return NextResponse.json({ error: "No such student" }, { status: 404 });
+    // The op names a student, so refuse anything else rather than writing a
+    // student-shaped flag onto a provider's profile.
+    if (profile.type !== "student") {
+      return NextResponse.json({ error: "That profile is not a student" }, { status: 400 });
+    }
+
+    const meta = { ...((profile.metadata ?? {}) as Record<string, unknown>) };
+    if (body.hidden) {
+      meta.board_hidden_at = new Date().toISOString();
+      meta.board_hidden_by = admin.id;
+    } else {
+      // Cleared rather than set false, so "is this hidden" stays one check
+      // and an unhidden student's metadata looks the way it did before.
+      delete meta.board_hidden_at;
+      delete meta.board_hidden_by;
+    }
+
+    const { error } = await db
+      .from("business_profiles")
+      .update({ metadata: meta })
+      .eq("id", studentId);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+    return NextResponse.json({ ok: true, hidden: body.hidden });
+  }
+
   // ── who owns a task type ──────────────────────────────────────────────
   // Campus-level, like create_record, so it is handled before the lookup
   // below that expects a record id.
@@ -668,13 +727,20 @@ export async function POST(req: Request) {
   if (body.op === "create_record") {
     const name = (body.name ?? "").trim();
     if (!name) return NextResponse.json({ error: "A record needs a name" }, { status: 400 });
-    // Providers and advising offices only. Both have a sweep that fills them
-    // and both carry on needing additions after it — a student org or a
-    // professor arrives from its own rung, and a hand-typed one would sit
-    // outside the count those are measured on.
-    if (body.section !== "providers" && body.section !== "advisors") {
+    // Every section a sweep fills, which is every section whose records are
+    // student_outreach rows. This was providers and advising offices alone
+    // until 30 September, on the reasoning that an org, an event or a
+    // professor arrives from its own rung. In practice that left a section
+    // with no way to gain a record once its sweep was closed, and somebody
+    // stuck for two weeks with nothing on screen to say why.
+    //
+    // Students and the job board are still refused, and for a reason that
+    // does hold: a student is a business_profile that exists because
+    // somebody applied, and the job board is the campus's own channel row.
+    // Neither is a thing createFound can make.
+    if (!isSweptSection(body.section)) {
       return NextResponse.json(
-        { error: "Only providers and advising offices can be added by hand" },
+        { error: `A ${body.section} record cannot be added by hand` },
         { status: 400 },
       );
     }
@@ -1131,6 +1197,12 @@ export async function POST(req: Request) {
               // now, so say so rather than leaving the row mislabelled.
               task_type: taskTypeFor(section, step),
               completed_at: new Date().toISOString(),
+              // Who closed it. The column has been here since migration 064
+              // and nothing ever filled it, so every provider, advisor, org,
+              // event and professor task on the board was anonymous — five
+              // of the seven sections. Students and the job board have
+              // always recorded it; these three writes are what was missing.
+              completed_by: user.id,
               // Which button was pressed. Without it every finished task
               // reads "Logged" and four attempts are indistinguishable.
               payload: {
@@ -1161,6 +1233,7 @@ export async function POST(req: Request) {
             status: "completed",
             due_at: new Date().toISOString().slice(0, 10),
             completed_at: new Date().toISOString(),
+            completed_by: user.id,
             payload: {
               step,
               round,
@@ -1203,6 +1276,10 @@ export async function POST(req: Request) {
               .update({
                 status: "completed",
                 completed_at: new Date().toISOString(),
+                // Skipped rather than worked, but somebody's action closed
+                // it. Leaving it null would put a hole in any count of who
+                // moved a record along.
+                completed_by: user.id,
                 payload: { ...((t.payload ?? {}) as object), outcome: SKIPPED },
               })
               .eq("id", t.id);

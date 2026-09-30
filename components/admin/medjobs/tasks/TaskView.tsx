@@ -506,11 +506,16 @@ export default function TaskView({
                   className={`${
                     i === picked
                       ? BTN_GO
-                      : i === 0
-                        ? BTN_GO
-                        : a.outcome === "closed" || a.outcome === "archive"
-                          ? BTN_BAD
-                          : BTN
+                      : a.quiet
+                        ? // In the row so it can be found, outlined so it does
+                          // not read as the answer. It is on every rung and it
+                          // is the answer on almost none of them.
+                          BTN_QUIET
+                        : i === 0
+                          ? BTN_GO
+                          : a.outcome === "closed" || a.outcome === "archive"
+                            ? BTN_BAD
+                            : BTN
                   } ${blocked ? "cursor-not-allowed opacity-40" : ""}`}
                 >
                   {a.outcome === "archive" && repeats?.archive && reached >= repeats.warnAt
@@ -1188,6 +1193,34 @@ function Field({
       </button>
     );
   }
+  // A fixed list. Rendered as a real select rather than a row of chips
+  // because nine options in chips is a wall, and this is a question with one
+  // answer that somebody types once per student.
+  if (field.type === "select") {
+    return (
+      <label className="mt-3 flex items-center gap-2.5">
+        <span className="w-24 shrink-0 text-[12px] text-gray-500">
+          {field.label}
+          {field.required && <span className="ml-0.5 text-error-600">*</span>}
+        </span>
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-[13px] text-gray-900 focus:border-primary-600 focus:outline-none"
+        >
+          {/* Empty and first, so an unanswered question reads as unanswered
+              rather than as whichever option happened to be at the top. */}
+          <option value="">&mdash;</option>
+          {(field.options ?? []).map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+      </label>
+    );
+  }
+
   return (
     <label className="mt-3 flex items-center gap-2.5">
       <span className="w-24 shrink-0 text-[12px] text-gray-500">
@@ -1232,3 +1265,8 @@ const BTN_GO =
   "rounded-md border border-primary-600 bg-primary-600 px-3 py-2 text-[12.5px] font-semibold text-white hover:bg-primary-700";
 const BTN_BAD =
   "rounded-md border border-error-200 bg-white px-3 py-2 text-[12.5px] font-semibold text-error-700 hover:bg-error-50";
+// Always present, rarely the answer. Teal so it reads as a real option
+// rather than a disabled one, outlined so it does not compete with the
+// filled button beside it.
+const BTN_QUIET =
+  "rounded-md border border-primary-600 bg-white px-3 py-2 text-[12.5px] font-semibold text-primary-700 hover:bg-primary-50";
