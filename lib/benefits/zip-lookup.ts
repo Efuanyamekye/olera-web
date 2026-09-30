@@ -75,33 +75,22 @@ export async function zipToCounty(zip: string): Promise<string | null> {
   const trimmed = zip.trim();
   if (!/^\d{5}$/.test(trimmed)) return null;
 
+  // Bundled with the code rather than fetched from the site. The server used
+  // to fetch its own public URL, which the firewall can refuse; the old
+  // fallback only ran when fetch threw, not on a refused response, so the
+  // county came back null and the local agency lookup picked the wrong
+  // office (San Antonio got Alamo AAA instead of Bexar County, found in QA
+  // 2026-09-30). A dynamic import keeps it out of the main browser bundle.
   if (!countyCache) {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_SITE_URL || ""}/data/zip-county.json`
-      );
-      if (res.ok) {
-        countyCache = await res.json();
-      }
-    } catch {
-      // If fetch fails (e.g., during SSR), try dynamic import (server-side only)
-      if (typeof window === 'undefined') {
-        try {
-          const fs = await import("fs");
-          const path = await import("path");
-          const filePath = path.join(process.cwd(), "public/data/zip-county.json");
-          const raw = fs.readFileSync(filePath, "utf-8");
-          countyCache = JSON.parse(raw);
-        } catch {
-          return null;
-        }
-      } else {
-        return null;
-      }
+      const mod = await import("@/public/data/zip-county.json");
+      countyCache = (mod.default ?? mod) as Record<string, { county: string; state: string }>;
+    } catch (err) {
+      console.error("[zip-lookup] county table failed to load:", err);
+      return null;
     }
   }
 
-  if (!countyCache) return null;
   const prefix = trimmed.substring(0, 3);
   return countyCache[prefix]?.county ?? null;
 }

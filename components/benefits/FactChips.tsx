@@ -42,6 +42,8 @@ const AGE_LABELS: Record<AgeBand, string> = {
   "65_74": "Age 65 to 74",
   "75_84": "Age 75 to 84",
   "85_plus": "Age 85 or older",
+  under_60: "Under 60",
+  "60_64": "Age 60 to 64",
 };
 
 const MEDICAID_LABELS: Record<string, string> = {

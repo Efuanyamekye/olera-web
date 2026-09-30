@@ -198,6 +198,9 @@ export interface EligibilityVerdict {
    *  weights: within income +12, meets age +8, Medicaid held on a gated
    *  program +10). 0 when nothing is confirmed. */
   boost: number;
+  /** One family-readable line per confirmed fact behind the boost, e.g.
+   *  "Income looks under the limit". Empty when nothing is confirmed. */
+  fits: string[];
 }
 
 export interface ProgramForVerdict {
@@ -242,10 +245,10 @@ export function evaluateProgramForFamily(
   // way. What differs between the two is the letter, not the program.
   const noMedicaid = facts.medicaidStatus === "doesNotHave" || facts.medicaidStatus === "denied";
   if (noMedicaid && gatedName) {
-    return { ruledOut: true, reason: "Needs Medicaid first", boost: 0 };
+    return { ruledOut: true, reason: "Needs Medicaid first", boost: 0, fits: [] };
   }
   if (sbf?.requires_veteran === true && facts.veteranStatus === "no") {
-    return { ruledOut: true, reason: "For veteran families", boost: 0 };
+    return { ruledOut: true, reason: "For veteran families", boost: 0, fits: [] };
   }
 
   // Age: rule out ONLY from the draft's own clean "N+" requirement (the
@@ -261,7 +264,7 @@ export function evaluateProgramForFamily(
   const careAge = { exact: facts.age, band: facts.ageBand };
   // Only a held fact rules out: "Under 65" against a 60+ rule is unknown.
   if (!altPathway && draftAge != null && ageMeetsMin(careAge, draftAge) === false) {
-    return { ruledOut: true, reason: `For age ${draftAge} and up`, boost: 0 };
+    return { ruledOut: true, reason: `For age ${draftAge} and up`, boost: 0, fits: [] };
   }
 
   // Income tests compare a HOUSEHOLD figure to a household limit. The stored
@@ -276,10 +279,11 @@ export function evaluateProgramForFamily(
   const incomeLimit = program.incomeLimitSingle ?? sbf?.max_income_single ?? null;
   const floor = incomeUsable ? incomeBandFloor(facts.incomeBand) : null;
   if (floor != null && incomeLimit != null && floor > incomeLimit) {
-    return { ruledOut: true, reason: "Income is likely above its limit", boost: 0 };
+    return { ruledOut: true, reason: "Income is likely above its limit", boost: 0, fits: [] };
   }
 
   let boost = 0;
+  const fits: string[] = [];
   // Weight each signal BELOW the one that covers more of the library, so a
   // boost never outranks a better-covered one on the strength of luck.
   //
@@ -300,11 +304,22 @@ export function evaluateProgramForFamily(
   // thirds of the library, and far less than the difference between a cash
   // program and a home retrofit. Absence of a number is not evidence of misfit.
   const ceiling = incomeUsable ? incomeBandCeiling(facts.incomeBand) : null;
-  if (ceiling != null && incomeLimit != null && ceiling <= incomeLimit) boost += 6;
+  if (ceiling != null && incomeLimit != null && ceiling <= incomeLimit) {
+    boost += 6;
+    fits.push("Income looks under the limit");
+  }
   const boostMinAge = draftAge ?? sbf?.min_age ?? null;
-  if (boostMinAge != null && ageMeetsMin(careAge, boostMinAge) === true) boost += 8;
-  if (facts.medicaidStatus === "alreadyHas" && gated) boost += 10;
-  return { ruledOut: false, reason: null, boost };
+  if (boostMinAge != null && ageMeetsMin(careAge, boostMinAge) === true) {
+    boost += 8;
+    // Say so only when the age rule is the program's own. The sbf column is
+    // seed-seniorized (SNAP carries 60), so it may boost but never be quoted.
+    if (draftAge != null) fits.push(`Meets the age rule (${draftAge}+)`);
+  }
+  if (facts.medicaidStatus === "alreadyHas" && gated) {
+    boost += 10;
+    fits.push("Already has Medicaid");
+  }
+  return { ruledOut: false, reason: null, boost, fits };
 }
 
 /** True when the family has given at least one Phase 3 eligibility fact —

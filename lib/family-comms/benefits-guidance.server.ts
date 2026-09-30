@@ -203,6 +203,7 @@ export function familyBenefitsFacts(profile: { state?: string | null; care_types
  * bands return null (no exclusion ever).
  */
 const INCOME_BAND_FLOOR: Record<string, number> = {
+  under1000: 0,
   under1500: 0,
   under2500: 1500,
   under4000: 2500,
@@ -220,6 +221,7 @@ export function incomeBandFloor(band: string | null | undefined): number | null 
 /** The band's ceiling — used only for positive "within income" scoring,
  *  never exclusion. Open-ended top bands return null. */
 const INCOME_BAND_CEILING: Record<string, number> = {
+  under1000: 1000,
   under1500: 1500,
   under2500: 2500,
   under4000: 4000,

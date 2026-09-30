@@ -12,15 +12,23 @@
  * and new rows read the same way. Isomorphic: no server imports.
  */
 
-export type AgeBand = "under_65" | "65_74" | "75_84" | "85_plus";
+export type AgeBand = "under_65" | "65_74" | "75_84" | "85_plus" | "under_60" | "60_64";
 
+/** The four one-tap chips on the program card. */
 export const AGE_BANDS: readonly AgeBand[] = ["under_65", "65_74", "75_84", "85_plus"];
+
+/** Every band a stored answer may hold. The full finder splits "Under 65"
+ *  into "Under 60" and "60 to 64", because 60 is where most senior food,
+ *  meal and Older Americans Act programs start. */
+export const ALL_AGE_BANDS: readonly AgeBand[] = [...AGE_BANDS, "under_60", "60_64"];
 
 export const AGE_BAND_LABELS: Record<AgeBand, string> = {
   under_65: "Under 65",
   "65_74": "65 to 74",
   "75_84": "75 to 84",
   "85_plus": "85 or older",
+  under_60: "Under 60",
+  "60_64": "60 to 64",
 };
 
 /** Inclusive bounds. under_65 has no known floor (could be any adult age). */
@@ -29,6 +37,8 @@ const BAND_BOUNDS: Record<AgeBand, { min: number | null; max: number | null }> =
   "65_74": { min: 65, max: 74 },
   "75_84": { min: 75, max: 84 },
   "85_plus": { min: 85, max: null },
+  under_60: { min: null, max: 59 },
+  "60_64": { min: 60, max: 64 },
 };
 
 /** The representative numbers the chips used to store (and that quiz tokens
@@ -41,7 +51,7 @@ const LEGACY_CHIP_AGE_TO_BAND: Record<number, AgeBand> = {
 };
 
 export function isAgeBand(v: unknown): v is AgeBand {
-  return typeof v === "string" && (AGE_BANDS as readonly string[]).includes(v);
+  return typeof v === "string" && (ALL_AGE_BANDS as readonly string[]).includes(v);
 }
 
 /** Chip wire value → band. Accepts the band itself or a legacy chip number

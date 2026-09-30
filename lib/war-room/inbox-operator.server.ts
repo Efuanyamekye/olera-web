@@ -173,7 +173,20 @@ async function smsProposals(db: SupabaseClient): Promise<{ items: ProposedItem[]
 // ---------------------------------------------------------------------------
 // Email
 
-type ThreadRow = { id: string; subject: string; category: string; agent_summary: string | null; suggested_draft: string | null; matched_profile_name: string | null; last_message_at: string };
+type ThreadRow = { id: string; subject: string; category: string; agent_summary: string | null; suggested_draft: string | null; matched_profile_name: string | null; last_message_at: string; gmail_draft_id?: string | null; draft_updated_at?: string | null };
+
+/**
+ * A Gmail draft saved after their last message is a reply waiting for him to
+ * send, not a thread waiting on a draft. On 2026-09-29 three emails approved
+ * at 04:11 UTC were drafted again at 13:00, because the thread still read
+ * "waiting on us" until the draft was sent; approving them again would have
+ * stacked a second draft on each.
+ */
+export function draftAwaitingSend(thread: { gmail_draft_id?: string | null; draft_updated_at?: string | null }, messages: Array<{ direction: string; internal_date: string }>): boolean {
+  if (!thread.gmail_draft_id || !thread.draft_updated_at) return false;
+  const lastIn = Math.max(0, ...messages.filter((m) => m.direction === "in").map((m) => Date.parse(m.internal_date)));
+  return Date.parse(thread.draft_updated_at) > lastIn;
+}
 type MessageRow = { thread_id: string; direction: string; from_email: string | null; from_name: string | null; internal_date: string; body_text: string | null; snippet: string | null };
 
 /** A thread waits on us only if the newest message came from them, not from Olera. */
@@ -207,7 +220,7 @@ Write the reply the founder would send:
 - Short: three to six sentences. One clear next step. No hedging, no over-apologising, no em dashes, no marketing language.
 - To a family: never say they qualify or are eligible for a program. The agency decides; say what the next step is and who decides.
 - Never invent a fact, a price, a date or a promise the thread does not support. If something needs checking, say what you will find out instead of guessing.
-- Sign off as "TJ, Olera".
+- Sign off as "Olera", never with a person's name. TJ, 2026-09-30: for a free benefits service a named sender adds liability and personal obligation for no gain.
 
 ${HUMAN_VOICE_RULES}
 
@@ -237,7 +250,7 @@ async function draftEmail(thread: ThreadRow, messages: MessageRow[]): Promise<{ 
   }
 }
 
-async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem[]; costUsd: number; waitingElsewhere: number }> {
+async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem[]; costUsd: number; waitingElsewhere: number; draftsInGmail: number }> {
   const items: ProposedItem[] = [];
   let costUsd = 0;
 
@@ -259,7 +272,7 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
 
   // Drafts: families and providers waiting on a reply, newest first.
   const { data: threads } = await db.from("support_email_threads")
-    .select("id, subject, category, agent_summary, suggested_draft, matched_profile_name, last_message_at")
+    .select("id, subject, category, agent_summary, suggested_draft, matched_profile_name, last_message_at, gmail_draft_id, draft_updated_at")
     .eq("state", "needs_reply")
     .in("category", ["care_seeker", "provider"])
     .eq("suggested_action", "draft_reply")
@@ -275,9 +288,14 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
     : { data: [] };
   const messages = (messageData ?? []) as MessageRow[];
   let waitingElsewhere = 0;
+  let draftsInGmail = 0;
   for (const thread of candidates) {
     const own = messages.filter((m) => m.thread_id === thread.id);
     if (!waitingOnUs(own)) continue;
+    if (draftAwaitingSend(thread, own)) {
+      draftsInGmail += 1;
+      continue;
+    }
     if (items.filter((item) => item.kind === "email_draft").length >= EMAIL_DRAFTS_PER_PASS) {
       waitingElsewhere += 1;
       continue;
@@ -299,7 +317,7 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
       body: draft.body,
     });
   }
-  return { items, costUsd, waitingElsewhere };
+  return { items, costUsd, waitingElsewhere, draftsInGmail };
 }
 
 // ---------------------------------------------------------------------------
@@ -355,10 +373,10 @@ async function voicemailProposals(db: SupabaseClient): Promise<{ items: Proposed
 // ---------------------------------------------------------------------------
 // The pass
 
-export type InboxPass = { passId: string; items: StoredItem[]; waitingElsewhere: number; costUsd: number };
+export type InboxPass = { passId: string; items: StoredItem[]; waitingElsewhere: number; costUsd: number; draftsInGmail?: number };
 
 /** What this pass would propose, in digest order, without storing anything. */
-export async function buildInboxProposals(db: SupabaseClient): Promise<{ proposed: ProposedItem[]; waitingElsewhere: number; costUsd: number }> {
+export async function buildInboxProposals(db: SupabaseClient): Promise<{ proposed: ProposedItem[]; waitingElsewhere: number; costUsd: number; draftsInGmail: number }> {
   const [sms, email, voicemail] = await Promise.all([smsProposals(db), emailProposals(db), voicemailProposals(db)]);
   // Order: clear first, then ready to send, then the one question.
   const questions = sms.items.filter((item) => item.kind === "question").slice(0, 1);
@@ -376,12 +394,13 @@ export async function buildInboxProposals(db: SupabaseClient): Promise<{ propose
     proposed,
     waitingElsewhere: sms.waitingElsewhere + email.waitingElsewhere + Math.max(0, extraQuestions),
     costUsd: email.costUsd + voicemail.costUsd,
+    draftsInGmail: email.draftsInGmail,
   };
 }
 
 /** Build the pass, store its items (older proposals expire), and return them. */
 export async function runInboxPass(db: SupabaseClient, now = new Date()): Promise<InboxPass> {
-  const { proposed, waitingElsewhere, costUsd } = await buildInboxProposals(db);
+  const { proposed, waitingElsewhere, costUsd, draftsInGmail } = await buildInboxProposals(db);
   const passId = now.toISOString().slice(0, 16);
   await db.from("cortex_inbox_items").update({ status: "expired", decided_at: now.toISOString() }).eq("status", "proposed");
   const rows = proposed.map((item, i) => ({ ...item, body: item.body ?? null, pass_id: passId, number: i + 1 }));
@@ -392,15 +411,17 @@ export async function runInboxPass(db: SupabaseClient, now = new Date()): Promis
     items: ((data ?? []) as StoredItem[]).sort((a, b) => a.number - b.number),
     waitingElsewhere,
     costUsd,
+    draftsInGmail,
   };
 }
 
 /** The Telegram message: numbered, short, one line per item, drafts quoted. */
 export function renderDigest(pass: InboxPass): string {
   if (!pass.items.length) {
-    return pass.waitingElsewhere
+    const gmailOnly = pass.draftsInGmail ? ` ${pass.draftsInGmail} approved ${pass.draftsInGmail === 1 ? "draft is" : "drafts are"} in Gmail waiting for you to send.` : "";
+    return (pass.waitingElsewhere
       ? `Inbox pass: nothing I can clear or draft right now. ${pass.waitingElsewhere} ${pass.waitingElsewhere === 1 ? "thread needs" : "threads need"} a person in /admin/inbox or support email.`
-      : "Inbox pass: both inboxes are clear.";
+      : "Inbox pass: both inboxes are clear.") + gmailOnly;
   }
   const section = (title: string, kinds: InboxItemKind[], only: (item: StoredItem) => boolean = () => true) => {
     const rows = pass.items.filter((item) => kinds.includes(item.kind) && only(item));
@@ -418,7 +439,8 @@ export function renderDigest(pass: InboxPass): string {
     ? `Reply "approve ${numbers.join(" ")}" for all of them, or "send ${numbers[0]}", "skip ${numbers[0]}", or "send ${numbers[numbers.length - 1]}: your edited text". "check ${numbers[numbers.length - 1]}" fact-checks a draft first. Busy? Reply "later" and they come back in the next pass.`
     : "";
   const more = pass.waitingElsewhere ? ` ${pass.waitingElsewhere} more need a person in the inbox.` : "";
-  return `${parts.join("\n\n")}\n\n${how}${more}`.trim();
+  const gmail = pass.draftsInGmail ? ` ${pass.draftsInGmail} approved ${pass.draftsInGmail === 1 ? "draft is" : "drafts are"} in Gmail waiting for you to send.` : "";
+  return `${parts.join("\n\n")}\n\n${how}${more}${gmail}`.trim();
 }
 
 // ---------------------------------------------------------------------------

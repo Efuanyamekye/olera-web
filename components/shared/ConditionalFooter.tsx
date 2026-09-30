@@ -49,12 +49,16 @@ export default function ConditionalFooter() {
   // /m/{token} (benefits results) and /benefits-outcome (check-in landing) are
   // noindex personal pages: the SEO city/state grid does nothing for search
   // there and is pure noise for a family mid-task (TJ, 2026-07-28).
+  // /benefits/finder is the same task, quiz through plan: TJ asked for the
+  // city grid and the full footer to go (2026-09-30). The legal bar stays
+  // because the page asks for a phone number to text the plan.
   if (
     pathname.startsWith("/portal") ||
     pathname.startsWith("/provider") ||
     pathname.startsWith("/account") ||
     pathname.startsWith("/m/") ||
-    pathname.startsWith("/benefits-outcome")
+    pathname.startsWith("/benefits-outcome") ||
+    pathname.startsWith("/benefits/finder")
   ) {
     return <SimpleFooter />;
   }

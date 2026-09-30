@@ -381,6 +381,32 @@ export function programCallContact(
 }
 
 /** Parse "/benefits/{stateSlug}/{programId}" out of an entry-source path. */
+/**
+ * The program the full finder (/benefits/finder) told this family to call
+ * first, saved with their plan. The finder is not a program page, so
+ * signup_source can't carry it. Without this, the plan page, the letter and
+ * the texts re-picked on their own and could lead with a different program
+ * than the one on the family's screen.
+ */
+async function finderFirstStep(
+  db: SupabaseClient,
+  accountId: string,
+): Promise<{ stateId: string; programId: string } | null> {
+  const { data } = await db
+    .from("business_profiles")
+    .select("metadata")
+    .eq("account_id", accountId)
+    .eq("type", "family")
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  const raw = (data?.metadata as { benefits_results?: { finder_first_step?: { state_id?: unknown; program_id?: unknown } } } | null)
+    ?.benefits_results?.finder_first_step;
+  return typeof raw?.state_id === "string" && typeof raw?.program_id === "string"
+    ? { stateId: raw.state_id, programId: raw.program_id }
+    : null;
+}
+
 export function parseEntrySourceProgram(entrySource: string | null | undefined): { stateId: string; programId: string } | null {
   if (!entrySource) return null;
   const segs = entrySource.split("?")[0].split("/").filter(Boolean);
@@ -545,7 +571,8 @@ export async function selectFirstStepProgram(
   // Foreign-state filtering applies here too: an entry page in another state
   // than the family's own is dropped silently (same reasoning as step 2), not
   // treated as a switch.
-  const entry = parseEntrySourceProgram(account.signup_source);
+  // A finder family's first step leads the same way a program page does.
+  const entry = parseEntrySourceProgram(account.signup_source) ?? (await finderFirstStep(db, opts.accountId));
   let switchInfo: Pick<FirstStepPick, "switchReason" | "switchedFromName" | "switchDetail"> | null =
     null;
   const ownAbbrev = opts.stateAbbrev ? opts.stateAbbrev.toUpperCase() : null;

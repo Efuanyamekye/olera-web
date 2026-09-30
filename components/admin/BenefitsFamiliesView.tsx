@@ -1,5 +1,6 @@
 "use client";
 
+import { inOleraVoice } from "@/lib/family-comms/olera-voice";
 import { Fragment, useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import DateRangePopover, {
@@ -1343,7 +1344,8 @@ export function NavigatorDraftEditor({
   // Saved edits win over the AI originals — reopening a row after a save
   // shows what TJ left, not what the model wrote.
   const [subject, setSubject] = useState(navigator.edited_subject ?? navigator.subject ?? "");
-  const [letter, setLetter] = useState(navigator.edited_body ?? navigator.body ?? "");
+  // Shown as it will send: older drafts were signed as TJ (olera-voice.ts).
+  const [letter, setLetter] = useState(inOleraVoice(navigator.edited_body ?? navigator.body ?? ""));
   const [sms, setSms] = useState(navigator.edited_sms ?? navigator.sms ?? "");
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const saveDraft = async () => {
@@ -1542,7 +1544,7 @@ export function NavigatorDraftEditor({
           disabled={busy || letter.trim().length < 40}
           className="rounded-lg bg-gray-900 px-4 py-1.5 text-xs font-semibold text-white disabled:opacity-40"
         >
-          Send as TJ
+          Send
         </button>
         <button
           onClick={saveDraft}

@@ -205,8 +205,13 @@ export default function BenefitsResults({ result }: BenefitsResultsProps) {
       ? matchedPrograms
       : matchedPrograms.filter((m) => m.program.category === activeFilter);
 
-  // For progressive reveal: skip the first program (shown as hero)
-  const remainingPrograms = filteredPrograms.slice(1);
+  // The hero shows the top program unless it shows the local agency instead
+  // (RecommendedFirstStep's rule). Skip only a program the hero is actually
+  // showing: slicing blindly hid the #1 match whenever the agency took the
+  // hero, and hid a different program under every category filter.
+  const heroProgramId =
+    localAAA?.phone || matchedPrograms.length === 0 ? null : matchedPrograms[0].id;
+  const remainingPrograms = filteredPrograms.filter((m) => m.id !== heroProgramId);
   const visiblePrograms = (showAll || isPrinting) ? remainingPrograms : remainingPrograms.slice(0, INITIAL_VISIBLE);
   const hiddenCount = remainingPrograms.length - visiblePrograms.length;
 

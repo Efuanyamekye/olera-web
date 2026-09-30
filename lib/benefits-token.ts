@@ -105,9 +105,21 @@ export async function lookupResultByToken(
     .filter((p): p is WaiverProgram => !!p)
     .filter((p) => p.programType === "benefit");
 
-  const matched = allPrograms.filter((p) =>
-    matchesCareNeed(p, tokenRow.care_need as CareNeed),
-  );
+  // A finder family saw a specific list, in a specific order. Show exactly
+  // that (current program data, same ids) instead of re-deriving it from one
+  // care-need keyword, which dropped programs the finder had just shown them.
+  // Everyone else keeps the care-need list.
+  const finderIds = (profile.metadata as { benefits_results?: { finder_program_ids?: unknown } } | null)
+    ?.benefits_results?.finder_program_ids;
+  const finderList = Array.isArray(finderIds)
+    ? finderIds
+        .filter((id): id is string => typeof id === "string")
+        .map((id) => allPrograms.find((p) => p.id === id))
+        .filter((p): p is WaiverProgram => !!p)
+    : [];
+  const matched = finderList.length
+    ? finderList
+    : allPrograms.filter((p) => matchesCareNeed(p, tokenRow.care_need as CareNeed));
 
   // Bump last_viewed_at — fire-and-forget, don't block render. Supabase
   // resolves the promise with {data, error} rather than rejecting, so we

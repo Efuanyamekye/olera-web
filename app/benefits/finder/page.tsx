@@ -1,96 +1,63 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import BenefitsIntakeForm from "@/components/benefits/BenefitsIntakeForm";
-import BenefitsResults from "@/components/benefits/BenefitsResults";
-import { useCareProfile } from "@/lib/benefits/care-profile-context";
-import { useAuth } from "@/components/auth/AuthProvider";
-import {
-  getBenefitsIntakeCache,
-  clearBenefitsIntakeCache,
-} from "@/lib/benefits-intake-cache";
-import type { BenefitsIntakeAnswers, BenefitsSearchResult } from "@/lib/types/benefits";
-import type { FamilyMetadata } from "@/lib/types";
+import FinderQuiz from "@/components/benefits/finder/FinderQuiz";
+import FinderResults from "@/components/benefits/finder/FinderResults";
+import { useFinder } from "@/hooks/use-finder";
 import { ContentViewTracker } from "@/components/analytics/ContentViewTracker";
 
+/**
+ * The Senior Benefits Finder, redesigned 2026-09-30: "who is this for" first,
+ * a caregiver question, household before income, and results that start
+ * with one call and end with "send me this plan". Results come from the same
+ * fact-checked programs as the program pages (/api/benefits/finder).
+ */
 export default function BenefitsFinderPage() {
-  const { pageState, result, errorMsg, reset, restoreResults, setPublishCarePost } = useCareProfile();
-  const { user, activeProfile } = useAuth();
-  const restoredRef = useRef(false);
+  const f = useFinder();
 
-  // Restore saved results for returning logged-in users
-  useEffect(() => {
-    if (restoredRef.current || pageState !== "intake") return;
-    if (!activeProfile) return;
+  // Nothing renders until a saved draft has been read, so a returning
+  // visitor doesn't see question 1 flash before their own step.
+  if (!f.restored) return <div className="min-h-[520px]" aria-busy="true" />;
 
-    const meta = (activeProfile.metadata || {}) as FamilyMetadata;
-    if (meta.benefits_results?.results && meta.benefits_results?.answers) {
-      restoredRef.current = true;
-      restoreResults(
-        meta.benefits_results.results as unknown as BenefitsSearchResult,
-        meta.benefits_results.answers as unknown as BenefitsIntakeAnswers,
-        meta.benefits_results.location_display || "",
-        { fromDb: true }
-      );
-    }
-  }, [activeProfile, pageState, restoreResults]);
+  if (f.phase === "results" && f.result) return <FinderResults f={f} />;
 
-  // Restore from intake cache after anonymous → auth flow
-  useEffect(() => {
-    if (restoredRef.current) return;
-    if (!user || !activeProfile) return;
+  if (f.phase === "loading") {
+    return (
+      <div className="py-24 flex flex-col items-start gap-4" role="status">
+        <div className="w-8 h-8 border-[3px] border-primary-600 border-t-transparent rounded-full animate-spin" />
+        <p className="text-base text-gray-600">Finding programs and who to call…</p>
+      </div>
+    );
+  }
 
-    const cached = getBenefitsIntakeCache();
-    if (!cached?.result) return;
-
-    restoredRef.current = true;
-    clearBenefitsIntakeCache();
-
-    // Restore the "Let providers find me" preference from cache
-    if (cached.publishCarePost !== undefined) {
-      setPublishCarePost(cached.publishCarePost);
-    }
-
-    // fromDb: false → BenefitsResults sync useEffect will persist + sync
-    restoreResults(cached.result, cached.answers, cached.locationDisplay);
-  }, [user, activeProfile, restoreResults, setPublishCarePost]);
-
-  // Results use full workspace width; intake is focused and centered
-  if (pageState === "results" && result) {
-    return <BenefitsResults result={result} />;
+  if (f.phase === "error") {
+    return (
+      <div className="py-16 flex flex-col items-start gap-3 max-w-[560px]" role="alert">
+        <h2 className="font-display text-[28px] text-gray-900">We couldn&apos;t load your plan</h2>
+        <p className="text-gray-600">{f.error}</p>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => void f.retry()}
+            className="min-h-[48px] px-6 rounded-2xl bg-primary-800 text-white font-semibold border-none cursor-pointer hover:bg-primary-700"
+          >
+            Try again
+          </button>
+          <button
+            type="button"
+            onClick={() => f.goTo("zip")}
+            className="min-h-[48px] px-6 rounded-2xl border-[1.5px] border-gray-200 bg-white text-gray-800 font-medium cursor-pointer"
+          >
+            Check the ZIP code
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="max-w-lg">
+    <>
       <ContentViewTracker page="/benefits/finder" />
-      {/* Intake form — no card wrapper, content sits directly on page */}
-      {pageState === "intake" && <BenefitsIntakeForm />}
-
-      {/* Loading */}
-      {pageState === "loading" && (
-        <div className="py-16">
-          <div className="inline-block w-8 h-8 border-3 border-primary-600 border-t-transparent rounded-full animate-spin mb-4" />
-          <p className="text-base text-gray-500">
-            Finding programs you may qualify for...
-          </p>
-        </div>
-      )}
-
-      {/* Error */}
-      {pageState === "error" && (
-        <div className="py-12">
-          <p className="text-lg font-semibold text-gray-900 mb-2">
-            Something went wrong
-          </p>
-          <p className="text-sm text-gray-500 mb-4">{errorMsg}</p>
-          <button
-            onClick={reset}
-            className="px-6 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-semibold border-none cursor-pointer hover:bg-primary-500 transition-colors min-h-[44px]"
-          >
-            Try Again
-          </button>
-        </div>
-      )}
-    </div>
+      <FinderQuiz f={f} />
+    </>
   );
 }
