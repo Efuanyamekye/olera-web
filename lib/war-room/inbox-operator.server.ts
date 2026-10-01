@@ -67,6 +67,55 @@ export async function approverAdmin(db: SupabaseClient): Promise<{ id: string; a
 }
 
 // ---------------------------------------------------------------------------
+// Carrying a draft forward
+
+/**
+ * A draft whose thread has nothing new since the last pass comes back as the
+ * same draft: same text, same checked rewrite, same number. On 2026-10-01 the
+ * 08:00 pass rewrote three drafts proposed at 20:00 with nothing new in their
+ * threads, so a check he ran no longer applied to the text on offer, and Elle's
+ * draft moved from 4 to 6 while 4 became Marti's: "send 4" from the night
+ * before would have reached the wrong person.
+ *
+ * `since` is the time of their last message when the draft was written; the
+ * draft carries only while that is still their last message.
+ */
+type PriorDraft = { number: number; body: string | null; status: string; target: Record<string, unknown> };
+
+async function priorDrafts(db: SupabaseClient, kind: "sms_draft" | "email_draft", key: "threadId" | "last10", values: string[]): Promise<Map<string, PriorDraft>> {
+  const out = new Map<string, PriorDraft>();
+  if (!values.length) return out;
+  const { data } = await db.from("cortex_inbox_items")
+    .select("number, body, status, target, created_at")
+    .eq("kind", kind)
+    .in(`target->>${key}`, values)
+    .in("status", ["proposed", "expired", "skipped"])
+    .order("created_at", { ascending: false })
+    .limit(200);
+  for (const row of (data ?? []) as Array<PriorDraft & { created_at: string }>) {
+    const id = String(row.target?.[key] ?? "");
+    if (id && !out.has(id)) out.set(id, row);
+  }
+  return out;
+}
+
+/** The target for a draft carried from an earlier pass, or null when there is something new. */
+export function carryTarget(prior: PriorDraft | undefined, base: Record<string, unknown>, since: string): Record<string, unknown> | null {
+  const priorSince = prior?.target?.since;
+  if (!prior || typeof priorSince !== "string" || Date.parse(priorSince) !== Date.parse(since)) return null;
+  const latest = (prior.target as { latest?: LatestVersion }).latest;
+  return {
+    ...base,
+    since,
+    carried: true,
+    ...(latest?.text ? { latest } : {}),
+    // Only an item still open from the last pass keeps its number; a skipped
+    // or older one gets a new number, so no number changes meaning.
+    ...(prior.status === "proposed" ? { carriedNumber: prior.number } : {}),
+  };
+}
+
+// ---------------------------------------------------------------------------
 // SMS
 
 type InboundRow = { phone_last10: string | null; body: string | null; keyword: string | null; display_name: string | null; profile_type: string | null; created_at: string };
@@ -112,6 +161,7 @@ async function smsProposals(db: SupabaseClient): Promise<{ items: ProposedItem[]
     if (!lastOut.has(key)) lastOut.set(key, row.created_at);
   }
   const scheduled = new Set(((queued ?? []) as Array<{ phone_last10: string }>).map((row) => row.phone_last10));
+  const priorSms = await priorDrafts(db, "sms_draft", "last10", phones);
   const newestJob = new Map<string, { status: string; packet: { draft?: string; triage?: { isCrisis?: boolean; category?: string } } | null }>();
   for (const job of (jobs ?? []) as Array<{ phone_last10: string; status: string; packet: never; created_at: string }>) {
     if (!newestJob.has(job.phone_last10)) newestJob.set(job.phone_last10, job);
@@ -149,7 +199,8 @@ async function smsProposals(db: SupabaseClient): Promise<{ items: ProposedItem[]
     }
     const draft = job?.status === "ready" ? job.packet?.draft?.trim() : null;
     if (draft && draft.length <= MAX_SMS_BODY && drafts.length < SMS_DRAFTS_PER_PASS) {
-      drafts.push({ kind: "sms_draft", category: `sms:reply:${job?.packet?.triage?.category ?? "other"}`, target: { last10 }, summary: `Text ${who} (waiting ${waitedHours}h). They said: "${said}"`, body: draft });
+      const target = carryTarget(priorSms.get(last10), { last10 }, latest.created_at) ?? { last10, since: latest.created_at };
+      drafts.push({ kind: "sms_draft", category: `sms:reply:${job?.packet?.triage?.category ?? "other"}`, target, summary: `Text ${who} (waiting ${waitedHours}h). They said: "${said}"`, body: draft });
       continue;
     }
     waitingElsewhere += 1;
@@ -224,7 +275,17 @@ Write the reply the founder would send:
 
 ${HUMAN_VOICE_RULES}
 
-Reply with the email body only.`;
+Reply with the email body only: no "Subject:" line, no headers.`;
+
+/**
+ * The body, without a header line the model echoed from its prompt. On
+ * 2026-10-01 the Blue Water draft opened "SUBJECT: RE: Request for
+ * Information About Olera's Services", which would have gone to her as the
+ * first line of the email.
+ */
+export function stripDraftHeaders(body: string): string {
+  return body.replace(/^(?:\s*(?:subject|re|to|from|cc)\s*:[^\n]*\n)+/i, "").trim();
+}
 
 async function draftEmail(thread: ThreadRow, messages: MessageRow[]): Promise<{ body: string; costUsd: number } | null> {
   if (!process.env.ANTHROPIC_API_KEY) return null;
@@ -241,7 +302,7 @@ async function draftEmail(thread: ThreadRow, messages: MessageRow[]): Promise<{ 
       system: DRAFT_SYSTEM,
       messages: [{ role: "user", content: `SUBJECT: ${thread.subject}\nWHO: ${thread.matched_profile_name ?? "unknown"} (${thread.category})\nSUMMARY: ${thread.agent_summary ?? ""}\n\nTHREAD:\n${transcript}\n\nFIRST DRAFT:\n${thread.suggested_draft ?? "(none)"}` }],
     }, { timeout: 45_000, maxRetries: 0 });
-    const body = reply.content.find((block): block is Anthropic.TextBlock => block.type === "text")?.text.replace(/\s*[—–]\s*/g, ", ").trim() ?? "";
+    const body = stripDraftHeaders(reply.content.find((block): block is Anthropic.TextBlock => block.type === "text")?.text.replace(/\s*[—–]\s*/g, ", ").trim() ?? "");
     const costUsd = (reply.usage.input_tokens * 2 + reply.usage.output_tokens * 10) / 1_000_000;
     return body.length > 20 ? { body, costUsd } : null;
   } catch (error) {
@@ -289,6 +350,7 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
   const messages = (messageData ?? []) as MessageRow[];
   let waitingElsewhere = 0;
   let draftsInGmail = 0;
+  const priorEmail = await priorDrafts(db, "email_draft", "threadId", candidates.map((t) => t.id));
   for (const thread of candidates) {
     const own = messages.filter((m) => m.thread_id === thread.id);
     if (!waitingOnUs(own)) continue;
@@ -300,7 +362,10 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
       waitingElsewhere += 1;
       continue;
     }
-    const draft = await draftEmail(thread, own);
+    const lastIn = own.filter((m) => m.direction === "in").map((m) => m.internal_date).sort((a, b) => Date.parse(b) - Date.parse(a))[0] ?? thread.last_message_at;
+    const prior = priorEmail.get(thread.id);
+    const carried = carryTarget(prior, { threadId: thread.id }, lastIn);
+    const draft = carried && prior?.body ? { body: stripDraftHeaders(prior.body), costUsd: 0 } : await draftEmail(thread, own);
     if (!draft) {
       waitingElsewhere += 1;
       continue;
@@ -312,7 +377,7 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
     items.push({
       kind: "email_draft",
       category: `email:draft:${thread.category}`,
-      target: { threadId: thread.id },
+      target: carried && prior?.body ? carried : { threadId: thread.id, since: lastIn },
       summary: `Email ${who} re "${cleanSubject(thread.subject)}". ${clip(thread.agent_summary ?? "", 180)}`,
       body: draft.body,
     });
@@ -402,8 +467,13 @@ export async function buildInboxProposals(db: SupabaseClient): Promise<{ propose
 export async function runInboxPass(db: SupabaseClient, now = new Date()): Promise<InboxPass> {
   const { proposed, waitingElsewhere, costUsd, draftsInGmail } = await buildInboxProposals(db);
   const passId = now.toISOString().slice(0, 16);
+  const { data: recent } = await db.from("cortex_inbox_items").select("number").gte("created_at", new Date(now.getTime() - 24 * 3_600_000).toISOString());
+  const numbers = assignNumbers(proposed, ((recent ?? []) as Array<{ number: number }>).map((row) => row.number));
   await db.from("cortex_inbox_items").update({ status: "expired", decided_at: now.toISOString() }).eq("status", "proposed");
-  const rows = proposed.map((item, i) => ({ ...item, body: item.body ?? null, pass_id: passId, number: i + 1 }));
+  const rows = proposed.map((item, i) => {
+    const { carriedNumber: _carried, ...target } = item.target;
+    return { ...item, target, body: item.body ?? null, pass_id: passId, number: numbers[i] };
+  });
   const { data, error } = rows.length ? await db.from("cortex_inbox_items").insert(rows).select("*") : { data: [], error: null };
   if (error) throw new Error(`inbox items not stored: ${error.message}`);
   return {
@@ -413,6 +483,32 @@ export async function runInboxPass(db: SupabaseClient, now = new Date()): Promis
     costUsd,
     draftsInGmail,
   };
+}
+
+/**
+ * Numbers for this pass. A draft carried from the last pass keeps its number;
+ * everything else takes the lowest number no item has had in the last 24
+ * hours. So "send 4" typed from last night's digest either reaches the same
+ * thread or gets "not in the current list", never somebody else's draft.
+ */
+export function assignNumbers(proposed: ProposedItem[], usedRecently: number[]): number[] {
+  const taken = new Set(usedRecently);
+  const kept = new Set<number>();
+  const out: Array<number | null> = proposed.map((item) => {
+    const n = item.target.carriedNumber;
+    if (typeof n === "number" && !kept.has(n)) {
+      kept.add(n);
+      return n;
+    }
+    return null;
+  });
+  let next = 1;
+  return out.map((n) => {
+    if (n !== null) return n;
+    while (taken.has(next) || kept.has(next)) next += 1;
+    kept.add(next);
+    return next;
+  });
 }
 
 /** The Telegram message: numbered, short, one line per item, drafts quoted. */
@@ -426,7 +522,7 @@ export function renderDigest(pass: InboxPass): string {
   const section = (title: string, kinds: InboxItemKind[], only: (item: StoredItem) => boolean = () => true) => {
     const rows = pass.items.filter((item) => kinds.includes(item.kind) && only(item));
     if (!rows.length) return "";
-    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.body ? `\n> ${item.body.replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? "\n(Saved as a Gmail draft when you approve. You send it.)" : ""}`).join("\n\n")}`;
+    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? "\n(Saved as a Gmail draft when you approve. You send it.)" : ""}`).join("\n\n")}`;
   };
   const parts = [
     section("Clear", ["triage_batch"]),
@@ -559,7 +655,7 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
       return finish("done", scheduled?.sendAfter ? `scheduled for their morning (quiet hours where they are).` : "sent.");
     }
     if (item.kind === "email_draft") {
-      await saveSupportDraft(db, { threadId: String(item.target.threadId), body: edit ?? currentText(item), actor: approver.actor, adminUserId: approver.id });
+      await saveSupportDraft(db, { threadId: String(item.target.threadId), body: edit ?? stripDraftHeaders(currentText(item)), actor: approver.actor, adminUserId: approver.id });
       return finish("done", "saved as a Gmail draft on the thread. Send it from Gmail when you're ready.");
     }
     return finish("failed", "I don't know how to do that one.");
