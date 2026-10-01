@@ -71,13 +71,19 @@ const COVERED_RULE = /priority|\bage\b|\d+\s*\+|income|asset|savings|fpl|poverty
 /** Summary lines that say nothing a family needs to check ("Must reside in
  *  Alabama", "All ages eligible", "Own or rent"). Shown as the "also requires"
  *  line, they read as a hurdle that isn't one. */
-const TRIVIAL_RULE = /must (reside|live) in|resident of|all ages|any age|all housing|own or rent|homeowners? (or|and) renters?|renters? (are )?eligible|qualify automatically|automatically qualif|responsible for paying/i;
+const TRIVIAL_RULE = /all ages|any age|all housing|own or rent|homeowners? (or|and) renters?|renters? (are )?eligible|qualify automatically|automatically qualif|responsible for paying/i;
+/** "Must live in Idaho": the whole state, which the ZIP already settles. A
+ *  county, a service area or a facility is NOT this ("Must live in PACE
+ *  service area", "Must live in long-term care facility"). Case-sensitive on
+ *  purpose: a state name is capitalised, "service area" is not. */
+const WHOLE_STATE_RULE = /^(?:[Mm]ust )?(?:reside|live) in (?:the state of )?[A-Z][a-z]+(?: [A-Z][a-z]+)?\.?$/;
 
 /** A rule no question settles and that decides the program: a level-of-care
- *  or daily-help assessment, being homebound, or an asset limit. With one of
+ *  or daily-help assessment, being homebound, an asset limit, living in a
+ *  care facility, or living in one county or service area. With one of
  *  these, a family can't be "likely" on income alone (ARChoices needs
  *  nursing-home level of care; Georgia's ABD Medicaid caps resources). */
-const UNASKED_GATE = /level of care|nursing (home|facility)|daily help|help with (bathing|dressing|eating|daily)|activities of daily living|\badls?\b|at risk of|homebound|assessment|functional|resources|asset/i;
+const UNASKED_GATE = /level of care|nursing (home|facility)|daily help|help with (bathing|dressing|eating|daily)|activities of daily living|\badls?\b|at risk of|homebound|assessment|functional|resources|asset|long-term care facility|assisted living|care facility|service area|participating|count(y|ies)\b|towns\b|delivery zone|covered area/i;
 
 /** Lowercase the first letter to follow "It also requires:", but leave an
  *  acronym alone ("SSI recipients", not "sSI recipients"). */
@@ -88,7 +94,9 @@ function lowerFirst(text: string): string {
 /** The first rule the questions don't cover, e.g. "State-certified need for
  *  nursing home level of care" or "Primarily homebound". */
 function otherRequirement(p: WaiverProgram): string | null {
-  const line = (p.structuredEligibility?.summary || []).find((l) => !COVERED_RULE.test(l) && !TRIVIAL_RULE.test(l));
+  const line = (p.structuredEligibility?.summary || []).find(
+    (l) => !COVERED_RULE.test(l) && !TRIVIAL_RULE.test(l) && !WHOLE_STATE_RULE.test(l.trim()),
+  );
   if (!line) return null;
   const clean = line.replace(/[.;]\s*$/, "").trim();
   return clean ? `It also requires: ${lowerFirst(clean)}.` : null;
