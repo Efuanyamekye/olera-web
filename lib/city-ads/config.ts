@@ -191,6 +191,55 @@ export const CITY_CONFIGS: Record<string, CityConfig> = {
     timeZone: "America/Phoenix",
     campaignTag: "shs-scottsdale-native-sep26",
   },
+  // Four Ad Boost providers moved from Google-only to Meta instant forms
+  // (TJ, 30 Sep). Same pattern as boulder-co: `concierge` because the importer
+  // requires it, and each form's city_campaigns row names the provider's Ad
+  // Boost request so its leads are handed to that provider.
+  // Franchil LLC (Hilda), Killeen.
+  "killeen-tx": {
+    slug: "killeen-tx",
+    city: "Killeen",
+    state: "TX",
+    routingMode: "concierge",
+    areaLabel: "Killeen, Harker Heights, Copperas Cove and nearby",
+    zipPrefill: "76543",
+    timeZone: "America/Chicago",
+    campaignTag: "franchil-killeen-native-oct26",
+  },
+  // Miracle-Lightstar (Zardy), Cleveland.
+  "cleveland-oh": {
+    slug: "cleveland-oh",
+    city: "Cleveland",
+    state: "OH",
+    routingMode: "concierge",
+    areaLabel: "Cleveland, Parma, Lakewood and nearby",
+    zipPrefill: "44109",
+    timeZone: "America/New_York",
+    campaignTag: "miracle-lightstar-cleveland-native-oct26",
+  },
+  // Pacesetter Home Services (Sherry), Dallas GA office serving Douglasville.
+  "douglasville-ga": {
+    slug: "douglasville-ga",
+    city: "Douglasville",
+    state: "GA",
+    routingMode: "concierge",
+    areaLabel: "Douglasville, Dallas, Hiram and nearby",
+    zipPrefill: "30132",
+    timeZone: "America/New_York",
+    campaignTag: "pacesetter-douglasville-native-oct26",
+  },
+  // Graceful Homecare, Concord. Not `charlotte-nc`: that slug is Olera's own
+  // city arm.
+  "concord-nc": {
+    slug: "concord-nc",
+    city: "Concord",
+    state: "NC",
+    routingMode: "concierge",
+    areaLabel: "Concord, Kannapolis, Harrisburg and nearby",
+    zipPrefill: "28027",
+    timeZone: "America/New_York",
+    campaignTag: "graceful-concord-native-oct26",
+  },
 };
 
 export function getCityConfig(slug: string): CityConfig | null {
