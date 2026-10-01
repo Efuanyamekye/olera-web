@@ -7,6 +7,42 @@
 
 ## Current Focus
 
+### 2026-10-01 (later) — Colorado CareAssist: Jacob on alerts + call booked (`thirsty-panini`)
+
+- **Jason (owner) asked** to copy Jacob McKay (Dir. of Client Development, jacob@coloradocareassist.com) on every family alert, keep Jason too; Jacob owns the call.
+- **Code: PR #2313 (OPEN, not merged)** `lib/city-ads/thread.server.ts`: `notifyProvider` also emails `business_profiles.metadata.alert_emails` (one email each, deduped, owner excluded). Only the owner address gets the signed-in link; copied staff get the plain link. Data already set: CCA profile 603a5a17 `metadata.alert_emails = [jacob@]`. Needs staging merge + hotfix to main before Monday.
+- **Call booked:** Mon 5 Oct 4:30 PM MT (5:30 AM Tue for TJ, who prefers early mornings to late nights) on tj@olera.care calendar, Jacob required, Jason optional, TJ's Zoom (Google auto-added a Meet link too). TJ's email told Jacob he's "being added" to alerts (worded as in-progress until #2313 ships).
+- **Scheduling rule learned:** for US calls from Vietnam (UTC+7), late-afternoon US time = TJ's early morning; propose a specific slot + send the invite in one go to avoid back-and-forth.
+
+**Next Up.** Merge #2313 -> staging -> hotfix main. Mon 5 Oct: Jacob call (first families Nancy/Marta, ideal client, next campaign; Marta needs Spanish-speaking caregiver). 4-5 Oct: five Meta forms review.
+
+### 2026-10-01 — Five provider Meta instant forms live; Robbie pilot email sent (`thirsty-panini`)
+
+- **Robbie pilot email sent** (cc Logan + support@): families to him first, our screening + next-day follow-up, his one-line outcome per family, ZIP list + routing ask, check-in Wed 14 Oct 9:30 CT. Logged.
+- **Assisting Hands North Texas form LIVE:** campaign 120251777188180487, $150 to 15 Oct, Dallas 32.85,-96.80 + 40 mi. New AH-branded form 1884994012868963 (who-is-it-for screen, consent names Olera + Assisting Hands); briefly ran on the old Olera Dallas form before swap. city_campaigns 7ccf9cd2 (request_id = Robbie 7dfb5a8c). Narrow to his 243 ZIPs when they arrive.
+- **Four more forms LIVE** ($50 each to 15 Oct, office + 20 mi, family image 8eb1ac99, screen question): Franchil killeen-tx (form 1127281436482824), Miracle-Lightstar cleveland-oh (1646658283663867), Pacesetter douglasville-ga (933616202764687), Graceful concord-nc (1645096703995957). Configs PR #2310 -> staging, hotfix #2311 -> main (e557250d6). META_LEADS_FORMS_JSON now 16 forms, all testOnly=false. Review logged for 4-5 Oct.
+- **How it was done:** env writes / prod deploys are classifier-blocked in auto mode; TJ toggled out of auto mode (Shift+Tab) and approved. Scripts in session scratchpad (allow-form.sh, allow-forms4.sh): vercel env pull -> append -> rm/add. Gotcha: pulled value is quoted with unescaped inner quotes; strip outer quotes before json.loads.
+- **Support:** Kierland Sanctuary (Scottsdale AL, Jessica McPherson tours) told Elvis is off; kept as contact. Ces answered: inbox texts go to the family only; Marta (CCA Boulder) needs Spanish-speaking caregivers, ask Jacob, else find a Denver agency.
+- **Liz (Hoop):** condolence/reschedule text sent from Olera number. **Hilda:** confirmed login; FB page URL still not captured (preview only).
+
+**Next Up.** 4-5 Oct: delivery + first leads on all five forms. Text Hilda/Zardy their ad is running. Impact (Pat) form if she says yes. Robbie ZIPs -> geo. Marta routing. Liz check-in when she replies.
+### 2026-09-30 (late) — Robbie call done: North Texas pilot agreed (`thirsty-panini`, no app code)
+
+- **Robbie (Assisting Hands N. Texas), TJ + Logan call:** pilot agreed in principle. Every North Texas family routes to Robbie; he hand-distributes to his 8 owners (243 ZIPs, ~12 counties). Min ~4 hrs/day (2-3 hr at ~$40/hr). His bar: ~30% suspect-to-client. On AH vendor committee (~20 area reps, ~150 owners, 35 states) = the CRP letter play. Check-in call proposed Wed 14 Oct 9:30 CT. Call page: https://claude.ai/artifact/21DwM5dsuYUEx15GSiFqkN (includes pilot email, copy button). Logged as provider_touches (meeting); memory `project_assisting_hands_dallas` updated.
+- **Gap:** Dallas Meta form ended 29 Sep; nothing live in DFW. Pilot needs a new North Texas instant form routed to Robbie, ~$150 / 2 weeks, awaiting TJ's go.
+- **Liz (Hoop):** condolence + reschedule text sent from the Olera number via SMS inbox (15:28 UTC). Next: book check-in when she replies.
+- **Hilda (Franchil):** confirmed hilda.administrator@franchil.com shows both families; she sent her Facebook page link (preview only, URL not yet captured).
+
+**Next Up (Thu 1 Oct).** TJ sends Robbie pilot email; approve $150 North Texas form, then build it (family image, Robbie routing); capture Hilda's FB URL; load Robbie's ZIPs into targeting when he sends them.
+### 2026-09-30 (night) — Liz call attempt, Robbie prep sharpened, Caring Senior moved to Thursday (`thirsty-panini`, no app code)
+
+- **Liz (Hoop):** called for the two-week check-in; she was at a funeral, asked for a callback in 30 min (clashed with Robbie). Logged. Next: TJ texts her gently to reschedule (drafted), due 1 Oct.
+- **Robbie prep** (https://claude.ai/artifact/7yonrRHCdmJWjzaeCKwwvX) gained a "How we're different" section: vs ad agency (all channels, our own pages + city pages + in-ad forms, screening before he hears, $81/inquiry vs $80-150, $60K own spend since 2022) and vs A Place for Mom (no commission/per-lead fee, one agency at a time, family chooses him, Franchil client 21 -> 42 hrs/wk). Pitch framing: pilot = first call not exclusivity, 1-business-hour callback, 60-90 days, month 1 ads on us, then paid plan + CRP letter. Carol is the care recipient in the Rudy case (Rudy = friend/contact); Marla is a separate Frisco family.
+- **/managed-ads page is stale:** says the one client "was never recorded"; Franchil's client is now confirmed in writing (care from 5 Sep, 42 hrs/wk). Fix the copy.
+- **Caring Senior:** Kaitlin call moved to Thursday, below the six families on Ces's sheet (TJ: today was too much). Replies logged: Hilda sending FB link; Zardy "Ok".
+
+**Next Up.** Robbie call outcome -> log + pilot terms email. Text Liz. Update /managed-ads client line.
+
 ### 2026-09-30 (evening) — Provider-by-provider sweep: Pacesetter, Miracle, Impact, LumiWell, Caring Senior (`thirsty-panini`, no app code)
 
 **Sent today (TJ), all logged as provider_touches:** Pacesetter email (move to Facebook + review call Fri/Mon), Impact email to Pat (Facebook ready; she named ~$150/mo for Google+FB at signup), Colorado CareAssist email to Jason cc Jacob, texts to Zardy ("Ok") and Hilda (sending her FB page link). LumiWell text queued from Olera's number for 8 AM PT (sms_queue 7b2977e6). Overdue actions cleared on Pacesetter, Miracle, Impact, LumiWell.

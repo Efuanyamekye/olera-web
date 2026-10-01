@@ -211,6 +211,12 @@ export interface ThreadProvider {
   phone: string | null;
   email: string | null;
   /**
+   * Extra addresses that also get family alerts, from
+   * `business_profiles.metadata.alert_emails` (e.g. an intake coordinator the
+   * owner asked us to copy). Each gets its own email; the main address stays.
+   */
+  alertEmails?: string[];
+  /**
    * Where she works this family. "campaign": the lead came from her own ad and
    * sits on her campaign page. "inbox": she took it as an offer, so it lives
    * in her inbox only.
@@ -243,12 +249,19 @@ export async function threadProvider(db: SupabaseClient, lead: ThreadLead): Prom
   const primary = holderId ? null : await resolvePrimaryCampaign(db, lead);
   const id = holderId ?? primary?.providerId ?? null;
   if (!id) return null;
-  const { data: p } = await db.from("business_profiles").select("id, display_name, phone, email").eq("id", id).maybeSingle();
+  const { data: p } = await db.from("business_profiles").select("id, display_name, phone, email, metadata").eq("id", id).maybeSingle();
+  const email = (p?.email as string | null) ?? null;
+  const extra = (p?.metadata as { alert_emails?: unknown } | null)?.alert_emails;
+  const alertEmails = Array.isArray(extra)
+    ? Array.from(new Set(extra.filter((e): e is string => typeof e === "string" && e.includes("@")).map((e) => e.trim().toLowerCase())))
+        .filter((e) => e !== email?.toLowerCase())
+    : [];
   return {
     id,
     name: (p?.display_name as string | null) ?? primary?.providerName ?? "Your care provider",
     phone: p?.phone ? normalizeUSPhone(p.phone as string) : null,
-    email: (p?.email as string | null) ?? null,
+    email,
+    alertEmails,
     via: holderId ? "inbox" : "campaign",
   };
 }
@@ -376,16 +389,19 @@ export async function notifyProvider(
       metadata: { lead_id: lead.id },
     });
   }
-  if (provider.email) {
+  const recipients = [provider.email, ...(provider.alertEmails ?? [])].filter((e): e is string => !!e);
+  for (const to of recipients) {
     await sendEmail({
-      to: provider.email,
+      to,
       subject: what.subject,
       html: cityThreadProviderEmail({
         eyebrow: `Olera · ${getCityConfig(lead.slug)?.city ?? "Your campaign"}`,
         headline: what.headline,
         quote: what.quote ?? null,
         body: what.body,
-        ctaUrl: await providerEmailUrl(db, lead, provider),
+        // Only the owner's own address gets a signed-in link; copied staff
+        // get the plain link and sign in themselves.
+        ctaUrl: to === provider.email ? await providerEmailUrl(db, lead, provider) : url,
         ctaLabel: provider.via === "inbox" ? "Open your inbox" : "Open your campaign",
       }),
       replyTo: "support@olera.care",
