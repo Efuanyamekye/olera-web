@@ -11,8 +11,32 @@ import { isRealObjection, parseObjections, renderCheck } from "../lib/war-room/d
 import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  buildInboxProposals, cleanSubject, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
+  assignNumbers, buildInboxProposals, carryTarget, cleanSubject, stripDraftHeaders, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
 } from "../lib/war-room/inbox-operator.server";
+
+// --- Draft headers: the model echoed its prompt's SUBJECT line into Blue Water's body on 1 Oct.
+assert.equal(stripDraftHeaders("SUBJECT: RE: Request for Information About Olera's Services\nThank you for the detailed questions, Denise.\nOlera"), "Thank you for the detailed questions, Denise.\nOlera");
+assert.equal(stripDraftHeaders("Subject: Hi\nTo: x@y.com\nBody here."), "Body here.");
+assert.equal(stripDraftHeaders("Hi Elle,\nRe: your question, we don't have it."), "Hi Elle,\nRe: your question, we don't have it.", "only leading headers go");
+
+// --- Carrying drafts: nothing new from them means the same draft, same number.
+{
+  const since = "2026-09-30T14:02:00+00:00";
+  const latest = { text: "Checked rewrite text here.", at: "2026-09-30T20:10:00Z", by: "cortex" as const, checked: true };
+  const prior = { number: 4, body: "Old draft", status: "proposed", target: { threadId: "t1", since, latest } };
+  assert.deepEqual(carryTarget(prior, { threadId: "t1" }, "2026-09-30T14:02:00.000Z"), { threadId: "t1", since: "2026-09-30T14:02:00.000Z", carried: true, latest, carriedNumber: 4 }, "same last message, written differently");
+  assert.equal(carryTarget(prior, { threadId: "t1" }, "2026-10-01T02:00:00Z"), null, "a new message from them means a new draft");
+  assert.equal(carryTarget({ ...prior, target: { threadId: "t1" } }, { threadId: "t1" }, since), null, "items from before this change have no since");
+  assert.equal(carryTarget(undefined, { threadId: "t1" }, since), null);
+  assert.equal(carryTarget({ ...prior, status: "skipped" }, { threadId: "t1" }, since)?.carriedNumber, undefined, "a skipped draft keeps its text, not its number");
+}
+// --- Numbers never change meaning within a day. Last night: 1-4 triage/drafts, Elle was 4.
+{
+  const item = (carriedNumber?: number) => ({ kind: "email_draft" as const, category: "c", target: carriedNumber ? { carriedNumber } : {}, summary: "s" });
+  assert.deepEqual(assignNumbers([item(), item(), item(4), item()], [1, 2, 3, 4, 5]), [6, 7, 4, 8], "Elle keeps 4; nothing new takes 1-5");
+  assert.deepEqual(assignNumbers([item(), item()], []), [1, 2], "a quiet day starts at 1");
+  assert.deepEqual(assignNumbers([item(2), item(2)], [1, 2]), [2, 3], "a duplicated carry gets a fresh number");
+}
 
 // --- Commands.
 assert.deepEqual(parseInboxCommand("approve 1 2"), { verb: "approve", numbers: [1, 2], edit: null });
