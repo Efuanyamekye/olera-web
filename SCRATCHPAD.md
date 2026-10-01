@@ -7,6 +7,16 @@
 
 ## Current Focus
 
+### 2026-10-01 — Five provider Meta instant forms live; Robbie pilot email sent (`thirsty-panini`)
+
+- **Robbie pilot email sent** (cc Logan + support@): families to him first, our screening + next-day follow-up, his one-line outcome per family, ZIP list + routing ask, check-in Wed 14 Oct 9:30 CT. Logged.
+- **Assisting Hands North Texas form LIVE:** campaign 120251777188180487, $150 to 15 Oct, Dallas 32.85,-96.80 + 40 mi. New AH-branded form 1884994012868963 (who-is-it-for screen, consent names Olera + Assisting Hands); briefly ran on the old Olera Dallas form before swap. city_campaigns 7ccf9cd2 (request_id = Robbie 7dfb5a8c). Narrow to his 243 ZIPs when they arrive.
+- **Four more forms LIVE** ($50 each to 15 Oct, office + 20 mi, family image 8eb1ac99, screen question): Franchil killeen-tx (form 1127281436482824), Miracle-Lightstar cleveland-oh (1646658283663867), Pacesetter douglasville-ga (933616202764687), Graceful concord-nc (1645096703995957). Configs PR #2310 -> staging, hotfix #2311 -> main (e557250d6). META_LEADS_FORMS_JSON now 16 forms, all testOnly=false. Review logged for 4-5 Oct.
+- **How it was done:** env writes / prod deploys are classifier-blocked in auto mode; TJ toggled out of auto mode (Shift+Tab) and approved. Scripts in session scratchpad (allow-form.sh, allow-forms4.sh): vercel env pull -> append -> rm/add. Gotcha: pulled value is quoted with unescaped inner quotes; strip outer quotes before json.loads.
+- **Support:** Kierland Sanctuary (Scottsdale AL, Jessica McPherson tours) told Elvis is off; kept as contact. Ces answered: inbox texts go to the family only; Marta (CCA Boulder) needs Spanish-speaking caregivers, ask Jacob, else find a Denver agency.
+- **Liz (Hoop):** condolence/reschedule text sent from Olera number. **Hilda:** confirmed login; FB page URL still not captured (preview only).
+
+**Next Up.** 4-5 Oct: delivery + first leads on all five forms. Text Hilda/Zardy their ad is running. Impact (Pat) form if she says yes. Robbie ZIPs -> geo. Marta routing. Liz check-in when she replies.
 ### 2026-09-30 (late) — Robbie call done: North Texas pilot agreed (`thirsty-panini`, no app code)
 
 - **Robbie (Assisting Hands N. Texas), TJ + Logan call:** pilot agreed in principle. Every North Texas family routes to Robbie; he hand-distributes to his 8 owners (243 ZIPs, ~12 counties). Min ~4 hrs/day (2-3 hr at ~$40/hr). His bar: ~30% suspect-to-client. On AH vendor committee (~20 area reps, ~150 owners, 35 states) = the CRP letter play. Check-in call proposed Wed 14 Oct 9:30 CT. Call page: https://claude.ai/artifact/21DwM5dsuYUEx15GSiFqkN (includes pilot email, copy button). Logged as provider_touches (meeting); memory `project_assisting_hands_dallas` updated.
