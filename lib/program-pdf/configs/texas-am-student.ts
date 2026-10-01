@@ -65,8 +65,8 @@ export const TEXAS_AM_STUDENT: ProgramPdfConfig = {
   ],
   // Repurposed "pricing" block → what to expect.
   pricing: {
-    headline: "Paid hourly · flexible hours · one-time $50 to join",
-    body: "A one-time, non-refundable $50 application fee gives you lifetime access to the Olera job board and includes mentorship, mock interviews, and help with your letters and personal statement from Dr. DuBose's team. You choose how much you work, around your classes.",
+    headline: "Paid hourly · flexible hours · free to join",
+    body: "There is no fee to join. You get lifetime access to the Olera job board, plus mentorship, mock interviews, and help with your letters and personal statement from Dr. DuBose's team. You choose how much you work, around your classes.",
   },
   ctaLabel: "Check eligibility: scan or visit",
 };
