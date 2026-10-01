@@ -7,6 +7,15 @@
 
 ## Current Focus
 
+### 2026-10-01 (later) — Colorado CareAssist: Jacob on alerts + call booked (`thirsty-panini`)
+
+- **Jason (owner) asked** to copy Jacob McKay (Dir. of Client Development, jacob@coloradocareassist.com) on every family alert, keep Jason too; Jacob owns the call.
+- **Code: PR #2313 (OPEN, not merged)** `lib/city-ads/thread.server.ts`: `notifyProvider` also emails `business_profiles.metadata.alert_emails` (one email each, deduped, owner excluded). Only the owner address gets the signed-in link; copied staff get the plain link. Data already set: CCA profile 603a5a17 `metadata.alert_emails = [jacob@]`. Needs staging merge + hotfix to main before Monday.
+- **Call booked:** Mon 5 Oct 4:30 PM MT (5:30 AM Tue for TJ, who prefers early mornings to late nights) on tj@olera.care calendar, Jacob required, Jason optional, TJ's Zoom (Google auto-added a Meet link too). TJ's email told Jacob he's "being added" to alerts (worded as in-progress until #2313 ships).
+- **Scheduling rule learned:** for US calls from Vietnam (UTC+7), late-afternoon US time = TJ's early morning; propose a specific slot + send the invite in one go to avoid back-and-forth.
+
+**Next Up.** Merge #2313 -> staging -> hotfix main. Mon 5 Oct: Jacob call (first families Nancy/Marta, ideal client, next campaign; Marta needs Spanish-speaking caregiver). 4-5 Oct: five Meta forms review.
+
 ### 2026-10-01 — Five provider Meta instant forms live; Robbie pilot email sent (`thirsty-panini`)
 
 - **Robbie pilot email sent** (cc Logan + support@): families to him first, our screening + next-day follow-up, his one-line outcome per family, ZIP list + routing ask, check-in Wed 14 Oct 9:30 CT. Logged.
