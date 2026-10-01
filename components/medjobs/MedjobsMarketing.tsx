@@ -22,7 +22,7 @@ const HOW_IT_WORKS = [
   },
   {
     title: "Apply to caregiver jobs near your university",
-    description: "Local families and care teams near your university review profiles and hire for a semester of recurring care or as needed (PRN).",
+    description: "Local home care agencies near your university review profiles and hire for a semester of recurring care or as needed (PRN).",
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -187,23 +187,23 @@ export default function MedjobsMarketing() {
             {[
               {
                 q: "Do I need any certifications or experience?",
-                a: "No. If you're a current college student with a compassionate attitude, you qualify. Free training on senior care basics, safety, and communication comes before your first match.",
+                a: "No, most students don't, but employers train them before their first shift.",
               },
               {
                 q: "How many hours per week do I commit to?",
-                a: "You and the family or agency agree on a recurring schedule that fits around your classes, and you can adjust it during exams. Most students work a steady handful of hours each week through the semester.",
+                a: "You and the agency agree on a recurring schedule that fits your classes, or you may be hired as needed or on call. Local home care agencies are vetted on whether they are student-friendly and expect school to come first. In return, it is your responsibility to be upfront about your availability and to update your employer promptly if anything changes once you have committed to a shift.",
               },
               {
                 q: "When and how do I get paid?",
-                a: "You're paid by the family or agency, not by Olera. Families can run pay through Olera, and agencies pay through their own payroll. Your rate is set with them before you start.",
+                a: "You're paid by the local home care agency that hires you, not by Olera. They pay through their own payroll, and your rate is set with them before you start.",
               },
               {
                 q: "What if I've never worked with seniors before?",
-                a: "Most of our students haven't. You're matched with a family or agency that fits your comfort level, and your first visits are supported so you're never figuring it out alone.",
+                a: "Many students haven't. Many have cared for family members, younger or older, and some have worked directly with seniors. Your local home care agency will train you and give you the resources you need — and it is experience you will draw on for the rest of a healthcare career, where you will certainly work with older adults.",
               },
               {
                 q: "Is it really paid?",
-                a: "Yes. These are paid caregiving roles — not volunteering or shadowing. You earn real patient-care hours and get paid for them.",
+                a: "Yes, these are paid caregiving roles, not volunteering or shadowing. You earn real caregiving hours and get paid for them.",
               },
             ].map((item) => (
               <details key={item.q} className="group py-5">
