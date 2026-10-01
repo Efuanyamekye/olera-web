@@ -7,6 +7,14 @@
 
 ## Current Focus
 
+### 2026-09-30 (late) — Robbie call done: North Texas pilot agreed (`thirsty-panini`, no app code)
+
+- **Robbie (Assisting Hands N. Texas), TJ + Logan call:** pilot agreed in principle. Every North Texas family routes to Robbie; he hand-distributes to his 8 owners (243 ZIPs, ~12 counties). Min ~4 hrs/day (2-3 hr at ~$40/hr). His bar: ~30% suspect-to-client. On AH vendor committee (~20 area reps, ~150 owners, 35 states) = the CRP letter play. Check-in call proposed Wed 14 Oct 9:30 CT. Call page: https://claude.ai/artifact/21DwM5dsuYUEx15GSiFqkN (includes pilot email, copy button). Logged as provider_touches (meeting); memory `project_assisting_hands_dallas` updated.
+- **Gap:** Dallas Meta form ended 29 Sep; nothing live in DFW. Pilot needs a new North Texas instant form routed to Robbie, ~$150 / 2 weeks, awaiting TJ's go.
+- **Liz (Hoop):** condolence + reschedule text sent from the Olera number via SMS inbox (15:28 UTC). Next: book check-in when she replies.
+- **Hilda (Franchil):** confirmed hilda.administrator@franchil.com shows both families; she sent her Facebook page link (preview only, URL not yet captured).
+
+**Next Up (Thu 1 Oct).** TJ sends Robbie pilot email; approve $150 North Texas form, then build it (family image, Robbie routing); capture Hilda's FB URL; load Robbie's ZIPs into targeting when he sends them.
 ### 2026-09-30 (night) — Liz call attempt, Robbie prep sharpened, Caring Senior moved to Thursday (`thirsty-panini`, no app code)
 
 - **Liz (Hoop):** called for the two-week check-in; she was at a funeral, asked for a callback in 30 min (clashed with Robbie). Logged. Next: TJ texts her gently to reschedule (drafted), due 1 Oct.
