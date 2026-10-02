@@ -7,6 +7,26 @@
 
 ## Current Focus
 
+### 2026-10-02 — Benefits: the AI caseworker is the direction; accuracy + data cleanup in PROD; founding doc with 6 phases (`jolly-ramanujan`, #2307 #2324 → promotions #2321 #2327)
+
+**THE DECISION.** Olera builds an AI benefits *caseworker*, not a better finder. Settled with TJ: the finder becomes a conversation (rules stay in code; AI asks and explains); we go as far into "doing" (pre-filled applications, callbacks, appeals) as we thoughtfully can, with family approval on every send and a person reachable; dementia caregivers first. Measure: dollars secured per family and days to first benefit, not completions.
+
+**The founding document (pick up here):** https://claude.ai/artifact/APdQ3n36UeTbSLhqUu1kGJ ("The Benefits Caseworker", v1). Standalone, first principles, inside and outside readers; six phases, each with an anchor `#phase-N`, a status chip and a "done when". Source backed up at `~/Desktop/hub-feedback/benefits-caseworker-src/`. Update by republishing the same file, bumping the version line and the phase chip.
+- **Phase 1, NEXT: one true knowledge base.** Fix the central store: two rule sources (per-state drafts in `data/pipeline/*/drafts.json` + `sbf_state_programs`/`sbf_federal_programs`, joined by name) over the legacy waiver-library; one id per program for life; every rule with source/date/confidence; apply the 241 open fact-check flags (98 high; `node scripts/factcheck-triage.js --high-only`; e.g. AK MSP limit verified $2,265, data says $1,663; some flags are wrong, aggregator-sourced); scheduled re-verification; raise structured income tables (162 of 466); freeze snapshot v1 for cohort 1; close DC program-page 404s (no waiver-library state), phoneless programs (IN Caregiver Respite), Michigan caregiver program.
+- **Phase 3, NEXT: the conversation** (UX of the AI social worker): principles first, rules-driven question engine, prototype with CARES caregivers, decide what the study pins per cohort.
+- Phases 2, 4, 5, 6: scoreboard (~100 counselor-labelled cases + outcomes), plan with expected value, doing and following up (provider network as the step after a benefit), learning.
+- **Before cohort 1 (week of 5 Oct):** frozen rules snapshot; study tag carried through letters/texts/events (today `?cohort` only lands on the record at send-plan); outcome questions at the 4-week and 3-month follow-ups.
+
+**Shipped today, all in PROD.**
+- #2307 finder accuracy (promoted in #2321): no program listed twice; no "likely" when an unasked rule decides it (level of care, daily help, assets, county, facility), though such a program can still lead the plan when the money fits; no under-65 ABD "likely"; acronym caps; filler lines dropped (only whole-state "must live in X"). Grid: 5 families × 51 states, scripts `scratchpad qa/matrix.js` (prod) and `matrix-local.js`.
+- #2324 data cleanup (promoted in #2327): `lib/benefits/program-duplicates.ts` maps 50 copies (+11 old caregiver shells) to the kept program; copies leave finder/plan/state page/sitemaps and 308-redirect; saved plans (`benefits-token.ts`) and letters (`benefits-cascade.server.ts` `draftFor`) translate a copy's id. Verified caregiver programs (`family-caregiver-support`) added for AZ DE DC IL IA ME MN NM ND SC VT VA WY from official sources (research JSON in the backup folder); MI skipped (no statewide line). Lesson: never reuse a legacy id for a new draft, `getEnrichedProgram` lets the legacy base win name/phone.
+
+**Ground truth from the push (2 Oct):** 466 benefit programs; incomeTable 162, functionalRequirement 237, assetLimits 202; 264/469 drafts carry `lastVerifiedDate`; `factcheck.json` for 51 states (29 Sep) and `scripts/attack-draft.js` exist, so adversarial checking is real, but no cron re-verifies and nothing applies the flags; zero automated tests on the engine; outcomes: 20 of 2,433 families (`metadata.benefits_cascade.outcome`: wants_help 10, moving 6, wrong_program 4). Landscape scan (NCOA, findhelp, mRelief, GetCalFresh, BDT, SHIP, Nava/Imagine LA, CfA Policy Navigator, Public Benefits Bench) is cited in the doc; Reddit/Trustpilot were unreachable.
+
+**Also today.** Hub redesign + finder `?who`/`?cohort` promoted (#2294); Logan's walkthrough page https://claude.ai/artifact/PXK1RGpdrvHRXD57P8HjWy retitled and updated; Liz's call sheet got her number.
+
+**Next Up.** Phase 1 (knowledge base), then Phase 3 (conversation), per the doc. Parked: sharp hub hero frame, NIH award number, US tap on "Use my location", deleting the unused `HeroStateSearch`/`MobileStateList`, DC pages (Phase 1 item).
+
 ### 2026-10-02 — Ad Boost full-book audit; Ces call sheet; audit corrected after publishing (`good-nobel`, docs only)
 
 **Output.** Audit page https://claude.ai/artifact/JgYHqs782AVrrXt6188obN (v2, corrected). Ces call sheet https://claude.ai/artifact/U43uysz3EveWAeMcktLSAv (v4; TJ must share it with Ces). Posted to #careseeker-support (TJ approved). 16 `ad_campaign_log` observations at 12:00Z + 3 corrections at 14:00Z; one dated line appended to each live campaign's `admin_note`; `~/Desktop/adboost-state-of-play.md` rewritten.
