@@ -61,7 +61,12 @@ interface ProviderMetadata extends OrganizationMetadata {
   email_otp_attempt?: EmailOtpAttempt;
   verification_method?: string;
   badge_approved?: boolean;
+  badge_approved_at?: string;
   badge_rejected?: boolean;
+  badge_rejected_at?: string;
+  rejection_reason?: string;
+  rejection_note?: string;
+  rejected_by?: string;
   auto_verified?: boolean;
   claim_trust_level?: "high" | "medium" | "low";
   outreach_state?: string;
@@ -530,6 +535,7 @@ export default function AdminVerificationPage() {
     rejected: 0,
   });
   const [moveModalProvider, setMoveModalProvider] = useState<Provider | null>(null);
+  const [rejectModalProvider, setRejectModalProvider] = useState<Provider | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkLoading, setBulkLoading] = useState(false);
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
@@ -698,6 +704,48 @@ export default function AdminVerificationPage() {
     } catch (err) {
       console.error("Move action failed:", err);
       setActionError("Failed to move provider. Please check your connection.");
+    } finally {
+      setActionLoading(null);
+    }
+  }
+
+  async function handleReject(id: string, reason: string, note?: string) {
+    setActionLoading(id);
+    setActionError(null);
+    try {
+      const res = await fetch(`/api/admin/verification/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "reject", reason, note: note || null }),
+      });
+      if (res.ok) {
+        setProviders((prev) => {
+          const updated = prev.filter((p) => p.id !== id);
+          if (updated.length === 0 && page > 0) {
+            setPage(0);
+          }
+          return updated;
+        });
+        setTotal((prev) => prev - 1);
+        setSelectedProvider(null);
+        setRejectModalProvider(null);
+        // Remove from selection if it was selected
+        setSelectedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+        fetchCounts();
+        return true;
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setActionError(data.error || "Failed to reject. Please try again.");
+        return false;
+      }
+    } catch (err) {
+      console.error("Reject action failed:", err);
+      setActionError("Failed to reject. Please check your connection.");
+      return false;
     } finally {
       setActionLoading(null);
     }
@@ -1199,7 +1247,7 @@ export default function AdminVerificationPage() {
                                 {actionLoading === provider.id ? "..." : "Verify"}
                               </button>
                               <button
-                                onClick={() => handleAction(provider.id, "reject")}
+                                onClick={() => setRejectModalProvider(provider)}
                                 disabled={actionLoading === provider.id}
                                 className="px-3 py-1.5 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 disabled:opacity-50 transition-colors"
                               >
@@ -1223,7 +1271,7 @@ export default function AdminVerificationPage() {
                                 {actionLoading === provider.id ? "..." : "Approve"}
                               </button>
                               <button
-                                onClick={() => handleAction(provider.id, "reject")}
+                                onClick={() => setRejectModalProvider(provider)}
                                 disabled={actionLoading === provider.id}
                                 className="px-3 py-1.5 bg-red-500 text-white text-sm font-medium rounded-lg hover:bg-red-600 disabled:opacity-50 transition-colors"
                               >
@@ -1284,7 +1332,8 @@ export default function AdminVerificationPage() {
           currentTab={filter}
           onClose={() => { setSelectedProvider(null); setActionError(null); }}
           onApprove={() => handleAction(selectedProvider.id, "approve")}
-          onReject={() => handleAction(selectedProvider.id, "reject")}
+          onReject={() => setRejectModalProvider(selectedProvider)}
+          onRevoke={() => handleAction(selectedProvider.id, "reject")}
           onUnclaim={() => handleAction(selectedProvider.id, "unclaim")}
           isLoading={actionLoading === selectedProvider.id}
           actionError={actionError}
@@ -1298,6 +1347,17 @@ export default function AdminVerificationPage() {
           onClose={() => { setMoveModalProvider(null); setActionError(null); }}
           onMove={(reason, note) => handleMoveToInProgress(moveModalProvider.id, reason, note)}
           isLoading={actionLoading === moveModalProvider.id}
+        />
+      )}
+
+      {/* Reject Provider Modal */}
+      {rejectModalProvider && (
+        <RejectProviderModal
+          provider={rejectModalProvider}
+          onClose={() => { setRejectModalProvider(null); setActionError(null); }}
+          onReject={(reason, note) => handleReject(rejectModalProvider.id, reason, note)}
+          isLoading={actionLoading === rejectModalProvider.id}
+          actionError={actionError}
         />
       )}
 
@@ -1557,6 +1617,155 @@ function MoveToInProgressModal({ provider, onClose, onMove, isLoading }: MoveToI
   );
 }
 
+// ── Reject Provider Modal ──
+
+interface RejectProviderModalProps {
+  provider: Provider;
+  onClose: () => void;
+  onReject: (reason: string, note?: string) => void;
+  isLoading: boolean;
+  actionError: string | null;
+}
+
+function RejectProviderModal({ provider, onClose, onReject, isLoading, actionError }: RejectProviderModalProps) {
+  const [selectedReason, setSelectedReason] = useState<string>("");
+  const [note, setNote] = useState<string>("");
+
+  const reasons = [
+    { value: "cannot_verify_identity", label: "Cannot verify identity", description: "Unable to confirm connection to this business" },
+    { value: "suspicious_activity", label: "Suspicious activity", description: "Signs of fraudulent or misleading behavior" },
+    { value: "duplicate_listing", label: "Duplicate listing", description: "This provider already has a verified profile" },
+    { value: "business_closed", label: "Business closed", description: "This business is no longer operating" },
+    { value: "not_care_provider", label: "Not a care provider", description: "Business doesn't provide senior care services" },
+    { value: "other", label: "Other", description: "Different reason" },
+  ];
+
+  // Require note when "Other" is selected
+  const isOther = selectedReason === "other";
+  const canSubmit = selectedReason && (!isOther || note.trim());
+
+  const handleSubmit = () => {
+    if (!canSubmit) return;
+    onReject(selectedReason, note.trim() || undefined);
+  };
+
+  return (
+    <Modal
+      isOpen={true}
+      onClose={onClose}
+      title="Reject Provider"
+      size="md"
+      footer={
+        <div className="flex gap-3">
+          <button
+            onClick={onClose}
+            disabled={isLoading}
+            className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 text-sm font-semibold rounded-xl hover:bg-gray-200 disabled:opacity-50 transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={isLoading || !canSubmit}
+            className="flex-1 px-4 py-3 bg-red-500 text-white text-sm font-semibold rounded-xl hover:bg-red-600 disabled:opacity-50 transition-colors"
+          >
+            {isLoading ? "Rejecting..." : "Reject"}
+          </button>
+        </div>
+      }
+    >
+      {/* Provider Info */}
+      <div className="mb-6 pb-5 border-b border-gray-100">
+        <div className="flex items-center gap-4">
+          {provider.image_url ? (
+            <img
+              src={provider.image_url}
+              alt={provider.display_name}
+              className="w-12 h-12 rounded-xl object-cover"
+            />
+          ) : (
+            <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+              <span className="text-gray-400 text-lg font-semibold">
+                {provider.display_name.charAt(0)}
+              </span>
+            </div>
+          )}
+          <div>
+            <h3 className="text-base font-semibold text-gray-900">{provider.display_name}</h3>
+            <p className="text-sm text-gray-500">
+              {[provider.city, provider.state].filter(Boolean).join(", ") || "No location"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Reason Selection */}
+      <div className="mb-5">
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-1">
+          Why are you rejecting this provider?
+        </p>
+        <p className="text-xs text-gray-500 mb-3">
+          This reason will be shared with the provider in their rejection email.
+        </p>
+        <div className="space-y-2">
+          {reasons.map((reason) => (
+            <label
+              key={reason.value}
+              className={`flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all ${
+                selectedReason === reason.value
+                  ? "border-red-400 bg-red-50 ring-1 ring-red-200"
+                  : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              <input
+                type="radio"
+                name="reason"
+                value={reason.value}
+                checked={selectedReason === reason.value}
+                onChange={(e) => setSelectedReason(e.target.value)}
+                className="mt-0.5 w-4 h-4 text-red-500 border-gray-300 focus:ring-red-500"
+              />
+              <div>
+                <p className="text-sm font-medium text-gray-900">{reason.label}</p>
+                <p className="text-xs text-gray-500">{reason.description}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Notes field - always visible when a reason is selected, required for "Other" */}
+      {selectedReason && (
+        <div className="mb-5">
+          <label className="block text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-1">
+            {isOther ? "Please specify (required)" : "Internal notes (optional)"}
+          </label>
+          <p className="text-xs text-gray-500 mb-2">
+            {isOther ? "This will help other admins understand the rejection." : "For admin reference only — not shared with the provider."}
+          </p>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder={isOther ? "Enter the reason for rejecting this provider..." : "Add any internal context..."}
+            rows={3}
+            className={`w-full px-3 py-2 text-sm border rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent ${
+              isOther && !note.trim() ? "border-red-300 bg-red-50" : "border-gray-200"
+            }`}
+          />
+        </div>
+      )}
+
+      {/* Error message */}
+      {actionError && (
+        <div className="mb-5 bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-red-700">
+          {actionError}
+        </div>
+      )}
+
+    </Modal>
+  );
+}
+
 // ── Verification Review Modal ──
 
 interface VerificationReviewModalProps {
@@ -1565,6 +1774,7 @@ interface VerificationReviewModalProps {
   onClose: () => void;
   onApprove: () => void;
   onReject: () => void;
+  onRevoke: () => void;
   onUnclaim: () => void;
   isLoading: boolean;
   actionError: string | null;
@@ -2004,6 +2214,66 @@ function LeadsAndQuestionsSection({
   );
 }
 
+// ── Rejection Reason Labels ──
+
+const REJECTION_REASON_LABELS: Record<string, string> = {
+  cannot_verify_identity: "Cannot verify identity",
+  suspicious_activity: "Suspicious activity",
+  duplicate_listing: "Duplicate listing",
+  business_closed: "Business closed",
+  not_care_provider: "Not a care provider",
+  other: "Other",
+};
+
+function getReasonLabel(reason: string): string {
+  return REJECTION_REASON_LABELS[reason] || reason;
+}
+
+// ── Rejection Details Section ──
+
+function RejectionDetailsSection({
+  metadata,
+  currentTab,
+}: {
+  metadata?: ProviderMetadata | null;
+  currentTab: StatusFilter;
+}) {
+  // Only show on rejected tab when there's rejection data
+  if (currentTab !== "rejected" || !metadata?.badge_rejected) return null;
+
+  const formatDateTime = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  };
+
+  return (
+    <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-xl">
+      <p className="text-xs font-semibold text-red-800 uppercase tracking-wide mb-2">
+        Rejection Details
+      </p>
+      <div className="space-y-1 text-sm text-red-700">
+        {metadata.badge_rejected_at && (
+          <p><span className="font-medium">Rejected:</span> {formatDateTime(metadata.badge_rejected_at)}</p>
+        )}
+        {metadata.rejected_by && (
+          <p><span className="font-medium">By:</span> {metadata.rejected_by}</p>
+        )}
+        {metadata.rejection_reason && (
+          <p><span className="font-medium">Reason:</span> {getReasonLabel(metadata.rejection_reason)}</p>
+        )}
+        {metadata.rejection_note && (
+          <p><span className="font-medium">Notes:</span> {metadata.rejection_note}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ── Outreach Log Section ──
 
 function OutreachLogSection({ outreachLog }: { outreachLog?: OutreachLogEntry[] }) {
@@ -2066,6 +2336,7 @@ function VerificationReviewModal({
   onClose,
   onApprove,
   onReject,
+  onRevoke,
   onUnclaim,
   isLoading,
   actionError,
@@ -2308,6 +2579,9 @@ function VerificationReviewModal({
 
       {/* Outreach Log - Show for in_progress providers */}
       <OutreachLogSection outreachLog={provider.metadata?.outreach_log} />
+
+      {/* Rejection Details - Show for rejected providers */}
+      <RejectionDetailsSection metadata={provider.metadata} currentTab={currentTab} />
 
       {/* Verification Attempts - Always show if they exist (regardless of submission) */}
       <VerificationAttemptsSection provider={provider} formatDate={formatDate} />
@@ -2570,7 +2844,7 @@ function VerificationReviewModal({
                 Cancel
               </button>
               <button
-                onClick={onReject}
+                onClick={onRevoke}
                 disabled={isLoading}
                 className="flex-1 px-4 py-2.5 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50"
               >
