@@ -76,6 +76,7 @@ for (const st of states) {
   const drafts = JSON.parse(fs.readFileSync(draftsPath, 'utf8'));
   const byId = new Map(drafts.programs.map((p) => [p.id, p]));
   let changed = false;
+  const queues = new Map(); // programId -> review items from this run
 
   for (const pr of fc.programs || []) {
     const draft = byId.get(pr.programId);
@@ -104,6 +105,10 @@ for (const st of states) {
 
       item.why = why;
       (decision === 'apply' ? plan.apply : plan.review).push(item);
+      if (decision === 'review') {
+        if (!queues.has(pr.programId)) queues.set(pr.programId, []);
+        queues.get(pr.programId).push({ field: f.field, from: f.draftValue, to: f.verifiedValue, source: src, severity: f.severity, why, flaggedAt: fc.checkedAt });
+      }
 
       if (decision === 'apply' && APPLY) {
         const se = (draft.structuredEligibility = draft.structuredEligibility || { summary: [] });
@@ -131,6 +136,15 @@ for (const st of states) {
         }
       }
     }
+  }
+  if (APPLY) {
+    // The review queue and the check date are written even when nothing was
+    // applied, so the drafts say what is still open and how fresh they are.
+    for (const p of drafts.programs) {
+      const q = queues.get(p.id) || [];
+      if (q.length || p.reviewQueue) { p.reviewQueue = q.length ? q : null; changed = true; }
+    }
+    if (fc.checkedAt && drafts.factcheckedAt !== fc.checkedAt) { drafts.factcheckedAt = fc.checkedAt; changed = true; }
   }
   if (changed && APPLY) {
     fs.writeFileSync(draftsPath, JSON.stringify(drafts, null, 2) + '\n');

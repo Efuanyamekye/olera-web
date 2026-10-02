@@ -1,0 +1,5 @@
+{
+  "version": "2026.10-dev",
+  "frozenAt": null,
+  "note": "Working version of the benefits program data. A frozen snapshot gets a version like 2026.10-v1, a frozenAt date, and a git tag benefits-data-<version>. Every family record saved by the finder carries metadata.benefits_results.data_version so a study cohort can be matched back to the rules it was judged against."
+}

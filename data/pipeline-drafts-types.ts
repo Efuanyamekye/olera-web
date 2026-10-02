@@ -69,7 +69,42 @@ export interface PipelineDraft {
   reviewedBy?: string | null;
   reviewedAt?: string | null;
   lastVerifiedDate?: string | null;
+  /** Per-rule provenance (schema v2, Oct 2026): where each rule the finder
+   *  keys on was last read, when, and how trustworthy the source is. The
+   *  draft-level sourceUrl stays as the page source. */
+  ruleSources?: Partial<Record<"incomeTable" | "assetLimits" | "ageRequirement" | "functionalRequirement" | "phone", RuleSource>> | null;
+  /** Corrections the fact-check judge applied (scripts/benefits-apply-factcheck.js). Never edited by hand. */
+  appliedCorrections?: AppliedCorrection[] | null;
+  /** Flags the judge would not apply, for a person to decide. Replaced on each run. */
+  reviewQueue?: ReviewItem[] | null;
   geographicScope?: { type: string; stateVariation?: boolean; localEntities?: { name: string; type: string; phone?: string; address?: string; url?: string }[] };
+}
+
+export interface RuleSource {
+  url: string | null;
+  checkedAt: string;
+  confidence: "official" | "aggregator" | "model";
+  checkedBy: string;
+}
+
+export interface AppliedCorrection {
+  field: string;
+  from: unknown;
+  to: unknown;
+  source: string | null;
+  flaggedAt: string;
+  appliedAt: string;
+  appliedBy: string;
+}
+
+export interface ReviewItem {
+  field: string;
+  from: unknown;
+  to: unknown;
+  source: string | null;
+  severity: string;
+  why: string;
+  flaggedAt: string;
 }
 
 export interface PipelineStateOverview {
@@ -82,6 +117,8 @@ export interface PipelineStateOverview {
 
 export interface PipelineStateDrafts {
   draftedAt: string;
+  /** When the fact-check phase last ran on these drafts (schema v2). */
+  factcheckedAt?: string | null;
   programs: PipelineDraft[];
   stateOverview?: PipelineStateOverview | null;
   // Region metadata (present for non-state entities)
