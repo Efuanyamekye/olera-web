@@ -82,9 +82,12 @@ Service-role key is in `.env.local`; never ask TJ for it. **Every metric column 
 
    ```bash
    grep -n -i -f <(printf '%s\n' <every campaign_tag and provider display_name from step 1>) SCRATCHPAD.md
-   grep -n -iE 'ad.?boost|city ads|nextdoor|meta arm|CAPI|pixel|city_leads' SCRATCHPAD.md | tail -80
-   grep -n -iE "^#{2,3} 20[0-9]{2}-" SCRATCHPAD.md | tail -12   # the last dozen session headers
+   grep -n -iE 'ad.?boost|city ads|nextdoor|meta arm|CAPI|pixel|city_leads' SCRATCHPAD.md | head -80
+   grep -n -iE "^#{2,3} 20[0-9]{2}-" SCRATCHPAD.md | head -12   # the newest dozen session headers
+   sed -n '1,400p' SCRATCHPAD.md   # newest entries; keep reading until the headers are two weeks old
    ```
+
+   **SCRATCHPAD is newest-first.** The current entries sit under `## Current Focus` at the top. Older archive blocks lower down also carry dated headers, so `tail` returns the oldest entries and looks plausible. On 2 Oct 2026 this command used `tail`, missed four days of entries, and published "the 30 Sep gate was not done" when the 30 Sep entry recorded the decision. Read from the top.
 
    Then check the **Next Up** section for open items naming any campaign in scope. An item parked there as "off the critical path" is a scored prediction like any other, and the audit's job is to say whether it still is.
 
@@ -303,6 +306,7 @@ For each provider with more than one flight, and for the program as a whole:
 - **One funnel, all channels, one table.** Spend → impressions → clicks to site → landings → `cta_engaged` → leads, one row per channel, from Phase 0 step 9 and Phase 2G/2M/2N. **Use the joined landing cohorts from Phase 0 step 9.** The 9 Sep table incorrectly showed every paid channel reaching zero at engagement; the 10 Sep same-visit reconciliation overturned that finding. Let the city/channel rows disagree, label each measurement window, and keep submitted leads separate from quiz starts.
 - **Forms get their own funnel row.** Spend → link clicks (upper bound on opens) → paid leads → families (screener answer) → first reply → handed → outcome, from Phase 2F. A form never lands on the site, so leave its landing and `cta_engaged` cells **blank, not zero**. A zero there reads as a failed funnel.
 - **Cost per site visit, per channel, same city same week.** Not cost per lead — lead counts are too small to divide by, and Nextdoor has no conversion signal at all. Cost per visit is measurable on day 1 and is the number that did not exist before these flights ran. A form has no site visit, so its row uses cost per form lead, labelled with its n.
+- **Read `family_touches` before saying anything about follow-up.** Ces logs every call, voicemail, text and email to a family there (`seeker_id` = `city_leads.care_seeker_id`; `reached`, `summary`, `author`). It is the record of hand-placed follow-up. `city_lead_messages`, `city_lead_thread` and `qualification_reply` only record what the app sent and received. On 2 Oct 2026 this audit read only those, headlined "the families don't answer", and sent Ces a call sheet for families she had already called and logged: one reached, two dead numbers, one bounced. The real finding was in her log. Only if `family_touches` is empty for a family does the rule below apply.
 - **A hand-placed action leaves no trace.** Before writing that a lead was never worked, remember that `reached_at`, `family_check_sent_at` and `outcome` are only ever set by the app. A phone call TJ makes himself writes nothing. **Ask him before concluding anything about follow-up** — on 9 Sep this audit's own headline claimed a lead had sat two days untouched; it had been called inside the intended window and the family did not pick up. The real finding underneath was that the system cannot see its own best work, which is the same shape as `reference_ad_metrics_are_hand_typed`.
 
 ## Phase 4 — Write it down (this is why the command exists)
