@@ -2890,12 +2890,23 @@ export function claimDecisionEmail(opts: {
   `, "We need more information to verify your claim");
 }
 
+// Map rejection reason codes to user-friendly labels for emails
+const REJECTION_REASON_LABELS: Record<string, string> = {
+  cannot_verify_identity: "We couldn't confirm your connection to this business.",
+  suspicious_activity: "We noticed some irregularities with this account.",
+  duplicate_listing: "This provider already has a verified profile.",
+  business_closed: "Our records indicate this business may no longer be operating.",
+  not_care_provider: "This business doesn't appear to provide senior care services.",
+  other: "We need additional information to proceed.",
+};
+
 /** Email to provider when their identity verification is approved or rejected (from admin panel) */
 export function verificationDecisionEmail(opts: {
   providerName: string;
   recipientName: string;
   approved: boolean;
   dashboardUrl: string;
+  rejectionReason?: string;
 }): string {
   const name = firstName(opts.recipientName, "there");
 
@@ -2929,11 +2940,19 @@ export function verificationDecisionEmail(opts: {
   }
 
   // Rejection case
+  const reasonLabel = opts.rejectionReason ? REJECTION_REASON_LABELS[opts.rejectionReason] || REJECTION_REASON_LABELS.other : null;
+
   return layout(`
     <h1 style="font-size:22px;font-weight:700;color:#111827;margin:0 0 8px;">Let's get you verified</h1>
     <p style="font-size:15px;color:#6b7280;margin:0 0 20px;line-height:1.5;">
       Hi ${escapeHtml(name)}, we reviewed your verification for <strong>${escapeHtml(opts.providerName)}</strong> but need a bit more information to confirm your connection.
     </p>
+    ${reasonLabel ? `
+    <div style="background:#fef2f2;border-radius:8px;padding:16px;margin:0 0 20px;">
+      <p style="font-size:13px;font-weight:600;color:#991b1b;margin:0 0 6px;">Feedback from our team</p>
+      <p style="font-size:13px;color:#991b1b;margin:0;line-height:1.6;">${escapeHtml(reasonLabel)}</p>
+    </div>
+    ` : ""}
     <p style="font-size:14px;color:#6b7280;margin:0 0 8px;line-height:1.5;">
       Don't worry — there are several ways to verify. Here's what works best:
     </p>

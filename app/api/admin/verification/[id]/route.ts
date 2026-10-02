@@ -32,6 +32,8 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
     const action = body.action as string;
+    const rejectionReason = body.reason as string | undefined;
+    const rejectionNote = body.note as string | undefined;
 
     if (!["approve", "reject", "unclaim", "move_to_in_progress"].includes(action)) {
       return NextResponse.json(
@@ -232,6 +234,12 @@ export async function PATCH(
         verified_at: new Date().toISOString(),
         verification_method: "admin_approval",
       }),
+      // Store rejection details when rejecting
+      ...(action === "reject" && {
+        rejection_reason: rejectionReason || null,
+        rejection_note: rejectionNote || null,
+        rejected_by: user.email,
+      }),
     };
 
     // Set verification_state based on action
@@ -328,6 +336,7 @@ export async function PATCH(
       details: {
         provider_name: profile?.display_name,
         badge_approved: action === "approve",
+        ...(action === "reject" && rejectionReason && { rejection_reason: rejectionReason }),
       },
     });
 
@@ -389,6 +398,7 @@ export async function PATCH(
                 recipientName,
                 approved: action === "approve",
                 dashboardUrl,
+                rejectionReason,
               }),
               emailType: "verification_decision",
               recipientType: "provider",
