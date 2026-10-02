@@ -11,7 +11,7 @@ import { isRealObjection, parseObjections, renderCheck } from "../lib/war-room/d
 import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  assignNumbers, sendsOnApproval, inboxReportBody, renderSynopsis, whoFor, buildInboxProposals, carryTarget, cleanSubject, stripDraftHeaders, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
+  assignNumbers, sendsOnApproval, slackProposals, organicProposal, needsNamedApproval, inboxReportBody, renderSynopsis, whoFor, buildInboxProposals, carryTarget, cleanSubject, stripDraftHeaders, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
 } from "../lib/war-room/inbox-operator.server";
 
 // --- Draft headers: the model echoed its prompt's SUBJECT line into Blue Water's body on 1 Oct.
@@ -84,6 +84,43 @@ assert.equal(sendsOnApproval({ kind: "sms_draft", category: "email:draft:provide
   const full = inboxReportBody(pass, at).body;
   assert.equal((full.match(/\(Saved as a Gmail draft when you approve\. You send it\.\)/g) ?? []).length, 2);
   assert.equal((full.match(/\(Provider account: sent from support@ when you approve\.\)/g) ?? []).length, 1);
+}
+// Slack replies he owes and the organic action become items; both reach the phone in a line or two.
+{
+  const at = new Date("2026-10-02T01:00:00Z");
+  const owed = { coverage: "Read 7 channels, last 14 days; DMs covered.", costUsd: 0, items: [
+    { kind: "mention" as const, channelId: "C1", channelLabel: "#careseeker-support", ts: "1.1", threadTs: "1.0", author: "Ces Chavez", text: "also for Elvis, he called back", permalink: "https://x/1", ageDays: 1, draftReply: "Thanks, I'll call him today." },
+    { kind: "promise" as const, channelId: "D1", channelLabel: "DM with Logan", ts: "2.0", threadTs: null, author: null, text: "I'll send the deck", permalink: null, ageDays: 9, draftReply: "Here it is: [status]" },
+  ] };
+  const items = slackProposals(owed);
+  assert.equal(items.length, 2);
+  assert.equal(items[0].target.threadTs, "1.0");
+  assert.equal(items[1].target.threadTs, "", "a standalone DM replies at the top, not in a thread");
+  assert.match(items[1].summary, /^unattributed in DM with Logan \(you promised, 9d\)/, "unknown authorship is never guessed");
+  const proposal = organicProposal({ synopsis: [], section: "", costUsd: 0, action: { title: "Restore rich-snippet schema on provider pages", why: "CTR halved at stable rank.", metric: "provider CTR", brief: "# Brief" } });
+  assert.equal(proposal?.kind, "proposal");
+  assert.equal(organicProposal({ synopsis: [], section: "", costUsd: 0, action: null }), null);
+  const mk = (n: number, it: { kind: string; category: string; target: Record<string, unknown>; summary: string; body?: string | null }) =>
+    ({ ...it, body: it.body ?? null, id: `x${n}`, pass_id: "p", number: n, status: "proposed", created_at: at.toISOString() }) as StoredItem;
+  const pass = { passId: "p", waitingElsewhere: 0, costUsd: 0, items: [mk(21, items[0]), mk(22, items[1]), mk(25, proposal!)],
+    extras: { slackCoverage: owed.coverage, organic: { synopsis: ["Provider sessions -17.3% (5,755 vs 6,963).", "Benefit +41.3%.", "CTR halved on stable-rank pages."], section: "Full read here." } } };
+  const synopsis = renderSynopsis(pass, at);
+  assert.match(synopsis, /Slack: 2 replies owed \(Ces, your threads\), 21, 22/, "a count by person, not a list of names");
+  assert.match(synopsis, /Organic: Provider sessions -17\.3%/);
+  assert.match(synopsis, /Try: 25 Restore rich-snippet schema on provider pages/);
+  assert.ok(!/"approve [^"]*2[125]/.test(synopsis), "Slack replies and the proposal are never in the approve-all line");
+  assert.match(synopsis, /Slack replies and the organic action go by number once you've read them\./);
+  assert.equal(needsNamedApproval({ kind: "slack_draft" }) && needsNamedApproval({ kind: "proposal" }) && !needsNamedApproval({ kind: "email_draft" }), true);
+  const full = inboxReportBody(pass, at).body;
+  assert.match(full, /### Slack: replies you owe/);
+  assert.match(full, /Posts in the thread as you when you approve\. https:\/\/x\/1/);
+  assert.match(full, /_Read 7 channels, last 14 days; DMs covered\._/);
+  assert.match(full, /### Organic\nFull read here\./);
+  const withHeading = inboxReportBody({ ...pass, extras: { ...pass.extras, organic: { synopsis: [], section: "## Organic\n\n**What's broken**\n- x" } } }, at).body;
+  assert.equal((withHeading.match(/Organic/g) ?? []).filter(Boolean).length >= 1, true);
+  assert.ok(!withHeading.includes("## Organic\n\n**What"), "the module's own heading is not repeated");
+  assert.ok(withHeading.includes("**What's broken**") && !withHeading.includes("### *What"), "bold labels stay bold, not headings");
+  assert.match(full, /Approving turns this into a \/handoff brief/);
 }
 console.log("synopsis checks passed");
 
