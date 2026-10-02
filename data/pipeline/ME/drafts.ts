@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ME/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.527Z
+ * Last updated: 2026-10-02T02:02:08.458Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1198,6 +1198,102 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mainelse.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "National Family Caregiver Program",
+      "shortName": "Caregiver Support Program",
+      "tagline": "Your local Area Agency on Aging helps people caring for an older adult or someone with dementia get a break, training, counseling and support.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through Maine's 5 Area Agencies on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "National Family Caregiver Program helps unpaid family caregivers keep going. Your local Area Agency on Aging helps people caring for an older adult or someone with dementia get a break, training, counseling and support.\n\nHelp can include information and assistance, individual counseling, education and training, support groups, respite care (in and out of home), adult day services, homemaker help and personal care.\n\nServices are delivered locally. Through Maine's 5 Area Agencies on Aging.\n\nCall the statewide ADRC line and pick your county. You are connected to your local Area Agency on Aging, which starts services. An interpreter is free if you need one.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Families caring for an older adult",
+          "Families caring for a person of any age living with dementia, including Alzheimer's",
+          "Older relatives who are the main caregiver for a child or an adult with a disability"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Families caring for an older adult",
+          "Families caring for a person of any age living with dementia, including Alzheimer's",
+          "Older relatives who are the main caregiver for a child or an adult with a disability"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the statewide ADRC line and pick your county. You are connected to your local Area Agency on Aging, which starts services. An interpreter is free if you need one.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call the statewide ADRC line and pick your county. You are connected to your local Area Agency on Aging, which starts services. An interpreter is free if you need one."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Care Partner Supports (Maine DHHS)",
+            "url": "https://www3.maine.gov/dhhs/oads/get-support/older-adults-disabilities/care-partner-supports"
+          },
+          {
+            "label": "Find your Area Agency on Aging",
+            "url": "https://www3.maine.gov/dhhs/oads/get-support/older-adults-disabilities/area-agencies-on-aging"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "Statewide ADRC line (connects you to your local Area Agency on Aging)",
+          "phone": "(877) 353-3771",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://www3.maine.gov/dhhs/oads/get-support/older-adults-disabilities/care-partner-supports",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

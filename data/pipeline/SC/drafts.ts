@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.482Z
+ * Last updated: 2026-10-02T02:02:08.499Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2592,6 +2592,109 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.sc.gov/programs-initiatives/medicare-and-medicare-fraud",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "Family Caregiver Support Program",
+      "shortName": "Family Caregiver Support Program",
+      "tagline": "Helps family caregivers keep a loved one at home with respite breaks, counseling, training and extra support services.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through 10 regional Area Agencies on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Family Caregiver Support Program helps unpaid family caregivers keep going. Helps family caregivers keep a loved one at home with respite breaks, counseling, training and extra support services.\n\nHelp can include information about available services, help getting access to services, individual counseling, support groups, caregiver training, respite care (in home, adult day, assisted living or nursing facility) and supplemental services.\n\nServices are delivered locally. Through 10 regional Area Agencies on Aging.\n\nContact your local Area Agency on Aging (10 regions statewide); find yours on GetCareSC. You can also call the SC Department on Aging / GetCareSC toll-free line to be pointed to your regional agency.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Adult family member or informal caregiver of someone 60+ who needs help with daily activities",
+          "Adult family member or informal caregiver of someone of any age with Alzheimer's disease or related dementia",
+          "Relative 55+ (not a parent) raising a child under 18",
+          "Relative 55+ (including parents) caring for an adult 18-59 with a disability"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Adult family member or informal caregiver of someone 60+ who needs help with daily activities",
+          "Adult family member or informal caregiver of someone of any age with Alzheimer's disease or related dementia",
+          "Relative 55+ (not a parent) raising a child under 18",
+          "Relative 55+ (including parents) caring for an adult 18-59 with a disability"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Contact your local Area Agency on Aging (10 regions statewide); find yours on GetCareSC. You can also call the SC Department on Aging / GetCareSC toll-free line to be pointed to your regional agency.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Contact your local Area Agency on Aging (10 regions statewide); find yours on GetCareSC. You can also call the SC Department on Aging / GetCareSC toll-free line to be pointed to your regional agency."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Family Caregiver Support Program",
+            "url": "https://aging.sc.gov/programs-initiatives/family-caregiver-support-program"
+          },
+          {
+            "label": "Find your Area Agency on Aging (GetCareSC)",
+            "url": "https://www.getcaresc.com/about/area-agencies-aging"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "SC Department on Aging / GetCareSC (toll-free)",
+          "phone": "(800) 868-9095",
+          "hours": null
+        },
+        {
+          "label": "SC Department on Aging (local)",
+          "phone": "(803) 734-9900",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://aging.sc.gov/programs-initiatives/family-caregiver-support-program",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

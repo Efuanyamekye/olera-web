@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AZ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-31T10:40:13.354Z
+ * Last updated: 2026-10-02T02:02:08.430Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1700,6 +1700,104 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://des.az.gov/LTCOP",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "Family Caregiver Support Program",
+      "shortName": "Family Caregiver Support Program",
+      "tagline": "Gives unpaid family caregivers information, help reaching services, counseling, support groups, training and short breaks through respite care.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through Arizona's Area Agencies on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Family Caregiver Support Program helps unpaid family caregivers keep going. Gives unpaid family caregivers information, help reaching services, counseling, support groups, training and short breaks through respite care.\n\nHelp can include information about available services, help reaching services, individual counseling, support groups, caregiver training, respite care and limited supplemental services.\n\nServices are delivered locally. Through Arizona's Area Agencies on Aging.\n\nCall the Arizona Caregiver Resource Line, where a trained volunteer gives information and local resources, or contact your local Area Agency on Aging (DES lists them by county).",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Adult family member or other person giving unpaid care at home or in the community",
+          "Caring for an older person, or someone of any age with Alzheimer's disease or a related neurological disorder",
+          "Grandparents or relatives 55+ raising a child (with conditions)",
+          "Respite and supplemental services need the care recipient to need substantial help with at least 2 daily activities"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Adult family member or other person giving unpaid care at home or in the community",
+          "Caring for an older person, or someone of any age with Alzheimer's disease or a related neurological disorder",
+          "Grandparents or relatives 55+ raising a child (with conditions)",
+          "Respite and supplemental services need the care recipient to need substantial help with at least 2 daily activities"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Arizona Caregiver Resource Line, where a trained volunteer gives information and local resources, or contact your local Area Agency on Aging (DES lists them by county).",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call the Arizona Caregiver Resource Line, where a trained volunteer gives information and local resources, or contact your local Area Agency on Aging (DES lists them by county)."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "DES Family Caregiver Support",
+            "url": "https://des.az.gov/FamilyCaregiver"
+          },
+          {
+            "label": "Find your local Area Agency on Aging (by county)",
+            "url": "https://des.az.gov/services/older-adults/area-agency-on-aging-locations"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "Arizona Caregiver Resource Line",
+          "phone": "(888) 737-7494",
+          "hours": "Mon-Fri 9am-4pm"
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://des.az.gov/FamilyCaregiver",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

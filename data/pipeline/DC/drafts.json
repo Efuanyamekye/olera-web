@@ -2,8 +2,8 @@
   "state": "DC",
   "stateName": "District of Columbia",
   "draftedAt": "2026-04-13T21:50:19.521Z",
-  "total": 4,
-  "successful": 4,
+  "total": 5,
+  "successful": 5,
   "programs": [
     {
       "id": "epd-waiver-program",
@@ -715,6 +715,100 @@
       "sourceUrl": "https://dcoa.dc.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "DACL Caregiver Programs",
+      "shortName": "Caregiver Programs",
+      "tagline": "Supports unpaid caregivers of DC seniors and adults with disabilities with respite, support groups, training, counseling and case management.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through DACL's senior services network",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "DACL Caregiver Programs helps unpaid family caregivers keep going. Supports unpaid caregivers of DC seniors and adults with disabilities with respite, support groups, training, counseling and case management.\n\nHelp can include information and assistance, counseling, support groups, caregiver training, respite, case management and supplemental services.\n\nServices are delivered locally. Through DACL's senior services network.\n\nCall DACL to learn about caregiver services and get connected. The DC Caregivers Institute is delivered by Home Care Partners.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Unpaid family member or other informal caregiver, age 18+",
+          "Caring for someone 60+, or someone of any age with Alzheimer's disease or related dementia",
+          "Relatives 55+ (not parents) raising children under 18",
+          "Relatives 55+, including parents, caring for adults 18-59 with disabilities"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Unpaid family member or other informal caregiver, age 18+",
+          "Caring for someone 60+, or someone of any age with Alzheimer's disease or related dementia",
+          "Relatives 55+ (not parents) raising children under 18",
+          "Relatives 55+, including parents, caring for adults 18-59 with disabilities"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call DACL to learn about caregiver services and get connected. The DC Caregivers Institute is delivered by Home Care Partners.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call DACL to learn about caregiver services and get connected. The DC Caregivers Institute is delivered by Home Care Partners."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "DACL Caregiver Programs",
+            "url": "https://dacl.dc.gov/service/caregiver-programs"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "DC Department of Aging and Community Living (DACL)",
+          "phone": "(202) 724-5626",
+          "hours": "Mon-Fri 9:30am-4:30pm"
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://dacl.dc.gov/service/caregiver-programs",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

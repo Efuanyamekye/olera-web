@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-06T12:14:31.519Z
+ * Last updated: 2026-10-02T02:02:08.460Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2258,6 +2258,96 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mn.gov/aging-pathways/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "Caregiver Support through Minnesota Aging Pathways",
+      "shortName": "Caregiver Support (Minnesota Aging Pathways)",
+      "tagline": "A free statewide line connects unpaid caregivers with a trained Caregiver Consultant and local help such as respite and training.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through the Minnesota Board on Aging and Minnesota's Area Agencies on Aging",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Caregiver Support through Minnesota Aging Pathways helps unpaid family caregivers keep going. A free statewide line connects unpaid caregivers with a trained Caregiver Consultant and local help such as respite and training.\n\nHelp can include one-to-one caregiver consultation, respite, training and education and help finding local services.\n\nServices are delivered locally. Through the Minnesota Board on Aging and Minnesota's Area Agencies on Aging.\n\nCall Minnesota Aging Pathways (formerly the Senior LinkAge Line). They connect you with a Caregiver Consultant in your area, who assesses your needs and helps you find respite, training and other services.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Unpaid caregiver who regularly helps an aging parent, spouse or friend",
+          "Some requirements may apply; availability varies by community"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Unpaid caregiver who regularly helps an aging parent, spouse or friend",
+          "Some requirements may apply; availability varies by community"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call Minnesota Aging Pathways (formerly the Senior LinkAge Line). They connect you with a Caregiver Consultant in your area, who assesses your needs and helps you find respite, training and other services.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call Minnesota Aging Pathways (formerly the Senior LinkAge Line). They connect you with a Caregiver Consultant in your area, who assesses your needs and helps you find respite, training and other services."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Caregiver Support (Minnesota Aging Pathways)",
+            "url": "https://mn.gov/aging-pathways/caregivers/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "Minnesota Aging Pathways (formerly Senior LinkAge Line)",
+          "phone": "(800) 333-2433",
+          "hours": "Mon-Fri 8am-4:30pm"
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://mn.gov/aging-pathways/caregivers/",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

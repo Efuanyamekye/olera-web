@@ -2,8 +2,8 @@
   "state": "IL",
   "stateName": "Illinois",
   "draftedAt": "2026-04-13T21:50:19.536Z",
-  "total": 12,
-  "successful": 12,
+  "total": 13,
+  "successful": 13,
   "programs": [
     {
       "id": "medical-assistance-medicaid-seniors-disabled",
@@ -2196,6 +2196,100 @@
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "lastVerifiedDate": "2026-07-14"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "Illinois Caregiver Support Program",
+      "shortName": "Caregiver Support Program",
+      "tagline": "Gives family caregivers information, help reaching services, counseling, support groups, training and respite through local Area Agencies on Aging.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Through 13 Area Agencies on Aging and local Caregiver Resource Centers",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Illinois Caregiver Support Program helps unpaid family caregivers keep going. Gives family caregivers information, help reaching services, counseling, support groups, training and respite through local Area Agencies on Aging.\n\nHelp can include information about available services, help reaching services, individual counseling, support groups, caregiver training, respite care, limited supplemental services and a caregiver needs assessment.\n\nServices are delivered locally. Through 13 Area Agencies on Aging and local Caregiver Resource Centers.\n\nCall the Senior HelpLine or contact your local Area Agency on Aging or Caregiver Resource Center. The agency assesses your needs and refers you to services such as respite, support groups or counseling.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Adult family member or other person giving unpaid care at home or in the community to an older person",
+          "Grandparents and relative caregivers of children 18 or younger"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Adult family member or other person giving unpaid care at home or in the community to an older person",
+          "Grandparents and relative caregivers of children 18 or younger"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Senior HelpLine or contact your local Area Agency on Aging or Caregiver Resource Center. The agency assesses your needs and refers you to services such as respite, support groups or counseling.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call the Senior HelpLine or contact your local Area Agency on Aging or Caregiver Resource Center. The agency assesses your needs and refers you to services such as respite, support groups or counseling."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Caregiver Support Program",
+            "url": "https://ilaging.illinois.gov/programs/caregiver/program.html"
+          },
+          {
+            "label": "Find your Area Agency on Aging",
+            "url": "https://ilaging.illinois.gov/forprofessionals/areaagenciesonaging.html"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "Illinois Department on Aging Senior HelpLine (TTY 711)",
+          "phone": "(800) 252-8966",
+          "hours": "Mon-Fri 8:30am-5pm"
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://ilaging.illinois.gov/programs/caregiver/program.html",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

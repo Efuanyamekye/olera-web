@@ -13,6 +13,10 @@
  * page shows the first few in draft order. In Indiana it is also the entry
  * with the verified 800-713-9023.
  *
+ * Also: the old caregiver-program entries in 11 states had no phone, website
+ * or rules (so the finder hid them). Each now points at the verified
+ * "family-caregiver-support" program added on 2 Oct 2026.
+ *
  * A duplicate id leaves the finder, the plan, the state page and the
  * sitemaps, and its page permanently redirects to the kept program.
  */
@@ -22,15 +26,24 @@ const DUPLICATES: Record<string, Record<string, string>> = {
     "elderly-and-disabled-e-d-medicaid-waiver": "medicaid-elderly-disabled-waiver",
   },
   AR: { "national-family-caregiver-support-program": "family-caregiver-support" },
-  AZ: { "arizona-long-term-care-system-altcs": "ahcccs-altcs" },
+  AZ: {
+    "arizona-long-term-care-system-altcs": "ahcccs-altcs",
+    "arizona-family-caregiver-support-program": "family-caregiver-support",
+  },
   CA: { "multipurpose-senior-services-program-mssp": "mssp-waiver" },
-  DE: { "diamond-state-health-plan-plus-long-term-care-community-serv": "diamond-state-health-plan" },
+  DE: {
+    "diamond-state-health-plan-plus-long-term-care-community-serv": "diamond-state-health-plan",
+    "national-family-caregiver-support-program-delaware": "family-caregiver-support",
+  },
   GA: { "aged-blind-and-disabled-medicaid-abd": "medicaid-aged-blind-disabled" },
   ID: {
     "home-delivered-meals": "home-delivered-meals-title-iii",
     "national-family-caregiver-support-program": "nfcsp-caregiver-support",
   },
-  IL: { "community-care-program-home-delivered-meals": "ccp-home-delivered-meals" },
+  IL: {
+    "community-care-program-home-delivered-meals": "ccp-home-delivered-meals",
+    "family-caregiver-support-program": "family-caregiver-support",
+  },
   IN: {
     "indiana-pathways-for-aging": "pathways-aging-waiver",
     "pathways-for-aging-waiver": "pathways-aging-waiver",
@@ -43,7 +56,10 @@ const DUPLICATES: Record<string, Record<string, string>> = {
     "home-and-community-based-hcb-waiver": "hcb-waiver",
   },
   MI: { "mi-choice-waiver-program": "choice-waiver" },
-  MN: { "medical-assistance-ma-for-elderly-blind-and-disabled": "medical-assistance-medicaid" },
+  MN: {
+    "medical-assistance-ma-for-elderly-blind-and-disabled": "medical-assistance-medicaid",
+    "family-caregiver-support-program": "family-caregiver-support",
+  },
   MS: {
     "elderly-and-disabled-waiver": "elderly-disabled-waiver",
     "national-family-caregiver-support-program": "family-caregiver-support",
@@ -68,7 +84,10 @@ const DUPLICATES: Record<string, Record<string, string>> = {
     "choices-for-independence-waiver": "cfi-waiver",
   },
   NJ: { "paad-pharmaceutical-assistance-to-the-aged-and-disabled": "paad-prescription-assistance" },
-  NM: { "community-benefit-program": "centennial-care-community-benefit" },
+  NM: {
+    "community-benefit-program": "centennial-care-community-benefit",
+    "new-mexico-family-caregiver-support-program": "family-caregiver-support",
+  },
   NC: {
     "home-delivered-meals-eat-right-to-age-well": "home-delivered-meals",
     "national-family-caregiver-support-program": "lifespan-respite-family-caregiver-support",
@@ -92,9 +111,17 @@ const DUPLICATES: Record<string, Record<string, string>> = {
   },
   TN: { "tennessee-family-caregiver-support-program": "nfcsp-caregiver-support" },
   UT: { "aging-waiver-home-and-community-based-services": "aging-waiver" },
-  VA: { "commonwealth-coordinated-care-plus-ccc-plus-waiver": "ccc-plus-waiver" },
+  VA: {
+    "commonwealth-coordinated-care-plus-ccc-plus-waiver": "ccc-plus-waiver",
+    "virginia-family-caregiver-support-program": "family-caregiver-support",
+  },
   WV: { "national-family-caregiver-support-program": "nfcsp-caregiver-support" },
   WI: { "wisconsin-seniorcare": "seniorcare-prescription-assistance" },
+  ME: { "maine-family-caregiver-support-program": "family-caregiver-support" },
+  ND: { "national-family-caregiver-support-program": "family-caregiver-support" },
+  SC: { "family-caregiver-support-program": "family-caregiver-support" },
+  WY: { "national-family-caregiver-support-program": "family-caregiver-support" },
+  VT: { "family-caregiver-support-program": "family-caregiver-support" },
 };
 
 /** The id a duplicate program should resolve to, or null when it isn't one. */
