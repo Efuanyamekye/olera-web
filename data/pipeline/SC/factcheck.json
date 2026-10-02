@@ -1,25 +1,81 @@
 {
   "state": "SC",
   "stateName": "South Carolina",
-  "checkedAt": "2026-04-14T10:08:52.884Z",
-  "total": 14,
+  "checkedAt": "2026-10-02T07:45:42.328Z",
+  "total": 16,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 3,
-  "totalFlags": 3,
-  "highSeverityFlags": 0,
+  "programsWithFlags": 7,
+  "totalFlags": 13,
+  "highSeverityFlags": 10,
   "programs": [
     {
-      "programId": "sc-community-choices-waiver",
+      "programId": "medicaid-aged-blind-disabled",
+      "programName": "South Carolina Healthy Connections Medicaid (Aged, Blind or Disabled)",
+      "facts": {
+        "age": 65,
+        "income_1": 2982,
+        "income_2": null,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phones": [
+          "8885490820",
+          "8007268774"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 65,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": 7080,
+        "assets_couple": 10620,
+        "phone": "8885490820",
+        "sources": {
+          "age": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
+          "income": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
+          "assets": "https://www1.scdhhs.gov/mppm/word/section300/chapter%20303%20amb-qmb-slmb.doc",
+          "phone": "https://www.scdhhs.gov/members/getting-started"
+        },
+        "notes": "Current South Carolina Healthy Connections Medicaid ABD eligibility page lists age 65+ for the senior pathway, with income limits effective 03/01/2026 and resources effective 01/01/2026."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2982,
+          "verifiedValue": 1330,
+          "pctDiff": 55.4
+        },
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 9950,
+          "verifiedValue": 7080,
+          "pctDiff": 28.8
+        },
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 14910,
+          "verifiedValue": 10620,
+          "pctDiff": 28.8
+        }
+      ],
+      "notes": "Current South Carolina Healthy Connections Medicaid ABD eligibility page lists age 65+ for the senior pathway, with income limits effective 03/01/2026 and resources effective 01/01/2026."
+    },
+    {
+      "programId": "community-choices-waiver",
       "programName": "Community Choices Waiver",
       "facts": {
         "age": 65,
-        "income_1": null,
+        "income_1": 2982,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "8889711637",
           "8885490820",
           "211"
         ],
@@ -27,49 +83,76 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
+        "income_1": 2982,
+        "income_2": 4038,
+        "assets_individual": 2000,
         "assets_couple": null,
-        "phone": "8885490820",
+        "phone": "8889711637",
         "sources": {
           "age": "https://www.scdhhs.gov/resources/waivers/community-choices-cc-waiver",
-          "income": null,
-          "assets": null,
-          "phone": "https://www.medicaidplanningassistance.org/south-carolina-community-choices-waiver/"
+          "income": "https://brevy.com/medicaid/south-carolina/hcbs-waivers",
+          "assets": "https://brevy.com/medicaid/south-carolina/hcbs-waivers",
+          "phone": "https://www.scdhhs.gov/sites/dhhs/files/waivers/Medicaid%20Waiver%20Programs%20Overview%20Final%206.26.25.pdf"
         },
-        "notes": "Waiver expires 06/30/2026 with renewal proposed effective 07/01/2026; no income/assets limits found in sources"
+        "notes": "Community Choices Waiver remains active; senior pathway is age 65+ and the official state materials confirm 2026 coverage, but income/asset limits were only found in a current non-government guide citing official sources."
       },
       "flags": [],
-      "notes": "Waiver expires 06/30/2026 with renewal proposed effective 07/01/2026; no income/assets limits found in sources"
+      "notes": "Community Choices Waiver remains active; senior pathway is age 65+ and the official state materials confirm 2026 coverage, but income/asset limits were only found in a current non-government guide citing official sources."
     },
     {
-      "programId": "sc-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
         "age": 65,
-        "income_1": 1350,
-        "income_2": 1824,
-        "assets_individual": 9660,
-        "assets_couple": 14470,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
         "phones": [
           "18885490820"
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        1
+      "verified": {
+        "age": 65,
+        "income_1": 1816,
+        "income_2": 2455,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8885490820",
+        "sources": {
+          "age": "https://www.scthrive.org/medicare-savings-program-faqs/",
+          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "assets": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "phone": "https://www.scdhhs.gov/formsandpubs/docs/MEDELGBLTY/MedicareSavingsProgramBrochureEntire.pdf"
+        },
+        "notes": "Current South Carolina MSP values found for the senior pathway; official Medicare.gov lists the 2026 income/resource limits, and South Carolina application/help line is 1-888-549-0820."
+      },
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1330,
+          "verifiedValue": 1816,
+          "pctDiff": 26.8
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 1804,
+          "verifiedValue": 2455,
+          "pctDiff": 26.5
+        }
       ],
-      "flags": [],
-      "notes": null
+      "notes": "Current South Carolina MSP values found for the senior pathway; official Medicare.gov lists the 2026 income/resource limits, and South Carolina application/help line is 1-888-549-0820."
     },
     {
-      "programId": "sc-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Food Assistance)",
       "facts": {
         "age": 60,
-        "income_1": 2608,
-        "income_2": 3526,
+        "income_1": 1729,
+        "income_2": 2345,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
@@ -80,20 +163,34 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2608,
-        "income_2": 3526,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "8038987602",
+        "income_1": 1305,
+        "income_2": 1763,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
+        "phone": "8006161309",
         "sources": {
           "age": null,
-          "income": "https://www.snapscreener.com/guides/south-carolina",
-          "assets": null,
-          "phone": "https://dss.sc.gov/news/new-federal-snap-work-requirements-take-effect-in-south-carolina/"
+          "income": "https://dss.sc.gov/assistance-programs/snap/faq/",
+          "assets": "https://dss.sc.gov/assistance-programs/snap/faq/",
+          "phone": "https://dss.sc.gov/contact-dss/"
         },
-        "notes": "SNAP has no age test for seniors; program serves all income-eligible households. Income limits shown are for expanded eligibility (households where all adults are 60+ or have disability). Standard federal limits are lower. Asset limits not published in search results. Work requirements expanded Feb 1, 2026 but do not apply to households with members 60+ or disabled."
+        "notes": "SNAP has no senior minimum age; senior pathway applies to households with an elderly member age 60+ for the net income test and resource limit."
       },
       "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1729,
+          "verifiedValue": 1305,
+          "pctDiff": 24.5
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2345,
+          "verifiedValue": 1763,
+          "pctDiff": 24.8
+        },
         {
           "field": "phone",
           "severity": "medium",
@@ -101,13 +198,13 @@
             "8888980055",
             "211"
           ],
-          "verifiedValue": "8038987602"
+          "verifiedValue": "8006161309"
         }
       ],
-      "notes": "SNAP has no age test for seniors; program serves all income-eligible households. Income limits shown are for expanded eligibility (households where all adults are 60+ or have disability). Standard federal limits are lower. Asset limits not published in search results. Work requirements expanded Feb 1, 2026 but do not apply to households with members 60+ or disabled."
+      "notes": "SNAP has no senior minimum age; senior pathway applies to households with an elderly member age 60+ for the net income test and resource limit."
     },
     {
-      "programId": "sc-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "Low-Income Home Energy Assistance Program (LIHEAP)",
       "facts": {
         "age": null,
@@ -116,9 +213,9 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8666746327",
           "8037340662",
-          "8037946778"
+          "8037946778",
+          "8666746327"
         ],
         "hasVerifiableFacts": true
       },
@@ -131,17 +228,17 @@
         "phone": "8037340662",
         "sources": {
           "age": null,
-          "income": "https://www.snapscreener.com/liheap/south-carolina",
+          "income": "https://www.carolinacommunityactions.org/liheap",
           "assets": null,
-          "phone": "https://energyfundsforall.org/low-income-home-energy-assistance-program-liheap-iija/"
+          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
         },
-        "notes": "LIHEAP has no age requirement; program serves all low-income households regardless of age, including senior caregivers. Income limits are current for 2026 per SNAP Screener source. No asset test found in official sources. Phone number is Governor's Office of Economic Opportunity main line for SC LIHEAP administration. Program remains active as of April 2026."
+        "notes": "South Carolina LIHEAP uses a 60% State Median Income income test; the senior pathway is a priority group, not a separate income scale. No asset test found in the retrieved authoritative sources."
       },
       "flags": [],
-      "notes": "LIHEAP has no age requirement; program serves all low-income households regardless of age, including senior caregivers. Income limits are current for 2026 per SNAP Screener source. No asset test found in official sources. Phone number is Governor's Office of Economic Opportunity main line for SC LIHEAP administration. Program remains active as of April 2026."
+      "notes": "South Carolina LIHEAP uses a 60% State Median Income income test; the senior pathway is a priority group, not a separate income scale. No asset test found in the retrieved authoritative sources."
     },
     {
-      "programId": "sc-weatherization-assistance",
+      "programId": "weatherization-assistance",
       "programName": "Weatherization Assistance Program",
       "facts": {
         "age": null,
@@ -152,14 +249,26 @@
         "phones": [],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        2
-      ],
+      "verified": {
+        "age": 60,
+        "income_1": 2510,
+        "income_2": 3407,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8037340662",
+        "sources": {
+          "age": "https://oeo.sc.gov/managedsites/prd/oeo/weatherization.html",
+          "income": "https://oeo.sc.gov/managedsites/prd/oeo/weatherization.html",
+          "assets": null,
+          "phone": "https://energy.sc.gov/home/ebill"
+        },
+        "notes": "Current South Carolina Weatherization Assistance Program uses a 200% federal poverty level income test; senior preference begins at age 60. No asset test found in authoritative sources."
+      },
       "flags": [],
-      "notes": null
+      "notes": "Current South Carolina Weatherization Assistance Program uses a 200% federal poverty level income test; senior preference begins at age 60. No asset test found in authoritative sources."
     },
     {
-      "programId": "sc-ship-i-care",
+      "programId": "ship-i-care",
       "programName": "SHIP / I-Care",
       "facts": {
         "age": 65,
@@ -173,25 +282,25 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8008689095",
         "sources": {
-          "age": "https://www.getcaresc.com/guide/insurance-counseling-medicaremedicaid",
+          "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/contacts/i-care-insurance-counseling-assistance-and-referrals-elders/general-beneficiary-contact/1562201"
+          "phone": "https://www.cms.gov/about-cms/contact/directory/i-care-insurance-counseling-assistance-referrals-elders/1562201"
         },
-        "notes": "Program is counseling service for Medicare beneficiaries (age 65+); no income or asset limits found in sources"
+        "notes": "No authoritative age/income/assets eligibility test found for South Carolina SHIP / I-CARE; current official source lists the program as Medicare counseling for beneficiaries and their families/caregivers. Phone verified from CMS directory."
       },
       "flags": [],
-      "notes": "Program is counseling service for Medicare beneficiaries (age 65+); no income or asset limits found in sources"
+      "notes": "No authoritative age/income/assets eligibility test found for South Carolina SHIP / I-CARE; current official source lists the program as Medicare counseling for beneficiaries and their families/caregivers. Phone verified from CMS directory."
     },
     {
-      "programId": "sc-congregate-home-delivered-meals",
+      "programId": "congregate-home-delivered-meals",
       "programName": "Congregate Meals / Home Delivered Meals",
       "facts": {
         "age": 60,
@@ -213,20 +322,32 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8037349900",
         "sources": {
           "age": "https://aging.sc.gov/programs-initiatives/senior-nutrition-program",
-          "income": "https://www.scacog.org/nutrition-program",
+          "income": "https://aging.sc.gov/programs-initiatives/senior-nutrition-program",
           "assets": null,
-          "phone": null
+          "phone": "https://aging.sc.gov/sites/default/files/documents/SeniorNutritionProgram/Senior%20Nutrition%20Program%20Flyer_Revised%20July_10_2025.pdf"
         },
-        "notes": "No statewide application phone found; contact local Area Agencies on Aging. Income/assets not considered."
+        "notes": "Current South Carolina Senior Nutrition Program; no income or asset test found for the senior pathway. Phone from state flyer; main program page directs users to their designated AAA."
       },
-      "flags": [],
-      "notes": "No statewide application phone found; contact local Area Agencies on Aging. Income/assets not considered."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8642429733",
+            "8004344036",
+            "8644893868",
+            "8648851000"
+          ],
+          "verifiedValue": "8037349900"
+        }
+      ],
+      "notes": "Current South Carolina Senior Nutrition Program; no income or asset test found for the senior pathway. Phone from state flyer; main program page directs users to their designated AAA."
     },
     {
-      "programId": "sc-legal-assistance-seniors",
+      "programId": "legal-assistance-seniors",
       "programName": "Legal Assistance for Seniors",
       "facts": {
         "age": 60,
@@ -246,14 +367,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8008689095",
+        "phone": "18008689095",
         "sources": {
           "age": "https://aging.sc.gov/programs-initiatives/legal-assistance-older-adults",
           "income": null,
           "assets": null,
           "phone": "https://aging.sc.gov/programs-initiatives/legal-assistance-older-adults"
         },
-        "notes": "Program serves seniors 60+ with greatest economic or social need. Specific income and asset limits not published in official sources retrieved. Phone number is South Carolina Department on Aging main line for legal assistance inquiries."
+        "notes": "Official South Carolina Department on Aging page says legal assistance is for older individuals age 60+; no income or asset test was found on the official page."
       },
       "flags": [
         {
@@ -263,13 +384,13 @@
             "18883465592",
             "8037996653"
           ],
-          "verifiedValue": "8008689095"
+          "verifiedValue": "18008689095"
         }
       ],
-      "notes": "Program serves seniors 60+ with greatest economic or social need. Specific income and asset limits not published in official sources retrieved. Phone number is South Carolina Department on Aging main line for legal assistance inquiries."
+      "notes": "Official South Carolina Department on Aging page says legal assistance is for older individuals age 60+; no income or asset test was found on the official page."
     },
     {
-      "programId": "sc-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -289,20 +410,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18008689095",
+        "phone": "8008689095",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
           "phone": "https://aging.sc.gov/programs-initiatives/long-term-care-ombudsman-program"
         },
-        "notes": "Program has no age, income, or asset eligibility requirements; open to residents of long-term care facilities and their families."
+        "notes": "No age, income, or asset test found for this ombudsman program; official contact number is 1-800-868-9095."
       },
       "flags": [],
-      "notes": "Program has no age, income, or asset eligibility requirements; open to residents of long-term care facilities and their families."
+      "notes": "No age, income, or asset test found for this ombudsman program; official contact number is 1-800-868-9095."
     },
     {
-      "programId": "sc-homestead-exemption-property-tax",
+      "programId": "homestead-exemption-property-tax",
       "programName": "Homestead Exemption (State Property Tax Assistance)",
       "facts": {
         "age": 65,
@@ -311,8 +432,8 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8038985709",
-          "211"
+          "211",
+          "8038985700"
         ],
         "hasVerifiableFacts": true
       },
@@ -322,20 +443,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8038985700",
         "sources": {
-          "age": "https://www.scstatehouse.gov/sess126_2025-2026/bills/4599.htm",
+          "age": "https://dor.sc.gov/index.php/property/property-tax-exemptions",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://dor.sc.gov/property/property-tax-exemptions"
         },
-        "notes": "Current law (as of April 2026) sets senior age at 65; multiple bills to change exemption amount/age are pending and not enacted"
+        "notes": "Current South Carolina Homestead Exemption senior pathway uses age 65+; no income or asset test found. Tax Year 2026 has a temporary increased exemption amount, but eligibility age remains 65."
       },
       "flags": [],
-      "notes": "Current law (as of April 2026) sets senior age at 65; multiple bills to change exemption amount/age are pending and not enacted"
+      "notes": "Current South Carolina Homestead Exemption senior pathway uses age 65+; no income or asset test found. Tax Year 2026 has a temporary increased exemption amount, but eligibility age remains 65."
     },
     {
-      "programId": "sc-esap-food-benefits",
+      "programId": "esap-food-benefits",
       "programName": "Elderly Simplified Application Project (ESAP)",
       "facts": {
         "age": 60,
@@ -344,12 +465,12 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "211"
+          "18888980055"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
@@ -359,24 +480,22 @@
           "age": "https://dss.sc.gov/assistance-programs/snap/how-do-i-apply/help-for-the-elderly/",
           "income": null,
           "assets": null,
-          "phone": "https://dss.sc.gov/media/uy3fslax/dss-form-3809-nov-19-lottery-and-gambling.pdf"
+          "phone": "https://dss.sc.gov/assistance-programs/snap/how-do-i-apply/help-for-the-elderly/"
         },
-        "notes": "Program active as of 2026 per available data; no specific income/assets limits detailed in sources for ESAP seniors"
+        "notes": "Current South Carolina DSS ESAP page shows the senior pathway age as 65+ and lists 1-888-898-0055 for ESAP help; no separate income or asset limits were found on the official ESAP page, because eligibility is based on age, no earned income, and not already receiving SCCAP."
       },
       "flags": [
         {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "211"
-          ],
-          "verifiedValue": "18888980055"
+          "field": "age",
+          "severity": "high",
+          "draftValue": 60,
+          "verifiedValue": 65
         }
       ],
-      "notes": "Program active as of 2026 per available data; no specific income/assets limits detailed in sources for ESAP seniors"
+      "notes": "Current South Carolina DSS ESAP page shows the senior pathway age as 65+ and lists 1-888-898-0055 for ESAP help; no separate income or asset limits were found on the official ESAP page, because eligibility is based on age, no earned income, and not already receiving SCCAP."
     },
     {
-      "programId": "sc-senior-farmers-market-nutrition",
+      "programId": "senior-farmers-market-nutrition",
       "programName": "Senior Farmers Market Nutrition Program (SFMNP)",
       "facts": {
         "age": 60,
@@ -392,24 +511,39 @@
       },
       "verified": {
         "age": 60,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 28953,
+        "income_2": 39128,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8038981760",
         "sources": {
-          "age": "https://www.myccnb.com/sfmnp/",
-          "income": "https://www.myccnb.com/sfmnp/",
+          "age": "https://dss.sc.gov/assistance-programs/food-and-nutrition-programs/senior-farmers-market/",
+          "income": "https://dss.sc.gov/news/senior-farmers-market-nutrition-program-returns-june-1st-2/",
           "assets": null,
-          "phone": null
+          "phone": "https://dss.sc.gov/assistance-programs/food-and-nutrition-programs/senior-farmers-market/"
         },
-        "notes": "Program will return in 2026 per sources; no specific 2026 income limits or phone found in current sources"
+        "notes": "SFMNP is active in South Carolina and uses a senior age threshold of 60+. No asset test was found in the official sources reviewed."
       },
-      "flags": [],
-      "notes": "Program will return in 2026 per sources; no specific 2026 income limits or phone found in current sources"
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2769,
+          "verifiedValue": 28953,
+          "pctDiff": 90.4
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 3769,
+          "verifiedValue": 39128,
+          "pctDiff": 90.4
+        }
+      ],
+      "notes": "SFMNP is active in South Carolina and uses a senior age threshold of 60+. No asset test was found in the official sources reviewed."
     },
     {
-      "programId": "sc-vantage-point",
+      "programId": "vantage-point",
       "programName": "Vantage Point",
       "facts": {
         "age": 60,
@@ -435,15 +569,15 @@
           "age": "https://aging.sc.gov/sites/default/files/documents/events/2023-2027%20Area%20Plan%20%20Update-Vantage%20Point_Pee%20Dee%20Region.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://www.caresouth-carolina.com/seniors"
+          "phone": "https://getcaresc.com/about/area-agencies-aging"
         },
-        "notes": "No income or asset limits found in sources; phone from official provider site citing Vantage Point services"
+        "notes": "Current South Carolina AAA/Vantage Point senior pathway appears to serve older individuals age 60+; no income or asset test found in authoritative sources."
       },
       "flags": [],
-      "notes": "No income or asset limits found in sources; phone from official provider site citing Vantage Point services"
+      "notes": "Current South Carolina AAA/Vantage Point senior pathway appears to serve older individuals age 60+; no income or asset test found in authoritative sources."
     },
     {
-      "programId": "sc-senior-medicare-patrol",
+      "programId": "senior-medicare-patrol",
       "programName": "Senior Medicare Patrol",
       "facts": {
         "age": null,
@@ -471,10 +605,43 @@
           "assets": null,
           "phone": "https://aging.sc.gov/programs-initiatives/medicare-and-medicare-fraud"
         },
-        "notes": "SMP is an education and fraud prevention program for Medicare beneficiaries, families, and caregivers with no age, income, or asset eligibility requirements"
+        "notes": "Senior Medicare Patrol in South Carolina does not appear to have a separate age, income, or asset eligibility test; it serves Medicare beneficiaries, families, and caregivers. Official state source lists 1-800-868-9095 as the contact number."
       },
       "flags": [],
-      "notes": "SMP is an education and fraud prevention program for Medicare beneficiaries, families, and caregivers with no age, income, or asset eligibility requirements"
+      "notes": "Senior Medicare Patrol in South Carolina does not appear to have a separate age, income, or asset eligibility test; it serves Medicare beneficiaries, families, and caregivers. Official state source lists 1-800-868-9095 as the contact number."
+    },
+    {
+      "programId": "family-caregiver-support",
+      "programName": "Family Caregiver Support Program",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8008689095",
+          "8037349900"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18008689095",
+        "sources": {
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://aging.sc.gov/programs-initiatives/family-caregiver-support"
+        },
+        "notes": "No age, income, or asset test found for the senior caregiver pathway; official South Carolina Department on Aging pages indicate the program is administered through regional Area Agencies on Aging. Phone number confirmed from current official/state and state-affiliated sources."
+      },
+      "flags": [],
+      "notes": "No age, income, or asset test found for the senior caregiver pathway; official South Carolina Department on Aging pages indicate the program is administered through regional Area Agencies on Aging. Phone number confirmed from current official/state and state-affiliated sources."
     }
   ]
 }

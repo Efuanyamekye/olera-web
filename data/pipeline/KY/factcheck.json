@@ -1,17 +1,17 @@
 {
   "state": "KY",
   "stateName": "Kentucky",
-  "checkedAt": "2026-04-14T10:02:25.336Z",
+  "checkedAt": "2026-10-02T07:37:58.975Z",
   "total": 16,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 0,
-  "programsWithFlags": 5,
-  "totalFlags": 6,
-  "highSeverityFlags": 2,
+  "errors": 2,
+  "programsWithFlags": 9,
+  "totalFlags": 14,
+  "highSeverityFlags": 7,
   "programs": [
     {
-      "programId": "ky-medicaid-long-term-care",
+      "programId": "medicaid-long-term-care",
       "programName": "Kentucky Medicaid",
       "facts": {
         "age": 65,
@@ -26,21 +26,28 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": null,
+        "age": 65,
+        "income_1": 217,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": 4000,
+        "assets_couple": 3000,
         "phone": "8554596328",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": "https://www.kyelderlaw.com/important-numbers-for-kentucky-medicaid-2026/",
-          "phone": "https://khbe.ky.gov/Agents-kynectors/KynectorResources/OE.Brochure.2026.kynector.pdf"
+          "age": "https://www.healthinsurance.org/medicaid/kentucky/",
+          "income": "https://www.chfs.ky.gov/agencies/dms/dpo/Pages/enroll.aspx",
+          "assets": "https://www.chfs.ky.gov/agencies/dms/dpo/Pages/enroll.aspx",
+          "phone": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/enroll.aspx"
         },
-        "notes": "No senior-specific age threshold found; assets from elder law site citing 2026 LTC Medicaid; phone from official KHBE 2026 brochure; income cap of 2982 exists for LTC but query specifies countable financial assets"
+        "notes": "Kentucky Medicaid’s aged/blind/disabled pathway uses an age 65+ senior threshold; income and resource limits were found for the aged pathway, but a couple-specific income limit was not clearly available in the retrieved official sources, so income_2 is null."
       },
       "flags": [
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 4000,
+          "verifiedValue": 3000,
+          "pctDiff": 25
+        },
         {
           "field": "phone",
           "severity": "medium",
@@ -51,41 +58,13 @@
           "verifiedValue": "8554596328"
         }
       ],
-      "notes": "No senior-specific age threshold found; assets from elder law site citing 2026 LTC Medicaid; phone from official KHBE 2026 brochure; income cap of 2982 exists for LTC but query specifies countable financial assets"
+      "notes": "Kentucky Medicaid’s aged/blind/disabled pathway uses an age 65+ senior threshold; income and resource limits were found for the aged pathway, but a couple-specific income limit was not clearly available in the retrieved official sources, so income_2 is null."
     },
     {
-      "programId": "ky-hcbs-waivers",
+      "programId": "hcbs-waivers",
       "programName": "Kentucky Home and Community-Based Services (HCBS) Waivers",
-      "facts": {
-        "age": 65,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "8553068959",
-          "8773150589",
-          "2707376082"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": 65,
-        "income_1": 2982,
-        "income_2": 2982,
-        "assets_individual": 2000,
-        "assets_couple": 2000,
-        "phone": "8773150589",
-        "sources": {
-          "age": "https://chfs.ky.gov/agencies/dms/dca/pages/hcb-waiver.aspx",
-          "income": "https://www.medicaidplanningassistance.org/kentucky-home-community-waiver/",
-          "assets": "https://www.medicaidplanningassistance.org/kentucky-home-community-waiver/",
-          "phone": "https://chfs.ky.gov/agencies/dms/dca/pages/hcb-waiver.aspx"
-        },
-        "notes": "HCB Waiver is the relevant program for seniors; values from 2026 update on secondary source citing official criteria"
-      },
-      "flags": [],
-      "notes": "HCB Waiver is the relevant program for seniors; values from 2026 update on secondary source citing official criteria"
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
     },
     {
       "programId": "kentucky-pace",
@@ -97,9 +76,15 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8008071301",
+          "8888040884",
+          "8554920812",
+          "2706002580",
+          "2704945401",
+          "8775893053",
+          "8552095451",
+          "8004613920",
           "5026767550",
-          "5025646930"
+          "8599702450"
         ],
         "hasVerifiableFacts": true
       },
@@ -109,20 +94,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5026767550",
+        "phone": "8888040884",
         "sources": {
-          "age": "https://chfs.ky.gov/agencies/dms/dca/Pages/pace.aspx",
+          "age": "https://www.chfs.ky.gov/agencies/dms/dca/Pages/pace.aspx",
           "income": null,
           "assets": null,
-          "phone": "https://chfs.ky.gov/agencies/dail/Pages/pace.aspx"
+          "phone": "https://www.chfs.ky.gov/agencies/dms/dca/Pages/pace.aspx"
         },
-        "notes": "Kentucky PACE is an active program as of April 2026. Age requirement is 55+ for seniors. No income or asset limits found in official sources; PACE eligibility is based on clinical need (nursing facility level of care) and ability to live safely in community with services. Phone number is for Senior CommUnity Care of Kentucky PACE (Jefferson County). Additional PACE organizations may operate in other Kentucky counties with different contact numbers."
+        "notes": "Current Kentucky PACE page shows age 55+; no income or asset test found on official source. DAIL contact number is listed as (888) 804-0884."
       },
       "flags": [],
-      "notes": "Kentucky PACE is an active program as of April 2026. Age requirement is 55+ for seniors. No income or asset limits found in official sources; PACE eligibility is based on clinical need (nursing facility level of care) and ability to live safely in community with services. Phone number is for Senior CommUnity Care of Kentucky PACE (Jefferson County). Additional PACE organizations may operate in other Kentucky counties with different contact numbers."
+      "notes": "Current Kentucky PACE page shows age 55+; no income or asset test found on official source. DAIL contact number is listed as (888) 804-0884."
     },
     {
-      "programId": "ky-medicare-savings-programs-qmb-slmb-qi",
+      "programId": "medicare-savings-programs-qmb-slmb-qi",
       "programName": "Kentucky Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
         "age": null,
@@ -131,50 +116,51 @@
         "assets_individual": 9660,
         "assets_couple": 14470,
         "phones": [
+          "8553068959",
           "8006334227"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 1565,
-        "income_2": 2115,
+        "age": 65,
+        "income_1": 1796,
+        "income_2": 2435,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": null,
+        "phone": "8553068959",
         "sources": {
-          "age": null,
-          "income": "https://khbe.ky.gov/About/FactsandResources/Medicare_Savings_Program_Fact_Sheet.pdf",
-          "assets": "https://ky.db101.org/ky/programs/health_coverage/how_health/program2c.htm",
-          "phone": null
+          "age": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "income": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/msp.aspx",
+          "assets": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/msp.aspx",
+          "phone": "https://www.chfs.ky.gov/agencies/dms/MAPForms/Map205English.pdf"
         },
-        "notes": "Income limits from Kentucky state agency PDF (KHBE) for QMB program as of 2026. Asset limits from Kentucky DB101 (state-level benefits database). Phone number not found in provided search results; recommend contacting Kentucky Cabinet for Health and Family Services (CHFS) Division of Medicaid Services directly. No age restriction applies to these programs—eligibility is based on Medicare enrollment, income, and assets only."
+        "notes": "Kentucky Medicare Savings Program is current and covers QMB, SLMB, and QI; age 65 is the senior pathway for Medicare beneficiaries. Income and resource figures shown on Kentucky CHFS site are current as of 2026."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 1325,
-          "verifiedValue": 1565,
-          "pctDiff": 15.3
+          "verifiedValue": 1796,
+          "pctDiff": 26.2
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 1783,
-          "verifiedValue": 2115,
-          "pctDiff": 15.7
+          "verifiedValue": 2435,
+          "pctDiff": 26.8
         }
       ],
-      "notes": "Income limits from Kentucky state agency PDF (KHBE) for QMB program as of 2026. Asset limits from Kentucky DB101 (state-level benefits database). Phone number not found in provided search results; recommend contacting Kentucky Cabinet for Health and Family Services (CHFS) Division of Medicaid Services directly. No age restriction applies to these programs—eligibility is based on Medicare enrollment, income, and assets only."
+      "notes": "Kentucky Medicare Savings Program is current and covers QMB, SLMB, and QI; age 65 is the senior pathway for Medicare beneficiaries. Income and resource figures shown on Kentucky CHFS site are current as of 2026."
     },
     {
-      "programId": "ky-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Supplemental Nutrition Assistance Program)",
       "facts": {
         "age": 60,
-        "income_1": 2608,
-        "income_2": 3526,
+        "income_1": 2660,
+        "income_2": 3607,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
@@ -184,25 +170,25 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 2608,
+        "age": 60,
+        "income_1": 2610,
         "income_2": 3526,
-        "assets_individual": null,
-        "assets_couple": null,
+        "assets_individual": 4250,
+        "assets_couple": 4250,
         "phone": "8553068959",
         "sources": {
-          "age": null,
-          "income": "https://www.snapscreener.com/guides/kentucky",
-          "assets": null,
-          "phone": "https://chfs.ky.gov/agencies/dcbs/dfs/nab/Pages/snap.aspx"
+          "age": "https://kynect.ky.gov/benefits/s/snap-program?language=en_US",
+          "income": "https://khbe.ky.gov/Agents-kynectors/SNAP%20Resources/SNAP%20Income%20Eligibility%20One-Pager.pdf",
+          "assets": "https://kynect.ky.gov/benefits/s/snap-program?language=en_US",
+          "phone": "https://www.chfs.ky.gov/agencies/dcbs/dfs/Pages/default.aspx"
         },
-        "notes": "SNAP has no minimum age threshold for seniors; households with members 60+ may qualify via net income/asset tests if over gross income limit. Income limits are gross for Oct 2025-Sept 2026. No specific asset limits detailed for seniors; general asset test applies with exemptions. snapscreener.com cites KY DCBS."
+        "notes": "Kentucky SNAP applies a senior-specific asset/resource limit for households with a member age 60 or older or disabled. The age threshold is 60; Kentucky SNAP has income limits, and the 1- and 2-person monthly values reflect the current FY 2026 guidance."
       },
       "flags": [],
-      "notes": "SNAP has no minimum age threshold for seniors; households with members 60+ may qualify via net income/asset tests if over gross income limit. Income limits are gross for Oct 2025-Sept 2026. No specific asset limits detailed for seniors; general asset test applies with exemptions. snapscreener.com cites KY DCBS."
+      "notes": "Kentucky SNAP applies a senior-specific asset/resource limit for households with a member age 60 or older or disabled. The age threshold is 60; Kentucky SNAP has income limits, and the 1- and 2-person monthly values reflect the current FY 2026 guidance."
     },
     {
-      "programId": "ky-energy-assistance-liheap",
+      "programId": "energy-assistance-liheap",
       "programName": "Kentucky Energy Assistance Program (LIHEAP)",
       "facts": {
         "age": null,
@@ -211,6 +197,7 @@
         "assets_individual": 2000,
         "assets_couple": 2000,
         "phones": [
+          "8004563452",
           "211",
           "5025643703"
         ],
@@ -221,49 +208,57 @@
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": null,
-        "phone": null,
+        "assets_couple": 4000,
+        "phone": "8004563452",
         "sources": {
           "age": null,
-          "income": "https://chfs.ky.gov/agencies/dcbs/dfs/pdb/Pages/liheap.aspx",
-          "assets": "https://chfs.ky.gov/agencies/dcbs/dfs/pdb/Pages/liheap.aspx",
-          "phone": null
+          "income": "https://www.chfs.ky.gov/agencies/dcbs/dfs/pdb/Pages/liheap.aspx",
+          "assets": "https://www.chfs.ky.gov/agencies/dcbs/dfs/pdb/Pages/liheap.aspx",
+          "phone": "https://www.chfs.ky.gov/agencies/dcbs/dfs/pdb/Pages/liheap.aspx"
         },
-        "notes": "No asset limit specified for couples; liquid resources match countable assets definition. No statewide phone; contact local agency. Income is 150% FPL per [1], 130% for subsidy per [2]. No age requirement."
+        "notes": "Kentucky LIHEAP uses a liquid-resources test for the subsidy component; no separate age threshold was found for the senior pathway. The official page states $2,000 in liquid resources, or up to $4,000 with a catastrophic illness; this is the closest official value found for individual vs couple, but the state page does not explicitly separate individual and couple limits."
       },
-      "flags": [],
-      "notes": "No asset limit specified for couples; liquid resources match countable assets definition. No statewide phone; contact local agency. Income is 150% FPL per [1], 130% for subsidy per [2]. No age requirement."
+      "flags": [
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 2000,
+          "verifiedValue": 4000,
+          "pctDiff": 50
+        }
+      ],
+      "notes": "Kentucky LIHEAP uses a liquid-resources test for the subsidy component; no separate age threshold was found for the senior pathway. The official page states $2,000 in liquid resources, or up to $4,000 with a catastrophic illness; this is the closest official value found for individual vs couple, but the state page does not explicitly separate individual and couple limits."
     },
     {
-      "programId": "ky-weatherization-assistance-program",
+      "programId": "weatherization-assistance-program",
       "programName": "Kentucky Weatherization Assistance Program",
       "facts": {
         "age": null,
-        "income_1": 2010,
-        "income_2": 2705,
+        "income_1": 2660,
+        "income_2": 3607,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
           "211",
           "8595816607",
-          "6064050019"
+          "8008174443"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 2550,
+        "income_2": 3458,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8006338896",
         "sources": {
           "age": null,
-          "income": "https://www.kyhousing.org/Partners/Developers/Single-Family/Weatherization-Assistance/Pages/WAP-Eligibility.aspx",
+          "income": "https://www.kyhousing.org/Programs/Weatherization",
           "assets": null,
-          "phone": "https://grantedai.com/grants/kentucky-weatherization-assistance-program-wap-kentucky-cabinet-for-health-and-family-s-94700654"
+          "phone": "https://www.kyhousing.org/Programs/Weatherization"
         },
-        "notes": "No specific income limits or age requirements found in sources; eligibility based on low-income guidelines referenced but not detailed on official KHC site. Priority for elderly. Phone from KHC contact."
+        "notes": "Weatherization Assistance in Kentucky uses an income guideline at or below 200% of the federal poverty level and a 15-year re-service rule; no age or asset test was found for the program. Monthly limits were derived from the 2026 200% FPL figures shown in the official KHC/related current materials and rounded to integers."
       },
       "flags": [
         {
@@ -272,15 +267,15 @@
           "draftValue": [
             "211",
             "8595816607",
-            "6064050019"
+            "8008174443"
           ],
           "verifiedValue": "8006338896"
         }
       ],
-      "notes": "No specific income limits or age requirements found in sources; eligibility based on low-income guidelines referenced but not detailed on official KHC site. Priority for elderly. Phone from KHC contact."
+      "notes": "Weatherization Assistance in Kentucky uses an income guideline at or below 200% of the federal poverty level and a 15-year re-service rule; no age or asset test was found for the program. Monthly limits were derived from the 2026 200% FPL figures shown in the official KHC/related current materials and rounded to integers."
     },
     {
-      "programId": "ky-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "Kentucky State Health Insurance Assistance Program (SHIP)",
       "facts": {
         "age": null,
@@ -306,15 +301,15 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/contacts/state-health-insurance-assistance-program-ship/general-beneficiary-contact/1562081"
+          "phone": "https://www.chfs.ky.gov/agencies/dail/Pages/ship.aspx"
         },
-        "notes": "No age, income, or asset limits apply; program serves Medicare beneficiaries (typically 65+ or disabled), families, and caregivers with no means test"
+        "notes": "Current Kentucky SHIP is a free Medicare counseling program; no separate age, income, or asset test was found for the senior pathway. Official statewide SHIP hotline is 877-293-7447."
       },
       "flags": [],
-      "notes": "No age, income, or asset limits apply; program serves Medicare beneficiaries (typically 65+ or disabled), families, and caregivers with no means test"
+      "notes": "Current Kentucky SHIP is a free Medicare counseling program; no separate age, income, or asset test was found for the senior pathway. Official statewide SHIP hotline is 877-293-7447."
     },
     {
-      "programId": "ky-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Kentucky Meals on Wheels",
       "facts": {
         "age": 60,
@@ -329,25 +324,41 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "9291411",
         "sources": {
-          "age": "https://chfs.ky.gov/agencies/dail/Pages/nutrition.aspx",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.mealsonwheels.ky/get-meals",
+          "income": "https://www.mealsonwheels.ky/get-meals",
+          "assets": "https://www.mealsonwheels.ky/get-meals",
+          "phone": "https://www.mealsonwheels.ky/get-meals"
         },
-        "notes": "Program is state-funded Nutrition Program for the Elderly (home-delivered/congregate meals); facing 2026 budget shortfalls with reduced funding, but operational as of 2026 per available data. No income/assets tests or phone found in sources."
+        "notes": "Current Kentucky Meals on Wheels site says age 65+ for home-delivered meals and no financial requirements."
       },
-      "flags": [],
-      "notes": "Program is state-funded Nutrition Program for the Elderly (home-delivered/congregate meals); facing 2026 budget shortfalls with reduced funding, but operational as of 2026 per available data. No income/assets tests or phone found in sources."
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 60,
+          "verifiedValue": 65
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8592831885",
+            "211"
+          ],
+          "verifiedValue": "9291411"
+        }
+      ],
+      "notes": "Current Kentucky Meals on Wheels site says age 65+ for home-delivered meals and no financial requirements."
     },
     {
-      "programId": "ky-national-family-caregiver-support",
+      "programId": "national-family-caregiver-support",
       "programName": "National Family Caregiver Support Program / Kentucky Family Caregiver Program",
       "facts": {
         "age": null,
@@ -363,25 +374,50 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
+        "age": null,
+        "income_1": 1505,
+        "income_2": 2043,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "5025646930",
         "sources": {
-          "age": "https://chfs.ky.gov/agencies/dail/Pages/caregiversupport.aspx",
-          "income": null,
+          "age": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx",
+          "income": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx",
           "assets": null,
-          "phone": null
+          "phone": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx"
         },
-        "notes": "No income or asset limits found for National Family Caregiver Support Program (senior pathway); income limits apply to separate Kentucky Family Caregiver Program (grandparent pathway)"
+        "notes": "Kentucky Family Caregiver Program is the senior/grandparent caregiver pathway, not a general senior-caregiver income-tested program; official source states 150% of federal poverty level and no asset test was found in current official guidance."
       },
-      "flags": [],
-      "notes": "No income or asset limits found for National Family Caregiver Support Program (senior pathway); income limits apply to separate Kentucky Family Caregiver Program (grandparent pathway)"
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2128,
+          "verifiedValue": 1505,
+          "pctDiff": 29.3
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2878,
+          "verifiedValue": 2043,
+          "pctDiff": 29
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211",
+            "5022665571",
+            "8592831885"
+          ],
+          "verifiedValue": "5025646930"
+        }
+      ],
+      "notes": "Kentucky Family Caregiver Program is the senior/grandparent caregiver pathway, not a general senior-caregiver income-tested program; official source states 150% of federal poverty level and no asset test was found in current official guidance."
     },
     {
-      "programId": "ky-senior-community-service-employment",
+      "programId": "senior-community-service-employment",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -399,60 +435,42 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
+        "income_1": 125,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8334397759",
+        "phone": "5025645759",
         "sources": {
-          "age": "https://chfs.ky.gov/agencies/dail/Pages/scsep.aspx",
-          "income": null,
+          "age": "https://www.chfs.ky.gov/agencies/dail/Pages/scsep.aspx",
+          "income": "https://apps.legislature.ky.gov/law/kar/titles/910/001/200/",
           "assets": null,
-          "phone": "https://goodwillky.org/scsep/"
+          "phone": "https://www.chfs.ky.gov/agencies/dail/Pages/scsep.aspx"
         },
-        "notes": "Program active in KY as of 2026 per state agency site; income limit at 125% poverty (no fixed $ amount specified); Goodwill phone for KY SCSEP"
+        "notes": "Current Kentucky SCSEP eligibility uses age 55+ and income at or below 125% of the federal poverty guidelines; no asset test found in the authoritative sources reviewed."
       },
-      "flags": [],
-      "notes": "Program active in KY as of 2026 per state agency site; income limit at 125% poverty (no fixed $ amount specified); Goodwill phone for KY SCSEP"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8334397759",
+            "6067896517",
+            "8595816607",
+            "2706861607"
+          ],
+          "verifiedValue": "5025645759"
+        }
+      ],
+      "notes": "Current Kentucky SCSEP eligibility uses age 55+ and income at or below 125% of the federal poverty guidelines; no asset test found in the authoritative sources reviewed."
     },
     {
-      "programId": "ky-legal-aid-seniors",
+      "programId": "legal-aid-seniors",
       "programName": "Kentucky Legal Aid for Seniors",
-      "facts": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "8007821924",
-          "2707821924",
-          "5025841254",
-          "8594318200",
-          "8662775733"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
-        "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": null
-        },
-        "notes": "No program named 'Kentucky Legal Aid for Seniors' found; general legal aid programs like Legal Aid of the Bluegrass (8594318200) and Kentucky Legal Aid (2707821924) serve low-income individuals including seniors but lack senior-specific age/income/assets thresholds in sources"
-      },
-      "flags": [],
-      "notes": "No program named 'Kentucky Legal Aid for Seniors' found; general legal aid programs like Legal Aid of the Bluegrass (8594318200) and Kentucky Legal Aid (2707821924) serve low-income individuals including seniors but lack senior-specific age/income/assets thresholds in sources"
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
     },
     {
-      "programId": "ky-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Kentucky Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -473,20 +491,31 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8003722991",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://chfs.ky.gov/agencies/dail/Pages/ltcomb.aspx"
+          "phone": "https://www.ag.ky.gov/AG%20Publications/Protect-Nursing-Home-Residents.pdf"
         },
-        "notes": "Program has no age, income, or asset eligibility requirements; services free for long-term care residents. No single statewide phone found; use county ombudsman listing on official site."
+        "notes": "No age, income, or asset eligibility test found; this is a statewide ombudsman assistance program, not a means-tested benefit. Official/state sources list the main hotline as 800-372-2991."
       },
-      "flags": [],
-      "notes": "Program has no age, income, or asset eligibility requirements; services free for long-term care residents. No single statewide phone found; use county ombudsman listing on official site."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8592779215",
+            "6068862374",
+            "8007372723"
+          ],
+          "verifiedValue": "8003722991"
+        }
+      ],
+      "notes": "No age, income, or asset eligibility test found; this is a statewide ombudsman assistance program, not a means-tested benefit. Official/state sources list the main hotline as 800-372-2991."
     },
     {
-      "programId": "ky-hcb-waiver",
+      "programId": "hcb-waiver",
       "programName": "Home and Community Based (HCB) Waiver",
       "facts": {
         "age": 65,
@@ -495,32 +524,32 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8773150589",
           "8553068959",
-          "211"
+          "8773150589",
+          "8779250037"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 65,
-        "income_1": 2982,
+        "income_1": null,
         "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": 2000,
+        "assets_individual": null,
+        "assets_couple": null,
         "phone": "8773150589",
         "sources": {
-          "age": "https://www.medicaidplanningassistance.org/kentucky-home-community-waiver/",
-          "income": "https://www.medicaidplanningassistance.org/kentucky-home-community-waiver/",
-          "assets": "https://www.medicaidplanningassistance.org/kentucky-home-community-waiver/",
-          "phone": "https://chfs.ky.gov/agencies/dms/dca/pages/hcb-waiver.aspx"
+          "age": "https://www.chfs.ky.gov/agencies/dms/dca/Pages/hcb-waiver.aspx",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.chfs.ky.gov/agencies/dms/dca/Pages/hcb-waiver.aspx"
         },
-        "notes": "Age 65+ is the senior-specific threshold for HCB Waiver eligibility; program also serves disabled adults up to age 64. Income limit of $2,982/month (2026) applies to applicants regardless of marital status. For married couples with both spouses as applicants, each spouse can retain $2,000 in assets individually. Phone number (877) 315-0589 is for HCB program information from Department for Aging and Independent Living (DAIL); alternative application line is (855) 306-8959 for initial Medicaid eligibility through DCBS."
+        "notes": "Current Kentucky HCB Waiver page says age 65+ and/or physical disability; no income or asset limits were found on the retrieved official source pages."
       },
       "flags": [],
-      "notes": "Age 65+ is the senior-specific threshold for HCB Waiver eligibility; program also serves disabled adults up to age 64. Income limit of $2,982/month (2026) applies to applicants regardless of marital status. For married couples with both spouses as applicants, each spouse can retain $2,000 in assets individually. Phone number (877) 315-0589 is for HCB program information from Department for Aging and Independent Living (DAIL); alternative application line is (855) 306-8959 for initial Medicaid eligibility through DCBS."
+      "notes": "Current Kentucky HCB Waiver page says age 65+ and/or physical disability; no income or asset limits were found on the retrieved official source pages."
     },
     {
-      "programId": "ky-money-follows-person",
+      "programId": "money-follows-person",
       "programName": "Money Follows the Person (Kentucky Transitions)",
       "facts": {
         "age": null,
@@ -529,6 +558,7 @@
         "assets_individual": 2000,
         "assets_couple": null,
         "phones": [
+          "8775640330",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -539,30 +569,21 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5025640330",
+        "phone": "8775640330",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://www.medicaid.gov/medicaid/long-term-services-supports/money-follows-person/mfp-recipient-contact-information"
+          "age": "https://www.chfs.ky.gov/agencies/dms/dca/Pages/kytransitions.aspx",
+          "income": "https://www.chfs.ky.gov/agencies/dms/dca/Pages/kytransitions.aspx",
+          "assets": "https://www.chfs.ky.gov/agencies/dms/dca/Pages/kytransitions.aspx",
+          "phone": "https://www.chfs.ky.gov/agencies/dms/dca/Pages/kytransitions.aspx"
         },
-        "notes": "Program active as of 2026 per grant dates to 6/30/26 and federal extension to 2031; eligibility tied to Medicaid LTSS (institutional level of care) with no specific asset/income limits found in official sources for KY Transitions MFP"
+        "notes": "Current official page lists Kentucky Transitions eligibility pathway but does not publish a separate countable asset limit or income limits for the program; phone number confirmed on official state page."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "211"
-          ],
-          "verifiedValue": "5025640330"
-        }
-      ],
-      "notes": "Program active as of 2026 per grant dates to 6/30/26 and federal extension to 2031; eligibility tied to Medicaid LTSS (institutional level of care) with no specific asset/income limits found in official sources for KY Transitions MFP"
+      "flags": [],
+      "notes": "Current official page lists Kentucky Transitions eligibility pathway but does not publish a separate countable asset limit or income limits for the program; phone number confirmed on official state page."
     },
     {
-      "programId": "ky-senior-meals-program",
-      "programName": "State-Funded Senior Meals Program",
+      "programId": "senior-meals-program",
+      "programName": "Nutrition Program for the Elderly",
       "facts": {
         "age": 60,
         "income_1": null,
@@ -571,6 +592,7 @@
         "assets_couple": null,
         "phones": [
           "8779250037",
+          "6069291366",
           "6067396349",
           "6064744179",
           "6064736244"
@@ -583,14 +605,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5025665571",
+        "phone": "5025646930",
         "sources": {
-          "age": "https://chfs.ky.gov/agencies/dail/Pages/nutrition.aspx",
+          "age": "https://www.chfs.ky.gov/agencies/dail/Pages/nutrition.aspx",
           "income": null,
           "assets": null,
-          "phone": "https://www.kipda.org/overview/senior-nutrition-program/"
+          "phone": "https://www.chfs.ky.gov/agencies/dail/Pages/default.aspx"
         },
-        "notes": "Kentucky operates the Nutrition Program for the Elderly statewide through Area Agencies on Aging and Independent Living. No income or asset limits found in official sources. Phone number is for KIPDA home-delivered meal referrals; congregate meal access varies by county with separate contact numbers. Some areas have waiting lists."
+        "notes": "Current Kentucky Nutrition Program for the Elderly eligibility is age 60+ for seniors; no income or asset test found in the official sources reviewed."
       },
       "flags": [
         {
@@ -598,14 +620,15 @@
           "severity": "medium",
           "draftValue": [
             "8779250037",
+            "6069291366",
             "6067396349",
             "6064744179",
             "6064736244"
           ],
-          "verifiedValue": "5025665571"
+          "verifiedValue": "5025646930"
         }
       ],
-      "notes": "Kentucky operates the Nutrition Program for the Elderly statewide through Area Agencies on Aging and Independent Living. No income or asset limits found in official sources. Phone number is for KIPDA home-delivered meal referrals; congregate meal access varies by county with separate contact numbers. Some areas have waiting lists."
+      "notes": "Current Kentucky Nutrition Program for the Elderly eligibility is age 60+ for seniors; no income or asset test found in the official sources reviewed."
     }
   ]
 }

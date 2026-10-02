@@ -1,25 +1,26 @@
 {
   "state": "AR",
   "stateName": "Arkansas",
-  "checkedAt": "2026-04-14T09:58:47.883Z",
+  "checkedAt": "2026-10-02T07:33:22.568Z",
   "total": 12,
   "skipped": 1,
   "parseErrors": 0,
   "errors": 0,
   "programsWithFlags": 6,
   "totalFlags": 12,
-  "highSeverityFlags": 4,
+  "highSeverityFlags": 2,
   "programs": [
     {
-      "programId": "ar-choices-homecare",
+      "programId": "choices-homecare",
       "programName": "ARChoices in Homecare",
       "facts": {
         "age": 65,
-        "income_1": null,
+        "income_1": 2982,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
         "phones": [
+          "18668013435",
           "8553721084",
           "211"
         ],
@@ -27,34 +28,24 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "income_1": 2982,
+        "income_2": 2982,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
         "phone": "8668013435",
         "sources": {
           "age": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/archoices-in-homecare/",
-          "income": null,
-          "assets": null,
+          "income": "https://humanservices.arkansas.gov/wp-content/uploads/PUB-125_LTSS_Information.pdf",
+          "assets": "https://humanservices.arkansas.gov/wp-content/uploads/PUB-125_LTSS_Information.pdf",
           "phone": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/archoices-in-homecare/"
         },
-        "notes": "No specific income or asset limits found in available sources; financial criteria mentioned but not detailed. Waiver active through June 2026."
+        "notes": "Current Arkansas DHS materials show ARChoices is active; senior pathway age is 65+, income/resource limits are Medicaid LTSS limits, and current official page lists a phone contact for help."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8553721084",
-            "211"
-          ],
-          "verifiedValue": "8668013435"
-        }
-      ],
-      "notes": "No specific income or asset limits found in available sources; financial criteria mentioned but not detailed. Waiver active through June 2026."
+      "flags": [],
+      "notes": "Current Arkansas DHS materials show ARChoices is active; senior pathway age is 65+, income/resource limits are Medicaid LTSS limits, and current official page lists a phone contact for help."
     },
     {
-      "programId": "ar-pace-comprehensive-care",
+      "programId": "pace-comprehensive-care",
       "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
       "facts": {
         "age": 55,
@@ -73,22 +64,33 @@
         "age": 55,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "18668013435",
         "sources": {
           "age": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/pace-program-of-all-inclusive-care-for-the-elderly/",
           "income": null,
-          "assets": null,
-          "phone": null
+          "assets": "https://law.cornell.edu/regulations/arkansas/016-20-06-Ark-Code-R-002",
+          "phone": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/pace-program-of-all-inclusive-care-for-the-elderly/"
         },
-        "notes": "No asset or income limits found in sources; PACE eligibility determined by state using nursing facility criteria (medical + non-medical), with private pay option if non-medical not met"
+        "notes": "PACE is current in Arkansas for seniors age 55+; no separate income limit found in the current state PACE page, but Medicaid resource limits of $2,000 individual / $3,000 couple appear in Arkansas rules."
       },
-      "flags": [],
-      "notes": "No asset or income limits found in sources; PACE eligibility determined by state using nursing facility criteria (medical + non-medical), with private pay option if non-medical not met"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "4794636600",
+            "8702077500",
+            "8002522412"
+          ],
+          "verifiedValue": "18668013435"
+        }
+      ],
+      "notes": "PACE is current in Arkansas for seniors age 55+; no separate income limit found in the current state PACE page, but Medicaid resource limits of $2,000 individual / $3,000 couple appear in Arkansas rules."
     },
     {
-      "programId": "ar-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
         "age": 65,
@@ -103,58 +105,66 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 1084,
-        "income_2": 1457,
-        "assets_individual": 7860,
-        "assets_couple": 11800,
-        "phone": null,
+        "income_1": 1330,
+        "income_2": 1803,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8553721084",
         "sources": {
-          "age": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "income": "https://search.arkansas211.org/search/0714330c-8e86-5554-bff3-c23a140be949",
-          "assets": "https://search.arkansas211.org/search/0714330c-8e86-5554-bff3-c23a140be949",
-          "phone": null
+          "age": "https://insurance.arkansas.gov/site/assets/files/2314/medi_sav_prog2025_brochures_lc_2.pdf",
+          "income": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "assets": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "phone": "https://search.arkansas211.org/search/0714330c-8e86-5554-bff3-c23a140be949"
         },
-        "notes": "Arkansas-specific limits from 211.org (state-linked); federal limits higher. No 2026 AR update found; values appear prior-year. Medicare eligibility requires age 65+ for seniors."
+        "notes": "Arkansas Medicare Savings Programs are current for 2025-03-31 to 2026-03-31; QMB/SLMB/QI are senior-pathway Medicare Savings Programs with the standard 65+ Medicare age threshold and current MSP resource limits."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "medium",
           "draftValue": 1235,
-          "verifiedValue": 1084,
-          "pctDiff": 12.2
+          "verifiedValue": 1330,
+          "pctDiff": 7.1
         },
         {
           "field": "income_2",
           "severity": "medium",
           "draftValue": 1663,
-          "verifiedValue": 1457,
-          "pctDiff": 12.4
+          "verifiedValue": 1803,
+          "pctDiff": 7.8
         },
         {
           "field": "assets_individual",
           "severity": "medium",
           "draftValue": 9090,
-          "verifiedValue": 7860,
-          "pctDiff": 13.5
+          "verifiedValue": 9950,
+          "pctDiff": 8.6
         },
         {
           "field": "assets_couple",
           "severity": "medium",
           "draftValue": 13630,
-          "verifiedValue": 11800,
-          "pctDiff": 13.4
+          "verifiedValue": 14910,
+          "pctDiff": 8.6
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8004828988"
+          ],
+          "verifiedValue": "8553721084"
         }
       ],
-      "notes": "Arkansas-specific limits from 211.org (state-linked); federal limits higher. No 2026 AR update found; values appear prior-year. Medicare eligibility requires age 65+ for seniors."
+      "notes": "Arkansas Medicare Savings Programs are current for 2025-03-31 to 2026-03-31; QMB/SLMB/QI are senior-pathway Medicare Savings Programs with the standard 65+ Medicare age threshold and current MSP resource limits."
     },
     {
-      "programId": "ar-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Supplemental Nutrition Assistance Program)",
       "facts": {
         "age": 60,
-        "income_1": 1305,
-        "income_2": 1763,
+        "income_1": 1330,
+        "income_2": 1804,
         "assets_individual": 4500,
         "assets_couple": 4500,
         "phones": [
@@ -165,25 +175,36 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 1305,
-        "income_2": 1763,
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": 4500,
         "assets_couple": 4500,
-        "phone": null,
+        "phone": "18553721084",
         "sources": {
-          "age": null,
+          "age": "https://humanservices.arkansas.gov/wp-content/uploads/Quick-Reference-SNAP-Eligibility-Chart-FY2026.pdf",
           "income": "https://humanservices.arkansas.gov/wp-content/uploads/Quick-Reference-SNAP-Eligibility-Chart-FY2026.pdf",
           "assets": "https://humanservices.arkansas.gov/wp-content/uploads/Quick-Reference-SNAP-Eligibility-Chart-FY2026.pdf",
-          "phone": null
+          "phone": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/contact-dco/"
         },
-        "notes": "Income limits are net monthly for FY2026 (Oct 2025-Sep 2026); assets apply to households with elderly (60+) or disabled members. No senior-specific age minimum beyond general rules; phone not found in results."
+        "notes": "Arkansas SNAP uses a senior/disabled pathway for households with at least one member age 60+ or disabled; the current posted resource limit for that pathway is $4,500, with a temporary broad-based categorical eligibility amount of $5,500 for 12 months mentioned separately. The official chart does not provide household-1 or household-2 monthly income limits for the senior pathway, so those are null here."
       },
-      "flags": [],
-      "notes": "Income limits are net monthly for FY2026 (Oct 2025-Sep 2026); assets apply to households with elderly (60+) or disabled members. No senior-specific age minimum beyond general rules; phone not found in results."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18004828988",
+            "211",
+            "18009979999"
+          ],
+          "verifiedValue": "18553721084"
+        }
+      ],
+      "notes": "Arkansas SNAP uses a senior/disabled pathway for households with at least one member age 60+ or disabled; the current posted resource limit for that pathway is $4,500, with a temporary broad-based categorical eligibility amount of $5,500 for 12 months mentioned separately. The official chart does not provide household-1 or household-2 monthly income limits for the senior pathway, so those are null here."
     },
     {
-      "programId": "ar-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "LIHEAP (Low-Income Home Energy Assistance Program)",
       "facts": {
         "age": null,
@@ -192,101 +213,108 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "211",
-          "5016820744"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": null,
-        "income_1": 1194,
-        "income_2": 1251,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
-        "sources": {
-          "age": null,
-          "income": "https://www.adeq.state.ar.us/energy/assistance/pdfs/LIHEAP_Brochure_2026.pdf",
-          "assets": null,
-          "phone": null
-        },
-        "notes": "Income from official 2026 brochure (annual $14,331/12=1194 for 1; $15,019/12=1251 for 2); SNAP Screener shows higher figures $2347/$3069 likely outdated. No phone or assets found. No age requirement."
-      },
-      "flags": [
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 2251,
-          "verifiedValue": 1194,
-          "pctDiff": 47
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 2944,
-          "verifiedValue": 1251,
-          "pctDiff": 57.5
-        }
-      ],
-      "notes": "Income from official 2026 brochure (annual $14,331/12=1194 for 1; $15,019/12=1251 for 2); SNAP Screener shows higher figures $2347/$3069 likely outdated. No phone or assets found. No age requirement."
-    },
-    {
-      "programId": "ar-weatherization-assistance-program",
-      "programName": "Weatherization Assistance Program (WAP)",
-      "facts": {
-        "age": null,
-        "income_1": 1980,
-        "income_2": 2670,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
+          "8882330326",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": 1667,
-        "income_2": 2250,
+        "income_1": 2347,
+        "income_2": 3070,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "5013791537",
+        "phone": "8004828988",
         "sources": {
           "age": null,
-          "income": "https://www.adeq.state.ar.us/energy/pdfs/Weatherization%20State%20Plan%202025-26%20%20%20_April%2018%202025.pdf",
+          "income": "https://www.adeq.state.ar.us/energy/assistance/pdfs/LIHEAP_Brochure_2026.pdf",
           "assets": null,
-          "phone": "https://bcdinc.org/weatherization-assistance/"
+          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
         },
-        "notes": "Income limit derived from official state plan stating eligibility up to 200% of federal poverty level. Using 2025 federal poverty guidelines (200% of $1,000/month for individual = $2,000/month; 200% of $1,350/month for couple = $2,700/month), rounded to nearest integer. Phone number is for James Whitaker, Weatherization Program Manager at Better Community Development, Inc., a primary service provider. No age restriction found in official sources. No asset limits specified in available documentation. Program is current and operational for PY 2025-26 (July 1, 2025 – June 30, 2026)."
+        "notes": "Arkansas LIHEAP uses a monthly income test; no separate age or asset test was found in the official materials reviewed. Income values are from the 2026 Arkansas LIHEAP brochure; phone is the state public inquiries number listed by ACF."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8882330326",
+            "211"
+          ],
+          "verifiedValue": "8004828988"
+        }
+      ],
+      "notes": "Arkansas LIHEAP uses a monthly income test; no separate age or asset test was found in the official materials reviewed. Income values are from the 2026 Arkansas LIHEAP brochure; phone is the state public inquiries number listed by ACF."
+    },
+    {
+      "programId": "weatherization-assistance-program",
+      "programName": "Weatherization Assistance Program (WAP)",
+      "facts": {
+        "age": null,
+        "income_1": 2608,
+        "income_2": 3525,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8882330326",
+          "5013791535",
+          "8702021347",
+          "5017768446",
+          "4797852303",
+          "8703335127",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": 1280,
+        "income_2": 1820,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "5016827390",
+        "sources": {
+          "age": "https://adeq.state.ar.us/energy/pdfs/state-plan-august-29-2024.pdf",
+          "income": "https://adeq.state.ar.us/energy/assistance/wap.aspx",
+          "assets": null,
+          "phone": "https://adeq.state.ar.us/energy/pdfs/state-plan-august-29-2024.pdf"
+        },
+        "notes": "Arkansas WAP uses 200% of federal poverty guidelines and gives priority to households with at least one member age 60+; no asset test found in authoritative sources."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
-          "draftValue": 1980,
-          "verifiedValue": 1667,
-          "pctDiff": 15.8
+          "draftValue": 2608,
+          "verifiedValue": 1280,
+          "pctDiff": 50.9
         },
         {
           "field": "income_2",
           "severity": "high",
-          "draftValue": 2670,
-          "verifiedValue": 2250,
-          "pctDiff": 15.7
+          "draftValue": 3525,
+          "verifiedValue": 1820,
+          "pctDiff": 48.4
         },
         {
           "field": "phone",
           "severity": "medium",
           "draftValue": [
+            "8882330326",
+            "5013791535",
+            "8702021347",
+            "5017768446",
+            "4797852303",
+            "8703335127",
             "211"
           ],
-          "verifiedValue": "5013791537"
+          "verifiedValue": "5016827390"
         }
       ],
-      "notes": "Income limit derived from official state plan stating eligibility up to 200% of federal poverty level. Using 2025 federal poverty guidelines (200% of $1,000/month for individual = $2,000/month; 200% of $1,350/month for couple = $2,700/month), rounded to nearest integer. Phone number is for James Whitaker, Weatherization Program Manager at Better Community Development, Inc., a primary service provider. No age restriction found in official sources. No asset limits specified in available documentation. Program is current and operational for PY 2025-26 (July 1, 2025 – June 30, 2026)."
+      "notes": "Arkansas WAP uses 200% of federal poverty guidelines and gives priority to households with at least one member age 60+; no asset test found in authoritative sources."
     },
     {
-      "programId": "ar-senior-medicare-patrol-ship",
+      "programId": "senior-medicare-patrol-ship",
       "programName": "Senior Medicare Patrol (SMP) / SHIP",
       "facts": {
         "age": null,
@@ -314,13 +342,13 @@
           "assets": null,
           "phone": "https://insurance.arkansas.gov/consumer-assistance/senior-medicare-patrol-smp/"
         },
-        "notes": "SMP is an outreach and education program with no eligibility requirements (age, income, or asset limits). It serves Medicare beneficiaries, families, and caregivers through volunteer-led fraud prevention education. SHIP (State Health Insurance Program) is a separate counseling program; contact number for SHIP is 1-800-224-6330. Phone number provided is for SMP services in Arkansas."
+        "notes": "No age, income, or asset test found for Arkansas Senior Medicare Patrol; phone confirmed from current Arkansas Insurance Department source."
       },
       "flags": [],
-      "notes": "SMP is an outreach and education program with no eligibility requirements (age, income, or asset limits). It serves Medicare beneficiaries, families, and caregivers through volunteer-led fraud prevention education. SHIP (State Health Insurance Program) is a separate counseling program; contact number for SHIP is 1-800-224-6330. Phone number provided is for SMP services in Arkansas."
+      "notes": "No age, income, or asset test found for Arkansas Senior Medicare Patrol; phone confirmed from current Arkansas Insurance Department source."
     },
     {
-      "programId": "ar-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Meals on Wheels",
       "facts": {
         "age": 60,
@@ -340,14 +368,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8662927165",
+        "phone": "8004826359",
         "sources": {
           "age": "https://agingarkansas.org/services/meals-on-wheels/",
-          "income": "https://www.carelink.org/who-qualifies-for-meals-on-wheels-in-arkansas/",
+          "income": null,
           "assets": null,
-          "phone": "https://agingarkansas.org/how-to-get-meals-on-wheels-in-arkansas/"
+          "phone": "https://search.arkansas211.org/search/2157d3ff-8296-5962-b65f-a3cbc7f1eea2"
         },
-        "notes": "Program administered locally via Area Agencies on Aging; no statewide income or asset limits found; age consistently 60+ for seniors across sources"
+        "notes": "Arkansas Meals on Wheels is locally administered through Area Agencies on Aging; current statewide guidance shows a senior threshold of 60+ and the main toll-free contact is 800-482-6359."
       },
       "flags": [
         {
@@ -357,13 +385,13 @@
             "5016822441",
             "211"
           ],
-          "verifiedValue": "8662927165"
+          "verifiedValue": "8004826359"
         }
       ],
-      "notes": "Program administered locally via Area Agencies on Aging; no statewide income or asset limits found; age consistently 60+ for seniors across sources"
+      "notes": "Arkansas Meals on Wheels is locally administered through Area Agencies on Aging; current statewide guidance shows a senior threshold of 60+ and the main toll-free contact is 800-482-6359."
     },
     {
-      "programId": "ar-family-caregiver-support",
+      "programId": "family-caregiver-support",
       "programName": "Family Caregiver Support Program",
       "facts": {
         "age": 60,
@@ -380,20 +408,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8552603274",
         "sources": {
           "age": "https://agingarkansas.org/services/family-caregiver-support/",
           "income": "https://agingarkansas.org/services/family-caregiver-support/",
           "assets": "https://agingarkansas.org/services/family-caregiver-support/",
-          "phone": null
+          "phone": "https://humanservices.arkansas.gov/divisions-shared-services/medical-services/healthcare-programs/alzheimers-dementia-brain-health-in-arkansas/dementia-resources/"
         },
-        "notes": "No official .gov source found; agingarkansas.org cites Area Agency on Aging. Cannot access codeofarrules.arkansas.gov rule details. No phone number in results."
+        "notes": "Current Arkansas family caregiver support/grant materials indicate a 60+ care-recipient threshold, with no income or asset test stated for the senior pathway; dementia cases may have no age limit."
       },
       "flags": [],
-      "notes": "No official .gov source found; agingarkansas.org cites Area Agency on Aging. Cannot access codeofarrules.arkansas.gov rule details. No phone number in results."
+      "notes": "Current Arkansas family caregiver support/grant materials indicate a 60+ care-recipient threshold, with no income or asset test stated for the senior pathway; dementia cases may have no age limit."
     },
     {
-      "programId": "ar-scsep-employment-program",
+      "programId": "scsep-employment-program",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -419,13 +447,13 @@
           "assets": null,
           "phone": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/senior-community-service-employment-program/"
         },
-        "notes": "Income eligibility is household at or below 125% HHS Poverty Guidelines per state plan 2024-2027; no specific dollar values or assets test found. Program active as of 2026 per state sources."
+        "notes": "SCSEP is an ongoing federal/state program in Arkansas; current Arkansas page states age 55+ and lists the main contact phone."
       },
       "flags": [],
-      "notes": "Income eligibility is household at or below 125% HHS Poverty Guidelines per state plan 2024-2027; no specific dollar values or assets test found. Program active as of 2026 per state sources."
+      "notes": "SCSEP is an ongoing federal/state program in Arkansas; current Arkansas page states age 55+ and lists the main contact phone."
     },
     {
-      "programId": "ar-legal-aid-seniors-multiple",
+      "programId": "legal-aid-seniors-multiple",
       "programName": "Legal Aid for Seniors in Arkansas (Multiple Programs)",
       "facts": {
         "age": null,
@@ -447,32 +475,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8009992853",
+        "phone": "8009529243",
         "sources": {
-          "age": "https://agingarkansas.org/4-things-you-need-to-know-about-legal-aid-for-the-elderly-in-arkansas/",
-          "income": null,
-          "assets": null,
-          "phone": "https://www.probono.net/oppsguide/organization.135313-Arkansas_Volunteer_Lawyers_for_the_Elderly"
+          "age": "https://www.hud.gov/states/arkansas",
+          "income": "https://www.hud.gov/states/arkansas",
+          "assets": "https://www.hud.gov/states/arkansas",
+          "phone": "https://arlegalaid.org/contact-us/apply-for-legal-aid.html"
         },
-        "notes": "Phone from AVLE, a key senior legal aid program; general Legal Aid of Arkansas has income eligibility at 125% FPG but no senior-specific thresholds found; no assets or precise income numbers for seniors"
+        "notes": "Senior pathway appears to be age 60+; no current income or asset test found in accessible authoritative sources for this senior legal aid pathway."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "18009529243",
-            "8002343544",
-            "5013763423",
-            "18703389834"
-          ],
-          "verifiedValue": "8009992853"
-        }
-      ],
-      "notes": "Phone from AVLE, a key senior legal aid program; general Legal Aid of Arkansas has income eligibility at 125% FPG but no senior-specific thresholds found; no assets or precise income numbers for seniors"
+      "flags": [],
+      "notes": "Senior pathway appears to be age 60+; no current income or asset test found in accessible authoritative sources for this senior legal aid pathway."
     },
     {
-      "programId": "ar-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Arkansas Long-Term Care Ombudsman Program",
       "skipped": true,
       "reason": "no verifiable facts",

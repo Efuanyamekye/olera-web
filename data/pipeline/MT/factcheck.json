@@ -1,17 +1,17 @@
 {
   "state": "MT",
   "stateName": "Montana",
-  "checkedAt": "2026-04-14T10:04:51.845Z",
+  "checkedAt": "2026-10-02T07:40:44.261Z",
   "total": 14,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 0,
-  "programsWithFlags": 5,
-  "totalFlags": 7,
-  "highSeverityFlags": 2,
+  "errors": 2,
+  "programsWithFlags": 8,
+  "totalFlags": 11,
+  "highSeverityFlags": 3,
   "programs": [
     {
-      "programId": "mt-big-sky-waiver-program",
+      "programId": "big-sky-waiver-program",
       "programName": "Big Sky Waiver Program",
       "facts": {
         "age": null,
@@ -27,44 +27,43 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": 2000,
-        "phone": "8887061535",
-        "sources": {
-          "age": null,
-          "income": null,
-          "assets": "https://www.medicaidplanningassistance.org/montana-big-sky-waiver/",
-          "phone": "https://www.medicaidplanningassistance.org/montana-big-sky-waiver/"
-        },
-        "notes": "No official .gov source found for 2026 asset limits; value from nonprofit citing Medicaid standards. Program active per dphhs.mt.gov as of 2025 amendment."
-      },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8002197035",
-            "4064434020",
-            "211"
-          ],
-          "verifiedValue": "8887061535"
-        }
-      ],
-      "notes": "No official .gov source found for 2026 asset limits; value from nonprofit citing Medicaid standards. Program active per dphhs.mt.gov as of 2025 amendment."
-    },
-    {
-      "programId": "mt-cfcs-personal-care-services",
-      "programName": "Community First Choice Services (CFCS) / Personal Care Services (PCS)",
-      "facts": {
         "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 3000,
+        "phone": "8002197035",
+        "sources": {
+          "age": "https://dphhs.mt.gov/SLTC/csb/BSW/BigSkyWaiverProgram",
+          "income": null,
+          "assets": "https://www.medicaidplanningassistance.org/montana-big-sky-waiver/",
+          "phone": "https://dphhs.mt.gov/SLTC/csb/BSW/BigSkyWaiverProgram"
+        },
+        "notes": "Current Montana Big Sky Waiver program appears active; official state page confirms referral phone and senior/disabled pathway, while asset limits were corroborated by a current secondary source citing the Medicaid rules."
+      },
+      "flags": [
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 2000,
+          "verifiedValue": 3000,
+          "pctDiff": 33.3
+        }
+      ],
+      "notes": "Current Montana Big Sky Waiver program appears active; official state page confirms referral phone and senior/disabled pathway, while asset limits were corroborated by a current secondary source citing the Medicaid rules."
+    },
+    {
+      "programId": "cfcs-personal-care-services",
+      "programName": "Community First Choice Services (CFCS) / Personal Care Services (PCS)",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
         "phones": [
+          "8887061535",
+          "8002197035",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -73,31 +72,22 @@
         "age": null,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
         "phone": "8887061535",
         "sources": {
           "age": null,
           "income": null,
-          "assets": null,
-          "phone": "https://www.medicaidplanningassistance.org/montana-community-first-choice/"
+          "assets": "https://www.medicaidplanningassistance.org/montana-community-first-choice/amp/",
+          "phone": "https://dphhs.mt.gov/assets/sltc/CommunityFirst/CFCSelfDirect/AccessingCommunityFirstChoiceServices.pdf"
         },
-        "notes": "Program renamed to CFCS/PCS with full implementation by end of 2025; eligibility tied to Montana Medicaid (no specific age/assets tests found for seniors); no authoritative financial limits located in sources"
+        "notes": "CFCS/PCS is a Medicaid-based program; I could verify current asset limits and the Montana Public Assistance Helpline phone, but I could not retrieve an authoritative current age or income limit specific to the senior pathway from the available sources."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "211"
-          ],
-          "verifiedValue": "8887061535"
-        }
-      ],
-      "notes": "Program renamed to CFCS/PCS with full implementation by end of 2025; eligibility tied to Montana Medicaid (no specific age/assets tests found for seniors); no authoritative financial limits located in sources"
+      "flags": [],
+      "notes": "CFCS/PCS is a Medicaid-based program; I could verify current asset limits and the Montana Public Assistance Helpline phone, but I could not retrieve an authoritative current age or income limit specific to the senior pathway from the available sources."
     },
     {
-      "programId": "mt-pace-comprehensive-care",
+      "programId": "pace-comprehensive-care",
       "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
       "facts": {
         "age": 55,
@@ -113,25 +103,25 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 55,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8006334227",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.medicare.gov/health-drug-plans/health-plans/your-coverage-options/other-medicare-health-plans/PACE",
+          "income": "https://www.npaonline.org/eligibility-requirements",
+          "assets": "https://www.npaonline.org/eligibility-requirements",
+          "phone": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly"
         },
-        "notes": "No PACE program for elderly in Montana as of 2026; search results show only C-PACE (commercial property financing). Confirmed absent in official NPA list."
+        "notes": "Montana has no PACE program of its own in 2026; PACE eligibility is age 55+ with no financial eligibility test, and the main federal help line is 1-800-MEDICARE."
       },
       "flags": [],
-      "notes": "No PACE program for elderly in Montana as of 2026; search results show only C-PACE (commercial property financing). Confirmed absent in official NPA list."
+      "notes": "Montana has no PACE program of its own in 2026; PACE eligibility is age 55+ with no financial eligibility test, and the main federal help line is 1-800-MEDICARE."
     },
     {
-      "programId": "mt-medicaid-abd",
+      "programId": "medicaid-abd",
       "programName": "Medicaid for the Aged, Blind, and Disabled (ABD)",
       "facts": {
         "age": 65,
@@ -140,30 +130,41 @@
         "assets_individual": 2000,
         "assets_couple": 3000,
         "phones": [
+          "8887061535",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 65,
-        "income_1": 994,
-        "income_2": 1491,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": null,
+        "phone": "8003628312",
         "sources": {
-          "age": "https://www.medicareresources.org/glossary/medicaid-for-the-aged-blind-and-disabled/",
-          "income": "https://www.medicaidplanningassistance.org/medicaid-eligibility-montana/",
-          "assets": "https://www.medicaidplanningassistance.org/medicaid-eligibility-montana/",
-          "phone": null
+          "age": "https://dphhs.mt.gov/assets/2025Legislature/MedicaidinMontana-PP.pdf",
+          "income": null,
+          "assets": "https://dphhs.mt.gov/assets/2025Legislature/MedicaidinMontana-PP.pdf",
+          "phone": "https://dphhs.mt.gov/assets/hrd/MedicaidMemberGuide.pdf"
         },
-        "notes": "No official .gov source found with exact 2026 ABD limits; values from non-gov sites citing SSI-related standards. No phone located."
+        "notes": "Montana ABD Medicaid is current and appears to retain SSI-style financial standards; authoritative current income-limit figures were not clearly retrievable from the available official sources, so income values are left null."
       },
-      "flags": [],
-      "notes": "No official .gov source found with exact 2026 ABD limits; values from non-gov sites citing SSI-related standards. No phone located."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8887061535",
+            "211"
+          ],
+          "verifiedValue": "8003628312"
+        }
+      ],
+      "notes": "Montana ABD Medicaid is current and appears to retain SSI-style financial standards; authoritative current income-limit figures were not clearly retrievable from the available official sources, so income values are left null."
     },
     {
-      "programId": "mt-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Qualified Medicare Beneficiary (QMB), Specified Low-Income Medicare Beneficiary (SLMB), Qualifying Individual (QI)",
       "facts": {
         "age": null,
@@ -178,24 +179,33 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1305,
-        "income_2": 1763,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
+        "income_1": 1350,
+        "income_2": 1824,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8887061535",
         "sources": {
           "age": null,
-          "income": "https://dphhs.mt.gov/assets/hcsd/mamanual/ABD009.pdf",
-          "assets": null,
-          "phone": null
+          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "assets": "https://www.dphhs.mt.gov/assets/hcsd/fmamanual/CMA001.pdf",
+          "phone": "https://www.dphhs.mt.gov/assets/hcsd/fmamanual/CMA001.pdf"
         },
-        "notes": "Income limits effective April 1, 2025 from MT DPHHS (QMB); no 2026 MT-specific limits or asset limits found in results; federal MSP asset limits typically $9,660/$14,470 but states may differ or eliminate"
+        "notes": "Montana Medicare Savings Programs (QMB, SLMB, QI) are current for 2026; no age minimum is published because eligibility is Medicare-based rather than age-tested."
       },
-      "flags": [],
-      "notes": "Income limits effective April 1, 2025 from MT DPHHS (QMB); no 2026 MT-specific limits or asset limits found in results; federal MSP asset limits typically $9,660/$14,470 but states may differ or eliminate"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18003621504"
+          ],
+          "verifiedValue": "8887061535"
+        }
+      ],
+      "notes": "Montana Medicare Savings Programs (QMB, SLMB, QI) are current for 2026; no age minimum is published because eligibility is Medicare-based rather than age-tested."
     },
     {
-      "programId": "mt-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Food Stamps)",
       "facts": {
         "age": 60,
@@ -211,34 +221,34 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 1927,
-        "income_2": 2596,
-        "assets_individual": null,
-        "assets_couple": null,
+        "age": 60,
+        "income_1": 1696,
+        "income_2": 2292,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
         "phone": "8887061535",
         "sources": {
-          "age": null,
-          "income": "https://dphhs.mt.gov/HCSD/SNAP",
-          "assets": null,
-          "phone": "https://dphhs.mt.gov/HCSD/SNAP"
+          "age": "https://dphhs.mt.gov/hcsd/SNAP/",
+          "income": "https://dphhs.mt.gov/hcsd/SNAP/",
+          "assets": "https://dphhs.mt.gov/hcsd/SNAP/",
+          "phone": "https://www.fna.usda.gov/snap-directory-entry/montana"
         },
-        "notes": "SNAP has no age-specific eligibility threshold for seniors; it serves all low-income households regardless of age. Asset limits not found in provided official sources. Income limits derived from October 2025 update (effective through September 2026): 1 person gross limit $1,927/month, 2 people $2,596/month, based on 130% Federal Poverty Level standard referenced in search results. Phone number is Montana Public Assistance Helpline from official state DPHHS source."
+        "notes": "SNAP in Montana is active and current for Oct 1, 2025-Sep 30, 2026; age/resource threshold applies to households with a member age 60+."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 2608,
-          "verifiedValue": 1927,
-          "pctDiff": 26.1
+          "verifiedValue": 1696,
+          "pctDiff": 35
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 3526,
-          "verifiedValue": 2596,
-          "pctDiff": 26.4
+          "verifiedValue": 2292,
+          "pctDiff": 35
         },
         {
           "field": "phone",
@@ -251,10 +261,10 @@
           "verifiedValue": "8887061535"
         }
       ],
-      "notes": "SNAP has no age-specific eligibility threshold for seniors; it serves all low-income households regardless of age. Asset limits not found in provided official sources. Income limits derived from October 2025 update (effective through September 2026): 1 person gross limit $1,927/month, 2 people $2,596/month, based on 130% Federal Poverty Level standard referenced in search results. Phone number is Montana Public Assistance Helpline from official state DPHHS source."
+      "notes": "SNAP in Montana is active and current for Oct 1, 2025-Sep 30, 2026; age/resource threshold applies to households with a member age 60+."
     },
     {
-      "programId": "mt-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "Montana Low Income Home Energy Assistance Program (LIHEAP)",
       "facts": {
         "age": null,
@@ -268,25 +278,41 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 2809,
-        "income_2": 3674,
-        "assets_individual": 14358,
-        "assets_couple": 21966,
-        "phone": null,
+        "age": 60,
+        "income_1": 2810,
+        "income_2": 3675,
+        "assets_individual": 14717,
+        "assets_couple": 14717,
+        "phone": "8005417735",
         "sources": {
-          "age": null,
+          "age": "https://dphhs.mt.gov/assets/hcsd/liheap/LIHEAPApplication.pdf",
           "income": "https://dphhs.mt.gov/hcsd/energyassistance/",
-          "assets": "https://dphhs.mt.gov/hcsd/energyassistance/",
-          "phone": null
+          "assets": "https://dphhs.mt.gov/assets/rules/2026-532pro-arm.pdf",
+          "phone": "https://dphhs.mt.gov/hcsd/energyassistance/"
         },
-        "notes": "Income limits are annual figures for 2025-2026 program year (HH 1: $33,719; HH 2: $44,095) divided by 12 and rounded to nearest integer. Assets are countable non-business resources. No single statewide application phone found; apply via local offices or apply.mt.gov. Official state source."
+        "notes": "Montana LIHEAP uses a senior/help line for applicants age 60+ or with disability; the program is current for the 2026-2027 year. Asset limit found in state rule applies to household resources; the retrieved source did not clearly distinguish a separate couple limit, so couple is set to the same value as individual."
       },
-      "flags": [],
-      "notes": "Income limits are annual figures for 2025-2026 program year (HH 1: $33,719; HH 2: $44,095) divided by 12 and rounded to nearest integer. Assets are countable non-business resources. No single statewide application phone found; apply via local offices or apply.mt.gov. Official state source."
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 13675,
+          "verifiedValue": 14717,
+          "pctDiff": 7.1
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18005513191"
+          ],
+          "verifiedValue": "8005417735"
+        }
+      ],
+      "notes": "Montana LIHEAP uses a senior/help line for applicants age 60+ or with disability; the program is current for the 2026-2027 year. Asset limit found in state rule applies to household resources; the retrieved source did not clearly distinguish a separate couple limit, so couple is set to the same value as individual."
     },
     {
-      "programId": "mt-weatherization-assistance-program",
+      "programId": "weatherization-assistance-program",
       "programName": "Weatherization Assistance Program",
       "facts": {
         "age": null,
@@ -306,20 +332,30 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "4064471625",
         "sources": {
           "age": null,
-          "income": "https://dphhs.mt.gov/HCSD/energyassistance/WeatherizationAssistanceProgram",
+          "income": null,
           "assets": null,
-          "phone": "https://dphhs.mt.gov/HCSD/energyassistance/WeatherizationAssistanceProgram"
+          "phone": "https://dphhs.mt.gov/hcsd/energyassistance/"
         },
-        "notes": "Program requires LIHEAP eligibility (income at or below 200% FPL or 60% state median); no specific age, asset, or income numbers or main phone found in official sources; apply via local eligibility offices or combined LIHEAP/Weatherization application"
+        "notes": "Could not find an authoritative statewide senior-specific age, income, or asset test for Montana Weatherization Assistance Program; program appears to use the LIHEAP application and local eligibility offices. Phone derived from the state DPHHS energy assistance page."
       },
-      "flags": [],
-      "notes": "Program requires LIHEAP eligibility (income at or below 200% FPL or 60% state median); no specific age, asset, or income numbers or main phone found in official sources; apply via local eligibility offices or combined LIHEAP/Weatherization application"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "4067283710",
+            "211"
+          ],
+          "verifiedValue": "4064471625"
+        }
+      ],
+      "notes": "Could not find an authoritative statewide senior-specific age, income, or asset test for Montana Weatherization Assistance Program; program appears to use the LIHEAP application and local eligibility offices. Phone derived from the state DPHHS energy assistance page."
     },
     {
-      "programId": "mt-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "State Health Insurance Assistance Program (SHIP)",
       "facts": {
         "age": null,
@@ -339,20 +375,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18005513191",
+        "phone": "8005513191",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
           "phone": "https://dphhs.mt.gov/SLTC/aging/SHIP"
         },
-        "notes": "SHIP is a free counseling program for Medicare beneficiaries and caregivers with no age, income, or asset eligibility requirements"
+        "notes": "Montana SHIP is a Medicare counseling program for beneficiaries and their families; no age, income, or asset test was found for the senior pathway."
       },
       "flags": [],
-      "notes": "SHIP is a free counseling program for Medicare beneficiaries and caregivers with no age, income, or asset eligibility requirements"
+      "notes": "Montana SHIP is a Medicare counseling program for beneficiaries and their families; no age, income, or asset test was found for the senior pathway."
     },
     {
-      "programId": "mt-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Meals on Wheels",
       "facts": {
         "age": 60,
@@ -375,12 +411,12 @@
         "assets_couple": null,
         "phone": "8005513191",
         "sources": {
-          "age": "https://www.cascadecountymt.gov/163/Meals-on-Wheels",
-          "income": null,
-          "assets": null,
+          "age": "https://dphhs.mt.gov/SLTC/aging/NutritionServices",
+          "income": "https://dphhs.mt.gov/SLTC/aging/NutritionServices",
+          "assets": "https://dphhs.mt.gov/SLTC/aging/NutritionServices",
           "phone": "https://dphhs.mt.gov/SLTC/aging/NutritionServices"
         },
-        "notes": "No statewide income or assets test found; Meals on Wheels programs in Montana counties like Cascade (60+) serve seniors via Area Agencies on Aging with suggested donations only. Local variations exist."
+        "notes": "State aging nutrition services page lists eligibility for older adults age 60+ and a contact number for local Area Agencies on Aging; no income or asset test was found."
       },
       "flags": [
         {
@@ -394,44 +430,16 @@
           "verifiedValue": "8005513191"
         }
       ],
-      "notes": "No statewide income or assets test found; Meals on Wheels programs in Montana counties like Cascade (60+) serve seniors via Area Agencies on Aging with suggested donations only. Local variations exist."
+      "notes": "State aging nutrition services page lists eligibility for older adults age 60+ and a contact number for local Area Agencies on Aging; no income or asset test was found."
     },
     {
-      "programId": "mt-big-sky-waiver-respite",
+      "programId": "big-sky-waiver-respite",
       "programName": "Respite Care (via Big Sky Waiver)",
-      "facts": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": null,
-        "phones": [
-          "8002197035",
-          "4064434020",
-          "211"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": null,
-        "phone": "8002197035",
-        "sources": {
-          "age": null,
-          "income": null,
-          "assets": "https://legacynavigate.com/medicaid-planning-montana/big-sky-waiver-program/",
-          "phone": "https://dphhs.mt.gov/sltc/csb/BSW/BigSkyWaiverProgram"
-        },
-        "notes": "Assets from 2025 nonprofit source citing Medicaid rules; no 2026 official update found. Program requires Medicaid financial eligibility with NFLOC; serves seniors among others. No explicit age/income caps in official sources."
-      },
-      "flags": [],
-      "notes": "Assets from 2025 nonprofit source citing Medicaid rules; no 2026 official update found. Program requires Medicaid financial eligibility with NFLOC; serves seniors among others. No explicit age/income caps in official sources."
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
     },
     {
-      "programId": "mt-scsep-employment",
+      "programId": "scsep-employment",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -452,12 +460,12 @@
         "assets_couple": null,
         "phone": "4064932408",
         "sources": {
-          "age": "https://www.esgw.org/scsep/",
-          "income": null,
-          "assets": null,
+          "age": "https://wsd.dli.mt.gov/_docs/wsd-policy/scsep-policy.pdf",
+          "income": "https://www.dol.gov/agencies/eta/seniors",
+          "assets": "https://www.dol.gov/agencies/eta/seniors",
           "phone": "https://www.esgw.org/scsep/"
         },
-        "notes": "No income or assets details found in sources for Montana SCSEP; national program info indicates 125% FPL income limit but no specific values or Montana assets test"
+        "notes": "SCSEP is current in Montana; no asset test found in authoritative sources, and the official income rule is federal (125% of poverty), but no Montana-specific numeric income table was retrieved."
       },
       "flags": [
         {
@@ -469,44 +477,16 @@
           "verifiedValue": "4064932408"
         }
       ],
-      "notes": "No income or assets details found in sources for Montana SCSEP; national program info indicates 125% FPL income limit but no specific values or Montana assets test"
+      "notes": "SCSEP is current in Montana; no asset test found in authoritative sources, and the official income rule is federal (125% of poverty), but no Montana-specific numeric income table was retrieved."
     },
     {
-      "programId": "mt-legal-services-seniors",
+      "programId": "legal-services-seniors",
       "programName": "Legal Services for Seniors",
-      "facts": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "18006666899",
-          "18003322272",
-          "18006771116"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "8003322272",
-        "sources": {
-          "age": "https://dphhs.mt.gov/sltc/aging/legal/",
-          "income": null,
-          "assets": null,
-          "phone": "https://www.montana.edu/estateplanning/epforparentsandgrandparents/resources/legalservices.html"
-        },
-        "notes": "Program is 'Aging and Disability Legal Assistance Program'; no income or asset limits found in sources"
-      },
-      "flags": [],
-      "notes": "Program is 'Aging and Disability Legal Assistance Program'; no income or asset limits found in sources"
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
     },
     {
-      "programId": "mt-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -530,12 +510,12 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://dphhs.mt.gov/assets/sltc/Ombudsman/MTLongTermCareOmbudsmanProgramBrochure.pdf"
+          "phone": "https://dphhs.mt.gov/sltc/aging/longtermcareombudsman/"
         },
-        "notes": "Program open to anyone; no age, income, or asset eligibility requirements found"
+        "notes": "Long-Term Care Ombudsman is a help/referral program, not a means-tested benefit; no age, income, or asset eligibility found in authoritative current sources. Official Montana help line is 1-800-332-2272."
       },
       "flags": [],
-      "notes": "Program open to anyone; no age, income, or asset eligibility requirements found"
+      "notes": "Long-Term Care Ombudsman is a help/referral program, not a means-tested benefit; no age, income, or asset eligibility found in authoritative current sources. Official Montana help line is 1-800-332-2272."
     }
   ]
 }

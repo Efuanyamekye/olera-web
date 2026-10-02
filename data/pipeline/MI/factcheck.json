@@ -1,17 +1,17 @@
 {
   "state": "MI",
   "stateName": "Michigan",
-  "checkedAt": "2026-04-14T10:03:40.568Z",
+  "checkedAt": "2026-10-02T07:39:19.738Z",
   "total": 6,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 1,
-  "totalFlags": 1,
+  "programsWithFlags": 4,
+  "totalFlags": 4,
   "highSeverityFlags": 1,
   "programs": [
     {
-      "programId": "mi-choice-waiver",
+      "programId": "choice-waiver",
       "programName": "Michigan Choice Waiver Program",
       "facts": {
         "age": 65,
@@ -27,56 +27,79 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
+        "income_1": 2982,
         "income_2": null,
-        "assets_individual": 9660,
+        "assets_individual": 9950,
         "assets_couple": null,
-        "phone": null,
+        "phone": "5172418474",
         "sources": {
-          "age": "https://www.detroitseniorsolution.org/clinical-services/mi-choice-waiver-mich/",
-          "income": null,
-          "assets": "https://www.medicaidplanningassistance.org/michigan-choice-waiver/",
-          "phone": null
+          "age": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/michoicewaiver",
+          "income": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/michoicewaiver",
+          "assets": "https://www.nemcsa.org/services/mi-choice-waiver-program.html",
+          "phone": "https://www.michigan.gov/mdhhs/-/media/Project/Websites/mdhhs/Assistance-Programs/Medicaid-BPHASA/Other-Prov-Specific-Page-Docs/MI-Choice-Participant-Handbook---DCH-1433-2-2023-Final.pdf?rev=31bad12ce6994bc6a117b68e555f325f&hash=D63402EBA421A897A9AC1E49ACBEB2EF"
         },
-        "notes": "Values from 2025 sources; no 2026 updates found in official sources. Income limits mentioned but not used per instructions. No statewide phone; regional contacts only. Assets are countable financial limit."
+        "notes": "MI Choice is current in 2026; senior pathway uses age 65+ and has Medicaid income/assets criteria. Official page confirms income and asset criteria but the exact asset figure was found on a current non-government source citing program limits."
       },
-      "flags": [],
-      "notes": "Values from 2025 sources; no 2026 updates found in official sources. Income limits mentioned but not used per instructions. No statewide phone; regional contacts only. Assets are countable financial limit."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "7347222830",
+            "211"
+          ],
+          "verifiedValue": "5172418474"
+        }
+      ],
+      "notes": "MI Choice is current in 2026; senior pathway uses age 65+ and has Medicaid income/assets criteria. Official page confirms income and asset criteria but the exact asset figure was found on a current non-government source citing program limits."
     },
     {
-      "programId": "mi-health-link-program",
-      "programName": "MI Health Link Program",
+      "programId": "health-link-program",
+      "programName": "MI Coordinated Health (MICH)",
       "facts": {
         "age": 21,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
+        "assets_individual": 9950,
         "assets_couple": null,
         "phones": [
+          "18009757630",
+          "18008037174",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 21,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8332302057",
         "sources": {
-          "age": "https://www.michigan.gov/mdhhs/doing-business/providers/integrated",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.michigan.gov/mdhhs/doing-business/providers/mi-coordinated-health",
+          "income": "https://www.michigan.gov/mdhhs/doing-business/providers/mi-coordinated-health",
+          "assets": "https://www.michigan.gov/mdhhs/doing-business/providers/mi-coordinated-health",
+          "phone": "https://www.caresource.com/documents/h4193_mi-snp-m-4199449_m-mmp-to-hide-2026-anoc-508.pdf"
         },
-        "notes": "Program transitioned to MI Coordinated Health on Jan 1, 2026; no age test for seniors (duals aged 21+); no income/asset limits as eligibility is dual Medicare-Medicaid"
+        "notes": "MICH is a 2026 Medicare-Medicaid dual-eligible plan; no separate countable-asset test was found in the retrieved official sources, and the age threshold is 21+ for the program’s senior/dual-eligible pathway."
       },
-      "flags": [],
-      "notes": "Program transitioned to MI Coordinated Health on Jan 1, 2026; no age test for seniors (duals aged 21+); no income/asset limits as eligibility is dual Medicare-Medicaid"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18009757630",
+            "18008037174",
+            "211"
+          ],
+          "verifiedValue": "8332302057"
+        }
+      ],
+      "notes": "MICH is a 2026 Medicare-Medicaid dual-eligible plan; no separate countable-asset test was found in the retrieved official sources, and the age threshold is 21+ for the program’s senior/dual-eligible pathway."
     },
     {
-      "programId": "mi-options",
+      "programId": "options",
       "programName": "MI Options",
       "facts": {
         "age": 18,
@@ -100,17 +123,17 @@
         "phone": "8008037174",
         "sources": {
           "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://www.michigan.gov/mdhhs/inside-mdhhs/newsroom/2025/08/22/mi-options"
+          "income": "https://www.thesenioralliance.org/services/mi-options/",
+          "assets": "https://www.thesenioralliance.org/services/mi-options/",
+          "phone": "https://www.michigan.gov/mdhhs/doing-business/providers/integrated/accordion/beneficiary-enrollee-resources/resource-contact-information-for"
         },
-        "notes": "MI Options is a free counseling program with no age, income, or asset eligibility tests for seniors; open to adults including older adults and people with disabilities"
+        "notes": "MI Options is a counseling/referral program, not a benefit program with income or asset limits; official current age test for the senior pathway was not identifiable from the available authoritative source."
       },
       "flags": [],
-      "notes": "MI Options is a free counseling program with no age, income, or asset eligibility tests for seniors; open to adults including older adults and people with disabilities"
+      "notes": "MI Options is a counseling/referral program, not a benefit program with income or asset limits; official current age test for the senior pathway was not identifiable from the available authoritative source."
     },
     {
-      "programId": "mi-senior-project-fresh",
+      "programId": "senior-project-fresh",
       "programName": "Senior Project Fresh Program",
       "facts": {
         "age": 60,
@@ -125,21 +148,44 @@
       },
       "verified": {
         "age": 60,
-        "income_1": 2413,
-        "income_2": 3261,
+        "income_1": 29526,
+        "income_2": 40034,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8557736424",
         "sources": {
           "age": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs/senior-project-freshmarket-fresh",
           "income": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs/senior-project-freshmarket-fresh",
           "assets": null,
-          "phone": null
+          "phone": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs/senior-project-freshmarket-fresh"
         },
-        "notes": "Income limits from March 2026 update are annual figures divided by 12 and rounded ($28,952.50/12=2412.71→2413; $39,127.50/12=3260.625→3261). No assets test or main phone found. Tribal members 55+ also eligible."
+        "notes": "Current Michigan Senior Project Fresh eligibility is age 60+ for the senior pathway, or 55+ for eligible tribal members; no asset test found in official sources."
       },
-      "flags": [],
-      "notes": "Income limits from March 2026 update are annual figures divided by 12 and rounded ($28,952.50/12=2412.71→2413; $39,127.50/12=3260.625→3261). No assets test or main phone found. Tribal members 55+ also eligible."
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "info",
+          "draftValue": 2322,
+          "verifiedValue": 29526,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        },
+        {
+          "field": "income_2",
+          "severity": "info",
+          "draftValue": 3151,
+          "verifiedValue": 40034,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211"
+          ],
+          "verifiedValue": "8557736424"
+        }
+      ],
+      "notes": "Current Michigan Senior Project Fresh eligibility is age 60+ for the senior pathway, or 55+ for eligible tribal members; no asset test found in official sources."
     },
     {
       "programId": "michigan-micafe-food-access",
@@ -165,18 +211,18 @@
         "assets_couple": null,
         "phone": "8776642233",
         "sources": {
-          "age": "https://www.michigan.gov/mdhhs/assistance-programs/other-help",
+          "age": "https://www.elderlawofmi.org/services",
           "income": null,
           "assets": null,
-          "phone": "https://www.ageways.org/caregiver_service/micafe-michigans-coordinated-access-to-food-for-the-elderly/"
+          "phone": "https://michigan.gov/reinventretirement/resources/emergency/emergency-financial-resources-and-services-directory"
         },
-        "notes": "MiCAFE is an assistance program for SNAP eligibility (age 60+); no specific income/assets limits found in sources as it refers to SNAP criteria"
+        "notes": "MiCAFE is a benefits-assistance program primarily for people age 60 and older; no authoritative current income or asset thresholds were found for the MiCAFE senior pathway itself."
       },
       "flags": [],
-      "notes": "MiCAFE is an assistance program for SNAP eligibility (age 60+); no specific income/assets limits found in sources as it refers to SNAP criteria"
+      "notes": "MiCAFE is a benefits-assistance program primarily for people age 60 and older; no authoritative current income or asset thresholds were found for the MiCAFE senior pathway itself."
     },
     {
-      "programId": "mi-senior-companion-program",
+      "programId": "senior-companion-program",
       "programName": "Senior Companion Program",
       "facts": {
         "age": 21,
@@ -198,14 +244,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8102573769",
         "sources": {
-          "age": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://fsamich.org/programs/senior-programs/senior-companion/",
+          "income": "https://fsamich.org/programs/senior-programs/senior-companion/",
+          "assets": "https://fsamich.org/programs/senior-programs/senior-companion/",
+          "phone": "https://fsamich.org/programs/senior-programs/senior-companion/"
         },
-        "notes": "Program is a volunteer opportunity for low-income seniors age 55+ to provide companionship; no central application phone or senior recipient eligibility found from official sources"
+        "notes": "Current Michigan Senior Companion Program materials state volunteers must be age 55+; no separate income or asset threshold was found on the retrievable official-looking source. Phone number confirmed from program page."
       },
       "flags": [
         {
@@ -215,7 +261,7 @@
           "verifiedValue": 55
         }
       ],
-      "notes": "Program is a volunteer opportunity for low-income seniors age 55+ to provide companionship; no central application phone or senior recipient eligibility found from official sources"
+      "notes": "Current Michigan Senior Companion Program materials state volunteers must be age 55+; no separate income or asset threshold was found on the retrievable official-looking source. Phone number confirmed from program page."
     }
   ]
 }

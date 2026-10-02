@@ -1,17 +1,17 @@
 {
   "state": "VA",
   "stateName": "Virginia",
-  "checkedAt": "2026-04-14T10:10:38.065Z",
-  "total": 5,
+  "checkedAt": "2026-10-02T07:47:11.494Z",
+  "total": 6,
   "skipped": 1,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 1,
-  "totalFlags": 3,
+  "programsWithFlags": 2,
+  "totalFlags": 2,
   "highSeverityFlags": 0,
   "programs": [
     {
-      "programId": "va-ccc-plus-waiver",
+      "programId": "ccc-plus-waiver",
       "programName": "Commonwealth Coordinated Care Plus (CCC+) Waiver",
       "facts": {
         "age": 65,
@@ -22,7 +22,6 @@
         "phones": [
           "8335225582",
           "8882211590",
-          "7033247948",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -33,20 +32,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8335225582",
+        "phone": "18335225582",
         "sources": {
-          "age": null,
+          "age": "https://coverva.dmas.virginia.gov/learn/coverage-for-adults/long-term-services-supports/",
           "income": null,
           "assets": null,
           "phone": "https://www.dmas.virginia.gov/for-members/benefits-and-services/waivers/ccc-plus-waiver/"
         },
-        "notes": "CCC Plus Waiver serves older adults, individuals with physical disabilities, and chronically ill/severely impaired individuals of any age—no age minimum specified for seniors. Program has no stated income or asset limits in available official sources. Phone number is Cover Virginia Call Center from official DMAS source. Program remains active as of April 2026 (waiver approval expires 09/30/2028)."
+        "notes": "Current official Virginia sources describe CCC Plus Waiver as serving all ages; no senior-specific minimum age was found. No income or asset test was found in the retrieved official sources; Medicaid eligibility and level-of-care criteria are referenced instead."
       },
       "flags": [],
-      "notes": "CCC Plus Waiver serves older adults, individuals with physical disabilities, and chronically ill/severely impaired individuals of any age—no age minimum specified for seniors. Program has no stated income or asset limits in available official sources. Phone number is Cover Virginia Call Center from official DMAS source. Program remains active as of April 2026 (waiver approval expires 09/30/2028)."
+      "notes": "Current official Virginia sources describe CCC Plus Waiver as serving all ages; no senior-specific minimum age was found. No income or asset test was found in the retrieved official sources; Medicaid eligibility and level-of-care criteria are referenced instead."
     },
     {
-      "programId": "va-adult-services-program",
+      "programId": "adult-services-program",
       "programName": "Virginia Adult Services Program",
       "facts": {
         "age": 60,
@@ -63,20 +62,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8888323858",
         "sources": {
-          "age": "https://www.dss.virginia.gov/abuse/aps.cgi",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.dss.virginia.gov/printer/family/as/aps.cgi",
+          "income": "https://www.dars.virginia.gov/aps/AdultServices.htm",
+          "assets": "https://www.dars.virginia.gov/aps/AdultServices.htm",
+          "phone": "https://www.dss.virginia.gov/general-info/contact-us/"
         },
-        "notes": "Virginia Adult Services Program appears to refer to Adult Protective Services (APS); no income or asset limits found in official sources for seniors"
+        "notes": "Virginia Adult Services Program is administered through local departments of social services; current official guidance found no fixed income or asset threshold for the senior pathway, only need/eligibility and any applicable financial requirements."
       },
       "flags": [],
-      "notes": "Virginia Adult Services Program appears to refer to Adult Protective Services (APS); no income or asset limits found in official sources for seniors"
+      "notes": "Virginia Adult Services Program is administered through local departments of social services; current official guidance found no fixed income or asset threshold for the senior pathway, only need/eligibility and any applicable financial requirements."
     },
     {
-      "programId": "va-vicap-medicare-counseling",
+      "programId": "vicap-medicare-counseling",
       "programName": "Virginia Insurance Counseling and Assistance Program (VICAP)",
       "facts": {
         "age": null,
@@ -86,7 +85,6 @@
         "assets_couple": null,
         "phones": [
           "8005523402",
-          "7033245851",
           "5406357141"
         ],
         "hasVerifiableFacts": true
@@ -99,25 +97,25 @@
         "assets_couple": null,
         "phone": "8005523402",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://www.cms.gov/contacts/virginia-insurance-counseling-and-assistance-program-vicap/general-beneficiary-contact/1562236"
+          "age": "https://dars.virginia.gov/aging/home-community/medicare-counseling/",
+          "income": "https://dars.virginia.gov/aging/home-community/medicare-counseling/",
+          "assets": "https://dars.virginia.gov/aging/home-community/medicare-counseling/",
+          "phone": "https://cms.gov/about-cms/contact/directory/virginia-insurance-counseling-assistance-program-vicap/1562236"
         },
-        "notes": "VICAP is a free counseling program with no age, income, or asset eligibility requirements; serves Medicare beneficiaries including those under 65 with disabilities"
+        "notes": "VICAP is a Medicare counseling program; no age, income, or asset test was found in current official sources. The official statewide toll-free contact number is 800-552-3402."
       },
       "flags": [],
-      "notes": "VICAP is a free counseling program with no age, income, or asset eligibility requirements; serves Medicare beneficiaries including those under 65 with disabilities"
+      "notes": "VICAP is a Medicare counseling program; no age, income, or asset test was found in current official sources. The official statewide toll-free contact number is 800-552-3402."
     },
     {
-      "programId": "va-seniornavigator",
+      "programId": "seniornavigator",
       "programName": "SeniorNavigator",
       "skipped": true,
       "reason": "no verifiable facts",
       "flags": []
     },
     {
-      "programId": "va-scsep-senior-employment",
+      "programId": "scsep-senior-employment",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -133,34 +131,20 @@
       },
       "verified": {
         "age": 55,
-        "income_1": 1302,
-        "income_2": 1755,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8778725627",
+        "phone": "8046627035",
         "sources": {
           "age": "https://dars.virginia.gov/aging/senior-employment-program/",
-          "income": "https://www.dol.gov/agencies/eta/seniors",
+          "income": "https://www.dars.virginia.gov/olderadults.htm",
           "assets": null,
-          "phone": "https://www.dol.gov/agencies/eta/seniors"
+          "phone": "https://dars.virginia.gov/aging/senior-employment-program/"
         },
-        "notes": "Income limits based on 125% of federal poverty level (effective January 15, 2025 per DOL source). 2025 HHS poverty guidelines: $14,430 annual for individual, $21,060 for couple of 2. Calculated as 125% of these figures divided by 12 months. Virginia DARS and DOL sources confirm program is active and accepting participants as of 2026. No asset limits found in authoritative sources."
+        "notes": "SCSEP in Virginia uses a 55+ senior age threshold and is described as low-income, but the retrieved official sources did not provide a specific current income table or any asset test for Virginia; the main contact is DARS (804-662-7035)."
       },
       "flags": [
-        {
-          "field": "income_1",
-          "severity": "medium",
-          "draftValue": 1416,
-          "verifiedValue": 1302,
-          "pctDiff": 8.1
-        },
-        {
-          "field": "income_2",
-          "severity": "medium",
-          "draftValue": 1907,
-          "verifiedValue": 1755,
-          "pctDiff": 8
-        },
         {
           "field": "phone",
           "severity": "medium",
@@ -168,10 +152,53 @@
             "5713637688",
             "8043433000"
           ],
-          "verifiedValue": "8778725627"
+          "verifiedValue": "8046627035"
         }
       ],
-      "notes": "Income limits based on 125% of federal poverty level (effective January 15, 2025 per DOL source). 2025 HHS poverty guidelines: $14,430 annual for individual, $21,060 for couple of 2. Calculated as 125% of these figures divided by 12 months. Virginia DARS and DOL sources confirm program is active and accepting participants as of 2026. No asset limits found in authoritative sources."
+      "notes": "SCSEP in Virginia uses a 55+ senior age threshold and is described as low-income, but the retrieved official sources did not provide a specific current income table or any asset test for Virginia; the main contact is DARS (804-662-7035)."
+    },
+    {
+      "programId": "family-caregiver-support",
+      "programName": "Caregiver Support (Area Agencies on Aging)",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8005523402",
+          "8046629333"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "7037465999",
+        "sources": {
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://dars.virginia.gov/aging/home-community/find-local-aaa/"
+        },
+        "notes": "Virginia Area Agencies on Aging caregiver support is a service network, not a single means-tested program; no statewide age, income, or asset limits were found. Main statewide AAA contact number found on the Virginia DARS AAA directory page."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8005523402",
+            "8046629333"
+          ],
+          "verifiedValue": "7037465999"
+        }
+      ],
+      "notes": "Virginia Area Agencies on Aging caregiver support is a service network, not a single means-tested program; no statewide age, income, or asset limits were found. Main statewide AAA contact number found on the Virginia DARS AAA directory page."
     }
   ]
 }

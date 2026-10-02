@@ -1,17 +1,17 @@
 {
   "state": "IN",
   "stateName": "Indiana",
-  "checkedAt": "2026-04-14T10:01:34.406Z",
+  "checkedAt": "2026-10-02T07:37:18.606Z",
   "total": 12,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 4,
-  "totalFlags": 8,
-  "highSeverityFlags": 6,
+  "programsWithFlags": 8,
+  "totalFlags": 13,
+  "highSeverityFlags": 3,
   "programs": [
     {
-      "programId": "in-hoosier-care-connect",
+      "programId": "hoosier-care-connect",
       "programName": "Hoosier Care Connect",
       "facts": {
         "age": 59,
@@ -22,73 +22,89 @@
         "phones": [],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        2
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8669637383",
+        "sources": {
+          "age": "https://www.in.gov/fssa/resource-guide/",
+          "income": "https://www.in.gov/fssa/resource-guide/",
+          "assets": "https://www.in.gov/fssa/resource-guide/",
+          "phone": "https://secure.in.gov/medicaid/partners/files/IHCP-Model-Handbook.pdf"
+        },
+        "notes": "Hoosier Care Connect is a Medicaid managed-care program for aged/blind/disabled Hoosiers; the current state resource guide says it primarily serves Hoosiers age 60 and younger, while the handbook also describes aged members 65+ who are not eligible for Medicare. No separate senior income or asset limits were found in authoritative current sources."
+      },
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 59,
+          "verifiedValue": 60
+        }
       ],
-      "flags": [],
-      "notes": null
+      "notes": "Hoosier Care Connect is a Medicaid managed-care program for aged/blind/disabled Hoosiers; the current state resource guide says it primarily serves Hoosiers age 60 and younger, while the handbook also describes aged members 65+ who are not eligible for Medicare. No separate senior income or asset limits were found in authoritative current sources."
     },
     {
-      "programId": "in-pathways-aging-waiver",
+      "programId": "pathways-aging-waiver",
       "programName": "Indiana PathWays for Aging Waiver",
       "facts": {
         "age": 60,
-        "income_1": 2901,
-        "income_2": 3933,
+        "income_1": 2982,
+        "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 3000,
         "phones": [
+          "8007139023",
+          "8335972777",
+          "8004030864",
           "8009863505",
-          "211",
-          "8004030864"
+          "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 60,
-        "income_1": 1255,
-        "income_2": 1704,
+        "income_1": 1330,
+        "income_2": 1803,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": "8772828494",
+        "phone": "8772849294",
         "sources": {
-          "age": "https://www.in.gov/medicaid/members/home-and-community-based-services/aged-and-disabled-waiver/[1]",
-          "income": "https://www.brickyardhc.com/2024/08/understanding-the-indiana-pathways-for-aging-program/[4]",
-          "assets": "https://www.brickyardhc.com/2024/08/understanding-the-indiana-pathways-for-aging-program/[4]",
-          "phone": "https://www.medicaidplanningassistance.org/indiana-pathways-for-aging/[5]"
+          "age": "https://www.in.gov/medicaid/members/home-and-community-based-services/aged-and-disabled-waiver/",
+          "income": "https://www.medicaidplanningassistance.org/indiana-pathways-for-aging/",
+          "assets": "https://www.medicaidplanningassistance.org/indiana-pathways-for-aging/",
+          "phone": "https://www.in.gov/pathways/resources"
         },
-        "notes": "Income and asset limits from non-.gov source citing Medicaid rules; official .gov lacks explicit 2026 figures. Phone from 87-PATHWAY-4."
+        "notes": "Current program for seniors is Indiana PathWays for Aging Waiver; official state sources confirm age 60+ and phone 877-284-9294. Income and asset figures are from a current nonprofit guide that cites official sources; official waiver page states 300% SSI but does not publish dollar asset limits."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
-          "draftValue": 2901,
-          "verifiedValue": 1255,
-          "pctDiff": 56.7
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 3933,
-          "verifiedValue": 1704,
-          "pctDiff": 56.7
+          "draftValue": 2982,
+          "verifiedValue": 1330,
+          "pctDiff": 55.4
         },
         {
           "field": "phone",
           "severity": "medium",
           "draftValue": [
+            "8007139023",
+            "8335972777",
+            "8004030864",
             "8009863505",
-            "211",
-            "8004030864"
+            "211"
           ],
-          "verifiedValue": "8772828494"
+          "verifiedValue": "8772849294"
         }
       ],
-      "notes": "Income and asset limits from non-.gov source citing Medicaid rules; official .gov lacks explicit 2026 figures. Phone from 87-PATHWAY-4."
+      "notes": "Current program for seniors is Indiana PathWays for Aging Waiver; official state sources confirm age 60+ and phone 877-284-9294. Income and asset figures are from a current nonprofit guide that cites official sources; official waiver page states 300% SSI but does not publish dollar asset limits."
     },
     {
-      "programId": "in-pathways-aging-ltss",
+      "programId": "pathways-aging-ltss",
       "programName": "Indiana PathWays for Aging (PACE equivalent)",
       "facts": {
         "age": 60,
@@ -97,6 +113,7 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "8772849294",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -107,20 +124,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8772849294",
         "sources": {
-          "age": "https://www.in.gov/pathways/home/",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.in.gov/pathways/frequently-asked-questions/",
+          "income": "https://www.in.gov/medicaid/members/home-and-community-based-services/aged-and-disabled-waiver/",
+          "assets": "https://www.in.gov/medicaid/members/home-and-community-based-services/aged-and-disabled-waiver/",
+          "phone": "https://www.in.gov/pathways/frequently-asked-questions/"
         },
-        "notes": "Program launched July 2024; eligibility tied to Medicaid (age 60+), no specific income/assets found in official sources"
+        "notes": "Current program name is Indiana PathWays for Aging; official sources indicate the senior pathway is age 60+ and Medicaid-based, with no separate income/asset thresholds stated on the PathWays FAQ. The waiver page gives a Medicaid HCBS income rule, but PathWays-specific income/assets are not clearly stated."
       },
       "flags": [],
-      "notes": "Program launched July 2024; eligibility tied to Medicaid (age 60+), no specific income/assets found in official sources"
+      "notes": "Current program name is Indiana PathWays for Aging; official sources indicate the senior pathway is age 60+ and Medicaid-based, with no separate income/asset thresholds stated on the PathWays FAQ. The waiver page gives a Medicaid HCBS income rule, but PathWays-specific income/assets are not clearly stated."
     },
     {
-      "programId": "in-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Healthy Indiana Plan Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
         "age": 65,
@@ -135,24 +152,33 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 1977,
-        "income_2": 2664,
+        "income_1": 2015,
+        "income_2": 2725,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": null,
+        "phone": "8004524800",
         "sources": {
           "age": "https://www.in.gov/medicaid/providers/about-ihcp-programs/medicare-savings-programs/",
-          "income": "https://www.medicareresources.org/states/indiana-guide-content/",
-          "assets": "https://www.medicareresources.org/states/indiana-guide-content/",
-          "phone": null
+          "income": "https://www.in.gov/ship/help-paying-for-your-medicare-costs/",
+          "assets": "https://www.in.gov/ship/help-paying-for-your-medicare-costs/",
+          "phone": "https://www.in.gov/ship/help-paying-for-your-medicare-costs/"
         },
-        "notes": "No official IN.gov page with 2026 income/assets found; used nonprofit citing federal/IN standards. Medicare Savings Programs require age 65+ for seniors (entitled to Medicare); no phone in results."
+        "notes": "Current Indiana Medicare Savings Program values for QMB/SLMB/QI; no separate senior age threshold beyond Medicare entitlement, so age is reported as 65 for the senior pathway."
       },
-      "flags": [],
-      "notes": "No official IN.gov page with 2026 income/assets found; used nonprofit citing federal/IN standards. Medicare Savings Programs require age 65+ for seniors (entitled to Medicare); no phone in results."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8004030864"
+          ],
+          "verifiedValue": "8004524800"
+        }
+      ],
+      "notes": "Current Indiana Medicare Savings Program values for QMB/SLMB/QI; no separate senior age threshold beyond Medicare entitlement, so age is reported as 65 for the senior pathway."
     },
     {
-      "programId": "in-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Supplemental Nutrition Assistance Program)",
       "facts": {
         "age": 60,
@@ -167,40 +193,40 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 3000,
-        "assets_couple": 3000,
-        "phone": null,
+        "age": 60,
+        "income_1": 1696,
+        "income_2": 2292,
+        "assets_individual": 4750,
+        "assets_couple": 4750,
+        "phone": "8004030864",
         "sources": {
-          "age": null,
-          "income": null,
+          "age": "https://www.in.gov/fssa/dfr/snap-food-assistance/",
+          "income": "https://www.in.gov/fssa/dfr/snap-food-assistance/income/",
           "assets": "https://www.in.gov/fssa/dfr/snap-food-assistance/",
-          "phone": null
+          "phone": "https://www.in.gov/fssa/dfr/snap-food-assistance/"
         },
-        "notes": "SNAP has no age test for seniors; it serves low-income individuals and families of all ages. Income limits exist but are not provided in search results (source [5] references income limits but does not display them). Asset limit of $3,000 is current as of July 2026 per Senate Bill 1 changes [2]. Exception: $4,500 for households with seniors or disabled members [2]. Phone number not found in provided sources. Search results do not distinguish between individual and couple asset limits; $3,000 applies to most households [2]."
+        "notes": "Indiana SNAP is current; elderly household threshold is age 60+ and official state pages list current FY2026 income and asset limits."
       },
       "flags": [
         {
           "field": "assets_individual",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 4500,
-          "verifiedValue": 3000,
-          "pctDiff": 33.3
+          "verifiedValue": 4750,
+          "pctDiff": 5.3
         },
         {
           "field": "assets_couple",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 4500,
-          "verifiedValue": 3000,
-          "pctDiff": 33.3
+          "verifiedValue": 4750,
+          "pctDiff": 5.3
         }
       ],
-      "notes": "SNAP has no age test for seniors; it serves low-income individuals and families of all ages. Income limits exist but are not provided in search results (source [5] references income limits but does not display them). Asset limit of $3,000 is current as of July 2026 per Senate Bill 1 changes [2]. Exception: $4,500 for households with seniors or disabled members [2]. Phone number not found in provided sources. Search results do not distinguish between individual and couple asset limits; $3,000 applies to most households [2]."
+      "notes": "Indiana SNAP is current; elderly household threshold is age 60+ and official state pages list current FY2026 income and asset limits."
     },
     {
-      "programId": "in-weatherization-assistance-program",
+      "programId": "weatherization-assistance-program",
       "programName": "Indiana Weatherization Assistance Program (Wx)",
       "facts": {
         "age": 18,
@@ -214,37 +240,51 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 3130,
-        "income_2": 4220,
+        "age": 60,
+        "income_1": 2660,
+        "income_2": 3607,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8008720371",
         "sources": {
-          "age": null,
+          "age": "https://www.in.gov/ihcda/files/Indiana-LIHEAP-Intake-and-Operations-Program-Manual-PY2026.pdf",
           "income": "https://www.in.gov/ihcda/homeowners-and-renters/weatherizationenergy-conservation/",
           "assets": null,
-          "phone": null
+          "phone": "https://www.in.gov/oed/resources-and-information-center/customer-assistance-programs/"
         },
-        "notes": "No age requirement for seniors; program is income-based only. No assets test or phone number found in sources. Income calculated from 2026 FPL at 200% (HH1 annual $37,560/12=3130; HH2 annual $50,640/12=4220)"
+        "notes": "Current Indiana Wx is administered through IHCDA; official materials show senior/EAP households count age 60+ and Wx income limit is 200% of poverty. No asset test found in official sources."
       },
       "flags": [
         {
-          "field": "income_1",
+          "field": "age",
           "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 60
+        },
+        {
+          "field": "income_1",
+          "severity": "medium",
           "draftValue": 2388,
-          "verifiedValue": 3130,
-          "pctDiff": 23.7
+          "verifiedValue": 2660,
+          "pctDiff": 10.2
         },
         {
           "field": "income_2",
-          "severity": "high",
+          "severity": "medium",
           "draftValue": 3223,
-          "verifiedValue": 4220,
-          "pctDiff": 23.6
+          "verifiedValue": 3607,
+          "pctDiff": 10.6
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8007217385"
+          ],
+          "verifiedValue": "8008720371"
         }
       ],
-      "notes": "No age requirement for seniors; program is income-based only. No assets test or phone number found in sources. Income calculated from 2026 FPL at 200% (HH1 annual $37,560/12=3130; HH2 annual $50,640/12=4220)"
+      "notes": "Current Indiana Wx is administered through IHCDA; official materials show senior/EAP households count age 60+ and Wx income limit is 200% of poverty. No asset test found in official sources."
     },
     {
       "programId": "indiana-ship-medicare-counseling",
@@ -272,9 +312,9 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.shiphelp.org/ships/indiana/"
+          "phone": "https://www.in.gov/ship/"
         },
-        "notes": "SHIP is a free counseling program for Medicare beneficiaries with no age, income, or asset eligibility requirements"
+        "notes": "SHIP is a free Medicare counseling program for beneficiaries; no age, income, or asset test found for the SHIP service itself. The main office phone is 800-452-4800."
       },
       "flags": [
         {
@@ -287,10 +327,10 @@
           "verifiedValue": "8004524800"
         }
       ],
-      "notes": "SHIP is a free counseling program for Medicare beneficiaries with no age, income, or asset eligibility requirements"
+      "notes": "SHIP is a free Medicare counseling program for beneficiaries; no age, income, or asset test found for the SHIP service itself. The main office phone is 800-452-4800."
     },
     {
-      "programId": "in-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Meals on Wheels (Indiana)",
       "facts": {
         "age": null,
@@ -316,15 +356,15 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://mealsonwheelsindy.org/get-meals/"
+          "phone": "https://mealsonwheelsindy.org/apply/"
         },
-        "notes": "Meals on Wheels programs in Indiana are locally operated by nonprofits, not a single statewide program with uniform eligibility; no age/income/assets tests found in sources; phone from Meals on Wheels of Central Indiana (Marion County)"
+        "notes": "No authoritative age, income, or asset test found for the senior pathway; current official contact phone for Meals on Wheels of Central Indiana is listed on the program site."
       },
       "flags": [],
-      "notes": "Meals on Wheels programs in Indiana are locally operated by nonprofits, not a single statewide program with uniform eligibility; no age/income/assets tests found in sources; phone from Meals on Wheels of Central Indiana (Marion County)"
+      "notes": "No authoritative age, income, or asset test found for the senior pathway; current official contact phone for Meals on Wheels of Central Indiana is listed on the program site."
     },
     {
-      "programId": "in-caregiver-respite-services",
+      "programId": "caregiver-respite-services",
       "programName": "Indiana Caregiver Respite Services",
       "facts": {
         "age": 60,
@@ -339,22 +379,22 @@
         "age": 60,
         "income_1": null,
         "income_2": null,
-        "assets_individual": null,
+        "assets_individual": 250000,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8007139023",
         "sources": {
-          "age": "https://cicoa.org/resource-center/in-home-support-services-choice-program/",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.in.gov/fssa/ddars/bba/older-americans-act-family-caregiver-support",
+          "income": "https://www.in.gov/fssa/ddars/bba/older-americans-act-family-caregiver-support",
+          "assets": "https://www.in.gov/fssa/ddars/bba/community-and-home-options-to-institutional-care-for-the-elderly-and-disabled",
+          "phone": "https://www.in.gov/fssa/ddars/bba/older-americans-act-family-caregiver-support"
         },
-        "notes": "CHOICE program provides respite for seniors 60+; no income/assets tests or phone found in sources"
+        "notes": "Current Indiana Family Caregiver Program / Older Americans Act Family Caregiver Support has no income limit; assets are not listed for caregiver support, but CHOICE has a separate $250,000 individual asset limit."
       },
       "flags": [],
-      "notes": "CHOICE program provides respite for seniors 60+; no income/assets tests or phone found in sources"
+      "notes": "Current Indiana Family Caregiver Program / Older Americans Act Family Caregiver Support has no income limit; assets are not listed for caregiver support, but CHOICE has a separate $250,000 individual asset limit."
     },
     {
-      "programId": "in-scsep-employment-program",
+      "programId": "scsep-employment-program",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -373,20 +413,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8007433333",
         "sources": {
-          "age": "https://www.in.gov/dwd/files/SCSEP-RFA-PY-2026_revised-final.docx",
-          "income": "https://www.in.gov/dwd/files/SCSEP-RFA-PY-2026_revised-final.docx",
-          "assets": null,
-          "phone": null
+          "age": "https://www.in.gov/dwd/job-seekers/scsep/",
+          "income": "https://www.in.gov/dwd/job-seekers/scsep/",
+          "assets": "https://www.in.gov/dwd/job-seekers/scsep/",
+          "phone": "https://www.in.gov/dwd/job-seekers/scsep/"
         },
-        "notes": "Income eligibility is 125% poverty level; no assets test or main phone found in official sources"
+        "notes": "Indiana SCSEP is active in 2026; official state page says age 55+ and lists a toll-free contact number for help."
       },
-      "flags": [],
-      "notes": "Income eligibility is 125% poverty level; no assets test or main phone found in official sources"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211"
+          ],
+          "verifiedValue": "8007433333"
+        }
+      ],
+      "notes": "Indiana SCSEP is active in 2026; official state page says age 55+ and lists a toll-free contact number for help."
     },
     {
-      "programId": "in-senior-legal-aid",
+      "programId": "senior-legal-aid",
       "programName": "Indiana Senior Legal Aid",
       "facts": {
         "age": 60,
@@ -405,20 +454,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8008690212",
+        "phone": "8666446407",
         "sources": {
-          "age": "https://coaction.care/wp-content/uploads/2025/07/FY26-27-Legal-Services-Definitions.pdf",
-          "income": null,
-          "assets": null,
-          "phone": "https://cicoa.org/resource-center/legal-resources/"
+          "age": "https://www.indianalegalservices.org/senior/",
+          "income": "https://www.indianalegalservices.org/senior/",
+          "assets": "https://www.indianalegalservices.org/senior/",
+          "phone": "https://www.indianalegalservices.org/senior/"
         },
-        "notes": "Program is Senior Law Project of Indiana Legal Services; no specific income/asset limits found in sources for seniors"
+        "notes": "Current Indiana Legal Services Senior program page shows age 60+ and application by phone; no authoritative asset-test values were found on the retrieved current sources, so assets are null."
       },
-      "flags": [],
-      "notes": "Program is Senior Law Project of Indiana Legal Services; no specific income/asset limits found in sources for seniors"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8008690212"
+          ],
+          "verifiedValue": "8666446407"
+        }
+      ],
+      "notes": "Current Indiana Legal Services Senior program page shows age 60+ and application by phone; no authoritative asset-test values were found on the retrieved current sources, so assets are null."
     },
     {
-      "programId": "in-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Indiana Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -445,10 +503,10 @@
           "assets": null,
           "phone": "https://www.in.gov/ombudsman/long-term-care-ombudsman/contact-information/"
         },
-        "notes": "No age, income, or asset eligibility requirements; program is open to residents of long-term care facilities, families, and concerned parties with free, confidential services."
+        "notes": "Program has no age, income, or asset eligibility test; official Indiana contact line is 800-622-4484."
       },
       "flags": [],
-      "notes": "No age, income, or asset eligibility requirements; program is open to residents of long-term care facilities, families, and concerned parties with free, confidential services."
+      "notes": "Program has no age, income, or asset eligibility test; official Indiana contact line is 800-622-4484."
     }
   ]
 }

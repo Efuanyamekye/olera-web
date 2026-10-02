@@ -1,17 +1,17 @@
 {
   "state": "VT",
   "stateName": "Vermont",
-  "checkedAt": "2026-04-14T10:10:30.632Z",
-  "total": 15,
+  "checkedAt": "2026-10-02T07:47:39.066Z",
+  "total": 16,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 4,
-  "totalFlags": 4,
-  "highSeverityFlags": 1,
+  "programsWithFlags": 9,
+  "totalFlags": 12,
+  "highSeverityFlags": 4,
   "programs": [
     {
-      "programId": "vt-choices-for-care-waiver",
+      "programId": "choices-for-care-waiver",
       "programName": "Choices for Care (CFC) Waiver",
       "facts": {
         "age": 65,
@@ -26,19 +26,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 4000,
-        "phone": null,
+        "phone": "18004255119",
         "sources": {
-          "age": "https://clpc.ucsf.edu/sites/clpc.ucsf.edu/files/VT%20Choices%20for%20Care%201115%20Regulations%202009.pdf",
+          "age": "https://dvha.vermont.gov/members/long-term-care",
           "income": null,
-          "assets": "https://www.medicaidplanningassistance.org/vermont-choices-for-care-high-need/",
-          "phone": null
+          "assets": "https://www.medicaidlongtermcare.org/eligibility/vermont/",
+          "phone": "https://dvha.vermont.gov/members/long-term-care"
         },
-        "notes": "No official .gov source found for 2026 values; used 2025 data from cited source. No age minimum specified for seniors (adults 18+ with NFLOC). No phone number found. No explicit income limits in results."
+        "notes": "Current Choices for Care long-term care Medicaid uses a senior threshold of 65+ for the senior pathway; no separate income limit was found in the retrieved sources because eligibility is described through financial criteria rather than a single income cap."
       },
       "flags": [
         {
@@ -47,12 +47,21 @@
           "draftValue": 10000,
           "verifiedValue": 2000,
           "pctDiff": 80
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18002508427",
+            "211"
+          ],
+          "verifiedValue": "18004255119"
         }
       ],
-      "notes": "No official .gov source found for 2026 values; used 2025 data from cited source. No age minimum specified for seniors (adults 18+ with NFLOC). No phone number found. No explicit income limits in results."
+      "notes": "Current Choices for Care long-term care Medicaid uses a senior threshold of 65+ for the senior pathway; no separate income limit was found in the retrieved sources because eligibility is described through financial criteria rather than a single income cap."
     },
     {
-      "programId": "vt-medicaid-abd",
+      "programId": "medicaid-abd",
       "programName": "Medicaid for Aged, Blind, and Disabled (ABD)",
       "facts": {
         "age": 65,
@@ -66,14 +75,36 @@
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        7
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "18558999600",
+        "sources": {
+          "age": "https://info.healthconnect.vermont.gov/compare-plans/medicaid-and-dr-dynasaur",
+          "income": null,
+          "assets": "https://www.medicaidlongtermcare.org/eligibility/vermont/",
+          "phone": "https://info.healthconnect.vermont.gov/compare-plans/medicaid-and-dr-dynasaur"
+        },
+        "notes": "Vermont Medicaid for the Aged, Blind, and Disabled (MABD) is current; authoritative age and phone are on Vermont Health Connect/DVHA pages. Income test was not confirmed from an official source in the retrieved results, so it is set to null."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8002508427",
+            "211"
+          ],
+          "verifiedValue": "18558999600"
+        }
       ],
-      "flags": [],
-      "notes": null
+      "notes": "Vermont Medicaid for the Aged, Blind, and Disabled (MABD) is current; authoritative age and phone are on Vermont Health Connect/DVHA pages. Income test was not confirmed from an official source in the retrieved results, so it is set to null."
     },
     {
-      "programId": "vt-pace-comprehensive-care",
+      "programId": "pace-comprehensive-care",
       "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
       "facts": {
         "age": 55,
@@ -88,25 +119,35 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 55,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8022412401",
         "sources": {
-          "age": null,
+          "age": "https://www.medicare.gov/health-drug-plans/health-plans/your-coverage-options/other-medicare-health-plans/PACE",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://humanservices.vermont.gov/help-and-resources"
         },
-        "notes": "No PACE program found in Vermont; NPA search yields no results and no Vermont state agency or .gov source confirms existence as of 2026"
+        "notes": "PACE in Vermont appears active; current official eligibility age is 55+. No income or asset test found for PACE."
       },
-      "flags": [],
-      "notes": "No PACE program found in Vermont; NPA search yields no results and no Vermont state agency or .gov source confirms existence as of 2026"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8006334227",
+            "211"
+          ],
+          "verifiedValue": "8022412401"
+        }
+      ],
+      "notes": "PACE in Vermont appears active; current official eligibility age is 55+. No income or asset test found for PACE."
     },
     {
-      "programId": "vt-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Qualified Medicare Beneficiary (QMB), Specified Low-Income Medicare Beneficiary (SLMB), Qualified Individual (QI)",
       "facts": {
         "age": null,
@@ -123,24 +164,39 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1350,
-        "income_2": 1824,
-        "assets_individual": 9950,
-        "assets_couple": 14910,
-        "phone": null,
+        "income_1": 1995,
+        "income_2": 2707,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18002508427",
         "sources": {
           "age": null,
-          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "assets": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "phone": null
+          "income": "https://dvha.vermont.gov/members/medicare-savings-program",
+          "assets": "https://outside.vermont.gov/dept/DCF/Shared%20Documents/ESD/Partners/Health-Law.pdf",
+          "phone": "https://dvha.vermont.gov/members/medicare-savings-program"
         },
-        "notes": "Federal 2026 limits shown; Vermont bill proposes higher FPL thresholds but no confirmation of enactment or exact 2026 figures from official VT source. Programs apply nationally with uniform federal standards administered by states."
+        "notes": "Vermont’s SLMB no longer exists; SLMB enrollees were moved to QMB in 2026. Vermont MSP has no resource/asset test."
       },
-      "flags": [],
-      "notes": "Federal 2026 limits shown; Vermont bill proposes higher FPL thresholds but no confirmation of enactment or exact 2026 figures from official VT source. Programs apply nationally with uniform federal standards administered by states."
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1305,
+          "verifiedValue": 1995,
+          "pctDiff": 34.6
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 1763,
+          "verifiedValue": 2707,
+          "pctDiff": 34.9
+        }
+      ],
+      "notes": "Vermont’s SLMB no longer exists; SLMB enrollees were moved to QMB in 2026. Vermont MSP has no resource/asset test."
     },
     {
-      "programId": "vt-3squaresvt-older-vermonters",
+      "programId": "3squaresvt-older-vermonters",
       "programName": "3SquaresVT for Older Vermonters",
       "facts": {
         "age": 60,
@@ -149,6 +205,7 @@
         "assets_individual": 4250,
         "assets_couple": 4250,
         "phones": [
+          "8004796151",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -159,14 +216,14 @@
         "income_2": null,
         "assets_individual": 4500,
         "assets_couple": null,
-        "phone": null,
+        "phone": "18004796151",
         "sources": {
-          "age": "https://vermontfoodhelp.com/learn-more/applicants-participants/older-vermonters",
-          "income": null,
-          "assets": "https://vermontfoodhelp.com/learn-more/applicants-participants/older-vermonters",
-          "phone": null
+          "age": "https://dcf.vermont.gov/benefits/3SquaresVT/SNAP",
+          "income": "https://dcf.vermont.gov/benefits/3SquaresVT",
+          "assets": "https://dcf.vermont.gov/benefits/3SquaresVT",
+          "phone": "https://dcf.vermont.gov/benefits/3SquaresVT/SNAP"
         },
-        "notes": "3SquaresVT for Older Vermonters (age 60+) has no income test but applies $4500 resource test if income exceeds limit; no couple asset limit specified; no official phone found in sources"
+        "notes": "Current Vermont 3SquaresVT older-vermonters pathway still uses age 60+ in official state materials, but some newer non-government guides mention a 65+ change effective 10/01/2026; official state page retrieved here still shows 60+."
       },
       "flags": [
         {
@@ -177,10 +234,10 @@
           "pctDiff": 5.6
         }
       ],
-      "notes": "3SquaresVT for Older Vermonters (age 60+) has no income test but applies $4500 resource test if income exceeds limit; no couple asset limit specified; no official phone found in sources"
+      "notes": "Current Vermont 3SquaresVT older-vermonters pathway still uses age 60+ in official state materials, but some newer non-government guides mention a 65+ change effective 10/01/2026; official state page retrieved here still shows 60+."
     },
     {
-      "programId": "vt-fuel-assistance-heating-help",
+      "programId": "fuel-assistance-heating-help",
       "programName": "Fuel Assistance Program",
       "facts": {
         "age": null,
@@ -198,36 +255,24 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2412,
-        "income_2": 3260,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18007750516",
+        "phone": "8004796151",
         "sources": {
           "age": null,
-          "income": "https://vtlawhelp.org/energy-assistance-programs",
+          "income": null,
           "assets": null,
-          "phone": "https://vgsvt.com/savings/assistance-programs/"
+          "phone": "https://dcf.vermont.gov/benefits/fuel"
         },
-        "notes": "Income values represent 185% of Federal Poverty Guidelines for 2025 (monthly threshold for 1 and 2 person households). Program has no stated age requirement or asset limits in available sources. Phone number is Vermont Department for Children and Families Energy Assistance Office. No age-specific pathway identified for senior caregivers; program serves all eligible households regardless of age."
+        "notes": "No senior-specific age, income, or asset test was found from an authoritative current source; the program appears to have no resource test, and the current main help line is 1-800-479-6151."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8004796151",
-            "8024791053",
-            "8006391053",
-            "8028887993"
-          ],
-          "verifiedValue": "18007750516"
-        }
-      ],
-      "notes": "Income values represent 185% of Federal Poverty Guidelines for 2025 (monthly threshold for 1 and 2 person households). Program has no stated age requirement or asset limits in available sources. Phone number is Vermont Department for Children and Families Energy Assistance Office. No age-specific pathway identified for senior caregivers; program serves all eligible households regardless of age."
+      "flags": [],
+      "notes": "No senior-specific age, income, or asset test was found from an authoritative current source; the program appears to have no resource test, and the current main help line is 1-800-479-6151."
     },
     {
-      "programId": "vt-weatherization-assistance",
+      "programId": "weatherization-assistance",
       "programName": "Weatherization Assistance Program",
       "facts": {
         "age": null,
@@ -237,7 +282,7 @@
         "assets_couple": null,
         "phones": [
           "8028632345",
-          "8027750878",
+          "8026651748",
           "8024791053",
           "8005451084",
           "8027486040",
@@ -247,24 +292,38 @@
       },
       "verified": {
         "age": null,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 5215,
+        "income_2": 6019,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8022410935",
         "sources": {
           "age": null,
-          "income": null,
+          "income": "https://outside.vermont.gov/dept/DCF/Shared%20Documents/Benefits/Weatherization-Income-Guidelines.pdf",
           "assets": null,
-          "phone": null
+          "phone": "https://energysaver.vermont.gov/programs-incentives"
         },
-        "notes": "No authoritative current income limits, age requirements, assets, or phone found in search results for Vermont Weatherization Assistance Program as of 2026; sources mention general low-income or moderate-income (e.g., <120% AMI for WRAP) but no specific USD figures or senior pathway details with URLs providing exact values."
+        "notes": "Current Vermont Weatherization Assistance Program appears to use income guidelines only; no age or asset test found in authoritative sources. Income limits are annual figures converted to monthly by dividing by 12 and rounding: household of 1 = $62,580/year -> $5,215/month; household of 2 = $71,520/year -> $5,960/month. Official main contact listed as VT OEO Weatherization Assistance Program, (802) 241-0935."
       },
-      "flags": [],
-      "notes": "No authoritative current income limits, age requirements, assets, or phone found in search results for Vermont Weatherization Assistance Program as of 2026; sources mention general low-income or moderate-income (e.g., <120% AMI for WRAP) but no specific USD figures or senior pathway details with URLs providing exact values."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8028632345",
+            "8026651748",
+            "8024791053",
+            "8005451084",
+            "8027486040",
+            "8027224575"
+          ],
+          "verifiedValue": "8022410935"
+        }
+      ],
+      "notes": "Current Vermont Weatherization Assistance Program appears to use income guidelines only; no age or asset test found in authoritative sources. Income limits are annual figures converted to monthly by dividing by 12 and rounding: household of 1 = $62,580/year -> $5,215/month; household of 2 = $71,520/year -> $5,960/month. Official main contact listed as VT OEO Weatherization Assistance Program, (802) 241-0935."
     },
     {
-      "programId": "vt-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "State Health Insurance Assistance Program (SHIP)",
       "facts": {
         "age": null,
@@ -289,15 +348,15 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/contacts/vermont-state-health-insurance-assistance-program/general-beneficiary-contact/1562221"
+          "phone": "https://www.cms.gov/about-cms/contact/directory/vermont-state-health-insurance-assistance-program/1562221"
         },
-        "notes": "SHIP has no age, income, or asset eligibility limits; open to Medicare beneficiaries, families, caregivers"
+        "notes": "Vermont SHIP is a Medicare counseling program and does not have age, income, or asset eligibility tests; official phone number verified from CMS."
       },
       "flags": [],
-      "notes": "SHIP has no age, income, or asset eligibility limits; open to Medicare beneficiaries, families, caregivers"
+      "notes": "Vermont SHIP is a Medicare counseling program and does not have age, income, or asset eligibility tests; official phone number verified from CMS."
     },
     {
-      "programId": "vt-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Meals on Wheels (Vermont)",
       "facts": {
         "age": 60,
@@ -311,14 +370,36 @@
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        3
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8006425119",
+        "sources": {
+          "age": "https://www.agewellvt.org/services/food-meal-delivery/meals-on-wheels/",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.agewellvt.org/services/food-meal-delivery/meals-on-wheels/"
+        },
+        "notes": "Current Vermont senior Meals on Wheels pathway uses a 60+ threshold; no income or asset test found in current source."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8024657293",
+            "8022241825"
+          ],
+          "verifiedValue": "8006425119"
+        }
       ],
-      "flags": [],
-      "notes": null
+      "notes": "Current Vermont senior Meals on Wheels pathway uses a 60+ threshold; no income or asset test found in current source."
     },
     {
-      "programId": "vt-caregiver-support-program",
+      "programId": "caregiver-support-program",
       "programName": "Caregiver Support Program",
       "facts": {
         "age": 18,
@@ -333,21 +414,27 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8022413738",
+        "phone": "8006425119",
         "sources": {
-          "age": null,
+          "age": "https://ddsd.vermont.gov/services/caregiver-programs",
           "income": null,
           "assets": null,
-          "phone": "https://cpfamilynetwork.org/resources/resources-guide/vermont-family-caregiver-support-program/"
+          "phone": "https://ddsd.vermont.gov/services/caregiver-programs"
         },
-        "notes": "No age, income, or asset limits found for seniors in authoritative sources; program supports caregivers of adults 60+ per NFCSP but no senior-specific age test confirmed. Phone from state agency-linked source."
+        "notes": "Current Vermont caregiver support services for older Vermonters use a senior pathway age threshold of 60+; no income or asset test found in the retrieved official source."
       },
       "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 18,
+          "verifiedValue": 60
+        },
         {
           "field": "phone",
           "severity": "medium",
@@ -355,13 +442,13 @@
             "8002508427",
             "211"
           ],
-          "verifiedValue": "8022413738"
+          "verifiedValue": "8006425119"
         }
       ],
-      "notes": "No age, income, or asset limits found for seniors in authoritative sources; program supports caregivers of adults 60+ per NFCSP but no senior-specific age test confirmed. Phone from state agency-linked source."
+      "notes": "Current Vermont caregiver support services for older Vermonters use a senior pathway age threshold of 60+; no income or asset test found in the retrieved official source."
     },
     {
-      "programId": "vt-scsep-employment",
+      "programId": "scsep-employment",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -376,24 +463,33 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
+        "income_1": 125,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8004393307",
         "sources": {
-          "age": "https://a4td.org/scs-employment-program/",
-          "income": null,
+          "age": "https://labor.vermont.gov/vt-retain/individuals/resources",
+          "income": "https://www.dol.gov/agencies/eta/seniors",
           "assets": null,
-          "phone": null
+          "phone": "https://labor.vermont.gov/vt-retain/individuals/resources"
         },
-        "notes": "No phone number or income details found in sources; A4TD administers SCSEP in Vermont"
+        "notes": "SCSEP in Vermont is current and administered through state/federal SCSEP channels; no asset test was found in the retrieved official sources."
       },
-      "flags": [],
-      "notes": "No phone number or income details found in sources; A4TD administers SCSEP in Vermont"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8778725627"
+          ],
+          "verifiedValue": "8004393307"
+        }
+      ],
+      "notes": "SCSEP in Vermont is current and administered through state/federal SCSEP channels; no asset test was found in the retrieved official sources."
     },
     {
-      "programId": "vt-legal-assistance-seniors",
+      "programId": "legal-assistance-seniors",
       "programName": "Legal Assistance for Seniors (Vermont Legal Aid Elder Law Project)",
       "facts": {
         "age": 60,
@@ -413,20 +509,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8008892047",
         "sources": {
           "age": "https://www.vtlegalaid.org/legal-projects/elder-law-medicare-advocacy",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "income": "https://www.vtlegalaid.org/legal-projects/elder-law-medicare-advocacy",
+          "assets": "https://www.vtlegalaid.org/legal-projects/elder-law-medicare-advocacy",
+          "phone": "https://www.vtlegalaid.org/legal-projects/elder-law-medicare-advocacy"
         },
-        "notes": "No income, assets, or phone details found in sources for Elder Law Project; serves low-income but no specific limits given"
+        "notes": "Elder Law Project is current and serves Vermonters aged 60 and up; no income or asset test was found in current sources."
       },
       "flags": [],
-      "notes": "No income, assets, or phone details found in sources for Elder Law Project; serves low-income but no specific limits given"
+      "notes": "Elder Law Project is current and serves Vermonters aged 60 and up; no income or asset test was found in current sources."
     },
     {
-      "programId": "vt-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Long-Term Care Ombudsman",
       "facts": {
         "age": null,
@@ -451,15 +547,15 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/contacts/vermont-long-term-care-ombudsman-project/general-beneficiary-contact/1553991"
+          "phone": "https://asd.vermont.gov/services/ltc-ombudsman-program"
         },
-        "notes": "Program is free service with no income, assets, or age eligibility requirements"
+        "notes": "Long-Term Care Ombudsman is an advocacy/help line, not an income- or asset-tested benefit; no senior eligibility age limit found in the retrieved official sources."
       },
       "flags": [],
-      "notes": "Program is free service with no income, assets, or age eligibility requirements"
+      "notes": "Long-Term Care Ombudsman is an advocacy/help line, not an income- or asset-tested benefit; no senior eligibility age limit found in the retrieved official sources."
     },
     {
-      "programId": "vt-senior-companion-program",
+      "programId": "senior-companion-program",
       "programName": "Vermont Senior Companion Program",
       "facts": {
         "age": null,
@@ -477,24 +573,24 @@
       },
       "verified": {
         "age": 55,
-        "income_1": 31300,
-        "income_2": 42300,
+        "income_1": 30120,
+        "income_2": 40880,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8006425119",
         "sources": {
-          "age": "https://www.agewellvt.org/information/faqs-about-the-senior-companion-program/",
-          "income": "https://vermontmaturity.com/blogs/senior-companion-vermont/",
+          "age": "https://cvcoa.org/senior-companion-program",
+          "income": "https://cvcoa.org/senior-companion-program",
           "assets": null,
           "phone": "https://cvcoa.org/senior-companion-program"
         },
-        "notes": "Income eligibility varies slightly across sources (2022 guidelines show $27,180 single/$36,620 couple; 2026 sources show $31,300 single/$42,300 couple). Phone number 800-642-5119 is the official statewide HelpLine cited by multiple Area Agencies on Aging. Program is active and administered through Vermont's four Area Agencies on Aging as part of AmeriCorps Seniors. No asset limits found in search results."
+        "notes": "Current Vermont Senior Companion Program appears active; no authoritative asset limit found in retrieved sources."
       },
       "flags": [],
-      "notes": "Income eligibility varies slightly across sources (2022 guidelines show $27,180 single/$36,620 couple; 2026 sources show $31,300 single/$42,300 couple). Phone number 800-642-5119 is the official statewide HelpLine cited by multiple Area Agencies on Aging. Program is active and administered through Vermont's four Area Agencies on Aging as part of AmeriCorps Seniors. No asset limits found in search results."
+      "notes": "Current Vermont Senior Companion Program appears active; no authoritative asset limit found in retrieved sources."
     },
     {
-      "programId": "vt-senior-solutions-vet-to-vet",
+      "programId": "senior-solutions-vet-to-vet",
       "programName": "Senior Solutions Vet-to-Vet Program",
       "facts": {
         "age": 60,
@@ -509,22 +605,54 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8028852669",
         "sources": {
-          "age": "https://www.seniorsolutionsvt.org/services/pet-assistance/",
+          "age": "https://www.seniorsolutionsvt.org/services/veterans/",
           "income": null,
           "assets": null,
-          "phone": "https://www.seniorsolutionsvt.org/services/veterans/"
+          "phone": "https://www.seniorsolutionsvt.org/seniors/"
         },
-        "notes": "Vet-to-Vet program lacks explicit eligibility details like age or income on official pages; age from related Senior Solutions senior services (over 60). No .gov sources found for this specific program. Phone from volunteer coordinator context."
+        "notes": "No official senior age threshold was found for Vet-to-Vet; the page describes 'senior veterans' but gives no numeric age. Program appears current and active."
       },
       "flags": [],
-      "notes": "Vet-to-Vet program lacks explicit eligibility details like age or income on official pages; age from related Senior Solutions senior services (over 60). No .gov sources found for this specific program. Phone from volunteer coordinator context."
+      "notes": "No official senior age threshold was found for Vet-to-Vet; the page describes 'senior veterans' but gives no numeric age. Program appears current and active."
+    },
+    {
+      "programId": "family-caregiver-support",
+      "programName": "National Family Caregiver Program (NFCP)",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8006425119"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8006425119",
+        "sources": {
+          "age": "https://www.caregiver.org/connecting-caregivers/services-by-state/vermont/",
+          "income": "https://www.caregiver.org/connecting-caregivers/services-by-state/vermont/",
+          "assets": "https://www.caregiver.org/connecting-caregivers/services-by-state/vermont/",
+          "phone": "https://www.agewellvt.org/services/home-care-coordination/caregiver-support/"
+        },
+        "notes": "Vermont’s National Family Caregiver Program is administered through Area Agencies on Aging; no income or asset test was found for the senior caregiver pathway, and the main statewide helpline is 1-800-642-5119."
+      },
+      "flags": [],
+      "notes": "Vermont’s National Family Caregiver Program is administered through Area Agencies on Aging; no income or asset test was found for the senior caregiver pathway, and the main statewide helpline is 1-800-642-5119."
     }
   ]
 }

@@ -1,17 +1,17 @@
 {
   "state": "WY",
   "stateName": "Wyoming",
-  "checkedAt": "2026-04-14T10:11:48.328Z",
-  "total": 3,
+  "checkedAt": "2026-10-02T07:48:40.673Z",
+  "total": 4,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
   "programsWithFlags": 2,
-  "totalFlags": 2,
-  "highSeverityFlags": 1,
+  "totalFlags": 4,
+  "highSeverityFlags": 2,
   "programs": [
     {
-      "programId": "wy-state-parks-senior-discounts",
+      "programId": "state-parks-senior-discounts",
       "programName": "Wyoming State Parks Senior Discounts",
       "facts": {
         "age": 62,
@@ -25,19 +25,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 62,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "3077773680",
+        "phone": "3077776323",
         "sources": {
-          "age": "https://wyoparks.wyo.gov/index.php/permits-reservations/permits-fees",
+          "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://wyospcr.wyo.gov/index.php/news-events/press-releases"
+          "phone": "https://wyoparks.wyo.gov/index.php/learn/contact"
         },
-        "notes": "Wyoming State Parks offers senior discounts for ages 62+. No income or asset limits found in official sources. Senior lifetime pass price increased to $80 as of 2026 (previously $10). Phone number is for Wyoming Department of State Parks and Cultural Resources main contact. Program appears active as of April 2026."
+        "notes": "No authoritative statewide senior-discount age threshold could be verified from the retrieved official Wyoming State Parks pages; the official general contact phone is 307-777-6323."
       },
       "flags": [
         {
@@ -46,13 +46,13 @@
           "draftValue": [
             "8779967275"
           ],
-          "verifiedValue": "3077773680"
+          "verifiedValue": "3077776323"
         }
       ],
-      "notes": "Wyoming State Parks offers senior discounts for ages 62+. No income or asset limits found in official sources. Senior lifetime pass price increased to $80 as of 2026 (previously $10). Phone number is for Wyoming Department of State Parks and Cultural Resources main contact. Program appears active as of April 2026."
+      "notes": "No authoritative statewide senior-discount age threshold could be verified from the retrieved official Wyoming State Parks pages; the official general contact phone is 307-777-6323."
     },
     {
-      "programId": "wy-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "Low Income Energy Assistance Program (LIHEAP)",
       "facts": {
         "age": null,
@@ -67,24 +67,24 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2985,
-        "income_2": 3904,
+        "income_1": 2988,
+        "income_2": 3908,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8002464221",
         "sources": {
           "age": null,
-          "income": "https://www.snapscreener.com/liheap/wyoming",
+          "income": "https://dfs.wyo.gov/wp-content/uploads/2026/09/2026-0903-LIEAP-About-handout.pdf",
           "assets": null,
-          "phone": "https://dfs.wyo.gov/assistance-programs/home-utilities-energy-assistance/low-income-energy-assistance-program-lieap/"
+          "phone": "https://dfs.wyo.gov/wp-content/uploads/2026/09/2026-0903-LIEAP-About-handout.pdf"
         },
-        "notes": "Income from nonprofit citing official limits; official state site confirms 60% SMI but no table. Program active for 2025-2026 season. Priority for elderly 60+ but no age minimum."
+        "notes": "Wyoming LIHEAP/LIEAP uses a 60% State Median Income test; no asset test found in current official materials. Senior-specific LIHEAP pathway not identified; using standard household income limits."
       },
       "flags": [],
-      "notes": "Income from nonprofit citing official limits; official state site confirms 60% SMI but no table. Program active for 2025-2026 season. Priority for elderly 60+ but no age minimum."
+      "notes": "Wyoming LIHEAP/LIEAP uses a 60% State Median Income test; no asset test found in current official materials. Senior-specific LIHEAP pathway not identified; using standard household income limits."
     },
     {
-      "programId": "wy-tax-refund-elderly-disabled",
+      "programId": "tax-refund-elderly-disabled",
       "programName": "Wyoming Tax Refund for Elderly & Disabled",
       "facts": {
         "age": 65,
@@ -93,34 +93,85 @@
         "assets_individual": 29950,
         "assets_couple": 59900,
         "phones": [
+          "3077777320",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 62,
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 25000,
+        "assets_couple": 25000,
+        "phone": "8669898901",
+        "sources": {
+          "age": "https://wyoleg.gov/LSOResearch/2007/07RM055.pdf",
+          "income": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
+          "assets": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
+          "phone": "https://wyotax.org/wp-content/uploads/2020/07/Current-Property-Tax-Assistance-Programs-2013.pdf"
+        },
+        "notes": "Program is the Wyoming Tax Refund for Elderly & Disabled; current statute indicates age 65+ for senior pathway. Asset limit is stated per adult member of the household and no separate couple cap was found in the available official-style sources. Income values were not extracted because the request asked only for assets and age, and the retrievable statutory snippet did not provide clear current income thresholds."
+      },
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 29950,
+          "verifiedValue": 25000,
+          "pctDiff": 16.5
+        },
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 59900,
+          "verifiedValue": 25000,
+          "pctDiff": 58.3
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "3077777320",
+            "211"
+          ],
+          "verifiedValue": "8669898901"
+        }
+      ],
+      "notes": "Program is the Wyoming Tax Refund for Elderly & Disabled; current statute indicates age 65+ for senior pathway. Asset limit is stated per adult member of the household and no separate couple cap was found in the available official-style sources. Income values were not extracted because the request asked only for assets and age, and the retrievable statutory snippet did not provide clear current income thresholds."
+    },
+    {
+      "programId": "family-caregiver-support",
+      "programName": "National Family Caregiver Support Program",
+      "facts": {
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phones": [
+          "8004422766",
+          "3077777995"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "3077777995",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://health.wyo.gov/aging/communityliving/older-americans-act-programs/nfcp/"
         },
-        "notes": "No authoritative 2026 details found on eligibility (age, income, assets) or phone in search results; program administered by Wyoming Dept. of Health per county site, but no official specs retrievable"
+        "notes": "No age, income, or asset test found for Wyoming's National Family Caregiver Support Program senior-caregiver pathway; official contact number listed on Wyoming Department of Health page."
       },
-      "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 65,
-          "verifiedValue": 62
-        }
-      ],
-      "notes": "No authoritative 2026 details found on eligibility (age, income, assets) or phone in search results; program administered by Wyoming Dept. of Health per county site, but no official specs retrievable"
+      "flags": [],
+      "notes": "No age, income, or asset test found for Wyoming's National Family Caregiver Support Program senior-caregiver pathway; official contact number listed on Wyoming Department of Health page."
     }
   ]
 }
