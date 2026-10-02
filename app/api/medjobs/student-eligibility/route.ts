@@ -15,6 +15,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { sanitizeReferral } from "@/lib/medjobs/apply-link";
+import { notifyNewApplication } from "@/lib/medjobs/new-application-notice";
 import { calculateCompleteness } from "@/lib/medjobs-completeness";
 import { sendSlackAlert, slackMedJobsNewStudent } from "@/lib/slack";
 import { sendEmail } from "@/lib/email";
@@ -199,6 +200,27 @@ export async function POST(request: NextRequest) {
       console.error("[medjobs/student-eligibility] insert error:", error);
       return NextResponse.json({ error: "Failed to create profile" }, { status: 500 });
     }
+
+    // Tell whoever owns Students at this campus that somebody applied.
+    //
+    // This is the only route that creates a student. The notice used to hang
+    // off /api/medjobs/apply, which nothing posts to any more — the page of
+    // that name redirects here — so from 30 September to 2 October every
+    // applicant arrived in silence. If a third create path is ever added,
+    // this call belongs in it too.
+    //
+    // The screener creates them with is_active false, so the application is
+    // started and not finished: complete is false. It never throws; a failed
+    // email must not cost the student their account.
+    await notifyNewApplication(supabaseAdmin, {
+      profileId: profile.id,
+      name: displayName,
+      university: university || "",
+      universityId: body.universityId || null,
+      city: cityValue || undefined,
+      state: stateValue || undefined,
+      complete: false,
+    });
 
     // ── Auth user + account + link + silent sign-in token ──
     let insertPathSignInToken: string | undefined;
