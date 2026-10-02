@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T09:35:41.645Z
+ * Last updated: 2026-10-02T23:34:41.684Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -245,11 +245,11 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 6046
+            "monthlyLimit": 8300
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 6879
+            "monthlyLimit": 9488
           }
         ],
         "assetLimits": null,
@@ -388,26 +388,30 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dacl.dc.gov/service/safe-home",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
+      "reviewQueue": [],
+      "appliedCorrections": [
         {
           "field": "income_1",
           "from": 6046,
-          "to": 99600,
+          "to": 8300,
           "source": "https://dacl.dc.gov/service/safe-home",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
+          "flaggedAt": "2026-10-02T09:35:41.563Z",
+          "appliedAt": "2026-10-03",
+          "appliedBy": "reviewed-by-hand",
+          "note": "Page says $99,600 a year for an individual; stored as $8,300 a month"
         },
         {
           "field": "income_2",
           "from": 6879,
-          "to": 113850,
+          "to": 9488,
           "source": "https://dacl.dc.gov/service/safe-home",
-          "severity": "high",
-          "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
+          "flaggedAt": "2026-10-02T09:35:41.563Z",
+          "appliedAt": "2026-10-03",
+          "appliedBy": "reviewed-by-hand",
+          "note": "Page says $113,850 a year for a household of two; stored as $9,488 a month"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-03"
     },
     {
       "id": "dacl-benefits-assistance",
@@ -434,7 +438,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "If your loved one is 65+ or has a disability and needs help with daily tasks like bathing, dressing, or medication management, DACL Benefits Assistance helps them enroll in DC's Elderly and Persons with Physical Disabilities (EPD) Waiver program. This Medicaid waiver covers personal care aide services, case management, and other supports that let your loved one stay home instead of moving to a nursing home.\n\nYour loved one must qualify for Medicaid with income under $2,743/month and countable assets under $4,000 (2023 figures). Because this program requires nursing home level of care, your loved one will need a face-to-face assessment by Liberty Healthcare to determine their level of need. DACL staff guide families through the entire enrollment process, from Medicaid applications to waiver services.\n\nThis is enrollment assistance, not direct benefits, DACL helps you navigate the complex EPD Waiver system and connects you with the right case managers once approved.",
+      "intro": "If your loved one is 60+ or has a disability and needs help with daily tasks like bathing, dressing, or medication management, DACL Benefits Assistance helps them enroll in DC's Elderly and Persons with Physical Disabilities (EPD) Waiver program. This Medicaid waiver covers personal care aide services, case management, and other supports that let your loved one stay home instead of moving to a nursing home.\n\nYour loved one must qualify for Medicaid with income under $2,743/month and countable assets under $4,000 (2023 figures). Because this program requires nursing home level of care, your loved one will need a face-to-face assessment by Liberty Healthcare to determine their level of need. DACL staff guide families through the entire enrollment process, from Medicaid applications to waiver services.\n\nThis is enrollment assistance, not direct benefits, DACL helps you navigate the complex EPD Waiver system and connects you with the right case managers once approved.",
       "savingsRange": "",
       "savingsSource": "Free enrollment assistance service",
       "savingsVerified": false,
@@ -446,7 +450,7 @@ export const drafts: PipelineStateDrafts = {
           "Assets under $4,000",
           "Needs nursing home level of care"
         ],
-        "ageRequirement": "65+",
+        "ageRequirement": "60+",
         "incomeTable": null,
         "assetLimits": {
           "individual": 4000,
@@ -603,16 +607,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dacl.dc.gov/service/benefits-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null,
-      "reviewQueue": [
+      "lastVerifiedDate": "2026-10-03",
+      "reviewQueue": [],
+      "appliedCorrections": [
         {
           "field": "age",
-          "from": 65,
-          "to": 60,
-          "source": "https://dacl.dc.gov/sites/default/files/dc/sites/dacl/service_content/attachments/Case%20Management%20FAQ_2.pdf",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
+          "from": "60+",
+          "to": "60+",
+          "source": "https://dacl.dc.gov/service/information-referralassistance",
+          "flaggedAt": "2026-10-02T09:35:41.563Z",
+          "appliedAt": "2026-10-03",
+          "appliedBy": "reviewed-by-hand",
+          "note": "DACL intake is adults 60 and older, plus adults with disabilities 18 to 59"
         }
       ]
     },
@@ -673,7 +679,7 @@ export const drafts: PipelineStateDrafts = {
           {
             "step": 1,
             "title": "Choose a center",
-            "description": "Contact the D.C. Office on Aging at (202) 724-7000 for referrals to centers near your loved one, or visit centers directly like SOME at 1395 Aspen St. NW or Vida Senior Centers for Hispanic seniors."
+            "description": "Contact the DC Department of Aging and Community Living at (202) 724-5626 for referrals to centers near your loved one, or visit centers directly like SOME at 1395 Aspen St. NW or Vida Senior Centers for Hispanic seniors."
           },
           {
             "step": 2,
@@ -704,8 +710,8 @@ export const drafts: PipelineStateDrafts = {
       ],
       "contacts": [
         {
-          "label": "D.C. Office on Aging",
-          "phone": "(202) 724-7000",
+          "label": "DC Department of Aging and Community Living (DACL)",
+          "phone": "(202) 724-5626",
           "description": "General information and referrals to senior centers",
           "hours": "Mon-Fri 8:30am-5pm ET"
         },
@@ -727,11 +733,11 @@ export const drafts: PipelineStateDrafts = {
       "faqs": [
         {
           "question": "Can my loved one with dementia participate in DC senior centers?",
-          "answer": "It depends on the specific center. SOME Senior Services excludes participants with dementia or Alzheimer's diagnoses, but other centers in the DC network may accept participants with cognitive impairments. Call the D.C. Office on Aging at (202) 724-7000 to find centers that can accommodate your loved one's needs."
+          "answer": "It depends on the specific center. SOME Senior Services excludes participants with dementia or Alzheimer's diagnoses, but other centers in the DC network may accept participants with cognitive impairments. Call the DC Department of Aging and Community Living at (202) 724-5626 to find centers that can accommodate your loved one's needs."
         },
         {
           "question": "What if my loved one doesn't speak English well?",
-          "answer": "Vida Senior Centers specifically serve Hispanic seniors with programming conducted in Spanish. Contact the D.C. Office on Aging at (202) 724-7000 to locate Vida center locations or other centers that may offer services in your loved one's preferred language."
+          "answer": "Vida Senior Centers specifically serve Hispanic seniors with programming conducted in Spanish. Contact the DC Department of Aging and Community Living at (202) 724-5626 to locate Vida center locations or other centers that may offer services in your loved one's preferred language."
         },
         {
           "question": "How much do the meals and activities cost?",
@@ -747,32 +753,24 @@ export const drafts: PipelineStateDrafts = {
         "visualTone": "minimal"
       },
       "icon": "Users",
-      "phone": "(202) 724-7000",
+      "phone": "(202) 724-5626",
       "sourceUrl": "https://dcoa.dc.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "reviewQueue": [
-        {
-          "field": "age",
-          "from": 60,
-          "to": 55,
-          "source": "https://dacl.dc.gov/service/senior-centers",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
-        },
+      "reviewQueue": [],
+      "appliedCorrections": [
         {
           "field": "phone",
-          "from": [
-            "2027247000"
-          ],
-          "to": "2027245626",
-          "source": "https://dacl.dc.gov/service/senior-centers",
-          "severity": "medium",
-          "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
+          "from": "(202) 724-5626",
+          "to": "(202) 724-5626",
+          "source": "https://dacl.dc.gov/services",
+          "flaggedAt": "2026-10-02T09:35:41.563Z",
+          "appliedAt": "2026-10-03",
+          "appliedBy": "reviewed-by-hand",
+          "note": "DACL main line; the Office on Aging number predates the agency rename"
         }
-      ]
+      ],
+      "lastVerifiedDate": "2026-10-03"
     },
     {
       "id": "family-caregiver-support",
