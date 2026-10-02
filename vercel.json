@@ -170,7 +170,7 @@
     },
     {
       "path": "/api/cron/cortex-inbox-pass",
-      "schedule": "0 1,13 * * *"
+      "schedule": "0 1 * * *"
     },
     {
       "path": "/api/cron/deliverability-watch",
