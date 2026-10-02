@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { isOptOutPhrase, matchOutcomeReply } from "@/lib/sms/inbound-intent";
 import { markSmsThreadHandled, MAX_SMS_BODY, replyToSmsThread } from "@/lib/sms/inbox-actions.server";
 import { runNoiseSweep } from "@/lib/support-email/noise-sweep.server";
-import { archiveSupportThreads, saveSupportDraft } from "@/lib/support-email/thread-actions.server";
+import { archiveSupportThreads, saveSupportDraft, sendSupportReply } from "@/lib/support-email/thread-actions.server";
 import { checkDraft, renderCheck } from "@/lib/war-room/draft-check.server";
 import { HUMAN_VOICE_RULES } from "@/lib/family-answers/human-voice";
 import { AGED_OUT_DAYS, callbackLine, loadWaitingVoicemails, sortVoicemails, STALE_CALLBACK_DAYS } from "@/lib/war-room/voicemail-triage.server";
@@ -20,7 +20,8 @@ import { AGED_OUT_DAYS, callbackLine, loadWaitingVoicemails, sortVoicemails, STA
  * Every action runs through the same shared functions the admin inbox uses
  * (lib/sms/inbox-actions.server.ts, lib/support-email/*), so quiet hours,
  * do-not-contact, "mark handled" and the draft bookkeeping all happen exactly
- * as they do for his clicks. Email is drafted only; he sends from Gmail.
+ * as they do for his clicks. A provider email he approves is sent from
+ * support@; a family email is saved as a Gmail draft he sends himself.
  *
  * Never surface handled work (TJ, 26 Sep: "it's giving outdated information,
  * stuff that we've already handled"). A thread is proposed only when the last
@@ -512,6 +513,16 @@ export function assignNumbers(proposed: ProposedItem[], usedRecently: number[]):
   });
 }
 
+/**
+ * A provider email goes out when he approves it; a family email stays a draft
+ * he sends himself. TJ, 2026-10-02, choosing between all, providers only and
+ * none: providers only. Families are where a wrong sentence costs most, and the
+ * last look in Gmail is where he caught one on 1 Oct.
+ */
+export function sendsOnApproval(item: Pick<StoredItem, "kind" | "category">): boolean {
+  return item.kind === "email_draft" && item.category === "email:draft:provider";
+}
+
 /** "Email Blue Water Homecare re ..." -> "Blue Water Homecare". */
 export function whoFor(item: StoredItem): string {
   return clip(item.summary.replace(/^(Email|Text)\s+/, "").split(/ re "| \(waiting|\. They said|: "/)[0], 42);
@@ -546,7 +557,7 @@ export function renderSynopsis(pass: InboxPass, now = new Date()): string {
   const calls = pass.items.find((item) => item.category === "email:voicemail_callbacks");
   const questions = pass.items.filter((item) => item.kind === "question" && item.category !== "email:voicemail_callbacks");
   const actionable = pass.items.filter((item) => item.kind !== "question");
-  const line = (items: StoredItem[]) => items.map((item) => `${item.number} ${whoFor(item)}${item.target?.carried ? " (same draft)" : ""}`).join(" · ");
+  const line = (items: StoredItem[]) => items.map((item) => `${item.number} ${whoFor(item)}${item.kind === "email_draft" && !sendsOnApproval(item) ? " (family, draft)" : ""}${item.target?.carried ? " (same draft)" : ""}`).join(" · ");
   const parts = [
     `*Inbox, ${day}:* ${actionable.length} to approve.`,
     triage.length ? `Clear: ${triage.map((item) => `${item.number} ${triagePhrase(item)}`).join(" · ")}` : "",
@@ -579,7 +590,15 @@ ${renderDigest(pass).replace(/^\*(.+)\*$/gm, "### $1")}
 
 **Do not act on anything until TJ names the numbers.** This report is a list of choices, not a task.
 
-Show him the items, then help him decide, from an olera-web checkout:
+Walk him through it, so he never has to remember a command:
+
+1. Open with one line: how many items, which are drafts, which are clear-outs.
+2. Clear-outs first, together: list them in a sentence and ask "approve all of these?"
+3. Then each draft, one at a time: show the full text and ask "approve, edit, check, or skip?" On "edit", write the change with him, then run \`check N: <new text>\` so the version he approves is the checked one. On "check", run it and show the objections. On "skip", run it.
+4. Last, the call-back list, if he wants it.
+5. End with the single line he sends Cortex on Telegram for everything he approved, e.g. \`approve 12 15 16\`. An edited draft is sent as is by approving its number, because "check N: <text>" already made it the version that goes.
+
+Commands, from an olera-web checkout:
 
 \`\`\`
 ${run} list                  # what is still open
@@ -588,7 +607,7 @@ ${run} "check 5: <his text>" # check his edited version; "send 5" then sends it
 ${run} skip 4
 \`\`\`
 
-Approvals run in production, not here: archiving and email drafts go through Gmail, whose keys are only in Vercel. When he has chosen, give him the one line to send Cortex on Telegram (desktop works), for example \`approve 2 5 7\` or \`send 5: <his text>\`. Texts go to families on approval (quiet hours respected); emails become Gmail drafts he sends himself. Items stay open until the next pass (${nextPassIn(now)}).
+Approvals run in production, not here: archiving and email drafts go through Gmail, whose keys are only in Vercel. When he has chosen, give him the one line to send Cortex on Telegram (desktop works), for example \`approve 2 5 7\` or \`send 5: <his text>\`. Texts go to families on approval (quiet hours respected). Provider emails are sent from support@ on approval; family emails become Gmail drafts he sends himself. Items stay open until the next pass (${nextPassIn(now)}).
 
 When he is done, close this report with what he chose: \`npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-handoffs.ts close <id> done "approved 2 5 7"\`.
 `;
@@ -606,7 +625,7 @@ export function renderDigest(pass: InboxPass): string {
   const section = (title: string, kinds: InboxItemKind[], only: (item: StoredItem) => boolean = () => true) => {
     const rows = pass.items.filter((item) => kinds.includes(item.kind) && only(item));
     if (!rows.length) return "";
-    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? "\n(Saved as a Gmail draft when you approve. You send it.)" : ""}`).join("\n\n")}`;
+    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? (sendsOnApproval(item) ? "\n(Provider: sent from support@ when you approve.)" : "\n(Family: saved as a Gmail draft when you approve. You send it.)") : ""}`).join("\n\n")}`;
   };
   const parts = [
     section("Clear", ["triage_batch"]),
@@ -739,7 +758,12 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
       return finish("done", scheduled?.sendAfter ? `scheduled for their morning (quiet hours where they are).` : "sent.");
     }
     if (item.kind === "email_draft") {
-      await saveSupportDraft(db, { threadId: String(item.target.threadId), body: edit ?? stripDraftHeaders(currentText(item)), actor: approver.actor, adminUserId: approver.id });
+      const args = { threadId: String(item.target.threadId), body: edit ?? stripDraftHeaders(currentText(item)), actor: approver.actor, adminUserId: approver.id };
+      if (sendsOnApproval(item)) {
+        const sent = await sendSupportReply(db, args);
+        return finish("done", `sent to ${sent.to} from support@.${sent.warning ? ` (It went; ${sent.warning}.)` : ""}`);
+      }
+      await saveSupportDraft(db, args);
       return finish("done", "saved as a Gmail draft on the thread. Send it from Gmail when you're ready.");
     }
     return finish("failed", "I don't know how to do that one.");

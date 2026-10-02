@@ -7,16 +7,18 @@ import {
   buildReplyRaw,
   createGmailDraft,
   gmailAccessToken,
+  sendGmailDraft,
   updateGmailDraft,
 } from "@/lib/support-email/gmail.server";
-import type { SupportMailboxRow } from "@/lib/support-email/sync.server";
+import { importGmailMessage, type SupportMailboxRow } from "@/lib/support-email/sync.server";
 
 /**
  * Support-thread actions shared by /api/admin/support-email/[threadId] and
  * Cortex. Moved out of the route unchanged, so a draft Cortex saves after the
  * founder's approval is the same Gmail draft his "Save draft" makes: a reply
  * in the thread, from the support address, recorded in support_email_actions
- * and the audit log. Cortex saves drafts only; a person sends, as today.
+ * and the audit log. Cortex saves family replies as drafts for a person to
+ * send, and sends provider replies he approved (TJ, 2026-10-02).
  */
 
 type ThreadRow = { id: string; subject: string; gmail_thread_id: string; gmail_draft_id: string | null };
@@ -85,21 +87,15 @@ export async function writeSupportDraft(args: {
   return { draft, to };
 }
 
-/**
- * Save a Gmail draft on a thread, loading everything the route would have in
- * hand. The same checks as the route: non-empty, under 20k, a reply address.
- */
-export async function saveSupportDraft(
-  db: SupabaseClient,
-  args: { threadId: string; body: string; actor: string; adminUserId: string },
-): Promise<{ draftId: string }> {
-  const draftBody = args.body.trim();
+/** Everything the route has in hand for a thread: the row, its mailbox, a Gmail token, their latest message. */
+async function loadThreadForReply(db: SupabaseClient, threadId: string, body: string) {
+  const draftBody = body.trim();
   if (!draftBody) throw new Error("Reply cannot be empty");
   if (draftBody.length > 20_000) throw new Error("Reply is too long");
   const { data: thread, error } = await db
     .from("support_email_threads")
     .select("*, support_mailboxes(*)")
-    .eq("id", args.threadId)
+    .eq("id", threadId)
     .single();
   if (error || !thread) throw error ?? new Error("Thread not found");
   const mailbox = thread.support_mailboxes as SupportMailboxRow;
@@ -108,17 +104,61 @@ export async function saveSupportDraft(
   const { data: latestInbound, error: latestError } = await db
     .from("support_email_messages")
     .select("*")
-    .eq("thread_id", args.threadId)
+    .eq("thread_id", threadId)
     .eq("direction", "in")
     .order("internal_date", { ascending: false })
     .limit(1)
     .single();
   if (latestError || !latestInbound) throw latestError ?? new Error("No inbound message to answer");
+  return { thread, mailbox, accessToken, latestInbound, draftBody };
+}
+
+/**
+ * Save a Gmail draft on a thread, loading everything the route would have in
+ * hand. The same checks as the route: non-empty, under 20k, a reply address.
+ */
+export async function saveSupportDraft(
+  db: SupabaseClient,
+  args: { threadId: string; body: string; actor: string; adminUserId: string },
+): Promise<{ draftId: string }> {
+  const { thread, mailbox, accessToken, latestInbound, draftBody } = await loadThreadForReply(db, args.threadId, args.body);
   const { draft } = await writeSupportDraft({
     db, accessToken, thread, mailbox, latestInbound, draftBody, actor: args.actor, now: new Date().toISOString(),
   });
   await recordSupportAction(db, args.threadId, args.actor, args.adminUserId, "save_draft");
   return { draftId: draft.id };
+}
+
+/**
+ * Send a reply, exactly as the admin inbox's Send does: write the draft, send
+ * it, import Gmail's sent copy, mark the thread handled. Gmail is authoritative,
+ * so a failure after the send is a warning, not an error: the email went.
+ */
+export async function sendSupportReply(
+  db: SupabaseClient,
+  args: { threadId: string; body: string; actor: string; adminUserId: string },
+): Promise<{ to: string; warning: string | null }> {
+  const { thread, mailbox, accessToken, latestInbound, draftBody } = await loadThreadForReply(db, args.threadId, args.body);
+  const now = new Date().toISOString();
+  const { draft, to } = await writeSupportDraft({ db, accessToken, thread, mailbox, latestInbound, draftBody, actor: args.actor, now });
+  const sent = await sendGmailDraft(accessToken, draft.id);
+  const warnings: string[] = [];
+  try {
+    if (sent.id) await importGmailMessage(db, mailbox, accessToken, sent.id);
+  } catch (err) {
+    console.error("[support-email] reply sent but immediate Gmail import failed:", err);
+    warnings.push("the conversation could not refresh immediately");
+  }
+  const { error: stateError } = await db.from("support_email_threads").update({
+    state: "handled", unread: false, handled_at: now, handled_by: args.actor,
+    gmail_draft_id: null, draft_body: null, draft_updated_at: null, updated_at: now,
+  }).eq("id", args.threadId);
+  if (stateError) {
+    console.error("[support-email] reply sent but local thread state failed to update:", stateError);
+    warnings.push("the local inbox state could not be updated");
+  }
+  await recordSupportAction(db, args.threadId, args.actor, args.adminUserId, "send", { gmailMessageId: sent.id, to });
+  return { to, warning: warnings.length ? warnings.join(" and ") : null };
 }
 
 /**

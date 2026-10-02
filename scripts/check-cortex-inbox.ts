@@ -11,7 +11,7 @@ import { isRealObjection, parseObjections, renderCheck } from "../lib/war-room/d
 import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  assignNumbers, inboxReportBody, renderSynopsis, whoFor, buildInboxProposals, carryTarget, cleanSubject, stripDraftHeaders, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
+  assignNumbers, sendsOnApproval, inboxReportBody, renderSynopsis, whoFor, buildInboxProposals, carryTarget, cleanSubject, stripDraftHeaders, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
 } from "../lib/war-room/inbox-operator.server";
 
 // --- Draft headers: the model echoed its prompt's SUBJECT line into Blue Water's body on 1 Oct.
@@ -67,6 +67,20 @@ assert.equal(stripDraftHeaders("Hi Elle,\nRe: your question, we don't have it.")
   assert.match(report.body, /Do not act on anything until TJ names the numbers/);
   assert.match(report.body, /scripts\/cortex-inbox\.ts check 5/);
   assert.equal(renderSynopsis({ passId: "p", items: [], waitingElsewhere: 0, costUsd: 0 }, at), "Inbox pass: both inboxes are clear.");
+}
+// Provider emails send on approval; family emails stay drafts (TJ, 2 Oct).
+assert.equal(sendsOnApproval({ kind: "email_draft", category: "email:draft:provider" }), true);
+assert.equal(sendsOnApproval({ kind: "email_draft", category: "email:draft:care_seeker" }), false, "a family email is never sent for him");
+assert.equal(sendsOnApproval({ kind: "sms_draft", category: "email:draft:provider" }), false);
+{
+  const at = new Date("2026-10-02T01:00:00Z");
+  const fam = { id: "f", pass_id: "p", number: 4, kind: "email_draft", category: "email:draft:care_seeker", summary: 'Email Marti Carroll re "LIHEAP". Care seeker', target: { threadId: "t" }, body: "Draft", status: "proposed", created_at: at.toISOString() } as StoredItem;
+  const prov = { ...fam, id: "p2", number: 5, category: "email:draft:provider", summary: 'Email Elle Patti re "website". Provider' } as StoredItem;
+  const pass = { passId: "p", items: [fam, prov], waitingElsewhere: 0, costUsd: 0 };
+  assert.match(renderSynopsis(pass, at), /Emails: 4 Marti Carroll \(family, draft\) · 5 Elle Patti$/m);
+  const full = inboxReportBody(pass, at).body;
+  assert.match(full, /\(Family: saved as a Gmail draft when you approve\. You send it\.\)/);
+  assert.match(full, /\(Provider: sent from support@ when you approve\.\)/);
 }
 console.log("synopsis checks passed");
 
