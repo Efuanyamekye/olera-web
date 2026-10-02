@@ -15,6 +15,13 @@ import {
   PRN_OPTIONS,
   REQUIREMENT_OPTIONS,
 } from "@/lib/medjobs/hiring-needs-questions";
+import {
+  type AvailabilitySchedule,
+  TIME_SLOTS,
+  getDateOptions,
+  getAvailableTimeSlots,
+  formatTimeSlot,
+} from "@/lib/medjobs/availability-utils";
 
 /* ── Types ── */
 
@@ -518,6 +525,9 @@ function InterviewDetailModal({
   const resumeStoragePath = studentMeta.resume_url as string | undefined;
   const videoUrl = studentMeta.video_intro_url as string | undefined;
 
+  // Student availability for filtering reschedule options
+  const studentAvailability = studentMeta.availability_schedule as AvailabilitySchedule | undefined;
+
   // State for signed document URLs
   const [signedResumeUrl, setSignedResumeUrl] = useState<string | null>(null);
   const [resumeLoading, setResumeLoading] = useState(false);
@@ -621,7 +631,28 @@ function InterviewDetailModal({
   const [showReschedule, setShowReschedule] = useState(false);
   const [rescheduleDate, setRescheduleDate] = useState("");
   const [rescheduleTime, setRescheduleTime] = useState("");
-  const todayStr = new Date().toISOString().split("T")[0];
+
+  // Filtered date/time options based on student availability
+  const rescheduleDateOptions = useMemo(
+    () => getDateOptions(studentAvailability),
+    [studentAvailability]
+  );
+  const rescheduleTimeOptions = useMemo(() => {
+    if (!rescheduleDate) {
+      return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+    }
+    const selectedDate = new Date(rescheduleDate + "T00:00:00");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+  }, [rescheduleDate, studentAvailability]);
+
+  // Clear time if it's no longer valid after date change
+  useEffect(() => {
+    if (rescheduleTime && !rescheduleTimeOptions.some(opt => opt.value === rescheduleTime)) {
+      setRescheduleTime("");
+    }
+  }, [rescheduleTime, rescheduleTimeOptions]);
+
   const canReschedule = !!rescheduleDate && !!rescheduleTime && !isLoading;
   const handleReschedule = async () => {
     if (!canReschedule) return;
@@ -662,19 +693,26 @@ function InterviewDetailModal({
       return (
         <div className="space-y-3">
           <div className="flex gap-2">
-            <input
-              type="date"
-              min={todayStr}
+            <select
               value={rescheduleDate}
               onChange={(e) => setRescheduleDate(e.target.value)}
-              className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-            <input
-              type="time"
+              className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="">Select date</option>
+              {rescheduleDateOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+            <select
               value={rescheduleTime}
               onChange={(e) => setRescheduleTime(e.target.value)}
-              className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
+              className="flex-1 px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+            >
+              <option value="">Select time</option>
+              {rescheduleTimeOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
           </div>
           <button
             type="button"

@@ -362,6 +362,7 @@ export default function HireCaregiversBoard() {
           onClose={() => setScheduleTarget(null)}
           onScheduled={() => setScheduleTarget(null)}
           jobDetails={jobDetails}
+          studentAvailability={scheduleTarget.metadata?.availability_schedule}
         />
       )}
 

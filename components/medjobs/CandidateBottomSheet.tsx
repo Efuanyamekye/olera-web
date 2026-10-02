@@ -17,6 +17,13 @@ import {
   getSeasonalStatusLabel,
 } from "@/lib/medjobs-helpers";
 import { EMPLOYER_AGREEMENT_URL } from "@/lib/medjobs/eligibility";
+import {
+  type AvailabilitySchedule,
+  TIME_SLOTS,
+  getDateOptions,
+  getAvailableTimeSlots,
+  formatTimeSlot,
+} from "@/lib/medjobs/availability-utils";
 
 type ViewState = "profile" | "schedule" | "success";
 
@@ -37,37 +44,6 @@ const FORMAT_OPTIONS: { value: "video" | "phone" | "in_person"; label: string }[
   { value: "phone", label: "Phone" },
   { value: "in_person", label: "In person" },
 ];
-
-function getDateOptions(): { value: string; label: string }[] {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const options: { value: string; label: string }[] = [];
-  for (let i = 0; i < 30; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() + i);
-    const dateStr = d.toISOString().split("T")[0];
-    let label: string;
-    if (i === 0) label = "Today";
-    else if (i === 1) label = "Tomorrow";
-    else label = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-    options.push({ value: dateStr, label });
-  }
-  return options;
-}
-
-const TIME_SLOTS = [
-  "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-  "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
-  "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
-  "17:00", "17:30", "18:00",
-];
-
-function formatTimeSlot(time24: string): string {
-  const [hours, minutes] = time24.split(":").map(Number);
-  const period = hours >= 12 ? "PM" : "AM";
-  const hour12 = hours % 12 || 12;
-  return minutes === 0 ? `${hour12}:00 ${period}` : `${hour12}:${minutes.toString().padStart(2, "0")} ${period}`;
-}
 
 function formatExperienceDate(ym: string): string {
   const [year, month] = ym.split("-");
@@ -176,8 +152,40 @@ export default function CandidateBottomSheet({
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const dateOptions = useMemo(() => getDateOptions(), []);
-  const timeOptions = useMemo(() => TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) })), []);
+  const studentAvailability = candidate.metadata?.availability_schedule;
+  const dateOptions = useMemo(
+    () => getDateOptions(studentAvailability),
+    [studentAvailability]
+  );
+  const timeOptions = useMemo(() => {
+    if (!date) {
+      return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+    }
+    const selectedDate = new Date(date + "T00:00:00");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+  }, [date, studentAvailability]);
+  const altTimeOptions = useMemo(() => {
+    if (!altDate) {
+      return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+    }
+    const selectedDate = new Date(altDate + "T00:00:00");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+  }, [altDate, studentAvailability]);
+
+  // Clear time selection if it's no longer valid after date change
+  useEffect(() => {
+    if (time && !timeOptions.some(opt => opt.value === time)) {
+      setTime("");
+    }
+  }, [time, timeOptions]);
+
+  useEffect(() => {
+    if (altTime && !altTimeOptions.some(opt => opt.value === altTime)) {
+      setAltTime("");
+    }
+  }, [altTime, altTimeOptions]);
 
   const meta = candidate.metadata;
   const firstName = candidate.display_name.split(" ")[0];
@@ -415,6 +423,7 @@ export default function CandidateBottomSheet({
               setAltDate={setAltDate}
               altTime={altTime}
               setAltTime={setAltTime}
+              altTimeOptions={altTimeOptions}
               notes={notes}
               setNotes={setNotes}
               agreed={agreed}
@@ -836,6 +845,7 @@ interface ScheduleContentProps {
   setAltDate: (v: string) => void;
   altTime: string;
   setAltTime: (v: string) => void;
+  altTimeOptions: { value: string; label: string }[];
   notes: string;
   setNotes: (v: string) => void;
   agreed: boolean;
@@ -859,6 +869,7 @@ function ScheduleContent({
   setAltDate,
   altTime,
   setAltTime,
+  altTimeOptions,
   notes,
   setNotes,
   agreed,
@@ -961,7 +972,7 @@ function ScheduleContent({
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl text-sm bg-white"
             >
               <option value="">Select time</option>
-              {timeOptions.map((opt) => (
+              {altTimeOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>

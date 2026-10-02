@@ -90,6 +90,7 @@ export default function AdminStudentsPage() {
 
   // For approve/reject/revoke actions
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [showApproveModal, setShowApproveModal] = useState<StudentRow | null>(null);
   const [showRejectModal, setShowRejectModal] = useState<StudentRow | null>(null);
   const [rejectReason, setRejectReason] = useState("");
   const [showRevokeModal, setShowRevokeModal] = useState<StudentRow | null>(null);
@@ -243,7 +244,6 @@ export default function AdminStudentsPage() {
   }
 
   async function handleApprove(student: StudentRow) {
-    if (!confirm(`Approve "${student.display_name}"? Their profile will become visible to providers.`)) return;
     setActionLoading(student.id);
     try {
       const res = await fetch(`/api/admin/caregivers/${student.id}/approve`, { method: "POST" });
@@ -253,6 +253,9 @@ export default function AdminStudentsPage() {
         setStudents((prev) => prev.filter((s) => s.id !== student.id));
         setTotal((prev) => prev - 1);
         fetchTabCounts();
+        // Close whichever approval modal was open
+        setShowApproveModal(null);
+        setShowIncompleteApproveModal(null);
       } else {
         const data = await res.json().catch(() => ({}));
         showToast(data.error || "Failed to approve", "error");
@@ -557,8 +560,8 @@ export default function AdminStudentsPage() {
                               // Show warning modal for incomplete profiles
                               setShowIncompleteApproveModal(student);
                             } else {
-                              // Direct approve for 100% complete profiles
-                              handleApprove(student);
+                              // Show confirmation modal for complete profiles
+                              setShowApproveModal(student);
                             }
                           }}
                           disabled={actionLoading === student.id}
@@ -711,6 +714,61 @@ export default function AdminStudentsPage() {
         </div>
       )}
 
+      {/* Approve confirmation modal */}
+      {showApproveModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="approve-student-title"
+        >
+          <div className="bg-white rounded-xl shadow-xl p-6 max-w-md w-full">
+            <h3 id="approve-student-title" className="text-base font-semibold text-gray-900 mb-1">
+              Approve this profile?
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              {showApproveModal.display_name}&apos;s profile will become visible to providers and they can start receiving interview requests.
+            </p>
+            <dl className="text-sm text-gray-700 space-y-1.5 mb-5 bg-gray-50 rounded-lg p-3">
+              {showApproveModal.university && (
+                <div className="flex gap-2">
+                  <dt className="w-16 shrink-0 text-gray-400">School</dt>
+                  <dd className="text-gray-900">{showApproveModal.university}</dd>
+                </div>
+              )}
+              {showApproveModal.email && (
+                <div className="flex gap-2">
+                  <dt className="w-16 shrink-0 text-gray-400">Email</dt>
+                  <dd className="text-gray-900">{showApproveModal.email}</dd>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <dt className="w-16 shrink-0 text-gray-400">Profile</dt>
+                <dd className="text-emerald-600 font-medium">{showApproveModal.profile_completeness}% complete</dd>
+              </div>
+            </dl>
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowApproveModal(null)}
+                disabled={actionLoading === showApproveModal.id}
+                className="text-sm font-medium text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-md disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleApprove(showApproveModal)}
+                disabled={actionLoading === showApproveModal.id}
+                className="text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 px-4 py-1.5 rounded-lg disabled:opacity-50"
+              >
+                {actionLoading === showApproveModal.id ? "Approving..." : "Approve"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Reject confirmation modal */}
       {showRejectModal && (
         <div
@@ -857,10 +915,7 @@ export default function AdminStudentsPage() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  handleApprove(showIncompleteApproveModal);
-                  setShowIncompleteApproveModal(null);
-                }}
+                onClick={() => handleApprove(showIncompleteApproveModal)}
                 disabled={actionLoading === showIncompleteApproveModal.id}
                 className="text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 px-4 py-1.5 rounded-lg disabled:opacity-50"
               >

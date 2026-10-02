@@ -9,6 +9,13 @@ import ApprovalBlockModal from "@/components/medjobs/ApprovalBlockModal";
 import { EMPLOYER_AGREEMENT_URL, type DemandProfile } from "@/lib/medjobs/eligibility";
 import type { MedjobsRequirements } from "@/lib/medjobs/hiring-needs-questions";
 import type { ApprovalBlock } from "@/app/api/medjobs/check-approval/route";
+import {
+  type AvailabilitySchedule,
+  TIME_SLOTS,
+  getDateOptions,
+  getAvailableTimeSlots,
+  formatTimeSlot,
+} from "@/lib/medjobs/availability-utils";
 
 export interface ScheduleFormData {
   type: "video" | "in_person" | "phone";
@@ -47,6 +54,8 @@ interface ScheduleInterviewModalProps {
   onScheduledUnverified?: () => void;
   /** Provider's hiring defaults — job description pre-fills Notes, all fields stored with interview. */
   jobDetails?: JobDetails;
+  /** Student's availability schedule - used to filter date/time options (provider → student only) */
+  studentAvailability?: AvailabilitySchedule;
 }
 
 const FORMAT_OPTIONS: { value: "video" | "phone" | "in_person"; label: string }[] = [
@@ -54,51 +63,6 @@ const FORMAT_OPTIONS: { value: "video" | "phone" | "in_person"; label: string }[
   { value: "phone", label: "Phone" },
   { value: "in_person", label: "In person" },
 ];
-
-// Generate date options for next 30 days (dropdown format)
-function getDateOptions(): { value: string; label: string }[] {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const options: { value: string; label: string }[] = [];
-
-  for (let i = 0; i < 30; i++) {
-    const d = new Date(today);
-    d.setDate(d.getDate() + i);
-    const dateStr = d.toISOString().split("T")[0];
-
-    let label: string;
-    if (i === 0) {
-      label = "Today";
-    } else if (i === 1) {
-      label = "Tomorrow";
-    } else {
-      label = d.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric"
-      });
-    }
-
-    options.push({ value: dateStr, label });
-  }
-
-  return options;
-}
-
-// Time slots from 8 AM to 6 PM in 30-min increments
-const TIME_SLOTS = [
-  "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-  "11:00", "11:30", "12:00", "12:30", "13:00", "13:30",
-  "14:00", "14:30", "15:00", "15:30", "16:00", "16:30",
-  "17:00", "17:30", "18:00",
-];
-
-function formatTimeSlot(time24: string): string {
-  const [hours, minutes] = time24.split(":").map(Number);
-  const period = hours >= 12 ? "PM" : "AM";
-  const hour12 = hours % 12 || 12;
-  return minutes === 0 ? `${hour12}:00 ${period}` : `${hour12}:${minutes.toString().padStart(2, "0")} ${period}`;
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Custom Dropdown Component (matching QuickScheduleModal style)
@@ -235,6 +199,7 @@ export default function ScheduleInterviewModal({
   initialValues,
   onScheduledUnverified,
   jobDetails,
+  studentAvailability,
 }: ScheduleInterviewModalProps) {
   // Pre-fill notes with job description if provided and no initial notes
   const defaultNotes = initialValues?.notes ?? jobDetails?.job_description ?? "";
@@ -255,9 +220,45 @@ export default function ScheduleInterviewModal({
   const isStudentInitiated = !!providerProfileId;
   const firstName = otherName.split(" ")[0];
 
-  // Date and time options for dropdowns
-  const dateOptions = useMemo(() => getDateOptions(), []);
-  const timeOptions = useMemo(() => TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) })), []);
+  // Date and time options for dropdowns - filtered by student availability when provided
+  const dateOptions = useMemo(
+    () => getDateOptions(studentAvailability),
+    [studentAvailability]
+  );
+
+  // Time options filtered by selected date's availability windows
+  const timeOptions = useMemo(() => {
+    if (!date) {
+      // No date selected yet - show all times (will be filtered once date is picked)
+      return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+    }
+    const selectedDate = new Date(date + "T00:00:00");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+  }, [date, studentAvailability]);
+
+  // Time options for alternative time (same filtering logic)
+  const altTimeOptions = useMemo(() => {
+    if (!altDate) {
+      return TIME_SLOTS.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+    }
+    const selectedDate = new Date(altDate + "T00:00:00");
+    const availableSlots = getAvailableTimeSlots(selectedDate, studentAvailability);
+    return availableSlots.map(slot => ({ value: slot, label: formatTimeSlot(slot) }));
+  }, [altDate, studentAvailability]);
+
+  // Clear time selection if it's no longer valid after date change
+  useEffect(() => {
+    if (time && !timeOptions.some(opt => opt.value === time)) {
+      setTime("");
+    }
+  }, [time, timeOptions]);
+
+  useEffect(() => {
+    if (altTime && !altTimeOptions.some(opt => opt.value === altTime)) {
+      setAltTime("");
+    }
+  }, [altTime, altTimeOptions]);
 
   const handleSubmit = async () => {
     if (!date || !time) { setError("Please select a date and time."); return; }
@@ -554,7 +555,7 @@ export default function ScheduleInterviewModal({
                 label="Select alternative date"
               />
               <StyledDropdown
-                options={timeOptions}
+                options={altTimeOptions}
                 value={altTime}
                 onChange={setAltTime}
                 placeholder="Select time"
