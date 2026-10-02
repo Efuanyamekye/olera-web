@@ -391,7 +391,7 @@
           "source": "https://dacl.dc.gov/service/safe-home",
           "severity": "high",
           "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
+          "flaggedAt": "2026-10-02T09:35:41.563Z"
         },
         {
           "field": "income_2",
@@ -400,7 +400,7 @@
           "source": "https://dacl.dc.gov/service/safe-home",
           "severity": "high",
           "why": "outside sanity bounds (3x)",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
+          "flaggedAt": "2026-10-02T09:35:41.563Z"
         }
       ]
     },
@@ -604,10 +604,10 @@
           "field": "age",
           "from": 65,
           "to": 60,
-          "source": "https://dacl.dc.gov/sites/default/files/dc/sites/dacl/service_content/attachments/Case%20Management%20FAQ_2.pdf",
+          "source": "https://dacl.dc.gov/service/information-referralassistance",
           "severity": "high",
           "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
+          "flaggedAt": "2026-10-02T09:35:41.563Z"
         }
       ]
     },
@@ -748,24 +748,15 @@
       "draftedAt": "2026-04-13",
       "reviewQueue": [
         {
-          "field": "age",
-          "from": 60,
-          "to": 55,
-          "source": "https://dacl.dc.gov/service/senior-centers",
-          "severity": "high",
-          "why": "field age is applied by hand",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
-        },
-        {
           "field": "phone",
           "from": [
             "2027247000"
           ],
           "to": "2027245626",
-          "source": "https://dacl.dc.gov/service/senior-centers",
+          "source": "https://dacl.dc.gov/services",
           "severity": "medium",
           "why": "phone (run with --phones to apply official ones)",
-          "flaggedAt": "2026-10-02T07:34:41.977Z"
+          "flaggedAt": "2026-10-02T09:35:41.563Z"
         }
       ]
     },
@@ -920,5 +911,5 @@
     ],
     "resourcesVsBenefits": "DC offers both qualification-based benefits and free resources. Benefits like the EPD Waiver Program and Safe at Home Program require meeting specific income or disability criteria and provide significant financial assistance for home care and modifications. Free resources like DC Senior Centers are available to all residents 60+ regardless of income and provide social activities, meals, and health screenings at no cost."
   },
-  "factcheckedAt": "2026-10-02T07:34:41.977Z"
+  "factcheckedAt": "2026-10-02T09:35:41.563Z"
 }
