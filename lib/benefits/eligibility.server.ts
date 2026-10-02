@@ -276,9 +276,14 @@ export function evaluateProgramForFamily(
   // household that is thousands over. Falls back to "unknown", which this
   // module always treats as keep-and-do-not-promote.
   const incomeUsable = incomeBandIsHouseholdScoped(facts);
+  // Rule out on the draft's own fact-checked limit only. The sbf column is
+  // the March 2026 seed: where both stores hold a limit, two in three differ
+  // by more than 10% (measured 2 Oct 2026), and for 111 programs it was the
+  // only limit, so it was deciding exclusions alone. Like min_age and
+  // requires_medicaid it may boost, never exclude.
   const incomeLimit = program.incomeLimitSingle ?? sbf?.max_income_single ?? null;
   const floor = incomeUsable ? incomeBandFloor(facts.incomeBand) : null;
-  if (floor != null && incomeLimit != null && floor > incomeLimit) {
+  if (floor != null && program.incomeLimitSingle != null && floor > program.incomeLimitSingle) {
     return { ruledOut: true, reason: "Income is likely above its limit", boost: 0, fits: [] };
   }
 
