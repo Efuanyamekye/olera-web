@@ -8,6 +8,7 @@
 import type { WaiverProgram, StateData } from "@/data/waiver-library";
 import { getStateById, getProgramById } from "@/data/waiver-library";
 import { pipelineDrafts, type PipelineDraft } from "@/data/pipeline-drafts";
+import { withoutDuplicates } from "@/lib/benefits/program-duplicates";
 
 // State name → abbreviation lookup
 const STATE_ABBREVS: Record<string, string> = {
@@ -232,7 +233,8 @@ export function getCanonicalProgramIds(stateId: string): string[] {
     if (topic && draftTopics.has(topic)) continue;
     ids.push(p.id);
   }
-  return ids;
+  // Programs held twice under two ids are listed once (see program-duplicates).
+  return withoutDuplicates(stateAbbrev, ids.map((id) => ({ id }))).map((p) => p.id);
 }
 
 /**
