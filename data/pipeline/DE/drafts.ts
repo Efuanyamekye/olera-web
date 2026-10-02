@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DE/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T11:25:55.869Z
+ * Last updated: 2026-10-02T02:22:51.905Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2079,6 +2079,100 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhss.delaware.gov/dsaapd",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13"
+    },
+    {
+      "id": "family-caregiver-support",
+      "name": "Supports and Services for Caregivers (DSAAPD)",
+      "shortName": "Caregiver Support",
+      "tagline": "Connects caregivers to respite, support groups, options counseling and Caregiver Resource Centers through the Delaware Aging and Disability Resource Center.",
+      "programType": "benefit",
+      "complexity": "low",
+      "geographicScope": {
+        "type": "state",
+        "stateVariation": true,
+        "localEntities": [
+          {
+            "name": "Statewide through DSAAPD and the Delaware ADRC, with Caregiver Resource Centers across the state",
+            "type": "service-area"
+          }
+        ]
+      },
+      "intro": "Supports and Services for Caregivers (DSAAPD) helps unpaid family caregivers keep going. Connects caregivers to respite, support groups, options counseling and Caregiver Resource Centers through the Delaware Aging and Disability Resource Center.\n\nHelp can include information and assistance, options counseling, respite care at home, Lifespan Respite vouchers, support groups, Caregiver Resource Centers, case management and adult day services.\n\nServices are delivered locally, statewide through DSAAPD and the Delaware ADRC, with Caregiver Resource Centers across the state.\n\nCall the Delaware Aging and Disability Resource Center (ADRC) or email DelawareADRC@delaware.gov. A resource specialist connects you to respite and other caregiver services.",
+      "savingsRange": "",
+      "savingsSource": "",
+      "savingsVerified": false,
+      "structuredEligibility": {
+        "summary": [
+          "Family members or other caregivers of an older person, an adult with a physical disability, or a person with dementia",
+          "For respite: the person cared for is a Delaware resident who is 60+, or 18+ with a physical disability, or any age with dementia"
+        ],
+        "ageRequirement": null,
+        "incomeTable": null,
+        "assetLimits": null,
+        "functionalRequirement": null,
+        "otherRequirements": [
+          "Family members or other caregivers of an older person, an adult with a physical disability, or a person with dementia",
+          "For respite: the person cared for is a Delaware resident who is 60+, or 18+ with a physical disability, or any age with dementia"
+        ],
+        "povertyLevelReference": null
+      },
+      "applicationGuide": {
+        "method": "phone",
+        "summary": "Call the Delaware Aging and Disability Resource Center (ADRC) or email DelawareADRC@delaware.gov. A resource specialist connects you to respite and other caregiver services.",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Call the program line",
+            "description": "Call the Delaware Aging and Disability Resource Center (ADRC) or email DelawareADRC@delaware.gov. A resource specialist connects you to respite and other caregiver services."
+          },
+          {
+            "step": 2,
+            "title": "Describe your caregiving",
+            "description": "Say who you care for, their age, and what would help most, such as a break or someone to talk to."
+          }
+        ],
+        "processingTime": null,
+        "waitlist": null,
+        "tip": null,
+        "urls": [
+          {
+            "label": "Delaware ADRC, Caregivers",
+            "url": "https://delawareadrc.com/caregivers"
+          },
+          {
+            "label": "DSAAPD Support for Caregivers",
+            "url": "https://dhss.delaware.gov/dsaapd/division-of-services-for-aging-and-adults-with-physical-disabilities/support-for-caregivers/"
+          }
+        ]
+      },
+      "documentsNeeded": [
+        "Your contact information",
+        "The age and needs of the person you care for"
+      ],
+      "contacts": [
+        {
+          "label": "Delaware Aging and Disability Resource Center (ADRC), toll-free",
+          "phone": "(800) 223-9074",
+          "hours": null
+        }
+      ],
+      "applicationNotes": [],
+      "relatedPrograms": [],
+      "contentSections": [],
+      "faqs": [],
+      "sourceUrl": "https://delawareadrc.com/caregivers",
+      "lastVerifiedDate": "2026-10-02",
+      "reviewedBy": null,
+      "contentStatus": "pipeline-draft",
+      "draftedAt": "2026-10-02",
+      "layoutIntent": {
+        "aboutHighlight": "coverage",
+        "eligibilityDisplay": "simple-list",
+        "applyDisplay": "phone-cta",
+        "hasLocationFinder": true,
+        "hasDocumentChecklist": true,
+        "visualTone": "warm"
+      }
     }
   ],
   "stateOverview": {

@@ -7,6 +7,7 @@ import { ContentViewTracker } from "@/components/analytics/ContentViewTracker";
 import { createClient } from "@/lib/supabase/server";
 import { shouldDiscoverBenefitsProgram } from "@/lib/benefits/program-content-quality";
 import { getStateFamilyQuestions, type StateFamilyQuestion } from "@/lib/benefits/state-family-questions";
+import { withoutDuplicates } from "@/lib/benefits/program-duplicates";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -79,7 +80,10 @@ function resolveSlug(slug: string): {
   if (stateMetadata) {
     const drafts = pipelineDrafts[stateMetadata.abbreviation];
     if (drafts?.stateOverview) {
-      const discoverablePrograms = (drafts.programs || []).filter(shouldDiscoverBenefitsProgram);
+      const discoverablePrograms = withoutDuplicates(
+        stateMetadata.abbreviation,
+        (drafts.programs || []).filter(shouldDiscoverBenefitsProgram),
+      );
       // Build a state object where programs come from pipeline, metadata from waiver-library
       const state: StateData = {
         ...stateMetadata,

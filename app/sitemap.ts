@@ -9,6 +9,7 @@ import { allStates } from "@/data/waiver-library";
 import { pipelineDrafts } from "@/data/pipeline-drafts";
 import { shouldIndexBenefitsProgram } from "@/lib/benefits/program-content-quality";
 import { listBrands, BRANDS_BASE_PATH } from "@/lib/brands";
+import { withoutDuplicates } from "@/lib/benefits/program-duplicates";
 import {
   countActiveProviders,
   getActiveProviderGeoByCategory,
@@ -146,7 +147,7 @@ export default async function sitemap({
           // Program URLs come from pipeline-drafts, which is the source of truth
           // for /benefits/[slug]/[program] rendering. Iterating waiver-library
           // would emit 404s for any state whose legacy IDs don't match pipeline IDs.
-          const drafts = pipelineDrafts[state.abbreviation]?.programs || [];
+          const drafts = withoutDuplicates(state.abbreviation, pipelineDrafts[state.abbreviation]?.programs || []);
           for (const draft of drafts) {
             if (!shouldIndexBenefitsProgram(draft)) continue;
             const programUrl = `/benefits/${state.id}/${draft.id}`;
