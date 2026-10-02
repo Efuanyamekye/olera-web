@@ -57,7 +57,9 @@ export function currentText(item: StoredItem): string {
   return latestVersion(item)?.text ?? item.body ?? "";
 }
 
-const EMAIL_DRAFTS_PER_PASS = 3;
+// Six, not three, once providers go first (TJ, 2 Oct): three provider replies
+// sat undrafted behind family ones, so a higher cap keeps families drafted too.
+const EMAIL_DRAFTS_PER_PASS = 6;
 const SMS_DRAFTS_PER_PASS = 4;
 /** Outbound SMS a person wrote: the inbox reply box, and a manual city-lead text. */
 const HUMAN_SMS_TYPES = ["admin_reply", "city_lead_family_manual"];
@@ -228,6 +230,19 @@ async function smsProposals(db: SupabaseClient): Promise<{ items: ProposedItem[]
 // ---------------------------------------------------------------------------
 // Email
 
+/**
+ * Drafting order. A matched provider account, then other provider threads,
+ * then families, then the "provider" threads that are really people asking
+ * for a job (the classifier's provider label covers both; 1 Oct, about 10 of 40).
+ */
+export const JOB_SEEKER = /\b(job applicant|applicants?|seeking (?:employment|work|a job)|looking for (?:work|a job|employment)|job application|applied for|application link|r[eé]sum[eé]|employment rather|caregiver (?:position|employment)|is hiring|hiring for caregiver)\b/i;
+export function draftRank(thread: { category: string; matched_profile_type?: string | null; agent_summary: string | null }): number {
+  if (thread.category === "provider" && thread.matched_profile_type === "provider") return 0;
+  if (thread.category === "provider" && !JOB_SEEKER.test(thread.agent_summary ?? "")) return 1;
+  if (thread.category === "care_seeker") return 2;
+  return 3;
+}
+
 type ThreadRow = { id: string; subject: string; category: string; agent_summary: string | null; suggested_draft: string | null; matched_profile_name: string | null; matched_profile_type?: string | null; last_message_at: string; gmail_draft_id?: string | null; draft_updated_at?: string | null };
 
 /**
@@ -343,7 +358,11 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
     .eq("suggested_action", "draft_reply")
     .order("last_message_at", { ascending: false })
     .limit(40);
-  const candidates = (threads ?? []) as ThreadRow[];
+  // Providers first, then families (TJ, 2 Oct: Robbie, Jacob and Heather waited
+  // undrafted while three newer threads took the three slots).
+  const candidates = ((threads ?? []) as ThreadRow[]).map((thread, i) => ({ thread, i, rank: draftRank(thread) }))
+    .sort((a, b) => a.rank - b.rank || a.i - b.i)
+    .map(({ thread }) => thread);
   const { data: messageData } = candidates.length
     ? await db.from("support_email_messages")
       .select("thread_id, direction, from_email, from_name, internal_date, body_text, snippet")
@@ -628,6 +647,23 @@ function numberSpan(items: StoredItem[]): string {
  */
 export function needsNamedApproval(item: Pick<StoredItem, "kind">): boolean {
   return item.kind === "slack_draft" || item.kind === "proposal";
+}
+
+/**
+ * Who an item is for, as the web page shows it. Families appear by phone
+ * ending or initials, never by full name (brief 2a274b1b); providers by name.
+ */
+export function pageLabel(item: Pick<StoredItem, "kind" | "category" | "summary" | "target">): string {
+  if (item.kind === "sms_draft" || item.category.startsWith("sms:")) {
+    const last10 = String(item.target?.last10 ?? "");
+    return last10 ? `Family, phone ending ${last10.slice(-4)}` : "A family";
+  }
+  if (item.category === "email:draft:care_seeker") {
+    const name = whoFor(item as StoredItem);
+    const initials = name.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w)).map((w) => w[0].toUpperCase()).slice(0, 2).join(".");
+    return initials && name !== "a family" ? `Family ${initials}.` : "A family";
+  }
+  return whoFor(item as StoredItem);
 }
 
 /** One short phrase for a triage batch: "archive 5 old voicemails". */
