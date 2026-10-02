@@ -73,12 +73,37 @@ export async function saveHandoff(db: SupabaseClient, args: { body: string; note
   return data as Handoff;
 }
 
+/**
+ * The daily inbox report: the full digest, kept as a handoff so he can act on
+ * it from his computer with /handoff while Telegram carries only a synopsis.
+ * TJ, 2026-10-02: "These messages can be a bit overwhelming especially on my
+ * phone." One report is open at a time; a new one closes the last, and none of
+ * them count as briefs in Cortex's record.
+ */
+export const INBOX_REPORT_NOTE = "inbox-report";
+
+export async function saveInboxReport(db: SupabaseClient, args: { title: string; body: string; chatId: string }): Promise<Handoff> {
+  await db.from("cortex_handoffs")
+    .update({ status: "dropped", result: `Superseded by ${args.title}.`, closed_at: new Date().toISOString() })
+    .eq("note", INBOX_REPORT_NOTE)
+    .in("status", ["open", "partial"]);
+  const { data, error } = await db.from("cortex_handoffs")
+    .insert({ title: args.title, body: args.body, repo: "olera-web", status: "open", note: INBOX_REPORT_NOTE, chat_id: args.chatId })
+    .select("*")
+    .single();
+  if (error) throw new Error(error.message);
+  return data as Handoff;
+}
+
 /** For Cortex's record: what is waiting on a session, and what came back in the last two weeks. */
 export async function recentHandoffs(db: SupabaseClient): Promise<Array<Pick<Handoff, "title" | "status" | "result" | "created_at" | "closed_at">>> {
   const since = new Date(Date.now() - 14 * 86_400_000).toISOString();
   const { data, error } = await db.from("cortex_handoffs")
     .select("title, status, result, created_at, closed_at")
     .or(`status.in.(open,partial),closed_at.gte.${since}`)
+    // Inbox reports are the digest, not briefs. A null note is a brief, and
+    // neq alone would drop it, so both are spelled out.
+    .or(`note.is.null,note.neq.${INBOX_REPORT_NOTE}`)
     .order("created_at", { ascending: false })
     .limit(15);
   if (error) return [];
