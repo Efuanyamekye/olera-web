@@ -1,0 +1,78 @@
+# Re-verify benefits program facts on a rotation.
+#
+# Every Monday it fact-checks ten states (so each state is re-checked about
+# every five weeks), runs the judge, regenerates the data modules, and opens a
+# pull request with the diff and the review queue. A person merges it.
+#
+# Needs two repository secrets: PERPLEXITY_API_KEY and ANTHROPIC_API_KEY.
+# Runs here, not as a Vercel cron, because the pipeline writes files and needs
+# those keys. Manual runs can name the states.
+name: Benefits fact-check
+
+on:
+  schedule:
+    - cron: "0 9 * * 1" # Mondays 09:00 UTC
+  workflow_dispatch:
+    inputs:
+      states:
+        description: "Space-separated state codes (blank = this week's rotation)"
+        required: false
+        default: ""
+
+jobs:
+  factcheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+
+      - name: Pick this week's states
+        id: pick
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.states }}" ]; then
+            echo "states=${{ github.event.inputs.states }}" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          ALL=$(ls data/pipeline | grep -E '^[A-Z]{2}$' | sort)
+          N=$(echo "$ALL" | wc -l)
+          WEEK=$(( $(date +%s) / 604800 ))
+          START=$(( (WEEK * 10) % N ))
+          STATES=$(echo "$ALL" | awk -v s=$START -v n=$N 'NR>s && NR<=s+10 {print} END{}' )
+          # wrap around the end of the list
+          COUNT=$(echo "$STATES" | grep -c .)
+          if [ "$COUNT" -lt 10 ]; then STATES="$STATES $(echo "$ALL" | head -n $((10 - COUNT)))"; fi
+          echo "states=$(echo $STATES | tr '\n' ' ')" >> "$GITHUB_OUTPUT"
+
+      - name: Fact-check
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          for st in ${{ steps.pick.outputs.states }}; do
+            echo "=== $st"
+            node scripts/benefits-pipeline.js --state "$st" --phase factcheck --run | tail -8
+          done
+
+      - name: Judge and regenerate
+        run: |
+          node scripts/benefits-apply-factcheck.js --apply | tail -20
+          node scripts/benefits-apply-factcheck.js --review > review-queue.txt || true
+          node scripts/benefits-pipeline.js --regen-index | tail -2
+
+      - name: Open a pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: benefits-factcheck/${{ github.run_id }}
+          base: staging
+          title: "Benefits fact-check: ${{ steps.pick.outputs.states }}"
+          commit-message: "Re-verify benefits facts: ${{ steps.pick.outputs.states }}"
+          body-path: review-queue.txt
+          labels: benefits-data
