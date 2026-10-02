@@ -41,6 +41,30 @@ const REVIEW = args.includes('--review');
 const PHONES = args.includes('--phones');
 const TODAY = new Date().toISOString().slice(0, 10);
 
+// Income limits that sit on a federal poverty-line or SSI tier. When BOTH the
+// draft and the verified value sit on a tier, the flag is a dispute about
+// which rule applies (200% vs 100%, gross vs net), not a stale number, and a
+// scrape cannot settle it: a person checks the state's rule. (On 2 Oct 2026,
+// 84 of 105 income flags were this.)
+const T = JSON.parse(fs.readFileSync(path.join(ROOT, 'federal-thresholds.json'), 'utf8'));
+function tierOf(value, st, size, recentOnly = false) {
+  const v = Number(value); if (!Number.isFinite(v) || v <= 0) return null;
+  const hits = [];
+  // A value read from a page today is this year's or last year's figure; the
+  // draft's value may be older. So the verified side matches recent lines only.
+  const minYear = recentOnly ? new Date().getFullYear() - 1 : 0;
+  for (const year of Object.keys(T.fpl).filter((y) => Number(y) >= minYear).sort((x, y) => Number(y) - Number(x))) {
+    const [a, b] = T.fpl[year][st === 'AK' ? 'AK' : st === 'HI' ? 'HI' : '48']; const m = (a + b * (size - 1)) / 12;
+    for (const pct of [100, 120, 125, 130, 133, 135, 138, 150, 165, 185, 200, 250, 300]) for (const dis of [0, 20]) { const tier = m * pct / 100 + dis; if (Math.abs(v - tier) / tier <= 0.035) hits.push({ percent: pct, year: Number(year), basis: 'FPL', label: `${pct}% FPL ${year}` }); }
+  }
+  for (const year of Object.keys(T.ssi).filter((y) => Number(y) >= minYear).sort((x, y) => Number(y) - Number(x))) { const s = T.ssi[year]; const base = size === 1 ? s.individual : s.couple; for (const pct of [100, 300]) if (Math.abs(v - base * pct / 100) / (base * pct / 100) <= 0.035) hits.push({ percent: pct, year: Number(year), basis: 'SSI', label: `${pct}% SSI ${year}` }); }
+  if (!hits.length) return null;
+  // A value that fits more than one percentage (120% of this year and 130%
+  // of an older line, say) is ambiguous: the judge never guesses.
+  const pcts = new Set(hits.map((h) => `${h.basis}${h.percent}`));
+  return { ...hits[0], ambiguous: pcts.size > 1, labels: [...new Set(hits.map((h) => h.label))].join(' or ') };
+}
+
 // Official: federal and state government, plus the few state agencies that
 // publish outside .gov. Anything else is treated as an aggregator.
 const OFFICIAL_HOSTS = /(\.gov|\.us|\.mil)$/i;
@@ -90,11 +114,21 @@ for (const st of states) {
       const item = { state: st, programId: pr.programId, program: pr.programName, field: f.field, severity: f.severity, from: f.draftValue, to: f.verifiedValue, source: src, official: isOfficial(src) };
       let decision = 'review', why = '';
 
+      const srcYear = src && (src.match(/(20[12][0-9])/) || [])[1];
       if (!src || !item.official) { why = src ? 'aggregator source' : 'no source'; }
+      else if (srcYear && Number(srcYear) < new Date().getFullYear() - 1) { why = `source dated ${srcYear}`; }
       else if (/^(income_1|income_2|assets_individual|assets_couple)$/.test(f.field)) {
         const to = Number(f.verifiedValue), from = Number(f.draftValue);
+        const size = f.field === 'income_2' ? 2 : 1;
+        const tFrom = f.field.startsWith('income') ? tierOf(from, st, size) : null, tTo = f.field.startsWith('income') ? tierOf(to, st, size, true) : null;
         if (!Number.isFinite(to) || to <= 0) why = 'verified value not a number';
         else if (Number.isFinite(from) && from > 0 && (to / from > 3 || to / from < 1 / 3)) why = 'outside sanity bounds (3x)';
+        else if (f.field.startsWith('assets')) why = 'asset limit (federal figure; applied with the yearly table)';
+        else if ((tFrom && tFrom.ambiguous) || (tTo && tTo.ambiguous)) why = `value fits more than one tier (${(tTo && tTo.ambiguous ? tTo : tFrom).labels})`;
+        else if (tFrom && tTo && tFrom.percent !== tTo.percent) why = `tier dispute: draft ${tFrom.label} vs verified ${tTo.label}`;
+        else if (tFrom && tTo && tTo.year < tFrom.year) why = `verified value is an older year (${tTo.label}) than the draft (${tFrom.label})`;
+        else if (tFrom && !tTo) why = `draft fits a federal formula (${tFrom.label}); verified value fits none`;
+        else if (tTo && tTo.year < new Date().getFullYear() - 1) why = `verified value is on an old line (${tTo.label}); recompute from the rule instead`;
         else decision = 'apply';
       } else if (f.field === 'phone') {
         const to = fmtPhone(f.verifiedValue);

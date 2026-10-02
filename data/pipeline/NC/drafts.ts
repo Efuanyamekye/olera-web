@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.473Z
+ * Last updated: 2026-10-02T07:57:10.920Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -417,7 +417,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(919) 855-4340",
       "sourceUrl": "https://medicaid.ncdhhs.gov/providers/programs-and-services/long-term-care/program-all-inclusive-care-elderly-pace",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9198554340",
+            "211"
+          ],
+          "to": "8882450179",
+          "source": "https://medicaid.ncdhhs.gov/beneficiaries/long-term-services-and-supports/program-all-inclusive-care-elderly",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -653,7 +667,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.ncdhhs.gov/apply",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8882450179",
+            "211",
+            "8006334227"
+          ],
+          "to": "8006627030",
+          "source": "https://medicaid.ncdhhs.gov/documents/medicaid/medcare-savings/open",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -726,7 +755,15 @@ export const drafts: PipelineStateDrafts = {
           "Buy and prepare food with household members",
           "Not disqualified from previous SNAP violations"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -862,7 +899,36 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.ncdhhs.gov/divisions/child-and-family-well-being/food-and-nutrition-services-food-stamps",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://www.ncdhhs.gov/divisions/child-and-family-well-being/food-and-nutrition-services-food-stamps/simplified-nutritional-assistance-program-snap",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        },
+        {
+          "field": "income_1",
+          "from": 1330,
+          "to": 1696,
+          "source": "https://www.nhcgov.com/440/Food-and-Nutrition-SNAP",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1804,
+          "to": 2292,
+          "source": "https://www.nhcgov.com/440/Food-and-Nutrition-SNAP",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -923,7 +989,15 @@ export const drafts: PipelineStateDrafts = {
           "Must reside in county where applying",
           "Disabled persons must receive services through NC Division of Aging and Adult Services for priority status"
         ],
-        "povertyLevelReference": "130% FPL (150% FPL for priority households)"
+        "povertyLevelReference": "130% FPL (150% FPL for priority households)",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2022,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1044,7 +1118,38 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance-lieap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1427,
+          "to": 1560,
+          "source": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2023 or 120% FPL 2022 or 125% FPL 2022 or 130% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1930,
+          "to": 2110,
+          "source": "https://www.ncdhhs.gov/divisions/social-services/energy-assistance/low-income-energy-assistance",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2023 or 125% FPL 2022 or 130% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8006627030",
+          "source": "https://liheapch.acf.hhs.gov/profiles/NC.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1117,7 +1222,15 @@ export const drafts: PipelineStateDrafts = {
           "Only one weatherization service per household",
           "Renters must have written landlord permission"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1411,7 +1524,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": null,
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "7044321111",
+            "7043363144"
+          ],
+          "to": "9198553400",
+          "source": "https://www.ncdhhs.gov/home-delivered-meal-provider-directory-fy-24/open",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        }
+      ]
     },
     {
       "id": "lifespan-respite-family-caregiver-support",
@@ -1584,7 +1712,31 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(828) 265-5434",
       "sourceUrl": "www.highcountryaging.org/services/lifespan-respite-project",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://www.ncdhhs.gov/divisions/aging/family-caregiver-support-program",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8282655434",
+            "8282655434139",
+            "211"
+          ],
+          "to": "9198553417",
+          "source": "https://www.nctreasurer.gov/documents/files/slgfdcompliancesupplements/93052-2024/open",
+          "severity": "medium",
+          "why": "source dated 2024",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        }
+      ]
     },
     {
       "id": "senior-community-service-employment-program",
@@ -1648,7 +1800,15 @@ export const drafts: PipelineStateDrafts = {
           "Veterans and qualified spouses receive priority",
           "Second priority: age 65+, disability, low literacy/limited English proficiency, rural residence, homeless/at risk, low employment prospects"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2581,7 +2741,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.ncdhhs.gov/divisions/aging/project-care-caregiver-alternatives-running-empty",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-02"
+      "lastVerifiedDate": "2026-09-02",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18006627030",
+            "7044321111",
+            "8282655434",
+            "211"
+          ],
+          "to": "9843656992",
+          "source": "https://www.ncdhhs.gov/rfa-fiduciary-agent-fy-25/open",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        }
+      ]
     },
     {
       "id": "special-assistance-in-home",
@@ -2796,7 +2972,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.ncdhhs.gov/divisions/social-services/special-assistance/state-and-county-special-assistance-home-residents",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18006627030",
+            "9192127000",
+            "211"
+          ],
+          "to": "9199895300",
+          "source": "https://www.johnstonnc.gov/dss/content.cfm?pageid=saih",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:04.679Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

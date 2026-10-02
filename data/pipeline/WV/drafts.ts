@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.488Z
+ * Last updated: 2026-10-02T07:57:10.936Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -76,7 +76,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified immigrant",
           "Not eligible for full Medicaid (QI program only)"
         ],
-        "povertyLevelReference": "100-135% FPL"
+        "povertyLevelReference": "100-135% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -218,7 +226,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://bms.wv.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "3045870105"
+          ],
+          "to": "18777161212",
+          "source": "https://bms.wv.gov/members/applying-healthcare",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        }
+      ]
     },
     {
       "id": "aged-disabled-waiver",
@@ -407,7 +428,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "http://www.wvseniorservices.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 65,
+          "source": "https://adwprogram.wv.gov/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -653,7 +685,15 @@ export const drafts: PipelineStateDrafts = {
           "Include all household members who buy and prepare food together",
           "Meet work requirements unless exempt (age 60+ automatically exempt)"
         ],
-        "povertyLevelReference": "200% FPL before deductions (West Virginia broad-based eligibility). Households with someone 60+ or disabled who are over that can qualify at 100% FPL after deductions"
+        "povertyLevelReference": "200% FPL before deductions (West Virginia broad-based eligibility). Households with someone 60+ or disabled who are over that can qualify at 100% FPL after deductions",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -779,7 +819,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://bfa.wv.gov/snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2660,
+          "to": 1608,
+          "source": "https://bfa.wv.gov/snap",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3607,
+          "to": 2171,
+          "source": "https://bfa.wv.gov/snap",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -983,7 +1043,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://bfa.wv.gov/utility-assistancelieap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1884,
+          "to": 2454,
+          "source": "https://bfa.wv.gov/utility-assistancelieap",
+          "severity": "high",
+          "why": "value fits more than one tier (138% FPL 2026 or 150% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2464,
+          "to": 3209,
+          "source": "https://bfa.wv.gov/utility-assistancelieap",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2023 or 165% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1048,7 +1128,15 @@ export const drafts: PipelineStateDrafts = {
           "Dwelling must meet building eligibility requirements (structurally adaptable for weatherization materials)",
           "Renters need landlord permission"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1599,7 +1687,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(877) 987-3646",
       "sourceUrl": "https://acl.gov/programs/support-caregivers/national-family-caregiver-support-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8779873646",
+            "211"
+          ],
+          "to": "3045583317",
+          "source": "https://wvats.cedwvu.org/media/3774/pathways-to-funding-for-adults-accessible.pdf",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        }
+      ]
     },
     {
       "id": "senior-legal-aid",
@@ -2312,7 +2414,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://wvdrs.org/adults/specialized-services/visions/amp/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18006423021",
+            "211"
+          ],
+          "to": "8006428207",
+          "source": "https://wvdrs.org/adults/specialized-services/services-for-the-blind-and-impaired/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        }
+      ]
     },
     {
       "id": "home-modification-accessibility-grant",
@@ -2476,7 +2592,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.wvadrc.com/assistance-programs.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-08-18",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8669812372",
+            "3047206861"
+          ],
+          "to": "3045583317",
+          "source": "https://www.wv.gov/agencies/senior-services-bureau",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:35.284Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

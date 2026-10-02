@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/LA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.466Z
+ * Last updated: 2026-10-02T07:57:10.912Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -206,7 +206,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://ldh.la.gov/medicaid/long-term-care",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8774561146",
+            "8002300690",
+            "211"
+          ],
+          "to": "18883426207",
+          "source": "https://ldh.la.gov/faq/category/24",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        }
+      ]
     },
     {
       "id": "community-choices-waiver",
@@ -407,7 +422,36 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://ldh.la.gov/page/community-choices-waiver",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 21,
+          "to": 65,
+          "source": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        },
+        {
+          "field": "income_1",
+          "from": 2742,
+          "to": 2523,
+          "source": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf",
+          "severity": "medium",
+          "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        },
+        {
+          "field": "income_2",
+          "from": 5484,
+          "to": 5046,
+          "source": "https://ldh.la.gov/assets/docs/OAAS/publications/CCW_Fact_Sheet.pdf",
+          "severity": "medium",
+          "why": "draft fits a federal formula (300% FPL 2026); verified value fits none",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        }
+      ]
     },
     {
       "id": "pace-elder-care",
@@ -891,7 +935,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or lawfully present non-citizen",
           "Social Security number or application proof"
         ],
-        "povertyLevelReference": "200% FPL before deductions (Louisiana broad-based eligibility); 100% FPL after deductions above that"
+        "povertyLevelReference": "200% FPL before deductions (Louisiana broad-based eligibility); 100% FPL after deductions above that",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1022,7 +1074,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://sspweb.ie.dcfs.la.gov/selfservice/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2660,
+          "to": 1696,
+          "source": "https://ldh.la.gov/supplemental-nutrition-assistance-program",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3607,
+          "to": 2292,
+          "source": "https://ldh.la.gov/supplemental-nutrition-assistance-program",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        }
+      ]
     },
     {
       "id": "csfp-senior-food-boxes",
@@ -1095,7 +1167,15 @@ export const drafts: PipelineStateDrafts = {
           "Must provide proof of residence (driver's license or utility bill)",
           "Must declare gross household income"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1211,7 +1291,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "504-729-2842",
       "sourceUrl": "https://www.fns.usda.gov/csfp/commodity-supplemental-food-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5047292842",
+            "211"
+          ],
+          "to": "2253100091",
+          "source": "https://ldh.la.gov/bureau-of-nutrition-services/commodity-supplemental-food-program",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        }
+      ]
     },
     {
       "id": "spas-personal-assistance",
@@ -1555,7 +1649,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://ldh.la.gov/office-of-aging-and-adult-services",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 22,
+          "to": 65,
+          "source": "https://ldh.la.gov/office-of-aging-and-adult-services/ADHC-waiver",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        }
+      ]
     },
     {
       "id": "caregiver-voucher-program",
@@ -1763,7 +1868,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://ldh.la.gov/office-of-aging-and-adult-services/community-choices-waiver-ccw",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-08-11",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 21,
+          "to": 65,
+          "source": "https://www.lamedicaid.com/provweb1/Providermanuals/manuals/CCW2/CCW2_7.3_01-13-25.pdf",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:38:10.855Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

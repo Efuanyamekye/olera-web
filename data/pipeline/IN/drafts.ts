@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.464Z
+ * Last updated: 2026-10-02T07:57:10.910Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -180,7 +180,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.in.gov/medicaid/members/member-programs/hoosier-care-connect/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 59,
+          "to": 60,
+          "source": "https://www.in.gov/fssa/resource-guide/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        }
+      ]
     },
     {
       "id": "pathways-aging-waiver",
@@ -242,7 +253,15 @@ export const drafts: PipelineStateDrafts = {
           "Cannot be enrolled in Healthy Indiana Plan or Hoosier Healthwise",
           "Ages 60-64 must have disability determination from Social Security"
         ],
-        "povertyLevelReference": "300% of SSI maximum"
+        "povertyLevelReference": "300% of SSI maximum",
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -389,7 +408,33 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.in.gov/pathways/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 1330,
+          "source": "https://www.medicaidplanningassistance.org/indiana-pathways-for-aging/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8007139023",
+            "8335972777",
+            "8004030864",
+            "8009863505",
+            "211"
+          ],
+          "to": "8772849294",
+          "source": "https://www.in.gov/pathways/resources",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        }
+      ]
     },
     {
       "id": "pathways-aging-ltss",
@@ -803,7 +848,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.in.gov/medicaid/providers/about-ihcp-programs/medicare-savings-programs/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8004030864"
+          ],
+          "to": "8004524800",
+          "source": "https://www.in.gov/ship/help-paying-for-your-medicare-costs/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -886,7 +944,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizenship or qualified non-citizen status",
           "Household includes those who buy/prepare food together"
         ],
-        "povertyLevelReference": "130% FPL for gross income (elderly exempt)"
+        "povertyLevelReference": "130% FPL for gross income (elderly exempt)",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1018,7 +1084,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.in.gov/fssa/dfr/snap-food-assistance/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://www.in.gov/fssa/dfr/snap-food-assistance/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 4750,
+          "source": "https://www.in.gov/fssa/dfr/snap-food-assistance/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1083,7 +1169,15 @@ export const drafts: PipelineStateDrafts = {
           "Renters must provide written landlord permission before permanent installations",
           "Must be present for entire 1-2 hour assessment"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 175,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1214,7 +1308,47 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 721-7385",
       "sourceUrl": "https://www.in.gov/ihcda/homeowners-and-renters/weatherizationenergy-conservation/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://www.in.gov/ihcda/files/Indiana-LIHEAP-Intake-and-Operations-Program-Manual-PY2026.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        },
+        {
+          "field": "income_1",
+          "from": 2388,
+          "to": 2660,
+          "source": "https://www.in.gov/ihcda/homeowners-and-renters/weatherizationenergy-conservation/",
+          "severity": "medium",
+          "why": "value fits more than one tier (185% FPL 2026 or 185% FPL 2025 or 185% FPL 2024 or 200% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3223,
+          "to": 3607,
+          "source": "https://www.in.gov/ihcda/homeowners-and-renters/weatherizationenergy-conservation/",
+          "severity": "medium",
+          "why": "value fits more than one tier (185% FPL 2026 or 185% FPL 2025 or 185% FPL 2024 or 200% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8007217385"
+          ],
+          "to": "8008720371",
+          "source": "https://www.in.gov/oed/resources-and-information-center/customer-assistance-programs/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        }
+      ]
     },
     {
       "id": "indiana-ship-medicare-counseling",
@@ -1334,7 +1468,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(317) 803-6131",
       "sourceUrl": "https://www.in.gov/ship/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "3178036131",
+            "8778392675"
+          ],
+          "to": "8004524800",
+          "source": "https://www.in.gov/ship/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        }
+      ]
     },
     {
       "id": "meals-on-wheels",
@@ -1878,7 +2026,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.in.gov/dwd/files/INDWD_SCSEP_State_Plan_24-27.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8007433333",
+          "source": "https://www.in.gov/dwd/job-seekers/scsep/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        }
+      ]
     },
     {
       "id": "senior-legal-aid",
@@ -2034,7 +2195,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.indianalegalservices.org/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8008690212"
+          ],
+          "to": "8666446407",
+          "source": "https://www.indianalegalservices.org/senior/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:37:18.606Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",

@@ -25,6 +25,11 @@ export interface PipelineDraft {
     summary: string[];
     ageRequirement?: string | null;
     incomeTable?: { householdSize: number; monthlyLimit: number }[] | null;
+    /** The formula behind incomeTable, when it sits on one (schema v2):
+     *  a percentage of the federal poverty guideline or of the SSI rate,
+     *  from data/pipeline/federal-thresholds.json. Verified as a rule; the
+     *  dollars are recomputed when the yearly table changes. */
+    incomeRule?: { basis: "FPL" | "SSI" | "SMI"; percent: number; year: number; disregard?: number; confidence: "derived" | "official" | "model"; derivedAt?: string } | null;
     assetLimits?: {
       individual?: number | null;
       couple?: number | null;

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/HI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.590Z
+ * Last updated: 2026-10-02T07:57:10.907Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -189,7 +189,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(877) 628-5076",
       "sourceUrl": "https://medquest.hawaii.gov",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8776285076"
+          ],
+          "to": "18003168005",
+          "source": "https://medquest.hawaii.gov/en/contact-us.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "kupuna-care-program",
@@ -810,7 +823,15 @@ export const drafts: PipelineStateDrafts = {
           "Social Security number (or application pending)",
           "Must include household members who buy and prepare food together"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -941,7 +962,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://humanservices.hawaii.gov/bessd/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 0,
+          "to": 4500,
+          "source": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-cola-fy26memo.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 0,
+          "to": 4500,
+          "source": "https://www.usda.gov/sites/default/files/guidance-documents/fns.snap-cola-fy26memo.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1176,7 +1217,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(808) 488-6834",
       "sourceUrl": "https://humanservices.hawaii.gov/bessd/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8084886834",
+            "8088470804",
+            "8086964261",
+            "211"
+          ],
+          "to": "8085865740",
+          "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1260,7 +1317,15 @@ export const drafts: PipelineStateDrafts = {
           "Landlord permission required if renting",
           "Priority given to elderly (60+ or 65+), persons with disabilities, families with children, high energy users"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 165,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1395,7 +1460,38 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2600,
+          "to": 2998,
+          "source": "https://gems.hawaii.gov/save-on-your-energy-bill-programs-for-hawaii-households/",
+          "severity": "medium",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 300% SSI 2026 or 300% SSI 2025)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3520,
+          "to": 4053,
+          "source": "https://gems.hawaii.gov/save-on-your-energy-bill-programs-for-hawaii-households/",
+          "severity": "medium",
+          "why": "value fits more than one tier (165% FPL 2026 or 185% FPL 2024 or 185% FPL 2023 or 200% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8085868675",
+          "source": "https://labor.hawaii.gov/ocs/service-programs-index/weatherization-assistance-program/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1708,7 +1804,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(808) 356-8519",
       "sourceUrl": "https://www.hawaiicommunityfoundation.org/strengthening/kupuna-aging-in-place",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8083568519",
+            "8089886747",
+            "8082150073",
+            "211"
+          ],
+          "to": "8087687700",
+          "source": "https://keikitokupuna.org/about/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "caregiver-support-eoa",
@@ -1895,7 +2007,30 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(808) 768-7700",
       "sourceUrl": "https://health.hawaii.gov/eoa/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://www.caregiver.org/connecting-caregivers/services-by-state/hawaii/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8087687700",
+            "8089618626"
+          ],
+          "to": "8085860100",
+          "source": "https://health.hawaii.gov/eoa/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment-training",
@@ -2080,7 +2215,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(808) 961-8730",
       "sourceUrl": "https://labor.hawaii.gov/wdd/job-seekers/scsep/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8089618730",
+            "8083234320",
+            "211"
+          ],
+          "to": "8087687700",
+          "source": "https://elderlyaffairs.com/about-us/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "senior-legal-helpline",
@@ -2938,7 +3088,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medquest.hawaii.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8085860100",
+          "source": "https://health.hawaii.gov/eoa/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "transportation-friends-kupuna",
@@ -3221,7 +3384,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(808) 832-0340",
       "sourceUrl": "https://humanservices.hawaii.gov/senior-companion-program/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 55,
+          "source": "https://humanservices.hawaii.gov/ssd/home/adult-services/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:36:18.771Z"
+        }
+      ]
     },
     {
       "id": "foster-grandparent-program",

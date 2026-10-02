@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.939Z
+ * Last updated: 2026-10-02T07:57:10.934Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -209,7 +209,30 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-250-8427",
       "sourceUrl": "https://www.medicaid.gov/Medicaid-CHIP-Program-Information/By-Topics/Waivers/1115/downloads/vt/vt-choices-for-care-ca.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 10000,
+          "to": 2000,
+          "source": "https://www.medicaidlongtermcare.org/eligibility/vermont/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18002508427",
+            "211"
+          ],
+          "to": "18004255119",
+          "source": "https://dvha.vermont.gov/members/long-term-care",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "medicaid-abd",
@@ -379,7 +402,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mabdapply.vermont.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8002508427",
+            "211"
+          ],
+          "to": "18558999600",
+          "source": "https://info.healthconnect.vermont.gov/compare-plans/medicaid-and-dr-dynasaur",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -548,7 +585,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 633-4227",
       "sourceUrl": "https://www.cms.gov/medicare/medicaid-coordination/about/pace",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8006334227",
+            "211"
+          ],
+          "to": "8022412401",
+          "source": "https://humanservices.vermont.gov/help-and-resources",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -755,7 +806,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dvha.vermont.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-08-18",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1305,
+          "to": 1995,
+          "source": "https://dvha.vermont.gov/members/medicare-savings-program",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2026 vs verified 150% FPL 2026",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1763,
+          "to": 2707,
+          "source": "https://dvha.vermont.gov/members/medicare-savings-program",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2026 vs verified 150% FPL 2026",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "3squaresvt-older-vermonters",
@@ -930,7 +1001,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dcf.vermont.gov/benefits/3SquaresVT/SNAP",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 4250,
+          "to": 4500,
+          "source": "https://dcf.vermont.gov/benefits/3SquaresVT",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "fuel-assistance-heating-help",
@@ -1359,7 +1441,25 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://outside.vermont.gov/dept/DCF/Shared%20Documents/Benefits/Weatherization-Income-Guidelines.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-08-11",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8028632345",
+            "8026651748",
+            "8024791053",
+            "8005451084",
+            "8027486040",
+            "8027224575"
+          ],
+          "to": "8022410935",
+          "source": "https://energysaver.vermont.gov/programs-incentives",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1672,7 +1772,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(802) 465-7293",
       "sourceUrl": "https://agewellvt.org/services/food-meal-delivery/meals-on-wheels/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8024657293",
+            "8022241825"
+          ],
+          "to": "8006425119",
+          "source": "https://www.agewellvt.org/services/food-meal-delivery/meals-on-wheels/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "caregiver-support-program",
@@ -1811,7 +1925,30 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 250-8427",
       "sourceUrl": "https://dvha.vermont.gov/global-commitment-to-health",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://ddsd.vermont.gov/services/caregiver-programs",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8002508427",
+            "211"
+          ],
+          "to": "8006425119",
+          "source": "https://ddsd.vermont.gov/services/caregiver-programs",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -1961,7 +2098,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://a4td.org/scs-employment-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8778725627"
+          ],
+          "to": "8004393307",
+          "source": "https://labor.vermont.gov/vt-retain/individuals/resources",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:39.066Z"
+        }
+      ]
     },
     {
       "id": "legal-assistance-seniors",

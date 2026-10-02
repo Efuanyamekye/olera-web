@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.939Z
+ * Last updated: 2026-10-02T07:57:10.934Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -706,7 +706,15 @@ export const drafts: PipelineStateDrafts = {
           "Live in provider service area",
           "Have low employment prospects and need job skills training"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2022,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -831,7 +839,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(571) 363-7688",
       "sourceUrl": "https://dars.virginia.gov/aging/senior-employment-program/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5713637688",
+            "8043433000"
+          ],
+          "to": "8046627035",
+          "source": "https://dars.virginia.gov/aging/senior-employment-program/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:11.494Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-support",
@@ -928,7 +950,21 @@ export const drafts: PipelineStateDrafts = {
         "hasLocationFinder": true,
         "hasDocumentChecklist": true,
         "visualTone": "warm"
-      }
+      },
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8005523402",
+            "8046629333"
+          ],
+          "to": "7037465999",
+          "source": "https://dars.virginia.gov/aging/home-community/find-local-aaa/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:11.494Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

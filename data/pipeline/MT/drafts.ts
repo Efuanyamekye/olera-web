@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.531Z
+ * Last updated: 2026-10-02T07:57:10.919Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -202,7 +202,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dphhs.mt.gov/sltc/csb/BSW/BigSkyWaiverProgram",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "assets_couple",
+          "from": 2000,
+          "to": 3000,
+          "source": "https://www.medicaidplanningassistance.org/montana-big-sky-waiver/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        }
+      ]
     },
     {
       "id": "cfcs-personal-care-services",
@@ -755,7 +766,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dphhs.mt.gov/SLTC/eligible",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8887061535",
+            "211"
+          ],
+          "to": "8003628312",
+          "source": "https://dphhs.mt.gov/assets/hrd/MedicaidMemberGuide.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -990,7 +1015,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dphhs.mt.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18003621504"
+          ],
+          "to": "8887061535",
+          "source": "https://www.dphhs.mt.gov/assets/hcsd/fmamanual/CMA001.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -1075,7 +1113,15 @@ export const drafts: PipelineStateDrafts = {
           "Social Security number for all applying household members",
           "Must include spouses and children under 22 in same household"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1217,7 +1263,40 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dphhs.mt.gov/HCSD/SNAP",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2608,
+          "to": 1696,
+          "source": "https://dphhs.mt.gov/hcsd/SNAP/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3526,
+          "to": 2292,
+          "source": "https://dphhs.mt.gov/hcsd/SNAP/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18556428650",
+            "4064442990",
+            "211"
+          ],
+          "to": "8887061535",
+          "source": "https://www.fna.usda.gov/snap-directory-entry/montana",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1416,7 +1495,29 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-800-551-3191",
       "sourceUrl": "https://dphhs.mt.gov/hcsd/energyassistance/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 13675,
+          "to": 14717,
+          "source": "https://dphhs.mt.gov/assets/rules/2026-532pro-arm.pdf",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18005513191"
+          ],
+          "to": "8005417735",
+          "source": "https://dphhs.mt.gov/hcsd/energyassistance/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1600,7 +1701,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(406) 728-3710",
       "sourceUrl": "https://dphhs.mt.gov/HCSD/energyassistance/WeatherizationAssistanceProgram",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4067283710",
+            "211"
+          ],
+          "to": "4064471625",
+          "source": "https://dphhs.mt.gov/hcsd/energyassistance/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1877,7 +1992,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(406) 454-6993",
       "sourceUrl": "https://www.cascadecountymt.gov/163/Meals-on-Wheels",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4064546993",
+            "6",
+            "211"
+          ],
+          "to": "8005513191",
+          "source": "https://dphhs.mt.gov/SLTC/aging/NutritionServices",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        }
+      ]
     },
     {
       "id": "big-sky-waiver-respite",
@@ -2242,7 +2372,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://wsd.dli.mt.gov/_docs/wsd-policy/scsep-policy.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18778725627"
+          ],
+          "to": "4064932408",
+          "source": "https://www.esgw.org/scsep/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:40:44.261Z"
+        }
+      ]
     },
     {
       "id": "legal-services-seniors",

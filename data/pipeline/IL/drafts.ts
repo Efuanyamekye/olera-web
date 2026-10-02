@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.911Z
+ * Last updated: 2026-10-02T07:57:10.909Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -72,7 +72,15 @@ export const drafts: PipelineStateDrafts = {
           "Illinois resident",
           "U.S. citizen or qualified non-citizen (lawfully present 5+ years)"
         ],
-        "povertyLevelReference": "100% FPL for AABD pathway"
+        "povertyLevelReference": "100% FPL for AABD pathway",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -569,7 +577,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hfs.illinois.gov/medicalproviders/pace.html",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-14"
+      "lastVerifiedDate": "2026-07-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8002528966"
+          ],
+          "to": "2177821200",
+          "source": "https://hfs.illinois.gov/medicalproviders/pace.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:04.852Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -793,7 +814,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hfs.illinois.gov/info/brochures-and-forms/brochures/hfs3352.html",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-14"
+      "lastVerifiedDate": "2026-07-14",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1330,
+          "to": 1796,
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:37:04.852Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1803,
+          "to": 2435,
+          "source": "https://ilaging.illinois.gov/content/dam/soi/en/web/aging/ship/documents/medicare-savings-program-chart.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:37:04.852Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -875,7 +916,15 @@ export const drafts: PipelineStateDrafts = {
           "Social Security number or proof of application",
           "Must buy and prepare food together if living with others"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1008,7 +1057,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhs.state.il.us/page.aspx?item=30357",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-06"
+      "lastVerifiedDate": "2026-09-06",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2608,
+          "to": 1696,
+          "source": "https://www.dhs.state.il.us/page.aspx?item=30357",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:37:04.852Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3525,
+          "to": 2292,
+          "source": "https://www.dhs.state.il.us/page.aspx?item=30357",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:37:04.852Z"
+        }
+      ]
     },
     {
       "id": "home-weatherization-assistance",
@@ -1073,7 +1142,15 @@ export const drafts: PipelineStateDrafts = {
           "Renters need landlord consent",
           "For buildings with 5 or more units, at least 50% of the units must be occupied by income-eligible tenants to qualify the entire building"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1765,7 +1842,15 @@ export const drafts: PipelineStateDrafts = {
           "Household income must be at or below 125% of the federal poverty guidelines",
           "Must be physically and mentally capable of performing the duties of the community service training assignment"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.455Z
+ * Last updated: 2026-10-02T07:57:10.899Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -60,7 +60,15 @@ export const drafts: PipelineStateDrafts = {
           "Must score exactly Tier 2 on ARIA functional assessment",
           "Live in own home or intend to return home"
         ],
-        "povertyLevelReference": "300% of the SSI federal benefit rate. Arkansas publishes $2,982/month for one person, effective January 1, 2026."
+        "povertyLevelReference": "300% of the SSI federal benefit rate. Arkansas publishes $2,982/month for one person, effective January 1, 2026.",
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "in-person",
@@ -391,7 +399,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/pace-program-of-all-inclusive-care-for-the-elderly/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4794636600",
+            "8702077500",
+            "8002522412"
+          ],
+          "to": "18668013435",
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/aging-adult-behavioral-health-services/find-home-community-based-services-for-adults-seniors/pace-program-of-all-inclusive-care-for-the-elderly/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -425,11 +448,11 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1235
+            "monthlyLimit": 1330
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1663
+            "monthlyLimit": 1803
           }
         ],
         "assetLimits": {
@@ -456,7 +479,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified immigrant",
           "Cannot receive full Medicaid (QI program only)"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -608,7 +639,58 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://humanservices.arkansas.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-10-02",
+      "appliedCorrections": [
+        {
+          "field": "income_1",
+          "from": 1235,
+          "to": 1330,
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "flaggedAt": "2026-10-02T07:33:22.568Z",
+          "appliedAt": "2026-10-02",
+          "appliedBy": "factcheck-judge"
+        },
+        {
+          "field": "income_2",
+          "from": 1663,
+          "to": 1803,
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "flaggedAt": "2026-10-02T07:33:22.568Z",
+          "appliedAt": "2026-10-02",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 9090,
+          "to": 9950,
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 13630,
+          "to": 14910,
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/medicaid-quick-reference-chart/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8004828988"
+          ],
+          "to": "8553721084",
+          "source": "https://search.arkansas211.org/search/0714330c-8e86-5554-bff3-c23a140be949",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -683,7 +765,15 @@ export const drafts: PipelineStateDrafts = {
           "Social Security, VA benefits, and disability payments count as income",
           "Medical expenses over $35/month can be deducted from income"
         ],
-        "povertyLevelReference": "100% FPL"
+        "povertyLevelReference": "100% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -824,7 +914,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://humanservices.arkansas.gov/services-worth-knowing/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18004828988",
+            "211",
+            "18009979999"
+          ],
+          "to": "18553721084",
+          "source": "https://humanservices.arkansas.gov/divisions-shared-services/county-operations/contact-dco/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1022,7 +1127,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.adeq.state.ar.us/energy/assistance/liheap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8882330326",
+            "211"
+          ],
+          "to": "8004828988",
+          "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1101,7 +1220,15 @@ export const drafts: PipelineStateDrafts = {
           "A home cannot be weatherized again within 15 years. Homes eligible for re-weatherization had their previous work completed before 7/1/2011",
           "Eligibility expires 12 months from certification if the energy audit has not started, and subgrantees re-certify eligibility every 12 months"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1262,7 +1389,44 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.adeq.state.ar.us/energy/assistance/wap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2608,
+          "to": 1280,
+          "source": "https://adeq.state.ar.us/energy/assistance/wap.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2022)",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3525,
+          "to": 1820,
+          "source": "https://adeq.state.ar.us/energy/assistance/wap.aspx",
+          "severity": "high",
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 100% FPL 2026",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8882330326",
+            "5013791535",
+            "8702021347",
+            "5017768446",
+            "4797852303",
+            "8703335127",
+            "211"
+          ],
+          "to": "5016827390",
+          "source": "https://adeq.state.ar.us/energy/pdfs/state-plan-august-29-2024.pdf",
+          "severity": "medium",
+          "why": "source dated 2024",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        }
+      ]
     },
     {
       "id": "senior-medicare-patrol-ship",
@@ -1570,7 +1734,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(501) 682-2441",
       "sourceUrl": "https://aging.arkansas.gov/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5016822441",
+            "211"
+          ],
+          "to": "8004826359",
+          "source": "https://search.arkansas211.org/search/2157d3ff-8296-5962-b65f-a3cbc7f1eea2",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:33:22.568Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-support",

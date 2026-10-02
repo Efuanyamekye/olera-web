@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.934Z
+ * Last updated: 2026-10-02T07:57:10.930Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -63,7 +63,15 @@ export const drafts: PipelineStateDrafts = {
           "You can apply up to three months before turning 65",
           "Coverage is renewed every year, and changes must be reported within 10 days"
         ],
-        "povertyLevelReference": "ABD income limits are set at 100% of the federal poverty level; nursing home and in-home care use 300% of the SSI federal benefit rate"
+        "povertyLevelReference": "ABD income limits are set at 100% of the federal poverty level; nursing home and in-home care use 300% of the SSI federal benefit rate",
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -193,7 +201,36 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-09",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 1330,
+          "source": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
+          "severity": "high",
+          "why": "value fits more than one tier (250% FPL 2023 or 300% SSI 2026 or 300% SSI 2025)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 9950,
+          "to": 7080,
+          "source": "https://www1.scdhhs.gov/mppm/word/section300/chapter%20303%20amb-qmb-slmb.doc",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14910,
+          "to": 10620,
+          "source": "https://www1.scdhhs.gov/mppm/word/section300/chapter%20303%20amb-qmb-slmb.doc",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        }
+      ]
     },
     {
       "id": "community-choices-waiver",
@@ -255,7 +292,15 @@ export const drafts: PipelineStateDrafts = {
           "Live in home or community setting (not institution)",
           "Cost of waiver services must be less than nursing facility cost"
         ],
-        "povertyLevelReference": "300% of the SSI federal benefit rate (2026). Spousal allocation $4,066.50."
+        "povertyLevelReference": "300% of the SSI federal benefit rate (2026). Spousal allocation $4,066.50.",
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -635,7 +680,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.scdhhs.gov/members/program-eligibility-and-income-limits",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1330,
+          "to": 1816,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1804,
+          "to": 2455,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -699,7 +764,15 @@ export const drafts: PipelineStateDrafts = {
           "For ESAP (simplified application): no earned income in household",
           "Medical expenses over $35/month can be deducted to increase benefits"
         ],
-        "povertyLevelReference": "130% FPL"
+        "povertyLevelReference": "130% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 130,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -824,7 +897,39 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dss.sc.gov/assistance-programs/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1729,
+          "to": 1305,
+          "source": "https://dss.sc.gov/assistance-programs/snap/faq/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2345,
+          "to": 1763,
+          "source": "https://dss.sc.gov/assistance-programs/snap/faq/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8888980055",
+            "211"
+          ],
+          "to": "8006161309",
+          "source": "https://dss.sc.gov/contact-dss/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1136,7 +1241,15 @@ export const drafts: PipelineStateDrafts = {
           "Renters must have written landlord permission",
           "Homeowners need proof of ownership"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1574,7 +1687,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(864) 242-9733",
       "sourceUrl": "https://aging.sc.gov/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8642429733",
+            "8004344036",
+            "8644893868",
+            "8648851000"
+          ],
+          "to": "8037349900",
+          "source": "https://aging.sc.gov/sites/default/files/documents/SeniorNutritionProgram/Senior%20Nutrition%20Program%20Flyer_Revised%20July_10_2025.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        }
+      ]
     },
     {
       "id": "legal-assistance-seniors",
@@ -1727,7 +1856,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.sc.gov/programs-initiatives/legal-assistance-older-adults",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-31"
+      "lastVerifiedDate": "2026-07-31",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18883465592",
+            "8037996653"
+          ],
+          "to": "18008689095",
+          "source": "https://aging.sc.gov/programs-initiatives/legal-assistance-older-adults",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2164,7 +2307,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dss.sc.gov/assistance-programs/snap/how-do-i-apply/help-for-the-elderly/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://dss.sc.gov/assistance-programs/snap/how-do-i-apply/help-for-the-elderly/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        }
+      ]
     },
     {
       "id": "senior-farmers-market-nutrition",
@@ -2209,7 +2363,15 @@ export const drafts: PipelineStateDrafts = {
           "Must apply in person at approved location in county of residence",
           "Must reapply every year"
         ],
-        "povertyLevelReference": "185% FPL"
+        "povertyLevelReference": "185% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 250,
+          "year": 2022,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "in-person",
@@ -2325,7 +2487,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dss.sc.gov/assistance-programs/food-and-nutrition-programs/senior-farmers-market/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2769,
+          "to": 28953,
+          "source": "https://dss.sc.gov/news/senior-farmers-market-nutrition-program-returns-june-1st-2/",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3769,
+          "to": 39128,
+          "source": "https://dss.sc.gov/news/senior-farmers-market-nutrition-program-returns-june-1st-2/",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:45:42.328Z"
+        }
+      ]
     },
     {
       "id": "vantage-point",

@@ -93,6 +93,39 @@ map and 308-redirects. Legacy ids are never reused for new drafts, because
    metadata (names, abbreviations) stays until DC gets an entry (today every DC
    program page 404s because DC has no library state).
 
+## Rules, not dollars (found 2 Oct 2026)
+
+The first fresh fact-check proposed 105 income corrections. Classifying both
+sides against the federal poverty guideline: 84 had the draft and the
+"verified" value each sitting exactly on a tier, and disagreeing about which
+tier (200% vs 100%, 130% of last year vs 200% of this year, gross vs net). A
+dollar scrape cannot settle that; only the state's rule can. Examples that
+would have made the data worse: Alaska SNAP $3,258 to $1,630, CalFresh $2,610
+to $1,628, Florida SNAP $2,660 to $2,172, all drafts correct at 200% FPL.
+
+So for the federal-formula programs the knowledge base holds the **rule**:
+
+```
+structuredEligibility.incomeRule: { basis: "FPL" | "SSI" | "SMI", percent, year, disregard, confidence }
+data/pipeline/federal-thresholds.json: the poverty guideline and SSI rate by year
+```
+
+`scripts/benefits-income-rules.js` derives the rule from an existing table
+where the table fits one (125 of 181 tables on 2 Oct: 113 FPL, 12 SSI; 14
+still on the 2025 line, which the next yearly recompute fixes). The judge (`benefits-apply-factcheck.js`) applies a numeric flag only when
+the source is official and recent, the field is a limit we hold, the verified
+value sits on exactly one tier of this year's or last year's line, and the
+draft was either off any tier or on the same percentage in an older year.
+Everything else is filed for a person with the reason: tier dispute, value
+fits more than one tier, draft fits a formula but the verified value fits
+none, old line, old source, aggregator source, asset limit, phone, age. On
+the 2 Oct run that left 6 corrections to apply (Arkansas, Maryland and Nevada
+Medicare Savings, 2025 to 2026) and 448 items for review, 185 of them phones. The yearly
+threshold update becomes one file change; verification becomes a check of the
+percentage against the state's policy page. LIHEAP (60% of state median income)
+and the multi-tier Medicare Savings tables need the SMI basis and per-tier
+rows; they stay as dollars until then.
+
 ## The loop
 
 1. **Check.** `node scripts/benefits-pipeline.js --state XX --phase factcheck --run`
@@ -115,15 +148,18 @@ map and 308-redirects. Legacy ids are never reused for new drafts, because
 
 - [x] Stop the stale table from excluding anyone (`eligibility.server.ts`, 2 Oct).
 - [x] The judge: `scripts/benefits-apply-factcheck.js`.
-- [ ] Re-run the fact-check on the current drafts, all 51 states.
-- [ ] Apply official numeric corrections; review phones; regenerate; grid clean.
-- [ ] Schema v2 fields in `data/pipeline-drafts-types.ts` and the pipeline writer.
-- [ ] `VERSION.json`, git tag, `data_version` stamped at `save-results`.
+- [x] Re-run the fact-check on the current drafts, all 51 states (2 Oct, $3.24).
+- [x] Apply the judge's tier-safe corrections (6 on 2 Oct); grid clean.
+- [ ] A person clears the review queue: 185 phones, the tier disputes, the aggregator-sourced flags, the asset limits (a yearly federal figure), the age strings.
+- [ ] Add the SMI basis and per-tier rows (LIHEAP, Medicare Savings) so those tables become rules too.
+- [ ] Make the finder read `incomeRule` and compute from the current year's table.
+- [x] Schema v2 fields in `data/pipeline-drafts-types.ts` (ruleSources, appliedCorrections, reviewQueue, factcheckedAt, incomeRule).
+- [x] `VERSION.json` and `data_version` stamped at `save-results`; git tag at the freeze.
 - [ ] Freeze version 1 before cohort 1 (week of 5 October 2026).
 - [ ] Derive the sbf tables from the drafts; then switch readers; then drop.
 - [ ] Resolve the 285 legacy-only programs (map, draft, or drop).
 - [ ] Raise structured income tables for the programs study families hit most.
-- [ ] GitHub Actions rotation for re-verification.
+- [x] GitHub Actions rotation for re-verification (`.github/workflows/benefits-factcheck.yml`; needs the two repository secrets).
 - [ ] DC: a library state entry so program pages render.
 - [ ] Programs with no phone (e.g. Indiana Caregiver Respite Services); Michigan caregiver program.
 

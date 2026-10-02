@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.944Z
+ * Last updated: 2026-10-02T07:57:10.937Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -147,7 +147,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(877) 996-7275",
       "sourceUrl": "https://wyoparks.wyo.gov/index.php/permits-reservations/permits-fees",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8779967275"
+          ],
+          "to": "3077776323",
+          "source": "https://wyoparks.wyo.gov/index.php/learn/contact",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:40.673Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -482,7 +495,39 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(307) 777-7320",
       "sourceUrl": "https://www.lincolninst.edu/app/uploads/legacy-files/gwipp/upload/sources/Wyoming/2017/WY_Tax_Refund_for_Elderly_and_Disabled_Wyoming_Department_of_Health_2013.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 29950,
+          "to": 25000,
+          "source": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:48:40.673Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 59900,
+          "to": 25000,
+          "source": "https://codes.findlaw.com/wy/title-39-taxation-and-revenue/wy-st-sect-39-11-109/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:48:40.673Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "3077777320",
+            "211"
+          ],
+          "to": "8669898901",
+          "source": "https://wyotax.org/wp-content/uploads/2020/07/Current-Property-Tax-Assistance-Programs-2013.pdf",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:48:40.673Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-support",

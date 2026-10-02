@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-08-22T10:37:49.053Z
+ * Last updated: 2026-10-02T07:57:10.936Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -513,7 +513,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhs.wisconsin.gov/publications/p00409-2024-2027.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9202295557",
+            "6082424928",
+            "211"
+          ],
+          "to": "6082677286",
+          "source": "https://www.dhs.wisconsin.gov/employment-skills/index.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:16.664Z"
+        }
+      ]
     },
     {
       "id": "family-care",
@@ -702,7 +717,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhs.wisconsin.gov/familycare/apply.htm",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8449472372",
+            "211"
+          ],
+          "to": "8003623002",
+          "source": "https://www.dhs.wisconsin.gov/familycare/index.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:16.664Z"
+        }
+      ]
     },
     {
       "id": "iris-self-directed-care",
@@ -888,7 +917,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhs.wisconsin.gov/iris/index.htm",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18556772372",
+            "211"
+          ],
+          "to": "8885154747",
+          "source": "https://www.dhs.wisconsin.gov/iris/index.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:16.664Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

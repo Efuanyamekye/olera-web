@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NM/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.928Z
+ * Last updated: 2026-10-02T07:57:10.924Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -352,7 +352,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(844) 945-0467",
       "sourceUrl": "https://www.hca.nm.gov/lookingforinformation/pace/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8449450467",
+            "5059161932",
+            "711",
+            "18004322080"
+          ],
+          "to": "8002834465",
+          "source": "https://www.hsd.state.nm.us/lookingforinformation/pace/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:51.020Z"
+        }
+      ]
     },
     {
       "id": "community-benefit-program",
@@ -561,7 +577,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hca.nm.gov/community-benefit-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "income_2",
+          "from": 1262,
+          "to": 1491,
+          "source": "https://www.medicaidplanningassistance.org/mexico-centennial-care/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:51.020Z"
+        }
+      ]
     },
     {
       "id": "senior-farmers-market-nutrition",
@@ -617,7 +644,15 @@ export const drafts: PipelineStateDrafts = {
           "Must reapply every year",
           "Automatic qualification if already receiving SNAP, TEFAP, or CSFP"
         ],
-        "povertyLevelReference": "185% FPL"
+        "povertyLevelReference": "185% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "online",
@@ -749,7 +784,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.nmwic.org/fmnp/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-08-11",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2739,
+          "to": 1986,
+          "source": "https://www.nmwic.org/fmnp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:51.020Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3706,
+          "to": 2686,
+          "source": "https://www.nmwic.org/fmnp/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:51.020Z"
+        }
+      ]
     },
     {
       "id": "senior-employment-training-program",

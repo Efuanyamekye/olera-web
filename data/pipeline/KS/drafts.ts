@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KS/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T11:25:55.875Z
+ * Last updated: 2026-10-02T07:57:10.911Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -920,7 +920,15 @@ export const drafts: PipelineStateDrafts = {
           "College students must live at home full-time (dorm residents ineligible)",
           "Legally incapacitated persons need guardian or conservator to apply"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1234,7 +1242,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 432-0303",
       "sourceUrl": "https://kshousingcorp.org/weatherization-assistance",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8004320303",
+            "211"
+          ],
+          "to": "18007524422",
+          "source": "https://content.dcf.ks.gov/ees/keesm/current/keesm13500.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:38.319Z"
+        }
+      ]
     },
     {
       "id": "shick-medicare-counseling",
@@ -1704,7 +1726,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-855-200-2372",
       "sourceUrl": "https://www.kdads.ks.gov/services-programs/aging/caregivers",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://www.jhawkaaa.org/caregiving",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:37:38.319Z"
+        }
+      ]
     },
     {
       "id": "scsep-senior-employment",
@@ -2001,7 +2034,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-888-353-5337",
       "sourceUrl": "https://www.kansaslegalservices.org/page/57/programs-seniors",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18883535337",
+            "18007236953",
+            "9138263160",
+            "9138262830"
+          ],
+          "to": "3162673975",
+          "source": "https://www.kansaslegalservices.org/page/57/programs-seniors",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:37:38.319Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2287,7 +2336,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "855-200-2372",
       "sourceUrl": "https://www.kdads.ks.gov/services-programs/aging/senior-care-act-sca",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8552002372",
+            "7852964986"
+          ],
+          "to": "8006771116",
+          "source": "https://www.kdads.ks.gov/services-programs/aging",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:38.319Z"
+        }
+      ]
     },
     {
       "id": "senior-citizen-law-project",
@@ -2400,7 +2463,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.kansaslegalservices.org/page/57/programs-seniors",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "316"
+          ],
+          "to": "8883535337",
+          "source": "https://www.kansaslegalservices.org/page/57/programs-seniors",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:37:38.319Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

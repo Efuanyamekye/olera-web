@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.487Z
+ * Last updated: 2026-10-02T07:57:10.935Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -73,7 +73,15 @@ export const drafts: PipelineStateDrafts = {
           "For aged 65+: Different income limits apply ($967/month for single person)",
           "Asset test applies for elderly and disabled categories"
         ],
-        "povertyLevelReference": "138% FPL for adults under 65"
+        "povertyLevelReference": "138% FPL for adults under 65",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 135,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -173,7 +181,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(877) 501-2233",
       "sourceUrl": "https://www.hca.wa.gov/free-or-low-cost-health-care/i-need-medical-dental-or-vision-care/apple-health-medicaid-apple-health-elderly-blind-disabled",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1835,
+          "to": 994,
+          "source": "https://www.waseniorsupport.org/programs/apple-health-classic-medicaid",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2490,
+          "to": 1491,
+          "source": "https://www.waseniorsupport.org/programs/apple-health-classic-medicaid",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        }
+      ]
     },
     {
       "id": "medicaid-personal-care-mpc",
@@ -802,7 +830,15 @@ export const drafts: PipelineStateDrafts = {
           "Cannot receive QI if eligible for other Medicaid programs",
           "Must be Washington resident"
         ],
-        "povertyLevelReference": "110-138% FPL"
+        "povertyLevelReference": "110-138% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 120,
+          "year": 2024,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1038,7 +1074,15 @@ export const drafts: PipelineStateDrafts = {
           "Must participate in Food Assistance work and training program if applicable",
           "Income counted is gross income before taxes and deductions"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1503,7 +1547,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.commerce.wa.gov/weatherization/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5094527145"
+          ],
+          "to": "3607252857",
+          "source": "https://dcyf.wa.gov/services/housing-basic-needs/basic-needs-community-resource-directory",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1809,7 +1866,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://app.leg.wa.gov/wac/default.aspx?cite=388-473-0020",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-08-31",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "3605335100",
+            "2064485767",
+            "18443485464",
+            "211"
+          ],
+          "to": "2537984600",
+          "source": "https://www.piercecountywa.gov/6826/Senior-Nutrition",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-support",
@@ -1955,7 +2028,30 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 422-3263",
       "sourceUrl": "https://www.adsa.dshs.wa.gov/caregiving",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://www.dshs.wa.gov/adult-and-aging-services/caregiving-resources/information-caregivers",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8004223263",
+            "211"
+          ],
+          "to": "18555670252",
+          "source": "https://www.dshs.wa.gov/media/578/download?inline",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment-program",
@@ -2135,7 +2231,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dol.gov/agencies/eta/seniors",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4253664457",
+            "211"
+          ],
+          "to": "18778725627",
+          "source": "https://www.dol.gov/agencies/eta/seniors",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        }
+      ]
     },
     {
       "id": "legal-aid-seniors",
@@ -2390,7 +2500,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(253) 798-3789",
       "sourceUrl": "https://waombudsman.org",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "2537983789"
+          ],
+          "to": "8005626028",
+          "source": "https://www.waombudsman.org/about/staff/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        }
+      ]
     },
     {
       "id": "state-parks-senior-limited-income-pass",
@@ -3117,7 +3240,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dshs.wa.gov/esa/community-services-offices/aged-blind-or-disabled-cash-program",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23"
+      "lastVerifiedDate": "2026-08-23",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 6000,
+          "to": 12000,
+          "source": "https://manuals.dshs.wa.gov/book/export/html/17",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 6000,
+          "to": 12000,
+          "source": "https://manuals.dshs.wa.gov/book/export/html/17",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        }
+      ]
     },
     {
       "id": "cares-fund",
@@ -3395,7 +3538,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(206) 582-5011",
       "sourceUrl": "https://www.seattle.gov/agefriendly/about/discount-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "2065825011"
+          ],
+          "to": "2066840500",
+          "source": "https://seattle.gov/agefriendly/programs/discounts",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:08.854Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

@@ -508,7 +508,22 @@
       "sourceUrl": "https://www.dhs.wisconsin.gov/publications/p00409-2024-2027.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9202295557",
+            "6082424928",
+            "211"
+          ],
+          "to": "6082677286",
+          "source": "https://www.dhs.wisconsin.gov/employment-skills/index.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:16.664Z"
+        }
+      ]
     },
     {
       "id": "family-care",
@@ -697,7 +712,21 @@
       "sourceUrl": "https://www.dhs.wisconsin.gov/familycare/apply.htm",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8449472372",
+            "211"
+          ],
+          "to": "8003623002",
+          "source": "https://www.dhs.wisconsin.gov/familycare/index.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:16.664Z"
+        }
+      ]
     },
     {
       "id": "iris-self-directed-care",
@@ -883,7 +912,21 @@
       "sourceUrl": "https://www.dhs.wisconsin.gov/iris/index.htm",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18556772372",
+            "211"
+          ],
+          "to": "8885154747",
+          "source": "https://www.dhs.wisconsin.gov/iris/index.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:48:16.664Z"
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -942,5 +985,6 @@
       "Family Care and IRIS both require Nursing Facility Level of Care assessment but let your loved one stay at home"
     ],
     "resourcesVsBenefits": "The Elder Benefit Specialist Program is free to all Wisconsin seniors regardless of income, call your local Aging and Disability Resource Center anytime for help. The other four programs require qualification: SeniorCare has income limits, Family Care and IRIS require clinical assessments showing your loved one needs daily care assistance, and WISE requires unemployment and income under $31,200/year for a family of two."
-  }
+  },
+  "factcheckedAt": "2026-10-02T07:48:16.664Z"
 }

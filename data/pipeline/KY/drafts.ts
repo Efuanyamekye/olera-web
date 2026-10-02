@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/KY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.466Z
+ * Last updated: 2026-10-02T07:57:10.911Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -182,7 +182,30 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://kynect.ky.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "assets_couple",
+          "from": 4000,
+          "to": 3000,
+          "source": "https://www.chfs.ky.gov/agencies/dms/dpo/Pages/enroll.aspx",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8553068959",
+            "211"
+          ],
+          "to": "8554596328",
+          "source": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/enroll.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     },
     {
       "id": "hcbs-waivers",
@@ -703,7 +726,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://chfs.ky.gov/agencies/dms/dpo/epb/Pages/msp.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1325,
+          "to": 1796,
+          "source": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/msp.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1783,
+          "to": 2435,
+          "source": "https://www.chfs.ky.gov/agencies/dms/dpo/epb/Pages/msp.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -776,7 +819,15 @@ export const drafts: PipelineStateDrafts = {
           "Must live together and share food preparation with household members",
           "Adults 18 through 64 who can work and have no children under 14 at home must work or train 20 hours a week to keep SNAP beyond 3 months, unless exempt (for example, a disability). People 65 and older are exempt."
         ],
-        "povertyLevelReference": "200% FPL before deductions (Kentucky broad-based eligibility), from October 1, 2026. Households with someone 60+ or disabled who are over that can qualify at 100% FPL after deductions"
+        "povertyLevelReference": "200% FPL before deductions (Kentucky broad-based eligibility), from October 1, 2026. Households with someone 60+ or disabled who are over that can qualify at 100% FPL after deductions",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1066,7 +1117,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://chfs.ky.gov/agencies/dcbs/dfs/pdb/Pages/liheap.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "assets_couple",
+          "from": 2000,
+          "to": 4000,
+          "source": "https://www.chfs.ky.gov/agencies/dcbs/dfs/pdb/Pages/liheap.aspx",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1132,7 +1194,15 @@ export const drafts: PipelineStateDrafts = {
           "Must provide proof of U.S. citizenship or legal residency",
           "Renters need written landlord permission"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "in-person",
@@ -1258,7 +1328,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.kyhousing.org/programs/weatherization",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "8595816607",
+            "8008174443"
+          ],
+          "to": "8006338896",
+          "source": "https://www.kyhousing.org/Programs/Weatherization",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1537,7 +1622,30 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(859) 283-1885",
       "sourceUrl": "https://chfs.ky.gov/agencies/dail/Pages/nutrition.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 65,
+          "source": "https://www.mealsonwheels.ky/get-meals",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8592831885",
+            "211"
+          ],
+          "to": "9291411",
+          "source": "https://www.mealsonwheels.ky/get-meals",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     },
     {
       "id": "national-family-caregiver-support",
@@ -1587,7 +1695,15 @@ export const drafts: PipelineStateDrafts = {
           "For grandparent caregivers: child's biological/adoptive parents cannot live in home",
           "Must be related by blood, marriage, or adoption (for Kentucky program)"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 160,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -1703,7 +1819,40 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": "https://chfs.ky.gov/agencies/dail/Pages/caregiversupport.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2128,
+          "to": 1505,
+          "source": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (165% FPL 2026 or 165% FPL 2025 or 165% FPL 2024 or 185% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2878,
+          "to": 2043,
+          "source": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx",
+          "severity": "high",
+          "why": "value fits more than one tier (165% FPL 2026 or 165% FPL 2025 or 165% FPL 2024 or 185% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "5022665571",
+            "8592831885"
+          ],
+          "to": "5025646930",
+          "source": "https://www.chfs.ky.gov/agencies/dail/pages/caregiversupport.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     },
     {
       "id": "senior-community-service-employment",
@@ -1866,7 +2015,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://chfs.ky.gov/agencies/dail/Pages/scsep.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8334397759",
+            "6067896517",
+            "8595816607",
+            "2706861607"
+          ],
+          "to": "5025645759",
+          "source": "https://www.chfs.ky.gov/agencies/dail/Pages/scsep.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     },
     {
       "id": "legal-aid-seniors",
@@ -2153,7 +2318,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(859) 277-9215",
       "sourceUrl": "https://chfs.ky.gov/agencies/dail/Pages/ltcomb.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8592779215",
+            "6068862374",
+            "8007372723"
+          ],
+          "to": "8003722991",
+          "source": "https://www.ag.ky.gov/AG%20Publications/Protect-Nursing-Home-Residents.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     },
     {
       "id": "hcb-waiver",
@@ -2628,7 +2808,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://chfs.ky.gov/agencies/dail/Pages/nutrition.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8779250037",
+            "6069291366",
+            "6067396349",
+            "6064744179",
+            "6064736244"
+          ],
+          "to": "5025646930",
+          "source": "https://www.chfs.ky.gov/agencies/dail/Pages/default.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:37:58.975Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

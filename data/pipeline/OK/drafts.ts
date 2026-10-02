@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.479Z
+ * Last updated: 2026-10-02T07:57:10.926Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -386,7 +386,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://oklahoma.gov/okdhs/services/cap/advantage-services.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "assets_couple",
+          "from": 3000,
+          "to": 4000,
+          "source": "https://oklahoma.gov/ohca/policies-and-rules/xpolicy/medical-assistance-for-adults-and-children-eligibility/advantage-waiver-services/determining-financial-eligibility-for-advantage-program-services.html",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -834,7 +845,58 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://oklahoma.gov/okdhs/services/health/help.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1235,
+          "to": 1816,
+          "source": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1663,
+          "to": 2455,
+          "source": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 9090,
+          "to": 9950,
+          "source": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 13630,
+          "to": 14910,
+          "source": "https://oklahoma.gov/okdhs/medicareandmeds/mippa.html",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "4055213646",
+            "4055225050",
+            "211"
+          ],
+          "to": "4055213679",
+          "source": "https://oklahoma.gov/okdhs/services/health/medicare.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -907,7 +969,15 @@ export const drafts: PipelineStateDrafts = {
           "Oklahoma residency",
           "Household must buy/prepare food together"
         ],
-        "povertyLevelReference": "100% FPL (net income)"
+        "povertyLevelReference": "100% FPL (net income)",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1048,7 +1118,40 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://oklahoma.gov/okdhs/services/snap.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1330,
+          "to": 1739,
+          "source": "https://www.fns.usda.gov/snap-recipient/eligibility",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1804,
+          "to": 2345,
+          "source": "https://www.fns.usda.gov/snap-recipient/eligibility",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8777600114",
+            "211",
+            "8778234369"
+          ],
+          "to": "8664111877",
+          "source": "https://oklahoma.gov/okdhs/services/snap.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1112,7 +1215,15 @@ export const drafts: PipelineStateDrafts = {
           "Cannot receive both OKDHS and tribal LIHEAP benefits in the same federal fiscal year",
           "Household includes everyone under the same roof sharing a utility meter"
         ],
-        "povertyLevelReference": "130% FPL"
+        "povertyLevelReference": "130% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1415,7 +1526,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": "https://oklahoma.gov/okdhs/services/cap/meals.html",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "8002522412"
+          ],
+          "to": "8002112116",
+          "source": "https://oklahoma.gov/okdhs/services/aging/titleiii.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:21.822Z"
+        }
+      ]
     },
     {
       "id": "respite-voucher-programs",
