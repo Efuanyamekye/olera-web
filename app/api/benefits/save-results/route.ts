@@ -25,6 +25,7 @@ import { emailReturningUserSignInLink, resolveExistingUserId } from "@/lib/auth/
 import { readCareAge, AGE_BAND_LABELS, isAgeBand } from "@/lib/benefits/age";
 import { benefitAmountLabel } from "@/lib/benefits/savings-label";
 import { readCareNeedSource, isInferredCareNeed, type CareNeedSource } from "@/lib/benefits/care-need-source";
+import dataVersion from "@/data/pipeline/VERSION.json";
 
 // ─── Email + SMS body helpers ────────────────────────────────────────────
 //
@@ -534,6 +535,10 @@ export async function POST(req: Request) {
       answers: careNeed ? { careNeed, careNeedSource } : undefined,
       matchCount,
       completed_at: completedAt,
+      // Which version of the program rules this family was matched against
+      // (data/pipeline/VERSION.json), so a study cohort can be read back
+      // against the facts it saw.
+      data_version: dataVersion.version,
       finder_program_ids: Array.isArray(finderProgramIds) && finderProgramIds.length
         ? finderProgramIds.filter((id) => typeof id === "string").slice(0, 30)
         : undefined,

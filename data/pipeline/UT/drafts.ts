@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/UT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T06:27:16.094Z
+ * Last updated: 2026-10-02T07:57:10.933Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -243,7 +243,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.utah.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "assets_couple",
+          "from": 4000,
+          "to": 3000,
+          "source": "https://oepmanuals.dhhs.utah.gov/500/503_Household_Size_and_Asset_Limits.htm",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        }
+      ]
     },
     {
       "id": "pace-elder-care",
@@ -663,7 +674,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizenship not required - many non-citizens qualify after 5 years or with disability benefits",
           "Include spouse and children under 22 in household even if they buy food separately"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2024,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -871,7 +890,15 @@ export const drafts: PipelineStateDrafts = {
           "At least one U.S. citizen or qualified non-citizen",
           "Household includes all people sharing the address and utility bill"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1009,7 +1036,39 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": "https://jobs.utah.gov/housing/scso/seal/heat.html",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1956,
+          "to": 1550,
+          "source": "https://jobs.utah.gov/housing/scso/seal/heat.html",
+          "severity": "high",
+          "why": "value fits more than one tier (150% FPL 2026 or 150% FPL 2025 or 150% FPL 2024 or 165% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2644,
+          "to": 2110,
+          "source": "https://jobs.utah.gov/housing/scso/seal/heat.html",
+          "severity": "high",
+          "why": "value fits more than one tier (150% FPL 2026 or 150% FPL 2025 or 150% FPL 2024 or 165% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "4355861112"
+          ],
+          "to": "18662054357",
+          "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1087,7 +1146,15 @@ export const drafts: PipelineStateDrafts = {
           "Renters need notarized landlord permission form",
           "HEAT program recipients automatically qualify"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 185,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1224,7 +1291,41 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(801) 214-3215",
       "sourceUrl": "https://jobs.utah.gov/housing/scso/wap/how.html",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2510,
+          "to": 380,
+          "source": "https://jobs.utah.gov/housing/scso/wap/how.html",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3407,
+          "to": 514,
+          "source": "https://jobs.utah.gov/housing/scso/wap/how.html",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8012143215",
+            "4357527242",
+            "8012293800",
+            "4358650195"
+          ],
+          "to": "8015383939",
+          "source": "https://jobs.utah.gov/housing/scso/wap/how.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1748,7 +1849,32 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://daas.utah.gov/services/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23"
+      "lastVerifiedDate": "2026-08-23",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://daas.utah.gov/seniors/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18774244640",
+            "8014682460",
+            "8014513377",
+            "8016253866"
+          ],
+          "to": "8015383910",
+          "source": "https://daas.utah.gov/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -1807,7 +1933,15 @@ export const drafts: PipelineStateDrafts = {
           "Have not exceeded 48-month lifetime participation limit",
           "Register with Utah State Workforce within two weeks"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 120,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1934,7 +2068,39 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 771-2153",
       "sourceUrl": "https://daas.utah.gov/wp-content/uploads/2024/05/Utah-SCSEP-Four-Year-State-Plan-2024-for-public-comment-1.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1583,
+          "to": 1983,
+          "source": "https://daas.utah.gov/seniors/",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 125% FPL 2024 or 130% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2142,
+          "to": 2689,
+          "source": "https://daas.utah.gov/seniors/",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 125% FPL 2024 or 130% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8007712153",
+            "211"
+          ],
+          "to": "8015383910",
+          "source": "https://daas.utah.gov/seniors/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        }
+      ]
     },
     {
       "id": "legal-services-seniors",
@@ -1980,7 +2146,15 @@ export const drafts: PipelineStateDrafts = {
         "otherRequirements": [
           "Legal issue must relate to senior-specific problems like public benefits, housing, elder abuse, guardianship, or estate planning"
         ],
-        "povertyLevelReference": "125% FPL (exceptions to 200% FPL with hardship documentation)"
+        "povertyLevelReference": "125% FPL (exceptions to 200% FPL with hardship documentation)",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 120,
+          "year": 2025,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2086,7 +2260,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.utahlegalservices.org/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8013288849",
+            "8016498895",
+            "211"
+          ],
+          "to": "8013288891",
+          "source": "https://www.utahlegalservices.org/contact",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2211,7 +2400,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(801) 229-3809",
       "sourceUrl": "https://daas.utah.gov/long-term-care-ombudsman/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8012293809"
+          ],
+          "to": "3852221273",
+          "source": "https://daas.utah.gov/ombudsman-locations-3/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:47:00.310Z"
+        }
+      ]
     },
     {
       "id": "aging-waiver",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MI/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-04T09:57:48.364Z
+ * Last updated: 2026-10-02T07:57:10.916Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -208,7 +208,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.michigan.gov/mdhhs/assistance-programs/healthcare/seniors/michoicewaiver",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-14"
+      "lastVerifiedDate": "2026-07-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7347222830",
+            "211"
+          ],
+          "to": "5172418474",
+          "source": "https://www.michigan.gov/mdhhs/-/media/Project/Websites/mdhhs/Assistance-Programs/Medicaid-BPHASA/Other-Prov-Specific-Page-Docs/MI-Choice-Participant-Handbook---DCH-1433-2-2023-Final.pdf?rev=31bad12ce6994bc6a117b68e555f325f&hash=D63402EBA421A897A9AC1E49ACBEB2EF",
+          "severity": "medium",
+          "why": "source dated 2023",
+          "flaggedAt": "2026-10-02T07:39:19.738Z"
+        }
+      ]
     },
     {
       "id": "health-link-program",
@@ -384,7 +398,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.michigan.gov/mdhhs/doing-business/providers/mi-coordinated-health/information-for-health-plans-and-providers",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-14"
+      "lastVerifiedDate": "2026-07-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18009757630",
+            "18008037174",
+            "211"
+          ],
+          "to": "8332302057",
+          "source": "https://www.caresource.com/documents/h4193_mi-snp-m-4199449_m-mmp-to-hide-2026-anoc-508.pdf",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:39:19.738Z"
+        }
+      ]
     },
     {
       "id": "options",
@@ -553,7 +582,15 @@ export const drafts: PipelineStateDrafts = {
           "Must live in county where applying",
           "Age 55+ if member of Michigan federally recognized tribe"
         ],
-        "povertyLevelReference": "185% FPL"
+        "povertyLevelReference": "185% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 175,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "online",
@@ -649,7 +686,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs/senior-project-freshmarket-fresh",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-14"
+      "lastVerifiedDate": "2026-07-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8557736424",
+          "source": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs/senior-project-freshmarket-fresh",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:39:19.738Z"
+        }
+      ]
     },
     {
       "id": "michigan-micafe-food-access",
@@ -966,7 +1016,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.michigan.gov/mdhhs/adult-child-serv/adults-and-seniors/acls/special-programs",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-14"
+      "lastVerifiedDate": "2026-07-14",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 21,
+          "to": 55,
+          "source": "https://fsamich.org/programs/senior-programs/senior-companion/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:39:19.738Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.536Z
+ * Last updated: 2026-10-02T07:57:10.922Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -191,7 +191,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.healthcare.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8008523345",
+            "8003182596"
+          ],
+          "to": "8442753447",
+          "source": "https://www.medicaid.gov/about-us/where-can-people-get-help-medicaid-chip",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "cfi-waiver",
@@ -367,7 +381,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhhs.nh.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 65,
+          "source": "https://www.medicaid.gov/medicaid/section-1115-demo/demonstration-and-waiver-list/Waiver-Descript-Factsheet/NH",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -508,7 +533,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(603) 271-9389",
       "sourceUrl": "https://www.dhhs.nh.gov/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6032719389",
+            "8666349412",
+            "1800"
+          ],
+          "to": "8446427223",
+          "source": "https://www.nhpace.org/do-i-qualify/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -563,7 +603,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be eligible for Medicare Parts A and B (even if not currently enrolled)",
           "New Hampshire residency required"
         ],
-        "povertyLevelReference": "100-135% FPL depending on tier"
+        "povertyLevelReference": "100-135% FPL depending on tier",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -692,7 +740,56 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhhs.nh.gov/health-care/medicaid",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1660,
+          "to": 1350,
+          "source": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-qualified-medicare-beneficiaries-qmbs/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2239,
+          "to": 1824,
+          "source": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-qualified-medicare-beneficiaries-qmbs/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 9090,
+          "to": 9950,
+          "source": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-qualified-medicare-beneficiaries-qmbs/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 13630,
+          "to": 14910,
+          "source": "https://www.kff.org/medicare/state-indicator/eligibility-for-medicare-savings-programs-for-qualified-medicare-beneficiaries-qmbs/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8006334227"
+          ],
+          "to": "18442753447",
+          "source": "https://www.dhhs.nh.gov/medicaid-contact-directory",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -772,7 +869,15 @@ export const drafts: PipelineStateDrafts = {
           "New Hampshire resident",
           "Net income generally at 100% federal poverty level after deductions"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -913,7 +1018,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhhs.nh.gov/programs-services/food-stamps",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8773477627",
+            "211"
+          ],
+          "to": "6032719700",
+          "source": "https://www.dhhs.nh.gov/programs-services/food-meals-assistance/supplemental-nutrition-assistance-program-snap",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1131,7 +1250,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(603) 223-0043",
       "sourceUrl": "https://www.energy.nh.gov/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6032230043",
+            "6034363896",
+            "6034352500",
+            "211"
+          ],
+          "to": "6032713670",
+          "source": "https://liheapch.acf.hhs.gov/profiles/NH.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1309,7 +1444,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(603) 435-2500",
       "sourceUrl": "https://www.energy.nh.gov/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6034352500",
+            "211"
+          ],
+          "to": "6036688010",
+          "source": "https://caphr.org/system/files/2021-01/uploads/file/2017_08_WEATHERIZATION_BROCHURE_4c1.pdf",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1610,7 +1759,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mealsonwheelsnh.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8666349412",
+            "211"
+          ],
+          "to": "6032719203",
+          "source": "https://staging.nhfv.org/resources/bureau-of-elderly-and-adult-services/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-support",
@@ -1765,7 +1928,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "866-634-9412",
       "sourceUrl": "https://www.dhhs.nh.gov",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://www.dhhs.nh.gov/sites/g/files/ehbemt476/files/inline-documents/sonh/rfa-2024-dltss-03-adrcs-app-e-appendix-e-nhfcsp-program-operations.pdf",
+          "severity": "high",
+          "why": "source dated 2024",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -2237,7 +2411,15 @@ export const drafts: PipelineStateDrafts = {
           "Needs cannot exceed what provider can safely meet",
           "Physician referral required"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2370,7 +2552,30 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhhs.nh.gov/programs-services/medicaid",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2901,
+          "to": 1646,
+          "source": "https://www.gc.nh.gov/rules/state_agencies/he-e500.html",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8666349412",
+            "211"
+          ],
+          "to": "8003511888",
+          "source": "https://www.dhhs.nh.gov/programs-services/adult-aging-care",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "easterseals-in-home-care",
@@ -2687,7 +2892,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-866-634-9412",
       "sourceUrl": "nhcare-c.org",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18666349412"
+          ],
+          "to": "6032253295",
+          "source": "https://www.strathamnh.gov/Documents/Departments/Parks%20and%20Recreation/Senior%20Services/stratham_seniorresourceguide_final.pdf?t=202512231130030",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:24.535Z"
+        }
+      ]
     },
     {
       "id": "americorps-senior-companion",

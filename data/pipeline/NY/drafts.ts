@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-09T05:48:18.612Z
+ * Last updated: 2026-10-02T07:57:10.925Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -590,7 +590,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.health.ny.gov/health_care/managed_care/mltc/mltcplans.htm",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18884016582",
+            "8554574636",
+            "8662639083",
+            "8332522737"
+          ],
+          "to": "8887287223",
+          "source": "https://pacecny.org/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:43:40.306Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-program-qmb-slmb-qi",
@@ -638,7 +654,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified immigrant",
           "New York resident"
         ],
-        "povertyLevelReference": "Up to 186% FPL"
+        "povertyLevelReference": "Up to 186% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 185,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -786,7 +810,40 @@ export const drafts: PipelineStateDrafts = {
       "phone": "888-692-6116",
       "sourceUrl": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/medicaresavingsprogram.htm",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2494,
+          "to": 1856,
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/",
+          "severity": "high",
+          "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:43:40.306Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3375,
+          "to": 2509,
+          "source": "https://www.health.ny.gov/health_care/medicaid/program/update/savingsprogram/",
+          "severity": "high",
+          "why": "value fits more than one tier (135% FPL 2026 or 138% FPL 2026 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:43:40.306Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8886926116",
+            "5857868900",
+            "1800"
+          ],
+          "to": "8005412831",
+          "source": "https://www.health.ny.gov/forms/instructions/doh-4328_instructions.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:40.306Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -871,7 +928,15 @@ export const drafts: PipelineStateDrafts = {
           "An asset test ($4,500 countable assets) applies only if the household is over the standard gross income limit; most applicants have no asset limit",
           "Must report changes in household composition or income"
         ],
-        "povertyLevelReference": "125% FPL monthly income"
+        "povertyLevelReference": "125% FPL monthly income",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1392,7 +1457,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(716) 661-9430",
       "sourceUrl": "https://otda.ny.gov/workingfamilies/wap.asp",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7166619430",
+            "211"
+          ],
+          "to": "311",
+          "source": "https://www.nyc.gov/html/mancb2/downloads/pdf/cb2seniorserviceguide2013.pdf",
+          "severity": "medium",
+          "why": "source dated 2013",
+          "flaggedAt": "2026-10-02T07:43:40.306Z"
+        }
+      ]
     },
     {
       "id": "hiicap-medicare-counseling",
@@ -1932,7 +2011,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be authorized to work in the United States",
           "Must reside in the area served by the local SCSEP provider"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2053,7 +2140,29 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(212) 244-6469",
       "sourceUrl": "https://www.dol.gov/agencies/eta/seniors",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1663,
+          "to": 1575,
+          "source": "https://aging.ny.gov/senior-community-service-employment-program-scsep",
+          "severity": "medium",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:43:40.306Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "2122446469"
+          ],
+          "to": "18778725627",
+          "source": "https://www.dol.gov/agencies/eta/seniors/contact",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:40.306Z"
+        }
+      ]
     },
     {
       "id": "legal-services-seniors",
@@ -2412,7 +2521,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "3-1-1",
       "sourceUrl": "https://www.nyc.gov/site/finance/property/landlords-sche.page",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "311"
+          ],
+          "to": "2126399675",
+          "source": "https://www.nyc.gov/site/finance/property/landlords-sche.page",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:40.306Z"
+        }
+      ]
     },
     {
       "id": "scrie-rent-freeze",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.454Z
+ * Last updated: 2026-10-02T07:57:10.899Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -650,7 +650,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified non-citizen",
           "Alabama resident"
         ],
-        "povertyLevelReference": "130% FPL before deductions (Alabama broad-based eligibility); 100% FPL after deductions above that"
+        "povertyLevelReference": "130% FPL before deductions (Alabama broad-based eligibility); 100% FPL after deductions above that",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 130,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -764,7 +772,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dhr.alabama.gov/food-assistance/alabama-elderly-simplified-application-project-aesap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1729,
+          "to": 1305,
+          "source": "https://dhr.alabama.gov/wp-content/uploads/2025/10/Form-DHR-FAP-2200-Rev.-10-2025.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:33:05.611Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2345,
+          "to": 1763,
+          "source": "https://dhr.alabama.gov/wp-content/uploads/2025/10/Form-DHR-FAP-2200-Rev.-10-2025.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025 or 133% FPL 2024 or 135% FPL 2024 or 138% FPL 2024 or 138% FPL 2023 or 150% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:33:05.611Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -826,7 +854,15 @@ export const drafts: PipelineStateDrafts = {
           "Medical statement required for medical cooling/heating needs",
           "Crisis assistance requires emergency verification (disconnection notice)"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1137,7 +1173,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://adeca.alabama.gov/weatherization/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23"
+      "lastVerifiedDate": "2026-08-23",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "3342624300",
+            "2569991166",
+            "2563833832",
+            "2568519800"
+          ],
+          "to": "3342428972",
+          "source": "https://adeca.alabama.gov/wp-content/uploads/2025-WAP-State-Plan.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:05.611Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -2439,7 +2492,15 @@ export const drafts: PipelineStateDrafts = {
           "Cannot have transferred assets within 60 months for less than fair market value",
           "Veterans must apply for maximum VA benefits first"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -2582,7 +2643,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.alabama.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 55,
+          "source": "https://www.slideserve.com/Anita/welcome-to-nacolg-your-regional-commission-december-4-2008",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:33:05.611Z"
+        },
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 1292,
+          "source": "https://www.slideserve.com/Anita/welcome-to-nacolg-your-regional-commission-december-4-2008",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:33:05.611Z"
+        }
+      ]
     },
     {
       "id": "seniorx-prescription-assistance",

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DE/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.905Z
+ * Last updated: 2026-10-02T07:57:10.903Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -356,7 +356,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dhss.delaware.gov/dsaapd",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 55,
+          "source": "https://dhss.delaware.gov/dsaapd/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -550,7 +561,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.law.cornell.edu/regulations/delaware/16-Del-Admin-Code-SS-20000-20775",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "13026603380",
+            "3028653565",
+            "18002239074"
+          ],
+          "to": "18669408963",
+          "source": "https://dhss.delaware.gov/wp-content/uploads/sites/2/2026/06/Program-Information-Rights-and-Responsibilities-English.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        }
+      ]
     },
     {
       "id": "qmb-slmb-medicare-help",
@@ -599,7 +625,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified non-citizen",
           "Cannot be eligible for full Medicaid"
         ],
-        "povertyLevelReference": "QMB: 100% FPL, SLMB: 100-120% FPL"
+        "povertyLevelReference": "QMB: 100% FPL, SLMB: 100-120% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 120,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -722,7 +756,39 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://regulations.delaware.gov/board/division-of-medicaid-and-medical-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1585,
+          "to": 1330,
+          "source": "https://dhss.delaware.gov/dmma/home/income-limits/",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 125% FPL 2024 or 130% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2135,
+          "to": 1804,
+          "source": "https://dhss.delaware.gov/dmma/home/income-limits/",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 120% FPL 2025 or 125% FPL 2025 or 120% FPL 2024 or 125% FPL 2024 or 125% FPL 2023 or 130% FPL 2023 or 133% FPL 2023 or 135% FPL 2022 or 138% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8008529089",
+            "211"
+          ],
+          "to": "8668437212",
+          "source": "https://medicaid.gov/about-us/where-can-people-get-help-medicaid-chip",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -794,7 +860,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or eligible lawful alien",
           "Interview required (can be done by phone for seniors)"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1211,7 +1285,15 @@ export const drafts: PipelineStateDrafts = {
           "Renters must have landlord permission and rental agreement",
           "Someone age 18+ must be present during all contractor visits"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 185,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1337,7 +1419,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(302) 504-6111",
       "sourceUrl": "https://dnrec.delaware.gov/climate-coastal-energy/sustainable-communities/weatherization/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2510,
+          "to": 2658,
+          "source": "https://dnrec.delaware.gov/climate-coastal-energy/energy-office/programs/wap/",
+          "severity": "medium",
+          "why": "value fits more than one tier (185% FPL 2026 or 185% FPL 2025 or 200% FPL 2024 or 200% FPL 2023 or 300% SSI 2022)",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3407,
+          "to": 3607,
+          "source": "https://dnrec.delaware.gov/climate-coastal-energy/energy-office/programs/wap/",
+          "severity": "medium",
+          "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 200% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        }
+      ]
     },
     {
       "id": "senior-medicare-patrol",
@@ -1483,7 +1585,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(877) 808-2468",
       "sourceUrl": "https://dhss.delaware.gov/dsaapd",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8778082468"
+          ],
+          "to": "8002239074",
+          "source": "https://dhss.delaware.gov/dsaapd/services/delaware-senior-medicare-patrol-program/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        }
+      ]
     },
     {
       "id": "home-delivered-meals",
@@ -1816,7 +1931,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(302) 252-3211",
       "sourceUrl": "https://laborfiles.delaware.gov/main/det/faqs-scsep/SCSEP_FAQs.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "3022523211",
+            "211"
+          ],
+          "to": "3027813568",
+          "source": "https://d2leuf3vilid4d.cloudfront.net/-/media/Communities/olderworkers/Files/2026/SCSEP-STATE-AND-TERRITORY-GRANTEES-3,-d-,25,-d-,2026.ashx?rev=6935c1d2026b44698630823ff64541b2&hash=51E4ACB19D27D1102E3B6A7A6BEDB611",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        }
+      ]
     },
     {
       "id": "legal-aid-seniors",
@@ -2078,7 +2207,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 223-9074",
       "sourceUrl": "https://dhss.delaware.gov/dsaapd",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8002239074",
+            "211"
+          ],
+          "to": "18557731002",
+          "source": "https://dhss.delaware.gov/office-of-the-secretary/long-term-care-ombudsman-program/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:04.265Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-support",

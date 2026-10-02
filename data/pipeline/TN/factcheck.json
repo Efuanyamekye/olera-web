@@ -1,17 +1,17 @@
 {
   "state": "TN",
   "stateName": "Tennessee",
-  "checkedAt": "2026-04-14T10:09:39.867Z",
+  "checkedAt": "2026-10-02T07:46:20.995Z",
   "total": 12,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 4,
-  "totalFlags": 5,
+  "programsWithFlags": 6,
+  "totalFlags": 8,
   "highSeverityFlags": 3,
   "programs": [
     {
-      "programId": "tn-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "TennCare Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
         "age": null,
@@ -25,30 +25,39 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
+        "age": 65,
+        "income_1": 1350,
+        "income_2": 1824,
         "assets_individual": 9950,
         "assets_couple": 14910,
-        "phone": null,
+        "phone": "8552590701",
         "sources": {
-          "age": null,
+          "age": "https://www.tn.gov/tenncare/members-applicants/eligibility-reference-guide.html",
           "income": "https://www.tn.gov/tenncare/members-applicants/eligibility-reference-guide.html",
           "assets": "https://www.tn.gov/tenncare/members-applicants/eligibility-reference-guide.html",
-          "phone": null
+          "phone": "https://www.tn.gov/tenncare/contact-us.html"
         },
-        "notes": "Official TN.gov source lists annual resource limits ($9,950 individual, $14,910 couple) for QMB/SLMB/QI; no 2026 monthly income limits found in results. Federal MSP limits for 2026 in medicare.gov not specified numerically."
+        "notes": "TennCare Medicare Savings Programs (QMB, SLMB, QI) require Medicare Part A and use income/resource limits; the senior pathway is Medicare beneficiaries, typically age 65+."
       },
-      "flags": [],
-      "notes": "Official TN.gov source lists annual resource limits ($9,950 individual, $14,910 couple) for QMB/SLMB/QI; no 2026 monthly income limits found in results. Federal MSP limits for 2026 in medicare.gov not specified numerically."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8778010044"
+          ],
+          "verifiedValue": "8552590701"
+        }
+      ],
+      "notes": "TennCare Medicare Savings Programs (QMB, SLMB, QI) require Medicare Part A and use income/resource limits; the senior pathway is Medicare beneficiaries, typically age 65+."
     },
     {
-      "programId": "tn-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "Tennessee SNAP",
       "facts": {
         "age": 60,
-        "income_1": 1255,
-        "income_2": 1703,
+        "income_1": 1330,
+        "income_2": 1804,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
@@ -58,24 +67,47 @@
       },
       "verified": {
         "age": null,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 1729,
+        "income_2": 2348,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8337728347",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.tn.gov/humanservices/for-families/supplemental-nutrition-assistance-program-snap/supplemental-nutrition-assistance-program-snap-eligibility-information.html",
+          "income": "https://snapbenefitshelp.com/en/blog/tennessee-snap-eligibility-2026",
+          "assets": "https://www.tn.gov/humanservices/for-families/supplemental-nutrition-assistance-program-snap/supplemental-nutrition-assistance-program-snap-eligibility-information.html",
+          "phone": "https://www.tn.gov/humanservices/need-help-/tdhs-contact-us.html"
         },
-        "notes": "Tennessee SNAP (Supplemental Nutrition Assistance Program) has no senior-specific age threshold (age test applies differently across populations, e.g., work requirements for 18-64); current 2026 income limits not found in provided sources despite general references; no authoritative current monthly figures or phone sourced"
+        "notes": "SNAP has no senior-specific minimum age; Tennessee says there are no specific age limits. Elderly/disabled households are subject to net-income rules rather than a separate asset test in the cited source; no separate asset threshold found."
       },
-      "flags": [],
-      "notes": "Tennessee SNAP (Supplemental Nutrition Assistance Program) has no senior-specific age threshold (age test applies differently across populations, e.g., work requirements for 18-64); current 2026 income limits not found in provided sources despite general references; no authoritative current monthly figures or phone sourced"
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1330,
+          "verifiedValue": 1729,
+          "pctDiff": 23.1
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 1804,
+          "verifiedValue": 2348,
+          "pctDiff": 23.2
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8663114287"
+          ],
+          "verifiedValue": "8337728347"
+        }
+      ],
+      "notes": "SNAP has no senior-specific minimum age; Tennessee says there are no specific age limits. Elderly/disabled households are subject to net-income rules rather than a separate asset test in the cited source; no separate asset threshold found."
     },
     {
-      "programId": "tn-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "Tennessee LIHEAP",
       "facts": {
         "age": null,
@@ -85,7 +117,7 @@
         "assets_couple": null,
         "phones": [
           "6158152200",
-          "211",
+          "18002288432",
           "8656912551"
         ],
         "hasVerifiableFacts": true
@@ -96,20 +128,20 @@
         "income_2": 3492,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "6158152200",
         "sources": {
           "age": null,
-          "income": "https://www.snapscreener.com/liheap/tennessee",
+          "income": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
           "assets": null,
-          "phone": null
+          "phone": "https://liheapch.acf.hhs.gov/profiles/Tenn.htm"
         },
-        "notes": "No official .gov income source found; snapscreener.com provides current monthly limits citing federal LIHEAP guidelines. Program active for 2026 pending federal funds per local agency sites. No statewide application phone located."
+        "notes": "Tennessee LIHEAP appears to use a 60% State Median Income income test; no separate age or asset test was found in retrievable official sources. Public inquiries phone confirmed from federal LIHEAP state profile."
       },
       "flags": [],
-      "notes": "No official .gov income source found; snapscreener.com provides current monthly limits citing federal LIHEAP guidelines. Program active for 2026 pending federal funds per local agency sites. No statewide application phone located."
+      "notes": "Tennessee LIHEAP appears to use a 60% State Median Income income test; no separate age or asset test was found in retrievable official sources. Public inquiries phone confirmed from federal LIHEAP state profile."
     },
     {
-      "programId": "tn-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "Tennessee State Health Insurance Assistance Program (TN SHIP)",
       "facts": {
         "age": 65,
@@ -131,20 +163,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8778010044",
+        "phone": "18778010044",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
+          "age": "https://www.tn.gov/disability-and-aging/disability-aging-programs/tn-ship.html",
+          "income": "null",
+          "assets": "null",
           "phone": "https://www.tn.gov/disability-and-aging/disability-aging-programs/tn-ship.html"
         },
-        "notes": "TN SHIP is a counseling and assistance program for Medicare-eligible individuals, not an eligibility-based benefit program with age, income, or asset limits. The program provides free Medicare counseling to all Medicare beneficiaries and their families/caregivers. No minimum age requirement, income test, or asset test applies to receive SHIP counseling services. SHIP assists beneficiaries in applying for separate programs (Medicare Savings Plans, Extra Help) that do have income limits, but SHIP itself has no eligibility restrictions beyond Medicare eligibility."
+        "notes": "TN SHIP appears to serve Medicare-eligible individuals rather than having a specific senior age minimum; no authoritative age test, income test, or asset test found for the senior pathway."
       },
       "flags": [],
-      "notes": "TN SHIP is a counseling and assistance program for Medicare-eligible individuals, not an eligibility-based benefit program with age, income, or asset limits. The program provides free Medicare counseling to all Medicare beneficiaries and their families/caregivers. No minimum age requirement, income test, or asset test applies to receive SHIP counseling services. SHIP assists beneficiaries in applying for separate programs (Medicare Savings Plans, Extra Help) that do have income limits, but SHIP itself has no eligibility restrictions beyond Medicare eligibility."
+      "notes": "TN SHIP appears to serve Medicare-eligible individuals rather than having a specific senior age minimum; no authoritative age test, income test, or asset test found for the senior pathway."
     },
     {
-      "programId": "tn-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Tennessee Meals on Wheels",
       "facts": {
         "age": 60,
@@ -168,18 +200,18 @@
         "assets_couple": null,
         "phone": "8668366678",
         "sources": {
-          "age": "https://www.tn.gov/disability-and-aging/disability-aging-programs/aging-nutrition-program.html",
+          "age": "https://www.ftaaad.org/nutrition-subpage",
           "income": null,
           "assets": null,
-          "phone": "https://www.tn.gov/disability-and-aging/disability-aging-programs/aging-nutrition-program.html"
+          "phone": "https://www.ftaaad.org/nutrition-subpage"
         },
-        "notes": "Tennessee Aging Nutrition Program is the official statewide program. Age 60+ is the senior-specific threshold across all regional programs (Meals on Wheels Northeast Tennessee, Mid-Cumberland, Nashville Metro Social Services). No income or asset limits found in official sources. Regional programs may have additional eligibility criteria; contact local Area Agency on Aging for details. Phone number is the official state hotline for all 95 Tennessee counties."
+        "notes": "Current Tennessee home-delivered Meals on Wheels pathway appears to use the 60+ older-adult threshold; no income or asset test found in the retrieved official/current sources."
       },
       "flags": [],
-      "notes": "Tennessee Aging Nutrition Program is the official statewide program. Age 60+ is the senior-specific threshold across all regional programs (Meals on Wheels Northeast Tennessee, Mid-Cumberland, Nashville Metro Social Services). No income or asset limits found in official sources. Regional programs may have additional eligibility criteria; contact local Area Agency on Aging for details. Phone number is the official state hotline for all 95 Tennessee counties."
+      "notes": "Current Tennessee home-delivered Meals on Wheels pathway appears to use the 60+ older-adult threshold; no income or asset test found in the retrieved official/current sources."
     },
     {
-      "programId": "tn-nfcsp-caregiver-support",
+      "programId": "nfcsp-caregiver-support",
       "programName": "National Family Caregiver Support Program (NFCSP)",
       "facts": {
         "age": 55,
@@ -200,12 +232,12 @@
         "assets_couple": null,
         "phone": "18668366678",
         "sources": {
-          "age": "https://www.tn.gov/disability-and-aging/disability-aging-programs/caregiving.html",
-          "income": null,
+          "age": "https://www.tn.gov/content/dam/tn/aging/documents/06_Helping_Caregivers.pdf",
+          "income": "https://www.tn.gov/content/dam/tn/aging/documents/06_Helping_Caregivers.pdf",
           "assets": null,
           "phone": "https://www.tn.gov/disability-and-aging/disability-aging-programs/caregiving.html"
         },
-        "notes": "Program serves seniors age 60+ as primary population for NFCSP senior pathway. Income test exists (185% Federal Poverty Guidelines triggers contribution encouragement) but specific dollar thresholds not provided in retrieved sources. No asset limits found in authoritative sources. Program active as of April 2026."
+        "notes": "Current Tennessee NFCSP materials indicate support for unpaid caregivers of people age 60+ or those with Alzheimer’s/dementia; no income or asset test was found in the official sources."
       },
       "flags": [
         {
@@ -215,10 +247,10 @@
           "verifiedValue": 60
         }
       ],
-      "notes": "Program serves seniors age 60+ as primary population for NFCSP senior pathway. Income test exists (185% Federal Poverty Guidelines triggers contribution encouragement) but specific dollar thresholds not provided in retrieved sources. No asset limits found in authoritative sources. Program active as of April 2026."
+      "notes": "Current Tennessee NFCSP materials indicate support for unpaid caregivers of people age 60+ or those with Alzheimer’s/dementia; no income or asset test was found in the official sources."
     },
     {
-      "programId": "tn-scsep-employment",
+      "programId": "scsep-employment",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -236,39 +268,36 @@
       },
       "verified": {
         "age": 55,
-        "income_1": 1354,
-        "income_2": 1823,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8656912551",
+        "phone": "6157415671",
         "sources": {
           "age": "https://www.tn.gov/workforce/jobs-and-education/services-by-group/services-by-group-redirect/senior-work-experience-program.html",
-          "income": "https://www.dol.gov/agencies/eta/seniors",
+          "income": "https://www.tn.gov/content/dam/tn/workforce-services-tn/documents/SCSEP-Procedure-Manual.pdf",
           "assets": null,
-          "phone": "https://www.ethra.org/programs/17/senior-employment-services-scsep-title-v/"
+          "phone": "https://www.tn.gov/workforce/jobs-and-education/services-by-group/services-by-group-redirect/senior-work-experience-program.html"
         },
-        "notes": "Income limit based on 125% of federal poverty level (2026 figures: $1,083/month for individual, $1,458/month for couple at 100% FPL). Phone number is East Tennessee Human Resources regional coordinator; additional regional coordinators available via TN.gov source. Program remains active as of April 2026."
+        "notes": "SCSEP in Tennessee is current and uses a senior age threshold of 55+. The official Tennessee source states income must be at or below 125% of the federal poverty level, but the retrieved source does not provide a current household-size-specific table, so income_1 and income_2 are null."
       },
       "flags": [
         {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 1630,
-          "verifiedValue": 1354,
-          "pctDiff": 16.9
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 2200,
-          "verifiedValue": 1823,
-          "pctDiff": 17.1
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "7319895111",
+            "8003726013",
+            "7315874213",
+            "8656912551"
+          ],
+          "verifiedValue": "6157415671"
         }
       ],
-      "notes": "Income limit based on 125% of federal poverty level (2026 figures: $1,083/month for individual, $1,458/month for couple at 100% FPL). Phone number is East Tennessee Human Resources regional coordinator; additional regional coordinators available via TN.gov source. Program remains active as of April 2026."
+      "notes": "SCSEP in Tennessee is current and uses a senior age threshold of 55+. The official Tennessee source states income must be at or below 125% of the federal poverty level, but the retrieved source does not provide a current household-size-specific table, so income_1 and income_2 are null."
     },
     {
-      "programId": "tn-senior-law-alliance",
+      "programId": "senior-law-alliance",
       "programName": "Tennessee Senior Law Alliance (TSLA) / Tennessee Senior Legal Helpline",
       "facts": {
         "age": 60,
@@ -291,12 +320,12 @@
         "assets_couple": null,
         "phone": "8444357486",
         "sources": {
-          "age": "https://www.tals.org/page/453/free-senior-legal-helpline",
-          "income": null,
-          "assets": null,
-          "phone": "https://www.tals.org/page/453/free-senior-legal-helpline"
+          "age": "https://www.help4tn.org/node/1500/free-senior-legal-helpline",
+          "income": "https://www.help4tn.org/node/1500/free-senior-legal-helpline",
+          "assets": "https://www.help4tn.org/node/1500/free-senior-legal-helpline",
+          "phone": "https://www.help4tn.org/node/1500/free-senior-legal-helpline"
         },
-        "notes": "Program explicitly serves seniors aged 60+. No income or asset limits found in available sources; helpline states services available 'regardless of your income or assets.' TSLA is active as of 2026 and operates statewide across all 95 Tennessee counties. Phone number is for Free Senior Legal Helpline (844-HELP4TN)."
+        "notes": "Current Help4TN / Tennessee Senior Legal Helpline materials describe the senior pathway as 60+ and state help is available regardless of income or assets."
       },
       "flags": [
         {
@@ -310,10 +339,10 @@
           "verifiedValue": "8444357486"
         }
       ],
-      "notes": "Program explicitly serves seniors aged 60+. No income or asset limits found in available sources; helpline states services available 'regardless of your income or assets.' TSLA is active as of 2026 and operates statewide across all 95 Tennessee counties. Phone number is for Free Senior Legal Helpline (844-HELP4TN)."
+      "notes": "Current Help4TN / Tennessee Senior Legal Helpline materials describe the senior pathway as 60+ and state help is available regardless of income or assets."
     },
     {
-      "programId": "tn-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Tennessee Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -334,31 +363,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6152535412",
+        "phone": "8772360013",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.tn.gov/disability-and-aging/disability-aging-programs/long-term-care-ombudsman.html"
+          "phone": "https://www.tn.gov/disability-and-aging/about-us/contact-information/other-helpful-numbers.html"
         },
-        "notes": "Tennessee Long-Term Care Ombudsman Program is an advocacy service, not a benefits program with eligibility criteria. No age, income, or asset limits apply. The program serves any resident of a long-term care facility (nursing homes, assisted living, homes for the aged, adult care homes). Phone number is for the State Long-Term Care Ombudsman office in Nashville. Regional district ombudsmen also available for specific counties."
+        "notes": "No age, income, or asset eligibility test found; this program serves long-term care facility residents and their families. Current statewide toll-free phone number found on official Tennessee source."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8772360013",
-            "86569125514223",
-            "4239792599"
-          ],
-          "verifiedValue": "6152535412"
-        }
-      ],
-      "notes": "Tennessee Long-Term Care Ombudsman Program is an advocacy service, not a benefits program with eligibility criteria. No age, income, or asset limits apply. The program serves any resident of a long-term care facility (nursing homes, assisted living, homes for the aged, adult care homes). Phone number is for the State Long-Term Care Ombudsman office in Nashville. Regional district ombudsmen also available for specific counties."
+      "flags": [],
+      "notes": "No age, income, or asset eligibility test found; this program serves long-term care facility residents and their families. Current statewide toll-free phone number found on official Tennessee source."
     },
     {
-      "programId": "tn-options-community-living",
+      "programId": "options-community-living",
       "programName": "OPTIONS for Community Living",
       "facts": {
         "age": 60,
@@ -378,20 +396,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "1-866-836-6678",
+        "phone": "8668366678",
         "sources": {
-          "age": "https://www.tn.gov/disability-and-aging/disability-aging-programs/hcbs.html",
+          "age": "https://www.tn.gov/content/dam/tn/disability-and-aging/documents/disability-aging-programs/hcbs/OPTIONS%20One-Pager.docx",
           "income": null,
           "assets": null,
           "phone": "https://www.tn.gov/disability-and-aging/disability-aging-programs/hcbs.html"
         },
-        "notes": "OPTIONS for Community Living serves adults age 60+ (elderly) and adults with physical disabilities age 18+. Senior-specific minimum age is 60. Program has no income eligibility requirement but uses sliding fee scale based on income. No asset limits found in official sources. Applicants must meet ADL/IADL limitation requirements."
+        "notes": "Current Tennessee OPTIONS for Community Living senior pathway uses age 60+; no current official income or asset test found in retrievable official sources."
       },
       "flags": [],
-      "notes": "OPTIONS for Community Living serves adults age 60+ (elderly) and adults with physical disabilities age 18+. Senior-specific minimum age is 60. Program has no income eligibility requirement but uses sliding fee scale based on income. No asset limits found in official sources. Applicants must meet ADL/IADL limitation requirements."
+      "notes": "Current Tennessee OPTIONS for Community Living senior pathway uses age 60+; no current official income or asset test found in retrievable official sources."
     },
     {
-      "programId": "tn-senior-advocate-program",
+      "programId": "senior-advocate-program",
       "programName": "Senior Advocate Program",
       "facts": {
         "age": 60,
@@ -406,14 +424,37 @@
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        1
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8668366678",
+        "sources": {
+          "age": "https://www.tn.gov/content/dam/tn/aging/documents/State%20Plan%20on%20Aging_DRAFT.pdf",
+          "income": "https://www.tn.gov/content/dam/tn/aging/documents/State%20Plan%20on%20Aging_DRAFT.pdf",
+          "assets": null,
+          "phone": "https://www.tn.gov/disability-and-aging/resource-directory/aaad.html"
+        },
+        "notes": "No separate income or asset test found for the senior pathway; Tennessee AAAD information and assistance is accessed statewide through 1-866-836-6678."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8656912551",
+            "86569125514212",
+            "86569125514216"
+          ],
+          "verifiedValue": "8668366678"
+        }
       ],
-      "flags": [],
-      "notes": null
+      "notes": "No separate income or asset test found for the senior pathway; Tennessee AAAD information and assistance is accessed statewide through 1-866-836-6678."
     },
     {
-      "programId": "tn-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "Tennessee State Health Insurance Assistance Program (TN SHIP) and Senior Medicare Patrol (SMP)",
       "facts": {
         "age": 65,
@@ -429,22 +470,22 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8778010044",
         "sources": {
-          "age": null,
+          "age": "https://www.tn.gov/content/dam/tn/disability-and-aging/documents/disability-aging-programs/tn-ship/2024%20TN%20SHIP%20One-Pager.docx",
           "income": null,
           "assets": null,
           "phone": "https://www.tn.gov/disability-and-aging/disability-aging-programs/tn-ship.html"
         },
-        "notes": "TN SHIP is a counseling and assistance program for Medicare-eligible individuals, not an eligibility-based benefit program with age, income, or asset limits. The program provides free Medicare counseling to all Medicare beneficiaries and their families/caregivers. No age test, income test, or asset test applies to receive SHIP counseling services. Phone number confirmed from official Tennessee state agency source."
+        "notes": "TN SHIP serves Medicare-eligible individuals; no separate income or asset test found for the senior pathway. SMP is a fraud-reporting companion program and shares the SHIP hotline on official Tennessee pages."
       },
       "flags": [],
-      "notes": "TN SHIP is a counseling and assistance program for Medicare-eligible individuals, not an eligibility-based benefit program with age, income, or asset limits. The program provides free Medicare counseling to all Medicare beneficiaries and their families/caregivers. No age test, income test, or asset test applies to receive SHIP counseling services. Phone number confirmed from official Tennessee state agency source."
+      "notes": "TN SHIP serves Medicare-eligible individuals; no separate income or asset test found for the senior pathway. SMP is a fraud-reporting companion program and shares the SHIP hotline on official Tennessee pages."
     }
   ]
 }

@@ -1,17 +1,17 @@
 {
   "state": "ME",
   "stateName": "Maine",
-  "checkedAt": "2026-04-14T10:02:47.455Z",
-  "total": 7,
+  "checkedAt": "2026-10-02T07:39:10.236Z",
+  "total": 8,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 2,
-  "totalFlags": 2,
+  "programsWithFlags": 3,
+  "totalFlags": 3,
   "highSeverityFlags": 0,
   "programs": [
     {
-      "programId": "me-hcbs-waivers",
+      "programId": "hcbs-waivers",
       "programName": "Home and Community-Based Services (HCBS) Waivers",
       "facts": {
         "age": 65,
@@ -23,25 +23,25 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
+        "age": 65,
+        "income_1": 2982,
+        "income_2": 2982,
+        "assets_individual": 10000,
+        "assets_couple": 15000,
+        "phone": "18009776740",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.medicaid.gov/medicaid/home-community-based-services/downloads/ME-hw-summary-rpt.pdf",
+          "income": "https://www.medicaidplanningassistance.org/maine-elderly-adults-disabilities-waiver/",
+          "assets": "https://www.medicaidplanningassistance.org/maine-elderly-adults-disabilities-waiver/",
+          "phone": "https://www.maine.gov/dhhs/oms/mainecare-options/older-adults-and-adults-with-disabilities"
         },
-        "notes": "No Maine HCBS waiver exclusively for seniors (55+); Elderly and Adults with Disabilities Waiver (Section 18) serves seniors 65+ but query specifies Section 20 (Adults with Other Related Conditions, no senior age threshold found). Cannot find authoritative 2026 eligibility data for seniors in Section 20 from .gov sources."
+        "notes": "Maine’s Section 19 / Elderly and Adults with Disabilities waiver is the senior pathway; official state page confirms HCBS waiver availability and Member Services phone, while income/assets are reflected in current waiver summaries."
       },
       "flags": [],
-      "notes": "No Maine HCBS waiver exclusively for seniors (55+); Elderly and Adults with Disabilities Waiver (Section 18) serves seniors 65+ but query specifies Section 20 (Adults with Other Related Conditions, no senior age threshold found). Cannot find authoritative 2026 eligibility data for seniors in Section 20 from .gov sources."
+      "notes": "Maine’s Section 19 / Elderly and Adults with Disabilities waiver is the senior pathway; official state page confirms HCBS waiver availability and Member Services phone, while income/assets are reflected in current waiver summaries."
     },
     {
-      "programId": "me-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Supplemental Nutrition Assistance Program)",
       "facts": {
         "age": 60,
@@ -50,32 +50,32 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8557974357",
+          "8004426003",
           "211",
-          "8004426003"
+          "8557974357"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": 2609,
-        "income_2": 3526,
+        "income_2": 3525,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "18557974357",
         "sources": {
-          "age": "https://www.snapscreener.com/guides/maine",
+          "age": null,
           "income": "https://www.maine.gov/dhhs/ofi/programs-services/food-supplement",
           "assets": null,
-          "phone": null
+          "phone": "https://www.maine.gov/dhhs/ofi/programs-services/food-supplement"
         },
-        "notes": "SNAP has no asset test for households with seniors (60+); income limits are gross monthly at 200% FPL for Oct 2025-Sept 2026, confirmed current as of 2026. Official phone not found in results."
+        "notes": "SNAP in Maine has no senior-specific minimum age test; age is not an eligibility threshold for seniors. Maine’s current SNAP gross monthly income limits for the broad household categories shown on the official page are 200% of FPL."
       },
       "flags": [],
-      "notes": "SNAP has no asset test for households with seniors (60+); income limits are gross monthly at 200% FPL for Oct 2025-Sept 2026, confirmed current as of 2026. Official phone not found in results."
+      "notes": "SNAP in Maine has no senior-specific minimum age test; age is not an eligibility threshold for seniors. Maine’s current SNAP gross monthly income limits for the broad household categories shown on the official page are 200% of FPL."
     },
     {
-      "programId": "me-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "Low-Income Home Energy Assistance Program (LIHEAP)",
       "facts": {
         "age": null,
@@ -91,24 +91,24 @@
       },
       "verified": {
         "age": null,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 3173,
+        "income_2": 4149,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8004524668",
         "sources": {
           "age": null,
-          "income": "https://www.mainehousing.org/programs-services/energy/energydetails/liheap",
+          "income": "https://mainehousing.org/programs-services/energy/energydetails/liheap",
           "assets": null,
-          "phone": null
+          "phone": "https://mainehousing.org/programs-services/energy/energydetails/home-energy-assistance-program-online-application-resources"
         },
-        "notes": "HEAP (Maine's LIHEAP) has income limits by household size for 2025-2026 season per official MaineHousing site, but specific figures not listed in available sources; table likely on page but not extracted. No age, assets, or phone found. Contact CAA for details."
+        "notes": "LIHEAP in Maine is current for the 2026-2027 season; income limits are monthly on the official MaineHousing page. No asset test found in the retrieved official sources. The official help/application phone number is 1-800-452-4668."
       },
       "flags": [],
-      "notes": "HEAP (Maine's LIHEAP) has income limits by household size for 2025-2026 season per official MaineHousing site, but specific figures not listed in available sources; table likely on page but not extracted. No age, assets, or phone found. Contact CAA for details."
+      "notes": "LIHEAP in Maine is current for the 2026-2027 season; income limits are monthly on the official MaineHousing page. No asset test found in the retrieved official sources. The official help/application phone number is 1-800-452-4668."
     },
     {
-      "programId": "me-weatherization-assistance-program",
+      "programId": "weatherization-assistance-program",
       "programName": "Weatherization Assistance Program (WAP)",
       "facts": {
         "age": null,
@@ -132,11 +132,11 @@
         "phone": "2076264600",
         "sources": {
           "age": null,
-          "income": "https://www.mainehousing.org/programs-services/HomeImprovement/homeimprovementdetail/weatherization",
+          "income": null,
           "assets": null,
-          "phone": "https://www.mainehousing.org/programs-services/HomeImprovement/homeimprovementdetail/weatherization"
+          "phone": "https://www.maine.gov/energy/winter-heating-resources"
         },
-        "notes": "Eligibility tied to HEAP; no specific age/income/assets found for seniors. Phone from MaineHousing WAP page."
+        "notes": "MaineHousing WAP is administered through local Community Action Agencies and the official statewide contact number listed by Maine.gov is (207) 626-4600; no separate senior-specific age, income, or asset limits were found in the retrievable official source."
       },
       "flags": [
         {
@@ -150,10 +150,10 @@
           "verifiedValue": "2076264600"
         }
       ],
-      "notes": "Eligibility tied to HEAP; no specific age/income/assets found for seniors. Phone from MaineHousing WAP page."
+      "notes": "MaineHousing WAP is administered through local Community Action Agencies and the official statewide contact number listed by Maine.gov is (207) 626-4600; no separate senior-specific age, income, or asset limits were found in the retrievable official source."
     },
     {
-      "programId": "me-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "State Health Insurance Assistance Program (SHIP) - Maine Senior Health Insurance Assistance Program",
       "facts": {
         "age": 65,
@@ -167,19 +167,19 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002622232",
+        "phone": "8773533771",
         "sources": {
-          "age": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/ship-medicare-assistance[3]",
+          "age": "https://www.cms.gov/about-cms/contact/directory/maine-state-health-insurance-assistance-program-ship/1562091",
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/contacts/maine-state-health-insurance-assistance-program-ship/general-beneficiary-contact/1562091[1]"
+          "phone": "https://www.maine.gov/pfr/insurance/consumers/medicare-supplement-insurance/where-to-get-help"
         },
-        "notes": "No age, income, or asset limits for seniors; program is for Medicare beneficiaries (age 65+ or disabled under 65)"
+        "notes": "Current Maine SHIP contact materials list the program as a Medicare counseling resource for older adults; no income or asset test found."
       },
       "flags": [
         {
@@ -188,13 +188,13 @@
           "draftValue": [
             "2073966524"
           ],
-          "verifiedValue": "8002622232"
+          "verifiedValue": "8773533771"
         }
       ],
-      "notes": "No age, income, or asset limits for seniors; program is for Medicare beneficiaries (age 65+ or disabled under 65)"
+      "notes": "Current Maine SHIP contact materials list the program as a Medicare counseling resource for older adults; no income or asset test found."
     },
     {
-      "programId": "me-home-delivered-meals",
+      "programId": "home-delivered-meals",
       "programName": "Home Delivered Meals",
       "facts": {
         "age": 60,
@@ -214,20 +214,30 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "18773533771",
         "sources": {
-          "age": "https://www.smaaa.org/services-for-older-adults/nutrition/meals-on-wheels/",
+          "age": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/food-and-nutrition",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/food-and-nutrition"
         },
-        "notes": "No statewide official .gov source found for Home Delivered Meals eligibility details; SMAaa.org (regional agency on aging) specifies age 60+ for seniors. No income/assets tests or phone mentioned in sources."
+        "notes": "Current Maine older-adult home-delivered meals information points seniors to the statewide ADRC line; no official income or asset test was found for the senior pathway."
       },
-      "flags": [],
-      "notes": "No statewide official .gov source found for Home Delivered Meals eligibility details; SMAaa.org (regional agency on aging) specifies age 60+ for seniors. No income/assets tests or phone mentioned in sources."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "2072879200",
+            "211"
+          ],
+          "verifiedValue": "18773533771"
+        }
+      ],
+      "notes": "Current Maine older-adult home-delivered meals information points seniors to the statewide ADRC line; no official income or asset test was found for the senior pathway."
     },
     {
-      "programId": "me-legal-services-elderly",
+      "programId": "legal-services-elderly",
       "programName": "Maine Legal Services for the Elderly",
       "facts": {
         "age": 60,
@@ -247,17 +257,49 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18007505353",
+        "phone": "8007505353",
         "sources": {
-          "age": "https://mainelse.org/content/about-legal-services-maine-elders",
+          "age": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/legal-assistance",
           "income": null,
           "assets": null,
-          "phone": "https://mainelse.org/content/about-legal-services-maine-elders"
+          "phone": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/legal-assistance"
         },
-        "notes": "No income or asset limits found in sources; program targets 'socially and economically needy' elderly but no specific thresholds provided"
+        "notes": "Current program appears active under Legal Services for Maine Elders; official Maine DHHS and Maine elders site state eligibility for Maine residents age 60+ and provide the statewide helpline."
       },
       "flags": [],
-      "notes": "No income or asset limits found in sources; program targets 'socially and economically needy' elderly but no specific thresholds provided"
+      "notes": "Current program appears active under Legal Services for Maine Elders; official Maine DHHS and Maine elders site state eligibility for Maine residents age 60+ and provide the statewide helpline."
+    },
+    {
+      "programId": "family-caregiver-support",
+      "programName": "National Family Caregiver Program",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8773533771"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18773533771",
+        "sources": {
+          "age": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/care-partner-supports",
+          "income": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/care-partner-supports",
+          "assets": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/care-partner-supports",
+          "phone": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/care-partner-supports"
+        },
+        "notes": "Current Maine DHHS page uses the National Family Caregiver Program name within Care Partner Supports; no age, income, or asset test was found for the senior pathway, and the statewide contact is 1-877-353-3771."
+      },
+      "flags": [],
+      "notes": "Current Maine DHHS page uses the National Family Caregiver Program name within Care Partner Supports; no age, income, or asset test was found for the senior pathway, and the statewide contact is 1-877-353-3771."
     }
   ]
 }

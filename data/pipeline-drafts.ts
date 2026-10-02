@@ -6,7 +6,7 @@
  * from the directory listing of data/pipeline/*\/drafts.ts. To re-render:
  *   node scripts/benefits-pipeline.js --regen-index
  *
- * Last updated: 2026-08-22T10:37:49.063Z
+ * Last updated: 2026-10-02T07:57:10.944Z
  */
 export type {
   PipelineDraft,

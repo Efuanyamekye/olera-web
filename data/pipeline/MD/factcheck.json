@@ -1,17 +1,17 @@
 {
   "state": "MD",
   "stateName": "Maryland",
-  "checkedAt": "2026-04-14T10:03:05.652Z",
-  "total": 16,
+  "checkedAt": "2026-10-02T07:38:57.033Z",
+  "total": 15,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 5,
-  "totalFlags": 6,
-  "highSeverityFlags": 1,
+  "programsWithFlags": 9,
+  "totalFlags": 16,
+  "highSeverityFlags": 5,
   "programs": [
     {
-      "programId": "md-durable-medical-equipment-reuse",
+      "programId": "durable-medical-equipment-reuse",
       "programName": "Maryland Durable Medical Equipment Reuse Program (DME)",
       "facts": {
         "age": null,
@@ -34,18 +34,18 @@
         "assets_couple": null,
         "phone": "2402308000",
         "sources": {
-          "age": "https://aging.maryland.gov/pages/dme.aspx",
-          "income": "https://aging.maryland.gov/pages/dme.aspx",
-          "assets": "https://aging.maryland.gov/pages/dme.aspx",
-          "phone": "https://aging.maryland.gov/pages/dme.aspx"
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://aging.maryland.gov/durable-medical-equipment"
         },
-        "notes": "Program is free regardless of age, income, or assets for Maryland residents with illness, injury, or disability; phone is for Prince George's County center"
+        "notes": "No age, income, or asset test found for the Maryland Durable Medical Equipment Re-Use Program; official sources describe it as available regardless of age. Main contact phone is 240-230-8000."
       },
       "flags": [],
-      "notes": "Program is free regardless of age, income, or assets for Maryland residents with illness, injury, or disability; phone is for Prince George's County center"
+      "notes": "No age, income, or asset test found for the Maryland Durable Medical Equipment Re-Use Program; official sources describe it as available regardless of age. Main contact phone is 240-230-8000."
     },
     {
-      "programId": "md-community-first-choice-cfc",
+      "programId": "community-first-choice-cfc",
       "programName": "Community First Choice (CFC)",
       "facts": {
         "age": null,
@@ -68,18 +68,61 @@
         "assets_couple": null,
         "phone": "4107671739",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
+          "age": "https://health.maryland.gov/mmcp/ltss/Pages/community-first-choice.aspx",
+          "income": "https://health.maryland.gov/mmcp/ltss/Pages/community-first-choice.aspx",
+          "assets": "https://health.maryland.gov/mmcp/ltss/Pages/community-first-choice.aspx",
           "phone": "https://health.maryland.gov/mmcp/ltss/Pages/community-first-choice.aspx"
         },
-        "notes": "CFC eligibility requires Maryland Medicaid (Medical Assistance) financial and nursing facility level of care; no specific age, income, or asset limits unique to CFC found in official sources"
+        "notes": "Maryland CFC has no age limit, but eligible seniors must have full Medicaid and meet institutional level of care; the Maryland page does not publish numeric income or asset limits, so those values are null. Official contact phone listed by MDH is 410-767-1739."
       },
       "flags": [],
-      "notes": "CFC eligibility requires Maryland Medicaid (Medical Assistance) financial and nursing facility level of care; no specific age, income, or asset limits unique to CFC found in official sources"
+      "notes": "Maryland CFC has no age limit, but eligible seniors must have full Medicaid and meet institutional level of care; the Maryland page does not publish numeric income or asset limits, so those values are null. Official contact phone listed by MDH is 410-767-1739."
     },
     {
-      "programId": "md-pace-comprehensive-care",
+      "programId": "soar",
+      "programName": "Supporting Older Adults with Resources (SOAR)",
+      "facts": {
+        "age": 62,
+        "income_1": 4358,
+        "income_2": 4983,
+        "assets_individual": 20064,
+        "assets_couple": 26400,
+        "phones": [
+          "18446275465",
+          "4107671100"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 62,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "4103131234",
+        "sources": {
+          "age": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.howardcountymd.gov/soar"
+        },
+        "notes": "Current official Maryland source confirms SOAR serves Marylanders age 62+ and refers applicants to MAP/local Area Agency on Aging; publicly retrievable official source did not expose current income or countable asset thresholds in the search results."
+      },
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "18446275465",
+            "4107671100"
+          ],
+          "verifiedValue": "4103131234"
+        }
+      ],
+      "notes": "Current official Maryland source confirms SOAR serves Marylanders age 62+ and refers applicants to MAP/local Area Agency on Aging; publicly retrievable official source did not expose current income or countable asset thresholds in the search results."
+    },
+    {
+      "programId": "pace-comprehensive-care",
       "programName": "Maryland PACE",
       "facts": {
         "age": 55,
@@ -99,20 +142,30 @@
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": null,
-        "phone": null,
+        "phone": "4107671739",
         "sources": {
           "age": "https://health.maryland.gov/mmcp/waiverprograms/pages/pace.aspx",
-          "income": null,
+          "income": "https://health.maryland.gov/mmcp/waiverprograms/pages/pace.aspx",
           "assets": "https://health.maryland.gov/mmcp/waiverprograms/pages/pace.aspx",
-          "phone": null
+          "phone": "https://health.maryland.gov/mmcp/waiverprograms/pages/pace.aspx"
         },
-        "notes": "Income limit stated as 'no more than 300% SSI for household of one' but no specific USD amount found in sources; phone numbers listed are site-specific, not main statewide"
+        "notes": "PACE is current in Maryland; official Maryland DHMH page lists age 55+, income up to 300% SSI, and assets no more than $2,000 for an individual. No separate couple asset limit was found on the cited official source."
       },
-      "flags": [],
-      "notes": "Income limit stated as 'no more than 300% SSI for household of one' but no specific USD amount found in sources; phone numbers listed are site-specific, not main statewide"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8002433425",
+            "8004925231"
+          ],
+          "verifiedValue": "4107671739"
+        }
+      ],
+      "notes": "PACE is current in Maryland; official Maryland DHMH page lists age 55+, income up to 300% SSI, and assets no more than $2,000 for an individual. No separate couple asset limit was found on the cited official source."
     },
     {
-      "programId": "md-medicare-savings-program",
+      "programId": "medicare-savings-program",
       "programName": "Maryland Medicare Savings Program (MSP)",
       "facts": {
         "age": null,
@@ -122,42 +175,60 @@
         "assets_couple": 13630,
         "phones": [
           "4107676860",
-          "211",
+          "18006383403",
           "18002433425"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": 1235,
-        "income_2": 1663,
-        "assets_individual": 9090,
-        "assets_couple": 13630,
-        "phone": "18006383403",
+        "income_1": 1350,
+        "income_2": 1824,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8006383403",
         "sources": {
           "age": null,
           "income": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
           "assets": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
           "phone": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx"
         },
-        "notes": "Values reflect QMB (Qualified Medicare Beneficiary) program tier, the most comprehensive MSP tier in Maryland. Income limits are from Maryland state agency source and align with federal guidelines. Asset limits use federal standards as applied in Maryland. Phone number is Maryland Department of Health Medicare Savings Program line. No age requirement specified in official sources; MSP is available to Medicare beneficiaries regardless of age."
+        "notes": "Maryland MSP is current as of 2026 on the state health department page; it does not appear to use an age minimum beyond Medicare eligibility, so age is null."
       },
       "flags": [
         {
-          "field": "phone",
+          "field": "income_1",
           "severity": "medium",
-          "draftValue": [
-            "4107676860",
-            "211",
-            "18002433425"
-          ],
-          "verifiedValue": "18006383403"
+          "draftValue": 1235,
+          "verifiedValue": 1350,
+          "pctDiff": 8.5
+        },
+        {
+          "field": "income_2",
+          "severity": "medium",
+          "draftValue": 1663,
+          "verifiedValue": 1824,
+          "pctDiff": 8.8
+        },
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 9090,
+          "verifiedValue": 9950,
+          "pctDiff": 8.6
+        },
+        {
+          "field": "assets_couple",
+          "severity": "medium",
+          "draftValue": 13630,
+          "verifiedValue": 14910,
+          "pctDiff": 8.6
         }
       ],
-      "notes": "Values reflect QMB (Qualified Medicare Beneficiary) program tier, the most comprehensive MSP tier in Maryland. Income limits are from Maryland state agency source and align with federal guidelines. Asset limits use federal standards as applied in Maryland. Phone number is Maryland Department of Health Medicare Savings Program line. No age requirement specified in official sources; MSP is available to Medicare beneficiaries regardless of age."
+      "notes": "Maryland MSP is current as of 2026 on the state health department page; it does not appear to use an age minimum beyond Medicare eligibility, so age is null."
     },
     {
-      "programId": "md-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "Supplemental Nutrition Assistance Program (SNAP)",
       "facts": {
         "age": 60,
@@ -172,24 +243,53 @@
       },
       "verified": {
         "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
+        "income_1": 1696,
+        "income_2": 2292,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
         "phone": "18003326347",
         "sources": {
           "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://dhs.maryland.gov/important-changes-snap-benefits/"
+          "income": "https://dhs.maryland.gov/documents/FIA/Action%20Transmittals-AT%20-%20Information%20Memo-IM/AT-IM2026/26-05%20AT%20SNAP%20Mass%20Changes%20for%20October%202025.pdf",
+          "assets": "https://aging.maryland.gov/media/116",
+          "phone": "https://dhs.maryland.gov/supplemental-nutrition-assistance-program/language-access/"
         },
-        "notes": "No authoritative 2026 data found for senior-specific age threshold, income limits, or asset limits in search results; SNAP generally has no asset test and no senior age minimum (open to all ages with exemptions); phone from MD DHS site."
+        "notes": "SNAP has no minimum age test for seniors; senior-specific rules affect deductions/resources, not eligibility age. Maryland SNAP uses FFY 2026 income limits effective Oct. 1, 2025-Sep. 30, 2026. Countable resources are $4,500 if at least one household member is age 60+ or disabled; no separate couple asset cap was found, so the same household resource limit applies."
       },
-      "flags": [],
-      "notes": "No authoritative 2026 data found for senior-specific age threshold, income limits, or asset limits in search results; SNAP generally has no asset test and no senior age minimum (open to all ages with exemptions); phone from MD DHS site."
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2152,
+          "verifiedValue": 1696,
+          "pctDiff": 21.2
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2909,
+          "verifiedValue": 2292,
+          "pctDiff": 21.2
+        },
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 3001,
+          "verifiedValue": 4500,
+          "pctDiff": 33.3
+        },
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 3001,
+          "verifiedValue": 4500,
+          "pctDiff": 33.3
+        }
+      ],
+      "notes": "SNAP has no minimum age test for seniors; senior-specific rules affect deductions/resources, not eligibility age. Maryland SNAP uses FFY 2026 income limits effective Oct. 1, 2025-Sep. 30, 2026. Countable resources are $4,500 if at least one household member is age 60+ or disabled; no separate couple asset cap was found, so the same household resource limit applies."
     },
     {
-      "programId": "md-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "Low-Income Home Energy Assistance Program (LIHEAP)",
       "facts": {
         "age": null,
@@ -212,17 +312,17 @@
         "phone": "18003326347",
         "sources": {
           "age": null,
-          "income": "https://dhs.maryland.gov/office-of-home-energy-programs/",
+          "income": "https://dhs.maryland.gov/documents/OHEP/OHEP_Englishbrochure_2026.pdf",
           "assets": null,
-          "phone": "https://dhs.maryland.gov/office-of-home-energy-programs/"
+          "phone": "https://dhs.maryland.gov/documents/OHEP/OHEP_Englishbrochure_2026.pdf"
         },
-        "notes": "Program also known as Maryland Energy Assistance Program (MEAP); FY26 guidelines apply through June 30, 2026; no age or asset limits specified"
+        "notes": "Maryland LIHEAP income limits are published in the FY26 OHEP/LIHEAP brochure; no separate age or asset test was found for the senior pathway in the retrieved authoritative source."
       },
       "flags": [],
-      "notes": "Program also known as Maryland Energy Assistance Program (MEAP); FY26 guidelines apply through June 30, 2026; no age or asset limits specified"
+      "notes": "Maryland LIHEAP income limits are published in the FY26 OHEP/LIHEAP brochure; no separate age or asset test was found for the senior pathway in the retrieved authoritative source."
     },
     {
-      "programId": "md-weatherization-assistance",
+      "programId": "weatherization-assistance",
       "programName": "Maryland Weatherization Assistance Program",
       "facts": {
         "age": null,
@@ -231,32 +331,31 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8444003423",
-          "8007560119",
-          "8555838976"
+          "8555838976",
+          "8007560119"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 4010,
+        "income_2": 5240,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18555838976",
         "sources": {
           "age": null,
-          "income": "https://dhcd.maryland.gov/Energy-Home-Repair/pages/homeowner-grants/wap.aspx",
+          "income": "https://dhcd.maryland.gov/energy-home-repair/energy-grants-and-loans-residents/weatherization-assistance-program-wap",
           "assets": null,
-          "phone": "https://dhcd.maryland.gov/Energy-Home-Repair/pages/homeowner-grants/wap.aspx"
+          "phone": "https://dhcd.maryland.gov/energy-home-repair/energy-grants-and-loans-residents/weatherization-assistance-program-wap"
         },
-        "notes": "Official source updated 2/11/2026 uses 60% SMI or 200% FPL (no specific dollar figures published; priority for seniors over 60 but no age minimum)"
+        "notes": "No age or asset test found for Maryland WAP. Income limits shown are DOE WAP 60% State Median Income, updated 2/11/2026; monthly values were calculated by dividing annual figures by 12 and rounding to the nearest integer."
       },
       "flags": [],
-      "notes": "Official source updated 2/11/2026 uses 60% SMI or 200% FPL (no specific dollar figures published; priority for seniors over 60 but no age minimum)"
+      "notes": "No age or asset test found for Maryland WAP. Income limits shown are DOE WAP 60% State Median Income, updated 2/11/2026; monthly values were calculated by dividing annual figures by 12 and rounding to the nearest integer."
     },
     {
-      "programId": "md-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "State Health Insurance Assistance Program (SHIP)",
       "facts": {
         "age": null,
@@ -276,30 +375,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "4107671100",
+        "phone": "8002433425",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://aging.maryland.gov/pages/state-health-insurance-program.aspx"
+          "phone": "https://www.cms.gov/contacts/maryland-department-aging-senior-health-insurance-assistance-program-ship/general-beneficiary-contact/1553861"
         },
-        "notes": "SHIP has no age, income, or asset eligibility limits; serves Medicare-eligible seniors, families, caregivers. Official state site lists (410) 767-1100 as main contact; shiphelp.org lists 1-800-243-3425."
+        "notes": "SHIP is a counseling/referral program for Medicare beneficiaries; no age, income, or asset eligibility test was found in the retrieved official sources. Official Maryland SHIP main toll-free number is 800-243-3425."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8002433425",
-            "4103863800"
-          ],
-          "verifiedValue": "4107671100"
-        }
-      ],
-      "notes": "SHIP has no age, income, or asset eligibility limits; serves Medicare-eligible seniors, families, caregivers. Official state site lists (410) 767-1100 as main contact; shiphelp.org lists 1-800-243-3425."
+      "flags": [],
+      "notes": "SHIP is a counseling/referral program for Medicare beneficiaries; no age, income, or asset eligibility test was found in the retrieved official sources. Official Maryland SHIP main toll-free number is 800-243-3425."
     },
     {
-      "programId": "md-home-delivered-meals",
+      "programId": "home-delivered-meals",
       "programName": "Home Delivered Meals",
       "facts": {
         "age": 60,
@@ -314,25 +403,35 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "3014754200",
         "sources": {
-          "age": null,
+          "age": "https://www.stmaryscountymd.gov/aging/homedeliveredmeals/",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.stmaryscountymd.gov/aging/homedeliveredmeals/"
         },
-        "notes": "No authoritative current data found on minimum age, income/assets limits, or official statewide phone for Home Delivered Meals program in Maryland as of 2026; sources describe Medicaid/HCBS eligibility without specific senior thresholds or tests"
+        "notes": "No statewide Maryland age rule was found for the senior pathway; a county official page shows the senior threshold as age 60+. Income and asset tests were not found in authoritative current sources."
       },
-      "flags": [],
-      "notes": "No authoritative current data found on minimum age, income/assets limits, or official statewide phone for Home Delivered Meals program in Maryland as of 2026; sources describe Medicaid/HCBS eligibility without specific senior thresholds or tests"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "4105580923",
+            "4102224257"
+          ],
+          "verifiedValue": "3014754200"
+        }
+      ],
+      "notes": "No statewide Maryland age rule was found for the senior pathway; a county official page shows the senior threshold as age 60+. Income and asset tests were not found in authoritative current sources."
     },
     {
-      "programId": "md-national-family-caregiver-support",
+      "programId": "national-family-caregiver-support",
       "programName": "National Family Caregiver Support Program",
       "facts": {
         "age": 18,
@@ -348,26 +447,26 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": 55,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18002433425",
+        "phone": "18446275465",
         "sources": {
-          "age": "https://aging.maryland.gov/pages/national-family-caregiver-support.aspx",
-          "income": null,
-          "assets": null,
-          "phone": "https://aging.maryland.gov/Documents/National_Family_Caregivers_Support_Program/Caregivers%20Support%20Month/National%20Family%20Caregiver%20Support%20Program%20Flyer.pdf"
+          "age": "https://aging.maryland.gov/programs-and-services/caregivers",
+          "income": "https://aging.maryland.gov/programs-and-services/caregivers",
+          "assets": "https://aging.maryland.gov/programs-and-services/caregivers",
+          "phone": "https://aging.maryland.gov/programs-and-services/caregivers"
         },
-        "notes": "No income or asset limits mentioned in sources"
+        "notes": "Current Maryland Family Caregiver Support/NFCSP guidance shows senior-pathway eligibility at age 55+ for older relatives and lists the Maryland Access Point help line; no income or asset test is shown for this program."
       },
       "flags": [
         {
           "field": "age",
           "severity": "high",
           "draftValue": 18,
-          "verifiedValue": 60
+          "verifiedValue": 55
         },
         {
           "field": "phone",
@@ -377,13 +476,13 @@
             "2407773000",
             "211"
           ],
-          "verifiedValue": "18002433425"
+          "verifiedValue": "18446275465"
         }
       ],
-      "notes": "No income or asset limits mentioned in sources"
+      "notes": "Current Maryland Family Caregiver Support/NFCSP guidance shows senior-pathway eligibility at age 55+ for older relatives and lists the Maryland Access Point help line; no income or asset test is shown for this program."
     },
     {
-      "programId": "md-scsep-employment",
+      "programId": "scsep-employment",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -411,24 +510,24 @@
           "assets": null,
           "phone": "https://labor.maryland.gov/employment/scsep.shtml"
         },
-        "notes": "Income eligibility exists (125% of federal poverty level) but specific dollar thresholds vary annually by household size and are not provided in search results; contact program manager for current income limits. No asset limits found in authoritative sources. Program is active as of 2026."
+        "notes": "Maryland SCSEP is active in 2026; no asset thresholds found in the official Maryland source. Official Maryland Labor page lists 55+ eligibility and main contact 410-767-2160."
       },
       "flags": [],
-      "notes": "Income eligibility exists (125% of federal poverty level) but specific dollar thresholds vary annually by household size and are not provided in search results; contact program manager for current income limits. No asset limits found in authoritative sources. Program is active as of 2026."
+      "notes": "Maryland SCSEP is active in 2026; no asset thresholds found in the official Maryland source. Official Maryland Labor page lists 55+ eligibility and main contact 410-767-2160."
     },
     {
-      "programId": "md-senior-legal-assistance-program",
-      "programName": "Senior Legal Assistance Program (Sixty Plus Legal Program)",
+      "programId": "senior-legal-assistance-program",
+      "programName": "Senior Legal Assistance Program",
       "facts": {
         "age": 60,
-        "income_1": 3261,
-        "income_2": 4406,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
           "8008964213",
           "8006771116",
-          "4103961322",
+          "4103965605",
           "30147542001064"
         ],
         "hasVerifiableFacts": true
@@ -439,20 +538,32 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8446275465",
         "sources": {
-          "age": "https://aging.maryland.gov/pages/senior-legal-assistance.aspx",
+          "age": "https://aging.maryland.gov/Pages/senior-legal-assistance.aspx",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://aging.maryland.gov/Pages/senior-legal-assistance.aspx"
         },
-        "notes": "No income or asset limits specified for this program in official sources; preference given to those with greatest economic need. Contact local Area Agency on Aging’s Maryland Access Point (no statewide phone listed). Program also called Senior Legal Assistance Program."
+        "notes": "Current Maryland Department of Aging page states eligibility for residents 60+ or their caregiver; no income or asset test found on the official page. Main contact is Maryland Access Point (MAP) / local Area Agency on Aging; MD Dept. of Aging customer service is listed elsewhere but the program page directs applicants to MAP."
       },
-      "flags": [],
-      "notes": "No income or asset limits specified for this program in official sources; preference given to those with greatest economic need. Contact local Area Agency on Aging’s Maryland Access Point (no statewide phone listed). Program also called Senior Legal Assistance Program."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8008964213",
+            "8006771116",
+            "4103965605",
+            "30147542001064"
+          ],
+          "verifiedValue": "8446275465"
+        }
+      ],
+      "notes": "Current Maryland Department of Aging page states eligibility for residents 60+ or their caregiver; no income or asset test found on the official page. Main contact is Maryland Access Point (MAP) / local Area Agency on Aging; MD Dept. of Aging customer service is listed elsewhere but the program page directs applicants to MAP."
     },
     {
-      "programId": "md-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -472,14 +583,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "4107672161",
+        "phone": "4107671100",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.intelycare.com/facilities/resources/what-is-a-healthcare-ombudsman-maryland-guide-for-facilities/"
+          "phone": "https://aging.maryland.gov/programs-and-services/long-term-care-ombudsman"
         },
-        "notes": "Program has no age, income, or asset eligibility requirements; services are free and available to residents of long-term care facilities (primarily seniors). Phone from secondary source citing official program; no single statewide 'apply' number found, regional numbers vary."
+        "notes": "Program is an ombudsman service and does not have age, income, or asset eligibility tests; official state contact number found for the Maryland Department of Aging state ombudsman office."
       },
       "flags": [
         {
@@ -489,13 +600,13 @@
             "4103136423",
             "2407773005"
           ],
-          "verifiedValue": "4107672161"
+          "verifiedValue": "4107671100"
         }
       ],
-      "notes": "Program has no age, income, or asset eligibility requirements; services are free and available to residents of long-term care facilities (primarily seniors). Phone from secondary source citing official program; no single statewide 'apply' number found, regional numbers vary."
+      "notes": "Program is an ombudsman service and does not have age, income, or asset eligibility tests; official state contact number found for the Maryland Department of Aging state ombudsman office."
     },
     {
-      "programId": "md-senior-call-check-program",
+      "programId": "senior-call-check-program",
       "programName": "Maryland Senior Call Check Program (SCC)",
       "facts": {
         "age": 60,
@@ -515,97 +626,27 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8665020560",
+        "phone": "18665023560",
         "sources": {
-          "age": "https://aging.maryland.gov/pages/senior-call-check.aspx",
+          "age": "https://aging.maryland.gov/programs-and-services/senior-call-check",
           "income": null,
           "assets": null,
-          "phone": "https://aging.maryland.gov/pages/senior-call-check.aspx"
+          "phone": "https://aging.maryland.gov/programs-and-services/senior-call-check"
         },
-        "notes": "Program transitioning to 'Senior Call Check and Social Connections' per official site; no income or asset tests"
-      },
-      "flags": [],
-      "notes": "Program transitioning to 'Senior Call Check and Social Connections' per official site; no income or asset tests"
-    },
-    {
-      "programId": "md-sals-assisted-living-subsidy",
-      "programName": "Senior Assisted Living Subsidy Program (SALS)",
-      "facts": {
-        "age": 62,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 20064,
-        "assets_couple": 26400,
-        "phones": [
-          "2407771138",
-          "4103131234",
-          "4102224257",
-          "4107580848"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": 62,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 20064,
-        "assets_couple": 26400,
-        "phone": null,
-        "sources": {
-          "age": "https://aging.maryland.gov/pages/senior-assisted-living-subsidy-program.aspx",
-          "income": null,
-          "assets": "https://aging.maryland.gov/pages/senior-assisted-living-subsidy-program.aspx",
-          "phone": null
-        },
-        "notes": "Program administered locally by counties; statewide standards from MD Dept of Aging. Income limits exist but not requested in schema. No single statewide phone; contact local Area Agency on Aging."
-      },
-      "flags": [],
-      "notes": "Program administered locally by counties; statewide standards from MD Dept of Aging. Income limits exist but not requested in schema. No single statewide phone; contact local Area Agency on Aging."
-    },
-    {
-      "programId": "md-senior-care-program",
-      "programName": "Senior Care Program",
-      "facts": {
-        "age": 65,
-        "income_1": 3998,
-        "income_2": 4657,
-        "assets_individual": 11000,
-        "assets_couple": 14000,
-        "phones": [
-          "4107671100",
-          "2407773000",
-          "211"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": 65,
-        "income_1": 3997,
-        "income_2": 4656,
-        "assets_individual": 11000,
-        "assets_couple": 14000,
-        "phone": "4103863800",
-        "sources": {
-          "age": "https://aging.maryland.gov/pages/senior-care.aspx",
-          "income": "https://www.carrollcountymd.gov/government/directory/citizen-services/division-of-aging-disabilities/services-and-programs/senior-care-program/",
-          "assets": "https://www.carrollcountymd.gov/government/directory/citizen-services/division-of-aging-disabilities/services-and-programs/senior-care-program/",
-          "phone": "https://www.carrollcountymd.gov/government/directory/citizen-services/division-of-aging-disabilities/services-and-programs/senior-care-program/"
-        },
-        "notes": "Income/assets from Carroll County 2025 example; state program with county-level determination. No 2026 updates found."
+        "notes": "Program is currently the Senior Call Check and Social Connections Program; official state source shows eligibility at age 60+ and toll-free number 1-866-50-CHECK (1-866-502-0560)."
       },
       "flags": [
         {
           "field": "phone",
           "severity": "medium",
           "draftValue": [
-            "4107671100",
-            "2407773000",
-            "211"
+            "8665020560",
+            "4107671100"
           ],
-          "verifiedValue": "4103863800"
+          "verifiedValue": "18665023560"
         }
       ],
-      "notes": "Income/assets from Carroll County 2025 example; state program with county-level determination. No 2026 updates found."
+      "notes": "Program is currently the Senior Call Check and Social Connections Program; official state source shows eligibility at age 60+ and toll-free number 1-866-50-CHECK (1-866-502-0560)."
     }
   ]
 }

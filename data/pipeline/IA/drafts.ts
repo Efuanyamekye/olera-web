@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.910Z
+ * Last updated: 2026-10-02T07:57:10.908Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -202,7 +202,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/medicaid/services-care/home-and-community-based-services/waiver-programs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8558897985",
+            "8009722017"
+          ],
+          "to": "8003388366",
+          "source": "https://hhs.iowa.gov/medicaid/about-medicaid/medicaid-projects/home-project/waiver-redesign-faq",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        }
+      ]
     },
     {
       "id": "hcbs-waiver-services",
@@ -569,7 +583,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8009722017",
+            "211"
+          ],
+          "to": "5152705000",
+          "source": "https://hhs.iowa.gov/medicaid/plans-programs/program-all-inclusive-care-elderly-pace",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -649,7 +677,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified non-citizen",
           "SSI recipients often automatically eligible"
         ],
-        "povertyLevelReference": "160% FPL"
+        "povertyLevelReference": "160% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 160,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -788,7 +824,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/assistance-programs/food-assistance/snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8558897985",
+            "211"
+          ],
+          "to": "8009722017",
+          "source": "https://hhs.iowa.gov/assistance-programs/food-assistance",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -860,7 +910,15 @@ export const drafts: PipelineStateDrafts = {
           "All household members including roommates sharing utility bills count toward household size",
           "Payment goes directly to utility company or heating fuel vendor"
         ],
-        "povertyLevelReference": "175% FPL"
+        "povertyLevelReference": "175% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 133,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -987,7 +1045,39 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://iuc.iowa.gov/customer-assistance/how-do-i-apply-energy-assistance-liheap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-08-04",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1822,
+          "to": 2611,
+          "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2461,
+          "to": 3525,
+          "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025 or 150% FPL 2023 or 165% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "5633828436"
+          ],
+          "to": "8009722017",
+          "source": "https://hhs.iowa.gov/assistance-programs/housing-rent-assistance/low-income-home-energy-assistance",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        }
+      ]
     },
     {
       "id": "shiip-medicare-counseling",
@@ -1314,7 +1404,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(855) 410-6222",
       "sourceUrl": "https://www.legis.iowa.gov/docs/iac/rule/02-05-2025.17.7.21.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8554106222",
+            "3193380515",
+            "5156993243",
+            "5157253333"
+          ],
+          "to": "8007792001",
+          "source": "https://hhs.iowa.gov/family-community/aging-services/iowa-area-agencies-aging",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        }
+      ]
     },
     {
       "id": "legal-aid-seniors",
@@ -1558,7 +1664,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 532-3213",
       "sourceUrl": "https://hhs.iowa.gov/health-prevention/aging-services/ltcombudsman",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8005323213"
+          ],
+          "to": "8662361430",
+          "source": "https://hhs.iowa.gov/family-community/aging-services/ltc-ombudsman",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        }
+      ]
     },
     {
       "id": "state-supplementary-assistance",
@@ -1783,7 +1902,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hhs.iowa.gov/media/3987/download",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-08-18",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18773475678",
+            "18007792001",
+            "18007721213"
+          ],
+          "to": "5153283640",
+          "source": "https://hhs.iowa.gov/assistance-programs/state-supplementary-assistance",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:32.766Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-support",

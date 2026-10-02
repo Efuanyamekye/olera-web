@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AK/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.507Z
+ * Last updated: 2026-10-02T07:57:10.897Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -236,7 +236,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/apply-for-medicaid/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8004787778",
+          "source": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        }
+      ]
     },
     {
       "id": "hcbs-waiver",
@@ -417,7 +430,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://health.alaska.gov/en/services/hcbs-waivers/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9072693463",
+            "211"
+          ],
+          "to": "8004789996",
+          "source": "https://health.alaska.gov/en/services/hcbs-waivers/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        }
+      ]
     },
     {
       "id": "pace-elderly-care",
@@ -569,7 +596,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(907) 465-3300",
       "sourceUrl": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-elderly",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9074653300",
+            "211"
+          ],
+          "to": "8006334227",
+          "source": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -638,7 +679,15 @@ export const drafts: PipelineStateDrafts = {
           "SLMB and QI require both Medicare Part A and Part B",
           "QI: Cannot receive QI benefits if you qualify for Medicaid"
         ],
-        "povertyLevelReference": "100-135% FPL"
+        "povertyLevelReference": "100-135% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -792,7 +841,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8774862048"
+          ],
+          "to": "8004786065",
+          "source": "https://health.alaska.gov/en/services/extra-help-on-medicare-drug-costs/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -875,7 +937,15 @@ export const drafts: PipelineStateDrafts = {
           "Adults 18-54 without dependents must work, train, or volunteer 20+ hours/week (exemptions for 60+ and disabled)",
           "Cannot have quit a job without good cause"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1011,7 +1081,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/snap-nutrition-assistance/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 3258,
+          "to": 1630,
+          "source": "https://health.alaska.gov/media/lorb0pgw/dpa-program-descriptions-0126.pdf",
+          "severity": "high",
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 100% FPL 2026",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        },
+        {
+          "field": "income_2",
+          "from": 4406,
+          "to": 2203,
+          "source": "https://health.alaska.gov/media/lorb0pgw/dpa-program-descriptions-0126.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 300% SSI 2026 or 300% SSI 2025)",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1096,7 +1186,15 @@ export const drafts: PipelineStateDrafts = {
           "Some tribal programs require Alaska Native or American Indian documentation",
           "Must live in provider's service area"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1316,7 +1414,15 @@ export const drafts: PipelineStateDrafts = {
           "Cannot have received AHFC Home Energy Rebate after May 1, 2008",
           "Must apply through regional provider for your area"
         ],
-        "povertyLevelReference": "100% of area median income"
+        "povertyLevelReference": "100% of area median income",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1428,7 +1534,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.ahfc.us/efficiency/weatherization",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9077806868"
+          ],
+          "to": "8004787227",
+          "source": "https://www.ahfc.us/efficiency/weatherization/weatherization-service-providers",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1731,7 +1850,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(907) 349-0613",
       "sourceUrl": "https://health.alaska.gov/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9073490613",
+            "9074521735",
+            "9078520276"
+          ],
+          "to": "9074636179",
+          "source": "https://www.ccsak.org/uploads/8/5/9/6/85963578/brochure__6_commonly_asked_questions_for_clients.pdf",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        }
+      ]
     },
     {
       "id": "alzheimers-family-caregiver-support",
@@ -2065,7 +2199,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://labor.alaska.gov/masst/about-masst.htm",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "9074654872",
+          "source": "https://www.jedc.org/wp-content/uploads/2025/10/SREC-Meeting-Minutes-10032025.pdf",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:32:37.357Z"
+        }
+      ]
     },
     {
       "id": "legal-services-senior-hotline",
@@ -2149,7 +2296,15 @@ export const drafts: PipelineStateDrafts = {
           "Case must align with office priorities",
           "No conflicts of interest"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",

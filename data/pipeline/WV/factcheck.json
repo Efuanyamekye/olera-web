@@ -1,17 +1,17 @@
 {
   "state": "WV",
   "stateName": "West Virginia",
-  "checkedAt": "2026-04-14T10:11:25.984Z",
+  "checkedAt": "2026-10-02T07:48:35.284Z",
   "total": 15,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 0,
-  "programsWithFlags": 6,
-  "totalFlags": 8,
-  "highSeverityFlags": 3,
+  "errors": 2,
+  "programsWithFlags": 7,
+  "totalFlags": 9,
+  "highSeverityFlags": 5,
   "programs": [
     {
-      "programId": "wv-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Medicaid Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
         "age": 65,
@@ -25,25 +25,34 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
-        "income_1": 1305,
-        "income_2": 1763,
-        "assets_individual": 9660,
-        "assets_couple": 14470,
-        "phone": null,
+        "age": null,
+        "income_1": 1350,
+        "income_2": 1824,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "18777161212",
         "sources": {
-          "age": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
-          "income": "https://bms.wv.gov/media/30551/download?inline",
-          "assets": "https://bms.wv.gov/media/30551/download?inline",
-          "phone": null
+          "age": null,
+          "income": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "assets": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "phone": "https://bms.wv.gov/members/applying-healthcare"
         },
-        "notes": "Income and assets from WV BMS official source; age from federal Medicare standard for MSPs as no WV-specific senior threshold found. 2026 federal limits not specified in results."
+        "notes": "West Virginia Medicare Savings Programs (QMB, SLMB, QI-1) are current; no senior-specific minimum age is listed because eligibility is based on Medicare enrollment, not a separate age test."
       },
-      "flags": [],
-      "notes": "Income and assets from WV BMS official source; age from federal Medicare standard for MSPs as no WV-specific senior threshold found. 2026 federal limits not specified in results."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "3045870105"
+          ],
+          "verifiedValue": "18777161212"
+        }
+      ],
+      "notes": "West Virginia Medicare Savings Programs (QMB, SLMB, QI-1) are current; no senior-specific minimum age is listed because eligibility is based on Medicare enrollment, not a separate age test."
     },
     {
-      "programId": "wv-aged-disabled-waiver",
+      "programId": "aged-disabled-waiver",
       "programName": "Aged and Disabled Waiver (ADW)",
       "facts": {
         "age": 18,
@@ -53,6 +62,7 @@
         "assets_couple": null,
         "phones": [
           "8667671575",
+          "8447237811",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -65,12 +75,12 @@
         "assets_couple": null,
         "phone": "18667671575",
         "sources": {
-          "age": "https://www.medicaidplanningassistance.org/west-viriginia-aged-disabled-waiver/",
-          "income": null,
-          "assets": null,
-          "phone": "https://adwprogram.wv.gov"
+          "age": "https://adwprogram.wv.gov/",
+          "income": "https://adwprogram.wv.gov/",
+          "assets": "https://adwprogram.wv.gov/",
+          "phone": "https://adwprogram.wv.gov/"
         },
-        "notes": "No authoritative income or asset limits found in provided sources for seniors; financial eligibility follows WV Medicaid waiver rules per state site. Age from secondary source citing seniors 65+."
+        "notes": "ADW is available to adults 18+ generally; for the senior pathway, the official WV.gov site indicates programs for people at least 60 years old and ADW application help at 1-866-767-1575. No separate senior-specific income or asset thresholds were found in the retrieved official source."
       },
       "flags": [
         {
@@ -80,10 +90,10 @@
           "verifiedValue": 65
         }
       ],
-      "notes": "No authoritative income or asset limits found in provided sources for seniors; financial eligibility follows WV Medicaid waiver rules per state site. Age from secondary source citing seniors 65+."
+      "notes": "ADW is available to adults 18+ generally; for the senior pathway, the official WV.gov site indicates programs for people at least 60 years old and ADW application help at 1-866-767-1575. No separate senior-specific income or asset thresholds were found in the retrieved official source."
     },
     {
-      "programId": "wv-pace-comprehensive-care",
+      "programId": "pace-comprehensive-care",
       "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
       "facts": {
         "age": 55,
@@ -109,56 +119,61 @@
           "assets": null,
           "phone": null
         },
-        "notes": "No PACE program operating in West Virginia as of 2026 per official sources; program not available"
+        "notes": "I could not find an authoritative West Virginia PACE program because West Virginia does not currently have a PACE program; official/federal sources indicate PACE eligibility is 55+ but no WV-specific program phone is available."
       },
       "flags": [],
-      "notes": "No PACE program operating in West Virginia as of 2026 per official sources; program not available"
+      "notes": "I could not find an authoritative West Virginia PACE program because West Virginia does not currently have a PACE program; official/federal sources indicate PACE eligibility is 55+ but no WV-specific program phone is available."
     },
     {
-      "programId": "wv-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Supplemental Nutrition Assistance Program)",
       "facts": {
         "age": 60,
-        "income_1": 2608,
-        "income_2": 3526,
+        "income_1": 2660,
+        "income_2": 3607,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "3045587980",
+          "18777161212",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "18777161212",
+        "income_1": 1608,
+        "income_2": 2171,
+        "assets_individual": 4750,
+        "assets_couple": 4750,
+        "phone": "8777161212",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://bfa.wv.gov/article/west-virginia-department-human-services-announces-implementation-wvs-snap-healthy-choices"
+          "age": "https://bfa.wv.gov/snap",
+          "income": "https://bfa.wv.gov/snap",
+          "assets": "https://bfa.wv.gov/snap",
+          "phone": "https://www.fns.usda.gov/snap-directory-entry/west-virginia"
         },
-        "notes": "No authoritative current data found for senior-specific age threshold, income limits, or assets in search results; SNAP generally has no senior age minimum or asset test but income limits exist and vary; phone from official WV DoHS source for SNAP inquiries."
+        "notes": "SNAP has no senior-specific minimum age for eligibility; age 60 only affects the asset test. Income values are derived from West Virginia's current SNAP gross income limits shown in an official 2026 guide and converted to monthly amounts."
       },
       "flags": [
         {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "3045587980",
-            "211"
-          ],
-          "verifiedValue": "18777161212"
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2660,
+          "verifiedValue": 1608,
+          "pctDiff": 39.5
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 3607,
+          "verifiedValue": 2171,
+          "pctDiff": 39.8
         }
       ],
-      "notes": "No authoritative current data found for senior-specific age threshold, income limits, or assets in search results; SNAP generally has no senior age minimum or asset test but income limits exist and vary; phone from official WV DoHS source for SNAP inquiries."
+      "notes": "SNAP has no senior-specific minimum age for eligibility; age 60 only affects the asset test. Income values are derived from West Virginia's current SNAP gross income limits shown in an official 2026 guide and converted to monthly amounts."
     },
     {
-      "programId": "wv-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "LIHEAP (Low-Income Home Energy Assistance Program)",
       "facts": {
         "age": null,
@@ -178,14 +193,14 @@
         "income_2": 3209,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "18006428589",
         "sources": {
           "age": null,
           "income": "https://bfa.wv.gov/utility-assistancelieap",
           "assets": null,
-          "phone": null
+          "phone": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing"
         },
-        "notes": "Program renamed LIEAP; no age, assets, or phone found in sources"
+        "notes": "LIHEAP in West Virginia uses income limits, not an age test; official FY 2026 limits are published by WV DoHS. No asset test found in the official materials reviewed."
       },
       "flags": [
         {
@@ -203,58 +218,16 @@
           "pctDiff": 23.2
         }
       ],
-      "notes": "Program renamed LIEAP; no age, assets, or phone found in sources"
+      "notes": "LIHEAP in West Virginia uses income limits, not an age test; official FY 2026 limits are published by WV DoHS. No asset test found in the official materials reviewed."
     },
     {
-      "programId": "wv-weatherization-assistance-program",
+      "programId": "weatherization-assistance-program",
       "programName": "Weatherization Assistance Program (WAP)",
-      "facts": {
-        "age": null,
-        "income_1": 2608,
-        "income_2": 3525,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "3046828271",
-          "211"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": 60,
-        "income_1": 2430,
-        "income_2": 3287,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
-        "sources": {
-          "age": "https://wvcad.org/sustainability/weatherization-assistance-program",
-          "income": "https://wvcad.org/index.php?p=wap",
-          "assets": null,
-          "phone": null
-        },
-        "notes": "Income limits are annual figures from source converted to monthly (29160/12=2430, 39440/12=3287); no 2026-specific data found, latest appears PY2024; no statewide phone or assets test identified; elderly (60+) receive priority, relevant for senior-caregiver households"
-      },
-      "flags": [
-        {
-          "field": "income_1",
-          "severity": "medium",
-          "draftValue": 2608,
-          "verifiedValue": 2430,
-          "pctDiff": 6.8
-        },
-        {
-          "field": "income_2",
-          "severity": "medium",
-          "draftValue": 3525,
-          "verifiedValue": 3287,
-          "pctDiff": 6.8
-        }
-      ],
-      "notes": "Income limits are annual figures from source converted to monthly (29160/12=2430, 39440/12=3287); no 2026-specific data found, latest appears PY2024; no statewide phone or assets test identified; elderly (60+) receive priority, relevant for senior-caregiver households"
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
     },
     {
-      "programId": "wv-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "SHIP (State Health Insurance Assistance Program)",
       "facts": {
         "age": 65,
@@ -273,20 +246,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18779874463",
+        "phone": "8779874463",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.shiphelp.org/ships/west-virginia/"
+          "phone": "https://www.cms.gov/about-cms/contact/directory/west-virginia-state-health-insurance-assistance-program-wv-ship/1562251"
         },
-        "notes": "SHIP has no age, income, or asset tests for seniors; serves Medicare beneficiaries (typically 65+ or disabled under 65). No 2026-specific changes found; phone from current source."
+        "notes": "WV SHIP is a Medicare counseling program for Medicare beneficiaries; no senior age minimum is stated in the retrieved current official sources."
       },
       "flags": [],
-      "notes": "SHIP has no age, income, or asset tests for seniors; serves Medicare beneficiaries (typically 65+ or disabled under 65). No 2026-specific changes found; phone from current source."
+      "notes": "WV SHIP is a Medicare counseling program for Medicare beneficiaries; no senior age minimum is stated in the retrieved current official sources."
     },
     {
-      "programId": "wv-meals-on-wheels-home-delivered",
+      "programId": "meals-on-wheels-home-delivered",
       "programName": "Meals on Wheels (Home Delivered Meals)",
       "facts": {
         "age": 60,
@@ -303,20 +276,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "3047552385",
         "sources": {
-          "age": "https://mountainstatespotlight.org/2025/03/03/meals-on-wheels-waitlist-budget/",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://wcscwv.org/home-delivered-meals/",
+          "income": "https://slsmc.org/nutrition/home-delivered-meals/",
+          "assets": "https://slsmc.org/nutrition/home-delivered-meals/",
+          "phone": "https://putnamaging.com/nutrition"
         },
-        "notes": "No statewide centralized eligibility found; varies by local provider. Age from state senior services context. No authoritative income/assets data in results."
+        "notes": "Current West Virginia home-delivered meals programs commonly use a 60+ senior threshold; no authoritative statewide income or asset limit found. Eligibility and phone number vary by local provider."
       },
       "flags": [],
-      "notes": "No statewide centralized eligibility found; varies by local provider. Age from state senior services context. No authoritative income/assets data in results."
+      "notes": "Current West Virginia home-delivered meals programs commonly use a 60+ senior threshold; no authoritative statewide income or asset limit found. Eligibility and phone number vary by local provider."
     },
     {
-      "programId": "wv-nfcsp-caregiver-support",
+      "programId": "nfcsp-caregiver-support",
       "programName": "National Family Caregiver Support Program (NFCSP)",
       "facts": {
         "age": null,
@@ -325,50 +298,47 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "8779873646",
           "211"
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        1
-      ],
-      "flags": [],
-      "notes": null
-    },
-    {
-      "programId": "wv-senior-legal-aid",
-      "programName": "West Virginia Senior Legal Aid, Inc. (Senior Legal Services)",
-      "facts": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "8002295068"
-        ],
-        "hasVerifiableFacts": true
-      },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8002295068",
+        "phone": "3045583317",
         "sources": {
-          "age": "https://www.seniorlegalaid.org/blank-2",
+          "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.seniorlegalaid.org"
+          "phone": "https://wvats.cedwvu.org/media/3774/pathways-to-funding-for-adults-accessible.pdf"
         },
-        "notes": "No income or asset limits found in sources; program appears active as of 2026 per FY2026 Provider Plan reference"
+        "notes": "NFCSP in West Virginia does not appear to have an income, asset, or age test for the senior-caregiver pathway; the current official contact number found is the West Virginia Bureau of Senior Services at 304-558-3317."
       },
-      "flags": [],
-      "notes": "No income or asset limits found in sources; program appears active as of 2026 per FY2026 Provider Plan reference"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8779873646",
+            "211"
+          ],
+          "verifiedValue": "3045583317"
+        }
+      ],
+      "notes": "NFCSP in West Virginia does not appear to have an income, asset, or age test for the senior-caregiver pathway; the current official contact number found is the West Virginia Bureau of Senior Services at 304-558-3317."
     },
     {
-      "programId": "wv-long-term-care-ombudsman",
+      "programId": "senior-legal-aid",
+      "programName": "West Virginia Senior Legal Aid, Inc. (Senior Legal Services)",
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
+    },
+    {
+      "programId": "long-term-care-ombudsman",
       "programName": "Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -396,13 +366,13 @@
           "assets": null,
           "phone": "https://legalaidwv.org/our-programs/long-term-care/"
         },
-        "notes": "Program serves long-term care residents (typically seniors); no age, income, or asset eligibility requirements; services are free and open to residents, families, and concerned parties"
+        "notes": "No age, income, or asset eligibility test found for the West Virginia Long-Term Care Ombudsman Program; official/help page indicates services are free and open to any long-term care resident, family, or concerned caregiver. Current contact number found on a current program page."
       },
       "flags": [],
-      "notes": "Program serves long-term care residents (typically seniors); no age, income, or asset eligibility requirements; services are free and open to residents, families, and concerned parties"
+      "notes": "No age, income, or asset eligibility test found for the West Virginia Long-Term Care Ombudsman Program; official/help page indicates services are free and open to any long-term care resident, family, or concerned caregiver. Current contact number found on a current program page."
     },
     {
-      "programId": "wv-lighthouse-in-home-care",
+      "programId": "lighthouse-in-home-care",
       "programName": "Lighthouse Program",
       "facts": {
         "age": 60,
@@ -422,30 +392,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "7885467",
+        "phone": "8779873646",
         "sources": {
-          "age": "https://wvaging.com/lighthouse/",
+          "age": "https://adwprogram.wv.gov/",
           "income": null,
           "assets": null,
-          "phone": "https://wvaging.com/lighthouse/"
+          "phone": "http://www.wvseniorservices.gov/GettingAnswers/FrequentlyAskedQuestions/tabid/62/Default.aspx"
         },
-        "notes": "Program uses sliding fee scale based on income but no specific income thresholds are published in available sources. Assets limits not specified in search results. Phone number (788-5467) is from state Aging & Family Services main office; county-level providers also listed but state office is primary contact for program information."
+        "notes": "Current official WV sources indicate the Lighthouse Program is for seniors age 60+; no official income/assets thresholds were found in the retrieved sources. Program still appears active under WV aging services."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8779873646",
-            "3046752369"
-          ],
-          "verifiedValue": "7885467"
-        }
-      ],
-      "notes": "Program uses sliding fee scale based on income but no specific income thresholds are published in available sources. Assets limits not specified in search results. Phone number (788-5467) is from state Aging & Family Services main office; county-level providers also listed but state office is primary contact for program information."
+      "flags": [],
+      "notes": "Current official WV sources indicate the Lighthouse Program is for seniors age 60+; no official income/assets thresholds were found in the retrieved sources. Program still appears active under WV aging services."
     },
     {
-      "programId": "wv-take-me-home-program",
+      "programId": "take-me-home-program",
       "programName": "Take Me Home Program",
       "facts": {
         "age": null,
@@ -467,20 +427,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18555197557",
+        "phone": "8555197557",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://bms.wv.gov/take-me-home-tmh-transition-program"
+          "phone": "https://dhhr.wv.gov/bms/programs/takemehome/Pages/default.aspx"
         },
-        "notes": "No age, income, or asset limits specified in official sources; eligibility tied to Medicaid enrollment in ADW or TBIW (which have financial criteria) and 60-day institutional stay. Program active as of 2026."
+        "notes": "Take Me Home is a Medicaid transition program for people in long-term care facilities returning to the community; no separate senior-specific age, income, or asset test was found in the retrieved official source."
       },
       "flags": [],
-      "notes": "No age, income, or asset limits specified in official sources; eligibility tied to Medicaid enrollment in ADW or TBIW (which have financial criteria) and 60-day institutional stay. Program active as of 2026."
+      "notes": "Take Me Home is a Medicaid transition program for people in long-term care facilities returning to the community; no separate senior-specific age, income, or asset test was found in the retrieved official source."
     },
     {
-      "programId": "wv-visions-blind-services",
+      "programId": "visions-blind-services",
       "programName": "Visually Impaired Seniors In-Home Outreach and Networking Services (VISIONS)",
       "facts": {
         "age": 55,
@@ -489,6 +449,7 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "18006423021",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -499,30 +460,31 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18006423021",
+        "phone": "8006428207",
         "sources": {
-          "age": "https://wvdrs.org/adults/specialized-services/visions/",
+          "age": "https://wvdrs.org/adults/specialized-services/services-for-the-blind-and-impaired/",
           "income": null,
           "assets": null,
-          "phone": "https://wvdrs.org/adults/specialized-services/visions/"
+          "phone": "https://wvdrs.org/adults/specialized-services/services-for-the-blind-and-impaired/"
         },
-        "notes": ""
+        "notes": "Current WV DRS page lists VISIONS for West Virginians ages 55+ with permanent vision loss; no income or asset test found on the official source."
       },
       "flags": [
         {
           "field": "phone",
           "severity": "medium",
           "draftValue": [
+            "18006423021",
             "211"
           ],
-          "verifiedValue": "18006423021"
+          "verifiedValue": "8006428207"
         }
       ],
-      "notes": null
+      "notes": "Current WV DRS page lists VISIONS for West Virginians ages 55+ with permanent vision loss; no income or asset test found on the official source."
     },
     {
-      "programId": "wv-home-modification-accessibility-grant",
-      "programName": "WV Bureau of Senior Services Home Modification and Accessibility Grant Program (Aging Well, Safe at Home Initiative)",
+      "programId": "home-modification-accessibility-grant",
+      "programName": "WV Bureau of Senior Services Home Modification and Accessibility Program",
       "facts": {
         "age": 60,
         "income_1": null,
@@ -541,17 +503,27 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8669812372",
+        "phone": "3045583317",
         "sources": {
           "age": "https://www.wvadrc.com/assistance-programs.html",
           "income": null,
           "assets": null,
-          "phone": "https://www.wvadrc.com/assistance-programs.html"
+          "phone": "https://www.wv.gov/agencies/senior-services-bureau"
         },
-        "notes": "Program confirmed active as of 2026. Age requirement is 60+ for seniors. No income or asset limits found in authoritative sources. Phone number is for WV Aging & Disability Resource Center (ADRC), the official intake point for applications. Maximum grant amount is $3,000 per source https://search.wv211.org/detail/?idServiceAtLocation=211charles-c315c0dd-562e-4918-a149-1b7801f1b3fb&idService=211charles-4641e1bf-8b4a-44b7-a19c-5c5bc19f63ec&idOrganization=211charles-359533b9-dbb7-43ba-bc45-2251dce0193a&idLocation=211charles-d37e5e0a-0f55-4574-99e0-a951b1e80f89&location=Morgantown++WV++United+States&distance=10&adv=-1"
+        "notes": "Current program page shows age 60+ for senior applicants; no income or asset test found on the cited official/current pages."
       },
-      "flags": [],
-      "notes": "Program confirmed active as of 2026. Age requirement is 60+ for seniors. No income or asset limits found in authoritative sources. Phone number is for WV Aging & Disability Resource Center (ADRC), the official intake point for applications. Maximum grant amount is $3,000 per source https://search.wv211.org/detail/?idServiceAtLocation=211charles-c315c0dd-562e-4918-a149-1b7801f1b3fb&idService=211charles-4641e1bf-8b4a-44b7-a19c-5c5bc19f63ec&idOrganization=211charles-359533b9-dbb7-43ba-bc45-2251dce0193a&idLocation=211charles-d37e5e0a-0f55-4574-99e0-a951b1e80f89&location=Morgantown++WV++United+States&distance=10&adv=-1"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8669812372",
+            "3047206861"
+          ],
+          "verifiedValue": "3045583317"
+        }
+      ],
+      "notes": "Current program page shows age 60+ for senior applicants; no income or asset test found on the cited official/current pages."
     }
   ]
 }

@@ -412,6 +412,23 @@ export async function collectGrowthWeek(options: CollectOptions): Promise<Growth
   };
 }
 
+/**
+ * Page intelligence for any date ranges (Cortex's daily rolling read), one
+ * token for all of them. The weekly path above stays week-validated; these
+ * windows are not weeks, so they are only checked for shape and order.
+ */
+export async function collectPageMetricsForRanges(
+  ranges: Array<{ start: string; end: string }>,
+): Promise<GrowthPageMetric[][]> {
+  for (const range of ranges) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(range.start) || !/^\d{4}-\d{2}-\d{2}$/.test(range.end) || range.start > range.end) {
+      throw new Error(`Invalid page-metrics range ${range.start}..${range.end}`);
+    }
+  }
+  const token = await getGoogleAccessToken();
+  return Promise.all(ranges.map(async (range) => (await pullGoogleGrowth(token, range.start, range.end)).pageMetrics));
+}
+
 /** Recollect page intelligence for an already-saved historical week. */
 export async function collectGrowthPageMetrics(
   weekStart: string,

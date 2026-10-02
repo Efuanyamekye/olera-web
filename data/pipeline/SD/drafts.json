@@ -191,7 +191,20 @@
       "sourceUrl": "https://dss.sd.gov/economicassistance/medical_eligibility.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8552566742"
+          ],
+          "to": "8005971603",
+          "source": "https://dss.sd.gov/medicaid/contact/PhoneList.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     },
     {
       "id": "hope-waiver",
@@ -573,7 +586,15 @@
           "Must reside in South Dakota",
           "QI program requires annual reapplication with priority given to previous recipients"
         ],
-        "povertyLevelReference": "100-135% FPL"
+        "povertyLevelReference": "100-135% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -738,7 +759,45 @@
       "sourceUrl": "https://dss.sd.gov/medicaid/Eligibility/default.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1350,
+          "to": 1781,
+          "source": "https://dss.sd.gov/formsandpubs/docs/MEDELGBLTY/MedicareSavingsProgramBrochureEntire.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 2400,
+          "source": "https://dss.sd.gov/formsandpubs/docs/MEDELGBLTY/MedicareSavingsProgramBrochureEntire.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 9430,
+          "to": 7140,
+          "source": "https://consumer.sd.gov/fastfacts/medicaid.aspx",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14130,
+          "to": 10750,
+          "source": "https://consumer.sd.gov/fastfacts/medicaid.aspx",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     },
     {
       "id": "csfp-senior-food-box",
@@ -900,7 +959,21 @@
       "phone": "(605) 853-3656",
       "sourceUrl": "https://doe.sd.gov/cans/csfp.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6058533656",
+            "211"
+          ],
+          "to": "6057733413",
+          "source": "https://doe.sd.gov/cans/csfp.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     },
     {
       "id": "lieap-energy-assistance",
@@ -1149,7 +1222,15 @@
           "Home must pass energy audit and be feasible for rehabilitation",
           "Proof of ownership required for owner-occupied homes (deed or property tax notice)"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 160,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1283,7 +1364,39 @@
       "phone": "(605) 348-1460",
       "sourceUrl": "https://dss.sd.gov/economicassistance/energy_weatherization_assistance.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2152,
+          "to": 261,
+          "source": "https://dss.sd.gov/economicassistance/energy_weatherization_assistance.aspx",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2920,
+          "to": 352,
+          "source": "https://dss.sd.gov/economicassistance/energy_weatherization_assistance.aspx",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "6053481460",
+            "6056987654"
+          ],
+          "to": "8002338503",
+          "source": "https://dss.sd.gov/formsandpubs/docs/GEN/guide_to_assistance.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     },
     {
       "id": "shiine-medicare-counseling",
@@ -1570,7 +1683,21 @@
       "sourceUrl": "https://dakotaathome.sd.gov/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-11"
+      "lastVerifiedDate": "2026-08-11",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6053333305",
+            "8336639673"
+          ],
+          "to": "6053946002",
+          "source": "https://dakotaathome.sd.gov/search/c0c77b9b-3b90-5b03-931d-3fb09ced81bb",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     },
     {
       "id": "hope-waiver-respite-care",
@@ -1924,7 +2051,18 @@
       "sourceUrl": "https://dlr.sd.gov/workforce_services/individuals/scsep/participants.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "income_2",
+          "from": 2054,
+          "to": 27050,
+          "source": "https://dlr.sd.gov/workforce_services/individuals/scsep/participants.aspx",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     },
     {
       "id": "legal-aid-seniors",
@@ -2201,7 +2339,21 @@
       "phone": "(605) 773-3656",
       "sourceUrl": "https://dhs.sd.gov/ltss/ombudsman-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6057733656",
+            "8556423055"
+          ],
+          "to": "8336639673",
+          "source": "https://dhs.sd.gov/ltss/ombudsman-program",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     },
     {
       "id": "senior-companions",
@@ -2331,7 +2483,18 @@
       "phone": "(888) 239-1210",
       "sourceUrl": "https://www.good-sam.com/senior-companions",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 21,
+          "to": 55,
+          "source": "https://www.good-sam.com/senior-companions/volunteers",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     },
     {
       "id": "60s-plus-dining",
@@ -2613,7 +2776,22 @@
       "phone": "(605) 332-2331",
       "sourceUrl": "https://www.fns.usda.gov/csfp",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6053322331",
+            "6052257410",
+            "6058864030"
+          ],
+          "to": "6057733413",
+          "source": "https://doe.sd.gov/cans/csfp.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:04.688Z"
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -2696,5 +2874,6 @@
       "PACE is available statewide and combines medical care with home services under one program"
     ],
     "resourcesVsBenefits": "South Dakota's programs split into two categories: benefits that require income/asset qualification (like Medicaid, SNAP, and weatherization assistance) and free resources available to all seniors (like SHIINE Medicare counseling, Senior Companions visits, and Legal Aid). Even if your loved one's income is too high for financial benefits, they can still access the free resources for Medicare help, companionship, and legal assistance."
-  }
+  },
+  "factcheckedAt": "2026-10-02T07:46:04.688Z"
 }

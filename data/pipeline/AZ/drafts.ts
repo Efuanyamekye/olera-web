@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AZ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.902Z
+ * Last updated: 2026-10-02T07:57:10.900Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -392,7 +392,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.azahcccs.gov/Members/GetCovered/Categories/nursinghome.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18554327587",
+            "211"
+          ],
+          "to": "8886216880",
+          "source": "https://www.azahcccs.gov/members/ALTCSlocations.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:36.731Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -625,7 +639,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.azahcccs.gov/PlansProviders/FeeForServiceHealthPlans/MedicareSavingsPrograms/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-08-04",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8554327587",
+            "1800",
+            "8777672382"
+          ],
+          "to": "8004324040",
+          "source": "https://www.azahcccs.gov/Members/GetCovered/Categories/medicare.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:36.731Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -698,7 +727,15 @@ export const drafts: PipelineStateDrafts = {
           "Social Security number or proof of application",
           "Work 80 hours/month if able-bodied (many exceptions apply)"
         ],
-        "povertyLevelReference": "100% FPL"
+        "povertyLevelReference": "100% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1109,7 +1146,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be customer of participating utility (SRP, TEP, UniSource, or other Arizona providers)",
           "Home must pass assessment and inspection for eligible improvements"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2025,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1245,7 +1290,31 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://azdes.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "income_2",
+          "from": 3407,
+          "to": 3607,
+          "source": "https://housing.az.gov/general-public/weatherization-assistance-program",
+          "severity": "medium",
+          "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 200% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:33:36.731Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "5204854985",
+            "5207242461",
+            "4808080429"
+          ],
+          "to": "6025344444",
+          "source": "https://housing.az.gov/general-public/weatherization-assistance-program",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:36.731Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",

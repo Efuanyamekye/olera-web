@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.904Z
+ * Last updated: 2026-10-02T07:57:10.903Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -387,7 +387,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(202) 724-5626",
       "sourceUrl": "https://dacl.dc.gov/service/safe-home",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 6046,
+          "to": 99600,
+          "source": "https://dacl.dc.gov/service/safe-home",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:34:41.977Z"
+        },
+        {
+          "field": "income_2",
+          "from": 6879,
+          "to": 113850,
+          "source": "https://dacl.dc.gov/service/safe-home",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:34:41.977Z"
+        }
+      ]
     },
     {
       "id": "dacl-benefits-assistance",
@@ -583,7 +603,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dacl.dc.gov/service/benefits-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 60,
+          "source": "https://dacl.dc.gov/sites/default/files/dc/sites/dacl/service_content/attachments/Case%20Management%20FAQ_2.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:34:41.977Z"
+        }
+      ]
     },
     {
       "id": "senior-centers",
@@ -719,7 +750,29 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(202) 724-7000",
       "sourceUrl": "https://dcoa.dc.gov/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 55,
+          "source": "https://dacl.dc.gov/service/senior-centers",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:34:41.977Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "2027247000"
+          ],
+          "to": "2027245626",
+          "source": "https://dacl.dc.gov/service/senior-centers",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:34:41.977Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-support",

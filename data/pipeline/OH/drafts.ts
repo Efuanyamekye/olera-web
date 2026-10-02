@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OH/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.479Z
+ * Last updated: 2026-10-02T07:57:10.926Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -76,7 +76,15 @@ export const drafts: PipelineStateDrafts = {
           "Social Security number",
           "Disability must meet Social Security Administration criteria (expected to last 12+ months)"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -208,7 +216,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.ohio.gov/families-and-individuals/support/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8003248680"
+          ],
+          "to": "18446406446",
+          "source": "https://dam.assets.ohio.gov/image/upload/medicaid.ohio.gov/Resources/Publications/Forms/ODM07216fillx.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:59.200Z"
+        }
+      ]
     },
     {
       "id": "passport-waiver",
@@ -577,7 +598,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.ohio.gov/PACE",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-07-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8446406446",
+            "5138627223",
+            "8888957223"
+          ],
+          "to": "18002664346",
+          "source": "https://dam.assets.ohio.gov/image/upload/aging.ohio.gov/rules/Chapter_173-50_COMMENT_PERIOD_2025-11-19.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:59.200Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -821,7 +857,39 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://insurance.ohio.gov/consumers/medicare/msp",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-07-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1350,
+          "to": 1816,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:43:59.200Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 2455,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:43:59.200Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18003248680",
+            "18446406446"
+          ],
+          "to": "8006861578",
+          "source": "https://insurance.ohio.gov/wps/wcm/connect/gov/7b4bb533-6c62-4576-9ae7-2185fbf2ff60/MedSavProg_2019.pdf?MOD=AJPERES&CONVERT_TO=url&CACHEID=ROOTWORKSPACE.Z18_M1HGGIK0N0JO00QO9DDDDM3000-7b4bb533-6c62-4576-9ae7-2185fbf2ff60-mS82ox.",
+          "severity": "medium",
+          "why": "source dated 2019",
+          "flaggedAt": "2026-10-02T07:43:59.200Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -1362,7 +1430,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://jfs.ohio.gov/public-assistance/energy-and-community-assistance",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-07-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8002820880",
+            "6142522799",
+            "7405948499",
+            "4197845393"
+          ],
+          "to": "8008481300",
+          "source": "https://www.occ.ohio.gov/factsheet/home-weatherization-assistance-program-hwap",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:59.200Z"
+        }
+      ]
     },
     {
       "id": "oshiip-medicare-counseling",
@@ -1827,7 +1911,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.ohio.gov/care-and-living/caregiver-support",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-07-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8662435678",
+            "211"
+          ],
+          "to": "8002664346",
+          "source": "https://www.ohio.gov/home/caregiver",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:59.200Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -2036,7 +2134,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.ohio.gov/care-and-living/staying-active/staying-active-catalog/senior-community-services-employment-program",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-13"
+      "lastVerifiedDate": "2026-07-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6144665500",
+            "9378400055",
+            "3308327220",
+            "7403535238",
+            "3307820978"
+          ],
+          "to": "3302534597",
+          "source": "https://vantageaging.org/about-us/our-locations/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:43:59.200Z"
+        }
+      ]
     },
     {
       "id": "legal-assistance-seniors",

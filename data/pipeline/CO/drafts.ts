@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CO/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.456Z
+ * Last updated: 2026-10-02T07:57:10.901Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -234,7 +234,39 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.healthfirstcolorado.com/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 9660,
+          "to": 11160,
+          "source": "https://hcpf.colorado.gov/medicare-savings-programs-msp",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:34:14.795Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14490,
+          "to": 17470,
+          "source": "https://hcpf.colorado.gov/medicare-savings-programs-msp",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:34:14.795Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8002213943",
+            "211"
+          ],
+          "to": "18007116994",
+          "source": "https://hcpf.colorado.gov/health-first-colorado-buy-in-programs",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:34:14.795Z"
+        }
+      ]
     },
     {
       "id": "hcbs-waivers",
@@ -670,7 +702,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified non-citizen",
           "Social Security number or proof of application"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -816,7 +856,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.colorado.gov/PEAK",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8558554626",
+            "8008164451",
+            "211",
+            "8883282656"
+          ],
+          "to": "8005365298",
+          "source": "https://www.fna.usda.gov/snap-directory-entry/colorado",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:34:14.795Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1312,7 +1368,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://hcpf.colorado.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "3038662800",
+          "source": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:34:14.795Z"
+        }
+      ]
     },
     {
       "id": "senior-community-service-employment-program",
@@ -1508,7 +1577,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dol.gov/agencies/eta/seniors",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8778725627",
+          "source": "https://cdhs.colorado.gov/benefits-assistance/employment-assistance/senior-community-service-employment-program",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:34:14.795Z"
+        }
+      ]
     },
     {
       "id": "legal-aid-seniors",
@@ -1634,7 +1716,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.coloradolegalservices.org",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "3038371313",
+          "source": "https://www.coloradolegalservices.org/get-help/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:34:14.795Z"
+        }
+      ]
     },
     {
       "id": "ltc-ombudsman",
@@ -1769,7 +1864,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(720) 925-8609",
       "sourceUrl": "https://www.coombudsman.org",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7209258609",
+            "3034411170",
+            "7196016282"
+          ],
+          "to": "3038623524",
+          "source": "https://cdhs.colorado.gov/about-cdhs/performance-outcomes-and-reviews/ombudsman-offices/long-term-care-ombudsman",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:34:14.795Z"
+        }
+      ]
     },
     {
       "id": "old-age-pension",

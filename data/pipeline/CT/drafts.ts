@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/CT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-03T11:25:55.868Z
+ * Last updated: 2026-10-02T07:57:10.902Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -304,7 +304,15 @@ export const drafts: PipelineStateDrafts = {
           "US citizen or legal resident (for Medicare Savings)",
           "Enrolled or eligible for Medicare Part A (for Medicare Savings)"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -524,7 +532,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified non-citizen",
           "Household includes those who buy and cook food together"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -658,7 +674,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://portal.ct.gov/dss/snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-08-31",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 4500,
+          "to": 4250,
+          "source": "https://portal.ct.gov/dss/knowledge-base/articles/health-programs-overview/snap",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:34:30.320Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4500,
+          "to": 4250,
+          "source": "https://portal.ct.gov/dss/knowledge-base/articles/health-programs-overview/snap",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:34:30.320Z"
+        }
+      ]
     },
     {
       "id": "energy-assistance-ceap",
@@ -863,7 +899,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(203) 756-8151",
       "sourceUrl": "https://portal.ct.gov/dss/economic-security/winter-heating-assistance/energy-assistance---winter-heating",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "2037568151",
+            "2032350278",
+            "8604960622",
+            "8607389138"
+          ],
+          "to": "211",
+          "source": "https://portal.ct.gov/deep/environmental-justice/11-available-programs-and-initiatives",
+          "severity": "medium",
+          "why": "not a 10-digit number",
+          "flaggedAt": "2026-10-02T07:34:30.320Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance",
@@ -1048,7 +1100,38 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": "https://portal.ct.gov/DEEP/Energy/Weatherization/Weatherization-in-Connecticut",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 3252,
+          "to": 4059,
+          "source": "https://www.cngcorp.com/smartenergy/rebatesandprograms/hes-ie",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:34:30.320Z"
+        },
+        {
+          "field": "income_2",
+          "from": 4253,
+          "to": 5310,
+          "source": "https://www.cngcorp.com/smartenergy/rebatesandprograms/hes-ie",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:34:30.320Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8608272655",
+          "source": "https://portal.ct.gov/deep/about/contact-us/general-contact-information",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:34:30.320Z"
+        }
+      ]
     },
     {
       "id": "choices-ship",
@@ -1477,7 +1560,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(203) 461-2154",
       "sourceUrl": "https://www.dol.gov/agencies/eta/seniors",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "2034612154",
+            "211"
+          ],
+          "to": "18004393307",
+          "source": "https://portal.ct.gov/ads/knowledge-base/articles/employment-services/for-job-seekers/jobs-for-older-adults",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:34:30.320Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",

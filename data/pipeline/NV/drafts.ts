@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NV/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.477Z
+ * Last updated: 2026-10-02T07:57:10.924Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -211,7 +211,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.adsd.nv.gov/programs/programs-for-seniors/home-and-community-based-services-waiver-for-the-frail-elderly/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7756874210",
+            "211",
+            "8005252395"
+          ],
+          "to": "8776383472",
+          "source": "https://www.medicaid.nv.gov/contactinfo",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "hcbs-waiver",
@@ -434,11 +449,11 @@ export const drafts: PipelineStateDrafts = {
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1235
+            "monthlyLimit": 1350
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1663
+            "monthlyLimit": 1824
           },
           {
             "householdSize": 1,
@@ -612,7 +627,47 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dss.nv.gov/programs/medical/general-medical-information/2-general-information-4mb/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-10-02",
+      "appliedCorrections": [
+        {
+          "field": "income_1",
+          "from": 1235,
+          "to": 1350,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "flaggedAt": "2026-10-02T07:43:19.448Z",
+          "appliedAt": "2026-10-02",
+          "appliedBy": "factcheck-judge"
+        },
+        {
+          "field": "income_2",
+          "from": 1663,
+          "to": 1824,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "flaggedAt": "2026-10-02T07:43:19.448Z",
+          "appliedAt": "2026-10-02",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 9090,
+          "to": 9950,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 13630,
+          "to": 14910,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -684,7 +739,15 @@ export const drafts: PipelineStateDrafts = {
           "Nevada resident",
           "Buy and prepare food with household members"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -827,7 +890,45 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dss.nv.gov/programs/snap/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2608,
+          "to": 1729,
+          "source": "https://www.dss.nv.gov/access-nv/eligibility-payments-manual/income-limit-charts/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3526,
+          "to": 2345,
+          "source": "https://www.dss.nv.gov/access-nv/eligibility-payments-manual/income-limit-charts/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 3200,
+          "to": 4250,
+          "source": "https://www.dss.nv.gov/programs/snap/facts-faq/snap-faqs-4/",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 3200,
+          "to": 4250,
+          "source": "https://www.dss.nv.gov/programs/snap/facts-faq/snap-faqs-4/",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "energy-assistance-eap-liheap",
@@ -885,7 +986,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be U.S. citizen or legal resident",
           "Must be responsible for home heating costs (either directly to utility company or through rent)"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -985,7 +1094,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": "https://www.dss.nv.gov/programs/energy/apply-for-assistance/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "7756840500"
+          ],
+          "to": "8009920900",
+          "source": "https://www.dws.nv.gov/uploadedFiles/dwssnvgov/content/Home/Features/Forms/2824-EL_Energy%20Assistance%20Application-Large%20Print.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1057,7 +1180,15 @@ export const drafts: PipelineStateDrafts = {
           "Home must be owner-occupied single-family home, mobile home, condo, or rental with landlord approval",
           "Home must pass Department of Energy cost-effectiveness audit"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1203,7 +1334,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://housing.nv.gov/programs/weatherization/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2660,
+          "to": 1550,
+          "source": "https://housing.nv.gov/Programs/Weatherization/",
+          "severity": "high",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 300% SSI 2023)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3607,
+          "to": 2098,
+          "source": "https://housing.nv.gov/Programs/Weatherization/",
+          "severity": "high",
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 120% FPL 2026",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1851,7 +2002,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://adsd.nv.gov/About/Reports/SrCommSvcEmplyProg/Home/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7753232243",
+            "211",
+            "7756874210"
+          ],
+          "to": "7026483356",
+          "source": "https://www.aarp.org/states/nevada/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "advocates-for-seniors",
@@ -1985,7 +2151,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://nvapros.com/our-services/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7756874210",
+            "211"
+          ],
+          "to": "7024863545",
+          "source": "https://www.pebp.nv.gov/resources/community-resources/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2172,7 +2352,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be enrolled in Medicare Part D",
           "Must apply for Extra Help if eligible"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 20,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2284,7 +2472,27 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 307-4444",
       "sourceUrl": "https://adsd.nv.gov/programs/seniors/seniorrx/srrxprog/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2763,
+          "to": 27746,
+          "source": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Programs/Seniors/SeniorRx/FAQ%20-%20Members.pdf",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3683,
+          "to": 37222,
+          "source": "https://adsd.nv.gov/uploadedFiles/adsdnvgov/content/Programs/Seniors/SeniorRx/FAQ%20-%20Members.pdf",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "hcbw-fe-waiver",
@@ -2471,7 +2679,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://adsd.nv.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-22"
+      "lastVerifiedDate": "2026-08-22",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7756874210",
+            "211"
+          ],
+          "to": "8663036323",
+          "source": "https://adsd.nv.gov/Programs/Seniors/HCBS_(FE)/HCBS_(FE)/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:43:19.448Z"
+        }
+      ]
     },
     {
       "id": "personal-care-services-program",

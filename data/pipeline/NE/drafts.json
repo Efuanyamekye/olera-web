@@ -613,7 +613,20 @@
       "sourceUrl": "https://dhhs.ne.gov/Pages/Medicaid-Customer-Contacts.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8003834278"
+          ],
+          "to": "8556327633",
+          "source": "https://dhhs.ne.gov/pages/accessnebraska.aspx?id=2636",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -687,7 +700,15 @@
           "Household includes those who buy and prepare food together",
           "All income sources count (Social Security, pensions, veterans benefits)"
         ],
-        "povertyLevelReference": "165% FPL"
+        "povertyLevelReference": "165% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 160,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -882,7 +903,15 @@
           "Everyone living at the address counts as household members",
           "Priority given to households with members age 60+, under 6, disabled, or with medical conditions aggravated by heat or cold"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1083,7 +1112,15 @@
           "Renters need written landlord permission",
           "Property must be owner-occupied or renter-occupied single-family, multi-family, mobile home, or frame home"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2025,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1221,7 +1258,40 @@
       "phone": "(402) 444-6666",
       "sourceUrl": "https://dee.nebraska.gov/sites/default/files/publications/22-044-Final_WX_Full_Policies_and_Procedures_Manual.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2672,
+          "to": 1958,
+          "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
+          "severity": "high",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 300% SSI 2023)",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3625,
+          "to": 2645,
+          "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
+          "severity": "high",
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 150% FPL 2026",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "4024446666",
+            "4023428232",
+            "211"
+          ],
+          "to": "8772532603",
+          "source": "https://dwee.nebraska.gov/aid/nebraska-weatherization-assistance-program",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1480,7 +1550,21 @@
       "phone": "(402) 471-4619",
       "sourceUrl": "https://dhhs.ne.gov/Medicaid%20SUA/SUA-21-PI-02%20Home%20Delivered%20Meals.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4024714619",
+            "18006771116"
+          ],
+          "to": "4022231376",
+          "source": "https://dhhs.ne.gov/pages/aging.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        }
+      ]
     },
     {
       "id": "lifespan-respite-services",
@@ -1833,7 +1917,20 @@
       "phone": "2-1-1",
       "sourceUrl": "https://www.nationalable.org/wp-content/uploads/2020/02/SCSEP_NebraskaHandbook_013120.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "5314278229",
+          "source": "https://d2leuf3vilid4d.cloudfront.net/-/media/Communities/olderworkers/Files/2026/SCSEP-STATE-AND-TERRITORY-GRANTEES-3,-d-,25,-d-,2026.ashx?rev=6935c1d2026b44698630823ff64541b2&hash=51E4ACB19D27D1102E3B6A7A6BEDB611",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        }
+      ]
     },
     {
       "id": "legal-services-seniors-aaa",
@@ -2472,7 +2569,21 @@
       "phone": "(402) 471-4270",
       "sourceUrl": "https://dhhs.ne.gov/pages/aging.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4024714270",
+            "211"
+          ],
+          "to": "4024712307",
+          "source": "https://dhhs.ne.gov/pages/aging.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        }
+      ]
     },
     {
       "id": "aging-disability-resource-center",
@@ -2778,7 +2889,27 @@
       "sourceUrl": "https://dhhs.ne.gov/Pages/Aged-Blind-or-Disabled.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-31"
+      "lastVerifiedDate": "2026-08-31",
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 2000,
+          "to": 4000,
+          "source": "https://dhhs.ne.gov/Guidance%20Docs/Title%20469%20-%20Assistance%20to%20the%20Aged,%20Blind,%20Disabled%20Program.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 3000,
+          "to": 6000,
+          "source": "https://dhhs.ne.gov/Guidance%20Docs/Title%20469%20-%20Assistance%20to%20the%20Aged,%20Blind,%20Disabled%20Program.pdf",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        }
+      ]
     },
     {
       "id": "ssad-aged-disabled-services",
@@ -2944,7 +3075,20 @@
       "sourceUrl": "https://dhhs.ne.gov/Pages/Social-Services-Aged-and-Disabled-Adults.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "4024713121",
+          "source": "https://dhhs.ne.gov/Pages/Social-Services-Aged-and-Disabled-Adults.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:41:52.600Z"
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -3028,5 +3172,6 @@
       "Most benefit programs have income limits, but resources like SHIP counseling and legal services are free to all seniors 60+"
     ],
     "resourcesVsBenefits": "Nebraska's programs fall into two categories: benefits that require qualification (like SNAP food assistance or Medicaid home care waivers based on income and medical need) and free resources available to all seniors regardless of income (like Nebraska SHIP Medicare counseling, Legal Services for Seniors, and Long-Term Care Ombudsman advocacy). Start with free resources to get expert guidance, then apply for qualified benefits your loved one may be eligible for."
-  }
+  },
+  "factcheckedAt": "2026-10-02T07:41:52.600Z"
 }

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.467Z
+ * Last updated: 2026-10-02T07:57:10.913Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -62,7 +62,15 @@ export const drafts: PipelineStateDrafts = {
           "Entitled to Medicare Part A or eligible for Part A",
           "Meet MassHealth immigration criteria"
         ],
-        "povertyLevelReference": "225% FPL"
+        "povertyLevelReference": "225% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 250,
+          "year": 2023,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -380,7 +388,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mass.gov/info-details/frail-elder-waiver-information-for-applicants-and-participants",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 60,
+          "source": "https://www.mass.gov/info-details/frail-elder-waiver-information-for-applicants-and-participants",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 154140,
+          "to": 162660,
+          "source": "https://www.mass.gov/doc/frail-elder-waiver-fact-sheet-0/download",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     },
     {
       "id": "pace-elder-care",
@@ -593,7 +621,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mass.gov/program-of-all-inclusive-care-for-the-elderly-pace",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8778379009"
+          ],
+          "to": "8888850484",
+          "source": "https://www.mass.gov/doc/pace-brochure-english/download",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -670,7 +711,15 @@ export const drafts: PipelineStateDrafts = {
           "Social Security number or proof of application",
           "For simplified application (EDSAP): no earned income from wages or self-employment"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -988,7 +1037,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://www.mass.gov/info-details/weatherization-assistance-program-wap",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6173576000",
+            "9784590551"
+          ],
+          "to": "6175731100",
+          "source": "https://www.mass.gov/info-details/weatherization-assistance-program-wap",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     },
     {
       "id": "shine-health-insurance-counseling",
@@ -1291,7 +1354,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 985-6000",
       "sourceUrl": "https://www.massmealsonwheels.org",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8009856000"
+          ],
+          "to": "8002434636",
+          "source": "https://www.umass.edu/agriculture-food-environment/nutrition/publications-resources/food-access-resources",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     },
     {
       "id": "alzheimers-respite-care",
@@ -1633,7 +1709,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.dol.gov/agencies/eta/seniors",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5088602241",
+            "211"
+          ],
+          "to": "6175424180",
+          "source": "https://www.mass.gov/doc/operation-able-2024-2028-wioa-public-listening-session/download",
+          "severity": "medium",
+          "why": "source dated 2024",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     },
     {
       "id": "senior-legal-helpline",
@@ -2113,7 +2203,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.prescriptionadvantagema.org",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1761,
+          "to": 35910,
+          "source": "https://www.mass.gov/doc/prescription-advantage-rate-schedule-guide-for-members-eligible-for-medicare-1/download",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2379,
+          "to": 48690,
+          "source": "https://www.mass.gov/doc/prescription-advantage-rate-schedule-guide-for-members-eligible-for-medicare-1/download",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     },
     {
       "id": "home-modification-loan",
@@ -2333,7 +2443,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(617) 727-7001",
       "sourceUrl": "https://www.mass.gov/home-modification-loan-program-hmlp",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6177277001",
+            "211"
+          ],
+          "to": "18665005599",
+          "source": "https://www.mass.gov/home-modification-loan-program-hmlp",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     },
     {
       "id": "home-care-program",
@@ -2382,7 +2506,15 @@ export const drafts: PipelineStateDrafts = {
           "Living at home (not in nursing home or assisted living)",
           "MassHealth enrollment strongly recommended for financial eligibility"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2025,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2719,7 +2851,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mass.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6177277750",
+            "211"
+          ],
+          "to": "8002434636",
+          "source": "https://www.mass.gov/doc/summary-document-state-programs-and-services-for-alzheimers-and-dementia/download",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     },
     {
       "id": "senior-care-options",
@@ -2926,7 +3072,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(800) 841-2900",
       "sourceUrl": "https://www.mass.gov/senior-care-options",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8008412900",
+            "8006334227",
+            "8007721213"
+          ],
+          "to": "8885375816",
+          "source": "https://www.mass.gov/info-details/senior-care-options-plans",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:36.005Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

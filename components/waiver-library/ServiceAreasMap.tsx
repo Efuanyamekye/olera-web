@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+const MAPTILER_KEY = process.env.NEXT_PUBLIC_MAPTILER_KEY;
+
 // City coordinates [latitude, longitude] — used as fallback when mapPins aren't provided
 const CITY_COORDS: Record<string, [number, number]> = {
   Houston: [29.7604, -95.3698],
@@ -87,11 +89,17 @@ export function ServiceAreasMap({ stateId, areas, mapPins, programName, noWrappe
     // Zoom controls — top right
     L.control.zoom({ position: "topright" }).addTo(map);
 
-    // CartoDB Positron — clean light tiles
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, &copy; <a href="https://carto.com/">CARTO</a>',
+    // MapTiler Positron when key is available, CartoDB fallback otherwise
+    const tileUrl = MAPTILER_KEY
+      ? `https://api.maptiler.com/maps/positron/256/{z}/{x}/{y}@2x.png?key=${MAPTILER_KEY}`
+      : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png";
+    const tileAttribution = MAPTILER_KEY
+      ? '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, &copy; <a href="https://www.maptiler.com/">MapTiler</a>'
+      : '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>, &copy; <a href="https://carto.com/">CARTO</a>';
+    L.tileLayer(tileUrl, {
+      attribution: tileAttribution,
       maxZoom: 18,
-      subdomains: "abcd",
+      ...(MAPTILER_KEY ? {} : { subdomains: "abcd" }),
     }).addTo(map);
 
     // Highlight the state boundary with Olera teal

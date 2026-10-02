@@ -328,7 +328,20 @@
       "phone": null,
       "sourceUrl": "https://www.ndsu.edu/agriculture/extension/programs/aging-community-program",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "7012315948",
+          "source": "https://www.ndsu.edu/agriculture/extension/impact-stories/ndsu-extensions-aging-community-project-brings-care-rural-communities",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:41:13.679Z"
+        }
+      ]
     },
     {
       "id": "assistive-senior-safety-program",
@@ -613,5 +626,6 @@
       "Two programs require eligibility screening while one is available to all North Dakota seniors"
     ],
     "resourcesVsBenefits": "North Dakota offers both types of help: qualification-based benefits like BCAP that require income and asset screening to help pay for care, and free resources like the Assistive Senior Safety Program that any North Dakota senior can access regardless of income. The AIC Project falls in between, it's free but specifically serves rural communities where volunteer networks are available."
-  }
+  },
+  "factcheckedAt": "2026-10-02T07:41:13.679Z"
 }
