@@ -7,6 +7,24 @@
 
 ## Current Focus
 
+### 2026-10-02 (night) — Cortex daily report: one message, Slack + organic, inbox on a web page (`graceful-franklin`)
+
+**In production:**
+- Inbox pass runs once a day, 01:00 UTC (8 AM Bangkok). Telegram gets a one-screen synopsis; the full digest is the day's "Inbox report" in `cortex_handoffs` (#2322 via #2325).
+- Approving an email sends from support@ only for a thread matched to an Olera provider account. Everything else, families and job seekers included, stays a Gmail draft. The classifier's "provider" label covers job seekers, a dental office and senior-living sales mail, so it isn't enough to send on.
+- Slack replies owed (channels + TJ's DMs) and a daily organic read in the same report (#2331 via #2332). Migrations 268-270 applied. Slack user token connected 2 Oct (`cortex_slack_user_tokens`, founder-only connect). Slack replies and the organic action need their number named; "approve all" leaves them out.
+- First run with Slack + organic: 3 Oct, 8 AM Bangkok.
+
+**Open:** PR #2338 `/admin/inbox/today`: work the numbered items in the browser (approve, edit, check, skip), providers drafted first, cap 6. Built, Vercel to confirm; not merged.
+
+**Sent tonight:** Robbie (ZIP list received; launch date + tracking "by next week"; owed). Heather Buck, Concierge Care, 14 FL locations (Fort Myers entry duplicates Daytona; asked for correct details; offered a call).
+
+**Next Up:**
+1. **Heather's listings.** We told her we'd set up the new ones and connect the existing ones, then send links. Actually do it: compare her 14 against `olera-providers`, create the missing, link the existing, send her the links. Multi-location under one login is a real product gap.
+2. **Robbie:** launch date + referral tracking by next week; needs a new North Texas Meta form from his 243 ZIPs (spend = TJ's call).
+3. Merge/promote #2338 and try one item from the page.
+4. Read the first Slack + organic report (3 Oct) for noise and false "owed" items before trusting it.
+
 ### 2026-10-02 — Benefits: the AI caseworker is the direction; accuracy + data cleanup in PROD; founding doc with 6 phases (`jolly-ramanujan`, #2307 #2324 → promotions #2321 #2327)
 
 **THE DECISION.** Olera builds an AI benefits *caseworker*, not a better finder. Settled with TJ: the finder becomes a conversation (rules stay in code; AI asks and explains); we go as far into "doing" (pre-filled applications, callbacks, appeals) as we thoughtfully can, with family approval on every send and a person reachable; dementia caregivers first. Measure: dollars secured per family and days to first benefit, not completions.
