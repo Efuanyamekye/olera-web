@@ -11,7 +11,7 @@ import { isRealObjection, parseObjections, renderCheck } from "../lib/war-room/d
 import { callbackLine, dedupeByCaller } from "../lib/war-room/voicemail-triage.server";
 import { createClient } from "@supabase/supabase-js";
 import {
-  assignNumbers, buildInboxProposals, carryTarget, cleanSubject, stripDraftHeaders, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
+  assignNumbers, inboxReportBody, renderSynopsis, whoFor, buildInboxProposals, carryTarget, cleanSubject, stripDraftHeaders, clip, currentText, draftAwaitingSend, isSmsBookkeeping, parseInboxCommand, parseRewrites, renderDigest, waitingOnUs, type StoredItem,
 } from "../lib/war-room/inbox-operator.server";
 
 // --- Draft headers: the model echoed its prompt's SUBJECT line into Blue Water's body on 1 Oct.
@@ -37,6 +37,37 @@ assert.equal(stripDraftHeaders("Hi Elle,\nRe: your question, we don't have it.")
   assert.deepEqual(assignNumbers([item(), item()], []), [1, 2], "a quiet day starts at 1");
   assert.deepEqual(assignNumbers([item(2), item(2)], [1, 2]), [2, 3], "a duplicated carry gets a fresh number");
 }
+
+// --- The phone synopsis (TJ, 2 Oct: the full digest is overwhelming on a phone).
+{
+  const at = new Date("2026-10-02T01:00:00Z");
+  const mk = (number: number, kind: StoredItem["kind"], category: string, summary: string, target: Record<string, unknown> = {}, body: string | null = null) =>
+    ({ id: `i${number}`, pass_id: "p", number, kind, category, summary, target, body, status: "proposed", created_at: at.toISOString() }) as StoredItem;
+  const pass = { passId: "p", waitingElsewhere: 3, costUsd: 0, draftsInGmail: 1, items: [
+    mk(15, "triage_batch", "email:noise", "Archive 3 noise emails (...)", { count: 3 }),
+    mk(16, "triage_batch", "email:voicemail_aged", "Archive ...", { threadIds: ["a", "b"] }, "Chris Lane, (360) 547-9884: long list"),
+    mk(9, "sms_draft", "sms:reply:other", 'Text a family ending 1234 (waiting 14h). They said: "help"', { last10: "1" }, "Long text body"),
+    mk(11, "email_draft", "email:draft:provider", 'Email Blue Water Homecare re "Request for Information". Executive Director asks', { threadId: "t", carried: true }, "Thank you for the detailed questions..."),
+    mk(14, "question", "email:voicemail_callbacks", "10 voicemails are worth a call back:", { threadIds: Array.from({ length: 10 }) }, "Jessica..."),
+    mk(20, "question", "sms:crisis", 'A family texted something that reads as a crisis: "I can\'t do this". Answer it yourself in the inbox.', { last10: "2" }),
+  ] };
+  const synopsis = renderSynopsis(pass, at);
+  assert.match(synopsis, /^\*Inbox, Fri 2 Oct:\* 4 to approve\./);
+  assert.match(synopsis, /Clear: 15 archive 3 noise emails · 16 archive 2 old voicemails/);
+  assert.match(synopsis, /Texts: 9 a family ending 1234/);
+  assert.match(synopsis, /Emails: 11 Blue Water Homecare \(same draft\)/);
+  assert.match(synopsis, /Calls: 10 voicemails worth a call back\./);
+  assert.match(synopsis, /20\. A family texted something that reads as a crisis/, "a crisis is never hidden behind the report");
+  assert.ok(!synopsis.includes("Thank you for the detailed") && !synopsis.includes("Chris Lane"), "no draft text or voicemail lists on the phone");
+  assert.match(synopsis, /"approve 15 16 9 11"/);
+  assert.equal(whoFor(pass.items[3]), "Blue Water Homecare");
+  const report = inboxReportBody(pass, at);
+  assert.equal(report.title, "Inbox report, 2 Oct 2026");
+  assert.ok(report.body.includes("Thank you for the detailed questions") && report.body.includes("Chris Lane"), "the report carries everything the phone leaves out");
+  assert.match(report.body, /scripts\/cortex-inbox\.ts approve/);
+  assert.equal(renderSynopsis({ passId: "p", items: [], waitingElsewhere: 0, costUsd: 0 }, at), "Inbox pass: both inboxes are clear.");
+}
+console.log("synopsis checks passed");
 
 // --- Commands.
 assert.deepEqual(parseInboxCommand("approve 1 2"), { verb: "approve", numbers: [1, 2], edit: null });

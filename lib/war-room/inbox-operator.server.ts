@@ -467,7 +467,8 @@ export async function buildInboxProposals(db: SupabaseClient): Promise<{ propose
 export async function runInboxPass(db: SupabaseClient, now = new Date()): Promise<InboxPass> {
   const { proposed, waitingElsewhere, costUsd, draftsInGmail } = await buildInboxProposals(db);
   const passId = now.toISOString().slice(0, 16);
-  const { data: recent } = await db.from("cortex_inbox_items").select("number").gte("created_at", new Date(now.getTime() - 24 * 3_600_000).toISOString());
+  // 36 hours, not 24: with one pass a day, yesterday's items sit right at a 24-hour edge.
+  const { data: recent } = await db.from("cortex_inbox_items").select("number").gte("created_at", new Date(now.getTime() - 36 * 3_600_000).toISOString());
   const numbers = assignNumbers(proposed, ((recent ?? []) as Array<{ number: number }>).map((row) => row.number));
   await db.from("cortex_inbox_items").update({ status: "expired", decided_at: now.toISOString() }).eq("status", "proposed");
   const rows = proposed.map((item, i) => {
@@ -487,7 +488,7 @@ export async function runInboxPass(db: SupabaseClient, now = new Date()): Promis
 
 /**
  * Numbers for this pass. A draft carried from the last pass keeps its number;
- * everything else takes the lowest number no item has had in the last 24
+ * everything else takes the lowest number no item has had in the last 36
  * hours. So "send 4" typed from last night's digest either reaches the same
  * thread or gets "not in the current list", never somebody else's draft.
  */
@@ -509,6 +510,88 @@ export function assignNumbers(proposed: ProposedItem[], usedRecently: number[]):
     kept.add(next);
     return next;
   });
+}
+
+/** "Email Blue Water Homecare re ..." -> "Blue Water Homecare". */
+export function whoFor(item: StoredItem): string {
+  return clip(item.summary.replace(/^(Email|Text)\s+/, "").split(/ re "| \(waiting|\. They said|: "/)[0], 42);
+}
+
+/** One short phrase for a triage batch: "archive 5 old voicemails". */
+function triagePhrase(item: StoredItem): string {
+  const ids = (key: string) => ((item.target[key] as unknown[] | undefined) ?? []).length;
+  switch (item.category) {
+    case "email:noise": return `archive ${Number(item.target.count ?? 0)} noise emails`;
+    case "email:voicemail_aged": return `archive ${ids("threadIds")} old voicemails`;
+    case "email:voicemail_recent": return `archive ${ids("threadIds")} stale voicemails`;
+    case "sms:keywords": return `close ${ids("phones")} text threads`;
+    default: return clip(item.summary, 60);
+  }
+}
+
+/**
+ * The Telegram message: what is waiting, one line per draft, no draft text.
+ * The full digest is the day's inbox report (a /handoff on his computer).
+ * TJ, 2026-10-02: "a daily synopsis of what I need to approve in a very
+ * concise way ... everything is captured in the handoff report and then I'll
+ * execute it from my computer." A crisis or STUCK text stays in full: it must
+ * never wait for the computer.
+ */
+export function renderSynopsis(pass: InboxPass, now = new Date()): string {
+  if (!pass.items.length) return renderDigest(pass);
+  const day = now.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: "UTC" });
+  const triage = pass.items.filter((item) => item.kind === "triage_batch");
+  const texts = pass.items.filter((item) => item.kind === "sms_draft");
+  const emails = pass.items.filter((item) => item.kind === "email_draft");
+  const calls = pass.items.find((item) => item.category === "email:voicemail_callbacks");
+  const questions = pass.items.filter((item) => item.kind === "question" && item.category !== "email:voicemail_callbacks");
+  const actionable = pass.items.filter((item) => item.kind !== "question");
+  const line = (items: StoredItem[]) => items.map((item) => `${item.number} ${whoFor(item)}${item.target?.carried ? " (same draft)" : ""}`).join(" · ");
+  const parts = [
+    `*Inbox, ${day}:* ${actionable.length} to approve.`,
+    triage.length ? `Clear: ${triage.map((item) => `${item.number} ${triagePhrase(item)}`).join(" · ")}` : "",
+    texts.length ? `Texts: ${line(texts)}` : "",
+    emails.length ? `Emails: ${line(emails)}` : "",
+    calls ? `Calls: ${((calls.target.threadIds as unknown[] | undefined) ?? []).length} voicemails worth a call back.` : "",
+    ...questions.map((item) => `${item.number}. ${item.summary}`),
+  ].filter(Boolean);
+  const more = [
+    pass.waitingElsewhere ? `${pass.waitingElsewhere} more need a person in the inbox.` : "",
+    pass.draftsInGmail ? `${pass.draftsInGmail} approved ${pass.draftsInGmail === 1 ? "draft is" : "drafts are"} in Gmail waiting for you to send.` : "",
+  ].filter(Boolean).join(" ");
+  const how = actionable.length ? `Drafts and lists are in today's inbox report: /handoff on your computer. Or reply here, "approve ${actionable.map((item) => item.number).join(" ")}".` : "";
+  return [parts.join("\n"), [how, more].filter(Boolean).join(" ")].filter(Boolean).join("\n\n");
+}
+
+/** The full digest as a handoff: what each item is, and how a Claude Code session carries out his choices. */
+export function inboxReportBody(pass: InboxPass, now = new Date()): { title: string; body: string } {
+  const title = `Inbox report, ${now.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" })}`;
+  const run = "npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-inbox.ts";
+  const body = `# ${title}
+
+Cortex's daily inbox pass (${pass.passId} UTC). Telegram got a one-screen synopsis; this is everything behind it. Nothing has been sent.
+
+## The items
+
+${renderDigest(pass).replace(/^\*(.+)\*$/gm, "### $1")}
+
+## How to act (for the Claude Code session)
+
+Show TJ the items, then do only what he chooses, one command per choice, from an olera-web checkout:
+
+\`\`\`
+${run} list                 # what is still open
+${run} approve 2 5 7        # same as "approve 2 5 7" on Telegram
+${run} "send 5: <his text>" # send his edited version
+${run} check 5              # fact-check a draft, sends nothing
+${run} skip 4
+\`\`\`
+
+Texts go to families on approval (quiet hours respected); emails become Gmail drafts he sends himself. Items stay open until the next pass (${nextPassIn(now)}), then they expire and come back if still waiting.
+
+When he is done, close this report with what was approved: \`npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-handoffs.ts close <id> done "approved 2 5 7"\`.
+`;
+  return { title, body };
 }
 
 /** The Telegram message: numbered, short, one line per item, drafts quoted. */
@@ -814,10 +897,10 @@ export async function inferInboxCommand(text: string, open: StoredItem[], lastCo
   }
 }
 
-/** Hours until the next cortex-inbox-pass run (vercel.json: 01:00 and 13:00 UTC). */
-function nextPassIn(now = new Date()): string {
+/** Hours until the next cortex-inbox-pass run (vercel.json: daily at 01:00 UTC, 08:00 in Bangkok). */
+export function nextPassIn(now = new Date()): string {
   const h = now.getUTCHours() + now.getUTCMinutes() / 60;
-  const next = [1, 13, 25].find((x) => x > h) as number;
+  const next = [1, 25].find((x) => x > h) as number;
   const hours = Math.max(1, Math.round(next - h));
   return `in about ${hours} hour${hours === 1 ? "" : "s"}`;
 }
