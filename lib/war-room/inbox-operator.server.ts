@@ -7,6 +7,9 @@ import { archiveSupportThreads, saveSupportDraft, sendSupportReply } from "@/lib
 import { checkDraft, renderCheck } from "@/lib/war-room/draft-check.server";
 import { HUMAN_VOICE_RULES } from "@/lib/family-answers/human-voice";
 import { AGED_OUT_DAYS, callbackLine, loadWaitingVoicemails, sortVoicemails, STALE_CALLBACK_DAYS } from "@/lib/war-room/voicemail-triage.server";
+import { saveHandoff } from "@/lib/war-room/handoff.server";
+import { buildOrganicRead, rememberOrganicRead, type OrganicRead } from "@/lib/war-room/organic-read.server";
+import { findSlackOwed, postSlackReplyAsTj, type SlackOwed } from "@/lib/war-room/slack-owed.server";
 
 /**
  * Cortex as inbox operator: support@ email and the SMS inbox.
@@ -28,7 +31,7 @@ import { AGED_OUT_DAYS, callbackLine, loadWaitingVoicemails, sortVoicemails, STA
  * message in it came from them, after our last reply.
  */
 
-export type InboxItemKind = "triage_batch" | "sms_draft" | "email_draft" | "question";
+export type InboxItemKind = "triage_batch" | "sms_draft" | "email_draft" | "question" | "slack_draft" | "proposal";
 export type ProposedItem = {
   kind: InboxItemKind;
   category: string;
@@ -443,11 +446,51 @@ async function voicemailProposals(db: SupabaseClient): Promise<{ items: Proposed
 // ---------------------------------------------------------------------------
 // The pass
 
-export type InboxPass = { passId: string; items: StoredItem[]; waitingElsewhere: number; costUsd: number; draftsInGmail?: number };
+/**
+ * The day's Slack and organic reads ride the same pass (TJ, 2026-10-02): what
+ * he owes on Slack, drafted, and a daily organic read with one action. Each is
+ * optional; a failure in either is reported, never fatal to the inbox.
+ */
+export type InboxExtras = { slackCoverage?: string | null; organic?: Pick<OrganicRead, "synopsis" | "section"> | null; notes?: string[] };
+export type InboxPass = { passId: string; items: StoredItem[]; waitingElsewhere: number; costUsd: number; draftsInGmail?: number; extras?: InboxExtras };
 
 /** What this pass would propose, in digest order, without storing anything. */
-export async function buildInboxProposals(db: SupabaseClient): Promise<{ proposed: ProposedItem[]; waitingElsewhere: number; costUsd: number; draftsInGmail: number }> {
-  const [sms, email, voicemail] = await Promise.all([smsProposals(db), emailProposals(db), voicemailProposals(db)]);
+const SLACK_KIND_LABEL: Record<string, string> = { mention: "asked you", unanswered_thread: "your thread, no reply", promise: "you promised" };
+
+/** Replies he owes on Slack, as numbered drafts. */
+export function slackProposals(owed: SlackOwed): ProposedItem[] {
+  return owed.items.map((item) => ({
+    kind: "slack_draft" as const,
+    category: `slack:${item.kind}`,
+    target: { channelId: item.channelId, ts: item.ts, threadTs: item.threadTs ?? item.ts, permalink: item.permalink },
+    summary: `${item.author ?? "unattributed"} in ${item.channelLabel} (${SLACK_KIND_LABEL[item.kind] ?? item.kind}, ${item.ageDays}d): "${clip(item.text, 140)}"`,
+    body: item.draftReply,
+  }));
+}
+
+/** The organic read's one action, as an item he can approve into a handoff. */
+export function organicProposal(read: OrganicRead): ProposedItem | null {
+  if (!read.action) return null;
+  return {
+    kind: "proposal",
+    category: "organic:action",
+    target: { metric: read.action.metric, brief: read.action.brief },
+    summary: `${read.action.title}. ${read.action.why}`,
+  };
+}
+
+export async function buildInboxProposals(db: SupabaseClient, now = new Date()): Promise<{ proposed: ProposedItem[]; waitingElsewhere: number; costUsd: number; draftsInGmail: number; extras: InboxExtras; organicRead: OrganicRead | null }> {
+  const notes: string[] = [];
+  const failed = (what: string) => (error: unknown) => {
+    notes.push(`${what} failed: ${error instanceof Error ? error.message : String(error)}`);
+    return null;
+  };
+  const [sms, email, voicemail, slack, organic] = await Promise.all([
+    smsProposals(db), emailProposals(db), voicemailProposals(db),
+    findSlackOwed(db, now).catch(failed("Slack scan")),
+    buildOrganicRead(db, now).catch(failed("Organic read")),
+  ]);
+  const proposal = organic ? organicProposal(organic) : null;
   // Order: clear first, then ready to send, then the one question.
   const questions = sms.items.filter((item) => item.kind === "question").slice(0, 1);
   const proposed: ProposedItem[] = [
@@ -456,21 +499,26 @@ export async function buildInboxProposals(db: SupabaseClient): Promise<{ propose
     ...sms.items.filter((item) => item.kind === "triage_batch"),
     ...sms.items.filter((item) => item.kind === "sms_draft"),
     ...email.items.filter((item) => item.kind === "email_draft"),
+    ...(slack ? slackProposals(slack) : []),
     ...voicemail.items.filter((item) => item.kind === "question"),
+    ...(proposal ? [proposal] : []),
     ...questions,
   ];
   const extraQuestions = sms.items.filter((item) => item.kind === "question").length - questions.length;
   return {
     proposed,
     waitingElsewhere: sms.waitingElsewhere + email.waitingElsewhere + Math.max(0, extraQuestions),
-    costUsd: email.costUsd + voicemail.costUsd,
+    costUsd: email.costUsd + voicemail.costUsd + (slack?.costUsd ?? 0) + (organic?.costUsd ?? 0),
     draftsInGmail: email.draftsInGmail,
+    extras: { slackCoverage: slack?.coverage ?? null, organic: organic ? { synopsis: organic.synopsis, section: organic.section } : null, notes },
+    organicRead: organic,
   };
 }
 
 /** Build the pass, store its items (older proposals expire), and return them. */
 export async function runInboxPass(db: SupabaseClient, now = new Date()): Promise<InboxPass> {
-  const { proposed, waitingElsewhere, costUsd, draftsInGmail } = await buildInboxProposals(db);
+  const { proposed: built, waitingElsewhere, costUsd, draftsInGmail, extras, organicRead } = await buildInboxProposals(db, now);
+  let proposed = built;
   const passId = now.toISOString().slice(0, 16);
   // 36 hours, not 24: with one pass a day, yesterday's items sit right at a 24-hour edge.
   const { data: recent } = await db.from("cortex_inbox_items").select("number").gte("created_at", new Date(now.getTime() - 36 * 3_600_000).toISOString());
@@ -480,14 +528,24 @@ export async function runInboxPass(db: SupabaseClient, now = new Date()): Promis
     const { carriedNumber: _carried, ...target } = item.target;
     return { ...item, target, body: item.body ?? null, pass_id: passId, number: numbers[i] };
   });
-  const { data, error } = rows.length ? await db.from("cortex_inbox_items").insert(rows).select("*") : { data: [], error: null };
+  let { data, error } = rows.length ? await db.from("cortex_inbox_items").insert(rows).select("*") : { data: [], error: null };
+  // Before migration 270 the table refuses the two new kinds. Store the inbox
+  // without them rather than lose the whole day's pass, and say so.
+  if (error && /cortex_inbox_items_kind_check/.test(error.message)) {
+    const keep = rows.filter((row) => row.kind !== "slack_draft" && row.kind !== "proposal");
+    proposed = proposed.filter((item) => item.kind !== "slack_draft" && item.kind !== "proposal");
+    (extras.notes ??= []).push(`${rows.length - keep.length} Slack and organic items not stored: run migration 270.`);
+    ({ data, error } = keep.length ? await db.from("cortex_inbox_items").insert(keep).select("*") : { data: [], error: null });
+  }
   if (error) throw new Error(`inbox items not stored: ${error.message}`);
+  if (organicRead) await rememberOrganicRead(db, organicRead, now).catch((e: unknown) => (extras.notes ??= []).push(`Organic memory not saved: ${e instanceof Error ? e.message : String(e)}`));
   return {
     passId,
     items: ((data ?? []) as StoredItem[]).sort((a, b) => a.number - b.number),
     waitingElsewhere,
     costUsd,
     draftsInGmail,
+    extras,
   };
 }
 
@@ -562,6 +620,8 @@ export function renderSynopsis(pass: InboxPass, now = new Date()): string {
   const triage = pass.items.filter((item) => item.kind === "triage_batch");
   const texts = pass.items.filter((item) => item.kind === "sms_draft");
   const emails = pass.items.filter((item) => item.kind === "email_draft");
+  const slack = pass.items.filter((item) => item.kind === "slack_draft");
+  const proposal = pass.items.find((item) => item.kind === "proposal");
   const calls = pass.items.find((item) => item.category === "email:voicemail_callbacks");
   const questions = pass.items.filter((item) => item.kind === "question" && item.category !== "email:voicemail_callbacks");
   const actionable = pass.items.filter((item) => item.kind !== "question");
@@ -572,6 +632,9 @@ export function renderSynopsis(pass: InboxPass, now = new Date()): string {
     texts.length ? `Texts: ${line(texts)}` : "",
     emails.length ? `Emails: ${line(emails)}` : "",
     calls ? `Calls: ${((calls.target.threadIds as unknown[] | undefined) ?? []).length} voicemails worth a call back.` : "",
+    slack.length ? `Slack: ${slack.map((item) => `${item.number} ${clip(item.summary.split(" (")[0], 34)}`).join(" · ")}` : "",
+    ...(pass.extras?.organic?.synopsis ?? []).slice(0, 3).map((line, i) => (i === 0 ? `Organic: ${line}` : line)),
+    proposal ? `Try: ${proposal.number} ${clip(proposal.summary.split(". ")[0], 70)}` : "",
     ...questions.map((item) => `${item.number}. ${item.summary}`),
   ].filter(Boolean);
   const more = [
@@ -602,9 +665,10 @@ Walk him through it, so he never has to remember a command:
 
 1. Open with one line: how many items, which are drafts, which are clear-outs.
 2. Clear-outs first, together: list them in a sentence and ask "approve all of these?"
-3. Then each draft, one at a time: show the full text and ask "approve, edit, check, or skip?" On "edit", write the change with him, then run \`check N: <new text>\` so the version he approves is the checked one. On "check", run it and show the objections. On "skip", run it.
-4. Last, the call-back list, if he wants it.
-5. End with the single line he sends Cortex on Telegram for everything he approved, e.g. \`approve 12 15 16\`. An edited draft is sent as is by approving its number, because "check N: <text>" already made it the version that goes.
+3. Then each draft, texts, emails and Slack replies, one at a time: show the full text (for Slack, the message he owes a reply to as well) and ask "approve, edit, check, or skip?" Check is for texts and emails, which go to families and providers; a Slack reply to the team skips it, and an edited Slack reply goes as \`send N: <text>\`. On "edit", write the change with him, then run \`check N: <new text>\` so the version he approves is the checked one. On "check", run it and show the objections. On "skip", run it.
+4. Then the organic read in a few sentences, and its one action: approving it turns it into a /handoff brief.
+5. Last, the call-back list, if he wants it.
+6. End with the single line he sends Cortex on Telegram for everything he approved, e.g. \`approve 12 15 16\`. An edited draft is sent as is by approving its number, because "check N: <text>" already made it the version that goes.
 
 Commands, from an olera-web checkout:
 
@@ -633,13 +697,18 @@ export function renderDigest(pass: InboxPass): string {
   const section = (title: string, kinds: InboxItemKind[], only: (item: StoredItem) => boolean = () => true) => {
     const rows = pass.items.filter((item) => kinds.includes(item.kind) && only(item));
     if (!rows.length) return "";
-    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? (sendsOnApproval(item) ? "\n(Provider account: sent from support@ when you approve.)" : "\n(Saved as a Gmail draft when you approve. You send it.)") : ""}`).join("\n\n")}`;
+    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? (sendsOnApproval(item) ? "\n(Provider account: sent from support@ when you approve.)" : "\n(Saved as a Gmail draft when you approve. You send it.)") : ""}${item.kind === "slack_draft" ? `\n(Posts in the thread as you when you approve.${item.target?.permalink ? ` ${String(item.target.permalink)}` : ""})` : ""}${item.kind === "proposal" ? "\n(Approving turns this into a /handoff brief. Nothing changes on the site by itself.)" : ""}`).join("\n\n")}`;
   };
   const parts = [
     section("Clear", ["triage_batch"]),
     section("Ready to send", ["sms_draft", "email_draft"]),
+    section("Slack: replies you owe", ["slack_draft"]),
+    pass.extras?.slackCoverage ? `_${pass.extras.slackCoverage}_` : "",
     section("Call back", ["question"], (item) => item.category === "email:voicemail_callbacks"),
+    pass.extras?.organic?.section ? `*Organic*\n${pass.extras.organic.section}` : "",
+    section("Organic: today's action", ["proposal"]),
     section("One question", ["question"], (item) => item.category !== "email:voicemail_callbacks"),
+    ...(pass.extras?.notes ?? []).map((note) => `_${note}_`),
   ].filter(Boolean);
   const numbers = pass.items.filter((item) => item.kind !== "question").map((item) => item.number);
   const how = numbers.length
@@ -749,6 +818,18 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
     }
     if (item.category === "email:voicemail_callbacks") {
       return finish("skipped", "those are for you to call; I'll keep listing them until they're 14 days old.");
+    }
+    if (item.kind === "slack_draft") {
+      const text = edit ?? currentText(item);
+      if (!text) return finish("failed", "no reply drafted; write one with send N: <text>.");
+      const posted = await postSlackReplyAsTj(db, { channelId: String(item.target.channelId), threadTs: String(item.target.threadTs ?? item.target.ts), text });
+      return posted.ok ? finish("done", `posted in the thread as you.${posted.permalink ? ` ${posted.permalink}` : ""}`) : finish("failed", `not posted: ${posted.error}`);
+    }
+    if (item.kind === "proposal") {
+      const brief = String(item.target.brief ?? "");
+      if (!brief) return finish("failed", "the proposal has no brief to hand off.");
+      const handoff = await saveHandoff(db, { body: brief, note: "organic proposal", chatId: process.env.TELEGRAM_CORTEX_CHAT_ID?.trim() ?? "" });
+      return finish("done", `handed off as "${handoff.title}" (id ${handoff.id.slice(0, 8)}). Run /handoff on your computer to build it.`);
     }
     if (item.category === "sms:keywords") {
       const phones = (item.target.phones as string[] | undefined) ?? [];
@@ -883,7 +964,7 @@ export async function rememberRewrites(db: SupabaseClient, reply: string): Promi
   const open = await openItems(db);
   let saved = 0;
   for (const rewrite of rewrites) {
-    const item = open.find((o) => o.number === rewrite.number && (o.kind === "sms_draft" || o.kind === "email_draft"));
+    const item = open.find((o) => o.number === rewrite.number && (o.kind === "sms_draft" || o.kind === "email_draft" || o.kind === "slack_draft"));
     if (!item) continue;
     await saveLatest(db, item, { text: rewrite.text, at: new Date().toISOString(), by: "cortex" });
     saved += 1;
