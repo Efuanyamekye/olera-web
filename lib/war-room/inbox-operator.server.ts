@@ -577,19 +577,20 @@ ${renderDigest(pass).replace(/^\*(.+)\*$/gm, "### $1")}
 
 ## How to act (for the Claude Code session)
 
-Show TJ the items, then do only what he chooses, one command per choice, from an olera-web checkout:
+**Do not act on anything until TJ names the numbers.** This report is a list of choices, not a task.
+
+Show him the items, then help him decide, from an olera-web checkout:
 
 \`\`\`
-${run} list                 # what is still open
-${run} approve 2 5 7        # same as "approve 2 5 7" on Telegram
-${run} "send 5: <his text>" # send his edited version
-${run} check 5              # fact-check a draft, sends nothing
+${run} list                  # what is still open
+${run} check 5               # fact-check a draft (Perplexity), sends nothing
+${run} "check 5: <his text>" # check his edited version; "send 5" then sends it
 ${run} skip 4
 \`\`\`
 
-Texts go to families on approval (quiet hours respected); emails become Gmail drafts he sends himself. Items stay open until the next pass (${nextPassIn(now)}), then they expire and come back if still waiting.
+Approvals run in production, not here: archiving and email drafts go through Gmail, whose keys are only in Vercel. When he has chosen, give him the one line to send Cortex on Telegram (desktop works), for example \`approve 2 5 7\` or \`send 5: <his text>\`. Texts go to families on approval (quiet hours respected); emails become Gmail drafts he sends himself. Items stay open until the next pass (${nextPassIn(now)}).
 
-When he is done, close this report with what was approved: \`npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-handoffs.ts close <id> done "approved 2 5 7"\`.
+When he is done, close this report with what he chose: \`npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-handoffs.ts close <id> done "approved 2 5 7"\`.
 `;
   return { title, body };
 }

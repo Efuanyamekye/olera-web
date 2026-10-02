@@ -64,7 +64,8 @@ assert.equal(stripDraftHeaders("Hi Elle,\nRe: your question, we don't have it.")
   const report = inboxReportBody(pass, at);
   assert.equal(report.title, "Inbox report, 2 Oct 2026");
   assert.ok(report.body.includes("Thank you for the detailed questions") && report.body.includes("Chris Lane"), "the report carries everything the phone leaves out");
-  assert.match(report.body, /scripts\/cortex-inbox\.ts approve/);
+  assert.match(report.body, /Do not act on anything until TJ names the numbers/);
+  assert.match(report.body, /scripts\/cortex-inbox\.ts check 5/);
   assert.equal(renderSynopsis({ passId: "p", items: [], waitingElsewhere: 0, costUsd: 0 }, at), "Inbox pass: both inboxes are clear.");
 }
 console.log("synopsis checks passed");

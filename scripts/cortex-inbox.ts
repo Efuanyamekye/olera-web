@@ -3,14 +3,15 @@
  * report with TJ (/handoff). Same code path as his Telegram replies.
  *
  *   npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-inbox.ts list
- *   npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-inbox.ts approve 2 5 7
- *   npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-inbox.ts "send 5: <his text>"
  *   npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-inbox.ts check 5
+ *   npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-inbox.ts "check 5: <his version>"
  *   npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-inbox.ts skip 4
  *
- * approve and send act for real: texts go to families, emails become Gmail
- * drafts. Run them only on his explicit choice. check calls Perplexity
- * (a few cents per draft). list reads only.
+ * Approvals don't run here. Archiving and email drafts go through Gmail, and
+ * its OAuth keys live only in Vercel, not in .env.local, so a local "approve"
+ * would fail partway. "approve" and "send" print the line to send Cortex on
+ * Telegram (desktop or phone), which runs them in production. list reads
+ * only; check calls Perplexity (a few cents per draft); skip marks the item.
  */
 import Module from "node:module";
 
@@ -33,7 +34,11 @@ const load = (Module as unknown as { _load: (request: string, ...rest: unknown[]
     return;
   }
   const command = ops.parseInboxCommand(words);
-  if (!command) throw new Error(`not a command: "${words}". Try: list, approve 2 5, "send 5: text", check 5, skip 4`);
+  if (!command) throw new Error(`not a command: "${words}". Try: list, check 5, "check 5: text", skip 4, or approve 2 5 for the Telegram line`);
+  if (command.verb === "approve") {
+    console.log(`Not run here (Gmail's keys are only in production). Send Cortex this on Telegram:\n\n${words.replace(/^(yes|do|ok)\b/i, "approve")}`);
+    return;
+  }
   console.log(await ops.handleInboxCommand(db, command) ?? "Nothing open.");
 })().catch((error: unknown) => {
   console.error(error instanceof Error ? error.message : String(error));
