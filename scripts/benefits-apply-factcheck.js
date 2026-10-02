@@ -26,6 +26,7 @@
  *   node scripts/benefits-apply-factcheck.js --apply    # writes drafts.json
  *   node scripts/benefits-apply-factcheck.js --review   # prints the review list with sources
  *   node scripts/benefits-apply-factcheck.js --phones   # also apply official-sourced phone flags
+ *   node scripts/benefits-apply-factcheck.js --states DC,MD   # only these states (default: all)
  *
  * After --apply, regenerate the generated modules:
  *   node scripts/benefits-pipeline.js --regen-index
@@ -39,6 +40,7 @@ const args = process.argv.slice(2);
 const APPLY = args.includes('--apply');
 const REVIEW = args.includes('--review');
 const PHONES = args.includes('--phones');
+const ONLY = (() => { const i = args.indexOf('--states'); return i >= 0 && args[i + 1] ? new Set(args[i + 1].split(/[,\s]+/).filter(Boolean)) : null; })();
 const TODAY = new Date().toISOString().slice(0, 10);
 
 // Income limits that sit on a federal poverty-line or SSI tier. When BOTH the
@@ -92,7 +94,7 @@ function fmtPhone(v) {
 }
 
 const plan = { apply: [], review: [], skipped: 0 };
-const states = fs.readdirSync(ROOT).filter((d) => /^[A-Z]{2}$/.test(d) && fs.existsSync(path.join(ROOT, d, 'factcheck.json')));
+const states = fs.readdirSync(ROOT).filter((d) => /^[A-Z]{2}$/.test(d) && fs.existsSync(path.join(ROOT, d, 'factcheck.json')) && (!ONLY || ONLY.has(d)));
 
 for (const st of states) {
   const fc = JSON.parse(fs.readFileSync(path.join(ROOT, st, 'factcheck.json'), 'utf8'));

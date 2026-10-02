@@ -63,8 +63,11 @@ jobs:
 
       - name: Judge and regenerate
         run: |
-          node scripts/benefits-apply-factcheck.js --apply | tail -20
-          node scripts/benefits-apply-factcheck.js --review > review-queue.txt || true
+          STATES="$(echo '${{ steps.pick.outputs.states }}' | tr ' ' ',' | sed 's/,*$//')"
+          node scripts/benefits-apply-factcheck.js --apply --states "$STATES" | tail -20
+          # The review list is the PR body, written outside the checkout so
+          # it is never committed.
+          node scripts/benefits-apply-factcheck.js --review --states "$STATES" > "$RUNNER_TEMP/review-queue.txt" || true
           # Each state's run already regenerated its own drafts.ts. A full
           # --regen-index would touch all 51 with new timestamps and bury the
           # real diff, so the summary and barrel churn is reverted here.
@@ -77,5 +80,5 @@ jobs:
           base: staging
           title: "Benefits fact-check: ${{ steps.pick.outputs.states }}"
           commit-message: "Re-verify benefits facts: ${{ steps.pick.outputs.states }}"
-          body-path: review-queue.txt
+          body-path: ${{ runner.temp }}/review-queue.txt
           labels: benefits-data
