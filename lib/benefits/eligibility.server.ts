@@ -221,8 +221,14 @@ export interface ProgramForVerdict {
 export function incomeLimitFromTable(
   table: { householdSize: number; monthlyLimit: number }[] | null | undefined,
 ): number | null {
-  const row = (table || []).find((r) => r.householdSize === 1);
-  return row && row.monthlyLimit > 0 ? row.monthlyLimit : null;
+  // Some tables list several tiers for the same household size (Medicare
+  // Savings: QMB 100%, SLMB 120%, QI 135% of the poverty line, in 25 states on
+  // 2 Oct 2026). The first row is the strictest tier, and reading it ruled out
+  // families the generous tier would take. For "could this family qualify",
+  // the limit is the most generous row.
+  let limit: number | null = null;
+  for (const r of table || []) if (r.householdSize === 1 && r.monthlyLimit > 0 && (limit == null || r.monthlyLimit > limit)) limit = r.monthlyLimit;
+  return limit;
 }
 
 /** Apply the scored engine's rules to one pipeline program. Conservative by
