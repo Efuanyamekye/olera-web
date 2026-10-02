@@ -225,7 +225,7 @@ async function smsProposals(db: SupabaseClient): Promise<{ items: ProposedItem[]
 // ---------------------------------------------------------------------------
 // Email
 
-type ThreadRow = { id: string; subject: string; category: string; agent_summary: string | null; suggested_draft: string | null; matched_profile_name: string | null; last_message_at: string; gmail_draft_id?: string | null; draft_updated_at?: string | null };
+type ThreadRow = { id: string; subject: string; category: string; agent_summary: string | null; suggested_draft: string | null; matched_profile_name: string | null; matched_profile_type?: string | null; last_message_at: string; gmail_draft_id?: string | null; draft_updated_at?: string | null };
 
 /**
  * A Gmail draft saved after their last message is a reply waiting for him to
@@ -334,7 +334,7 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
 
   // Drafts: families and providers waiting on a reply, newest first.
   const { data: threads } = await db.from("support_email_threads")
-    .select("id, subject, category, agent_summary, suggested_draft, matched_profile_name, last_message_at, gmail_draft_id, draft_updated_at")
+    .select("id, subject, category, agent_summary, suggested_draft, matched_profile_name, matched_profile_type, last_message_at, gmail_draft_id, draft_updated_at")
     .eq("state", "needs_reply")
     .in("category", ["care_seeker", "provider"])
     .eq("suggested_action", "draft_reply")
@@ -365,7 +365,11 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
     }
     const lastIn = own.filter((m) => m.direction === "in").map((m) => m.internal_date).sort((a, b) => Date.parse(b) - Date.parse(a))[0] ?? thread.last_message_at;
     const prior = priorEmail.get(thread.id);
-    const carried = carryTarget(prior, { threadId: thread.id }, lastIn);
+    // A provider account Olera knows, not just the classifier's "provider":
+    // that label also covers job seekers and a dental office asking about a
+    // patient (1 Oct: about 10 of the 40 latest). Only these send on approval.
+    const matchedProvider = thread.category === "provider" && thread.matched_profile_type === "provider";
+    const carried = carryTarget(prior, { threadId: thread.id, matchedProvider }, lastIn);
     const draft = carried && prior?.body ? { body: stripDraftHeaders(prior.body), costUsd: 0 } : await draftEmail(thread, own);
     if (!draft) {
       waitingElsewhere += 1;
@@ -378,7 +382,7 @@ async function emailProposals(db: SupabaseClient): Promise<{ items: ProposedItem
     items.push({
       kind: "email_draft",
       category: `email:draft:${thread.category}`,
-      target: carried && prior?.body ? carried : { threadId: thread.id, since: lastIn },
+      target: carried && prior?.body ? carried : { threadId: thread.id, matchedProvider, since: lastIn },
       summary: `Email ${who} re "${cleanSubject(thread.subject)}". ${clip(thread.agent_summary ?? "", 180)}`,
       body: draft.body,
     });
@@ -514,13 +518,17 @@ export function assignNumbers(proposed: ProposedItem[], usedRecently: number[]):
 }
 
 /**
- * A provider email goes out when he approves it; a family email stays a draft
- * he sends himself. TJ, 2026-10-02, choosing between all, providers only and
- * none: providers only. Families are where a wrong sentence costs most, and the
- * last look in Gmail is where he caught one on 1 Oct.
+ * A provider email goes out when he approves it; everything else stays a
+ * Gmail draft he sends himself. TJ, 2026-10-02, choosing between all,
+ * providers only and none: providers only. Families are where a wrong sentence
+ * costs most, and the last look in Gmail is where he caught one on 1 Oct.
+ *
+ * "Provider" means a thread matched to an Olera provider account. The
+ * classifier's provider label alone also covers caregivers asking for a job
+ * and a dental office asking about a patient, so it is not enough to send on.
  */
-export function sendsOnApproval(item: Pick<StoredItem, "kind" | "category">): boolean {
-  return item.kind === "email_draft" && item.category === "email:draft:provider";
+export function sendsOnApproval(item: Pick<StoredItem, "kind" | "category" | "target">): boolean {
+  return item.kind === "email_draft" && item.category === "email:draft:provider" && item.target?.matchedProvider === true;
 }
 
 /** "Email Blue Water Homecare re ..." -> "Blue Water Homecare". */
@@ -557,7 +565,7 @@ export function renderSynopsis(pass: InboxPass, now = new Date()): string {
   const calls = pass.items.find((item) => item.category === "email:voicemail_callbacks");
   const questions = pass.items.filter((item) => item.kind === "question" && item.category !== "email:voicemail_callbacks");
   const actionable = pass.items.filter((item) => item.kind !== "question");
-  const line = (items: StoredItem[]) => items.map((item) => `${item.number} ${whoFor(item)}${item.kind === "email_draft" && !sendsOnApproval(item) ? " (family, draft)" : ""}${item.target?.carried ? " (same draft)" : ""}`).join(" · ");
+  const line = (items: StoredItem[]) => items.map((item) => `${item.number} ${whoFor(item)}${sendsOnApproval(item) ? " (sends)" : ""}${item.target?.carried ? " (same draft)" : ""}`).join(" · ");
   const parts = [
     `*Inbox, ${day}:* ${actionable.length} to approve.`,
     triage.length ? `Clear: ${triage.map((item) => `${item.number} ${triagePhrase(item)}`).join(" · ")}` : "",
@@ -607,7 +615,7 @@ ${run} "check 5: <his text>" # check his edited version; "send 5" then sends it
 ${run} skip 4
 \`\`\`
 
-Approvals run in production, not here: archiving and email drafts go through Gmail, whose keys are only in Vercel. When he has chosen, give him the one line to send Cortex on Telegram (desktop works), for example \`approve 2 5 7\` or \`send 5: <his text>\`. Texts go to families on approval (quiet hours respected). Provider emails are sent from support@ on approval; family emails become Gmail drafts he sends himself. Items stay open until the next pass (${nextPassIn(now)}).
+Approvals run in production, not here: archiving and email drafts go through Gmail, whose keys are only in Vercel. When he has chosen, give him the one line to send Cortex on Telegram (desktop works), for example \`approve 2 5 7\` or \`send 5: <his text>\`. Texts go to families on approval (quiet hours respected). An email to a matched provider account is sent from support@ on approval; every other email becomes a Gmail draft he sends himself. The digest says which under each draft. Items stay open until the next pass (${nextPassIn(now)}).
 
 When he is done, close this report with what he chose: \`npx tsx --env-file=$HOME/Desktop/olera-web/.env.local scripts/cortex-handoffs.ts close <id> done "approved 2 5 7"\`.
 `;
@@ -625,7 +633,7 @@ export function renderDigest(pass: InboxPass): string {
   const section = (title: string, kinds: InboxItemKind[], only: (item: StoredItem) => boolean = () => true) => {
     const rows = pass.items.filter((item) => kinds.includes(item.kind) && only(item));
     if (!rows.length) return "";
-    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? (sendsOnApproval(item) ? "\n(Provider: sent from support@ when you approve.)" : "\n(Family: saved as a Gmail draft when you approve. You send it.)") : ""}`).join("\n\n")}`;
+    return `*${title}*\n${rows.map((item) => `${item.number}. ${item.summary}${item.target?.carried ? " (Same draft as last pass; nothing new from them.)" : ""}${currentText(item) ? `\n> ${currentText(item).replace(/\n+/g, "\n> ")}` : ""}${item.kind === "email_draft" ? (sendsOnApproval(item) ? "\n(Provider account: sent from support@ when you approve.)" : "\n(Saved as a Gmail draft when you approve. You send it.)") : ""}`).join("\n\n")}`;
   };
   const parts = [
     section("Clear", ["triage_batch"]),

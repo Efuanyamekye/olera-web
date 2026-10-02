@@ -68,19 +68,22 @@ assert.equal(stripDraftHeaders("Hi Elle,\nRe: your question, we don't have it.")
   assert.match(report.body, /scripts\/cortex-inbox\.ts check 5/);
   assert.equal(renderSynopsis({ passId: "p", items: [], waitingElsewhere: 0, costUsd: 0 }, at), "Inbox pass: both inboxes are clear.");
 }
-// Provider emails send on approval; family emails stay drafts (TJ, 2 Oct).
-assert.equal(sendsOnApproval({ kind: "email_draft", category: "email:draft:provider" }), true);
-assert.equal(sendsOnApproval({ kind: "email_draft", category: "email:draft:care_seeker" }), false, "a family email is never sent for him");
-assert.equal(sendsOnApproval({ kind: "sms_draft", category: "email:draft:provider" }), false);
+// Provider emails send on approval (TJ, 2 Oct), but only for a matched provider
+// account: the classifier's "provider" also covers job seekers (pre-test, 2 Oct).
+assert.equal(sendsOnApproval({ kind: "email_draft", category: "email:draft:provider", target: { matchedProvider: true } }), true);
+assert.equal(sendsOnApproval({ kind: "email_draft", category: "email:draft:provider", target: {} }), false, "labelled provider, no account: a draft");
+assert.equal(sendsOnApproval({ kind: "email_draft", category: "email:draft:care_seeker", target: { matchedProvider: true } }), false, "a family email is never sent for him");
+assert.equal(sendsOnApproval({ kind: "sms_draft", category: "email:draft:provider", target: { matchedProvider: true } }), false);
 {
   const at = new Date("2026-10-02T01:00:00Z");
   const fam = { id: "f", pass_id: "p", number: 4, kind: "email_draft", category: "email:draft:care_seeker", summary: 'Email Marti Carroll re "LIHEAP". Care seeker', target: { threadId: "t" }, body: "Draft", status: "proposed", created_at: at.toISOString() } as StoredItem;
-  const prov = { ...fam, id: "p2", number: 5, category: "email:draft:provider", summary: 'Email Elle Patti re "website". Provider' } as StoredItem;
-  const pass = { passId: "p", items: [fam, prov], waitingElsewhere: 0, costUsd: 0 };
-  assert.match(renderSynopsis(pass, at), /Emails: 4 Marti Carroll \(family, draft\) · 5 Elle Patti$/m);
+  const prov = { ...fam, id: "p2", number: 5, category: "email:draft:provider", summary: 'Email Optimized Senior Living re "access". Provider', target: { threadId: "u", matchedProvider: true } } as StoredItem;
+  const applicant = { ...fam, id: "p3", number: 6, category: "email:draft:provider", summary: 'Email an LPN applicant re "job". Job applicant', target: { threadId: "v", matchedProvider: false } } as StoredItem;
+  const pass = { passId: "p", items: [fam, prov, applicant], waitingElsewhere: 0, costUsd: 0 };
+  assert.match(renderSynopsis(pass, at), /Emails: 4 Marti Carroll · 5 Optimized Senior Living \(sends\) · 6 an LPN applicant$/m);
   const full = inboxReportBody(pass, at).body;
-  assert.match(full, /\(Family: saved as a Gmail draft when you approve\. You send it\.\)/);
-  assert.match(full, /\(Provider: sent from support@ when you approve\.\)/);
+  assert.equal((full.match(/\(Saved as a Gmail draft when you approve\. You send it\.\)/g) ?? []).length, 2);
+  assert.equal((full.match(/\(Provider account: sent from support@ when you approve\.\)/g) ?? []).length, 1);
 }
 console.log("synopsis checks passed");
 
