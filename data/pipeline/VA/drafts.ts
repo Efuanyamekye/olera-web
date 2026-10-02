@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.510Z
+ * Last updated: 2026-10-02T02:22:51.939Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -850,7 +850,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "Caregiver Support (Area Agencies on Aging) helps unpaid family caregivers keep going. Your local Area Agency on Aging helps family caregivers with respite, support groups and counseling.\n\nHelp can include respite care, caregiver support groups, individual counseling and a caregiver resource guide.\n\nServices are delivered locally. Through 25 local Area Agencies on Aging.\n\nContact your local Area Agency on Aging (25 statewide), the front door to aging services in Virginia. Use the DARS 'Find Your Local Area Agency on Aging' page or call the Division for Aging Services toll-free line.",
+      "intro": "Caregiver Support (Area Agencies on Aging) helps unpaid family caregivers keep going. Your local Area Agency on Aging helps family caregivers with respite, support groups and counseling.\n\nHelp can include respite care, caregiver support groups, individual counseling and a caregiver resource guide.\n\nServices are delivered locally, through 25 local Area Agencies on Aging.\n\nContact your local Area Agency on Aging (25 statewide), the front door to aging services in Virginia. Use the DARS 'Find Your Local Area Agency on Aging' page or call the Division for Aging Services toll-free line.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

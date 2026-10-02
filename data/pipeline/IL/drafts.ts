@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.446Z
+ * Last updated: 2026-10-02T02:22:51.911Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2213,7 +2213,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "Illinois Caregiver Support Program helps unpaid family caregivers keep going. Gives family caregivers information, help reaching services, counseling, support groups, training and respite through local Area Agencies on Aging.\n\nHelp can include information about available services, help reaching services, individual counseling, support groups, caregiver training, respite care, limited supplemental services and a caregiver needs assessment.\n\nServices are delivered locally. Through 13 Area Agencies on Aging and local Caregiver Resource Centers.\n\nCall the Senior HelpLine or contact your local Area Agency on Aging or Caregiver Resource Center. The agency assesses your needs and refers you to services such as respite, support groups or counseling.",
+      "intro": "Illinois Caregiver Support Program helps unpaid family caregivers keep going. Gives family caregivers information, help reaching services, counseling, support groups, training and respite through local Area Agencies on Aging.\n\nHelp can include information about available services, help reaching services, individual counseling, support groups, caregiver training, respite care, limited supplemental services and a caregiver needs assessment.\n\nServices are delivered locally, through 13 Area Agencies on Aging and local Caregiver Resource Centers.\n\nCall the Senior HelpLine or contact your local Area Agency on Aging or Caregiver Resource Center. The agency assesses your needs and refers you to services such as respite, support groups or counseling.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

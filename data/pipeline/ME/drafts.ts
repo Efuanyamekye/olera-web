@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ME/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.458Z
+ * Last updated: 2026-10-02T02:22:51.917Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1216,7 +1216,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "National Family Caregiver Program helps unpaid family caregivers keep going. Your local Area Agency on Aging helps people caring for an older adult or someone with dementia get a break, training, counseling and support.\n\nHelp can include information and assistance, individual counseling, education and training, support groups, respite care (in and out of home), adult day services, homemaker help and personal care.\n\nServices are delivered locally. Through Maine's 5 Area Agencies on Aging.\n\nCall the statewide ADRC line and pick your county. You are connected to your local Area Agency on Aging, which starts services. An interpreter is free if you need one.",
+      "intro": "National Family Caregiver Program helps unpaid family caregivers keep going. Your local Area Agency on Aging helps people caring for an older adult or someone with dementia get a break, training, counseling and support.\n\nHelp can include information and assistance, individual counseling, education and training, support groups, respite care (in and out of home), adult day services, homemaker help and personal care.\n\nServices are delivered locally, through Maine's 5 Area Agencies on Aging.\n\nCall the statewide ADRC line and pick your county. You are connected to your local Area Agency on Aging, which starts services. An interpreter is free if you need one.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

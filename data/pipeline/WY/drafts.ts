@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/WY/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.527Z
+ * Last updated: 2026-10-02T02:22:51.944Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -488,7 +488,7 @@ export const drafts: PipelineStateDrafts = {
       "id": "family-caregiver-support",
       "name": "National Family Caregiver Support Program",
       "shortName": "Family Caregiver Support Program",
-      "tagline": "Gives family caregivers temporary breaks, support group connections and help with specific needed services.",
+      "tagline": "It gives family caregivers temporary breaks, support group connections and help with specific needed services.",
       "programType": "benefit",
       "complexity": "low",
       "geographicScope": {
@@ -501,7 +501,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "National Family Caregiver Support Program helps unpaid family caregivers keep going. Gives family caregivers temporary breaks, support group connections and help with specific needed services.\n\nHelp can include respite care, support groups and help with specific needed services.\n\nServices are delivered locally. Through 12 local providers (senior centers and community organizations); not available in 7 counties.\n\nCall the local caregiver provider listed for your area on the Wyoming Department of Health program page (mostly senior centers), or call the Community Living Section. Wyoming has no Area Agencies on Aging.",
+      "intro": "National Family Caregiver Support Program helps unpaid family caregivers keep going. It gives family caregivers temporary breaks, support group connections and help with specific needed services.\n\nHelp can include respite care, support groups and help with specific needed services.\n\nServices are delivered locally, through 12 local providers (senior centers and community organizations); not available in 7 counties.\n\nCall the local caregiver provider listed for your area on the Wyoming Department of Health program page (mostly senior centers), or call the Community Living Section. Wyoming has no Area Agencies on Aging.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

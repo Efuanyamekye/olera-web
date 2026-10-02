@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.435Z
+ * Last updated: 2026-10-02T02:22:51.904Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -738,7 +738,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "DACL Caregiver Programs helps unpaid family caregivers keep going. Supports unpaid caregivers of DC seniors and adults with disabilities with respite, support groups, training, counseling and case management.\n\nHelp can include information and assistance, counseling, support groups, caregiver training, respite, case management and supplemental services.\n\nServices are delivered locally. Through DACL's senior services network.\n\nCall DACL to learn about caregiver services and get connected. The DC Caregivers Institute is delivered by Home Care Partners.",
+      "intro": "DACL Caregiver Programs helps unpaid family caregivers keep going. Supports unpaid caregivers of DC seniors and adults with disabilities with respite, support groups, training, counseling and case management.\n\nHelp can include information and assistance, counseling, support groups, caregiver training, respite, case management and supplemental services.\n\nServices are delivered locally, through DACL's senior services network.\n\nCall DACL to learn about caregiver services and get connected. The DC Caregivers Institute is delivered by Home Care Partners.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/IA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.444Z
+ * Last updated: 2026-10-02T02:22:51.910Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1802,7 +1802,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "Iowa Family Caregiver Support Program helps unpaid family caregivers keep going. Helps family caregivers with information, counseling, support groups, training and respite through Iowa's Area Agencies on Aging.\n\nHelp can include information about available services, help identifying needs and reaching services, family caregiver counseling, caregiver training, support groups, respite care, help finding ways to pay for respite and limited supplemental services.\n\nServices are delivered locally. Through six Area Agencies on Aging covering all 99 counties.\n\nCall your local Area Agency on Aging. If you don't know which one serves your county, call the Iowa Aging and Disability Resource Center line (Iowa Compass) to speak to a system navigator.",
+      "intro": "Iowa Family Caregiver Support Program helps unpaid family caregivers keep going. Helps family caregivers with information, counseling, support groups, training and respite through Iowa's Area Agencies on Aging.\n\nHelp can include information about available services, help identifying needs and reaching services, family caregiver counseling, caregiver training, support groups, respite care, help finding ways to pay for respite and limited supplemental services.\n\nServices are delivered locally, through six Area Agencies on Aging covering all 99 counties.\n\nCall your local Area Agency on Aging. If you don't know which one serves your county, call the Iowa Aging and Disability Resource Center line (Iowa Compass) to speak to a system navigator.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

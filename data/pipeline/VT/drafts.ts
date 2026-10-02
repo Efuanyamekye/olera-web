@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/VT/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.512Z
+ * Last updated: 2026-10-02T02:22:51.939Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2555,7 +2555,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "National Family Caregiver Program (NFCP) helps unpaid family caregivers keep going. Vermont's five Area Agencies on Aging help family caregivers with respite, support and grants for services like in-home care and adult day.\n\nHelp can include respite care, in-home care, homemaker services, adult day services, caregiver education and training, support groups and counseling referrals.\n\nServices are delivered locally. Through Vermont's five Area Agencies on Aging.\n\nCall the Vermont Helpline; it connects you to your local Area Agency on Aging, each of which runs a caregiver support program and handles both the NFCP and Dementia Respite Grants.",
+      "intro": "National Family Caregiver Program (NFCP) helps unpaid family caregivers keep going. Vermont's five Area Agencies on Aging help family caregivers with respite, support and grants for services like in-home care and adult day.\n\nHelp can include respite care, in-home care, homemaker services, adult day services, caregiver education and training, support groups and counseling referrals.\n\nServices are delivered locally, through Vermont's five Area Agencies on Aging.\n\nCall the Vermont Helpline; it connects you to your local Area Agency on Aging, each of which runs a caregiver support program and handles both the NFCP and Dementia Respite Grants.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/AZ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.430Z
+ * Last updated: 2026-10-02T02:22:51.902Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1718,7 +1718,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "Family Caregiver Support Program helps unpaid family caregivers keep going. Gives unpaid family caregivers information, help reaching services, counseling, support groups, training and short breaks through respite care.\n\nHelp can include information about available services, help reaching services, individual counseling, support groups, caregiver training, respite care and limited supplemental services.\n\nServices are delivered locally. Through Arizona's Area Agencies on Aging.\n\nCall the Arizona Caregiver Resource Line, where a trained volunteer gives information and local resources, or contact your local Area Agency on Aging (DES lists them by county).",
+      "intro": "Family Caregiver Support Program helps unpaid family caregivers keep going. Gives unpaid family caregivers information, help reaching services, counseling, support groups, training and short breaks through respite care.\n\nHelp can include information about available services, help reaching services, individual counseling, support groups, caregiver training, respite care and limited supplemental services.\n\nServices are delivered locally, through Arizona's Area Agencies on Aging.\n\nCall the Arizona Caregiver Resource Line, where a trained volunteer gives information and local resources, or contact your local Area Agency on Aging (DES lists them by county).",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

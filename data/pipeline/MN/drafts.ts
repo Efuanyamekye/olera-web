@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.460Z
+ * Last updated: 2026-10-02T02:22:51.918Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2276,7 +2276,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "Caregiver Support through Minnesota Aging Pathways helps unpaid family caregivers keep going. A free statewide line connects unpaid caregivers with a trained Caregiver Consultant and local help such as respite and training.\n\nHelp can include one-to-one caregiver consultation, respite, training and education and help finding local services.\n\nServices are delivered locally. Through the Minnesota Board on Aging and Minnesota's Area Agencies on Aging.\n\nCall Minnesota Aging Pathways (formerly the Senior LinkAge Line). They connect you with a Caregiver Consultant in your area, who assesses your needs and helps you find respite, training and other services.",
+      "intro": "Caregiver Support through Minnesota Aging Pathways helps unpaid family caregivers keep going. A free statewide line connects unpaid caregivers with a trained Caregiver Consultant and local help such as respite and training.\n\nHelp can include one-to-one caregiver consultation, respite, training and education and help finding local services.\n\nServices are delivered locally, through the Minnesota Board on Aging and Minnesota's Area Agencies on Aging.\n\nCall Minnesota Aging Pathways (formerly the Senior LinkAge Line). They connect you with a Caregiver Consultant in your area, who assesses your needs and helps you find respite, training and other services.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NM/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.486Z
+ * Last updated: 2026-10-02T02:22:51.928Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -961,7 +961,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "National Family Caregiver Support Program (NFCSP) helps unpaid family caregivers keep going. The state's aging help line connects family caregivers of older adults with respite, training, counseling and other support.\n\nHelp can include respite care (adult day care, in-home care), caregiver training, information and referral, counseling, support groups, homemaker services and care coordination.\n\nServices are delivered locally. Through New Mexico's Area Agencies on Aging.\n\nCall the Aging and Disability Resource Center or use live chat on the ALTSD site. They connect you with caregiver services through your local Area Agency on Aging.",
+      "intro": "National Family Caregiver Support Program (NFCSP) helps unpaid family caregivers keep going. The state's aging help line connects family caregivers of older adults with respite, training, counseling and other support.\n\nHelp can include respite care (adult day care, in-home care), caregiver training, information and referral, counseling, support groups, homemaker services and care coordination.\n\nServices are delivered locally, through New Mexico's Area Agencies on Aging.\n\nCall the Aging and Disability Resource Center or use live chat on the ALTSD site. They connect you with caregiver services through your local Area Agency on Aging.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

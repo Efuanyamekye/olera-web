@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/SC/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.499Z
+ * Last updated: 2026-10-02T02:22:51.934Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2610,7 +2610,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "Family Caregiver Support Program helps unpaid family caregivers keep going. Helps family caregivers keep a loved one at home with respite breaks, counseling, training and extra support services.\n\nHelp can include information about available services, help getting access to services, individual counseling, support groups, caregiver training, respite care (in home, adult day, assisted living or nursing facility) and supplemental services.\n\nServices are delivered locally. Through 10 regional Area Agencies on Aging.\n\nContact your local Area Agency on Aging (10 regions statewide); find yours on GetCareSC. You can also call the SC Department on Aging / GetCareSC toll-free line to be pointed to your regional agency.",
+      "intro": "Family Caregiver Support Program helps unpaid family caregivers keep going. Helps family caregivers keep a loved one at home with respite breaks, counseling, training and extra support services.\n\nHelp can include information about available services, help getting access to services, individual counseling, support groups, caregiver training, respite care (in home, adult day, assisted living or nursing facility) and supplemental services.\n\nServices are delivered locally, through 10 regional Area Agencies on Aging.\n\nContact your local Area Agency on Aging (10 regions statewide); find yours on GetCareSC. You can also call the SC Department on Aging / GetCareSC toll-free line to be pointed to your regional agency.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

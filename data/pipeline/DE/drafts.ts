@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/DE/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:02:08.435Z
+ * Last updated: 2026-10-02T02:22:51.905Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -2097,7 +2097,7 @@ export const drafts: PipelineStateDrafts = {
           }
         ]
       },
-      "intro": "Supports and Services for Caregivers (DSAAPD) helps unpaid family caregivers keep going. Connects caregivers to respite, support groups, options counseling and Caregiver Resource Centers through the Delaware Aging and Disability Resource Center.\n\nHelp can include information and assistance, options counseling, respite care at home, Lifespan Respite vouchers, support groups, Caregiver Resource Centers, case management and adult day services.\n\nServices are delivered locally. Statewide through DSAAPD and the Delaware ADRC, with Caregiver Resource Centers across the state.\n\nCall the Delaware Aging and Disability Resource Center (ADRC) or email DelawareADRC@delaware.gov. A resource specialist connects you to respite and other caregiver services.",
+      "intro": "Supports and Services for Caregivers (DSAAPD) helps unpaid family caregivers keep going. Connects caregivers to respite, support groups, options counseling and Caregiver Resource Centers through the Delaware Aging and Disability Resource Center.\n\nHelp can include information and assistance, options counseling, respite care at home, Lifespan Respite vouchers, support groups, Caregiver Resource Centers, case management and adult day services.\n\nServices are delivered locally, statewide through DSAAPD and the Delaware ADRC, with Caregiver Resource Centers across the state.\n\nCall the Delaware Aging and Disability Resource Center (ADRC) or email DelawareADRC@delaware.gov. A resource specialist connects you to respite and other caregiver services.",
       "savingsRange": "",
       "savingsSource": "",
       "savingsVerified": false,

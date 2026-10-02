@@ -39,6 +39,7 @@ import { getSiteUrl } from "@/lib/site-url";
 import { sendSlackAlert } from "@/lib/slack";
 import { readCareAge, careAgeShort } from "@/lib/benefits/age";
 import { pickCallContact } from "@/lib/benefits/call-script";
+import { duplicateTarget } from "@/lib/benefits/program-duplicates";
 
 // ── benefits_cascade metadata (on business_profiles.metadata) ───────────────
 
@@ -320,7 +321,10 @@ const COMPLEXITY_RANK: Record<string, number> = { simple: 0, medium: 1, deep: 2 
  * the family's stated interest was dropped without trace. Every other consumer
  * already went through the shared bridge; this was the one that did not.
  */
-function draftFor(stateAbbrev: string, programId: string): PipelineDraft | null {
+function draftFor(stateAbbrev: string, rawProgramId: string): PipelineDraft | null {
+  // A saved or entry id may be a copy of a program held twice in the data;
+  // read the program that stays, so the letter uses its checked number.
+  const programId = duplicateTarget(stateAbbrev, rawProgramId) ?? rawProgramId;
   const exact = pipelineDrafts[stateAbbrev]?.programs?.find((p) => p.id === programId);
   if (exact) return exact;
   return findPipelineDraftFor(stateAbbrev, programId);
