@@ -387,7 +387,21 @@
       "sourceUrl": "https://www.azahcccs.gov/Members/GetCovered/Categories/nursinghome.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18554327587",
+            "211"
+          ],
+          "to": "8886216880",
+          "source": "https://www.azahcccs.gov/members/ALTCSlocations.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:36.731Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -620,7 +634,22 @@
       "sourceUrl": "https://www.azahcccs.gov/PlansProviders/FeeForServiceHealthPlans/MedicareSavingsPrograms/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-08-04",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8554327587",
+            "1800",
+            "8777672382"
+          ],
+          "to": "8004324040",
+          "source": "https://www.azahcccs.gov/Members/GetCovered/Categories/medicare.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:36.731Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -693,7 +722,15 @@
           "Social Security number or proof of application",
           "Work 80 hours/month if able-bodied (many exceptions apply)"
         ],
-        "povertyLevelReference": "100% FPL"
+        "povertyLevelReference": "100% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1104,7 +1141,15 @@
           "Must be customer of participating utility (SRP, TEP, UniSource, or other Arizona providers)",
           "Home must pass assessment and inspection for eligible improvements"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2025,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1240,7 +1285,31 @@
       "sourceUrl": "https://azdes.gov",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "income_2",
+          "from": 3407,
+          "to": 3607,
+          "source": "https://housing.az.gov/general-public/weatherization-assistance-program",
+          "severity": "medium",
+          "why": "value fits more than one tier (185% FPL 2026 or 200% FPL 2025 or 200% FPL 2024 or 200% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:33:36.731Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "5204854985",
+            "5207242461",
+            "4808080429"
+          ],
+          "to": "6025344444",
+          "source": "https://housing.az.gov/general-public/weatherization-assistance-program",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:36.731Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1867,5 +1936,6 @@
       "SHIP counseling is free for all Arizona Medicare beneficiaries at 1-800-432-4040"
     ],
     "resourcesVsBenefits": "Most Arizona programs are benefits that require meeting income and asset limits, like ALTCS (Arizona's Medicaid) which covers nursing home costs but requires income under specific thresholds. However, Arizona's State Health Insurance Assistance Program (SHIP) provides free Medicare counseling to any Arizona senior regardless of income, helping them understand coverage options and find savings on healthcare costs."
-  }
+  },
+  "factcheckedAt": "2026-10-02T07:33:36.731Z"
 }

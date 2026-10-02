@@ -532,7 +532,21 @@
       "sourceUrl": "https://aging.maryland.gov/programs-and-services/supporting-older-adults-resources",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-14",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18446275465",
+            "4107671100"
+          ],
+          "to": "4103131234",
+          "source": "https://www.howardcountymd.gov/soar",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -720,7 +734,21 @@
       "sourceUrl": "https://regs.maryland.gov/us/md/exec/comar/10.09.44.05",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8002433425",
+            "8004925231"
+          ],
+          "to": "4107671739",
+          "source": "https://health.maryland.gov/mmcp/waiverprograms/pages/pace.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-program",
@@ -754,7 +782,7 @@
         "incomeTable": [
           {
             "householdSize": 1,
-            "monthlyLimit": 1235
+            "monthlyLimit": 1350
           },
           {
             "householdSize": 1,
@@ -766,7 +794,7 @@
           },
           {
             "householdSize": 2,
-            "monthlyLimit": 1663
+            "monthlyLimit": 1824
           },
           {
             "householdSize": 2,
@@ -944,7 +972,47 @@
       "sourceUrl": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-31"
+      "lastVerifiedDate": "2026-10-02",
+      "appliedCorrections": [
+        {
+          "field": "income_1",
+          "from": 1235,
+          "to": 1350,
+          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
+          "flaggedAt": "2026-10-02T07:38:57.033Z",
+          "appliedAt": "2026-10-02",
+          "appliedBy": "factcheck-judge"
+        },
+        {
+          "field": "income_2",
+          "from": 1663,
+          "to": 1824,
+          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
+          "flaggedAt": "2026-10-02T07:38:57.033Z",
+          "appliedAt": "2026-10-02",
+          "appliedBy": "factcheck-judge"
+        }
+      ],
+      "reviewQueue": [
+        {
+          "field": "assets_individual",
+          "from": 9090,
+          "to": 9950,
+          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 13630,
+          "to": 14910,
+          "source": "https://health.maryland.gov/mmcp/eligibility/Pages/medicare-savings-programs.aspx",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -1034,7 +1102,15 @@
           "Social Security number for each household member",
           "Include all who live together and buy/prepare food together"
         ],
-        "povertyLevelReference": "165% FPL for households with members 60+ or disabled"
+        "povertyLevelReference": "165% FPL for households with members 60+ or disabled",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 160,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1169,7 +1245,45 @@
       "sourceUrl": "https://dhs.maryland.gov/supplemental-nutrition-assistance-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2152,
+          "to": 1696,
+          "source": "https://dhs.maryland.gov/documents/FIA/Action%20Transmittals-AT%20-%20Information%20Memo-IM/AT-IM2026/26-05%20AT%20SNAP%20Mass%20Changes%20for%20October%202025.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2909,
+          "to": 2292,
+          "source": "https://dhs.maryland.gov/documents/FIA/Action%20Transmittals-AT%20-%20Information%20Memo-IM/AT-IM2026/26-05%20AT%20SNAP%20Mass%20Changes%20for%20October%202025.pdf",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 3001,
+          "to": 4500,
+          "source": "https://aging.maryland.gov/media/116",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 3001,
+          "to": 4500,
+          "source": "https://aging.maryland.gov/media/116",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1248,7 +1362,15 @@
           "Household includes everyone at the address covered by the same utility bill",
           "No utility shutoff notice required to qualify"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1420,7 +1542,15 @@
           "Building must be 4 units or fewer",
           "Automatic eligibility if receiving OHEP Utility Bill Pay Assistance, SNAP, TANF, or SSI"
         ],
-        "povertyLevelReference": "200% FPL or 60% State Median Income, whichever is higher"
+        "povertyLevelReference": "200% FPL or 60% State Median Income, whichever is higher",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -1868,7 +1998,21 @@
       "phone": "(410) 558-0923",
       "sourceUrl": "https://aging.maryland.gov/pages/nutrition.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4105580923",
+            "4102224257"
+          ],
+          "to": "3014754200",
+          "source": "https://www.stmaryscountymd.gov/aging/homedeliveredmeals/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     },
     {
       "id": "national-family-caregiver-support",
@@ -2013,7 +2157,31 @@
       "phone": "(410) 767-1100",
       "sourceUrl": "https://aging.maryland.gov/pages/national-family-caregiver-support.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 55,
+          "source": "https://aging.maryland.gov/programs-and-services/caregivers",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "4107671100",
+            "2407773000",
+            "211"
+          ],
+          "to": "18446275465",
+          "source": "https://aging.maryland.gov/programs-and-services/caregivers",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -2373,7 +2541,23 @@
       "sourceUrl": "https://aging.maryland.gov/pages/senior-legal-assistance.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8008964213",
+            "8006771116",
+            "4103965605",
+            "30147542001064"
+          ],
+          "to": "8446275465",
+          "source": "https://aging.maryland.gov/Pages/senior-legal-assistance.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2498,7 +2682,21 @@
       "phone": "(410) 313-6423",
       "sourceUrl": "https://aging.maryland.gov/pages/state-long-term-care-ombudsman.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4103136423",
+            "2407773005"
+          ],
+          "to": "4107671100",
+          "source": "https://aging.maryland.gov/programs-and-services/long-term-care-ombudsman",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     },
     {
       "id": "senior-call-check-program",
@@ -2640,7 +2838,21 @@
       "phone": "(866) 502-0560",
       "sourceUrl": "https://aging.maryland.gov/pages/senior-call-check.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8665020560",
+            "4107671100"
+          ],
+          "to": "18665023560",
+          "source": "https://aging.maryland.gov/programs-and-services/senior-call-check",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:38:57.033Z"
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -2732,5 +2944,6 @@
       "Most income-based programs use similar thresholds: SNAP allows up to $2,266/month for a single person, while MSP goes up to $1,715/month for full benefits."
     ],
     "resourcesVsBenefits": "Maryland's benefit programs require income or medical qualification, like Community First Choice (needs Medicaid eligibility) or LIHEAP (income limits apply). But four programs are available to any Maryland senior regardless of income: free medical equipment through the DME Reuse Program, Medicare counseling through SHIP, legal help for those 60+, and nursing home advocacy through the Ombudsman Program. Start with free resources first, then apply for benefits your loved one qualifies for."
-  }
+  },
+  "factcheckedAt": "2026-10-02T07:38:57.033Z"
 }

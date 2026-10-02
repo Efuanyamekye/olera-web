@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ID/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.520Z
+ * Last updated: 2026-10-02T07:57:10.909Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -765,7 +765,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://healthandwelfare.idaho.gov/services-programs/medicaid-health/apply-medicaid",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23"
+      "lastVerifiedDate": "2026-08-23",
+      "reviewQueue": [
+        {
+          "field": "assets_couple",
+          "from": 14910,
+          "to": 9950,
+          "source": "https://healthandwelfare.idaho.gov/medicaid-program-income-limits",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -829,7 +840,15 @@ export const drafts: PipelineStateDrafts = {
           "Idaho resident",
           "Household defined as those who buy and prepare food together"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2024,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -971,7 +990,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://healthandwelfare.idaho.gov/services-programs/food-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-14"
+      "lastVerifiedDate": "2026-09-14",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1255,
+          "to": 1696,
+          "source": "https://healthandwelfare.idaho.gov/services-programs/food-assistance/apply-snap",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1704,
+          "to": 2292,
+          "source": "https://healthandwelfare.idaho.gov/services-programs/food-assistance/apply-snap",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        }
+      ]
     },
     {
       "id": "energy-assistance-liheap",
@@ -1130,7 +1169,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://healthandwelfare.idaho.gov/services-programs/financial-assistance/home-heating-and-utility-assistance/about-heating-assistance",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-06"
+      "lastVerifiedDate": "2026-09-06",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8009262588"
+          ],
+          "to": "2083757382",
+          "source": "https://liheapch.acf.hhs.gov/profiles/Idaho.htm",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1213,7 +1265,15 @@ export const drafts: PipelineStateDrafts = {
           "For Idaho Power program: home must be heated with Idaho Power electricity",
           "Work must be cost-effective (savings must exceed improvement costs)"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 160,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -1367,7 +1427,40 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(855) 944-3246",
       "sourceUrl": "https://healthandwelfare.idaho.gov/services-programs/financial-assistance/home-heating-and-utility-assistance/about-weatherization",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2146,
+          "to": 2660,
+          "source": "https://healthandwelfare.idaho.gov/services-programs/financial-assistance/home-heating-and-utility-assistance/apply-weatherization",
+          "severity": "high",
+          "why": "value fits more than one tier (165% FPL 2026 or 165% FPL 2025 or 165% FPL 2024 or 185% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2903,
+          "to": 3607,
+          "source": "https://healthandwelfare.idaho.gov/services-programs/financial-assistance/home-heating-and-utility-assistance/apply-weatherization",
+          "severity": "high",
+          "why": "value fits more than one tier (165% FPL 2026 or 165% FPL 2025 or 165% FPL 2024 or 185% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8559443246",
+            "211",
+            "8004886151"
+          ],
+          "to": "2083321660",
+          "source": "https://oemr.idaho.gov/financial-information/weatherization/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        }
+      ]
     },
     {
       "id": "shiba-insurance-advisors",
@@ -1805,7 +1898,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "2-1-1",
       "sourceUrl": "https://aging.idaho.gov/stay-at-home/national-family-caregiver-support-program/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "2083343833"
+          ],
+          "to": "8009262588",
+          "source": "https://healthandwelfare.idaho.gov/services-programs/211",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        }
+      ]
     },
     {
       "id": "senior-community-service-employment-program",
@@ -1857,7 +1964,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or authorized to work",
           "Must actively seek unsubsidized employment during participation"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 120,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2114,7 +2229,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "208-736-2122",
       "sourceUrl": "https://aging.idaho.gov/ombudsman-program/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "2087362122",
+            "18005748656"
+          ],
+          "to": "2083343833",
+          "source": "https://aging.idaho.gov/ombudsman-program/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        }
+      ]
     },
     {
       "id": "home-choice",
@@ -2166,7 +2295,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be discharged to a 'qualified residence' (not another institutional setting)",
           "Must maintain Medicaid eligibility throughout transition"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2293,7 +2430,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://healthandwelfare.idaho.gov/services-programs/medicaid-health/idaho-home-choice",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8774561233",
+            "211"
+          ],
+          "to": "2084557118",
+          "source": "https://healthandwelfare.idaho.gov/services-programs/medicaid-health/idaho-home-choice",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:36:48.416Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

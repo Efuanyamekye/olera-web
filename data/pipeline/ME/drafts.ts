@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/ME/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.917Z
+ * Last updated: 2026-10-02T07:57:10.916Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -264,7 +264,15 @@ export const drafts: PipelineStateDrafts = {
           "Social Security number (or applied for one)",
           "Household includes those who buy and prepare food together"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -768,7 +776,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(207) 206-1261",
       "sourceUrl": "https://www.mainehousing.org/programs-services/HomeImprovement/homeimprovementdetail/weatherization",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "2072061261",
+            "2079742407",
+            "211"
+          ],
+          "to": "2076264600",
+          "source": "https://www.maine.gov/energy/winter-heating-resources",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:39:10.236Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -898,7 +921,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(207) 396-6524",
       "sourceUrl": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/ship-medicare-assistance",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "2073966524"
+          ],
+          "to": "8773533771",
+          "source": "https://www.maine.gov/pfr/insurance/consumers/medicare-supplement-insurance/where-to-get-help",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:39:10.236Z"
+        }
+      ]
     },
     {
       "id": "home-delivered-meals",
@@ -1073,7 +1109,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(207) 287-9200",
       "sourceUrl": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/food-and-nutrition",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "2072879200",
+            "211"
+          ],
+          "to": "18773533771",
+          "source": "https://www.maine.gov/dhhs/oads/get-support/older-adults-disabilities/older-adult-services/food-and-nutrition",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:39:10.236Z"
+        }
+      ]
     },
     {
       "id": "legal-services-elderly",

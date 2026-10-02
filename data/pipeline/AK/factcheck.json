@@ -1,17 +1,17 @@
 {
   "state": "AK",
   "stateName": "Alaska",
-  "checkedAt": "2026-04-14T09:58:17.518Z",
+  "checkedAt": "2026-10-02T07:32:37.357Z",
   "total": 13,
   "skipped": 1,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 4,
-  "totalFlags": 8,
-  "highSeverityFlags": 5,
+  "programsWithFlags": 8,
+  "totalFlags": 9,
+  "highSeverityFlags": 2,
   "programs": [
     {
-      "programId": "ak-medicaid-seniors-disabled",
+      "programId": "medicaid-seniors-disabled",
       "programName": "Medicaid for Seniors/Disabled",
       "facts": {
         "age": 65,
@@ -26,18 +26,18 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 1356,
+        "income_2": 2019,
         "assets_individual": 2000,
         "assets_couple": 3000,
-        "phone": "8007809972",
+        "phone": "8004787778",
         "sources": {
-          "age": "https://www.medicaidlongtermcare.org/eligibility/alaska/",
-          "income": null,
-          "assets": "https://www.medicaidlongtermcare.org/eligibility/alaska/",
-          "phone": "https://health.alaska.gov/media/ux4ds44w/2025-medicaid-recipient-handbook.pdf"
+          "age": "https://health.alaska.gov/media/lorb0pgw/program-descriptions.pdf",
+          "income": "https://health.alaska.gov/media/lorb0pgw/program-descriptions.pdf",
+          "assets": "https://health.alaska.gov/media/lorb0pgw/program-descriptions.pdf",
+          "phone": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/"
         },
-        "notes": "Program is Aged, Blind, and Disabled (ABD) Medicaid or Aged, Disabled, and Long-Term Care (ADLTC) Medicaid; income limits found but schema requests assets only; non-.gov sources used as no official .gov details match query exactly"
+        "notes": "Current Alaska Adult Public Assistance / Medicaid pathway for aged, blind, or disabled individuals; income and asset values reflect the 2026 Alaska Department of Health program description."
       },
       "flags": [
         {
@@ -46,13 +46,13 @@
           "draftValue": [
             "211"
           ],
-          "verifiedValue": "8007809972"
+          "verifiedValue": "8004787778"
         }
       ],
-      "notes": "Program is Aged, Blind, and Disabled (ABD) Medicaid or Aged, Disabled, and Long-Term Care (ADLTC) Medicaid; income limits found but schema requests assets only; non-.gov sources used as no official .gov details match query exactly"
+      "notes": "Current Alaska Adult Public Assistance / Medicaid pathway for aged, blind, or disabled individuals; income and asset values reflect the 2026 Alaska Department of Health program description."
     },
     {
-      "programId": "ak-hcbs-waiver",
+      "programId": "hcbs-waiver",
       "programName": "Home and Community-Based Services Waiver",
       "facts": {
         "age": null,
@@ -61,30 +61,41 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "9072693463",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": null,
+        "age": 65,
+        "income_1": 2982,
         "income_2": null,
-        "assets_individual": null,
+        "assets_individual": 2000,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8004789996",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://health.alaska.gov/en/services/hcbs-waivers/",
+          "income": "https://www.medicaidplanningassistance.org/alaskans-living-independently-waiver/",
+          "assets": "https://www.medicaidplanningassistance.org/alaskans-living-independently-waiver/",
+          "phone": "https://health.alaska.gov/en/services/hcbs-waivers/"
         },
-        "notes": "Alaska operates five HCBS waivers (ALI, APDD, CCMC, IDD, ISW). For seniors, the relevant program is the Alaskans Living Independently (ALI) Waiver. Search results confirm eligibility requires Medicaid income/resource limits and nursing facility level of care assessment, but specific dollar thresholds, asset limits, and official application phone number are not provided in the retrieved sources. The Alaska Department of Health official HCBS page (health.alaska.gov) does not include these specific values in the search results. A direct contact with the Division of Public Assistance (DPA) or SDS Intake and Assessment Unit would be required to obtain current 2026 limits and phone numbers."
+        "notes": "Senior pathway corresponds to the Alaskans Living Independently (ALI) waiver; current official page lists the main contact number and confirms Medicaid eligibility plus level-of-care requirements. Current 2026 income and asset figures were found on a non-government source citing official rules."
       },
-      "flags": [],
-      "notes": "Alaska operates five HCBS waivers (ALI, APDD, CCMC, IDD, ISW). For seniors, the relevant program is the Alaskans Living Independently (ALI) Waiver. Search results confirm eligibility requires Medicaid income/resource limits and nursing facility level of care assessment, but specific dollar thresholds, asset limits, and official application phone number are not provided in the retrieved sources. The Alaska Department of Health official HCBS page (health.alaska.gov) does not include these specific values in the search results. A direct contact with the Division of Public Assistance (DPA) or SDS Intake and Assessment Unit would be required to obtain current 2026 limits and phone numbers."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "9072693463",
+            "211"
+          ],
+          "verifiedValue": "8004789996"
+        }
+      ],
+      "notes": "Senior pathway corresponds to the Alaskans Living Independently (ALI) waiver; current official page lists the main contact number and confirms Medicaid eligibility plus level-of-care requirements. Current 2026 income and asset figures were found on a non-government source citing official rules."
     },
     {
-      "programId": "ak-pace-elderly-care",
+      "programId": "pace-elderly-care",
       "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
       "facts": {
         "age": 55,
@@ -99,25 +110,35 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 55,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8006334227",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
+          "income": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
+          "assets": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly",
+          "phone": "https://www.medicaid.gov/medicaid/long-term-services-supports/program-of-all-inclusive-care-for-elderly"
         },
-        "notes": "No PACE program available in Alaska as of 2026 per multiple sources listing states without PACE"
+        "notes": "PACE is not known to use a separate countable asset test or income limit in the federal program description; Alaska-specific PACE availability was not found in an official Alaska source."
       },
-      "flags": [],
-      "notes": "No PACE program available in Alaska as of 2026 per multiple sources listing states without PACE"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "9074653300",
+            "211"
+          ],
+          "verifiedValue": "8006334227"
+        }
+      ],
+      "notes": "PACE is not known to use a separate countable asset test or income limit in the federal program description; Alaska-specific PACE availability was not found in an official Alaska source."
     },
     {
-      "programId": "ak-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
         "age": null,
@@ -132,39 +153,33 @@
       },
       "verified": {
         "age": null,
-        "income_1": 2265,
-        "income_2": 6064,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
+        "income_1": 1683,
+        "income_2": 2275,
+        "assets_individual": 9950,
+        "assets_couple": 14910,
+        "phone": "8004786065",
         "sources": {
           "age": null,
-          "income": "https://health.alaska.gov/en/services/extra-help-on-medicare-drug-costs/",
-          "assets": null,
-          "phone": null
+          "income": "https://secure.ssa.gov/apps10/poms.nsf/lnx/0600815023",
+          "assets": "https://grantsforseniors.org/medicare-savings-programs-in-alaska/",
+          "phone": "https://health.alaska.gov/en/services/extra-help-on-medicare-drug-costs/"
         },
-        "notes": "Alaska state site gives 2026 MSP income limits effective 04/01/2026; no specific asset limits or phone found in results; federal resources $9,950 individual/$14,910 couple but states may differ or omit"
+        "notes": "Alaska Medicare Savings Programs (QMB/SLMB/QI) are current for 2026; no age minimum found in the retrieved official source. Income values shown are the QMB senior-pathway limits for Alaska."
       },
       "flags": [
         {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 1663,
-          "verifiedValue": 2265,
-          "pctDiff": 26.6
-        },
-        {
-          "field": "income_2",
-          "severity": "high",
-          "draftValue": 2247,
-          "verifiedValue": 6064,
-          "pctDiff": 62.9
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8774862048"
+          ],
+          "verifiedValue": "8004786065"
         }
       ],
-      "notes": "Alaska state site gives 2026 MSP income limits effective 04/01/2026; no specific asset limits or phone found in results; federal resources $9,950 individual/$14,910 couple but states may differ or omit"
+      "notes": "Alaska Medicare Savings Programs (QMB/SLMB/QI) are current for 2026; no age minimum found in the retrieved official source. Income values shown are the QMB senior-pathway limits for Alaska."
     },
     {
-      "programId": "ak-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "Supplemental Nutrition Assistance Program (SNAP)",
       "facts": {
         "age": null,
@@ -178,54 +193,40 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 1407,
-        "income_2": 1890,
-        "assets_individual": 2750,
-        "assets_couple": 4250,
-        "phone": null,
+        "age": 60,
+        "income_1": 1630,
+        "income_2": 2203,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
+        "phone": "8004787778",
         "sources": {
-          "age": null,
-          "income": "https://usbenefitguide.com/alaska-assistance-programs/",
-          "assets": null,
-          "phone": null
+          "age": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/snap-nutrition-assistance/",
+          "income": "https://health.alaska.gov/media/lorb0pgw/dpa-program-descriptions-0126.pdf",
+          "assets": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/snap-nutrition-assistance/",
+          "phone": "https://health.alaska.gov/en/resources/department-contacts/"
         },
-        "notes": "Income limits derived from 130% Federal Poverty Level threshold stated in search result [5]. Monthly values calculated from annual FPL: $3,381/month for family of 4 implies ~$1,407/month for individual and ~$1,890/month for couple based on standard FPL ratios. Asset limits, phone number, and age-specific eligibility not found in provided search results. Search results confirm SNAP is active in Alaska as of 2026 with federal funding through September 30, 2026 [1]. Official Alaska DPA and USDA SNAP websites would contain complete asset limits and application phone numbers but were not fully indexed in search results provided."
+        "notes": "SNAP in Alaska is current and active; senior pathway uses age 60+ resource limit and ESAP/senior-related rules where applicable."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 3258,
-          "verifiedValue": 1407,
-          "pctDiff": 56.8
+          "verifiedValue": 1630,
+          "pctDiff": 50
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 4406,
-          "verifiedValue": 1890,
-          "pctDiff": 57.1
-        },
-        {
-          "field": "assets_individual",
-          "severity": "high",
-          "draftValue": 4500,
-          "verifiedValue": 2750,
-          "pctDiff": 38.9
-        },
-        {
-          "field": "assets_couple",
-          "severity": "medium",
-          "draftValue": 4500,
-          "verifiedValue": 4250,
-          "pctDiff": 5.6
+          "verifiedValue": 2203,
+          "pctDiff": 50
         }
       ],
-      "notes": "Income limits derived from 130% Federal Poverty Level threshold stated in search result [5]. Monthly values calculated from annual FPL: $3,381/month for family of 4 implies ~$1,407/month for individual and ~$1,890/month for couple based on standard FPL ratios. Asset limits, phone number, and age-specific eligibility not found in provided search results. Search results confirm SNAP is active in Alaska as of 2026 with federal funding through September 30, 2026 [1]. Official Alaska DPA and USDA SNAP websites would contain complete asset limits and application phone numbers but were not fully indexed in search results provided."
+      "notes": "SNAP in Alaska is current and active; senior pathway uses age 60+ resource limit and ESAP/senior-related rules where applicable."
     },
     {
-      "programId": "ak-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "Low Income Home Energy Assistance Program (LIHEAP)",
       "facts": {
         "age": null,
@@ -242,20 +243,20 @@
         "income_2": 3303,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8004787778",
         "sources": {
-          "age": null,
+          "age": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/heating-assistance/",
           "income": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/heating-assistance/",
-          "assets": "https://www.snapscreener.com/liheap/alaska",
-          "phone": null
+          "assets": null,
+          "phone": "https://health.alaska.gov/en/services/division-of-public-assistance-dpa-services/heating-assistance/"
         },
-        "notes": "Program administered as Heating Assistance Program (HAP) in Alaska. No age or asset limits. Income limits are monthly for FY2026 from official state source."
+        "notes": "Alaska LIHEAP (Heating Assistance Program) uses a gross monthly income test at 150% of federal poverty guidelines; no age or asset test was found in the current official source."
       },
       "flags": [],
-      "notes": "Program administered as Heating Assistance Program (HAP) in Alaska. No age or asset limits. Income limits are monthly for FY2026 from official state source."
+      "notes": "Alaska LIHEAP (Heating Assistance Program) uses a gross monthly income test at 150% of federal poverty guidelines; no age or asset test was found in the current official source."
     },
     {
-      "programId": "ak-weatherization-assistance-program",
+      "programId": "weatherization-assistance-program",
       "programName": "Weatherization Assistance Program",
       "facts": {
         "age": null,
@@ -270,18 +271,18 @@
       },
       "verified": {
         "age": null,
-        "income_1": 3258,
-        "income_2": 4405,
+        "income_1": null,
+        "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8004788080",
+        "phone": "8004787227",
         "sources": {
           "age": null,
-          "income": "https://www.alaskacdc.org/weatherization-assistance-program.html",
+          "income": null,
           "assets": null,
-          "phone": "https://health.alaska.gov/media/fygdfzle/2026-heating-assistance-application.pdf"
+          "phone": "https://www.ahfc.us/efficiency/weatherization/weatherization-service-providers"
         },
-        "notes": "Income limits from 4/10/2025 (annual $39,100/1 person, $52,860/2 persons divided by 12, rounded); no 2026 update found. Phone from state heating assistance doc referring to weatherization provider."
+        "notes": "Could not verify a statewide Alaska Weatherization Assistance Program income limit from an authoritative current source in the retrieved results; the best current official contact found was AHFC/RurAL Cap statewide at 800-478-7227."
       },
       "flags": [
         {
@@ -290,13 +291,13 @@
           "draftValue": [
             "9077806868"
           ],
-          "verifiedValue": "8004788080"
+          "verifiedValue": "8004787227"
         }
       ],
-      "notes": "Income limits from 4/10/2025 (annual $39,100/1 person, $52,860/2 persons divided by 12, rounded); no 2026 update found. Phone from state heating assistance doc referring to weatherization provider."
+      "notes": "Could not verify a statewide Alaska Weatherization Assistance Program income limit from an authoritative current source in the retrieved results; the best current official contact found was AHFC/RurAL Cap statewide at 800-478-7227."
     },
     {
-      "programId": "ak-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "State Health Insurance Assistance Program (SHIP)",
       "facts": {
         "age": null,
@@ -324,13 +325,13 @@
           "assets": null,
           "phone": "https://health.alaska.gov/en/senior-and-disabilities-services/medicare-office/"
         },
-        "notes": "SHIP provides counseling to Medicare beneficiaries (typically age 65+ or disabled under 65); no income or asset limits apply to core counseling services"
+        "notes": "No age, income, or asset eligibility test found for Alaska SHIP/Medicare Information Office; current official phone is 1-800-478-6065."
       },
       "flags": [],
-      "notes": "SHIP provides counseling to Medicare beneficiaries (typically age 65+ or disabled under 65); no income or asset limits apply to core counseling services"
+      "notes": "No age, income, or asset eligibility test found for Alaska SHIP/Medicare Information Office; current official phone is 1-800-478-6065."
     },
     {
-      "programId": "ak-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Meals on Wheels (Senior Meals Program)",
       "facts": {
         "age": 60,
@@ -351,27 +352,38 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "9074636179",
         "sources": {
-          "age": "https://oap.salvationarmy.org/older_alaskans_program/our-program/",
+          "age": "https://www.ccsak.org/uploads/8/5/9/6/85963578/brochure__6_commonly_asked_questions_for_clients.pdf",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.ccsak.org/uploads/8/5/9/6/85963578/brochure__6_commonly_asked_questions_for_clients.pdf"
         },
-        "notes": "Program delivered locally (e.g. Salvation Army in Anchorage, Fairbanks Senior Center); no statewide uniform phone or .gov eligibility details found. Multiple providers confirm 60+ for seniors, no income/assets test."
+        "notes": "Current Alaska Meals on Wheels senior pathway appears to use a 60+ age threshold; no authoritative income or asset test found. Program is offered locally, with Juneau Senior Center materials providing the clearest current phone number."
       },
-      "flags": [],
-      "notes": "Program delivered locally (e.g. Salvation Army in Anchorage, Fairbanks Senior Center); no statewide uniform phone or .gov eligibility details found. Multiple providers confirm 60+ for seniors, no income/assets test."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "9073490613",
+            "9074521735",
+            "9078520276"
+          ],
+          "verifiedValue": "9074636179"
+        }
+      ],
+      "notes": "Current Alaska Meals on Wheels senior pathway appears to use a 60+ age threshold; no authoritative income or asset test found. Program is offered locally, with Juneau Senior Center materials providing the clearest current phone number."
     },
     {
-      "programId": "ak-alzheimers-family-caregiver-support",
+      "programId": "alzheimers-family-caregiver-support",
       "programName": "Alzheimer's Family Caregiver Support Program",
       "skipped": true,
       "reason": "no verifiable facts",
       "flags": []
     },
     {
-      "programId": "ak-scsep-masst-employment",
+      "programId": "scsep-masst-employment",
       "programName": "Senior Community Service Employment Program (SCSEP) / Mature Alaskans Seeking Skills Training (MASST)",
       "facts": {
         "age": 55,
@@ -386,24 +398,33 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
+        "income_1": 125,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "9074654872",
         "sources": {
-          "age": "https://aws.state.ak.us/OnlinePublicNotices/Notices/Attachment.aspx?id=97194",
-          "income": null,
+          "age": "https://labor.alaska.gov/masst/",
+          "income": "https://wioaplans.ed.gov/node/161966",
           "assets": null,
-          "phone": null
+          "phone": "https://www.jedc.org/wp-content/uploads/2025/10/SREC-Meeting-Minutes-10032025.pdf"
         },
-        "notes": "No current (2026) authoritative data found; sources from 2018 or earlier. No phone number located. Income/assets not detailed for Alaska SCSEP/MASST."
+        "notes": "MASST is Alaska’s SCSEP program; current sources show 55+ age eligibility and income up to 125% of federal poverty level. No asset test found in authoritative current sources."
       },
-      "flags": [],
-      "notes": "No current (2026) authoritative data found; sources from 2018 or earlier. No phone number located. Income/assets not detailed for Alaska SCSEP/MASST."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211"
+          ],
+          "verifiedValue": "9074654872"
+        }
+      ],
+      "notes": "MASST is Alaska’s SCSEP program; current sources show 55+ age eligibility and income up to 125% of federal poverty level. No asset test found in authoritative current sources."
     },
     {
-      "programId": "ak-legal-services-senior-hotline",
+      "programId": "legal-services-senior-hotline",
       "programName": "Alaska Legal Services Corporation (ALSC) Senior Legal Hotline",
       "facts": {
         "age": 60,
@@ -421,24 +442,24 @@
       },
       "verified": {
         "age": 60,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 2078,
+        "income_2": 2818,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "18884782572",
         "sources": {
           "age": "https://www.alsc-law.org/elder-advocacy/",
-          "income": null,
+          "income": "https://www.alsc-law.org/eligibility/",
           "assets": null,
-          "phone": "https://www.alsc-law.org/apply-for-services/"
+          "phone": "https://www.alsc-law.org/apply/"
         },
-        "notes": "No Senior Legal Hotline found; statewide intake used. Elder Law Project serves seniors 60+ with priority on economic need but no strict income test specified."
+        "notes": "Current ALSC senior legal services pathway appears to serve Alaska residents age 60+; no asset test found. Income limits are generally waived for seniors, but ALSC publishes 125% FPL guideline amounts."
       },
       "flags": [],
-      "notes": "No Senior Legal Hotline found; statewide intake used. Elder Law Project serves seniors 60+ with priority on economic need but no strict income test specified."
+      "notes": "Current ALSC senior legal services pathway appears to serve Alaska residents age 60+; no asset test found. Income limits are generally waived for seniors, but ALSC publishes 125% FPL guideline amounts."
     },
     {
-      "programId": "ak-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Long-Term Care Ombudsman Program",
       "facts": {
         "age": 60,
@@ -460,15 +481,15 @@
         "assets_couple": null,
         "phone": "8007306393",
         "sources": {
-          "age": "https://akoltco.org/about-us/",
+          "age": "https://law.alaska.gov/department/civil/consumer/cp_resources.html",
           "income": null,
           "assets": null,
-          "phone": "https://akoltco.org/home/"
+          "phone": "https://akoltco.org/about-us/"
         },
-        "notes": "Program serves seniors age 60+ in long-term care facilities (assisted living, nursing homes) and adults 60+ in home settings. No income or asset limits found in official sources. All services are free. Program is active and current as of search results."
+        "notes": "Program appears current and serves residents age 60+; no income or asset test found for the ombudsman program."
       },
       "flags": [],
-      "notes": "Program serves seniors age 60+ in long-term care facilities (assisted living, nursing homes) and adults 60+ in home settings. No income or asset limits found in official sources. All services are free. Program is active and current as of search results."
+      "notes": "Program appears current and serves residents age 60+; no income or asset test found for the ombudsman program."
     }
   ]
 }

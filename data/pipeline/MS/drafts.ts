@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MS/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.471Z
+ * Last updated: 2026-10-02T07:57:10.919Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -445,7 +445,15 @@ export const drafts: PipelineStateDrafts = {
           "Mississippi resident",
           "U.S. citizen or qualified non-citizen"
         ],
-        "povertyLevelReference": "100-135% FPL"
+        "povertyLevelReference": "100-135% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -590,7 +598,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.ms.gov/medicaid-coverage/who-qualifies-for-coverage/medicare-cost-sharing/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8004212408",
+            "8009483090",
+            "211"
+          ],
+          "to": "8448224622",
+          "source": "https://www.mdhs.ms.gov/post/navigating-medicare-made-easy-with-ship/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:25.485Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -659,7 +682,15 @@ export const drafts: PipelineStateDrafts = {
           "If 60+ or disabled, only net income test applies (no gross income limit)",
           "Able-bodied adults without dependents must work 20+ hours/week (seniors exempt)"
         ],
-        "povertyLevelReference": "100% FPL net income test (from October 1, 2026)"
+        "povertyLevelReference": "100% FPL net income test (from October 1, 2026)",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -780,7 +811,45 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mdhs.ms.gov/help/snap/special/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1330,
+          "to": 1729,
+          "source": "https://www.mdhs.ms.gov/help/snap/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:40:25.485Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1804,
+          "to": 2345,
+          "source": "https://www.mdhs.ms.gov/help/snap/",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 133% FPL 2026 or 130% FPL 2025 or 133% FPL 2025 or 135% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:40:25.485Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 4750,
+          "to": 4500,
+          "source": "https://www.mdhs.ms.gov/help/snap/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:40:25.485Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4750,
+          "to": 4500,
+          "source": "https://www.mdhs.ms.gov/help/snap/",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:40:25.485Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1568,7 +1637,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.mdhs.ms.gov/aging/caregivers/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-08-18",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 55,
+          "to": 60,
+          "source": "https://www.mdhs.ms.gov/aging/caregivers/",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:40:25.485Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -1749,7 +1829,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(601) 960-0419",
       "sourceUrl": "https://www.dol.gov/agencies/eta/seniors",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6019600419",
+            "6016438671",
+            "6016832007",
+            "2283141433"
+          ],
+          "to": "6013216000",
+          "source": "https://mdes.ms.gov/media/521454/py26-rfq_scsep_posts07212026.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:25.485Z"
+        }
+      ]
     },
     {
       "id": "legal-services-senior-aid",

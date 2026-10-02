@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-10-02T02:22:51.918Z
+ * Last updated: 2026-10-02T07:57:10.917Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -209,7 +209,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/seniors.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8553667873",
+            "211"
+          ],
+          "to": "8006573672",
+          "source": "https://mn.gov/dhs/health-care/contact-us/consumer-support/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:39:39.575Z"
+        }
+      ]
     },
     {
       "id": "elderly-waiver",
@@ -579,7 +593,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/msho.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6514312670",
+            "9528837979"
+          ],
+          "to": "6514312517",
+          "source": "https://mn.gov/dhs/about-us/contact-us/contact-numbers/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:39:39.575Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -803,7 +831,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mn.gov/dhs/people-we-serve/seniors/health-care/health-care-programs/programs-and-services/help-with-medicare-costs.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "6514312670",
+            "8006573739"
+          ],
+          "to": "8663332466",
+          "source": "https://mn.db101.org/mn/programs/health_coverage/medicare2/program2b.htm",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:39:39.575Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -891,7 +933,15 @@ export const drafts: PipelineStateDrafts = {
           "Automatic qualification if receiving SSI, MSA, or General Assistance",
           "Work requirements may apply to ages 55-64 without dependents under new 2025 rules"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1042,7 +1092,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mn.gov/dhs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-03"
+      "lastVerifiedDate": "2026-09-03",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1305,
+          "to": 2660,
+          "source": "https://mn.gov/dhs/mnfoodhelper/",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2026 vs verified 200% FPL 2026",
+          "flaggedAt": "2026-10-02T07:39:39.575Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1763,
+          "to": 3607,
+          "source": "https://mn.gov/dhs/mnfoodhelper/",
+          "severity": "high",
+          "why": "tier dispute: draft 100% FPL 2026 vs verified 200% FPL 2026",
+          "flaggedAt": "2026-10-02T07:39:39.575Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1566,7 +1636,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or legally authorized to work",
           "Priority for veterans, adults 65+, individuals with disabilities, low literacy, limited English proficiency, rural residents, homeless or at risk of homelessness"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 120,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -1695,7 +1773,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mn.gov/deed/programs-services/dislocated-worker/scsep/index.jsp",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8325990872",
+            "5073456822",
+            "6512597114"
+          ],
+          "to": "6512597581",
+          "source": "https://mn.gov/deed/job-seekers/find-a-job/targeted-services/older/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:39:39.575Z"
+        }
+      ]
     },
     {
       "id": "legal-assistance-seniors",

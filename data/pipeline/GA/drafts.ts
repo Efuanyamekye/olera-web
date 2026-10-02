@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/GA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.461Z
+ * Last updated: 2026-10-02T07:57:10.907Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -195,7 +195,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.georgia.gov/how-apply/basic-eligibility",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-09-09",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 2094,
+          "source": "https://dfcs.georgia.gov/document/document/dfcsabd-medicaid-512pdf-0/download",
+          "severity": "high",
+          "why": "value fits more than one tier (250% FPL 2023 or 300% SSI 2026 or 300% SSI 2025)",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        }
+      ]
     },
     {
       "id": "ccsp-home-care",
@@ -573,7 +584,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dch.georgia.gov/programs/hcbs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 65,
+          "to": 60,
+          "source": "https://aging.georgia.gov/programs-and-services/home-community-based-services",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -824,7 +846,45 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1350,
+          "to": 1550,
+          "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
+          "severity": "medium",
+          "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 2095,
+          "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
+          "severity": "medium",
+          "why": "value fits more than one tier (100% FPL 2026 or 100% FPL 2025 or 120% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 9950,
+          "to": 7390,
+          "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 14910,
+          "to": 11090,
+          "source": "https://medicaid.georgia.gov/medicare-savings-plans-programs-faqs",
+          "severity": "high",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        }
+      ]
     },
     {
       "id": "senior-snap",
@@ -873,7 +933,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified non-citizen (5+ years residency, disability benefits, or child under 18)",
           "All household members must meet age/no-work criteria and share food preparation"
         ],
-        "povertyLevelReference": "130% FPL before deductions (Georgia broad-based eligibility); 100% FPL after deductions above that"
+        "povertyLevelReference": "130% FPL before deductions (Georgia broad-based eligibility); 100% FPL after deductions above that",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 130,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1165,7 +1233,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dfcs.georgia.gov/regular-home-energy-assistance/energy-assistance-eligibility-requirements",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8774234746",
+            "211"
+          ],
+          "to": "4046573426",
+          "source": "https://dhs.georgia.gov/low-income-home-energy-assistance-program",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1229,7 +1311,15 @@ export const drafts: PipelineStateDrafts = {
           "Renters need written landlord permission",
           "Program does not fix structural issues like roofing, walls, or flooring holes"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -1365,7 +1455,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://gefa.georgia.gov/weatherization-assistance-program",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "4045841000",
+            "211"
+          ],
+          "to": "4046563826",
+          "source": "https://psc.ga.gov/about-the-psc/consumer-corner/consumer-advisories/utility-assistance-programs/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
@@ -1907,7 +2011,15 @@ export const drafts: PipelineStateDrafts = {
           "Poor employment prospects based on assessment",
           "Reside in a county served by a Georgia SCSEP provider"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 125,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2019,7 +2131,22 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://aging.georgia.gov/programs-and-services/senior-community-service-employment-program-scsep",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-09"
+      "lastVerifiedDate": "2026-09-09",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8558502525",
+            "7705382657",
+            "211"
+          ],
+          "to": "8665524464",
+          "source": "https://dhs.georgia.gov/document/document/guidehealthsocialservicesv8pdf-0/download",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:51.173Z"
+        }
+      ]
     },
     {
       "id": "elderly-legal-assistance-elap",

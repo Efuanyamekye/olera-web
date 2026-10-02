@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/FL/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.458Z
+ * Last updated: 2026-10-02T07:57:10.904Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -276,7 +276,18 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "TJ",
       "reviewedAt": "2026-04-20",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_2",
+          "from": 5964,
+          "to": 2982,
+          "source": "https://www.medicaidplanningassistance.org/florida-medicaid-smmc-ltc/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        }
+      ]
     },
     {
       "id": "pace-comprehensive-care",
@@ -776,7 +787,15 @@ export const drafts: PipelineStateDrafts = {
           "Not fleeing felony warrant",
           "Asset limits apply only in a few cases: a household with a member disqualified from SNAP ($4,500 if someone is 60+ or disabled), or a senior household over the 200% gross limit that qualifies on net income instead ($4,750 from October 1, 2026)"
         ],
-        "povertyLevelReference": "200% FPL gross for most households under Broad-Based Categorical Eligibility (BBCE); households with a member 60+ or disabled that are over it face only the 100% FPL net test"
+        "povertyLevelReference": "200% FPL gross for most households under Broad-Based Categorical Eligibility (BBCE); households with a member 60+ or disabled that are over it face only the 100% FPL net test",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -925,7 +944,39 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "TJ",
       "reviewedAt": "2026-04-20",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2660,
+          "to": 2172,
+          "source": "https://www.fna.usda.gov/snap/recipient/eligibility",
+          "severity": "high",
+          "why": "value fits more than one tier (200% FPL 2026 or 200% FPL 2025 or 300% SSI 2023)",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3607,
+          "to": 2948,
+          "source": "https://www.fna.usda.gov/snap/recipient/eligibility",
+          "severity": "high",
+          "why": "tier dispute: draft 200% FPL 2026 vs verified 165% FPL 2026",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8503004323",
+            "211"
+          ],
+          "to": "8667622237",
+          "source": "https://www.fna.usda.gov/snap-directory-entry/florida",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1155,7 +1206,24 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://floridaliheap.com",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "7725624177",
+            "5613554792",
+            "4078468532",
+            "8132725220"
+          ],
+          "to": "8507178450",
+          "source": "https://acf.gov/ocs/map/liheap-map-state-and-territory-contact-listing",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        }
+      ]
     },
     {
       "id": "eheap-emergency-home-energy-elderly",
@@ -1308,7 +1376,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://elderaffairs.org/programs-and-services/emergency-home-energy-assistance-for-the-elderly-program/",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-08-18",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-08-18",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18009635337",
+            "211"
+          ],
+          "to": "8504142000",
+          "source": "https://elderaffairs.org/programs-and-services/emergency-home-energy-assistance-for-the-elderly-program/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1393,7 +1475,15 @@ export const drafts: PipelineStateDrafts = {
           "Homeowner with proof of ownership OR renter with landlord written consent",
           "Households receiving SSI or TANF are categorically eligible (bypass income test but still apply)"
         ],
-        "povertyLevelReference": "200% FPL gross (2026 HHS guidelines). Confirm with the local agency, since FloridaCommerce's page still shows older figures."
+        "povertyLevelReference": "200% FPL gross (2026 HHS guidelines). Confirm with the local agency, since FloridaCommerce's page still shows older figures.",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1598,7 +1688,27 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "TJ",
       "reviewedAt": "2026-04-20",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2660,
+          "to": 1565,
+          "source": "https://www.cfcaa.org/weatherization/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3607,
+          "to": 2118,
+          "source": "https://www.cfcaa.org/weatherization/",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        }
+      ]
     },
     {
       "id": "shine-medicare-counseling",
@@ -2259,7 +2369,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-05-05"
+      "lastVerifiedDate": "2026-05-05",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8558502525",
+            "8665006587",
+            "211"
+          ],
+          "to": "8504142000",
+          "source": "https://elderaffairs.org/programs-and-services/senior-community-service-employment-program-scsep/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        }
+      ]
     },
     {
       "id": "area-agency-legal-services",
@@ -2488,7 +2613,15 @@ export const drafts: PipelineStateDrafts = {
           "Caregiver must be determined willing and able to provide or coordinate care. A Level II background screening is required only for caregivers who are not related to the person receiving care.",
           "Income and assets may be met by self-declaration, or by receiving SSI, or by QMB or SLMB benefits. Enrolment in SSI, QMB or SLMB is one route, not a prerequisite."
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "SSI",
+          "percent": 300,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -2620,7 +2753,18 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://elderaffairs.org/programs-services/home-care-for-the-elderly/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 2982,
+          "to": 2829,
+          "source": "https://elderaffairs.org/programs-and-services/home-care-for-the-elderly-hce-program/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:35:32.324Z"
+        }
+      ]
     },
     {
       "id": "cce-community-care-elderly",
@@ -3045,7 +3189,15 @@ export const drafts: PipelineStateDrafts = {
           "Must have or apply for a Social Security number",
           "Must apply for other benefits they may be eligible for, such as pensions, Social Security, or Medicare"
         ],
-        "povertyLevelReference": "MEDS-AD uses 88% FPL standards in Florida's April 2026 SSI-related financial eligibility chart."
+        "povertyLevelReference": "MEDS-AD uses 88% FPL standards in Florida's April 2026 SSI-related financial eligibility chart.",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2022,
+          "disregard": 20,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",

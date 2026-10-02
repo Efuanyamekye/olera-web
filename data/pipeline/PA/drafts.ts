@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/PA/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-14T07:53:39.543Z
+ * Last updated: 2026-10-02T07:57:10.928Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -205,7 +205,39 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 21,
+          "to": 55,
+          "source": "https://www.pa.gov/agencies/dhs/resources/medicaid/chc",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 8000,
+          "to": 2000,
+          "source": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/healthchoices/hc-services/documents/Eligibility%20for%20CHC.pdf",
+          "severity": "high",
+          "why": "outside sanity bounds (3x)",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18775504227",
+            "211"
+          ],
+          "to": "18448243655",
+          "source": "https://www.pa.gov/agencies/dhs/contact/long-term-care-contacts",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        }
+      ]
     },
     {
       "id": "life-program",
@@ -310,7 +342,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "717-783-1550",
       "sourceUrl": "https://www.pa.gov/agencies/aging/aging-programs-and-services.html",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-06-19"
+      "draftedAt": "2026-06-19",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7177831550"
+          ],
+          "to": "18775504227",
+          "source": "https://www.pa.gov/services/dhs/enroll-in-the-living-independently-for-the-elderly-program-life",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        }
+      ]
     },
     {
       "id": "pace-prescription-assistance",
@@ -549,7 +594,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified immigrant",
           "Spouse income and resources counted if married"
         ],
-        "povertyLevelReference": "100-175% FPL"
+        "povertyLevelReference": "100-175% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -690,7 +743,39 @@ export const drafts: PipelineStateDrafts = {
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
       "reviewedAt": "2026-06-17",
-      "lastVerifiedDate": "2026-08-07"
+      "lastVerifiedDate": "2026-08-07",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1350,
+          "to": 1816,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1824,
+          "to": 2455,
+          "source": "https://www.medicare.gov/basics/costs/help/medicare-savings-programs",
+          "severity": "high",
+          "why": "value fits more than one tier (133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 135% FPL 2025 or 138% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8665504355",
+            "8006927462"
+          ],
+          "to": "8006334227",
+          "source": "https://www.pa.gov/agencies/dhs/resources/aging-physical-disabilities/medicaid-older-people-and-people-with-disabilities",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -768,7 +853,15 @@ export const drafts: PipelineStateDrafts = {
           "Must buy and prepare food together with others counted in household",
           "Medical expenses and housing costs are deducted to increase benefits"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1204,7 +1297,21 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
-      "reviewedAt": "2026-06-17"
+      "reviewedAt": "2026-06-17",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7177719610",
+            "8149461235"
+          ],
+          "to": "7177831550",
+          "source": "https://www.palottery.pa.gov/Benefits/Local-Services-Senior-Centers-Meals.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        }
+      ]
     },
     {
       "id": "caregiver-support-program",
@@ -1522,7 +1629,21 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
       "reviewedBy": "Cecille Chavez",
-      "reviewedAt": "2026-06-17"
+      "reviewedAt": "2026-06-17",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8777277529",
+            "211"
+          ],
+          "to": "7177831550",
+          "source": "https://www.pa.gov/services/aging/apply-for-the-older-pennsylvanians-legal-assistance-program",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:57.351Z"
+        }
+      ]
     },
     {
       "id": "ltc-ombudsman",

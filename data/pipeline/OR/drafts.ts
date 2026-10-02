@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/OR/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.480Z
+ * Last updated: 2026-10-02T07:57:10.927Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -67,7 +67,15 @@ export const drafts: PipelineStateDrafts = {
           "Cannot receive other Medicaid long-term care services at the same time. Being enrolled in Medicaid or the Oregon Health Plan does not by itself rule OPI-M out.",
           "For ages 18-59: Must have qualifying physical disability meeting Social Security standards"
         ],
-        "povertyLevelReference": "400% FPL"
+        "povertyLevelReference": "400% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 400,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -197,7 +205,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8556732372",
+            "211"
+          ],
+          "to": "5039455600",
+          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/opi-m-scm-checklist.docx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:40.858Z"
+        }
+      ]
     },
     {
       "id": "pace-elderly-care",
@@ -355,7 +377,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/pace-fact-sheet.pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-18"
+      "lastVerifiedDate": "2026-08-18",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18556732372"
+          ],
+          "to": "8442247223",
+          "source": "https://www.oregon.gov/odhs/providers-partners/seniors-disabilities/Documents/pace-fact-sheet.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:40.858Z"
+        }
+      ]
     },
     {
       "id": "medicare-savings-programs",
@@ -411,7 +446,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be Oregon resident",
           "Cannot receive other Oregon Medicaid benefits (for QI/SMF tier only)"
         ],
-        "povertyLevelReference": "100-200% FPL depending on tier"
+        "povertyLevelReference": "100-200% FPL depending on tier",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -567,7 +610,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/odhs/aging-disability-services/pages/medicare-savings-programs.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18002828096"
+          ],
+          "to": "8556732372",
+          "source": "https://www.oregon.gov/odhs/aging-disability-services/pages/medicare-savings-programs.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:40.858Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -647,7 +703,15 @@ export const drafts: PipelineStateDrafts = {
           "Buy and prepare food with household members",
           "Work requirements may apply if age 18-64 without disabilities or children under 14"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1499,7 +1563,23 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(503) 945-5811",
       "sourceUrl": "https://www.oregon.gov/odhs/aging-disability-services/pages/meals-nutrition.aspx",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5039455811",
+            "5033642856",
+            "8004698772",
+            "5033043400"
+          ],
+          "to": "8556732372",
+          "source": "https://www.oregon.gov/odhs/food/pages/default.aspx",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:40.858Z"
+        }
+      ]
     },
     {
       "id": "family-caregiver-assistance-support",
@@ -1968,7 +2048,24 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(503) 224-2640",
       "sourceUrl": "https://lasoregon.org",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5032242640",
+            "5032445204",
+            "5419268678",
+            "5413856944",
+            "18006786944"
+          ],
+          "to": "5032244086",
+          "source": "https://lasoregon.org/locations/portland-regional-office/",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:44:40.858Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2241,7 +2338,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://secure.sos.state.or.us/oard/displayDivisionRules.action?selectedDivision=3636",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "8666986155"
+          ],
+          "to": "5039862000",
+          "source": "https://www.oregon.gov/ohcs/for-providers/Documents/manuals/ERA-Operations-Manual.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:40.858Z"
+        }
+      ]
     },
     {
       "id": "senior-tuition-audit",
@@ -2412,7 +2523,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(971) 722-6111",
       "sourceUrl": "https://www.oregonlegislature.gov/bills_laws/ors/ors341.html",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9717226111",
+            "5033250910"
+          ],
+          "to": "8005478887",
+          "source": "https://www.pdx.edu/senior-adult-learning-center/salc-history",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:44:40.858Z"
+        }
+      ]
     },
     {
       "id": "hrsn-health-social-needs",
@@ -2582,7 +2707,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.oregon.gov/oha/hsd/medicaid-policy/pages/hrsn.aspx",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8002730557",
+            "211"
+          ],
+          "to": "9716731222",
+          "source": "https://sharedsystems.dhsoha.state.or.us/DHSForms/Served/le-991901.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:44:40.858Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

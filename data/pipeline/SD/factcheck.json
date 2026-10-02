@@ -1,17 +1,17 @@
 {
   "state": "SD",
   "stateName": "South Dakota",
-  "checkedAt": "2026-04-14T10:09:19.849Z",
+  "checkedAt": "2026-10-02T07:46:04.688Z",
   "total": 16,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 8,
-  "totalFlags": 11,
-  "highSeverityFlags": 7,
+  "programsWithFlags": 9,
+  "totalFlags": 14,
+  "highSeverityFlags": 8,
   "programs": [
     {
-      "programId": "sd-medicaid-seniors-disabled",
+      "programId": "medicaid-seniors-disabled",
       "programName": "South Dakota Medicaid for Seniors/Disabled",
       "facts": {
         "age": 65,
@@ -26,32 +26,33 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
+        "income_1": 2982,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": 3000,
-        "phone": null,
+        "assets_couple": null,
+        "phone": "8005971603",
         "sources": {
-          "age": "https://www.medicaidlongtermcare.org/eligibility/south_dakota/",
-          "income": null,
-          "assets": "https://www.medicaidplanningassistance.org/medicaid-eligibility-south-dakota/",
-          "phone": null
+          "age": "https://dss.sd.gov/economicassistance/medical_programs.aspx",
+          "income": "https://dss.sd.gov/economicassistance/medical_programs.aspx",
+          "assets": "https://dss.sd.gov/economicassistance/medical_programs.aspx",
+          "phone": "https://dss.sd.gov/medicaid/contact/PhoneList.aspx"
         },
-        "notes": "No official .gov source found with 2026 limits; relied on current non-gov sources citing them. Income limits exist but not requested in schema. ABD Medicaid serves seniors 65+ and disabled."
+        "notes": "Current SD Medicaid aged/disabled coverage groups use a 65+ senior threshold; separate couple asset limit was not found for this pathway in the retrieved official source, and the page shows a $2,000 resource limit for individuals."
       },
       "flags": [
         {
-          "field": "assets_couple",
-          "severity": "high",
-          "draftValue": 4000,
-          "verifiedValue": 3000,
-          "pctDiff": 25
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8552566742"
+          ],
+          "verifiedValue": "8005971603"
         }
       ],
-      "notes": "No official .gov source found with 2026 limits; relied on current non-gov sources citing them. Income limits exist but not requested in schema. ABD Medicaid serves seniors 65+ and disabled."
+      "notes": "Current SD Medicaid aged/disabled coverage groups use a 65+ senior threshold; separate couple asset limit was not found for this pathway in the retrieved official source, and the page shows a $2,000 resource limit for individuals."
     },
     {
-      "programId": "sd-hope-waiver",
+      "programId": "hope-waiver",
       "programName": "HOPE Waiver (Home & Community-Based Options and Person Centered Excellence)",
       "facts": {
         "age": 65,
@@ -69,30 +70,22 @@
         "age": 65,
         "income_1": null,
         "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": 3000,
+        "assets_individual": null,
+        "assets_couple": null,
         "phone": "8336639673",
         "sources": {
           "age": "https://dhs.sd.gov/ltss/hope-waiver",
-          "income": null,
-          "assets": "https://www.medicaidlongtermcare.org/eligibility/south_dakota/",
-          "phone": "https://dakotaathome.sd.gov/search/c4275e52-8d7a-5a6e-afc4-48062b9f7f4c"
+          "income": "https://sdlegislature.gov/Rules/Administrative/67:44",
+          "assets": "https://dss.sd.gov/docs/medicaid/providers/billingmanuals/General/Recipient_Eligibility.pdf",
+          "phone": "https://dhs.sd.gov/ltss/hope-waiver"
         },
-        "notes": "Income limits exist but are expressed as multiples of Federal Benefit Rate (FBR) which fluctuates annually; 2026 FBR-based income limit not found in search results. Asset limits are current as of 2026 per medicaidlongtermcare.org. Waiver expiration is 09/30/2026 with anticipated renewal effective 10/01/2026 per dhs.sd.gov. Program is not an entitlement; enrollment capped at approximately 3,103 beneficiaries per year with potential waitlist."
+        "notes": "HOPE Waiver is current in South Dakota as of 2026; official sources show a 65+ senior pathway and a separate disability pathway. I could verify income-related eligibility language but not a countable asset limit from the retrieved official sources, so assets are null."
       },
-      "flags": [
-        {
-          "field": "assets_couple",
-          "severity": "high",
-          "draftValue": 126420,
-          "verifiedValue": 3000,
-          "pctDiff": 97.6
-        }
-      ],
-      "notes": "Income limits exist but are expressed as multiples of Federal Benefit Rate (FBR) which fluctuates annually; 2026 FBR-based income limit not found in search results. Asset limits are current as of 2026 per medicaidlongtermcare.org. Waiver expiration is 09/30/2026 with anticipated renewal effective 10/01/2026 per dhs.sd.gov. Program is not an entitlement; enrollment capped at approximately 3,103 beneficiaries per year with potential waitlist."
+      "flags": [],
+      "notes": "HOPE Waiver is current in South Dakota as of 2026; official sources show a 65+ senior pathway and a separate disability pathway. I could verify income-related eligibility language but not a countable asset limit from the retrieved official sources, so assets are null."
     },
     {
-      "programId": "sd-pace-all-inclusive-care",
+      "programId": "pace-all-inclusive-care",
       "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
       "facts": {
         "age": 55,
@@ -115,18 +108,18 @@
         "assets_couple": null,
         "phone": null,
         "sources": {
-          "age": "https://www.medicaidlongtermcare.org/benefits/pace-life-programs/",
+          "age": "https://dhs.sd.gov/content/dam/digital/united-states/south-dakota/sdo/pdf/long-term-services-and-supports/provider-portal/feasibility-studies/SD-PACE%20Feasibility-Study.pdf",
           "income": null,
           "assets": null,
           "phone": null
         },
-        "notes": "PACE is not currently operating in South Dakota as of April 2026. Search results indicate South Dakota is among states without PACE/LIFE programs. A feasibility study was conducted (HB 1016, 2024) to evaluate potential statewide implementation, but no operational program exists. Age requirement (55+) is the national PACE standard per federal program design, not South Dakota-specific. Income and asset limits, phone numbers, and other eligibility details cannot be provided because the program does not operate in this state. User should verify current status with South Dakota Department of Human Services or consult the National PACE Association locator at https://www.npaonline.org/find-a-pace-program."
+        "notes": "PACE appears to be a feasibility/study-level reference in South Dakota rather than a clearly established statewide program; no authoritative South Dakota phone number for applying or getting help was found in the retrieved sources."
       },
       "flags": [],
-      "notes": "PACE is not currently operating in South Dakota as of April 2026. Search results indicate South Dakota is among states without PACE/LIFE programs. A feasibility study was conducted (HB 1016, 2024) to evaluate potential statewide implementation, but no operational program exists. Age requirement (55+) is the national PACE standard per federal program design, not South Dakota-specific. Income and asset limits, phone numbers, and other eligibility details cannot be provided because the program does not operate in this state. User should verify current status with South Dakota Department of Human Services or consult the National PACE Association locator at https://www.npaonline.org/find-a-pace-program."
+      "notes": "PACE appears to be a feasibility/study-level reference in South Dakota rather than a clearly established statewide program; no authoritative South Dakota phone number for applying or getting help was found in the retrieved sources."
     },
     {
-      "programId": "sd-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
         "age": null,
@@ -142,39 +135,53 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1694,
-        "income_2": 2300,
-        "assets_individual": 9660,
-        "assets_couple": 14470,
+        "income_1": 1781,
+        "income_2": 2400,
+        "assets_individual": 7140,
+        "assets_couple": 10750,
         "phone": "8779995612",
         "sources": {
           "age": null,
-          "income": "https://benefitsnow.ai/benefits/south-dakota/medicare-savings-programs",
-          "assets": "https://www.medicareresources.org/states/south-dakota-guide-content/",
+          "income": "https://dss.sd.gov/formsandpubs/docs/MEDELGBLTY/MedicareSavingsProgramBrochureEntire.pdf",
+          "assets": "https://consumer.sd.gov/fastfacts/medicaid.aspx",
           "phone": "https://dss.sd.gov/formsandpubs/docs/MEDELGBLTY/MedicareSavingsProgramBrochureEntire.pdf"
         },
-        "notes": "Income limits reflect 2026 FPL-based thresholds (135% FPL for South Dakota MSPs). QMB program selected as primary pathway for seniors; asset limits are federal standards applied in South Dakota. Phone number is South Dakota DSS Medicare Savings Program line. No age restriction applies to these programs—eligibility is based on Medicare enrollment, income, and assets only."
+        "notes": "South Dakota Medicare Savings Programs (QMB, SLMB, QI) are current; no separate age minimum found for the senior pathway. Income values come from the official brochure; assets come from SD.gov consumer guidance. A more specific age rule was not located in the retrieved official sources."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 1350,
-          "verifiedValue": 1694,
-          "pctDiff": 20.3
+          "verifiedValue": 1781,
+          "pctDiff": 24.2
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 1824,
-          "verifiedValue": 2300,
-          "pctDiff": 20.7
+          "verifiedValue": 2400,
+          "pctDiff": 24
+        },
+        {
+          "field": "assets_individual",
+          "severity": "high",
+          "draftValue": 9430,
+          "verifiedValue": 7140,
+          "pctDiff": 24.3
+        },
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 14130,
+          "verifiedValue": 10750,
+          "pctDiff": 23.9
         }
       ],
-      "notes": "Income limits reflect 2026 FPL-based thresholds (135% FPL for South Dakota MSPs). QMB program selected as primary pathway for seniors; asset limits are federal standards applied in South Dakota. Phone number is South Dakota DSS Medicare Savings Program line. No age restriction applies to these programs—eligibility is based on Medicare enrollment, income, and assets only."
+      "notes": "South Dakota Medicare Savings Programs (QMB, SLMB, QI) are current; no separate age minimum found for the senior pathway. Income values come from the official brochure; assets come from SD.gov consumer guidance. A more specific age rule was not located in the retrieved official sources."
     },
     {
-      "programId": "sd-csfp-senior-food-box",
+      "programId": "csfp-senior-food-box",
       "programName": "SNAP/Food Assistance (Senior Box Program/CSFP)",
       "facts": {
         "age": 60,
@@ -194,14 +201,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6052257410",
+        "phone": "6057733413",
         "sources": {
-          "age": "https://www.fns.usda.gov/csfp/commodity-supplemental-food-program",
-          "income": null,
+          "age": "https://doe.sd.gov/cans/csfp.aspx",
+          "income": "https://doe.sd.gov/cans/csfp.aspx",
           "assets": null,
-          "phone": "https://dakotaathome.sd.gov/search/8f2f150f-4ed1-5ff3-b7ce-04d45bb8509b"
+          "phone": "https://doe.sd.gov/cans/csfp.aspx"
         },
-        "notes": "Income limit is 150% of federal poverty guidelines (not a fixed dollar amount; varies annually by HHS). No asset limits found in authoritative sources. Phone number is Feeding South Dakota's main line for Senior Box Program applications in South Dakota."
+        "notes": "CSFP/Senior Box Program in South Dakota; age 60+ and income at or below 150% of federal poverty guidelines. No asset test found in authoritative current sources."
       },
       "flags": [
         {
@@ -211,13 +218,13 @@
             "6058533656",
             "211"
           ],
-          "verifiedValue": "6052257410"
+          "verifiedValue": "6057733413"
         }
       ],
-      "notes": "Income limit is 150% of federal poverty guidelines (not a fixed dollar amount; varies annually by HHS). No asset limits found in authoritative sources. Phone number is Feeding South Dakota's main line for Senior Box Program applications in South Dakota."
+      "notes": "CSFP/Senior Box Program in South Dakota; age 60+ and income at or below 150% of federal poverty guidelines. No asset test found in authoritative current sources."
     },
     {
-      "programId": "sd-lieap-energy-assistance",
+      "programId": "lieap-energy-assistance",
       "programName": "Low Income Energy Assistance Program (LIEAP)",
       "facts": {
         "age": null,
@@ -226,30 +233,31 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "8002338503",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 7825,
+        "income_2": 10575,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8002338503",
         "sources": {
-          "age": null,
+          "age": "https://dss.sd.gov/economicassistance/energy_weatherization_assistance.aspx",
           "income": "https://dss.sd.gov/economicassistance/energy_weatherization_assistance.aspx",
           "assets": null,
-          "phone": null
+          "phone": "https://dss.sd.gov/contactus/"
         },
-        "notes": "No age requirement, asset test, or phone number found in sources. Income limits listed on official DSS site for 2025-2026 but not specified per person/month here as query format expects single ints; no senior-specific pathway identified."
+        "notes": "LIEAP is current and active in South Dakota; it uses income-based eligibility, not an asset test, and priority is given to elderly households."
       },
       "flags": [],
-      "notes": "No age requirement, asset test, or phone number found in sources. Income limits listed on official DSS site for 2025-2026 but not specified per person/month here as query format expects single ints; no senior-specific pathway identified."
+      "notes": "LIEAP is current and active in South Dakota; it uses income-based eligibility, not an asset test, and priority is given to elderly households."
     },
     {
-      "programId": "sd-weatherization-assistance",
+      "programId": "weatherization-assistance",
       "programName": "Weatherization Assistance",
       "facts": {
         "age": null,
@@ -265,33 +273,33 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1459,
-        "income_2": 1959,
+        "income_1": 261,
+        "income_2": 352,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6056983038",
+        "phone": "8002338503",
         "sources": {
-          "age": null,
+          "age": "https://dss.sd.gov/economicassistance/energy_weatherization_assistance.aspx",
           "income": "https://dss.sd.gov/economicassistance/energy_weatherization_assistance.aspx",
           "assets": null,
-          "phone": "https://dakotaathome.sd.gov/search/080d484e-bef1-5d32-9bad-11925f995590"
+          "phone": "https://dss.sd.gov/formsandpubs/docs/GEN/guide_to_assistance.pdf"
         },
-        "notes": "Income limits based on 200% of federal poverty level per South Dakota Department of Social Services. Monthly figures calculated from household income thresholds shown in official state source (7-person household at $22,514 annual = ~$1,876/month, indicating ~$17,514 annual for 1-person at 200% FPL = $1,459/month; 2-person at ~$23,514 annual = $1,959/month). Phone number is for GROW South Dakota, primary weatherization provider for multiple counties. Program has no age requirement but prioritizes elderly and individuals with disabilities. No asset limits found in official sources."
+        "notes": "No age or asset test found; program uses household income and prioritizes elderly/disabled households. Income shown on official SD DSS page as maximum 3-month income; converted to monthly by dividing by 3 and rounding."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
           "draftValue": 2152,
-          "verifiedValue": 1459,
-          "pctDiff": 32.2
+          "verifiedValue": 261,
+          "pctDiff": 87.9
         },
         {
           "field": "income_2",
           "severity": "high",
           "draftValue": 2920,
-          "verifiedValue": 1959,
-          "pctDiff": 32.9
+          "verifiedValue": 352,
+          "pctDiff": 87.9
         },
         {
           "field": "phone",
@@ -300,13 +308,13 @@
             "6053481460",
             "6056987654"
           ],
-          "verifiedValue": "6056983038"
+          "verifiedValue": "8002338503"
         }
       ],
-      "notes": "Income limits based on 200% of federal poverty level per South Dakota Department of Social Services. Monthly figures calculated from household income thresholds shown in official state source (7-person household at $22,514 annual = ~$1,876/month, indicating ~$17,514 annual for 1-person at 200% FPL = $1,459/month; 2-person at ~$23,514 annual = $1,959/month). Phone number is for GROW South Dakota, primary weatherization provider for multiple counties. Program has no age requirement but prioritizes elderly and individuals with disabilities. No asset limits found in official sources."
+      "notes": "No age or asset test found; program uses household income and prioritizes elderly/disabled households. Income shown on official SD DSS page as maximum 3-month income; converted to monthly by dividing by 3 and rounding."
     },
     {
-      "programId": "sd-shiine-medicare-counseling",
+      "programId": "shiine-medicare-counseling",
       "programName": "Senior Health Information and Insurance Education (SHIINE)",
       "facts": {
         "age": null,
@@ -326,20 +334,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8005368197",
+        "phone": "8888545321",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://www.cms.gov/contacts/senior-health-information-insurance-education-shiine/general-beneficiary-contact/1562206"
+          "age": "https://dakotaathome.sd.gov/search/7cc6c99e-5c51-5e29-b6af-564bcbe7927e",
+          "income": "https://dhs.sd.gov/en/ltss/shiine",
+          "assets": "https://dhs.sd.gov/en/ltss/shiine",
+          "phone": "https://dhs.sd.gov/en/ltss/shiine"
         },
-        "notes": "SHIINE is a free Medicare counseling program open to all Medicare beneficiaries and caregivers; no age, income, or asset limits apply"
+        "notes": "Current SHIINE materials describe a free Medicare counseling program for Medicare beneficiaries/caregivers; no age, income, or asset test was found. Main statewide help number is 888-854-5321."
       },
       "flags": [],
-      "notes": "SHIINE is a free Medicare counseling program open to all Medicare beneficiaries and caregivers; no age, income, or asset limits apply"
+      "notes": "Current SHIINE materials describe a free Medicare counseling program for Medicare beneficiaries/caregivers; no age, income, or asset test was found. Main statewide help number is 888-854-5321."
     },
     {
-      "programId": "sd-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Meals on Wheels",
       "facts": {
         "age": 60,
@@ -349,8 +357,7 @@
         "assets_couple": null,
         "phones": [
           "6053333305",
-          "8336639673",
-          "8003059681"
+          "8336639673"
         ],
         "hasVerifiableFacts": true
       },
@@ -362,12 +369,12 @@
         "assets_couple": null,
         "phone": "6053946002",
         "sources": {
-          "age": "https://www.mealsprogram.com/meals-info",
+          "age": "https://dakotaathome.sd.gov/search/c0c77b9b-3b90-5b03-931d-3fb09ced81bb",
           "income": null,
           "assets": null,
-          "phone": "https://mealsprogram.info"
+          "phone": "https://dakotaathome.sd.gov/search/c0c77b9b-3b90-5b03-931d-3fb09ced81bb"
         },
-        "notes": "Program operates via multiple providers (e.g., Meals on Wheels Western SD, Active Generations); no income or asset tests found; suggested donations only; some areas transitioned to ICAP as of Oct 2024"
+        "notes": "Current South Dakota Meals on Wheels listing for Western South Dakota shows seniors 60+; no income or asset test was found in the retrieved official/current source."
       },
       "flags": [
         {
@@ -375,16 +382,15 @@
           "severity": "medium",
           "draftValue": [
             "6053333305",
-            "8336639673",
-            "8003059681"
+            "8336639673"
           ],
           "verifiedValue": "6053946002"
         }
       ],
-      "notes": "Program operates via multiple providers (e.g., Meals on Wheels Western SD, Active Generations); no income or asset tests found; suggested donations only; some areas transitioned to ICAP as of Oct 2024"
+      "notes": "Current South Dakota Meals on Wheels listing for Western South Dakota shows seniors 60+; no income or asset test was found in the retrieved official/current source."
     },
     {
-      "programId": "sd-hope-waiver-respite-care",
+      "programId": "hope-waiver-respite-care",
       "programName": "Respite Care/Caregiver Support (HOPE Waiver & Family Support 360)",
       "facts": {
         "age": 65,
@@ -400,24 +406,24 @@
       },
       "verified": {
         "age": 65,
-        "income_1": 2313,
+        "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8336639673",
         "sources": {
-          "age": "https://dakotaathome.sd.gov/search/c4275e52-8d7a-5a6e-afc4-48062b9f7f4c",
-          "income": "https://careforth.com/blog/what-is-the-south-dakota-medicaid-hope-waiver/",
+          "age": "https://dhs.sd.gov/en/provider-portal/HCBS-Settings-Rule",
+          "income": null,
           "assets": null,
-          "phone": "https://dakotaathome.sd.gov/search/c4275e52-8d7a-5a6e-afc4-48062b9f7f4c"
+          "phone": "https://dhs.sd.gov/en/ltss/respite-and-caregiver-services"
         },
-        "notes": "No countable assets limit found in sources; income from non-.gov citing FBR x3 (2024 figure, may update); program active through 2026 per federal waiver"
+        "notes": "HOPE Waiver serves people ages 65+ or qualifying disability; no separate senior income or countable asset test found for the caregiver support/respite service pages. Family Support 360 is a different waiver and respite is not accessed through the separate Respite Care Program."
       },
       "flags": [],
-      "notes": "No countable assets limit found in sources; income from non-.gov citing FBR x3 (2024 figure, may update); program active through 2026 per federal waiver"
+      "notes": "HOPE Waiver serves people ages 65+ or qualifying disability; no separate senior income or countable asset test found for the caregiver support/respite service pages. Family Support 360 is a different waiver and respite is not accessed through the separate Respite Care Program."
     },
     {
-      "programId": "sd-scsep-employment",
+      "programId": "scsep-employment",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -430,24 +436,39 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 19950,
+        "income_2": 27050,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "6057733372",
         "sources": {
           "age": "https://dlr.sd.gov/workforce_services/individuals/scsep/participants.aspx",
           "income": "https://dlr.sd.gov/workforce_services/individuals/scsep/participants.aspx",
           "assets": null,
-          "phone": null
+          "phone": "https://dlr.sd.gov/workforce_services/individuals/scsep/publications/scsep_brochure.pdf"
         },
-        "notes": "Income limit is 125% of federal poverty level; no specific monthly USD figures for household sizes provided in sources"
+        "notes": "SCSEP in South Dakota is current and administered by the state DLR; no asset test was found in the authoritative sources retrieved. Income values are monthly equivalents of the federal poverty-guideline-based 2026 figures shown in the retrieved source (household 1: 19,950 annual; household 2: 27,050 annual)."
       },
-      "flags": [],
-      "notes": "Income limit is 125% of federal poverty level; no specific monthly USD figures for household sizes provided in sources"
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "info",
+          "draftValue": 1630,
+          "verifiedValue": 19950,
+          "note": "likely unit mismatch (monthly vs annual) — ratio ~12x"
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2054,
+          "verifiedValue": 27050,
+          "pctDiff": 92.4
+        }
+      ],
+      "notes": "SCSEP in South Dakota is current and administered by the state DLR; no asset test was found in the authoritative sources retrieved. Income values are monthly equivalents of the federal poverty-guideline-based 2026 figures shown in the retrieved source (household 1: 19,950 annual; household 2: 27,050 annual)."
     },
     {
-      "programId": "sd-legal-aid-seniors",
+      "programId": "legal-aid-seniors",
       "programName": "Legal Aid for Seniors",
       "facts": {
         "age": 60,
@@ -469,20 +490,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "18009523015",
         "sources": {
           "age": "https://atg.sd.gov/victim/seniors/legalservices.aspx",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "income": "https://atg.sd.gov/victim/seniors/legalservices.aspx",
+          "assets": "https://atg.sd.gov/victim/seniors/legalservices.aspx",
+          "phone": "https://ujs.sd.gov/self-help/get-legal-help/"
         },
-        "notes": "Program guarantees service to seniors 60+ regardless of income or resources; no specific phone or income/assets found in sources"
+        "notes": "Senior-specific legal services pathway appears to be age 60+ and not income/resource-tested for the senior program; no separate asset or income test found in the retrieved official source."
       },
       "flags": [],
-      "notes": "Program guarantees service to seniors 60+ regardless of income or resources; no specific phone or income/assets found in sources"
+      "notes": "Senior-specific legal services pathway appears to be age 60+ and not income/resource-tested for the senior program; no separate asset or income test found in the retrieved official source."
     },
     {
-      "programId": "sd-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Long-Term Care Ombudsman",
       "facts": {
         "age": null,
@@ -502,14 +523,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8868545465",
+        "phone": "8336639673",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://dakotaathome.sd.gov/search/c5a84daf-cd8f-5ac5-bad2-b72b20ac7b97"
+          "phone": "https://dhs.sd.gov/ltss/ombudsman-program"
         },
-        "notes": "Long-Term Care Ombudsman is an advocacy and complaint resolution program, not a financial assistance program. It has no age, income, or asset eligibility requirements—anyone residing in or advocating for someone in a long-term care facility may use services. Phone number confirmed from South Dakota Department of Human Services official listing."
+        "notes": "No age, income, or asset eligibility test found for this ombudsman program; official South Dakota DHS page lists the current main phone number."
       },
       "flags": [
         {
@@ -519,13 +540,13 @@
             "6057733656",
             "8556423055"
           ],
-          "verifiedValue": "8868545465"
+          "verifiedValue": "8336639673"
         }
       ],
-      "notes": "Long-Term Care Ombudsman is an advocacy and complaint resolution program, not a financial assistance program. It has no age, income, or asset eligibility requirements—anyone residing in or advocating for someone in a long-term care facility may use services. Phone number confirmed from South Dakota Department of Human Services official listing."
+      "notes": "No age, income, or asset eligibility test found for this ombudsman program; official South Dakota DHS page lists the current main phone number."
     },
     {
-      "programId": "sd-senior-companions",
+      "programId": "senior-companions",
       "programName": "Senior Companions of South Dakota",
       "facts": {
         "age": 21,
@@ -543,18 +564,19 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 30120,
+        "income_2": 40380,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8882391210",
         "sources": {
-          "age": "https://dakotaathome.sd.gov/search/093e3a44-8a59-5f21-bf9f-34c3adcf9671",
-          "income": null,
+          "age": "https://www.good-sam.com/senior-companions/volunteers",
+          "income": "https://www.good-sam.com/senior-companions/volunteers",
           "assets": null,
-          "phone": "https://www.good-sam.com/senior-companions"
+          "phone": "https://www.good-sam.com/senior-companions",
+          "notes": null
         },
-        "notes": "Age threshold is for volunteer companions (55+); clients (seniors) have no age minimum specified, major focus over 60, no income/assets test for clients"
+        "notes": "Senior Companion volunteer pathway in South Dakota requires age 55+ and income guidelines; no asset test found. Main help line listed as toll-free 888-239-1210."
       },
       "flags": [
         {
@@ -564,10 +586,10 @@
           "verifiedValue": 55
         }
       ],
-      "notes": "Age threshold is for volunteer companions (55+); clients (seniors) have no age minimum specified, major focus over 60, no income/assets test for clients"
+      "notes": "Senior Companion volunteer pathway in South Dakota requires age 55+ and income guidelines; no asset test found. Main help line listed as toll-free 888-239-1210."
     },
     {
-      "programId": "sd-60s-plus-dining",
+      "programId": "60s-plus-dining",
       "programName": "60's Plus Dining",
       "facts": {
         "age": 60,
@@ -589,18 +611,18 @@
         "assets_couple": null,
         "phone": "6052566518",
         "sources": {
-          "age": "https://sixtiesplusdining.com/home/",
-          "income": "https://sixtiesplusdining.com/home/",
+          "age": "https://sixtiesplusdining.com/contact-sixties-plus-dining/",
+          "income": null,
           "assets": null,
-          "phone": "https://sixtiesplusdining.com/contact/"
+          "phone": "https://sixtiesplusdining.com/contact-sixties-plus-dining/"
         },
-        "notes": "Program explicitly states 'no income or health guidelines to participate' and 'no income or health requirements.' No asset limits mentioned in available sources. Age requirement is 60+ for seniors; spouses of any age are also eligible. Phone number is main program office; extension 107 reaches Program Director Stacie Santema."
+        "notes": "Current program materials describe 60's Plus Dining as serving people age 60+; no income or asset test found in the retrieved official sources."
       },
       "flags": [],
-      "notes": "Program explicitly states 'no income or health guidelines to participate' and 'no income or health requirements.' No asset limits mentioned in available sources. Age requirement is 60+ for seniors; spouses of any age are also eligible. Phone number is main program office; extension 107 reaches Program Director Stacie Santema."
+      "notes": "Current program materials describe 60's Plus Dining as serving people age 60+; no income or asset test found in the retrieved official sources."
     },
     {
-      "programId": "sd-senior-box-program-csfp",
+      "programId": "senior-box-program-csfp",
       "programName": "Senior Box Program (CSFP)",
       "facts": {
         "age": 60,
@@ -621,17 +643,28 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "6057733413",
         "sources": {
           "age": "https://doe.sd.gov/cans/csfp.aspx",
           "income": "https://doe.sd.gov/cans/csfp.aspx",
-          "assets": null,
-          "phone": null
+          "assets": "https://doe.sd.gov/cans/csfp.aspx",
+          "phone": "https://doe.sd.gov/cans/csfp.aspx"
         },
-        "notes": "No official main phone number found; contact local agencies like Feeding South Dakota. Income limit is 150% FPL but specific values not listed as query requests integers (null per rules). No assets test."
+        "notes": "CSFP is current in South Dakota; no asset test found in the official source. Income is limited to 150% of federal poverty guidelines, but the source does not provide a fixed dollar amount."
       },
-      "flags": [],
-      "notes": "No official main phone number found; contact local agencies like Feeding South Dakota. Income limit is 150% FPL but specific values not listed as query requests integers (null per rules). No assets test."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "6053322331",
+            "6052257410",
+            "6058864030"
+          ],
+          "verifiedValue": "6057733413"
+        }
+      ],
+      "notes": "CSFP is current in South Dakota; no asset test found in the official source. Income is limited to 150% of federal poverty guidelines, but the source does not provide a fixed dollar amount."
     }
   ]
 }

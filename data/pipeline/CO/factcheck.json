@@ -1,17 +1,17 @@
 {
   "state": "CO",
   "stateName": "Colorado",
-  "checkedAt": "2026-04-14T09:59:20.563Z",
-  "total": 13,
+  "checkedAt": "2026-10-02T07:34:14.795Z",
+  "total": 12,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 0,
-  "programsWithFlags": 3,
-  "totalFlags": 4,
-  "highSeverityFlags": 2,
+  "errors": 2,
+  "programsWithFlags": 6,
+  "totalFlags": 8,
+  "highSeverityFlags": 1,
   "programs": [
     {
-      "programId": "co-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Health First Colorado Buy-In (QMB, SLMB, QI)",
       "facts": {
         "age": 65,
@@ -26,25 +26,49 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
+        "age": 65,
+        "income_1": 1325,
+        "income_2": 1783,
+        "assets_individual": 11160,
+        "assets_couple": 17470,
+        "phone": "18007116994",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://hcpf.colorado.gov/medicare-savings-programs-msp",
+          "income": "https://hcpf.colorado.gov/medicare-savings-programs-msp",
+          "assets": "https://hcpf.colorado.gov/medicare-savings-programs-msp",
+          "phone": "https://hcpf.colorado.gov/health-first-colorado-buy-in-programs"
         },
-        "notes": "The provided search results do not contain specific eligibility details for Health First Colorado Buy-In (QMB, SLMB, QI) programs. The results discuss general Health First Colorado changes for 2026-2027 (work requirements, immigration restrictions, retroactive coverage changes) but do not address Buy-In program age thresholds, asset limits, or application phone numbers. To obtain authoritative data on QMB/SLMB/QI eligibility for seniors, contact Health First Colorado directly or consult official Colorado Department of Health Care Policy & Financing documentation."
+        "notes": "Current Colorado Medicare Savings Programs page lists QMB/SLMB/QI-1 resource limits and monthly income limits; age is senior pathway for Medicare and generally 65+ for these programs."
       },
-      "flags": [],
-      "notes": "The provided search results do not contain specific eligibility details for Health First Colorado Buy-In (QMB, SLMB, QI) programs. The results discuss general Health First Colorado changes for 2026-2027 (work requirements, immigration restrictions, retroactive coverage changes) but do not address Buy-In program age thresholds, asset limits, or application phone numbers. To obtain authoritative data on QMB/SLMB/QI eligibility for seniors, contact Health First Colorado directly or consult official Colorado Department of Health Care Policy & Financing documentation."
+      "flags": [
+        {
+          "field": "assets_individual",
+          "severity": "medium",
+          "draftValue": 9660,
+          "verifiedValue": 11160,
+          "pctDiff": 13.4
+        },
+        {
+          "field": "assets_couple",
+          "severity": "high",
+          "draftValue": 14490,
+          "verifiedValue": 17470,
+          "pctDiff": 17.1
+        },
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8002213943",
+            "211"
+          ],
+          "verifiedValue": "18007116994"
+        }
+      ],
+      "notes": "Current Colorado Medicare Savings Programs page lists QMB/SLMB/QI-1 resource limits and monthly income limits; age is senior pathway for Medicare and generally 65+ for these programs."
     },
     {
-      "programId": "co-hcbs-waivers",
+      "programId": "hcbs-waivers",
       "programName": "Home and Community-Based Services (HCBS) Waivers in Colorado",
       "facts": {
         "age": 65,
@@ -53,31 +77,31 @@
         "assets_individual": 2000,
         "assets_couple": 3000,
         "phones": [
-          "8552642683",
+          "8002213943",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
+        "income_1": 3000,
+        "income_2": 5964,
+        "assets_individual": 2000,
+        "assets_couple": 3000,
+        "phone": "8002213943",
         "sources": {
-          "age": "https://www.medicaid.gov/medicaid/section-1115-demo/demonstration-and-waiver-list/Waiver-Descript-Factsheet/CO",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://hcpf.colorado.gov/sites/hcpf/files/HCBS%20Adult%20Waivers%20and%20PACE%20Comparison%20Chart.pdf",
+          "income": "https://hcpf.colorado.gov/sites/hcpf/files/HCBS%20Adult%20Waivers%20and%20PACE%20Comparison%20Chart.pdf",
+          "assets": "https://hcpf.colorado.gov/sites/hcpf/files/HCBS%20Adult%20Waivers%20and%20PACE%20Comparison%20Chart.pdf",
+          "phone": "https://www.douglasco.gov/human-services/assistance/medical-assistance/long-term-care/"
         },
-        "notes": "HCBS-EBD Waiver is the senior pathway (age 65+); no financial eligibility details found in sources for 2026"
+        "notes": "Colorado’s senior HCBS pathway is the Elderly, Blind and Disabled (EBD) Waiver; the adult waiver comparison chart lists age 55+ generally, but the waiver factsheet and issue brief indicate the senior-specific threshold is age 65+ for EBD. Income limits are shown on the comparison chart as 300% SSI. Assets shown are countable resources, not home equity or other excluded items."
       },
       "flags": [],
-      "notes": "HCBS-EBD Waiver is the senior pathway (age 65+); no financial eligibility details found in sources for 2026"
+      "notes": "Colorado’s senior HCBS pathway is the Elderly, Blind and Disabled (EBD) Waiver; the adult waiver comparison chart lists age 55+ generally, but the waiver factsheet and issue brief indicate the senior-specific threshold is age 65+ for EBD. Income limits are shown on the comparison chart as 300% SSI. Assets shown are countable resources, not home equity or other excluded items."
     },
     {
-      "programId": "co-pace-comprehensive-elderly-care",
+      "programId": "pace-comprehensive-elderly-care",
       "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
       "facts": {
         "age": 55,
@@ -94,30 +118,32 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8887881241",
         "sources": {
-          "age": "https://seniorsbluebook.com/articles/a-stepbystep-guide-to-the-colorado-pace-enrollment-process",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://hcpf.colorado.gov/program-all-inclusive-care-elderly",
+          "income": "https://hcpf.colorado.gov/program-all-inclusive-care-elderly",
+          "assets": "https://hcpf.colorado.gov/program-all-inclusive-care-elderly",
+          "phone": "https://coloradopace.org/contact-us"
         },
-        "notes": "No authoritative financial eligibility details (income/assets) found in provided sources; PACE typically uses Medicaid eligibility which has no asset test for seniors but requires nursing home level of care and dual eligibility"
+        "notes": "PACE in Colorado is current and active; official Colorado Medicaid guidance confirms the 55+ age threshold and indicates Medicaid financial criteria apply, but no separate PACE countable-asset limit could be verified from the retrieved authoritative sources."
       },
       "flags": [],
-      "notes": "No authoritative financial eligibility details (income/assets) found in provided sources; PACE typically uses Medicaid eligibility which has no asset test for seniors but requires nursing home level of care and dual eligibility"
+      "notes": "PACE in Colorado is current and active; official Colorado Medicaid guidance confirms the 55+ age threshold and indicates Medicaid financial criteria apply, but no separate PACE countable-asset limit could be verified from the retrieved authoritative sources."
     },
     {
-      "programId": "co-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "Supplemental Nutrition Assistance Program (SNAP)",
       "facts": {
         "age": 60,
         "income_1": 2608,
         "income_2": 3526,
-        "assets_individual": 4500,
-        "assets_couple": 4500,
+        "assets_individual": null,
+        "assets_couple": null,
         "phones": [
-          "8883282656",
-          "211"
+          "8558554626",
+          "8008164451",
+          "211",
+          "8883282656"
         ],
         "hasVerifiableFacts": true
       },
@@ -127,63 +153,38 @@
         "income_2": 3526,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8558554626",
+        "phone": "8005365298",
         "sources": {
           "age": null,
-          "income": "https://hungerfreecolorado.org/getting-snap/",
+          "income": "https://cdhs.colorado.gov/snap",
           "assets": null,
-          "phone": "https://hungerfreecolorado.org/getting-snap/"
+          "phone": "https://www.fna.usda.gov/snap-directory-entry/colorado"
         },
-        "notes": "SNAP has no age requirement for seniors or any population; eligibility is based on income (200% FPL) and household composition only. No asset test found in search results for SNAP. Income limits effective October 1, 2025 through September 30, 2026. Phone number is Hunger Free Colorado's SNAP hotline; official state CDHS application portal is Colorado PEAK or MyCoBenefits app. Search results do not contain asset limit information for SNAP in Colorado."
+        "notes": "SNAP has no senior-specific minimum age test; eligibility is not age-based for seniors. Colorado SNAP income limits shown are current gross monthly limits for FY2026."
       },
       "flags": [
         {
           "field": "phone",
           "severity": "medium",
           "draftValue": [
-            "8883282656",
-            "211"
+            "8558554626",
+            "8008164451",
+            "211",
+            "8883282656"
           ],
-          "verifiedValue": "8558554626"
+          "verifiedValue": "8005365298"
         }
       ],
-      "notes": "SNAP has no age requirement for seniors or any population; eligibility is based on income (200% FPL) and household composition only. No asset test found in search results for SNAP. Income limits effective October 1, 2025 through September 30, 2026. Phone number is Hunger Free Colorado's SNAP hotline; official state CDHS application portal is Colorado PEAK or MyCoBenefits app. Search results do not contain asset limit information for SNAP in Colorado."
+      "notes": "SNAP has no senior-specific minimum age test; eligibility is not age-based for seniors. Colorado SNAP income limits shown are current gross monthly limits for FY2026."
     },
     {
-      "programId": "co-weatherization-assistance-program",
+      "programId": "weatherization-assistance-program",
       "programName": "Weatherization Assistance Program (WAP)",
-      "facts": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "7202361321",
-          "211"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "7202361321",
-        "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://aging.networkofcare.org/denverregion-co/services/agency?pid=ColoradoEnergyOfficeWeatherizationAssistanceProgram_965_1_0"
-        },
-        "notes": "No age, income, or asset limits specified for seniors in sources; income eligibility by county/household size or assistance programs"
-      },
-      "flags": [],
-      "notes": "No age, income, or asset limits specified for seniors in sources; income eligibility by county/household size or assistance programs"
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
     },
     {
-      "programId": "co-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "State Health Insurance Assistance Program (SHIP)",
       "facts": {
         "age": null,
@@ -208,15 +209,15 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/contacts/senior-health-insurance-assistance-program-ship/general-beneficiary-contact/1562026"
+          "phone": "https://www.cms.gov/about-cms/contact/directory/senior-health-insurance-assistance-program-ship/1562026"
         },
-        "notes": "SHIP has no age, income, or asset eligibility limits; it provides free counseling to Medicare beneficiaries, families, and caregivers"
+        "notes": "Colorado SHIP is a Medicare counseling program for seniors and has no age, income, or asset test; authoritative current phone number found."
       },
       "flags": [],
-      "notes": "SHIP has no age, income, or asset eligibility limits; it provides free counseling to Medicare beneficiaries, families, and caregivers"
+      "notes": "Colorado SHIP is a Medicare counseling program for seniors and has no age, income, or asset test; authoritative current phone number found."
     },
     {
-      "programId": "co-community-access-services-respite-care",
+      "programId": "community-access-services-respite-care",
       "programName": "Community Access Services (CAS) and Respite Care",
       "facts": {
         "age": null,
@@ -235,20 +236,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "3038662800",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://cdhs.colorado.gov/our-services/older-adult-services/state-unit-on-aging/caregiver-support"
         },
-        "notes": "No authoritative data found for 'Community Access Services (CAS) and Respite Care' as a specific program; respite is a service within multiple Medicaid HCBS waivers with varying eligibility by population (e.g., seniors via HCBS-CIH waiver for 65+), but no centralized phone, income/assets limits specified in sources for senior pathway"
+        "notes": "Could not find authoritative age/income/assets limits for a Colorado senior CAS/respite pathway; the official state caregiver-support contact is 303-866-2800."
       },
-      "flags": [],
-      "notes": "No authoritative data found for 'Community Access Services (CAS) and Respite Care' as a specific program; respite is a service within multiple Medicaid HCBS waivers with varying eligibility by population (e.g., seniors via HCBS-CIH waiver for 65+), but no centralized phone, income/assets limits specified in sources for senior pathway"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211"
+          ],
+          "verifiedValue": "3038662800"
+        }
+      ],
+      "notes": "Could not find authoritative age/income/assets limits for a Colorado senior CAS/respite pathway; the official state caregiver-support contact is 303-866-2800."
     },
     {
-      "programId": "co-senior-community-service-employment-program",
+      "programId": "senior-community-service-employment-program",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -267,20 +277,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8778725627",
         "sources": {
-          "age": "https://www.dol.gov/agencies/eta/seniors",
+          "age": "https://cdhs.colorado.gov/benefits-assistance/employment-assistance/senior-community-service-employment-program",
           "income": "https://www.dol.gov/agencies/eta/seniors",
           "assets": null,
-          "phone": null
+          "phone": "https://cdhs.colorado.gov/benefits-assistance/employment-assistance/senior-community-service-employment-program"
         },
-        "notes": "Age requirement (55+) confirmed from U.S. Department of Labor official source. Income limit is 125% of federal poverty level (not a fixed dollar amount; varies annually). No asset test found in search results. Official phone number for Colorado SCSEP not provided in search results; Colorado DHHS referral URL available at https://cdhs.colorado.gov/benefits-assistance/employment-assistance/senior-community-service-employment-program. Program is active as of 2026 per NCOA source noting recent federal funding transitions."
+        "notes": "SCSEP is active in Colorado. Official sources show the senior eligibility threshold is age 55+; no asset test was found for this program."
       },
-      "flags": [],
-      "notes": "Age requirement (55+) confirmed from U.S. Department of Labor official source. Income limit is 125% of federal poverty level (not a fixed dollar amount; varies annually). No asset test found in search results. Official phone number for Colorado SCSEP not provided in search results; Colorado DHHS referral URL available at https://cdhs.colorado.gov/benefits-assistance/employment-assistance/senior-community-service-employment-program. Program is active as of 2026 per NCOA source noting recent federal funding transitions."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211"
+          ],
+          "verifiedValue": "8778725627"
+        }
+      ],
+      "notes": "SCSEP is active in Colorado. Official sources show the senior eligibility threshold is age 55+; no asset test was found for this program."
     },
     {
-      "programId": "co-legal-aid-seniors",
+      "programId": "legal-aid-seniors",
       "programName": "Colorado Legal Services (Legal Aid for Seniors)",
       "facts": {
         "age": 60,
@@ -299,20 +318,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "3038371313",
         "sources": {
-          "age": "https://www.coloradolegalservices.org",
-          "income": null,
-          "assets": null,
-          "phone": null
+          "age": "https://www.coloradolegalservices.org/",
+          "income": "https://www.coloradolegalservices.org/",
+          "assets": "https://www.coloradolegalservices.org/",
+          "phone": "https://www.coloradolegalservices.org/get-help/"
         },
-        "notes": "No single statewide phone number found; multiple local office numbers listed. Income based on federal poverty guidelines (125-200% FPL) but no specific dollar values. No assets test specified. Data current as of 2025."
+        "notes": "Current official site indicates seniors are age 60+; no retrievable official income or asset limits were found for the senior pathway."
       },
-      "flags": [],
-      "notes": "No single statewide phone number found; multiple local office numbers listed. Income based on federal poverty guidelines (125-200% FPL) but no specific dollar values. No assets test specified. Data current as of 2025."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211"
+          ],
+          "verifiedValue": "3038371313"
+        }
+      ],
+      "notes": "Current official site indicates seniors are age 60+; no retrievable official income or asset limits were found for the senior pathway."
     },
     {
-      "programId": "co-ltc-ombudsman",
+      "programId": "ltc-ombudsman",
       "programName": "Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -333,63 +361,37 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "3038623524",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.coombudsman.org/resources/find-an-ombudsman/"
+          "phone": "https://cdhs.colorado.gov/about-cdhs/performance-outcomes-and-reviews/ombudsman-offices/long-term-care-ombudsman"
         },
-        "notes": "Program has no age, income, or asset eligibility requirements; services are free and available to residents of long-term care facilities (primarily seniors), their families, and others without financial tests. No single statewide phone; contact regional offices via listed site."
-      },
-      "flags": [],
-      "notes": "Program has no age, income, or asset eligibility requirements; services are free and available to residents of long-term care facilities (primarily seniors), their families, and others without financial tests. No single statewide phone; contact regional offices via listed site."
-    },
-    {
-      "programId": "co-old-age-pension",
-      "programName": "Old Age Pension (OAP)",
-      "facts": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": 3000,
-        "phones": [
-          "3036884825",
-          "211"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": 3000,
-        "phone": "8558554626",
-        "sources": {
-          "age": "https://www.senioranswers.org/financial-resources/oap/",
-          "income": null,
-          "assets": "https://www.senioranswers.org/financial-resources/oap/",
-          "phone": "https://www.douglas.co.us/human-services/assistance/financial-assistance/old-age-pension/"
-        },
-        "notes": "No asset test details explicitly exclude bank accounts/stocks etc., but sources describe countable resources matching definition. No 2026 updates found; values consistent across sources."
+        "notes": "No age, income, or asset test found for the Colorado Long-Term Care Ombudsman Program; official main phone number is 303-862-3524."
       },
       "flags": [
         {
           "field": "phone",
           "severity": "medium",
           "draftValue": [
-            "3036884825",
-            "211"
+            "7209258609",
+            "3034411170",
+            "7196016282"
           ],
-          "verifiedValue": "8558554626"
+          "verifiedValue": "3038623524"
         }
       ],
-      "notes": "No asset test details explicitly exclude bank accounts/stocks etc., but sources describe countable resources matching definition. No 2026 updates found; values consistent across sources."
+      "notes": "No age, income, or asset test found for the Colorado Long-Term Care Ombudsman Program; official main phone number is 303-862-3524."
     },
     {
-      "programId": "co-home-care-allowance-hca",
+      "programId": "old-age-pension",
+      "programName": "Old Age Pension (OAP)",
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
+    },
+    {
+      "programId": "home-care-allowance-hca",
       "programName": "Home Care Allowance (HCA)",
       "facts": {
         "age": 65,
@@ -405,69 +407,30 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 5,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8558554626",
-        "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://www.douglas.co.us/human-services/assistance/financial-assistance/home-care-allowance/"
-        },
-        "notes": "Program active as of 2026 per state docs; eligibility tied to SSI/OAP/AND-SO (no explicit age/assets thresholds found for seniors); phone from county site (Douglas County); no statewide official financial details retrieved"
-      },
-      "flags": [],
-      "notes": "Program active as of 2026 per state docs; eligibility tied to SSI/OAP/AND-SO (no explicit age/assets thresholds found for seniors); phone from county site (Douglas County); no statewide official financial details retrieved"
-    },
-    {
-      "programId": "co-older-coloradans-cash-fund",
-      "programName": "Older Coloradans Cash Fund",
-      "facts": {
-        "age": 60,
-        "income_1": 2400,
-        "income_2": 3240,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "211",
-          "3038665700"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": 65,
-        "income_1": 3200,
-        "income_2": null,
-        "assets_individual": 2000,
-        "assets_couple": null,
         "phone": null,
         "sources": {
-          "age": "https://carepatrol.com/south-metro-denver/understanding-colorados-elder-care-financial-assistance-programs-2025-guide/",
-          "income": "https://carepatrol.com/south-metro-denver/understanding-colorados-elder-care-financial-assistance-programs-2025-guide/",
-          "assets": "https://carepatrol.com/south-metro-denver/understanding-colorados-elder-care-financial-assistance-programs-2025-guide/",
-          "phone": null
+          "age": "https://cdhs.colorado.gov/adult-financial-programs",
+          "income": "https://cdhs.colorado.gov/adult-financial-programs",
+          "assets": "https://cdhs.colorado.gov/adult-financial-programs",
+          "phone": "https://cdhs.colorado.gov/adult-financial-programs"
         },
-        "notes": "No official .gov source found with eligibility details; values from 2025 nonprofit guide citing state program. Cannot confirm 2026 updates or authoritative data."
+        "notes": "Colorado HCA is a disability-based adult financial program, not a senior-only program; the official state page states eligibility for individuals 5 years of age and older with a disability. The state page does not provide a separate senior-specific minimum age, a standalone countable asset limit, or a clear main phone number on the retrieved page."
       },
       "flags": [
         {
           "field": "age",
-          "severity": "high",
-          "draftValue": 60,
-          "verifiedValue": 65
-        },
-        {
-          "field": "income_1",
-          "severity": "high",
-          "draftValue": 2400,
-          "verifiedValue": 3200,
-          "pctDiff": 25
+          "severity": "info",
+          "draftValue": 65,
+          "verifiedValue": 5,
+          "note": "likely compound program — drafted senior threshold, verified returned floor age for other population"
         }
       ],
-      "notes": "No official .gov source found with eligibility details; values from 2025 nonprofit guide citing state program. Cannot confirm 2026 updates or authoritative data."
+      "notes": "Colorado HCA is a disability-based adult financial program, not a senior-only program; the official state page states eligibility for individuals 5 years of age and older with a disability. The state page does not provide a separate senior-specific minimum age, a standalone countable asset limit, or a clear main phone number on the retrieved page."
     }
   ]
 }

@@ -221,8 +221,14 @@ export interface ProgramForVerdict {
 export function incomeLimitFromTable(
   table: { householdSize: number; monthlyLimit: number }[] | null | undefined,
 ): number | null {
-  const row = (table || []).find((r) => r.householdSize === 1);
-  return row && row.monthlyLimit > 0 ? row.monthlyLimit : null;
+  // Some tables list several tiers for the same household size (Medicare
+  // Savings: QMB 100%, SLMB 120%, QI 135% of the poverty line, in 25 states on
+  // 2 Oct 2026). The first row is the strictest tier, and reading it ruled out
+  // families the generous tier would take. For "could this family qualify",
+  // the limit is the most generous row.
+  let limit: number | null = null;
+  for (const r of table || []) if (r.householdSize === 1 && r.monthlyLimit > 0 && (limit == null || r.monthlyLimit > limit)) limit = r.monthlyLimit;
+  return limit;
 }
 
 /** Apply the scored engine's rules to one pipeline program. Conservative by
@@ -276,9 +282,14 @@ export function evaluateProgramForFamily(
   // household that is thousands over. Falls back to "unknown", which this
   // module always treats as keep-and-do-not-promote.
   const incomeUsable = incomeBandIsHouseholdScoped(facts);
+  // Rule out on the draft's own fact-checked limit only. The sbf column is
+  // the March 2026 seed: where both stores hold a limit, two in three differ
+  // by more than 10% (measured 2 Oct 2026), and for 111 programs it was the
+  // only limit, so it was deciding exclusions alone. Like min_age and
+  // requires_medicaid it may boost, never exclude.
   const incomeLimit = program.incomeLimitSingle ?? sbf?.max_income_single ?? null;
   const floor = incomeUsable ? incomeBandFloor(facts.incomeBand) : null;
-  if (floor != null && incomeLimit != null && floor > incomeLimit) {
+  if (floor != null && program.incomeLimitSingle != null && floor > program.incomeLimitSingle) {
     return { ruledOut: true, reason: "Income is likely above its limit", boost: 0, fits: [] };
   }
 

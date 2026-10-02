@@ -1,17 +1,17 @@
 {
   "state": "MS",
   "stateName": "Mississippi",
-  "checkedAt": "2026-04-14T10:04:15.246Z",
+  "checkedAt": "2026-10-02T07:40:25.485Z",
   "total": 14,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 0,
-  "programsWithFlags": 3,
+  "errors": 1,
+  "programsWithFlags": 4,
   "totalFlags": 7,
-  "highSeverityFlags": 5,
+  "highSeverityFlags": 3,
   "programs": [
     {
-      "programId": "ms-medicaid-elderly-disabled",
+      "programId": "medicaid-elderly-disabled",
       "programName": "Mississippi Medicaid (Elderly and Disabled)",
       "facts": {
         "age": 65,
@@ -20,30 +20,32 @@
         "assets_individual": 2000,
         "assets_couple": null,
         "phones": [
+          "8004212408",
+          "8448224622",
           "8007721213"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 65,
-        "income_1": 2982,
+        "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8004212408",
         "sources": {
-          "age": "https://www.medicaidplanningassistance.org/mississippi-elderly-disabled-waiver/",
-          "income": "https://www.medicaidplanningassistance.org/mississippi-elderly-disabled-waiver/",
+          "age": "https://medicaid.ms.gov/how-to-apply-2/",
+          "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://medicaid.ms.gov/how-to-apply-2/"
         },
-        "notes": "Official .gov sources confirm program exists and income up to 300% SSI FBR ($2,982/month in 2026) but lack explicit asset limit detail for waiver; no asset value found. Age 65+ for seniors per secondary source citing official criteria."
+        "notes": "Official Mississippi Medicaid application/contact pages confirm the Aged, Blind and Disabled pathway and the main contact number; I could not retrieve an authoritative current asset limit from the available source."
       },
       "flags": [],
-      "notes": "Official .gov sources confirm program exists and income up to 300% SSI FBR ($2,982/month in 2026) but lack explicit asset limit detail for waiver; no asset value found. Age 65+ for seniors per secondary source citing official criteria."
+      "notes": "Official Mississippi Medicaid application/contact pages confirm the Aged, Blind and Disabled pathway and the main contact number; I could not retrieve an authoritative current asset limit from the available source."
     },
     {
-      "programId": "ms-elderly-disabled-waiver",
+      "programId": "elderly-disabled-waiver",
       "programName": "Mississippi Elderly and Disabled (E&D) Waiver",
       "facts": {
         "age": 21,
@@ -52,37 +54,33 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "8448224622",
+          "8004212408",
+          "6013596141",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 65,
+        "age": 21,
         "income_1": null,
         "income_2": null,
-        "assets_individual": 4000,
-        "assets_couple": 6000,
-        "phone": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8004212408",
         "sources": {
-          "age": "https://medicaid.ms.gov/programs/elderly-and-disabled-waiver/",
-          "income": null,
-          "assets": "https://www.medicaidplanningassistance.org/mississippi-elderly-disabled-waiver/",
-          "phone": null
+          "age": "https://medicaid.ms.gov/wp-content/uploads/2025/05/Title-23-Part-208-HCBS-LTC-eff.-6.1.25.pdf",
+          "income": "https://medicaid.ms.gov/programs/elderly-and-disabled-waiver/",
+          "assets": "https://medicaid.ms.gov/programs/elderly-and-disabled-waiver/",
+          "phone": "https://medicaid.ms.gov/wp-content/uploads/2025/04/Fact-Sheet_Elderly-and-Disabled-Waiver.pdf"
         },
-        "notes": "Senior-specific age threshold is 65+. Program also serves disabled adults ages 21-64, but per instructions, senior pathway values returned. Income eligibility exists (up to 300% SSI) but specific 2026 dollar amounts not found in search results. Official phone number not located in provided sources."
+        "notes": "Current official Mississippi Medicaid sources show the E&D Waiver senior pathway starts at age 21, with Medicaid income/resource rules but no separate fixed dollar asset limits located."
       },
-      "flags": [
-        {
-          "field": "age",
-          "severity": "high",
-          "draftValue": 21,
-          "verifiedValue": 65
-        }
-      ],
-      "notes": "Senior-specific age threshold is 65+. Program also serves disabled adults ages 21-64, but per instructions, senior pathway values returned. Income eligibility exists (up to 300% SSI) but specific 2026 dollar amounts not found in search results. Official phone number not located in provided sources."
+      "flags": [],
+      "notes": "Current official Mississippi Medicaid sources show the E&D Waiver senior pathway starts at age 21, with Medicaid income/resource rules but no separate fixed dollar asset limits located."
     },
     {
-      "programId": "ms-medicare-savings-programs",
+      "programId": "medicare-savings-programs",
       "programName": "Medicare Savings Programs",
       "facts": {
         "age": null,
@@ -99,93 +97,97 @@
       },
       "verified": {
         "age": null,
-        "income_1": 1325,
-        "income_2": 1783,
+        "income_1": 1380,
+        "income_2": 1854,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8448224622",
         "sources": {
           "age": null,
-          "income": "https://www.medicareresources.org/states/mississippi-guide-content/",
-          "assets": null,
-          "phone": null
+          "income": "https://assets.ncoa.org/ffacfe7d-10b6-0083-2632-604077fd4eca/dea5a693-cb35-4572-96a6-74626e7f94cb/2026_MSP_Coverage_and_Eligibility_FINAL_03-12-26.pdf",
+          "assets": "https://medinav.net/resources/states-with-no-asset-test",
+          "phone": "https://www.mdhs.ms.gov/post/navigating-medicare-made-easy-with-ship/"
         },
-        "notes": "Income limits provided are for QMB (Qualified Medicare Beneficiary) program as of 2026, the most comprehensive of Mississippi's four Medicare Savings Programs. No age requirement found in sources (Medicare eligibility itself requires age 65+ or disability). Asset limits and official application phone number not available in provided search results. SLMB and QI programs have higher income thresholds ($1,585/$2,135 and $1,781/$2,400 respectively) but QMB is the primary senior pathway. Phone number should be obtained from Mississippi Division of Medicaid directly."
+        "notes": "Mississippi Medicare Savings Programs for seniors have no resource test; income limits shown are the current 2026 QMB monthly limits for household of 1 and 2."
       },
-      "flags": [],
-      "notes": "Income limits provided are for QMB (Qualified Medicare Beneficiary) program as of 2026, the most comprehensive of Mississippi's four Medicare Savings Programs. No age requirement found in sources (Medicare eligibility itself requires age 65+ or disability). Asset limits and official application phone number not available in provided search results. SLMB and QI programs have higher income thresholds ($1,585/$2,135 and $1,781/$2,400 respectively) but QMB is the primary senior pathway. Phone number should be obtained from Mississippi Division of Medicaid directly."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8004212408",
+            "8009483090",
+            "211"
+          ],
+          "verifiedValue": "8448224622"
+        }
+      ],
+      "notes": "Mississippi Medicare Savings Programs for seniors have no resource test; income limits shown are the current 2026 QMB monthly limits for household of 1 and 2."
     },
     {
-      "programId": "ms-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Supplemental Nutrition Assistance Program) in Mississippi",
       "facts": {
         "age": null,
-        "income_1": 1255,
-        "income_2": 1704,
-        "assets_individual": 4500,
-        "assets_couple": 4500,
+        "income_1": 1330,
+        "income_2": 1804,
+        "assets_individual": 4750,
+        "assets_couple": 4750,
         "phones": [
+          "8009483050",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
-        "income_1": 2980,
-        "income_2": 4020,
-        "assets_individual": 2750,
-        "assets_couple": 4125,
-        "phone": "6013599500",
+        "age": 60,
+        "income_1": 1729,
+        "income_2": 2345,
+        "assets_individual": 4500,
+        "assets_couple": 4500,
+        "phone": "8009483050",
         "sources": {
-          "age": null,
+          "age": "https://www.mdhs.ms.gov/help/snap/",
           "income": "https://www.mdhs.ms.gov/help/snap/",
           "assets": "https://www.mdhs.ms.gov/help/snap/",
-          "phone": "https://www.mdhs.ms.gov/help/snap/"
+          "phone": "https://www.mdhs.ms.gov/contact/"
         },
-        "notes": "Income limits are gross monthly for 200% FPL (Oct 2025-Sep 2026); higher for seniors over 60. Asset limits standard federal SNAP (countable resources). No 2026 COLA data found; using current FY2026 values."
+        "notes": "Current Mississippi SNAP guidance applies a senior/disabled resource limit; households with at least one member age 60+ or disabled use the higher asset limit. Mississippi SNAP uses current FY2026 limits effective Oct. 1, 2026."
       },
       "flags": [
         {
           "field": "income_1",
           "severity": "high",
-          "draftValue": 1255,
-          "verifiedValue": 2980,
-          "pctDiff": 57.9
+          "draftValue": 1330,
+          "verifiedValue": 1729,
+          "pctDiff": 23.1
         },
         {
           "field": "income_2",
           "severity": "high",
-          "draftValue": 1704,
-          "verifiedValue": 4020,
-          "pctDiff": 57.6
+          "draftValue": 1804,
+          "verifiedValue": 2345,
+          "pctDiff": 23.1
         },
         {
           "field": "assets_individual",
-          "severity": "high",
-          "draftValue": 4500,
-          "verifiedValue": 2750,
-          "pctDiff": 38.9
+          "severity": "medium",
+          "draftValue": 4750,
+          "verifiedValue": 4500,
+          "pctDiff": 5.3
         },
         {
           "field": "assets_couple",
           "severity": "medium",
-          "draftValue": 4500,
-          "verifiedValue": 4125,
-          "pctDiff": 8.3
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "211"
-          ],
-          "verifiedValue": "6013599500"
+          "draftValue": 4750,
+          "verifiedValue": 4500,
+          "pctDiff": 5.3
         }
       ],
-      "notes": "Income limits are gross monthly for 200% FPL (Oct 2025-Sep 2026); higher for seniors over 60. Asset limits standard federal SNAP (countable resources). No 2026 COLA data found; using current FY2026 values."
+      "notes": "Current Mississippi SNAP guidance applies a senior/disabled resource limit; households with at least one member age 60+ or disabled use the higher asset limit. Mississippi SNAP uses current FY2026 limits effective Oct. 1, 2026."
     },
     {
-      "programId": "ms-liheap-energy-assistance",
+      "programId": "liheap-energy-assistance",
       "programName": "Low-Income Home Energy Assistance Program (LIHEAP)",
       "facts": {
         "age": null,
@@ -194,6 +196,42 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
+          "8004210762",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8004210762",
+        "sources": {
+          "age": "https://www.mdhs.ms.gov/wp-content/uploads/2026/03/2026_LIHEAP_Policy_Manual_(Final)_-_Mark_up.pdf",
+          "income": "https://www.mdhs.ms.gov/community/liheap/",
+          "assets": null,
+          "phone": "https://www.mdhs.ms.gov/community/liheap/"
+        },
+        "notes": "Mississippi LIHEAP uses a 60% state median income test; no asset test was found in the current official sources. Elderly priority applies to households with members age 60+."
+      },
+      "flags": [],
+      "notes": "Mississippi LIHEAP uses a 60% state median income test; no asset test was found in the current official sources. Elderly priority applies to households with members age 60+."
+    },
+    {
+      "programId": "weatherization-assistance-program",
+      "programName": "Weatherization Assistance Program (WAP)",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18004210762",
+          "6016841777",
+          "8778911271",
           "211"
         ],
         "hasVerifiableFacts": true
@@ -204,43 +242,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8004210762",
         "sources": {
           "age": null,
-          "income": "https://www.mdhs.ms.gov/community/liheap/",
+          "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.mdhs.ms.gov/wap/"
         },
-        "notes": "No official main phone number found in sources; apply via Access MS portal. Vulnerable households (elderly) prioritized but no age/income/assets specifics for seniors vs general 60% SMI"
+        "notes": "No authoritative age, income, or asset test was found for Mississippi WAP senior pathway in the retrieved official sources; program appears to be income-based without an age-specific senior-only rule. Official main contact number is 800-421-0762."
       },
       "flags": [],
-      "notes": "No official main phone number found in sources; apply via Access MS portal. Vulnerable households (elderly) prioritized but no age/income/assets specifics for seniors vs general 60% SMI"
+      "notes": "No authoritative age, income, or asset test was found for Mississippi WAP senior pathway in the retrieved official sources; program appears to be income-based without an age-specific senior-only rule. Official main contact number is 800-421-0762."
     },
     {
-      "programId": "ms-weatherization-assistance-program",
-      "programName": "Weatherization Assistance Program (WAP)",
-      "facts": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "6013594500",
-          "6016841777",
-          "8778911271",
-          "211"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": [
-        1
-      ],
-      "flags": [],
-      "notes": null
-    },
-    {
-      "programId": "ms-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "Mississippi State Health Insurance Assistance Program (SHIP)",
       "facts": {
         "age": null,
@@ -265,50 +280,18 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.cms.gov/contacts/ms-state-health-insurance-assistance-program-ship/general-beneficiary-contact/1565291"
+          "phone": "https://www.cms.gov/about-cms/contact/directory/ms-state-health-insurance-assistance-program-ship/1565291"
         },
-        "notes": "Mississippi SHIP is a counseling program for Medicare beneficiaries and does not have eligibility requirements based on age, income, or assets. The program provides free, objective counseling to help seniors understand Medicare coverage options. No specific age, income, or asset limits were found in authoritative sources. Phone number confirmed from CMS official contact page."
+        "notes": "Mississippi SHIP is a Medicare counseling program; no age, income, or asset test was found for the senior pathway. Official phone number confirmed from CMS and MDHS sources."
       },
       "flags": [],
-      "notes": "Mississippi SHIP is a counseling program for Medicare beneficiaries and does not have eligibility requirements based on age, income, or assets. The program provides free, objective counseling to help seniors understand Medicare coverage options. No specific age, income, or asset limits were found in authoritative sources. Phone number confirmed from CMS official contact page."
+      "notes": "Mississippi SHIP is a Medicare counseling program; no age, income, or asset test was found for the senior pathway. Official phone number confirmed from CMS and MDHS sources."
     },
     {
-      "programId": "ms-home-delivered-meals",
+      "programId": "home-delivered-meals",
       "programName": "Home Delivered Meals (Meals on Wheels)",
       "facts": {
         "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "211"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
-        "sources": {
-          "age": "https://www.mdhs.ms.gov/aging/services/",
-          "income": null,
-          "assets": null,
-          "phone": null
-        },
-        "notes": "No statewide income/assets thresholds or phone found in official sources; eligibility assessed locally by Area Agencies on Aging. CSFP (food boxes, not meals) has 130% FPL income limit but is separate program."
-      },
-      "flags": [],
-      "notes": "No statewide income/assets thresholds or phone found in official sources; eligibility assessed locally by Area Agencies on Aging. CSFP (food boxes, not meals) has 130% FPL income limit but is separate program."
-    },
-    {
-      "programId": "ms-family-caregiver-support",
-      "programName": "National Family Caregiver Support Program (Mississippi)",
-      "facts": {
-        "age": 55,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
@@ -327,12 +310,46 @@
         "assets_couple": null,
         "phone": "8448224622",
         "sources": {
-          "age": "https://www.mdhs.ms.gov/post/mdhs-provides-essential-support-for-caregivers-in-mississippi-3/",
+          "age": "https://www.mdhs.ms.gov/aging/services/",
           "income": null,
           "assets": null,
-          "phone": "https://www.mdhs.ms.gov/post/mdhs-provides-essential-support-for-caregivers-in-mississippi-3/"
+          "phone": "https://www.mdhs.ms.gov/aging/"
         },
-        "notes": "No income or asset limits found in sources; federal NFCSP typically has state-determined discretionary guidelines not detailed here"
+        "notes": "State aging services page indicates home-delivered meals for older adults; no income or asset test found on authoritative source."
+      },
+      "flags": [],
+      "notes": "State aging services page indicates home-delivered meals for older adults; no income or asset test found on authoritative source."
+    },
+    {
+      "programId": "family-caregiver-support",
+      "programName": "National Family Caregiver Support Program (Mississippi)",
+      "facts": {
+        "age": 55,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8448224622",
+          "6013594915",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": 60,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8448224622",
+        "sources": {
+          "age": "https://www.mdhs.ms.gov/aging/caregivers/",
+          "income": null,
+          "assets": null,
+          "phone": "https://www.mdhs.ms.gov/aging/caregivers/"
+        },
+        "notes": "Current Mississippi Family Caregiver Support Program eligibility page states the senior pathway is for family members age 60+; no income or asset test found on the official page."
       },
       "flags": [
         {
@@ -342,10 +359,10 @@
           "verifiedValue": 60
         }
       ],
-      "notes": "No income or asset limits found in sources; federal NFCSP typically has state-determined discretionary guidelines not detailed here"
+      "notes": "Current Mississippi Family Caregiver Support Program eligibility page states the senior pathway is for family members age 60+; no income or asset test found on the official page."
     },
     {
-      "programId": "ms-scsep-employment",
+      "programId": "scsep-employment",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -367,20 +384,32 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "6013216000",
         "sources": {
-          "age": "http://mdes.ms.gov/i-need-a-job/senior-employment-program/",
-          "income": null,
+          "age": "https://mdes.ms.gov/i-need-a-job/senior-employment-program/",
+          "income": "https://www.dol.gov/agencies/eta/seniors",
           "assets": null,
-          "phone": null
+          "phone": "https://mdes.ms.gov/media/521454/py26-rfq_scsep_posts07212026.pdf"
         },
-        "notes": "No current authoritative income limits or phone found; MDES page lists outdated income table without phone contact"
+        "notes": "Current Mississippi SCSEP appears active under MDES; no asset test found. Federal SCSEP rules show the senior pathway age is 55+ and family income no more than 125% of poverty."
       },
-      "flags": [],
-      "notes": "No current authoritative income limits or phone found; MDES page lists outdated income table without phone contact"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "6019600419",
+            "6016438671",
+            "6016832007",
+            "2283141433"
+          ],
+          "verifiedValue": "6013216000"
+        }
+      ],
+      "notes": "Current Mississippi SCSEP appears active under MDES; no asset test found. Federal SCSEP rules show the senior pathway age is 55+ and family income no more than 125% of poverty."
     },
     {
-      "programId": "ms-legal-services-senior-aid",
+      "programId": "legal-services-senior-aid",
       "programName": "Mississippi Legal Services / Senior Legal Aid",
       "facts": {
         "age": null,
@@ -396,25 +425,25 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18004981804",
+        "phone": "8004981804",
         "sources": {
-          "age": null,
-          "income": "https://www.mslegalservices.org/organization/mississippi-center-for-legal-services-jackson",
-          "assets": null,
-          "phone": "https://www.mslegalservices.org/organization/mississippi-center-for-legal-services-jackson"
+          "age": "https://www.fema.gov/assistance/individual/disaster-survivors/state-local-referral-lists/mississippi",
+          "income": "https://www.fema.gov/assistance/individual/disaster-survivors/state-local-referral-lists/mississippi",
+          "assets": "https://www.fema.gov/assistance/individual/disaster-survivors/state-local-referral-lists/mississippi",
+          "phone": "https://www.fema.gov/assistance/individual/disaster-survivors/state-local-referral-lists/mississippi"
         },
-        "notes": "Income eligibility at 125% FPL per multiple mslegalservices.org pages citing program details; no age, asset limits specified for senior pathway; no .gov sources found"
+        "notes": "Senior pathway appears to serve age 60+; no income or asset test found in authoritative current sources. Main statewide intake phone is 800-498-1804."
       },
       "flags": [],
-      "notes": "Income eligibility at 125% FPL per multiple mslegalservices.org pages citing program details; no age, asset limits specified for senior pathway; no .gov sources found"
+      "notes": "Senior pathway appears to serve age 60+; no income or asset test found in authoritative current sources. Main statewide intake phone is 800-498-1804."
     },
     {
-      "programId": "ms-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "State Long Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -442,13 +471,13 @@
           "assets": null,
           "phone": "https://www.mdhs.ms.gov/ombudsman/"
         },
-        "notes": "Program has no age, income, or asset eligibility requirements; services are free and available to long-term care residents"
+        "notes": "No age, income, or asset eligibility test found; program is a long-term care ombudsman service, not a means-tested benefit. Official Mississippi hotline found and current."
       },
       "flags": [],
-      "notes": "Program has no age, income, or asset eligibility requirements; services are free and available to long-term care residents"
+      "notes": "No age, income, or asset eligibility test found; program is a long-term care ombudsman service, not a means-tested benefit. Official Mississippi hotline found and current."
     },
     {
-      "programId": "ms-respite-voucher-program",
+      "programId": "respite-voucher-program",
       "programName": "Mississippi Respite Voucher Program",
       "facts": {
         "age": null,
@@ -473,44 +502,18 @@
           "age": null,
           "income": null,
           "assets": null,
-          "phone": "https://www.mdhs.ms.gov/post/mdhs-caregiver-programs-provide-support-for-aging-and-vulnerable-mississippians/"
+          "phone": "https://www.mdhs.ms.gov/aging/"
         },
-        "notes": "Program is Lifespan Respite Program (not Mississippi Respite Voucher Program); no age, income, or asset limits found for senior-caregiver pathway"
+        "notes": "No age, income, or asset test found for the senior caregiver pathway; official Mississippi Access to Care Helpline is 844-822-4622."
       },
       "flags": [],
-      "notes": "Program is Lifespan Respite Program (not Mississippi Respite Voucher Program); no age, income, or asset limits found for senior-caregiver pathway"
+      "notes": "No age, income, or asset test found for the senior caregiver pathway; official Mississippi Access to Care Helpline is 844-822-4622."
     },
     {
-      "programId": "ms-central-aaa-reassurance-program",
+      "programId": "central-aaa-reassurance-program",
       "programName": "Central Mississippi Area Agency on Aging Reassurance Program",
-      "facts": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "8448224622"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "8448224622",
-        "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://cmpdd.org/images/aging/Reassurance-Program-brochure.pdf"
-        },
-        "notes": "Reassurance Program brochure provides phone number but does not specify age, income, or asset eligibility requirements. Program described as providing social phone calls, wellness checks, and helpline assistance for aging population in seven Mississippi counties (Hinds, Madison, Rankin, Simpson, Copiah, Warren, Yazoo). No eligibility criteria found in available sources."
-      },
-      "flags": [],
-      "notes": "Reassurance Program brochure provides phone number but does not specify age, income, or asset eligibility requirements. Program described as providing social phone calls, wellness checks, and helpline assistance for aging population in seven Mississippi counties (Hinds, Madison, Rankin, Simpson, Copiah, Warren, Yazoo). No eligibility criteria found in available sources."
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
     }
   ]
 }

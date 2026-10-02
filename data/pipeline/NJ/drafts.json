@@ -1175,7 +1175,21 @@
       "sourceUrl": "https://www.nj.gov/humanservices/doas/documents/Adult%20Day%20Services%20Program%20Brochure%20(Web-English).pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8772223737",
+            "211"
+          ],
+          "to": "18772223733",
+          "source": "https://nj.gov/humanservices/doas/documents/ADSP%20Brochure%20(Print%20-%20English).pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:42.493Z"
+        }
+      ]
     },
     {
       "id": "senior-ezpass-discount",
@@ -1421,5 +1435,6 @@
       "Several programs are linked, if your loved one qualifies for PAAD, they automatically qualify for Lifeline Credit utility assistance."
     ],
     "resourcesVsBenefits": "Most New Jersey senior programs are qualification-based benefits requiring specific income limits, age requirements, or care needs. For example, PAAD requires income under $54,943/year, while JACC requires nursing-level care assessment. Only one program (Senior Freeze) functions as a general resource with broader eligibility. Unlike some states that offer universal information services, New Jersey focuses on targeted financial assistance for those who meet specific criteria."
-  }
+  },
+  "factcheckedAt": "2026-10-02T07:42:42.493Z"
 }

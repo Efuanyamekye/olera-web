@@ -1,8 +1,8 @@
 {
   "state": "ND",
   "stateName": "North Dakota",
-  "checkedAt": "2026-04-14T10:06:58.833Z",
-  "total": 3,
+  "checkedAt": "2026-10-02T07:41:13.679Z",
+  "total": 4,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
@@ -11,7 +11,7 @@
   "highSeverityFlags": 0,
   "programs": [
     {
-      "programId": "nd-basic-care-assistance-program",
+      "programId": "basic-care-assistance-program",
       "programName": "North Dakota Basic Care Assistance Program (BCAP)",
       "facts": {
         "age": 65,
@@ -24,14 +24,26 @@
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        6
-      ],
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 3000,
+        "assets_couple": 6000,
+        "phone": "8666146005",
+        "sources": {
+          "age": "https://www.hhs.nd.gov/adults-and-aging/services/basic-care-assistance-program",
+          "income": "https://www.hhs.nd.gov/sites/default/files/documents/EA/application-for-assistance-guidebook-exclusion.pdf",
+          "assets": "https://www.nd.gov/dhs/policymanuals/40029/PDF_of_Manual/SC%20400-29%20BCAP%20ML%203735%207.1.23.pdf",
+          "phone": "https://www.hhs.nd.gov/adults-and-aging/services/basic-care-assistance-program"
+        },
+        "notes": "Official ND HHS page shows the senior pathway threshold as age 65+; program also serves disabled/blind adults. No clear current countable-asset cap for BCAP was found in the retrieved official sources beyond the cited equity/property limits, so the reported asset values reflect the manual's stated unit equity limits."
+      },
       "flags": [],
-      "notes": null
+      "notes": "Official ND HHS page shows the senior pathway threshold as age 65+; program also serves disabled/blind adults. No clear current countable-asset cap for BCAP was found in the retrieved official sources beyond the cited equity/property limits, so the reported asset values reflect the manual's stated unit equity limits."
     },
     {
-      "programId": "nd-aging-in-community-project",
+      "programId": "aging-in-community-project",
       "programName": "North Dakota Aging in Community (AIC) Project",
       "facts": {
         "age": 60,
@@ -50,20 +62,29 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "7012315948",
         "sources": {
           "age": null,
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.ndsu.edu/agriculture/extension/impact-stories/ndsu-extensions-aging-community-project-brings-care-rural-communities"
         },
-        "notes": "No eligibility criteria (age threshold, income, assets) or phone number found in sources; program appears open to older adults in rural areas without specified tests. Prefer official NDSU source: https://www.ndsu.edu/agriculture/extension/programs/aging-community-program"
+        "notes": "No authoritative senior-specific age threshold was found; program is described as serving older adults with no explicit minimum age test. Main program contact found for Jane Strommen."
       },
-      "flags": [],
-      "notes": "No eligibility criteria (age threshold, income, assets) or phone number found in sources; program appears open to older adults in rural areas without specified tests. Prefer official NDSU source: https://www.ndsu.edu/agriculture/extension/programs/aging-community-program"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211"
+          ],
+          "verifiedValue": "7012315948"
+        }
+      ],
+      "notes": "No authoritative senior-specific age threshold was found; program is described as serving older adults with no explicit minimum age test. Main program contact found for Jane Strommen."
     },
     {
-      "programId": "nd-assistive-senior-safety-program",
+      "programId": "assistive-senior-safety-program",
       "programName": "ND Assistive Senior Safety Program",
       "facts": {
         "age": 60,
@@ -72,7 +93,9 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8007355400"
+          "8008954728",
+          "7012584728",
+          "8554625465"
         ],
         "hasVerifiableFacts": true
       },
@@ -89,19 +112,42 @@
           "assets": null,
           "phone": "https://ndassistive.org/senior-safety-program/"
         },
-        "notes": "No income or asset limits mentioned in sources; program funded via Older Americans Act through ND Dept of Human Services."
+        "notes": "Current ND Assistive Senior Safety Program appears active; source states eligibility for North Dakota residents aged 60+ and provides the main contact number. No official income or asset test was found in the retrieved source."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8007355400"
-          ],
-          "verifiedValue": "8008954728"
-        }
-      ],
-      "notes": "No income or asset limits mentioned in sources; program funded via Older Americans Act through ND Dept of Human Services."
+      "flags": [],
+      "notes": "Current ND Assistive Senior Safety Program appears active; source states eligibility for North Dakota residents aged 60+ and provides the main contact number. No official income or asset test was found in the retrieved source."
+    },
+    {
+      "programId": "family-caregiver-support",
+      "programName": "North Dakota Family Caregiver Support Program",
+      "facts": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "8554625465"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18554625465",
+        "sources": {
+          "age": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program",
+          "income": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program",
+          "assets": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program",
+          "phone": "https://www.hhs.nd.gov/adults-and-aging/human-services/adults-and-aging/family-caregiver-support-program"
+        },
+        "notes": "Current North Dakota FCSP appears active and has no income or asset test listed; eligibility is based on caregiver/care-recipient criteria instead."
+      },
+      "flags": [],
+      "notes": "Current North Dakota FCSP appears active and has no income or asset test listed; eligibility is based on caregiver/care-recipient criteria instead."
     }
   ]
 }

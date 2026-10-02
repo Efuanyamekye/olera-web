@@ -1,17 +1,17 @@
 {
   "state": "AL",
   "stateName": "Alabama",
-  "checkedAt": "2026-04-14T09:58:01.024Z",
+  "checkedAt": "2026-10-02T07:33:05.611Z",
   "total": 16,
   "skipped": 0,
   "parseErrors": 0,
-  "errors": 0,
-  "programsWithFlags": 5,
-  "totalFlags": 7,
-  "highSeverityFlags": 0,
+  "errors": 1,
+  "programsWithFlags": 3,
+  "totalFlags": 5,
+  "highSeverityFlags": 4,
   "programs": [
     {
-      "programId": "al-medicaid-elderly-disabled-waiver",
+      "programId": "medicaid-elderly-disabled-waiver",
       "programName": "Alabama Medicaid Elderly and Disabled Waiver",
       "facts": {
         "age": null,
@@ -20,39 +20,32 @@
         "assets_individual": 2000,
         "assets_couple": null,
         "phones": [
-          "8003621504"
+          "8002435463",
+          "8003621504",
+          "3342425743"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": 2982,
-        "income_2": 2982,
+        "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": 4000,
-        "phone": "18774252243",
+        "assets_couple": 2000,
+        "phone": "8002435463",
         "sources": {
-          "age": "https://alabamaageline.gov/medicaid-waiver-programs/",
-          "income": "https://www.medicaidplanningassistance.org/alabama-elderly-disabled-waiver/",
-          "assets": "https://www.medicaidplanningassistance.org/alabama-elderly-disabled-waiver/",
-          "phone": "https://medicaid.alabama.gov/content/6.0_LTC_Waivers/6.3_Other_LTC_Programs/6.3.3_Personal_Choices.aspx"
+          "age": "https://medicaid.alabama.gov/documents/3.0_Apply/3.2_Qualifying_Medicaid/3.2.1_Medicaid_for_Children_POCRs/3.2.1_Form_206_Waiver_HBCS_2-4-26.pdf",
+          "income": "https://medicaid.alabama.gov/documents/3.0_Apply/3.2_Qualifying_Medicaid/3.2.1_Medicaid_for_Children_POCRs/3.2.1_Form_206_Waiver_HBCS_2-4-26.pdf",
+          "assets": "https://medicaid.alabama.gov/documents/3.0_Apply/3.2_Qualifying_Medicaid/3.2.1_Medicaid_for_Children_POCRs/3.2.1_Form_206_Waiver_HBCS_2-4-26.pdf",
+          "phone": "https://medicaid.alabama.gov/documents/3.0_Apply/3.2_Qualifying_Medicaid/3.2.1_Medicaid_for_Children_POCRs/3.2.1_Form_206_Waiver_HBCS_2-4-26.pdf"
         },
-        "notes": "Income/assets from non-.gov source citing 2026 FBR; no official .gov financial limits found; phone via Area Agency on Aging for E&D Waiver"
+        "notes": "Current Alabama Medicaid guidance shows the Elderly and Disabled Waiver has a $2,000 resource limit and a 300% SSI income pathway; application help is routed through the Alabama Department of Senior Services at 1-800-243-5463."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8003621504"
-          ],
-          "verifiedValue": "18774252243"
-        }
-      ],
-      "notes": "Income/assets from non-.gov source citing 2026 FBR; no official .gov financial limits found; phone via Area Agency on Aging for E&D Waiver"
+      "flags": [],
+      "notes": "Current Alabama Medicaid guidance shows the Elderly and Disabled Waiver has a $2,000 resource limit and a 300% SSI income pathway; application help is routed through the Alabama Department of Senior Services at 1-800-243-5463."
     },
     {
-      "programId": "al-pace-comprehensive-care",
+      "programId": "pace-comprehensive-care",
       "programName": "Alabama PACE (Program of All-Inclusive Care for the Elderly)",
       "facts": {
         "age": 55,
@@ -64,147 +57,139 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 55,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8552121552",
         "sources": {
-          "age": null,
+          "age": "https://admincode.legislature.state.al.us/api/chapter/560-X-53",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.icarol.info/ResourceView2.aspx?org=84123&agencynum=39181135"
         },
-        "notes": "No authoritative current data found on senior-specific age threshold or financial eligibility (income/assets) for Alabama PACE in provided sources; official Medicaid page lacks details, admin code snippet incomplete"
+        "notes": "Current Alabama PACE eligibility uses a 55+ age threshold and nursing-facility level of care; no current authoritative Alabama source found with a separate income or countable asset test for PACE enrollment."
       },
       "flags": [],
-      "notes": "No authoritative current data found on senior-specific age threshold or financial eligibility (income/assets) for Alabama PACE in provided sources; official Medicaid page lacks details, admin code snippet incomplete"
+      "notes": "Current Alabama PACE eligibility uses a 55+ age threshold and nursing-facility level of care; no current authoritative Alabama source found with a separate income or countable asset test for PACE enrollment."
     },
     {
-      "programId": "al-medicare-savings-programs-qmb-slmb-qi",
+      "programId": "medicare-savings-programs-qmb-slmb-qi",
       "programName": "Alabama Medicaid Medicare Savings Programs (QMB, SLMB, QI)",
       "facts": {
-        "age": 65,
-        "income_1": 1275,
-        "income_2": 1724,
-        "assets_individual": 9430,
-        "assets_couple": 14130,
+        "age": null,
+        "income_1": 1350,
+        "income_2": 1824,
+        "assets_individual": null,
+        "assets_couple": null,
         "phones": [
           "18003621504"
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        1
-      ],
+      "verified": {
+        "age": null,
+        "income_1": 1350,
+        "income_2": 1824,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "18003621504",
+        "sources": {
+          "age": null,
+          "income": "https://medicaid.alabama.gov/documents/3.0_Apply/3.2_Qualifying_Medicaid/3.2_Medicaid_Income_Limits_2026_3-11-26.pdf",
+          "assets": "https://medicaid.alabama.gov/documents/3.0_Apply/3.2_Qualifying_Medicaid/3.2_Medicaid_Income_Limits_2026_3-11-26.pdf",
+          "phone": "https://medicaid.alabama.gov/content/3.0_Apply/3.2_Qualifying/3.2.6_Help_Paying_Medicare.aspx"
+        },
+        "notes": "Alabama Medicaid says Medicare Savings Program resource limits do not apply; income limits shown are the current 2026 QMB figures. Phone number is Alabama Medicaid main help line for Medicare savings program applications."
+      },
       "flags": [],
-      "notes": null
+      "notes": "Alabama Medicaid says Medicare Savings Program resource limits do not apply; income limits shown are the current 2026 QMB figures. Phone number is Alabama Medicaid main help line for Medicare savings program applications."
     },
     {
-      "programId": "al-aesap-elderly-food-assistance",
+      "programId": "aesap-elderly-food-assistance",
       "programName": "Alabama Elderly Simplified Application Project (AESAP)",
       "facts": {
-        "age": 60,
-        "income_1": 1580,
-        "income_2": 2137,
+        "age": 65,
+        "income_1": 1729,
+        "income_2": 2345,
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
           "18004382958",
-          "33424217003",
+          "8338222202",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
-        "income_1": null,
-        "income_2": null,
+        "age": 65,
+        "income_1": 1305,
+        "income_2": 1763,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8338222202",
+        "phone": "8004382958",
         "sources": {
           "age": "https://dhr.alabama.gov/wp-content/uploads/2025/10/AESAP-Project-Information-Rev.10-25.pdf",
-          "income": null,
-          "assets": null,
-          "phone": "https://tarcog.us/wp-content/uploads/AESAP-FY23-FACT-Sheet-w-income-limits.pdf"
+          "income": "https://dhr.alabama.gov/wp-content/uploads/2025/10/Form-DHR-FAP-2200-Rev.-10-2025.pdf",
+          "assets": "https://dhr.alabama.gov/wp-content/uploads/2025/10/AESAP-Project-Information-Rev.10-25.pdf",
+          "phone": "https://dhr.alabama.gov/wp-content/uploads/2024/10/Form-DHR-FSD-2198-AESAP-Application-Rev.-10-24.pdf"
         },
-        "notes": "AESAP uses standard SNAP income/resource limits, which are not specified here; age varies across sources (60 or 65); phone from regional fact sheet"
-      },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "18004382958",
-            "33424217003",
-            "211"
-          ],
-          "verifiedValue": "8338222202"
-        }
-      ],
-      "notes": "AESAP uses standard SNAP income/resource limits, which are not specified here; age varies across sources (60 or 65); phone from regional fact sheet"
-    },
-    {
-      "programId": "al-liheap-energy-assistance",
-      "programName": "Alabama LIHEAP (Low-Income Home Energy Assistance Program)",
-      "facts": {
-        "age": null,
-        "income_1": 2152,
-        "income_2": 2908,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "3342425100",
-          "211"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": null,
-        "income_1": 1883,
-        "income_2": 2555,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "2057870139",
-        "sources": {
-          "age": null,
-          "income": "https://www.caaneal.org/liheap",
-          "assets": null,
-          "phone": "https://adeca.alabama.gov/liheap/"
-        },
-        "notes": "Income limits based on 150% Federal poverty guideline (current as of FY 2026 plan). Alabama LIHEAP does not have age-based eligibility; seniors are a priority population but not age-gated. No asset test found in official sources. Phone number is Community Action Partnership of Middle Alabama call center; individual CAAs maintain separate contact numbers. Program is active and operational as of April 2026."
+        "notes": "Current Alabama DHR AESAP uses age 65+ for the senior pathway; income limits are the SNAP net monthly limits for 10/01/2025-9/30/2026. The program does not appear to publish separate asset limits; it references the same income and resource limits as SNAP."
       },
       "flags": [
         {
           "field": "income_1",
-          "severity": "medium",
-          "draftValue": 2152,
-          "verifiedValue": 1883,
-          "pctDiff": 12.5
+          "severity": "high",
+          "draftValue": 1729,
+          "verifiedValue": 1305,
+          "pctDiff": 24.5
         },
         {
           "field": "income_2",
-          "severity": "medium",
-          "draftValue": 2908,
-          "verifiedValue": 2555,
-          "pctDiff": 12.1
-        },
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "3342425100",
-            "211"
-          ],
-          "verifiedValue": "2057870139"
+          "severity": "high",
+          "draftValue": 2345,
+          "verifiedValue": 1763,
+          "pctDiff": 24.8
         }
       ],
-      "notes": "Income limits based on 150% Federal poverty guideline (current as of FY 2026 plan). Alabama LIHEAP does not have age-based eligibility; seniors are a priority population but not age-gated. No asset test found in official sources. Phone number is Community Action Partnership of Middle Alabama call center; individual CAAs maintain separate contact numbers. Program is active and operational as of April 2026."
+      "notes": "Current Alabama DHR AESAP uses age 65+ for the senior pathway; income limits are the SNAP net monthly limits for 10/01/2025-9/30/2026. The program does not appear to publish separate asset limits; it references the same income and resource limits as SNAP."
     },
     {
-      "programId": "al-weatherization-assistance-program",
+      "programId": "liheap-energy-assistance",
+      "programName": "Alabama LIHEAP (Low-Income Home Energy Assistance Program)",
+      "facts": {
+        "age": null,
+        "income_1": 1995,
+        "income_2": 2705,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phones": [
+          "18003928098",
+          "211"
+        ],
+        "hasVerifiableFacts": true
+      },
+      "verified": {
+        "age": null,
+        "income_1": 1956,
+        "income_2": 2644,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8003928098",
+        "sources": {
+          "age": null,
+          "income": "https://adeca.alabama.gov/wp-content/uploads/FY-2026-LIHEAP-Manual-1.pdf",
+          "assets": null,
+          "phone": "https://adeca.alabama.gov/wp-content/uploads/FY-2026-LIHEAP-Manual-1.pdf"
+        },
+        "notes": "Alabama LIHEAP is current for FY 2026 and uses a monthly income test; no asset test was identified in the official materials reviewed."
+      },
+      "flags": [],
+      "notes": "Alabama LIHEAP is current for FY 2026 and uses a monthly income test; no asset test was identified in the official materials reviewed."
+    },
+    {
+      "programId": "weatherization-assistance-program",
       "programName": "Alabama Weatherization Assistance Program",
       "facts": {
         "age": null,
@@ -213,7 +198,7 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8667804945",
+          "211",
           "3342624300",
           "2569991166",
           "2563833832",
@@ -227,53 +212,39 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "3342428972",
         "sources": {
-          "age": null,
+          "age": "https://adeca.alabama.gov/weatherization/",
           "income": "https://adeca.alabama.gov/weatherization/",
           "assets": null,
-          "phone": "https://adeca.alabama.gov/weatherization/"
+          "phone": "https://adeca.alabama.gov/wp-content/uploads/2025-WAP-State-Plan.pdf"
         },
-        "notes": "No single official main phone number; contact county-specific community action agency. Program active as of 2025 with priority for elderly."
+        "notes": "Program appears active and still uses the 200% federal poverty guideline; no separate age or asset test found in the official state sources reviewed. Public-facing application contact is through local agencies, and the state program phone in the official plan is 3342428972."
       },
-      "flags": [],
-      "notes": "No single official main phone number; contact county-specific community action agency. Program active as of 2025 with priority for elderly."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "211",
+            "3342624300",
+            "2569991166",
+            "2563833832",
+            "2568519800"
+          ],
+          "verifiedValue": "3342428972"
+        }
+      ],
+      "notes": "Program appears active and still uses the 200% federal poverty guideline; no separate age or asset test found in the official state sources reviewed. Public-facing application contact is through local agencies, and the state program phone in the official plan is 3342428972."
     },
     {
-      "programId": "al-ship-medicare-counseling",
+      "programId": "ship-medicare-counseling",
       "programName": "Alabama SHIP (State Health Insurance Assistance Program)",
-      "facts": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phones": [
-          "8002435463",
-          "1800"
-        ],
-        "hasVerifiableFacts": true
-      },
-      "verified": {
-        "age": null,
-        "income_1": null,
-        "income_2": null,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": "8002435463",
-        "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://www.cms.gov/contacts/state-health-insurance-assistance-program-ship/general-beneficiary-contact/1562001"
-        },
-        "notes": "Alabama SHIP is a counseling program with no age/income/asset eligibility tests; phone confirmed from federal CMS site and multiple state agency sources"
-      },
-      "flags": [],
-      "notes": "Alabama SHIP is a counseling program with no age/income/asset eligibility tests; phone confirmed from federal CMS site and multiple state agency sources"
+      "error": "Perplexity 500: {\"error\":{\"message\":\"request failed\",\"type\":\"internal_error\",\"code\":500}}\n",
+      "flags": []
     },
     {
-      "programId": "al-elderly-nutrition-meals-on-wheels",
+      "programId": "elderly-nutrition-meals-on-wheels",
       "programName": "Elderly Nutrition Program (Meals on Wheels)",
       "facts": {
         "age": 60,
@@ -283,7 +254,8 @@
         "assets_couple": null,
         "phones": [
           "8002435463",
-          "8002396741"
+          "3342425743",
+          "8002393507"
         ],
         "hasVerifiableFacts": true
       },
@@ -293,17 +265,17 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8002435463",
         "sources": {
           "age": "https://alabamaageline.gov/elderly-nutrition-program/",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://alabamaageline.gov/elderly-nutrition-program/"
         },
-        "notes": "No income or asset limits mentioned in sources; voluntary contributions accepted. No statewide application phone found; contact local Area Agency on Aging."
+        "notes": "Current Alabama Department of Senior Services page lists eligible participants as anyone 60 years of age or older; no income or asset test found for this program."
       },
       "flags": [],
-      "notes": "No income or asset limits mentioned in sources; voluntary contributions accepted. No statewide application phone found; contact local Area Agency on Aging."
+      "notes": "Current Alabama Department of Senior Services page lists eligible participants as anyone 60 years of age or older; no income or asset test found for this program."
     },
     {
       "programId": "alabama-lifespan-respite-program",
@@ -320,14 +292,26 @@
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        1
-      ],
+      "verified": {
+        "age": null,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "2568598300",
+        "sources": {
+          "age": null,
+          "income": null,
+          "assets": null,
+          "phone": "https://alabamarespite.org/apply-for-respite/"
+        },
+        "notes": "No age, income, or asset test was found in the retrieved official/current program materials for the senior-caregiver pathway; current application/help phone number is 256-859-8300. Program appears active under Alabama Lifespan Respite/Alabama Respite."
+      },
       "flags": [],
-      "notes": null
+      "notes": "No age, income, or asset test was found in the retrieved official/current program materials for the senior-caregiver pathway; current application/help phone number is 256-859-8300. Program appears active under Alabama Lifespan Respite/Alabama Respite."
     },
     {
-      "programId": "al-scsep-employment-training",
+      "programId": "scsep-employment-training",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -345,24 +329,24 @@
       },
       "verified": {
         "age": 55,
-        "income_1": null,
+        "income_1": 125,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8002435463",
         "sources": {
           "age": "https://alabamaageline.gov/scsep/",
-          "income": "https://alabamaageline.gov/scsep/",
-          "assets": "https://alabamaageline.gov/scsep/",
-          "phone": null
+          "income": "https://alabamaageline.gov/wp-content/uploads/2023/06/Guide-To-Services-2023.pdf",
+          "assets": "https://alabamaageline.gov/wp-content/uploads/2023/06/Guide-To-Services-2023.pdf",
+          "phone": "https://alabamaageline.gov/scsep/"
         },
-        "notes": "No single statewide phone; multiple regional contacts. No asset limits. Income <125% FPL but no specific $ values provided."
+        "notes": "SCSEP in Alabama is current and active; official Alabama sources list age 55+ and income under 125% FPL, with no resource/asset limit required."
       },
       "flags": [],
-      "notes": "No single statewide phone; multiple regional contacts. No asset limits. Income <125% FPL but no specific $ values provided."
+      "notes": "SCSEP in Alabama is current and active; official Alabama sources list age 55+ and income under 125% FPL, with no resource/asset limit required."
     },
     {
-      "programId": "al-legal-services-seniors",
+      "programId": "legal-services-seniors",
       "programName": "Alabama Legal Services for Seniors",
       "facts": {
         "age": 60,
@@ -383,20 +367,20 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18002435463",
+        "phone": "8664563959",
         "sources": {
-          "age": "https://alabamaageline.gov/legal-assistance/",
+          "age": "https://alabamaageline.gov/wp-content/uploads/2022/03/Guide-to-services-DD-3.15.22-web.pdf",
           "income": null,
           "assets": null,
-          "phone": "https://alabamaageline.gov/legal-assistance/"
+          "phone": "https://legalservicesalabama.org/elder-law/"
         },
-        "notes": "Program is Legal Assistance Program via Alabama Department of Senior Services; Legal Services Alabama offers elder grants for 60+ with no income test specified. No 2026 changes found; income/assets screened case-by-case."
+        "notes": "Current sources found for the senior pathway indicate eligibility for adults age 60+ and the elder helpline phone number. No authoritative income or asset test was found for this program."
       },
       "flags": [],
-      "notes": "Program is Legal Assistance Program via Alabama Department of Senior Services; Legal Services Alabama offers elder grants for 60+ with no income test specified. No 2026 changes found; income/assets screened case-by-case."
+      "notes": "Current sources found for the senior pathway indicate eligibility for adults age 60+ and the elder helpline phone number. No authoritative income or asset test was found for this program."
     },
     {
-      "programId": "al-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Alabama Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -423,13 +407,13 @@
           "assets": null,
           "phone": "https://alabamaageline.gov/ombudsman/"
         },
-        "notes": "No age, income, or asset eligibility requirements; open to anyone. Additional toll-free line 1-800-AGE-LINE (18002435463) mentioned in related sources."
+        "notes": "No age, income, or asset eligibility test found for this ombudsman program; official current phone number listed on the Alabama Office of the State Long-Term Care Ombudsman page is 334-242-5753."
       },
       "flags": [],
-      "notes": "No age, income, or asset eligibility requirements; open to anyone. Additional toll-free line 1-800-AGE-LINE (18002435463) mentioned in related sources."
+      "notes": "No age, income, or asset eligibility test found for this ombudsman program; official current phone number listed on the Alabama Office of the State Long-Term Care Ombudsman page is 334-242-5753."
     },
     {
-      "programId": "al-alabama-cares-program",
+      "programId": "alabama-cares-program",
       "programName": "Alabama Cares Program",
       "facts": {
         "age": null,
@@ -443,34 +427,25 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": 60,
+        "age": null,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8004252243",
+        "phone": "8002435463",
         "sources": {
           "age": "https://alabamaageline.gov/alabama-cares/",
-          "income": null,
-          "assets": null,
-          "phone": "https://alabamafamilycentral.org/service/alabama-cares/"
+          "income": "https://alabamaageline.gov/alabama-cares/",
+          "assets": "https://alabamaageline.gov/alabama-cares/",
+          "phone": "https://alabamaageline.gov/alabama-cares/"
         },
-        "notes": "No income or asset limits found in sources; priority to greatest social/economic need"
+        "notes": "Current official Alabama Cares/Alabama CARES caregiver support page shows no age, income, or asset test for the senior caregiver pathway; it states income will not prevent services. Official main contact number listed is 1-800-AGE-LINE (1-800-243-5463)."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "18002435463"
-          ],
-          "verifiedValue": "8004252243"
-        }
-      ],
-      "notes": "No income or asset limits found in sources; priority to greatest social/economic need"
+      "flags": [],
+      "notes": "Current official Alabama Cares/Alabama CARES caregiver support page shows no age, income, or asset test for the senior caregiver pathway; it states income will not prevent services. Official main contact number listed is 1-800-AGE-LINE (1-800-243-5463)."
     },
     {
-      "programId": "al-ed-medicaid-waiver",
+      "programId": "ed-medicaid-waiver",
       "programName": "Elderly and Disabled (E&D) Medicaid Waiver",
       "facts": {
         "age": null,
@@ -479,19 +454,31 @@
         "assets_individual": 2000,
         "assets_couple": null,
         "phones": [
-          "18774252243",
+          "18002435463",
           "18003621504"
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        6
-      ],
+      "verified": {
+        "age": 65,
+        "income_1": null,
+        "income_2": null,
+        "assets_individual": 2000,
+        "assets_couple": 4000,
+        "phone": "8002435463",
+        "sources": {
+          "age": "https://www.medicaidplanningassistance.org/alabama-elderly-disabled-waiver/",
+          "income": null,
+          "assets": "https://www.medicaidplanningassistance.org/alabama-elderly-disabled-waiver/",
+          "phone": "https://medicaid.alabama.gov/documents/6.0_LTC_Waivers/6.1_HCBS_Waivers/6.1.2_Elderly_Disabled_Waiver/6.1.2_Elderly_Disabled_Waiver_handout.pdf"
+        },
+        "notes": "Current 2026 guidance located; age and asset limits appear consistent across current secondary sources, but the most authoritative official Alabama page retrieved did not expose the financial limits in the snippet. Phone number for waiver help is the Alabama Department of Senior Services/AGE-LINE line."
+      },
       "flags": [],
-      "notes": null
+      "notes": "Current 2026 guidance located; age and asset limits appear consistent across current secondary sources, but the most authoritative official Alabama page retrieved did not expose the financial limits in the snippet. Phone number for waiver help is the Alabama Department of Senior Services/AGE-LINE line."
     },
     {
-      "programId": "al-senior-aides-program",
+      "programId": "senior-aides-program",
       "programName": "Senior Aides Program",
       "facts": {
         "age": 65,
@@ -506,14 +493,40 @@
         ],
         "hasVerifiableFacts": true
       },
-      "verified": [
-        6
+      "verified": {
+        "age": 55,
+        "income_1": 1292,
+        "income_2": 1740,
+        "assets_individual": null,
+        "assets_couple": null,
+        "phone": "8002435463",
+        "sources": {
+          "age": "https://www.slideserve.com/Anita/welcome-to-nacolg-your-regional-commission-december-4-2008",
+          "income": "https://www.slideserve.com/Anita/welcome-to-nacolg-your-regional-commission-december-4-2008",
+          "assets": null,
+          "phone": "https://alabamaageline.gov/"
+        },
+        "notes": "Senior Aides Program appears to be Alabama SCSEP/Senior Aides; current official Alabama source found for the program name/phone, but the income figures located were from an older regional slide deck and may not be current. No authoritative current asset test found."
+      },
+      "flags": [
+        {
+          "field": "age",
+          "severity": "high",
+          "draftValue": 65,
+          "verifiedValue": 55
+        },
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 2982,
+          "verifiedValue": 1292,
+          "pctDiff": 56.7
+        }
       ],
-      "flags": [],
-      "notes": null
+      "notes": "Senior Aides Program appears to be Alabama SCSEP/Senior Aides; current official Alabama source found for the program name/phone, but the income figures located were from an older regional slide deck and may not be current. No authoritative current asset test found."
     },
     {
-      "programId": "al-seniorx-prescription-assistance",
+      "programId": "seniorx-prescription-assistance",
       "programName": "SenioRx Prescription Drug Assistance Program",
       "facts": {
         "age": 55,
@@ -522,8 +535,8 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "8008385845",
-          "211"
+          "8002435463",
+          "8008385845"
         ],
         "hasVerifiableFacts": true
       },
@@ -535,25 +548,15 @@
         "assets_couple": null,
         "phone": "18002435463",
         "sources": {
-          "age": "https://alabamaageline.gov/seniorx/",
-          "income": null,
+          "age": "https://alabamaageline.gov/2023/07/19/need-help-obtaining-prescription-medications/",
+          "income": "https://alabamaageline.gov/2023/07/19/need-help-obtaining-prescription-medications/",
           "assets": null,
           "phone": "https://alabamaageline.gov/seniorx/"
         },
-        "notes": "No specific income or asset limits found in sources; mentions 'certain income limits' or 200% FPL but no numeric values provided"
+        "notes": "Current Alabama SenioRx guidance shows a senior pathway for age 55+; program also serves disabled adults regardless of age. No authoritative current public source found for fixed income or asset limits; income is described as company-specific or unspecified."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8008385845",
-            "211"
-          ],
-          "verifiedValue": "18002435463"
-        }
-      ],
-      "notes": "No specific income or asset limits found in sources; mentions 'certain income limits' or 200% FPL but no numeric values provided"
+      "flags": [],
+      "notes": "Current Alabama SenioRx guidance shows a senior pathway for age 55+; program also serves disabled adults regardless of age. No authoritative current public source found for fixed income or asset limits; income is described as company-specific or unspecified."
     }
   ]
 }

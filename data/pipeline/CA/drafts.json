@@ -68,7 +68,15 @@
           "U.S. citizen or qualified non-citizen",
           "Meet all standard Medi-Cal requirements"
         ],
-        "povertyLevelReference": "100-135% FPL"
+        "povertyLevelReference": "100-135% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "online",
@@ -410,7 +418,21 @@
       "sourceUrl": "https://www.dhcs.ca.gov/services/medi-cal/Pages/MSSPMedi-CalWaiver.aspx",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-07-31"
+      "lastVerifiedDate": "2026-07-31",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9164197500",
+            "18884528609"
+          ],
+          "to": "9165529105",
+          "source": "https://www.dhcs.ca.gov/services/medi-cal-resources/multipurpose-senior-services-program-msspmedi-calwaiver/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        }
+      ]
     },
     {
       "id": "cbas-adult-day-services",
@@ -570,7 +592,21 @@
       "phone": "(916) 440-7400",
       "sourceUrl": "https://aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9164407400",
+            "211"
+          ],
+          "to": "9164197545",
+          "source": "https://www.aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        }
+      ]
     },
     {
       "id": "calfresh-food-benefits",
@@ -659,7 +695,15 @@
           "U.S. citizen or qualified non-citizen",
           "Provide Social Security Number for all household members"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 200,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -793,7 +837,36 @@
       "sourceUrl": "https://www.cdss.ca.gov/calfresh",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 60,
+          "to": 55,
+          "source": "https://www.cdss.ca.gov/inforesources/calfresh/eligibility-and-issuance-requirements",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        },
+        {
+          "field": "income_1",
+          "from": 2610,
+          "to": 1628,
+          "source": "https://www.cdss.ca.gov/Portals/9/FA/Forms/CF24.pdf?ver=2026-10-01-095941-493",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        },
+        {
+          "field": "income_2",
+          "from": 3526,
+          "to": 2203,
+          "source": "https://www.cdss.ca.gov/Portals/9/FA/Forms/CF24.pdf?ver=2026-10-01-095941-493",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1864,7 +1937,15 @@
           "Priority given to homebound, abused, homeless, limited mobility, or chronic health conditions",
           "Some health-related services have no income limits in Fresno, Madera, Kings, Merced, and Tulare counties"
         ],
-        "povertyLevelReference": "125% FPL for general legal services, 200% FPL for some services"
+        "povertyLevelReference": "125% FPL for general legal services, 200% FPL for some services",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 120,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1952,7 +2033,21 @@
       "phone": "1-800-510-2020",
       "sourceUrl": "https://aging.ca.gov/Programs_and_Services/Legal_Services/",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18005102020",
+            "18006758001"
+          ],
+          "to": "8002221753",
+          "source": "https://dfpi.ca.gov/wp-content/uploads/sites/337/2019/07/Consumer_ResourceGuide.pdf",
+          "severity": "medium",
+          "why": "source dated 2019",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -2475,7 +2570,15 @@
           "At risk of nursing home placement without services",
           "Physician completes Health Care Certification (SOC 873)"
         ],
-        "povertyLevelReference": "138% FPL"
+        "povertyLevelReference": "138% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 135,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -2595,7 +2698,20 @@
       "sourceUrl": "https://www.cdss.ca.gov/in-home-supportive-services",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-08-23"
+      "lastVerifiedDate": "2026-08-23",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "8663767066",
+          "source": "https://www.cdss.ca.gov/inforesources/county-ihss-offices",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        }
+      ]
     },
     {
       "id": "caregiver-resource-centers",
@@ -2742,7 +2858,21 @@
       "phone": "(800) 675-6694",
       "sourceUrl": "https://www.caregivercalifornia.org/",
       "contentStatus": "approved",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8006756694",
+            "9095141404"
+          ],
+          "to": "8005102020",
+          "source": "https://aging.ca.gov/Aging_Resources/Caring_for_the_Caregivers/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        }
+      ]
     },
     {
       "id": "cbas-adult-day-services",
@@ -2927,7 +3057,21 @@
       "sourceUrl": "https://aging.ca.gov/Programs_and_Services/Community-Based_Adult_Services/",
       "contentStatus": "approved",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "9164407400",
+            "211"
+          ],
+          "to": "9164197545",
+          "source": "https://www.aging.ca.gov/Providers_and_Partners/Community-Based_Adult_Services/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:33:59.830Z"
+        }
+      ]
     }
   ],
   "stateOverview": {
@@ -3001,5 +3145,6 @@
       "Property owners can defer taxes through California's postponement program with 7% annual interest"
     ],
     "resourcesVsBenefits": "California offers both income-qualified benefits and free resources for all seniors. Benefits like CalFresh, IHSS, and Medicare Savings Programs require income verification and provide direct financial assistance or services. Free resources like HICAP counseling, Caregiver Resource Centers, and California Senior Legal Services are available regardless of income, these help you navigate the system, understand your options, and solve problems without qualifying for specific dollar amounts."
-  }
+  },
+  "factcheckedAt": "2026-10-02T07:33:59.830Z"
 }

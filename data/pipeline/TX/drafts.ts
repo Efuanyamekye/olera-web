@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TX/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.484Z
+ * Last updated: 2026-10-02T07:57:10.932Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -72,7 +72,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizenship or legal immigrant status",
           "Entitled to Medicare Part A, or Part B immunosuppressive-drug coverage"
         ],
-        "povertyLevelReference": "100-135% FPL"
+        "povertyLevelReference": "100-135% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 133,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -235,7 +243,27 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1796,
+          "to": 1330,
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "severity": "high",
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025 or 138% FPL 2024 or 150% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2435,
+          "to": 1804,
+          "source": "https://fhb.hhs.texas.gov/handbooks/medicaid-elderly-people-disabilities-handbook/appendix-xxxi-budget-reference-chart",
+          "severity": "high",
+          "why": "value fits more than one tier (130% FPL 2026 or 133% FPL 2026 or 135% FPL 2026 or 138% FPL 2026 or 133% FPL 2025 or 135% FPL 2025 or 138% FPL 2025 or 138% FPL 2024 or 150% FPL 2023 or 165% FPL 2022)",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        }
+      ]
     },
     {
       "id": "star-plus-medicaid-hcbs",
@@ -465,7 +493,22 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18774385658",
+            "211",
+            "8777826440"
+          ],
+          "to": "8009642777",
+          "source": "https://fhb.hhs.texas.gov/handbooks/starplus-handbook/3300-administrative-procedures",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        }
+      ]
     },
     {
       "id": "pace-eldercare",
@@ -727,7 +770,15 @@ export const drafts: PipelineStateDrafts = {
           "Include all household members who share food",
           "Medical expenses over $35/month are deductible for seniors"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "online",
@@ -855,7 +906,27 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.yourtexasbenefits.com",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1330,
+          "to": 1696,
+          "source": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/c-120-supplemental-nutrition-assistance-program",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1804,
+          "to": 2292,
+          "source": "https://fhb.hhs.texas.gov/handbooks/texas-works-handbook/c-120-supplemental-nutrition-assistance-program",
+          "severity": "high",
+          "why": "value fits more than one tier (125% FPL 2026 or 130% FPL 2026 or 125% FPL 2025 or 130% FPL 2025 or 133% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -919,7 +990,15 @@ export const drafts: PipelineStateDrafts = {
           "U.S. citizen or qualified non-citizen (lawful permanent resident, refugee)",
           "Automatic eligibility if receiving SNAP, SSI, TANF, or certain veterans' benefits"
         ],
-        "povertyLevelReference": "150% of the Federal Poverty Level"
+        "povertyLevelReference": "150% of the Federal Poverty Level",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1052,7 +1131,27 @@ export const drafts: PipelineStateDrafts = {
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
       "reviewedBy": "Cess",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1995,
+          "to": 1883,
+          "source": "https://www.tdhca.texas.gov/community-affairs-income-guidelines",
+          "severity": "medium",
+          "why": "value fits more than one tier (150% FPL 2026 or 150% FPL 2025 or 165% FPL 2023)",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        },
+        {
+          "field": "income_2",
+          "from": 2705,
+          "to": 2555,
+          "source": "https://www.tdhca.texas.gov/community-affairs-income-guidelines",
+          "severity": "medium",
+          "why": "value fits more than one tier (138% FPL 2026 or 150% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        }
+      ]
     },
     {
       "id": "weatherization-assistance-program",
@@ -1749,7 +1848,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hhs.texas.gov/services/long-term-care/home-community-based-care/community-based-alternatives-cba",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211",
+            "8775417905"
+          ],
+          "to": "8774385658",
+          "source": "https://www.txp2p.org/services/services-for-parents-pathway-to-adulthood/services-and-supports",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        }
+      ]
     },
     {
       "id": "community-caregiver-support",
@@ -1919,7 +2032,30 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.hhs.texas.gov/services/health/support-caregivers",
       "contentStatus": "approved",
       "draftedAt": "2026-04-10",
-      "lastVerifiedDate": "2026-08-04"
+      "lastVerifiedDate": "2026-08-04",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 18,
+          "to": 60,
+          "source": "https://nasua.org/familycaregiver/pdf/sf-tx.pdf",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "18559372372",
+            "8775417905"
+          ],
+          "to": "18002529240",
+          "source": "https://www.dshs.texas.gov/alzheimers-disease/risk-reduction-promoting-cognitive-health/prevention/resources-support-family-caregivers",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:40.083Z"
+        }
+      ]
     },
     {
       "id": "legal-aid-seniors-aaa",

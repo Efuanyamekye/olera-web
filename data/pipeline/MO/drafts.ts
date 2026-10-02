@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/MO/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.470Z
+ * Last updated: 2026-10-02T07:57:10.917Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -77,7 +77,15 @@ export const drafts: PipelineStateDrafts = {
           "May need to spend down excess income through medical expenses",
           "Cannot be eligible for other comprehensive health coverage"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2022,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -239,7 +247,45 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://dss.mo.gov/healthcare/apply",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1131,
+          "to": 860,
+          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "severity": "high",
+          "why": "source dated 2019",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1533,
+          "to": 1166,
+          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "severity": "high",
+          "why": "source dated 2019",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 6220.5,
+          "to": 3000,
+          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "severity": "high",
+          "why": "source dated 2019",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 12441,
+          "to": 6000,
+          "source": "https://mydss.mo.gov/sites/mydss/files/media/pdf/2019/07/aged_blind_disabled_income_chart.pdf",
+          "severity": "high",
+          "why": "source dated 2019",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        }
+      ]
     },
     {
       "id": "structured-family-caregiving-waiver",
@@ -925,7 +971,15 @@ export const drafts: PipelineStateDrafts = {
           "All household members need Social Security Numbers",
           "Adults 55-64 without dependents may need to work or join job training"
         ],
-        "povertyLevelReference": "100% FPL for net income"
+        "povertyLevelReference": "100% FPL for net income",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1046,7 +1100,45 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mydss.mo.gov/food-assistance/apply-for-snap",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1330,
+          "to": 1632,
+          "source": "https://dss.mo.gov/benefit-program-income-limits",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 120% FPL 2025 or 125% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1804,
+          "to": 2215,
+          "source": "https://dss.mo.gov/benefit-program-income-limits",
+          "severity": "high",
+          "why": "value fits more than one tier (120% FPL 2026 or 125% FPL 2026 or 125% FPL 2025 or 130% FPL 2025)",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        },
+        {
+          "field": "assets_individual",
+          "from": 4750,
+          "to": 4500,
+          "source": "https://dss.mo.gov/food-assistance/apply-for-snap",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        },
+        {
+          "field": "assets_couple",
+          "from": 4750,
+          "to": 4500,
+          "source": "https://dss.mo.gov/food-assistance/apply-for-snap",
+          "severity": "medium",
+          "why": "asset limit (federal figure; applied with the yearly table)",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1322,7 +1414,15 @@ export const drafts: PipelineStateDrafts = {
           "Renters must have written landlord permission",
           "Automatic eligibility if receiving SSI or TANF"
         ],
-        "povertyLevelReference": "200% FPL"
+        "povertyLevelReference": "200% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 160,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -1450,7 +1550,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://dnr.mo.gov/energy/weatherization",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "211"
+          ],
+          "to": "5737512254",
+          "source": "https://dnr.mo.gov/energy/weatherization/low-income-assistance",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        }
+      ]
     },
     {
       "id": "missouri-ship",
@@ -1651,7 +1764,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be Missouri resident",
           "Cannot participate in WIC simultaneously"
         ],
-        "povertyLevelReference": "150% FPL"
+        "povertyLevelReference": "150% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 150,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -2383,7 +2504,15 @@ export const drafts: PipelineStateDrafts = {
           "Must be eligible for MO HealthNet (Missouri Medicaid)",
           "Cannot qualify with Medicare Part D alone (program ended for Medicare-only beneficiaries in 2017)"
         ],
-        "povertyLevelReference": null
+        "povertyLevelReference": null,
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2025,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "online",
@@ -2500,7 +2629,39 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://mydss.mo.gov/mhd/morx-general-faqs",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1276,
+          "to": 1805,
+          "source": "https://collaborate.umsystem.edu/sites/hrpublic/documents/GEN/CURRENT/RetireeMedicalM4APresentation.pdf",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1711,
+          "to": 2428,
+          "source": "https://collaborate.umsystem.edu/sites/hrpublic/documents/GEN/CURRENT/RetireeMedicalM4APresentation.pdf",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8553734636",
+            "1800"
+          ],
+          "to": "8003751406",
+          "source": "https://dss.mo.gov/mhd/morx-pharmacist-faqs",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        }
+      ]
     },
     {
       "id": "property-tax-credit-circuit-breaker",
@@ -2660,7 +2821,21 @@ export const drafts: PipelineStateDrafts = {
       "phone": null,
       "sourceUrl": "https://dor.mo.gov/taxation/individual/tax-types/property-tax-credit/",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8002436060",
+            "6362070847"
+          ],
+          "to": "5737513505",
+          "source": "https://dor.mo.gov/personal/ptc/",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        }
+      ]
     },
     {
       "id": "aged-disabled-waiver",
@@ -3007,7 +3182,20 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(573) 751-6400",
       "sourceUrl": "https://health.mo.gov/seniors/pdf/program-info.pdf",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "5737516400"
+          ],
+          "to": "8002355503",
+          "source": "https://health.mo.gov/sites/health/files/media/pdf/2026/02/Programs%20and%20Services%20Directory.pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:40:05.397Z"
+        }
+      ]
     }
   ],
   "stateOverview": {

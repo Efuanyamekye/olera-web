@@ -1,17 +1,17 @@
 {
   "state": "MA",
   "stateName": "Massachusetts",
-  "checkedAt": "2026-04-14T10:03:33.227Z",
+  "checkedAt": "2026-10-02T07:38:36.005Z",
   "total": 16,
   "skipped": 0,
   "parseErrors": 0,
   "errors": 0,
-  "programsWithFlags": 5,
-  "totalFlags": 5,
-  "highSeverityFlags": 1,
+  "programsWithFlags": 9,
+  "totalFlags": 11,
+  "highSeverityFlags": 3,
   "programs": [
     {
-      "programId": "ma-masshealth-medicare-savings",
+      "programId": "masshealth-medicare-savings",
       "programName": "MassHealth Medicare Savings Program",
       "facts": {
         "age": null,
@@ -27,34 +27,24 @@
       },
       "verified": {
         "age": null,
-        "income_1": 3013,
-        "income_2": 4078,
+        "income_1": 2993,
+        "income_2": 4058,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "6172841275",
+        "phone": "8008412900",
         "sources": {
           "age": null,
-          "income": "https://static1.squarespace.com/static/55ae9518e4b0a617842e0104/t/69a5add3e28ec20eba3bd84b/1772465619550/ENG+(2026)+MSP+Outreach+Flyer+-+FINAL+(2).pdf",
-          "assets": "https://massgeneralbrighamadvantage.org/plans/medicare-savings",
-          "phone": "https://static1.squarespace.com/static/55ae9518e4b0a617842e0104/t/69a5add3e28ec20eba3bd84b/1772465619550/ENG+(2026)+MSP+Outreach+Flyer+-+FINAL+(2).pdf"
+          "income": "https://www.mass.gov/doc/medicare-savings-programs-application/download",
+          "assets": "https://www.mass.gov/doc/msp-flyer/download",
+          "phone": "https://www.mass.gov/info-details/get-help-paying-medicare-costs"
         },
-        "notes": "Income limits effective March 1, 2026 per 2026 MSP flyer; no asset limits since March 1, 2024; requires Medicare enrollment (typically age 65+)"
+        "notes": "Massachusetts MSP has no asset limit as of March 1, 2024; current income limits change annually on March 1. Senior pathway applies to Medicare beneficiaries eligible for MSP."
       },
-      "flags": [
-        {
-          "field": "phone",
-          "severity": "medium",
-          "draftValue": [
-            "8008412900",
-            "211"
-          ],
-          "verifiedValue": "6172841275"
-        }
-      ],
-      "notes": "Income limits effective March 1, 2026 per 2026 MSP flyer; no asset limits since March 1, 2024; requires Medicare enrollment (typically age 65+)"
+      "flags": [],
+      "notes": "Massachusetts MSP has no asset limit as of March 1, 2024; current income limits change annually on March 1. Senior pathway applies to Medicare beneficiaries eligible for MSP."
     },
     {
-      "programId": "ma-frail-elder-waiver",
+      "programId": "frail-elder-waiver",
       "programName": "Frail Elder Waiver (FEW)",
       "facts": {
         "age": 65,
@@ -63,24 +53,25 @@
         "assets_individual": 2000,
         "assets_couple": 154140,
         "phones": [
+          "8002434636",
           "8008412900"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": 60,
-        "income_1": null,
+        "income_1": 2982,
         "income_2": null,
         "assets_individual": 2000,
-        "assets_couple": 154140,
-        "phone": null,
+        "assets_couple": 162660,
+        "phone": "8008412900",
         "sources": {
           "age": "https://www.mass.gov/info-details/frail-elder-waiver-information-for-applicants-and-participants",
-          "income": null,
-          "assets": "https://eswa.org/frail-elder-waiver-few/",
-          "phone": null
+          "income": "https://www.mass.gov/doc/frail-elder-waiver-fact-sheet-0/download",
+          "assets": "https://www.mass.gov/doc/frail-elder-waiver-fact-sheet-0/download",
+          "phone": "https://www.mass.gov/info-details/frail-elder-waiver-information-for-applicants-and-participants"
         },
-        "notes": "Financial eligibility tied to MassHealth Standard; assets from nonprofit citing official criteria. No official phone in results. No 2026 changes noted."
+        "notes": "Current Massachusetts FEW appears active; income limit shown as 300% of SSI FBR ($2,982/month in 2026). Couple income is not separately listed in the retrieved official sources, so it is null."
       },
       "flags": [
         {
@@ -88,12 +79,19 @@
           "severity": "high",
           "draftValue": 65,
           "verifiedValue": 60
+        },
+        {
+          "field": "assets_couple",
+          "severity": "medium",
+          "draftValue": 154140,
+          "verifiedValue": 162660,
+          "pctDiff": 5.2
         }
       ],
-      "notes": "Financial eligibility tied to MassHealth Standard; assets from nonprofit citing official criteria. No official phone in results. No 2026 changes noted."
+      "notes": "Current Massachusetts FEW appears active; income limit shown as 300% of SSI FBR ($2,982/month in 2026). Couple income is not separately listed in the retrieved official sources, so it is null."
     },
     {
-      "programId": "ma-pace-elder-care",
+      "programId": "pace-elder-care",
       "programName": "Program of All-Inclusive Care for the Elderly (PACE)",
       "facts": {
         "age": 55,
@@ -112,20 +110,29 @@
         "income_2": null,
         "assets_individual": 2000,
         "assets_couple": 162660,
-        "phone": null,
+        "phone": "8888850484",
         "sources": {
           "age": "https://www.mass.gov/info-details/who-is-eligible-for-pace",
-          "income": null,
+          "income": "https://www.mass.gov/info-details/who-is-eligible-for-pace",
           "assets": "https://www.mass.gov/info-details/who-is-eligible-for-pace",
-          "phone": null
+          "phone": "https://www.mass.gov/doc/pace-brochure-english/download"
         },
-        "notes": "Income limit exists (300% of Federal Benefit Rate) but is variable annually and not a fixed integer; see Mass.gov source. Community spouse asset limit of $162,660 effective January 15, 2026. Official phone number for PACE applications not found in search results; contact MassHealth directly via mass.gov."
+        "notes": "PACE is active in Massachusetts; official Mass.gov sources show a 55+ minimum age, no separate general income value beyond 300% FBR, and MassHealth-related asset limits of $2,000 for a single applicant and $162,660 for a spouse/nonapplying spouse context."
       },
-      "flags": [],
-      "notes": "Income limit exists (300% of Federal Benefit Rate) but is variable annually and not a fixed integer; see Mass.gov source. Community spouse asset limit of $162,660 effective January 15, 2026. Official phone number for PACE applications not found in search results; contact MassHealth directly via mass.gov."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8778379009"
+          ],
+          "verifiedValue": "8888850484"
+        }
+      ],
+      "notes": "PACE is active in Massachusetts; official Mass.gov sources show a 55+ minimum age, no separate general income value beyond 300% FBR, and MassHealth-related asset limits of $2,000 for a single applicant and $162,660 for a spouse/nonapplying spouse context."
     },
     {
-      "programId": "ma-snap-food-benefits",
+      "programId": "snap-food-benefits",
       "programName": "SNAP (Food Stamps)",
       "facts": {
         "age": 60,
@@ -135,30 +142,31 @@
         "assets_couple": null,
         "phones": [
           "8773822363",
+          "8337128027",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
         "age": null,
-        "income_1": 2608,
-        "income_2": 3525,
-        "assets_individual": null,
-        "assets_couple": null,
-        "phone": null,
+        "income_1": 2660,
+        "income_2": 3607,
+        "assets_individual": 2001,
+        "assets_couple": 3001,
+        "phone": "8773822363",
         "sources": {
           "age": null,
           "income": "https://www.mass.gov/how-to/supplemental-nutrition-assistance-program-snap-formerly-known-as-food-stamps",
-          "assets": null,
-          "phone": null
+          "assets": "https://www.workwithoutlimits.org/siteassets/pdf-resources-new-branding/2-supplemental-nutrition-assistance-program-snap-oct-2025-sep-2026.pdf",
+          "phone": "https://www.mass.gov/how-to/supplemental-nutrition-assistance-program-snap-formerly-known-as-food-stamps"
         },
-        "notes": "SNAP has no minimum age threshold for seniors; new work requirements apply to ages 55-64 but do not create age-based eligibility. Income limits from official Mass.gov DTA page, current as of 2026. No asset test or phone number found in results."
+        "notes": "SNAP is not age-restricted for seniors; the senior pathway affects deductions and asset limits, not basic eligibility age. Massachusetts lists monthly income limits and a higher asset limit when a household member is age 60+ or disabled."
       },
       "flags": [],
-      "notes": "SNAP has no minimum age threshold for seniors; new work requirements apply to ages 55-64 but do not create age-based eligibility. Income limits from official Mass.gov DTA page, current as of 2026. No asset test or phone number found in results."
+      "notes": "SNAP is not age-restricted for seniors; the senior pathway affects deductions and asset limits, not basic eligibility age. Massachusetts lists monthly income limits and a higher asset limit when a household member is age 60+ or disabled."
     },
     {
-      "programId": "ma-weatherization-assistance",
+      "programId": "weatherization-assistance",
       "programName": "Residential Conservation Service (Weatherization)",
       "facts": {
         "age": null,
@@ -178,20 +186,30 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "6175731100",
         "sources": {
           "age": null,
-          "income": "https://www.mass.gov/info-details/weatherization-assistance-program-wap",
+          "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.mass.gov/info-details/weatherization-assistance-program-wap"
         },
-        "notes": "Program eligibility is based on income (60% of State Median Income) with no age requirement identified in search results. No asset limits found in provided sources. No official phone number for application/assistance located in search results; sources direct applicants to apply online or contact local energy assistance agencies by town. Search results do not contain specific phone number or asset limit information. Income threshold applies to all eligible populations including seniors, but no senior-specific pathway or age-based eligibility was identified."
+        "notes": "No senior-specific age, income, or asset test found in the official source; WAP gives priority of service to elderly households. Program appears current and administered by HLC/EOHLC; official main office phone found."
       },
-      "flags": [],
-      "notes": "Program eligibility is based on income (60% of State Median Income) with no age requirement identified in search results. No asset limits found in provided sources. No official phone number for application/assistance located in search results; sources direct applicants to apply online or contact local energy assistance agencies by town. Search results do not contain specific phone number or asset limit information. Income threshold applies to all eligible populations including seniors, but no senior-specific pathway or age-based eligibility was identified."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "6173576000",
+            "9784590551"
+          ],
+          "verifiedValue": "6175731100"
+        }
+      ],
+      "notes": "No senior-specific age, income, or asset test found in the official source; WAP gives priority of service to elderly households. Program appears current and administered by HLC/EOHLC; official main office phone found."
     },
     {
-      "programId": "ma-shine-health-insurance-counseling",
+      "programId": "shine-health-insurance-counseling",
       "programName": "SHINE (Serving Health Insurance Needs of Everyone)",
       "facts": {
         "age": 65,
@@ -206,25 +224,25 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 65,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8002434636",
         "sources": {
-          "age": null,
-          "income": null,
-          "assets": null,
-          "phone": "https://www.mass.gov/info-details/serving-the-health-insurance-needs-of-everyone-shine-program"
+          "age": "https://www.mass.gov/info-details/paying-for-a-stay-in-a-nursing-or-rest-home",
+          "income": "https://www.mass.gov/info-details/get-help-paying-medicare-costs",
+          "assets": "https://www.mass.gov/info-details/get-help-paying-medicare-costs",
+          "phone": "https://www.mass.gov/info-details/get-help-paying-medicare-costs"
         },
-        "notes": "SHINE is a health insurance counseling and information program, not a needs-based assistance program. It has no age, income, or asset eligibility requirements. The program serves Medicare-eligible individuals (typically 65+) and their caregivers, but eligibility is based on Medicare status, not age thresholds. No age test exists for seniors. Income and asset limits do not apply to SHINE itself, though counselors may discuss programs like Prescription Advantage (which has income limits: $64,400 single/$87,100 married as of 2022) and MassHealth that have their own separate eligibility criteria. Primary contact: MassOptions at 1-800-243-4636."
+        "notes": "Current Massachusetts SHINE guidance identifies the program for elderly and disabled adults; senior pathway uses Medicare/elderly age 65+. No separate income or asset test found for SHINE counseling itself; those fields appear not applicable."
       },
       "flags": [],
-      "notes": "SHINE is a health insurance counseling and information program, not a needs-based assistance program. It has no age, income, or asset eligibility requirements. The program serves Medicare-eligible individuals (typically 65+) and their caregivers, but eligibility is based on Medicare status, not age thresholds. No age test exists for seniors. Income and asset limits do not apply to SHINE itself, though counselors may discuss programs like Prescription Advantage (which has income limits: $64,400 single/$87,100 married as of 2022) and MassHealth that have their own separate eligibility criteria. Primary contact: MassOptions at 1-800-243-4636."
+      "notes": "Current Massachusetts SHINE guidance identifies the program for elderly and disabled adults; senior pathway uses Medicare/elderly age 65+. No separate income or asset test found for SHINE counseling itself; those fields appear not applicable."
     },
     {
-      "programId": "ma-meals-on-wheels",
+      "programId": "meals-on-wheels",
       "programName": "Meals on Wheels",
       "facts": {
         "age": 60,
@@ -243,14 +261,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "18002434636",
+        "phone": "8002434636",
         "sources": {
-          "age": "https://www.mass.gov/info-details/senior-nutrition-program",
+          "age": "https://www.lifepathma.org/what-we-offer/nutrition/meals-on-wheels/",
           "income": null,
           "assets": null,
-          "phone": "https://www.mass.gov/info-details/senior-nutrition-program"
+          "phone": "https://www.umass.edu/agriculture-food-environment/nutrition/publications-resources/food-access-resources"
         },
-        "notes": "Age 60+ is the senior-specific threshold for home-delivered meals per Mass.gov official source. No income or asset limits found in search results; Mass.gov explicitly states 'There is no income limit to participate in the program.' Phone number (MassOptions) is the official state referral line per Mass.gov. Program is active as of April 2026 (current menus available)."
+        "notes": "Current Massachusetts Meals on Wheels senior pathway appears to use age 60+; no official income or asset test found in retrievable sources."
       },
       "flags": [
         {
@@ -259,13 +277,13 @@
           "draftValue": [
             "8009856000"
           ],
-          "verifiedValue": "18002434636"
+          "verifiedValue": "8002434636"
         }
       ],
-      "notes": "Age 60+ is the senior-specific threshold for home-delivered meals per Mass.gov official source. No income or asset limits found in search results; Mass.gov explicitly states 'There is no income limit to participate in the program.' Phone number (MassOptions) is the official state referral line per Mass.gov. Program is active as of April 2026 (current menus available)."
+      "notes": "Current Massachusetts Meals on Wheels senior pathway appears to use age 60+; no official income or asset test found in retrievable sources."
     },
     {
-      "programId": "ma-alzheimers-respite-care",
+      "programId": "alzheimers-respite-care",
       "programName": "Alzheimer's Respite Care Program",
       "facts": {
         "age": 60,
@@ -280,25 +298,25 @@
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8002434636",
         "sources": {
-          "age": null,
+          "age": "https://www.mass.gov/info-details/cost-share-guidelines-for-home-care",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.mass.gov/info-details/cost-share-guidelines-for-home-care"
         },
-        "notes": "No specific 'Alzheimer's Respite Care Program' found in Massachusetts; various general respite, grant, and dementia support programs exist (e.g., Alzheimer's Caregiver Respite Grant, Respite Innovations Grant) without stated age/income/assets tests for seniors or official phone in sources."
+        "notes": "Official Massachusetts home care guidance shows the senior pathway for Alzheimer’s respite services begins at age 60; no income or asset test found for this program page."
       },
       "flags": [],
-      "notes": "No specific 'Alzheimer's Respite Care Program' found in Massachusetts; various general respite, grant, and dementia support programs exist (e.g., Alzheimer's Caregiver Respite Grant, Respite Innovations Grant) without stated age/income/assets tests for seniors or official phone in sources."
+      "notes": "Official Massachusetts home care guidance shows the senior pathway for Alzheimer’s respite services begins at age 60; no income or asset test found for this program page."
     },
     {
-      "programId": "ma-scsep-employment-program",
+      "programId": "scsep-employment-program",
       "programName": "Senior Community Service Employment Program (SCSEP)",
       "facts": {
         "age": 55,
@@ -318,20 +336,30 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "6175424180",
         "sources": {
-          "age": "https://www.dol.gov/agencies/eta/seniors",
+          "age": "https://www.mass.gov/doc/operation-able-2024-2028-wioa-public-listening-session/download",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.mass.gov/doc/operation-able-2024-2028-wioa-public-listening-session/download"
         },
-        "notes": "No single statewide phone number found; multiple local providers serve MA counties. Income limit is 125% FPL per federal DOL but no MA-specific 2026 values in results."
+        "notes": "SCSEP is current in Massachusetts; the cited state document shows age 55+ and Operation ABLE main number 617-542-4180. No retrievable authoritative source found here for income/assets beyond the program's general 125% FPL rule, so those fields are null."
       },
-      "flags": [],
-      "notes": "No single statewide phone number found; multiple local providers serve MA counties. Income limit is 125% FPL per federal DOL but no MA-specific 2026 values in results."
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "5088602241",
+            "211"
+          ],
+          "verifiedValue": "6175424180"
+        }
+      ],
+      "notes": "SCSEP is current in Massachusetts; the cited state document shows age 55+ and Operation ABLE main number 617-542-4180. No retrievable authoritative source found here for income/assets beyond the program's general 125% FPL rule, so those fields are null."
     },
     {
-      "programId": "ma-senior-legal-helpline",
+      "programId": "senior-legal-helpline",
       "programName": "Massachusetts Senior Legal Helpline",
       "facts": {
         "age": 60,
@@ -353,18 +381,18 @@
         "assets_couple": null,
         "phone": "8003425297",
         "sources": {
-          "age": "https://www.mass.gov/files/documents/2018/04/06/Brochure%20Sr%20Legal%20helpline%20for%20Massgov.pdf",
+          "age": "https://www.mass.gov/doc/senior-legal-help-line/download",
           "income": null,
           "assets": null,
-          "phone": "https://www.mass.gov/files/documents/2018/04/06/Brochure%20Sr%20Legal%20helpline%20for%20Massgov.pdf"
+          "phone": "https://www.mass.gov/doc/senior-legal-help-line/download"
         },
-        "notes": "Program serves seniors 60+ with free legal information and referral services. No income or asset limits found in available sources. Most callers do not qualify for free attorney representation; eligibility for attorney services requires separate application to Massachusetts civil legal services programs."
+        "notes": "Current Mass.gov brochure shows the senior pathway as age 60+ and lists 800-342-5297; no income or asset test found."
       },
       "flags": [],
-      "notes": "Program serves seniors 60+ with free legal information and referral services. No income or asset limits found in available sources. Most callers do not qualify for free attorney representation; eligibility for attorney services requires separate application to Massachusetts civil legal services programs."
+      "notes": "Current Mass.gov brochure shows the senior pathway as age 60+ and lists 800-342-5297; no income or asset test found."
     },
     {
-      "programId": "ma-long-term-care-ombudsman",
+      "programId": "long-term-care-ombudsman",
       "programName": "Long-Term Care Ombudsman Program",
       "facts": {
         "age": null,
@@ -391,13 +419,13 @@
           "assets": null,
           "phone": "https://www.mass.gov/orgs/massachusetts-long-term-care-ombudsman-program"
         },
-        "notes": "Program is free advocacy/mediation service with no eligibility requirements based on age, income, or assets. All residents of nursing homes, rest homes, or assisted living facilities qualify regardless of demographics. Phone number confirmed from official Mass.gov sources."
+        "notes": "No age, income, or asset eligibility test found for the Massachusetts Long-Term Care Ombudsman Program; it is a free service for residents in nursing homes, rest homes, or assisted living facilities."
       },
       "flags": [],
-      "notes": "Program is free advocacy/mediation service with no eligibility requirements based on age, income, or assets. All residents of nursing homes, rest homes, or assisted living facilities qualify regardless of demographics. Phone number confirmed from official Mass.gov sources."
+      "notes": "No age, income, or asset eligibility test found for the Massachusetts Long-Term Care Ombudsman Program; it is a free service for residents in nursing homes, rest homes, or assisted living facilities."
     },
     {
-      "programId": "ma-prescription-advantage",
+      "programId": "prescription-advantage",
       "programName": "Prescription Advantage",
       "facts": {
         "age": 65,
@@ -413,24 +441,39 @@
       },
       "verified": {
         "age": 65,
-        "income_1": null,
-        "income_2": null,
+        "income_1": 35910,
+        "income_2": 48690,
         "assets_individual": null,
         "assets_couple": null,
         "phone": "8002434636",
         "sources": {
-          "age": "https://www.prescriptionadvantagema.org",
-          "income": null,
-          "assets": null,
-          "phone": "https://www.prescriptionadvantagema.org"
+          "age": "https://www.prescriptionadvantagema.org/Home/About/",
+          "income": "https://www.mass.gov/doc/prescription-advantage-rate-schedule-guide-for-members-eligible-for-medicare-1/download",
+          "assets": "https://www.mass.gov/doc/how-prescription-advantage-works-with-the-medicare-prescription-drug-coverage-part-d/download",
+          "phone": "https://www.prescriptionadvantagema.org/Home/Contact"
         },
-        "notes": "Income limits are tiered by % FPL (e.g., <500% FPL for Medicare-eligible seniors); no fixed monthly USD or asset limits specified in sources"
+        "notes": "Prescription Advantage is active in 2026, but Massachusetts announced it will stop accepting new applications after September 11, 2026; no countable financial asset limit was found in current official sources."
       },
-      "flags": [],
-      "notes": "Income limits are tiered by % FPL (e.g., <500% FPL for Medicare-eligible seniors); no fixed monthly USD or asset limits specified in sources"
+      "flags": [
+        {
+          "field": "income_1",
+          "severity": "high",
+          "draftValue": 1761,
+          "verifiedValue": 35910,
+          "pctDiff": 95.1
+        },
+        {
+          "field": "income_2",
+          "severity": "high",
+          "draftValue": 2379,
+          "verifiedValue": 48690,
+          "pctDiff": 95.1
+        }
+      ],
+      "notes": "Prescription Advantage is active in 2026, but Massachusetts announced it will stop accepting new applications after September 11, 2026; no countable financial asset limit was found in current official sources."
     },
     {
-      "programId": "ma-home-modification-loan",
+      "programId": "home-modification-loan",
       "programName": "Home Modification Loan Program",
       "facts": {
         "age": 60,
@@ -450,14 +493,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "1-866-500-5599",
+        "phone": "18665005599",
         "sources": {
           "age": "https://www.mass.gov/home-modification-loan-program-hmlp",
-          "income": null,
-          "assets": null,
-          "phone": "https://cedac.org/hmlp/"
+          "income": "https://www.mass.gov/home-modification-loan-program-hmlp",
+          "assets": "https://www.mass.gov/home-modification-loan-program-hmlp",
+          "phone": "https://www.mass.gov/home-modification-loan-program-hmlp"
         },
-        "notes": "Program eligibility confirmed for seniors age 60+. Income and asset limits not disclosed in available official sources; Mass.gov and CEDAC materials reference 'generous income guidelines' but do not publish specific thresholds. Application materials (mass.gov/doc/hmlp-application/download) require professional documentation of need but do not specify countable asset caps in retrieved excerpts. Contact Susan Gillam at provided phone number for current income/asset eligibility details."
+        "notes": "Current Massachusetts HMLP senior pathway uses over 60, not 55. I could not verify an official countable financial asset limit from the retrieved current source, so assets are null."
       },
       "flags": [
         {
@@ -470,10 +513,10 @@
           "verifiedValue": "18665005599"
         }
       ],
-      "notes": "Program eligibility confirmed for seniors age 60+. Income and asset limits not disclosed in available official sources; Mass.gov and CEDAC materials reference 'generous income guidelines' but do not publish specific thresholds. Application materials (mass.gov/doc/hmlp-application/download) require professional documentation of need but do not specify countable asset caps in retrieved excerpts. Contact Susan Gillam at provided phone number for current income/asset eligibility details."
+      "notes": "Current Massachusetts HMLP senior pathway uses over 60, not 55. I could not verify an official countable financial asset limit from the retrieved current source, so assets are null."
     },
     {
-      "programId": "ma-home-care-program",
+      "programId": "home-care-program",
       "programName": "Home Care Program (HCP)",
       "facts": {
         "age": 60,
@@ -482,32 +525,31 @@
         "assets_individual": null,
         "assets_couple": null,
         "phones": [
-          "6172043853",
-          "6172043665",
+          "8002434636",
           "211"
         ],
         "hasVerifiableFacts": true
       },
       "verified": {
-        "age": null,
+        "age": 60,
         "income_1": null,
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8002434636",
         "sources": {
-          "age": "https://www.mass.gov/home-care",
-          "income": null,
+          "age": "https://www.mass.gov/doc/651-cmr-3-home-care-program/download",
+          "income": "https://www.mass.gov/doc/651-cmr-3-home-care-program/download",
           "assets": null,
-          "phone": null
+          "phone": "https://www.mass.gov/info-details/home-care-program"
         },
-        "notes": "No minimum age threshold for seniors (60+); program serves adults 60+ and disabled 18-59 separately. No specific 2026 income/asset limits found in official sources."
+        "notes": "Official Massachusetts Home Care Program for elders is age 60+; the official regulation does not publish fixed income amounts and instead refers to financial eligibility guidelines issued by Elder Affairs. No asset limit was found in the retrievable official sources."
       },
       "flags": [],
-      "notes": "No minimum age threshold for seniors (60+); program serves adults 60+ and disabled 18-59 separately. No specific 2026 income/asset limits found in official sources."
+      "notes": "Official Massachusetts Home Care Program for elders is age 60+; the official regulation does not publish fixed income amounts and instead refers to financial eligibility guidelines issued by Elder Affairs. No asset limit was found in the retrievable official sources."
     },
     {
-      "programId": "ma-ecop-home-care",
+      "programId": "ecop-home-care",
       "programName": "Enhanced Community Options Program (ECOP)",
       "facts": {
         "age": 60,
@@ -527,14 +569,14 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": "8008920890",
+        "phone": "8002434636",
         "sources": {
-          "age": "https://agespan.org/wp-content/uploads/2021/11/AS-Enhanced-Comm-Options-Fact-Sheet-English.pdf",
+          "age": "https://www.mass.gov/doc/summary-document-state-programs-and-services-for-alzheimers-and-dementia/download",
           "income": null,
           "assets": null,
-          "phone": "https://agespan.org/wp-content/uploads/2021/11/AS-Enhanced-Comm-Options-Fact-Sheet-English.pdf"
+          "phone": "https://www.mass.gov/doc/summary-document-state-programs-and-services-for-alzheimers-and-dementia/download"
         },
-        "notes": "No official .gov sources found for detailed 2026 eligibility; AgeSpan fact sheet (nonprofit citing state program) specifies 60+ for elders. Program facing cuts and eligibility tightening in 2026 per news reports."
+        "notes": "ECOP is an elder home-care program; official Massachusetts source identifies age 60+ for frail elders and gives MassOptions/EOEA help line 800-243-4636. No authoritative income or asset test was found in the retrieved source."
       },
       "flags": [
         {
@@ -544,13 +586,13 @@
             "6177277750",
             "211"
           ],
-          "verifiedValue": "8008920890"
+          "verifiedValue": "8002434636"
         }
       ],
-      "notes": "No official .gov sources found for detailed 2026 eligibility; AgeSpan fact sheet (nonprofit citing state program) specifies 60+ for elders. Program facing cuts and eligibility tightening in 2026 per news reports."
+      "notes": "ECOP is an elder home-care program; official Massachusetts source identifies age 60+ for frail elders and gives MassOptions/EOEA help line 800-243-4636. No authoritative income or asset test was found in the retrieved source."
     },
     {
-      "programId": "ma-senior-care-options",
+      "programId": "senior-care-options",
       "programName": "Senior Care Options (SCO)",
       "facts": {
         "age": 65,
@@ -571,17 +613,28 @@
         "income_2": null,
         "assets_individual": null,
         "assets_couple": null,
-        "phone": null,
+        "phone": "8885375816",
         "sources": {
-          "age": "https://www.mass.gov/senior-care-options",
+          "age": "https://www.mass.gov/info-details/senior-care-options-eligibility",
           "income": null,
           "assets": null,
-          "phone": null
+          "phone": "https://www.mass.gov/info-details/senior-care-options-plans"
         },
-        "notes": "No asset or income limits found in sources; eligibility tied to MassHealth Standard and Medicare enrollment as of 2026"
+        "notes": "Official Massachusetts SCO eligibility page lists age 65+ and does not show a separate countable-asset or income test for SCO itself; eligibility is tied to MassHealth Standard and Medicare. No authoritative countable-asset thresholds found in the retrieved sources."
       },
-      "flags": [],
-      "notes": "No asset or income limits found in sources; eligibility tied to MassHealth Standard and Medicare enrollment as of 2026"
+      "flags": [
+        {
+          "field": "phone",
+          "severity": "medium",
+          "draftValue": [
+            "8008412900",
+            "8006334227",
+            "8007721213"
+          ],
+          "verifiedValue": "8885375816"
+        }
+      ],
+      "notes": "Official Massachusetts SCO eligibility page lists age 65+ and does not show a separate countable-asset or income test for SCO itself; eligibility is tied to MassHealth Standard and Medicare. No authoritative countable-asset thresholds found in the retrieved sources."
     }
   ]
 }

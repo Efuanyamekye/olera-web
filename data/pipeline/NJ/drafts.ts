@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/NJ/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.476Z
+ * Last updated: 2026-10-02T07:57:10.923Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -1171,7 +1171,21 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.nj.gov/humanservices/doas/documents/Adult%20Day%20Services%20Program%20Brochure%20(Web-English).pdf",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8772223737",
+            "211"
+          ],
+          "to": "18772223733",
+          "source": "https://nj.gov/humanservices/doas/documents/ADSP%20Brochure%20(Print%20-%20English).pdf",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:42:42.493Z"
+        }
+      ]
     },
     {
       "id": "senior-ezpass-discount",

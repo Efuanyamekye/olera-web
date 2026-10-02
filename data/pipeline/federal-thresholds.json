@@ -1,0 +1,17 @@
+{
+  "note": "Federal figures the benefits rules are written against. fpl = HHS poverty guidelines by calendar year: [first person, each additional person], annual dollars, for the 48 states and DC, Alaska and Hawaii (aspe.hhs.gov/topics/poverty-economic-mobility/poverty-guidelines, read 2 Oct 2026 for 2026; earlier years from the same series). ssi = SSI federal benefit rate, monthly (ssa.gov/oact/cola/SSI.html; 2026 is the 2.8% COLA on 2025). Update each January; every program whose incomeRule has basis FPL or SSI recomputes from here.",
+  "fpl": {
+    "2026": { "48": [15960, 5680], "AK": [19950, 7100], "HI": [18360, 6530] },
+    "2025": { "48": [15650, 5500], "AK": [19550, 6880], "HI": [17990, 6330] },
+    "2024": { "48": [15060, 5380], "AK": [18810, 6730], "HI": [17310, 6190] },
+    "2023": { "48": [14580, 5140], "AK": [18210, 6430], "HI": [16770, 5910] },
+    "2022": { "48": [13590, 4720], "AK": [16990, 5900], "HI": [15630, 5430] }
+  },
+  "ssi": {
+    "2026": { "individual": 994, "couple": 1491 },
+    "2025": { "individual": 967, "couple": 1450 },
+    "2024": { "individual": 943, "couple": 1415 },
+    "2023": { "individual": 914, "couple": 1371 },
+    "2022": { "individual": 841, "couple": 1261 }
+  }
+}

@@ -3,7 +3,7 @@
  * Do not edit manually. Regenerated from data/pipeline/TN/drafts.json
  * after each pipeline run for this state, or via --regen-index.
  *
- * Last updated: 2026-09-28T09:21:59.484Z
+ * Last updated: 2026-10-02T07:57:10.932Z
  */
 import type { PipelineStateDrafts } from "../../pipeline-drafts-types";
 
@@ -192,7 +192,20 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.tn.gov/tenncare/members-applicants/eligibility/categories.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8778010044"
+          ],
+          "to": "8552590701",
+          "source": "https://www.tn.gov/tenncare/contact-us.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:20.995Z"
+        }
+      ]
     },
     {
       "id": "snap-food-benefits",
@@ -260,7 +273,15 @@ export const drafts: PipelineStateDrafts = {
           "Household defined as those who buy and prepare food together",
           "Parents and children under 21 always counted as one household"
         ],
-        "povertyLevelReference": "130% FPL for gross income (seniors exempt)"
+        "povertyLevelReference": "130% FPL for gross income (seniors exempt)",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 100,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "multiple",
@@ -390,7 +411,38 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.tn.gov/humanservices/for-families/supplemental-nutrition-assistance-program-snap.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": "2026-09-28"
+      "lastVerifiedDate": "2026-09-28",
+      "reviewQueue": [
+        {
+          "field": "income_1",
+          "from": 1330,
+          "to": 1729,
+          "source": "https://snapbenefitshelp.com/en/blog/tennessee-snap-eligibility-2026",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:46:20.995Z"
+        },
+        {
+          "field": "income_2",
+          "from": 1804,
+          "to": 2348,
+          "source": "https://snapbenefitshelp.com/en/blog/tennessee-snap-eligibility-2026",
+          "severity": "high",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:46:20.995Z"
+        },
+        {
+          "field": "phone",
+          "from": [
+            "8663114287"
+          ],
+          "to": "8337728347",
+          "source": "https://www.tn.gov/humanservices/need-help-/tdhs-contact-us.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:20.995Z"
+        }
+      ]
     },
     {
       "id": "liheap-energy-assistance",
@@ -1027,7 +1079,18 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(866) 836-6678",
       "sourceUrl": "https://www.tn.gov/disability-and-aging/disability-aging-programs/caregiving.html",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "age",
+          "from": 55,
+          "to": 60,
+          "source": "https://www.tn.gov/content/dam/tn/aging/documents/06_Helping_Caregivers.pdf",
+          "severity": "high",
+          "why": "field age is applied by hand",
+          "flaggedAt": "2026-10-02T07:46:20.995Z"
+        }
+      ]
     },
     {
       "id": "scsep-employment",
@@ -1084,7 +1147,15 @@ export const drafts: PipelineStateDrafts = {
           "Legal resident of Tennessee",
           "Must live in a county served by a local provider"
         ],
-        "povertyLevelReference": "125% FPL"
+        "povertyLevelReference": "125% FPL",
+        "incomeRule": {
+          "basis": "FPL",
+          "percent": 120,
+          "year": 2026,
+          "disregard": 0,
+          "confidence": "derived",
+          "derivedAt": "2026-10-02"
+        }
       },
       "applicationGuide": {
         "method": "phone",
@@ -1210,7 +1281,23 @@ export const drafts: PipelineStateDrafts = {
       "sourceUrl": "https://www.tn.gov/workforce/jobs-and-education/services-by-group/services-by-group-redirect/senior-work-experience-program.html",
       "contentStatus": "pipeline-draft",
       "draftedAt": "2026-04-13",
-      "lastVerifiedDate": null
+      "lastVerifiedDate": null,
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "7319895111",
+            "8003726013",
+            "7315874213",
+            "8656912551"
+          ],
+          "to": "6157415671",
+          "source": "https://www.tn.gov/workforce/jobs-and-education/services-by-group/services-by-group-redirect/senior-work-experience-program.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:20.995Z"
+        }
+      ]
     },
     {
       "id": "senior-law-alliance",
@@ -1353,7 +1440,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "1-844-HELP4TN",
       "sourceUrl": "https://www.tals.org/page/453/free-senior-legal-helpline",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "18444",
+            "18002381443",
+            "86569125514212"
+          ],
+          "to": "8444357486",
+          "source": "https://www.help4tn.org/node/1500/free-senior-legal-helpline",
+          "severity": "medium",
+          "why": "aggregator source",
+          "flaggedAt": "2026-10-02T07:46:20.995Z"
+        }
+      ]
     },
     {
       "id": "long-term-care-ombudsman",
@@ -1768,7 +1870,22 @@ export const drafts: PipelineStateDrafts = {
       "phone": "(865) 691-2551",
       "sourceUrl": "https://tn.gov/disability-and-aging",
       "contentStatus": "pipeline-draft",
-      "draftedAt": "2026-04-13"
+      "draftedAt": "2026-04-13",
+      "reviewQueue": [
+        {
+          "field": "phone",
+          "from": [
+            "8656912551",
+            "86569125514212",
+            "86569125514216"
+          ],
+          "to": "8668366678",
+          "source": "https://www.tn.gov/disability-and-aging/resource-directory/aaad.html",
+          "severity": "medium",
+          "why": "phone (run with --phones to apply official ones)",
+          "flaggedAt": "2026-10-02T07:46:20.995Z"
+        }
+      ]
     },
     {
       "id": "ship-medicare-counseling",
