@@ -7,6 +7,25 @@
 
 ## Current Focus
 
+### 2026-10-02 — Ad Boost full-book audit; Ces call sheet; audit corrected after publishing (`good-nobel`, docs only)
+
+**Output.** Audit page https://claude.ai/artifact/JgYHqs782AVrrXt6188obN (v2, corrected). Ces call sheet https://claude.ai/artifact/U43uysz3EveWAeMcktLSAv (v4; TJ must share it with Ces). Posted to #careseeker-support (TJ approved). 16 `ad_campaign_log` observations at 12:00Z + 3 corrections at 14:00Z; one dated line appended to each live campaign's `admin_note`; `~/Desktop/adboost-state-of-play.md` rewritten.
+
+**Findings (at source, 2 Oct).**
+- Meta forms: 12 provider forms, $375.59, 158 link clicks, 27 paid leads (reconcile 27=27), 18 job seekers screened out, 9 families. Hoop v3 now gives families (4 "myself"), but **3 of 5 Hoop form numbers don't work** (Barbara wrong number, Ramona disconnected, Shirley SMS bounces), per Ces's `family_touches`.
+- Google, 7 legacy campaigns: $706.29, 338 clicks, 9 inquiries, 0 with care detail, 0 clients. **Graceful $139.61 of $150, crosses ~4-5 Oct, needs a pause/top-up call.**
+- Franchil consolidation worked: Hilda read all 4 inquiries 30 Sep 15:57 and replied to 2.
+- LumiWell: 5/5 job seekers, 2 after the image swap (unknown if new creative was serving). A form job seeker then sent a page inquiry via the thank-you link and fired `first_lead_celebration` (opened, so info@ is NOT undeliverable).
+- AH `lead_received` +5 on 1 Oct = re-routed old city leads; AH NT form shares tag `olera-dallas-native-sep26` with the ended pilot. Ramona's SMS: `city_lead_messages` says sent, `email_log` says failed.
+
+**Where I was wrong (corrected same day).** Headline "families don't answer" and the call sheet ignored `family_touches`, where Ces had already logged calls to nearly every family. "30 Sep gate not done" was wrong: the 30 Sep entry below records it. Cause: never read `family_touches`; grepped SCRATCHPAD with `tail` (oldest end). Fixed both in `.claude/commands/ad-boost-audit.md`. Also briefly mangled two `admin_note`s (shell `read` ate `\n`); restored from pre-write copy and verified all 15.
+
+**Next Up.**
+- TJ: Graceful Google at $150 (by 4 Oct). Share the call sheet with Ces; consider a short correction in the #careseeker-support thread (the posted message implied she hadn't called them).
+- Ces: call Sarah, Susan (Hoop, 1 Oct) and Lisa (Cleveland). If Sarah/Susan numbers also fail, Hoop v3 is collecting stale Facebook-prefilled numbers; fix before Liz's 15 Oct renewal.
+- 5 Oct: Caring Senior flights end; Jacob call (Marta needs Spanish-speaking caregiver). 9-10 Oct: score image swap when the five Sep forms end.
+- Data defects (none fixed): thank-you-link job-seeker leak, re-routed handovers inflating lead counts, shared Dallas tag, stale city row statuses.
+
 ### 2026-10-01 (later) — Colorado CareAssist: Jacob on alerts + call booked (`thirsty-panini`)
 
 - **Jason (owner) asked** to copy Jacob McKay (Dir. of Client Development, jacob@coloradocareassist.com) on every family alert, keep Jason too; Jacob owns the call.
