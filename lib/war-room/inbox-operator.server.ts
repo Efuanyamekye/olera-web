@@ -455,6 +455,13 @@ export type InboxExtras = { slackCoverage?: string | null; organic?: Pick<Organi
 export type InboxPass = { passId: string; items: StoredItem[]; waitingElsewhere: number; costUsd: number; draftsInGmail?: number; extras?: InboxExtras };
 
 /** What this pass would propose, in digest order, without storing anything. */
+/** Rejects after ms; the work itself is left to finish or fail on its own. */
+function withDeadline<T>(work: Promise<T>, ms: number, what: string): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const deadline = new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error(`${what} took over ${Math.round(ms / 1000)}s`)), ms); });
+  return Promise.race([work, deadline]).finally(() => clearTimeout(timer));
+}
+
 const SLACK_KIND_LABEL: Record<string, string> = { mention: "asked you", unanswered_thread: "your thread, no reply", promise: "you promised" };
 
 /** Replies he owes on Slack, as numbered drafts. */
@@ -462,7 +469,8 @@ export function slackProposals(owed: SlackOwed): ProposedItem[] {
   return owed.items.map((item) => ({
     kind: "slack_draft" as const,
     category: `slack:${item.kind}`,
-    target: { channelId: item.channelId, ts: item.ts, threadTs: item.threadTs ?? item.ts, permalink: item.permalink },
+    // A standalone DM has no thread: an empty threadTs replies at the top of the DM.
+    target: { channelId: item.channelId, ts: item.ts, threadTs: item.threadTs ?? "", permalink: item.permalink },
     summary: `${item.author ?? "unattributed"} in ${item.channelLabel} (${SLACK_KIND_LABEL[item.kind] ?? item.kind}, ${item.ageDays}d): "${clip(item.text, 140)}"`,
     body: item.draftReply,
   }));
@@ -487,8 +495,10 @@ export async function buildInboxProposals(db: SupabaseClient, now = new Date()):
   };
   const [sms, email, voicemail, slack, organic] = await Promise.all([
     smsProposals(db), emailProposals(db), voicemailProposals(db),
-    findSlackOwed(db, now).catch(failed("Slack scan")),
-    buildOrganicRead(db, now).catch(failed("Organic read")),
+    // Each has its own clock: the pass has 300s, the organic read alone takes
+    // about 125s (2 Oct dry run), and the inbox must go out regardless.
+    withDeadline(findSlackOwed(db, now), 120_000, "Slack scan").catch(failed("Slack scan")),
+    withDeadline(buildOrganicRead(db, now), 210_000, "Organic read").catch(failed("Organic read")),
   ]);
   const proposal = organic ? organicProposal(organic) : null;
   // Order: clear first, then ready to send, then the one question.
@@ -594,6 +604,32 @@ export function whoFor(item: StoredItem): string {
   return clip(item.summary.replace(/^(Email|Text)\s+/, "").split(/ re "| \(waiting|\. They said|: "/)[0], 42);
 }
 
+/** "Ces ×4, your threads ×3, Graize" from the Slack items' summaries. */
+function slackWho(items: StoredItem[]): string {
+  const counts = new Map<string, number>();
+  for (const item of items) {
+    const author = item.summary.split(" in ")[0];
+    const who = item.category === "slack:unanswered_thread" || item.category === "slack:promise" ? "your threads" : author.split(" ")[0];
+    counts.set(who, (counts.get(who) ?? 0) + 1);
+  }
+  return [...counts].map(([who, n]) => (n > 1 ? `${who} ×${n}` : who)).join(", ");
+}
+
+/** "8 to 15", or "8, 11, 14" when the numbers aren't consecutive. */
+function numberSpan(items: StoredItem[]): string {
+  const n = items.map((item) => item.number).sort((a, b) => a - b);
+  const consecutive = n.every((value, i) => i === 0 || value === n[i - 1] + 1);
+  return n.length > 2 && consecutive ? `${n[0]} to ${n[n.length - 1]}` : n.join(", ");
+}
+
+/**
+ * Items that need their number named: a Slack reply posts as him, and a
+ * proposal starts work. "approve all" and the suggested line leave them out.
+ */
+export function needsNamedApproval(item: Pick<StoredItem, "kind">): boolean {
+  return item.kind === "slack_draft" || item.kind === "proposal";
+}
+
 /** One short phrase for a triage batch: "archive 5 old voicemails". */
 function triagePhrase(item: StoredItem): string {
   const ids = (key: string) => ((item.target[key] as unknown[] | undefined) ?? []).length;
@@ -625,6 +661,7 @@ export function renderSynopsis(pass: InboxPass, now = new Date()): string {
   const calls = pass.items.find((item) => item.category === "email:voicemail_callbacks");
   const questions = pass.items.filter((item) => item.kind === "question" && item.category !== "email:voicemail_callbacks");
   const actionable = pass.items.filter((item) => item.kind !== "question");
+  const quick = actionable.filter((item) => !needsNamedApproval(item));
   const line = (items: StoredItem[]) => items.map((item) => `${item.number} ${whoFor(item)}${sendsOnApproval(item) ? " (sends)" : ""}${item.target?.carried ? " (same draft)" : ""}`).join(" · ");
   const parts = [
     `*Inbox, ${day}:* ${actionable.length} to approve.`,
@@ -632,7 +669,7 @@ export function renderSynopsis(pass: InboxPass, now = new Date()): string {
     texts.length ? `Texts: ${line(texts)}` : "",
     emails.length ? `Emails: ${line(emails)}` : "",
     calls ? `Calls: ${((calls.target.threadIds as unknown[] | undefined) ?? []).length} voicemails worth a call back.` : "",
-    slack.length ? `Slack: ${slack.map((item) => `${item.number} ${clip(item.summary.split(" (")[0], 34)}`).join(" · ")}` : "",
+    slack.length ? `Slack: ${slack.length} ${slack.length === 1 ? "reply" : "replies"} owed (${slackWho(slack)}), ${numberSpan(slack)}` : "",
     ...(pass.extras?.organic?.synopsis ?? []).slice(0, 3).map((line, i) => (i === 0 ? `Organic: ${line}` : line)),
     proposal ? `Try: ${proposal.number} ${clip(proposal.summary.split(". ")[0], 70)}` : "",
     ...questions.map((item) => `${item.number}. ${item.summary}`),
@@ -641,7 +678,7 @@ export function renderSynopsis(pass: InboxPass, now = new Date()): string {
     pass.waitingElsewhere ? `${pass.waitingElsewhere} more need a person in the inbox.` : "",
     pass.draftsInGmail ? `${pass.draftsInGmail} approved ${pass.draftsInGmail === 1 ? "draft is" : "drafts are"} in Gmail waiting for you to send.` : "",
   ].filter(Boolean).join(" ");
-  const how = actionable.length ? `Drafts and lists are in today's inbox report: /handoff on your computer. Or reply here, "approve ${actionable.map((item) => item.number).join(" ")}".` : "";
+  const how = actionable.length ? `Drafts and lists are in today's inbox report: /handoff on your computer. ${quick.length ? ` Or reply here, "approve ${quick.map((item) => item.number).join(" ")}".` : ""}${actionable.length > quick.length ? " Slack replies and the organic action go by number once you've read them." : ""}` : "";
   return [parts.join("\n"), [how, more].filter(Boolean).join(" ")].filter(Boolean).join("\n\n");
 }
 
@@ -655,7 +692,7 @@ Cortex's daily inbox pass (${pass.passId} UTC). Telegram got a one-screen synops
 
 ## The items
 
-${renderDigest(pass).replace(/^\*(.+)\*$/gm, "### $1")}
+${renderDigest(pass).replace(/^\*([^*\n][^\n]*[^*\n])\*$/gm, "### $1")}
 
 ## How to act (for the Claude Code session)
 
@@ -705,12 +742,12 @@ export function renderDigest(pass: InboxPass): string {
     section("Slack: replies you owe", ["slack_draft"]),
     pass.extras?.slackCoverage ? `_${pass.extras.slackCoverage}_` : "",
     section("Call back", ["question"], (item) => item.category === "email:voicemail_callbacks"),
-    pass.extras?.organic?.section ? `*Organic*\n${pass.extras.organic.section}` : "",
+    pass.extras?.organic?.section ? `*Organic*\n${pass.extras.organic.section.replace(/^#{1,3}\s*Organic\s*\n+/i, "")}` : "",
     section("Organic: today's action", ["proposal"]),
     section("One question", ["question"], (item) => item.category !== "email:voicemail_callbacks"),
     ...(pass.extras?.notes ?? []).map((note) => `_${note}_`),
   ].filter(Boolean);
-  const numbers = pass.items.filter((item) => item.kind !== "question").map((item) => item.number);
+  const numbers = pass.items.filter((item) => item.kind !== "question" && !needsNamedApproval(item)).map((item) => item.number);
   const how = numbers.length
     ? `Reply "approve ${numbers.join(" ")}" for all of them, or "send ${numbers[0]}", "skip ${numbers[0]}", or "send ${numbers[numbers.length - 1]}: your edited text". "check ${numbers[numbers.length - 1]}" fact-checks a draft first. Busy? Reply "later" and they come back in the next pass.`
     : "";
@@ -822,7 +859,7 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
     if (item.kind === "slack_draft") {
       const text = edit ?? currentText(item);
       if (!text) return finish("failed", "no reply drafted; write one with send N: <text>.");
-      const posted = await postSlackReplyAsTj(db, { channelId: String(item.target.channelId), threadTs: String(item.target.threadTs ?? item.target.ts), text });
+      const posted = await postSlackReplyAsTj(db, { channelId: String(item.target.channelId), threadTs: String(item.target.threadTs ?? ""), text });
       return posted.ok ? finish("done", `posted in the thread as you.${posted.permalink ? ` ${posted.permalink}` : ""}`) : finish("failed", `not posted: ${posted.error}`);
     }
     if (item.kind === "proposal") {
@@ -875,7 +912,8 @@ export async function handleInboxCommand(db: SupabaseClient, command: InboxComma
     return `OK, nothing sent. The ${open.length} open ${open.length === 1 ? "item stays" : "items stay"} open and come back in the next inbox pass (${nextPassIn()}).`;
   }
   if (command.verb === "check") return checkItems(db, open, command.numbers, command.edit);
-  const chosen = command.numbers.length ? open.filter((item) => command.numbers.includes(item.number)) : open.filter((item) => item.kind !== "question");
+  // "approve all" covers the quick items only; a Slack reply or a proposal needs its number.
+  const chosen = command.numbers.length ? open.filter((item) => command.numbers.includes(item.number)) : open.filter((item) => item.kind !== "question" && !needsNamedApproval(item));
   const missing = command.numbers.filter((n) => !open.some((item) => item.number === n));
   const lines: string[] = [];
   for (const item of chosen) {
