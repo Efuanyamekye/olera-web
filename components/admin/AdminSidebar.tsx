@@ -41,6 +41,7 @@ const navSections: NavSection[] = [
     defaultOpen: true,
     items: [
       { label: "Activity", href: "/admin/activity", description: "See recent admin activity", keywords: "notifications updates" },
+      { label: "Today", href: "/admin/inbox/today", description: "Cortex's numbered items for today: drafts to approve, edit, check or skip", keywords: "cortex daily digest approve drafts today" },
       // Inbound SMS. Carries an unhandled badge because the volume is low —
       // without it this reads as a dead page and stops getting checked.
       { label: "Messages", href: "/admin/inbox", description: "Handle inbound texts and replies", keywords: "sms inbox conversations" },
@@ -686,8 +687,12 @@ export default function AdminSidebar({
     });
   }
 
+  // The most specific link wins: on /admin/inbox/today, "Today" is active and
+  // "Messages" (/admin/inbox) is not.
   const isActive = (href: string) =>
-    href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
+    href === "/admin"
+      ? pathname === "/admin"
+      : pathname.startsWith(href) && !navSections.some((s) => s.items.some((item) => item.href.length > href.length && item.href.startsWith(href) && pathname.startsWith(item.href)));
 
   // Auto-expand section if it contains the active item
   const activeSectionKey = navSections.find((s) =>
