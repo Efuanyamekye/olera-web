@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminUser, getAuthUser, getServiceClient } from "@/lib/admin";
 import { verifyGmailOAuthState } from "@/lib/support-email/oauth-state.server";
-import { exchangeSlackUserCode, saveSlackUserToken, SLACK_USER_AUTH_PATH, SLACK_USER_SCOPES } from "@/lib/war-room/slack-user-token.server";
+import { exchangeSlackUserCode, isFounderEmail, saveSlackUserToken, SLACK_USER_AUTH_PATH, SLACK_USER_SCOPES } from "@/lib/war-room/slack-user-token.server";
 
 /** A plain page that says what happened, as the calendar connection does. */
 function done(ok: boolean, message: string) {
@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
   if (!user) return done(false, "Sign in to Olera as an admin, then try again.");
   const admin = await getAdminUser(user.id);
   if (!admin) return done(false, "Admin access is required.");
+  if (!isFounderEmail(admin.email ?? user.email)) return done(false, "Only the founder connects Slack to Cortex, because replies post under the connected name.");
   const code = request.nextUrl.searchParams.get("code");
   const state = request.nextUrl.searchParams.get("state");
   const declined = request.nextUrl.searchParams.get("error");

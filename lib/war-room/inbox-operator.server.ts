@@ -859,6 +859,9 @@ export async function executeInboxItem(db: SupabaseClient, item: StoredItem, edi
     if (item.kind === "slack_draft") {
       const text = edit ?? currentText(item);
       if (!text) return finish("failed", "no reply drafted; write one with send N: <text>.");
+      // A promise draft leaves "[status]" for him to fill; it never posts with the blank in it.
+      const blank = edit ? null : text.match(/\[[^\]\n]{2,40}\]/);
+      if (blank) return finish("failed", `not posted: fill in ${blank[0]} first, with send ${item.number}: <your text>.`);
       const posted = await postSlackReplyAsTj(db, { channelId: String(item.target.channelId), threadTs: String(item.target.threadTs ?? ""), text });
       return posted.ok ? finish("done", `posted in the thread as you.${posted.permalink ? ` ${posted.permalink}` : ""}`) : finish("failed", `not posted: ${posted.error}`);
     }

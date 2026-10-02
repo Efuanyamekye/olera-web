@@ -126,3 +126,13 @@ const load = (Module as unknown as { _load: (request: string, ...rest: unknown[]
   console.error(error);
   process.exit(1);
 });
+
+// Only the founder may connect: the token is "TJ" to the daily read and to every approved reply.
+{
+  const { isFounderEmail } = require("../lib/war-room/slack-user-token.server") as typeof import("../lib/war-room/slack-user-token.server");
+  const assertOk = (cond: boolean, msg: string) => { if (!cond) throw new Error(msg); };
+  assertOk(isFounderEmail("TJ@olera.care ") === true, "founder email, any case and spacing");
+  assertOk(isFounderEmail("logan@olera.care") === false, "another admin cannot connect");
+  assertOk(isFounderEmail(null) === false, "no email, no connection");
+  console.log("founder checks passed");
+}

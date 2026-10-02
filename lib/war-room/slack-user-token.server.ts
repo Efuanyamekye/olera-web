@@ -109,3 +109,14 @@ export async function loadSlackUserToken(db: SupabaseClient): Promise<SlackUserT
 export async function markSlackUserTokenRevoked(db: SupabaseClient, userId: string) {
   await db.from("cortex_slack_user_tokens").update({ revoked_at: new Date().toISOString() }).eq("slack_user_id", userId);
 }
+
+/**
+ * Only the founder connects. The token is "him" to everything downstream: the
+ * daily read scans its DMs, and an approved reply posts under its name. Any
+ * other admin's token would quietly become "TJ". Same address Cortex uses as
+ * the approver (inbox-operator approverAdmin).
+ */
+export function isFounderEmail(email: string | null | undefined): boolean {
+  const founder = (process.env.CORTEX_APPROVER_EMAIL?.trim() || "tj@olera.care").toLowerCase();
+  return Boolean(email) && email!.trim().toLowerCase() === founder;
+}
