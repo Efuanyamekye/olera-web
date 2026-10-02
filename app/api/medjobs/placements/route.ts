@@ -17,6 +17,7 @@ import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient as createServiceClient, type SupabaseClient } from "@supabase/supabase-js";
 import { sendEmail } from "@/lib/email";
 import { generateStudentPortalUrl } from "@/lib/claim-tokens";
+import { sendSlackAlert, slackMedJobsPlacement } from "@/lib/slack";
 import {
   placementOfferedEmail,
   placementAcceptedEmail,
@@ -209,11 +210,11 @@ export async function PATCH(request: Request) {
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Fetch profiles for email notifications
+  // Fetch profiles for email and Slack notifications
   const [{ data: studentProfile }, { data: providerProfile }] = await Promise.all([
     supabase
       .from("business_profiles")
-      .select("id, display_name, email, slug")
+      .select("id, display_name, email, slug, metadata")
       .eq("id", p.student_profile_id)
       .single(),
     supabase
@@ -261,6 +262,21 @@ export async function PATCH(request: Request) {
           recipientType: "student",
           recipientProfileId: studentProfile.id,
         });
+      }
+
+      // Send Slack notification for the hire
+      try {
+        const university =
+          (studentProfile.metadata as { university?: string } | null)?.university || "Unknown";
+        const alert = slackMedJobsPlacement({
+          studentName: studentProfile.display_name || "Unknown student",
+          providerName: providerProfile.display_name || "Unknown provider",
+          university,
+          studentId: studentProfile.id,
+        });
+        await sendSlackAlert(alert.text, alert.blocks);
+      } catch (slackErr) {
+        console.error("[medjobs/placements] slack error:", slackErr);
       }
     }
 
